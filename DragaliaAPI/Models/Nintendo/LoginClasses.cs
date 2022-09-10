@@ -1,21 +1,16 @@
 ﻿#nullable enable
-using System;
 using System.Collections.Generic;
-using System.Security;
-using DragaliaAPI.Models.Nintendo;
-using MessagePack;
-using System.Security.Cryptography;
 
 namespace DragaliaAPI.Models.Nintendo
 {
-    [MessagePackObject(keyAsPropertyName: true)]
+    // These classes are targets for the deserializer and so cannot have a constructor with parameters
+    #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public class DeviceAccount
     {
         public string id { get; set; }
         public string? password { get; set; }
     }
 
-    [MessagePackObject(keyAsPropertyName: true)]
     public class LoginRequest
     {
         public string appVersion { get; set; }
@@ -34,8 +29,11 @@ namespace DragaliaAPI.Models.Nintendo
         public long timeZoneOffset { get; set; }
         public DeviceAccount? deviceAccount { get; set; }
     }
+    #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    [MessagePackObject(keyAsPropertyName: true)]
+    // This class is not subject to the disabled warning as it is created by the user rather than the deserializer.
+    // The constructor for this class fills in many irrelevant fields, and takes parameters for the important ones.
+    // It is intended to be called via a factory, so that DeviceAccounts can be validated against the DB.
     public class LoginResponse
     {
         public string accessToken { get; set; }
@@ -49,16 +47,22 @@ namespace DragaliaAPI.Models.Nintendo
         public string sessionId { get; set; }
         public User user { get; set; }
 
-        [MessagePackObject(keyAsPropertyName: true)]
         public class Capability
         {
             public string accountApiHost { get; set; }
             public string accountHost { get; set; }
             public string pointProgramHost { get; set; }
             public long sessionUpdateInterval { get; set; }
+
+            public Capability()
+            {
+                accountApiHost = "api.accounts.nintendo.com";
+                accountHost = "accounts.nintendo.com";
+                pointProgramHost = "my.nintendo.com";
+                sessionUpdateInterval = 180000;
+            }
         }
 
-        [MessagePackObject(keyAsPropertyName: true)]
         public class User
         {
             public string birthday { get; set; }
@@ -73,79 +77,50 @@ namespace DragaliaAPI.Models.Nintendo
             public List<DeviceAccount>  deviceAccounts { get; set; }
             public Permissions permissions { get; set; }
 
-            [MessagePackObject(keyAsPropertyName: true)]
             public class Permissions
             {
                 public bool personalAnalytics { get; set; }
                 public long personalAnalyticsUpdatedAt { get; set; }
                 public bool personalNotification { get; set; }
                 public long personalNotificationUpdatedAt { get; set; }
+
+                public Permissions()
+                {
+                    this.personalAnalytics = false;
+                    this.personalAnalyticsUpdatedAt = 0;
+                    this.personalNotification = false;
+                    this.personalNotificationUpdatedAt = 0;
+                }
+            }
+
+            public User(DeviceAccount deviceAccount)
+            {
+                this.birthday = "0000-00-00";
+                this.country = "";
+                this.createdAt = 0;
+                this.gender = "Unknown";
+                this.hasUnreadCsComment = false;
+                this.id = "";
+                this.links = "";
+                this.nickname = "";
+                this.updatedAt = 0;
+                // This parameter is an array in the JSON response, despite the fact that it never seems to contain >1 account.
+                this.deviceAccounts = new() { deviceAccount };
+                this.permissions = new Permissions();
             }
         }
-    }
 
-    public static class LoginFactories
-    {
-        public static LoginResponse LoginResponseFactory_CreateDeviceAccount()
+        public LoginResponse(string accessToken, string idToken, string sessionId, DeviceAccount deviceAccount)
         {
-            DeviceAccount newDeviceAccount = DeviceAccountFactory();
-
-            long currentUnixTime = DateTimeOffset.Now.ToUnixTimeSeconds();
-
-            LoginResponse result = new()
-            {
-                accessToken = "ACCESS TOKEN PLACEHOLDER",
-                behaviourSettings = "",
-                capability = new()
-                {
-                    accountApiHost = "api.accounts.nintendo.com",
-                    accountHost = "accounts.nintendo.com",
-                    pointProgramHost = "my.nintendo.com",
-                    sessionUpdateInterval = 180000,
-                },
-                createdDeviceAccount = newDeviceAccount,
-                error = null,
-                expiresIn = 900,
-                idToken = "ID TOKEN PLACEHOLDER",
-                market = null,
-                sessionId = "",
-                user = new()
-                {
-                    birthday = "0000-00-00",
-                    country = "",
-                    createdAt = currentUnixTime,
-                    deviceAccounts = new()
-                    {
-                        newDeviceAccount,
-                    },
-                    gender =  "unknown",
-                    hasUnreadCsComment =  false,
-                    id =  "USER ID PLACEHOLDER",
-                    links =  "",
-                    nickname =  "",
-                    permissions = new()
-                    { 
-                        personalAnalytics =  true,
-                        personalAnalyticsUpdatedAt = currentUnixTime,
-                        personalNotification =  true,
-                        personalNotificationUpdatedAt = currentUnixTime,
-                    },
-                    updatedAt = currentUnixTime,
-                },
-            };
-
-            return result;
-        }
-
-        public static DeviceAccount DeviceAccountFactory()
-        {
-            // TODO: register this in the backend
-            return new()
-            {
-                id = Guid.NewGuid().ToString(),
-                password = Guid.NewGuid().ToString(),
-            };
+            this.accessToken = accessToken;
+            this.behaviourSettings = "";
+            this.capability = new Capability();
+            this.error = null;
+            this.expiresIn = int.MaxValue;
+            this.idToken = idToken;
+            this.market = null;
+            this.sessionId = sessionId;
+            this.user = new User(deviceAccount);
         }
     }
-
 }
