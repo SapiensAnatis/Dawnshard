@@ -12,7 +12,7 @@ namespace DragaliaAPI.Test.Controllers.Nintendo
     public class LoginTest
     {
         private readonly Mock<ILogger<NintendoLoginController>> _mockLogger = new(MockBehavior.Strict);
-        private readonly Mock<ILoginFactory> _mockLoginFactory = new(MockBehavior.Strict);
+        private readonly Mock<ILoginService> _mockLoginFactory = new(MockBehavior.Strict);
 
         public LoginTest()
         {

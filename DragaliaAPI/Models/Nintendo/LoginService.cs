@@ -2,13 +2,15 @@
 
 namespace DragaliaAPI.Models.Nintendo
 {
-    public class LoginFactory : ILoginFactory
+    public class LoginService : ILoginService
     {
         private readonly ISessionService _sessionService;
+        private readonly ILogger<LoginService> _logger;
 
-        public LoginFactory(ISessionService sessionService)
+        public LoginService(ISessionService sessionService, ILogger<LoginService> logger)
         {
             _sessionService = sessionService;
+            _logger = logger;
         }
 
         public LoginResponse LoginResponseFactory()
@@ -17,6 +19,7 @@ namespace DragaliaAPI.Models.Nintendo
 
             LoginResponse result = LoginResponseFactory(newDeviceAccount);
             result.createdDeviceAccount = newDeviceAccount;
+            _logger.LogInformation("Registered new user with deviceAccount id {id}", newDeviceAccount.id);
 
             return result;
         }
@@ -26,6 +29,7 @@ namespace DragaliaAPI.Models.Nintendo
             string sessionId = _sessionService.CreateNewSession(deviceAccount);
 
             LoginResponse result = new("accessToken", "idToken", sessionId, deviceAccount);
+            _logger.LogInformation("Logged in user with deviceAccount id {id} and session id {session_id}", deviceAccount.id, sessionId);
             return result;
         }
 

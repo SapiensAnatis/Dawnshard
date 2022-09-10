@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
 	<LangVersion>10.0</LangVersion>
     <IsPackable>false</IsPackable>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,10 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Unit\Models\Nintendo\" />
   </ItemGroup>
 
 </Project>
