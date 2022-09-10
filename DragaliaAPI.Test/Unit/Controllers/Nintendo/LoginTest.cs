@@ -19,38 +19,15 @@ namespace DragaliaAPI.Test.Controllers.Nintendo
             
         }
 
-        #nullable enable
         private static LoginRequest TestLoginRequestFactory(DeviceAccount? deviceAccount)
         {
-            return new()
-            {
-                appVersion = "2.19.0",
-                assertion = "assertion",
-                carrier = "giffgaff",
-                deviceAccount = deviceAccount,
-                deviceAnalyticsId = "id",
-                deviceName = "ONEPLUS A6003",
-                locale = "en-US",
-                manufacturer = "OnePlus",
-                networkType = "wifi",
-                osType = "Android",
-                osVersion = "11",
-                sdkVersion = "Unity-2.33.0-0a4be7c8",
-                sessionId = "",
-                timeZone = "Europe/London",
-                timeZoneOffset = 3600000
-            };
+            return new LoginRequest(deviceAccount);
         }
-        #nullable restore
 
         [Fact]
         public void LoginController_NullDeviceAccount_ReturnsCreatedDeviceAccount()
         {
-            DeviceAccount deviceAccount = new()
-            {
-                id = "test id",
-                password = "test password",
-            };
+            DeviceAccount deviceAccount = new("test id", "test password");
 
             LoginResponse createDeviceAccountResponse = new("accessToken", "idToken", "sessionId", deviceAccount)
             {

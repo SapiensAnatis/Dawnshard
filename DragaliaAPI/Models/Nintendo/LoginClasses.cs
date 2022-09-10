@@ -1,37 +1,32 @@
-﻿#nullable enable
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace DragaliaAPI.Models.Nintendo
 {
-    // These classes are targets for the deserializer and so cannot have a constructor with parameters
-    #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public class DeviceAccount
     {
         public string id { get; set; }
         public string? password { get; set; }
+
+        [JsonConstructor]
+        public DeviceAccount(string id, string? password)
+        {
+            this.id = id;
+            this.password = password;
+        }
     }
 
     public class LoginRequest
     {
-        public string appVersion { get; set; }
-        public string assertion { get; set; }
-        public string carrier { get; set; }
-        public string deviceAnalyticsId { get; set; }
-        public string deviceName { get; set; }
-        public string locale { get; set; }
-        public string manufacturer { get; set; }
-        public string networkType { get; set; }
-        public string osType { get; set; }
-        public string osVersion { get; set; }
-        public string sdkVersion { get; set; }
-        public string sessionId { get; set; }
-        public string timeZone { get; set; }
-        public long timeZoneOffset { get; set; }
         public DeviceAccount? deviceAccount { get; set; }
-    }
-    #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    // This class is not subject to the disabled warning as it is created by the user rather than the deserializer.
+        [JsonConstructor]
+        public LoginRequest(DeviceAccount? deviceAccount)
+        {
+            this.deviceAccount = deviceAccount;
+        }
+    }
+
     // The constructor for this class fills in many irrelevant fields, and takes parameters for the important ones.
     // It is intended to be called via a factory, so that DeviceAccounts can be validated against the DB.
     public class LoginResponse
