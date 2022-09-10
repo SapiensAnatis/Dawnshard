@@ -32,11 +32,7 @@ namespace DragaliaAPI.Models.Nintendo
         public DeviceAccount DeviceAccountFactory()
         {
             // TODO: register this in the backend
-            return new()
-            {
-                id = Guid.NewGuid().ToString(),
-                password = Guid.NewGuid().ToString(),
-            };
+            return new(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
         }
     }
 }
