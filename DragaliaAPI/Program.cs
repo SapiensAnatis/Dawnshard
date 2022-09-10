@@ -13,7 +13,7 @@ builder.Services.AddMvc().AddMvcOptions(option =>
     option.OutputFormatters.Add(new MessagePackOutputFormatter(ContractlessStandardResolver.Options));
     option.InputFormatters.Add(new MessagePackInputFormatter(ContractlessStandardResolver.Options));
 });
-builder.Services.AddSingleton<ILoginFactory, LoginFactory>();
+builder.Services.AddSingleton<ILoginService, LoginService>();
 builder.Services.AddSingleton<ISessionService, SessionService>();
 
 var app = builder.Build();

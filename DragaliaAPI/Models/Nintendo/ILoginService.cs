@@ -1,6 +1,6 @@
 ﻿namespace DragaliaAPI.Models.Nintendo
 {
-    public interface ILoginFactory
+    public interface ILoginService
     {
         /// <summary>
         /// Create a login response without a device account being passed.

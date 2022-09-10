@@ -5,9 +5,10 @@ namespace DragaliaAPI.Models.Nintendo
 {
     public record DeviceAccount(string id, string? password);
 
-    // We only need the deviceAccount field from the request
+    // We only need to deserialize deviceAccount from the request. The rest of it is useless
     public record LoginRequest(DeviceAccount? deviceAccount);
 
+    // Conversely, we should probably fill in all the useless data in the response in case the client expects it
     public record LoginResponse(string accessToken, string idToken, string sessionId, DeviceAccount deviceAccount)
     {
         public string behaviourSettings = "";

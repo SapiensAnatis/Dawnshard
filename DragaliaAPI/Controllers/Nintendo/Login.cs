@@ -12,12 +12,12 @@ namespace DragaliaAPI.Controllers.Nintendo
     public class NintendoLoginController : ControllerBase
     {
         private readonly ILogger<NintendoLoginController> _logger;
-        private readonly ILoginFactory _loginFactory;
+        private readonly ILoginService _loginService;
 
-        public NintendoLoginController(ILogger<NintendoLoginController> logger, ILoginFactory loginFactory)
+        public NintendoLoginController(ILogger<NintendoLoginController> logger, ILoginService loginService)
         {
             _logger = logger;
-            _loginFactory = loginFactory;
+            _loginService = loginService;
         }
 
         [HttpPost]
@@ -25,7 +25,7 @@ namespace DragaliaAPI.Controllers.Nintendo
         {
             if (request.deviceAccount == null)
             {
-                return _loginFactory.LoginResponseFactory();
+                return _loginService.LoginResponseFactory();
             }
 
             throw new NotImplementedException();
