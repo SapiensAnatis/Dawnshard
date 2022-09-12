@@ -9,8 +9,9 @@ namespace DragaliaAPI.Models.Nintendo
     public record LoginRequest(DeviceAccount? deviceAccount);
 
     // Conversely, we should probably fill in all the useless data in the response in case the client expects it
-    public record LoginResponse(string accessToken, string idToken, string sessionId, DeviceAccount deviceAccount)
+    public record LoginResponse(string idToken, DeviceAccount deviceAccount)
     {
+        public string accessToken = "";
         public string behaviourSettings = "";
         public Capability capability = new();
         public DeviceAccount? createdDeviceAccount;
@@ -24,7 +25,7 @@ namespace DragaliaAPI.Models.Nintendo
             public string accountApiHost = "api.accounts.nintendo.com";
             public string accountHost = "accounts.nintendo.com";
             public string pointProgramHost = "my.nintendo.com";
-            public long sessionUpdateInterval = 180000;
+            public long sessionUpdateInterval = long.MaxValue;
         }
 
         public record User(DeviceAccount deviceAccount)

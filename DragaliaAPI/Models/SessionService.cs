@@ -9,25 +9,27 @@ namespace DragaliaAPI.Models
     {
         private class Session
         {
-            public string Id { get; set; }
+            public string Id { get; }
             public DeviceAccount deviceAccount { get; set; }
+            public string IdToken { get; init; }
 
-            public Session(DeviceAccount deviceAccount)
+            public Session(DeviceAccount deviceAccount, string idToken)
             {
-                Id = Guid.NewGuid().ToString();
+                this.Id = Guid.NewGuid().ToString();
+                this.IdToken = idToken;
                 this.deviceAccount = deviceAccount;
             }
         }
 
-        private List<Session> _sessions = new List<Session>();
+        private readonly List<Session> _sessions = new();
 
-        public string CreateNewSession(DeviceAccount deviceAccount)
+        public string CreateNewSession(DeviceAccount deviceAccount, string idToken)
         {
             Session? existingSession = _sessions.SingleOrDefault(x => x.deviceAccount.id == deviceAccount.id);
             if (existingSession != null)
                 _sessions.Remove(existingSession);
             
-            Session session = new(deviceAccount);
+            Session session = new(deviceAccount, idToken);
             _sessions.Add(session);
 
             return session.Id;
@@ -36,6 +38,11 @@ namespace DragaliaAPI.Models
         public bool ValidateSession(DeviceAccount deviceAccount, string sessionId)
         {
             return _sessions.Any(x => x.deviceAccount.id == deviceAccount.id && x.Id == sessionId);
+        }
+
+        public string? SessionIdFromIdToken(string idToken)
+        {
+            return _sessions.FirstOrDefault(x => x.IdToken == idToken)?.Id;
         }
     }
 }

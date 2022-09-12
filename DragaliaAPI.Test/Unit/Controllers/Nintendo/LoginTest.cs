@@ -6,43 +6,41 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using System.Text.Json;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Test.Controllers.Nintendo
 {
     public class LoginTest
     {
         private readonly Mock<ILogger<NintendoLoginController>> _mockLogger = new(MockBehavior.Strict);
-        private readonly Mock<ILoginService> _mockLoginFactory = new(MockBehavior.Strict);
+        private readonly Mock<ILoginService> _mockLoginService = new(MockBehavior.Strict);
 
         public LoginTest()
         {
             
         }
 
-        private static LoginRequest TestLoginRequestFactory(DeviceAccount? deviceAccount)
-        {
-            return new LoginRequest(deviceAccount);
-        }
-
         [Fact]
-        public void LoginController_NullDeviceAccount_ReturnsCreatedDeviceAccount()
+        public async Task LoginController_NullDeviceAccount_ReturnsCreatedDeviceAccount()
         {
             DeviceAccount deviceAccount = new("test id", "test password");
 
-            LoginResponse createDeviceAccountResponse = new("accessToken", "idToken", "sessionId", deviceAccount)
+            LoginResponse createDeviceAccountResponse = new("idToken", deviceAccount)
             {
                 createdDeviceAccount = deviceAccount
             };
 
-            _mockLoginFactory.Setup(x => x.LoginResponseFactory()).Returns(createDeviceAccountResponse);
+            _mockLoginService.Setup(x => x.DeviceAccountFactory()).ReturnsAsync(deviceAccount);
+            _mockLoginService.Setup(x => x.Login(deviceAccount)).ReturnsAsync(createDeviceAccountResponse);
 
-            LoginRequest request = TestLoginRequestFactory(null);
-            NintendoLoginController nintendoLoginController = new(_mockLogger.Object, _mockLoginFactory.Object);
-            
-            LoginResponse response = nintendoLoginController.Post(request);
+            LoginRequest request = new(null);
+            NintendoLoginController nintendoLoginController = new(_mockLogger.Object, _mockLoginService.Object);
 
-            response.Should().Be(createDeviceAccountResponse);
-            _mockLoginFactory.VerifyAll();
+            OkObjectResult? response = (await nintendoLoginController.Post(request)).Result as OkObjectResult;
+
+            response.Should().NotBeNull();
+            response!.Value.Should().Be(createDeviceAccountResponse);
+            _mockLoginService.VerifyAll();
         }
     }
 }

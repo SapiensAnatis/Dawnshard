@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Security.Authentication;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Controllers.Nintendo
 {
+    /// <summary>
+    /// This endpoint authenticates the user's DeviceAccount. 
+    /// If a Nintendo account were linked, it would return information about the user, but that is not yet implemented.
+    /// </summary>
     [ApiController]
     [Consumes("application/json")]
     [Produces("application/json")]
@@ -21,14 +26,26 @@ namespace DragaliaAPI.Controllers.Nintendo
         }
 
         [HttpPost]
-        public LoginResponse Post(LoginRequest request)
+        public async Task<ActionResult<LoginResponse>> Post(LoginRequest request)
         {
-            if (request.deviceAccount == null)
+            DeviceAccount? deviceAccount = request.deviceAccount;
+            if (deviceAccount is null)
             {
-                return _loginService.LoginResponseFactory();
+                DeviceAccount createdDeviceAccount = await _loginService.DeviceAccountFactory();
+                // Should never return unauthorized if just created, no need for try/catch
+                LoginResponse response = await _loginService.Login(createdDeviceAccount);
+                return Ok(response);
             }
 
-            throw new NotImplementedException();
+            try
+            {
+                LoginResponse response = await _loginService.Login(deviceAccount);
+                return Ok(response);
+            }
+            catch (AuthenticationException)
+            {
+                return Unauthorized();
+            }
         }
     }
 }

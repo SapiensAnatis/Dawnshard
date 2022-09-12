@@ -9,7 +9,7 @@ namespace DragaliaAPI.Models
         /// </summary>
         /// <param name="deviceAccount">The device account to associate with the new session.</param>
         /// <returns>The session id.</returns>
-        string CreateNewSession(DeviceAccount deviceAccount);
+        string CreateNewSession(DeviceAccount deviceAccount, string idToken);
 
         /// <summary>
         /// Check if a session with the given device account and id exists.
