@@ -9,18 +9,27 @@ namespace DragaliaAPI.Models.Nintendo
     public record LoginRequest(DeviceAccount? deviceAccount);
 
     // Conversely, we should probably fill in all the useless data in the response in case the client expects it
-    public record LoginResponse(string idToken, DeviceAccount deviceAccount)
+    public record LoginResponse
     {
+        public LoginResponse(string idToken, DeviceAccount deviceAccount)
+        {
+            this.idToken = idToken;
+            this.user = new(deviceAccount);
+        }
+
+        public string idToken;
+        public User user;
+        public DeviceAccount? createdDeviceAccount;
+
+        // Junk fields
         public string accessToken = "";
         public string behaviourSettings = "";
         public Capability capability = new();
-        public DeviceAccount? createdDeviceAccount;
         public string? error = null;
         public int expiresIn = int.MaxValue;
         public string? market = null;
-        public User user = new(deviceAccount);
 
-        public record Capability()
+        public record Capability
         {
             public string accountApiHost = "api.accounts.nintendo.com";
             public string accountHost = "accounts.nintendo.com";
@@ -28,8 +37,13 @@ namespace DragaliaAPI.Models.Nintendo
             public long sessionUpdateInterval = long.MaxValue;
         }
 
-        public record User(DeviceAccount deviceAccount)
+        public record User
         {
+            public User(DeviceAccount deviceAccount)
+            {
+                this.deviceAccounts = new() { deviceAccount };
+            }
+
             public string birthday = "0000-00-00";
             public string country = "";
             public long createdAt = 0;
@@ -39,7 +53,7 @@ namespace DragaliaAPI.Models.Nintendo
             public string links = "";
             public string nickname = "";
             public long updatedAt = 0;
-            public List<DeviceAccount> deviceAccounts = new() { deviceAccount };
+            public List<DeviceAccount> deviceAccounts;
             public Permissions permissions = new();
 
             public record Permissions

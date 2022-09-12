@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  dragaliaapi:
+    image: ${DOCKER_REGISTRY-}dragaliaapi
+    build:
+      context: .
+      dockerfile: DragaliaAPI/Dockerfile
+  redis:
+    image: redis
