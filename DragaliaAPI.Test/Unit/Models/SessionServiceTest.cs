@@ -19,7 +19,7 @@ namespace DragaliaAPI.Test.Unit.Models
         [Fact]
         public void CreateNewSession_NewSession_CreatesValidSession()
         {
-            string sessionId = sessionService.CreateNewSession(deviceAccount);
+            string sessionId = sessionService.CreateNewSession(deviceAccount, "");
 
             sessionService.ValidateSession(deviceAccount, sessionId).Should().Be(true);
         }
@@ -27,8 +27,8 @@ namespace DragaliaAPI.Test.Unit.Models
         [Fact]
         public void CreateNewSession_ExistingSession_ReplacesOldSession()
         {
-            string firstSessionId = sessionService.CreateNewSession(deviceAccount);
-            string secondSessionId = sessionService.CreateNewSession(deviceAccount);
+            string firstSessionId = sessionService.CreateNewSession(deviceAccount, "");
+            string secondSessionId = sessionService.CreateNewSession(deviceAccount, "");
 
             sessionService.ValidateSession(deviceAccount, secondSessionId).Should().Be(true);
             secondSessionId.Should().NotBeEquivalentTo(firstSessionId);
