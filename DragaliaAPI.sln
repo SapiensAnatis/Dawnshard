@@ -5,7 +5,9 @@ VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI", "DragaliaAPI\DragaliaAPI.csproj", "{161BE542-C5B4-441D-BEA1-5F3553BFD839}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragaliaAPI.Test", "DragaliaAPI.Test\DragaliaAPI.Test.csproj", "{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Test", "DragaliaAPI.Test\DragaliaAPI.Test.csproj", "{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{6E4BCC4D-1998-4135-A474-681EC6E6AF57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

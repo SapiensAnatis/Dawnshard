@@ -27,4 +27,8 @@
     <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Unit\Models\Nintendo\" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Authentication;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -17,35 +18,41 @@ namespace DragaliaAPI.Controllers.Nintendo
     public class NintendoLoginController : ControllerBase
     {
         private readonly ILogger<NintendoLoginController> _logger;
-        private readonly ILoginService _loginService;
+        private readonly ISessionService _sessionService;
+        private readonly IDeviceAccountService _deviceAccountService;
 
-        public NintendoLoginController(ILogger<NintendoLoginController> logger, ILoginService loginService)
+        public NintendoLoginController(
+            ILogger<NintendoLoginController> logger,
+            ISessionService sessionService,
+            IDeviceAccountService deviceAccountService)
         {
             _logger = logger;
-            _loginService = loginService;
+            _sessionService = sessionService;
+            _deviceAccountService = deviceAccountService;
         }
 
         [HttpPost]
         public async Task<ActionResult<LoginResponse>> Post(LoginRequest request)
         {
             DeviceAccount? deviceAccount = request.deviceAccount;
+            DeviceAccount? createdDeviceAccount = null;
             if (deviceAccount is null)
             {
-                DeviceAccount createdDeviceAccount = await _loginService.DeviceAccountFactory();
-                // Should never return unauthorized if just created, no need for try/catch
-                LoginResponse response = await _loginService.Login(createdDeviceAccount);
-                return Ok(response);
+                createdDeviceAccount = await _deviceAccountService.RegisterDeviceAccount();
+                deviceAccount = createdDeviceAccount;
             }
 
-            try
+            bool authenticationSuccess = await _deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
+            if (!authenticationSuccess) return Unauthorized();
+
+            string token = Guid.NewGuid().ToString();
+            _sessionService.CreateNewSession(deviceAccount, token);
+            LoginResponse response = new(token, deviceAccount)
             {
-                LoginResponse response = await _loginService.Login(deviceAccount);
-                return Ok(response);
-            }
-            catch (AuthenticationException)
-            {
-                return Unauthorized();
-            }
+                createdDeviceAccount = createdDeviceAccount
+            };
+
+            return Ok(response);
         }
     }
 }
