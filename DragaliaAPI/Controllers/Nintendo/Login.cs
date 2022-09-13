@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Security.Authentication;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.AspNetCore.Mvc;
@@ -52,7 +54,13 @@ namespace DragaliaAPI.Controllers.Nintendo
                 createdDeviceAccount = createdDeviceAccount
             };
 
-            return Ok(response);
+            return response;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<string>>> Get()
+        {
+            return Ok(new List<string>() { "a", "b" });
         }
     }
 }
