@@ -5,15 +5,6 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "dragaliaapi": "StartDebugging",
-        "redis": "StartWithoutDebugging"
-      }
-    },
-    "Start Redis": {
-      "commandName": "DockerCompose",
-      "commandVersion": "1.0",
-      "serviceActions": {
-        "dragaliaapi": "DoNotStart",
-        "redis": "StartWithoutDebugging"
       }
     }
   }

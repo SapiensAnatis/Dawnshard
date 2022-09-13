@@ -1,47 +1,53 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using DragaliaAPI.Models.Nintendo;
-using Microsoft.Extensions.Caching.Distributed;
-
-
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DragaliaAPI.Models
 {
-    public class DeviceAccountService : IDeviceAccountService
+    public class DeviceAccountContext : DbContext
     {
-        private readonly IDistributedCache _cache;
-        private readonly ILogger<DeviceAccount> _logger;
         private readonly IConfiguration _configuration;
-        public DeviceAccountService(IDistributedCache cache, IConfiguration configuration, ILogger<DeviceAccount> logger)
+        private readonly ILogger<DeviceAccountContext> _logger;
+        public DeviceAccountContext (DbContextOptions<DeviceAccountContext> options, IConfiguration configuration, ILogger<DeviceAccountContext> logger) : base(options)
         {
-            _cache = cache;
-            _logger = logger;
             _configuration = configuration;
+            _logger = logger;
+            this.Database.CanConnect();
         }
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<DbDeviceAccount>().ToTable("DeviceAccount");
+        }
+
+        public DbSet<DbDeviceAccount> DeviceAccounts { get; set; }
 
         public async Task<bool> AuthenticateDeviceAccount(DeviceAccount deviceAccount)
         {
-            if (deviceAccount.password is null) { throw new ArgumentNullException(paramName: "deviceAccount.password"); }
+            if (deviceAccount.password is null) { throw new ArgumentNullException(paramName: deviceAccount.password); }
 
+            DbDeviceAccount dbDeviceAccount = await DeviceAccounts.SingleAsync(x => x.Id == deviceAccount.id);
             string hashedPassword = GetHashedPassword(deviceAccount.password);
-            string storedPassword = await _cache.GetStringAsync($"DeviceAccount:{deviceAccount.id}:password");
 
-            return (hashedPassword == storedPassword);
+            return (hashedPassword == dbDeviceAccount.HashedPassword);
         }
 
         public async Task<DeviceAccount> RegisterDeviceAccount()
         {
             string id = Guid.NewGuid().ToString();
             string password = Guid.NewGuid().ToString();
-
             string hashedPassword = GetHashedPassword(password);
 
-            await _cache.SetStringAsync($"DeviceAccount:{id}:password", hashedPassword);
+            DbDeviceAccount newDeviceAccount = new() { Id = id, HashedPassword = hashedPassword };
+            await DeviceAccounts.AddAsync(newDeviceAccount);
+            await this.SaveChangesAsync();
 
             _logger.LogInformation("Registered new account with ID {id}", id);
 
             return new DeviceAccount(id, password);
-            }
+        }
 
         private string GetHashedPassword(string password)
         {
@@ -54,7 +60,7 @@ namespace DragaliaAPI.Models
 
             var pkbdf2 = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 10000);
             byte[] hashBytes = pkbdf2.GetBytes(20);
-            
+
             return Convert.ToBase64String(hashBytes);
         }
     }

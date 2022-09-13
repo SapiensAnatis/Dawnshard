@@ -14,7 +14,7 @@ namespace DragaliaAPI.Test.Unit.Models
     public class SessionServiceTest
     {
         private readonly SessionService sessionService = new();
-        private readonly DeviceAccount deviceAccount = new("id", "password");
+        private readonly DragaliaAPI.Models.Nintendo.DeviceAccount deviceAccount = new("id", "password");
 
         [Fact]
         public void CreateNewSession_NewSession_CreatesValidSession()

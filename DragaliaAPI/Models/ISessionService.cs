@@ -9,7 +9,7 @@ namespace DragaliaAPI.Models
         /// </summary>
         /// <param name="deviceAccount">The device account to associate with the new session.</param>
         /// <returns>The session id.</returns>
-        string CreateNewSession(DeviceAccount deviceAccount, string idToken);
+        string CreateNewSession(Nintendo.DeviceAccount deviceAccount, string idToken);
 
         /// <summary>
         /// Check if a session with the given device account and id exists.
@@ -17,6 +17,6 @@ namespace DragaliaAPI.Models
         /// <param name="deviceAccount"></param>
         /// <param name="sessionId"></param>
         /// <returns>true if the session exists, false if it does not.</returns>
-        bool ValidateSession(DeviceAccount deviceAccount, string sessionId);
+        bool ValidateSession(Nintendo.DeviceAccount deviceAccount, string sessionId);
     }
 }

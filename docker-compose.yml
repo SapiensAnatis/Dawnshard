@@ -2,9 +2,20 @@ version: '3.4'
 
 services:
   dragaliaapi:
+    container_name: dragaliaapi
     image: ${DOCKER_REGISTRY-}dragaliaapi
     build:
       context: .
       dockerfile: DragaliaAPI/Dockerfile
-  redis:
-    image: redis
+    ports:
+      - "56403:56404"
+
+  sqlserver:
+    container_name: sqlserver
+    hostname: sqlserver
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      - "MSSQL_SA_PASSWORD=DragaliaLost123"
+      - "ACCEPT_EULA=Y"
+    ports:
+      - "1433:1433"
