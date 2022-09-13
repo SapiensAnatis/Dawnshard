@@ -3,7 +3,8 @@ using DragaliaAPI.Models;
 using MessagePack.AspNetCoreMvcFormatter;
 using MessagePack.Resolvers;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -17,14 +18,10 @@ builder.Services.AddMvc().AddMvcOptions(option =>
     option.InputFormatters.Add(new MessagePackInputFormatter(ContractlessStandardResolver.Options));
 });
 
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = configuration.GetValue<string>("RedisConnection"); // redis is the container name of the redis service. 6379 is the default port
-    options.InstanceName = "DragaliaAPI";
-});
+builder.Services.AddDbContext<DeviceAccountContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
 
 builder.Services.AddSingleton<ISessionService, SessionService>();
-builder.Services.AddSingleton<IDeviceAccountService, DeviceAccountService>();
 
 var app = builder.Build();
 
@@ -33,7 +30,6 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

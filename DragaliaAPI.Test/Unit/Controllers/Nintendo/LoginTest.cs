@@ -18,7 +18,7 @@ namespace DragaliaAPI.Test.Controllers.Nintendo
         private readonly Mock<IDeviceAccountService> mockDeviceAccountService = new(MockBehavior.Strict);
         private NintendoLoginController nintendoLoginController;
 
-        private readonly DeviceAccount deviceAccount = new("test id", "test password");
+        private readonly Models.Nintendo.DeviceAccount deviceAccount = new("test id", "test password");
 
         public LoginTest()
         {
@@ -41,7 +41,7 @@ namespace DragaliaAPI.Test.Controllers.Nintendo
 
             OkObjectResult goodResponse = Assert.IsType<OkObjectResult>(response.Result);
             LoginResponse responseObject = Assert.IsType<LoginResponse>(goodResponse.Value);
-            responseObject.user.deviceAccounts.Should().BeEquivalentTo(new List<DeviceAccount> { deviceAccount });
+            responseObject.user.deviceAccounts.Should().BeEquivalentTo(new List<Models.Nintendo.DeviceAccount> { deviceAccount });
             responseObject.createdDeviceAccount.Should().BeEquivalentTo(deviceAccount);
         }
 
@@ -55,7 +55,7 @@ namespace DragaliaAPI.Test.Controllers.Nintendo
 
             OkObjectResult goodResponse = Assert.IsType<OkObjectResult>(response.Result);
             LoginResponse responseObject = Assert.IsType<LoginResponse>(goodResponse.Value);
-            responseObject.user.deviceAccounts.Should().BeEquivalentTo(new List<DeviceAccount> { deviceAccount });
+            responseObject.user.deviceAccounts.Should().BeEquivalentTo(new List<Models.Nintendo.DeviceAccount> { deviceAccount });
             responseObject.createdDeviceAccount.Should().BeNull();
         }
 

@@ -19,30 +19,30 @@ namespace DragaliaAPI.Controllers.Nintendo
     {
         private readonly ILogger<NintendoLoginController> _logger;
         private readonly ISessionService _sessionService;
-        private readonly IDeviceAccountService _deviceAccountService;
+        private readonly DeviceAccountContext _deviceAccountContext;
 
         public NintendoLoginController(
             ILogger<NintendoLoginController> logger,
             ISessionService sessionService,
-            IDeviceAccountService deviceAccountService)
+            DeviceAccountContext context)
         {
             _logger = logger;
             _sessionService = sessionService;
-            _deviceAccountService = deviceAccountService;
+            _deviceAccountContext = context;
         }
 
         [HttpPost]
         public async Task<ActionResult<LoginResponse>> Post(LoginRequest request)
         {
-            DeviceAccount? deviceAccount = request.deviceAccount;
-            DeviceAccount? createdDeviceAccount = null;
+            Models.Nintendo.DeviceAccount? deviceAccount = request.deviceAccount;
+            Models.Nintendo.DeviceAccount? createdDeviceAccount = null;
             if (deviceAccount is null)
             {
-                createdDeviceAccount = await _deviceAccountService.RegisterDeviceAccount();
+                createdDeviceAccount = await _deviceAccountContext.RegisterDeviceAccount();
                 deviceAccount = createdDeviceAccount;
             }
 
-            bool authenticationSuccess = await _deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
+            bool authenticationSuccess = await _deviceAccountContext.AuthenticateDeviceAccount(deviceAccount);
             if (!authenticationSuccess) return Unauthorized();
 
             string token = Guid.NewGuid().ToString();
