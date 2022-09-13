@@ -16,10 +16,13 @@ builder.Services.AddMvc().AddMvcOptions(option =>
 {
     option.OutputFormatters.Add(new MessagePackOutputFormatter(ContractlessStandardResolver.Options));
     option.InputFormatters.Add(new MessagePackInputFormatter(ContractlessStandardResolver.Options));
-});
+}).AddJsonOptions(option =>
+    option.JsonSerializerOptions.IncludeFields = true
+);
 
 builder.Services.AddDbContext<DeviceAccountContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
+
 
 builder.Services.AddSingleton<ISessionService, SessionService>();
 
