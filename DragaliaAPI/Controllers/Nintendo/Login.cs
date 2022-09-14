@@ -36,8 +36,8 @@ namespace DragaliaAPI.Controllers.Nintendo
         [HttpPost]
         public async Task<ActionResult<LoginResponse>> Post(LoginRequest request)
         {
-            Models.Nintendo.DeviceAccount? deviceAccount = request.deviceAccount;
-            Models.Nintendo.DeviceAccount? createdDeviceAccount = null;
+            DeviceAccount? deviceAccount = request.deviceAccount;
+            DeviceAccount? createdDeviceAccount = null;
             if (deviceAccount is null)
             {
                 createdDeviceAccount = await _deviceAccountContext.RegisterDeviceAccount();

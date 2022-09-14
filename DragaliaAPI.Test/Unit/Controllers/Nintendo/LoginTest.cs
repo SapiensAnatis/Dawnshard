@@ -15,10 +15,10 @@ namespace DragaliaAPI.Test.Controllers.Nintendo
     {
         private readonly Mock<ILogger<NintendoLoginController>> mockLogger = new(MockBehavior.Strict);
         private readonly Mock<ISessionService> mockSessionService = new(MockBehavior.Strict);
-        private readonly Mock<IDeviceAccountService> mockDeviceAccountService = new(MockBehavior.Strict);
+        private readonly Mock<DeviceAccountContext> mockDeviceAccountContext = new(MockBehavior.Strict);
         private NintendoLoginController nintendoLoginController;
 
-        private readonly Models.Nintendo.DeviceAccount deviceAccount = new("test id", "test password");
+        private readonly DeviceAccount deviceAccount = new("test id", "test password");
 
         public LoginTest()
         {
@@ -27,42 +27,42 @@ namespace DragaliaAPI.Test.Controllers.Nintendo
             nintendoLoginController = new(
                 mockLogger.Object,
                 mockSessionService.Object,
-                mockDeviceAccountService.Object);
+                mockDeviceAccountContext.Object);
         }
 
         [Fact]
         public async Task LoginController_NullDeviceAccount_ReturnsOKAndCreatedDeviceAccount()
         {
-            mockDeviceAccountService.Setup(x => x.RegisterDeviceAccount()).ReturnsAsync(deviceAccount);
-            mockDeviceAccountService.Setup(x => x.AuthenticateDeviceAccount(deviceAccount)).ReturnsAsync(true);
+            mockDeviceAccountContext.Setup(x => x.RegisterDeviceAccount()).ReturnsAsync(deviceAccount);
+            mockDeviceAccountContext.Setup(x => x.AuthenticateDeviceAccount(deviceAccount)).ReturnsAsync(true);
             LoginRequest request = new(null);
 
             ActionResult<LoginResponse> response = await nintendoLoginController.Post(request);
 
             OkObjectResult goodResponse = Assert.IsType<OkObjectResult>(response.Result);
             LoginResponse responseObject = Assert.IsType<LoginResponse>(goodResponse.Value);
-            responseObject.user.deviceAccounts.Should().BeEquivalentTo(new List<Models.Nintendo.DeviceAccount> { deviceAccount });
+            responseObject.user.deviceAccounts.Should().BeEquivalentTo(new List<DeviceAccount> { deviceAccount });
             responseObject.createdDeviceAccount.Should().BeEquivalentTo(deviceAccount);
         }
 
         [Fact]
         public async Task LoginController_ExistingDeviceAccount_ReturnsOKAndDeviceAccount()
         {
-            mockDeviceAccountService.Setup(x => x.AuthenticateDeviceAccount(deviceAccount)).ReturnsAsync(true);
+            mockDeviceAccountContext.Setup(x => x.AuthenticateDeviceAccount(deviceAccount)).ReturnsAsync(true);
             LoginRequest request = new(deviceAccount);
 
             ActionResult<LoginResponse> response = await nintendoLoginController.Post(request);
 
             OkObjectResult goodResponse = Assert.IsType<OkObjectResult>(response.Result);
             LoginResponse responseObject = Assert.IsType<LoginResponse>(goodResponse.Value);
-            responseObject.user.deviceAccounts.Should().BeEquivalentTo(new List<Models.Nintendo.DeviceAccount> { deviceAccount });
+            responseObject.user.deviceAccounts.Should().BeEquivalentTo(new List<DeviceAccount> { deviceAccount });
             responseObject.createdDeviceAccount.Should().BeNull();
         }
 
         [Fact]
         public async Task LoginController_DeviceAccountUnauthorized_ReturnsUnauthorized()
         {
-            mockDeviceAccountService.Setup(x => x.AuthenticateDeviceAccount(deviceAccount)).ReturnsAsync(false);
+            mockDeviceAccountContext.Setup(x => x.AuthenticateDeviceAccount(deviceAccount)).ReturnsAsync(false);
             LoginRequest request = new(deviceAccount);
 
             ActionResult<LoginResponse> response = await nintendoLoginController.Post(request);

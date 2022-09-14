@@ -1,10 +1,7 @@
-using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models;
 using MessagePack.AspNetCoreMvcFormatter;
 using MessagePack.Resolvers;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -36,3 +33,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
