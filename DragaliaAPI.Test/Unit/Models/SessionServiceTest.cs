@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragaliaAPI.Models;
+﻿using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 using Xunit;
 
 namespace DragaliaAPI.Test.Unit.Models
@@ -14,7 +8,7 @@ namespace DragaliaAPI.Test.Unit.Models
     public class SessionServiceTest
     {
         private readonly SessionService sessionService = new();
-        private readonly DragaliaAPI.Models.Nintendo.DeviceAccount deviceAccount = new("id", "password");
+        private readonly DeviceAccount deviceAccount = new("id", "password");
 
         [Fact]
         public void CreateNewSession_NewSession_CreatesValidSession()

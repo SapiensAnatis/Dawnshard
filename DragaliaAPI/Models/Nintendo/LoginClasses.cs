@@ -11,12 +11,6 @@ namespace DragaliaAPI.Models.Nintendo
     // Conversely, we should probably fill in all the useless data in the response in case the client expects it
     public record LoginResponse
     {
-        public LoginResponse(string idToken, DeviceAccount deviceAccount)
-        {
-            this.idToken = idToken;
-            this.user = new(deviceAccount);
-        }
-
         public string idToken;
         public User user;
         public DeviceAccount? createdDeviceAccount;
@@ -28,6 +22,17 @@ namespace DragaliaAPI.Models.Nintendo
         public string? error = null;
         public int expiresIn = int.MaxValue;
         public string? market = null;
+
+        public LoginResponse(string idToken, DeviceAccount deviceAccount)
+        {
+            this.idToken = idToken;
+            this.user = new(deviceAccount);
+        }
+
+        [JsonConstructor]
+        public LoginResponse()
+        {
+        }
 
         public record Capability
         {
@@ -43,6 +48,9 @@ namespace DragaliaAPI.Models.Nintendo
             {
                 this.deviceAccounts = new() { deviceAccount };
             }
+
+            [JsonConstructor]
+            public User() { }
 
             public string birthday = "0000-00-00";
             public string country = "";

@@ -28,7 +28,9 @@ namespace DragaliaAPI.Models
         {
             if (deviceAccount.password is null) { throw new ArgumentNullException(paramName: deviceAccount.password); }
 
-            DbDeviceAccount dbDeviceAccount = await DeviceAccounts.SingleAsync(x => x.Id == deviceAccount.id);
+            DbDeviceAccount? dbDeviceAccount = await DeviceAccounts.SingleOrDefaultAsync(x => x.Id == deviceAccount.id);
+            if (dbDeviceAccount is null) { return false; }
+
             string hashedPassword = GetHashedPassword(deviceAccount.password);
 
             return (hashedPassword == dbDeviceAccount.HashedPassword);
@@ -55,8 +57,7 @@ namespace DragaliaAPI.Models
 
             // Dynamic salt would be better.
             // But security is not a top priority for this application; it is unlikely to be publically hosted for mass use.
-            string salt = _configuration.GetValue<string>("HashSalt");
-            byte[] saltBytes = Encoding.UTF8.GetBytes(salt);
+            byte[] saltBytes = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("HashSalt"));
 
             var pkbdf2 = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 10000);
             byte[] hashBytes = pkbdf2.GetBytes(20);
