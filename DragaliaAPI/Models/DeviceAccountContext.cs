@@ -15,6 +15,12 @@ namespace DragaliaAPI.Models
 
         [Required]
         public string HashedPassword { get; set; }
+
+        public DbDeviceAccount(string id, string hashedPassword)
+        {
+            Id = id;
+            HashedPassword = hashedPassword;
+        }
     }
 
     public class DeviceAccountContext : DbContext
@@ -30,6 +36,6 @@ namespace DragaliaAPI.Models
             modelBuilder.Entity<DbDeviceAccount>().ToTable("DeviceAccount");
         }
 
-        public DbSet<DbDeviceAccount> DeviceAccounts { get; set; }
+        public DbSet<DbDeviceAccount> DeviceAccounts { get; set; } = null!;
     }
 }

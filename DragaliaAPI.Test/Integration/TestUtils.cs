@@ -27,7 +27,7 @@ namespace DragaliaAPI.Test.Integration
             return new()
             {
                 // Password is a hash of the string "password"
-                new() { Id = "id", HashedPassword = "NMvdakTznEF6khwWcz17i6GTnDA=" },
+                new("id", "NMvdakTznEF6khwWcz17i6GTnDA="),
             };
         }
     }

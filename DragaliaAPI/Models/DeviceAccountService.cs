@@ -37,7 +37,7 @@ namespace DragaliaAPI.Models
             string password = Guid.NewGuid().ToString();
             string hashedPassword = GetHashedPassword(password);
 
-            DbDeviceAccount newDeviceAccount = new() { Id = id, HashedPassword = hashedPassword };
+            DbDeviceAccount newDeviceAccount = new(id, hashedPassword);
             await _context.DeviceAccounts.AddAsync(newDeviceAccount);
             await _context.SaveChangesAsync();
 

@@ -40,11 +40,6 @@ namespace DragaliaAPI.Models.Nintendo
             this.user = new(deviceAccount);
         }
 
-        [JsonConstructor]
-        public LoginResponse()
-        {
-        }
-
         public record Capability
         {
             public string accountApiHost = "api.accounts.nintendo.com";
@@ -59,9 +54,6 @@ namespace DragaliaAPI.Models.Nintendo
             {
                 this.deviceAccounts = new() { deviceAccount };
             }
-
-            [JsonConstructor]
-            public User() { }
 
             public string birthday = "0000-00-00";
             public string country = "";
