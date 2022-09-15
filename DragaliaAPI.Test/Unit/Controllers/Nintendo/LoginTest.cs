@@ -15,7 +15,7 @@ namespace DragaliaAPI.Test.Controllers.Nintendo
     {
         private readonly Mock<ILogger<NintendoLoginController>> mockLogger = new(MockBehavior.Strict);
         private readonly Mock<ISessionService> mockSessionService = new(MockBehavior.Strict);
-        private readonly Mock<DeviceAccountContext> mockDeviceAccountContext = new(MockBehavior.Strict);
+        private readonly Mock<IDeviceAccountService> mockDeviceAccountService = new(MockBehavior.Strict);
         private NintendoLoginController nintendoLoginController;
 
         private readonly DeviceAccount deviceAccount = new("test id", "test password");
@@ -27,14 +27,14 @@ namespace DragaliaAPI.Test.Controllers.Nintendo
             nintendoLoginController = new(
                 mockLogger.Object,
                 mockSessionService.Object,
-                mockDeviceAccountContext.Object);
+                mockDeviceAccountService.Object);
         }
 
         [Fact]
         public async Task LoginController_NullDeviceAccount_ReturnsOKAndCreatedDeviceAccount()
         {
-            mockDeviceAccountContext.Setup(x => x.RegisterDeviceAccount()).ReturnsAsync(deviceAccount);
-            mockDeviceAccountContext.Setup(x => x.AuthenticateDeviceAccount(deviceAccount)).ReturnsAsync(true);
+            mockDeviceAccountService.Setup(x => x.RegisterDeviceAccount()).ReturnsAsync(deviceAccount);
+            mockDeviceAccountService.Setup(x => x.AuthenticateDeviceAccount(deviceAccount)).ReturnsAsync(true);
             LoginRequest request = new(null);
 
             ActionResult<LoginResponse> response = await nintendoLoginController.Post(request);
@@ -48,7 +48,7 @@ namespace DragaliaAPI.Test.Controllers.Nintendo
         [Fact]
         public async Task LoginController_ExistingDeviceAccount_ReturnsOKAndDeviceAccount()
         {
-            mockDeviceAccountContext.Setup(x => x.AuthenticateDeviceAccount(deviceAccount)).ReturnsAsync(true);
+            mockDeviceAccountService.Setup(x => x.AuthenticateDeviceAccount(deviceAccount)).ReturnsAsync(true);
             LoginRequest request = new(deviceAccount);
 
             ActionResult<LoginResponse> response = await nintendoLoginController.Post(request);
@@ -62,7 +62,7 @@ namespace DragaliaAPI.Test.Controllers.Nintendo
         [Fact]
         public async Task LoginController_DeviceAccountUnauthorized_ReturnsUnauthorized()
         {
-            mockDeviceAccountContext.Setup(x => x.AuthenticateDeviceAccount(deviceAccount)).ReturnsAsync(false);
+            mockDeviceAccountService.Setup(x => x.AuthenticateDeviceAccount(deviceAccount)).ReturnsAsync(false);
             LoginRequest request = new(deviceAccount);
 
             ActionResult<LoginResponse> response = await nintendoLoginController.Post(request);

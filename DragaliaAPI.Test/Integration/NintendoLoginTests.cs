@@ -59,8 +59,8 @@ namespace DragaliaAPI.Test.Integration
             var createdDeviceAccount = deserializedResponse!.createdDeviceAccount;
 
             using IServiceScope scope = _factory.Services.CreateScope();
-            var _deviceAccountContext = scope.ServiceProvider.GetRequiredService<DeviceAccountContext>();
-            (await _deviceAccountContext.AuthenticateDeviceAccount(createdDeviceAccount)).Should().BeTrue();
+            var deviceAccountService = scope.ServiceProvider.GetRequiredService<IDeviceAccountService>();
+            (await deviceAccountService.AuthenticateDeviceAccount(createdDeviceAccount)).Should().BeTrue();
         }
 
         [Fact]
