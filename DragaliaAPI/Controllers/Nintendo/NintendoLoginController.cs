@@ -56,11 +56,5 @@ namespace DragaliaAPI.Controllers.Nintendo
 
             return Ok(response);
         }
-
-        [HttpGet]
-        public async Task<ActionResult<List<string>>> Get()
-        {
-            return Ok(new List<string>() { "a", "b" });
-        }
     }
 }
