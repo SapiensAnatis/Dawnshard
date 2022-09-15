@@ -21,16 +21,16 @@ namespace DragaliaAPI.Controllers.Nintendo
     {
         private readonly ILogger<NintendoLoginController> _logger;
         private readonly ISessionService _sessionService;
-        private readonly DeviceAccountContext _deviceAccountContext;
+        private readonly IDeviceAccountService _deviceAccountService;
 
         public NintendoLoginController(
             ILogger<NintendoLoginController> logger,
             ISessionService sessionService,
-            DeviceAccountContext context)
+            IDeviceAccountService deviceAccountService)
         {
             _logger = logger;
             _sessionService = sessionService;
-            _deviceAccountContext = context;
+            _deviceAccountService = deviceAccountService;
         }
 
         [HttpPost]
@@ -40,11 +40,11 @@ namespace DragaliaAPI.Controllers.Nintendo
             DeviceAccount? createdDeviceAccount = null;
             if (deviceAccount is null)
             {
-                createdDeviceAccount = await _deviceAccountContext.RegisterDeviceAccount();
+                createdDeviceAccount = await _deviceAccountService.RegisterDeviceAccount();
                 deviceAccount = createdDeviceAccount;
             }
 
-            bool authenticationSuccess = await _deviceAccountContext.AuthenticateDeviceAccount(deviceAccount);
+            bool authenticationSuccess = await _deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
             if (!authenticationSuccess) return Unauthorized();
 
             string token = Guid.NewGuid().ToString();
@@ -54,7 +54,7 @@ namespace DragaliaAPI.Controllers.Nintendo
                 createdDeviceAccount = createdDeviceAccount
             };
 
-            return response;
+            return Ok(response);
         }
 
         [HttpGet]

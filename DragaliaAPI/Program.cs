@@ -21,7 +21,9 @@ builder.Services.AddDbContext<DeviceAccountContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
 
 
-builder.Services.AddSingleton<ISessionService, SessionService>();
+builder.Services
+    .AddSingleton<ISessionService, SessionService>()
+    .AddScoped<IDeviceAccountService, DeviceAccountService>();
 
 var app = builder.Build();
 
