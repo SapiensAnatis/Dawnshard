@@ -3,7 +3,18 @@ using System.Text.Json.Serialization;
 
 namespace DragaliaAPI.Models.Nintendo
 {
-    public record DeviceAccount(string id, string? password);
+    public record DeviceAccount
+    {
+        public string id { get; set; }
+        public string? password { get; set; }  
+
+        [JsonConstructor]
+        public DeviceAccount(string id, string? password)
+        {
+            this.id = id;
+            this.password = password;
+        }
+    }
 
     // We only need to deserialize deviceAccount from the request. The rest of it is useless
     public record LoginRequest(DeviceAccount? deviceAccount);

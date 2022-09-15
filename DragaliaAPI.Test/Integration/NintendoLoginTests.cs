@@ -1,12 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -17,7 +15,7 @@ namespace DragaliaAPI.Test.Integration
     {
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<Program> _factory;
-        private readonly DeviceAccountContext _deviceAccountContext;
+        private readonly JsonSerializerOptions _jsonOptions = new() { IncludeFields = true };
 
         public NintendoLoginTests(CustomWebApplicationFactory<Program> factory)
         {
@@ -56,23 +54,19 @@ namespace DragaliaAPI.Test.Integration
             response.IsSuccessStatusCode.Should().BeTrue();
 
             string jsonString = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(jsonString);
-            LoginResponse? deserializedResponse = JsonSerializer.Deserialize<LoginResponse>(jsonString);
-
+            var deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString, _jsonOptions);
             deserializedResponse.Should().NotBeNull();
-            deserializedResponse!.createdDeviceAccount.Should().NotBeNull();
+            var createdDeviceAccount = deserializedResponse!.createdDeviceAccount;
 
-            using (var scope = _factory.Services.CreateScope())
-            {
-                var _deviceAccountContext = scope.ServiceProvider.GetRequiredService<DeviceAccountContext>();
-                (await _deviceAccountContext.AuthenticateDeviceAccount(deserializedResponse!.createdDeviceAccount!)).Should().BeTrue();
-            }
+            using IServiceScope scope = _factory.Services.CreateScope();
+            var _deviceAccountContext = scope.ServiceProvider.GetRequiredService<DeviceAccountContext>();
+            (await _deviceAccountContext.AuthenticateDeviceAccount(createdDeviceAccount)).Should().BeTrue();
         }
 
         [Fact]
         public async Task PostLogin_DeviceAccountCorrectCredentials_ReturnsSuccessResponse()
         {
-            DeviceAccount deviceAccount = new("584cbbad-0f20-4891-997e-1836435fc610", "password");
+            DeviceAccount deviceAccount = new("id", "password");
             StringContent requestContent = new("""
             {
                 "appVersion": "2.19.0",
@@ -89,8 +83,8 @@ namespace DragaliaAPI.Test.Integration
                 "timeZone": "Europe/London",
                 "timeZoneOffset": 3600000,
                 "deviceAccount": {
-                    "id": "584cbbad-0f20-4891-997e-1836435fc610",
-                    "password": "password",
+                    "id": "id",
+                    "password": "password"
                 }
             }
             """);
@@ -102,9 +96,9 @@ namespace DragaliaAPI.Test.Integration
 
             string jsonString = await response.Content.ReadAsStringAsync();
             Console.WriteLine(jsonString);
-            LoginResponse? deserializedResponse = JsonSerializer.Deserialize<LoginResponse>(jsonString);
-
+            PartialLoginResponse? deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString, _jsonOptions);
             deserializedResponse.Should().NotBeNull();
+
             deserializedResponse!.user.deviceAccounts.Should().Contain(deviceAccount);
         }
 
@@ -127,8 +121,8 @@ namespace DragaliaAPI.Test.Integration
                 "timeZone": "Europe/London",
                 "timeZoneOffset": 3600000,
                 "deviceAccount": {
-                    "id": "584cbbad-0f20-4891-997e-1836435fc610",
-                    "password": "wrong password",
+                    "id": "id",
+                    "password": "wrong password"
                 }
             }
             """);
@@ -137,6 +131,31 @@ namespace DragaliaAPI.Test.Integration
             HttpResponseMessage response = await _client.PostAsync("/core/v1/gateway/sdk/login", requestContent);
 
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
+
+        // Only deserialize the fields of interest for testing.
+        public record PartialLoginResponse
+        {
+            public DeviceAccount createdDeviceAccount;
+            public PartialUser user;
+
+            [JsonConstructor]
+            public PartialLoginResponse(DeviceAccount createdDeviceAccount, PartialUser user)
+            {
+                this.createdDeviceAccount = createdDeviceAccount;
+                this.user = user;
+            }
+
+            public record PartialUser
+            {
+                public List<DeviceAccount> deviceAccounts;
+
+                [JsonConstructor]
+                public PartialUser(List<DeviceAccount> deviceAccounts)
+                {
+                    this.deviceAccounts = deviceAccounts;
+                }
+            }
         }
     }
 }

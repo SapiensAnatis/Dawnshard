@@ -7,8 +7,6 @@ services:
     build:
       context: .
       dockerfile: DragaliaAPI/Dockerfile
-    ports:
-      - "56403:56404"
 
   sqlserver:
     container_name: sqlserver
