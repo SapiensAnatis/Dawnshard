@@ -5,6 +5,15 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "dragaliaapi": "StartDebugging",
+        "sqlserver": "StartWithoutDebugging"
+      }
+    },
+    "Docker Compose (1)": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "dragaliaapi": "StartDebugging",
+        "sqlserver": "StartWithoutDebugging"
       }
     }
   }

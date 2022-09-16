@@ -23,6 +23,9 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/weatherforecast",
       "publishAllPorts": true,
       "useSSL": true
+    },
+    "Profile 1": {
+      "commandName": "Docker"
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
