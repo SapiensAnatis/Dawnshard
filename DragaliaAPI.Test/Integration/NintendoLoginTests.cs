@@ -58,6 +58,7 @@ namespace DragaliaAPI.Test.Integration
             deserializedResponse.Should().NotBeNull();
             var createdDeviceAccount = deserializedResponse!.createdDeviceAccount;
 
+            // Ensure new DeviceAccount was registered against the DB, and will authenticate successfully
             using IServiceScope scope = _factory.Services.CreateScope();
             var deviceAccountService = scope.ServiceProvider.GetRequiredService<IDeviceAccountService>();
             (await deviceAccountService.AuthenticateDeviceAccount(createdDeviceAccount)).Should().BeTrue();

@@ -19,8 +19,6 @@ namespace DragaliaAPI.Test.Integration
 
                 services.Remove(descriptor);
 
-                services.AddScoped<IDeviceAccountService, DeviceAccountService>();
-
                 services.AddDbContext<DeviceAccountContext>(options =>
                 {
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
