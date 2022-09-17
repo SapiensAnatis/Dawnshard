@@ -1,11 +1,6 @@
-﻿using System;
-using System.Security.Authentication;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using DragaliaAPI.Models;
+﻿using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Controllers.Nintendo
 {
