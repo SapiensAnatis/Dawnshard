@@ -6,7 +6,7 @@ namespace DragaliaAPI.Models.Nintendo
     public record DeviceAccount
     {
         public string id { get; set; }
-        public string? password { get; set; }  
+        public string? password { get; set; }
 
         [JsonConstructor]
         public DeviceAccount(string id, string? password)
@@ -22,17 +22,16 @@ namespace DragaliaAPI.Models.Nintendo
     // Conversely, we should probably fill in all the useless data in the response in case the client expects it
     public record LoginResponse
     {
-        public string idToken;
-        public User user;
-        public DeviceAccount? createdDeviceAccount;
-
+        public string idToken { get; init; }
+        public User user { get; init; }
+        public DeviceAccount? createdDeviceAccount { get; set; }
         // Junk fields
-        public string accessToken = "";
-        public string behaviourSettings = "";
-        public Capability capability = new();
-        public string? error = null;
-        public int expiresIn = int.MaxValue;
-        public string? market = null;
+        public string accessToken { get; } = "";
+        public string behaviourSettings { get; } = "";
+        public Capability capability { get; } = new();
+        public string? error { get; } = null;
+        public int expiresIn { get; } = int.MaxValue;
+        public string? market { get; } = null;
 
         public LoginResponse(string idToken, DeviceAccount deviceAccount)
         {
@@ -42,10 +41,10 @@ namespace DragaliaAPI.Models.Nintendo
 
         public record Capability
         {
-            public string accountApiHost = "api.accounts.nintendo.com";
-            public string accountHost = "accounts.nintendo.com";
-            public string pointProgramHost = "my.nintendo.com";
-            public long sessionUpdateInterval = long.MaxValue;
+            public string accountApiHost { get; } = "api.accounts.nintendo.com";
+            public string accountHost { get; } = "accounts.nintendo.com";
+            public string pointProgramHost { get; } = "my.nintendo.com";
+            public long sessionUpdateInterval { get; } = long.MaxValue;
         }
 
         public record User
@@ -55,24 +54,23 @@ namespace DragaliaAPI.Models.Nintendo
                 this.deviceAccounts = new() { deviceAccount };
             }
 
-            public string birthday = "0000-00-00";
-            public string country = "";
-            public long createdAt = 0;
-            public string gender = "Unknown";
-            public bool hasUnreadCsComment = false;
-            public string id = "";
-            public string links = "";
-            public string nickname = "";
-            public long updatedAt = 0;
-            public List<DeviceAccount> deviceAccounts;
-            public Permissions permissions = new();
-
+            public string birthday { get; } = "0000-00-00";
+            public string country { get; } = "";
+            public long createdAt { get; } = 0;
+            public string gender { get; } = "Unknown";
+            public bool hasUnreadCsComment { get; } = false;
+            public string id { get; } = "";
+            public string links { get; } = "";
+            public string nickname { get; } = "";
+            public long updatedAt { get; } = 0;
+            public List<DeviceAccount> deviceAccounts { get; init; }
+            public Permissions permissions { get; } = new();
             public record Permissions
             {
-                public bool personalAnalytics = false;
-                public long personalAnalyticsUpdatedAt = 0;
-                public bool personalNotification = false;
-                public long personalNotificationUpdatedAt = 0;
+                public bool personalAnalytics { get; } = false;
+                public long personalAnalyticsUpdatedAt { get; } = 0;
+                public bool personalNotification { get; } = false;
+                public long personalNotificationUpdatedAt { get; } = 0;
             }
         }
     }

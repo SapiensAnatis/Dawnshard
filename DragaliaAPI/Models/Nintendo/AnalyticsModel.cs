@@ -2,15 +2,15 @@
 {
     public record AnalyticsConfigResponse
     {
-        public string accessToken = "";
-        public string applicationId = "";
-        public string city = "" ;
-        public string country = "" ;
-        public long expirationTime = long.MaxValue;
-        public bool immediateReporting = false;
-        public string mode = "" ;
-        public string region = "" ;
-        public int reportingPeriod = int.MaxValue;
-        public string topic = "";
+        public string accessToken { get; } = "";
+        public string applicationId { get; } = "";
+        public string city { get; } = "";
+        public string country { get; } = "";
+        public long expirationTime { get; } = long.MaxValue;
+        public bool immediateReporting { get; } = false;
+        public string mode { get; } = "";
+        public string region { get; } = "";
+        public int reportingPeriod { get; } = int.MaxValue;
+        public string topic { get; } = "";
     }
 }
