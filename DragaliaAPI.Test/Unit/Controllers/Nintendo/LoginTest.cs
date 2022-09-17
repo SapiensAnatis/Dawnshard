@@ -9,7 +9,7 @@ namespace DragaliaAPI.Test.Controllers.Nintendo
         private readonly Mock<ILogger<NintendoLoginController>> mockLogger;
         private readonly Mock<ISessionService> mockSessionService;
         private readonly Mock<IDeviceAccountService> mockDeviceAccountService;
-        private NintendoLoginController nintendoLoginController;
+        private readonly NintendoLoginController nintendoLoginController;
 
         private readonly DeviceAccount deviceAccount = new("test id", "test password");
 

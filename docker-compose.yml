@@ -1,8 +1,10 @@
 version: '3.4'
+name: DragaliaAPI
 
 services:
   dragaliaapi:
     container_name: dragaliaapi
+    hostname: dragaliaapi
     image: ${DOCKER_REGISTRY-}dragaliaapi
     build:
       context: .

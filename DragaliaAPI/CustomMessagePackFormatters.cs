@@ -1,4 +1,7 @@
-﻿using MessagePack;
+﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning disable IDE0052 // Remove unread private members
+
+using MessagePack;
 using MessagePack.AspNetCoreMvcFormatter;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
