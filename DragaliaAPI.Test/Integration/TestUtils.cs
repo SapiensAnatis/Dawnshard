@@ -40,6 +40,7 @@ namespace DragaliaAPI.Test.Integration
         {
             string json = MessagePackSerializer.ConvertToJson(content, ContractlessStandardResolver.Options);
             using var jDoc = JsonDocument.Parse(json);
+     
             return JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
         }
     }
