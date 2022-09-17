@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Models.Dragalia;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace DragaliaAPI.Controllers.Dragalia
 {
@@ -13,7 +14,8 @@ namespace DragaliaAPI.Controllers.Dragalia
         [HttpPost]
         public ActionResult<ServiceStatusResponse> Post()
         {
-            return Ok(new ServiceStatusResponse());
+            ServiceStatusResponse response = new();
+            return Ok(response);
         }
     }
 }

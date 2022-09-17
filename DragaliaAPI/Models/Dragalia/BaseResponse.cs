@@ -1,31 +1,24 @@
-﻿using Newtonsoft.Json;
+﻿using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia
 {
-    public record BaseResponse
+    [MessagePackObject(keyAsPropertyName: true)]
+    public abstract record BaseResponse<T>
     {
-        public DataHeaders data_headers;
-        object? data;
+        public DataHeaders data_headers { get; init; }
 
-        public BaseResponse(int resultCode)
-            : this(new DataHeaders(resultCode))
+        public abstract T data { get; init; }
+
+        public BaseResponse(ResultCode result_code = ResultCode.Success)
         {
+            this.data_headers = new(result_code);
         }
 
-        [JsonConstructor]
-        public BaseResponse(DataHeaders dataHeaders)
-        {
-            this.data_headers = dataHeaders;
-        }
+        public record DataHeaders(ResultCode result_code);
+    }
 
-        public record DataHeaders
-        {
-            public int result_code;
-
-            public DataHeaders(int result_code)
-            {
-                this.result_code = result_code;
-            }
-        }
+    public enum ResultCode
+    {
+        Success = 1,
     }
 }

@@ -24,7 +24,7 @@ namespace DragaliaAPI.Test.Integration
             {
                 AllowAutoRedirect = false
             });
-            
+
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace DragaliaAPI.Test.Integration
             requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
             HttpResponseMessage response = await _client.PostAsync("/core/v1/gateway/sdk/login", requestContent);
-            
+
             response.IsSuccessStatusCode.Should().BeTrue();
 
             string jsonString = await response.Content.ReadAsStringAsync();

@@ -1,5 +1,7 @@
 using DragaliaAPI.Models;
 using MessagePack.Resolvers;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +12,19 @@ var configuration = builder.Configuration;
 builder.Services.AddControllers();
 builder.Services.AddMvc().AddMvcOptions(option =>
 {
-    option.OutputFormatters.Add(new DragaliaAPI.CustomMessagePackOutputFormatter(ContractlessStandardResolver.Options));
-    option.InputFormatters.Add(new DragaliaAPI.CustomMessagePackInputFormatter(ContractlessStandardResolver.Options));
+    option.OutputFormatters.Add(new DragaliaAPI.CustomMessagePackOutputFormatter(TypelessContractlessStandardResolver.Options));
+    option.InputFormatters.Add(new DragaliaAPI.CustomMessagePackInputFormatter(TypelessContractlessStandardResolver.Options));
 }).AddJsonOptions(option =>
     option.JsonSerializerOptions.IncludeFields = true
 );
+
+/*
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.ConfigureHttpsDefaults(options =>
+        options.ClientCertificateMode = ClientCertificateMode.RequireCertificate);
+});
+*/
 
 builder.Services.AddDbContext<DeviceAccountContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));

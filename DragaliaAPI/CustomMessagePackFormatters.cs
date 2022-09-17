@@ -14,7 +14,7 @@ namespace DragaliaAPI
         {
         }
 
-        public CustomMessagePackOutputFormatter(MessagePackSerializerOptions options) 
+        public CustomMessagePackOutputFormatter(MessagePackSerializerOptions options)
             : base(options)
         {
             this.options = options;
