@@ -1,9 +1,4 @@
-﻿using DragaliaAPI.Models;
-using DragaliaAPI.Models.Nintendo;
-using FluentAssertions;
-using Xunit;
-
-namespace DragaliaAPI.Test.Unit.Models
+﻿namespace DragaliaAPI.Test.Unit.Models
 {
     public class SessionServiceTest
     {

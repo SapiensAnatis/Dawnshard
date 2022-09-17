@@ -1,27 +1,24 @@
-using System;
-using Xunit;
-using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Controllers.Nintendo;
 using Microsoft.Extensions.Logging;
-using Moq;
-using System.Text.Json;
-using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using DragaliaAPI.Models;
 
 namespace DragaliaAPI.Test.Controllers.Nintendo
 {
     public class LoginTest
     {
-        private readonly Mock<ILogger<NintendoLoginController>> mockLogger = new(MockBehavior.Strict);
-        private readonly Mock<ISessionService> mockSessionService = new(MockBehavior.Strict);
-        private readonly Mock<IDeviceAccountService> mockDeviceAccountService = new(MockBehavior.Strict);
+        private readonly Mock<ILogger<NintendoLoginController>> mockLogger;
+        private readonly Mock<ISessionService> mockSessionService;
+        private readonly Mock<IDeviceAccountService> mockDeviceAccountService;
         private NintendoLoginController nintendoLoginController;
 
         private readonly DeviceAccount deviceAccount = new("test id", "test password");
 
         public LoginTest()
         {
+            mockLogger = new(MockBehavior.Loose);
+            mockSessionService = new(MockBehavior.Strict);
+            mockDeviceAccountService = new(MockBehavior.Strict);
+
             mockSessionService.Setup(x => x.CreateNewSession(deviceAccount, It.IsAny<string>())).Returns("session id");
 
             nintendoLoginController = new(

@@ -23,7 +23,7 @@ namespace DragaliaAPI.Models
         {
             if (deviceAccount.password is null) { throw new ArgumentNullException(paramName: deviceAccount.password); }
 
-            DbDeviceAccount? dbDeviceAccount = await _context.DeviceAccounts.SingleOrDefaultAsync(x => x.Id == deviceAccount.id);
+            DbDeviceAccount? dbDeviceAccount = await _context.GetDeviceAccountById(deviceAccount.id);
             if (dbDeviceAccount is null) { return false; }
 
             string hashedPassword = GetHashedPassword(deviceAccount.password);
@@ -37,9 +37,7 @@ namespace DragaliaAPI.Models
             string password = Guid.NewGuid().ToString();
             string hashedPassword = GetHashedPassword(password);
 
-            DbDeviceAccount newDeviceAccount = new(id, hashedPassword);
-            await _context.DeviceAccounts.AddAsync(newDeviceAccount);
-            await _context.SaveChangesAsync();
+            await _context.AddNewDeviceAccount(id, hashedPassword);
 
             _logger.LogInformation("Registered new account with ID {id}", id);
 
