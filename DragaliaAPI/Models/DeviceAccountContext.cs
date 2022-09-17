@@ -25,17 +25,25 @@ namespace DragaliaAPI.Models
 
     public class DeviceAccountContext : DbContext
     {
-        private readonly IConfiguration _configuration;
-        public DeviceAccountContext(DbContextOptions<DeviceAccountContext> options, IConfiguration configuration) : base(options)
+        public DeviceAccountContext(DbContextOptions<DeviceAccountContext> options) : base(options)
         {
-            _configuration = configuration;
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public DeviceAccountContext()
         {
-            modelBuilder.Entity<DbDeviceAccount>().ToTable("DeviceAccount");
         }
 
         public DbSet<DbDeviceAccount> DeviceAccounts { get; set; } = null!;
+
+        public virtual async Task<DbDeviceAccount?> GetDeviceAccountById(string id)
+        {
+            return await this.DeviceAccounts.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public virtual async Task AddNewDeviceAccount(string id, string hashedPassword)
+        {
+            await this.DeviceAccounts.AddAsync(new DbDeviceAccount(id, hashedPassword));
+            await this.SaveChangesAsync();
+        }
     }
 }

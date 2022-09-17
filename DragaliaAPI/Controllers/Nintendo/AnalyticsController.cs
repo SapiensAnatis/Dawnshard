@@ -16,7 +16,7 @@ namespace DragaliaAPI.Controllers.Nintendo
         }
     }
 
-    [Route("bigdata/v1/analytics/")]
+    [Route("bigdata/v1/analytics")]
     [Consumes("application/json")]
     [Produces("text/html")]
     [ApiController]

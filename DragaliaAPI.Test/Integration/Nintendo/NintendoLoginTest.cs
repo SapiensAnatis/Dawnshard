@@ -4,20 +4,16 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
-namespace DragaliaAPI.Test.Integration
+namespace DragaliaAPI.Test.Integration.Nintendo
 {
-    public class NintendoLoginTests : IClassFixture<CustomWebApplicationFactory<Program>>
+    public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<Program> _factory;
-        private readonly JsonSerializerOptions _jsonOptions = new() { IncludeFields = true };
 
-        public NintendoLoginTests(CustomWebApplicationFactory<Program> factory)
+        public NintendoLoginTest(CustomWebApplicationFactory<Program> factory)
         {
             _factory = factory;
             _client = factory.CreateClient(new WebApplicationFactoryClientOptions
@@ -54,7 +50,7 @@ namespace DragaliaAPI.Test.Integration
             response.IsSuccessStatusCode.Should().BeTrue();
 
             string jsonString = await response.Content.ReadAsStringAsync();
-            var deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString, _jsonOptions);
+            var deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
             deserializedResponse.Should().NotBeNull();
             var createdDeviceAccount = deserializedResponse!.createdDeviceAccount;
 
@@ -97,7 +93,7 @@ namespace DragaliaAPI.Test.Integration
 
             string jsonString = await response.Content.ReadAsStringAsync();
             Console.WriteLine(jsonString);
-            PartialLoginResponse? deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString, _jsonOptions);
+            PartialLoginResponse? deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
             deserializedResponse.Should().NotBeNull();
 
             deserializedResponse!.user.deviceAccounts.Should().Contain(deviceAccount);
@@ -137,8 +133,8 @@ namespace DragaliaAPI.Test.Integration
         // Only deserialize the fields of interest for testing.
         public record PartialLoginResponse
         {
-            public DeviceAccount createdDeviceAccount;
-            public PartialUser user;
+            public DeviceAccount createdDeviceAccount { get; init; }
+            public PartialUser user { get; init; }
 
             [JsonConstructor]
             public PartialLoginResponse(DeviceAccount createdDeviceAccount, PartialUser user)
@@ -149,7 +145,7 @@ namespace DragaliaAPI.Test.Integration
 
             public record PartialUser
             {
-                public List<DeviceAccount> deviceAccounts;
+                public List<DeviceAccount> deviceAccounts { get; init; }
 
                 [JsonConstructor]
                 public PartialUser(List<DeviceAccount> deviceAccounts)

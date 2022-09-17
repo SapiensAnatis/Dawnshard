@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace DragaliaAPI
 {
+    /// <summary>
+    /// Wrapper to MessagePack formatters that accept application/octet-stream.
+    /// </summary>
     public class CustomMessagePackOutputFormatter : MessagePackOutputFormatter
     {
         private const string ContentType = "application/octet-stream";
