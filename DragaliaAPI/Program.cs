@@ -18,13 +18,13 @@ builder.Services.AddMvc().AddMvcOptions(option =>
 });
 
 builder.Services.AddDbContext<ApiContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")), ServiceLifetime.Transient, ServiceLifetime.Transient);
 
 
 builder.Services
     .AddSingleton<ISessionService, SessionService>()
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
-    .AddScoped<IApiRepository, ApiRepository>();
+    .AddTransient<IApiRepository, ApiRepository>();
 
 var app = builder.Build();
 

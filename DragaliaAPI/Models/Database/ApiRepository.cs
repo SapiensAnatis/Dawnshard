@@ -26,5 +26,11 @@ namespace DragaliaAPI.Models.Database
             await _context.DeviceAccounts.AddAsync(new DbDeviceAccount(id, hashedPassword));
             await _context.SaveChangesAsync();
         }
+
+        public virtual async Task AddNewPlayerSavefile(string deviceAccountId)
+        {
+            await _context.PlayerSavefiles.AddAsync(new DbPlayerSavefile() { DeviceAccountId = deviceAccountId });
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -39,6 +39,7 @@ namespace DragaliaAPI.Models
             string hashedPassword = GetHashedPassword(password);
 
             await _repository.AddNewDeviceAccount(id, hashedPassword);
+            await _repository.AddNewPlayerSavefile(id);
 
             _logger.LogInformation("Registered new account with ID {id}", id);
 
