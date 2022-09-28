@@ -50,5 +50,9 @@
 	<InternalsVisibleTo Include="DragaliaAPI.Test" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 
 </Project>

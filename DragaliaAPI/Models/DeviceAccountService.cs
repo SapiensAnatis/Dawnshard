@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,13 +9,13 @@ namespace DragaliaAPI.Models
 {
     public class DeviceAccountService : IDeviceAccountService
     {
-        private readonly DeviceAccountContext _context;
+        private readonly IApiRepository _repository;
         private readonly IConfiguration _configuration;
         private readonly ILogger<DeviceAccountService> _logger;
 
-        public DeviceAccountService(DeviceAccountContext context, IConfiguration configuration, ILogger<DeviceAccountService> logger)
+        public DeviceAccountService(IApiRepository repository, IConfiguration configuration, ILogger<DeviceAccountService> logger)
         {
-            _context = context;
+            _repository = repository;
             _configuration = configuration;
             _logger = logger;
         }
@@ -23,7 +24,7 @@ namespace DragaliaAPI.Models
         {
             if (deviceAccount.password is null) { throw new ArgumentNullException(paramName: deviceAccount.password); }
 
-            DbDeviceAccount? dbDeviceAccount = await _context.GetDeviceAccountById(deviceAccount.id);
+            DbDeviceAccount? dbDeviceAccount = await _repository.GetDeviceAccountById(deviceAccount.id);
             if (dbDeviceAccount is null) { return false; }
 
             string hashedPassword = GetHashedPassword(deviceAccount.password);
@@ -37,7 +38,7 @@ namespace DragaliaAPI.Models
             string password = Guid.NewGuid().ToString();
             string hashedPassword = GetHashedPassword(password);
 
-            await _context.AddNewDeviceAccount(id, hashedPassword);
+            await _repository.AddNewDeviceAccount(id, hashedPassword);
 
             _logger.LogInformation("Registered new account with ID {id}", id);
 
@@ -58,4 +59,4 @@ namespace DragaliaAPI.Models
             return Convert.ToBase64String(hashBytes);
         }
     }
-}
+} 

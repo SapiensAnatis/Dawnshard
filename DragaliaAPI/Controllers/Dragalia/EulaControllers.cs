@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using DragaliaAPI.Models.Nintendo;
+﻿using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Models.Dragalia;
 
 namespace DragaliaAPI.Controllers.Dragalia
@@ -29,7 +27,7 @@ namespace DragaliaAPI.Controllers.Dragalia
         {
             EulaVersion? version = EulaData.AllEulaVersions.FirstOrDefault(x => x.region == request.region && x.lang == request.lang);
 
-            if (version is null) { return BadRequest(); }
+            if (version is null) return BadRequest();
 
             EulaGetVersionResponse response = new(version);
             return Ok(response);

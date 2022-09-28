@@ -29,7 +29,7 @@ namespace DragaliaAPI.Test.Integration.Nintendo
             StringContent requestContent = new("""
             {
                 "appVersion": "2.19.0",
-                "assertion": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb20ubmludGVuZG8uemFnYTowYzNkNzg5ZjVlZDIzZjJiMzRjNzk2NjBhMzcxOTBkMWM4NzNhM2YyIiwiaWF0IjoxNjYyODIwODQ4LCJhdWQiOiJodHRwczpcL1wvNDhjYzgxY2RiOGRlMzBlMDYxOTI4ZjU2ZTliZDRiNGQuYmFhcy5uaW50ZW5kby5jb20ifQ==.brVDUSGZpnYugei0UHmTt_YEA3P6WPqr0id29TM8SM4=",
+                "assertion": "some gibberish",
                 "carrier": "giffgaff",
                 "deviceAnalyticsId": "a2J1YmFhYWFERG1NamZtckpNTmVqSHZ6UGJWUE9FUwA=",
                 "deviceName": "ONEPLUS A6003",
@@ -67,7 +67,7 @@ namespace DragaliaAPI.Test.Integration.Nintendo
             StringContent requestContent = new("""
             {
                 "appVersion": "2.19.0",
-                "assertion": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb20ubmludGVuZG8uemFnYTowYzNkNzg5ZjVlZDIzZjJiMzRjNzk2NjBhMzcxOTBkMWM4NzNhM2YyIiwiaWF0IjoxNjYyODIwODQ4LCJhdWQiOiJodHRwczpcL1wvNDhjYzgxY2RiOGRlMzBlMDYxOTI4ZjU2ZTliZDRiNGQuYmFhcy5uaW50ZW5kby5jb20ifQ==.brVDUSGZpnYugei0UHmTt_YEA3P6WPqr0id29TM8SM4=",
+                "assertion": "some gibberish",
                 "carrier": "giffgaff",
                 "deviceAnalyticsId": "a2J1YmFhYWFERG1NamZtckpNTmVqSHZ6UGJWUE9FUwA=",
                 "deviceName": "ONEPLUS A6003",
@@ -105,7 +105,7 @@ namespace DragaliaAPI.Test.Integration.Nintendo
             StringContent requestContent = new("""
             {
                 "appVersion": "2.19.0",
-                "assertion": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb20ubmludGVuZG8uemFnYTowYzNkNzg5ZjVlZDIzZjJiMzRjNzk2NjBhMzcxOTBkMWM4NzNhM2YyIiwiaWF0IjoxNjYyODIwODQ4LCJhdWQiOiJodHRwczpcL1wvNDhjYzgxY2RiOGRlMzBlMDYxOTI4ZjU2ZTliZDRiNGQuYmFhcy5uaW50ZW5kby5jb20ifQ==.brVDUSGZpnYugei0UHmTt_YEA3P6WPqr0id29TM8SM4=",
+                "assertion": "some gibberish",
                 "carrier": "giffgaff",
                 "deviceAnalyticsId": "a2J1YmFhYWFERG1NamZtckpNTmVqSHZ6UGJWUE9FUwA=",
                 "deviceName": "ONEPLUS A6003",
@@ -130,7 +130,8 @@ namespace DragaliaAPI.Test.Integration.Nintendo
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
 
-        // Only deserialize the fields of interest for testing.
+        // Only deserialize the fields of interest for testing -- the existing LoginResponse record contains a lot of useless data
+        // and the deserializer doesn't really seem to like it for reasons that aren't worth figuring out
         public record PartialLoginResponse
         {
             public DeviceAccount createdDeviceAccount { get; init; }

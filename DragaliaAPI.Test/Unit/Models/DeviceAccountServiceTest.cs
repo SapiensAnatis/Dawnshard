@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using DragaliaAPI.Models.Database;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Test.Unit.Models
@@ -6,26 +7,26 @@ namespace DragaliaAPI.Test.Unit.Models
     public class DeviceAccountServiceTest
     {
         private readonly Mock<ILogger<DeviceAccountService>> mockLogger;
-        private readonly Mock<DeviceAccountContext> mockContext;
+        private readonly Mock<IApiRepository> mockRepository;
 
         private readonly DeviceAccountService deviceAccountService;
 
         public DeviceAccountServiceTest()
         {
             mockLogger = new(MockBehavior.Loose);
-            mockContext = new (MockBehavior.Strict);
+            mockRepository = new (MockBehavior.Strict);
 
             var inMemoryConfiguration = new Dictionary<string, string> {
                 {"HashSalt", "dragalia"},
             };
 
-            mockContext = new(MockBehavior.Strict);
+            mockRepository = new(MockBehavior.Strict);
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(inMemoryConfiguration)
                 .Build();
 
-            deviceAccountService = new(mockContext.Object, configuration, mockLogger.Object);
+            deviceAccountService = new(mockRepository.Object, configuration, mockLogger.Object);
         }
 
         [Fact]
@@ -33,12 +34,12 @@ namespace DragaliaAPI.Test.Unit.Models
         {
             DeviceAccount deviceAccount = new("id", "password");
             DbDeviceAccount dbDeviceAccount = new("id", "NMvdakTznEF6khwWcz17i6GTnDA=");
-            mockContext.Setup(x => x.GetDeviceAccountById(deviceAccount.id)).ReturnsAsync(dbDeviceAccount);
+            mockRepository.Setup(x => x.GetDeviceAccountById(deviceAccount.id)).ReturnsAsync(dbDeviceAccount);
 
             bool result = await deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
 
             result.Should().BeTrue();
-            mockContext.VerifyAll();
+            mockRepository.VerifyAll();
         }
 
         [Fact]
@@ -46,12 +47,12 @@ namespace DragaliaAPI.Test.Unit.Models
         {
             DeviceAccount deviceAccount = new("id", "password");
             DbDeviceAccount dbDeviceAccount = new("id", "non-matching hash");
-            mockContext.Setup(x => x.GetDeviceAccountById(deviceAccount.id)).ReturnsAsync(dbDeviceAccount);
+            mockRepository.Setup(x => x.GetDeviceAccountById(deviceAccount.id)).ReturnsAsync(dbDeviceAccount);
 
             bool result = await deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
 
             result.Should().BeFalse();
-            mockContext.VerifyAll();
+            mockRepository.VerifyAll();
         }
 
         [Fact]
@@ -62,17 +63,17 @@ namespace DragaliaAPI.Test.Unit.Models
             Func<Task> act = async () => { await deviceAccountService.AuthenticateDeviceAccount(deviceAccount); };
 
             await act.Should().ThrowAsync<ArgumentNullException>();
-            mockContext.VerifyAll();
+            mockRepository.VerifyAll();
         }
 
         [Fact]
         public async Task CreateDeviceAccount_CallsAddNewDeviceAccount()
         {
-            mockContext.Setup(x => x.AddNewDeviceAccount(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
+            mockRepository.Setup(x => x.AddNewDeviceAccount(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
             await deviceAccountService.RegisterDeviceAccount();
 
-            mockContext.VerifyAll();
+            mockRepository.VerifyAll();
         }
     }
 }

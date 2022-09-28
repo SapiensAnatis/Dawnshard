@@ -8,7 +8,7 @@ namespace DragaliaAPI.Models
         private class Session
         {
             public string Id { get; }
-            public Nintendo.DeviceAccount deviceAccount { get; set; }
+            public DeviceAccount deviceAccount { get; set; }
             public string IdToken { get; init; }
 
             public Session(DeviceAccount deviceAccount, string idToken)
@@ -19,6 +19,7 @@ namespace DragaliaAPI.Models
             }
         }
 
+        // TODO: Implement Redis for session state management
         private readonly List<Session> _sessions = new();
 
         public string CreateNewSession(DeviceAccount deviceAccount, string idToken)
