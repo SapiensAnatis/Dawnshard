@@ -8,6 +8,14 @@ namespace DragaliaAPI.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "dbo");
+
+            migrationBuilder.CreateSequence(
+                name: "Viewer_id",
+                schema: "dbo",
+                startValue: 10000000000L);
+
             migrationBuilder.CreateTable(
                 name: "DeviceAccounts",
                 columns: table => new
@@ -24,12 +32,12 @@ namespace DragaliaAPI.Migrations
                 name: "PlayerSavefiles",
                 columns: table => new
                 {
-                    ViewerId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                    DeviceAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ViewerId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR dbo.Viewer_id")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerSavefiles", x => x.ViewerId);
+                    table.PrimaryKey("PK_PlayerSavefiles", x => x.DeviceAccountId);
                 });
         }
 
@@ -40,6 +48,10 @@ namespace DragaliaAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "PlayerSavefiles");
+
+            migrationBuilder.DropSequence(
+                name: "Viewer_id",
+                schema: "dbo");
         }
     }
 }

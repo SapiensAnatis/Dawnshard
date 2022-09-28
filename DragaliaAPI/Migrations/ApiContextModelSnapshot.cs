@@ -21,6 +21,9 @@ namespace DragaliaAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.HasSequence("Viewer_id", "dbo")
+                .StartsAt(10000000000L);
+
             modelBuilder.Entity("DragaliaAPI.Models.Database.DbDeviceAccount", b =>
                 {
                     b.Property<string>("Id")
@@ -37,13 +40,15 @@ namespace DragaliaAPI.Migrations
 
             modelBuilder.Entity("DragaliaAPI.Models.Database.DbPlayerSavefile", b =>
                 {
-                    b.Property<int>("ViewerId")
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long>("ViewerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("NEXT VALUE FOR dbo.Viewer_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ViewerId"), 1L, 1);
-
-                    b.HasKey("ViewerId");
+                    b.HasKey("DeviceAccountId");
 
                     b.ToTable("PlayerSavefiles");
                 });

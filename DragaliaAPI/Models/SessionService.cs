@@ -1,22 +1,16 @@
 ﻿
+using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Nintendo;
 
 namespace DragaliaAPI.Models
 {
     public class SessionService : ISessionService
     {
-        private class Session
-        {
-            public string Id { get; }
-            public DeviceAccount deviceAccount { get; set; }
-            public string IdToken { get; init; }
+        private readonly IApiRepository _repository;
 
-            public Session(DeviceAccount deviceAccount, string idToken)
-            {
-                this.Id = Guid.NewGuid().ToString();
-                this.IdToken = idToken;
-                this.deviceAccount = deviceAccount;
-            }
+        public SessionService(IApiRepository repository)
+        {
+            _repository = repository;
         }
 
         // TODO: Implement Redis for session state management
@@ -42,6 +36,20 @@ namespace DragaliaAPI.Models
         public string? SessionIdFromIdToken(string idToken)
         {
             return _sessions.FirstOrDefault(x => x.IdToken == idToken)?.Id;
+        }
+
+        private class Session
+        {
+            public string Id { get; }
+            public DeviceAccount deviceAccount { get; set; }
+            public string IdToken { get; init; }
+
+            public Session(DeviceAccount deviceAccount, string idToken)
+            {
+                this.Id = Guid.NewGuid().ToString();
+                this.IdToken = idToken;
+                this.deviceAccount = deviceAccount;
+            }
         }
     }
 }
