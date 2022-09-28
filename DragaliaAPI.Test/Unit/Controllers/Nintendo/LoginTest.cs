@@ -2,7 +2,7 @@ using DragaliaAPI.Controllers.Nintendo;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragaliaAPI.Test.Controllers.Nintendo
+namespace DragaliaAPI.Test.Unit.Controllers.Nintendo
 {
     public class LoginTest
     {

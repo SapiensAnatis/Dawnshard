@@ -13,11 +13,11 @@ namespace DragaliaAPI.Test.Integration
             {
                 var descriptor = services.Single(
                 d => d.ServiceType ==
-                    typeof(DbContextOptions<DeviceAccountContext>));
+                    typeof(DbContextOptions<ApiContext>));
 
                 services.Remove(descriptor);
 
-                services.AddDbContext<DeviceAccountContext>(options =>
+                services.AddDbContext<ApiContext>(options =>
                 {
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
@@ -27,7 +27,7 @@ namespace DragaliaAPI.Test.Integration
                 using (var scope = sp.CreateScope())
                 {
                     var scopedServices = scope.ServiceProvider;
-                    var db = scopedServices.GetRequiredService<DeviceAccountContext>();
+                    var db = scopedServices.GetRequiredService<ApiContext>();
                     var logger = scopedServices
                         .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
 

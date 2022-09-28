@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using DragaliaAPI.Models.Database;
 using MessagePack;
 using MessagePack.Resolvers;
 
@@ -8,13 +9,13 @@ namespace DragaliaAPI.Test.Integration
 {
     public static class TestUtils
     {
-        public static void InitializeDbForTests(DeviceAccountContext db)
+        public static void InitializeDbForTests(ApiContext db)
         {
             db.DeviceAccounts.AddRange(GetSeedingData());
             db.SaveChanges();
         }
 
-        public static void ReinitializeDbForTests(DeviceAccountContext db)
+        public static void ReinitializeDbForTests(ApiContext db)
         {
             db.DeviceAccounts.RemoveRange(db.DeviceAccounts);
             InitializeDbForTests(db);

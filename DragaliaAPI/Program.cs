@@ -1,4 +1,5 @@
 using DragaliaAPI.Models;
+using DragaliaAPI.Models.Database;
 using MessagePack.Resolvers;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,13 +17,14 @@ builder.Services.AddMvc().AddMvcOptions(option =>
     option.InputFormatters.Add(new DragaliaAPI.CustomMessagePackInputFormatter(ContractlessStandardResolver.Options));
 });
 
-builder.Services.AddDbContext<DeviceAccountContext>(options =>
+builder.Services.AddDbContext<ApiContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
 
 
 builder.Services
     .AddSingleton<ISessionService, SessionService>()
-    .AddScoped<IDeviceAccountService, DeviceAccountService>();
+    .AddScoped<IDeviceAccountService, DeviceAccountService>()
+    .AddScoped<IApiRepository, ApiRepository>();
 
 var app = builder.Build();
 
