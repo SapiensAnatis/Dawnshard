@@ -3,4 +3,4 @@
 namespace DragaliaAPI.Models.Dragalia.Requests;
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record AuthRequest(string uuid, string id_token);
+public record IdTokenRequest(string id_token);

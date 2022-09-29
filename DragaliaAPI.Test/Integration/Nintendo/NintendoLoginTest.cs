@@ -16,7 +16,7 @@ public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Progr
     public NintendoLoginTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _client = factory.CreateClient(new WebApplicationFactoryClientOptions
+        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = false
         });

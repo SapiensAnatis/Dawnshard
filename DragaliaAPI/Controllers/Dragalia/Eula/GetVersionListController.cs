@@ -7,7 +7,7 @@ namespace DragaliaAPI.Controllers.Dragalia.Eula;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class EulaGetVersionListController : ControllerBase
+public class GetVersionListController : ControllerBase
 {
     [HttpPost]
     public ActionResult<EulaGetVersionListResponse> Post()

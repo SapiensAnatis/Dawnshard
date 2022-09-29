@@ -13,8 +13,9 @@ public record AuthResponse : BaseResponse<AuthResponseData>
     }
 
     [SerializationConstructor]
-    public AuthResponse()
+    public AuthResponse(AuthResponseData data)
     {
+        this.data = data;
     }
 }
 

@@ -13,7 +13,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
     {
         builder.ConfigureServices(services =>
         {
-            var descriptor = services.Single(
+            ServiceDescriptor descriptor = services.Single(
                 d => d.ServiceType ==
                      typeof(DbContextOptions<ApiContext>));
 
@@ -24,14 +24,14 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 options.UseInMemoryDatabase("InMemoryDbForTesting");
             });
 
-            var sp = services.BuildServiceProvider();
+            ServiceProvider sp = services.BuildServiceProvider();
 
-            using var scope = sp.CreateScope();
-            var scopedServices = scope.ServiceProvider;
-            var db = scopedServices.GetRequiredService<ApiContext>();
-            var logger = scopedServices
+            using IServiceScope scope = sp.CreateScope();
+            IServiceProvider scopedServices = scope.ServiceProvider;
+            ApiContext db = scopedServices.GetRequiredService<ApiContext>();
+            ILogger<CustomWebApplicationFactory<TStartup>> logger = scopedServices
                 .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
-            var cache = scopedServices.GetRequiredService<IDistributedCache>();
+            IDistributedCache cache = scopedServices.GetRequiredService<IDistributedCache>();
 
             db.Database.EnsureCreated();
 
