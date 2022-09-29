@@ -37,13 +37,13 @@ public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Progr
         response.IsSuccessStatusCode.Should().BeTrue();
 
         string jsonString = await response.Content.ReadAsStringAsync();
-        var deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
+        PartialLoginResponse? deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
         deserializedResponse.Should().NotBeNull();
-        var createdDeviceAccount = deserializedResponse!.createdDeviceAccount;
+        DeviceAccount createdDeviceAccount = deserializedResponse!.createdDeviceAccount;
 
         // Ensure new DeviceAccount was registered against the DB, and will authenticate successfully
         using IServiceScope scope = _factory.Services.CreateScope();
-        var deviceAccountService = scope.ServiceProvider.GetRequiredService<IDeviceAccountService>();
+        IDeviceAccountService deviceAccountService = scope.ServiceProvider.GetRequiredService<IDeviceAccountService>();
         (await deviceAccountService.AuthenticateDeviceAccount(createdDeviceAccount)).Should().BeTrue();
     }
 

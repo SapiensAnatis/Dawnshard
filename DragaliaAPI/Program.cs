@@ -3,8 +3,8 @@ using DragaliaAPI.Models.Database;
 using MessagePack.Resolvers;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+ConfigurationManager configuration = builder.Configuration;
 
 // Add services to the container.
 
@@ -31,12 +31,12 @@ builder.Services
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
     .AddScoped<IApiRepository, ApiRepository>();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
-using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+using (IServiceScope serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
 {
-    var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    var db = serviceScope.ServiceProvider.GetRequiredService<ApiContext>().Database;
+    ILogger<Program> logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade db = serviceScope.ServiceProvider.GetRequiredService<ApiContext>().Database;
 
     logger.LogInformation("Migrating database...");
 

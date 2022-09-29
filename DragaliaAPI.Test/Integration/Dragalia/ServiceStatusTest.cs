@@ -25,7 +25,7 @@ public class ServiceStatusTest : IClassFixture<CustomWebApplicationFactory<Progr
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        var response = await _client.PostAsync("tool/get_service_status", content);
+        HttpResponseMessage response = await _client.PostAsync("tool/get_service_status", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }

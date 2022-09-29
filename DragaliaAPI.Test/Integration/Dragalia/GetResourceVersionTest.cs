@@ -25,8 +25,6 @@ public class GetDeployVersionTest : IClassFixture<CustomWebApplicationFactory<Pr
 
         HttpResponseMessage response = await _client.PostAsync("deploy/get_deploy_version", content);
 
-        response.IsSuccessStatusCode.Should().BeTrue();
-
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }
 }
