@@ -12,6 +12,12 @@ services:
     ports:
       - "5000:80"
       - "5001:443"
+    links:
+      - sqlserver
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+        
 
   sqlserver:
     container_name: sqlserver
@@ -22,3 +28,7 @@ services:
       - "ACCEPT_EULA=Y"
     ports:
       - "1433:1433"
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S host.docker.internal -U SA -P $$MSSQL_SA_PASSWORD -Q "SELECT 'Test' as 'Test'" || exit 1
+      interval: 5s
+      retries: 3

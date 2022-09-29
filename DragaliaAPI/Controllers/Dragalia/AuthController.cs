@@ -17,7 +17,7 @@ namespace DragaliaAPI.Controllers.Dragalia
         }
 
         [HttpPost]
-        public async Task<ActionResult<BaseResponse<object>>> Post(AuthRequest request)
+        public async Task<DragaliaResult> Post(AuthRequest request)
         {
             string? sessionId = _sessionService.GetSessionIdFromIdToken(request.id_token);
             if (sessionId is null) { return Ok(new ServerErrorResponse()); }

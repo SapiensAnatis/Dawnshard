@@ -28,6 +28,21 @@ builder.Services
 
 var app = builder.Build();
 
+using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+{
+    var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    logger.LogInformation("Migrating database...");
+
+    try
+    {
+        serviceScope.ServiceProvider.GetRequiredService<ApiContext>().Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
