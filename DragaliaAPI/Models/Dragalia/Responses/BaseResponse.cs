@@ -1,20 +1,19 @@
 ﻿using MessagePack;
 
-namespace DragaliaAPI.Models.Dragalia.Responses
+namespace DragaliaAPI.Models.Dragalia.Responses;
+
+[MessagePackObject(keyAsPropertyName: true)]
+public record DataHeaders(ResultCode result_code);
+
+[MessagePackObject(keyAsPropertyName: true)]
+public abstract record BaseResponse<TData> where TData : class
 {
-    [MessagePackObject(keyAsPropertyName: true)]
-    public record DataHeaders(ResultCode result_code);
+    public DataHeaders data_headers { get; init; }
 
-    [MessagePackObject(keyAsPropertyName: true)]
-    public abstract record BaseResponse<TData> where TData : class
+    public abstract TData data { get; init; }
+
+    public BaseResponse(ResultCode result_code = ResultCode.Success)
     {
-        public DataHeaders data_headers { get; init; }
-
-        public abstract TData data { get; init; }
-
-        public BaseResponse(ResultCode result_code = ResultCode.Success)
-        {
-            data_headers = new(result_code);
-        }
+        data_headers = new(result_code);
     }
 }

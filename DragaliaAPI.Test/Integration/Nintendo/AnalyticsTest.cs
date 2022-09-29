@@ -1,33 +1,32 @@
-﻿namespace DragaliaAPI.Test.Integration.Nintendo
+﻿namespace DragaliaAPI.Test.Integration.Nintendo;
+
+public class AnalyticsTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {
-    public class AnalyticsTest : IClassFixture<CustomWebApplicationFactory<Program>>
+    private readonly HttpClient _client;
+    private readonly CustomWebApplicationFactory<Program> _factory;
+
+    public AnalyticsTest(CustomWebApplicationFactory<Program> factory)
     {
-        private readonly HttpClient _client;
-        private readonly CustomWebApplicationFactory<Program> _factory;
-
-        public AnalyticsTest(CustomWebApplicationFactory<Program> factory)
+        _factory = factory;
+        _client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
-            _factory = factory;
-            _client = factory.CreateClient(new WebApplicationFactoryClientOptions
-            {
-                AllowAutoRedirect = false
-            });
-        }
+            AllowAutoRedirect = false
+        });
+    }
 
-        [Fact]
-        public async Task AnalyticsConfigController_Get_ReturnsOK()
-        {
-            var response = await _client.GetAsync("bigdata/v1/analytics/events/config");
+    [Fact]
+    public async Task AnalyticsConfigController_Get_ReturnsOK()
+    {
+        var response = await _client.GetAsync("bigdata/v1/analytics/events/config");
 
-            response.IsSuccessStatusCode.Should().BeTrue();
-        }
+        response.IsSuccessStatusCode.Should().BeTrue();
+    }
 
-        [Fact]
-        public async Task AnalyticsController_Post_ReturnsOK()
-        {
-            var response = await _client.PostAsync("bigdata/v1/analytics", null);
+    [Fact]
+    public async Task AnalyticsController_Post_ReturnsOK()
+    {
+        var response = await _client.PostAsync("bigdata/v1/analytics", null);
 
-            response.IsSuccessStatusCode.Should().BeTrue();
-        }
+        response.IsSuccessStatusCode.Should().BeTrue();
     }
 }

@@ -6,52 +6,52 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DragaliaAPI.Test.Integration.Nintendo
+namespace DragaliaAPI.Test.Integration.Nintendo;
+
+public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {
-    public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Program>>
+    private readonly HttpClient _client;
+    private readonly CustomWebApplicationFactory<Program> _factory;
+
+    public NintendoLoginTest(CustomWebApplicationFactory<Program> factory)
     {
-        private readonly HttpClient _client;
-        private readonly CustomWebApplicationFactory<Program> _factory;
-
-        public NintendoLoginTest(CustomWebApplicationFactory<Program> factory)
+        _factory = factory;
+        _client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
-            _factory = factory;
-            _client = factory.CreateClient(new WebApplicationFactoryClientOptions
-            {
-                AllowAutoRedirect = false
-            });
+            AllowAutoRedirect = false
+        });
 
-        }
+    }
 
-        [Fact]
-        public async Task PostLogin_NullDeviceAccount_ReturnsSuccessResponseAndCreatesDeviceAccount()
-        {
-            StringContent requestContent = new("""
+    [Fact]
+    public async Task PostLogin_NullDeviceAccount_ReturnsSuccessResponseAndCreatesDeviceAccount()
+    {
+        StringContent requestContent = new("""
             {
             }
             """);
-            requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+        requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-            HttpResponseMessage response = await _client.PostAsync("/core/v1/gateway/sdk/login", requestContent);
+        HttpResponseMessage response = await _client.PostAsync("/core/v1/gateway/sdk/login", requestContent);
 
-            response.IsSuccessStatusCode.Should().BeTrue();
+        response.IsSuccessStatusCode.Should().BeTrue();
 
-            string jsonString = await response.Content.ReadAsStringAsync();
-            var deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
-            deserializedResponse.Should().NotBeNull();
-            var createdDeviceAccount = deserializedResponse!.createdDeviceAccount;
+        string jsonString = await response.Content.ReadAsStringAsync();
+        var deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
+        deserializedResponse.Should().NotBeNull();
+        var createdDeviceAccount = deserializedResponse!.createdDeviceAccount;
 
-            // Ensure new DeviceAccount was registered against the DB, and will authenticate successfully
-            using IServiceScope scope = _factory.Services.CreateScope();
-            var deviceAccountService = scope.ServiceProvider.GetRequiredService<IDeviceAccountService>();
-            (await deviceAccountService.AuthenticateDeviceAccount(createdDeviceAccount)).Should().BeTrue();
-        }
+        // Ensure new DeviceAccount was registered against the DB, and will authenticate successfully
+        using IServiceScope scope = _factory.Services.CreateScope();
+        var deviceAccountService = scope.ServiceProvider.GetRequiredService<IDeviceAccountService>();
+        (await deviceAccountService.AuthenticateDeviceAccount(createdDeviceAccount)).Should().BeTrue();
+    }
 
-        [Fact]
-        public async Task PostLogin_DeviceAccountCorrectCredentials_ReturnsSuccessResponse()
-        {
-            DeviceAccount deviceAccount = new("id", "password");
-            StringContent requestContent = new("""
+    [Fact]
+    public async Task PostLogin_DeviceAccountCorrectCredentials_ReturnsSuccessResponse()
+    {
+        DeviceAccount deviceAccount = new("id", "password");
+        StringContent requestContent = new("""
             {
                 "deviceAccount": {
                     "id": "id",
@@ -59,24 +59,24 @@ namespace DragaliaAPI.Test.Integration.Nintendo
                 }
             }
             """);
-            requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+        requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-            HttpResponseMessage response = await _client.PostAsync("/core/v1/gateway/sdk/login", requestContent);
+        HttpResponseMessage response = await _client.PostAsync("/core/v1/gateway/sdk/login", requestContent);
 
-            response.IsSuccessStatusCode.Should().BeTrue();
+        response.IsSuccessStatusCode.Should().BeTrue();
 
-            string jsonString = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(jsonString);
-            PartialLoginResponse? deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
-            deserializedResponse.Should().NotBeNull();
+        string jsonString = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(jsonString);
+        PartialLoginResponse? deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
+        deserializedResponse.Should().NotBeNull();
 
-            deserializedResponse!.user.deviceAccounts.Should().Contain(deviceAccount);
-        }
+        deserializedResponse!.user.deviceAccounts.Should().Contain(deviceAccount);
+    }
 
-        [Fact]
-        public async Task PostLogin_DeviceAccountIncorrectCredentials_ReturnsUnauthorizedResponse()
-        {
-            StringContent requestContent = new("""
+    [Fact]
+    public async Task PostLogin_DeviceAccountIncorrectCredentials_ReturnsUnauthorizedResponse()
+    {
+        StringContent requestContent = new("""
             {
                 "deviceAccount": {
                     "id": "id",
@@ -84,36 +84,35 @@ namespace DragaliaAPI.Test.Integration.Nintendo
                 }
             }
             """);
-            requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+        requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-            HttpResponseMessage response = await _client.PostAsync("/core/v1/gateway/sdk/login", requestContent);
+        HttpResponseMessage response = await _client.PostAsync("/core/v1/gateway/sdk/login", requestContent);
 
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    // Only deserialize the fields of interest for testing -- the existing LoginResponse record contains a lot of useless data
+    // and the deserializer doesn't really seem to like it for reasons that aren't worth figuring out
+    public record PartialLoginResponse
+    {
+        public DeviceAccount createdDeviceAccount { get; init; }
+        public PartialUser user { get; init; }
+
+        [JsonConstructor]
+        public PartialLoginResponse(DeviceAccount createdDeviceAccount, PartialUser user)
+        {
+            this.createdDeviceAccount = createdDeviceAccount;
+            this.user = user;
         }
 
-        // Only deserialize the fields of interest for testing -- the existing LoginResponse record contains a lot of useless data
-        // and the deserializer doesn't really seem to like it for reasons that aren't worth figuring out
-        public record PartialLoginResponse
+        public record PartialUser
         {
-            public DeviceAccount createdDeviceAccount { get; init; }
-            public PartialUser user { get; init; }
+            public List<DeviceAccount> deviceAccounts { get; init; }
 
             [JsonConstructor]
-            public PartialLoginResponse(DeviceAccount createdDeviceAccount, PartialUser user)
+            public PartialUser(List<DeviceAccount> deviceAccounts)
             {
-                this.createdDeviceAccount = createdDeviceAccount;
-                this.user = user;
-            }
-
-            public record PartialUser
-            {
-                public List<DeviceAccount> deviceAccounts { get; init; }
-
-                [JsonConstructor]
-                public PartialUser(List<DeviceAccount> deviceAccounts)
-                {
-                    this.deviceAccounts = deviceAccounts;
-                }
+                this.deviceAccounts = deviceAccounts;
             }
         }
     }
