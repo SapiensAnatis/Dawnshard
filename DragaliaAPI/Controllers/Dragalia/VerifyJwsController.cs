@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Controllers.Dragalia
 {
     [Route("login/verify_jws")]
+    [Consumes("application/octet-stream")]
+    [Produces("application/octet-stream")]
     [ApiController]
     public class VerifyJwsController : ControllerBase
     {

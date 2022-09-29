@@ -28,19 +28,6 @@ namespace DragaliaAPI.Test.Integration.Nintendo
         {
             StringContent requestContent = new("""
             {
-                "appVersion": "2.19.0",
-                "assertion": "some gibberish",
-                "carrier": "giffgaff",
-                "deviceAnalyticsId": "a2J1YmFhYWFERG1NamZtckpNTmVqSHZ6UGJWUE9FUwA=",
-                "deviceName": "ONEPLUS A6003",
-                "locale": "en-GB",
-                "manufacturer": "OnePlus",
-                "networkType": "wifi",
-                "osType": "Android",
-                "osVersion": "11",
-                "sdkVersion": "Unity-2.33.0-0a4be7c8",
-                "timeZone": "Europe/London",
-                "timeZoneOffset": 3600000
             }
             """);
             requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
@@ -66,19 +53,6 @@ namespace DragaliaAPI.Test.Integration.Nintendo
             DeviceAccount deviceAccount = new("id", "password");
             StringContent requestContent = new("""
             {
-                "appVersion": "2.19.0",
-                "assertion": "some gibberish",
-                "carrier": "giffgaff",
-                "deviceAnalyticsId": "a2J1YmFhYWFERG1NamZtckpNTmVqSHZ6UGJWUE9FUwA=",
-                "deviceName": "ONEPLUS A6003",
-                "locale": "en-GB",
-                "manufacturer": "OnePlus",
-                "networkType": "wifi",
-                "osType": "Android",
-                "osVersion": "11",
-                "sdkVersion": "Unity-2.33.0-0a4be7c8",
-                "timeZone": "Europe/London",
-                "timeZoneOffset": 3600000,
                 "deviceAccount": {
                     "id": "id",
                     "password": "password"
@@ -104,19 +78,6 @@ namespace DragaliaAPI.Test.Integration.Nintendo
         {
             StringContent requestContent = new("""
             {
-                "appVersion": "2.19.0",
-                "assertion": "some gibberish",
-                "carrier": "giffgaff",
-                "deviceAnalyticsId": "a2J1YmFhYWFERG1NamZtckpNTmVqSHZ6UGJWUE9FUwA=",
-                "deviceName": "ONEPLUS A6003",
-                "locale": "en-GB",
-                "manufacturer": "OnePlus",
-                "networkType": "wifi",
-                "osType": "Android",
-                "osVersion": "11",
-                "sdkVersion": "Unity-2.33.0-0a4be7c8",
-                "timeZone": "Europe/London",
-                "timeZoneOffset": 3600000,
                 "deviceAccount": {
                     "id": "id",
                     "password": "wrong password"

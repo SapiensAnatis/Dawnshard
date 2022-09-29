@@ -1,14 +1,13 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses;
-using MessagePack;
+﻿using MessagePack;
 
 namespace DragaliaAPI.Test.Integration.Dragalia
 {
-    public class ServiceStatusTest : IClassFixture<CustomWebApplicationFactory<Program>>
+    public class VerifyJwsTest : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<Program> _factory;
 
-        public ServiceStatusTest(CustomWebApplicationFactory<Program> factory)
+        public VerifyJwsTest(CustomWebApplicationFactory<Program> factory)
         {
             _factory = factory;
             _client = factory.CreateClient(new WebApplicationFactoryClientOptions
@@ -18,14 +17,15 @@ namespace DragaliaAPI.Test.Integration.Dragalia
         }
 
         [Fact]
-        public async Task ServiceStatus_ReturnsCorrectJSON()
+        public async Task VerifyJws_ReturnsOK()
         {
-            ServiceStatusResponse expectedResponse = new();
-            // Corresponds to JSON: "{}"
-            byte[] payload = new byte[] { 0x80 };
+            VerifyJwsResponse expectedResponse = new();
+
+            var data = new { jws_result = "unused" };
+            byte[] payload = MessagePackSerializer.Serialize(data);
             HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-            var response = await _client.PostAsync("tool/get_service_status", content);
+            HttpResponseMessage response = await _client.PostAsync("/login/verify_jws", content);
 
             await TestUtils.CheckMsgpackResponse(response, expectedResponse);
         }

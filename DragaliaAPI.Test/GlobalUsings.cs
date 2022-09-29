@@ -5,3 +5,5 @@ global using Moq;
 global using DragaliaAPI.Models;
 global using DragaliaAPI.Models.Nintendo;
 global using DragaliaAPI.Models.Dragalia;
+global using DragaliaAPI.Models.Dragalia.Requests;
+global using DragaliaAPI.Models.Dragalia.Responses;

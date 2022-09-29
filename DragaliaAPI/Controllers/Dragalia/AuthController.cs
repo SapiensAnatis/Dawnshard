@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Controllers.Dragalia
 {
     [Route("tool/auth")]
+    [Consumes("application/octet-stream")]
+    [Produces("application/octet-stream")]
     [ApiController]
     public class AuthController : ControllerBase
     {
