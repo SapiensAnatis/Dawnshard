@@ -3,64 +3,84 @@ using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Dragalia;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DragaliaAPI.Models
 {
     public class SessionService : ISessionService
     {
         private readonly IApiRepository _repository;
+        private readonly IDistributedCache _cache;
 
-        public SessionService(IApiRepository repository)
+        public SessionService(IApiRepository repository, IDistributedCache cache)
         {
             _repository = repository;
+            _cache = cache;
+        }
+        private List<Session> GetSessions()
+        {
+            string json = _cache.GetString(":sessions");
+            return JsonSerializer.Deserialize<List<Session>>(json ?? "[]") ?? 
+                throw new JsonException($"Failed to deserialize session list JSON {json} from Redis cache.");
         }
 
-        // TODO: Implement Redis for session state management
-        private readonly List<Session> _sessions = new();
+        // Readonly shortcut to be used instead of calling GetSessions() in every method
+        private List<Session> Sessions { get { return GetSessions(); } }
+
+        private void SetSessions(List<Session> sessions)
+        {
+            string json = JsonSerializer.Serialize(sessions);
+            _cache.SetString(":sessions", json);
+        }
 
         public async Task<string> CreateNewSession(DeviceAccount deviceAccount, string idToken)
         {
-            Session? existingSession = _sessions.SingleOrDefault(x => x.deviceAccount.id == deviceAccount.id);
+            List<Session> sessions = GetSessions();
+            Session? existingSession = sessions.SingleOrDefault(x => x.DeviceAccountId == deviceAccount.id);
             if (existingSession != null)
-                _sessions.Remove(existingSession);
+                sessions.Remove(existingSession);
 
             long viewerId = (await _repository.GetSavefileByDeviceAccountId(deviceAccount.id)).ViewerId;
+            string sessionId = Guid.NewGuid().ToString();
 
-            Session session = new(idToken, deviceAccount, viewerId);
-            _sessions.Add(session);
+            Session session = new(sessionId, idToken, deviceAccount.id, viewerId);
+            sessions.Add(session);
+            SetSessions(sessions);
 
-            return session.Id;
+            return session.SessionId;
         }
 
         public bool ValidateSession(string sessionId)
         {
-            return _sessions.Any(x => x.Id == sessionId);
+            return Sessions.Any(x => x.SessionId == sessionId);
         }
 
         public string? GetSessionIdFromIdToken(string idToken)
         {
-            return _sessions.FirstOrDefault(x => x.IdToken == idToken)?.Id;
+            return Sessions.FirstOrDefault(x => x.IdToken == idToken)?.SessionId;
         }
 
         public async Task<DbPlayerSavefile> GetSavefile(string sessionId)
         {
-            Session session = _sessions.First(x => x.Id == sessionId);
+            Session session = Sessions.First(x => x.SessionId == sessionId);
 
-            return await _repository.GetSavefileByDeviceAccountId(session.deviceAccount.id);
+            return await _repository.GetSavefileByDeviceAccountId(session.DeviceAccountId);
         }
 
         private class Session
         {
-            public string Id { get; }
-            public DeviceAccount deviceAccount { get; set; }
+            public string SessionId { get; }
+            public string DeviceAccountId { get; set; }
             public string IdToken { get; init; }
             public long ViewerId { get; init; }
 
-            public Session(string idToken, DeviceAccount deviceAccount, long ViewerId)
+            public Session(string sessionId, string idToken, string deviceAccountId, long ViewerId)
             {
-                this.Id = Guid.NewGuid().ToString();
+                this.SessionId = sessionId;
                 this.IdToken = idToken;
-                this.deviceAccount = deviceAccount;
+                this.DeviceAccountId = deviceAccountId;
                 this.ViewerId = ViewerId;
             }
         }

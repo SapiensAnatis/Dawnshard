@@ -1,6 +1,10 @@
 version: '3.4'
 name: DragaliaAPI
 
+volumes:
+  sqlvolume:
+    name: ${VOLUME_ID}
+
 services:
   dragaliaapi:
     container_name: dragaliaapi
@@ -14,21 +18,23 @@ services:
       - "5001:443"
     links:
       - sqlserver
-    depends_on:
-      sqlserver:
-        condition: service_healthy
-        
-
+    
   sqlserver:
     container_name: sqlserver
     hostname: sqlserver
-    image: "mcr.microsoft.com/mssql/server"
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - "MSSQL_SA_PASSWORD=DragaliaLost123"
       - "ACCEPT_EULA=Y"
     ports:
       - "1433:1433"
-    healthcheck:
-      test: /opt/mssql-tools/bin/sqlcmd -S host.docker.internal -U SA -P $$MSSQL_SA_PASSWORD -Q "SELECT 'Test' as 'Test'" || exit 1
-      interval: 5s
-      retries: 3
+    volumes:
+      - sqlvolume:/var/opt/mssql
+
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis/redis-stack
+    ports:
+      - 6379:6379
+      - 8001:8001
