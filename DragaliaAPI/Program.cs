@@ -20,22 +20,36 @@ builder.Services.AddMvc().AddMvcOptions(option =>
 builder.Services.AddDbContext<ApiContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")), ServiceLifetime.Transient, ServiceLifetime.Transient);
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
+    options.InstanceName = "RedisInstance";
+});
 
 builder.Services
-    .AddSingleton<ISessionService, SessionService>()
+    .AddScoped<ISessionService, SessionService>()
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
-    .AddTransient<IApiRepository, ApiRepository>();
+    .AddScoped<IApiRepository, ApiRepository>();
 
 var app = builder.Build();
 
 using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
 {
     var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var db = serviceScope.ServiceProvider.GetRequiredService<ApiContext>().Database;
+
     logger.LogInformation("Migrating database...");
+
+    while (!db.CanConnect())
+    {
+        logger.LogInformation("Database not ready yet; waiting...");
+        Thread.Sleep(1000);
+    }
 
     try
     {
         serviceScope.ServiceProvider.GetRequiredService<ApiContext>().Database.Migrate();
+        logger.LogInformation("Database migrated successfully.");
     }
     catch (Exception ex)
     {
