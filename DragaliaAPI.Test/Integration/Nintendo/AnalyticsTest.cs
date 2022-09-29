@@ -8,7 +8,7 @@ public class AnalyticsTest : IClassFixture<CustomWebApplicationFactory<Program>>
     public AnalyticsTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _client = factory.CreateClient(new WebApplicationFactoryClientOptions
+        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = false
         });

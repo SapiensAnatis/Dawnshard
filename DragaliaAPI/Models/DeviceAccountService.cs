@@ -29,7 +29,7 @@ public class DeviceAccountService : IDeviceAccountService
 
         string hashedPassword = GetHashedPassword(deviceAccount.password);
 
-        return (hashedPassword == dbDeviceAccount.HashedPassword);
+        return hashedPassword == dbDeviceAccount.HashedPassword;
     }
 
     public async Task<DeviceAccount> RegisterDeviceAccount()

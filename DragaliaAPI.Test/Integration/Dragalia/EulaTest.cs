@@ -1,6 +1,4 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses;
-using MessagePack;
-using MessagePack.Resolvers;
+﻿using MessagePack;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -12,7 +10,7 @@ public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
     public EulaTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _client = factory.CreateClient(new WebApplicationFactoryClientOptions
+        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = false
         });
@@ -27,7 +25,7 @@ public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        var response = await _client.PostAsync("eula/get_version_list", content);
+        HttpResponseMessage response = await _client.PostAsync("eula/get_version_list", content);
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
@@ -44,7 +42,7 @@ public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        var response = await _client.PostAsync("eula/get_version", content);
+        HttpResponseMessage response = await _client.PostAsync("eula/get_version", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }
@@ -59,7 +57,7 @@ public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        var response = await _client.PostAsync("eula/get_version", content);
+        HttpResponseMessage response = await _client.PostAsync("eula/get_version", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }

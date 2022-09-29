@@ -2,17 +2,16 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragaliaAPI.Controllers.Dragalia.Login;
-
-[Route("login/verify_jws")]
+namespace DragaliaAPI.Controllers.Dragalia.Deploy;
+[Route("deploy/get_deploy_version")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class VerifyJwsController : ControllerBase
+public class GetDeployVersionController : ControllerBase
 {
     [HttpPost]
-    public ActionResult<OkResponse> Post()
+    public DragaliaResult Post()
     {
-        return Ok(new OkResponse());
+        return Ok(new GetDeployVersionResponse());
     }
 }

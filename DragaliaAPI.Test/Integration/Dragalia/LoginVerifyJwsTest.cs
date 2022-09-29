@@ -2,15 +2,15 @@
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class VerifyJwsTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class LoginVerifyJwsTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
     private readonly CustomWebApplicationFactory<Program> _factory;
 
-    public VerifyJwsTest(CustomWebApplicationFactory<Program> factory)
+    public LoginVerifyJwsTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _client = factory.CreateClient(new WebApplicationFactoryClientOptions
+        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = false
         });

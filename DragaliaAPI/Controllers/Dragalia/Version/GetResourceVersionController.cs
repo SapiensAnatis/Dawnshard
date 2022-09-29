@@ -1,0 +1,17 @@
+﻿using DragaliaAPI.Models.Dragalia.Responses;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DragaliaAPI.Controllers.Dragalia.Version;
+[Route("version/get_resource_version")]
+[Consumes("application/octet-stream")]
+[Produces("application/octet-stream")]
+[ApiController]
+public class GetResourceVersionController : ControllerBase
+{
+    [HttpPost]
+    public DragaliaResult Post()
+    {
+        return Ok(new GetResourceVersionResponse());
+    }
+}

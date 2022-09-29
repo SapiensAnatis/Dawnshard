@@ -1,14 +1,11 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses;
-using MessagePack;
+﻿namespace DragaliaAPI.Test.Integration.Dragalia;
 
-namespace DragaliaAPI.Test.Integration.Dragalia;
-
-public class ServiceStatusTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class GetResourceVersionTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
     private readonly CustomWebApplicationFactory<Program> _factory;
 
-    public ServiceStatusTest(CustomWebApplicationFactory<Program> factory)
+    public GetResourceVersionTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
         _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
@@ -18,14 +15,17 @@ public class ServiceStatusTest : IClassFixture<CustomWebApplicationFactory<Progr
     }
 
     [Fact]
-    public async Task ServiceStatus_ReturnsCorrectJSON()
+    public async Task GetResourceVersion_ReturnsCorrectResponse()
     {
-        ServiceStatusResponse expectedResponse = new();
+        GetResourceVersionResponse expectedResponse = new();
+
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        var response = await _client.PostAsync("tool/get_service_status", content);
+        HttpResponseMessage response = await _client.PostAsync("version/get_resource_version", content);
+
+        response.IsSuccessStatusCode.Should().BeTrue();
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }

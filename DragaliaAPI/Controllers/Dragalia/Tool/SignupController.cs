@@ -2,18 +2,27 @@
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Dragalia.Requests;
 using DragaliaAPI.Models.Dragalia.Responses;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia.Tool;
 
-[Route("tool/auth")]
+/// <summary>
+/// This is presumably used to create a savefile on Dragalia's servers,
+/// but we do that after creating a DeviceAccount in the Nintendo endpoint,
+/// because we aren't limited by having two separate servers/DBs.
+///
+/// As a result, this controller just retrieves the existing savefile and
+/// responds with its viewer_id.
+/// </summary>
+[Route("api/[controller]")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class AuthController : ControllerBase
+public class SignupController : ControllerBase
 {
     private readonly ISessionService _sessionService;
-    public AuthController(ISessionService sessionService)
+    public SignupController(ISessionService sessionService)
     {
         _sessionService = sessionService;
     }
@@ -25,7 +34,8 @@ public class AuthController : ControllerBase
         if (sessionId is null) { return Ok(new ServerErrorResponse()); }
 
         DbPlayerSavefile savefile = await _sessionService.GetSavefile(sessionId);
-        AuthResponse response = new(savefile.ViewerId, sessionId);
+
+        SignupResponse response = new(new SignupData(savefile.ViewerId));
         return Ok(response);
     }
 }

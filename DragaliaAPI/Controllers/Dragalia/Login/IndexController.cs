@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia.Login;
 
-[Route("login/verify_jws")]
+[Route("login/index")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class VerifyJwsController : ControllerBase
+public class IndexController : ControllerBase
 {
     [HttpPost]
     public ActionResult<OkResponse> Post()
