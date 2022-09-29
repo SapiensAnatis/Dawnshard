@@ -1,4 +1,7 @@
 ﻿using DragaliaAPI.Models.Database;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Test.Unit.Models
 {
@@ -11,7 +14,14 @@ namespace DragaliaAPI.Test.Unit.Models
         public SessionServiceTest()
         {
             mockRepository = new(MockBehavior.Strict);
-            sessionService = new(mockRepository.Object);
+            mockRepository.Setup(x => x.GetSavefileByDeviceAccountId("id")).ReturnsAsync(
+                new DbPlayerSavefile() { DeviceAccountId = deviceAccount.id, ViewerId = 1 });
+
+            var opts = Options.Create(new MemoryDistributedCacheOptions());
+            IDistributedCache testCache = new MemoryDistributedCache(opts);
+
+            sessionService = new(mockRepository.Object, testCache);
+
         }
 
         [Fact]

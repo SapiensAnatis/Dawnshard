@@ -11,7 +11,8 @@ namespace DragaliaAPI.Test.Integration
     {
         public static void InitializeDbForTests(ApiContext db)
         {
-            db.DeviceAccounts.AddRange(GetSeedingData());
+            db.DeviceAccounts.AddRange(GetDeviceAccountsSeed());
+            db.PlayerSavefiles.AddRange(GetPlayerSavefilesSeed());
             db.SaveChanges();
         }
 
@@ -21,12 +22,20 @@ namespace DragaliaAPI.Test.Integration
             InitializeDbForTests(db);
         }
 
-        public static List<DbDeviceAccount> GetSeedingData()
+        public static List<DbDeviceAccount> GetDeviceAccountsSeed()
         {
             return new()
             {
                 // Password is a hash of the string "password"
                 new("id", "NMvdakTznEF6khwWcz17i6GTnDA="),
+            };
+        }
+
+        public static List<DbPlayerSavefile> GetPlayerSavefilesSeed()
+        {
+            return new()
+            {
+                new() { DeviceAccountId = "id", ViewerId = 10000000001 }
             };
         }
 

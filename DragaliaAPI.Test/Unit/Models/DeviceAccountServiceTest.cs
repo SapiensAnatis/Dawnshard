@@ -14,7 +14,7 @@ namespace DragaliaAPI.Test.Unit.Models
         public DeviceAccountServiceTest()
         {
             mockLogger = new(MockBehavior.Loose);
-            mockRepository = new (MockBehavior.Strict);
+            mockRepository = new(MockBehavior.Strict);
 
             var inMemoryConfiguration = new Dictionary<string, string> {
                 {"HashSalt", "dragalia"},
@@ -70,6 +70,7 @@ namespace DragaliaAPI.Test.Unit.Models
         public async Task CreateDeviceAccount_CallsAddNewDeviceAccount()
         {
             mockRepository.Setup(x => x.AddNewDeviceAccount(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
+            mockRepository.Setup(x => x.AddNewPlayerSavefile(It.IsAny<string>())).Returns(Task.CompletedTask);
 
             await deviceAccountService.RegisterDeviceAccount();
 
