@@ -11,6 +11,11 @@ namespace DragaliaAPI.Models.Dragalia.Responses
         {
             this.data = new(viewer_id, session_id, "placeholder");
         }
+
+        [SerializationConstructor]
+        public AuthResponse()
+        {
+        }
     }
 
     [MessagePackObject(keyAsPropertyName: true)]

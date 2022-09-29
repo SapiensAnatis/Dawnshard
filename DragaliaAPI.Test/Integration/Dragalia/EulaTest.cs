@@ -21,6 +21,8 @@ namespace DragaliaAPI.Test.Integration.Dragalia
         [Fact]
         public async Task EulaGetVersionList_ReturnsAllVersions()
         {
+            EulaGetVersionListResponse expectedResponse = new(); // Constructor automatically populates with all versions
+
             // Corresponds to JSON: "{}"
             byte[] payload = new byte[] { 0x80 };
             HttpContent content = TestUtils.CreateMsgpackContent(payload);
@@ -29,51 +31,37 @@ namespace DragaliaAPI.Test.Integration.Dragalia
 
             response.IsSuccessStatusCode.Should().BeTrue();
 
-            byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-            var deserializedResponse = MessagePackSerializer.Deserialize<EulaGetVersionListResponse>(responseBytes, ContractlessStandardResolver.Options);
-
-            deserializedResponse.data_headers.result_code.Should().Be(ResultCode.Success);
-            deserializedResponse.data.version_hash_list.Should().BeEquivalentTo(EulaData.AllEulaVersions);
+            await TestUtils.CheckMsgpackResponse(response, expectedResponse);
         }
 
         [Fact]
         public async Task EulaGetVersion_ValidRegionAndLocale_ReturnsEulaData()
         {
-            EulaVersion expectedVersion = new("gb", "en_eu", 1, 1);
+            EulaGetVersionData expectedData = new(new EulaVersion("gb", "en_eu", 1, 1));
+            EulaGetVersionResponse expectedResponse = new(expectedData);
+
             var data = new { region = "gb", lang = "en_eu" };
             byte[] payload = MessagePackSerializer.Serialize(data);
             HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
             var response = await _client.PostAsync("eula/get_version", content);
 
-            response.IsSuccessStatusCode.Should().BeTrue();
-
-            byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-            var deserializedResponse = MessagePackSerializer.Deserialize<EulaGetVersionResponse>(responseBytes, ContractlessStandardResolver.Options);
-
-            deserializedResponse.data_headers.result_code.Should().Be(ResultCode.Success);
-            deserializedResponse.data.version_hash.Should().BeEquivalentTo(expectedVersion);
-            deserializedResponse.data.agreement_status.Should().Be(0);
-            deserializedResponse.data.is_required_agree.Should().BeFalse();
+            await TestUtils.CheckMsgpackResponse(response, expectedResponse);
         }
 
         [Fact]
         public async Task EulaGetVersion_InvalidRegionOrLocale_ReturnsDefault()
         {
-            EulaVersion defaultVersion = new("gb", "en_us", 1, 1);
+            EulaGetVersionData expectedData = new(new EulaVersion("gb", "en_us", 1, 1));
+            EulaGetVersionResponse expectedResponse = new(expectedData);
+
             var data = new { region = "microsoft", lang = "en_c#" };
             byte[] payload = MessagePackSerializer.Serialize(data);
             HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
             var response = await _client.PostAsync("eula/get_version", content);
 
-            byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-            var deserializedResponse = MessagePackSerializer.Deserialize<EulaGetVersionResponse>(responseBytes, ContractlessStandardResolver.Options);
-
-            deserializedResponse.data_headers.result_code.Should().Be(ResultCode.Success);
-            deserializedResponse.data.version_hash.Should().BeEquivalentTo(defaultVersion);
-            deserializedResponse.data.agreement_status.Should().Be(0);
-            deserializedResponse.data.is_required_agree.Should().BeFalse();
+            await TestUtils.CheckMsgpackResponse(response, expectedResponse);
         }
     }
 }

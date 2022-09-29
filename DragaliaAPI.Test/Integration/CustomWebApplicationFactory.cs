@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Models.Database;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -30,12 +31,14 @@ namespace DragaliaAPI.Test.Integration
                 var db = scopedServices.GetRequiredService<ApiContext>();
                 var logger = scopedServices
                     .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+                var cache = scopedServices.GetRequiredService<IDistributedCache>();
 
                 db.Database.EnsureCreated();
 
                 try
                 {
                     TestUtils.InitializeDbForTests(db);
+                    TestUtils.InitializeCacheForTests(cache);
                 }
                 catch (Exception ex)
                 {
