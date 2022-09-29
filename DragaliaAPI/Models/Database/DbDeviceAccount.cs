@@ -1,20 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DragaliaAPI.Models.Database
+namespace DragaliaAPI.Models.Database;
+
+public class DbDeviceAccount
 {
-    public class DbDeviceAccount
+    [Required]
+    [Key]
+    public string Id { get; set; }
+
+    [Required]
+    public string HashedPassword { get; set; }
+
+    public DbDeviceAccount(string id, string hashedPassword)
     {
-        [Required]
-        [Key]
-        public string Id { get; set; }
-
-        [Required]
-        public string HashedPassword { get; set; }
-
-        public DbDeviceAccount(string id, string hashedPassword)
-        {
-            Id = id;
-            HashedPassword = hashedPassword;
-        }
+        Id = id;
+        HashedPassword = hashedPassword;
     }
 }

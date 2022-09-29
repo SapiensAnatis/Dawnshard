@@ -1,20 +1,19 @@
 ﻿using MessagePack;
 
-namespace DragaliaAPI.Models.Dragalia.Responses
+namespace DragaliaAPI.Models.Dragalia.Responses;
+
+[MessagePackObject(keyAsPropertyName: true)]
+public record ServiceStatusResponse : BaseResponse<ServiceStatusData>
 {
-    [MessagePackObject(keyAsPropertyName: true)]
-    public record ServiceStatusResponse : BaseResponse<ServiceStatusData>
+    public override ServiceStatusData data { get; init; }
+
+    [SerializationConstructor]
+    public ServiceStatusResponse()
     {
-        public override ServiceStatusData data { get; init; }
-
-        [SerializationConstructor]
-        public ServiceStatusResponse()
-        {
-            data = new(1);
-        }
-
+        data = new(1);
     }
 
-    [MessagePackObject(keyAsPropertyName: true)]
-    public record ServiceStatusData(int service_status);
 }
+
+[MessagePackObject(keyAsPropertyName: true)]
+public record ServiceStatusData(int service_status);
