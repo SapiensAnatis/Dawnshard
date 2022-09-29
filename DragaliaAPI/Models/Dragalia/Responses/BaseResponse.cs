@@ -1,6 +1,6 @@
 ﻿using MessagePack;
 
-namespace DragaliaAPI.Models.Dragalia
+namespace DragaliaAPI.Models.Dragalia.Responses
 {
     [MessagePackObject(keyAsPropertyName: true)]
     public record DataHeaders(ResultCode result_code);
@@ -14,21 +14,7 @@ namespace DragaliaAPI.Models.Dragalia
 
         public BaseResponse(ResultCode result_code = ResultCode.Success)
         {
-            this.data_headers = new(result_code);
+            data_headers = new(result_code);
         }
     }
-
-    public enum ResultCode
-    {
-        Success = 1,
-		Maintenance = 101,
-		ServerError = 102,
-		SessionError = 201,
-		AccountBlockError = 203,
-		ApiVersionError = 204,
-		ProcessedError = 213,
-		MaintenanceFrom = 2000,
-		MaintenanceTo = 2999
-    }
-
 }

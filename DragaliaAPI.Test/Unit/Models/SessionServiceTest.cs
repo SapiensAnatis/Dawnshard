@@ -1,32 +1,41 @@
-﻿namespace DragaliaAPI.Test.Unit.Models
+﻿using DragaliaAPI.Models.Database;
+
+namespace DragaliaAPI.Test.Unit.Models
 {
     public class SessionServiceTest
     {
-        private readonly SessionService sessionService = new();
+        private readonly Mock<IApiRepository> mockRepository;
+        private readonly SessionService sessionService;
         private readonly DeviceAccount deviceAccount = new("id", "password");
 
-        [Fact]
-        public void CreateNewSession_NewSession_CreatesValidSession()
+        public SessionServiceTest()
         {
-            string sessionId = sessionService.CreateNewSession(deviceAccount, "idToken");
-
-            sessionService.ValidateSession(deviceAccount, sessionId).Should().Be(true);
+            mockRepository = new(MockBehavior.Strict);
+            sessionService = new(mockRepository.Object);
         }
 
         [Fact]
-        public void CreateNewSession_ExistingSession_ReplacesOldSession()
+        public async Task CreateNewSession_NewSession_CreatesValidSession()
         {
-            string firstSessionId = sessionService.CreateNewSession(deviceAccount, "idToken");
-            string secondSessionId = sessionService.CreateNewSession(deviceAccount, "idToken");
+            string sessionId = await sessionService.CreateNewSession(deviceAccount, "idToken");
 
-            sessionService.ValidateSession(deviceAccount, secondSessionId).Should().Be(true);
+            sessionService.ValidateSession(sessionId).Should().Be(true);
+        }
+
+        [Fact]
+        public async Task CreateNewSession_ExistingSession_ReplacesOldSession()
+        {
+            string firstSessionId = await sessionService.CreateNewSession(deviceAccount, "idToken");
+            string secondSessionId = await sessionService.CreateNewSession(deviceAccount, "idToken");
+
+            sessionService.ValidateSession(secondSessionId).Should().Be(true);
             secondSessionId.Should().NotBeEquivalentTo(firstSessionId);
         }
 
         [Fact]
         public void ValidateSession_NonExistentSession_ReturnsFalse()
         {
-            bool result = sessionService.ValidateSession(deviceAccount, "sessionId");
+            bool result = sessionService.ValidateSession("sessionId");
             result.Should().Be(false);
         }
     }

@@ -1,4 +1,5 @@
-﻿using MessagePack;
+﻿using DragaliaAPI.Models.Dragalia.Responses;
+using MessagePack;
 using MessagePack.Resolvers;
 
 namespace DragaliaAPI.Test.Integration.Dragalia
@@ -57,15 +58,22 @@ namespace DragaliaAPI.Test.Integration.Dragalia
         }
 
         [Fact]
-        public async Task EulaGetVersion_InvalidRegionOrLocale_ReturnsBadRequest()
+        public async Task EulaGetVersion_InvalidRegionOrLocale_ReturnsDefault()
         {
+            EulaVersion defaultVersion = new("gb", "en_us", 1, 1);
             var data = new { region = "microsoft", lang = "en_c#" };
             byte[] payload = MessagePackSerializer.Serialize(data);
             HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
             var response = await _client.PostAsync("eula/get_version", content);
 
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+            byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
+            var deserializedResponse = MessagePackSerializer.Deserialize<EulaGetVersionResponse>(responseBytes, ContractlessStandardResolver.Options);
+
+            deserializedResponse.data_headers.result_code.Should().Be(ResultCode.Success);
+            deserializedResponse.data.version_hash.Should().BeEquivalentTo(defaultVersion);
+            deserializedResponse.data.agreement_status.Should().Be(0);
+            deserializedResponse.data.is_required_agree.Should().BeFalse();
         }
     }
 }

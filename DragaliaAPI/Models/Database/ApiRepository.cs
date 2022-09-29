@@ -32,5 +32,10 @@ namespace DragaliaAPI.Models.Database
             await _context.PlayerSavefiles.AddAsync(new DbPlayerSavefile() { DeviceAccountId = deviceAccountId });
             await _context.SaveChangesAsync();
         }
+
+        public virtual async Task<DbPlayerSavefile> GetSavefileByDeviceAccountId(string deviceAccountId)
+        {
+            return await _context.PlayerSavefiles.FirstAsync(x => x.DeviceAccountId == deviceAccountId);
+        }
     }
 }
