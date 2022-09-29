@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DragaliaAPI.Models.Dragalia;
+using DragaliaAPI.Models.Dragalia.Responses;
 
 namespace DragaliaAPI.Controllers.Dragalia
 {
@@ -23,11 +23,11 @@ namespace DragaliaAPI.Controllers.Dragalia
     public class EulaGetVersionController : ControllerBase
     {
         [HttpPost]
-        public ActionResult<EulaGetVersionResponse> Post(EulaGetVersionRequest request)
+        public ActionResult<BaseResponse<object>> Post(EulaGetVersionRequest request)
         {
-            EulaVersion? version = EulaData.AllEulaVersions.FirstOrDefault(x => x.region == request.region && x.lang == request.lang);
-
-            if (version is null) return BadRequest();
+            EulaVersion version = 
+                EulaData.AllEulaVersions.FirstOrDefault(x => x.region == request.region && x.lang == request.lang) ?? 
+                EulaData.AllEulaVersions[0];
 
             EulaGetVersionResponse response = new(version);
             return Ok(response);

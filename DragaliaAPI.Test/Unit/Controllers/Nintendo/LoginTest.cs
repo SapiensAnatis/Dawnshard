@@ -19,7 +19,7 @@ namespace DragaliaAPI.Test.Unit.Controllers.Nintendo
             mockSessionService = new(MockBehavior.Strict);
             mockDeviceAccountService = new(MockBehavior.Strict);
 
-            mockSessionService.Setup(x => x.CreateNewSession(deviceAccount, It.IsAny<string>())).Returns("session id");
+            mockSessionService.Setup(x => x.CreateNewSession(deviceAccount, It.IsAny<string>())).ReturnsAsync("session id");
 
             nintendoLoginController = new(
                 mockLogger.Object,

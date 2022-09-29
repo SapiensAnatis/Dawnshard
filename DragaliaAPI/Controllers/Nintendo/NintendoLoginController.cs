@@ -43,7 +43,7 @@ namespace DragaliaAPI.Controllers.Nintendo
             if (!authenticationSuccess) return Unauthorized();
 
             string token = Guid.NewGuid().ToString();
-            _sessionService.CreateNewSession(deviceAccount, token);
+            await _sessionService.CreateNewSession(deviceAccount, token);
             LoginResponse response = new(token, deviceAccount)
             {
                 createdDeviceAccount = createdDeviceAccount

@@ -1,6 +1,6 @@
 ﻿using MessagePack;
 
-namespace DragaliaAPI.Models.Dragalia
+namespace DragaliaAPI.Models.Dragalia.Responses
 {
     [MessagePackObject(keyAsPropertyName: true)]
     public record ServiceStatusResponse : BaseResponse<ServiceStatusData>
@@ -10,7 +10,7 @@ namespace DragaliaAPI.Models.Dragalia
         [SerializationConstructor]
         public ServiceStatusResponse()
         {
-            this.data = new(1);
+            data = new(1);
         }
 
     }

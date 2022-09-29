@@ -1,6 +1,6 @@
 ﻿using MessagePack;
 
-namespace DragaliaAPI.Models.Dragalia
+namespace DragaliaAPI.Models.Dragalia.Responses
 {
     [MessagePackObject(keyAsPropertyName: true)]
     public record EulaVersion(string region, string lang, int eula_version, int privacy_policy_version);
@@ -55,7 +55,7 @@ namespace DragaliaAPI.Models.Dragalia
 
         public EulaGetVersionResponse(EulaVersion version)
         {
-            this.data = new(version);
+            data = new(version);
         }
     }
 
