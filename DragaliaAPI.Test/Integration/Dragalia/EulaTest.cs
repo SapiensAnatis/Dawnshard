@@ -27,8 +27,6 @@ public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
 
         HttpResponseMessage response = await _client.PostAsync("eula/get_version_list", content);
 
-        response.IsSuccessStatusCode.Should().BeTrue();
-
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }
 

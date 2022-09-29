@@ -34,7 +34,6 @@ public static class TestUtils
         cache.SetString(":sessions", sessionJson);
     }
 
-
     public static void ReinitializeDbForTests(ApiContext db)
     {
         db.DeviceAccounts.RemoveRange(db.DeviceAccounts);
@@ -87,7 +86,7 @@ public static class TestUtils
         response.IsSuccessStatusCode.Should().BeTrue();
 
         byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-        var deserializedResponse = MessagePackSerializer.Deserialize<TResponse>(responseBytes, ContractlessStandardResolver.Options);
+        TResponse? deserializedResponse = MessagePackSerializer.Deserialize<TResponse>(responseBytes, ContractlessStandardResolver.Options);
         deserializedResponse.Should().BeEquivalentTo(expectedResponse);
     }
 }
