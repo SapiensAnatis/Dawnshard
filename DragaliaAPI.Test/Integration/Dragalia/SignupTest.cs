@@ -25,7 +25,7 @@ public class SignupTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/tool/auth", content);
+        HttpResponseMessage response = await _client.PostAsync("/tool/signup", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }
@@ -39,7 +39,7 @@ public class SignupTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/tool/auth", content);
+        HttpResponseMessage response = await _client.PostAsync("/tool/signup", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }
