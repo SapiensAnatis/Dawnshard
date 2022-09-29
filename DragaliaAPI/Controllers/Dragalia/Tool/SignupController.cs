@@ -15,7 +15,7 @@ namespace DragaliaAPI.Controllers.Dragalia.Tool;
 /// As a result, this controller just retrieves the existing savefile and
 /// responds with its viewer_id.
 /// </summary>
-[Route("api/[controller]")]
+[Route("tool/signup")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
