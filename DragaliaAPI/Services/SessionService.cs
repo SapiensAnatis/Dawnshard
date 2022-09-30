@@ -1,14 +1,30 @@
 ﻿using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Dragalia;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json.Linq;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace DragaliaAPI.Services;
 
+/// <summary>
+/// SessionService interfaces with Redis to store the information about current sessions in-memory.
+/// The basic flow looks like this:
+/// 
+/// 1. The NintendoLoginController calls PrepareSession with DeviceAccount information and an ID
+///    token, and a session is created and stored in the cache indexed by the ID token. The
+///    controller sends back the ID token.
+///    
+/// 2. The client *may* later send that ID token in a request to SignupController, in which case it
+///    just needs to be sent the ViewerId of the DeviceAccount's associated savefile. This does not
+///    involve any cache writes.
+///    
+/// 3. The client will later send the ID token in a request to AuthController, where ActivateSession
+///    is called, which moves the key of the session from the id_token (hereafter unused) to the
+///    session ID. The session ID is returned and sent in the response from AuthController.
+///    
+/// 4. All subsequent requests will contain the session ID in the header, and this can be used to
+///    retrieve the savefile and update it if necessary.
+/// </summary>
 public class SessionService : ISessionService
 {
     private readonly IApiRepository _apiRepository;
@@ -53,15 +69,11 @@ public class SessionService : ISessionService
 
     public async Task<string> ActivateSession(string idToken)
     {
-        // Helper method not used as we want to retain the JSON to move it
-        string sessionJson = await _cache.GetStringAsync(Schema.Session_IdToken(idToken));
-        if (string.IsNullOrEmpty(sessionJson)) { throw new ArgumentException($"Could not load session for ID token {idToken}"); }
-
-        Session session = JsonSerializer.Deserialize<Session>(sessionJson) ?? throw new JsonException();
+        Session session = await LoadSession(Schema.Session_IdToken(idToken));
 
         // Move key to sessionId
         await _cache.RemoveAsync(Schema.Session_IdToken(idToken));
-        await _cache.SetStringAsync(Schema.Session_SessionId(session.SessionId), sessionJson);
+        await _cache.SetStringAsync(Schema.Session_SessionId(session.SessionId), JsonSerializer.Serialize(session));
         // Register in existent sessions
         await _cache.SetStringAsync(Schema.SessionId_DeviceAccountId(session.DeviceAccountId), session.SessionId);
 
@@ -93,7 +105,7 @@ public class SessionService : ISessionService
         string sessionJson = await _cache.GetStringAsync(key);
         if (string.IsNullOrEmpty(sessionJson)) { throw new ArgumentException($"Could not load session for key {key}"); }
 
-        return JsonSerializer.Deserialize<Session>(sessionJson) ?? throw new JsonException();
+        return JsonSerializer.Deserialize<Session>(sessionJson) ?? throw new JsonException($"Loaded session JSON {sessionJson} could not be deserialized.");
     }
 
     private record Session(string SessionId, string DeviceAccountId, long ViewerId);
