@@ -47,6 +47,8 @@ public class SessionService : ISessionService
         public static string SessionId_DeviceAccountId(string deviceAccountId)
             => $":session_id:device_account_id:{deviceAccountId}";
     }
+
+    private static readonly DistributedCacheEntryOptions cacheOptions = new() { SlidingExpiration = TimeSpan.FromMinutes(5) };
     
     public async Task PrepareSession(DeviceAccount deviceAccount, string idToken)
     {
@@ -64,7 +66,7 @@ public class SessionService : ISessionService
         string sessionId = Guid.NewGuid().ToString();
 
         Session session = new(sessionId, deviceAccount.id, viewerId);
-        await _cache.SetStringAsync(Schema.Session_IdToken(idToken), JsonSerializer.Serialize(session));
+        await _cache.SetStringAsync(Schema.Session_IdToken(idToken), JsonSerializer.Serialize(session), cacheOptions);
     }
 
     public async Task<string> ActivateSession(string idToken)
@@ -73,9 +75,9 @@ public class SessionService : ISessionService
 
         // Move key to sessionId
         await _cache.RemoveAsync(Schema.Session_IdToken(idToken));
-        await _cache.SetStringAsync(Schema.Session_SessionId(session.SessionId), JsonSerializer.Serialize(session));
+        await _cache.SetStringAsync(Schema.Session_SessionId(session.SessionId), JsonSerializer.Serialize(session), cacheOptions);
         // Register in existent sessions
-        await _cache.SetStringAsync(Schema.SessionId_DeviceAccountId(session.DeviceAccountId), session.SessionId);
+        await _cache.SetStringAsync(Schema.SessionId_DeviceAccountId(session.DeviceAccountId), session.SessionId, cacheOptions);
 
         return session.SessionId;
     }
@@ -103,6 +105,7 @@ public class SessionService : ISessionService
     private async Task<Session> LoadSession(string key)
     {
         string sessionJson = await _cache.GetStringAsync(key);
+        _cache.Refresh(key);
         if (string.IsNullOrEmpty(sessionJson)) { throw new ArgumentException($"Could not load session for key {key}"); }
 
         return JsonSerializer.Deserialize<Session>(sessionJson) ?? throw new JsonException($"Loaded session JSON {sessionJson} could not be deserialized.");
