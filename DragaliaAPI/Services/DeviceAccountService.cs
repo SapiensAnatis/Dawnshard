@@ -5,17 +5,17 @@ using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace DragaliaAPI.Models;
+namespace DragaliaAPI.Services;
 
 public class DeviceAccountService : IDeviceAccountService
 {
-    private readonly IApiRepository _repository;
+    private readonly IApiRepository _apiRepository;
     private readonly IConfiguration _configuration;
     private readonly ILogger<DeviceAccountService> _logger;
 
     public DeviceAccountService(IApiRepository repository, IConfiguration configuration, ILogger<DeviceAccountService> logger)
     {
-        _repository = repository;
+        _apiRepository = repository;
         _configuration = configuration;
         _logger = logger;
     }
@@ -24,7 +24,7 @@ public class DeviceAccountService : IDeviceAccountService
     {
         if (deviceAccount.password is null) { throw new ArgumentNullException(paramName: deviceAccount.password); }
 
-        DbDeviceAccount? dbDeviceAccount = await _repository.GetDeviceAccountById(deviceAccount.id);
+        DbDeviceAccount? dbDeviceAccount = await _apiRepository.GetDeviceAccountById(deviceAccount.id);
         if (dbDeviceAccount is null) { return false; }
 
         string hashedPassword = GetHashedPassword(deviceAccount.password);
@@ -38,8 +38,8 @@ public class DeviceAccountService : IDeviceAccountService
         string password = Guid.NewGuid().ToString();
         string hashedPassword = GetHashedPassword(password);
 
-        await _repository.AddNewDeviceAccount(id, hashedPassword);
-        await _repository.AddNewPlayerSavefile(id);
+        await _apiRepository.AddNewDeviceAccount(id, hashedPassword);
+        await _apiRepository.AddNewPlayerSavefile(id);
 
         _logger.LogInformation("Registered new account with ID {id}", id);
 

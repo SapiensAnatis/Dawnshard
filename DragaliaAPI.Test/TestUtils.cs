@@ -2,8 +2,10 @@
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
+using System.Transactions;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Dragalia.Responses;
+using DragaliaAPI.Models.Nintendo;
 using MessagePack;
 using MessagePack.Resolvers;
 using Microsoft.Extensions.Caching.Distributed;
@@ -21,17 +23,25 @@ public static class TestUtils
 
     public static void InitializeCacheForTests(IDistributedCache cache)
     {
+        // Downside of making Session a private nested class: I have to type this manually :(
+        string preparedSessionJson = """
+            {
+                "SessionId": "prepared_session_id",
+                "DeviceAccountId": "prepared_id",
+                "ViewerId": 10000000002
+            }
+            """;
+        cache.SetString(":session:id_token:id_token", preparedSessionJson);
+
         string sessionJson = """
-                [
-                  {
+                {
                     "SessionId": "session_id",
-                    "DeviceAccountId": "id",
-                    "IdToken": "id_token",
+                    "DeviceAccountId": "logged_in_id",
                     "ViewerId": 10000000001
-                  }
-                ]
+                }
                 """;
-        cache.SetString(":sessions", sessionJson);
+        cache.SetString(":session:session_id:session_id", sessionJson);
+        cache.SetString(":session_id:device_account_id:logged_in_id", "session_id");
     }
 
     public static void ReinitializeDbForTests(ApiContext db)
@@ -53,7 +63,8 @@ public static class TestUtils
     {
         return new()
         {
-            new() { DeviceAccountId = "id", ViewerId = 10000000001 }
+            new() { DeviceAccountId = "id", ViewerId = 10000000001 },
+            new() { DeviceAccountId = "prepared_id", ViewerId = 10000000002 }
         };
     }
 

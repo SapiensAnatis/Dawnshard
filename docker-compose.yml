@@ -13,6 +13,8 @@ services:
     build:
       context: .
       dockerfile: DragaliaAPI/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=https://+:443;http://+:80
     ports:
       - "5000:80"
       - "5001:443"

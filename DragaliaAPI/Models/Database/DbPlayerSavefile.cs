@@ -9,7 +9,7 @@ public class DbPlayerSavefile
     /// The device account ID which identifies the owner of this savefile
     /// </summary>
     [Key]
-    public string DeviceAccountId { get; set; }
+    public string DeviceAccountId { get; set; } = null!;
 
     /// <summary>
     /// The player's unique ID, i.e. the one that is used to send friend requests.
