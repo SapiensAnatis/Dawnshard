@@ -1,5 +1,7 @@
 ﻿using DragaliaAPI.Models.Dragalia.Responses;
 using MessagePack;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -15,6 +17,9 @@ public class SignupTest : IClassFixture<CustomWebApplicationFactory<Program>>
         {
             AllowAutoRedirect = false
         });
+
+        var cache = _factory.Services.GetRequiredService<IDistributedCache>();
+        TestUtils.InitializeCacheForTests(cache);
     }
 
     [Fact]
