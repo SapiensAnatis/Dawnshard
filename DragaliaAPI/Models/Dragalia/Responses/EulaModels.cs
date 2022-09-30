@@ -32,10 +32,10 @@ public record EulaGetVersionListData
 [MessagePackObject(keyAsPropertyName: true)]
 public record EulaGetVersionRequest
 {
-    public string region { get; init; }
-    public string lang { get; init; }
+    public string? region { get; init; }
+    public string? lang { get; init; }
 
-    public EulaGetVersionRequest(string region, string lang)
+    public EulaGetVersionRequest(string? region, string? lang)
     {
         this.region = region;
         this.lang = lang;
