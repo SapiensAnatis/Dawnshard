@@ -1,4 +1,6 @@
 ﻿using MessagePack;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -14,6 +16,10 @@ public class ToolAuthTest : IClassFixture<CustomWebApplicationFactory<Program>>
         {
             AllowAutoRedirect = false
         });
+
+        // TODO: Find a way to put this into the fixture
+        var cache = _factory.Services.GetRequiredService<IDistributedCache>();
+        TestUtils.InitializeCacheForTests(cache);
     }
 
     [Fact]
