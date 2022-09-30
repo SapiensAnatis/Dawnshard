@@ -34,8 +34,8 @@ public class DeviceAccountService : IDeviceAccountService
 
     public async Task<DeviceAccount> RegisterDeviceAccount()
     {
-        string id = Guid.NewGuid().ToString();
-        string password = Guid.NewGuid().ToString();
+        string id = GenerateRandomString(16);
+        string password = GenerateRandomString(40);
         string hashedPassword = GetHashedPassword(password);
 
         await _apiRepository.AddNewDeviceAccount(id, hashedPassword);
@@ -58,5 +58,20 @@ public class DeviceAccountService : IDeviceAccountService
         byte[] hashBytes = pkbdf2.GetBytes(20);
 
         return Convert.ToBase64String(hashBytes);
+    }
+
+    private string GenerateRandomString(int nChars)
+    {
+        // Not a great idea to use the standard RNG for making passwords, but again, security is not a big deal
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var stringChars = new char[nChars];
+        var random = new Random();
+
+        for (int i = 0; i < stringChars.Length; i++)
+        {
+            stringChars[i] = chars[random.Next(chars.Length)];
+        }
+
+        return new string(stringChars);
     }
 }

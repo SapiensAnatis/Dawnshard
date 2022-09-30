@@ -1,4 +1,6 @@
+using DragaliaAPI;
 using DragaliaAPI.Models.Database;
+using DragaliaAPI.Models.Dragalia.Responses;
 using DragaliaAPI.Services;
 using MessagePack.Resolvers;
 using Microsoft.EntityFrameworkCore;
@@ -57,7 +59,27 @@ using (IServiceScope serviceScope = app.Services.GetRequiredService<IServiceScop
     }
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+
+app.Use(async (context, next) =>
+{
+    context.Response.OnStarting(() =>
+    {
+        DateTime expires = DateTime.UtcNow + TimeSpan.FromMinutes(30);
+
+        context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+        context.Response.Headers["Expires"] = DateTime.UtcNow.ToString("ddd, dd MMM yyyy HH:mm:ss") + " GMT";
+        context.Response.Headers["Cache-Control"] = "max-age=0, no-cache, no-store";
+        context.Response.Headers["Pragma"] = "no-cache";
+        context.Response.Headers["Connection"] = "keep-alive";
+        
+        return Task.CompletedTask;
+    });
+
+    await next();
+});
+
+app.UseMiddleware<DeChunkerMiddleware>();
 
 app.UseAuthorization();
 app.MapControllers();

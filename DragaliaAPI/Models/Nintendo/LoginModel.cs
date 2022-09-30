@@ -26,16 +26,17 @@ public record LoginResponse
     public User user { get; init; }
     public DeviceAccount? createdDeviceAccount { get; set; }
     // Junk fields
-    public string accessToken { get; } = "";
-    public string behaviourSettings { get; } = "";
+    public string accessToken { get; init; }
+    public object behaviorSettings { get; } = new { };
     public Capability capability { get; } = new();
     public string? error { get; } = null;
-    public int expiresIn { get; } = int.MaxValue;
+    public int expiresIn { get; } = 900;
     public string? market { get; } = null;
 
     public LoginResponse(string idToken, DeviceAccount deviceAccount)
     {
         this.idToken = idToken;
+        this.accessToken = idToken;
         this.user = new(deviceAccount);
     }
 
@@ -44,7 +45,7 @@ public record LoginResponse
         public string accountApiHost { get; } = "api.accounts.nintendo.com";
         public string accountHost { get; } = "accounts.nintendo.com";
         public string pointProgramHost { get; } = "my.nintendo.com";
-        public long sessionUpdateInterval { get; } = long.MaxValue;
+        public long sessionUpdateInterval { get; } = 180000;
     }
 
     public record User
@@ -56,21 +57,21 @@ public record LoginResponse
 
         public string birthday { get; } = "0000-00-00";
         public string country { get; } = "";
-        public long createdAt { get; } = 0;
+        public long createdAt { get; } = DateTimeOffset.Now.ToUnixTimeSeconds();
         public string gender { get; } = "Unknown";
         public bool hasUnreadCsComment { get; } = false;
-        public string id { get; } = "";
-        public string links { get; } = "";
+        public string id { get; } = "20f92082aa3997e9";
+        public object links { get; } = new { };
         public string nickname { get; } = "";
-        public long updatedAt { get; } = 0;
+        public long updatedAt { get; } = DateTimeOffset.Now.ToUnixTimeSeconds();
         public List<DeviceAccount> deviceAccounts { get; init; }
         public Permissions permissions { get; } = new();
         public record Permissions
         {
             public bool personalAnalytics { get; } = false;
-            public long personalAnalyticsUpdatedAt { get; } = 0;
+            public long personalAnalyticsUpdatedAt { get; } = DateTimeOffset.Now.ToUnixTimeSeconds();
             public bool personalNotification { get; } = false;
-            public long personalNotificationUpdatedAt { get; } = 0;
+            public long personalNotificationUpdatedAt { get; } = DateTimeOffset.Now.ToUnixTimeSeconds();
         }
     }
 }
