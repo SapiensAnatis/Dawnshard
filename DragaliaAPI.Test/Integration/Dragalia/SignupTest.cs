@@ -17,9 +17,10 @@ public class SignupTest : IClassFixture<CustomWebApplicationFactory<Program>>
         });
     }
 
+    [Fact]
     public async Task Signup_CorrectIdToken_ReturnsOKResponse()
     {
-        SignupResponse expectedResponse = new(new SignupData(10000000001));
+        SignupResponse expectedResponse = new(new SignupData(10000000002));
 
         var data = new { id_token = "id_token" };
         byte[] payload = MessagePackSerializer.Serialize(data);
@@ -31,7 +32,7 @@ public class SignupTest : IClassFixture<CustomWebApplicationFactory<Program>>
     }
 
     [Fact]
-    public async Task Auth_IncorrectIdToken_ReturnsErrorResponse()
+    public async Task Signup_IncorrectIdToken_ReturnsErrorResponse()
     {
         ServerErrorResponse expectedResponse = new();
 

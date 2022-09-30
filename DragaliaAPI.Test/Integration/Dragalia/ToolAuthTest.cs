@@ -19,7 +19,7 @@ public class ToolAuthTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task Auth_CorrectIdToken_ReturnsOKResponse()
     {
-        AuthResponse expectedResponse = new(10000000001, "session_id");
+        AuthResponse expectedResponse = new(10000000002, "prepared_session_id");
 
         var data = new { uuid = "unused", id_token = "id_token" };
         byte[] payload = MessagePackSerializer.Serialize(data);

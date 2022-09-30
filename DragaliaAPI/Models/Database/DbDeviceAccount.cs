@@ -13,7 +13,7 @@ public class DbDeviceAccount
 
     public DbDeviceAccount(string id, string hashedPassword)
     {
-        Id = id;
-        HashedPassword = hashedPassword;
+        this.Id = id;
+        this.HashedPassword = hashedPassword;
     }
 }

@@ -2,8 +2,8 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
+using DragaliaAPI.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Nintendo;

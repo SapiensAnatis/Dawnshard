@@ -1,5 +1,5 @@
-﻿using DragaliaAPI.Models;
-using DragaliaAPI.Models.Nintendo;
+﻿using DragaliaAPI.Models.Nintendo;
+using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Nintendo;
@@ -43,7 +43,8 @@ public class NintendoLoginController : ControllerBase
         if (!authenticationSuccess) return Unauthorized();
 
         string token = Guid.NewGuid().ToString();
-        await _sessionService.CreateNewSession(deviceAccount, token);
+        await _sessionService.PrepareSession(deviceAccount, token);
+
         LoginResponse response = new(token, deviceAccount)
         {
             createdDeviceAccount = createdDeviceAccount

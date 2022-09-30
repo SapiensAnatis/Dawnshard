@@ -1,9 +1,11 @@
-﻿using DragaliaAPI.Models;
+﻿using System.Text.Json;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Dragalia.Requests;
 using DragaliaAPI.Models.Dragalia.Responses;
+using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Controllers.Dragalia.Tool;
 
@@ -30,12 +32,21 @@ public class SignupController : ControllerBase
     [HttpPost]
     public async Task<DragaliaResult> Post(IdTokenRequest request)
     {
-        string? sessionId = _sessionService.GetSessionIdFromIdToken(request.id_token);
-        if (sessionId is null) { return Ok(new ServerErrorResponse()); }
+        string sessionId;
+        long viewerId;
 
-        DbPlayerSavefile savefile = await _sessionService.GetSavefile(sessionId);
+        try
+        {
+            sessionId = await _sessionService.ActivateSession(request.id_token);
+            IQueryable<DbPlayerSavefile> savefile = await _sessionService.GetSavefile_SessionId(sessionId);
+            viewerId = await savefile.Select(x => x.ViewerId).SingleAsync();
+        }
+        catch (Exception e) when (e is ArgumentException || e is JsonException)
+        {
+            return Ok(new ServerErrorResponse());
+        }
 
-        SignupResponse response = new(new SignupData(savefile.ViewerId));
+        SignupResponse response = new(new SignupData(viewerId));
         return Ok(response);
     }
 }

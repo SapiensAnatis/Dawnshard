@@ -1,8 +1,9 @@
 ﻿using DragaliaAPI.Models.Database;
+using DragaliaAPI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace DragaliaAPI.Test.Unit.Models;
+namespace DragaliaAPI.Test.Unit.Services;
 
 public class DeviceAccountServiceTest
 {

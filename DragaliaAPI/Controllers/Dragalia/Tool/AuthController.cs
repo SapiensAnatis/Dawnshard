@@ -1,8 +1,10 @@
-﻿using DragaliaAPI.Models;
-using DragaliaAPI.Models.Database;
+﻿using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Dragalia.Requests;
 using DragaliaAPI.Models.Dragalia.Responses;
+using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace DragaliaAPI.Controllers.Dragalia.Tool;
 
@@ -21,11 +23,21 @@ public class AuthController : ControllerBase
     [HttpPost]
     public async Task<DragaliaResult> Post(IdTokenRequest request)
     {
-        string? sessionId = _sessionService.GetSessionIdFromIdToken(request.id_token);
-        if (sessionId is null) { return Ok(new ServerErrorResponse()); }
+        string sessionId;
+        long viewerId;
 
-        DbPlayerSavefile savefile = await _sessionService.GetSavefile(sessionId);
-        AuthResponse response = new(savefile.ViewerId, sessionId);
+        try
+        {
+            sessionId = await _sessionService.ActivateSession(request.id_token);
+            IQueryable<DbPlayerSavefile> savefile = await _sessionService.GetSavefile_SessionId(sessionId);
+            viewerId = await savefile.Select(x => x.ViewerId).SingleAsync();
+        }
+        catch (Exception e) when (e is ArgumentException || e is JsonException)
+        {
+            return Ok(new ServerErrorResponse());
+        }
+
+        AuthResponse response = new(viewerId, sessionId);
         return Ok(response);
     }
 }

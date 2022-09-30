@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Models;
+namespace DragaliaAPI.Services;
 
 public interface IDeviceAccountService
 {
