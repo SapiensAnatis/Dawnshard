@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Database.Savefile;
+﻿using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -30,11 +29,20 @@ public class SessionService : ISessionService
 {
     private readonly IApiRepository _apiRepository;
     private readonly IDistributedCache _cache;
+    private readonly IConfiguration _configuration;
+    private readonly DistributedCacheEntryOptions _cacheOptions;
+    private readonly ILogger<SessionService> _logger;   
 
-    public SessionService(IApiRepository repository, IDistributedCache cache)
+    public SessionService(IApiRepository repository, IDistributedCache cache, IConfiguration configuration, ILogger<SessionService> logger)
     {
         _apiRepository = repository;
         _cache = cache;
+        _configuration = configuration;
+        _logger = logger;
+        
+        var sessionSettings = configuration.GetRequiredSection("SessionManagement");
+        int expiryTimeMinutes = sessionSettings.GetValue<int>("ExpiryTimeMinutes");
+        _cacheOptions = new() { SlidingExpiration = TimeSpan.FromMinutes(expiryTimeMinutes) };
     }
 
     private static class Schema
@@ -49,7 +57,7 @@ public class SessionService : ISessionService
             => $":session_id:device_account_id:{deviceAccountId}";
     }
 
-    private static readonly DistributedCacheEntryOptions cacheOptions = new() { SlidingExpiration = TimeSpan.FromMinutes(5) };
+    
     
     public async Task PrepareSession(DeviceAccount deviceAccount, string idToken)
     {
@@ -67,7 +75,8 @@ public class SessionService : ISessionService
         string sessionId = Guid.NewGuid().ToString();
 
         Session session = new(sessionId, deviceAccount.id, viewerId);
-        await _cache.SetStringAsync(Schema.Session_IdToken(idToken), JsonSerializer.Serialize(session), cacheOptions);
+        await _cache.SetStringAsync(Schema.Session_IdToken(idToken), JsonSerializer.Serialize(session), _cacheOptions);
+        _logger.LogInformation("Preparing session: DeviceAccount '{id}', id-token '{id_token}'", deviceAccount.id, idToken);
     }
 
     public async Task<string> ActivateSession(string idToken)
@@ -86,10 +95,11 @@ public class SessionService : ISessionService
 
             return existingSession.SessionId;
         }
-        await _cache.SetStringAsync(Schema.Session_SessionId(session.SessionId), JsonSerializer.Serialize(session), cacheOptions);
+        await _cache.SetStringAsync(Schema.Session_SessionId(session.SessionId), JsonSerializer.Serialize(session), _cacheOptions);
         // Register in existent sessions
-        await _cache.SetStringAsync(Schema.SessionId_DeviceAccountId(session.DeviceAccountId), session.SessionId, cacheOptions);
-
+        await _cache.SetStringAsync(Schema.SessionId_DeviceAccountId(session.DeviceAccountId), session.SessionId, _cacheOptions);
+        
+        _logger.LogInformation("Activated session: id-token '{id_token}', issued session id '{session_id}'", idToken, session.SessionId);
         return session.SessionId;
     }
 

@@ -25,7 +25,10 @@ public class DeviceAccountService : IDeviceAccountService
         if (deviceAccount.password is null) { throw new ArgumentNullException(paramName: deviceAccount.password); }
 
         DbDeviceAccount? dbDeviceAccount = await _apiRepository.GetDeviceAccountById(deviceAccount.id);
-        if (dbDeviceAccount is null) { return false; }
+        if (dbDeviceAccount is null) {
+            _logger.LogInformation("Authentication failure: DeviceAccount ID '{id}'", deviceAccount.id);
+            return false; 
+        }
 
         string hashedPassword = GetHashedPassword(deviceAccount.password);
 
@@ -41,7 +44,7 @@ public class DeviceAccountService : IDeviceAccountService
         await _apiRepository.AddNewDeviceAccount(id, hashedPassword);
         await _apiRepository.AddNewPlayerSavefile(id);
 
-        _logger.LogInformation("Registered new account with ID {id}", id);
+        _logger.LogInformation("Registered new account: DeviceAccount ID '{id}'", id);
 
         return new DeviceAccount(id, password);
     }

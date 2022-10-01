@@ -4,6 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Transactions;
 using DragaliaAPI.Models.Database;
+using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Responses;
 using DragaliaAPI.Models.Nintendo;
 using MessagePack;
@@ -59,7 +60,7 @@ public static class TestUtils
         };
     }
 
-    public static List<DbPlayerSavefile> GetPlayerSavefilesSeed()
+    public static List<DbSavefilePlayerInfo> GetPlayerSavefilesSeed()
     {
         return new()
         {
