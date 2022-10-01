@@ -18,7 +18,7 @@ public static class TestUtils
     public static void InitializeDbForTests(ApiContext db)
     {
         db.DeviceAccounts.AddRange(GetDeviceAccountsSeed());
-        db.PlayerSavefiles.AddRange(GetPlayerSavefilesSeed());
+        db.SavefilePlayerInfo.AddRange(GetSavefilePlayerInfoSeed());
         db.SaveChanges();
     }
 
@@ -60,12 +60,17 @@ public static class TestUtils
         };
     }
 
-    public static List<DbSavefilePlayerInfo> GetPlayerSavefilesSeed()
+    public static List<DbSavefilePlayerInfo> GetSavefilePlayerInfoSeed()
     {
+        var playerInfoOne = DbSavefilePlayerInfoFactory.Create("id");
+        playerInfoOne.ViewerId = 10000000001;
+        var playerInfoTwo = DbSavefilePlayerInfoFactory.Create("prepared_id");
+        playerInfoTwo.ViewerId = 10000000002;
+
         return new()
         {
-            new() { DeviceAccountId = "id", ViewerId = 10000000001 },
-            new() { DeviceAccountId = "prepared_id", ViewerId = 10000000002 }
+            playerInfoOne,
+            playerInfoTwo,
         };
     }
 

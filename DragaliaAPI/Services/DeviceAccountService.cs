@@ -25,10 +25,8 @@ public class DeviceAccountService : IDeviceAccountService
         if (deviceAccount.password is null) { throw new ArgumentNullException(paramName: deviceAccount.password); }
 
         DbDeviceAccount? dbDeviceAccount = await _apiRepository.GetDeviceAccountById(deviceAccount.id);
-        if (dbDeviceAccount is null) {
-            _logger.LogInformation("Authentication failure: DeviceAccount ID '{id}'", deviceAccount.id);
+        if (dbDeviceAccount is null)
             return false; 
-        }
 
         string hashedPassword = GetHashedPassword(deviceAccount.password);
 

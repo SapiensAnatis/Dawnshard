@@ -37,6 +37,22 @@ public class ToolAuthTest : IClassFixture<CustomWebApplicationFactory<Program>>
     }
 
     [Fact]
+    public async Task Auth_CalledTwice_ReturnsSameSessionId()
+    {
+        AuthResponse expectedResponse = new(10000000002, "prepared_session_id");
+
+        var data = new { uuid = "unused", id_token = "id_token" };
+        byte[] payload = MessagePackSerializer.Serialize(data);
+        HttpContent content = TestUtils.CreateMsgpackContent(payload);
+
+        HttpResponseMessage response = await _client.PostAsync("/tool/auth", content);
+        HttpResponseMessage responseTwo = await _client.PostAsync("/tool/auth", content);
+
+        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        await TestUtils.CheckMsgpackResponse(responseTwo, expectedResponse);
+    }
+
+    [Fact]
     public async Task Auth_IncorrectIdToken_ReturnsErrorResponse()
     {
         ServerErrorResponse expectedResponse = new();

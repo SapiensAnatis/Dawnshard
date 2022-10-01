@@ -31,12 +31,17 @@ public class ApiRepository : IApiRepository
 
     public virtual async Task AddNewPlayerSavefile(string deviceAccountId)
     {
-        await _apiContext.PlayerSavefiles.AddAsync(new DbSavefilePlayerInfo() { DeviceAccountId = deviceAccountId });
+        await _apiContext.SavefilePlayerInfo.AddAsync(DbSavefilePlayerInfoFactory.Create(deviceAccountId));
         await _apiContext.SaveChangesAsync();
     }
 
     public virtual IQueryable<DbSavefilePlayerInfo> GetPlayerInfo(string deviceAccountId)
     {
-        return _apiContext.PlayerSavefiles.Where(x => x.DeviceAccountId == deviceAccountId);
+        IQueryable<DbSavefilePlayerInfo> infoQuery = _apiContext.SavefilePlayerInfo.Where(x => x.DeviceAccountId == deviceAccountId);
+
+        if (infoQuery.Count() != 1)
+            throw new ArgumentException($"PlayerInfo query with id {deviceAccountId} returned {infoQuery.Count()} results.");
+
+        return infoQuery;
     }
 }

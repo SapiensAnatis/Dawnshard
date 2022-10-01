@@ -29,7 +29,6 @@ public class SessionService : ISessionService
 {
     private readonly IApiRepository _apiRepository;
     private readonly IDistributedCache _cache;
-    private readonly IConfiguration _configuration;
     private readonly DistributedCacheEntryOptions _cacheOptions;
     private readonly ILogger<SessionService> _logger;
 
@@ -37,11 +36,9 @@ public class SessionService : ISessionService
     {
         _apiRepository = repository;
         _cache = cache;
-        _configuration = configuration;
         _logger = logger;
 
-        var sessionSettings = configuration.GetRequiredSection("SessionManagement");
-        int expiryTimeMinutes = sessionSettings.GetValue<int>("ExpiryTimeMinutes");
+        int expiryTimeMinutes = configuration.GetValue<int>("SessionExpiryTimeMinutes");
         _cacheOptions = new() { SlidingExpiration = TimeSpan.FromMinutes(expiryTimeMinutes) };
     }
 

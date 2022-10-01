@@ -21,8 +21,6 @@ public class DeviceAccountServiceTest
             {"HashSalt", "dragalia"},
         };
 
-        mockRepository = new(MockBehavior.Strict);
-
         IConfiguration configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(inMemoryConfiguration)
             .Build();
