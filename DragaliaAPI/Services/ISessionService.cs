@@ -33,12 +33,12 @@ public interface ISessionService
     /// </summary>
     /// <param name="idToken"></param>
     /// <returns></returns>
-    Task<IQueryable<DbSavefilePlayerInfo>> GetSavefile_IdToken(string idToken);
+    Task<string> GetDeviceAccountId_IdToken(string idToken);
 
     /// <summary>
     /// Get a queryable for a player's savefile from a session id.
     /// </summary>
     /// <param name="sessionId">The session id.</param>
     /// <returns></returns>
-    Task<IQueryable<DbSavefilePlayerInfo>> GetSavefile_SessionId(string sessionId);
+    Task<string> GetDeviceAccountId_SessionId(string sessionId);
 }

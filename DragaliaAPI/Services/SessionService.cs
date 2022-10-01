@@ -31,7 +31,7 @@ public class SessionService : ISessionService
     private readonly IDistributedCache _cache;
     private readonly IConfiguration _configuration;
     private readonly DistributedCacheEntryOptions _cacheOptions;
-    private readonly ILogger<SessionService> _logger;   
+    private readonly ILogger<SessionService> _logger;
 
     public SessionService(IApiRepository repository, IDistributedCache cache, IConfiguration configuration, ILogger<SessionService> logger)
     {
@@ -39,7 +39,7 @@ public class SessionService : ISessionService
         _cache = cache;
         _configuration = configuration;
         _logger = logger;
-        
+
         var sessionSettings = configuration.GetRequiredSection("SessionManagement");
         int expiryTimeMinutes = sessionSettings.GetValue<int>("ExpiryTimeMinutes");
         _cacheOptions = new() { SlidingExpiration = TimeSpan.FromMinutes(expiryTimeMinutes) };
@@ -52,13 +52,13 @@ public class SessionService : ISessionService
 
         public static string Session_SessionId(string sessionId)
             => $":session:session_id:{sessionId}";
-        
+
         public static string SessionId_DeviceAccountId(string deviceAccountId)
             => $":session_id:device_account_id:{deviceAccountId}";
     }
 
-    
-    
+
+
     public async Task PrepareSession(DeviceAccount deviceAccount, string idToken)
     {
         // Check if there is an existing session, and if so, remove it
@@ -70,7 +70,7 @@ public class SessionService : ISessionService
             await _cache.RemoveAsync(Schema.SessionId_DeviceAccountId(deviceAccount.id));
         }
 
-        IQueryable<DbSavefilePlayerInfo> savefile = _apiRepository.GetSavefile(deviceAccount.id);
+        IQueryable<DbSavefilePlayerInfo> savefile = _apiRepository.GetPlayerInfo(deviceAccount.id);
         long viewerId = await savefile.Select(x => x.ViewerId).SingleAsync();
         string sessionId = Guid.NewGuid().ToString();
 
@@ -90,7 +90,7 @@ public class SessionService : ISessionService
         if (!string.IsNullOrEmpty(sessionJson))
         {
             // Issue existing session ID if session has already been activated
-            Session existingSession = JsonSerializer.Deserialize<Session>(sessionJson) ?? 
+            Session existingSession = JsonSerializer.Deserialize<Session>(sessionJson) ??
                 throw new JsonException($"Loaded session JSON {sessionJson} could not be deserialized.");
 
             return existingSession.SessionId;
@@ -98,7 +98,7 @@ public class SessionService : ISessionService
         await _cache.SetStringAsync(Schema.Session_SessionId(session.SessionId), JsonSerializer.Serialize(session), _cacheOptions);
         // Register in existent sessions
         await _cache.SetStringAsync(Schema.SessionId_DeviceAccountId(session.DeviceAccountId), session.SessionId, _cacheOptions);
-        
+
         _logger.LogInformation("Activated session: id-token '{id_token}', issued session id '{session_id}'", idToken, session.SessionId);
         return session.SessionId;
     }
@@ -109,18 +109,18 @@ public class SessionService : ISessionService
         return !string.IsNullOrEmpty(sessionJson);
     }
 
-    public async Task<IQueryable<DbSavefilePlayerInfo>> GetSavefile_SessionId(string sessionId)
+    public async Task<string> GetDeviceAccountId_SessionId(string sessionId)
     {
         Session session = await LoadSession(Schema.Session_SessionId(sessionId));
 
-        return _apiRepository.GetSavefile(session.DeviceAccountId);
+        return session.DeviceAccountId;
     }
 
-    public async Task<IQueryable<DbSavefilePlayerInfo>> GetSavefile_IdToken(string idToken)
+    public async Task<string> GetDeviceAccountId_IdToken(string idToken)
     {
         Session session = await LoadSession(Schema.Session_IdToken(idToken));
 
-        return _apiRepository.GetSavefile(session.DeviceAccountId);
+        return session.DeviceAccountId;
     }
 
     private async Task<Session> LoadSession(string key)

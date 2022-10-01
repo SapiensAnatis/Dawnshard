@@ -24,9 +24,12 @@ namespace DragaliaAPI.Controllers.Dragalia.Tool;
 public class SignupController : ControllerBase
 {
     private readonly ISessionService _sessionService;
-    public SignupController(ISessionService sessionService)
+    private readonly IApiRepository _apiRepository;
+
+    public SignupController(ISessionService sessionService, IApiRepository apiRepository)
     {
         _sessionService = sessionService;
+        _apiRepository = apiRepository;
     }
 
     [HttpPost]
@@ -36,8 +39,9 @@ public class SignupController : ControllerBase
 
         try
         {
-            IQueryable<DbSavefilePlayerInfo> savefile = await _sessionService.GetSavefile_IdToken(request.id_token);
-            viewerId = await savefile.Select(x => x.ViewerId).SingleAsync();
+            string deviceAccountId = await _sessionService.GetDeviceAccountId_IdToken(request.id_token);
+            IQueryable<DbSavefilePlayerInfo> playerInfo = _apiRepository.GetPlayerInfo(deviceAccountId);
+            viewerId = await playerInfo.Select(x => x.ViewerId).SingleAsync();
         }
         catch (Exception e) when (e is ArgumentException || e is JsonException)
         {

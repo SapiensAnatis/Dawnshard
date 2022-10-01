@@ -35,7 +35,7 @@ public class ApiRepository : IApiRepository
         await _apiContext.SaveChangesAsync();
     }
 
-    public virtual IQueryable<DbSavefilePlayerInfo> GetSavefile(string deviceAccountId)
+    public virtual IQueryable<DbSavefilePlayerInfo> GetPlayerInfo(string deviceAccountId)
     {
         return _apiContext.PlayerSavefiles.Where(x => x.DeviceAccountId == deviceAccountId);
     }
