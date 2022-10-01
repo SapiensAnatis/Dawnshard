@@ -17,7 +17,8 @@ public class GetResourceVersionTest : IClassFixture<CustomWebApplicationFactory<
     [Fact]
     public async Task GetResourceVersion_ReturnsCorrectResponse()
     {
-        GetResourceVersionResponse expectedResponse = new();
+        GetResourceVersionResponse expectedResponse = new(
+            new GetResourceVersionData(GetResourceVersionStatic.ResourceVersion));
 
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };

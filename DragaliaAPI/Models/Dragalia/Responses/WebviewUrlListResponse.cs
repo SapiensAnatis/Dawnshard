@@ -1,18 +1,16 @@
 ﻿namespace DragaliaAPI.Models.Dragalia.Responses;
 
-public record UrlListResponse : BaseResponse<UrlListData>
-{
-    public override UrlListData data { get; init; } = new(UrlListStaticData.AllUrls);
-}
+public record WebviewUrlListResponse(WebviewUrlListData data) : BaseResponse<WebviewUrlListData>;
 
-public record UrlListData(List<WebviewUrl> webview_url_list);
+public record WebviewUrlListData(List<WebviewUrl> webview_url_list);
 
 public record WebviewUrl(string function_name, string url);
 
-public static class UrlListStaticData
+public static class WebviewUrlListStatic
 {
-    public static string PlaceholderUrl = "localhost";
-    public static List<WebviewUrl> AllUrls = new()
+    private static string PlaceholderUrl { get; } = "localhost";
+
+    public static List<WebviewUrl> AllUrls { get; } = new()
     {
         new("ability_crest_advice", PlaceholderUrl),
         new("battle_royal_how_to", PlaceholderUrl),

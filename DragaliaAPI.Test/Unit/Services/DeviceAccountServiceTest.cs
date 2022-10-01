@@ -21,8 +21,6 @@ public class DeviceAccountServiceTest
             {"HashSalt", "dragalia"},
         };
 
-        mockRepository = new(MockBehavior.Strict);
-
         IConfiguration configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(inMemoryConfiguration)
             .Build();
@@ -44,7 +42,7 @@ public class DeviceAccountServiceTest
     }
 
     [Fact]
-    public async Task AuthenticateDeviceAccount_InCorrectCredentials_ReturnsFalse()
+    public async Task AuthenticateDeviceAccount_IncorrectCredentials_ReturnsFalse()
     {
         DeviceAccount deviceAccount = new("id", "password");
         DbDeviceAccount dbDeviceAccount = new("id", "non-matching hash");
@@ -71,7 +69,7 @@ public class DeviceAccountServiceTest
     public async Task CreateDeviceAccount_CallsAddNewDeviceAccount()
     {
         mockRepository.Setup(x => x.AddNewDeviceAccount(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
-        mockRepository.Setup(x => x.AddNewPlayerSavefile(It.IsAny<string>())).Returns(Task.CompletedTask);
+        mockRepository.Setup(x => x.AddNewPlayerInfo(It.IsAny<string>())).Returns(Task.CompletedTask);
 
         await deviceAccountService.RegisterDeviceAccount();
 

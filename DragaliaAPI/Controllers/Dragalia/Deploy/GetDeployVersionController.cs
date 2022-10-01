@@ -12,6 +12,8 @@ public class GetDeployVersionController : ControllerBase
     [HttpPost]
     public DragaliaResult Post()
     {
-        return Ok(new GetDeployVersionResponse());
+        GetDeployVersionResponse response = new(
+            new GetDeployVersionData(GetDeployVersionStatic.DeployHash));
+        return Ok(response);
     }
 }

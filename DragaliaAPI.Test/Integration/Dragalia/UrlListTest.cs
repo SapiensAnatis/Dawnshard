@@ -17,7 +17,8 @@ public class UrlListTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task UrlList_ReturnsCorrectList()
     {
-        UrlListResponse expectedResponse = new(); // Constructor automatically adds all the URLs
+        WebviewUrlListResponse expectedResponse = new(
+            new WebviewUrlListData(WebviewUrlListStatic.AllUrls));
 
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };

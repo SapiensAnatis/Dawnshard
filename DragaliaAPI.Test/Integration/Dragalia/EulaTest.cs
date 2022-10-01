@@ -19,7 +19,7 @@ public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task EulaGetVersionList_ReturnsAllVersions()
     {
-        EulaGetVersionListResponse expectedResponse = new(); // Constructor automatically populates with all versions
+        EulaGetVersionListResponse expectedResponse = new(new EulaGetVersionListData(EulaStatic.AllEulaVersions));
 
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };

@@ -17,7 +17,8 @@ public class GetDeployVersionTest : IClassFixture<CustomWebApplicationFactory<Pr
     [Fact]
     public async Task GetDeployVersion_ReturnsCorrectResponse()
     {
-        GetDeployVersionResponse expectedResponse = new();
+        GetDeployVersionResponse expectedResponse = new(
+            new GetDeployVersionData(GetDeployVersionStatic.DeployHash));
 
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };

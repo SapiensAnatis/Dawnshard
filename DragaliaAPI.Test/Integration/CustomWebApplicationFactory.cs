@@ -8,26 +8,29 @@ using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Test.Integration;
 
-public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
+public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>
+    where TStartup : class
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
         {
             ServiceDescriptor sqlDescriptor = services.Single(
-                d => d.ServiceType ==
-                     typeof(DbContextOptions<ApiContext>));
+                d => d.ServiceType == typeof(DbContextOptions<ApiContext>)
+            );
 
             ServiceDescriptor redisDescriptor = services.Single(
-                d => d.ServiceType == typeof(IDistributedCache) && d.ImplementationType?.Name == "RedisCache");
+                d =>
+                    d.ServiceType == typeof(IDistributedCache)
+                    && d.ImplementationType?.Name == "RedisCache"
+            );
 
             services.Remove(sqlDescriptor);
             services.Remove(redisDescriptor);
-            
 
             services.AddDbContext<ApiContext>(options =>
             {
-                options.UseInMemoryDatabase("InMemoryDbForTesting");
+                options.UseInMemoryDatabase("IntegrationTestingDb");
             });
 
             services.AddDistributedMemoryCache();
@@ -37,19 +40,25 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             IServiceProvider scopedServices = scope.ServiceProvider;
 
             var db = scopedServices.GetRequiredService<ApiContext>();
-            var logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+            var logger = scopedServices.GetRequiredService<
+                ILogger<CustomWebApplicationFactory<TStartup>>
+            >();
             var cache = scopedServices.GetRequiredService<IDistributedCache>();
 
             try
             {
                 TestUtils.InitializeDbForTests(db);
                 // This doesn't appear to persist values into the tests, but works if used in the constructor of each test class.
-                // TestUtils.InitializeCacheForTests(cache); 
+                // TestUtils.InitializeCacheForTests(cache);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "An error occurred seeding the " +
-                                    "database with test messages. Error: {Message}", ex.Message);
+                logger.LogError(
+                    ex,
+                    "An error occurred seeding the "
+                        + "database with test messages. Error: {Message}",
+                    ex.Message
+                );
             }
         });
     }

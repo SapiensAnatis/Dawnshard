@@ -12,6 +12,8 @@ public class UrlListController : ControllerBase
     [HttpPost]
     public DragaliaResult Post()
     {
-        return Ok(new UrlListResponse());
+        WebviewUrlListResponse response = new(
+            new WebviewUrlListData(WebviewUrlListStatic.AllUrls));
+        return Ok(response);
     } 
 }

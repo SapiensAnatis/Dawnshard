@@ -12,6 +12,7 @@ public class GetResourceVersionController : ControllerBase
     [HttpPost]
     public DragaliaResult Post()
     {
-        return Ok(new GetResourceVersionResponse());
+        GetResourceVersionResponse response = new(new GetResourceVersionData(GetResourceVersionStatic.ResourceVersion));
+        return Ok(response);
     }
 }

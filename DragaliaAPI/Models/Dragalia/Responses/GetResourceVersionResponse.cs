@@ -3,10 +3,12 @@
 namespace DragaliaAPI.Models.Dragalia.Responses;
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record GetResourceVersionResponse : BaseResponse<GetResourceVersionData>
-{
-    public override GetResourceVersionData data { get; init; } = new();
-}
+public record GetResourceVersionResponse(GetResourceVersionData data) : BaseResponse<GetResourceVersionData>;
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record GetResourceVersionData(string resource_version = "y2XM6giU6zz56wCm");
+public record GetResourceVersionData(string resource_version);
+
+public static class GetResourceVersionStatic
+{
+    public static string ResourceVersion { get; } = "y2XM6giU6zz56wCm";
+}
