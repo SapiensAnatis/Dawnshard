@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Database;
+﻿using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
@@ -13,11 +13,11 @@ public class SessionServiceTest
     private readonly SessionService sessionService;
     private readonly DeviceAccount deviceAccount = new("id", "password");
     private readonly DeviceAccount deviceAccountTwo = new("id 2", "password 2");
-    private readonly List<DbPlayerSavefile> dbPlayerSavefile = new()
+    private readonly List<DbSavefilePlayerInfo> dbPlayerSavefile = new()
     {
         new() { DeviceAccountId = "id", ViewerId = 1 },
     };
-    private readonly List<DbPlayerSavefile> dbPlayerSavefileTwo = new()
+    private readonly List<DbSavefilePlayerInfo> dbPlayerSavefileTwo = new()
     {
         new() { DeviceAccountId = "id 2", ViewerId = 2 },
     };

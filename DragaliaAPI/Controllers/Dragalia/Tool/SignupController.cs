@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using DragaliaAPI.Models.Database;
+using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Requests;
 using DragaliaAPI.Models.Dragalia.Responses;
 using DragaliaAPI.Services;
@@ -36,7 +36,7 @@ public class SignupController : ControllerBase
 
         try
         {
-            IQueryable<DbPlayerSavefile> savefile = await _sessionService.GetSavefile_IdToken(request.id_token);
+            IQueryable<DbSavefilePlayerInfo> savefile = await _sessionService.GetSavefile_IdToken(request.id_token);
             viewerId = await savefile.Select(x => x.ViewerId).SingleAsync();
         }
         catch (Exception e) when (e is ArgumentException || e is JsonException)

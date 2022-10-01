@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Database;
+﻿using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Requests;
 using DragaliaAPI.Models.Dragalia.Responses;
 using DragaliaAPI.Services;
@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
         try
         {
             sessionId = await _sessionService.ActivateSession(request.id_token);
-            IQueryable<DbPlayerSavefile> savefile = await _sessionService.GetSavefile_SessionId(sessionId);
+            IQueryable<DbSavefilePlayerInfo> savefile = await _sessionService.GetSavefile_SessionId(sessionId);
             viewerId = await savefile.Select(x => x.ViewerId).SingleAsync();
         }
         catch (Exception e) when (e is ArgumentException || e is JsonException)

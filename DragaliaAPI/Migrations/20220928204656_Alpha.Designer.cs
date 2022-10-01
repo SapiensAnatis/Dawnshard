@@ -40,7 +40,7 @@ namespace DragaliaAPI.Migrations
                     b.ToTable("DeviceAccounts");
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Models.Database.DbPlayerSavefile", b =>
+            modelBuilder.Entity("DragaliaAPI.Models.Database.DbSavefilePlayerInfo", b =>
                 {
                     b.Property<string>("DeviceAccountId")
                         .HasColumnType("nvarchar(450)");

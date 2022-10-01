@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Database;
+using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -61,7 +62,7 @@ public class SessionService : ISessionService
             await _cache.RemoveAsync(Schema.SessionId_DeviceAccountId(deviceAccount.id));
         }
 
-        IQueryable<DbPlayerSavefile> savefile = _apiRepository.GetSavefile(deviceAccount.id);
+        IQueryable<DbSavefilePlayerInfo> savefile = _apiRepository.GetSavefile(deviceAccount.id);
         long viewerId = await savefile.Select(x => x.ViewerId).SingleAsync();
         string sessionId = Guid.NewGuid().ToString();
 
@@ -98,14 +99,14 @@ public class SessionService : ISessionService
         return !string.IsNullOrEmpty(sessionJson);
     }
 
-    public async Task<IQueryable<DbPlayerSavefile>> GetSavefile_SessionId(string sessionId)
+    public async Task<IQueryable<DbSavefilePlayerInfo>> GetSavefile_SessionId(string sessionId)
     {
         Session session = await LoadSession(Schema.Session_SessionId(sessionId));
 
         return _apiRepository.GetSavefile(session.DeviceAccountId);
     }
 
-    public async Task<IQueryable<DbPlayerSavefile>> GetSavefile_IdToken(string idToken)
+    public async Task<IQueryable<DbSavefilePlayerInfo>> GetSavefile_IdToken(string idToken)
     {
         Session session = await LoadSession(Schema.Session_IdToken(idToken));
 

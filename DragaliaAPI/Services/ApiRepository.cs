@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Database;
+using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,11 +31,11 @@ public class ApiRepository : IApiRepository
 
     public virtual async Task AddNewPlayerSavefile(string deviceAccountId)
     {
-        await _apiContext.PlayerSavefiles.AddAsync(new DbPlayerSavefile() { DeviceAccountId = deviceAccountId });
+        await _apiContext.PlayerSavefiles.AddAsync(new DbSavefilePlayerInfo() { DeviceAccountId = deviceAccountId });
         await _apiContext.SaveChangesAsync();
     }
 
-    public virtual IQueryable<DbPlayerSavefile> GetSavefile(string deviceAccountId)
+    public virtual IQueryable<DbSavefilePlayerInfo> GetSavefile(string deviceAccountId)
     {
         return _apiContext.PlayerSavefiles.Where(x => x.DeviceAccountId == deviceAccountId);
     }
