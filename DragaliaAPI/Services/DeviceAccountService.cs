@@ -26,7 +26,7 @@ public class DeviceAccountService : IDeviceAccountService
 
         DbDeviceAccount? dbDeviceAccount = await _apiRepository.GetDeviceAccountById(deviceAccount.id);
         if (dbDeviceAccount is null)
-            return false; 
+            return false;
 
         string hashedPassword = GetHashedPassword(deviceAccount.password);
 
@@ -40,7 +40,7 @@ public class DeviceAccountService : IDeviceAccountService
         string hashedPassword = GetHashedPassword(password);
 
         await _apiRepository.AddNewDeviceAccount(id, hashedPassword);
-        await _apiRepository.AddNewPlayerSavefile(id);
+        await _apiRepository.AddNewPlayerInfo(id);
 
         _logger.LogInformation("Registered new account: DeviceAccount ID '{id}'", id);
 
