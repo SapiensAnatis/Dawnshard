@@ -36,12 +36,101 @@ namespace DragaliaAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DeviceAccounts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "id",
+                            HashedPassword = "NMvdakTznEF6khwWcz17i6GTnDA="
+                        });
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Models.Database.DbPlayerSavefile", b =>
+            modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbSavefileUserData", b =>
                 {
                     b.Property<string>("DeviceAccountId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ActiveMemoryEventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BuildTimePoint")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Coin")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreateTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Crystal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DewPoint")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmblemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Exp")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FortOpenTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IsOptin")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LastLoginTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LastStaminaMultiUpdateTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LastStaminaSingleUpdateTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MainPartyNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ManaPoint")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxAmuletQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxDragonQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxWeaponQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PrologueEndTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestSkipPoint")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaminaMulti")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaminaMultiSurplusSecond")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaminaSingle")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaminaSingleSurplusSecond")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TutorialStatus")
+                        .HasColumnType("int");
 
                     b.Property<long>("ViewerId")
                         .ValueGeneratedOnAdd()
@@ -50,7 +139,41 @@ namespace DragaliaAPI.Migrations
 
                     b.HasKey("DeviceAccountId");
 
-                    b.ToTable("PlayerSavefiles");
+                    b.ToTable("SavefileUserData");
+
+                    b.HasData(
+                        new
+                        {
+                            DeviceAccountId = "id",
+                            ActiveMemoryEventId = 0,
+                            BuildTimePoint = 0,
+                            Coin = 0,
+                            CreateTime = 1664719303,
+                            Crystal = 0,
+                            DewPoint = 0,
+                            EmblemId = 40000001,
+                            Exp = 0,
+                            FortOpenTime = 0,
+                            IsOptin = 0,
+                            LastLoginTime = 0,
+                            LastStaminaMultiUpdateTime = 0,
+                            LastStaminaSingleUpdateTime = 0,
+                            Level = 1,
+                            MainPartyNo = 1,
+                            ManaPoint = 0,
+                            MaxAmuletQuantity = 0,
+                            MaxDragonQuantity = 160,
+                            MaxWeaponQuantity = 0,
+                            Name = "Euden",
+                            PrologueEndTime = 0,
+                            QuestSkipPoint = 0,
+                            StaminaMulti = 12,
+                            StaminaMultiSurplusSecond = 0,
+                            StaminaSingle = 18,
+                            StaminaSingleSurplusSecond = 0,
+                            TutorialStatus = 0,
+                            ViewerId = 0L
+                        });
                 });
 #pragma warning restore 612, 618
         }

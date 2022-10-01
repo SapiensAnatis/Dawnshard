@@ -14,7 +14,7 @@ public class GetServiceStatusController : ControllerBase
     [HttpPost]
     public ActionResult<ServiceStatusResponse> Post()
     {
-        ServiceStatusResponse response = new();
+        ServiceStatusResponse response = new(new ServiceStatusData(1));
         return Ok(response);
     }
 }

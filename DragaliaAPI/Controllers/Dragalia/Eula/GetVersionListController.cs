@@ -12,6 +12,8 @@ public class GetVersionListController : ControllerBase
     [HttpPost]
     public ActionResult<EulaGetVersionListResponse> Post()
     {
-        return Ok(new EulaGetVersionListResponse());
+        EulaGetVersionListResponse response = new(
+            new EulaGetVersionListData(EulaStatic.AllEulaVersions));
+        return Ok(response);
     }
 }

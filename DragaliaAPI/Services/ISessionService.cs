@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Database;
+using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Nintendo;
 
 namespace DragaliaAPI.Services;
@@ -32,12 +33,12 @@ public interface ISessionService
     /// </summary>
     /// <param name="idToken"></param>
     /// <returns></returns>
-    Task<IQueryable<DbPlayerSavefile>> GetSavefile_IdToken(string idToken);
+    Task<string> GetDeviceAccountId_IdToken(string idToken);
 
     /// <summary>
     /// Get a queryable for a player's savefile from a session id.
     /// </summary>
     /// <param name="sessionId">The session id.</param>
     /// <returns></returns>
-    Task<IQueryable<DbPlayerSavefile>> GetSavefile_SessionId(string sessionId);
+    Task<string> GetDeviceAccountId_SessionId(string sessionId);
 }

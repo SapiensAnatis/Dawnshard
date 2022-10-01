@@ -4,6 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Transactions;
 using DragaliaAPI.Models.Database;
+using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Responses;
 using DragaliaAPI.Models.Nintendo;
 using MessagePack;
@@ -17,7 +18,7 @@ public static class TestUtils
     public static void InitializeDbForTests(ApiContext db)
     {
         db.DeviceAccounts.AddRange(GetDeviceAccountsSeed());
-        db.PlayerSavefiles.AddRange(GetPlayerSavefilesSeed());
+        db.SavefileUserData.AddRange(GetSavefilePlayerInfoSeed());
         db.SaveChanges();
     }
 
@@ -27,8 +28,7 @@ public static class TestUtils
         string preparedSessionJson = """
             {
                 "SessionId": "prepared_session_id",
-                "DeviceAccountId": "prepared_id",
-                "ViewerId": 10000000002
+                "DeviceAccountId": "prepared_id"
             }
             """;
         cache.SetString(":session:id_token:id_token", preparedSessionJson);
@@ -36,18 +36,11 @@ public static class TestUtils
         string sessionJson = """
                 {
                     "SessionId": "session_id",
-                    "DeviceAccountId": "logged_in_id",
-                    "ViewerId": 10000000001
+                    "DeviceAccountId": "logged_in_id"
                 }
                 """;
         cache.SetString(":session:session_id:session_id", sessionJson);
         cache.SetString(":session_id:device_account_id:logged_in_id", "session_id");
-    }
-
-    public static void ReinitializeDbForTests(ApiContext db)
-    {
-        db.DeviceAccounts.RemoveRange(db.DeviceAccounts);
-        InitializeDbForTests(db);
     }
 
     public static List<DbDeviceAccount> GetDeviceAccountsSeed()
@@ -59,25 +52,32 @@ public static class TestUtils
         };
     }
 
-    public static List<DbPlayerSavefile> GetPlayerSavefilesSeed()
+    public static List<DbSavefileUserData> GetSavefilePlayerInfoSeed()
     {
-        return new()
-        {
-            new() { DeviceAccountId = "id", ViewerId = 10000000001 },
-            new() { DeviceAccountId = "prepared_id", ViewerId = 10000000002 }
-        };
+        var playerInfoOne = DbSavefileUserDataFactory.Create("id");
+        playerInfoOne.ViewerId = 10000000001;
+        var playerInfoTwo = DbSavefileUserDataFactory.Create("prepared_id");
+        playerInfoTwo.ViewerId = 10000000002;
+        var playerInfoThree = DbSavefileUserDataFactory.Create("logged_in_id");
+        playerInfoThree.ViewerId = 10000000003;
+
+        return new() { playerInfoOne, playerInfoTwo, playerInfoThree };
     }
 
     public static HttpContent CreateMsgpackContent(byte[] content)
     {
         ByteArrayContent result = new(content);
         result.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+        result.Headers.Add("SID", "session_id");
         return result;
     }
 
     public static string MsgpackBytesToPrettyJson(byte[] content)
     {
-        string json = MessagePackSerializer.ConvertToJson(content, ContractlessStandardResolver.Options);
+        string json = MessagePackSerializer.ConvertToJson(
+            content,
+            ContractlessStandardResolver.Options
+        );
         using var jDoc = JsonDocument.Parse(json);
 
         return JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
@@ -92,12 +92,18 @@ public static class TestUtils
     /// <typeparam name="TResponse">The type of response expected in the body.</typeparam>
     /// <param name="response">The received response.</param>
     /// <param name="expectedResponse">The expected response body object.</param>
-    public static async Task CheckMsgpackResponse<TResponse>(HttpResponseMessage response, TResponse expectedResponse)
+    public static async Task CheckMsgpackResponse<TResponse>(
+        HttpResponseMessage response,
+        TResponse expectedResponse
+    )
     {
         response.IsSuccessStatusCode.Should().BeTrue();
 
         byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-        TResponse? deserializedResponse = MessagePackSerializer.Deserialize<TResponse>(responseBytes, ContractlessStandardResolver.Options);
+        TResponse? deserializedResponse = MessagePackSerializer.Deserialize<TResponse>(
+            responseBytes,
+            ContractlessStandardResolver.Options
+        );
         deserializedResponse.Should().BeEquivalentTo(expectedResponse);
     }
 }

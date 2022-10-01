@@ -1,7 +1,12 @@
-﻿using DragaliaAPI.Models.Database;
+﻿using Castle.Core.Logging;
+using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MockQueryable.Moq;
 
@@ -9,29 +14,31 @@ namespace DragaliaAPI.Test.Unit.Services;
 
 public class SessionServiceTest
 {
-    private readonly Mock<IApiRepository> mockRepository;
+    private readonly Mock<ILogger<SessionService>> mockLogger;
+    private readonly Mock<IWebHostEnvironment> mockEnvironment;
     private readonly SessionService sessionService;
+
     private readonly DeviceAccount deviceAccount = new("id", "password");
     private readonly DeviceAccount deviceAccountTwo = new("id 2", "password 2");
-    private readonly List<DbPlayerSavefile> dbPlayerSavefile = new()
-    {
-        new() { DeviceAccountId = "id", ViewerId = 1 },
-    };
-    private readonly List<DbPlayerSavefile> dbPlayerSavefileTwo = new()
-    {
-        new() { DeviceAccountId = "id 2", ViewerId = 2 },
-    };
 
     public SessionServiceTest()
     {
-        mockRepository = new(MockBehavior.Strict);
-        mockRepository.Setup(x => x.GetSavefile("id")).Returns(dbPlayerSavefile.AsQueryable().BuildMock());
-        mockRepository.Setup(x => x.GetSavefile("id 2")).Returns(dbPlayerSavefileTwo.AsQueryable().BuildMock());
+        mockLogger = new(MockBehavior.Loose);
+        mockEnvironment = new(MockBehavior.Loose);
 
         var opts = Options.Create(new MemoryDistributedCacheOptions());
         IDistributedCache testCache = new MemoryDistributedCache(opts);
 
-        sessionService = new(mockRepository.Object, testCache);
+        var inMemoryConfiguration = new Dictionary<string, string>
+        {
+            { "SessionExpiryTimeMinutes", "5" },
+        };
+
+        IConfiguration configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(inMemoryConfiguration)
+            .Build();
+
+        sessionService = new(testCache, configuration, mockEnvironment.Object, mockLogger.Object);
     }
 
     [Fact]
@@ -80,7 +87,10 @@ public class SessionServiceTest
         result.Should().Be(false);
     }
 
-    private async Task<string> PrepareAndRegisterSession(string idToken, DeviceAccount deviceAccount)
+    private async Task<string> PrepareAndRegisterSession(
+        string idToken,
+        DeviceAccount deviceAccount
+    )
     {
         await sessionService.PrepareSession(deviceAccount, idToken);
         return await sessionService.ActivateSession(idToken);

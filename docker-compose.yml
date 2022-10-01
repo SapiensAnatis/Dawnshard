@@ -3,7 +3,7 @@ name: DragaliaAPI
 
 volumes:
   sqlvolume:
-    name: ${VOLUME_ID}
+    name: dragaliaapi_sqlvolume
 
 services:
   dragaliaapi:
