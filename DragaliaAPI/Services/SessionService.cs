@@ -74,7 +74,17 @@ public class SessionService : ISessionService
         Session session = await LoadSession(Schema.Session_IdToken(idToken));
 
         // Move key to sessionId
-        await _cache.RemoveAsync(Schema.Session_IdToken(idToken));
+        // Don't remove -- sometimes /tool/auth is called multiple times consecutively?
+        // await _cache.RemoveAsync(Schema.Session_IdToken(idToken));
+        string sessionJson = await _cache.GetStringAsync(Schema.Session_SessionId(session.SessionId));
+        if (!string.IsNullOrEmpty(sessionJson))
+        {
+            // Issue existing session ID if session has already been activated
+            Session existingSession = JsonSerializer.Deserialize<Session>(sessionJson) ?? 
+                throw new JsonException($"Loaded session JSON {sessionJson} could not be deserialized.");
+
+            return existingSession.SessionId;
+        }
         await _cache.SetStringAsync(Schema.Session_SessionId(session.SessionId), JsonSerializer.Serialize(session), cacheOptions);
         // Register in existent sessions
         await _cache.SetStringAsync(Schema.SessionId_DeviceAccountId(session.DeviceAccountId), session.SessionId, cacheOptions);
@@ -105,7 +115,6 @@ public class SessionService : ISessionService
     private async Task<Session> LoadSession(string key)
     {
         string sessionJson = await _cache.GetStringAsync(key);
-        _cache.Refresh(key);
         if (string.IsNullOrEmpty(sessionJson)) { throw new ArgumentException($"Could not load session for key {key}"); }
 
         return JsonSerializer.Deserialize<Session>(sessionJson) ?? throw new JsonException($"Loaded session JSON {sessionJson} could not be deserialized.");
