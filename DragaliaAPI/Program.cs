@@ -79,8 +79,6 @@ app.Use(async (context, next) =>
     await next();
 });
 
-app.UseMiddleware<DeChunkerMiddleware>();
-
 app.UseAuthorization();
 app.MapControllers();
 

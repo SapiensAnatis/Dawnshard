@@ -32,13 +32,11 @@ public class SignupController : ControllerBase
     [HttpPost]
     public async Task<DragaliaResult> Post(IdTokenRequest request)
     {
-        string sessionId;
         long viewerId;
 
         try
         {
-            sessionId = await _sessionService.ActivateSession(request.id_token);
-            IQueryable<DbPlayerSavefile> savefile = await _sessionService.GetSavefile_SessionId(sessionId);
+            IQueryable<DbPlayerSavefile> savefile = await _sessionService.GetSavefile_IdToken(request.id_token);
             viewerId = await savefile.Select(x => x.ViewerId).SingleAsync();
         }
         catch (Exception e) when (e is ArgumentException || e is JsonException)
