@@ -32,7 +32,12 @@ public class SessionService : ISessionService
     private readonly DistributedCacheEntryOptions _cacheOptions;
     private readonly ILogger<SessionService> _logger;
 
-    public SessionService(IApiRepository repository, IDistributedCache cache, IConfiguration configuration, ILogger<SessionService> logger)
+    public SessionService(
+        IApiRepository repository,
+        IDistributedCache cache,
+        IConfiguration configuration,
+        IWebHostEnvironment environment,
+        ILogger<SessionService> logger)
     {
         _apiRepository = repository;
         _cache = cache;
@@ -40,6 +45,21 @@ public class SessionService : ISessionService
 
         int expiryTimeMinutes = configuration.GetValue<int>("SessionExpiryTimeMinutes");
         _cacheOptions = new() { SlidingExpiration = TimeSpan.FromMinutes(expiryTimeMinutes) };
+
+        if (environment.IsDevelopment())
+        {
+            // Create non-expiring 'development' session for manual testing
+            Session devSession = new("session id", "id", 10000000001L);
+            string devSessionSchema1 = Schema.Session_SessionId(devSession.SessionId);
+            string devSessionSchema2 = Schema.SessionId_DeviceAccountId(devSession.DeviceAccountId);
+
+            // This is a scoped service -- so make sure it doesn't already exist
+            if (string.IsNullOrEmpty(_cache.GetString(devSessionSchema1)))
+                _cache.SetString(devSessionSchema1, JsonSerializer.Serialize(devSession));
+
+            if (string.IsNullOrEmpty(_cache.GetString(devSessionSchema2)))
+                _cache.SetString(devSessionSchema2, devSession.SessionId);
+        }
     }
 
     private static class Schema
