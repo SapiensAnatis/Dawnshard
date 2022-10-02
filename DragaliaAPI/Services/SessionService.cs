@@ -67,7 +67,7 @@ public class SessionService : ISessionService
             await _cache.RemoveAsync(Schema.SessionId_DeviceAccountId(deviceAccount.id));
         }
 
-        IQueryable<DbSavefilePlayerInfo> savefile = _apiRepository.GetPlayerInfo(deviceAccount.id);
+        IQueryable<DbSavefileUserData> savefile = _apiRepository.GetPlayerInfo(deviceAccount.id);
         long viewerId = await savefile.Select(x => x.ViewerId).SingleAsync();
         string sessionId = Guid.NewGuid().ToString();
 

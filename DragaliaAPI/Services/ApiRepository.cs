@@ -32,13 +32,13 @@ public class ApiRepository : IApiRepository
 
     public virtual async Task AddNewPlayerInfo(string deviceAccountId)
     {
-        await _apiContext.SavefilePlayerInfo.AddAsync(DbSavefilePlayerInfoFactory.Create(deviceAccountId));
+        await _apiContext.SavefileUserData.AddAsync(DbSavefileUserDataFactory.Create(deviceAccountId));
         await _apiContext.SaveChangesAsync();
     }
 
-    public virtual IQueryable<DbSavefilePlayerInfo> GetPlayerInfo(string deviceAccountId)
+    public virtual IQueryable<DbSavefileUserData> GetPlayerInfo(string deviceAccountId)
     {
-        IQueryable<DbSavefilePlayerInfo> infoQuery = _apiContext.SavefilePlayerInfo.Where(x => x.DeviceAccountId == deviceAccountId);
+        IQueryable<DbSavefileUserData> infoQuery = _apiContext.SavefileUserData.Where(x => x.DeviceAccountId == deviceAccountId);
 
         if (infoQuery.Count() != 1)
             // Returning an empty IQueryable will almost certainly cause errors down the line.

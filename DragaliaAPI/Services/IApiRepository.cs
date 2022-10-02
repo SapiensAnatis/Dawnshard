@@ -8,5 +8,5 @@ public interface IApiRepository
     Task AddNewDeviceAccount(string id, string hashedPassword);
     Task<DbDeviceAccount?> GetDeviceAccountById(string id);
     Task AddNewPlayerInfo(string deviceAccountId);
-    IQueryable<DbSavefilePlayerInfo> GetPlayerInfo(string deviceAccountId);
+    IQueryable<DbSavefileUserData> GetPlayerInfo(string deviceAccountId);
 }

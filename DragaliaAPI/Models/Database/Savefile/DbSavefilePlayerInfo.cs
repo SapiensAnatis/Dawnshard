@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 
-public class DbSavefilePlayerInfo : IDbSavefile
+public class DbSavefileUserData : IDbSavefile
 {
     /// <inheritdoc/>
     [Key]
@@ -81,9 +81,9 @@ public class DbSavefilePlayerInfo : IDbSavefile
     public int CreateTime { get; set; }
 }
 
-public static class DbSavefilePlayerInfoFactory
+public static class DbSavefileUserDataFactory
 {
-    public static DbSavefilePlayerInfo Create(string deviceAccountId)
+    public static DbSavefileUserData Create(string deviceAccountId)
     {
         return new()
         {

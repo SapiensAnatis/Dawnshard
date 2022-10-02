@@ -42,7 +42,7 @@ public class DeviceAccountServiceTest
     }
 
     [Fact]
-    public async Task AuthenticateDeviceAccount_InCorrectCredentials_ReturnsFalse()
+    public async Task AuthenticateDeviceAccount_IncorrectCredentials_ReturnsFalse()
     {
         DeviceAccount deviceAccount = new("id", "password");
         DbDeviceAccount dbDeviceAccount = new("id", "non-matching hash");

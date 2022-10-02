@@ -17,7 +17,7 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
     private readonly ApiContext apiContext;
 
     private readonly DbDeviceAccount account = new("id", "hashed password");
-    private readonly DbSavefilePlayerInfo playerInfo = DbSavefilePlayerInfoFactory.Create("id");
+    private readonly DbSavefileUserData playerInfo = DbSavefileUserDataFactory.Create("id");
 
     public ApiRepositoryTest(DbTestFixture data)
     {
@@ -58,7 +58,7 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
     public async Task AddNewPlayerInfo_CanGetAfterward()
     {
         await apiRepository.AddNewPlayerInfo("id 2");
-        IQueryable<DbSavefilePlayerInfo> result = apiRepository.GetPlayerInfo("id 2");
+        IQueryable<DbSavefileUserData> result = apiRepository.GetPlayerInfo("id 2");
 
         result.Count().Should().Be(1);
     }
@@ -66,7 +66,7 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public void GetPlayerInfo_ValidId_ReturnsInfo()
     {
-        IQueryable<DbSavefilePlayerInfo> result = apiRepository.GetPlayerInfo("id");
+        IQueryable<DbSavefileUserData> result = apiRepository.GetPlayerInfo("id");
 
         result.Count().Should().Be(1);
     }

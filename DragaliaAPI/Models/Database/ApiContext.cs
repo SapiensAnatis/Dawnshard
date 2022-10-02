@@ -1,10 +1,5 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia;
-using DragaliaAPI.Models.Nintendo;
+﻿using DragaliaAPI.Models.Database.Savefile;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace DragaliaAPI.Models.Database;
 
@@ -24,12 +19,12 @@ public class ApiContext : DbContext
            .StartsAt(10000000000L)
            .IncrementsBy(1);
 
-        modelBuilder.Entity<DbSavefilePlayerInfo>()
+        modelBuilder.Entity<DbSavefileUserData>()
             .Property(o => o.ViewerId)
-            .HasDefaultValueSql("NEXT VALUE FOR dbo.Viewer_id");    
+            .HasDefaultValueSql("NEXT VALUE FOR dbo.Viewer_id");
     }
 
     public DbSet<DbDeviceAccount> DeviceAccounts { get; set; } = null!;
 
-    public DbSet<DbSavefilePlayerInfo> SavefilePlayerInfo { get; set; } = null!;
+    public DbSet<DbSavefileUserData> SavefileUserData { get; set; } = null!;
 }

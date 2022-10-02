@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DragaliaAPI.Models.Database.Savefile
+namespace DragaliaAPI.Models.Database.Savefile;
+
+public interface IDbSavefile
 {
-    public interface IDbSavefile
-    {
-        /// <summary>
-        /// The device account ID which identifies the owner of this information.
-        /// </summary>
-        public string DeviceAccountId { get; set; }
-    }
+    /// <summary>
+    /// The device account ID which identifies the owner of this information.
+    /// </summary>
+    public string DeviceAccountId { get; set; }
 }

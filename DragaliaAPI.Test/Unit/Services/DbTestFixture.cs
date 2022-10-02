@@ -22,7 +22,7 @@ namespace DragaliaAPI.Test.Unit.Services
                 .Options;
             apiContext = new ApiContext(options);
             apiContext.DeviceAccounts.Add(new DbDeviceAccount("id", "hashed password"));
-            apiContext.SavefilePlayerInfo.Add(DbSavefilePlayerInfoFactory.Create("id"));
+            apiContext.SavefileUserData.Add(DbSavefileUserDataFactory.Create("id"));
             apiContext.SaveChanges();
         }
 

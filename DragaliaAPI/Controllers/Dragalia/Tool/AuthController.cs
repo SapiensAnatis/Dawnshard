@@ -33,7 +33,7 @@ public class AuthController : ControllerBase
         {
             sessionId = await _sessionService.ActivateSession(request.id_token);
             string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-            IQueryable<DbSavefilePlayerInfo> playerInfo = _apiRepository.GetPlayerInfo(deviceAccountId);
+            IQueryable<DbSavefileUserData> playerInfo = _apiRepository.GetPlayerInfo(deviceAccountId);
             viewerId = await playerInfo.Select(x => x.ViewerId).SingleAsync();
         }
         catch (Exception e) when (e is ArgumentException || e is JsonException)

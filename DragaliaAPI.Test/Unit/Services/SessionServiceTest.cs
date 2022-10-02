@@ -18,11 +18,11 @@ public class SessionServiceTest
 
     private readonly DeviceAccount deviceAccount = new("id", "password");
     private readonly DeviceAccount deviceAccountTwo = new("id 2", "password 2");
-    private readonly List<DbSavefilePlayerInfo> dbPlayerSavefile = new()
+    private readonly List<DbSavefileUserData> dbPlayerSavefile = new()
     {
         new() { DeviceAccountId = "id" },
     };
-    private readonly List<DbSavefilePlayerInfo> dbPlayerSavefileTwo = new()
+    private readonly List<DbSavefileUserData> dbPlayerSavefileTwo = new()
     {
         new() { DeviceAccountId = "id 2" },
     };
