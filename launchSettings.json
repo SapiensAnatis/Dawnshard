@@ -6,7 +6,7 @@
       "serviceActions": {
         "dragaliaapi": "StartDebugging",
         "sqlserver": "StartWithoutDebugging",
-        "redis":  "StartWithoutDebugging"
+        "redis": "StartWithoutDebugging"
       }
     }
   }
