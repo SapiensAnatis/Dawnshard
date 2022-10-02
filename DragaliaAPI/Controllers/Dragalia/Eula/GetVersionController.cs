@@ -13,10 +13,10 @@ public class GetVersionController : ControllerBase
     public DragaliaResult Post(EulaGetVersionRequest request)
     {
         EulaVersion version =
-            EulaData.AllEulaVersions.FirstOrDefault(x => x.region == request.region && x.lang == request.lang) ??
-            EulaData.AllEulaVersions[0];
+            EulaStatic.AllEulaVersions.FirstOrDefault(x => x.region == request.region && x.lang == request.lang) ??
+            EulaStatic.AllEulaVersions[0];
 
-        EulaGetVersionResponse response = new(version);
+        EulaGetVersionResponse response = new(new EulaGetVersionData(version));
         return Ok(response);
     }
 }

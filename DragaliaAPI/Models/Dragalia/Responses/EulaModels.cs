@@ -5,59 +5,17 @@ namespace DragaliaAPI.Models.Dragalia.Responses;
 [MessagePackObject(keyAsPropertyName: true)]
 public record EulaVersion(string region, string lang, int eula_version, int privacy_policy_version);
 
-public static class EulaData
-{
-    public static List<EulaVersion> AllEulaVersions { get; } = new()
-    {
-        // TODO: Add the complete list of versions
-        new("gb", "en_us", 1, 1),
-        new("gb", "en_eu", 1, 1),
-        new("us", "en_us", 1, 6),
-        new("us", "en_eu", 1, 6)
-    };
-}
+[MessagePackObject(keyAsPropertyName: true)]
+public record EulaGetVersionListResponse(EulaGetVersionListData data) : BaseResponse<EulaGetVersionListData>;
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record EulaGetVersionListResponse : BaseResponse<EulaGetVersionListData>
-{
-    public override EulaGetVersionListData data { get; init; } = new EulaGetVersionListData();
-}
+public record EulaGetVersionListData(List<EulaVersion> version_hash_list);
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record EulaGetVersionListData
-{
-    public List<EulaVersion> version_hash_list { get; init; } = EulaData.AllEulaVersions;
-}
+public record EulaGetVersionRequest(string? region, string? lang);
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record EulaGetVersionRequest
-{
-    public string? region { get; init; }
-    public string? lang { get; init; }
-
-    public EulaGetVersionRequest(string? region, string? lang)
-    {
-        this.region = region;
-        this.lang = lang;
-    }
-}
-
-[MessagePackObject(keyAsPropertyName: true)]
-public record EulaGetVersionResponse : BaseResponse<EulaGetVersionData>
-{
-    public override EulaGetVersionData data { get; init; }
-
-    [SerializationConstructor]
-    public EulaGetVersionResponse(EulaGetVersionData data)
-    {
-        this.data = data;
-    }
-
-    public EulaGetVersionResponse(EulaVersion version)
-    {
-        data = new(version);
-    }
-}
+public record EulaGetVersionResponse(EulaGetVersionData data) : BaseResponse<EulaGetVersionData>;
 
 public record EulaGetVersionData
 {
@@ -69,4 +27,16 @@ public record EulaGetVersionData
     {
         this.version_hash = version_hash;
     }
+}
+
+public static class EulaStatic
+{
+    public static List<EulaVersion> AllEulaVersions { get; } = new()
+    {
+        // TODO: Add the complete list of versions
+        new("gb", "en_us", 1, 1),
+        new("gb", "en_eu", 1, 1),
+        new("us", "en_us", 1, 6),
+        new("us", "en_eu", 1, 6)
+    };
 }

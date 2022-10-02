@@ -43,7 +43,6 @@ public class ApiRepository : IApiRepository
         if (infoQuery.Count() != 1)
             // Returning an empty IQueryable will almost certainly cause errors down the line.
             // Better stop here instead, where it's easier to debug with access to ApiContext.
-            // Also, it shouldn't have more than one as deviceAccountId is a primary key
             throw new InvalidOperationException($"PlayerInfo query with id {deviceAccountId} returned {infoQuery.Count()} results.");
 
         return infoQuery;

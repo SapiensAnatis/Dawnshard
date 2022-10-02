@@ -19,7 +19,7 @@ public class LoginVerifyJwsTest : IClassFixture<CustomWebApplicationFactory<Prog
     [Fact]
     public async Task VerifyJws_ReturnsOK()
     {
-        VerifyJwsResponse expectedResponse = new();
+        VerifyJwsResponse expectedResponse = new(new VerifyJwsData());
 
         var data = new { jws_result = "unused" };
         byte[] payload = MessagePackSerializer.Serialize(data);

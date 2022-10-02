@@ -41,7 +41,8 @@ public class AuthController : ControllerBase
             return Ok(new ServerErrorResponse());
         }
 
-        AuthResponse response = new(viewerId, sessionId);
+        AuthResponseData data = new(viewerId, sessionId, "placeholder nonce");
+        AuthResponse response = new(data);
         return Ok(response);
     }
 }

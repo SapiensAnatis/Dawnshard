@@ -20,7 +20,8 @@ public class ServiceStatusTest : IClassFixture<CustomWebApplicationFactory<Progr
     [Fact]
     public async Task ServiceStatus_ReturnsCorrectJSON()
     {
-        ServiceStatusResponse expectedResponse = new();
+        ServiceStatusResponse expectedResponse = new(new ServiceStatusData(1));
+
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
