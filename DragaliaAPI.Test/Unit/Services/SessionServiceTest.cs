@@ -14,30 +14,17 @@ namespace DragaliaAPI.Test.Unit.Services;
 
 public class SessionServiceTest
 {
-    private readonly Mock<IApiRepository> mockRepository;
     private readonly Mock<ILogger<SessionService>> mockLogger;
     private readonly Mock<IWebHostEnvironment> mockEnvironment;
     private readonly SessionService sessionService;
 
     private readonly DeviceAccount deviceAccount = new("id", "password");
     private readonly DeviceAccount deviceAccountTwo = new("id 2", "password 2");
-    private readonly List<DbSavefileUserData> dbPlayerSavefile =
-        new() { new() { DeviceAccountId = "id" }, };
-    private readonly List<DbSavefileUserData> dbPlayerSavefileTwo =
-        new() { new() { DeviceAccountId = "id 2" }, };
 
     public SessionServiceTest()
     {
-        mockRepository = new(MockBehavior.Strict);
         mockLogger = new(MockBehavior.Loose);
         mockEnvironment = new(MockBehavior.Loose);
-
-        mockRepository
-            .Setup(x => x.GetPlayerInfo("id"))
-            .Returns(dbPlayerSavefile.AsQueryable().BuildMock());
-        mockRepository
-            .Setup(x => x.GetPlayerInfo("id 2"))
-            .Returns(dbPlayerSavefileTwo.AsQueryable().BuildMock());
 
         var opts = Options.Create(new MemoryDistributedCacheOptions());
         IDistributedCache testCache = new MemoryDistributedCache(opts);
@@ -51,13 +38,7 @@ public class SessionServiceTest
             .AddInMemoryCollection(inMemoryConfiguration)
             .Build();
 
-        sessionService = new(
-            mockRepository.Object,
-            testCache,
-            configuration,
-            mockEnvironment.Object,
-            mockLogger.Object
-        );
+        sessionService = new(testCache, configuration, mockEnvironment.Object, mockLogger.Object);
     }
 
     [Fact]

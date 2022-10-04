@@ -28,8 +28,7 @@ public static class TestUtils
         string preparedSessionJson = """
             {
                 "SessionId": "prepared_session_id",
-                "DeviceAccountId": "prepared_id",
-                "ViewerId": 10000000002
+                "DeviceAccountId": "prepared_id"
             }
             """;
         cache.SetString(":session:id_token:id_token", preparedSessionJson);
@@ -37,18 +36,11 @@ public static class TestUtils
         string sessionJson = """
                 {
                     "SessionId": "session_id",
-                    "DeviceAccountId": "logged_in_id",
-                    "ViewerId": 10000000001
+                    "DeviceAccountId": "logged_in_id"
                 }
                 """;
         cache.SetString(":session:session_id:session_id", sessionJson);
         cache.SetString(":session_id:device_account_id:logged_in_id", "session_id");
-    }
-
-    public static void ReinitializeDbForTests(ApiContext db)
-    {
-        db.DeviceAccounts.RemoveRange(db.DeviceAccounts);
-        InitializeDbForTests(db);
     }
 
     public static List<DbDeviceAccount> GetDeviceAccountsSeed()
@@ -67,11 +59,7 @@ public static class TestUtils
         var playerInfoTwo = DbSavefileUserDataFactory.Create("prepared_id");
         playerInfoTwo.ViewerId = 10000000002;
 
-        return new()
-        {
-            playerInfoOne,
-            playerInfoTwo,
-        };
+        return new() { playerInfoOne, playerInfoTwo, };
     }
 
     public static HttpContent CreateMsgpackContent(byte[] content)
@@ -83,7 +71,10 @@ public static class TestUtils
 
     public static string MsgpackBytesToPrettyJson(byte[] content)
     {
-        string json = MessagePackSerializer.ConvertToJson(content, ContractlessStandardResolver.Options);
+        string json = MessagePackSerializer.ConvertToJson(
+            content,
+            ContractlessStandardResolver.Options
+        );
         using var jDoc = JsonDocument.Parse(json);
 
         return JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
@@ -98,12 +89,18 @@ public static class TestUtils
     /// <typeparam name="TResponse">The type of response expected in the body.</typeparam>
     /// <param name="response">The received response.</param>
     /// <param name="expectedResponse">The expected response body object.</param>
-    public static async Task CheckMsgpackResponse<TResponse>(HttpResponseMessage response, TResponse expectedResponse)
+    public static async Task CheckMsgpackResponse<TResponse>(
+        HttpResponseMessage response,
+        TResponse expectedResponse
+    )
     {
         response.IsSuccessStatusCode.Should().BeTrue();
 
         byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-        TResponse? deserializedResponse = MessagePackSerializer.Deserialize<TResponse>(responseBytes, ContractlessStandardResolver.Options);
+        TResponse? deserializedResponse = MessagePackSerializer.Deserialize<TResponse>(
+            responseBytes,
+            ContractlessStandardResolver.Options
+        );
         deserializedResponse.Should().BeEquivalentTo(expectedResponse);
     }
 }
