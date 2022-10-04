@@ -58,14 +58,17 @@ public static class TestUtils
         playerInfoOne.ViewerId = 10000000001;
         var playerInfoTwo = DbSavefileUserDataFactory.Create("prepared_id");
         playerInfoTwo.ViewerId = 10000000002;
+        var playerInfoThree = DbSavefileUserDataFactory.Create("logged_in_id");
+        playerInfoThree.ViewerId = 10000000003;
 
-        return new() { playerInfoOne, playerInfoTwo, };
+        return new() { playerInfoOne, playerInfoTwo, playerInfoThree };
     }
 
     public static HttpContent CreateMsgpackContent(byte[] content)
     {
         ByteArrayContent result = new(content);
         result.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+        result.Headers.Add("SID", "session_id");
         return result;
     }
 

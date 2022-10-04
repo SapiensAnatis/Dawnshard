@@ -3,4 +3,4 @@
 namespace DragaliaAPI.Models.Dragalia.Requests;
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record NamechangeRequest(string name);
+public record UpdateNamechangeRequest(string name);

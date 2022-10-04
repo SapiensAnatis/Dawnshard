@@ -24,7 +24,7 @@ public class NamechangeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<DragaliaResult> Post(NamechangeRequest request)
+    public async Task<DragaliaResult> Post(UpdateNamechangeRequest request)
     {
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(
             Request.Headers["SID"]
@@ -36,7 +36,7 @@ public class NamechangeController : ControllerBase
         userData.Name = request.name;
         await _apiContext.SaveChangesAsync();
 
-        NamechangeResponse response = new(new NamechangeData(request.name));
+        UpdateNamechangeResponse response = new(new NamechangeData(request.name));
         return Ok(response);
     }
 }

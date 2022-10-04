@@ -1,5 +1,7 @@
 ﻿using DragaliaAPI.Models.Dragalia.Savefile;
+using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia;
 
-public record UpdateDataList(SavefileUserData? savefileUserData);
+[MessagePackObject(keyAsPropertyName: true)]
+public record UpdateDataList(SavefileUserData? user_data);

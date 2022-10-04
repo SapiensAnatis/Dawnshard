@@ -17,15 +17,13 @@ namespace DragaliaAPI.Test.Unit.Services
     {
         public ApiContext apiContext { get; init; }
 
-        private readonly Mock<IWebHostEnvironment> mockEnvironment;
-
         public DbTestFixture()
         {
             var options = new DbContextOptionsBuilder<ApiContext>()
                 .UseInMemoryDatabase("ApiRepositoryTest")
                 .Options;
 
-            mockEnvironment = new(MockBehavior.Loose);
+            Mock<IWebHostEnvironment> mockEnvironment = new(MockBehavior.Loose);
 
             apiContext = new ApiContext(options, mockEnvironment.Object);
             apiContext.DeviceAccounts.Add(new DbDeviceAccount("id", "hashed password"));
