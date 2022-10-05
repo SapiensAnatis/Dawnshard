@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Dragalia.Savefile;
+﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+using DragaliaAPI.Models.Dragalia.Savefile;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia.Responses;

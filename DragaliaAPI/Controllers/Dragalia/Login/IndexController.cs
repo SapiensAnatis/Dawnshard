@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses;
+﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

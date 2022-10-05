@@ -16,58 +16,73 @@ public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Progr
     public NintendoLoginTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
-        {
-            AllowAutoRedirect = false
-        });
-
+        _client = _factory.CreateClient(
+            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
+        );
     }
 
     [Fact]
     public async Task PostLogin_NullDeviceAccount_ReturnsSuccessResponseAndCreatesDeviceAccount()
     {
-        StringContent requestContent = new("""
+        StringContent requestContent =
+            new(
+                """
             {
             }
-            """);
+            """
+            );
         requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-        HttpResponseMessage response = await _client.PostAsync("/core/v1/gateway/sdk/login", requestContent);
+        HttpResponseMessage response = await _client.PostAsync(
+            "/core/v1/gateway/sdk/login",
+            requestContent
+        );
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
         string jsonString = await response.Content.ReadAsStringAsync();
-        PartialLoginResponse? deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
+        PartialLoginResponse? deserializedResponse =
+            JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
         deserializedResponse.Should().NotBeNull();
         DeviceAccount createdDeviceAccount = deserializedResponse!.createdDeviceAccount;
 
         // Ensure new DeviceAccount was registered against the DB, and will authenticate successfully
         using IServiceScope scope = _factory.Services.CreateScope();
-        IDeviceAccountService deviceAccountService = scope.ServiceProvider.GetRequiredService<IDeviceAccountService>();
-        (await deviceAccountService.AuthenticateDeviceAccount(createdDeviceAccount)).Should().BeTrue();
+        IDeviceAccountService deviceAccountService =
+            scope.ServiceProvider.GetRequiredService<IDeviceAccountService>();
+        (await deviceAccountService.AuthenticateDeviceAccount(createdDeviceAccount))
+            .Should()
+            .BeTrue();
     }
 
     [Fact]
     public async Task PostLogin_DeviceAccountCorrectCredentials_ReturnsSuccessResponse()
     {
         DeviceAccount deviceAccount = new("id", "password");
-        StringContent requestContent = new("""
+        StringContent requestContent =
+            new(
+                """
             {
                 "deviceAccount": {
                     "id": "id",
                     "password": "password"
                 }
             }
-            """);
+            """
+            );
         requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-        HttpResponseMessage response = await _client.PostAsync("/core/v1/gateway/sdk/login", requestContent);
+        HttpResponseMessage response = await _client.PostAsync(
+            "/core/v1/gateway/sdk/login",
+            requestContent
+        );
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
         string jsonString = await response.Content.ReadAsStringAsync();
         Console.WriteLine(jsonString);
-        PartialLoginResponse? deserializedResponse = JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
+        PartialLoginResponse? deserializedResponse =
+            JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
         deserializedResponse.Should().NotBeNull();
 
         deserializedResponse!.user.deviceAccounts.Should().Contain(deviceAccount);
@@ -76,17 +91,23 @@ public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Progr
     [Fact]
     public async Task PostLogin_DeviceAccountIncorrectCredentials_ReturnsUnauthorizedResponse()
     {
-        StringContent requestContent = new("""
+        StringContent requestContent =
+            new(
+                """
             {
                 "deviceAccount": {
                     "id": "id",
                     "password": "wrong password"
                 }
             }
-            """);
+            """
+            );
         requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-        HttpResponseMessage response = await _client.PostAsync("/core/v1/gateway/sdk/login", requestContent);
+        HttpResponseMessage response = await _client.PostAsync(
+            "/core/v1/gateway/sdk/login",
+            requestContent
+        );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }

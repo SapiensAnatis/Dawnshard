@@ -8,17 +8,16 @@ public class UrlListTest : IClassFixture<CustomWebApplicationFactory<Program>>
     public UrlListTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
-        {
-            AllowAutoRedirect = false
-        });
+        _client = _factory.CreateClient(
+            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
+        );
     }
 
     [Fact]
     public async Task UrlList_ReturnsCorrectList()
     {
-        WebviewUrlListResponse expectedResponse = new(
-            new WebviewUrlListData(WebviewUrlListStatic.AllUrls));
+        WebviewUrlListResponse expectedResponse =
+            new(new WebviewUrlListData(WebviewUrlListStatic.AllUrls));
 
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };

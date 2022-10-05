@@ -15,7 +15,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "StaminaSingleSurplusSecond",
@@ -24,7 +25,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "StaminaSingle",
@@ -33,7 +35,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 18);
+                oldDefaultValue: 18
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "StaminaMultiSurplusSecond",
@@ -42,7 +45,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "StaminaMulti",
@@ -51,7 +55,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 12);
+                oldDefaultValue: 12
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "QuestSkipPoint",
@@ -60,7 +65,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "PrologueEndTime",
@@ -69,7 +75,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
@@ -78,7 +85,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)",
-                oldDefaultValue: "Euden");
+                oldDefaultValue: "Euden"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "MaxWeaponQuantity",
@@ -87,7 +95,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "MaxDragonQuantity",
@@ -96,7 +105,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 160);
+                oldDefaultValue: 160
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "ManaPoint",
@@ -105,7 +115,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "MainPartyNo",
@@ -114,7 +125,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 1);
+                oldDefaultValue: 1
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "Level",
@@ -123,7 +135,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 1);
+                oldDefaultValue: 1
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "LastStaminaSingleUpdateTime",
@@ -132,7 +145,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "LastStaminaMultiUpdateTime",
@@ -141,7 +155,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "LastLoginTime",
@@ -150,7 +165,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "IsOptin",
@@ -159,7 +175,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "FortOpenTime",
@@ -168,7 +185,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "Exp",
@@ -177,7 +195,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "EmblemId",
@@ -186,7 +205,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 40000001);
+                oldDefaultValue: 40000001
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "DewPoint",
@@ -195,7 +215,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "Crystal",
@@ -204,7 +225,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "CreateTime",
@@ -213,7 +235,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "Coin",
@@ -222,7 +245,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "BuildTimePoint",
@@ -231,7 +255,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "ActiveMemoryEventId",
@@ -240,7 +265,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int",
-                oldDefaultValue: 0);
+                oldDefaultValue: 0
+            );
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -252,7 +278,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "StaminaSingleSurplusSecond",
@@ -261,7 +288,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "StaminaSingle",
@@ -270,7 +298,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 18,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "StaminaMultiSurplusSecond",
@@ -279,7 +308,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "StaminaMulti",
@@ -288,7 +318,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 12,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "QuestSkipPoint",
@@ -297,7 +328,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "PrologueEndTime",
@@ -306,7 +338,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
@@ -315,7 +348,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: "Euden",
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                oldType: "nvarchar(max)"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "MaxWeaponQuantity",
@@ -324,7 +358,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "MaxDragonQuantity",
@@ -333,7 +368,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 160,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "ManaPoint",
@@ -342,7 +378,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "MainPartyNo",
@@ -351,7 +388,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 1,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "Level",
@@ -360,7 +398,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 1,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "LastStaminaSingleUpdateTime",
@@ -369,7 +408,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "LastStaminaMultiUpdateTime",
@@ -378,7 +418,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "LastLoginTime",
@@ -387,7 +428,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "IsOptin",
@@ -396,7 +438,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "FortOpenTime",
@@ -405,7 +448,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "Exp",
@@ -414,7 +458,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "EmblemId",
@@ -423,7 +468,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 40000001,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "DewPoint",
@@ -432,7 +478,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "Crystal",
@@ -441,7 +488,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "CreateTime",
@@ -450,7 +498,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "Coin",
@@ -459,7 +508,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "BuildTimePoint",
@@ -468,7 +518,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "ActiveMemoryEventId",
@@ -477,7 +528,8 @@ namespace DragaliaAPI.Migrations
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
         }
     }
 }
