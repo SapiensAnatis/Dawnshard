@@ -72,6 +72,8 @@ public class DbSavefileUserData : IDbSavefile
 
     public int TutorialStatus { get; set; }
 
+    public int TutorialFlag { get; set; }
+
     public int PrologueEndTime { get; set; }
 
     public int IsOptin { get; set; }

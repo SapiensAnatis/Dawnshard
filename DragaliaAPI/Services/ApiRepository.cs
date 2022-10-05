@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Database;
+﻿using DragaliaAPI.Models;
+using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
@@ -51,5 +52,34 @@ public class ApiRepository : IApiRepository
             );
 
         return infoQuery;
+    }
+
+    public virtual async Task<ISet<int>> getTutorialFlags(string deviceAccountId)
+    {
+        DbSavefileUserData? saveFileUserData = await _apiContext.SavefileUserData.FindAsync(
+            deviceAccountId
+        );
+        if (saveFileUserData == null)
+        {
+            throw new Exception($"No SaveFileData found for Account-Id: {deviceAccountId}");
+        }
+        int flags_ = saveFileUserData.TutorialFlag;
+        return TutorialFlagUtil.ConvertIntToFlagIntList(flags_);
+    }
+
+    public virtual async Task setTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags)
+    {
+        DbSavefileUserData? saveFileUserData = await _apiContext.SavefileUserData.FindAsync(
+            deviceAccountId
+        );
+        if (saveFileUserData == null)
+        {
+            throw new Exception($"No SaveFileData found for Account-Id: {deviceAccountId}");
+        }
+        saveFileUserData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(
+            tutorialFlags,
+            saveFileUserData.TutorialFlag
+        );
+        int udpatedRows = await _apiContext.SaveChangesAsync();
     }
 }
