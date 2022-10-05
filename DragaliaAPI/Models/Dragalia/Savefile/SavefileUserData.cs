@@ -3,10 +3,10 @@ using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia.Savefile;
 
-/* 
+/*
  * This will make the longest constructor of All Time, it's true.
  * But it needs such a standard constructor to work with serialization/deserialization.
- * 
+ *
  * In user code, this record will instead be created using the factory below the record.
  * An alternative constructor would also work, but that would require abandoning the
  * record shorthand and making a very long parameterized [SerializationConstructor].
@@ -42,7 +42,8 @@ public record SavefileUserData(
     int prologue_end_time,
     int is_optin,
     int fort_open_time,
-    int create_time);
+    int create_time
+);
 
 public static class SavefileUserDataFactory
 {
@@ -77,6 +78,7 @@ public static class SavefileUserDataFactory
             prologue_end_time: dbEntry.PrologueEndTime,
             is_optin: dbEntry.IsOptin,
             fort_open_time: dbEntry.FortOpenTime,
-            create_time: dbEntry.CreateTime);
+            create_time: dbEntry.CreateTime
+        );
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
+using DragaliaAPI.Models.Dragalia.Responses.Common;
 using DragaliaAPI.Models.Dragalia.Savefile;
 using MessagePack;
 using Microsoft.EntityFrameworkCore;

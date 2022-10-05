@@ -8,23 +8,25 @@ public class GetResourceVersionTest : IClassFixture<CustomWebApplicationFactory<
     public GetResourceVersionTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
-        {
-            AllowAutoRedirect = false
-        });
+        _client = _factory.CreateClient(
+            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
+        );
     }
 
     [Fact]
     public async Task GetResourceVersion_ReturnsCorrectResponse()
     {
-        GetResourceVersionResponse expectedResponse = new(
-            new GetResourceVersionData(GetResourceVersionStatic.ResourceVersion));
+        GetResourceVersionResponse expectedResponse =
+            new(new GetResourceVersionData(GetResourceVersionStatic.ResourceVersion));
 
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("version/get_resource_version", content);
+        HttpResponseMessage response = await _client.PostAsync(
+            "version/get_resource_version",
+            content
+        );
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }

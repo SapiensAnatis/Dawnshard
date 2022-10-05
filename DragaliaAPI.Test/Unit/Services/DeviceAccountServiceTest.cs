@@ -17,9 +17,7 @@ public class DeviceAccountServiceTest
         mockLogger = new(MockBehavior.Loose);
         mockRepository = new(MockBehavior.Strict);
 
-        var inMemoryConfiguration = new Dictionary<string, string> {
-            {"HashSalt", "dragalia"},
-        };
+        var inMemoryConfiguration = new Dictionary<string, string> { { "HashSalt", "dragalia" }, };
 
         IConfiguration configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(inMemoryConfiguration)
@@ -33,7 +31,9 @@ public class DeviceAccountServiceTest
     {
         DeviceAccount deviceAccount = new("id", "password");
         DbDeviceAccount dbDeviceAccount = new("id", "NMvdakTznEF6khwWcz17i6GTnDA=");
-        mockRepository.Setup(x => x.GetDeviceAccountById(deviceAccount.id)).ReturnsAsync(dbDeviceAccount);
+        mockRepository
+            .Setup(x => x.GetDeviceAccountById(deviceAccount.id))
+            .ReturnsAsync(dbDeviceAccount);
 
         bool result = await deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
 
@@ -46,7 +46,9 @@ public class DeviceAccountServiceTest
     {
         DeviceAccount deviceAccount = new("id", "password");
         DbDeviceAccount dbDeviceAccount = new("id", "non-matching hash");
-        mockRepository.Setup(x => x.GetDeviceAccountById(deviceAccount.id)).ReturnsAsync(dbDeviceAccount);
+        mockRepository
+            .Setup(x => x.GetDeviceAccountById(deviceAccount.id))
+            .ReturnsAsync(dbDeviceAccount);
 
         bool result = await deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
 
@@ -59,7 +61,10 @@ public class DeviceAccountServiceTest
     {
         DeviceAccount deviceAccount = new("id", null);
 
-        Func<Task> act = async () => { await deviceAccountService.AuthenticateDeviceAccount(deviceAccount); };
+        Func<Task> act = async () =>
+        {
+            await deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
+        };
 
         await act.Should().ThrowAsync<ArgumentNullException>();
         mockRepository.VerifyAll();
@@ -68,8 +73,12 @@ public class DeviceAccountServiceTest
     [Fact]
     public async Task CreateDeviceAccount_CallsAddNewDeviceAccount()
     {
-        mockRepository.Setup(x => x.AddNewDeviceAccount(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
-        mockRepository.Setup(x => x.AddNewPlayerInfo(It.IsAny<string>())).Returns(Task.CompletedTask);
+        mockRepository
+            .Setup(x => x.AddNewDeviceAccount(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(Task.CompletedTask);
+        mockRepository
+            .Setup(x => x.AddNewPlayerInfo(It.IsAny<string>()))
+            .Returns(Task.CompletedTask);
 
         await deviceAccountService.RegisterDeviceAccount();
 

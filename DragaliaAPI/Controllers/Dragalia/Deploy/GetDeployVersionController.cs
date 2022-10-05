@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia.Deploy;
+
 [Route("deploy/get_deploy_version")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
@@ -12,8 +13,8 @@ public class GetDeployVersionController : ControllerBase
     [HttpPost]
     public DragaliaResult Post()
     {
-        GetDeployVersionResponse response = new(
-            new GetDeployVersionData(GetDeployVersionStatic.DeployHash));
+        GetDeployVersionResponse response =
+            new(new GetDeployVersionData(GetDeployVersionStatic.DeployHash));
         return Ok(response);
     }
 }

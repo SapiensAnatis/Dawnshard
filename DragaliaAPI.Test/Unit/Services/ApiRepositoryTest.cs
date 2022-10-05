@@ -26,7 +26,6 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
         apiRepository = new(apiContext);
     }
 
-
     [Fact]
     public async Task AddNewDeviceAccount_CanGetAfterwards()
     {
@@ -74,6 +73,9 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public void GetPlayerInfo_InvalidId_ThrowsException()
     {
-        apiRepository.Invoking(x => x.GetPlayerInfo("wrong id")).Should().Throw<InvalidOperationException>();
+        apiRepository
+            .Invoking(x => x.GetPlayerInfo("wrong id"))
+            .Should()
+            .Throw<InvalidOperationException>();
     }
 }

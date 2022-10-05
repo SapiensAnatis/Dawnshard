@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Requests;
 using DragaliaAPI.Models.Dragalia.Responses;
+using DragaliaAPI.Models.Dragalia.Responses.Common;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +34,9 @@ public class AuthController : ControllerBase
         {
             sessionId = await _sessionService.ActivateSession(request.id_token);
             string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-            IQueryable<DbSavefileUserData> playerInfo = _apiRepository.GetPlayerInfo(deviceAccountId);
+            IQueryable<DbSavefileUserData> playerInfo = _apiRepository.GetPlayerInfo(
+                deviceAccountId
+            );
             viewerId = await playerInfo.Select(x => x.ViewerId).SingleAsync();
         }
         catch (Exception e) when (e is ArgumentException || e is JsonException)
@@ -42,7 +45,7 @@ public class AuthController : ControllerBase
         }
 
         AuthResponseData data = new(viewerId, sessionId, "placeholder nonce");
-        AuthResponse response = new(data);
+        ToolAuthResponse response = new(data);
         return Ok(response);
     }
 }

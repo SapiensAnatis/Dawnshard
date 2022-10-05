@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Models.Dragalia.Responses;
+using DragaliaAPI.Models.Dragalia.Responses.Common;
 
 namespace DragaliaAPI.Controllers.Dragalia.Eula;
 
@@ -12,8 +13,8 @@ public class GetVersionListController : ControllerBase
     [HttpPost]
     public ActionResult<EulaGetVersionListResponse> Post()
     {
-        EulaGetVersionListResponse response = new(
-            new EulaGetVersionListData(EulaStatic.AllEulaVersions));
+        EulaGetVersionListResponse response =
+            new(new EulaGetVersionListData(EulaStatic.AllEulaVersions));
         return Ok(response);
     }
 }

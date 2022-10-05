@@ -1,4 +1,5 @@
-﻿using MessagePack;
+﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+using MessagePack;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -10,16 +11,16 @@ public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
     public EulaTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
-        {
-            AllowAutoRedirect = false
-        });
+        _client = _factory.CreateClient(
+            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
+        );
     }
 
     [Fact]
     public async Task EulaGetVersionList_ReturnsAllVersions()
     {
-        EulaGetVersionListResponse expectedResponse = new(new EulaGetVersionListData(EulaStatic.AllEulaVersions));
+        EulaGetVersionListResponse expectedResponse =
+            new(new EulaGetVersionListData(EulaStatic.AllEulaVersions));
 
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };

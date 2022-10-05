@@ -1,1 +1,1 @@
-﻿global using DragaliaResult = Microsoft.AspNetCore.Mvc.ActionResult<DragaliaAPI.Models.Dragalia.Responses.BaseResponse<object>>;
+﻿global using DragaliaResult = Microsoft.AspNetCore.Mvc.ActionResult<DragaliaAPI.Models.Dragalia.Responses.Common.BaseResponse<object>>;

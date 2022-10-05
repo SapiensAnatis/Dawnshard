@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Controllers.Nintendo;
 
 /// <summary>
-/// This endpoint authenticates the user's DeviceAccount. 
+/// This endpoint authenticates the user's DeviceAccount.
 /// If a Nintendo account were linked, it would return information about the user, but that is not yet implemented.
 /// </summary>
 [ApiController]
@@ -21,7 +21,8 @@ public class NintendoLoginController : ControllerBase
     public NintendoLoginController(
         ILogger<NintendoLoginController> logger,
         ISessionService sessionService,
-        IDeviceAccountService deviceAccountService)
+        IDeviceAccountService deviceAccountService
+    )
     {
         _logger = logger;
         _sessionService = sessionService;
@@ -39,16 +40,17 @@ public class NintendoLoginController : ControllerBase
             deviceAccount = createdDeviceAccount;
         }
 
-        bool authenticationSuccess = await _deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
-        if (!authenticationSuccess) return Unauthorized();
+        bool authenticationSuccess = await _deviceAccountService.AuthenticateDeviceAccount(
+            deviceAccount
+        );
+        if (!authenticationSuccess)
+            return Unauthorized();
 
         string token = Guid.NewGuid().ToString();
         await _sessionService.PrepareSession(deviceAccount, token);
 
-        LoginResponse response = new(token, deviceAccount)
-        {
-            createdDeviceAccount = createdDeviceAccount
-        };
+        LoginResponse response =
+            new(token, deviceAccount) { createdDeviceAccount = createdDeviceAccount };
 
         return Ok(response);
     }

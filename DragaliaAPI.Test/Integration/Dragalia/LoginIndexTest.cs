@@ -10,10 +10,9 @@ public class LoginIndexTest : IClassFixture<CustomWebApplicationFactory<Program>
     public LoginIndexTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
-        {
-            AllowAutoRedirect = false
-        });
+        _client = _factory.CreateClient(
+            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
+        );
     }
 
     [Fact]

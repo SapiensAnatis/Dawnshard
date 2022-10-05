@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia;
 using DragaliaAPI.Models.Dragalia.Responses;
+using DragaliaAPI.Models.Dragalia.Responses.Common;
 using DragaliaAPI.Models.Dragalia.Savefile;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Http;

@@ -13,7 +13,11 @@ public class DeviceAccountService : IDeviceAccountService
     private readonly IConfiguration _configuration;
     private readonly ILogger<DeviceAccountService> _logger;
 
-    public DeviceAccountService(IApiRepository repository, IConfiguration configuration, ILogger<DeviceAccountService> logger)
+    public DeviceAccountService(
+        IApiRepository repository,
+        IConfiguration configuration,
+        ILogger<DeviceAccountService> logger
+    )
     {
         _apiRepository = repository;
         _configuration = configuration;
@@ -22,9 +26,14 @@ public class DeviceAccountService : IDeviceAccountService
 
     public async Task<bool> AuthenticateDeviceAccount(DeviceAccount deviceAccount)
     {
-        if (deviceAccount.password is null) { throw new ArgumentNullException(paramName: deviceAccount.password); }
+        if (deviceAccount.password is null)
+        {
+            throw new ArgumentNullException(paramName: deviceAccount.password);
+        }
 
-        DbDeviceAccount? dbDeviceAccount = await _apiRepository.GetDeviceAccountById(deviceAccount.id);
+        DbDeviceAccount? dbDeviceAccount = await _apiRepository.GetDeviceAccountById(
+            deviceAccount.id
+        );
         if (dbDeviceAccount is null)
             return false;
 
