@@ -4,6 +4,7 @@ using System.ComponentModel;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 
+[Table("PlayerUnitStory")]
 public class DbPlayerUnitStory : IDbHasAccountId
 {
     [Column("DEVICE_ACCOUNT_ID")]

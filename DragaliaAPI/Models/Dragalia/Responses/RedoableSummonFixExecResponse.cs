@@ -14,26 +14,20 @@ public record RedoableSummonFixExecData(
     EntityResult entity_result
 );
 
-public record EntityResult(
-    List<SummonEntity> converted_entity_list,
-    List<SummonEntity> new_get_entity_list
-);
+public record EntityResult(List<Entity> converted_entity_list, List<Entity> new_get_entity_list);
 
 public static class RedoableSummonFixExecFactory
 {
-    public static RedoableSummonFixExecData CreateData()
+    public static RedoableSummonFixExecData CreateData(
+        List<SummonEntity> cachedSummonResult,
+        List<Entity> convertedEntities,
+        List<Entity> newEntities
+    )
     {
-        //TODO: get cached resultList
-        List<SummonEntity> resultList = new List<SummonEntity>();
-
-        //TODO: create both from non-/existance in PlayerCharaData/PlayerDragonReliability
-        List<SummonEntity> convertedUnitList = new List<SummonEntity>();
-        List<SummonEntity> newUnitList = new List<SummonEntity>();
-
         return new RedoableSummonFixExecData(
-            new UserRedoableSummonData(0, resultList),
+            new UserRedoableSummonData(0, cachedSummonResult),
             new UpdateDataList(null),
-            new EntityResult(convertedUnitList, newUnitList)
+            new EntityResult(convertedEntities, newEntities)
         );
     }
 }
