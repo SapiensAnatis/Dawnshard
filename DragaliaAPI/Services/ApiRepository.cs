@@ -98,7 +98,7 @@ public class ApiRepository : IApiRepository
         {
             throw new Exception($"No SaveFileData found for Account-Id: {deviceAccountId}");
         }
-        List<Entity> convertedEntities = new List<Entity>();
+        List<SummonEntity> convertedEntities = new List<SummonEntity>();
         List<Entity> newEntities = new List<Entity>();
         List<Entity> sentToGiftsEntities = new List<Entity>();
 
@@ -120,12 +120,16 @@ public class ApiRepository : IApiRepository
         int dragonStorageSize = -1;
         int dragonStorageCount = playerDragons.Count;
 
-        foreach (Entity e in summonResult)
+        foreach (SummonEntity e in summonResult)
         {
             switch ((EntityTypes)e.entity_type)
             {
                 case EntityTypes.CHARA:
-                    if (playerCharas.ContainsKey((Charas)e.entity_id))
+                    if (
+                        newEntities.Exists(
+                            x => x.entity_id == e.entity_id && x.entity_type == e.entity_type
+                        ) || playerCharas.ContainsKey((Charas)e.entity_id)
+                    )
                     {
                         DbPlayerCharaData newChar = new DbPlayerCharaData()
                         {
@@ -144,6 +148,7 @@ public class ApiRepository : IApiRepository
                     if (!(dragonStorageSize < dragonStorageCount))
                     {
                         sentToGiftsEntities.Add(e);
+                        continue;
                     }
                     DbPlayerDragonData newDragon = new DbPlayerDragonData()
                     {
@@ -169,9 +174,26 @@ public class ApiRepository : IApiRepository
             }
         }
 
-        //TODO: convert summonEntity into Eldwater here
+        convertedEntities.ForEach(e =>
+        {
+            int amount = 0;
+            switch (e.rarity)
+            {
+                case 5:
+                    amount = (int)DupeReturnBaseValues.RARITY_5;
+                    break;
+                case 4:
+                    amount = (int)DupeReturnBaseValues.RARITY_4;
+                    break;
+                case 3:
+                    amount = (int)DupeReturnBaseValues.RARITY_3;
+                    break;
+            }
+            saveFileUserData.DewPoint += amount;
+        });
 
         await _apiContext.SaveChangesAsync();
+
         return new Tuple<IEnumerable<Entity>, IEnumerable<Entity>, IEnumerable<Entity>>(
             convertedEntities,
             newEntities,
