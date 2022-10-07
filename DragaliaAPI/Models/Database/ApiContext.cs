@@ -62,7 +62,7 @@ public class ApiContext : DbContext
     public DbSet<DbDeviceAccount> DeviceAccounts { get; set; } = null!;
 
     public DbSet<DbSavefileUserData> SavefileUserData { get; set; } = null!;
-    public DbSet<DbPlayerCharaData> PlayerUnitData { get; set; } = null!;
+    public DbSet<DbPlayerCharaData> PlayerCharaData { get; set; } = null!;
     public DbSet<DbPlayerDragonData> PlayerDragonData { get; set; } = null!;
     public DbSet<DbPlayerDragonReliability> PlayerDragonReliability { get; set; } = null!;
     public DbSet<DbPlayerUnitStory> PlayerUnitStory { get; set; } = null!;

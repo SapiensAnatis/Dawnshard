@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Models.Dragalia.Enums;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 
+[Table("PlayerDragonReliability")]
 public class DbPlayerDragonReliability : IDbHasAccountId
 {
     [Column("DEVICE_ACCOUNT_ID")]
@@ -11,7 +14,8 @@ public class DbPlayerDragonReliability : IDbHasAccountId
 
     [Column("DRAGON_ID")]
     [Required]
-    public long DragonId { get; set; }
+    [TypeConverter(typeof(EnumConverter))]
+    public Dragons DragonId { get; set; }
 
     [Column("REL_EXP")]
     [Required]

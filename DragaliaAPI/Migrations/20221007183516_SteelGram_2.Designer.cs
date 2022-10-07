@@ -3,6 +3,7 @@ using DragaliaAPI.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DragaliaAPI.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20221007183516_SteelGram_2")]
+    partial class SteelGram_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -379,7 +381,7 @@ namespace DragaliaAPI.Migrations
                             ActiveMemoryEventId = 0,
                             BuildTimePoint = 0,
                             Coin = 0,
-                            CreateTime = 1665390975,
+                            CreateTime = 1665167716,
                             Crystal = 0,
                             DewPoint = 0,
                             EmblemId = 40000001,

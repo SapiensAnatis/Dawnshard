@@ -8,6 +8,7 @@ using DragaliaAPI.Models.Enums;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 
+[Table("PlayerDragonData")]
 public class DbPlayerDragonData : IDbHasAccountId
 {
     /// <inheritdoc/>
