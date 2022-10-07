@@ -44,10 +44,6 @@ public class FixExecController : ControllerBase
             }
 
             string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-            DbSavefileUserData dbUserData = await _apiRepository
-                .GetPlayerInfo(deviceAccountId)
-                .SingleAsync();
-            SavefileUserData userData = SavefileUserDataFactory.Create(dbUserData, new() { });
 
             string summonCacheKey = $":{deviceAccountId}Or{sessionId}" + GetSummonCacheKey;
             List<SummonEntity> cachedSummonResults = JsonSerializer.Deserialize<List<SummonEntity>>(
@@ -63,12 +59,18 @@ public class FixExecController : ControllerBase
             );
             List<Entity> convertedSummonResults = orderedPostCommitLists.Item1.ToList();
             List<Entity> newSummonResults = orderedPostCommitLists.Item2.ToList();
+            DbSavefileUserData dbUserData = await _apiRepository
+                .GetPlayerInfo(deviceAccountId)
+                .SingleAsync();
+            SavefileUserData userData = SavefileUserDataFactory.Create(dbUserData, new() { });
+
             RedoableSummonFixExecResponse response =
                 new(
                     RedoableSummonFixExecFactory.CreateData(
                         cachedSummonResults,
                         convertedSummonResults,
-                        newSummonResults
+                        newSummonResults,
+                        userData
                     )
                 );
             return Ok(response);
