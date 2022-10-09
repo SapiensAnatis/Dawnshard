@@ -2,8 +2,8 @@ name: build
 
 on:
   push:
-  pull-request:
-  
+  pull_request:
+
 jobs:
   build:
 
