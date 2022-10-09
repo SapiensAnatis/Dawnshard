@@ -1,11 +1,15 @@
 ﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia.Responses;
 
+[MessagePackObject(true)]
 public record WebviewUrlListResponse(WebviewUrlListData data) : BaseResponse<WebviewUrlListData>;
 
+[MessagePackObject(true)]
 public record WebviewUrlListData(List<WebviewUrl> webview_url_list);
 
+[MessagePackObject(true)]
 public record WebviewUrl(string function_name, string url);
 
 public static class WebviewUrlListStatic

@@ -18,10 +18,10 @@ builder.Services
         // Must use ContractlessResolver because the DefaultResolver doesn't like serializing the generic BaseResponse<T>
         // record, even when it is properly annotated with the MessagePackObject decorator.
         option.OutputFormatters.Add(
-            new DragaliaAPI.CustomMessagePackOutputFormatter(ContractlessStandardResolver.Options)
+            new DragaliaAPI.CustomMessagePackOutputFormatter(StandardResolver.Options)
         );
         option.InputFormatters.Add(
-            new DragaliaAPI.CustomMessagePackInputFormatter(ContractlessStandardResolver.Options)
+            new DragaliaAPI.CustomMessagePackInputFormatter(StandardResolver.Options)
         );
     });
 
