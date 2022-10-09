@@ -1,5 +1,8 @@
 # DragaliaAPI
 
+[![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yml/badge.svg)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yml)
+
+
 ## Setup
 
 1. Install Docker Desktop

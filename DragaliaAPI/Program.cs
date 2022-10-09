@@ -26,9 +26,7 @@ builder.Services
     });
 
 builder.Services.AddDbContext<ApiContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")),
-    ServiceLifetime.Transient,
-    ServiceLifetime.Transient
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"))
 );
 
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -51,13 +49,11 @@ using (
 )
 {
     ILogger<Program> logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade db = serviceScope.ServiceProvider
-        .GetRequiredService<ApiContext>()
-        .Database;
+    ApiContext context = serviceScope.ServiceProvider.GetRequiredService<ApiContext>();
 
     logger.LogInformation("Migrating database...");
 
-    while (!db.CanConnect())
+    while (!context.Database.CanConnect())
     {
         logger.LogInformation("Database not ready yet; waiting...");
         Thread.Sleep(1000);
@@ -65,8 +61,11 @@ using (
 
     try
     {
-        serviceScope.ServiceProvider.GetRequiredService<ApiContext>().Database.Migrate();
-        logger.LogInformation("Database migrated successfully.");
+        if (context.Database.IsRelational())
+        {
+            serviceScope.ServiceProvider.GetRequiredService<ApiContext>().Database.Migrate();
+            logger.LogInformation("Database migrated successfully.");
+        }
     }
     catch (Exception ex)
     {
