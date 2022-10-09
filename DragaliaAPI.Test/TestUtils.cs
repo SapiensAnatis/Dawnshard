@@ -17,8 +17,12 @@ public static class TestUtils
 {
     public static void InitializeDbForTests(ApiContext db)
     {
+        db.DeviceAccounts.RemoveRange(db.DeviceAccounts);
+        db.SavefileUserData.RemoveRange(db.SavefileUserData);
+
         db.DeviceAccounts.AddRange(GetDeviceAccountsSeed());
         db.SavefileUserData.AddRange(GetSavefilePlayerInfoSeed());
+
         db.SaveChanges();
     }
 
