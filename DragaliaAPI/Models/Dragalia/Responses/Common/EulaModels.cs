@@ -1,6 +1,6 @@
 ﻿using MessagePack;
 
-namespace DragaliaAPI.Models.Dragalia.Responses;
+namespace DragaliaAPI.Models.Dragalia.Responses.Common;
 
 [MessagePackObject(keyAsPropertyName: true)]
 public record EulaVersion(string region, string lang, int eula_version, int privacy_policy_version);

@@ -9,4 +9,6 @@ public interface IApiRepository
     Task<DbDeviceAccount?> GetDeviceAccountById(string id);
     Task AddNewPlayerInfo(string deviceAccountId);
     IQueryable<DbSavefileUserData> GetPlayerInfo(string deviceAccountId);
+    Task<ISet<int>> getTutorialFlags(string deviceAccountId);
+    Task setTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags);
 }

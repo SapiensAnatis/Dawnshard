@@ -25,6 +25,7 @@ public record LoginResponse
     public string idToken { get; init; }
     public User user { get; init; }
     public DeviceAccount? createdDeviceAccount { get; set; }
+
     // Junk fields
     public string accessToken { get; init; }
     public object behaviorSettings { get; } = new { };
@@ -66,12 +67,15 @@ public record LoginResponse
         public long updatedAt { get; } = DateTimeOffset.Now.ToUnixTimeSeconds();
         public List<DeviceAccount> deviceAccounts { get; init; }
         public Permissions permissions { get; } = new();
+
         public record Permissions
         {
             public bool personalAnalytics { get; } = false;
-            public long personalAnalyticsUpdatedAt { get; } = DateTimeOffset.Now.ToUnixTimeSeconds();
+            public long personalAnalyticsUpdatedAt { get; } =
+                DateTimeOffset.Now.ToUnixTimeSeconds();
             public bool personalNotification { get; } = false;
-            public long personalNotificationUpdatedAt { get; } = DateTimeOffset.Now.ToUnixTimeSeconds();
+            public long personalNotificationUpdatedAt { get; } =
+                DateTimeOffset.Now.ToUnixTimeSeconds();
         }
     }
 }

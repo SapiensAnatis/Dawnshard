@@ -28,8 +28,10 @@ public class IndexController : ControllerBase
     {
         string sessionId = Request.Headers["SID"];
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-        DbSavefileUserData dbUserData = await _apiRepository.GetPlayerInfo(deviceAccountId).SingleAsync();
-        SavefileUserData userData = SavefileUserDataFactory.Create(dbUserData, new() {});
+        DbSavefileUserData dbUserData = await _apiRepository
+            .GetPlayerInfo(deviceAccountId)
+            .SingleAsync();
+        SavefileUserData userData = SavefileUserDataFactory.Create(dbUserData, new() { });
         LoadIndexResponse response = new(new LoadIndexData(userData));
 
         return Ok(response);

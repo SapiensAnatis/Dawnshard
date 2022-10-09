@@ -5,4 +5,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "msgpack/json object fields should start with lowercase to match real keys")]
+[assembly: SuppressMessage(
+    "Style",
+    "IDE1006:Naming Styles",
+    Justification = "msgpack/json object fields should start with lowercase to match real keys"
+)]

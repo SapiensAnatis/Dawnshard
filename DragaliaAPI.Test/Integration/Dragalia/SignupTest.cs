@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses;
+﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
 using MessagePack;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,10 +13,9 @@ public class SignupTest : IClassFixture<CustomWebApplicationFactory<Program>>
     public SignupTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
-        {
-            AllowAutoRedirect = false
-        });
+        _client = _factory.CreateClient(
+            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
+        );
 
         var cache = _factory.Services.GetRequiredService<IDistributedCache>();
         TestUtils.InitializeCacheForTests(cache);

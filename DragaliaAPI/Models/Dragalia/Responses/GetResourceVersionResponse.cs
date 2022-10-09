@@ -1,9 +1,11 @@
-﻿using MessagePack;
+﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia.Responses;
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record GetResourceVersionResponse(GetResourceVersionData data) : BaseResponse<GetResourceVersionData>;
+public record GetResourceVersionResponse(GetResourceVersionData data)
+    : BaseResponse<GetResourceVersionData>;
 
 [MessagePackObject(keyAsPropertyName: true)]
 public record GetResourceVersionData(string resource_version);

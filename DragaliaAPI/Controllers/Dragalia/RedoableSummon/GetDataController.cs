@@ -2,18 +2,18 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragaliaAPI.Controllers.Dragalia.WebviewVersion;
+namespace DragaliaAPI.Controllers.Dragalia.RedoableSummon;
 
-[Route("webview_version/url_list")]
+[Route("redoable_summon/get_data")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class UrlListController : ControllerBase
+public class GetDataController : ControllerBase
 {
     [HttpPost]
     public DragaliaResult Post()
     {
-        WebviewUrlListResponse response = new(new WebviewUrlListData(WebviewUrlListStatic.AllUrls));
+        RedoableSummonGetDataResponse response = new(RedoableSummonGetDataFactory.CreateData());
         return Ok(response);
     }
 }

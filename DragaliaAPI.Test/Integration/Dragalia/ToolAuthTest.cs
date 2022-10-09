@@ -1,4 +1,5 @@
-﻿using MessagePack;
+﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+using MessagePack;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,10 +13,9 @@ public class ToolAuthTest : IClassFixture<CustomWebApplicationFactory<Program>>
     public ToolAuthTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
-        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
-        {
-            AllowAutoRedirect = false
-        });
+        _client = _factory.CreateClient(
+            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
+        );
 
         // TODO: Find a way to put this into the fixture
         var cache = _factory.Services.GetRequiredService<IDistributedCache>();
@@ -25,7 +25,8 @@ public class ToolAuthTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task Auth_CorrectIdToken_ReturnsOKResponse()
     {
-        AuthResponse expectedResponse = new(new AuthResponseData(10000000002, "prepared_session_id", "placeholder nonce"));
+        ToolAuthResponse expectedResponse =
+            new(new AuthResponseData(10000000002, "prepared_session_id", "placeholder nonce"));
 
         var data = new { uuid = "unused", id_token = "id_token" };
         byte[] payload = MessagePackSerializer.Serialize(data);
@@ -39,7 +40,8 @@ public class ToolAuthTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task Auth_CalledTwice_ReturnsSameSessionId()
     {
-        AuthResponse expectedResponse = new(new AuthResponseData(10000000002, "prepared_session_id", "placeholder nonce"));
+        ToolAuthResponse expectedResponse =
+            new(new AuthResponseData(10000000002, "prepared_session_id", "placeholder nonce"));
 
         var data = new { uuid = "unused", id_token = "id_token" };
         byte[] payload = MessagePackSerializer.Serialize(data);

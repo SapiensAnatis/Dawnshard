@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Database;
+﻿using DragaliaAPI.Models;
+using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
@@ -29,22 +30,56 @@ public class ApiRepository : IApiRepository
         return await _apiContext.DeviceAccounts.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-
     public virtual async Task AddNewPlayerInfo(string deviceAccountId)
     {
-        await _apiContext.SavefileUserData.AddAsync(DbSavefileUserDataFactory.Create(deviceAccountId));
+        await _apiContext.SavefileUserData.AddAsync(
+            DbSavefileUserDataFactory.Create(deviceAccountId)
+        );
         await _apiContext.SaveChangesAsync();
     }
 
     public virtual IQueryable<DbSavefileUserData> GetPlayerInfo(string deviceAccountId)
     {
-        IQueryable<DbSavefileUserData> infoQuery = _apiContext.SavefileUserData.Where(x => x.DeviceAccountId == deviceAccountId);
+        IQueryable<DbSavefileUserData> infoQuery = _apiContext.SavefileUserData.Where(
+            x => x.DeviceAccountId == deviceAccountId
+        );
 
         if (infoQuery.Count() != 1)
             // Returning an empty IQueryable will almost certainly cause errors down the line.
             // Better stop here instead, where it's easier to debug with access to ApiContext.
-            throw new InvalidOperationException($"PlayerInfo query with id {deviceAccountId} returned {infoQuery.Count()} results.");
+            throw new InvalidOperationException(
+                $"PlayerInfo query with id {deviceAccountId} returned {infoQuery.Count()} results."
+            );
 
         return infoQuery;
+    }
+
+    public virtual async Task<ISet<int>> getTutorialFlags(string deviceAccountId)
+    {
+        DbSavefileUserData? saveFileUserData = await _apiContext.SavefileUserData.FindAsync(
+            deviceAccountId
+        );
+        if (saveFileUserData == null)
+        {
+            throw new Exception($"No SaveFileData found for Account-Id: {deviceAccountId}");
+        }
+        int flags_ = saveFileUserData.TutorialFlag;
+        return TutorialFlagUtil.ConvertIntToFlagIntList(flags_);
+    }
+
+    public virtual async Task setTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags)
+    {
+        DbSavefileUserData? saveFileUserData = await _apiContext.SavefileUserData.FindAsync(
+            deviceAccountId
+        );
+        if (saveFileUserData == null)
+        {
+            throw new Exception($"No SaveFileData found for Account-Id: {deviceAccountId}");
+        }
+        saveFileUserData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(
+            tutorialFlags,
+            saveFileUserData.TutorialFlag
+        );
+        int udpatedRows = await _apiContext.SaveChangesAsync();
     }
 }
