@@ -1,6 +1,8 @@
 name: test
 
-on: [push]
+on:
+  push:
+  pull-request:
 
 jobs:
   build:
@@ -9,7 +11,7 @@ jobs:
     strategy:
       matrix:
         dotnet-version: [ '6.0.x' ]
-        test-project: 'DragaliaAPI.Test'
+        test-project: [ 'DragaliaAPI.Test' ]
 
     steps:
       - uses: actions/checkout@v3
@@ -17,7 +19,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Install build dependencies
-        run: dotnet restore ${{ matrix.test-project }}
+      - name: Install dependencies
+        run: dotnet restore DragaliaAPI.Test
       - name: Build
-        run: dotnet test ${{ matrix.test-project }} --no-restore
+        run: dotnet test DragaliaAPI.Test --no-restore
