@@ -24,9 +24,8 @@ public class IndexController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<DragaliaResult> Post()
+    public async Task<DragaliaResult> Post([FromHeader(Name = "SID")] string sessionId)
     {
-        string sessionId = Request.Headers["SID"];
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
         DbSavefileUserData dbUserData = await _apiRepository
             .GetPlayerInfo(deviceAccountId)

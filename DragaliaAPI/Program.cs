@@ -42,6 +42,10 @@ builder.Services
 
 WebApplication app = builder.Build();
 
+// Skip past /version/ path base
+// Doesn't seem to work
+app.UsePathBase("/2.19.0_20220714193707");
+
 using (
     IServiceScope serviceScope = app.Services
         .GetRequiredService<IServiceScopeFactory>()

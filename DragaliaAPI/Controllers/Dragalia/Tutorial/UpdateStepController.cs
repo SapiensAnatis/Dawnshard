@@ -26,11 +26,12 @@ public class UpdateStepController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<DragaliaResult> Post(TutorialUpdateStepRequest request)
+    public async Task<DragaliaResult> Post(
+        [FromHeader(Name = "SID")] string sessionId,
+        TutorialUpdateStepRequest request
+    )
     {
-        string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(
-            Request.Headers["SID"]
-        );
+        string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
 
         DbSavefileUserData userData =
             await _apiContext.SavefileUserData.FindAsync(deviceAccountId)
