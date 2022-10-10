@@ -54,7 +54,7 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
     }
 
     [Fact]
-    public async Task AddNewPlayerInfo_CanGetAfterward()
+    public async Task AddNewPlayerInfo_CanGetAfterwards()
     {
         await apiRepository.AddNewPlayerInfo("id 2");
         IQueryable<DbSavefileUserData> result = apiRepository.GetPlayerInfo("id 2");
@@ -65,17 +65,34 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public void GetPlayerInfo_ValidId_ReturnsInfo()
     {
-        IQueryable<DbSavefileUserData> result = apiRepository.GetPlayerInfo("id");
-
-        result.Count().Should().Be(1);
+        apiRepository.GetPlayerInfo("id").Should().NotBeEmpty();
     }
 
     [Fact]
-    public void GetPlayerInfo_InvalidId_ThrowsException()
+    public void GetPlayerInfo_InvalidId_ReturnsEmptyQueryable()
     {
-        apiRepository
-            .Invoking(x => x.GetPlayerInfo("wrong id"))
-            .Should()
-            .Throw<InvalidOperationException>();
+        apiRepository.GetPlayerInfo("wrong id").Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task UpdateTutorialStatus_UpdatesTutorialStatus()
+    {
+        await apiRepository.UpdateTutorialStatus("id", 200);
+
+        this.apiContext.SavefileUserData
+            .Single(x => x.DeviceAccountId == "id")
+            .TutorialStatus.Should()
+            .Be(200);
+    }
+
+    [Fact]
+    public async Task UpdateName_UpdatesName()
+    {
+        await apiRepository.UpdateName("id", "Euden 2");
+
+        this.apiContext.SavefileUserData
+            .Single(x => x.DeviceAccountId == "id")
+            .Name.Should()
+            .Be("Euden 2");
     }
 }

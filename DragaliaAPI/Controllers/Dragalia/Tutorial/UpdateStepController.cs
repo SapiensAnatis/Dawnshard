@@ -16,12 +16,12 @@ namespace DragaliaAPI.Controllers.Dragalia.Tutorial;
 [ApiController]
 public class UpdateStepController : ControllerBase
 {
-    private readonly ApiContext _apiContext;
+    private readonly IApiRepository _apiRepository;
     private readonly ISessionService _sessionService;
 
-    public UpdateStepController(ApiContext apiContext, ISessionService sessionService)
+    public UpdateStepController(IApiRepository apiRepository, ISessionService sessionService)
     {
-        _apiContext = apiContext;
+        _apiRepository = apiRepository;
         _sessionService = sessionService;
     }
 
@@ -32,12 +32,10 @@ public class UpdateStepController : ControllerBase
     )
     {
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-
-        DbSavefileUserData userData =
-            await _apiContext.SavefileUserData.FindAsync(deviceAccountId)
-            ?? throw new NullReferenceException("Savefile lookup failed");
-        userData.TutorialStatus = request.step;
-        await _apiContext.SaveChangesAsync();
+        DbSavefileUserData userData = await _apiRepository.UpdateTutorialStatus(
+            deviceAccountId,
+            request.step
+        );
 
         UpdateDataList updateDataList = new(SavefileUserDataFactory.Create(userData, new()));
         TutorialUpdateStepResponse response =
