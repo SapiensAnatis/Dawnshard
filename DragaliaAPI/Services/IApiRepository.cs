@@ -12,4 +12,3 @@ public interface IApiRepository
     Task<ISet<int>> getTutorialFlags(string deviceAccountId);
     Task setTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags);
 }
-
