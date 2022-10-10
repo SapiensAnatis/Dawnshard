@@ -9,7 +9,7 @@
       ]
     },
     "csharpier": {
-      "version": "1.3.5",
+      "version": "0.20.0",
       "commands": [
           "dotnet-csharpier"
       ]
