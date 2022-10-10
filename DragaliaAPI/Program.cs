@@ -26,9 +26,7 @@ builder.Services
     });
 
 builder.Services.AddDbContext<ApiContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")),
-    ServiceLifetime.Transient,
-    ServiceLifetime.Transient
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"))
 );
 
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -50,27 +48,30 @@ using (
         .CreateScope()
 )
 {
-    ILogger<Program> logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    Microsoft.EntityFrameworkCore.Infrastructure.DatabaseFacade db = serviceScope.ServiceProvider
-        .GetRequiredService<ApiContext>()
-        .Database;
+    ApiContext context = serviceScope.ServiceProvider.GetRequiredService<ApiContext>();
 
-    logger.LogInformation("Migrating database...");
+    if (context.Database.IsRelational() && !app.Environment.IsEnvironment("Testing"))
+    {
+        ILogger<Program> logger = serviceScope.ServiceProvider.GetRequiredService<
+            ILogger<Program>
+        >();
+        logger.LogInformation("Migrating database...");
 
-    while (!db.CanConnect())
-    {
-        logger.LogInformation("Database not ready yet; waiting...");
-        Thread.Sleep(1000);
-    }
+        while (!context.Database.CanConnect())
+        {
+            logger.LogInformation("Database not ready yet; waiting...");
+            Thread.Sleep(1000);
+        }
 
-    try
-    {
-        serviceScope.ServiceProvider.GetRequiredService<ApiContext>().Database.Migrate();
-        logger.LogInformation("Database migrated successfully.");
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "An error occurred while migrating the database.");
+        try
+        {
+            serviceScope.ServiceProvider.GetRequiredService<ApiContext>().Database.Migrate();
+            logger.LogInformation("Database migrated successfully.");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while migrating the database.");
+        }
     }
 }
 

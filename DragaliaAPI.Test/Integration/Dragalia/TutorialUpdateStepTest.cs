@@ -15,7 +15,6 @@ public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<
 {
     private readonly HttpClient _client;
     private readonly CustomWebApplicationFactory<Program> _factory;
-    private readonly IServiceScopeFactory _serviceScopeFactory;
 
     public TutorialUpdateStepTest(CustomWebApplicationFactory<Program> factory)
     {
@@ -23,9 +22,7 @@ public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<
         _client = factory.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
-        _serviceScopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
-        var cache = _factory.Services.GetRequiredService<IDistributedCache>();
-        TestUtils.InitializeCacheForTests(cache);
+        _factory.SeedCache();
     }
 
     [Fact]
@@ -39,7 +36,7 @@ public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<
 
         HttpResponseMessage response = await _client.PostAsync("/tutorial/update_step", content);
 
-        using (var scope = _serviceScopeFactory.CreateScope())
+        using (var scope = _factory.Services.CreateScope())
         {
             ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
             apiContext.SavefileUserData
@@ -53,6 +50,11 @@ public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<
     public async Task TutorialUpdateStep_ReturnsCorrectResponse()
     {
         int step = 2;
+        DbSavefileUserData dbUserData = TestUtils.GetLoggedInSavefileSeed();
+
+        SavefileUserData userData = SavefileUserDataFactory.Create(dbUserData, new());
+        UpdateDataList updateData = new(userData with { tutorial_status = step });
+        TutorialUpdateStepResponse expectedResponse = new(new(step, updateData));
 
         var data = new { step = step };
         byte[] payload = MessagePackSerializer.Serialize(data);
@@ -60,18 +62,10 @@ public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<
 
         HttpResponseMessage response = await _client.PostAsync("/tutorial/update_step", content);
 
-        using (var scope = _serviceScopeFactory.CreateScope())
-        {
-            // Should send the new SavefileUserData object as update_data_list
-            ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
-            DbSavefileUserData dbUserData = apiContext.SavefileUserData.First(
-                x => x.DeviceAccountId == "logged_in_id"
-            );
-            SavefileUserData userData = SavefileUserDataFactory.Create(dbUserData, new());
-            UpdateDataList updateData = new(userData);
-            TutorialUpdateStepResponse expectedResponse = new(new(step, updateData));
-
-            await TestUtils.CheckMsgpackResponse(response, expectedResponse);
-        }
+        await TestUtils.CheckMsgpackResponse(
+            response,
+            expectedResponse,
+            options => options.Excluding(x => x.data.update_data_list.user_data.create_time)
+        );
     }
 }
