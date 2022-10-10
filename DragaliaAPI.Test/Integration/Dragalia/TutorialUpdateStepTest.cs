@@ -65,7 +65,7 @@ public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<
         await TestUtils.CheckMsgpackResponse(
             response,
             expectedResponse,
-            options => options.Excluding(x => x.data.update_data_list.user_data.create_time)
+            options => options.Excluding(x => x.data.update_data_list.user_data!.create_time)
         );
     }
 }
