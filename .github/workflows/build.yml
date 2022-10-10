@@ -3,13 +3,10 @@ name: build
 on:
   pull_request:
     paths-ignore:
-      - '**/*.md'
+      - 'README.md'
   push:
     branches:
       - master
-    paths-ignore:
-      - '**/*.md'
-      
 env:
   HUSKY: 0
 
