@@ -1,7 +1,7 @@
 # DragaliaAPI
 
+[![build](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/build.yml)
 [![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yml/badge.svg)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yml)
-
 
 ## Setup
 
