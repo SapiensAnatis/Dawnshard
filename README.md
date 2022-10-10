@@ -18,6 +18,6 @@ See also the [API documentation](https://dragalia-api-docs.readthedocs.io/en/lat
 
 ## Contributing
 
-Contributions are more than welcome! Feel free to fork the repository and open a pull request with these changes. Please also include integration-style tests for any new controllers, and unit tests for any new services. See the DragaliaAPI.Test project for examples (these are by no means a gold standard, however).
+Contributions are more than welcome! Feel free to fork the repository and open a pull request with your proposed changes. Please also include integration-style tests for any new controllers, and unit tests for any new services. See the DragaliaAPI.Test project for examples (these are by no means a gold standard, however).
 
 Code formatting is enforced by [CSharpier](https://csharpier.com/) with a pre-commit hook and a pipeline step. You may find it beneficial to run this on save instead -- this can be done using an extension in your IDE. For Visual Studio, install [this extension](https://marketplace.visualstudio.com/items?itemName=csharpier.CSharpier) and enable formatting on save in the IDE options under CSharpier.
