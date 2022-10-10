@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 
+[Table("PlayerInfo")]
 public class DbSavefileUserData : IDbHasAccountId
 {
     /// <inheritdoc/>
