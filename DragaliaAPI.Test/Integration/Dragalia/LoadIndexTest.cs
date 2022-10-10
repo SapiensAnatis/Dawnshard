@@ -18,24 +18,16 @@ public class LoadIndexTest : IClassFixture<CustomWebApplicationFactory<Program>>
         _client = factory.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
-        var cache = _factory.Services.GetRequiredService<IDistributedCache>();
-        TestUtils.InitializeCacheForTests(cache);
+        _factory.SeedCache();
     }
 
     [Fact]
     public async Task LoadIndex_ReturnsSavefile()
     {
-        LoadIndexResponse expectedResponse;
+        DbSavefileUserData dbUserData = TestUtils.GetLoggedInSavefileSeed();
 
-        using (var scope = _factory.Services.CreateScope())
-        {
-            ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
-            DbSavefileUserData dbUserData = apiContext.SavefileUserData.First(
-                x => x.DeviceAccountId == "logged_in_id"
-            );
-            SavefileUserData userData = SavefileUserDataFactory.Create(dbUserData, new());
-            expectedResponse = new(new(userData));
-        }
+        LoadIndexResponse expectedResponse =
+            new(new LoadIndexData(SavefileUserDataFactory.Create(dbUserData, new())));
 
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };
@@ -43,6 +35,10 @@ public class LoadIndexTest : IClassFixture<CustomWebApplicationFactory<Program>>
 
         HttpResponseMessage response = await _client.PostAsync("load/index", content);
 
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        await TestUtils.CheckMsgpackResponse(
+            response,
+            expectedResponse,
+            options => options.Excluding(x => x.data.user_data.create_time)
+        );
     }
 }

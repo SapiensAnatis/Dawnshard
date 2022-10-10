@@ -1,12 +1,8 @@
-﻿using System.Net;
-using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Net.Http.Headers;
 using System.Text.Json;
-using System.Transactions;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Responses;
-using DragaliaAPI.Models.Nintendo;
+using FluentAssertions.Equivalency;
 using MessagePack;
 using MessagePack.Resolvers;
 using Microsoft.Extensions.Caching.Distributed;
@@ -68,6 +64,11 @@ public static class TestUtils
         return new() { playerInfoOne, playerInfoTwo, playerInfoThree };
     }
 
+    public static DbSavefileUserData GetLoggedInSavefileSeed()
+    {
+        return GetSavefilePlayerInfoSeed()[2];
+    }
+
     public static HttpContent CreateMsgpackContent(byte[] content)
     {
         ByteArrayContent result = new(content);
@@ -98,7 +99,11 @@ public static class TestUtils
     /// <param name="expectedResponse">The expected response body object.</param>
     public static async Task CheckMsgpackResponse<TResponse>(
         HttpResponseMessage response,
-        TResponse expectedResponse
+        TResponse expectedResponse,
+        Func<
+            EquivalencyAssertionOptions<TResponse>,
+            EquivalencyAssertionOptions<TResponse>
+        >? config = null
     )
     {
         response.IsSuccessStatusCode.Should().BeTrue();
@@ -108,6 +113,9 @@ public static class TestUtils
             responseBytes,
             ContractlessStandardResolver.Options
         );
-        deserializedResponse.Should().BeEquivalentTo(expectedResponse);
+
+        config ??= options => options;
+
+        deserializedResponse.Should().BeEquivalentTo(expectedResponse, config);
     }
 }

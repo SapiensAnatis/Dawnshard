@@ -80,7 +80,6 @@ public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Progr
         response.IsSuccessStatusCode.Should().BeTrue();
 
         string jsonString = await response.Content.ReadAsStringAsync();
-        Console.WriteLine(jsonString);
         PartialLoginResponse? deserializedResponse =
             JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
         deserializedResponse.Should().NotBeNull();

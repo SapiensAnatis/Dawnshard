@@ -48,28 +48,30 @@ using (
         .CreateScope()
 )
 {
-    ILogger<Program> logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     ApiContext context = serviceScope.ServiceProvider.GetRequiredService<ApiContext>();
 
-    logger.LogInformation("Migrating database...");
-
-    while (!context.Database.CanConnect())
+    if (context.Database.IsRelational() && !app.Environment.IsEnvironment("Testing"))
     {
-        logger.LogInformation("Database not ready yet; waiting...");
-        Thread.Sleep(1000);
-    }
+        ILogger<Program> logger = serviceScope.ServiceProvider.GetRequiredService<
+            ILogger<Program>
+        >();
+        logger.LogInformation("Migrating database...");
 
-    try
-    {
-        if (context.Database.IsRelational())
+        while (!context.Database.CanConnect())
+        {
+            logger.LogInformation("Database not ready yet; waiting...");
+            Thread.Sleep(1000);
+        }
+
+        try
         {
             serviceScope.ServiceProvider.GetRequiredService<ApiContext>().Database.Migrate();
             logger.LogInformation("Database migrated successfully.");
         }
-    }
-    catch (Exception ex)
-    {
-        logger.LogError(ex, "An error occurred while migrating the database.");
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while migrating the database.");
+        }
     }
 }
 

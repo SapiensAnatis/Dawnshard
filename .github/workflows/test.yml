@@ -1,7 +1,6 @@
 name: test
 
 on:
-  push:
   pull_request:
 
 
@@ -21,5 +20,5 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
         run: dotnet restore DragaliaAPI.Test
-      - name: Build
+      - name: Test
         run: dotnet test DragaliaAPI.Test --no-restore
