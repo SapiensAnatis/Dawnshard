@@ -20,7 +20,7 @@ namespace DragaliaAPI.Test.Unit.Services
         public DbTestFixture()
         {
             var options = new DbContextOptionsBuilder<ApiContext>()
-                .UseInMemoryDatabase("ApiRepositoryTest")
+                .UseInMemoryDatabase($"ApiRepositoryTest-{Guid.NewGuid()}")
                 .Options;
 
             Mock<IWebHostEnvironment> mockEnvironment = new(MockBehavior.Loose);

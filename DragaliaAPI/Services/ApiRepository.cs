@@ -23,18 +23,18 @@ public class ApiRepository : IApiRepository
         _apiContext = context;
     }
 
-    public virtual async Task AddNewDeviceAccount(string id, string hashedPassword)
+    public async Task AddNewDeviceAccount(string id, string hashedPassword)
     {
         await _apiContext.DeviceAccounts.AddAsync(new DbDeviceAccount(id, hashedPassword));
         await _apiContext.SaveChangesAsync();
     }
 
-    public virtual async Task<DbDeviceAccount?> GetDeviceAccountById(string id)
+    public async Task<DbDeviceAccount?> GetDeviceAccountById(string id)
     {
         return await _apiContext.DeviceAccounts.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public virtual async Task AddNewPlayerInfo(string deviceAccountId)
+    public async Task AddNewPlayerInfo(string deviceAccountId)
     {
         await _apiContext.SavefileUserData.AddAsync(
             DbSavefileUserDataFactory.Create(deviceAccountId)
@@ -42,20 +42,35 @@ public class ApiRepository : IApiRepository
         await _apiContext.SaveChangesAsync();
     }
 
-    public virtual IQueryable<DbSavefileUserData> GetPlayerInfo(string deviceAccountId)
+    public IQueryable<DbSavefileUserData> GetPlayerInfo(string deviceAccountId)
     {
         IQueryable<DbSavefileUserData> infoQuery = _apiContext.SavefileUserData.Where(
             x => x.DeviceAccountId == deviceAccountId
         );
 
-        if (infoQuery.Count() != 1)
-            // Returning an empty IQueryable will almost certainly cause errors down the line.
-            // Better stop here instead, where it's easier to debug with access to ApiContext.
-            throw new InvalidOperationException(
-                $"PlayerInfo query with id {deviceAccountId} returned {infoQuery.Count()} results."
-            );
-
         return infoQuery;
+    }
+
+    public async Task<DbSavefileUserData> UpdateTutorialStatus(
+        string deviceAccountId,
+        int newStatus
+    )
+    {
+        DbSavefileUserData userData =
+            await _apiContext.SavefileUserData.FindAsync(deviceAccountId)
+            ?? throw new NullReferenceException("Savefile lookup failed");
+        userData.TutorialStatus = newStatus;
+        await _apiContext.SaveChangesAsync();
+        return userData;
+    }
+
+    public async Task UpdateName(string deviceAccountId, string newName)
+    {
+        DbSavefileUserData userData =
+            await _apiContext.SavefileUserData.FindAsync(deviceAccountId)
+            ?? throw new NullReferenceException("Savefile lookup failed");
+        userData.Name = newName;
+        await _apiContext.SaveChangesAsync();
     }
 
     public virtual async Task<ISet<int>> getTutorialFlags(string deviceAccountId)

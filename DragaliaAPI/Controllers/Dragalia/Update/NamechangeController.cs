@@ -14,12 +14,12 @@ namespace DragaliaAPI.Controllers.Dragalia.Update;
 [ApiController]
 public class NamechangeController : ControllerBase
 {
-    private readonly ApiContext _apiContext;
+    private readonly IApiRepository _apiRepository;
     private readonly ISessionService _sessionService;
 
-    public NamechangeController(ApiContext apiContext, ISessionService sessionService)
+    public NamechangeController(IApiRepository apiRepository, ISessionService sessionService)
     {
-        _apiContext = apiContext;
+        _apiRepository = apiRepository;
         _sessionService = sessionService;
     }
 
@@ -31,11 +31,7 @@ public class NamechangeController : ControllerBase
     {
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
 
-        DbSavefileUserData userData =
-            await _apiContext.SavefileUserData.FindAsync(deviceAccountId)
-            ?? throw new ArgumentException("Invalid DeviceAccountId");
-        userData.Name = request.name;
-        await _apiContext.SaveChangesAsync();
+        await _apiRepository.UpdateName(deviceAccountId, request.name);
 
         UpdateNamechangeResponse response = new(new NamechangeData(request.name));
         return Ok(response);
