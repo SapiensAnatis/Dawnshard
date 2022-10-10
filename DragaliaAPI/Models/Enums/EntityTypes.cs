@@ -2,7 +2,7 @@
 
 public enum EntityTypes
 {
-    CHARA = 1,
-    AMULET = 4,
-    DRAGON = 7
+    Chara = 1,
+    AbilityCrest = 4,
+    Dragon = 7
 }
