@@ -21,12 +21,8 @@ public record UserRedoableSummonData(
 
 public static class RedoableSummonPreExecFactory
 {
-    public static RedoableSummonPreExecData CreateData()
+    public static RedoableSummonPreExecData CreateData(List<SummonEntity> resultList)
     {
-        List<SummonEntity> resultList = new();
-        for (int i = 0; i < 50; i++)
-            resultList.Add(new(entity_type: 7, id: 20050101, rarity: 5));
-
         return new(new(0, resultList), new(null));
     }
 }
