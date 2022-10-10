@@ -4,48 +4,64 @@ using DragaliaAPI.Models.Dragalia.Responses;
 using DragaliaAPI.Models.Dragalia.Responses.Common;
 using DragaliaAPI.Models.Dragalia.Savefile;
 using DragaliaAPI.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace DragaliaAPI.Controllers.Dragalia.RedoableSummon;
 
-[Route("redoable_summon/fix_exec")]
+[Route("redoable_summon")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class FixExecController : ControllerBase
+public class RedoableSummonController : ControllerBase
 {
+    private readonly ISummonService _summonService;
     private readonly IApiRepository _apiRepository;
     private readonly IDistributedCache _cache;
     private readonly ISessionService _sessionService;
-    private const string GetSummonCacheKey = ":summonCache:";
 
-    public FixExecController(
+    public RedoableSummonController(
+        ISummonService summonService,
         IApiRepository apiRepository,
         IDistributedCache cache,
         ISessionService sessionService
     )
     {
+        _summonService = summonService;
         _apiRepository = apiRepository;
         _cache = cache;
         _sessionService = sessionService;
     }
 
-    [HttpGet]
-    public async Task<DragaliaResult> Get()
+    [HttpPost]
+    [Route("get_data")]
+    public DragaliaResult GetData()
     {
-        string sessionId = Request.Headers["SID"];
+        RedoableSummonGetDataResponse response = new(RedoableSummonGetDataFactory.CreateData());
+        return Ok(response);
+    }
+
+    [HttpPost]
+    [Route("pre_exec")]
+    public DragaliaResult PreExec()
+    {
+        List<SummonEntity> summonResult = _summonService.GenerateSummonResult(50);
+        RedoableSummonPreExecResponse response = new(new(new(0, summonResult), new(null)));
+        return Ok(response);
+    }
+
+    [HttpPost]
+    [Route("fix_exec")]
+    [HttpGet]
+    public async Task<DragaliaResult> PostExec([FromHeader(Name = "SID")] string sessionId)
+    {
         try
         {
-            if (!await _sessionService.ValidateSession(sessionId))
-            {
-                throw new TimeoutException($"No session exists for {sessionId}");
-            }
-
             string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
 
-            string summonCacheKey = $":{deviceAccountId}Or{sessionId}" + GetSummonCacheKey;
+            string summonCacheKey = $"key";
             List<SummonEntity> cachedSummonResults = JsonSerializer.Deserialize<List<SummonEntity>>(
                 await _cache.GetStringAsync(summonCacheKey)
             )!;
