@@ -12,7 +12,6 @@ env:
 
 jobs:
   test:
-    name: Automated tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
