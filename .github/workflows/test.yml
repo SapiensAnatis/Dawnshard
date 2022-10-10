@@ -2,16 +2,20 @@ name: test
 
 on:
   pull_request:
+    paths-ignore:
+      - '**/*.md'
   push:
     branches:
       - master
+    paths-ignore:
+      - '**/*.md'
 
 env:
   HUSKY: 0
 
-
 jobs:
   test:
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
