@@ -115,7 +115,6 @@ public static class TestUtils
         );
 
         config ??= options => options;
-
         deserializedResponse.Should().BeEquivalentTo(expectedResponse, config);
     }
 }
