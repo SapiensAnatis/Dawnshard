@@ -29,6 +29,22 @@ public class ApiContext : DbContext
                 .HasDefaultValueSql("NEXT VALUE FOR dbo.Viewer_id");
         }
 
+        modelBuilder
+            .Entity<DbPlayerCharaData>()
+            .HasKey(key => new { key.DeviceAccountId, key.CharaId });
+
+        modelBuilder
+            .Entity<DbPlayerDragonData>()
+            .HasKey(key => new { key.DeviceAccountId, key.DragonKeyId });
+
+        modelBuilder
+            .Entity<DbPlayerDragonReliability>()
+            .HasKey(key => new { key.DeviceAccountId, key.DragonId });
+
+        modelBuilder
+            .Entity<DbPlayerUnitStory>()
+            .HasKey(key => new { key.DeviceAccountId, key.EntityType, key.EntityId, key.StoryId });
+
         if (_isDevelopment)
             SeedDatabase(modelBuilder);
     }
@@ -46,4 +62,8 @@ public class ApiContext : DbContext
     public DbSet<DbDeviceAccount> DeviceAccounts { get; set; } = null!;
 
     public DbSet<DbSavefileUserData> SavefileUserData { get; set; } = null!;
+    public DbSet<DbPlayerCharaData> PlayerCharaData { get; set; } = null!;
+    public DbSet<DbPlayerDragonData> PlayerDragonData { get; set; } = null!;
+    public DbSet<DbPlayerDragonReliability> PlayerDragonReliability { get; set; } = null!;
+    public DbSet<DbPlayerUnitStory> PlayerUnitStory { get; set; } = null!;
 }

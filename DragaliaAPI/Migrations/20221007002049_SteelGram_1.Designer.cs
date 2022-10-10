@@ -3,6 +3,7 @@ using DragaliaAPI.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DragaliaAPI.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20221007002049_SteelGram_1")]
+    partial class SteelGram_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,7 +155,7 @@ namespace DragaliaAPI.Migrations
 
                     b.HasKey("DeviceAccountId", "CharaId");
 
-                    b.ToTable("PlayerCharaData");
+                    b.ToTable("PlayerUnitData");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbPlayerDragonData", b =>
@@ -225,8 +227,8 @@ namespace DragaliaAPI.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("DEVICE_ACCOUNT_ID");
 
-                    b.Property<int>("DragonId")
-                        .HasColumnType("int")
+                    b.Property<long>("DragonId")
+                        .HasColumnType("bigint")
                         .HasColumnName("DRAGON_ID");
 
                     b.Property<long>("LastContactTime")
@@ -379,7 +381,7 @@ namespace DragaliaAPI.Migrations
                             ActiveMemoryEventId = 0,
                             BuildTimePoint = 0,
                             Coin = 0,
-                            CreateTime = 1665390975,
+                            CreateTime = 1665102049,
                             Crystal = 0,
                             DewPoint = 0,
                             EmblemId = 40000001,

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 
-public class DbSavefileUserData : IDbSavefile
+public class DbSavefileUserData : IDbHasAccountId
 {
     /// <inheritdoc/>
     [Key]

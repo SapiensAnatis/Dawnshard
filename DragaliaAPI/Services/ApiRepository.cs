@@ -1,6 +1,10 @@
-﻿using DragaliaAPI.Models;
+﻿using System.Collections.Immutable;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
+using DragaliaAPI.Models.Dragalia.Enums;
+using DragaliaAPI.Models.Dragalia.Responses.Common;
+using DragaliaAPI.Models.Enums;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
 
@@ -81,5 +85,119 @@ public class ApiRepository : IApiRepository
             saveFileUserData.TutorialFlag
         );
         int udpatedRows = await _apiContext.SaveChangesAsync();
+    }
+
+    public virtual async Task<
+        Tuple<IEnumerable<Entity>, IEnumerable<Entity>, IEnumerable<Entity>>
+    > commitSummonResults(string deviceAccountId, IEnumerable<SummonEntity> summonResult)
+    {
+        DbSavefileUserData? saveFileUserData = await _apiContext.SavefileUserData.FindAsync(
+            deviceAccountId
+        );
+        if (saveFileUserData == null)
+        {
+            throw new Exception($"No SaveFileData found for Account-Id: {deviceAccountId}");
+        }
+        List<SummonEntity> convertedEntities = new List<SummonEntity>();
+        List<Entity> newEntities = new List<Entity>();
+        List<Entity> sentToGiftsEntities = new List<Entity>();
+
+        DbSet<DbPlayerCharaData> playerCharaData = _apiContext.PlayerCharaData;
+        DbSet<DbPlayerDragonData> playerDragonData = _apiContext.PlayerDragonData;
+
+        ImmutableDictionary<Charas, DbPlayerCharaData> playerCharas = playerCharaData
+            .Where(x => x.DeviceAccountId == deviceAccountId)
+            .ToImmutableDictionary(chara => chara.CharaId);
+        ImmutableDictionary<Dragons, DbPlayerDragonData> playerDragons = playerDragonData
+            .Where(x => x.DeviceAccountId == deviceAccountId)
+            .ToImmutableDictionary(dragon => dragon.DragonId);
+        ImmutableDictionary<Dragons, DbPlayerDragonReliability> playerDragonsReliability =
+            _apiContext.PlayerDragonReliability
+                .Where(x => x.DeviceAccountId == deviceAccountId)
+                .ToImmutableDictionary(dragon => dragon.DragonId);
+
+        //TODO: storage size limit for dragons
+        int dragonStorageSize = -1;
+        int dragonStorageCount = playerDragons.Count;
+
+        foreach (SummonEntity e in summonResult)
+        {
+            switch ((EntityTypes)e.entity_type)
+            {
+                case EntityTypes.CHARA:
+                    if (
+                        newEntities.Exists(
+                            x => x.entity_id == e.entity_id && x.entity_type == e.entity_type
+                        ) || playerCharas.ContainsKey((Charas)e.entity_id)
+                    )
+                    {
+                        DbPlayerCharaData newChar = new DbPlayerCharaData()
+                        {
+                            DeviceAccountId = deviceAccountId,
+                            CharaId = (Charas)e.entity_id
+                        };
+                        playerCharaData.Add(newChar);
+                        newEntities.Add(e);
+                    }
+                    else
+                    {
+                        convertedEntities.Add(e);
+                    }
+                    break;
+                case EntityTypes.DRAGON:
+                    if (!(dragonStorageSize < dragonStorageCount))
+                    {
+                        sentToGiftsEntities.Add(e);
+                        continue;
+                    }
+                    DbPlayerDragonData newDragon = new DbPlayerDragonData()
+                    {
+                        DeviceAccountId = deviceAccountId,
+                        DragonId = (Dragons)e.entity_id
+                    };
+                    if (playerDragonsReliability.ContainsKey((Dragons)e.entity_id))
+                    {
+                        DbPlayerDragonReliability newDragonReliability =
+                            new DbPlayerDragonReliability()
+                            {
+                                DeviceAccountId = deviceAccountId,
+                                DragonId = (Dragons)e.entity_id
+                            };
+                        _apiContext.PlayerDragonReliability.Add(newDragonReliability);
+                    }
+                    playerDragonData.Add(newDragon);
+                    newEntities.Add(e);
+                    dragonStorageCount++;
+                    break;
+                default:
+                    throw new InvalidDataException($"Unknown Entity Type Id {e.entity_type}");
+            }
+        }
+
+        convertedEntities.ForEach(e =>
+        {
+            int amount = 0;
+            switch (e.rarity)
+            {
+                case 5:
+                    amount = (int)DupeReturnBaseValues.RARITY_5;
+                    break;
+                case 4:
+                    amount = (int)DupeReturnBaseValues.RARITY_4;
+                    break;
+                case 3:
+                    amount = (int)DupeReturnBaseValues.RARITY_3;
+                    break;
+            }
+            saveFileUserData.DewPoint += amount;
+        });
+
+        await _apiContext.SaveChangesAsync();
+
+        return new Tuple<IEnumerable<Entity>, IEnumerable<Entity>, IEnumerable<Entity>>(
+            convertedEntities,
+            newEntities,
+            sentToGiftsEntities
+        );
     }
 }

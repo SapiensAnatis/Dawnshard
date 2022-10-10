@@ -34,4 +34,7 @@ public record RarityOddsList(bool pickup, int rarity, List<Odds> unit_list);
 public record Odds(int id, string rate);
 
 [MessagePackObject(true)]
-public record SummonEntity(int entity_type, int id, int rarity);
+public record SummonEntity(int entity_type, int id, int rarity) : Entity(entity_type, id);
+
+[MessagePackObject(true)]
+public record Entity(int entity_type, int entity_id);
