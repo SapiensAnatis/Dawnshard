@@ -15,15 +15,19 @@ public class ApiContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder
-            .HasSequence<long>("Viewer_id", schema: "dbo")
-            .StartsAt(10000000000L)
-            .IncrementsBy(1);
+        // The SQLite testing DB doesn't support sequences
+        if (!this.Database.IsSqlite())
+        {
+            modelBuilder
+                .HasSequence<long>("Viewer_id", schema: "dbo")
+                .StartsAt(10000000000L)
+                .IncrementsBy(1);
 
-        modelBuilder
-            .Entity<DbSavefileUserData>()
-            .Property(o => o.ViewerId)
-            .HasDefaultValueSql("NEXT VALUE FOR dbo.Viewer_id");
+            modelBuilder
+                .Entity<DbSavefileUserData>()
+                .Property(o => o.ViewerId)
+                .HasDefaultValueSql("NEXT VALUE FOR dbo.Viewer_id");
+        }
 
         if (_isDevelopment)
             SeedDatabase(modelBuilder);
