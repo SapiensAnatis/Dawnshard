@@ -38,7 +38,8 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services
     .AddScoped<ISessionService, SessionService>()
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
-    .AddScoped<IApiRepository, ApiRepository>();
+    .AddScoped<IApiRepository, ApiRepository>()
+    .AddScoped<ISummonService, SummonService>();
 
 WebApplication app = builder.Build();
 
