@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Models.Enums;
+﻿namespace DragaliaAPI.Models.Data;
 
 public enum EntityTypes
 {

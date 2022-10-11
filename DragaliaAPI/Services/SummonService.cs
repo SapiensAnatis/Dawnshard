@@ -1,7 +1,6 @@
 ﻿using System;
-using DragaliaAPI.Models.Dragalia.Enums;
+using DragaliaAPI.Models.Data;
 using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Enums;
 
 namespace DragaliaAPI.Services;
 

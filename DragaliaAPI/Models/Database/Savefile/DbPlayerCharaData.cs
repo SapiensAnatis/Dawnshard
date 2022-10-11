@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DragaliaAPI.Models.Dragalia.Enums;
-using DragaliaAPI.Models.Enums;
+using DragaliaAPI.Models.Data;
+using MessagePack;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 
@@ -22,7 +22,7 @@ public class DbPlayerCharaData : IDbHasAccountId
     public byte Rarity { get; set; }
 
     [Required]
-    public uint Exp { get; set; }
+    public int Exp { get; set; }
 
     [Required]
     public byte Level { get; set; }
@@ -62,7 +62,7 @@ public class DbPlayerCharaData : IDbHasAccountId
     public byte BurstAttackLevel { get; set; }
 
     [Required]
-    public uint ComboBuildupCount { get; set; }
+    public int ComboBuildupCount { get; set; }
 
     [Required]
     public ushort Hp { get; set; }
@@ -90,12 +90,48 @@ public class DbPlayerCharaData : IDbHasAccountId
     public bool ListViewFlag { get; set; }
 
     [Required]
-    public bool GetTime { get; set; }
+    public int GetTime { get; set; }
 
     [NotMapped]
     public ISet<int> ManaNodesUnlocked
     {
         get => ManaNodesUtil.GetSetFromManaNodes((ManaNodes)ManaNodeUnlockCount);
         set => ManaNodeUnlockCount = (ushort)ManaNodesUtil.SetManaCircleNodesFromSet(value);
+    }
+}
+
+public static class DbPlayerCharaDataFactory
+{
+    public static DbPlayerCharaData Create(string deviceAccountId, int id, int rarity)
+    {
+        return new()
+        {
+            DeviceAccountId = deviceAccountId,
+            CharaId = (Charas)id,
+            Rarity = (byte)rarity,
+            Exp = 0,
+            Level = 1,
+            AdditionalMaxLevel = 0,
+            HpPlusCount = 0,
+            AttackPlusCount = 0,
+            LimitBreakCount = 0,
+            IsNew = true,
+            FirstSkillLevel = 1,
+            SecondSkillLevel = 1,
+            FirstAbilityLevel = 1,
+            SecondAbilityLevel = 1,
+            ThirdAbilityLevel = 1,
+            BurstAttackLevel = 1,
+            ComboBuildupCount = 0,
+            Hp = 100,
+            Attack = 100,
+            FirstExAbilityLevel = 1,
+            SecondExAbilityLevel = 1,
+            IsTemporary = false,
+            IsUnlockEditSkill = false,
+            ManaNodesUnlocked = new HashSet<int>(),
+            ListViewFlag = false,
+            GetTime = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+        };
     }
 }

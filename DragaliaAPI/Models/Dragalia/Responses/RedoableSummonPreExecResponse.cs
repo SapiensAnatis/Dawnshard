@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia.Responses;
@@ -23,6 +24,6 @@ public static class RedoableSummonPreExecFactory
 {
     public static RedoableSummonPreExecData CreateData(List<SummonEntity> resultList)
     {
-        return new(new(0, resultList), new(null));
+        return new(new(0, resultList), new());
     }
 }

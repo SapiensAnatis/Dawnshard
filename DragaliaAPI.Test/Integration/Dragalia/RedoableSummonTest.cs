@@ -1,4 +1,10 @@
-﻿namespace DragaliaAPI.Test.Integration.Dragalia;
+﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+using MessagePack.Resolvers;
+using MessagePack;
+using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+using DragaliaAPI.Models.Data;
+
+namespace DragaliaAPI.Test.Integration.Dragalia;
 
 public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {
@@ -29,10 +35,10 @@ public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Prog
     }
 
     [Fact]
-    public async Task RedoableSummonPreExec_ReturnsResult()
+    public async Task RedoableSummonPreExec_ReturnsValidResult()
     {
         RedoableSummonPreExecResponse expectedResponse =
-            new(RedoableSummonPreExecFactory.CreateData());
+            new(RedoableSummonPreExecFactory.CreateData(new()));
 
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };
@@ -40,6 +46,19 @@ public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Prog
 
         HttpResponseMessage response = await _client.PostAsync("redoable_summon/pre_exec", content);
 
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.IsSuccessStatusCode.Should().BeTrue();
+
+        byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
+        var deserializedResponse = MessagePackSerializer.Deserialize<RedoableSummonPreExecResponse>(
+            responseBytes,
+            ContractlessStandardResolver.Options
+        );
+
+        List<SummonEntity> summonResult = deserializedResponse
+            .data
+            .user_redoable_summon_data
+            .redoable_summon_result_unit_list;
+
+        summonResult.Count.Should().Be(50);
     }
 }

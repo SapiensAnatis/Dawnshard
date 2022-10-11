@@ -36,7 +36,7 @@ public class UpdateNamechangeTest : IClassFixture<CustomWebApplicationFactory<Pr
         using (var scope = _serviceScopeFactory.CreateScope())
         {
             ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
-            apiContext.SavefileUserData
+            apiContext.PlayerUserData
                 .First(x => x.DeviceAccountId == "logged_in_id")
                 .Name.Should()
                 .Be(newName);

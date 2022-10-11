@@ -15,14 +15,8 @@ builder.Services
     .AddMvc()
     .AddMvcOptions(option =>
     {
-        // Must use ContractlessResolver because the DefaultResolver doesn't like serializing the generic BaseResponse<T>
-        // record, even when it is properly annotated with the MessagePackObject decorator.
-        option.OutputFormatters.Add(
-            new DragaliaAPI.CustomMessagePackOutputFormatter(StandardResolver.Options)
-        );
-        option.InputFormatters.Add(
-            new DragaliaAPI.CustomMessagePackInputFormatter(StandardResolver.Options)
-        );
+        option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(StandardResolver.Options));
+        option.InputFormatters.Add(new CustomMessagePackInputFormatter(StandardResolver.Options));
     });
 
 builder.Services.AddDbContext<ApiContext>(
@@ -39,7 +33,8 @@ builder.Services
     .AddScoped<ISessionService, SessionService>()
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
     .AddScoped<IApiRepository, ApiRepository>()
-    .AddScoped<ISummonService, SummonService>();
+    .AddScoped<ISummonService, SummonService>()
+    .AddScoped<ISavefileWriteService, SavefileWriteService>();
 
 WebApplication app = builder.Build();
 

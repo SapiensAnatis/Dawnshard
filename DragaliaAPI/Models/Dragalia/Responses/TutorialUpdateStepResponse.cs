@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia.Responses;

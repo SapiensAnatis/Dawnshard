@@ -1,5 +1,5 @@
 ﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Savefile;
+using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia.Responses;
@@ -8,4 +8,4 @@ namespace DragaliaAPI.Models.Dragalia.Responses;
 public record LoadIndexResponse(LoadIndexData data) : BaseResponse<LoadIndexData>;
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record LoadIndexData(SavefileUserData user_data);
+public record LoadIndexData(UserData user_data);

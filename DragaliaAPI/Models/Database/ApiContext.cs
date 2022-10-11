@@ -24,9 +24,19 @@ public class ApiContext : DbContext
                 .IncrementsBy(1);
 
             modelBuilder
-                .Entity<DbSavefileUserData>()
+                .Entity<DbPlayerUserData>()
                 .Property(o => o.ViewerId)
                 .HasDefaultValueSql("NEXT VALUE FOR dbo.Viewer_id");
+
+            modelBuilder
+                .HasSequence<long>("Dragon_key_id", schema: "dbo")
+                .StartsAt(10000000000L)
+                .IncrementsBy(1);
+
+            modelBuilder
+                .Entity<DbPlayerDragonData>()
+                .Property(o => o.DragonKeyId)
+                .HasDefaultValueSql("NEXT VALUE FOR dbo.Dragon_key_id");
         }
 
         modelBuilder
@@ -56,12 +66,12 @@ public class ApiContext : DbContext
             // Hash corresponds to string "password"
             .HasData(new DbDeviceAccount("id", "NMvdakTznEF6khwWcz17i6GTnDA="));
 
-        modelBuilder.Entity<DbSavefileUserData>().HasData(DbSavefileUserDataFactory.Create("id"));
+        modelBuilder.Entity<DbPlayerUserData>().HasData(DbSavefileUserDataFactory.Create("id"));
     }
 
     public DbSet<DbDeviceAccount> DeviceAccounts { get; set; } = null!;
 
-    public DbSet<DbSavefileUserData> SavefileUserData { get; set; } = null!;
+    public DbSet<DbPlayerUserData> PlayerUserData { get; set; } = null!;
     public DbSet<DbPlayerCharaData> PlayerCharaData { get; set; } = null!;
     public DbSet<DbPlayerDragonData> PlayerDragonData { get; set; } = null!;
     public DbSet<DbPlayerDragonReliability> PlayerDragonReliability { get; set; } = null!;

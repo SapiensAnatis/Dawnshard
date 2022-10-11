@@ -1,8 +1,9 @@
-﻿using System.Text.Json;
+﻿using System.Collections.Generic;
+using System.Text.Json;
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Responses;
 using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Savefile;
+using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,19 +19,25 @@ namespace DragaliaAPI.Controllers.Dragalia.RedoableSummon;
 public class RedoableSummonController : ControllerBase
 {
     private readonly ISummonService _summonService;
-    private readonly IApiRepository _apiRepository;
+    private readonly ISavefileWriteService _savefileWriteService;
     private readonly IDistributedCache _cache;
     private readonly ISessionService _sessionService;
 
+    private static class Schema
+    {
+        public static string SessionId_CachedSummonResult(string sessionId) =>
+            $":{sessionId}:cachedSummonResult";
+    }
+
     public RedoableSummonController(
         ISummonService summonService,
-        IApiRepository apiRepository,
+        ISavefileWriteService savefileWriteService,
         IDistributedCache cache,
         ISessionService sessionService
     )
     {
         _summonService = summonService;
-        _apiRepository = apiRepository;
+        _savefileWriteService = savefileWriteService;
         _cache = cache;
         _sessionService = sessionService;
     }
@@ -45,55 +52,66 @@ public class RedoableSummonController : ControllerBase
 
     [HttpPost]
     [Route("pre_exec")]
-    public DragaliaResult PreExec()
+    public async Task<DragaliaResult> PreExec([FromHeader(Name = "SID")] string sessionId)
     {
         List<SummonEntity> summonResult = _summonService.GenerateSummonResult(50);
-        RedoableSummonPreExecResponse response = new(new(new(0, summonResult), new(null)));
+        /*
+        int testtype = 23;
+        int testid = 0;
+        List<SummonEntity> summonResult = new()
+        {
+            new(testtype, testid, 5),
+            new(testtype, testid, 5),
+            new(testtype, testid, 5),
+            new(testtype, testid, 5),
+            new(testtype, testid, 5),
+            new(testtype, testid, 5),
+            new(testtype, testid, 5),
+            new(testtype, testid, 5),
+            new(testtype, testid, 5),
+            new(testtype, testid, 5)
+        }; */
+
+        await _cache.SetStringAsync(
+            Schema.SessionId_CachedSummonResult(sessionId),
+            JsonSerializer.Serialize(summonResult)
+        );
+
+        RedoableSummonPreExecResponse response =
+            new(RedoableSummonPreExecFactory.CreateData(summonResult));
+
         return Ok(response);
     }
 
     [HttpPost]
     [Route("fix_exec")]
-    [HttpGet]
     public async Task<DragaliaResult> PostExec([FromHeader(Name = "SID")] string sessionId)
     {
-        try
-        {
-            string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
+        string cachedResultJson = await _cache.GetStringAsync(
+            Schema.SessionId_CachedSummonResult(sessionId)
+        );
 
-            string summonCacheKey = $"key";
-            List<SummonEntity> cachedSummonResults = JsonSerializer.Deserialize<List<SummonEntity>>(
-                await _cache.GetStringAsync(summonCacheKey)
-            )!;
-            Tuple<
-                IEnumerable<Entity>,
-                IEnumerable<Entity>,
-                IEnumerable<Entity>
-            > orderedPostCommitLists = await _apiRepository.commitSummonResults(
-                deviceAccountId,
-                cachedSummonResults
-            );
-            List<Entity> convertedSummonResults = orderedPostCommitLists.Item1.ToList();
-            List<Entity> newSummonResults = orderedPostCommitLists.Item2.ToList();
-            DbSavefileUserData dbUserData = await _apiRepository
-                .GetPlayerInfo(deviceAccountId)
-                .SingleAsync();
-            SavefileUserData userData = SavefileUserDataFactory.Create(dbUserData, new() { });
-
-            RedoableSummonFixExecResponse response =
-                new(
-                    RedoableSummonFixExecFactory.CreateData(
-                        cachedSummonResults,
-                        convertedSummonResults,
-                        newSummonResults,
-                        userData
-                    )
-                );
-            return Ok(response);
-        }
-        catch (Exception)
+        if (string.IsNullOrEmpty(cachedResultJson))
         {
-            return Ok(new ServerErrorResponse());
+            return BadRequest();
         }
+
+        List<SummonEntity> cachedResult =
+            JsonSerializer.Deserialize<List<SummonEntity>>(cachedResultJson)
+            ?? throw new JsonException("Null deserialization result!");
+
+        string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
+
+        UpdateDataList updateData = await _savefileWriteService.CommitSummonResult(
+            cachedResult,
+            deviceAccountId,
+            giveDew: false
+        );
+
+        return Ok(
+            new RedoableSummonFixExecResponse(
+                RedoableSummonFixExecFactory.CreateData(cachedResult, updateData)
+            )
+        );
     }
 }
