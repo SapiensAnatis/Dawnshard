@@ -1,5 +1,5 @@
 ﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Savefile;
+using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia.Responses;
@@ -15,21 +15,19 @@ public record RedoableSummonFixExecData(
     EntityResult entity_result
 );
 
-public record EntityResult(List<Entity> converted_entity_list, List<Entity> new_get_entity_list);
+public record EntityResult(IEnumerable<Entity> new_get_entity_list);
 
 public static class RedoableSummonFixExecFactory
 {
     public static RedoableSummonFixExecData CreateData(
         List<SummonEntity> cachedSummonResult,
-        List<Entity> convertedEntities,
-        List<Entity> newEntities,
-        SavefileUserData userData
+        UpdateDataList updateDataList
     )
     {
         return new RedoableSummonFixExecData(
-            new UserRedoableSummonData(0, cachedSummonResult),
-            new UpdateDataList(userData),
-            new EntityResult(convertedEntities, newEntities)
+            new UserRedoableSummonData(1, cachedSummonResult),
+            updateDataList,
+            new EntityResult(cachedSummonResult.Select(x => (Entity)x))
         );
     }
 }

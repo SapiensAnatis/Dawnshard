@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Models.Dragalia.Enums;
+﻿namespace DragaliaAPI.Models.Data;
 
 public enum Dragons
 {

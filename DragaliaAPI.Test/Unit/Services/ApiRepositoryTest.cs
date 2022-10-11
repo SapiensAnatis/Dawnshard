@@ -17,7 +17,7 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
     private readonly ApiContext apiContext;
 
     private readonly DbDeviceAccount account = new("id", "hashed password");
-    private readonly DbSavefileUserData playerInfo = DbSavefileUserDataFactory.Create("id");
+    private readonly DbPlayerUserData playerInfo = DbSavefileUserDataFactory.Create("id");
 
     public ApiRepositoryTest(DbTestFixture data)
     {
@@ -57,7 +57,7 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
     public async Task AddNewPlayerInfo_CanGetAfterwards()
     {
         await apiRepository.AddNewPlayerInfo("id 2");
-        IQueryable<DbSavefileUserData> result = apiRepository.GetPlayerInfo("id 2");
+        IQueryable<DbPlayerUserData> result = apiRepository.GetPlayerInfo("id 2");
 
         result.Count().Should().Be(1);
     }
@@ -79,7 +79,7 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
     {
         await apiRepository.UpdateTutorialStatus("id", 200);
 
-        this.apiContext.SavefileUserData
+        this.apiContext.PlayerUserData
             .Single(x => x.DeviceAccountId == "id")
             .TutorialStatus.Should()
             .Be(200);
@@ -90,7 +90,7 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
     {
         await apiRepository.UpdateName("id", "Euden 2");
 
-        this.apiContext.SavefileUserData
+        this.apiContext.PlayerUserData
             .Single(x => x.DeviceAccountId == "id")
             .Name.Should()
             .Be("Euden 2");

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Immutable;
 using DragaliaAPI.Models;
+using DragaliaAPI.Models.Data;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Enums;
 using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Enums;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,28 +35,25 @@ public class ApiRepository : IApiRepository
 
     public async Task AddNewPlayerInfo(string deviceAccountId)
     {
-        await _apiContext.SavefileUserData.AddAsync(
+        await _apiContext.PlayerUserData.AddAsync(
             DbSavefileUserDataFactory.Create(deviceAccountId)
         );
         await _apiContext.SaveChangesAsync();
     }
 
-    public IQueryable<DbSavefileUserData> GetPlayerInfo(string deviceAccountId)
+    public IQueryable<DbPlayerUserData> GetPlayerInfo(string deviceAccountId)
     {
-        IQueryable<DbSavefileUserData> infoQuery = _apiContext.SavefileUserData.Where(
+        IQueryable<DbPlayerUserData> infoQuery = _apiContext.PlayerUserData.Where(
             x => x.DeviceAccountId == deviceAccountId
         );
 
         return infoQuery;
     }
 
-    public async Task<DbSavefileUserData> UpdateTutorialStatus(
-        string deviceAccountId,
-        int newStatus
-    )
+    public async Task<DbPlayerUserData> UpdateTutorialStatus(string deviceAccountId, int newStatus)
     {
-        DbSavefileUserData userData =
-            await _apiContext.SavefileUserData.FindAsync(deviceAccountId)
+        DbPlayerUserData userData =
+            await _apiContext.PlayerUserData.FindAsync(deviceAccountId)
             ?? throw new NullReferenceException("Savefile lookup failed");
         userData.TutorialStatus = newStatus;
         await _apiContext.SaveChangesAsync();
@@ -66,8 +62,8 @@ public class ApiRepository : IApiRepository
 
     public async Task UpdateName(string deviceAccountId, string newName)
     {
-        DbSavefileUserData userData =
-            await _apiContext.SavefileUserData.FindAsync(deviceAccountId)
+        DbPlayerUserData userData =
+            await _apiContext.PlayerUserData.FindAsync(deviceAccountId)
             ?? throw new NullReferenceException("Savefile lookup failed");
         userData.Name = newName;
         await _apiContext.SaveChangesAsync();
@@ -75,7 +71,7 @@ public class ApiRepository : IApiRepository
 
     public virtual async Task<ISet<int>> getTutorialFlags(string deviceAccountId)
     {
-        DbSavefileUserData? saveFileUserData = await _apiContext.SavefileUserData.FindAsync(
+        DbPlayerUserData? saveFileUserData = await _apiContext.PlayerUserData.FindAsync(
             deviceAccountId
         );
         if (saveFileUserData == null)
@@ -88,7 +84,7 @@ public class ApiRepository : IApiRepository
 
     public virtual async Task setTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags)
     {
-        DbSavefileUserData? saveFileUserData = await _apiContext.SavefileUserData.FindAsync(
+        DbPlayerUserData? saveFileUserData = await _apiContext.PlayerUserData.FindAsync(
             deviceAccountId
         );
         if (saveFileUserData == null)
@@ -102,117 +98,33 @@ public class ApiRepository : IApiRepository
         int udpatedRows = await _apiContext.SaveChangesAsync();
     }
 
-    public virtual async Task<
-        Tuple<IEnumerable<Entity>, IEnumerable<Entity>, IEnumerable<Entity>>
-    > commitSummonResults(string deviceAccountId, IEnumerable<SummonEntity> summonResult)
+    public async Task<bool> CheckHasChara(string deviceAccountId, int charaId)
     {
-        DbSavefileUserData? saveFileUserData = await _apiContext.SavefileUserData.FindAsync(
-            deviceAccountId
-        );
-        if (saveFileUserData == null)
-        {
-            throw new Exception($"No SaveFileData found for Account-Id: {deviceAccountId}");
-        }
-        List<SummonEntity> convertedEntities = new List<SummonEntity>();
-        List<Entity> newEntities = new List<Entity>();
-        List<Entity> sentToGiftsEntities = new List<Entity>();
-
-        DbSet<DbPlayerCharaData> playerCharaData = _apiContext.PlayerCharaData;
-        DbSet<DbPlayerDragonData> playerDragonData = _apiContext.PlayerDragonData;
-
-        ImmutableDictionary<Charas, DbPlayerCharaData> playerCharas = playerCharaData
+        return await _apiContext.PlayerCharaData
             .Where(x => x.DeviceAccountId == deviceAccountId)
-            .ToImmutableDictionary(chara => chara.CharaId);
-        ImmutableDictionary<Dragons, DbPlayerDragonData> playerDragons = playerDragonData
+            .AnyAsync(x => (int)x.CharaId == charaId);
+    }
+
+    public async Task<bool> CheckHasDragon(string deviceAccountId, int dragonId)
+    {
+        return await _apiContext.PlayerDragonData
             .Where(x => x.DeviceAccountId == deviceAccountId)
-            .ToImmutableDictionary(dragon => dragon.DragonId);
-        ImmutableDictionary<Dragons, DbPlayerDragonReliability> playerDragonsReliability =
-            _apiContext.PlayerDragonReliability
-                .Where(x => x.DeviceAccountId == deviceAccountId)
-                .ToImmutableDictionary(dragon => dragon.DragonId);
+            .AnyAsync(x => (int)x.DragonId == dragonId);
+    }
 
-        //TODO: storage size limit for dragons
-        int dragonStorageSize = -1;
-        int dragonStorageCount = playerDragons.Count;
-
-        foreach (SummonEntity e in summonResult)
-        {
-            switch ((EntityTypes)e.entity_type)
-            {
-                case EntityTypes.Chara:
-                    if (
-                        newEntities.Exists(
-                            x => x.entity_id == e.entity_id && x.entity_type == e.entity_type
-                        ) || playerCharas.ContainsKey((Charas)e.entity_id)
-                    )
-                    {
-                        DbPlayerCharaData newChar = new DbPlayerCharaData()
-                        {
-                            DeviceAccountId = deviceAccountId,
-                            CharaId = (Charas)e.entity_id
-                        };
-                        playerCharaData.Add(newChar);
-                        newEntities.Add(e);
-                    }
-                    else
-                    {
-                        convertedEntities.Add(e);
-                    }
-                    break;
-                case EntityTypes.Dragon:
-                    if (!(dragonStorageSize < dragonStorageCount))
-                    {
-                        sentToGiftsEntities.Add(e);
-                        continue;
-                    }
-                    DbPlayerDragonData newDragon = new DbPlayerDragonData()
-                    {
-                        DeviceAccountId = deviceAccountId,
-                        DragonId = (Dragons)e.entity_id
-                    };
-                    if (playerDragonsReliability.ContainsKey((Dragons)e.entity_id))
-                    {
-                        DbPlayerDragonReliability newDragonReliability =
-                            new DbPlayerDragonReliability()
-                            {
-                                DeviceAccountId = deviceAccountId,
-                                DragonId = (Dragons)e.entity_id
-                            };
-                        _apiContext.PlayerDragonReliability.Add(newDragonReliability);
-                    }
-                    playerDragonData.Add(newDragon);
-                    newEntities.Add(e);
-                    dragonStorageCount++;
-                    break;
-                default:
-                    throw new InvalidDataException($"Unknown Entity Type Id {e.entity_type}");
-            }
-        }
-
-        convertedEntities.ForEach(e =>
-        {
-            int amount = 0;
-            switch (e.rarity)
-            {
-                case 5:
-                    amount = (int)DupeReturnBaseValues.RARITY_5;
-                    break;
-                case 4:
-                    amount = (int)DupeReturnBaseValues.RARITY_4;
-                    break;
-                case 3:
-                    amount = (int)DupeReturnBaseValues.RARITY_3;
-                    break;
-            }
-            saveFileUserData.DewPoint += amount;
-        });
-
+    public async Task<DbPlayerCharaData> AddChara(string deviceAccountId, int id, int rarity)
+    {
+        DbPlayerCharaData dbEntry = DbPlayerCharaDataFactory.Create(deviceAccountId, id, rarity);
+        await _apiContext.PlayerCharaData.AddAsync(dbEntry);
         await _apiContext.SaveChangesAsync();
+        return dbEntry;
+    }
 
-        return new Tuple<IEnumerable<Entity>, IEnumerable<Entity>, IEnumerable<Entity>>(
-            convertedEntities,
-            newEntities,
-            sentToGiftsEntities
-        );
+    public async Task<DbPlayerDragonData> AddDragon(string deviceAccountId, int id, int rarity)
+    {
+        DbPlayerDragonData dbEntry = DbPlayerDragonDataFactory.Create(deviceAccountId, id, rarity);
+        await _apiContext.PlayerDragonData.AddAsync(dbEntry);
+        await _apiContext.SaveChangesAsync();
+        return dbEntry;
     }
 }

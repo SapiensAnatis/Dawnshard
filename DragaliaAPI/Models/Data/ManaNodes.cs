@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Models.Enums;
+﻿namespace DragaliaAPI.Models.Data;
 
 [Flags]
 public enum ManaNodes
@@ -27,7 +27,7 @@ public static class ManaNodesUtil
     public static ManaNodes SetManaCircleNodesFromSet(ISet<int> set)
     {
         int max = set.Max();
-        int ten = (int)(max / 10);
+        int ten = max / 10;
         int finalDigit = max % 10;
         ManaNodes flag = (ManaNodes)(ten << 9);
         ManaNodes[] allNodes = Enum.GetValues<ManaNodes>();
@@ -35,9 +35,7 @@ public static class ManaNodesUtil
         for (int i = 1; !(i > finalDigit); i++)
         {
             if (set.Contains(ten + i))
-            {
                 flag |= allNodes[i];
-            }
         }
         return flag;
     }
@@ -58,9 +56,7 @@ public static class ManaNodesUtil
             for (int i = 1; allNodes[i] < ManaNodes.Circle1; i++)
             {
                 if (nodeNr.HasFlag(allNodes[i]))
-                {
                     nodes.Add(circleNr + i);
-                }
             }
         }
         return nodes;

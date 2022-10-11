@@ -27,7 +27,7 @@ namespace DragaliaAPI.Test.Unit.Services
 
             apiContext = new ApiContext(options, mockEnvironment.Object);
             apiContext.DeviceAccounts.Add(new DbDeviceAccount("id", "hashed password"));
-            apiContext.SavefileUserData.Add(DbSavefileUserDataFactory.Create("id"));
+            apiContext.PlayerUserData.Add(DbSavefileUserDataFactory.Create("id"));
             apiContext.SaveChanges();
         }
 

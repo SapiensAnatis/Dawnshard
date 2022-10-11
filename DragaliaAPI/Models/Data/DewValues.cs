@@ -1,4 +1,6 @@
-﻿namespace DragaliaAPI.Models.Enums;
+﻿using System.Reflection;
+
+namespace DragaliaAPI.Models.Data;
 
 public enum CharaPromoteValues
 {
@@ -13,6 +15,16 @@ public enum DupeReturnBaseValues
     RARITY_5_STORY = 300,
     RARITY_4 = 2200,
     RARITY_5 = 8500
+}
+
+public static class DewValueData
+{
+    /// <summary>
+    /// Key: Rarity
+    /// Value: Eldwater given for duplicate character summon of that rarity
+    /// </summary>
+    public static readonly Dictionary<int, int> DupeSummon =
+        new() { { 3, 150 }, { 4, 2200 }, { 5, 8500 } };
 }
 
 public enum AmuletReturnBaseValues

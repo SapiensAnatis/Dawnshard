@@ -37,4 +37,4 @@ public record Odds(int id, string rate);
 public record SummonEntity(int entity_type, int id, int rarity) : Entity(entity_type, id);
 
 [MessagePackObject(true)]
-public record Entity(int entity_type, int entity_id);
+public record Entity(int entity_type, int id);

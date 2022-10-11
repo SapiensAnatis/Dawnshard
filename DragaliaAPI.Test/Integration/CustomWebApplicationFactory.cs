@@ -51,7 +51,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             context.Database.EnsureCreated();
 
             context.DeviceAccounts.AddRange(TestUtils.GetDeviceAccountsSeed());
-            context.SavefileUserData.AddRange(TestUtils.GetSavefilePlayerInfoSeed());
+            context.PlayerUserData.AddRange(TestUtils.GetSavefilePlayerInfoSeed());
             context.SaveChanges();
         });
 

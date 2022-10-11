@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Responses;
-using DragaliaAPI.Models.Dragalia.Savefile;
+using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,10 +27,10 @@ public class IndexController : ControllerBase
     public async Task<DragaliaResult> Post([FromHeader(Name = "SID")] string sessionId)
     {
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-        DbSavefileUserData dbUserData = await _apiRepository
+        DbPlayerUserData dbUserData = await _apiRepository
             .GetPlayerInfo(deviceAccountId)
             .SingleAsync();
-        SavefileUserData userData = SavefileUserDataFactory.Create(dbUserData, new() { });
+        UserData userData = SavefileUserDataFactory.Create(dbUserData, new() { });
         LoadIndexResponse response = new(new LoadIndexData(userData));
 
         return Ok(response);

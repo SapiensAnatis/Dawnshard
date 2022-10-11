@@ -43,9 +43,7 @@ public class SignupController : ControllerBase
             string deviceAccountId = await _sessionService.GetDeviceAccountId_IdToken(
                 request.id_token
             );
-            IQueryable<DbSavefileUserData> playerInfo = _apiRepository.GetPlayerInfo(
-                deviceAccountId
-            );
+            IQueryable<DbPlayerUserData> playerInfo = _apiRepository.GetPlayerInfo(deviceAccountId);
             viewerId = await playerInfo.Select(x => x.ViewerId).SingleAsync();
         }
         catch (Exception e) when (e is ArgumentException || e is JsonException)
