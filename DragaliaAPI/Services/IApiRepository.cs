@@ -12,9 +12,9 @@ public interface IApiRepository
 
     Task AddNewPlayerInfo(string deviceAccountId);
 
-    IQueryable<DbSavefileUserData> GetPlayerInfo(string deviceAccountId);
+    IQueryable<DbPlayerUserData> GetPlayerInfo(string deviceAccountId);
 
-    Task<DbSavefileUserData> UpdateTutorialStatus(string deviceAccountId, int newStatus);
+    Task<DbPlayerUserData> UpdateTutorialStatus(string deviceAccountId, int newStatus);
 
     Task UpdateName(string deviceAccountId, string newName);
 
@@ -22,8 +22,8 @@ public interface IApiRepository
 
     Task setTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags);
 
-    Task<Tuple<IEnumerable<Entity>, IEnumerable<Entity>, IEnumerable<Entity>>> commitSummonResults(
-        string deviceAccountId,
-        IEnumerable<SummonEntity> summonResult
-    );
+    Task<bool> CheckHasDragon(string deviceAccountId, int dragonId);
+    Task<bool> CheckHasChara(string deviceAccountId, int charaId);
+    Task<DbPlayerCharaData> AddChara(string deviceAccountId, int id, int rarity);
+    Task<DbPlayerDragonData> AddDragon(string deviceAccountId, int id, int rarity);
 }

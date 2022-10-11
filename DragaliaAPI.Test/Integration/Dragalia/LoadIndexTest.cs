@@ -1,9 +1,9 @@
 ﻿using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Savefile;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Caching.Distributed;
+using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -24,7 +24,7 @@ public class LoadIndexTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task LoadIndex_ReturnsSavefile()
     {
-        DbSavefileUserData dbUserData = TestUtils.GetLoggedInSavefileSeed();
+        DbPlayerUserData dbUserData = TestUtils.GetLoggedInSavefileSeed();
 
         LoadIndexResponse expectedResponse =
             new(new LoadIndexData(SavefileUserDataFactory.Create(dbUserData, new())));

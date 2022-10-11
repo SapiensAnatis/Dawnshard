@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Models.Database.Savefile;
 using MessagePack;
 
-namespace DragaliaAPI.Models.Dragalia.Savefile;
+namespace DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 
 /*
  * This will make the longest constructor of All Time, it's true.
@@ -13,7 +13,7 @@ namespace DragaliaAPI.Models.Dragalia.Savefile;
  */
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record SavefileUserData(
+public record UserData(
     long viewer_id,
     string name,
     int level,
@@ -47,9 +47,9 @@ public record SavefileUserData(
 
 public static class SavefileUserDataFactory
 {
-    public static SavefileUserData Create(DbSavefileUserData dbEntry, List<int> tutorialFlagList)
+    public static UserData Create(DbPlayerUserData dbEntry, List<int> tutorialFlagList)
     {
-        return new SavefileUserData(
+        return new UserData(
             viewer_id: dbEntry.ViewerId,
             name: dbEntry.Name,
             level: dbEntry.Level,

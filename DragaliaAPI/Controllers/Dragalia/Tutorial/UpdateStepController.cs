@@ -2,7 +2,7 @@
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Responses;
 using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Savefile;
+using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,12 +32,13 @@ public class UpdateStepController : ControllerBase
     )
     {
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-        DbSavefileUserData userData = await _apiRepository.UpdateTutorialStatus(
+        DbPlayerUserData userData = await _apiRepository.UpdateTutorialStatus(
             deviceAccountId,
             request.step
         );
 
-        UpdateDataList updateDataList = new(SavefileUserDataFactory.Create(userData, new()));
+        UpdateDataList updateDataList =
+            new() { user_data = SavefileUserDataFactory.Create(userData, new()) };
         TutorialUpdateStepResponse response =
             new(new TutorialUpdateStepData(request.step, updateDataList));
 

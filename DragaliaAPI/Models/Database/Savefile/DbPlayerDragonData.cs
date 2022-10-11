@@ -3,8 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
-using DragaliaAPI.Models.Dragalia.Enums;
-using DragaliaAPI.Models.Enums;
+using DragaliaAPI.Models.Data;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 
@@ -56,5 +55,28 @@ public class DbPlayerDragonData : IDbHasAccountId
     public byte SecondAbilityLevel { get; set; }
 
     [Required]
-    public bool GetTime { get; set; }
+    public int GetTime { get; set; }
+}
+
+public static class DbPlayerDragonDataFactory
+{
+    public static DbPlayerDragonData Create(string deviceAccountId, int id, int rarity)
+    {
+        return new()
+        {
+            DeviceAccountId = deviceAccountId,
+            DragonId = (Dragons)id,
+            Exp = 0,
+            Level = 1,
+            HpPlusCount = 0,
+            AttackPlusCount = 0,
+            LimitBreakCount = 0,
+            IsLocked = false,
+            IsNew = true,
+            FirstSkillLevel = 1,
+            FirstAbilityLevel = 1,
+            SecondAbilityLevel = 1,
+            GetTime = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+        };
+    }
 }
