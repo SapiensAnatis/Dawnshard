@@ -48,108 +48,82 @@ namespace DragaliaAPI.Migrations
             modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbPlayerCharaData", b =>
                 {
                     b.Property<string>("DeviceAccountId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("DEVICE_ACCOUNT_ID");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CharaId")
-                        .HasColumnType("int")
-                        .HasColumnName("CHARA_ID");
+                        .HasColumnType("int");
 
                     b.Property<byte>("AdditionalMaxLevel")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("ADD_MAX_LVL");
+                        .HasColumnType("tinyint");
 
                     b.Property<int>("Attack")
-                        .HasColumnType("int")
-                        .HasColumnName("ATK");
+                        .HasColumnType("int");
 
                     b.Property<byte>("AttackPlusCount")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("ATK_PLUS_CNT");
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("BurstAttackLevel")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("BRST_ATK_LVL");
+                        .HasColumnType("tinyint");
 
                     b.Property<long>("ComboBuildupCount")
-                        .HasColumnType("bigint")
-                        .HasColumnName("COMBO_BUILDUP_CNT");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("Exp")
-                        .HasColumnType("bigint")
-                        .HasColumnName("EXP");
+                        .HasColumnType("bigint");
 
                     b.Property<byte>("FirstAbilityLevel")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("ABIL_1_LVL");
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("FirstExAbilityLevel")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("EX_ABIL_LVL");
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("FirstSkillLevel")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("SKILL_1_LVL");
+                        .HasColumnType("tinyint");
 
                     b.Property<bool>("GetTime")
-                        .HasColumnType("bit")
-                        .HasColumnName("GET_TIME");
+                        .HasColumnType("bit");
 
                     b.Property<int>("Hp")
-                        .HasColumnType("int")
-                        .HasColumnName("HP");
+                        .HasColumnType("int");
 
                     b.Property<byte>("HpPlusCount")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("HP_PLUS_CNT");
+                        .HasColumnType("tinyint");
 
                     b.Property<bool>("IsNew")
-                        .HasColumnType("bit")
-                        .HasColumnName("IS_NEW");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsTemporary")
-                        .HasColumnType("bit")
-                        .HasColumnName("IS_TEMP");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsUnlockEditSkill")
-                        .HasColumnType("bit")
-                        .HasColumnName("IS_UNLOCK_EDIT_SKILL");
+                        .HasColumnType("bit");
 
                     b.Property<byte>("Level")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("LEVEL");
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("LimitBreakCount")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("LIMIT_BREAK_CNT");
+                        .HasColumnType("tinyint");
 
                     b.Property<bool>("ListViewFlag")
-                        .HasColumnType("bit")
-                        .HasColumnName("LIST_VIEW_FLAG");
+                        .HasColumnType("bit");
 
                     b.Property<int>("ManaNodeUnlockCount")
-                        .HasColumnType("int")
-                        .HasColumnName("MANA_NODE_UNLOCK_CNT");
+                        .HasColumnType("int");
 
                     b.Property<byte>("Rarity")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("RARITY");
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("SecondAbilityLevel")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("ABIL_2_LVL");
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("SecondExAbilityLevel")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("EX_ABIL_2_LVL");
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("SecondSkillLevel")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("SKILL_2_LVL");
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("ThirdAbilityLevel")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("ABIL_3_LVL");
+                        .HasColumnType("tinyint");
 
                     b.HasKey("DeviceAccountId", "CharaId");
 
@@ -159,60 +133,46 @@ namespace DragaliaAPI.Migrations
             modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbPlayerDragonData", b =>
                 {
                     b.Property<string>("DeviceAccountId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("DEVICE_ACCOUNT_ID");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<long>("DragonKeyId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("DRAGON_KEY_ID");
+                        .HasColumnType("bigint");
 
                     b.Property<byte>("AttackPlusCount")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("ATK_PLUS_CNT");
+                        .HasColumnType("tinyint");
 
                     b.Property<int>("DragonId")
-                        .HasColumnType("int")
-                        .HasColumnName("DRAGON_ID");
+                        .HasColumnType("int");
 
                     b.Property<long>("Exp")
-                        .HasColumnType("bigint")
-                        .HasColumnName("EXP");
+                        .HasColumnType("bigint");
 
                     b.Property<byte>("FirstAbilityLevel")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("ABIL_1_LVL");
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("FirstSkillLevel")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("SKILL_1_LVL");
+                        .HasColumnType("tinyint");
 
                     b.Property<bool>("GetTime")
-                        .HasColumnType("bit")
-                        .HasColumnName("GET_TIME");
+                        .HasColumnType("bit");
 
                     b.Property<byte>("HpPlusCount")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("HP_PLUS_CNT");
+                        .HasColumnType("tinyint");
 
                     b.Property<bool>("IsLocked")
-                        .HasColumnType("bit")
-                        .HasColumnName("IS_LOCKED");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsNew")
-                        .HasColumnType("bit")
-                        .HasColumnName("IS_NEW");
+                        .HasColumnType("bit");
 
                     b.Property<byte>("Level")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("LEVEL");
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("LimitBreakCount")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("LIMIT_BREAK_CNT");
+                        .HasColumnType("tinyint");
 
                     b.Property<byte>("SecondAbilityLevel")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("ABIL_2_LVL");
+                        .HasColumnType("tinyint");
 
                     b.HasKey("DeviceAccountId", "DragonKeyId");
 
@@ -222,24 +182,19 @@ namespace DragaliaAPI.Migrations
             modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbPlayerDragonReliability", b =>
                 {
                     b.Property<string>("DeviceAccountId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("DEVICE_ACCOUNT_ID");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("DragonId")
-                        .HasColumnType("int")
-                        .HasColumnName("DRAGON_ID");
+                        .HasColumnType("int");
 
                     b.Property<long>("LastContactTime")
-                        .HasColumnType("bigint")
-                        .HasColumnName("LAST_CONTACT_TIME");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("ReliabilityExp")
-                        .HasColumnType("bigint")
-                        .HasColumnName("REL_EXP");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("ReliabilityTotalExp")
-                        .HasColumnType("bigint")
-                        .HasColumnName("REL_TOTAL_EXP");
+                        .HasColumnType("bigint");
 
                     b.HasKey("DeviceAccountId", "DragonId");
 
@@ -249,24 +204,19 @@ namespace DragaliaAPI.Migrations
             modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbPlayerUnitStory", b =>
                 {
                     b.Property<string>("DeviceAccountId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("DEVICE_ACCOUNT_ID");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<byte>("EntityType")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("ENTITY_TYPE");
+                        .HasColumnType("tinyint");
 
                     b.Property<long>("EntityId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("ENTITY_ID");
+                        .HasColumnType("bigint");
 
                     b.Property<long>("StoryId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("STORY_ID");
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("DragonId")
-                        .HasColumnType("bit")
-                        .HasColumnName("DRAGON_ID");
+                        .HasColumnType("bit");
 
                     b.HasKey("DeviceAccountId", "EntityType", "EntityId", "StoryId");
 
@@ -370,7 +320,7 @@ namespace DragaliaAPI.Migrations
 
                     b.HasKey("DeviceAccountId");
 
-                    b.ToTable("SavefileUserData");
+                    b.ToTable("PlayerInfo");
 
                     b.HasData(
                         new
@@ -379,7 +329,7 @@ namespace DragaliaAPI.Migrations
                             ActiveMemoryEventId = 0,
                             BuildTimePoint = 0,
                             Coin = 0,
-                            CreateTime = 1665390975,
+                            CreateTime = 1665434277,
                             Crystal = 0,
                             DewPoint = 0,
                             EmblemId = 40000001,

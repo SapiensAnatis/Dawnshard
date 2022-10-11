@@ -139,7 +139,7 @@ public class ApiRepository : IApiRepository
         {
             switch ((EntityTypes)e.entity_type)
             {
-                case EntityTypes.CHARA:
+                case EntityTypes.Chara:
                     if (
                         newEntities.Exists(
                             x => x.entity_id == e.entity_id && x.entity_type == e.entity_type
@@ -159,7 +159,7 @@ public class ApiRepository : IApiRepository
                         convertedEntities.Add(e);
                     }
                     break;
-                case EntityTypes.DRAGON:
+                case EntityTypes.Dragon:
                     if (!(dragonStorageSize < dragonStorageCount))
                     {
                         sentToGiftsEntities.Add(e);
