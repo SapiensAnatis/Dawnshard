@@ -2,6 +2,7 @@ using DragaliaAPI;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Dragalia.Responses;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Data;
 using MessagePack.Resolvers;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,6 +36,10 @@ builder.Services
     .AddScoped<IApiRepository, ApiRepository>()
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<ISavefileWriteService, SavefileWriteService>();
+
+// Data services should be initialized on startup rather than when first requested
+UnitDataService u = new();
+builder.Services.AddSingleton<IUnitDataService>(u);
 
 WebApplication app = builder.Build();
 
