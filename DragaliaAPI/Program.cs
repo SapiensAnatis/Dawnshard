@@ -39,7 +39,9 @@ builder.Services
 
 // Data services should be initialized on startup rather than when first requested
 UnitDataService u = new();
+DragonDataService d = new();
 builder.Services.AddSingleton<IUnitDataService>(u);
+builder.Services.AddSingleton<IDragonDataService>(d);
 
 WebApplication app = builder.Build();
 
