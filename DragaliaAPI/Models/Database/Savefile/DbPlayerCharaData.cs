@@ -159,7 +159,7 @@ public static class DbPlayerCharaDataFactory
         return new DbPlayerCharaData()
         {
             DeviceAccountId = deviceAccountId,
-            CharaId = (Charas)id,
+            CharaId = (Charas)data.IdLong,
             Rarity = validRarity,
             Exp = 0,
             Level = 1,
