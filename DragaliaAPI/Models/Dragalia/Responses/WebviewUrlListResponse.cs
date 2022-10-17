@@ -27,7 +27,10 @@ public static class WebviewUrlListStatic
             new("faq", PlaceholderUrl),
             new("help_comic", PlaceholderUrl),
             new("help", PlaceholderUrl),
-            new("information", PlaceholderUrl),
+            new(
+                "information",
+                "https://dragalialost.akamaized.net/static/1661841469/views/information/index.html"
+            ),
             new("inquiry_attention", PlaceholderUrl),
             new("dragon_battle_info", PlaceholderUrl),
             new("quest_info", PlaceholderUrl),
