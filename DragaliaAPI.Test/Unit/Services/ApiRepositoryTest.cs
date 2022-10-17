@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory.Storage.Internal;
 
@@ -15,6 +16,8 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly ApiRepository apiRepository;
     private readonly ApiContext apiContext;
+    private readonly IUnitDataService unitDataService;
+    private readonly IDragonDataService dragonDataService;
 
     private readonly DbDeviceAccount account = new("id", "hashed password");
     private readonly DbPlayerUserData playerInfo = DbSavefileUserDataFactory.Create("id");
@@ -22,8 +25,10 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
     public ApiRepositoryTest(DbTestFixture data)
     {
         apiContext = data.apiContext;
+        this.unitDataService = new UnitDataService();
+        this.dragonDataService = new DragonDataService();
 
-        apiRepository = new(apiContext);
+        apiRepository = new(apiContext, unitDataService, dragonDataService);
     }
 
     [Fact]

@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
-using System.Runtime.InteropServices;
 using DragaliaAPI.Models.Data;
 using DragaliaAPI.Models.Database.Savefile;
+using DragaliaAPI.Models.Dragalia.MessagePackFormatters;
 using MessagePack;
-using Newtonsoft.Json.Linq;
 
 namespace DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 
@@ -20,7 +19,7 @@ public record Chara(
     int ability_1_level,
     int ability_2_level,
     int ability_3_level,
-    int is_new,
+    [property: MessagePackFormatter(typeof(BoolToIntFormatter))] bool is_new,
     int skill_1_level,
     int skill_2_level,
     int burst_attack_level,
@@ -29,11 +28,11 @@ public record Chara(
     int hp_plus_count,
     int attack_plus_count,
     int combo_buildup_count,
-    int is_unlock_edit_skill,
+    [property: MessagePackFormatter(typeof(BoolToIntFormatter))] bool is_unlock_edit_skill,
     int gettime,
-    List<int> mana_circle_piece_id_list,
-    int is_temporary,
-    int list_view_flag
+    SortedSet<int> mana_circle_piece_id_list,
+    [property: MessagePackFormatter(typeof(BoolToIntFormatter))] bool is_temporary,
+    [property: MessagePackFormatter(typeof(BoolToIntFormatter))] bool list_view_flag
 );
 
 public static class CharaFactory
@@ -52,7 +51,7 @@ public static class CharaFactory
             ability_1_level: dbEntry.FirstAbilityLevel,
             ability_2_level: dbEntry.SecondAbilityLevel,
             ability_3_level: dbEntry.ThirdAbilityLevel,
-            is_new: dbEntry.IsNew ? 1 : 0,
+            is_new: dbEntry.IsNew,
             skill_1_level: dbEntry.FirstSkillLevel,
             skill_2_level: dbEntry.SecondSkillLevel,
             burst_attack_level: dbEntry.BurstAttackLevel,
@@ -61,11 +60,11 @@ public static class CharaFactory
             hp_plus_count: dbEntry.HpPlusCount,
             attack_plus_count: dbEntry.AttackPlusCount,
             combo_buildup_count: dbEntry.ComboBuildupCount,
-            is_unlock_edit_skill: dbEntry.IsUnlockEditSkill ? 1 : 0,
+            is_unlock_edit_skill: dbEntry.IsUnlockEditSkill,
             gettime: dbEntry.GetTime,
-            mana_circle_piece_id_list: new(),
-            is_temporary: dbEntry.IsTemporary ? 1 : 0,
-            list_view_flag: dbEntry.ListViewFlag ? 1 : 0
+            mana_circle_piece_id_list: dbEntry.ManaNodesUnlocked,
+            is_temporary: dbEntry.IsTemporary,
+            list_view_flag: dbEntry.ListViewFlag
         );
     }
 }
