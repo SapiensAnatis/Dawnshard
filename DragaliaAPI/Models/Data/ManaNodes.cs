@@ -24,9 +24,13 @@ public enum ManaNodes
 
 public static class ManaNodesUtil
 {
-    public static ManaNodes SetManaCircleNodesFromSet(ISet<int> set)
+    public static ManaNodes SetManaCircleNodesFromSet(IEnumerable<int> enumerable)
     {
-        int max = set.Max();
+        if (!enumerable.GetEnumerator().MoveNext() || enumerable.Contains(0))
+        {
+            return ManaNodes.Clear;
+        }
+        int max = enumerable.Max();
         int ten = max / 10;
         int finalDigit = max % 10;
         ManaNodes flag = (ManaNodes)(ten << 9);
@@ -34,18 +38,24 @@ public static class ManaNodesUtil
 
         for (int i = 1; !(i > finalDigit); i++)
         {
-            if (set.Contains(ten + i))
+            if (enumerable.Contains(ten + i))
+            {
                 flag |= allNodes[i];
+            }
         }
         return flag;
     }
 
-    public static ISet<int> GetSetFromManaNodes(ManaNodes flag)
+    public static SortedSet<int> GetSetFromManaNodes(ManaNodes flag)
     {
+        SortedSet<int> nodes = new SortedSet<int>();
+        if (flag == ManaNodes.Clear)
+        {
+            return nodes;
+        }
         ManaNodes circle = flag & ManaNodes.Circle7;
         int circleNr = ((int)circle >> 9) * 10;
         ManaNodes nodeNr = flag & ~ManaNodes.Circle7;
-        HashSet<int> nodes = new HashSet<int>();
         for (int i = 1; i < circleNr; i++)
         {
             nodes.Add(i);
@@ -53,10 +63,12 @@ public static class ManaNodesUtil
         if (circle < ManaNodes.Circle7)
         {
             ManaNodes[] allNodes = Enum.GetValues<ManaNodes>();
-            for (int i = 1; allNodes[i] < ManaNodes.Circle1; i++)
+            for (int i = 1; !(allNodes[i] > nodeNr); i++)
             {
-                if (nodeNr.HasFlag(allNodes[i]))
+                if (circle > ManaNodes.Circle4 || nodeNr.HasFlag(allNodes[i]))
+                {
                     nodes.Add(circleNr + i);
+                }
             }
         }
         return nodes;

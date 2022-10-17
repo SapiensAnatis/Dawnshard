@@ -1,9 +1,9 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Data;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
+using DragaliaAPI.Services.Data;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,10 +16,18 @@ namespace DragaliaAPI.Services;
 public class ApiRepository : IApiRepository
 {
     private readonly ApiContext _apiContext;
+    private readonly IUnitDataService _unitDataService;
+    private readonly IDragonDataService _dragonDataService;
 
-    public ApiRepository(ApiContext context)
+    public ApiRepository(
+        ApiContext context,
+        IUnitDataService unitDataService,
+        IDragonDataService dragonDataService
+    )
     {
         _apiContext = context;
+        _unitDataService = unitDataService;
+        _dragonDataService = dragonDataService;
     }
 
     public async Task AddNewDeviceAccount(string id, string hashedPassword)
@@ -114,7 +122,11 @@ public class ApiRepository : IApiRepository
 
     public async Task<DbPlayerCharaData> AddChara(string deviceAccountId, int id, int rarity)
     {
-        DbPlayerCharaData dbEntry = DbPlayerCharaDataFactory.Create(deviceAccountId, id, rarity);
+        DbPlayerCharaData dbEntry = DbPlayerCharaDataFactory.Create(
+            deviceAccountId,
+            _unitDataService.GetData(id),
+            (byte)rarity
+        );
         await _apiContext.PlayerCharaData.AddAsync(dbEntry);
         await _apiContext.SaveChangesAsync();
         return dbEntry;
