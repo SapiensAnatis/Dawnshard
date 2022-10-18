@@ -1,0 +1,14 @@
+﻿@page
+@model NewsModel
+@using DragaliaAPI.Models.Dragalia
+@using DragaliaAPI.Pages
+
+<div>
+	<h1 id="title" style="text-align: center">News</h1>
+	@foreach (NewsItem item in Model.NewsItems) {
+		<h2>@item.Headline</h2>
+		<p>@item.Description</p>
+	}
+	<NewsList />
+</div>
+
