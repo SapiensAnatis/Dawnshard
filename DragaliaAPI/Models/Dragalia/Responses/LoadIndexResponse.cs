@@ -8,4 +8,8 @@ namespace DragaliaAPI.Models.Dragalia.Responses;
 public record LoadIndexResponse(LoadIndexData data) : BaseResponse<LoadIndexData>;
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record LoadIndexData(UserData user_data);
+public record LoadIndexData(
+    UserData user_data,
+    IEnumerable<Chara> chara_list,
+    IEnumerable<Dragon> dragon_list
+);

@@ -10,4 +10,6 @@ public class UpdateDataList
     public List<Chara>? chara_list { get; set; }
 
     public List<Dragon>? dragon_list { get; set; }
+
+    public List<object> functional_maintenance_list { get; set; } = new();
 }

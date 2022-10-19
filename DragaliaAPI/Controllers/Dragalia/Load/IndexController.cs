@@ -27,11 +27,22 @@ public class IndexController : ControllerBase
     public async Task<DragaliaResult> Post([FromHeader(Name = "SID")] string sessionId)
     {
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
+
         DbPlayerUserData dbUserData = await _apiRepository
             .GetPlayerInfo(deviceAccountId)
             .SingleAsync();
+        IEnumerable<DbPlayerCharaData> dbCharaData = await _apiRepository
+            .GetCharaData(deviceAccountId)
+            .ToListAsync();
+        IEnumerable<DbPlayerDragonData> dbDragonData = await _apiRepository
+            .GetDragonData(deviceAccountId)
+            .ToListAsync();
+
         UserData userData = SavefileUserDataFactory.Create(dbUserData, new() { });
-        LoadIndexResponse response = new(new LoadIndexData(userData));
+        IEnumerable<Chara> charas = dbCharaData.Select(CharaFactory.Create);
+        IEnumerable<Dragon> dragons = dbDragonData.Select(DragonFactory.Create);
+
+        LoadIndexResponse response = new(new LoadIndexData(userData, charas, dragons));
 
         return Ok(response);
     }

@@ -77,7 +77,7 @@ public class ApiRepository : IApiRepository
         await _apiContext.SaveChangesAsync();
     }
 
-    public virtual async Task<ISet<int>> getTutorialFlags(string deviceAccountId)
+    public async Task<ISet<int>> getTutorialFlags(string deviceAccountId)
     {
         DbPlayerUserData? saveFileUserData = await _apiContext.PlayerUserData.FindAsync(
             deviceAccountId
@@ -90,7 +90,7 @@ public class ApiRepository : IApiRepository
         return TutorialFlagUtil.ConvertIntToFlagIntList(flags_);
     }
 
-    public virtual async Task setTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags)
+    public async Task setTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags)
     {
         DbPlayerUserData? saveFileUserData = await _apiContext.PlayerUserData.FindAsync(
             deviceAccountId
@@ -138,5 +138,15 @@ public class ApiRepository : IApiRepository
         await _apiContext.PlayerDragonData.AddAsync(dbEntry);
         await _apiContext.SaveChangesAsync();
         return dbEntry;
+    }
+
+    public IQueryable<DbPlayerCharaData> GetCharaData(string deviceAccountId)
+    {
+        return _apiContext.PlayerCharaData.Where(x => x.DeviceAccountId == deviceAccountId);
+    }
+
+    public IQueryable<DbPlayerDragonData> GetDragonData(string deviceAccountId)
+    {
+        return _apiContext.PlayerDragonData.Where(x => x.DeviceAccountId == deviceAccountId);
     }
 }

@@ -26,4 +26,6 @@ public interface IApiRepository
     Task<bool> CheckHasChara(string deviceAccountId, int charaId);
     Task<DbPlayerCharaData> AddChara(string deviceAccountId, int id, int rarity);
     Task<DbPlayerDragonData> AddDragon(string deviceAccountId, int id, int rarity);
+    IQueryable<DbPlayerCharaData> GetCharaData(string deviceAccountId);
+    IQueryable<DbPlayerDragonData> GetDragonData(string deviceAccountId);
 }
