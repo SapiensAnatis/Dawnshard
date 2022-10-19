@@ -77,7 +77,7 @@ public class DeviceAccountServiceTest
             .Setup(x => x.AddNewDeviceAccount(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(Task.CompletedTask);
         mockRepository
-            .Setup(x => x.AddNewPlayerInfo(It.IsAny<string>()))
+            .Setup(x => x.CreateNewSavefile(It.IsAny<string>()))
             .Returns(Task.CompletedTask);
 
         await deviceAccountService.RegisterDeviceAccount();

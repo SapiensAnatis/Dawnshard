@@ -11,5 +11,6 @@ public record LoadIndexResponse(LoadIndexData data) : BaseResponse<LoadIndexData
 public record LoadIndexData(
     UserData user_data,
     IEnumerable<Chara> chara_list,
-    IEnumerable<Dragon> dragon_list
+    IEnumerable<Dragon> dragon_list,
+    IEnumerable<Party> party_list
 );

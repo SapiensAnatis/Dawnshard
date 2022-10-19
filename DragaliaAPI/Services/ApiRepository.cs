@@ -6,6 +6,7 @@ using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Services.Data;
 using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
+using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 
 namespace DragaliaAPI.Services;
 
@@ -18,16 +19,19 @@ public class ApiRepository : IApiRepository
     private readonly ApiContext _apiContext;
     private readonly IUnitDataService _unitDataService;
     private readonly IDragonDataService _dragonDataService;
+    private readonly IWebHostEnvironment environment;
 
     public ApiRepository(
         ApiContext context,
         IUnitDataService unitDataService,
-        IDragonDataService dragonDataService
+        IDragonDataService dragonDataService,
+        IWebHostEnvironment environment
     )
     {
         _apiContext = context;
         _unitDataService = unitDataService;
         _dragonDataService = dragonDataService;
+        this.environment = environment;
     }
 
     public async Task AddNewDeviceAccount(string id, string hashedPassword)
@@ -41,11 +45,47 @@ public class ApiRepository : IApiRepository
         return await _apiContext.DeviceAccounts.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task AddNewPlayerInfo(string deviceAccountId)
+    public async Task CreateNewSavefile(string deviceAccountId)
     {
-        await _apiContext.PlayerUserData.AddAsync(
-            DbSavefileUserDataFactory.Create(deviceAccountId)
+        DbPlayerUserData userData = DbSavefileUserDataFactory.Create(deviceAccountId);
+
+        if (environment.IsDevelopment())
+        {
+            // Skip the tutorial
+            userData.TutorialStatus = 10151;
+        }
+
+        await _apiContext.PlayerUserData.AddAsync(userData);
+
+        await _apiContext.PlayerCharaData.AddAsync(
+            DbPlayerCharaDataFactory.Create(
+                deviceAccountId,
+                _unitDataService.GetData(Charas.ThePrince),
+                4
+            )
         );
+
+        List<DbParty> defaultParties = new();
+
+        // New savefiles come with 54 parties, for some reason
+        for (int i = 1; i <= 54; i++)
+        {
+            defaultParties.Add(
+                new()
+                {
+                    DeviceAccountId = deviceAccountId,
+                    PartyName = "Default",
+                    PartyNo = i,
+                    Units = new List<DbPartyUnit>()
+                    {
+                        new() { UnitNo = 1, CharaId = Charas.ThePrince }
+                    }
+                }
+            );
+        }
+
+        await _apiContext.PlayerParties.AddRangeAsync(defaultParties);
+
         await _apiContext.SaveChangesAsync();
     }
 
@@ -148,5 +188,12 @@ public class ApiRepository : IApiRepository
     public IQueryable<DbPlayerDragonData> GetDragonData(string deviceAccountId)
     {
         return _apiContext.PlayerDragonData.Where(x => x.DeviceAccountId == deviceAccountId);
+    }
+
+    public IQueryable<DbParty> GetParties(string deviceAccountId)
+    {
+        return _apiContext.PlayerParties
+            .Include(x => x.Units)
+            .Where(x => x.DeviceAccountId == deviceAccountId);
     }
 }

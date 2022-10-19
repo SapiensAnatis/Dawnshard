@@ -49,7 +49,7 @@ public class DeviceAccountService : IDeviceAccountService
         string hashedPassword = GetHashedPassword(password);
 
         await _apiRepository.AddNewDeviceAccount(id, hashedPassword);
-        await _apiRepository.AddNewPlayerInfo(id);
+        await _apiRepository.CreateNewSavefile(id);
 
         _logger.LogInformation("Registered new account: DeviceAccount ID '{id}'", id);
 

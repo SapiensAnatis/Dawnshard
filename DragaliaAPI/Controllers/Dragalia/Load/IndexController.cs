@@ -37,12 +37,16 @@ public class IndexController : ControllerBase
         IEnumerable<DbPlayerDragonData> dbDragonData = await _apiRepository
             .GetDragonData(deviceAccountId)
             .ToListAsync();
+        IEnumerable<DbParty> dbParties = await _apiRepository
+            .GetParties(deviceAccountId)
+            .ToListAsync();
 
         UserData userData = SavefileUserDataFactory.Create(dbUserData, new() { });
         IEnumerable<Chara> charas = dbCharaData.Select(CharaFactory.Create);
         IEnumerable<Dragon> dragons = dbDragonData.Select(DragonFactory.Create);
+        IEnumerable<Party> parties = dbParties.Select(PartyFactory.Create);
 
-        LoadIndexResponse response = new(new LoadIndexData(userData, charas, dragons));
+        LoadIndexResponse response = new(new LoadIndexData(userData, charas, dragons, parties));
 
         return Ok(response);
     }

@@ -3,6 +3,7 @@ using DragaliaAPI.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DragaliaAPI.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20221019215952_Alpha-SapiensAnatis5")]
+    partial class AlphaSapiensAnatis5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
