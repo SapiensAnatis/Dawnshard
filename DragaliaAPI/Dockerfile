@@ -8,6 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["DragaliaAPI/DragaliaAPI.csproj", "DragaliaAPI/"]
+RUN dotnet tool restore
 RUN dotnet restore "DragaliaAPI/DragaliaAPI.csproj"
 COPY . .
 WORKDIR "/src/DragaliaAPI"
