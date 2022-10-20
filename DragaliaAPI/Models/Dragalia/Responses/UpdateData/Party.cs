@@ -32,7 +32,7 @@ public static class PartyFactory
         List<PartyUnit> UnitList = dbEntry.Units.Select(CreateUnit).ToList();
 
         // Fill empty slots
-        for (int i = 1; i <= 4 - UnitList.Count; i++)
+        for (int i = UnitList.Count() + 1; i <= 4; i++)
         {
             UnitList.Add(Empty with { unit_no = i });
         }
