@@ -10,13 +10,14 @@ namespace DragaliaAPI.Models.Database.Savefile;
 [Table("PlayerDragonData")]
 public class DbPlayerDragonData : IDbHasAccountId
 {
+    [Required]
+    [Key]
+    public long DragonKeyId { get; set; }
+
     /// <inheritdoc/>
     [Required]
     [ForeignKey("DbDeviceAccount")]
     public string DeviceAccountId { get; set; } = null!;
-
-    [Required]
-    public long DragonKeyId { get; set; }
 
     [Required]
     [TypeConverter(typeof(EnumConverter))]

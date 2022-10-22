@@ -45,10 +45,6 @@ public class ApiContext : DbContext
             .HasKey(key => new { key.DeviceAccountId, key.CharaId });
 
         modelBuilder
-            .Entity<DbPlayerDragonData>()
-            .HasKey(key => new { key.DeviceAccountId, key.DragonKeyId });
-
-        modelBuilder
             .Entity<DbPlayerDragonReliability>()
             .HasKey(key => new { key.DeviceAccountId, key.DragonId });
 

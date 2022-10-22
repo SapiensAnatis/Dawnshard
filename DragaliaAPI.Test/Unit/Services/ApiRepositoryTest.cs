@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragaliaAPI.Models.Database;
+﻿using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.InMemory.Storage.Internal;
+using Microsoft.AspNetCore.Hosting;
 
 namespace DragaliaAPI.Test.Unit.Services;
 
@@ -24,11 +18,16 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
 
     public ApiRepositoryTest(DbTestFixture data)
     {
-        apiContext = data.apiContext;
+        apiContext = data.ApiContext;
         this.unitDataService = new UnitDataService();
         this.dragonDataService = new DragonDataService();
 
-        apiRepository = new(apiContext, unitDataService, dragonDataService);
+        apiRepository = new(
+            apiContext,
+            unitDataService,
+            dragonDataService,
+            data.MockEnvironment.Object
+        );
     }
 
     [Fact]
@@ -59,9 +58,9 @@ public class ApiRepositoryTest : IClassFixture<DbTestFixture>
     }
 
     [Fact]
-    public async Task AddNewPlayerInfo_CanGetAfterwards()
+    public async Task CreateSavefile_CanGetUserDataAfterwards()
     {
-        await apiRepository.AddNewPlayerInfo("id 2");
+        await apiRepository.CreateNewSavefile("id 2");
         IQueryable<DbPlayerUserData> result = apiRepository.GetPlayerInfo("id 2");
 
         result.Count().Should().Be(1);

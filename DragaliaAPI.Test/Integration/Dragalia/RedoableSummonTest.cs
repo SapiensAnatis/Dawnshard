@@ -3,6 +3,8 @@ using MessagePack.Resolvers;
 using MessagePack;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using DragaliaAPI.Models.Data;
+using DragaliaAPI.Models.Database;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -17,6 +19,7 @@ public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Prog
         _client = factory.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
+        _factory.SeedCache();
     }
 
     [Fact]
@@ -60,5 +63,51 @@ public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Prog
             .redoable_summon_result_unit_list;
 
         summonResult.Count.Should().Be(50);
+    }
+
+    [Fact]
+    public async Task RedoableSummonFixExec_UpdatesDatabase()
+    {
+        // Corresponds to JSON: "{}"
+        byte[] payload = new byte[] { 0x80 };
+        HttpContent content = TestUtils.CreateMsgpackContent(payload);
+
+        // Set up cached summon result
+        await _client.PostAsync("redoable_summon/pre_exec", content);
+
+        HttpResponseMessage fixResponse = await _client.PostAsync(
+            "redoable_summon/fix_exec",
+            content
+        );
+
+        fixResponse.IsSuccessStatusCode.Should().BeTrue();
+
+        byte[] fixBytes = await fixResponse.Content.ReadAsByteArrayAsync();
+
+        var fixDeserialized = MessagePackSerializer.Deserialize<RedoableSummonPreExecResponse>(
+            fixBytes,
+            ContractlessStandardResolver.Options
+        );
+
+        IEnumerable<int> newCharaIds = fixDeserialized.data.update_data_list.chara_list!.Select(
+            x => (int)x.chara_id
+        );
+
+        IEnumerable<int> newDragonIds = fixDeserialized.data.update_data_list.dragon_list!.Select(
+            x => (int)x.dragon_id
+        );
+
+        using var scope = _factory.Services.CreateScope();
+        ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
+
+        IEnumerable<int> committedCharaIds = apiContext.PlayerCharaData
+            .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
+            .Select(x => (int)x.CharaId);
+        IEnumerable<int> committedDragonIds = apiContext.PlayerDragonData
+            .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
+            .Select(x => (int)x.DragonId);
+
+        committedCharaIds.Should().BeEquivalentTo(newCharaIds);
+        committedDragonIds.Should().BeEquivalentTo(newDragonIds);
     }
 }

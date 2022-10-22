@@ -53,10 +53,19 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             context.DeviceAccounts.AddRange(TestUtils.GetDeviceAccountsSeed());
             context.PlayerUserData.AddRange(TestUtils.GetSavefilePlayerInfoSeed());
             context.SaveChanges();
+
+            ApiContext = context;
+            Cache = cache;
         });
 
         builder.UseEnvironment("Testing");
     }
+
+    public ApiContext ApiContext { get; private set; } = null!;
+
+    public IDistributedCache Cache { get; private set; } = null!;
+
+    public string DeviceAccountId => "logged_in_id";
 
     /// <summary>
     /// Seed the cache with a valid session, so that controllers can lookup database entries.
