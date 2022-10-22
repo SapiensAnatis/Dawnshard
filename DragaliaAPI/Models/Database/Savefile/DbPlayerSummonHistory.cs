@@ -73,7 +73,7 @@ public class DbPlayerSummonHistory : IDbHasAccountId
 
     [Column("SummonPrizeRank")]
     [Required]
-    public int SummonPrizeRank { get; set; }
+    public SummonPrizeRanks SummonPrizeRank { get; set; }
 
     [Column("SummonPointGet")]
     [Required]

@@ -1,5 +1,7 @@
 ﻿using DragaliaAPI.Models.Data.Entity;
+using DragaliaAPI.Models.Dragalia.MessagePackFormatters;
 using MessagePack;
+using MessagePack.Resolvers;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DragaliaAPI.Models.Dragalia.Responses.Common;
@@ -61,7 +63,7 @@ public record SummonTicket(int key_id, int summon_ticket_id, int quantity, long 
 public record SummonPrize(int material_id, int quantity);
 
 [MessagePackObject(true)]
-public record SummonReward(int entity_type, int id, int rarity, bool? isNew, int? dew_point)
+public record SummonReward(int entity_type, int id, int rarity, bool is_new, int dew_point)
     : SimpleSummonReward(entity_type, id, rarity);
 
 [MessagePackObject(true)]

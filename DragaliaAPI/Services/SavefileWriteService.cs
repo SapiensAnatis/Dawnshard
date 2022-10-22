@@ -132,15 +132,17 @@ public class SavefileWriteService : ISavefileWriteService
                     throw new InvalidDataException($"Unsupported Entity Type Id {e.entity_type}");
             }
         }
+
+        await apiContext.SaveChangesAsync();
+        DbPlayerUserData userData = await apiRepository.GetPlayerInfo(deviceAccountId).FirstAsync();
         UpdateDataList result =
             new()
             {
                 chara_list = newChars.Values.ToList(),
                 dragon_list = newDragons,
-                dragon_reliability_list = newUniqueDragons.Values.ToList()
+                dragon_reliability_list = newUniqueDragons.Values.ToList(),
+                user_data = SavefileUserDataFactory.Create(userData)
             };
-
-        await apiContext.SaveChangesAsync();
 
         return result;
     }

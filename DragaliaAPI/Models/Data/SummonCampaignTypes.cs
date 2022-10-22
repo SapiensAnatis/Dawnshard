@@ -7,6 +7,8 @@
 public enum SummonCampaignTypes
 {
     Normal = 0,
+
+    //UNKNOWN: These are just guesses
     Limited = 0b_0001,
     Beginner = 0b_0010,
 

@@ -109,6 +109,18 @@ public class ApiRepository : IApiRepository
         return userData;
     }
 
+    public async Task<DbPlayerUserData> UpdateTutorialFlag(string deviceAccountId, int flag)
+    {
+        DbPlayerUserData userData =
+            await _apiContext.PlayerUserData.FindAsync(deviceAccountId)
+            ?? throw new NullReferenceException("Savefile lookup failed");
+        ISet<int> flags = TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag);
+        flags.Add(flag);
+        userData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(flags);
+        await _apiContext.SaveChangesAsync();
+        return userData;
+    }
+
     public async Task UpdateName(string deviceAccountId, string newName)
     {
         DbPlayerUserData userData =
@@ -200,7 +212,7 @@ public class ApiRepository : IApiRepository
         DbPlayerBannerData bannerData = new DbPlayerBannerData()
         {
             DeviceAccountId = deviceAccountId,
-            //TODO Probably get all this from bannerInfo
+            //TODO Probably get all this and more from bannerInfo
             SummonBannerId = bannerId,
             ConsecutionSummonPointsMinDate = DateTimeOffset.UtcNow,
             ConsecutionSummonPointsMaxDate = DateTimeOffset.UtcNow.AddDays(7),

@@ -15,6 +15,8 @@ using Microsoft.EntityFrameworkCore;
 using Pipelines.Sockets.Unofficial;
 using DragaliaAPI.Models.Nintendo;
 using System.Collections.Immutable;
+using MessagePack;
+using Microsoft.AspNetCore.Identity;
 
 namespace DragaliaAPI.Controllers.Dragalia.Summon;
 
@@ -42,27 +44,40 @@ public class SummonController : ControllerBase
         _saveService = saveService;
     }
 
+    [MessagePackObject(true)]
+    public record BannerIdRequest(int summon_id);
+
+    /// <summary>
+    /// Returns excluded/excludable units for special banners
+    /// </summary>
+    /// <param name="sessionId"></param>
+    /// <param name="bannerIdRequest"></param>
+    /// <returns></returns>
     [HttpPost]
     [Route("~/summon_exclude/get_list")]
     public async Task<DragaliaResult> SummonExcludeGetList(
         [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] int bannerId
+        [FromBody] BannerIdRequest bannerIdRequest
     )
     {
+        int bannerId = bannerIdRequest.summon_id;
         string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
         DbPlayerUserData userData = await _apiRepository.GetPlayerInfo(accountId).FirstAsync();
-        //TODO Replace DummyData with real exludes
+        //TODO Replace DummyData with real exludes from BannerInfo
+        List<BaseNewEntity> excludableList = new List<BaseNewEntity>();
+        foreach (Charas c in Enum.GetValues<Charas>())
+        {
+            excludableList.Add(new BaseNewEntity((int)EntityTypes.Chara, (int)c));
+        }
+        foreach (Dragons d in Enum.GetValues<Dragons>())
+        {
+            excludableList.Add(new BaseNewEntity((int)EntityTypes.Dragon, (int)d));
+        }
         return Ok(
             new SummonExcludeGetListResponse(
                 SummonExcludeGetListResponseFactory.CreateData(
-                    new(),
-                    new UpdateDataList()
-                    {
-                        user_data = SavefileUserDataFactory.Create(
-                            userData,
-                            TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag).ToList()
-                        )
-                    }
+                    excludableList,
+                    new UpdateDataList() { user_data = SavefileUserDataFactory.Create(userData) }
                 )
             )
         );
@@ -72,19 +87,17 @@ public class SummonController : ControllerBase
     [Route("get_odds_data")]
     public async Task<DragaliaResult> GetOddsData(
         [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] int bannerId
+        [FromBody] BannerIdRequest bannerIdRequest
     )
     {
+        int bannerId = bannerIdRequest.summon_id;
         string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
         DbPlayerUserData userData = await _apiRepository.GetPlayerInfo(accountId).FirstAsync();
         //TODO Replace Dummy data with oddscalculation
         return Ok(
             new SummonGetOddsDataResponse(
                 SummonGetOddsDataResponseFactory.CreateDummyData(
-                    SavefileUserDataFactory.Create(
-                        userData,
-                        TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag).ToList()
-                    )
+                    SavefileUserDataFactory.Create(userData)
                 )
             )
         );
@@ -103,13 +116,7 @@ public class SummonController : ControllerBase
             new SummonGetSummonHistoryResponse(
                 SummonGetSummonHistoryResponseFactory.CreateData(
                     dbList,
-                    new UpdateDataList()
-                    {
-                        user_data = SavefileUserDataFactory.Create(
-                            userData,
-                            TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag).ToList()
-                        )
-                    }
+                    new UpdateDataList() { user_data = SavefileUserDataFactory.Create(userData) }
                 )
             )
         );
@@ -147,10 +154,7 @@ public class SummonController : ControllerBase
         {
             update_data_list = new UpdateDataList()
             {
-                user_data = SavefileUserDataFactory.Create(
-                    userData,
-                    TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag).ToList()
-                )
+                user_data = SavefileUserDataFactory.Create(userData)
             }
         };
         return Ok(new SummonGetSummonListResponse(data));
@@ -160,9 +164,10 @@ public class SummonController : ControllerBase
     [Route("get_summon_point_trade")]
     public async Task<DragaliaResult> GetSummonPointTrade(
         [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] int bannerId
+        [FromBody] BannerIdRequest bannerIdRequest
     )
     {
+        int bannerId = bannerIdRequest.summon_id;
         string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
         DbPlayerUserData userData = await _apiRepository.GetPlayerInfo(accountId).FirstAsync();
         //TODO maybe throw BadRequest on bad banner id, for now generate empty data if not exists
@@ -196,10 +201,7 @@ public class SummonController : ControllerBase
                     playerBannerData.ConsecutionSummonPointsMinDate,
                     playerBannerData.ConsecutionSummonPointsMaxDate
                 ),
-                SavefileUserDataFactory.Create(
-                    userData,
-                    TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag).ToList()
-                )
+                SavefileUserDataFactory.Create(userData)
             )
         );
         return Ok(response);
@@ -236,8 +238,8 @@ public class SummonController : ControllerBase
             0,
             SummonCampaignTypes.Normal,
             0,
-            0,
-            0,
+            false,
+            false,
             0
         );
 
@@ -253,28 +255,50 @@ public class SummonController : ControllerBase
         DbPlayerUserData userData = await _apiRepository.GetPlayerInfo(accountId).FirstAsync();
 
         int numSummons =
-            summonRequest.exec_type == SummonExecTypes.Tenfold ? 10 : summonRequest.exec_count;
+            summonRequest.exec_type == SummonExecTypes.Tenfold
+                ? 10
+                : Math.Max(1, summonRequest.exec_count);
         int summonPointMultiplier = bannerData.add_summon_point;
         int paymentHeld = 0;
         Action<int> paymentHeldSetter = reduction => { };
         int paymentCost = 1;
         switch (summonRequest.payment_type)
         {
+            case PaymentTypes.Diamantium:
+                summonPointMultiplier = bannerData.add_summon_point_stone;
+                paymentHeld = 0;
+                paymentHeldSetter = reduction =>
+                {
+                    playerBannerData.DailyLimitedSummonCount++;
+                };
+                paymentCost =
+                    summonRequest.exec_type == SummonExecTypes.Tenfold
+                        ? bannerData.multi_diamond
+                        : bannerData.single_diamond * numSummons;
+                break;
             case PaymentTypes.Wyrmite:
                 paymentHeld = userData.Crystal;
                 paymentHeldSetter = reduction => userData.Crystal -= reduction;
                 paymentCost =
                     summonRequest.exec_type == SummonExecTypes.Tenfold
                         ? bannerData.multi_crystal
-                        : bannerData.single_crystal * summonRequest.exec_count;
+                        : bannerData.single_crystal * numSummons;
                 break;
-            case PaymentTypes.SummonVoucher:
+            case PaymentTypes.Ticket:
                 paymentCost =
                     summonRequest.exec_type == SummonExecTypes.Tenfold
                         ? 1
-                        : summonRequest.exec_count * summonRequest.exec_count;
+                        : summonRequest.exec_count * numSummons;
                 break;
-            case PaymentTypes.Free:
+            case PaymentTypes.FreeDailyExecDependant:
+            case PaymentTypes.FreeDailyTenfold:
+                paymentHeldSetter = x =>
+                {
+                    if (bannerData.is_beginner_campaign)
+                    {
+                        playerBannerData.IsBeginnerFreeSummonAvailable = 0;
+                    }
+                };
                 paymentCost = 0;
                 break;
             default:
@@ -287,11 +311,13 @@ public class SummonController : ControllerBase
         }
 
         List<SimpleSummonReward> summonResult = _summonService.GenerateSummonResult(numSummons);
+        //TODO: Roll prize summon and commit prize summon results
         UpdateDataList commitResult = await _saveService.CommitSummonResult(
             summonResult,
             accountId,
             false
         );
+
         paymentHeldSetter(paymentCost);
         playerBannerData.SummonPoints += numSummons * summonPointMultiplier;
         playerBannerData.SummonCount += numSummons;
@@ -308,12 +334,36 @@ public class SummonController : ControllerBase
         Models.Dragalia.Responses.EntityResult entityResult =
             new(new List<BaseNewEntity>(), newEntities);
 
-        int summonEffect = summonResult.Select(x => x.rarity).Max();
-
         List<SummonReward> rewardList = new List<SummonReward>();
         List<DbPlayerSummonHistory> historyEntries = new List<DbPlayerSummonHistory>();
-        foreach (SimpleSummonReward summon in summonResult)
+
+        int lastIndexOfRare5 = -1;
+        int countOfRare5Char = 0;
+        int countOfRare5Dragon = 0;
+        int countOfRare4 = 0;
+        int topRarity = 3;
+        for (int i = 0; i < summonResult.Count; i++)
         {
+            SimpleSummonReward summon = summonResult[i];
+            topRarity = topRarity > summon.rarity ? topRarity : summon.rarity;
+            EntityTypes entityType = (EntityTypes)summon.entity_type;
+            if (summon.rarity == 5)
+            {
+                lastIndexOfRare5 = i;
+                if (entityType == EntityTypes.Chara)
+                {
+                    countOfRare5Char++;
+                }
+                else if (entityType == EntityTypes.Dragon)
+                {
+                    countOfRare5Dragon++;
+                }
+            }
+            if (summon.rarity == 4)
+            {
+                countOfRare4++;
+            }
+
             bool isNew =
                 newEntities.Find(
                     x => x.entity_type == summon.entity_type && x.entity_id == summon.id
@@ -330,6 +380,10 @@ public class SummonController : ControllerBase
             rewardList.Add(
                 new SummonReward(summon.entity_type, summon.id, summon.rarity, isNew, dewGained)
             );
+
+            //TODO: Get prize rank for this reward
+            SummonPrizeRanks prizeRank = SummonPrizeRanks.None;
+
             historyEntries.Add(
                 new DbPlayerSummonHistory()
                 {
@@ -346,7 +400,7 @@ public class SummonController : ControllerBase
                     EntityLimitBreakCount = 0,
                     EntityHpPlusCount = 0,
                     EntityAtkPlusCount = 0,
-                    SummonPrizeRank = 1,
+                    SummonPrizeRank = prizeRank,
                     SummonPointGet = summonPointMultiplier,
                     DewPointGet = dewGained
                 }
@@ -355,10 +409,45 @@ public class SummonController : ControllerBase
 
         int saved = await _saveService.CreateSummonHistory(historyEntries);
 
+        int reversalIndex = lastIndexOfRare5;
+        if (reversalIndex != -1 && new Random().NextSingle() < 0.95)
+        {
+            reversalIndex = -1;
+        }
+
+        int sageEffect = (int)SummonEffectsSage.Dull;
+        int circleEffect = (int)SummonEffectsSky.Blue;
+        int rarityDisplayModifier = reversalIndex == -1 ? 0 : 1;
+        if (countOfRare5Char + countOfRare5Dragon > 0 + rarityDisplayModifier)
+        {
+            sageEffect =
+                countOfRare5Dragon > countOfRare5Char
+                    ? (int)SummonEffectsSage.GoldFafnirs
+                    : (int)SummonEffectsSage.RainbowCrystal;
+            circleEffect = (int)SummonEffectsSky.Rainbow;
+        }
+        else
+        {
+            circleEffect = (int)SummonEffectsSky.Yellow;
+            switch (countOfRare4 + ((countOfRare5Char + countOfRare5Dragon) * 2))
+            {
+                case > 1:
+                    sageEffect = (int)SummonEffectsSage.MultiDoves;
+                    break;
+                case > 0:
+                    sageEffect = (int)SummonEffectsSage.SingleDove;
+                    break;
+                default:
+                    sageEffect = (int)SummonEffectsSage.Dull;
+                    circleEffect = (int)SummonEffectsSky.Blue;
+                    break;
+            }
+        }
+
         SummonRequestResponse response = new SummonRequestResponse(
             new SummonRequestResponseData(
-                0,
-                new() { summonEffect - 2, summonEffect },
+                reversalIndex,
+                new() { sageEffect, circleEffect },
                 rewardList,
                 new(),
                 new(),
@@ -367,7 +456,7 @@ public class SummonController : ControllerBase
                 {
                     new UserSummon(
                         bannerData.summon_id,
-                        playerBannerData.SummonCount + numSummons,
+                        playerBannerData.SummonCount,
                         bannerData.campaign_type,
                         bannerData.free_count_rest,
                         bannerData.is_beginner_campaign,
@@ -391,10 +480,7 @@ public class SummonController : ControllerBase
                         )
                     },
                     unit_story_list = new(),
-                    user_data = SavefileUserDataFactory.Create(
-                        userData,
-                        TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag).ToList()
-                    )
+                    user_data = SavefileUserDataFactory.Create(userData)
                 },
                 entityResult
             )

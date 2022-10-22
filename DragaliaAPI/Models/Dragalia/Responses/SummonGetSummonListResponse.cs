@@ -42,7 +42,7 @@ public record SummonGetSummonListResponseData(
 
 /// UNKNOWN: Are those all possible lists?
 /// <summary>
-/// List of types of banners
+/// List of types of banners, mostly just for the top small banner image
 /// </summary>
 /// <param name="summon_list"></param>
 /// <param name="campaign_summon_list"></param>
@@ -74,26 +74,26 @@ public record BannerList(
 /// <param name="summon_id">Banner Id</param>
 /// <param name="priority">Unknown</param>
 /// <param name="summon_type">Unknown, maybe for special banners like platinum only banners</param>
-/// <param name="single_crystal">1x summon Wyrmite cost</param>
-/// <param name="single_diamond">1x summon Diamantium cost</param>
-/// <param name="multi_crystal">10x summon Wyrmite cost</param>
-/// <param name="multi_diamond">10x summon Diamantium cost</param>
-/// <param name="limited_crystal">Wyrmite cost of the limited 1x summon button</param>
+/// <param name="single_crystal">1x summon Wyrmite cost (Negative numbers won't allow summons, 0 for default)</param>
+/// <param name="single_diamond">Client uses <see cref="single_crystal"/> for displaying both wyrmite and diamantium cost<br/>Most likely 1x summon Diamantium cost (Negative numbers won't allow summons, 0 for default)</param>
+/// <param name="multi_crystal">10x summon Wyrmite cost (Negative numbers won't allow summons, 0 for default)</param>
+/// <param name="multi_diamond">Client uses <see cref="multi_crystal"/> for displaying both wyrmite and diamantium cost<br/>Most likely 10x summon Diamantium cost (Negative numbers won't allow summons, 0 for default)</param>
+/// <param name="limited_crystal">Unknown: Presumably Wyrmite cost of the limited 1x summon button but it never existed</param>
 /// <param name="limited_diamond">Diamantium cost of the limited 1x summon button</param>
 /// <param name="add_summon_point">Summon points for a 1x Wyrmite summon</param>
 /// <param name="add_summon_point_stone">Summon points for a 1x Diamantium summon</param>
-/// <param name="exchange_summon_point">Summon point cost for sparking</param>
-/// <param name="status">Unknown, maybe just active = 1, inactive = 0</param>
+/// <param name="exchange_summon_point">Summon point cost for sparking, the client doesn't seem to care though</param>
+/// <param name="status">Unknown function, maybe just active = 1, inactive = 0 but no change in normal banner</param>
 /// <param name="commence_date">Banner start date</param>
 /// <param name="complete_date">Banner end date</param>
-/// <param name="daily_count">Probably current used daily free summons</param>
-/// <param name="daily_limit">Probably total daily free summons</param>
-/// <param name="total_limit">Total amount of summons limit</param>
-/// <param name="total_count">Current total amount of summons</param>
+/// <param name="daily_count">Currently used summons for the daily discounted diamantium summon</param>
+/// <param name="daily_limit">Total limit for the daily discounted diamantium summon</param>
+/// <param name="total_limit">Total amount of summons limit(seems ignored for normal banners)</param>
+/// <param name="total_count">Current total amount of summons(seems ignored for normal banners)</param>
 /// <param name="campaign_type">Unknown, maybe used for </param>
-/// <param name="free_count_rest">Unknown</param>
+/// <param name="free_count_rest">Most likely free summons for certain banner/campaign types</param>
 /// <param name="is_beginner_campaign">If this banner is part of the beginner campaign</param>
-/// <param name="beginner_campaign_count_rest">Unknown</param>
+/// <param name="beginner_campaign_count_rest">Begginer banner has a free tenfold available(only if <see cref="is_beginner_campaign"/> is set)</param>
 /// <param name="consecution_campaign_count_rest">Unknown</param>
 [MessagePackObject(true)]
 public record BannerData(
@@ -120,8 +120,8 @@ public record BannerData(
     int total_count,
     SummonCampaignTypes campaign_type,
     int free_count_rest,
-    int is_beginner_campaign,
-    int beginner_campaign_count_rest,
+    [property: MessagePackFormatter(typeof(BoolToIntFormatter))] bool is_beginner_campaign,
+    [property: MessagePackFormatter(typeof(BoolToIntFormatter))] bool beginner_campaign_count_rest,
     int consecution_campaign_count_rest
 );
 
@@ -165,7 +165,7 @@ public static class SummonGetSummonListResponseFactory
                     120,
                     1200,
                     1200,
-                    0,
+                    5,
                     30,
                     1,
                     2,
@@ -179,22 +179,13 @@ public static class SummonGetSummonListResponseFactory
                     0,
                     SummonCampaignTypes.Normal,
                     0,
-                    1,
-                    1,
+                    true,
+                    true,
                     0
-                )
-            },
-            new(),
-            new(),
-            new(),
-            new(),
-            new(),
-            new(),
-            new()
-            {
+                ),
                 new BannerData(
                     1110003,
-                    101136,
+                    null,
                     BannerTypes.DiamantiumMulti,
                     0,
                     0,
@@ -214,11 +205,18 @@ public static class SummonGetSummonListResponseFactory
                     0,
                     SummonCampaignTypes.Normal,
                     0,
-                    0,
-                    0,
+                    false,
+                    false,
                     0
                 )
             },
+            new(),
+            new(),
+            new(),
+            new(),
+            new(),
+            new(),
+            new() { },
             new(),
             new(new(), new(), new(), new(), new(), new(), new(), new(), new()),
             new(),

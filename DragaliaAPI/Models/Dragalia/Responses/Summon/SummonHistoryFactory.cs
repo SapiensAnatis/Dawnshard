@@ -8,16 +8,16 @@ namespace DragaliaAPI.Models.Dragalia.Responses.Summon;
 
 public class SummonHistoryFactory
 {
-    /// UNKNOWN: params: summon_prize_rank, summon_point_id(why?)
+    /// UNKNOWN: params: summon_point_id(why?)
     /// <summary>
     /// A summon history entry
     /// </summary>
     /// <param name="key_id">Unique Id of the summon</param>
     /// <param name="summon_id">Banner Id</param>
-    /// <param name="summon_exec_type">Maybe distinguishing 1x from 10x</param>
+    /// <param name="summon_exec_type">Distinguishing 1x from 10x</param>
     /// <param name="exec_date">Summon date</param>
     /// <param name="payment_type">Summon currency type</param>
-    /// <param name="summon_prize_rank">Related to prize summon banners but values unknown</param>
+    /// <param name="summon_prize_rank">Summon prize rank obtained for this summon</param>
     /// <param name="summon_point_id">Summon point entry id (unknown why needed since <see cref="summon_point"/> exists)</param>
     /// <param name="summon_point">Amount of summon points received</param>
     /// <param name="get_dew_point_quantity">Amount of Dew points received</param>
@@ -37,7 +37,7 @@ public class SummonHistoryFactory
         int entity_limit_break_count,
         int entity_hp_plus_count,
         int entity_attack_plus_count,
-        int summon_prize_rank,
+        SummonPrizeRanks summon_prize_rank,
         int summon_point_id,
         int summon_point,
         int get_dew_point_quantity

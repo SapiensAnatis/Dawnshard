@@ -17,14 +17,14 @@ public record SummonExcludeGetListResponse(SummonExcludeGetListResponseData data
 /// <param name="update_data_list"></param>
 [MessagePackObject(true)]
 public record SummonExcludeGetListResponseData(
-    List<EntityResult> summon_exclude_unit_list,
+    List<BaseNewEntity> summon_exclude_unit_list,
     UpdateDataList update_data_list
 );
 
 public static class SummonExcludeGetListResponseFactory
 {
     public static SummonExcludeGetListResponseData CreateData(
-        List<EntityResult> summonExcludeUnitList,
+        List<BaseNewEntity> summonExcludeUnitList,
         UpdateDataList updateDataList
     )
     {

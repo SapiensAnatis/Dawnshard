@@ -16,6 +16,8 @@ public interface IApiRepository
 
     Task<DbPlayerUserData> UpdateTutorialStatus(string deviceAccountId, int newStatus);
 
+    Task<DbPlayerUserData> UpdateTutorialFlag(string deviceAccountId, int flag);
+
     Task UpdateName(string deviceAccountId, string newName);
 
     Task<ISet<int>> getTutorialFlags(string deviceAccountId);

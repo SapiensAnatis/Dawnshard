@@ -75,7 +75,7 @@ public class ApiContext : DbContext
     public DbSet<DbPlayerDragonData> PlayerDragonData { get; set; } = null!;
 
     public DbSet<DbPlayerDragonReliability> PlayerDragonReliability { get; set; } = null!;
-    public DbSet<DbPlayerStoryState> PlayerUnitStory { get; set; } = null!;
+    public DbSet<DbPlayerStoryState> PlayerStoryState { get; set; } = null!;
     public DbSet<DbPlayerSummonHistory> PlayerSummonHistory { get; set; } = null!;
     public DbSet<DbPlayerBannerData> PlayerBannerData { get; set; } = null!;
     public DbSet<DbParty> PlayerParties { get; set; } = null!;

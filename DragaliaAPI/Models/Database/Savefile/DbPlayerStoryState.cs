@@ -5,7 +5,7 @@ using DragaliaAPI.Models.Data;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 
-[Table("PlayerStoryRead")]
+[Table("PlayerStoryState")]
 public class DbPlayerStoryState : IDbHasAccountId
 {
     [Column("DeviceAccountId")]

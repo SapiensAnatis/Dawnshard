@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.InteropServices;
+using DragaliaAPI.Models.Data;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 
@@ -75,6 +76,13 @@ public class DbPlayerUserData : IDbHasAccountId
     public int TutorialStatus { get; set; }
 
     public int TutorialFlag { get; set; }
+
+    [NotMapped]
+    public ISet<int> TutorialFlagList
+    {
+        get => TutorialFlagUtil.ConvertIntToFlagIntList(TutorialFlag);
+        set => TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(value);
+    }
 
     public int PrologueEndTime { get; set; }
 

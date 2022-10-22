@@ -23,9 +23,21 @@ public class DbPlayerBannerData : IDbHasAccountId
     [Required]
     public int SummonCount { get; set; }
 
-    [Column("FreeCountRest")]
+    [Column("DailyLimitedSummons")]
     [Required]
-    public int FreeCountRest { get; set; }
+    public int DailyLimitedSummonCount { get; set; }
+
+    [Column("FreeSummonAvailable")]
+    [Required]
+    public int IsFreeSummonAvailable { get; set; }
+
+    [Column("BeginnerSummonAvailable")]
+    [Required]
+    public int IsBeginnerFreeSummonAvailable { get; set; }
+
+    [Column("CsSummonAvailable")]
+    [Required]
+    public int IsConsecutionFreeSummonAvailable { get; set; }
 
     [Column("SummonPoints")]
     [Required]
