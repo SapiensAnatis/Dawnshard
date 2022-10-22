@@ -8,6 +8,7 @@ namespace DragaliaAPI.Models.Database.Savefile;
 [Table("PlayerDragonData")]
 public class DbPlayerDragonData : IDbHasAccountId
 {
+    [Column("DragonKeyId")]
     [Required]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,7 +20,7 @@ public class DbPlayerDragonData : IDbHasAccountId
     [ForeignKey("DbDeviceAccount")]
     public string DeviceAccountId { get; set; } = null!;
 
-    [Column("DragonKeyId")]
+    [Column("DragonId")]
     [Required]
     [TypeConverter(typeof(EnumConverter))]
     public Dragons DragonId { get; set; }
