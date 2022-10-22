@@ -15,30 +15,6 @@ public class ApiContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // The SQLite testing DB doesn't support sequences
-        if (!this.Database.IsSqlite())
-        {
-            modelBuilder
-                .HasSequence<long>("Viewer_id", schema: "dbo")
-                .StartsAt(10000000000L)
-                .IncrementsBy(1);
-
-            modelBuilder
-                .Entity<DbPlayerUserData>()
-                .Property(o => o.ViewerId)
-                .HasDefaultValueSql("NEXT VALUE FOR dbo.Viewer_id");
-
-            modelBuilder
-                .HasSequence<long>("Dragon_key_id", schema: "dbo")
-                .StartsAt(10000000000L)
-                .IncrementsBy(1);
-
-            modelBuilder
-                .Entity<DbPlayerDragonData>()
-                .Property(o => o.DragonKeyId)
-                .HasDefaultValueSql("NEXT VALUE FOR dbo.Dragon_key_id");
-        }
-
         // TODO: put this into IEntityTypeConfiguration classes before this method gets huge
         modelBuilder
             .Entity<DbPlayerCharaData>()

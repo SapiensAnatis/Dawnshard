@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DragaliaAPI.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20221019215952_Alpha-SapiensAnatis5")]
-    partial class AlphaSapiensAnatis5
+    [Migration("20221022182643_Alpha-SapiensAnatis1")]
+    partial class AlphaSapiensAnatis1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,12 +22,6 @@ namespace DragaliaAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.HasSequence("Dragon_key_id", "dbo")
-                .StartsAt(10000000000L);
-
-            modelBuilder.HasSequence("Viewer_id", "dbo")
-                .StartsAt(10000000000L);
 
             modelBuilder.Entity("DragaliaAPI.Models.Database.DbDeviceAccount", b =>
                 {
@@ -103,11 +97,11 @@ namespace DragaliaAPI.Migrations
                     b.Property<int>("EquipCrestSlotType3CrestId2")
                         .HasColumnType("int");
 
-                    b.Property<int>("EquipDragonKeyId")
-                        .HasColumnType("int");
+                    b.Property<long>("EquipDragonKeyId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("EquipTalismanKeyId")
-                        .HasColumnType("int");
+                    b.Property<long>("EquipTalismanKeyId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("EquipWeaponBodyId")
                         .HasColumnType("int");
@@ -219,16 +213,18 @@ namespace DragaliaAPI.Migrations
 
             modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbPlayerDragonData", b =>
                 {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<long>("DragonKeyId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR dbo.Dragon_key_id");
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("DragonKeyId"), 1L, 1);
 
                     b.Property<byte>("AttackPlusCount")
                         .HasColumnType("tinyint");
+
+                    b.Property<string>("DeviceAccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DragonId")
                         .HasColumnType("int");
@@ -263,7 +259,7 @@ namespace DragaliaAPI.Migrations
                     b.Property<byte>("SecondAbilityLevel")
                         .HasColumnType("tinyint");
 
-                    b.HasKey("DeviceAccountId", "DragonKeyId");
+                    b.HasKey("DragonKeyId");
 
                     b.ToTable("PlayerDragonData");
                 });
@@ -404,8 +400,9 @@ namespace DragaliaAPI.Migrations
 
                     b.Property<long>("ViewerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR dbo.Viewer_id");
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ViewerId"), 1L, 1);
 
                     b.HasKey("DeviceAccountId");
 

@@ -21,12 +21,6 @@ namespace DragaliaAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.HasSequence("Dragon_key_id", "dbo")
-                .StartsAt(10000000000L);
-
-            modelBuilder.HasSequence("Viewer_id", "dbo")
-                .StartsAt(10000000000L);
-
             modelBuilder.Entity("DragaliaAPI.Models.Database.DbDeviceAccount", b =>
                 {
                     b.Property<string>("Id")
@@ -219,8 +213,9 @@ namespace DragaliaAPI.Migrations
                 {
                     b.Property<long>("DragonKeyId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR dbo.Dragon_key_id");
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("DragonKeyId"), 1L, 1);
 
                     b.Property<byte>("AttackPlusCount")
                         .HasColumnType("tinyint");
@@ -403,8 +398,9 @@ namespace DragaliaAPI.Migrations
 
                     b.Property<long>("ViewerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR dbo.Viewer_id");
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ViewerId"), 1L, 1);
 
                     b.HasKey("DeviceAccountId");
 

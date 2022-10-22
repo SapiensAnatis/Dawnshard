@@ -8,14 +8,6 @@ namespace DragaliaAPI.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "dbo");
-
-            migrationBuilder.CreateSequence(
-                name: "Viewer_id",
-                schema: "dbo",
-                startValue: 10000000000L);
-
             migrationBuilder.CreateTable(
                 name: "DeviceAccounts",
                 columns: table => new
@@ -29,13 +21,26 @@ namespace DragaliaAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PartyData",
+                columns: table => new
+                {
+                    DeviceAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PartyNo = table.Column<int>(type: "int", nullable: false),
+                    PartyName = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PartyData", x => new { x.DeviceAccountId, x.PartyNo });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PlayerCharaData",
                 columns: table => new
                 {
                     DeviceAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CharaId = table.Column<int>(type: "int", nullable: false),
                     Rarity = table.Column<byte>(type: "tinyint", nullable: false),
-                    Exp = table.Column<long>(type: "bigint", nullable: false),
+                    Exp = table.Column<int>(type: "int", nullable: false),
                     Level = table.Column<byte>(type: "tinyint", nullable: false),
                     AdditionalMaxLevel = table.Column<byte>(type: "tinyint", nullable: false),
                     HpPlusCount = table.Column<byte>(type: "tinyint", nullable: false),
@@ -48,7 +53,7 @@ namespace DragaliaAPI.Migrations
                     SecondAbilityLevel = table.Column<byte>(type: "tinyint", nullable: false),
                     ThirdAbilityLevel = table.Column<byte>(type: "tinyint", nullable: false),
                     BurstAttackLevel = table.Column<byte>(type: "tinyint", nullable: false),
-                    ComboBuildupCount = table.Column<long>(type: "bigint", nullable: false),
+                    ComboBuildupCount = table.Column<int>(type: "int", nullable: false),
                     Hp = table.Column<int>(type: "int", nullable: false),
                     Attack = table.Column<int>(type: "int", nullable: false),
                     FirstExAbilityLevel = table.Column<byte>(type: "tinyint", nullable: false),
@@ -57,7 +62,7 @@ namespace DragaliaAPI.Migrations
                     IsUnlockEditSkill = table.Column<bool>(type: "bit", nullable: false),
                     ManaNodeUnlockCount = table.Column<int>(type: "int", nullable: false),
                     ListViewFlag = table.Column<bool>(type: "bit", nullable: false),
-                    GetTime = table.Column<bool>(type: "bit", nullable: false)
+                    GetTime = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,8 +73,9 @@ namespace DragaliaAPI.Migrations
                 name: "PlayerDragonData",
                 columns: table => new
                 {
-                    DeviceAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DragonKeyId = table.Column<long>(type: "bigint", nullable: false),
+                    DragonKeyId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DeviceAccountId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DragonId = table.Column<int>(type: "int", nullable: false),
                     Exp = table.Column<long>(type: "bigint", nullable: false),
                     Level = table.Column<byte>(type: "tinyint", nullable: false),
@@ -81,11 +87,11 @@ namespace DragaliaAPI.Migrations
                     FirstSkillLevel = table.Column<byte>(type: "tinyint", nullable: false),
                     FirstAbilityLevel = table.Column<byte>(type: "tinyint", nullable: false),
                     SecondAbilityLevel = table.Column<byte>(type: "tinyint", nullable: false),
-                    GetTime = table.Column<bool>(type: "bit", nullable: false)
+                    GetTime = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerDragonData", x => new { x.DeviceAccountId, x.DragonKeyId });
+                    table.PrimaryKey("PK_PlayerDragonData", x => x.DragonKeyId);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,11 +110,27 @@ namespace DragaliaAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlayerInfo",
+                name: "PlayerUnitStory",
                 columns: table => new
                 {
                     DeviceAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ViewerId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR dbo.Viewer_id"),
+                    EntityType = table.Column<byte>(type: "tinyint", nullable: false),
+                    EntityId = table.Column<long>(type: "bigint", nullable: false),
+                    StoryId = table.Column<long>(type: "bigint", nullable: false),
+                    DragonId = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerUnitStory", x => new { x.DeviceAccountId, x.EntityType, x.EntityId, x.StoryId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlayerUserData",
+                columns: table => new
+                {
+                    DeviceAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ViewerId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false),
                     Exp = table.Column<int>(type: "int", nullable: false),
@@ -140,22 +162,41 @@ namespace DragaliaAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerInfo", x => x.DeviceAccountId);
+                    table.PrimaryKey("PK_PlayerUserData", x => x.DeviceAccountId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlayerUnitStory",
+                name: "PlayerPartyUnits",
                 columns: table => new
                 {
-                    DeviceAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EntityType = table.Column<byte>(type: "tinyint", nullable: false),
-                    EntityId = table.Column<long>(type: "bigint", nullable: false),
-                    StoryId = table.Column<long>(type: "bigint", nullable: false),
-                    DragonId = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PartyDeviceAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PartyNo = table.Column<int>(type: "int", nullable: false),
+                    UnitNo = table.Column<int>(type: "int", nullable: false),
+                    CharaId = table.Column<int>(type: "int", nullable: false),
+                    EquipDragonKeyId = table.Column<long>(type: "bigint", nullable: false),
+                    EquipWeaponBodyId = table.Column<int>(type: "int", nullable: false),
+                    EquipWeaponSkinId = table.Column<int>(type: "int", nullable: false),
+                    EquipCrestSlotType1CrestId1 = table.Column<int>(type: "int", nullable: false),
+                    EquipCrestSlotType1CrestId2 = table.Column<int>(type: "int", nullable: false),
+                    EquipCrestSlotType1CrestId3 = table.Column<int>(type: "int", nullable: false),
+                    EquipCrestSlotType2CrestId1 = table.Column<int>(type: "int", nullable: false),
+                    EquipCrestSlotType2CrestId2 = table.Column<int>(type: "int", nullable: false),
+                    EquipCrestSlotType3CrestId1 = table.Column<int>(type: "int", nullable: false),
+                    EquipCrestSlotType3CrestId2 = table.Column<int>(type: "int", nullable: false),
+                    EquipTalismanKeyId = table.Column<long>(type: "bigint", nullable: false),
+                    EditSkill1CharaId = table.Column<int>(type: "int", nullable: false),
+                    EditSkill2CharaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerUnitStory", x => new { x.DeviceAccountId, x.EntityType, x.EntityId, x.StoryId });
+                    table.PrimaryKey("PK_PlayerPartyUnits", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlayerPartyUnits_PartyData_PartyDeviceAccountId_PartyNo",
+                        columns: x => new { x.PartyDeviceAccountId, x.PartyNo },
+                        principalTable: "PartyData",
+                        principalColumns: new[] { "DeviceAccountId", "PartyNo" },
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -163,10 +204,10 @@ namespace DragaliaAPI.Migrations
                 columns: new[] { "Id", "HashedPassword" },
                 values: new object[] { "id", "NMvdakTznEF6khwWcz17i6GTnDA=" });
 
-            migrationBuilder.InsertData(
-                table: "PlayerInfo",
-                columns: new[] { "DeviceAccountId", "ActiveMemoryEventId", "BuildTimePoint", "Coin", "CreateTime", "Crystal", "DewPoint", "EmblemId", "Exp", "FortOpenTime", "IsOptin", "LastLoginTime", "LastStaminaMultiUpdateTime", "LastStaminaSingleUpdateTime", "Level", "MainPartyNo", "ManaPoint", "MaxAmuletQuantity", "MaxDragonQuantity", "MaxWeaponQuantity", "Name", "PrologueEndTime", "QuestSkipPoint", "StaminaMulti", "StaminaMultiSurplusSecond", "StaminaSingle", "StaminaSingleSurplusSecond", "TutorialFlag", "TutorialStatus" },
-                values: new object[] { "id", 0, 0, 0, 1665434277, 0, 0, 40000001, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 160, 0, "Euden", 0, 0, 12, 0, 18, 0, 0, 0 });
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerPartyUnits_PartyDeviceAccountId_PartyNo",
+                table: "PlayerPartyUnits",
+                columns: new[] { "PartyDeviceAccountId", "PartyNo" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -184,14 +225,16 @@ namespace DragaliaAPI.Migrations
                 name: "PlayerDragonReliability");
 
             migrationBuilder.DropTable(
-                name: "PlayerInfo");
+                name: "PlayerPartyUnits");
 
             migrationBuilder.DropTable(
                 name: "PlayerUnitStory");
 
-            migrationBuilder.DropSequence(
-                name: "Viewer_id",
-                schema: "dbo");
+            migrationBuilder.DropTable(
+                name: "PlayerUserData");
+
+            migrationBuilder.DropTable(
+                name: "PartyData");
         }
     }
 }

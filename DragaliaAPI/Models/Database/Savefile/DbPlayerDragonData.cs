@@ -12,6 +12,7 @@ public class DbPlayerDragonData : IDbHasAccountId
 {
     [Required]
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long DragonKeyId { get; set; }
 
     /// <inheritdoc/>
