@@ -30,6 +30,15 @@ public class ApiContext : DbContext
 
         modelBuilder.Entity<DbParty>().HasKey(e => new { e.DeviceAccountId, e.PartyNo });
 
+        if (this.Database.IsSqlite())
+        {
+            // SQLite doesn't support identity columns that aren't primary keys
+            modelBuilder
+                .Entity<DbPlayerUserData>()
+                .Property(x => x.ViewerId)
+                .HasDefaultValueSql("last_insert_rowid()");
+        }
+
         /*
         
         Stop players from adding more than 1 character of the same ID to a party,

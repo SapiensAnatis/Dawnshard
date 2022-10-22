@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Database;
+using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Test.Integration;
 
+// TODO: create a test fixture which instead contains this and let the test fixture handle database updates etc
 public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>
     where TStartup : class
 {
@@ -46,26 +48,23 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 ILogger<CustomWebApplicationFactory<TStartup>>
             >();
             var context = scopedServices.GetRequiredService<ApiContext>();
+            var repository = scopedServices.GetRequiredService<IApiRepository>();
             var cache = scopedServices.GetRequiredService<IDistributedCache>();
 
             context.Database.EnsureCreated();
 
             context.DeviceAccounts.AddRange(TestUtils.GetDeviceAccountsSeed());
-            context.PlayerUserData.AddRange(TestUtils.GetSavefilePlayerInfoSeed());
+            repository.CreateNewSavefile(this.DeviceAccountId);
+            repository.CreateNewSavefile(this.PreparedDeviceAccountId);
             context.SaveChanges();
-
-            ApiContext = context;
-            Cache = cache;
         });
 
         builder.UseEnvironment("Testing");
     }
 
-    public ApiContext ApiContext { get; private set; } = null!;
-
-    public IDistributedCache Cache { get; private set; } = null!;
-
     public string DeviceAccountId => "logged_in_id";
+
+    public string PreparedDeviceAccountId => "prepared_id";
 
     /// <summary>
     /// Seed the cache with a valid session, so that controllers can lookup database entries.
@@ -81,5 +80,15 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 """;
         cache.SetString(":session:session_id:session_id", sessionJson);
         cache.SetString(":session_id:device_account_id:logged_in_id", "session_id");
+    }
+
+    public async Task AddCharacter(int id, int rarity)
+    {
+        using (var scope = this.Services.CreateScope())
+        {
+            IApiRepository apiRepository =
+                scope.ServiceProvider.GetRequiredService<IApiRepository>();
+            await apiRepository.AddChara(this.DeviceAccountId, id, rarity);
+        }
     }
 }

@@ -89,25 +89,27 @@ public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Prog
             ContractlessStandardResolver.Options
         );
 
-        IEnumerable<int> newCharaIds = fixDeserialized.data.update_data_list.chara_list!.Select(
-            x => (int)x.chara_id
-        );
+        IEnumerable<int> newCharaIds = fixDeserialized.data.update_data_list.chara_list!
+            .Select(x => (int)x.chara_id)
+            .OrderBy(x => x);
 
-        IEnumerable<int> newDragonIds = fixDeserialized.data.update_data_list.dragon_list!.Select(
-            x => (int)x.dragon_id
-        );
+        IEnumerable<int> newDragonIds = fixDeserialized.data.update_data_list.dragon_list!
+            .Select(x => (int)x.dragon_id)
+            .OrderBy(x => x);
 
         using var scope = _factory.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
 
-        IEnumerable<int> committedCharaIds = apiContext.PlayerCharaData
+        IEnumerable<int> dbCharaIds = apiContext.PlayerCharaData
             .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
-            .Select(x => (int)x.CharaId);
-        IEnumerable<int> committedDragonIds = apiContext.PlayerDragonData
+            .Select(x => (int)x.CharaId)
+            .OrderBy(x => x);
+        IEnumerable<int> dbDragonIds = apiContext.PlayerDragonData
             .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
-            .Select(x => (int)x.DragonId);
+            .Select(x => (int)x.DragonId)
+            .OrderBy(x => x);
 
-        committedCharaIds.Should().BeEquivalentTo(newCharaIds);
-        committedDragonIds.Should().BeEquivalentTo(newDragonIds);
+        newCharaIds.Should().BeSubsetOf(dbCharaIds);
+        dbDragonIds.Should().BeSubsetOf(dbDragonIds);
     }
 }
