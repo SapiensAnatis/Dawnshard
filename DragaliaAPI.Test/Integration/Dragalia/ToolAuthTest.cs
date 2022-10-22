@@ -26,7 +26,7 @@ public class ToolAuthTest : IClassFixture<CustomWebApplicationFactory<Program>>
     public async Task Auth_CorrectIdToken_ReturnsOKResponse()
     {
         ToolAuthResponse expectedResponse =
-            new(new AuthResponseData(10000000002, "prepared_session_id", "placeholder nonce"));
+            new(new AuthResponseData(2, "prepared_session_id", "placeholder nonce"));
 
         var data = new { uuid = "unused", id_token = "id_token" };
         byte[] payload = MessagePackSerializer.Serialize(data);
@@ -41,7 +41,7 @@ public class ToolAuthTest : IClassFixture<CustomWebApplicationFactory<Program>>
     public async Task Auth_CalledTwice_ReturnsSameSessionId()
     {
         ToolAuthResponse expectedResponse =
-            new(new AuthResponseData(10000000002, "prepared_session_id", "placeholder nonce"));
+            new(new AuthResponseData(2, "prepared_session_id", "placeholder nonce"));
 
         var data = new { uuid = "unused", id_token = "id_token" };
         byte[] payload = MessagePackSerializer.Serialize(data);

@@ -10,7 +10,7 @@ public interface IApiRepository
 
     Task<DbDeviceAccount?> GetDeviceAccountById(string id);
 
-    Task AddNewPlayerInfo(string deviceAccountId);
+    Task CreateNewSavefile(string deviceAccountId);
 
     IQueryable<DbPlayerUserData> GetPlayerInfo(string deviceAccountId);
 
@@ -23,7 +23,17 @@ public interface IApiRepository
     Task setTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags);
 
     Task<bool> CheckHasDragon(string deviceAccountId, int dragonId);
+
     Task<bool> CheckHasChara(string deviceAccountId, int charaId);
+
     Task<DbPlayerCharaData> AddChara(string deviceAccountId, int id, int rarity);
+
     Task<DbPlayerDragonData> AddDragon(string deviceAccountId, int id, int rarity);
+
+    IQueryable<DbPlayerCharaData> GetCharaData(string deviceAccountId);
+
+    IQueryable<DbPlayerDragonData> GetDragonData(string deviceAccountId);
+
+    IQueryable<DbParty> GetParties(string deviceAccountId);
+    Task SetParty(string deviceAccountId, DbParty newParty);
 }

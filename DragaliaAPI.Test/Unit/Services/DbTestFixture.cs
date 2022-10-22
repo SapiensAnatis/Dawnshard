@@ -11,29 +11,31 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace DragaliaAPI.Test.Unit.Services
+namespace DragaliaAPI.Test.Unit.Services;
+
+public class DbTestFixture : IDisposable
 {
-    public class DbTestFixture : IDisposable
+    public ApiContext ApiContext { get; init; }
+
+    public Mock<IWebHostEnvironment> MockEnvironment { get; init; }
+
+    public DbTestFixture()
     {
-        public ApiContext apiContext { get; init; }
+        var options = new DbContextOptionsBuilder<ApiContext>()
+            .UseInMemoryDatabase($"ApiRepositoryTest-{Guid.NewGuid()}")
+            .Options;
 
-        public DbTestFixture()
-        {
-            var options = new DbContextOptionsBuilder<ApiContext>()
-                .UseInMemoryDatabase($"ApiRepositoryTest-{Guid.NewGuid()}")
-                .Options;
+        MockEnvironment = new(MockBehavior.Loose);
 
-            Mock<IWebHostEnvironment> mockEnvironment = new(MockBehavior.Loose);
+        ApiContext = new ApiContext(options, MockEnvironment.Object);
+        ApiContext.DeviceAccounts.Add(new DbDeviceAccount("id", "hashed password"));
+        ApiContext.PlayerUserData.Add(DbSavefileUserDataFactory.Create("id"));
+        ApiContext.SaveChanges();
+    }
 
-            apiContext = new ApiContext(options, mockEnvironment.Object);
-            apiContext.DeviceAccounts.Add(new DbDeviceAccount("id", "hashed password"));
-            apiContext.PlayerUserData.Add(DbSavefileUserDataFactory.Create("id"));
-            apiContext.SaveChanges();
-        }
-
-        public void Dispose()
-        {
-            apiContext.Dispose();
-        }
+    public void Dispose()
+    {
+        ApiContext.Dispose();
+        GC.SuppressFinalize(this);
     }
 }
