@@ -19,7 +19,7 @@ public class DbPartyUnit
     [Required]
     public Charas CharaId { get; set; }
 
-    public int EquipDragonKeyId { get; set; }
+    public long EquipDragonKeyId { get; set; }
 
     public int EquipWeaponBodyId { get; set; }
 
@@ -39,7 +39,7 @@ public class DbPartyUnit
 
     public int EquipCrestSlotType3CrestId2 { get; set; }
 
-    public int EquipTalismanKeyId { get; set; }
+    public long EquipTalismanKeyId { get; set; }
 
     public int EditSkill1CharaId { get; set; }
 

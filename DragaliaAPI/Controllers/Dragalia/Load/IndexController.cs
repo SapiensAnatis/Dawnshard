@@ -46,7 +46,7 @@ public class IndexController : ControllerBase
         UserData userData = SavefileUserDataFactory.Create(dbUserData, new() { });
         IEnumerable<Chara> charas = dbCharaData.Select(CharaFactory.Create);
         IEnumerable<Dragon> dragons = dbDragonData.Select(DragonFactory.Create);
-        IEnumerable<Party> parties = dbParties.Select(PartyFactory.Create);
+        IEnumerable<Party> parties = dbParties.Select(PartyFactory.CreateDto);
 
         LoadIndexData data = new LoadIndexData(
             userData,

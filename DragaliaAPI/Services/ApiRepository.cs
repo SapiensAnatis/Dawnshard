@@ -196,4 +196,27 @@ public class ApiRepository : IApiRepository
             .Include(x => x.Units)
             .Where(x => x.DeviceAccountId == deviceAccountId);
     }
+
+    public async Task SetParty(string deviceAccountId, DbParty newParty)
+    {
+        DbParty existingParty = await _apiContext.PlayerParties
+            .Where(x => x.DeviceAccountId == deviceAccountId && x.PartyNo == newParty.PartyNo)
+            .Include(x => x.Units)
+            .SingleAsync();
+
+        existingParty.PartyName = newParty.PartyName;
+
+        // For some reason, pressing 'Optimize' sends a request to /party/set_party_setting with like 8 units in it
+        // Take the first one under each number
+        existingParty.Units.Clear();
+        for (int i = 1; i <= 4; i++)
+        {
+            existingParty.Units.Add(
+                newParty.Units.FirstOrDefault(x => x.UnitNo == i)
+                    ?? new() { UnitNo = i, CharaId = 0 }
+            );
+        }
+
+        await _apiContext.SaveChangesAsync();
+    }
 }

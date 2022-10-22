@@ -35,4 +35,5 @@ public interface IApiRepository
     IQueryable<DbPlayerDragonData> GetDragonData(string deviceAccountId);
 
     IQueryable<DbParty> GetParties(string deviceAccountId);
+    Task SetParty(string deviceAccountId, DbParty newParty);
 }
