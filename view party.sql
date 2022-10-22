@@ -1,0 +1,1 @@
+﻿select * from dbo.PlayerPartyUnits where PartyDeviceAccountId='zgn3ltjpng6rFkGk' and PartyNo=1;

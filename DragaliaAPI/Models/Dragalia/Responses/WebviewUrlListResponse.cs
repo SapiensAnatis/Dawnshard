@@ -14,9 +14,9 @@ public record WebviewUrl(string function_name, string url);
 
 public static class WebviewUrlListStatic
 {
-    private static string PlaceholderUrl { get; } = "localhost";
+    private static readonly string PlaceholderUrl = "localhost";
 
-    public static List<WebviewUrl> AllUrls { get; } =
+    public static List<WebviewUrl> GetAllUrls(string host) =>
         new()
         {
             new("ability_crest_advice", PlaceholderUrl),
@@ -27,7 +27,7 @@ public static class WebviewUrlListStatic
             new("faq", PlaceholderUrl),
             new("help_comic", PlaceholderUrl),
             new("help", PlaceholderUrl),
-            new("information", PlaceholderUrl),
+            new("information", host + "/News"),
             new("inquiry_attention", PlaceholderUrl),
             new("dragon_battle_info", PlaceholderUrl),
             new("quest_info", PlaceholderUrl),

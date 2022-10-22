@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Models.Data;
 using DragaliaAPI.Services.Data.Models;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace DragaliaAPI.Services.Data;
 
@@ -21,7 +21,9 @@ public class DragonDataService : IDragonDataService
     public DragonDataService()
     {
         string json = File.ReadAllText(Path.Join(_folder, _filename));
-        List<DataDragon> deserialized = JsonConvert.DeserializeObject<List<DataDragon>>(json);
+        List<DataDragon> deserialized =
+            JsonSerializer.Deserialize<List<DataDragon>>(json)
+            ?? throw new JsonException("Deserialization failure");
 
         _dictionary = deserialized
             .Select(x => new KeyValuePair<int, DataDragon>(x.Id, x))

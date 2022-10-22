@@ -24,7 +24,7 @@ public class SignupTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task Signup_CorrectIdToken_ReturnsOKResponse()
     {
-        SignupResponse expectedResponse = new(new SignupData(10000000002));
+        SignupResponse expectedResponse = new(new SignupData(2));
 
         var data = new { id_token = "id_token" };
         byte[] payload = MessagePackSerializer.Serialize(data);
