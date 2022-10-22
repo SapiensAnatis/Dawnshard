@@ -8,9 +8,9 @@ namespace DragaliaAPI.Models.Dragalia.Requests;
 /// A summoning request
 /// </summary>
 /// <param name="summon_id">Id of the summon banner</param>
-/// <param name="exec_type">Unknown<br/>Maybe distinguishing 1x from 10x</param>
-/// <param name="exec_count">Unknown<br/>Maybe for multiple single tickets</param>
-/// <param name="payment_type">Probably type of currency used</param>
+/// <param name="exec_type">Distinguishing single(1) from tenfold(2) summons, maybe more</param>
+/// <param name="exec_count">Seemingly only passed for multiple single summons, 0 for tenfold</param>
+/// <param name="payment_type">Type of currency used</param>
 /// <param name="payment_target"><b>See: <see cref="PaymentTarget"/></b></param>
 [MessagePackObject(true)]
 public record SummonRequest(
@@ -23,7 +23,7 @@ public record SummonRequest(
 
 /// <summary>
 /// Contains the cost of the summon and the amount held of the relevant currency
-/// Maybe required for Diamantium purchases
+/// Mostly likely only relevant for Diamantium
 /// </summary>
 /// <param name="target_hold_quantity">Total relevant currency held</param>
 /// <param name="target_cost">Relevant currency cost</param>

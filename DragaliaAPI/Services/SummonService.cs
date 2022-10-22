@@ -32,7 +32,6 @@ public class SummonService : ISummonService
         _dragonDataService = dragonDataService;
     }
 
-    public List<SummonEntity> GenerateSummonResult(int numSummons)
     public record BannerSummonInfo(
         Dictionary<EntityTypes, SummonableEntity> featured,
         Dictionary<EntityTypes, SummonableEntity> normal,
@@ -70,10 +69,10 @@ public class SummonService : ISummonService
                 relPool == bannerInfo.featured
                     ? SRSummonRateTotalFeatured / countSrFeaturedRewards
                     : realSsrRate / countSrFeaturedRewards;
-            foreach (SummonableEntity thing in relPool.Values)
+            foreach (SummonableEntity summonableEntity in relPool.Values)
             {
                 double summonRate = 0d;
-                switch (thing.rarity)
+                switch (summonableEntity.rarity)
                 {
                     case 5:
                         realSsrRate -= ssrRateChara;
@@ -85,7 +84,7 @@ public class SummonService : ISummonService
 
                         break;
                 }
-                pool.Add(thing, summonRate);
+                pool.Add(summonableEntity, summonRate);
             }
         }
         return pool;
@@ -119,7 +118,7 @@ public class SummonService : ISummonService
             {
                 Charas id = NextEnum<Charas>(random);
                 int rarity = _unitDataService.GetData(id).Rarity;
-                resultList.Add(new((int)EntityTypes.Chara, (int)id, 5));
+                resultList.Add(new((int)EntityTypes.Chara, (int)id, rarity));
             }
         }
 
@@ -137,54 +136,5 @@ public class SummonService : ISummonService
     private static T NextEnum<T>(Random random) where T : struct, Enum
     {
         return NextEnum(random, Enum.GetValues<T>());
-    }
-
-    private readonly ApiContext _apiContext;
-
-    public record SummonCommitResult(
-        Dictionary<Charas, DbPlayerCharaData> newChars,
-        Dictionary<Dragons, List<DbPlayerDragonData>> newDragons,
-        Dictionary<Dragons, DbPlayerDragonReliability> newUniqueDragons
-    );
-
-    public SummonService(ApiContext context)
-    {
-        _apiContext = context;
-    }
-
-    private async Task<List<SummonReward>> ConvertRewardsToDew(
-        long deviceAccountId,
-        IEnumerable<SimpleSummonReward> summonsToConvert
-    )
-    {
-        DbPlayerUserData? saveFileUserData = await _apiContext.PlayerUserData.FindAsync(
-            deviceAccountId
-        );
-        if (saveFileUserData == null)
-        {
-            throw new Exception($"No SaveFileData found for Account-Id: {deviceAccountId}");
-        }
-        List<SummonReward> convertedRewards = new List<SummonReward>();
-        foreach (SimpleSummonReward reward in summonsToConvert)
-        {
-            int amount = 0;
-            switch (reward.rarity)
-            {
-                case 5:
-                    amount = (int)DupeReturnBaseValues.Rarity5;
-                    break;
-                case 4:
-                    amount = (int)DupeReturnBaseValues.Rarity4;
-                    break;
-                case 3:
-                    amount = (int)DupeReturnBaseValues.Rarity3;
-                    break;
-            }
-            saveFileUserData.DewPoint += amount;
-            convertedRewards.Add(
-                new SummonReward(reward.entity_type, reward.id, reward.rarity, false, amount)
-            );
-        }
-        return convertedRewards;
     }
 }

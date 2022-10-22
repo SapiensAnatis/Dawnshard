@@ -7,6 +7,7 @@ using DragaliaAPI.Services.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+using DragaliaAPI.Models.Dragalia.Responses;
 
 namespace DragaliaAPI.Services;
 
@@ -194,6 +195,21 @@ public class ApiRepository : IApiRepository
         return dbEntry;
     }
 
+    public async Task<DbPlayerBannerData> AddPlayerBannerData(string deviceAccountId, int bannerId)
+    {
+        DbPlayerBannerData bannerData = new DbPlayerBannerData()
+        {
+            DeviceAccountId = deviceAccountId,
+            //TODO Probably get all this from bannerInfo
+            SummonBannerId = bannerId,
+            ConsecutionSummonPointsMinDate = DateTimeOffset.UtcNow,
+            ConsecutionSummonPointsMaxDate = DateTimeOffset.UtcNow.AddDays(7),
+        };
+        bannerData = _apiContext.PlayerBannerData.Add(bannerData).Entity;
+        await _apiContext.SaveChangesAsync();
+        return bannerData;
+    }
+
     public async Task<List<DbPlayerSummonHistory>> GetSummonHistory(string deviceAccountId)
     {
         return await _apiContext.PlayerSummonHistory
@@ -206,19 +222,7 @@ public class ApiRepository : IApiRepository
         DbPlayerBannerData bannerData =
             await _apiContext.PlayerBannerData.FirstOrDefaultAsync(
                 x => x.DeviceAccountId.Equals(deviceAccountId) && x.SummonBannerId == bannerId
-            )
-            ?? new DbPlayerBannerData()
-            {
-                DeviceAccountId = deviceAccountId,
-                SummonBannerId = bannerId,
-                ConsecutionSummonPointsMinDate = DateTimeOffset.UtcNow,
-                ConsecutionSummonPointsMaxDate = DateTimeOffset.UtcNow.AddDays(7),
-            };
-        if (_apiContext.Entry(bannerData).State == EntityState.Detached)
-        {
-            _apiContext.PlayerBannerData.Add(bannerData);
-            await _apiContext.SaveChangesAsync();
-        }
+            ) ?? await AddPlayerBannerData(deviceAccountId, bannerId);
         return bannerData;
     }
 

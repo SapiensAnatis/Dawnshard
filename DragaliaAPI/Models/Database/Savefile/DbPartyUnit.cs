@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using DragaliaAPI.Models.Data;
+using DragaliaAPI.Models.Data.Entity;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 

@@ -1,19 +1,11 @@
 ﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
 using MessagePack.Resolvers;
 using MessagePack;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using DragaliaAPI.Models.Data;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using System.Text;
 using Xunit.Abstractions;
-using Newtonsoft.Json;
 using DragaliaAPI.Models.Data.Entity;
 using DragaliaAPI.Models.Database;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using DragaliaAPI.Models.Database.Savefile;
-using System.Collections.Generic;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -144,6 +136,8 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
         }
     }
 
+    /// Multisummon tests fail on testDB when saving 2+ new dragonData because sqlLite can't generate new Dragon_Key_Ids (always returns 0) via sequence
+    /// TODO: Low priority since it works with the actual DB, but maybe figure out how to change the generation so it works in tests too
     [Fact]
     public async Task SummonRequest_TenSummonWyrmite_ReturnsValidResult()
     {
