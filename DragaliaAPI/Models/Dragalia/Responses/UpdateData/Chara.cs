@@ -6,6 +6,7 @@ using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 
+// TODO: Change to CharaDTO to avoid confusion with Charas enum
 [MessagePackObject(true)]
 public record Chara(
     Charas chara_id,

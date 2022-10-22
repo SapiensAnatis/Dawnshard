@@ -15,6 +15,7 @@ public record RedoableSummonFixExecData(
     EntityResult entity_result
 );
 
+[MessagePackObject(true)]
 public record EntityResult(IEnumerable<Entity> new_get_entity_list);
 
 public static class RedoableSummonFixExecFactory

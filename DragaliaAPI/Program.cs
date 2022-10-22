@@ -20,6 +20,9 @@ builder.Services
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(StandardResolver.Options));
     });
 
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+
 builder.Services.AddDbContext<ApiContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"))
 );
@@ -83,6 +86,7 @@ using (
 }
 
 //app.UseHttpsRedirection();
+app.MapRazorPages();
 
 app.Use(
     async (context, next) =>

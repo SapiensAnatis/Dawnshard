@@ -3,6 +3,7 @@ using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Responses.Common;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+using DragaliaAPI.Services;
 using MessagePack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -50,7 +51,11 @@ public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<
     public async Task TutorialUpdateStep_ReturnsCorrectResponse()
     {
         int step = 2;
-        DbPlayerUserData dbUserData = TestUtils.GetLoggedInSavefileSeed();
+        using var scope = _factory.Services.CreateScope();
+        IApiRepository apiRepository = scope.ServiceProvider.GetRequiredService<IApiRepository>();
+        DbPlayerUserData dbUserData = await apiRepository
+            .GetPlayerInfo("logged_in_id")
+            .SingleAsync();
 
         UserData userData = SavefileUserDataFactory.Create(dbUserData, new());
         UpdateDataList updateData = new() { user_data = userData with { tutorial_status = step } };

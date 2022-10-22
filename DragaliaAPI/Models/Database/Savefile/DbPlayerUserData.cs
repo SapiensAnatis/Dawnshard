@@ -16,6 +16,7 @@ public class DbPlayerUserData : IDbHasAccountId
     /// <summary>
     /// The player's unique ID, i.e. the one that is used to send friend requests.
     /// </summary>
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long ViewerId { get; set; }
 
     /// <summary>

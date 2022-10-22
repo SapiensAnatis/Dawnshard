@@ -1,0 +1,1 @@
+﻿UPDATE dbo.PlayerUserData SET TutorialStatus = 10152 WHERE DeviceAccountId = 'zgn3ltjpng6rFkGk';

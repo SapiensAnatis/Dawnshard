@@ -1,11 +1,21 @@
 ﻿using System;
 using DragaliaAPI.Models.Data;
 using DragaliaAPI.Models.Dragalia.Responses.Common;
+using DragaliaAPI.Services.Data;
 
 namespace DragaliaAPI.Services;
 
 public class SummonService : ISummonService
 {
+    private readonly IUnitDataService _unitDataService;
+    private readonly IDragonDataService _dragonDataService;
+
+    public SummonService(IUnitDataService unitDataService, IDragonDataService dragonDataService)
+    {
+        _unitDataService = unitDataService;
+        _dragonDataService = dragonDataService;
+    }
+
     public List<SummonEntity> GenerateSummonResult(int numSummons)
     {
         Random random = new((int)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
@@ -19,11 +29,13 @@ public class SummonService : ISummonService
             if (isDragon)
             {
                 Dragons id = NextEnum<Dragons>(random);
-                resultList.Add(new((int)EntityTypes.Dragon, (int)id, 5));
+                int rarity = _dragonDataService.GetData(id).Rarity;
+                resultList.Add(new((int)EntityTypes.Dragon, (int)id, rarity));
             }
             else
             {
                 Charas id = NextEnum<Charas>(random);
+                int rarity = _unitDataService.GetData(id).Rarity;
                 resultList.Add(new((int)EntityTypes.Chara, (int)id, 5));
             }
         }

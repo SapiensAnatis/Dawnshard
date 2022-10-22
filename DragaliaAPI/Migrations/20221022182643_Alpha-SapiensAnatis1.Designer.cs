@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DragaliaAPI.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20221011222927_Alpha-SapiensAnatis2")]
-    partial class AlphaSapiensAnatis2
+    [Migration("20221022182643_Alpha-SapiensAnatis1")]
+    partial class AlphaSapiensAnatis1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,12 +22,6 @@ namespace DragaliaAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.HasSequence("Dragon_key_id", "dbo")
-                .StartsAt(10000000000L);
-
-            modelBuilder.HasSequence("Viewer_id", "dbo")
-                .StartsAt(10000000000L);
 
             modelBuilder.Entity("DragaliaAPI.Models.Database.DbDeviceAccount", b =>
                 {
@@ -48,6 +42,88 @@ namespace DragaliaAPI.Migrations
                             Id = "id",
                             HashedPassword = "NMvdakTznEF6khwWcz17i6GTnDA="
                         });
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbParty", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PartyNo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PartyName")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.HasKey("DeviceAccountId", "PartyNo");
+
+                    b.ToTable("PartyData");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbPartyUnit", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CharaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EditSkill1CharaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EditSkill2CharaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EquipCrestSlotType1CrestId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EquipCrestSlotType1CrestId2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EquipCrestSlotType1CrestId3")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EquipCrestSlotType2CrestId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EquipCrestSlotType2CrestId2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EquipCrestSlotType3CrestId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EquipCrestSlotType3CrestId2")
+                        .HasColumnType("int");
+
+                    b.Property<long>("EquipDragonKeyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("EquipTalismanKeyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("EquipWeaponBodyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EquipWeaponSkinId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PartyDeviceAccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PartyNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnitNo")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyDeviceAccountId", "PartyNo");
+
+                    b.ToTable("PlayerPartyUnits");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbPlayerCharaData", b =>
@@ -137,16 +213,18 @@ namespace DragaliaAPI.Migrations
 
             modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbPlayerDragonData", b =>
                 {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<long>("DragonKeyId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR dbo.Dragon_key_id");
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("DragonKeyId"), 1L, 1);
 
                     b.Property<byte>("AttackPlusCount")
                         .HasColumnType("tinyint");
+
+                    b.Property<string>("DeviceAccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DragonId")
                         .HasColumnType("int");
@@ -181,7 +259,7 @@ namespace DragaliaAPI.Migrations
                     b.Property<byte>("SecondAbilityLevel")
                         .HasColumnType("tinyint");
 
-                    b.HasKey("DeviceAccountId", "DragonKeyId");
+                    b.HasKey("DragonKeyId");
 
                     b.ToTable("PlayerDragonData");
                 });
@@ -322,47 +400,29 @@ namespace DragaliaAPI.Migrations
 
                     b.Property<long>("ViewerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR dbo.Viewer_id");
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ViewerId"), 1L, 1);
 
                     b.HasKey("DeviceAccountId");
 
                     b.ToTable("PlayerUserData");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            DeviceAccountId = "id",
-                            ActiveMemoryEventId = 0,
-                            BuildTimePoint = 0,
-                            Coin = 0,
-                            CreateTime = 1665527367,
-                            Crystal = 0,
-                            DewPoint = 0,
-                            EmblemId = 40000001,
-                            Exp = 0,
-                            FortOpenTime = 0,
-                            IsOptin = 0,
-                            LastLoginTime = 0,
-                            LastStaminaMultiUpdateTime = 0,
-                            LastStaminaSingleUpdateTime = 0,
-                            Level = 1,
-                            MainPartyNo = 1,
-                            ManaPoint = 0,
-                            MaxAmuletQuantity = 0,
-                            MaxDragonQuantity = 160,
-                            MaxWeaponQuantity = 0,
-                            Name = "Euden",
-                            PrologueEndTime = 0,
-                            QuestSkipPoint = 0,
-                            StaminaMulti = 12,
-                            StaminaMultiSurplusSecond = 0,
-                            StaminaSingle = 18,
-                            StaminaSingleSurplusSecond = 0,
-                            TutorialFlag = 0,
-                            TutorialStatus = 0,
-                            ViewerId = 0L
-                        });
+            modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbPartyUnit", b =>
+                {
+                    b.HasOne("DragaliaAPI.Models.Database.Savefile.DbParty", "Party")
+                        .WithMany("Units")
+                        .HasForeignKey("PartyDeviceAccountId", "PartyNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Models.Database.Savefile.DbParty", b =>
+                {
+                    b.Navigation("Units");
                 });
 #pragma warning restore 612, 618
         }

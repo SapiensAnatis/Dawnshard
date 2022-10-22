@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Models.Data;
 using DragaliaAPI.Services.Data.Models;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace DragaliaAPI.Services.Data;
 
@@ -22,9 +22,9 @@ public class UnitDataService : IUnitDataService
     public UnitDataService()
     {
         string json = File.ReadAllText(Path.Join(_folder, _filename));
-        List<DataAdventurer> deserialized = JsonConvert.DeserializeObject<List<DataAdventurer>>(
-            json
-        );
+        List<DataAdventurer> deserialized =
+            JsonSerializer.Deserialize<List<DataAdventurer>>(json)
+            ?? throw new JsonException("Deserialization failure");
 
         _dictionary = deserialized
             .Select(x => new KeyValuePair<int, DataAdventurer>(x.IdLong, x))

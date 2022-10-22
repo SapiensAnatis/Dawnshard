@@ -48,7 +48,7 @@ public static class ManaNodesUtil
 
     public static SortedSet<int> GetSetFromManaNodes(ManaNodes flag)
     {
-        SortedSet<int> nodes = new SortedSet<int>();
+        SortedSet<int> nodes = new();
         if (flag == ManaNodes.Clear)
         {
             return nodes;

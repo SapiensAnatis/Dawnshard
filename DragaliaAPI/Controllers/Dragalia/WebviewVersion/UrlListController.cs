@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Models.Dragalia.Responses;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia.WebviewVersion;
@@ -13,7 +14,10 @@ public class UrlListController : ControllerBase
     [HttpPost]
     public DragaliaResult Post()
     {
-        WebviewUrlListResponse response = new(new WebviewUrlListData(WebviewUrlListStatic.AllUrls));
+        // Webview URLs such as localhost:5000/News are not considered acceptable by the game;
+        // the webview pages will only load when the server is deployed to a dedicated domain.
+        WebviewUrlListResponse response =
+            new(new WebviewUrlListData(WebviewUrlListStatic.GetAllUrls(Request.Host.Value)));
         return Ok(response);
     }
 }

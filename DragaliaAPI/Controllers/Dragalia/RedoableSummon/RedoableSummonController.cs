@@ -19,6 +19,7 @@ namespace DragaliaAPI.Controllers.Dragalia.RedoableSummon;
 public class RedoableSummonController : ControllerBase
 {
     private readonly ISummonService _summonService;
+    private readonly IApiRepository _apiRepository;
     private readonly ISavefileWriteService _savefileWriteService;
     private readonly IDistributedCache _cache;
     private readonly ISessionService _sessionService;
@@ -31,12 +32,14 @@ public class RedoableSummonController : ControllerBase
 
     public RedoableSummonController(
         ISummonService summonService,
+        IApiRepository apiRepository,
         ISavefileWriteService savefileWriteService,
         IDistributedCache cache,
         ISessionService sessionService
     )
     {
         _summonService = summonService;
+        _apiRepository = apiRepository;
         _savefileWriteService = savefileWriteService;
         _cache = cache;
         _sessionService = sessionService;
@@ -85,7 +88,7 @@ public class RedoableSummonController : ControllerBase
 
     [HttpPost]
     [Route("fix_exec")]
-    public async Task<DragaliaResult> PostExec([FromHeader(Name = "SID")] string sessionId)
+    public async Task<DragaliaResult> FixExec([FromHeader(Name = "SID")] string sessionId)
     {
         string cachedResultJson = await _cache.GetStringAsync(
             Schema.SessionId_CachedSummonResult(sessionId)
@@ -102,11 +105,19 @@ public class RedoableSummonController : ControllerBase
 
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
 
+        await _apiRepository.UpdateTutorialStatus(deviceAccountId, 10152);
+
         UpdateDataList updateData = await _savefileWriteService.CommitSummonResult(
             cachedResult,
             deviceAccountId,
             giveDew: false
         );
+
+        if (updateData.user_data is null)
+        {
+            // Removes warning below
+            throw new Exception("CommitSummonResult doesn't work properly");
+        }
 
         return Ok(
             new RedoableSummonFixExecResponse(
