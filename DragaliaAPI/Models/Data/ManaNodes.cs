@@ -26,7 +26,7 @@ public static class ManaNodesUtil
 {
     public static ManaNodes SetManaCircleNodesFromSet(IEnumerable<int> enumerable)
     {
-        if (!enumerable.GetEnumerator().MoveNext() || enumerable.Contains(0))
+        if (!enumerable.Any() || enumerable.Contains(0))
         {
             return ManaNodes.Clear;
         }

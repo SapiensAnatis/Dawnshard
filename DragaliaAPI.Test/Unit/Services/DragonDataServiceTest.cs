@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DragaliaAPI.Services.Data;
 using DragaliaAPI.Models.Data;
+using DragaliaAPI.Models.Data.Entity;
 
 namespace DragaliaAPI.Test.Unit.Services;
 

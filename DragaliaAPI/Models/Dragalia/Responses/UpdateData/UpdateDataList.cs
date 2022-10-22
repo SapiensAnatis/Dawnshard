@@ -1,4 +1,6 @@
-﻿using MessagePack;
+﻿using System.ComponentModel;
+using System.Runtime.Serialization;
+using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 
@@ -10,6 +12,8 @@ public class UpdateDataList
     public List<Chara>? chara_list { get; set; }
 
     public List<Dragon>? dragon_list { get; set; }
+
+    public List<DragonReliability>? dragon_reliability_list { get; set; }
 
     public List<Party>? party_list { get; set; }
 

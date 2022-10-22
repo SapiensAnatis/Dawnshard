@@ -1,0 +1,15 @@
+﻿namespace DragaliaAPI.Models.Data;
+
+/// <summary>
+/// Types of Summoning Banners
+/// </summary>
+[Flags]
+public enum SummonCampaignTypes
+{
+    Normal = 0,
+    Limited = 0b_0001,
+    Beginner = 0b_0010,
+
+    //UNKNOWN: Maybe for followup banners
+    Consecution = 0b_0100,
+}

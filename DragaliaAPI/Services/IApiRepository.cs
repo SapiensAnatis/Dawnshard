@@ -29,6 +29,9 @@ public interface IApiRepository
     Task<DbPlayerCharaData> AddChara(string deviceAccountId, int id, int rarity);
 
     Task<DbPlayerDragonData> AddDragon(string deviceAccountId, int id, int rarity);
+    Task<DbPlayerDragonReliability> AddDragonReliability(string deviceAccountId, int id);
+    Task<List<DbPlayerSummonHistory>> GetSummonHistory(string deviceAccountId);
+    Task<DbPlayerBannerData> GetPlayerBannerData(string deviceAccountId, int bannerId);
 
     IQueryable<DbPlayerCharaData> GetCharaData(string deviceAccountId);
 

@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Models.Data;
-using MessagePack;
+using DragaliaAPI.Models.Data.Entity;
 using DragaliaAPI.Services.Data.Models;
 
 namespace DragaliaAPI.Models.Database.Savefile;
@@ -11,114 +11,115 @@ namespace DragaliaAPI.Models.Database.Savefile;
 public class DbPlayerCharaData : IDbHasAccountId
 {
     /// <inheritdoc/>
-    [Column("DEVICE_ACCOUNT_ID")]
+    [Column("DeviceAccountId")]
     [Required]
     [ForeignKey("DbDeviceAccount")]
     public string DeviceAccountId { get; set; } = null!;
 
-    [Column("CHARA_ID")]
+    [Column("CharaId")]
     [Required]
     [TypeConverter(typeof(EnumConverter))]
     public Charas CharaId { get; set; }
 
-    [Column("RARITY")]
+    [Column("Rarity")]
     [Required]
     public byte Rarity { get; set; }
 
-    [Column("EXP")]
+    [Column("Exp")]
     [Required]
     public int Exp { get; set; }
 
-    [Column("LEVEL")]
+    [Column("Level")]
     [Required]
     public byte Level { get; set; }
 
-    [Column("ADD_MAX_LVL")]
+    [Column("AddMaxLevel")]
     [Required]
     public byte AdditionalMaxLevel { get; set; }
 
-    [Column("HP_PLUS_CNT")]
+    [Column("HpPlusCount")]
     [Required]
     public byte HpPlusCount { get; set; }
 
-    [Column("ATK_PLUS_CNT")]
+    [Column("AtkPlusCount")]
     [Required]
     public byte AttackPlusCount { get; set; }
 
-    [Column("LIMIT_BREAK_CNT")]
+    [Column("LimitBreakCount")]
     [Required]
     public byte LimitBreakCount { get; set; }
 
-    [Column("IS_NEW")]
+    [Column("IsNew")]
     [Required]
     [TypeConverter(typeof(BooleanConverter))]
     public bool IsNew { get; set; }
 
-    [Column("SKILL_1_LVL")]
+    [Column("Skill1Lvl")]
     [Required]
     public byte FirstSkillLevel { get; set; }
 
-    [Column("SKILL_2_LVL")]
+    [Column("Skill2Lvl")]
     [Required]
     public byte SecondSkillLevel { get; set; }
 
-    [Column("ABIL_1_LVL")]
+    [Column("Abil1Lvl")]
     [Required]
     public byte FirstAbilityLevel { get; set; }
 
-    [Column("ABIL_2_LVL")]
+    [Column("Abil2Lvl")]
     [Required]
     public byte SecondAbilityLevel { get; set; }
 
-    [Column("ABIL_3_LVL")]
+    [Column("Abil3Lvl")]
     [Required]
     public byte ThirdAbilityLevel { get; set; }
 
-    [Column("BRST_ATK_LVL")]
+    [Column("BurstAtkLvl")]
     [Required]
     public byte BurstAttackLevel { get; set; }
 
-    [Column("COMBO_BUILDUP_CNT")]
+    [Column("ComboBuildupCount")]
     [Required]
     public int ComboBuildupCount { get; set; }
 
-    [Column("HP")]
+    [Column("Hp")]
     [Required]
     public ushort Hp { get; set; }
 
-    [Column("ATK")]
+    [Column("Atk")]
     [Required]
     public ushort Attack { get; set; }
 
-    [Column("EX_ABIL_LVL")]
+    [Column("ExAbility1Lvl")]
     [Required]
     public byte FirstExAbilityLevel { get; set; }
 
-    [Column("EX_ABIL_2_LVL")]
+    [Column("ExAbility2Lvl")]
     [Required]
     public byte SecondExAbilityLevel { get; set; }
 
-    [Column("IS_TEMP")]
+    [Column("IsTemp")]
     [Required]
     [TypeConverter(typeof(BooleanConverter))]
     public bool IsTemporary { get; set; }
 
-    [Column("IS_UNLOCK_EDIT_SKILL")]
+    [Column("IsUnlockEditSkill")]
     [Required]
     public bool IsUnlockEditSkill { get; set; }
 
-    [Column("MANA_NODE_UNLOCK_CNT")]
+    [Column("ManaNodeUnlockCount")]
     [Required]
     public ushort ManaNodeUnlockCount { get; private set; }
 
-    [Column("LIST_VIEW_FLAG")]
+    [Column("ListViewFlag")]
     [Required]
     [TypeConverter(typeof(BooleanConverter))]
     public bool ListViewFlag { get; set; }
 
-    [Column("GET_TIME")]
+    [Column("GetTime")]
     [Required]
-    public int GetTime { get; set; }
+    [TypeConverter(typeof(DateTimeOffsetConverter))]
+    public DateTimeOffset GetTime { get; set; }
 
     [NotMapped]
     public SortedSet<int> ManaNodesUnlocked
@@ -133,7 +134,7 @@ public static class DbPlayerCharaDataFactory
     public static DbPlayerCharaData Create(
         string deviceAccountId,
         DataAdventurer data,
-        byte? rarity
+        byte? rarity = null
     )
     {
         byte validRarity = Math.Clamp(rarity ?? (byte)data.Rarity, (byte)data.Rarity, (byte)5);
@@ -183,7 +184,7 @@ public static class DbPlayerCharaDataFactory
             IsUnlockEditSkill = false,
             ManaNodesUnlocked = new SortedSet<int>(),
             ListViewFlag = false,
-            GetTime = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+            GetTime = DateTimeOffset.UtcNow
         };
     }
 }

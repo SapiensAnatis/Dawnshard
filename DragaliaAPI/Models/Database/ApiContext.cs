@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Database.Savefile;
+using DragaliaAPI.Models.Database.Savefile;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Models.Database;
@@ -25,8 +25,8 @@ public class ApiContext : DbContext
             .HasKey(key => new { key.DeviceAccountId, key.DragonId });
 
         modelBuilder
-            .Entity<DbPlayerUnitStory>()
-            .HasKey(key => new { key.DeviceAccountId, key.EntityType, key.EntityId, key.StoryId });
+            .Entity<DbPlayerStoryState>()
+            .HasKey(key => new { key.DeviceAccountId, key.StoryType, key.StoryId });
 
         modelBuilder.Entity<DbParty>().HasKey(e => new { e.DeviceAccountId, e.PartyNo });
 
@@ -50,6 +50,10 @@ public class ApiContext : DbContext
             .IsUnique();
         
          */
+        modelBuilder
+            .Entity<DbPlayerBannerData>()
+            .HasKey(key => new { key.DeviceAccountId, key.SummonBannerId });
+
         if (_isDevelopment)
             SeedDatabase(modelBuilder);
     }
@@ -71,10 +75,9 @@ public class ApiContext : DbContext
     public DbSet<DbPlayerDragonData> PlayerDragonData { get; set; } = null!;
 
     public DbSet<DbPlayerDragonReliability> PlayerDragonReliability { get; set; } = null!;
-
-    public DbSet<DbPlayerUnitStory> PlayerUnitStory { get; set; } = null!;
-
+    public DbSet<DbPlayerStoryState> PlayerUnitStory { get; set; } = null!;
+    public DbSet<DbPlayerSummonHistory> PlayerSummonHistory { get; set; } = null!;
+    public DbSet<DbPlayerBannerData> PlayerBannerData { get; set; } = null!;
     public DbSet<DbParty> PlayerParties { get; set; } = null!;
-
     public DbSet<DbPartyUnit> PlayerPartyUnits { get; set; } = null!;
 }

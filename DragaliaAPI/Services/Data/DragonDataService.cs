@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Data;
+using DragaliaAPI.Models.Data.Entity;
 using DragaliaAPI.Services.Data.Models;
 using System.Text.Json;
 
@@ -33,4 +34,7 @@ public class DragonDataService : IDragonDataService
     public DataDragon GetData(Dragons id) => _dictionary[(int)id];
 
     public DataDragon GetData(int id) => _dictionary[id];
+
+    public IEnumerable<DataDragon> getByRarity(int rarity) =>
+        _dictionary.Values.Where(x => x.Rarity == rarity);
 }

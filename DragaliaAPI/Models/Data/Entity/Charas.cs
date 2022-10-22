@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Models.Data;
+﻿namespace DragaliaAPI.Models.Data.Entity;
 
 public enum Charas
 {

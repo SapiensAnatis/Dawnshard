@@ -14,7 +14,8 @@ public record Dragon(
     int exp,
     [property: MessagePackFormatter(typeof(BoolToIntFormatter))] bool is_lock,
     [property: MessagePackFormatter(typeof(BoolToIntFormatter))] bool is_new,
-    int get_time,
+    [property: MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+        DateTimeOffset get_time,
     int skill_1_level,
     int ability_1_level,
     int ability_2_level,

@@ -1,11 +1,11 @@
-using System.Collections.Immutable;
-using DragaliaAPI.Models;
+﻿using DragaliaAPI.Models;
+using DragaliaAPI.Models.Data.Entity;
 using DragaliaAPI.Models.Data;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Services.Data;
-using DragaliaAPI.Models.Nintendo;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 
 namespace DragaliaAPI.Services;
@@ -155,7 +155,7 @@ public class ApiRepository : IApiRepository
 
     public async Task<bool> CheckHasDragon(string deviceAccountId, int dragonId)
     {
-        return await _apiContext.PlayerDragonData
+        return await _apiContext.PlayerDragonReliability
             .Where(x => x.DeviceAccountId == deviceAccountId)
             .AnyAsync(x => (int)x.DragonId == dragonId);
     }
@@ -174,10 +174,52 @@ public class ApiRepository : IApiRepository
 
     public async Task<DbPlayerDragonData> AddDragon(string deviceAccountId, int id, int rarity)
     {
-        DbPlayerDragonData dbEntry = DbPlayerDragonDataFactory.Create(deviceAccountId, id, rarity);
+        DbPlayerDragonData dbEntry = DbPlayerDragonDataFactory.Create(deviceAccountId, (Dragons)id);
         await _apiContext.PlayerDragonData.AddAsync(dbEntry);
         await _apiContext.SaveChangesAsync();
         return dbEntry;
+    }
+
+    public async Task<DbPlayerDragonReliability> AddDragonReliability(
+        string deviceAccountId,
+        int id
+    )
+    {
+        DbPlayerDragonReliability dbEntry = DbPlayerDragonReliabilityFactory.Create(
+            deviceAccountId,
+            (Dragons)id
+        );
+        await _apiContext.PlayerDragonReliability.AddAsync(dbEntry);
+        await _apiContext.SaveChangesAsync();
+        return dbEntry;
+    }
+
+    public async Task<List<DbPlayerSummonHistory>> GetSummonHistory(string deviceAccountId)
+    {
+        return await _apiContext.PlayerSummonHistory
+            .Where(x => x.DeviceAccountId.Equals(deviceAccountId))
+            .ToListAsync();
+    }
+
+    public async Task<DbPlayerBannerData> GetPlayerBannerData(string deviceAccountId, int bannerId)
+    {
+        DbPlayerBannerData bannerData =
+            await _apiContext.PlayerBannerData.FirstOrDefaultAsync(
+                x => x.DeviceAccountId.Equals(deviceAccountId) && x.SummonBannerId == bannerId
+            )
+            ?? new DbPlayerBannerData()
+            {
+                DeviceAccountId = deviceAccountId,
+                SummonBannerId = bannerId,
+                ConsecutionSummonPointsMinDate = DateTimeOffset.UtcNow,
+                ConsecutionSummonPointsMaxDate = DateTimeOffset.UtcNow.AddDays(7),
+            };
+        if (_apiContext.Entry(bannerData).State == EntityState.Detached)
+        {
+            _apiContext.PlayerBannerData.Add(bannerData);
+            await _apiContext.SaveChangesAsync();
+        }
+        return bannerData;
     }
 
     public IQueryable<DbPlayerCharaData> GetCharaData(string deviceAccountId)

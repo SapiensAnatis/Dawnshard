@@ -99,6 +99,7 @@ public static class DbSavefileUserDataFactory
             EmblemId = 40000001,
             StaminaSingle = 18,
             StaminaMulti = 12,
+            Crystal = 1200,
             // Matches internal datatype of the game -- I guess they anticipated EOS before 2038
             CreateTime = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
