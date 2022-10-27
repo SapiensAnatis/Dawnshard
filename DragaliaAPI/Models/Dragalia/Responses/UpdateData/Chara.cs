@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using DragaliaAPI.Models.Data;
+﻿using DragaliaAPI.Models.Data.Entity;
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.MessagePackFormatters;
 using MessagePack;
@@ -30,7 +29,8 @@ public record Chara(
     int attack_plus_count,
     int combo_buildup_count,
     [property: MessagePackFormatter(typeof(BoolToIntFormatter))] bool is_unlock_edit_skill,
-    int gettime,
+    [property: MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+        DateTimeOffset gettime,
     SortedSet<int> mana_circle_piece_id_list,
     [property: MessagePackFormatter(typeof(BoolToIntFormatter))] bool is_temporary,
     [property: MessagePackFormatter(typeof(BoolToIntFormatter))] bool list_view_flag

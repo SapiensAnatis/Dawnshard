@@ -57,7 +57,7 @@ public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Prog
             ContractlessStandardResolver.Options
         );
 
-        List<SummonEntity> summonResult = deserializedResponse
+        List<SimpleSummonReward> summonResult = deserializedResponse
             .data
             .user_redoable_summon_data
             .redoable_summon_result_unit_list;

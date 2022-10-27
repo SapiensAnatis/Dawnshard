@@ -57,7 +57,7 @@ public class RedoableSummonController : ControllerBase
     [Route("pre_exec")]
     public async Task<DragaliaResult> PreExec([FromHeader(Name = "SID")] string sessionId)
     {
-        List<SummonEntity> summonResult = _summonService.GenerateSummonResult(50);
+        List<SimpleSummonReward> summonResult = _summonService.GenerateSummonResult(50);
         /*
         int testtype = 23;
         int testid = 0;
@@ -99,8 +99,8 @@ public class RedoableSummonController : ControllerBase
             return BadRequest();
         }
 
-        List<SummonEntity> cachedResult =
-            JsonSerializer.Deserialize<List<SummonEntity>>(cachedResultJson)
+        List<SimpleSummonReward> cachedResult =
+            JsonSerializer.Deserialize<List<SimpleSummonReward>>(cachedResultJson)
             ?? throw new JsonException("Null deserialization result!");
 
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);

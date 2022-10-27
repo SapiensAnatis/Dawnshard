@@ -4,17 +4,17 @@ namespace DragaliaAPI.Models.Data;
 
 public enum CharaPromoteValues
 {
-    TO_RARITY_4 = 2500,
-    TO_RARITY_5 = 25000
+    ToRarity4 = 2500,
+    ToRarity5 = 25000
 }
 
 public enum DupeReturnBaseValues
 {
-    RARITY_4_STORY = 100,
-    RARITY_3 = 150,
-    RARITY_5_STORY = 300,
-    RARITY_4 = 2200,
-    RARITY_5 = 8500
+    Rarity4Story = 100,
+    Rarity3 = 150,
+    Rarity5Story = 300,
+    Rarity4 = 2200,
+    Rarity5 = 8500
 }
 
 public static class DewValueData
@@ -24,15 +24,31 @@ public static class DewValueData
     /// Value: Eldwater given for duplicate character summon of that rarity
     /// </summary>
     public static readonly Dictionary<int, int> DupeSummon =
-        new() { { 3, 150 }, { 4, 2200 }, { 5, 8500 } };
+        new()
+        {
+            { 3, (int)DupeReturnBaseValues.Rarity3 },
+            { 4, (int)DupeReturnBaseValues.Rarity4 },
+            { 5, (int)DupeReturnBaseValues.Rarity5 }
+        };
+
+    /// <summary>
+    /// Key: Rarity
+    /// Value: Eldwater given for duplicate character summon of that rarity
+    /// </summary>
+    public static readonly Dictionary<int, int> DupeStorySummon =
+        new()
+        {
+            { 4, (int)DupeReturnBaseValues.Rarity4Story },
+            { 5, (int)DupeReturnBaseValues.Rarity5Story }
+        };
 }
 
 public enum AmuletReturnBaseValues
 {
-    RARITY_3_STORY = 10,
-    RARITY_4_STORY = 100,
-    RARITY_3 = 150,
-    RARITY_5_STORY = 300,
-    RARITY_4 = 1000,
-    RARITY_5 = 3000
+    Rarity3Story = 10,
+    Rarity4Story = 100,
+    Rarity3 = 150,
+    Rarity5Story = 300,
+    Rarity4 = 1000,
+    Rarity5 = 3000
 }

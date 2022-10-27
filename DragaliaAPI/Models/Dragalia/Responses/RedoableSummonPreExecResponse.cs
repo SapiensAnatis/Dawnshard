@@ -17,12 +17,12 @@ public record RedoableSummonPreExecData(
 [MessagePackObject(true)]
 public record UserRedoableSummonData(
     int is_fixed_result,
-    List<SummonEntity> redoable_summon_result_unit_list
+    List<SimpleSummonReward> redoable_summon_result_unit_list
 );
 
 public static class RedoableSummonPreExecFactory
 {
-    public static RedoableSummonPreExecData CreateData(List<SummonEntity> resultList)
+    public static RedoableSummonPreExecData CreateData(List<SimpleSummonReward> resultList)
     {
         return new(new(0, resultList), new());
     }

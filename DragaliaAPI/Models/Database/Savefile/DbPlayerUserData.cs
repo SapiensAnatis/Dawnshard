@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.InteropServices;
+using DragaliaAPI.Models.Data;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 
@@ -76,6 +77,13 @@ public class DbPlayerUserData : IDbHasAccountId
 
     public int TutorialFlag { get; set; }
 
+    [NotMapped]
+    public ISet<int> TutorialFlagList
+    {
+        get => TutorialFlagUtil.ConvertIntToFlagIntList(TutorialFlag);
+        set => TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(value);
+    }
+
     public int PrologueEndTime { get; set; }
 
     public int IsOptin { get; set; }
@@ -99,6 +107,7 @@ public static class DbSavefileUserDataFactory
             EmblemId = 40000001,
             StaminaSingle = 18,
             StaminaMulti = 12,
+            Crystal = 1200,
             // Matches internal datatype of the game -- I guess they anticipated EOS before 2038
             CreateTime = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
