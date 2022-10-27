@@ -47,7 +47,7 @@ public record UserData(
 
 public static class SavefileUserDataFactory
 {
-    public static UserData Create(DbPlayerUserData dbEntry, List<int> tutorialFlagList)
+    public static UserData Create(DbPlayerUserData dbEntry)
     {
         return new UserData(
             viewer_id: dbEntry.ViewerId,
@@ -74,7 +74,7 @@ public static class SavefileUserDataFactory
             last_stamina_multi_update_time: dbEntry.LastStaminaMultiUpdateTime,
             stamina_multi_surplus_second: dbEntry.StaminaMultiSurplusSecond,
             tutorial_status: dbEntry.TutorialStatus,
-            tutorial_flag_list: tutorialFlagList,
+            tutorial_flag_list: dbEntry.TutorialFlagList.ToList(),
             prologue_end_time: dbEntry.PrologueEndTime,
             is_optin: dbEntry.IsOptin,
             fort_open_time: dbEntry.FortOpenTime,

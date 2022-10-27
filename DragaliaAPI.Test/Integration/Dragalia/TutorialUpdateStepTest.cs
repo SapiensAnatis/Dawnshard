@@ -57,7 +57,7 @@ public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<
             .GetPlayerInfo("logged_in_id")
             .SingleAsync();
 
-        UserData userData = SavefileUserDataFactory.Create(dbUserData, new());
+        UserData userData = SavefileUserDataFactory.Create(dbUserData);
         UpdateDataList updateData = new() { user_data = userData with { tutorial_status = step } };
         TutorialUpdateStepResponse expectedResponse = new(new(step, updateData));
 

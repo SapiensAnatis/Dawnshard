@@ -4,5 +4,5 @@ namespace DragaliaAPI.Services;
 
 public interface ISummonService
 {
-    List<SummonEntity> GenerateSummonResult(int numSummons);
+    List<SimpleSummonReward> GenerateSummonResult(int numSummons);
 }

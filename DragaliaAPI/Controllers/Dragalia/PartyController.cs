@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Data;
+﻿using DragaliaAPI.Models.Data.Entity;
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Requests;
 using DragaliaAPI.Models.Dragalia.Responses;
