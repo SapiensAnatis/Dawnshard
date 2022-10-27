@@ -16,6 +16,8 @@ public interface IApiRepository
 
     Task<DbPlayerUserData> UpdateTutorialStatus(string deviceAccountId, int newStatus);
 
+    Task<DbPlayerUserData> UpdateTutorialFlag(string deviceAccountId, int flag);
+
     Task UpdateName(string deviceAccountId, string newName);
 
     Task<ISet<int>> getTutorialFlags(string deviceAccountId);
@@ -29,6 +31,9 @@ public interface IApiRepository
     Task<DbPlayerCharaData> AddChara(string deviceAccountId, int id, int rarity);
 
     Task<DbPlayerDragonData> AddDragon(string deviceAccountId, int id, int rarity);
+    Task<DbPlayerDragonReliability> AddDragonReliability(string deviceAccountId, int id);
+    Task<List<DbPlayerSummonHistory>> GetSummonHistory(string deviceAccountId);
+    Task<DbPlayerBannerData> GetPlayerBannerData(string deviceAccountId, int bannerId);
 
     IQueryable<DbPlayerCharaData> GetCharaData(string deviceAccountId);
 

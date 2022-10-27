@@ -43,7 +43,7 @@ public class IndexController : ControllerBase
             .GetParties(deviceAccountId)
             .ToListAsync();
 
-        UserData userData = SavefileUserDataFactory.Create(dbUserData, new() { });
+        UserData userData = SavefileUserDataFactory.Create(dbUserData);
         IEnumerable<Chara> charas = dbCharaData.Select(CharaFactory.Create);
         IEnumerable<Dragon> dragons = dbDragonData.Select(DragonFactory.Create);
         IEnumerable<Party> parties = dbParties.Select(PartyFactory.CreateDto);

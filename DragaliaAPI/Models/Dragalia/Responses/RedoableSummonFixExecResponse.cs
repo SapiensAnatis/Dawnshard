@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+using DragaliaAPI.Models.Dragalia.Responses.Common;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using MessagePack;
 
@@ -16,19 +16,25 @@ public record RedoableSummonFixExecData(
 );
 
 [MessagePackObject(true)]
-public record EntityResult(IEnumerable<Entity> new_get_entity_list);
+public record EntityResult(
+    IEnumerable<BaseNewEntity> converted_entity_list,
+    IEnumerable<BaseNewEntity> new_get_entity_list
+);
 
 public static class RedoableSummonFixExecFactory
 {
     public static RedoableSummonFixExecData CreateData(
-        List<SummonEntity> cachedSummonResult,
+        List<SimpleSummonReward> cachedSummonResult,
         UpdateDataList updateDataList
     )
     {
         return new RedoableSummonFixExecData(
             new UserRedoableSummonData(1, cachedSummonResult),
             updateDataList,
-            new EntityResult(cachedSummonResult.Select(x => (Entity)x))
+            new EntityResult(
+                new List<BaseNewEntity>(),
+                cachedSummonResult.Select(x => new BaseNewEntity(x.entity_type, x.id))
+            )
         );
     }
 }

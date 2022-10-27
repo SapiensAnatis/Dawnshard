@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Data;
+using DragaliaAPI.Models.Data.Entity;
 using DragaliaAPI.Services.Data.Models;
 
 namespace DragaliaAPI.Services.Data;
@@ -9,4 +10,5 @@ public interface IDragonDataService
 
     DataDragon GetData(Dragons id);
     DataDragon GetData(int id);
+    public IEnumerable<DataDragon> getByRarity(int rarity);
 }

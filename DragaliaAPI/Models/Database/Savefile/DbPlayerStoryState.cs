@@ -1,25 +1,26 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using DragaliaAPI.Models.Data;
 
 namespace DragaliaAPI.Models.Database.Savefile;
 
-[Table("PlayerUnitStory")]
-public class DbPlayerUnitStory : IDbHasAccountId
+[Table("PlayerStoryState")]
+public class DbPlayerStoryState : IDbHasAccountId
 {
+    [Column("DeviceAccountId")]
     [Required]
     public string DeviceAccountId { get; set; } = null!;
 
+    [Column("StoryType")]
     [Required]
-    public byte EntityType { get; set; }
+    public StoryTypes StoryType { get; set; }
 
-    [Required]
-    public long EntityId { get; set; }
-
+    [Column("StoryId")]
     [Required]
     public long StoryId { get; set; }
 
+    [Column("StoryState")]
     [Required]
-    [TypeConverter(typeof(BooleanConverter))]
-    public bool DragonId { get; set; }
+    public byte StoryState { get; set; }
 }
