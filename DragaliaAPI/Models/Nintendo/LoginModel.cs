@@ -31,7 +31,7 @@ public record LoginResponse
     public object behaviorSettings { get; } = new { };
     public Capability capability { get; } = new();
     public string? error { get; } = null;
-    public int expiresIn { get; } = 900;
+    public int expiresIn { get; } = 600;
     public string? market { get; } = null;
 
     public LoginResponse(string idToken, DeviceAccount deviceAccount)

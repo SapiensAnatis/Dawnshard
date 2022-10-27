@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace DragaliaAPI.Controllers.Dragalia.RedoableSummon;
+namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("redoable_summon")]
 [Consumes("application/octet-stream")]
@@ -95,9 +95,7 @@ public class RedoableSummonController : ControllerBase
         );
 
         if (string.IsNullOrEmpty(cachedResultJson))
-        {
             return BadRequest();
-        }
 
         List<SimpleSummonReward> cachedResult =
             JsonSerializer.Deserialize<List<SimpleSummonReward>>(cachedResultJson)
@@ -114,10 +112,8 @@ public class RedoableSummonController : ControllerBase
         );
 
         if (updateData.user_data is null)
-        {
             // Removes warning below
             throw new Exception("CommitSummonResult doesn't work properly");
-        }
 
         return Ok(
             new RedoableSummonFixExecResponse(

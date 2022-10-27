@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Models.Database.Savefile;
+﻿#define TEST
+
+using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Responses;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using DragaliaAPI.Services;
@@ -7,26 +9,27 @@ using MessagePack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Controllers.Dragalia.Load;
+namespace DragaliaAPI.Controllers.Dragalia;
 
-[Route("load/index")]
+[Route("load")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class IndexController : ControllerBase
+public class LoadController : ControllerBase
 {
     private readonly IApiRepository _apiRepository;
     private readonly ISessionService _sessionService;
 
-    public IndexController(IApiRepository apiRepository, ISessionService sessionService)
+    public LoadController(IApiRepository apiRepository, ISessionService sessionService)
     {
         _apiRepository = apiRepository;
         _sessionService = sessionService;
     }
 
 #if !TEST
+    [Route("index")]
     [HttpPost]
-    public async Task<DragaliaResult> Post([FromHeader(Name = "SID")] string sessionId)
+    public async Task<DragaliaResult> Index([FromHeader(Name = "SID")] string sessionId)
     {
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
 
@@ -48,13 +51,7 @@ public class IndexController : ControllerBase
         IEnumerable<Dragon> dragons = dbDragonData.Select(DragonFactory.Create);
         IEnumerable<Party> parties = dbParties.Select(PartyFactory.CreateDto);
 
-        LoadIndexData data = new LoadIndexData(
-            userData,
-            charas,
-            dragons,
-            parties,
-            new List<object>()
-        );
+        LoadIndexData data = new(userData, charas, dragons, parties, new List<object>());
 
         LoadIndexResponse response = new(data);
 
@@ -64,9 +61,10 @@ public class IndexController : ControllerBase
 
     // Testing method: returns preset savefile to check what properties are needed
 #if TEST
+    [Route("index")]
     [HttpPost]
     [Produces("application/octet-stream")]
-    public ActionResult<object> Post()
+    public ActionResult<object> Index()
     {
         byte[] blob = System.IO.File.ReadAllBytes("Resources/new_savefile");
         dynamic preset_savefile = MessagePackSerializer.Deserialize<dynamic>(
@@ -95,7 +93,7 @@ public class IndexController : ControllerBase
         preset_savefile["data"].Remove("castle_story_list");
         preset_savefile["data"].Remove("quest_list");
         preset_savefile["data"].Remove("quest_event_list");
-        preset_savefile["data"].Remove("quest_story_list");
+        //preset_savefile["data"].Remove("quest_story_list");
         preset_savefile["data"].Remove("quest_treasure_list");
         preset_savefile["data"].Remove("quest_carry_list");
         preset_savefile["data"].Remove("quest_entry_condition_list");
@@ -104,7 +102,7 @@ public class IndexController : ControllerBase
         preset_savefile["data"].Remove("present_notice");
         preset_savefile["data"].Remove("friend_notice");
         preset_savefile["data"].Remove("mission_notice");
-        preset_savefile["data"].Remove("current_main_story_mission");
+        //preset_savefile["data"].Remove("current_main_story_mission");
         preset_savefile["data"].Remove("guild_notice");
         preset_savefile["data"].Remove("shop_notice");
         preset_savefile["data"].Remove("album_passive_notice");
@@ -118,21 +116,23 @@ public class IndexController : ControllerBase
         preset_savefile["data"].Remove("weapon_skin_list");
         preset_savefile["data"].Remove("weapon_body_list");
         preset_savefile["data"].Remove("weapon_passive_ability_list");
-        //preset_savefile["data"].Remove("ability_crest_list"); // Needed for teams
+        //preset_savefile["data"].Remove("ability_crest_list"); // Existing implementation (sort of)
         preset_savefile["data"].Remove("exchange_ticket_list");
         preset_savefile["data"].Remove("album_dragon_list");
         preset_savefile["data"].Remove("talisman_list");
         preset_savefile["data"].Remove("user_summon_list");
-        preset_savefile["data"].Remove("server_time");
-        preset_savefile["data"].Remove("stamina_multi_user_max");
-        preset_savefile["data"].Remove("stamina_multi_system_max");
-        preset_savefile["data"].Remove("quest_bonus_stack_base_time");
-        preset_savefile["data"].Remove("spec_upgrade_time");
+        //preset_savefile["data"].Remove("server_time"); //1
+        //preset_savefile["data"].Remove("stamina_multi_user_max"); //1
+        //preset_savefile["data"].Remove("stamina_multi_system_max"); //1
+        //preset_savefile["data"].Remove("quest_bonus_stack_base_time");
+        //preset_savefile["data"].Remove("spec_upgrade_time"); //1
         preset_savefile["data"].Remove("quest_skip_point_use_limit_max");
         preset_savefile["data"].Remove("quest_skip_point_system_max");
         preset_savefile["data"].Remove("multi_server");
         preset_savefile["data"].Remove("walker_data");
         preset_savefile["data"].Remove("update_data_list");
+
+        preset_savefile["data"]["user_data"]["tutorial_status"] = 10301;
 
         return Ok(preset_savefile);
     }
