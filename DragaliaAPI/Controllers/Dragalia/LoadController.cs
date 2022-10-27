@@ -1,6 +1,4 @@
-﻿#define TEST
-
-using DragaliaAPI.Models.Database.Savefile;
+﻿using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Responses;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using DragaliaAPI.Services;
@@ -8,6 +6,8 @@ using MessagePack.Resolvers;
 using MessagePack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using DragaliaAPI.Models.Data;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -19,11 +19,17 @@ public class LoadController : ControllerBase
 {
     private readonly IApiRepository _apiRepository;
     private readonly ISessionService _sessionService;
+    private readonly IMapper mapper;
 
-    public LoadController(IApiRepository apiRepository, ISessionService sessionService)
+    public LoadController(
+        IApiRepository apiRepository,
+        ISessionService sessionService,
+        IMapper mapper
+    )
     {
         _apiRepository = apiRepository;
         _sessionService = sessionService;
+        this.mapper = mapper;
     }
 
 #if !TEST
@@ -33,29 +39,36 @@ public class LoadController : ControllerBase
     {
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
 
-        DbPlayerUserData dbUserData = await _apiRepository
-            .GetPlayerInfo(deviceAccountId)
-            .SingleAsync();
-        IEnumerable<DbPlayerCharaData> dbCharaData = await _apiRepository
-            .GetCharaData(deviceAccountId)
-            .ToListAsync();
-        IEnumerable<DbPlayerDragonData> dbDragonData = await _apiRepository
-            .GetDragonData(deviceAccountId)
-            .ToListAsync();
-        IEnumerable<DbParty> dbParties = await _apiRepository
-            .GetParties(deviceAccountId)
-            .ToListAsync();
+        UserData userData = SavefileUserDataFactory.Create(
+            await _apiRepository.GetPlayerInfo(deviceAccountId).SingleAsync()
+        );
+        IEnumerable<Chara> charas = (
+            await _apiRepository.GetCharaData(deviceAccountId).ToListAsync()
+        ).Select(CharaFactory.Create);
+        IEnumerable<Dragon> dragons = (
+            await _apiRepository.GetDragonData(deviceAccountId).ToListAsync()
+        ).Select(DragonFactory.Create);
+        IEnumerable<Party> parties = (
+            await _apiRepository.GetParties(deviceAccountId).ToListAsync()
+        ).Select(PartyFactory.CreateDto);
+        IEnumerable<QuestStory> questStories = (
+            await _apiRepository.GetStoryList(deviceAccountId, StoryTypes.Quest).ToListAsync()
+        ).Select(mapper.Map<QuestStory>);
 
-        UserData userData = SavefileUserDataFactory.Create(dbUserData);
-        IEnumerable<Chara> charas = dbCharaData.Select(CharaFactory.Create);
-        IEnumerable<Dragon> dragons = dbDragonData.Select(DragonFactory.Create);
-        IEnumerable<Party> parties = dbParties.Select(PartyFactory.CreateDto);
-
-        LoadIndexData data = new(userData, charas, dragons, parties, new List<object>());
+        LoadIndexData data =
+            new(
+                userData,
+                charas,
+                dragons,
+                parties,
+                questStories,
+                new List<object>(),
+                new List<object>()
+            );
 
         LoadIndexResponse response = new(data);
 
-        return Ok(response);
+        return this.Ok(response);
     }
 #endif
 

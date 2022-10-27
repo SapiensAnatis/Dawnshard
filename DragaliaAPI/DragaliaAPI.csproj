@@ -19,6 +19,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="12.0.0" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
 		<PackageReference Include="MessagePack" Version="2.4.35" />
 		<PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="2.4.35" />
 		<PackageReference Include="MessagePackAnalyzer" Version="2.4.35">
@@ -55,11 +57,17 @@
 
 	<ItemGroup>
 		<Folder Include="Migrations\" />
-		<Folder Include="Pages\Components\" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="$(SolutionDir)Resources\**" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Pages\Components\**" />
+	  <Content Remove="Pages\Components\**" />
+	  <EmbeddedResource Remove="Pages\Components\**" />
+	  <None Remove="Pages\Components\**" />
 	</ItemGroup>
 
 	<ItemGroup>

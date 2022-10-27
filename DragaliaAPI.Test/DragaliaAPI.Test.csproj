@@ -59,4 +59,8 @@
     <None Include="C:\Users\jay0\Documents\Programming\dragalia\DragaliaAPI\DragaliaAPI.Test\.editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Unit\AutoMapper\" />
+  </ItemGroup>
+
 </Project>

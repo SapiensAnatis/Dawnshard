@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using DragaliaAPI.Models.Dragalia.Responses;
+using System.Security.Cryptography.X509Certificates;
 
 namespace DragaliaAPI.Services;
 
@@ -277,4 +278,26 @@ public class ApiRepository : IApiRepository
 
         await _apiContext.SaveChangesAsync();
     }
+
+    public async Task UpdateQuestStory(string deviceAccountId, int storyId, int state)
+    {
+        DbPlayerStoryState storyData =
+            await _apiContext.PlayerStoryState.SingleOrDefaultAsync(
+                x => x.DeviceAccountId == deviceAccountId && x.StoryId == storyId
+            )
+            ?? new()
+            {
+                DeviceAccountId = deviceAccountId,
+                StoryId = storyId,
+                StoryType = StoryTypes.Quest
+            };
+
+        storyData.State = (byte)state;
+        await _apiContext.SaveChangesAsync();
+    }
+
+    public IQueryable<DbPlayerStoryState> GetStoryList(string deviceAccountId, StoryTypes type) =>
+        this._apiContext.PlayerStoryState.Where(
+            x => x.DeviceAccountId == deviceAccountId && x.StoryType == type
+        );
 }

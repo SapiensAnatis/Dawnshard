@@ -13,5 +13,7 @@ public record LoadIndexData(
     IEnumerable<Chara> chara_list,
     IEnumerable<Dragon> dragon_list,
     IEnumerable<Party> party_list,
+    IEnumerable<QuestStory> quest_story_list,
+    IEnumerable<object> current_main_story_mission,
     IEnumerable<object> ability_crest_list
 );

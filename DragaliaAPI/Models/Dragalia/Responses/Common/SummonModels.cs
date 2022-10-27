@@ -49,11 +49,6 @@ public record RarityOddsList(bool pickup, int rarity, List<Odds> unit_list);
 [MessagePackObject(true)]
 public record Odds(int id, string rate);
 
-public record EntityResult(
-    List<BaseReward> converted_entity_list,
-    List<BaseReward> new_get_entity_list
-);
-
 //TODO: Probably taken from an inventory table
 [MessagePackObject(true)]
 public record SummonTicket(int key_id, int summon_ticket_id, int quantity, long use_limit_time);

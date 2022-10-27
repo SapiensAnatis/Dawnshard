@@ -331,8 +331,7 @@ public class SummonController : ControllerBase
             )
             .ToList();
 
-        Models.Dragalia.Responses.EntityResult entityResult =
-            new(new List<BaseNewEntity>(), newEntities);
+        EntityResult entityResult = new(new List<BaseNewEntity>(), newEntities);
 
         List<SummonReward> rewardList = new List<SummonReward>();
         List<DbPlayerSummonHistory> historyEntries = new List<DbPlayerSummonHistory>();
