@@ -9,8 +9,8 @@ public record QuestReadStoryResponse(QuestReadStoryData data) : BaseResponse<Que
 
 [MessagePackObject(true)]
 public record QuestReadStoryData(
-    List<BaseReward> quest_story_reward_list,
+    List<QuestReward> quest_story_reward_list,
     List<object> converted_entity_list,
-    UpdateDataList update_data_list,
+    Dictionary<string, object> update_data_list,
     EntityResult entity_result
 );

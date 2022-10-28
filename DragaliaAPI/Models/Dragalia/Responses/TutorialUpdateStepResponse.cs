@@ -5,12 +5,8 @@ using MessagePack;
 namespace DragaliaAPI.Models.Dragalia.Responses;
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record TutorialUpdateFlagsResponse(TutorialUpdateFlagsData data)
-    : BaseResponse<TutorialUpdateFlagsData>;
+public record TutorialUpdateStepResponse(TutorialUpdateStepData data)
+    : BaseResponse<TutorialUpdateStepData>;
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record TutorialUpdateFlagsData(
-    List<int> tutorial_flag_list,
-    UpdateDataList update_data_list,
-    EntityResult entity_result
-);
+public record TutorialUpdateStepData(int step, object update_data_list);

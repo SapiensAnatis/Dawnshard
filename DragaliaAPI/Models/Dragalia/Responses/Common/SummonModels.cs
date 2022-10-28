@@ -65,8 +65,18 @@ public record SummonReward(int entity_type, int id, int rarity, bool is_new, int
 public record TradableEntity(int trade_id, int entity_type, int entity_id)
     : BaseNewEntity(entity_type, entity_id);
 
+[MessagePackObject(true)]
 public record SummonableEntity(int entity_type, int entity_id, int rarity, int quantity)
     : BaseNewEntity(entity_type, entity_id);
+
+[MessagePackObject(true)]
+public record QuestReward(
+    int entity_type,
+    int entity_id,
+    int entity_quantity,
+    int entity_level,
+    int entity_limit_break_count
+) : BaseNewEntity(entity_type, entity_id);
 
 [MessagePackObject(true)]
 public record BaseNewEntity(int entity_type, int entity_id);

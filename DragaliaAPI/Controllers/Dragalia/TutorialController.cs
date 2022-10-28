@@ -7,7 +7,7 @@ using DragaliaAPI.Models.Data;
 using DragaliaAPI.Models.Dragalia.Responses.Common;
 using MessagePack;
 
-namespace DragaliaAPI.Controllers.Dragalia.Tutorial;
+namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("/tutorial")]
 [Consumes("application/octet-stream")]
@@ -37,8 +37,7 @@ public class TutorialController : ControllerBase
             request.step
         );
 
-        UpdateDataList updateDataList =
-            new() { user_data = SavefileUserDataFactory.Create(userData) };
+        object updateDataList = new { user_data = SavefileUserDataFactory.Create(userData) };
         TutorialUpdateStepResponse response =
             new(new TutorialUpdateStepData(request.step, updateDataList));
 

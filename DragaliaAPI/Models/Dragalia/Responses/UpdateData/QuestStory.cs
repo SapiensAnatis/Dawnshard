@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.Configuration.Annotations;
-using DragaliaAPI.Models.Database.Savefile;
-using MessagePack;
+﻿using MessagePack;
 
 namespace DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 

@@ -281,18 +281,23 @@ public class ApiRepository : IApiRepository
 
     public async Task UpdateQuestStory(string deviceAccountId, int storyId, int state)
     {
-        DbPlayerStoryState storyData =
-            await _apiContext.PlayerStoryState.SingleOrDefaultAsync(
-                x => x.DeviceAccountId == deviceAccountId && x.StoryId == storyId
-            )
-            ?? new()
+        DbPlayerStoryState? storyData = await _apiContext.PlayerStoryState.SingleOrDefaultAsync(
+            x => x.DeviceAccountId == deviceAccountId && x.StoryId == storyId
+        );
+
+        if (storyData is null)
+        {
+            storyData = new()
             {
                 DeviceAccountId = deviceAccountId,
                 StoryId = storyId,
                 StoryType = StoryTypes.Quest
             };
+            _apiContext.PlayerStoryState.Add(storyData);
+        }
 
         storyData.State = (byte)state;
+
         await _apiContext.SaveChangesAsync();
     }
 

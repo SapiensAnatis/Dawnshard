@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DragaliaAPI.Models.Data;
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 
@@ -9,6 +10,9 @@ public class StoryMapProfile : Profile
     public StoryMapProfile()
     {
         this.CreateMap<DbPlayerStoryState, QuestStory>()
-            .ForMember<int>(x => x.quest_story_id, opts => opts.MapFrom<int>(x => x.StoryId));
+            .ForCtorParam(
+                nameof(QuestStory.quest_story_id),
+                o => o.MapFrom(nameof(DbPlayerStoryState.StoryId))
+            );
     }
 }

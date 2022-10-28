@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Models.Database.Savefile;
+﻿//#define TEST
+
+using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Responses;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using DragaliaAPI.Services;
@@ -58,12 +60,13 @@ public class LoadController : ControllerBase
         LoadIndexData data =
             new(
                 userData,
+                questStories,
+                new List<object>(),
+                new List<object>(),
                 charas,
                 dragons,
                 parties,
-                questStories,
-                new List<object>(),
-                new List<object>()
+                DateTimeOffset.UtcNow
             );
 
         LoadIndexResponse response = new(data);
@@ -76,7 +79,6 @@ public class LoadController : ControllerBase
 #if TEST
     [Route("index")]
     [HttpPost]
-    [Produces("application/octet-stream")]
     public ActionResult<object> Index()
     {
         byte[] blob = System.IO.File.ReadAllBytes("Resources/new_savefile");

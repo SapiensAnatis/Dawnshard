@@ -104,6 +104,7 @@ public class RedoableSummonController : ControllerBase
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
 
         await _apiRepository.UpdateTutorialStatus(deviceAccountId, 10152);
+        await _apiRepository.UpdateQuestStory(deviceAccountId, 1000100, 1); // Complete prologue story
 
         UpdateDataList updateData = await _savefileWriteService.CommitSummonResult(
             cachedResult,
