@@ -59,14 +59,21 @@ public class LoadController : ControllerBase
 
         LoadIndexData data =
             new(
-                userData,
-                questStories,
-                new List<object>(),
-                new List<object>(),
-                charas,
-                dragons,
-                parties,
-                DateTimeOffset.UtcNow
+                user_data: userData,
+                quest_story_list: questStories,
+                current_main_story_mission: new List<object>(),
+                party_power_data: new(999999),
+                friend_notice: new { friend_new_count = 0, apply_new_count = 0 },
+                present_notice: new { present_count = 0, present_limit_count = 0 },
+                guild_notice: new(),
+                mission_notice: GetMissionListFactory.emptyMissionNoticeData,
+                shop_notice: new { is_shop_notification = 0 },
+                ability_crest_list: new List<object>(),
+                chara_list: charas,
+                dragon_list: dragons,
+                party_list: parties,
+                server_time: DateTimeOffset.UtcNow,
+                functional_maintenance_list: new()
             );
 
         LoadIndexResponse response = new(data);

@@ -46,7 +46,7 @@ public record LoginResponse
         public string accountApiHost { get; } = "api.accounts.nintendo.com";
         public string accountHost { get; } = "accounts.nintendo.com";
         public string pointProgramHost { get; } = "my.nintendo.com";
-        public long sessionUpdateInterval { get; } = 180000;
+        public long sessionUpdateInterval { get; } = 1000;
     }
 
     public record User

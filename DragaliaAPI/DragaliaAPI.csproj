@@ -71,6 +71,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="Resources\mypage_info">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="Resources\new_savefile">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
