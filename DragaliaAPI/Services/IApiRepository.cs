@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Database;
+﻿using DragaliaAPI.Models.Data;
+using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Responses.Common;
 
@@ -31,8 +32,11 @@ public interface IApiRepository
     Task<DbPlayerCharaData> AddChara(string deviceAccountId, int id, int rarity);
 
     Task<DbPlayerDragonData> AddDragon(string deviceAccountId, int id, int rarity);
+
     Task<DbPlayerDragonReliability> AddDragonReliability(string deviceAccountId, int id);
+
     Task<List<DbPlayerSummonHistory>> GetSummonHistory(string deviceAccountId);
+
     Task<DbPlayerBannerData> GetPlayerBannerData(string deviceAccountId, int bannerId);
 
     IQueryable<DbPlayerCharaData> GetCharaData(string deviceAccountId);
@@ -40,5 +44,9 @@ public interface IApiRepository
     IQueryable<DbPlayerDragonData> GetDragonData(string deviceAccountId);
 
     IQueryable<DbParty> GetParties(string deviceAccountId);
+
     Task SetParty(string deviceAccountId, DbParty newParty);
+    Task UpdateQuestStory(string deviceAccountId, int storyId, int state);
+    IQueryable<DbPlayerStoryState> GetStoryList(string deviceAccountId, StoryTypes type);
+    Task SetMainPartyNo(string deviceAccountId, int partyNo);
 }

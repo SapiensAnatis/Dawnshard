@@ -1,13 +1,37 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace DragaliaAPI.Migrations
 {
-    public partial class AlphaSapiensAnatis1 : Migration
+    public partial class SapiensAnatis1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "DbQuest",
+                columns: table => new
+                {
+                    DeviceAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    QuestId = table.Column<int>(type: "int", nullable: false),
+                    State = table.Column<byte>(type: "tinyint", nullable: false),
+                    IsMissionClear1 = table.Column<bool>(type: "bit", nullable: false),
+                    IsMissionClear2 = table.Column<bool>(type: "bit", nullable: false),
+                    IsMissionClear3 = table.Column<bool>(type: "bit", nullable: false),
+                    PlayCount = table.Column<int>(type: "int", nullable: false),
+                    DailyPlayCount = table.Column<int>(type: "int", nullable: false),
+                    WeeklyPlayCount = table.Column<int>(type: "int", nullable: false),
+                    LastDailyResetTime = table.Column<int>(type: "int", nullable: false),
+                    LastWeeklyResetTime = table.Column<int>(type: "int", nullable: false),
+                    IsAppear = table.Column<bool>(type: "bit", nullable: false),
+                    BestClearTime = table.Column<float>(type: "real", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DbQuest", x => new { x.DeviceAccountId, x.QuestId });
+                });
+
             migrationBuilder.CreateTable(
                 name: "DeviceAccounts",
                 columns: table => new
@@ -34,6 +58,28 @@ namespace DragaliaAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PlayerBannerData",
+                columns: table => new
+                {
+                    DeviceAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SummonBannerId = table.Column<int>(type: "int", nullable: false),
+                    Pity = table.Column<byte>(type: "tinyint", nullable: false),
+                    SummonCount = table.Column<int>(type: "int", nullable: false),
+                    DailyLimitedSummons = table.Column<int>(type: "int", nullable: false),
+                    FreeSummonAvailable = table.Column<int>(type: "int", nullable: false),
+                    BeginnerSummonAvailable = table.Column<int>(type: "int", nullable: false),
+                    CsSummonAvailable = table.Column<int>(type: "int", nullable: false),
+                    SummonPoints = table.Column<int>(type: "int", nullable: false),
+                    CsSummonPoints = table.Column<int>(type: "int", nullable: false),
+                    CsSummonPointsMinDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CsSummonPointsMaxDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerBannerData", x => new { x.DeviceAccountId, x.SummonBannerId });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PlayerCharaData",
                 columns: table => new
                 {
@@ -42,27 +88,27 @@ namespace DragaliaAPI.Migrations
                     Rarity = table.Column<byte>(type: "tinyint", nullable: false),
                     Exp = table.Column<int>(type: "int", nullable: false),
                     Level = table.Column<byte>(type: "tinyint", nullable: false),
-                    AdditionalMaxLevel = table.Column<byte>(type: "tinyint", nullable: false),
+                    AddMaxLevel = table.Column<byte>(type: "tinyint", nullable: false),
                     HpPlusCount = table.Column<byte>(type: "tinyint", nullable: false),
-                    AttackPlusCount = table.Column<byte>(type: "tinyint", nullable: false),
+                    AtkPlusCount = table.Column<byte>(type: "tinyint", nullable: false),
                     LimitBreakCount = table.Column<byte>(type: "tinyint", nullable: false),
                     IsNew = table.Column<bool>(type: "bit", nullable: false),
-                    FirstSkillLevel = table.Column<byte>(type: "tinyint", nullable: false),
-                    SecondSkillLevel = table.Column<byte>(type: "tinyint", nullable: false),
-                    FirstAbilityLevel = table.Column<byte>(type: "tinyint", nullable: false),
-                    SecondAbilityLevel = table.Column<byte>(type: "tinyint", nullable: false),
-                    ThirdAbilityLevel = table.Column<byte>(type: "tinyint", nullable: false),
-                    BurstAttackLevel = table.Column<byte>(type: "tinyint", nullable: false),
+                    Skill1Lvl = table.Column<byte>(type: "tinyint", nullable: false),
+                    Skill2Lvl = table.Column<byte>(type: "tinyint", nullable: false),
+                    Abil1Lvl = table.Column<byte>(type: "tinyint", nullable: false),
+                    Abil2Lvl = table.Column<byte>(type: "tinyint", nullable: false),
+                    Abil3Lvl = table.Column<byte>(type: "tinyint", nullable: false),
+                    BurstAtkLvl = table.Column<byte>(type: "tinyint", nullable: false),
                     ComboBuildupCount = table.Column<int>(type: "int", nullable: false),
                     Hp = table.Column<int>(type: "int", nullable: false),
-                    Attack = table.Column<int>(type: "int", nullable: false),
-                    FirstExAbilityLevel = table.Column<byte>(type: "tinyint", nullable: false),
-                    SecondExAbilityLevel = table.Column<byte>(type: "tinyint", nullable: false),
-                    IsTemporary = table.Column<bool>(type: "bit", nullable: false),
+                    Atk = table.Column<int>(type: "int", nullable: false),
+                    ExAbility1Lvl = table.Column<byte>(type: "tinyint", nullable: false),
+                    ExAbility2Lvl = table.Column<byte>(type: "tinyint", nullable: false),
+                    IsTemp = table.Column<bool>(type: "bit", nullable: false),
                     IsUnlockEditSkill = table.Column<bool>(type: "bit", nullable: false),
                     ManaNodeUnlockCount = table.Column<int>(type: "int", nullable: false),
                     ListViewFlag = table.Column<bool>(type: "bit", nullable: false),
-                    GetTime = table.Column<int>(type: "int", nullable: false)
+                    GetTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -84,10 +130,10 @@ namespace DragaliaAPI.Migrations
                     LimitBreakCount = table.Column<byte>(type: "tinyint", nullable: false),
                     IsLocked = table.Column<bool>(type: "bit", nullable: false),
                     IsNew = table.Column<bool>(type: "bit", nullable: false),
-                    FirstSkillLevel = table.Column<byte>(type: "tinyint", nullable: false),
-                    FirstAbilityLevel = table.Column<byte>(type: "tinyint", nullable: false),
-                    SecondAbilityLevel = table.Column<byte>(type: "tinyint", nullable: false),
-                    GetTime = table.Column<int>(type: "int", nullable: false)
+                    Skill1Level = table.Column<byte>(type: "tinyint", nullable: false),
+                    Abil1Level = table.Column<byte>(type: "tinyint", nullable: false),
+                    Abil2Level = table.Column<byte>(type: "tinyint", nullable: false),
+                    GetTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,9 +146,9 @@ namespace DragaliaAPI.Migrations
                 {
                     DeviceAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DragonId = table.Column<int>(type: "int", nullable: false),
-                    ReliabilityExp = table.Column<long>(type: "bigint", nullable: false),
-                    ReliabilityTotalExp = table.Column<long>(type: "bigint", nullable: false),
-                    LastContactTime = table.Column<long>(type: "bigint", nullable: false)
+                    Level = table.Column<byte>(type: "tinyint", nullable: false),
+                    TotalExp = table.Column<int>(type: "int", nullable: false),
+                    LastContactTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -110,18 +156,45 @@ namespace DragaliaAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlayerUnitStory",
+                name: "PlayerStoryState",
                 columns: table => new
                 {
                     DeviceAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EntityType = table.Column<byte>(type: "tinyint", nullable: false),
-                    EntityId = table.Column<long>(type: "bigint", nullable: false),
-                    StoryId = table.Column<long>(type: "bigint", nullable: false),
-                    DragonId = table.Column<bool>(type: "bit", nullable: false)
+                    StoryType = table.Column<int>(type: "int", nullable: false),
+                    StoryId = table.Column<int>(type: "int", nullable: false),
+                    State = table.Column<byte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerUnitStory", x => new { x.DeviceAccountId, x.EntityType, x.EntityId, x.StoryId });
+                    table.PrimaryKey("PK_PlayerStoryState", x => new { x.DeviceAccountId, x.StoryType, x.StoryId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlayerSummonHistory",
+                columns: table => new
+                {
+                    SummonId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DeviceAccountId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BannerId = table.Column<int>(type: "int", nullable: false),
+                    SummonExecType = table.Column<byte>(type: "tinyint", nullable: false),
+                    SummonDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    PaymentType = table.Column<int>(type: "int", nullable: false),
+                    EntityType = table.Column<int>(type: "int", nullable: false),
+                    EntityId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Level = table.Column<byte>(type: "tinyint", nullable: false),
+                    Rarity = table.Column<byte>(type: "tinyint", nullable: false),
+                    LimitBreakCount = table.Column<byte>(type: "tinyint", nullable: false),
+                    HpPlusCount = table.Column<int>(type: "int", nullable: false),
+                    AtkPlusCount = table.Column<int>(type: "int", nullable: false),
+                    SummonPrizeRank = table.Column<int>(type: "int", nullable: false),
+                    SummonPointGet = table.Column<int>(type: "int", nullable: false),
+                    DewPointGet = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerSummonHistory", x => x.SummonId);
                 });
 
             migrationBuilder.CreateTable(
@@ -213,7 +286,13 @@ namespace DragaliaAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "DbQuest");
+
+            migrationBuilder.DropTable(
                 name: "DeviceAccounts");
+
+            migrationBuilder.DropTable(
+                name: "PlayerBannerData");
 
             migrationBuilder.DropTable(
                 name: "PlayerCharaData");
@@ -228,7 +307,10 @@ namespace DragaliaAPI.Migrations
                 name: "PlayerPartyUnits");
 
             migrationBuilder.DropTable(
-                name: "PlayerUnitStory");
+                name: "PlayerStoryState");
+
+            migrationBuilder.DropTable(
+                name: "PlayerSummonHistory");
 
             migrationBuilder.DropTable(
                 name: "PlayerUserData");
