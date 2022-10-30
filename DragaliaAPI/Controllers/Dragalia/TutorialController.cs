@@ -7,7 +7,7 @@ using DragaliaAPI.Models.Data;
 using DragaliaAPI.Models.Dragalia.Responses.Common;
 using MessagePack;
 
-namespace DragaliaAPI.Controllers.Dragalia.Tutorial;
+namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("/tutorial")]
 [Consumes("application/octet-stream")]
@@ -57,7 +57,7 @@ public class TutorialController : ControllerBase
     {
         int flag_id = flagRequest.flag_id;
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-        DbPlayerUserData userData = await _apiRepository.UpdateTutorialStatus(
+        DbPlayerUserData userData = await _apiRepository.UpdateTutorialFlag(
             deviceAccountId,
             flag_id
         );

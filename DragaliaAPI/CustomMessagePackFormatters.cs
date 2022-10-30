@@ -22,6 +22,7 @@ public class CustomMessagePackOutputFormatter : MessagePackOutputFormatter
         this.options = options;
 
         SupportedMediaTypes.Add(ContentType);
+        SupportedMediaTypes.Add("application/x-msgpack");
     }
 
     public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context) =>

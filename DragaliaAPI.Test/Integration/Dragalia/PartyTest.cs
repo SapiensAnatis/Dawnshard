@@ -28,7 +28,7 @@ public class PartyTest : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         await _factory.AddCharacter((int)Charas.Ilia, 5);
 
-        SetPartySettingRequest request =
+        PartySetPartySettingRequest request =
             new(
                 1,
                 "My New Party",
@@ -45,24 +45,22 @@ public class PartyTest : IClassFixture<CustomWebApplicationFactory<Program>>
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
-        using (var scope = _factory.Services.CreateScope())
-        {
-            ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
-            DbParty dbparty = await apiContext.PlayerParties
-                .Include(x => x.Units)
-                .Where(x => x.DeviceAccountId == _factory.DeviceAccountId && x.PartyNo == 1)
-                .SingleAsync();
+        using var scope = _factory.Services.CreateScope();
+        ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
+        DbParty dbparty = await apiContext.PlayerParties
+            .Include(x => x.Units)
+            .Where(x => x.DeviceAccountId == _factory.DeviceAccountId && x.PartyNo == 1)
+            .SingleAsync();
 
-            dbparty.PartyName.Should().Be("My New Party");
-            dbparty.Units.Should().HaveCount(4);
-            dbparty.Units.Single(x => x.UnitNo == 1).CharaId.Should().Be(Charas.Ilia);
-        }
+        dbparty.PartyName.Should().Be("My New Party");
+        dbparty.Units.Should().HaveCount(4);
+        dbparty.Units.Single(x => x.UnitNo == 1).CharaId.Should().Be(Charas.Ilia);
     }
 
     [Fact]
     public async Task SetPartySetting_InvalidRequest_NotOwnedCharacter_ReturnsBadRequest()
     {
-        SetPartySettingRequest request =
+        PartySetPartySettingRequest request =
             new(
                 1,
                 "My New Party",
@@ -83,7 +81,7 @@ public class PartyTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task SetPartySetting_InvalidRequest_NotOwnedDragonKeyId_ReturnsBadRequest()
     {
-        SetPartySettingRequest request =
+        PartySetPartySettingRequest request =
             new(
                 1,
                 "My New Party",
@@ -99,5 +97,24 @@ public class PartyTest : IClassFixture<CustomWebApplicationFactory<Program>>
         HttpResponseMessage response = await _client.PostAsync("/party/set_party_setting", content);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task SetMainPartyNo_UpdatesDatabase()
+    {
+        PartySetMainPartyNoRequest request = new(2);
+
+        byte[] payload = MessagePackSerializer.Serialize(request);
+        HttpContent content = TestUtils.CreateMsgpackContent(payload);
+
+        HttpResponseMessage response = await _client.PostAsync("/party/set_main_party_no", content);
+
+        using IServiceScope scope = _factory.Services.CreateScope();
+        ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
+        DbPlayerUserData userData = await apiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
+            .SingleAsync();
+
+        userData.MainPartyNo.Should().Be(2);
     }
 }
