@@ -305,4 +305,13 @@ public class ApiRepository : IApiRepository
         this._apiContext.PlayerStoryState.Where(
             x => x.DeviceAccountId == deviceAccountId && x.StoryType == type
         );
+
+    public async Task SetMainPartyNo(string deviceAccountId, int partyNo)
+    {
+        DbPlayerUserData userData =
+            await _apiContext.PlayerUserData.FindAsync(deviceAccountId)
+            ?? throw new NullReferenceException("Savefile lookup failed");
+        userData.MainPartyNo = partyNo;
+        await _apiContext.SaveChangesAsync();
+    }
 }

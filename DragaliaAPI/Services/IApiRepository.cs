@@ -48,4 +48,5 @@ public interface IApiRepository
     Task SetParty(string deviceAccountId, DbParty newParty);
     Task UpdateQuestStory(string deviceAccountId, int storyId, int state);
     IQueryable<DbPlayerStoryState> GetStoryList(string deviceAccountId, StoryTypes type);
+    Task SetMainPartyNo(string deviceAccountId, int partyNo);
 }

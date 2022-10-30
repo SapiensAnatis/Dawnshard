@@ -55,15 +55,16 @@ public class QuestController : ControllerBase
         QuestReadStoryData responseData =
             new(
                 quest_story_reward_list: new()
+                /*
                 {
                     new(23, 0, 25, 0, 0),
                     new(1, (int)Charas.Ilia, 1, 5, 0)
-                },
+                }*/,
                 new(),
                 updateData,
                 new(
                     converted_entity_list: new List<BaseNewEntity>(),
-                    new_get_entity_list: new List<BaseNewEntity>() { new(1, (int)Charas.Ilia) }
+                    new_get_entity_list: new List<BaseNewEntity>() /* { new(1, (int)Charas.Ilia) } */
                 )
             );
 
