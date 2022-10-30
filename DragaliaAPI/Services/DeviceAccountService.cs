@@ -26,6 +26,10 @@ public class DeviceAccountService : IDeviceAccountService
 
     public async Task<bool> AuthenticateDeviceAccount(DeviceAccount deviceAccount)
     {
+        // TODO: If the user attempts to connect with an id that is not in the database,
+        // just create it for them instead of returning unauthorized. Use case: for when
+        // I nuke the DB after fucking up a migration and the app keeps my old credentials
+
         if (deviceAccount.password is null)
         {
             throw new ArgumentNullException(paramName: deviceAccount.password);

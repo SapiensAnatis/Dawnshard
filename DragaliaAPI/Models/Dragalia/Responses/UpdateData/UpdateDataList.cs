@@ -9,6 +9,8 @@ public class UpdateDataList
 {
     public UserData? user_data { get; set; }
 
+    public List<QuestStory> quest_story_list { get; set; } = new();
+
     public List<Chara>? chara_list { get; set; }
 
     public List<Dragon>? dragon_list { get; set; }

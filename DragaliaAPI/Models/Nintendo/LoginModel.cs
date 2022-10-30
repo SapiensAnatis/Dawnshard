@@ -31,7 +31,7 @@ public record LoginResponse
     public object behaviorSettings { get; } = new { };
     public Capability capability { get; } = new();
     public string? error { get; } = null;
-    public int expiresIn { get; } = 900;
+    public int expiresIn { get; } = 600;
     public string? market { get; } = null;
 
     public LoginResponse(string idToken, DeviceAccount deviceAccount)
@@ -46,7 +46,7 @@ public record LoginResponse
         public string accountApiHost { get; } = "api.accounts.nintendo.com";
         public string accountHost { get; } = "accounts.nintendo.com";
         public string pointProgramHost { get; } = "my.nintendo.com";
-        public long sessionUpdateInterval { get; } = 180000;
+        public long sessionUpdateInterval { get; } = 1000;
     }
 
     public record User

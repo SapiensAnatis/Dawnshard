@@ -67,6 +67,15 @@ public record SpecialMission(
 );
 
 [MessagePackObject(true)]
+public record DrillMission(
+    int drill_mission_id,
+    int progress,
+    int state,
+    int start_date,
+    int end_date
+);
+
+[MessagePackObject(true)]
 public record MissionNotice(
     int is_update,
     int receivable_reward_count,
@@ -104,6 +113,18 @@ public static class GetMissionListFactory
         new() { new(10010101, 0, 0, 0, 0) };
     private static readonly MissionNotice emptyMissionNotice =
         new(0, 0, new List<object>(), 0, 0, 0, 0);
+    public static readonly MissionNoticeData emptyMissionNoticeData =
+        new(
+            emptyMissionNotice,
+            emptyMissionNotice,
+            emptyMissionNotice,
+            emptyMissionNotice,
+            emptyMissionNotice,
+            emptyMissionNotice,
+            emptyMissionNotice,
+            emptyMissionNotice,
+            emptyMissionNotice
+        );
 
     public static GetMissionListData CreateData() // TODO: replace stub data with actual implementation
     {
@@ -113,17 +134,7 @@ public static class GetMissionListFactory
             periodMissions,
             specialMissions,
             albumMissions,
-            new MissionNoticeData(
-                emptyMissionNotice,
-                emptyMissionNotice,
-                emptyMissionNotice,
-                emptyMissionNotice,
-                emptyMissionNotice,
-                emptyMissionNotice,
-                emptyMissionNotice,
-                emptyMissionNotice,
-                emptyMissionNotice
-            ),
+            emptyMissionNoticeData,
             new List<object>(),
             new List<object>()
         );

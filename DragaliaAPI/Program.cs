@@ -1,3 +1,4 @@
+using System.Reflection;
 using DragaliaAPI;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Dragalia.Responses;
@@ -39,6 +40,8 @@ builder.Services
     .AddScoped<IApiRepository, ApiRepository>()
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<ISavefileWriteService, SavefileWriteService>();
+
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Data services should be initialized on startup rather than when first requested
 UnitDataService u = new();

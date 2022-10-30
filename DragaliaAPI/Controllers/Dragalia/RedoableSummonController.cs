@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace DragaliaAPI.Controllers.Dragalia.RedoableSummon;
+namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("redoable_summon")]
 [Consumes("application/octet-stream")]
@@ -95,9 +95,7 @@ public class RedoableSummonController : ControllerBase
         );
 
         if (string.IsNullOrEmpty(cachedResultJson))
-        {
             return BadRequest();
-        }
 
         List<SimpleSummonReward> cachedResult =
             JsonSerializer.Deserialize<List<SimpleSummonReward>>(cachedResultJson)
@@ -106,6 +104,7 @@ public class RedoableSummonController : ControllerBase
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
 
         await _apiRepository.UpdateTutorialStatus(deviceAccountId, 10152);
+        await _apiRepository.UpdateQuestStory(deviceAccountId, 1000100, 1); // Complete prologue story
 
         UpdateDataList updateData = await _savefileWriteService.CommitSummonResult(
             cachedResult,
@@ -114,10 +113,8 @@ public class RedoableSummonController : ControllerBase
         );
 
         if (updateData.user_data is null)
-        {
             // Removes warning below
             throw new Exception("CommitSummonResult doesn't work properly");
-        }
 
         return Ok(
             new RedoableSummonFixExecResponse(

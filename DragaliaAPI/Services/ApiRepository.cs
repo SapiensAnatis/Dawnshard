@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using DragaliaAPI.Models.Dragalia.Responses;
+using System.Security.Cryptography.X509Certificates;
 
 namespace DragaliaAPI.Services;
 
@@ -275,6 +276,42 @@ public class ApiRepository : IApiRepository
             );
         }
 
+        await _apiContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateQuestStory(string deviceAccountId, int storyId, int state)
+    {
+        DbPlayerStoryState? storyData = await _apiContext.PlayerStoryState.SingleOrDefaultAsync(
+            x => x.DeviceAccountId == deviceAccountId && x.StoryId == storyId
+        );
+
+        if (storyData is null)
+        {
+            storyData = new()
+            {
+                DeviceAccountId = deviceAccountId,
+                StoryId = storyId,
+                StoryType = StoryTypes.Quest
+            };
+            _apiContext.PlayerStoryState.Add(storyData);
+        }
+
+        storyData.State = (byte)state;
+
+        await _apiContext.SaveChangesAsync();
+    }
+
+    public IQueryable<DbPlayerStoryState> GetStoryList(string deviceAccountId, StoryTypes type) =>
+        this._apiContext.PlayerStoryState.Where(
+            x => x.DeviceAccountId == deviceAccountId && x.StoryType == type
+        );
+
+    public async Task SetMainPartyNo(string deviceAccountId, int partyNo)
+    {
+        DbPlayerUserData userData =
+            await _apiContext.PlayerUserData.FindAsync(deviceAccountId)
+            ?? throw new NullReferenceException("Savefile lookup failed");
+        userData.MainPartyNo = partyNo;
         await _apiContext.SaveChangesAsync();
     }
 }

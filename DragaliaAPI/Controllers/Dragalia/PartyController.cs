@@ -45,7 +45,7 @@ public class PartyController : ControllerBase
     [Route("set_party_setting")]
     public async Task<DragaliaResult> SetPartySetting(
         [FromHeader(Name = "SID")] string sessionId,
-        SetPartySettingRequest requestParty
+        PartySetPartySettingRequest requestParty
     )
     {
         string deviceAccountId = await sessionService.GetDeviceAccountId_SessionId(sessionId);
@@ -68,6 +68,11 @@ public class PartyController : ControllerBase
         // Validate characters
         foreach (int id in requestParty.request_party_setting_list.Select(x => x.chara_id))
         {
+            if (id == 0)
+            {
+                continue;
+            }
+
             if (!Enum.IsDefined(typeof(Charas), id))
             {
                 logger.LogError(
@@ -123,5 +128,18 @@ public class PartyController : ControllerBase
         UpdateDataListResponse response = new(new(updateDataList));
 
         return Ok(response);
+    }
+
+    [Route("set_main_party_no")]
+    public async Task<DragaliaResult> SetMainPartyNo(
+        [FromHeader(Name = "SID")] string sessionId,
+        PartySetMainPartyNoRequest request
+    )
+    {
+        string deviceAccountId = await sessionService.GetDeviceAccountId_SessionId(sessionId);
+
+        await apiRepository.SetMainPartyNo(deviceAccountId, request.main_party_no);
+
+        return this.Ok(new PartySetMainPartyNoResponse(new(request.main_party_no)));
     }
 }

@@ -15,12 +15,6 @@ public record RedoableSummonFixExecData(
     EntityResult entity_result
 );
 
-[MessagePackObject(true)]
-public record EntityResult(
-    IEnumerable<BaseNewEntity> converted_entity_list,
-    IEnumerable<BaseNewEntity> new_get_entity_list
-);
-
 public static class RedoableSummonFixExecFactory
 {
     public static RedoableSummonFixExecData CreateData(

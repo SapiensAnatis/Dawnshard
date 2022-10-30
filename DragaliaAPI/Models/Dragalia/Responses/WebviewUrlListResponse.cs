@@ -27,7 +27,7 @@ public static class WebviewUrlListStatic
             new("faq", PlaceholderUrl),
             new("help_comic", PlaceholderUrl),
             new("help", PlaceholderUrl),
-            new("information", host + "/News"),
+            new("information", "http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/schr.html#c1"),
             new("inquiry_attention", PlaceholderUrl),
             new("dragon_battle_info", PlaceholderUrl),
             new("quest_info", PlaceholderUrl),
