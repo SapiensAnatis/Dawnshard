@@ -37,7 +37,8 @@ public class TutorialController : ControllerBase
             request.step
         );
 
-        object updateDataList = new { user_data = SavefileUserDataFactory.Create(userData) };
+        UpdateDataList updateDataList =
+            new() { user_data = SavefileUserDataFactory.Create(userData) };
         TutorialUpdateStepResponse response =
             new(new TutorialUpdateStepData(request.step, updateDataList));
 

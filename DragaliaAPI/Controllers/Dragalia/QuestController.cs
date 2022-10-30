@@ -43,15 +43,17 @@ public class QuestController : ControllerBase
         UserData userData = SavefileUserDataFactory.Create(
             await apiRepository.GetPlayerInfo(deviceAccountId).SingleAsync()
         );
-        Dictionary<string, object> updateData =
+
+        UpdateDataList updateData =
             new()
             {
-                { "user_data", userData },
+                user_data = userData,
+                quest_story_list = new List<QuestStory>()
                 {
-                    "quest_story_list",
-                    new List<QuestStory>() { new(request.quest_story_id, ReadStoryState) }
-                },
+                    new(request.quest_story_id, ReadStoryState)
+                }
             };
+
         QuestReadStoryData responseData =
             new(
                 quest_story_reward_list: new()

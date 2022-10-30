@@ -9,4 +9,4 @@ public record TutorialUpdateStepResponse(TutorialUpdateStepData data)
     : BaseResponse<TutorialUpdateStepData>;
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record TutorialUpdateStepData(int step, object update_data_list);
+public record TutorialUpdateStepData(int step, UpdateDataList update_data_list);

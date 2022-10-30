@@ -45,7 +45,7 @@ public class PartyController : ControllerBase
     [Route("set_party_setting")]
     public async Task<DragaliaResult> SetPartySetting(
         [FromHeader(Name = "SID")] string sessionId,
-        SetPartySettingRequest requestParty
+        PartySetPartySettingRequest requestParty
     )
     {
         string deviceAccountId = await sessionService.GetDeviceAccountId_SessionId(sessionId);

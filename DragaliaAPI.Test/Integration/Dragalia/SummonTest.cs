@@ -6,6 +6,9 @@ using Xunit.Abstractions;
 using DragaliaAPI.Models.Data.Entity;
 using DragaliaAPI.Models.Database;
 using Microsoft.Extensions.DependencyInjection;
+using DragaliaAPI.Models.Database.Savefile;
+using Microsoft.EntityFrameworkCore;
+using Xunit;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -28,31 +31,35 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task SummonExcludeGetList_ReturnsAnyData()
     {
-        // Corresponds to JSON: "{}"
-        byte[] payload = MessagePackSerializer.Serialize(1020203);
+        byte[] payload = MessagePackSerializer.Serialize(new BannerIdRequest(1020203));
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("summon_exclude/get_list", content);
+        HttpResponseMessage response = await _client.PostAsync("/summon_exclude/get_list", content);
+
+        response.IsSuccessStatusCode.Should().BeTrue();
 
         byte[] bytes = await response.Content.ReadAsByteArrayAsync();
-        SummonExcludeGetListResponse data =
+        SummonExcludeGetListResponse deserialized =
             MessagePackSerializer.Deserialize<SummonExcludeGetListResponse>(bytes);
-        _output.WriteLine(TestUtils.MsgpackBytesToPrettyJson(bytes));
+
+        deserialized.data.summon_exclude_unit_list.Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task SummonGetOddsData_ReturnsAnyData()
     {
-        // Corresponds to JSON: "{}"
-        byte[] payload = MessagePackSerializer.Serialize(1020203);
+        byte[] payload = MessagePackSerializer.Serialize(new BannerIdRequest(1020203));
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("summon/get_odds_data", content);
+        HttpResponseMessage response = await _client.PostAsync("/summon/get_odds_data", content);
+
+        response.IsSuccessStatusCode.Should().BeTrue();
 
         byte[] bytes = await response.Content.ReadAsByteArrayAsync();
-        SummonGetOddsDataResponse data =
+        SummonGetOddsDataResponse deserialized =
             MessagePackSerializer.Deserialize<SummonGetOddsDataResponse>(bytes);
-        _output.WriteLine(TestUtils.MsgpackBytesToPrettyJson(bytes));
+
+        deserialized.data.Should().NotBeNull();
     }
 
     [Fact]
@@ -67,10 +74,13 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
             content
         );
 
+        response.IsSuccessStatusCode.Should().BeTrue();
+
         byte[] bytes = await response.Content.ReadAsByteArrayAsync();
-        SummonGetSummonHistoryResponse data =
+        SummonGetSummonHistoryResponse deserialized =
             MessagePackSerializer.Deserialize<SummonGetSummonHistoryResponse>(bytes);
-        _output.WriteLine(TestUtils.MsgpackBytesToPrettyJson(bytes));
+
+        deserialized.data.summon_history_list.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -82,58 +92,47 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
 
         HttpResponseMessage response = await _client.PostAsync("summon/get_summon_list", content);
 
+        response.IsSuccessStatusCode.Should().BeTrue();
+
         byte[] bytes = await response.Content.ReadAsByteArrayAsync();
-        SummonGetSummonListResponse data =
+        SummonGetSummonListResponse deserialized =
             MessagePackSerializer.Deserialize<SummonGetSummonListResponse>(bytes);
-        _output.WriteLine(TestUtils.MsgpackBytesToPrettyJson(bytes));
+
+        deserialized.data.Should().NotBeNull();
     }
 
     [Fact]
     public async Task SummonRequest_GetSummonPointData_ReturnsAnyData()
     {
-        HttpContent content = TestUtils.CreateMsgpackContent(
-            MessagePackSerializer.Serialize(1020203)
-        );
+        byte[] payload = MessagePackSerializer.Serialize(new BannerIdRequest(1020203));
+        HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
         HttpResponseMessage response = await _client.PostAsync(
             "summon/get_summon_point_trade",
             content
         );
 
+        response.IsSuccessStatusCode.Should().BeTrue();
+
         byte[] bytes = await response.Content.ReadAsByteArrayAsync();
-        SummonGetSummonPointTradeResponse data =
+        SummonGetSummonPointTradeResponse deserialized =
             MessagePackSerializer.Deserialize<SummonGetSummonPointTradeResponse>(bytes);
-        _output.WriteLine(TestUtils.MsgpackBytesToPrettyJson(bytes));
-        _output.WriteLine(bytes.Length.ToString());
+
+        deserialized.data.summon_point_list.Should().NotBeEmpty();
+        deserialized.data.summon_point_trade_list.Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task SummonRequest_SingleSummonWyrmite_ReturnsValidResult()
     {
-        SummonRequest request = new SummonRequest(
-            1,
-            SummonExecTypes.Single,
-            1,
-            PaymentTypes.Wyrmite,
-            new PaymentTarget(1, 1)
-        );
-        SummonRequestResponseData data = await SummonRequest(request);
+        SummonRequest request =
+            new(1, SummonExecTypes.Single, 1, PaymentTypes.Wyrmite, new PaymentTarget(1, 1));
+
+        SummonRequestResponseData data = await this.SummonRequest(request);
+
         data.result_unit_list.Count.Should().Be(1);
-        _output.WriteLine(
-            data.result_unit_list[0].entity_type == 7
-                ? ((Dragons)data.result_unit_list[0].id).ToString()
-                : ((Charas)data.result_unit_list[0].id).ToString()
-        );
-        using (IServiceScope scope = _factory.Services.CreateScope())
-        {
-            ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
-            int size =
-                data.result_unit_list[0].entity_type == 7
-                    ? apiContext.PlayerDragonReliability.Count()
-                        + apiContext.PlayerDragonData.Count()
-                    : apiContext.PlayerCharaData.Count();
-            _output.WriteLine(size.ToString());
-        }
+
+        await this.CheckRewardInDb(data.result_unit_list.ElementAt(0));
     }
 
     /// Multisummon tests fail on testDB when saving 2+ new dragonData because sqlLite can't generate new Dragon_Key_Ids (always returns 0) via sequence
@@ -141,53 +140,20 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task SummonRequest_TenSummonWyrmite_ReturnsValidResult()
     {
-        SummonRequest request = new SummonRequest(
-            1020203,
-            SummonExecTypes.Tenfold,
-            0,
-            PaymentTypes.Wyrmite,
-            new PaymentTarget(1, 1)
-        );
-        SummonRequestResponseData data = await SummonRequest(request);
+        SummonRequest request =
+            new(1020203, SummonExecTypes.Tenfold, 0, PaymentTypes.Wyrmite, new PaymentTarget(1, 1));
+
+        SummonRequestResponseData data = await this.SummonRequest(request);
+
         data.result_unit_list.Count.Should().Be(10);
-        _output.WriteLine("Summoned: ");
-        foreach (SummonReward result in data.result_unit_list)
+
+        foreach (SummonReward reward in data.result_unit_list)
         {
-            _output.WriteLine(
-                result.entity_type == 7
-                    ? ((Dragons)result.id).ToString()
-                    : ((Charas)result.id).ToString()
-            );
-        }
-        _output.WriteLine("\n");
-        using (IServiceScope scope = _factory.Services.CreateScope())
-        {
-            ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
-            List<Charas> dbCharas = apiContext.PlayerCharaData.Select(x => x.CharaId).ToList();
-            _output.WriteLine($"DB Charas:\n{string.Join(",\n", dbCharas)}\n");
-            dbCharas.Should().Contain(data.update_data_list.chara_list!.Select(x => x.chara_id));
-            List<Tuple<long, Dragons>> dbDragons = apiContext.PlayerDragonData
-                .Select(x => new Tuple<long, Dragons>(x.DragonKeyId, x.DragonId))
-                .ToList();
-            _output.WriteLine($"DB Dragons:\n{string.Join(",\n", dbDragons)}\n");
-            dbDragons
-                .Should()
-                .Contain(
-                    data.update_data_list.dragon_list!.Select(
-                        x => new Tuple<long, Dragons>((long)x.dragon_key_id, (Dragons)x.dragon_id)
-                    )
-                );
-            List<Dragons> dbUniqueDragons = apiContext.PlayerDragonReliability
-                .Select(x => x.DragonId)
-                .ToList();
-            _output.WriteLine($"DB Unique Dragons:\n{string.Join(",\n", dbUniqueDragons)}\n");
-            dbUniqueDragons
-                .Should()
-                .Contain(data.update_data_list.dragon_reliability_list!.Select(x => x.dragon_id));
+            await this.CheckRewardInDb(reward);
         }
     }
 
-    protected async Task<SummonRequestResponseData> SummonRequest(SummonRequest request)
+    private async Task<SummonRequestResponseData> SummonRequest(SummonRequest request)
     {
         byte[] payload = MessagePackSerializer.Serialize(request);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
@@ -202,7 +168,30 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
                 responseBytes,
                 ContractlessStandardResolver.Options
             );
-        _output.WriteLine(TestUtils.MsgpackBytesToPrettyJson(responseBytes));
+
         return deserializedResponse.data;
+    }
+
+    private async Task CheckRewardInDb(SummonReward reward)
+    {
+        using IServiceScope scope = _factory.Services.CreateScope();
+        ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
+
+        if (reward.entity_type == (int)EntityTypes.Dragon)
+        {
+            List<DbPlayerDragonData> dragonData = await apiContext.PlayerDragonData
+                .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
+                .ToListAsync();
+
+            dragonData.Where(x => (int)x.DragonId == reward.id).Should().NotBeEmpty();
+        }
+        else
+        {
+            List<DbPlayerCharaData> charaData = await apiContext.PlayerCharaData
+                .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
+                .ToListAsync();
+
+            charaData.Where(x => (int)x.CharaId == reward.id).Should().NotBeEmpty();
+        }
     }
 }

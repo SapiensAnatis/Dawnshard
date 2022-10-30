@@ -11,6 +11,6 @@ public record QuestReadStoryResponse(QuestReadStoryData data) : BaseResponse<Que
 public record QuestReadStoryData(
     List<QuestReward> quest_story_reward_list,
     List<object> converted_entity_list,
-    Dictionary<string, object> update_data_list,
+    UpdateDataList update_data_list,
     EntityResult entity_result
 );
