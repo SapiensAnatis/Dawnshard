@@ -1,4 +1,7 @@
-﻿namespace DragaliaAPI.Services.Data.Models;
+﻿using System.Text.Json.Serialization;
+using DragaliaAPI.Models.Data;
+
+namespace DragaliaAPI.Services.Data.Models;
 
 public record DataAdventurer(
     int IdLong,
@@ -6,12 +9,13 @@ public record DataAdventurer(
     int WeaponTypeId,
     int Rarity,
     int MaxLimitBreakCount,
-    string ElementalType,
+    [property: JsonConverter(typeof(JsonStringEnumConverter))] UnitElement ElementalType,
     int MinHp3,
     int MinHp4,
     int MinHp5,
     int MaxHp,
     int AddMaxHp1,
+    int PlusHp0,
     int PlusHp1,
     int PlusHp2,
     int PlusHp3,

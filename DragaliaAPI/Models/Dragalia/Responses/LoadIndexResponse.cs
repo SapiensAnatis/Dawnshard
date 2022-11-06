@@ -23,6 +23,7 @@ public record LoadIndexData(
     IEnumerable<Chara> chara_list,
     IEnumerable<Dragon> dragon_list,
     IEnumerable<Party> party_list,
+    IEnumerable<Material> material_list,
     [property: MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
         DateTimeOffset server_time,
     List<object> functional_maintenance_list,
