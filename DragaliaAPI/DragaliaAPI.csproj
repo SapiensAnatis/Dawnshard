@@ -19,8 +19,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="12.0.0" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
 		<PackageReference Include="MessagePack" Version="2.4.35" />
 		<PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="2.4.35" />
 		<PackageReference Include="MessagePackAnalyzer" Version="2.4.35">
@@ -30,20 +28,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="6.0.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.9">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.9">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.9" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
@@ -56,27 +40,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Migrations\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Include="$(SolutionDir)Resources\**" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Pages\Components\**" />
-	  <Content Remove="Pages\Components\**" />
-	  <EmbeddedResource Remove="Pages\Components\**" />
-	  <None Remove="Pages\Components\**" />
+		<Compile Remove="Pages\Components\**" />
+		<Content Remove="Pages\Components\**" />
+		<EmbeddedResource Remove="Pages\Components\**" />
+		<None Remove="Pages\Components\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Resources\mypage_info">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\new_savefile">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+		<ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
+		<ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Resources\mypage_info">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\new_savefile">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 

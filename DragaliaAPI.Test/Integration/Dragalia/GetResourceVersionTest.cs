@@ -1,14 +1,16 @@
-﻿namespace DragaliaAPI.Test.Integration.Dragalia;
+﻿using DragaliaAPI.Models.Responses;
 
-public class GetDeployVersionTest : IClassFixture<CustomWebApplicationFactory<Program>>
+namespace DragaliaAPI.Test.Integration.Dragalia;
+
+public class GetDeployVersionTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public GetDeployVersionTest(CustomWebApplicationFactory<Program> factory)
+    public GetDeployVersionTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
     }
@@ -23,10 +25,7 @@ public class GetDeployVersionTest : IClassFixture<CustomWebApplicationFactory<Pr
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync(
-            "deploy/get_deploy_version",
-            content
-        );
+        HttpResponseMessage response = await client.PostAsync("deploy/get_deploy_version", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }

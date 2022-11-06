@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses;
-using Microsoft.AspNetCore.Http;
+﻿using DragaliaAPI.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia.Deploy;

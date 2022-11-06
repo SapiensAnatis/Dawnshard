@@ -1,6 +1,4 @@
-﻿using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Nintendo;
-using Microsoft.EntityFrameworkCore;
+﻿using DragaliaAPI.Models.Components;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 

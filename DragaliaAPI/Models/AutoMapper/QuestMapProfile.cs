@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models.Components;
 
 namespace DragaliaAPI.Models.AutoMapper;
 

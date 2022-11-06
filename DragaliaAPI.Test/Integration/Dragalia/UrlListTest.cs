@@ -1,14 +1,16 @@
-﻿namespace DragaliaAPI.Test.Integration.Dragalia;
+﻿using DragaliaAPI.Models.Responses;
 
-public class UrlListTest : IClassFixture<CustomWebApplicationFactory<Program>>
+namespace DragaliaAPI.Test.Integration.Dragalia;
+
+public class UrlListTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public UrlListTest(CustomWebApplicationFactory<Program> factory)
+    public UrlListTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
     }
@@ -23,7 +25,7 @@ public class UrlListTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("webview_version/url_list", content);
+        HttpResponseMessage response = await client.PostAsync("webview_version/url_list", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }

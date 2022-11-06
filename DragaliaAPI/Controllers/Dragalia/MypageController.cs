@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Responses;
+﻿using Microsoft.AspNetCore.Mvc;
 using MessagePack.Resolvers;
 using MessagePack;
 

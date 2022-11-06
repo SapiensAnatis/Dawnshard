@@ -1,31 +1,30 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
-using MessagePack.Resolvers;
+﻿using MessagePack.Resolvers;
 using MessagePack;
-using DragaliaAPI.Models.Data;
 using Xunit.Abstractions;
-using DragaliaAPI.Models.Data.Entity;
-using DragaliaAPI.Models.Database;
 using Microsoft.Extensions.DependencyInjection;
-using DragaliaAPI.Models.Database.Savefile;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
+using DragaliaAPI.Models.Requests;
+using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class SummonTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
-    private readonly ITestOutputHelper _output;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
+    private readonly ITestOutputHelper outputHelper;
 
-    public SummonTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper output)
+    public SummonTest(IntegrationTestFixture fixture, ITestOutputHelper outputHelper)
     {
-        _factory = factory;
-        _client = factory.CreateClient(
+        this.fixture = fixture;
+        this.outputHelper = outputHelper;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
-        _factory.SeedCache();
-        _output = output;
     }
 
     [Fact]
@@ -34,7 +33,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(new BannerIdRequest(1020203));
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/summon_exclude/get_list", content);
+        HttpResponseMessage response = await client.PostAsync("/summon_exclude/get_list", content);
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
@@ -51,7 +50,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(new BannerIdRequest(1020203));
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/summon/get_odds_data", content);
+        HttpResponseMessage response = await client.PostAsync("/summon/get_odds_data", content);
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
@@ -65,14 +64,40 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task SummonGetSummonHistory_ReturnsAnyData()
     {
+        DbPlayerSummonHistory historyEntry =
+            new()
+            {
+                DeviceAccountId = fixture.DeviceAccountId,
+                SummonId = 1,
+                SummonExecType = SummonExecTypes.DailyDeal,
+                ExecDate = DateTimeOffset.UtcNow,
+                PaymentType = PaymentTypes.Diamantium,
+                EntityType = EntityTypes.Dragon,
+                EntityId = (int)Dragons.GalaRebornNidhogg,
+                EntityQuantity = 1,
+                EntityLevel = 1,
+                EntityRarity = 5,
+                EntityLimitBreakCount = 0,
+                EntityHpPlusCount = 0,
+                EntityAttackPlusCount = 0,
+                SummonPrizeRank = SummonPrizeRanks.None,
+                SummonPoint = 10,
+                GetDewPointQuantity = 0,
+            };
+
+        using (IServiceScope scope = fixture.Services.CreateScope())
+        {
+            ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
+
+            await context.PlayerSummonHistory.AddAsync(historyEntry);
+            await context.SaveChangesAsync();
+        }
+
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync(
-            "summon/get_summon_history",
-            content
-        );
+        HttpResponseMessage response = await client.PostAsync("summon/get_summon_history", content);
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
@@ -80,6 +105,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
         SummonGetSummonHistoryResponse deserialized =
             MessagePackSerializer.Deserialize<SummonGetSummonHistoryResponse>(bytes);
 
+        // Too lazy to set up automapper to check exact result and it is covered more or less in SummonRepositoryTests.cs
         deserialized.data.summon_history_list.Should().NotBeEmpty();
     }
 
@@ -90,7 +116,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("summon/get_summon_list", content);
+        HttpResponseMessage response = await client.PostAsync("summon/get_summon_list", content);
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
@@ -107,7 +133,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(new BannerIdRequest(1020203));
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync(
+        HttpResponseMessage response = await client.PostAsync(
             "summon/get_summon_point_trade",
             content
         );
@@ -130,7 +156,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
 
         SummonRequestResponseData data = await this.SummonRequest(request);
 
-        data.result_unit_list.Count.Should().Be(1);
+        data.result_unit_list.Count().Should().Be(1);
 
         await this.CheckRewardInDb(data.result_unit_list.ElementAt(0));
     }
@@ -145,7 +171,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
 
         SummonRequestResponseData data = await this.SummonRequest(request);
 
-        data.result_unit_list.Count.Should().Be(10);
+        data.result_unit_list.Count().Should().Be(10);
 
         foreach (SummonReward reward in data.result_unit_list)
         {
@@ -158,7 +184,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(request);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("summon/request", content);
+        HttpResponseMessage response = await client.PostAsync("summon/request", content);
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
@@ -174,13 +200,13 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
 
     private async Task CheckRewardInDb(SummonReward reward)
     {
-        using IServiceScope scope = _factory.Services.CreateScope();
+        using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
 
         if (reward.entity_type == (int)EntityTypes.Dragon)
         {
             List<DbPlayerDragonData> dragonData = await apiContext.PlayerDragonData
-                .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
+                .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
                 .ToListAsync();
 
             dragonData.Where(x => (int)x.DragonId == reward.id).Should().NotBeEmpty();
@@ -188,7 +214,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
         else
         {
             List<DbPlayerCharaData> charaData = await apiContext.PlayerCharaData
-                .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
+                .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
                 .ToListAsync();
 
             charaData.Where(x => (int)x.CharaId == reward.id).Should().NotBeEmpty();
