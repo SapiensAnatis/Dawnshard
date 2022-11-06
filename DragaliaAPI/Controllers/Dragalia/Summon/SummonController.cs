@@ -17,6 +17,8 @@ using DragaliaAPI.Models.Nintendo;
 using System.Collections.Immutable;
 using MessagePack;
 using Microsoft.AspNetCore.Identity;
+using DragaliaAPI.Models.Database;
+using System;
 
 namespace DragaliaAPI.Controllers.Dragalia.Summon;
 
@@ -204,7 +206,7 @@ public class SummonController : ControllerBase
         return Ok(response);
     }
 
-    //TODO: Fully implement and refactor
+    //TODO: Fully implement and REFACTOR
     [HttpPost]
     [Route("request")]
     public async Task<DragaliaResult> RequestSummon(
@@ -337,11 +339,9 @@ public class SummonController : ControllerBase
         int countOfRare5Char = 0;
         int countOfRare5Dragon = 0;
         int countOfRare4 = 0;
-        int topRarity = 3;
         for (int i = 0; i < summonResult.Count; i++)
         {
             SimpleSummonReward summon = summonResult[i];
-            topRarity = topRarity > summon.rarity ? topRarity : summon.rarity;
             EntityTypes entityType = (EntityTypes)summon.entity_type;
             if (summon.rarity == 5)
             {
@@ -439,7 +439,6 @@ public class SummonController : ControllerBase
                     break;
             }
         }
-
         SummonRequestResponse response = new SummonRequestResponse(
             new SummonRequestResponseData(
                 reversalIndex,
@@ -481,7 +480,6 @@ public class SummonController : ControllerBase
                 entityResult
             )
         );
-        ;
         return Ok(response);
     }
 }
