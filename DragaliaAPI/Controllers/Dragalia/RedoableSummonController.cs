@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Text.Json;
-using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Responses;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+﻿using System.Text.Json;
+using AutoMapper;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Responses;
 using DragaliaAPI.Services;
-using Microsoft.AspNetCore.Http;
+using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -19,8 +19,10 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class RedoableSummonController : ControllerBase
 {
     private readonly ISummonService _summonService;
-    private readonly IApiRepository _apiRepository;
-    private readonly ISavefileWriteService _savefileWriteService;
+    private readonly IQuestRepository questRepository;
+    private readonly IUserDataRepository userDataRepository;
+    private readonly IUnitRepository unitRepository;
+    private readonly IMapper mapper;
     private readonly IDistributedCache _cache;
     private readonly ISessionService _sessionService;
 
@@ -32,15 +34,19 @@ public class RedoableSummonController : ControllerBase
 
     public RedoableSummonController(
         ISummonService summonService,
-        IApiRepository apiRepository,
-        ISavefileWriteService savefileWriteService,
+        IQuestRepository questRepository,
+        IUserDataRepository userDataRepository,
+        IUnitRepository unitRepository,
+        IMapper mapper,
         IDistributedCache cache,
         ISessionService sessionService
     )
     {
         _summonService = summonService;
-        _apiRepository = apiRepository;
-        _savefileWriteService = savefileWriteService;
+        this.questRepository = questRepository;
+        this.userDataRepository = userDataRepository;
+        this.unitRepository = unitRepository;
+        this.mapper = mapper;
         _cache = cache;
         _sessionService = sessionService;
     }
@@ -103,18 +109,34 @@ public class RedoableSummonController : ControllerBase
 
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
 
-        await _apiRepository.UpdateTutorialStatus(deviceAccountId, 10152);
-        await _apiRepository.UpdateQuestStory(deviceAccountId, 1000100, 1); // Complete prologue story
+        await userDataRepository.UpdateTutorialStatus(deviceAccountId, 10152);
+        await this.questRepository.UpdateQuestStory(deviceAccountId, 1000100, 1); // Complete prologue story
 
-        UpdateDataList updateData = await _savefileWriteService.CommitSummonResult(
-            cachedResult,
+        IEnumerable<DbPlayerCharaData> repositoryCharaOuput = await this.unitRepository.AddCharas(
             deviceAccountId,
-            giveDew: false
+            cachedResult
+                .Where(x => x.entity_type == (int)EntityTypes.Chara)
+                .Select(x => (Charas)x.id)
         );
 
-        if (updateData.user_data is null)
-            // Removes warning below
-            throw new Exception("CommitSummonResult doesn't work properly");
+        (
+            IEnumerable<DbPlayerDragonData> newDragons,
+            IEnumerable<DbPlayerDragonReliability> newReliability
+        ) repositoryDragonOutput = await this.unitRepository.AddDragons(
+            deviceAccountId,
+            cachedResult
+                .Where(x => x.entity_type == (int)EntityTypes.Dragon)
+                .Select(x => (Dragons)x.id)
+        );
+
+        UpdateDataList updateData = _summonService.GenerateUpdateData(
+            repositoryCharaOuput,
+            repositoryDragonOutput
+        );
+
+        updateData.user_data = this.mapper.Map<UserData>(
+            await userDataRepository.GetUserData(deviceAccountId).SingleAsync()
+        );
 
         return Ok(
             new RedoableSummonFixExecResponse(

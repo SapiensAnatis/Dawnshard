@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using DragaliaAPI.Models.Dragalia.Requests;
-using DragaliaAPI.Models.Dragalia.Responses;
+﻿using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Services;
-using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Database.Savefile;
+using DragaliaAPI.Models.Requests;
+using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Database.Repositories;
 
 namespace DragaliaAPI.Controllers.Dragalia.Update;
 
@@ -14,12 +12,15 @@ namespace DragaliaAPI.Controllers.Dragalia.Update;
 [ApiController]
 public class NamechangeController : ControllerBase
 {
-    private readonly IApiRepository _apiRepository;
+    private readonly IUserDataRepository userDataRepository;
     private readonly ISessionService _sessionService;
 
-    public NamechangeController(IApiRepository apiRepository, ISessionService sessionService)
+    public NamechangeController(
+        IUserDataRepository userDataRepository,
+        ISessionService sessionService
+    )
     {
-        _apiRepository = apiRepository;
+        this.userDataRepository = userDataRepository;
         _sessionService = sessionService;
     }
 
@@ -31,7 +32,7 @@ public class NamechangeController : ControllerBase
     {
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
 
-        await _apiRepository.UpdateName(deviceAccountId, request.name);
+        await userDataRepository.UpdateName(deviceAccountId, request.name);
 
         UpdateNamechangeResponse response = new(new NamechangeData(request.name));
         return Ok(response);

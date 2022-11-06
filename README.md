@@ -16,8 +16,9 @@ Once the server is running, you should be able to make requests to `localhost:50
 
 Contributions are more than welcome! Feel free to fork the repository and open a pull request with these changes. Please also include integration-style tests for any new controllers, and unit tests for any new services. See the DragaliaAPI.Test project for examples (these are by no means a gold standard, however).
 
-Code formatting is enforced by [CSharpier](https://csharpier.com/) with a pre-commit hook and a pipeline step. You may find it beneficial to run this on saving a file -- this can be done using an extension in your IDE. For Visual Studio, install [this extension](https://marketplace.visualstudio.com/items?itemName=csharpier.CSharpier) and enable 'Reformat with CSharpier on Save' in Options > CSharpier > General.
-
-For development purposes, you may find [this tool](https://gist.github.com/SapiensAnatis/e76f067aad0ac425c9f9008db94e143c) useful for sending requests to endpoints that expect msgpack-formatted bodies (as Postman does not yet support this).
-
 See also the [API documentation](https://dragalia-api-docs.readthedocs.io/en/latest/) for reference on what existing endpoints do and how to implement new ones.
+
+### Development environment
+
+If you wish to connect to your locally-hosted instance of the server with a Dragalia client, you will need to set up the workflow for this. Please contact the repository owner for more information. If you simply wish to test individual endpoints in a less end-to-end fashion, you could write automated integration tests or use [this tool](https://gist.github.com/SapiensAnatis/e76f067aad0ac425c9f9008db94e143c) to send msgpack-formatted requests from your desktop.
+

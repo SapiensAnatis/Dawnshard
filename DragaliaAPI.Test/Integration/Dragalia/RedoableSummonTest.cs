@@ -1,25 +1,23 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
-using MessagePack.Resolvers;
+﻿using MessagePack.Resolvers;
 using MessagePack;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
-using DragaliaAPI.Models.Data;
-using DragaliaAPI.Models.Database;
 using Microsoft.Extensions.DependencyInjection;
+using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Database;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class RedoableSummonTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public RedoableSummonTest(CustomWebApplicationFactory<Program> factory)
+    public RedoableSummonTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
-        _factory.SeedCache();
     }
 
     [Fact]
@@ -32,7 +30,7 @@ public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Prog
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("redoable_summon/get_data", content);
+        HttpResponseMessage response = await client.PostAsync("redoable_summon/get_data", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }
@@ -47,7 +45,7 @@ public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Prog
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("redoable_summon/pre_exec", content);
+        HttpResponseMessage response = await client.PostAsync("redoable_summon/pre_exec", content);
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
@@ -73,9 +71,9 @@ public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Prog
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
         // Set up cached summon result
-        await _client.PostAsync("redoable_summon/pre_exec", content);
+        await client.PostAsync("redoable_summon/pre_exec", content);
 
-        HttpResponseMessage fixResponse = await _client.PostAsync(
+        HttpResponseMessage fixResponse = await client.PostAsync(
             "redoable_summon/fix_exec",
             content
         );
@@ -97,15 +95,15 @@ public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Prog
             .Select(x => (int)x.dragon_id)
             .OrderBy(x => x);
 
-        using var scope = _factory.Services.CreateScope();
+        using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
 
         IEnumerable<int> dbCharaIds = apiContext.PlayerCharaData
-            .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
+            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
             .Select(x => (int)x.CharaId)
             .OrderBy(x => x);
         IEnumerable<int> dbDragonIds = apiContext.PlayerDragonData
-            .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
+            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
             .Select(x => (int)x.DragonId)
             .OrderBy(x => x);
 

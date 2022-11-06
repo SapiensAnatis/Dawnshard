@@ -1,11 +1,10 @@
-﻿using DragaliaAPI.Models.Data.Entity;
-using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Requests;
-using DragaliaAPI.Models.Dragalia.Responses;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Requests;
+using DragaliaAPI.Models.Responses;
 using DragaliaAPI.Services;
-using Microsoft.AspNetCore.Http;
+using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,17 +16,23 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [ApiController]
 public class PartyController : ControllerBase
 {
-    private readonly IApiRepository apiRepository;
+    private readonly IPartyRepository partyRepository;
+    private readonly IUnitRepository unitRepository;
+    private readonly IUserDataRepository userDataRepository;
     private readonly ISessionService sessionService;
     private readonly ILogger<PartyController> logger;
 
     public PartyController(
-        IApiRepository apiRepository,
+        IPartyRepository partyRepository,
+        IUnitRepository unitRepository,
+        IUserDataRepository userDataRepository,
         ISessionService sessionService,
         ILogger<PartyController> logger
     )
     {
-        this.apiRepository = apiRepository;
+        this.partyRepository = partyRepository;
+        this.unitRepository = unitRepository;
+        this.userDataRepository = userDataRepository;
         this.sessionService = sessionService;
         this.logger = logger;
     }
@@ -39,7 +44,7 @@ public class PartyController : ControllerBase
     [Route("index")]
     public DragaliaResult Index()
     {
-        return Ok(new PartyIndexResponse(new PartyIndexData(new(), new())));
+        return this.Ok(new PartyIndexResponse(new PartyIndexData(new(), new())));
     }
 
     [Route("set_party_setting")]
@@ -55,13 +60,13 @@ public class PartyController : ControllerBase
         // TODO: Amulet validation
         // TODO: Talisman validation
         // TODO: Shared skill validation
-        IEnumerable<Charas> ownedCharas = await apiRepository
-            .GetCharaData(deviceAccountId)
+        IEnumerable<Charas> ownedCharaIds = await this.unitRepository
+            .GetAllCharaData(deviceAccountId)
             .Select(x => x.CharaId)
             .ToListAsync();
 
-        IEnumerable<long> ownedDragons = await apiRepository
-            .GetDragonData(deviceAccountId)
+        IEnumerable<long> ownedDragonKeyIds = await this.unitRepository
+            .GetAllDragonData(deviceAccountId)
             .Select(x => x.DragonKeyId)
             .ToListAsync();
 
@@ -80,18 +85,19 @@ public class PartyController : ControllerBase
                     deviceAccountId,
                     id
                 );
-                return BadRequest();
+                return this.BadRequest();
             }
+
             Charas c = (Charas)Enum.ToObject(typeof(Charas), id);
 
-            if (!ownedCharas.Contains(c))
+            if (!ownedCharaIds.Contains(c))
             {
                 logger.LogError(
                     "Request from DeviceAccount {id} contained not-owned character id {id}",
                     deviceAccountId,
                     id
                 );
-                return BadRequest();
+                return this.BadRequest();
             }
         }
 
@@ -102,14 +108,14 @@ public class PartyController : ControllerBase
             )
         )
         {
-            if (!ownedDragons.Contains(keyId) && keyId != 0)
+            if (!ownedDragonKeyIds.Contains(keyId) && keyId != 0)
             {
                 logger.LogError(
                     "Request from DeviceAccount {id} contained invalid dragon_key_id {key_id}",
                     deviceAccountId,
                     keyId
                 );
-                return BadRequest();
+                return this.BadRequest();
             }
         }
 
@@ -121,13 +127,13 @@ public class PartyController : ControllerBase
                 requestParty.request_party_setting_list
             );
         DbParty dbEntry = PartyFactory.CreateDbEntry(deviceAccountId, responseParty);
-        await apiRepository.SetParty(deviceAccountId, dbEntry);
+        await partyRepository.SetParty(deviceAccountId, dbEntry);
 
         // Send response
-        UpdateDataList updateDataList = new() { party_list = new() { responseParty } };
+        UpdateDataList updateDataList = new() { party_list = new List<Party>() { responseParty } };
         UpdateDataListResponse response = new(new(updateDataList));
 
-        return Ok(response);
+        return this.Ok(response);
     }
 
     [Route("set_main_party_no")]
@@ -138,7 +144,7 @@ public class PartyController : ControllerBase
     {
         string deviceAccountId = await sessionService.GetDeviceAccountId_SessionId(sessionId);
 
-        await apiRepository.SetMainPartyNo(deviceAccountId, request.main_party_no);
+        await this.userDataRepository.SetMainPartyNo(deviceAccountId, request.main_party_no);
 
         return this.Ok(new PartySetMainPartyNoResponse(new(request.main_party_no)));
     }

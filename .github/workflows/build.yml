@@ -10,7 +10,7 @@ env:
   HUSKY: 0
 
 jobs:
-  build:
+  build-api:
     runs-on: ubuntu-latest
     strategy:
       matrix:

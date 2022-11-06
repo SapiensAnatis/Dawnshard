@@ -1,13 +1,13 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
-using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Database.Savefile;
+using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using FluentAssertions.Equivalency;
 using MessagePack;
 using MessagePack.Resolvers;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace DragaliaAPI.Test.Integration;
+namespace DragaliaAPI.Test;
 
 public static class TestUtils
 {
@@ -54,14 +54,12 @@ public static class TestUtils
 
     public static List<DbPlayerUserData> GetSavefilePlayerInfoSeed()
     {
-        var playerInfoOne = DbSavefileUserDataFactory.Create("id");
-        playerInfoOne.ViewerId = 10000000001;
-        var playerInfoTwo = DbSavefileUserDataFactory.Create("prepared_id");
-        playerInfoTwo.ViewerId = 10000000002;
-        var playerInfoThree = DbSavefileUserDataFactory.Create("logged_in_id");
-        playerInfoThree.ViewerId = 10000000003;
-
-        return new() { playerInfoOne, playerInfoTwo, playerInfoThree };
+        return new()
+        {
+            DbSavefileUserDataFactory.Create("id"),
+            DbSavefileUserDataFactory.Create("prepared_id"),
+            DbSavefileUserDataFactory.Create("logged_in_id")
+        };
     }
 
     public static DbPlayerUserData GetLoggedInSavefileSeed()

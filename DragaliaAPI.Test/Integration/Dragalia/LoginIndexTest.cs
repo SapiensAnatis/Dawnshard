@@ -1,31 +1,18 @@
-﻿using MessagePack;
+﻿using DragaliaAPI.Models.Responses;
+using MessagePack;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class LoginIndexTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class LoginIndexTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public LoginIndexTest(CustomWebApplicationFactory<Program> factory)
+    public LoginIndexTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
-    }
-
-    [Fact]
-    public async Task VerifyJws_ReturnsOK()
-    {
-        VerifyJwsResponse expectedResponse = new(new VerifyJwsData());
-
-        var data = new { jws_result = "unused" };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await _client.PostAsync("/login/index", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }
 }
