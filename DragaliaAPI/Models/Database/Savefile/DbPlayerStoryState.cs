@@ -19,9 +19,9 @@ public class DbPlayerStoryState : IDbHasAccountId
 
     [Column("StoryId")]
     [Required]
-    public long StoryId { get; set; }
+    public int StoryId { get; set; }
 
-    [Column("StoryState")]
+    [Column("State")]
     [Required]
-    public byte StoryState { get; set; }
+    public byte State { get; set; }
 }

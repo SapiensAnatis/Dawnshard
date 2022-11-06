@@ -46,9 +46,6 @@ public class SummonController : ControllerBase
         _saveService = saveService;
     }
 
-    [MessagePackObject(true)]
-    public record BannerIdRequest(int summon_id);
-
     /// <summary>
     /// Returns excluded/excludable units for special banners
     /// </summary>
@@ -59,7 +56,7 @@ public class SummonController : ControllerBase
     [Route("~/summon_exclude/get_list")]
     public async Task<DragaliaResult> SummonExcludeGetList(
         [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] BannerIdRequest bannerIdRequest
+        BannerIdRequest bannerIdRequest
     )
     {
         int bannerId = bannerIdRequest.summon_id;
@@ -89,7 +86,7 @@ public class SummonController : ControllerBase
     [Route("get_odds_data")]
     public async Task<DragaliaResult> GetOddsData(
         [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] BannerIdRequest bannerIdRequest
+        BannerIdRequest bannerIdRequest
     )
     {
         int bannerId = bannerIdRequest.summon_id;
@@ -166,7 +163,7 @@ public class SummonController : ControllerBase
     [Route("get_summon_point_trade")]
     public async Task<DragaliaResult> GetSummonPointTrade(
         [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] BannerIdRequest bannerIdRequest
+        BannerIdRequest bannerIdRequest
     )
     {
         int bannerId = bannerIdRequest.summon_id;
@@ -214,7 +211,7 @@ public class SummonController : ControllerBase
     [Route("request")]
     public async Task<DragaliaResult> RequestSummon(
         [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] SummonRequest summonRequest
+        SummonRequest summonRequest
     )
     {
         //TODO Fetch real data by bannerId
@@ -333,8 +330,7 @@ public class SummonController : ControllerBase
             )
             .ToList();
 
-        Models.Dragalia.Responses.EntityResult entityResult =
-            new(new List<BaseNewEntity>(), newEntities);
+        EntityResult entityResult = new(new List<BaseNewEntity>(), newEntities);
 
         List<SummonReward> rewardList = new List<SummonReward>();
         List<DbPlayerSummonHistory> historyEntries = new List<DbPlayerSummonHistory>();

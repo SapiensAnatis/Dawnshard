@@ -62,6 +62,8 @@ public class ApiContext : DbContext
             .Entity<DbPlayerBannerData>()
             .HasKey(key => new { key.DeviceAccountId, key.SummonBannerId });
 
+        modelBuilder.Entity<DbQuest>().HasKey(e => new { e.DeviceAccountId, e.QuestId });
+
         if (_isDevelopment)
             SeedDatabase(modelBuilder);
     }
