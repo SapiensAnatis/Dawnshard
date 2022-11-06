@@ -6,6 +6,7 @@ using Xunit.Abstractions;
 using DragaliaAPI.Models.Data.Entity;
 using DragaliaAPI.Models.Database;
 using Microsoft.Extensions.DependencyInjection;
+using static DragaliaAPI.Controllers.Dragalia.Summon.SummonController;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -29,7 +30,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
     public async Task SummonExcludeGetList_ReturnsAnyData()
     {
         // Corresponds to JSON: "{}"
-        byte[] payload = MessagePackSerializer.Serialize(1020203);
+        byte[] payload = MessagePackSerializer.Serialize(new BannerIdRequest(1020203));
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
         HttpResponseMessage response = await _client.PostAsync("summon_exclude/get_list", content);
@@ -44,7 +45,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
     public async Task SummonGetOddsData_ReturnsAnyData()
     {
         // Corresponds to JSON: "{}"
-        byte[] payload = MessagePackSerializer.Serialize(1020203);
+        byte[] payload = MessagePackSerializer.Serialize(new BannerIdRequest(1020203));
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
         HttpResponseMessage response = await _client.PostAsync("summon/get_odds_data", content);
@@ -92,7 +93,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
     public async Task SummonRequest_GetSummonPointData_ReturnsAnyData()
     {
         HttpContent content = TestUtils.CreateMsgpackContent(
-            MessagePackSerializer.Serialize(1020203)
+            MessagePackSerializer.Serialize(new BannerIdRequest(1020203))
         );
 
         HttpResponseMessage response = await _client.PostAsync(

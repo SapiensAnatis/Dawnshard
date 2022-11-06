@@ -42,17 +42,22 @@ public class IndexController : ControllerBase
         IEnumerable<DbParty> dbParties = await _apiRepository
             .GetParties(deviceAccountId)
             .ToListAsync();
+        IEnumerable<DbPlayerMaterial> dbMaterials = await _apiRepository
+            .GetMaterials(deviceAccountId)
+            .ToListAsync();
 
         UserData userData = SavefileUserDataFactory.Create(dbUserData);
         IEnumerable<Chara> charas = dbCharaData.Select(CharaFactory.Create);
         IEnumerable<Dragon> dragons = dbDragonData.Select(DragonFactory.Create);
         IEnumerable<Party> parties = dbParties.Select(PartyFactory.CreateDto);
+        IEnumerable<Material> materials = dbMaterials.Select(MaterialFactory.Create);
 
         LoadIndexData data = new LoadIndexData(
             userData,
             charas,
             dragons,
             parties,
+            materials,
             new List<object>()
         );
 

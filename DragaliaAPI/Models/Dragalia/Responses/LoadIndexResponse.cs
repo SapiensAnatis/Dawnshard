@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using MessagePack;
+using static DragaliaAPI.Controllers.Dragalia.CharaController;
 
 namespace DragaliaAPI.Models.Dragalia.Responses;
 
@@ -13,5 +14,6 @@ public record LoadIndexData(
     IEnumerable<Chara> chara_list,
     IEnumerable<Dragon> dragon_list,
     IEnumerable<Party> party_list,
+    IEnumerable<Material> material_list,
     IEnumerable<object> ability_crest_list
 );

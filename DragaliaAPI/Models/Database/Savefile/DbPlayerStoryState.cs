@@ -10,6 +10,7 @@ public class DbPlayerStoryState : IDbHasAccountId
 {
     [Column("DeviceAccountId")]
     [Required]
+    [ForeignKey("DbDeviceAccount")]
     public string DeviceAccountId { get; set; } = null!;
 
     [Column("StoryType")]

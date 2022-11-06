@@ -9,6 +9,7 @@ public class DbPlayerBannerData : IDbHasAccountId
 {
     [Column("DeviceAccountId")]
     [Required]
+    [ForeignKey("DbDeviceAccount")]
     public string DeviceAccountId { get; set; } = null!;
 
     [Column("SummonBannerId")]

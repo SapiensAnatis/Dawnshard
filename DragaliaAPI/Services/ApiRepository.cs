@@ -277,4 +277,30 @@ public class ApiRepository : IApiRepository
 
         await _apiContext.SaveChangesAsync();
     }
+
+    public async Task<DbPlayerCurrency?> GetCurrency(string deviceAccountId, CurrencyTypes type)
+    {
+        return await _apiContext.PlayerWallet.FirstOrDefaultAsync(
+            entry => entry.CurrencyType == type
+        );
+    }
+
+    public IQueryable<DbPlayerCurrency> GetCurrencies(string deviceAccountId)
+    {
+        return _apiContext.PlayerWallet.Where(wallet => wallet.DeviceAccountId == deviceAccountId);
+    }
+
+    public async Task<DbPlayerMaterial?> GetMaterial(string deviceAccountId, Materials materialId)
+    {
+        return await _apiContext.PlayerStorage.FirstOrDefaultAsync(
+            entry => entry.MaterialId == materialId
+        );
+    }
+
+    public IQueryable<DbPlayerMaterial> GetMaterials(string deviceAccountId)
+    {
+        return _apiContext.PlayerStorage.Where(
+            storage => storage.DeviceAccountId == deviceAccountId
+        );
+    }
 }

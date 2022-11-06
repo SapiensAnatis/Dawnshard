@@ -7,10 +7,11 @@ using DragaliaAPI.Models.Data.Entity;
 namespace DragaliaAPI.Models.Database.Savefile;
 
 [Table("PlayerDragonReliability")]
-public class DbPlayerDragonReliability : IDbHasAccountId
+public class DbPlayerDragonReliability : IDbHasAccountId, IHasXp
 {
     [Column("DeviceAccountId")]
     [Required]
+    [ForeignKey("DbDeviceAccount")]
     public string DeviceAccountId { get; set; } = null!;
 
     [Column("DragonId")]
@@ -20,11 +21,11 @@ public class DbPlayerDragonReliability : IDbHasAccountId
 
     [Column("Level")]
     [Required]
-    public byte ReliabilityLevel { get; set; }
+    public byte Level { get; set; }
 
     [Column("TotalExp")]
     [Required]
-    public int ReliabilityTotalExp { get; set; }
+    public int Exp { get; set; }
 
     [Column("LastContactTime")]
     [Required]
@@ -40,8 +41,8 @@ public static class DbPlayerDragonReliabilityFactory
         {
             DeviceAccountId = deviceAccountId,
             DragonId = id,
-            ReliabilityLevel = 1,
-            ReliabilityTotalExp = 0,
+            Level = 1,
+            Exp = 0,
             LastContactTime = DateTimeOffset.UtcNow
         };
     }
