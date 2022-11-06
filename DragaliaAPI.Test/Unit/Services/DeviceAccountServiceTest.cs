@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Models.Database;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Components;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -8,7 +10,7 @@ namespace DragaliaAPI.Test.Unit.Services;
 public class DeviceAccountServiceTest
 {
     private readonly Mock<ILogger<DeviceAccountService>> mockLogger;
-    private readonly Mock<IApiRepository> mockRepository;
+    private readonly Mock<IDeviceAccountRepository> mockRepository;
 
     private readonly DeviceAccountService deviceAccountService;
 

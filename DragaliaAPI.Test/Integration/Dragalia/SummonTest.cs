@@ -1,14 +1,15 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
-using MessagePack.Resolvers;
+﻿using MessagePack.Resolvers;
 using MessagePack;
-using DragaliaAPI.Models.Data;
 using Xunit.Abstractions;
-using DragaliaAPI.Models.Data.Entity;
-using DragaliaAPI.Models.Database;
 using Microsoft.Extensions.DependencyInjection;
-using DragaliaAPI.Models.Database.Savefile;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
+using DragaliaAPI.Models.Requests;
+using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database;
+using DragaliaAPI.Shared.Definitions.Enums;
+using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -65,6 +66,35 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task SummonGetSummonHistory_ReturnsAnyData()
     {
+        DbPlayerSummonHistory historyEntry =
+            new()
+            {
+                DeviceAccountId = _factory.DeviceAccountId,
+                SummonId = 1,
+                SummonExecType = SummonExecTypes.DailyDeal,
+                ExecDate = DateTimeOffset.UtcNow,
+                PaymentType = PaymentTypes.Diamantium,
+                EntityType = EntityTypes.Dragon,
+                EntityId = (int)Dragons.GalaRebornNidhogg,
+                EntityQuantity = 1,
+                EntityLevel = 1,
+                EntityRarity = 5,
+                EntityLimitBreakCount = 0,
+                EntityHpPlusCount = 0,
+                EntityAttackPlusCount = 0,
+                SummonPrizeRank = SummonPrizeRanks.None,
+                SummonPoint = 10,
+                GetDewPointQuantity = 0,
+            };
+
+        using (IServiceScope scope = _factory.Services.CreateScope())
+        {
+            ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
+
+            await context.PlayerSummonHistory.AddAsync(historyEntry);
+            await context.SaveChangesAsync();
+        }
+
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
@@ -80,6 +110,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
         SummonGetSummonHistoryResponse deserialized =
             MessagePackSerializer.Deserialize<SummonGetSummonHistoryResponse>(bytes);
 
+        // Too lazy to set up automapper to check exact result and it is covered more or less in SummonRepositoryTests.cs
         deserialized.data.summon_history_list.Should().NotBeEmpty();
     }
 
@@ -130,7 +161,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
 
         SummonRequestResponseData data = await this.SummonRequest(request);
 
-        data.result_unit_list.Count.Should().Be(1);
+        data.result_unit_list.Count().Should().Be(1);
 
         await this.CheckRewardInDb(data.result_unit_list.ElementAt(0));
     }
@@ -145,7 +176,7 @@ public class SummonTest : IClassFixture<CustomWebApplicationFactory<Program>>
 
         SummonRequestResponseData data = await this.SummonRequest(request);
 
-        data.result_unit_list.Count.Should().Be(10);
+        data.result_unit_list.Count().Should().Be(10);
 
         foreach (SummonReward reward in data.result_unit_list)
         {

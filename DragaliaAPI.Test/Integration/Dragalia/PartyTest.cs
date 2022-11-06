@@ -1,8 +1,9 @@
 ﻿using System.Net;
-using DragaliaAPI.Models.Data.Entity;
-using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Requests;
+using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,7 @@ public class PartyTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task SetPartySetting_ValidRequest_UpdatesDatabase()
     {
-        await _factory.AddCharacter((int)Charas.Ilia, 5);
+        await _factory.AddCharacter((int)Charas.Ilia);
 
         PartySetPartySettingRequest request =
             new(

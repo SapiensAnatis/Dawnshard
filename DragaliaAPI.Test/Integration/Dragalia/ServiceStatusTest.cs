@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses;
-using MessagePack;
+﻿using DragaliaAPI.Models.Responses;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 

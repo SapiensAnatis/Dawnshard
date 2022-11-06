@@ -1,11 +1,10 @@
-﻿using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
-using DragaliaAPI.Models.Dragalia.Responses;
-using DragaliaAPI.Services;
+﻿using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using DragaliaAPI.Models.Data;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
 using MessagePack;
+using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models.Components;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -15,12 +14,15 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [ApiController]
 public class TutorialController : ControllerBase
 {
-    private readonly IApiRepository _apiRepository;
+    private readonly IUserDataRepository userDataRepository;
     private readonly ISessionService _sessionService;
 
-    public TutorialController(IApiRepository apiRepository, ISessionService sessionService)
+    public TutorialController(
+        IUserDataRepository userDataRepository,
+        ISessionService sessionService
+    )
     {
-        _apiRepository = apiRepository;
+        this.userDataRepository = userDataRepository;
         _sessionService = sessionService;
     }
 
@@ -32,7 +34,7 @@ public class TutorialController : ControllerBase
     )
     {
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-        DbPlayerUserData userData = await _apiRepository.UpdateTutorialStatus(
+        DbPlayerUserData userData = await userDataRepository.UpdateTutorialStatus(
             deviceAccountId,
             request.step
         );
@@ -57,7 +59,7 @@ public class TutorialController : ControllerBase
     {
         int flag_id = flagRequest.flag_id;
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-        DbPlayerUserData userData = await _apiRepository.UpdateTutorialFlag(
+        DbPlayerUserData userData = await this.userDataRepository.AddTutorialFlag(
             deviceAccountId,
             flag_id
         );

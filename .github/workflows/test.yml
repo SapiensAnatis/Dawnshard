@@ -11,8 +11,7 @@ env:
   HUSKY: 0
 
 jobs:
-  test:
-
+  test-api:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,3 +27,37 @@ jobs:
         run: dotnet restore DragaliaAPI.Test
       - name: Test
         run: dotnet test DragaliaAPI.Test --no-restore
+
+  test-database:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '6.0.x' ]
+    
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        run: dotnet restore DragaliaAPI.Database.Test
+      - name: Test
+        run: dotnet test DragaliaAPI.Database.Test --no-restore
+
+  test-shared:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '6.0.x' ]
+    
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        run: dotnet restore DragaliaAPI.Shared.Test
+      - name: Test
+        run: dotnet test DragaliaAPI.Shared.Test --no-restore

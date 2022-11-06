@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Database;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Models.Responses;
 using MessagePack;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,14 +34,12 @@ public class UpdateNamechangeTest : IClassFixture<CustomWebApplicationFactory<Pr
 
         HttpResponseMessage response = await _client.PostAsync("/update/namechange", content);
 
-        using (var scope = _serviceScopeFactory.CreateScope())
-        {
-            ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
-            apiContext.PlayerUserData
-                .First(x => x.DeviceAccountId == "logged_in_id")
-                .Name.Should()
-                .Be(newName);
-        }
+        using IServiceScope scope = _serviceScopeFactory.CreateScope();
+        ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
+        apiContext.PlayerUserData
+            .First(x => x.DeviceAccountId == "logged_in_id")
+            .Name.Should()
+            .Be(newName);
     }
 
     [Fact]

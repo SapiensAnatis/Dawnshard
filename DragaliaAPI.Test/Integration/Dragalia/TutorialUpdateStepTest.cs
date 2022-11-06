@@ -1,14 +1,11 @@
-﻿using System;
-using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
-using DragaliaAPI.Services;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Responses;
 using MessagePack;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -51,10 +48,11 @@ public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<
     public async Task TutorialUpdateStep_ReturnsCorrectResponse()
     {
         int step = 2;
-        using var scope = _factory.Services.CreateScope();
-        IApiRepository apiRepository = scope.ServiceProvider.GetRequiredService<IApiRepository>();
-        DbPlayerUserData dbUserData = await apiRepository
-            .GetPlayerInfo("logged_in_id")
+        using IServiceScope scope = _factory.Services.CreateScope();
+        IUserDataRepository userDataRepository =
+            scope.ServiceProvider.GetRequiredService<IUserDataRepository>();
+        DbPlayerUserData dbUserData = await userDataRepository
+            .GetUserData("logged_in_id")
             .SingleAsync();
 
         UserData userData = SavefileUserDataFactory.Create(dbUserData);

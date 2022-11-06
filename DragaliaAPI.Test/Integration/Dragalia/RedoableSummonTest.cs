@@ -1,10 +1,9 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
-using MessagePack.Resolvers;
+﻿using MessagePack.Resolvers;
 using MessagePack;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
-using DragaliaAPI.Models.Data;
-using DragaliaAPI.Models.Database;
 using Microsoft.Extensions.DependencyInjection;
+using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Database;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -97,7 +96,7 @@ public class RedoableSummonTest : IClassFixture<CustomWebApplicationFactory<Prog
             .Select(x => (int)x.dragon_id)
             .OrderBy(x => x);
 
-        using var scope = _factory.Services.CreateScope();
+        using IServiceScope scope = _factory.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
 
         IEnumerable<int> dbCharaIds = apiContext.PlayerCharaData

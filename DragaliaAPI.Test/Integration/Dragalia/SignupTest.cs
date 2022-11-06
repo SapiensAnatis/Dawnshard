@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+﻿using DragaliaAPI.Models.Base;
+using DragaliaAPI.Models.Responses;
 using MessagePack;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;

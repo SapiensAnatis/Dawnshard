@@ -1,7 +1,8 @@
-﻿using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Requests;
-using DragaliaAPI.Models.Dragalia.Responses;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Base;
+using DragaliaAPI.Models.Requests;
+using DragaliaAPI.Models.Responses;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,12 +17,12 @@ namespace DragaliaAPI.Controllers.Dragalia.Tool;
 public class AuthController : ControllerBase
 {
     private readonly ISessionService _sessionService;
-    private readonly IApiRepository _apiRepository;
+    private readonly IUserDataRepository userDataRepository;
 
-    public AuthController(ISessionService sessionService, IApiRepository repository)
+    public AuthController(ISessionService sessionService, IUserDataRepository userDataRepository)
     {
         _sessionService = sessionService;
-        _apiRepository = repository;
+        this.userDataRepository = userDataRepository;
     }
 
     [HttpPost]
@@ -34,10 +35,12 @@ public class AuthController : ControllerBase
         {
             sessionId = await _sessionService.ActivateSession(request.id_token);
             string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-            IQueryable<DbPlayerUserData> playerInfo = _apiRepository.GetPlayerInfo(deviceAccountId);
+            IQueryable<DbPlayerUserData> playerInfo = this.userDataRepository.GetUserData(
+                deviceAccountId
+            );
             viewerId = await playerInfo.Select(x => x.ViewerId).SingleAsync();
         }
-        catch (Exception e) when (e is ArgumentException || e is JsonException)
+        catch (Exception e) when (e is ArgumentException or JsonException)
         {
             return Ok(new ServerErrorResponse());
         }

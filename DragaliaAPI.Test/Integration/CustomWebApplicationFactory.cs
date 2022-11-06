@@ -1,5 +1,6 @@
-﻿using DragaliaAPI.Models.Database;
-using DragaliaAPI.Services;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -48,7 +49,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 ILogger<CustomWebApplicationFactory<TStartup>>
             >();
             var context = scopedServices.GetRequiredService<ApiContext>();
-            var repository = scopedServices.GetRequiredService<IApiRepository>();
+            var repository = scopedServices.GetRequiredService<IDeviceAccountRepository>();
             var cache = scopedServices.GetRequiredService<IDistributedCache>();
 
             context.Database.EnsureCreated();
@@ -82,13 +83,13 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         cache.SetString(":session_id:device_account_id:logged_in_id", "session_id");
     }
 
-    public async Task AddCharacter(int id, int rarity)
+    public async Task AddCharacter(int id)
     {
         using (var scope = this.Services.CreateScope())
         {
-            IApiRepository apiRepository =
-                scope.ServiceProvider.GetRequiredService<IApiRepository>();
-            await apiRepository.AddChara(this.DeviceAccountId, id, rarity);
+            IUnitRepository unitRepository =
+                scope.ServiceProvider.GetRequiredService<IUnitRepository>();
+            await unitRepository.AddCharas(this.DeviceAccountId, new List<Charas>() { (Charas)id });
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace DragaliaAPI.Test.Integration.Dragalia;
+﻿using DragaliaAPI.Models.Responses;
+
+namespace DragaliaAPI.Test.Integration.Dragalia;
 
 public class GetDeployVersionTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {
