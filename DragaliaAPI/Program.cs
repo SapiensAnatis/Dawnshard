@@ -1,11 +1,11 @@
 using System.Reflection;
-using DragaliaAPI;
-using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Dragalia.Responses;
+using DragaliaAPI.Database;
+using DragaliaAPI.MessagePackFormatters;
 using DragaliaAPI.Services;
-using DragaliaAPI.Services.Data;
+using DragaliaAPI.Shared;
 using MessagePack.Resolvers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -24,10 +24,6 @@ builder.Services
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-builder.Services.AddDbContext<ApiContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"))
-);
-
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
@@ -35,19 +31,12 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 builder.Services
+    .ConfigureDatabaseServices(builder.Configuration)
+    .ConfigureSharedServices()
     .AddScoped<ISessionService, SessionService>()
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
-    .AddScoped<IApiRepository, ApiRepository>()
     .AddScoped<ISummonService, SummonService>()
-    .AddScoped<ISavefileWriteService, SavefileWriteService>();
-
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-// Data services should be initialized on startup rather than when first requested
-UnitDataService u = new();
-DragonDataService d = new();
-builder.Services.AddSingleton<IUnitDataService>(u);
-builder.Services.AddSingleton<IDragonDataService>(d);
+    .AddAutoMapper(Assembly.GetExecutingAssembly());
 
 WebApplication app = builder.Build();
 
@@ -91,6 +80,7 @@ using (
 //app.UseHttpsRedirection();
 app.MapRazorPages();
 
+// Header middleware. May not be required.
 app.Use(
     async (context, next) =>
     {
@@ -109,6 +99,30 @@ app.Use(
         });
 
         await next();
+    }
+);
+
+// Session lookup middleware
+app.Use(
+    async (context, next) =>
+    {
+        ISessionService sessionService =
+            context.RequestServices.GetRequiredService<ISessionService>();
+
+        if (!context.Request.Headers.TryGetValue("SID", out StringValues sessionId))
+        {
+            // Requests prior to /tool/auth will not include SID
+            await next();
+        }
+        else
+        {
+            context.Items.Add(
+                "DeviceAccountId",
+                await sessionService.GetDeviceAccountId_SessionId(sessionId)
+            );
+
+            await next();
+        }
     }
 );
 

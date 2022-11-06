@@ -1,6 +1,4 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
+﻿using DragaliaAPI.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia.WebviewVersion;

@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
-using Microsoft.AspNetCore.Http;
+﻿using DragaliaAPI.Models.Base;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia.Login;

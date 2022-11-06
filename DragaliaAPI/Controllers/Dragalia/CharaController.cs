@@ -1,22 +1,19 @@
-﻿using System.Xml.Linq;
-using DragaliaAPI.Models.Data;
-using DragaliaAPI.Models.Data.Entity;
-using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.MessagePackFormatters;
-using DragaliaAPI.Models.Dragalia.Responses;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+﻿using AutoMapper;
+using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Responses;
 using DragaliaAPI.Services;
-using DragaliaAPI.Services.Data;
-using DragaliaAPI.Services.Data.Models;
-using MessagePack;
+using DragaliaAPI.Shared.Definitions;
+using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
-using static DragaliaAPI.Models.Data.ManaNodesUtil;
-using static DragaliaAPI.Models.Dragalia.Requests.CharaRequests;
+using static DragaliaAPI.Models.Requests.CharaRequests;
+using static DragaliaAPI.Shared.Definitions.Enums.ManaNodesUtil;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -26,19 +23,28 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [ApiController]
 public class CharaController : ControllerBase
 {
-    private IApiRepository _apiRepository;
-    private IUnitDataService _charaDataService;
+    private ICharaDataService _charaDataService;
     private ISessionService _sessionService;
+    private readonly IUserDataRepository userDataRepository;
+    private readonly IUnitRepository unitRepository;
+    private readonly IInventoryRepository inventoryRepository;
+    private readonly IMapper mapper;
     private ApiContext _apiContext;
 
     public CharaController(
-        IApiRepository apiRepository,
+        IUserDataRepository userDataRepository,
+        IUnitRepository unitRepository,
+        IInventoryRepository inventoryRepository,
+        IMapper mapper,
         ApiContext apiContext,
-        IUnitDataService charaDataService,
+        ICharaDataService charaDataService,
         ISessionService sessionService
     )
     {
-        _apiRepository = apiRepository;
+        this.userDataRepository = userDataRepository;
+        this.unitRepository = unitRepository;
+        this.inventoryRepository = inventoryRepository;
+        this.mapper = mapper;
         _apiContext = apiContext;
         _charaDataService = charaDataService;
         _sessionService = sessionService;
@@ -58,9 +64,12 @@ public class CharaController : ControllerBase
             {
                 throw new ArgumentException("Cannot enhance beyond rarity 5");
             }
-            DbPlayerUserData userData = await _apiRepository.GetPlayerInfo(accountId).FirstAsync();
-            DbPlayerCharaData playerCharData = await _apiRepository
-                .GetCharaData(accountId)
+
+            DbPlayerUserData userData = await this.userDataRepository
+                .GetUserData(accountId)
+                .FirstAsync();
+            DbPlayerCharaData playerCharData = await unitRepository
+                .GetAllCharaData(accountId)
                 .FirstAsync(chara => chara.CharaId == request.chara_id);
             DataAdventurer charData = _charaDataService.GetData((int)request.chara_id);
             playerCharData.HpBase += (ushort)(
@@ -83,7 +92,7 @@ public class CharaController : ControllerBase
                     new CharaBuildupData(
                         new CharBuildupUpdateDataList()
                         {
-                            chara_list = new() { CharaFactory.Create(playerCharData) },
+                            chara_list = new() { mapper.Map<Chara>(playerCharData) },
                             material_list = new(),
                             user_data = SavefileUserDataFactory.Create(userData),
                             mission_notice = new(
@@ -122,7 +131,7 @@ public class CharaController : ControllerBase
         {
             string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
             IEnumerable<Materials> matIds = request.material_list.Select(x => x.id);
-            Dictionary<Materials, DbPlayerMaterial> dbMats = await _apiRepository
+            Dictionary<Materials, DbPlayerMaterial> dbMats = await this.inventoryRepository
                 .GetMaterials(accountId)
                 .Where(dbMat => matIds.Contains(dbMat.MaterialId))
                 .ToDictionaryAsync(dbMat => dbMat.MaterialId);
@@ -147,9 +156,11 @@ public class CharaController : ControllerBase
                     throw new ArgumentException("Insufficient materials for buildup");
                 }
             }
-            DbPlayerUserData userData = await _apiRepository.GetPlayerInfo(accountId).FirstAsync();
-            DbPlayerCharaData playerCharData = await _apiRepository
-                .GetCharaData(accountId)
+            DbPlayerUserData userData = await this.userDataRepository
+                .GetUserData(accountId)
+                .FirstAsync();
+            DbPlayerCharaData playerCharData = await this.unitRepository
+                .GetAllCharaData(accountId)
                 .FirstAsync(chara => chara.CharaId == request.chara_id);
 
             Dictionary<int, int> usedMaterials = new();
@@ -170,7 +181,7 @@ public class CharaController : ControllerBase
                     new CharaBuildupData(
                         new CharBuildupUpdateDataList()
                         {
-                            chara_list = new() { CharaFactory.Create(playerCharData) },
+                            chara_list = new() { mapper.Map<Chara>(playerCharData) },
                             material_list = remainingMaterials,
                             user_data = SavefileUserDataFactory.Create(userData),
                             mission_notice = new(
@@ -317,9 +328,11 @@ public class CharaController : ControllerBase
         try
         {
             string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-            DbPlayerUserData userData = await _apiRepository.GetPlayerInfo(accountId).FirstAsync();
-            DbPlayerCharaData playerCharData = await _apiRepository
-                .GetCharaData(accountId)
+            DbPlayerUserData userData = await this.userDataRepository
+                .GetUserData(accountId)
+                .FirstAsync();
+            DbPlayerCharaData playerCharData = await this.unitRepository
+                .GetAllCharaData(accountId)
                 .FirstAsync(chara => chara.CharaId == request.chara_id);
             Dictionary<CurrencyTypes, int> usedCurrencies = new();
             Dictionary<Materials, int> usedMaterials = new();
@@ -344,7 +357,7 @@ public class CharaController : ControllerBase
                         new()
                         {
                             album_passive_notice = new AlbumPassiveNotice(isUpdateAlbum, false),
-                            chara_list = new() { CharaFactory.Create(playerCharData) },
+                            chara_list = new() { mapper.Map<Chara>(playerCharData) },
                             mission_notice = new(
                                 dummy,
                                 dummy,
@@ -383,9 +396,11 @@ public class CharaController : ControllerBase
         try
         {
             string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-            DbPlayerUserData userData = await _apiRepository.GetPlayerInfo(accountId).FirstAsync();
-            DbPlayerCharaData playerCharData = await _apiRepository
-                .GetCharaData(accountId)
+            DbPlayerUserData userData = await this.userDataRepository
+                .GetUserData(accountId)
+                .FirstAsync();
+            DbPlayerCharaData playerCharData = await this.unitRepository
+                .GetAllCharaData(accountId)
                 .FirstAsync(chara => chara.CharaId == request.chara_id);
             Dictionary<CurrencyTypes, int> usedCurrencies = new();
             Dictionary<Materials, int> usedMaterials = new();
@@ -403,7 +418,7 @@ public class CharaController : ControllerBase
                         new()
                         {
                             album_passive_notice = new AlbumPassiveNotice(isUpdateAlbum, false),
-                            chara_list = new() { CharaFactory.Create(playerCharData) },
+                            chara_list = new() { mapper.Map<Chara>(playerCharData) },
                             mission_notice = new(
                                 dummy,
                                 dummy,
@@ -448,9 +463,11 @@ public class CharaController : ControllerBase
         try
         {
             string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-            DbPlayerUserData userData = await _apiRepository.GetPlayerInfo(accountId).FirstAsync();
-            DbPlayerCharaData playerCharData = await _apiRepository
-                .GetCharaData(accountId)
+            DbPlayerUserData userData = await this.userDataRepository
+                .GetUserData(accountId)
+                .FirstAsync();
+            DbPlayerCharaData playerCharData = await this.unitRepository
+                .GetAllCharaData(accountId)
                 .FirstAsync(chara => chara.CharaId == request.chara_id);
             Dictionary<CurrencyTypes, int> usedCurrencies = new();
             Dictionary<Materials, int> usedMaterials = new();
@@ -483,7 +500,7 @@ public class CharaController : ControllerBase
                         new()
                         {
                             album_passive_notice = new AlbumPassiveNotice(isUpdateAlbum, false),
-                            chara_list = new() { CharaFactory.Create(playerCharData) },
+                            chara_list = new() { mapper.Map<Chara>(playerCharData) },
                             mission_notice = new(
                                 dummy,
                                 dummy,
@@ -518,9 +535,11 @@ public class CharaController : ControllerBase
         try
         {
             string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-            DbPlayerUserData userData = await _apiRepository.GetPlayerInfo(accountId).FirstAsync();
-            DbPlayerCharaData playerCharaData = await _apiRepository
-                .GetCharaData(accountId)
+            DbPlayerUserData userData = await this.userDataRepository
+                .GetUserData(accountId)
+                .FirstAsync();
+            DbPlayerCharaData playerCharaData = await this.unitRepository
+                .GetAllCharaData(accountId)
                 .FirstAsync(chara => chara.CharaId == request.chara_id);
             DataAdventurer charaData = _charaDataService.GetData(playerCharaData.CharaId);
             playerCharaData.Rarity = 5;
@@ -550,7 +569,7 @@ public class CharaController : ControllerBase
                         new()
                         {
                             album_passive_notice = new AlbumPassiveNotice(true, false),
-                            chara_list = new() { CharaFactory.Create(playerCharaData) },
+                            chara_list = new() { mapper.Map<Chara>(playerCharaData) },
                             mission_notice = new(
                                 dummy,
                                 dummy,
@@ -706,26 +725,26 @@ public class CharaController : ControllerBase
                     playerCharData.BurstAttackLevel++;
                     break;
                 case ManaNodeInfo.EffectTypes.S1:
-                    playerCharData.FirstSkillLevel++;
+                    playerCharData.Skill1Level++;
                     break;
                 case ManaNodeInfo.EffectTypes.S2:
-                    playerCharData.SecondSkillLevel++;
+                    playerCharData.Skill2Level++;
                     break;
                 case ManaNodeInfo.EffectTypes.A1:
-                    playerCharData.FirstAbilityLevel++;
+                    playerCharData.Ability1Level++;
                     break;
                 case ManaNodeInfo.EffectTypes.A2:
-                    playerCharData.SecondAbilityLevel++;
+                    playerCharData.Ability2Level++;
                     break;
                 case ManaNodeInfo.EffectTypes.A3:
-                    playerCharData.ThirdAbilityLevel++;
+                    playerCharData.Ability3Level++;
                     break;
                 case ManaNodeInfo.EffectTypes.Ex:
-                    playerCharData.FirstExAbilityLevel++;
-                    playerCharData.SecondExAbilityLevel++;
+                    playerCharData.ExAbilityLevel++;
+                    playerCharData.ExAbility2Level++;
                     break;
                 case ManaNodeInfo.EffectTypes.Mat:
-                    DbPlayerMaterial? mat = await _apiRepository.GetMaterial(
+                    DbPlayerMaterial? mat = await this.inventoryRepository.GetMaterial(
                         playerCharData.DeviceAccountId,
                         manaNodeInfo.MatId ?? Materials.DamascusCrystal
                     );
@@ -779,9 +798,9 @@ public class CharaController : ControllerBase
             }
         }
 
-        SortedSet<int> nodes = playerCharData.ManaNodesUnlocked;
+        SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
         nodes.AddRange(manaNodes);
-        playerCharData.ManaNodesUnlocked = nodes;
+        playerCharData.ManaCirclePieceIdList = nodes;
     }
 
     [Route("unlock_edit_skill")]
@@ -794,9 +813,11 @@ public class CharaController : ControllerBase
         try
         {
             string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-            DbPlayerUserData userData = await _apiRepository.GetPlayerInfo(accountId).FirstAsync();
-            DbPlayerCharaData playerCharData = await _apiRepository
-                .GetCharaData(accountId)
+            DbPlayerUserData userData = await this.userDataRepository
+                .GetUserData(accountId)
+                .FirstAsync();
+            DbPlayerCharaData playerCharData = await this.unitRepository
+                .GetAllCharaData(accountId)
                 .FirstAsync(chara => chara.CharaId == request.chara_id);
             DataAdventurer charData = _charaDataService.GetData(playerCharData.CharaId);
             //TODO: For now trust the client won't send the id of a chara who isn't allowed to share
@@ -810,7 +831,10 @@ public class CharaController : ControllerBase
 
             Materials usedMat = UpgradeMaterials.tomes[charData.ElementalType];
             int usedMatCount = charData.EditSkillCost;
-            DbPlayerMaterial? dbMat = await _apiRepository.GetMaterial(accountId, usedMat);
+            DbPlayerMaterial? dbMat = await this.inventoryRepository.GetMaterial(
+                accountId,
+                usedMat
+            );
             if (dbMat == null || dbMat.Quantity < usedMatCount)
             {
                 throw new ArgumentException("Insufficient materials in storage");
@@ -828,7 +852,7 @@ public class CharaController : ControllerBase
                     new CharaBuildupData(
                         new CharBuildupUpdateDataList()
                         {
-                            chara_list = new() { CharaFactory.Create(playerCharData) },
+                            chara_list = new() { mapper.Map<Chara>(playerCharData) },
                             material_list = remainingMaterials,
                             mission_notice = new(
                                 dummy,

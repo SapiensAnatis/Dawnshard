@@ -1,24 +1,25 @@
-﻿using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Requests;
+using DragaliaAPI.Models.Responses;
 using MessagePack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class QuestTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class QuestTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public QuestTest(CustomWebApplicationFactory<Program> factory)
+    public QuestTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
-        _factory.SeedCache();
     }
 
     [Fact]
@@ -28,7 +29,7 @@ public class QuestTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(request);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/quest/read_story", content);
+        HttpResponseMessage response = await client.PostAsync("/quest/read_story", content);
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
@@ -48,15 +49,15 @@ public class QuestTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(request);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/quest/read_story", content);
+        HttpResponseMessage response = await client.PostAsync("/quest/read_story", content);
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
-        using IServiceScope scope = _factory.Services.CreateScope();
+        using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
 
         List<DbPlayerStoryState> storyStates = await apiContext.PlayerStoryState
-            .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
+            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
             .ToListAsync();
 
         storyStates.Should().Contain(x => x.StoryId == 700 && x.State == 1);

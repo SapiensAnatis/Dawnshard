@@ -1,9 +1,5 @@
-﻿using System.Net.Http.Headers;
-using DragaliaAPI.Models.Dragalia.Responses;
-using Microsoft.AspNetCore.HttpLogging;
+﻿using DragaliaAPI.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Net.Http.Headers;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 

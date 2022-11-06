@@ -24,7 +24,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.9">
@@ -48,6 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
     <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj" />
   </ItemGroup>
 
@@ -57,10 +57,6 @@
 
   <ItemGroup>
     <None Include="C:\Users\jay0\Documents\Programming\dragalia\DragaliaAPI\DragaliaAPI.Test\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Unit\AutoMapper\" />
   </ItemGroup>
 
 </Project>

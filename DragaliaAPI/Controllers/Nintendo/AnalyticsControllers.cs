@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DragaliaAPI.Models.Nintendo;
+using DragaliaAPI.Models.Components;
 
 namespace DragaliaAPI.Controllers.Nintendo;
 

@@ -1,20 +1,19 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Nintendo;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Components;
 
 namespace DragaliaAPI.Services;
 
 public class DeviceAccountService : IDeviceAccountService
 {
-    private readonly IApiRepository _apiRepository;
+    private readonly IDeviceAccountRepository _apiRepository;
     private readonly IConfiguration _configuration;
     private readonly ILogger<DeviceAccountService> _logger;
 
     public DeviceAccountService(
-        IApiRepository repository,
+        IDeviceAccountRepository repository,
         IConfiguration configuration,
         ILogger<DeviceAccountService> logger
     )

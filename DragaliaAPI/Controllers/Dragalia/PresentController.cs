@@ -1,7 +1,7 @@
-﻿using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Dragalia.MessagePackFormatters;
-using DragaliaAPI.Models.Dragalia.Responses;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.MessagePackFormatters;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Responses;
 using MessagePack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

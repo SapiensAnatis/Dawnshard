@@ -1,6 +1,6 @@
-﻿using DragaliaAPI.Models.Dragalia.Requests;
-using DragaliaAPI.Models.Dragalia.Responses;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
+﻿using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Requests;
+using DragaliaAPI.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia.Eula;

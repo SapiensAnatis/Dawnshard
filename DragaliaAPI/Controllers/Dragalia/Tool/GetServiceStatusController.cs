@@ -1,7 +1,5 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses;
-using Microsoft.AspNetCore.Http;
+﻿using DragaliaAPI.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 
 namespace DragaliaAPI.Controllers.Dragalia.Tool;
 

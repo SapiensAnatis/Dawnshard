@@ -1,24 +1,17 @@
-using System;
-using DragaliaAPI.Models.Data;
-using DragaliaAPI.Models.Data.Entity;
-using DragaliaAPI.Models.Dragalia.Responses;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Services.Data;
-using static DragaliaAPI.Models.Dragalia.Responses.Summon.SummonHistoryFactory;
 using System.Collections.Immutable;
-using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Database.Savefile;
-using Microsoft.EntityFrameworkCore;
-using DragaliaAPI.Models.Nintendo;
-using Microsoft.AspNetCore.JsonPatch.Internal;
+using AutoMapper;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Services;
 
 namespace DragaliaAPI.Services;
 
 public class SummonService : ISummonService
 {
-    private readonly IUnitDataService _unitDataService;
+    private readonly ICharaDataService _charaDataService;
     private readonly IDragonDataService _dragonDataService;
-
+    private readonly IMapper mapper;
     private const float SSRSummonRateChara = 0.5f;
     private const float SSRSummonRateDragon = 0.8f;
     private const float SRSummonRateTotalNormal = 9.0f;
@@ -26,10 +19,15 @@ public class SummonService : ISummonService
     private const float SRSummonRateTotal = SRSummonRateTotalNormal + SRSummonRateTotalFeatured;
     private const float RSummonRateChara = 4.0f;
 
-    public SummonService(IUnitDataService unitDataService, IDragonDataService dragonDataService)
+    public SummonService(
+        ICharaDataService charaDataService,
+        IDragonDataService dragonDataService,
+        IMapper mapper
+    )
     {
-        _unitDataService = unitDataService;
+        _charaDataService = charaDataService;
         _dragonDataService = dragonDataService;
+        this.mapper = mapper;
     }
 
     public record BannerSummonInfo(
@@ -117,12 +115,83 @@ public class SummonService : ISummonService
             else
             {
                 Charas id = NextEnum<Charas>(random);
-                int rarity = _unitDataService.GetData(id).Rarity;
+                int rarity = _charaDataService.GetData(id).Rarity;
                 resultList.Add(new((int)EntityTypes.Chara, (int)id, rarity));
             }
         }
 
         return resultList;
+    }
+
+    public UpdateDataList GenerateUpdateData(
+        IEnumerable<DbPlayerCharaData> repositoryCharaOutput,
+        (
+            IEnumerable<DbPlayerDragonData> newDragons,
+            IEnumerable<DbPlayerDragonReliability> newReliability
+        ) repositoryDragonOutput
+    )
+    {
+        return new UpdateDataList()
+        {
+            chara_list = repositoryCharaOutput.Select(this.mapper.Map<Chara>),
+            dragon_list = repositoryDragonOutput.newDragons.Select(this.mapper.Map<Dragon>),
+            dragon_reliability_list = repositoryDragonOutput.newReliability.Select(
+                this.mapper.Map<DragonReliability>
+            )
+        };
+    }
+
+    public IEnumerable<SummonReward> GenerateRewardList(
+        IEnumerable<SimpleSummonReward> baseRewardList,
+        IEnumerable<DbPlayerCharaData> repositoryCharaOutput,
+        (
+            IEnumerable<DbPlayerDragonData> newDragons,
+            IEnumerable<DbPlayerDragonReliability> newReliability
+        ) repositoryDragonOutput,
+        bool giveDewPoint = true
+    )
+    {
+        List<SummonReward> result = new();
+        foreach (SimpleSummonReward reward in baseRewardList)
+        {
+            if (reward.entity_type == (int)EntityTypes.Chara)
+            {
+                SummonReward toAdd =
+                    new(
+                        reward.entity_type,
+                        reward.id,
+                        reward.rarity,
+                        false,
+                        giveDewPoint ? DewValueData.DupeSummon[reward.rarity] : 0
+                    );
+
+                if (
+                    repositoryCharaOutput.Any(x => x.CharaId == (Charas)toAdd.id)
+                    && !result.Any(x => x.id == toAdd.id)
+                )
+                {
+                    toAdd = toAdd with { is_new = true, dew_point = 0 };
+                }
+
+                result.Add(toAdd);
+            }
+            else if (reward.entity_type == (int)EntityTypes.Dragon)
+            {
+                SummonReward toAdd = new(reward.entity_type, reward.id, reward.rarity, false, 0);
+
+                if (
+                    repositoryDragonOutput.newReliability.Any(x => x.DragonId == (Dragons)toAdd.id)
+                    && !result.Any(x => x.id == toAdd.id)
+                )
+                {
+                    toAdd = toAdd with { is_new = true };
+                }
+
+                result.Add(toAdd);
+            }
+        }
+
+        return result;
     }
 
     private static T NextEnum<T>(Random random, T[] values) where T : struct, Enum

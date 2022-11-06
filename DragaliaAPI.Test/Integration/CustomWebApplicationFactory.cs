@@ -1,5 +1,6 @@
-﻿using DragaliaAPI.Models.Database;
-using DragaliaAPI.Services;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -48,7 +49,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 ILogger<CustomWebApplicationFactory<TStartup>>
             >();
             var context = scopedServices.GetRequiredService<ApiContext>();
-            var repository = scopedServices.GetRequiredService<IApiRepository>();
+            var repository = scopedServices.GetRequiredService<IDeviceAccountRepository>();
             var cache = scopedServices.GetRequiredService<IDistributedCache>();
 
             context.Database.EnsureCreated();
@@ -65,30 +66,4 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
     public string DeviceAccountId => "logged_in_id";
 
     public string PreparedDeviceAccountId => "prepared_id";
-
-    /// <summary>
-    /// Seed the cache with a valid session, so that controllers can lookup database entries.
-    /// </summary>
-    public void SeedCache()
-    {
-        var cache = this.Services.GetRequiredService<IDistributedCache>();
-        string sessionJson = """
-                {
-                    "SessionId": "session_id",
-                    "DeviceAccountId": "logged_in_id"
-                }
-                """;
-        cache.SetString(":session:session_id:session_id", sessionJson);
-        cache.SetString(":session_id:device_account_id:logged_in_id", "session_id");
-    }
-
-    public async Task AddCharacter(int id, int rarity)
-    {
-        using (var scope = this.Services.CreateScope())
-        {
-            IApiRepository apiRepository =
-                scope.ServiceProvider.GetRequiredService<IApiRepository>();
-            await apiRepository.AddChara(this.DeviceAccountId, id, rarity);
-        }
-    }
 }

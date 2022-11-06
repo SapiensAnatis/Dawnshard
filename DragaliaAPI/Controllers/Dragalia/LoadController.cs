@@ -1,15 +1,12 @@
 ﻿//#define TEST
 
-using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Responses;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using DragaliaAPI.Services;
-using MessagePack.Resolvers;
-using MessagePack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
-using DragaliaAPI.Models.Data;
+using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Database.Repositories;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -19,17 +16,26 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [ApiController]
 public class LoadController : ControllerBase
 {
-    private readonly IApiRepository _apiRepository;
+    private readonly IUserDataRepository userDataRepository;
+    private readonly IUnitRepository unitRepository;
+    private readonly IPartyRepository partyRepository;
+    private readonly IQuestRepository questRepository;
     private readonly ISessionService _sessionService;
     private readonly IMapper mapper;
 
     public LoadController(
-        IApiRepository apiRepository,
+        IUserDataRepository userDataRepository,
+        IUnitRepository unitRepository,
+        IPartyRepository partyRepository,
+        IQuestRepository questRepository,
         ISessionService sessionService,
         IMapper mapper
     )
     {
-        _apiRepository = apiRepository;
+        this.userDataRepository = userDataRepository;
+        this.unitRepository = unitRepository;
+        this.partyRepository = partyRepository;
+        this.questRepository = questRepository;
         _sessionService = sessionService;
         this.mapper = mapper;
     }
@@ -42,19 +48,19 @@ public class LoadController : ControllerBase
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
 
         UserData userData = SavefileUserDataFactory.Create(
-            await _apiRepository.GetPlayerInfo(deviceAccountId).SingleAsync()
+            await this.userDataRepository.GetUserData(deviceAccountId).SingleAsync()
         );
         IEnumerable<Chara> charas = (
-            await _apiRepository.GetCharaData(deviceAccountId).ToListAsync()
-        ).Select(CharaFactory.Create);
+            await this.unitRepository.GetAllCharaData(deviceAccountId).ToListAsync()
+        ).Select(mapper.Map<Chara>);
         IEnumerable<Dragon> dragons = (
-            await _apiRepository.GetDragonData(deviceAccountId).ToListAsync()
+            await this.unitRepository.GetAllDragonData(deviceAccountId).ToListAsync()
         ).Select(DragonFactory.Create);
         IEnumerable<Party> parties = (
-            await _apiRepository.GetParties(deviceAccountId).ToListAsync()
+            await this.partyRepository.GetParties(deviceAccountId).ToListAsync()
         ).Select(PartyFactory.CreateDto);
         IEnumerable<QuestStory> questStories = (
-            await _apiRepository.GetStoryList(deviceAccountId, StoryTypes.Quest).ToListAsync()
+            await this.questRepository.GetQuestStoryList(deviceAccountId).ToListAsync()
         ).Select(mapper.Map<QuestStory>);
 
         LoadIndexData data =

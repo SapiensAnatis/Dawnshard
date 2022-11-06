@@ -1,17 +1,18 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+﻿using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Responses;
 using MessagePack;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class EulaTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public EulaTest(CustomWebApplicationFactory<Program> factory)
+    public EulaTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
     }
@@ -26,7 +27,7 @@ public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("eula/get_version_list", content);
+        HttpResponseMessage response = await client.PostAsync("eula/get_version_list", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }
@@ -41,7 +42,7 @@ public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("eula/get_version", content);
+        HttpResponseMessage response = await client.PostAsync("eula/get_version", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }
@@ -56,7 +57,7 @@ public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("eula/get_version", content);
+        HttpResponseMessage response = await client.PostAsync("eula/get_version", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }

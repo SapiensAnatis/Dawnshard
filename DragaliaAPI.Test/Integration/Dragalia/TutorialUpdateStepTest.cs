@@ -1,29 +1,25 @@
-﻿using System;
-using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
-using DragaliaAPI.Services;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Responses;
 using MessagePack;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class TutorialUpdateStepTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public TutorialUpdateStepTest(CustomWebApplicationFactory<Program> factory)
+    public TutorialUpdateStepTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
-        _factory.SeedCache();
     }
 
     [Fact]
@@ -35,9 +31,9 @@ public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/tutorial/update_step", content);
+        HttpResponseMessage response = await client.PostAsync("/tutorial/update_step", content);
 
-        using (var scope = _factory.Services.CreateScope())
+        using (var scope = fixture.Services.CreateScope())
         {
             ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
             apiContext.PlayerUserData
@@ -51,10 +47,11 @@ public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<
     public async Task TutorialUpdateStep_ReturnsCorrectResponse()
     {
         int step = 2;
-        using var scope = _factory.Services.CreateScope();
-        IApiRepository apiRepository = scope.ServiceProvider.GetRequiredService<IApiRepository>();
-        DbPlayerUserData dbUserData = await apiRepository
-            .GetPlayerInfo("logged_in_id")
+        using IServiceScope scope = fixture.Services.CreateScope();
+        IUserDataRepository userDataRepository =
+            scope.ServiceProvider.GetRequiredService<IUserDataRepository>();
+        DbPlayerUserData dbUserData = await userDataRepository
+            .GetUserData("logged_in_id")
             .SingleAsync();
 
         UserData userData = SavefileUserDataFactory.Create(dbUserData);
@@ -65,7 +62,7 @@ public class TutorialUpdateStepTest : IClassFixture<CustomWebApplicationFactory<
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/tutorial/update_step", content);
+        HttpResponseMessage response = await client.PostAsync("/tutorial/update_step", content);
 
         await TestUtils.CheckMsgpackResponse(
             response,

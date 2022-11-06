@@ -1,23 +1,29 @@
 ﻿using System.Text.Json;
-using DragaliaAPI.Models.Dragalia;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DragaliaAPI.Pages;
 
+public record NewsItem(string Headline, string Description);
+
 public class NewsModel : PageModel
 {
-    public List<NewsItem>? NewsItems { get; private set; }
-    private const string _filename = "news.json";
-    private const string _folder = "Resources";
-
-    public void OnGet()
+    private List<NewsItem>? _newsItems;
+    public List<NewsItem> NewsItems
     {
-        if (NewsItems is null)
+        get
         {
-            string json = System.IO.File.ReadAllText(Path.Join(_folder, _filename));
-            NewsItems =
-                JsonSerializer.Deserialize<List<NewsItem>>(json)
-                ?? throw new JsonException("Deserialization failure");
+            if (this._newsItems is null)
+            {
+                string json = System.IO.File.ReadAllText(Path.Join(folder, filename));
+                this._newsItems =
+                    JsonSerializer.Deserialize<List<NewsItem>>(json)
+                    ?? throw new JsonException("Deserialization failure");
+            }
+
+            return this._newsItems;
         }
     }
+
+    private const string filename = "news.json";
+    private const string folder = "Resources";
 }

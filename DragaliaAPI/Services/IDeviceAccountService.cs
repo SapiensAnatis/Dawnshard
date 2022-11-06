@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Models.Nintendo;
-using Microsoft.EntityFrameworkCore;
+﻿using DragaliaAPI.Models.Components;
 
 namespace DragaliaAPI.Services;
 

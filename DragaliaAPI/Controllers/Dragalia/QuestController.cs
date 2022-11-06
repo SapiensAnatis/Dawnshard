@@ -1,10 +1,8 @@
-﻿using DragaliaAPI.Models.Data.Entity;
-using DragaliaAPI.Models.Dragalia.Requests;
-using DragaliaAPI.Models.Dragalia.Responses;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+﻿using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Requests;
+using DragaliaAPI.Models.Responses;
 using DragaliaAPI.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,13 +14,19 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [ApiController]
 public class QuestController : ControllerBase
 {
-    private readonly IApiRepository apiRepository;
+    private readonly IQuestRepository questRepository;
+    private readonly IUserDataRepository userDataRepository;
     private readonly ISessionService sessionService;
     private const int ReadStoryState = 1;
 
-    public QuestController(IApiRepository apiRepository, ISessionService sessionService)
+    public QuestController(
+        IQuestRepository questRepository,
+        IUserDataRepository userDataRepository,
+        ISessionService sessionService
+    )
     {
-        this.apiRepository = apiRepository;
+        this.questRepository = questRepository;
+        this.userDataRepository = userDataRepository;
         this.sessionService = sessionService;
     }
 
@@ -34,14 +38,14 @@ public class QuestController : ControllerBase
     )
     {
         string deviceAccountId = await this.sessionService.GetDeviceAccountId_SessionId(sessionId);
-        await apiRepository.UpdateQuestStory(
+        await questRepository.UpdateQuestStory(
             deviceAccountId,
             request.quest_story_id,
             ReadStoryState
         );
 
         UserData userData = SavefileUserDataFactory.Create(
-            await apiRepository.GetPlayerInfo(deviceAccountId).SingleAsync()
+            await userDataRepository.GetUserData(deviceAccountId).SingleAsync()
         );
 
         UpdateDataList updateData =
