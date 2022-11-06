@@ -54,6 +54,7 @@ public record LoginResponse
         public User(DeviceAccount deviceAccount)
         {
             this.deviceAccounts = new() { deviceAccount };
+            id = deviceAccount.id;
         }
 
         public string birthday { get; } = "0000-00-00";

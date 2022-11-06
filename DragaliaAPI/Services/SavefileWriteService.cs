@@ -34,7 +34,6 @@ public class SavefileWriteService : ISavefileWriteService
         bool giveDew = true
     )
     {
-        int dewGained = 0;
         Dictionary<Charas, Chara> newChars = new Dictionary<Charas, Chara>();
         List<Dragon> newDragons = new List<Dragon>();
         Dictionary<Dragons, DragonReliability> newUniqueDragons =

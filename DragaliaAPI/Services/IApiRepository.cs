@@ -1,4 +1,6 @@
 ﻿using DragaliaAPI.Models.Data;
+using DragaliaAPI.Models.Data.Entity;
+using System;
 using DragaliaAPI.Models.Database;
 using DragaliaAPI.Models.Database.Savefile;
 using DragaliaAPI.Models.Dragalia.Responses.Common;
@@ -49,4 +51,8 @@ public interface IApiRepository
     Task UpdateQuestStory(string deviceAccountId, int storyId, int state);
     IQueryable<DbPlayerStoryState> GetStoryList(string deviceAccountId, StoryTypes type);
     Task SetMainPartyNo(string deviceAccountId, int partyNo);
+    IQueryable<DbPlayerCurrency> GetCurrencies(string deviceAccountId);
+    Task<DbPlayerCurrency?> GetCurrency(string deviceAccountId, CurrencyTypes type);
+    IQueryable<DbPlayerMaterial> GetMaterials(string deviceAccountId);
+    Task<DbPlayerMaterial?> GetMaterial(string deviceAccountId, Materials materialId);
 }

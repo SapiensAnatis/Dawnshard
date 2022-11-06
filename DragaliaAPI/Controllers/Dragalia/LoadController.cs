@@ -73,6 +73,7 @@ public class LoadController : ControllerBase
                 dragon_list: dragons,
                 party_list: parties,
                 server_time: DateTimeOffset.UtcNow,
+                material_list: new List<Material>(),
                 functional_maintenance_list: new()
             );
 

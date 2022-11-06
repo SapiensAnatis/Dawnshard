@@ -20,8 +20,8 @@ public static class DragonReliabilityFactory
     {
         return new DragonReliability(
             dragon_id: dbEntry.DragonId,
-            reliability_level: dbEntry.ReliabilityLevel,
-            reliability_total_exp: dbEntry.ReliabilityTotalExp,
+            reliability_level: dbEntry.Level,
+            reliability_total_exp: dbEntry.Exp,
             last_contact_time: dbEntry.LastContactTime
         );
     }

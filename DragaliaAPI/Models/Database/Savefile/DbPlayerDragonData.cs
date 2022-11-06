@@ -6,7 +6,7 @@ using DragaliaAPI.Models.Data.Entity;
 namespace DragaliaAPI.Models.Database.Savefile;
 
 [Table("PlayerDragonData")]
-public class DbPlayerDragonData : IDbHasAccountId
+public class DbPlayerDragonData : IDbHasAccountId, IHasXp
 {
     [Column("DragonKeyId")]
     [Required]
@@ -27,7 +27,7 @@ public class DbPlayerDragonData : IDbHasAccountId
 
     [Column("Exp")]
     [Required]
-    public uint Exp { get; set; }
+    public int Exp { get; set; }
 
     [Column("Level")]
     [Required]

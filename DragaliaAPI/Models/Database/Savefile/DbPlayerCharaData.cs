@@ -8,7 +8,7 @@ using DragaliaAPI.Services.Data.Models;
 namespace DragaliaAPI.Models.Database.Savefile;
 
 [Table("PlayerCharaData")]
-public class DbPlayerCharaData : IDbHasAccountId
+public class DbPlayerCharaData : IDbHasAccountId, IHasXp
 {
     /// <inheritdoc/>
     [Column("DeviceAccountId")]
@@ -45,9 +45,12 @@ public class DbPlayerCharaData : IDbHasAccountId
     [Required]
     public byte AttackPlusCount { get; set; }
 
-    [Column("LimitBreakCount")]
-    [Required]
-    public byte LimitBreakCount { get; set; }
+    [NotMapped]
+    public byte LimitBreakCount
+    {
+        get => (byte)Math.Min(ManaNodeUnlockCount >> 10, ManaNodesUtil.MaxLimitbreakSpiral);
+        set => ManaNodeUnlockCount = (ushort)(value << 10);
+    }
 
     [Column("IsNew")]
     [Required]
@@ -82,13 +85,33 @@ public class DbPlayerCharaData : IDbHasAccountId
     [Required]
     public int ComboBuildupCount { get; set; }
 
-    [Column("Hp")]
+    [Column("HpBase")]
     [Required]
-    public ushort Hp { get; set; }
+    public ushort HpBase { get; set; }
 
-    [Column("Atk")]
+    [Column("HpNode")]
     [Required]
-    public ushort Attack { get; set; }
+    public ushort HpNode { get; set; }
+
+    [NotMapped]
+    public int Hp
+    {
+        get => HpBase + HpNode;
+    }
+
+    [Column("AtkBase")]
+    [Required]
+    public ushort AttackBase { get; set; }
+
+    [Column("AtkNode")]
+    [Required]
+    public ushort AttackNode { get; set; }
+
+    [NotMapped]
+    public int Attack
+    {
+        get => AttackBase + AttackNode;
+    }
 
     [Column("ExAbility1Lvl")]
     [Required]
@@ -125,7 +148,9 @@ public class DbPlayerCharaData : IDbHasAccountId
     public SortedSet<int> ManaNodesUnlocked
     {
         get => ManaNodesUtil.GetSetFromManaNodes((ManaNodes)ManaNodeUnlockCount);
-        set => ManaNodeUnlockCount = (ushort)ManaNodesUtil.SetManaCircleNodesFromSet(value);
+        set =>
+            ManaNodeUnlockCount = (ushort)
+                ManaNodesUtil.SetManaCircleNodesFromSet(value, (ManaNodes)ManaNodeUnlockCount);
     }
 }
 
@@ -176,8 +201,10 @@ public static class DbPlayerCharaDataFactory
             ThirdAbilityLevel = 1,
             BurstAttackLevel = 1,
             ComboBuildupCount = 0,
-            Hp = rarityHp,
-            Attack = rarityAtk,
+            HpBase = rarityHp,
+            HpNode = 0,
+            AttackBase = rarityAtk,
+            AttackNode = 0,
             FirstExAbilityLevel = 1,
             SecondExAbilityLevel = 1,
             IsTemporary = false,
