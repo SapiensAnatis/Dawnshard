@@ -5,7 +5,6 @@ using DragaliaAPI.Models.Dragalia.Responses.Common;
 using MessagePack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using EntityResult = DragaliaAPI.Models.Dragalia.Responses.EntityResult;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 

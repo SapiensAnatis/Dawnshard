@@ -17,7 +17,6 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 using static DragaliaAPI.Models.Data.ManaNodesUtil;
 using static DragaliaAPI.Models.Dragalia.Requests.CharaRequests;
-using EntityResult = DragaliaAPI.Models.Dragalia.Responses.EntityResult;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 

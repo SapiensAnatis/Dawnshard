@@ -8,9 +8,6 @@ public record CharaBuildupManaResponse(CharBuildupManaUpdateDataList data)
     : BaseResponse<CharBuildupManaUpdateDataList>;
 
 [MessagePackObject(true)]
-public record PartyPowerData(int max_party_power);
-
-[MessagePackObject(true)]
 public class CharBuildupManaUpdateDataList : UpdateDataList
 {
     public PartyPowerData party_power_data { get; set; } = null!;

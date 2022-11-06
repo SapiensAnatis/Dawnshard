@@ -2,7 +2,6 @@
 using DragaliaAPI.Models.Dragalia.Responses.Common;
 using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
 using MessagePack;
-using static DragaliaAPI.Controllers.Dragalia.CharaController;
 
 namespace DragaliaAPI.Models.Dragalia.Responses;
 
@@ -24,6 +23,7 @@ public record LoadIndexData(
     IEnumerable<Chara> chara_list,
     IEnumerable<Dragon> dragon_list,
     IEnumerable<Party> party_list,
+    IEnumerable<Material> material_list,
     [property: MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
         DateTimeOffset server_time,
     List<object> functional_maintenance_list,
@@ -31,8 +31,6 @@ public record LoadIndexData(
     int quest_bonus_stack_base_time = 1617775200,
     int stamina_multi_user_max = 12,
     int stamina_multi_system_max = 99
-    IEnumerable<Material> material_list,
-    IEnumerable<object> ability_crest_list
 );
 
 [MessagePackObject(true)]

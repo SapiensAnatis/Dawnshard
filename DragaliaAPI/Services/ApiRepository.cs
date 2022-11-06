@@ -313,6 +313,8 @@ public class ApiRepository : IApiRepository
             ?? throw new NullReferenceException("Savefile lookup failed");
         userData.MainPartyNo = partyNo;
         await _apiContext.SaveChangesAsync();
+    }
+
     public async Task<DbPlayerCurrency?> GetCurrency(string deviceAccountId, CurrencyTypes type)
     {
         return await _apiContext.PlayerWallet.FirstOrDefaultAsync(
