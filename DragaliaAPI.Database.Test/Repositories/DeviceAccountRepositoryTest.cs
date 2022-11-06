@@ -1,10 +1,8 @@
-﻿using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Services;
 using Microsoft.EntityFrameworkCore;
-using static DragaliaAPI.Database.Test.DbTestFixture;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 

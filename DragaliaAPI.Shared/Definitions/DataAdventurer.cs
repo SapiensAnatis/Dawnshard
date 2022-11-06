@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.Definitions;
 

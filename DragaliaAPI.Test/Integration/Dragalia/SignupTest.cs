@@ -6,20 +6,17 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class SignupTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class SignupTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public SignupTest(CustomWebApplicationFactory<Program> factory)
+    public SignupTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
-
-        var cache = _factory.Services.GetRequiredService<IDistributedCache>();
-        TestUtils.InitializeCacheForTests(cache);
     }
 
     [Fact]
@@ -31,7 +28,7 @@ public class SignupTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/tool/signup", content);
+        HttpResponseMessage response = await client.PostAsync("/tool/signup", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }
@@ -45,7 +42,7 @@ public class SignupTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/tool/signup", content);
+        HttpResponseMessage response = await client.PostAsync("/tool/signup", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }

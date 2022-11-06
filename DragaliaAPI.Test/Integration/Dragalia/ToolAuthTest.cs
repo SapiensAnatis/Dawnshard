@@ -6,21 +6,17 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class ToolAuthTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class ToolAuthTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public ToolAuthTest(CustomWebApplicationFactory<Program> factory)
+    public ToolAuthTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
-
-        // TODO: Find a way to put this into the fixture
-        var cache = _factory.Services.GetRequiredService<IDistributedCache>();
-        TestUtils.InitializeCacheForTests(cache);
     }
 
     [Fact]
@@ -33,7 +29,7 @@ public class ToolAuthTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/tool/auth", content);
+        HttpResponseMessage response = await client.PostAsync("/tool/auth", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }
@@ -48,8 +44,8 @@ public class ToolAuthTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/tool/auth", content);
-        HttpResponseMessage responseTwo = await _client.PostAsync("/tool/auth", content);
+        HttpResponseMessage response = await client.PostAsync("/tool/auth", content);
+        HttpResponseMessage responseTwo = await client.PostAsync("/tool/auth", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
         await TestUtils.CheckMsgpackResponse(responseTwo, expectedResponse);
@@ -64,7 +60,7 @@ public class ToolAuthTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(data);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/tool/auth", content);
+        HttpResponseMessage response = await client.PostAsync("/tool/auth", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }

@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using DragaliaAPI.Models.Data.Entity;
-using Microsoft.Build.Framework;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.Models.Database.Savefile;
+namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerMaterial")]
 public class DbPlayerMaterial : IDbHasAccountId

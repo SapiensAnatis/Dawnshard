@@ -1,6 +1,4 @@
-﻿using System.Collections.Immutable;
-
-namespace DragaliaAPI.Models.Data.Entity;
+﻿namespace DragaliaAPI.Shared.Definitions.Enums;
 
 public enum Materials
 {

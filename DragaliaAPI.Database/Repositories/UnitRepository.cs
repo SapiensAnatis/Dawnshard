@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Services;

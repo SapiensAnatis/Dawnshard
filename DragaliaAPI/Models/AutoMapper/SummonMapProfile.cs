@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Components;
-using Microsoft.AspNetCore.Server.IIS.Core;
 
 namespace DragaliaAPI.Models.AutoMapper;
 

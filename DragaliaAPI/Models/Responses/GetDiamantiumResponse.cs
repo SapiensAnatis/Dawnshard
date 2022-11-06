@@ -1,7 +1,7 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+﻿using DragaliaAPI.Models.Base;
 using MessagePack;
 
-namespace DragaliaAPI.Models.Dragalia.Responses;
+namespace DragaliaAPI.Models.Responses;
 
 public record GetDiamantiumResponse(GetDiamantiumData data) : BaseResponse<GetDiamantiumData>;
 

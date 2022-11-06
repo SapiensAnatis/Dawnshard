@@ -1,9 +1,6 @@
-﻿using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
+﻿using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Services;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 
 namespace DragaliaAPI.Database.Test;
 

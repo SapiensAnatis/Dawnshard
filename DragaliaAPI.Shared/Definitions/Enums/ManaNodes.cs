@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using DragaliaAPI.Models.Data.Entity;
 
 namespace DragaliaAPI.Shared.Definitions.Enums;
 

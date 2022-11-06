@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.MessagePackFormatters;
+﻿using DragaliaAPI.MessagePackFormatters;
 using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
 

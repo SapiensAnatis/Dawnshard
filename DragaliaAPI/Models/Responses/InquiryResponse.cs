@@ -1,8 +1,8 @@
-﻿using DragaliaAPI.Models.Dragalia.MessagePackFormatters;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
+﻿using DragaliaAPI.MessagePackFormatters;
+using DragaliaAPI.Models.Base;
 using MessagePack;
 
-namespace DragaliaAPI.Models.Dragalia.Responses;
+namespace DragaliaAPI.Models.Responses;
 
 public record InquiryResponse(InquiryData data) : BaseResponse<InquiryData>;
 

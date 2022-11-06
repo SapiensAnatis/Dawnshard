@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Models.Database.Savefile;
+﻿namespace DragaliaAPI.Database.Entities;
 
 public interface IHasXp
 {

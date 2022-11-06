@@ -1,8 +1,8 @@
-﻿using DragaliaAPI.Models.Data.Entity;
-using DragaliaAPI.Models.Dragalia.MessagePackFormatters;
+﻿using DragaliaAPI.MessagePackFormatters;
+using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
 
-namespace DragaliaAPI.Models.Dragalia.Requests;
+namespace DragaliaAPI.Models.Requests;
 
 public static class CharaRequests
 {

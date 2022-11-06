@@ -1,18 +1,16 @@
 ﻿using System.Collections.Immutable;
-using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Services.Data.Models;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.Definitions;
 
-namespace DragaliaAPI.Models.Data;
+namespace DragaliaAPI.Database.Utils;
 
 public static class CharaConstants
 {
     public static byte GetMaxLevelFor(int rarity)
     {
         if (rarity < 3 || rarity > 5)
-        {
             throw new ArgumentException("Invalid Rarity");
-        }
-        return (byte)(MinMaxLevel + ((rarity - 3) * 10));
+        return (byte)(MinMaxLevel + (rarity - 3) * 10);
     }
 
     public static int calcMight(
@@ -27,8 +25,8 @@ public static class CharaConstants
             + dbCharData.Attack
             + dbCharData.AttackPlusCount
             + fsMights[dbCharData.BurstAttackLevel]
-            + skillMights[dbCharData.FirstSkillLevel]
-            + skillMights[dbCharData.FirstSkillLevel]
+            + skillMights[dbCharData.Skill1Level]
+            + skillMights[dbCharData.Skill1Level]
             // a1 Might
             + 0
             // a2 Might

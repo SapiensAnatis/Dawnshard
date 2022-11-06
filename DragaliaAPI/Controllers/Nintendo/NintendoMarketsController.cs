@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Services;
-using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Data.Entity;
-using DragaliaAPI.Models.Dragalia.Responses;
-using static DragaliaAPI.Models.Nintendo.LoginResponse;
 using Microsoft.EntityFrameworkCore;
+using DragaliaAPI.Database;
+using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Models.Responses;
 
 namespace DragaliaAPI.Controllers.Nintendo;
 

@@ -3,7 +3,6 @@ using DragaliaAPI.Database;
 using DragaliaAPI.MessagePackFormatters;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared;
-using DragaliaAPI.Shared.Services;
 using MessagePack.Resolvers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;

@@ -2,15 +2,15 @@
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class GetResourceVersionTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class GetResourceVersionTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public GetResourceVersionTest(CustomWebApplicationFactory<Program> factory)
+    public GetResourceVersionTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
     }
@@ -25,7 +25,7 @@ public class GetResourceVersionTest : IClassFixture<CustomWebApplicationFactory<
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync(
+        HttpResponseMessage response = await client.PostAsync(
             "version/get_resource_version",
             content
         );

@@ -2,15 +2,15 @@
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class ServiceStatusTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class ServiceStatusTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public ServiceStatusTest(CustomWebApplicationFactory<Program> factory)
+    public ServiceStatusTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
     }
@@ -24,7 +24,7 @@ public class ServiceStatusTest : IClassFixture<CustomWebApplicationFactory<Progr
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("tool/get_service_status", content);
+        HttpResponseMessage response = await client.PostAsync("tool/get_service_status", content);
 
         await TestUtils.CheckMsgpackResponse(response, expectedResponse);
     }

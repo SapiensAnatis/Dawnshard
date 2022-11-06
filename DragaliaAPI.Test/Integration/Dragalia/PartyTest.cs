@@ -10,24 +10,23 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class PartyTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class PartyTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public PartyTest(CustomWebApplicationFactory<Program> factory)
+    public PartyTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
-        _factory.SeedCache();
     }
 
     [Fact]
     public async Task SetPartySetting_ValidRequest_UpdatesDatabase()
     {
-        await _factory.AddCharacter((int)Charas.Ilia);
+        await fixture.AddCharacter((int)Charas.Ilia);
 
         PartySetPartySettingRequest request =
             new(
@@ -42,15 +41,15 @@ public class PartyTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(request);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/party/set_party_setting", content);
+        HttpResponseMessage response = await client.PostAsync("/party/set_party_setting", content);
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
-        using var scope = _factory.Services.CreateScope();
+        using var scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
         DbParty dbparty = await apiContext.PlayerParties
             .Include(x => x.Units)
-            .Where(x => x.DeviceAccountId == _factory.DeviceAccountId && x.PartyNo == 1)
+            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId && x.PartyNo == 1)
             .SingleAsync();
 
         dbparty.PartyName.Should().Be("My New Party");
@@ -74,7 +73,7 @@ public class PartyTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(request);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/party/set_party_setting", content);
+        HttpResponseMessage response = await client.PostAsync("/party/set_party_setting", content);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -95,7 +94,7 @@ public class PartyTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(request);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/party/set_party_setting", content);
+        HttpResponseMessage response = await client.PostAsync("/party/set_party_setting", content);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -108,12 +107,12 @@ public class PartyTest : IClassFixture<CustomWebApplicationFactory<Program>>
         byte[] payload = MessagePackSerializer.Serialize(request);
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
 
-        HttpResponseMessage response = await _client.PostAsync("/party/set_main_party_no", content);
+        HttpResponseMessage response = await client.PostAsync("/party/set_main_party_no", content);
 
-        using IServiceScope scope = _factory.Services.CreateScope();
+        using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
         DbPlayerUserData userData = await apiContext.PlayerUserData
-            .Where(x => x.DeviceAccountId == _factory.DeviceAccountId)
+            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
             .SingleAsync();
 
         userData.MainPartyNo.Should().Be(2);

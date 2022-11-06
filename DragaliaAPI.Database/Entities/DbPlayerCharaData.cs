@@ -80,13 +80,30 @@ public class DbPlayerCharaData : IDbHasAccountId
     [Required]
     public int ComboBuildupCount { get; set; }
 
-    [Column("Hp")]
+    [Column("HpBase")]
     [Required]
-    public ushort Hp { get; set; }
+    public ushort HpBase { get; set; }
 
-    [Column("Atk")]
+    [Column("HpNode")]
     [Required]
-    public ushort Attack { get; set; }
+    public ushort HpNode { get; set; }
+
+    [NotMapped]
+    public int Hp => this.HpBase + this.HpNode;
+
+    [Column("AtkBase")]
+    [Required]
+    public ushort AttackBase { get; set; }
+
+    [Column("AtkNode")]
+    [Required]
+    public ushort AttackNode { get; set; }
+
+    [NotMapped]
+    public int Attack
+    {
+        get => AttackBase + AttackNode;
+    }
 
     [Column("ExAbility1Lvl")]
     [Required]
@@ -122,7 +139,9 @@ public class DbPlayerCharaData : IDbHasAccountId
     [NotMapped]
     public SortedSet<int> ManaCirclePieceIdList
     {
-        get => ManaNodesUtil.GetSetFromManaNodes((ManaNodes)this.ManaNodeUnlockCount);
-        set => this.ManaNodeUnlockCount = (ushort)ManaNodesUtil.SetManaCircleNodesFromSet(value);
+        get => ManaNodesUtil.GetSetFromManaNodes((ManaNodes)ManaNodeUnlockCount);
+        set =>
+            ManaNodeUnlockCount = (ushort)
+                ManaNodesUtil.SetManaCircleNodesFromSet(value, (ManaNodes)ManaNodeUnlockCount);
     }
 }

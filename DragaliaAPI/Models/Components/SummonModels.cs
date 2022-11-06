@@ -1,7 +1,6 @@
 ﻿using MessagePack;
 using DragaliaAPI.MessagePackFormatters;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Database.Entities;
 
 namespace DragaliaAPI.Models.Components;
 

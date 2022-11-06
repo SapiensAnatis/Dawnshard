@@ -1,10 +1,9 @@
-﻿using DragaliaAPI.Models.Dragalia.MessagePackFormatters;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+﻿using DragaliaAPI.MessagePackFormatters;
+using DragaliaAPI.Models.Base;
+using DragaliaAPI.Models.Components;
 using MessagePack;
-using static DragaliaAPI.Controllers.Dragalia.CharaController;
 
-namespace DragaliaAPI.Models.Dragalia.Responses;
+namespace DragaliaAPI.Models.Responses;
 
 public record CharaBuildupResponse(CharaBuildupData data) : BaseResponse<CharaBuildupData>;
 

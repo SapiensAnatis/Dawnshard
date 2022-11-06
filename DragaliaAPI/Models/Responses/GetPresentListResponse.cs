@@ -1,10 +1,9 @@
-﻿using DragaliaAPI.Models.Data.Entity;
-using DragaliaAPI.Models.Dragalia.MessagePackFormatters;
-using DragaliaAPI.Models.Dragalia.Responses.Common;
-using DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+﻿using DragaliaAPI.MessagePackFormatters;
+using DragaliaAPI.Models.Base;
+using DragaliaAPI.Models.Components;
 using MessagePack;
 
-namespace DragaliaAPI.Models.Dragalia.Responses;
+namespace DragaliaAPI.Models.Responses;
 
 [MessagePackObject(true)]
 public record GetPresentListResponse(GetPresentListData data) : BaseResponse<GetPresentListData>;

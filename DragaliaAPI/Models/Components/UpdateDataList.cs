@@ -1,5 +1,4 @@
-﻿using System.Drawing.Text;
-using MessagePack;
+﻿using MessagePack;
 
 namespace DragaliaAPI.Models.Components;
 

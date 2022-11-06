@@ -1,8 +1,8 @@
-﻿using DragaliaAPI.Models.Data.Entity;
-using DragaliaAPI.Models.Database.Savefile;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
 
-namespace DragaliaAPI.Models.Dragalia.Responses.UpdateData;
+namespace DragaliaAPI.Models.Components;
 
 [MessagePackObject(true)]
 public record Material(Materials material_id, int quantity);
