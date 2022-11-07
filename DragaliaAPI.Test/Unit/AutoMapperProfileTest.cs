@@ -24,6 +24,12 @@ public class AutoMapperProfileTest
     }
 
     [Fact]
+    public void PartyMapProfile_IsValid()
+    {
+        TestProfile<PartyMapProfile>();
+    }
+
+    [Fact]
     public void UserDataMapProfile_IsValid()
     {
         TestProfile<UserDataMapProfile>();

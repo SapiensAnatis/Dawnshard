@@ -1,8 +1,9 @@
-﻿using DragaliaAPI.Database.Repositories;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Database.Test;
+namespace DragaliaAPI.Test;
 
 public class DbTestFixture : IDisposable
 {
