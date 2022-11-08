@@ -2,7 +2,7 @@
 
 namespace DragaliaAPI.Database.Repositories;
 
-public interface IUserDataRepository
+public interface IUserDataRepository : IBaseRepository
 {
     Task<DbPlayerUserData> AddTutorialFlag(string deviceAccountId, int flag);
     Task<ISet<int>> GetTutorialFlags(string deviceAccountId);

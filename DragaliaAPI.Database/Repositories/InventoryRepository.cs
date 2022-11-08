@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class InventoryRepository : IInventoryRepository
+public class InventoryRepository : BaseRepository, IInventoryRepository
 {
     private readonly ApiContext apiContext;
 
-    public InventoryRepository(ApiContext apiContext)
+    public InventoryRepository(ApiContext apiContext) : base(apiContext)
     {
         this.apiContext = apiContext;
     }

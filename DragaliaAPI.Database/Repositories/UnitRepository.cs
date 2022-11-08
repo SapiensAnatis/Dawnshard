@@ -6,12 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class UnitRepository : IUnitRepository
+public class UnitRepository : BaseRepository, IUnitRepository
 {
     private readonly ApiContext apiContext;
     private readonly ICharaDataService charaDataService;
 
     public UnitRepository(ApiContext apiContext, ICharaDataService charaDataService)
+        : base(apiContext)
     {
         this.apiContext = apiContext;
         this.charaDataService = charaDataService;
@@ -84,8 +85,6 @@ public class UnitRepository : IUnitRepository
             .Select(x => x.Entity)
             .ToList();
 
-        await apiContext.SaveChangesAsync();
-
         return result;
     }
 
@@ -127,8 +126,6 @@ public class UnitRepository : IUnitRepository
             .Where(x => x.State == EntityState.Added)
             .Select(x => x.Entity)
             .ToList();
-
-        await apiContext.SaveChangesAsync();
 
         return (addedDragons, addedReliability);
     }

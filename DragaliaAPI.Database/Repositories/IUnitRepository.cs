@@ -3,7 +3,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public interface IUnitRepository
+public interface IUnitRepository : IBaseRepository
 {
     IQueryable<DbPlayerCharaData> GetAllCharaData(string deviceAccountId);
     IQueryable<DbPlayerDragonData> GetAllDragonData(string deviceAccountId);
