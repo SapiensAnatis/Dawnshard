@@ -1,19 +1,20 @@
 ﻿using DragaliaAPI.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragaliaAPI.Controllers.Dragalia.Deploy;
+namespace DragaliaAPI.Controllers.Dragalia;
 
-[Route("deploy/get_deploy_version")]
+[Route("deploy")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class GetDeployVersionController : ControllerBase
+public class DeployController : ControllerBase
 {
     [HttpPost]
-    public DragaliaResult Post()
+    [Route("get_deploy_version")]
+    public DragaliaResult GetDeployVersion()
     {
         GetDeployVersionResponse response =
             new(new GetDeployVersionData(GetDeployVersionStatic.DeployHash));
-        return Ok(response);
+        return this.Ok(response);
     }
 }

@@ -5,14 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia.Eula;
 
-[Route("eula/get_version")]
+[Route("eula")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class GetVersionController : ControllerBase
+public class EulaController : ControllerBase
 {
     [HttpPost]
-    public DragaliaResult Post(EulaGetVersionRequest request)
+    [Route("get_version")]
+    public DragaliaResult GetVersion(EulaGetVersionRequest request)
     {
         EulaVersion version =
             EulaStatic.AllEulaVersions.FirstOrDefault(
@@ -20,6 +21,15 @@ public class GetVersionController : ControllerBase
             ) ?? EulaStatic.AllEulaVersions[0];
 
         EulaGetVersionResponse response = new(new EulaGetVersionData(version));
-        return Ok(response);
+        return this.Ok(response);
+    }
+
+    [HttpPost]
+    [Route("get_version_list")]
+    public ActionResult<EulaGetVersionListResponse> GetVersionList()
+    {
+        EulaGetVersionListResponse response =
+            new(new EulaGetVersionListData(EulaStatic.AllEulaVersions));
+        return this.Ok(response);
     }
 }

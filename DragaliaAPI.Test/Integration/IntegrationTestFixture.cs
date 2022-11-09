@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,10 +29,19 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
 
     public string PreparedDeviceAccountId => "prepared_id";
 
+    public async Task AddCharacter(int id)
+    {
+        using IServiceScope scope = this.Services.CreateScope();
+        IUnitRepository unitRepository =
+            scope.ServiceProvider.GetRequiredService<IUnitRepository>();
+        await unitRepository.AddCharas(this.DeviceAccountId, new List<Charas>() { (Charas)id });
+        await unitRepository.SaveChangesAsync();
+    }
+
     /// <summary>
     /// Seed the cache with a valid session, so that controllers can lookup database entries.
     /// </summary>
-    public void SeedCache()
+    private void SeedCache()
     {
         IDistributedCache cache = this.Services.GetRequiredService<IDistributedCache>();
         // Downside of making Session a private nested class: I have to type this manually :(
@@ -53,7 +63,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         cache.SetString(":session_id:device_account_id:logged_in_id", "session_id");
     }
 
-    public void SeedDatabase()
+    private void SeedDatabase()
     {
         ApiContext context = this.Services.GetRequiredService<ApiContext>();
         IDeviceAccountRepository repository =
@@ -70,14 +80,5 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         repository.CreateNewSavefile(this.PreparedDeviceAccountId);
         repository.CreateNewSavefile(this.DeviceAccountId);
         context.SaveChanges();
-    }
-
-    public async Task AddCharacter(int id)
-    {
-        using IServiceScope scope = this.Services.CreateScope();
-        IUnitRepository unitRepository =
-            scope.ServiceProvider.GetRequiredService<IUnitRepository>();
-        await unitRepository.AddCharas(this.DeviceAccountId, new List<Charas>() { (Charas)id });
-        await unitRepository.SaveChangesAsync();
     }
 }

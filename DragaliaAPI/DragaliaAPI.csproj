@@ -66,9 +66,5 @@
 		</None>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Controllers\Dragalia\Update\" />
-	</ItemGroup>
-
 
 </Project>
