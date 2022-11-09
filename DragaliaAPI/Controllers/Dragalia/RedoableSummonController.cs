@@ -16,15 +16,15 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class RedoableSummonController : ControllerBase
+public class RedoableSummonController : DragaliaController
 {
-    private readonly ISummonService _summonService;
+    private readonly ISummonService summonService;
     private readonly IQuestRepository questRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
+    private readonly IUpdateDataService updateDataService;
     private readonly IMapper mapper;
-    private readonly IDistributedCache _cache;
-    private readonly ISessionService _sessionService;
+    private readonly IDistributedCache cache;
 
     private static class Schema
     {
@@ -37,18 +37,19 @@ public class RedoableSummonController : ControllerBase
         IQuestRepository questRepository,
         IUserDataRepository userDataRepository,
         IUnitRepository unitRepository,
+        IUpdateDataService updateDataService,
         IMapper mapper,
         IDistributedCache cache,
         ISessionService sessionService
     )
     {
-        _summonService = summonService;
+        this.summonService = summonService;
         this.questRepository = questRepository;
         this.userDataRepository = userDataRepository;
         this.unitRepository = unitRepository;
+        this.updateDataService = updateDataService;
         this.mapper = mapper;
-        _cache = cache;
-        _sessionService = sessionService;
+        this.cache = cache;
     }
 
     [HttpPost]
@@ -56,14 +57,14 @@ public class RedoableSummonController : ControllerBase
     public DragaliaResult GetData()
     {
         RedoableSummonGetDataResponse response = new(RedoableSummonGetDataFactory.CreateData());
-        return Ok(response);
+        return this.Ok(response);
     }
 
     [HttpPost]
     [Route("pre_exec")]
     public async Task<DragaliaResult> PreExec([FromHeader(Name = "SID")] string sessionId)
     {
-        List<SimpleSummonReward> summonResult = _summonService.GenerateSummonResult(50);
+        List<SimpleSummonReward> summonResult = summonService.GenerateSummonResult(50);
         /*
         int testtype = 23;
         int testid = 0;
@@ -81,7 +82,7 @@ public class RedoableSummonController : ControllerBase
             new(testtype, testid, 5)
         }; */
 
-        await _cache.SetStringAsync(
+        await cache.SetStringAsync(
             Schema.SessionId_CachedSummonResult(sessionId),
             JsonSerializer.Serialize(summonResult)
         );
@@ -89,31 +90,29 @@ public class RedoableSummonController : ControllerBase
         RedoableSummonPreExecResponse response =
             new(RedoableSummonPreExecFactory.CreateData(summonResult));
 
-        return Ok(response);
+        return this.Ok(response);
     }
 
     [HttpPost]
     [Route("fix_exec")]
     public async Task<DragaliaResult> FixExec([FromHeader(Name = "SID")] string sessionId)
     {
-        string cachedResultJson = await _cache.GetStringAsync(
+        string cachedResultJson = await cache.GetStringAsync(
             Schema.SessionId_CachedSummonResult(sessionId)
         );
 
         if (string.IsNullOrEmpty(cachedResultJson))
-            return BadRequest();
+            return this.BadRequest();
 
         List<SimpleSummonReward> cachedResult =
             JsonSerializer.Deserialize<List<SimpleSummonReward>>(cachedResultJson)
             ?? throw new JsonException("Null deserialization result!");
 
-        string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-
-        await userDataRepository.UpdateTutorialStatus(deviceAccountId, 10152);
-        await this.questRepository.UpdateQuestStory(deviceAccountId, 1000100, 1); // Complete prologue story
+        await userDataRepository.UpdateTutorialStatus(this.DeviceAccountId, 10152);
+        await this.questRepository.UpdateQuestStory(this.DeviceAccountId, 1000100, 1); // Complete prologue story
 
         IEnumerable<DbPlayerCharaData> repositoryCharaOuput = await this.unitRepository.AddCharas(
-            deviceAccountId,
+            this.DeviceAccountId,
             cachedResult
                 .Where(x => x.entity_type == (int)EntityTypes.Chara)
                 .Select(x => (Charas)x.id)
@@ -122,23 +121,18 @@ public class RedoableSummonController : ControllerBase
         (
             IEnumerable<DbPlayerDragonData> newDragons,
             IEnumerable<DbPlayerDragonReliability> newReliability
-        ) repositoryDragonOutput = await this.unitRepository.AddDragons(
-            deviceAccountId,
+        ) = await this.unitRepository.AddDragons(
+            this.DeviceAccountId,
             cachedResult
                 .Where(x => x.entity_type == (int)EntityTypes.Dragon)
                 .Select(x => (Dragons)x.id)
         );
 
-        UpdateDataList updateData = _summonService.GenerateUpdateData(
-            repositoryCharaOuput,
-            repositoryDragonOutput
-        );
+        UpdateDataList updateData = this.updateDataService.GetUpdateDataList(this.DeviceAccountId);
 
-        updateData.user_data = this.mapper.Map<UserData>(
-            await userDataRepository.GetUserData(deviceAccountId).SingleAsync()
-        );
+        await this.unitRepository.SaveChangesAsync();
 
-        return Ok(
+        return this.Ok(
             new RedoableSummonFixExecResponse(
                 RedoableSummonFixExecFactory.CreateData(cachedResult, updateData)
             )

@@ -1,4 +1,5 @@
-﻿using MessagePack;
+﻿using DragaliaAPI.Models.Responses;
+using MessagePack;
 
 namespace DragaliaAPI.Models.Components;
 
@@ -16,6 +17,10 @@ public class UpdateDataList
     public IEnumerable<DragonReliability>? dragon_reliability_list { get; set; }
 
     public IEnumerable<Party>? party_list { get; set; }
+
+    public IEnumerable<BannerIdSummonPoint>? summon_point_list { get; set; }
+
+    public IEnumerable<UnitStoryState>? unit_story_list { get; set; }
 
     public IEnumerable<object> functional_maintenance_list { get; set; } = new List<object>();
 

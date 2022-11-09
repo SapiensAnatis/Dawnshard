@@ -23,6 +23,7 @@ public class DbTestFixture : IDisposable
             new CharaDataService()
         );
         deviceAccountRepository.CreateNewSavefile("id");
+        deviceAccountRepository.SaveChangesAsync().Wait();
     }
 
     public async Task AddToDatabase<TEntity>(TEntity data)

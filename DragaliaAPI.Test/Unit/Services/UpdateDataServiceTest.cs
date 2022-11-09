@@ -115,6 +115,24 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     }
 
     [Fact]
+    public void GetUpdateDataList_RetrievesIdentityColumns()
+    {
+        this.fixture.ApiContext.AddRange(
+            new List<IDbHasAccountId>()
+            {
+                DbPlayerDragonDataFactory.Create("id", Dragons.Arsene),
+                DbPlayerDragonDataFactory.Create("id", Dragons.GalaBeastVolk),
+                DbPlayerDragonDataFactory.Create("id", Dragons.HighZodiark)
+            }
+        );
+
+        UpdateDataList list = this.updateDataService.GetUpdateDataList("id");
+
+        list.dragon_list.Should().NotBeNullOrEmpty();
+        list.dragon_list!.Select(x => x.dragon_key_id).Should().OnlyHaveUniqueItems();
+    }
+
+    [Fact]
     public void GetUpdateDataList_NullIfNoUpdates()
     {
         UpdateDataList list = this.updateDataService.GetUpdateDataList("id");

@@ -1,10 +1,10 @@
 ﻿using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using MessagePack;
 using DragaliaAPI.Models.Responses;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Requests;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -12,60 +12,55 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class TutorialController : ControllerBase
+public partial class TutorialController : DragaliaController
 {
     private readonly IUserDataRepository userDataRepository;
-    private readonly ISessionService _sessionService;
+    private readonly IUpdateDataService updateDataService;
 
     public TutorialController(
         IUserDataRepository userDataRepository,
-        ISessionService sessionService
+        IUpdateDataService updateDataService
     )
     {
         this.userDataRepository = userDataRepository;
-        _sessionService = sessionService;
+        this.updateDataService = updateDataService;
     }
 
     [HttpPost]
     [Route("update_step")]
-    public async Task<DragaliaResult> UpdateStep(
-        [FromHeader(Name = "SID")] string sessionId,
-        TutorialUpdateStepRequest request
-    )
+    public async Task<DragaliaResult> UpdateStep(TutorialUpdateStepRequest request)
     {
-        string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-        DbPlayerUserData userData = await userDataRepository.UpdateTutorialStatus(
-            deviceAccountId,
-            request.step
+        await userDataRepository.UpdateTutorialStatus(this.DeviceAccountId, request.step);
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
         );
 
-        UpdateDataList updateDataList =
-            new() { user_data = SavefileUserDataFactory.Create(userData) };
+        await this.userDataRepository.SaveChangesAsync();
+
         TutorialUpdateStepResponse response =
             new(new TutorialUpdateStepData(request.step, updateDataList));
 
-        return Ok(response);
+        return this.Ok(response);
     }
-
-    [MessagePackObject(true)]
-    public record UpdateFlagsRequest(int flag_id);
 
     [HttpPost]
     [Route("update_flags")]
-    public async Task<DragaliaResult> UpdateFlags(
-        [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] UpdateFlagsRequest flagRequest
-    )
+    public async Task<DragaliaResult> UpdateFlags(UpdateFlagsRequest flagRequest)
     {
         int flag_id = flagRequest.flag_id;
-        string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
+
         DbPlayerUserData userData = await this.userDataRepository.AddTutorialFlag(
-            deviceAccountId,
+            this.DeviceAccountId,
             flag_id
         );
 
-        UpdateDataList updateDataList =
-            new() { user_data = SavefileUserDataFactory.Create(userData) };
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await this.userDataRepository.SaveChangesAsync();
+
         TutorialUpdateFlagsResponse response =
             new(
                 new TutorialUpdateFlagsData(
@@ -75,6 +70,6 @@ public class TutorialController : ControllerBase
                 )
             );
 
-        return Ok(response);
+        return this.Ok(response);
     }
 }

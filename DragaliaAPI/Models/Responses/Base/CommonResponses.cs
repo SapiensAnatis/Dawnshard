@@ -1,6 +1,6 @@
 ﻿using MessagePack;
 
-namespace DragaliaAPI.Models.Base;
+namespace DragaliaAPI.Models.Responses.Base;
 
 [MessagePackObject(keyAsPropertyName: true)]
 public record OkResponse : BaseResponse<DataHeaders>

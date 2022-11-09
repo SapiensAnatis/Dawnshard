@@ -9,7 +9,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using AutoMapper;
 
-namespace DragaliaAPI.Controllers.Dragalia.Summon;
+namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("summon")]
 [Consumes("application/octet-stream")]
@@ -19,6 +19,7 @@ public class SummonController : ControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
+    private readonly IUpdateDataService updateDataService;
     private readonly IMapper mapper;
     private readonly ISummonRepository summonRepository;
     private readonly ISessionService _sessionService;
@@ -27,6 +28,7 @@ public class SummonController : ControllerBase
     public SummonController(
         IUserDataRepository userDataRepository,
         IUnitRepository unitRepository,
+        IUpdateDataService updateDataService,
         IMapper mapper,
         ISummonRepository summonRepository,
         ISessionService sessionService,
@@ -35,6 +37,7 @@ public class SummonController : ControllerBase
     {
         this.userDataRepository = userDataRepository;
         this.unitRepository = unitRepository;
+        this.updateDataService = updateDataService;
         this.mapper = mapper;
         this.summonRepository = summonRepository;
         _sessionService = sessionService;
@@ -185,12 +188,12 @@ public class SummonController : ControllerBase
             new()
             {
                 new TradableEntity(
-                    (bannerId * 1000) + 1,
+                    bannerId * 1000 + 1,
                     (int)EntityTypes.Chara,
                     (int)Charas.Celliera
                 ),
                 new TradableEntity(
-                    (bannerId * 1000) + 2,
+                    bannerId * 1000 + 2,
                     (int)EntityTypes.Chara,
                     (int)Charas.SummerCelliera
                 )
@@ -302,9 +305,7 @@ public class SummonController : ControllerBase
                 paymentHeldSetter = x =>
                 {
                     if (bannerData.is_beginner_campaign)
-                    {
                         playerBannerData.IsBeginnerFreeSummonAvailable = 0;
-                    }
                 };
                 paymentCost = 0;
                 break;
@@ -313,9 +314,7 @@ public class SummonController : ControllerBase
         }
 
         if (paymentHeld < paymentCost)
-        {
             return BadRequest();
-        }
 
         List<SimpleSummonReward> summonResult = _summonService.GenerateSummonResult(numSummons);
         //TODO: Roll prize summon and commit prize summon results
@@ -335,11 +334,6 @@ public class SummonController : ControllerBase
             summonResult
                 .Where(x => x.entity_type == (int)EntityTypes.Dragon)
                 .Select(x => (Dragons)x.id)
-        );
-
-        UpdateDataList updateDataList = _summonService.GenerateUpdateData(
-            repositoryCharaOuput,
-            repositoryDragonOutput
         );
 
         IEnumerable<SummonReward> rewardList = _summonService.GenerateRewardList(
@@ -376,18 +370,14 @@ public class SummonController : ControllerBase
             {
                 lastIndexOfRare5 = i;
                 if (entityType == EntityTypes.Chara)
-                {
                     countOfRare5Char++;
-                }
                 else if (entityType == EntityTypes.Dragon)
                 {
                     countOfRare5Dragon++;
                 }
             }
             if (summon.rarity == 4)
-            {
                 countOfRare4++;
-            }
 
             bool isNew =
                 newEntities.Find(
@@ -432,9 +422,7 @@ public class SummonController : ControllerBase
 
         int reversalIndex = lastIndexOfRare5;
         if (reversalIndex != -1 && new Random().NextSingle() < 0.95)
-        {
             reversalIndex = -1;
-        }
 
         int sageEffect = (int)SummonEffectsSage.Dull;
         int circleEffect = (int)SummonEffectsSky.Blue;
@@ -450,7 +438,7 @@ public class SummonController : ControllerBase
         else
         {
             circleEffect = (int)SummonEffectsSky.Yellow;
-            switch (countOfRare4 + ((countOfRare5Char + countOfRare5Dragon) * 2))
+            switch (countOfRare4 + (countOfRare5Char + countOfRare5Dragon) * 2)
             {
                 case > 1:
                     sageEffect = (int)SummonEffectsSage.MultiDoves;
@@ -465,47 +453,34 @@ public class SummonController : ControllerBase
             }
         }
 
-        SummonRequestResponse response = new SummonRequestResponse(
-            new SummonRequestResponseData(
-                reversalIndex,
-                new List<int>() { sageEffect, circleEffect },
-                rewardList,
-                new List<SummonPrize>(),
-                new List<SummonTicket>(),
-                playerBannerData.SummonPoints,
-                new List<UserSummon>()
-                {
-                    new UserSummon(
-                        bannerData.summon_id,
-                        playerBannerData.SummonCount,
-                        bannerData.campaign_type,
-                        bannerData.free_count_rest,
-                        bannerData.is_beginner_campaign,
-                        bannerData.beginner_campaign_count_rest,
-                        bannerData.consecution_campaign_count_rest
-                    )
-                },
-                new SummonUpdateData()
-                {
-                    chara_list = updateDataList.chara_list,
-                    dragon_list = updateDataList.dragon_list,
-                    dragon_reliability_list = updateDataList.dragon_reliability_list,
-                    summon_point_list = new()
+        UpdateDataList updateDataList = updateDataService.GetUpdateDataList(accountId);
+        await this.summonRepository.SaveChangesAsync();
+
+        SummonRequestResponse response =
+            new(
+                new SummonRequestResponseData(
+                    reversalIndex,
+                    new List<int>() { sageEffect, circleEffect },
+                    rewardList,
+                    new List<SummonPrize>(),
+                    new List<SummonTicket>(),
+                    playerBannerData.SummonPoints,
+                    new List<UserSummon>()
                     {
-                        new BannerIdSummonPoint(
+                        new UserSummon(
                             bannerData.summon_id,
-                            playerBannerData.SummonPoints,
-                            playerBannerData.ConsecutionSummonPoints,
-                            playerBannerData.ConsecutionSummonPointsMinDate,
-                            playerBannerData.ConsecutionSummonPointsMaxDate
+                            playerBannerData.SummonCount,
+                            bannerData.campaign_type,
+                            bannerData.free_count_rest,
+                            bannerData.is_beginner_campaign,
+                            bannerData.beginner_campaign_count_rest,
+                            bannerData.consecution_campaign_count_rest
                         )
                     },
-                    unit_story_list = new(),
-                    user_data = SavefileUserDataFactory.Create(userData)
-                },
-                entityResult
-            )
-        );
+                    updateDataList,
+                    entityResult
+                )
+            );
 
         return this.Ok(response);
     }

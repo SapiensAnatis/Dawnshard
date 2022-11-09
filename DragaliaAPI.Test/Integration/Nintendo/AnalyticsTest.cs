@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Test.Integration;
+﻿namespace DragaliaAPI.Test.Integration.Nintendo;
 
 public class AnalyticsTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {

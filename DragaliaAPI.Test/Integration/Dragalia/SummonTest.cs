@@ -12,6 +12,9 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
+/// <summary>
+/// Tests <see cref="Controllers.Dragalia.SummonController"/>
+/// </summary>
 public class SummonTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;

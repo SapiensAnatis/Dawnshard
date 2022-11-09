@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.MessagePackFormatters;
-using DragaliaAPI.Models.Base;
 using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Responses.Base;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Responses;

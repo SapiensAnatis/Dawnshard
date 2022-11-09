@@ -45,7 +45,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
-        using var scope = fixture.Services.CreateScope();
+        using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
         DbParty dbparty = await apiContext.PlayerParties
             .Include(x => x.Units)

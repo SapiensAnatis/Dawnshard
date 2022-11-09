@@ -9,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
+/// <summary>
+/// Tests <see cref="Controllers.Dragalia.QuestController"/>
+/// </summary>
 public class QuestTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;

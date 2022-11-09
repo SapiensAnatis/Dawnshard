@@ -152,6 +152,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         List<Charas> idList = new() { Charas.Addis, Charas.Aeleen };
 
         await this.unitRepository.AddCharas(DeviceAccountId, idList);
+        await this.unitRepository.SaveChangesAsync();
 
         (
             await this.fixture.ApiContext.PlayerCharaData
@@ -204,6 +205,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             new() { Dragons.GalaRebornAgni, Dragons.GalaRebornZephyr, Dragons.GalaRebornZephyr };
 
         await this.unitRepository.AddDragons(DeviceAccountId, idList);
+        await this.unitRepository.SaveChangesAsync();
 
         (
             await this.fixture.ApiContext.PlayerDragonData

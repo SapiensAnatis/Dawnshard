@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Base;
+﻿using DragaliaAPI.Models.Responses.Base;
 
 namespace DragaliaAPI.Models.Responses;
 

@@ -31,6 +31,7 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     public async Task UpdateTutorialStatus_UpdatesTutorialStatus()
     {
         await this.userDataRepository.UpdateTutorialStatus("id", 200);
+        await this.userDataRepository.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerUserData
             .Single(x => x.DeviceAccountId == "id")
@@ -42,6 +43,7 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     public async Task UpdateName_UpdatesName()
     {
         await this.userDataRepository.UpdateName("id", "Euden 2");
+        await this.userDataRepository.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerUserData
             .Single(x => x.DeviceAccountId == "id")

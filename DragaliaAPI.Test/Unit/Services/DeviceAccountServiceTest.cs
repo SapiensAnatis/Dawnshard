@@ -81,6 +81,7 @@ public class DeviceAccountServiceTest
         mockRepository
             .Setup(x => x.CreateNewSavefile(It.IsAny<string>()))
             .Returns(Task.CompletedTask);
+        mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
 
         await deviceAccountService.RegisterDeviceAccount();
 

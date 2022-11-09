@@ -4,37 +4,32 @@ using DragaliaAPI.Models.Requests;
 using DragaliaAPI.Models.Responses;
 using DragaliaAPI.Database.Repositories;
 
-namespace DragaliaAPI.Controllers.Dragalia.Update;
+namespace DragaliaAPI.Controllers.Dragalia;
 
-[Route("update/namechange")]
+[Route("update")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class NamechangeController : ControllerBase
+public class UpdateController : DragaliaController
 {
     private readonly IUserDataRepository userDataRepository;
     private readonly ISessionService _sessionService;
 
-    public NamechangeController(
-        IUserDataRepository userDataRepository,
-        ISessionService sessionService
-    )
+    public UpdateController(IUserDataRepository userDataRepository, ISessionService sessionService)
     {
         this.userDataRepository = userDataRepository;
         _sessionService = sessionService;
     }
 
     [HttpPost]
-    public async Task<DragaliaResult> Post(
-        [FromHeader(Name = "SID")] string sessionId,
-        UpdateNamechangeRequest request
-    )
+    [Route("namechange")]
+    public async Task<DragaliaResult> Post(UpdateNamechangeRequest request)
     {
-        string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-
-        await userDataRepository.UpdateName(deviceAccountId, request.name);
+        await userDataRepository.UpdateName(this.DeviceAccountId, request.name);
+        await userDataRepository.SaveChangesAsync();
 
         UpdateNamechangeResponse response = new(new NamechangeData(request.name));
-        return Ok(response);
+
+        return this.Ok(response);
     }
 }

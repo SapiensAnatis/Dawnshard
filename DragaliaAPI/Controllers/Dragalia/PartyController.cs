@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using AutoMapper;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Components;
 using DragaliaAPI.Models.Requests;
@@ -19,6 +20,8 @@ public class PartyController : ControllerBase
     private readonly IPartyRepository partyRepository;
     private readonly IUnitRepository unitRepository;
     private readonly IUserDataRepository userDataRepository;
+    private readonly IUpdateDataService updateDataService;
+    private readonly IMapper mapper;
     private readonly ISessionService sessionService;
     private readonly ILogger<PartyController> logger;
 
@@ -26,6 +29,8 @@ public class PartyController : ControllerBase
         IPartyRepository partyRepository,
         IUnitRepository unitRepository,
         IUserDataRepository userDataRepository,
+        IUpdateDataService updateDataService,
+        IMapper mapper,
         ISessionService sessionService,
         ILogger<PartyController> logger
     )
@@ -33,6 +38,8 @@ public class PartyController : ControllerBase
         this.partyRepository = partyRepository;
         this.unitRepository = unitRepository;
         this.userDataRepository = userDataRepository;
+        this.updateDataService = updateDataService;
+        this.mapper = mapper;
         this.sessionService = sessionService;
         this.logger = logger;
     }
@@ -60,77 +67,29 @@ public class PartyController : ControllerBase
         // TODO: Amulet validation
         // TODO: Talisman validation
         // TODO: Shared skill validation
-        IEnumerable<Charas> ownedCharaIds = await this.unitRepository
-            .GetAllCharaData(deviceAccountId)
-            .Select(x => x.CharaId)
-            .ToListAsync();
 
-        IEnumerable<long> ownedDragonKeyIds = await this.unitRepository
-            .GetAllDragonData(deviceAccountId)
-            .Select(x => x.DragonKeyId)
-            .ToListAsync();
-
-        // Validate characters
-        foreach (int id in requestParty.request_party_setting_list.Select(x => x.chara_id))
+        foreach (PartyUnit partyUnit in requestParty.request_party_setting_list)
         {
-            if (id == 0)
-            {
-                continue;
-            }
-
-            if (!Enum.IsDefined(typeof(Charas), id))
-            {
-                logger.LogError(
-                    "Request from DeviceAccount {id} contained invalid character id {id}",
-                    deviceAccountId,
-                    id
-                );
-                return this.BadRequest();
-            }
-
-            Charas c = (Charas)Enum.ToObject(typeof(Charas), id);
-
-            if (!ownedCharaIds.Contains(c))
-            {
-                logger.LogError(
-                    "Request from DeviceAccount {id} contained not-owned character id {id}",
-                    deviceAccountId,
-                    id
-                );
-                return this.BadRequest();
-            }
-        }
-
-        // Validate dragons
-        foreach (
-            long keyId in requestParty.request_party_setting_list.Select(
-                x => (long)x.equip_dragon_key_id
+            if (
+                !await this.ValidateCharacterId(partyUnit.chara_id, deviceAccountId)
+                || !await this.ValidateDragonKeyId(partyUnit.equip_dragon_key_id, deviceAccountId)
             )
-        )
-        {
-            if (!ownedDragonKeyIds.Contains(keyId) && keyId != 0)
             {
-                logger.LogError(
-                    "Request from DeviceAccount {id} contained invalid dragon_key_id {key_id}",
-                    deviceAccountId,
-                    keyId
-                );
                 return this.BadRequest();
             }
         }
 
-        // Party is OK, update DB
-        Party responseParty =
-            new(
+        DbParty dbEntry = mapper.Map<DbParty>(
+            new Party(
                 requestParty.party_no,
                 requestParty.party_name,
                 requestParty.request_party_setting_list
-            );
-        DbParty dbEntry = PartyFactory.CreateDbEntry(deviceAccountId, responseParty);
+            )
+        );
         await partyRepository.SetParty(deviceAccountId, dbEntry);
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(deviceAccountId);
+        await partyRepository.SaveChangesAsync();
 
-        // Send response
-        UpdateDataList updateDataList = new() { party_list = new List<Party>() { responseParty } };
         UpdateDataListResponse response = new(new(updateDataList));
 
         return this.Ok(response);
@@ -145,7 +104,72 @@ public class PartyController : ControllerBase
         string deviceAccountId = await sessionService.GetDeviceAccountId_SessionId(sessionId);
 
         await this.userDataRepository.SetMainPartyNo(deviceAccountId, request.main_party_no);
+        await this.userDataRepository.SaveChangesAsync();
 
         return this.Ok(new PartySetMainPartyNoResponse(new(request.main_party_no)));
+    }
+
+    private async Task<bool> ValidateCharacterId(int id, string deviceAccountId)
+    {
+        // Empty slot
+        if (id == 0)
+        {
+            return true;
+        }
+
+        IEnumerable<Charas> ownedCharaIds = await this.unitRepository
+            .GetAllCharaData(deviceAccountId)
+            .Select(x => x.CharaId)
+            .ToListAsync();
+
+        if (!Enum.IsDefined(typeof(Charas), id))
+        {
+            logger.LogError(
+                "Request from DeviceAccount {id} contained invalid character id {id}",
+                deviceAccountId,
+                id
+            );
+            return false;
+        }
+
+        Charas c = (Charas)Enum.ToObject(typeof(Charas), id);
+
+        if (!ownedCharaIds.Contains(c))
+        {
+            logger.LogError(
+                "Request from DeviceAccount {id} contained not-owned character id {id}",
+                deviceAccountId,
+                id
+            );
+            return false;
+        }
+
+        return true;
+    }
+
+    private async Task<bool> ValidateDragonKeyId(ulong keyId, string deviceAccountId)
+    {
+        // Empty slot
+        if (keyId == 0)
+        {
+            return true;
+        }
+
+        IEnumerable<long> ownedDragonKeyIds = await this.unitRepository
+            .GetAllDragonData(deviceAccountId)
+            .Select(x => x.DragonKeyId)
+            .ToListAsync();
+
+        if (!ownedDragonKeyIds.Contains((long)keyId))
+        {
+            logger.LogError(
+                "Request from DeviceAccount {id} contained not-owned dragon_key_id {key_id}",
+                deviceAccountId,
+                keyId
+            );
+            return false;
+        }
+
+        return true;
     }
 }

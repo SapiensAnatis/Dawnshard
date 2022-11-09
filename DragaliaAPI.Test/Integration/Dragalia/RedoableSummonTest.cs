@@ -7,6 +7,9 @@ using DragaliaAPI.Database;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
+/// <summary>
+/// Tests <see cref="Controllers.Dragalia.RedoableSummonController"/>
+/// </summary>
 public class RedoableSummonTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
@@ -38,9 +41,6 @@ public class RedoableSummonTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task RedoableSummonPreExec_ReturnsValidResult()
     {
-        RedoableSummonPreExecResponse expectedResponse =
-            new(RedoableSummonPreExecFactory.CreateData(new()));
-
         // Corresponds to JSON: "{}"
         byte[] payload = new byte[] { 0x80 };
         HttpContent content = TestUtils.CreateMsgpackContent(payload);
@@ -50,10 +50,11 @@ public class RedoableSummonTest : IClassFixture<IntegrationTestFixture>
         response.IsSuccessStatusCode.Should().BeTrue();
 
         byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-        var deserializedResponse = MessagePackSerializer.Deserialize<RedoableSummonPreExecResponse>(
-            responseBytes,
-            ContractlessStandardResolver.Options
-        );
+        RedoableSummonPreExecResponse deserializedResponse =
+            MessagePackSerializer.Deserialize<RedoableSummonPreExecResponse>(
+                responseBytes,
+                ContractlessStandardResolver.Options
+            );
 
         List<SimpleSummonReward> summonResult = deserializedResponse
             .data

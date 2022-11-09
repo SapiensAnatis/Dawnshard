@@ -6,17 +6,17 @@ using DragaliaAPI.Models.Components;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DragaliaAPI.Test.Integration;
+namespace DragaliaAPI.Test.Integration.Nintendo;
 
-public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Program>>
+public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public NintendoLoginTest(CustomWebApplicationFactory<Program> factory)
+    public NintendoLoginTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(
+        this.fixture = fixture;
+        this.client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
     }
@@ -33,7 +33,7 @@ public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Progr
             );
         requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-        HttpResponseMessage response = await _client.PostAsync(
+        HttpResponseMessage response = await client.PostAsync(
             "/core/v1/gateway/sdk/login",
             requestContent
         );
@@ -47,7 +47,7 @@ public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Progr
         DeviceAccount createdDeviceAccount = deserializedResponse!.createdDeviceAccount;
 
         // Ensure new DeviceAccount was registered against the DB, and will authenticate successfully
-        using IServiceScope scope = _factory.Services.CreateScope();
+        using IServiceScope scope = fixture.Services.CreateScope();
         IDeviceAccountService deviceAccountService =
             scope.ServiceProvider.GetRequiredService<IDeviceAccountService>();
         (await deviceAccountService.AuthenticateDeviceAccount(createdDeviceAccount))
@@ -72,7 +72,7 @@ public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Progr
             );
         requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-        HttpResponseMessage response = await _client.PostAsync(
+        HttpResponseMessage response = await client.PostAsync(
             "/core/v1/gateway/sdk/login",
             requestContent
         );
@@ -103,7 +103,7 @@ public class NintendoLoginTest : IClassFixture<CustomWebApplicationFactory<Progr
             );
         requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-        HttpResponseMessage response = await _client.PostAsync(
+        HttpResponseMessage response = await client.PostAsync(
             "/core/v1/gateway/sdk/login",
             requestContent
         );

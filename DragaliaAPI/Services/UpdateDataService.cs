@@ -52,6 +52,8 @@ public class UpdateDataService : IUpdateDataService
     {
         IEnumerable<TDatabase> typedEntries = baseEntries.OfType<TDatabase>();
 
-        return typedEntries.Any() ? typedEntries.Select(x => this.mapper.Map<TNetwork>(x)) : null;
+        return typedEntries.Any()
+            ? typedEntries.Select(x => this.mapper.Map<TNetwork>(x)).ToList()
+            : null;
     }
 }

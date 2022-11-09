@@ -11,17 +11,6 @@ namespace DragaliaAPI.Test;
 
 public static class TestUtils
 {
-    public static void InitializeDbForTests(ApiContext db)
-    {
-        db.DeviceAccounts.RemoveRange(db.DeviceAccounts);
-        db.PlayerUserData.RemoveRange(db.PlayerUserData);
-
-        db.DeviceAccounts.AddRange(GetDeviceAccountsSeed());
-        db.PlayerUserData.AddRange(GetSavefilePlayerInfoSeed());
-
-        db.SaveChanges();
-    }
-
     public static void InitializeCacheForTests(IDistributedCache cache)
     {
         // Downside of making Session a private nested class: I have to type this manually :(
@@ -62,16 +51,11 @@ public static class TestUtils
         };
     }
 
-    public static DbPlayerUserData GetLoggedInSavefileSeed()
-    {
-        return GetSavefilePlayerInfoSeed()[2];
-    }
-
-    public static HttpContent CreateMsgpackContent(byte[] content)
+    public static HttpContent CreateMsgpackContent(byte[] content, string sessionId = "session_id")
     {
         ByteArrayContent result = new(content);
         result.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
-        result.Headers.Add("SID", "session_id");
+        result.Headers.Add("SID", sessionId);
         return result;
     }
 

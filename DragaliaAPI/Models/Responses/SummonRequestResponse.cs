@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.MessagePackFormatters;
-using DragaliaAPI.Models.Base;
 using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Responses.Base;
 using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
 
@@ -31,7 +31,7 @@ public record SummonRequestResponseData(
     IEnumerable<SummonTicket> summon_ticket_list,
     int result_summon_point,
     IEnumerable<UserSummon> user_summon_list,
-    SummonUpdateData update_data_list,
+    UpdateDataList update_data_list,
     EntityResult entity_result
 );
 
@@ -58,36 +58,3 @@ public record UserSummon(
     [property: MessagePackFormatter(typeof(BoolToIntFormatter))] bool beginner_campaign_count_rest,
     int consecution_campaign_count_rest
 );
-
-/// <summary>
-/// Updated User data
-/// </summary>
-/// <param name="user_data">Updated userdata</param>
-/// <param name="chara_list">List of new characters</param>
-/// <param name="dragon_list">List of new Dragons</param>
-/// <param name="dragon_reliability_list">List of unique new dragons for Reliability</param>
-/// <param name="summon_point_list">List of updated summon points</param>
-/// <param name="unit_story_list">State of the new unit stories</param>
-[MessagePackObject(true)]
-public class SummonUpdateData : UpdateDataList
-{
-    public List<BannerIdSummonPoint>? summon_point_list { get; set; }
-    public List<UnitStoryState>? unit_story_list { get; set; }
-}
-
-public static class SummonRequestResponseFactory
-{
-    public static SummonRequestResponseData CreateData()
-    {
-        return null!;
-        //SummonUpdateData updateData = new UpdateDataList
-        //{
-
-        //}
-        //return new SummonRequestResponseData
-        //{
-        //    -1,
-
-        //};
-    }
-}

@@ -8,9 +8,9 @@ namespace DragaliaAPI.Services;
 
 public class DeviceAccountService : IDeviceAccountService
 {
-    private readonly IDeviceAccountRepository _apiRepository;
-    private readonly IConfiguration _configuration;
-    private readonly ILogger<DeviceAccountService> _logger;
+    private readonly IDeviceAccountRepository deviceAccountRepository;
+    private readonly IConfiguration configuration;
+    private readonly ILogger<DeviceAccountService> logger;
 
     public DeviceAccountService(
         IDeviceAccountRepository repository,
@@ -18,9 +18,9 @@ public class DeviceAccountService : IDeviceAccountService
         ILogger<DeviceAccountService> logger
     )
     {
-        _apiRepository = repository;
-        _configuration = configuration;
-        _logger = logger;
+        this.deviceAccountRepository = repository;
+        this.configuration = configuration;
+        this.logger = logger;
     }
 
     public async Task<bool> AuthenticateDeviceAccount(DeviceAccount deviceAccount)
@@ -34,27 +34,27 @@ public class DeviceAccountService : IDeviceAccountService
             throw new ArgumentNullException(paramName: deviceAccount.password);
         }
 
-        DbDeviceAccount? dbDeviceAccount = await _apiRepository.GetDeviceAccountById(
+        DbDeviceAccount? dbDeviceAccount = await this.deviceAccountRepository.GetDeviceAccountById(
             deviceAccount.id
         );
+
         if (dbDeviceAccount is null)
             return false;
 
-        string hashedPassword = GetHashedPassword(deviceAccount.password);
-
-        return hashedPassword == dbDeviceAccount.HashedPassword;
+        return this.GetHashedPassword(deviceAccount.password) == dbDeviceAccount.HashedPassword;
     }
 
     public async Task<DeviceAccount> RegisterDeviceAccount()
     {
-        string id = GenerateRandomString(16);
-        string password = GenerateRandomString(40);
-        string hashedPassword = GetHashedPassword(password);
+        string id = this.GenerateRandomString(16);
+        string password = this.GenerateRandomString(40);
+        string hashedPassword = this.GetHashedPassword(password);
 
-        await _apiRepository.AddNewDeviceAccount(id, hashedPassword);
-        await _apiRepository.CreateNewSavefile(id);
+        await this.deviceAccountRepository.AddNewDeviceAccount(id, hashedPassword);
+        await this.deviceAccountRepository.CreateNewSavefile(id);
+        await this.deviceAccountRepository.SaveChangesAsync();
 
-        _logger.LogInformation("Registered new account: DeviceAccount ID '{id}'", id);
+        this.logger.LogInformation("Registered new account: DeviceAccount ID '{id}'", id);
 
         return new DeviceAccount(id, password);
     }
@@ -65,9 +65,9 @@ public class DeviceAccountService : IDeviceAccountService
 
         // Dynamic salt would be better.
         // But security is not a top priority for this application; it is unlikely to be publically hosted for mass use.
-        byte[] saltBytes = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("HashSalt"));
+        byte[] saltBytes = Encoding.UTF8.GetBytes(this.configuration.GetValue<string>("HashSalt"));
 
-        var pkbdf2 = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 10000);
+        Rfc2898DeriveBytes pkbdf2 = new(passwordBytes, saltBytes, 10000);
         byte[] hashBytes = pkbdf2.GetBytes(20);
 
         return Convert.ToBase64String(hashBytes);
@@ -76,9 +76,9 @@ public class DeviceAccountService : IDeviceAccountService
     private string GenerateRandomString(int nChars)
     {
         // Not a great idea to use the standard RNG for making passwords, but again, security is not a big deal
-        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        var stringChars = new char[nChars];
-        var random = new Random();
+        string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        char[] stringChars = new char[nChars];
+        Random random = new();
 
         for (int i = 0; i < stringChars.Length; i++)
         {

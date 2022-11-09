@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Models.Base;
+﻿namespace DragaliaAPI.Models.Responses.Base;
 
 public enum ResultCode
 {

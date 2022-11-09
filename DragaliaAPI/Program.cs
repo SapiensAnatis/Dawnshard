@@ -24,19 +24,19 @@ builder.Services
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
-    options.InstanceName = "RedisInstance";
-});
-
 builder.Services
     .ConfigureDatabaseServices(builder.Configuration)
     .ConfigureSharedServices()
+    .AddAutoMapper(Assembly.GetExecutingAssembly())
+    .AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
+        options.InstanceName = "RedisInstance";
+    })
     .AddScoped<ISessionService, SessionService>()
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
     .AddScoped<ISummonService, SummonService>()
-    .AddAutoMapper(Assembly.GetExecutingAssembly());
+    .AddScoped<IUpdateDataService, UpdateDataService>();
 
 WebApplication app = builder.Build();
 

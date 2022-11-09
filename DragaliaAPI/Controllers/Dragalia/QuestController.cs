@@ -4,7 +4,6 @@ using DragaliaAPI.Models.Requests;
 using DragaliaAPI.Models.Responses;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -12,51 +11,31 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/x-msgpack")]
 [ApiController]
-public class QuestController : ControllerBase
+public class QuestController : DragaliaController
 {
     private readonly IQuestRepository questRepository;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly ISessionService sessionService;
+    private readonly IUpdateDataService updateDataService;
     private const int ReadStoryState = 1;
 
-    public QuestController(
-        IQuestRepository questRepository,
-        IUserDataRepository userDataRepository,
-        ISessionService sessionService
-    )
+    public QuestController(IQuestRepository questRepository, IUpdateDataService updateDataService)
     {
         this.questRepository = questRepository;
-        this.userDataRepository = userDataRepository;
-        this.sessionService = sessionService;
+        this.updateDataService = updateDataService;
     }
 
     [HttpPost]
     [Route("read_story")]
-    public async Task<DragaliaResult> ReadStory(
-        [FromHeader(Name = "SID")] string sessionId,
-        QuestReadStoryRequest request
-    )
+    public async Task<DragaliaResult> ReadStory(QuestReadStoryRequest request)
     {
-        string deviceAccountId = await this.sessionService.GetDeviceAccountId_SessionId(sessionId);
-        await questRepository.UpdateQuestStory(
-            deviceAccountId,
+        await this.questRepository.UpdateQuestStory(
+            this.DeviceAccountId,
             request.quest_story_id,
             ReadStoryState
         );
 
-        UserData userData = SavefileUserDataFactory.Create(
-            await userDataRepository.GetUserData(deviceAccountId).SingleAsync()
-        );
+        UpdateDataList updateData = this.updateDataService.GetUpdateDataList(this.DeviceAccountId);
 
-        UpdateDataList updateData =
-            new()
-            {
-                user_data = userData,
-                quest_story_list = new List<QuestStory>()
-                {
-                    new(request.quest_story_id, ReadStoryState)
-                }
-            };
+        await this.questRepository.SaveChangesAsync();
 
         QuestReadStoryData responseData =
             new(
