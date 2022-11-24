@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<None Remove="Resources\adventurers.json" />
 		<None Remove="Resources\dragons.json" />
+		<None Remove="Resources\mananodes.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -21,6 +22,9 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Include="Resources\mananodes.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
