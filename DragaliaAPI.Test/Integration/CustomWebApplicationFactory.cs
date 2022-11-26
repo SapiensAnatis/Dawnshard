@@ -24,7 +24,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             ServiceDescriptor redisDescriptor = services.Single(
                 d =>
                     d.ServiceType == typeof(IDistributedCache)
-                    && d.ImplementationType?.Name == "RedisCache"
+                    && (d.ImplementationType?.Name ?? "").Contains("Redis")
             );
 
             services.Remove(sqlDescriptor);

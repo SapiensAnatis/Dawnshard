@@ -32,7 +32,7 @@ public class DeviceAccountServiceTest
     public async Task AuthenticateDeviceAccount_CorrectCredentials_ReturnsTrue()
     {
         DeviceAccount deviceAccount = new("id", "password");
-        DbDeviceAccount dbDeviceAccount = new("id", "NMvdakTznEF6khwWcz17i6GTnDA=");
+        DbDeviceAccount dbDeviceAccount = new("id", "mZlZ+wpg+n3l63y9D25f93v0KLM=");
         mockRepository
             .Setup(x => x.GetDeviceAccountById(deviceAccount.id))
             .ReturnsAsync(dbDeviceAccount);
