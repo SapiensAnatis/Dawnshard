@@ -180,7 +180,10 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 
         List<Dragons> idList = new() { Dragons.Marishiten, Dragons.Barbatos, Dragons.Marishiten };
 
-        var result = await this.unitRepository.AddDragons(DeviceAccountId, idList);
+        IEnumerable<(Dragons id, bool isNew)> result = await this.unitRepository.AddDragons(
+            DeviceAccountId,
+            idList
+        );
 
         result
             .Where(x => x.isNew)

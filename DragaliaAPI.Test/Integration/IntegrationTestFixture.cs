@@ -71,7 +71,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
             new List<DbDeviceAccount>()
             {
                 // Password is a hash of the string "password"
-                new("id", "NMvdakTznEF6khwWcz17i6GTnDA="),
+                new("id", "mZlZ+wpg+n3l63y9D25f93v0KLM="),
             }
         );
 
