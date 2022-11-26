@@ -80,7 +80,7 @@ public class TutorialTest : IClassFixture<IntegrationTestFixture>
 
         TutorialUpdateFlagsData response = (
             await client.PostMsgpack<TutorialUpdateFlagsData>(
-                "/tool/auth",
+                "/tutorial/update_flags",
                 new TutorialUpdateFlagsRequest() { flag_id = flag }
             )
         ).data;

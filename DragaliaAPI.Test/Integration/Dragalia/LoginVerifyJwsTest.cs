@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 using MessagePack;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
@@ -22,13 +23,13 @@ public class LoginVerifyJwsTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task VerifyJws_ReturnsOK()
     {
-        LoginVerifyJwsData response = (
-            await client.PostMsgpack<LoginVerifyJwsData>(
-                "/update/namechange",
+        ResultCodeData response = (
+            await client.PostMsgpack<ResultCodeData>(
+                "/login/verify_jws",
                 new LoginVerifyJwsRequest()
             )
         ).data;
 
-        response.Should().BeEquivalentTo(new LoginVerifyJwsData());
+        response.Should().BeEquivalentTo(new ResultCodeData(ResultCode.Success));
     }
 }

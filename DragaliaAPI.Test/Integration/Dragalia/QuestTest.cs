@@ -28,7 +28,7 @@ public class QuestTest : IClassFixture<IntegrationTestFixture>
     {
         QuestReadStoryData response = (
             await client.PostMsgpack<QuestReadStoryData>(
-                "/tool/auth",
+                "/quest/read_story",
                 new QuestReadStoryRequest() { quest_story_id = 400 }
             )
         ).data;
@@ -43,7 +43,7 @@ public class QuestTest : IClassFixture<IntegrationTestFixture>
     {
         QuestReadStoryData response = (
             await client.PostMsgpack<QuestReadStoryData>(
-                "/tool/auth",
+                "/quest/read_story",
                 new QuestReadStoryRequest() { quest_story_id = 700 }
             )
         ).data;

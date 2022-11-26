@@ -8,14 +8,16 @@ public class UnitMapProfile : Profile
 {
     public UnitMapProfile()
     {
-        this.CreateMap<DbPlayerDragonData, DragonList>();
-        this.CreateMap<DbPlayerCharaData, CharaList>();
+        this.CreateMap<DbPlayerDragonData, DragonList>()
+            .ForMember(x => x.status_plus_count, opts => opts.Ignore());
+        this.CreateMap<DbPlayerCharaData, CharaList>()
+            .ForMember(x => x.status_plus_count, opts => opts.Ignore());
         this.CreateMap<DbPlayerDragonReliability, DragonReliabilityList>()
-            .ForCtorParam(
+            .ForMember(
                 nameof(DragonReliabilityList.reliability_level),
                 o => o.MapFrom(src => src.Level)
             )
-            .ForCtorParam(
+            .ForMember(
                 nameof(DragonReliabilityList.reliability_total_exp),
                 o => o.MapFrom(src => src.Exp)
             );

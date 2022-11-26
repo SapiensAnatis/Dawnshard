@@ -71,8 +71,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
                 0
             );
 
-        byte[] payload = MessagePackSerializer.Serialize(request);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
+        HttpContent content = TestUtils.CreateMsgpackContent(request);
 
         HttpResponseMessage response = await client.PostAsync("/party/set_party_setting", content);
 
@@ -94,8 +93,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
                 0
             );
 
-        byte[] payload = MessagePackSerializer.Serialize(request);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
+        HttpContent content = TestUtils.CreateMsgpackContent(request);
 
         HttpResponseMessage response = await client.PostAsync("/party/set_party_setting", content);
 
@@ -105,12 +103,10 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task SetMainPartyNo_UpdatesDatabase()
     {
-        PartySetMainPartyNoRequest request = new(2);
-
-        byte[] payload = MessagePackSerializer.Serialize(request);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/party/set_main_party_no", content);
+        await client.PostMsgpack<PartySetMainPartyNoRequest>(
+            "/party/set_main_party_no",
+            new PartySetMainPartyNoRequest(2)
+        );
 
         using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();

@@ -166,7 +166,7 @@ public class SessionService : ISessionService
         string sessionJson = await _cache.GetStringAsync(key);
         if (string.IsNullOrEmpty(sessionJson))
         {
-            throw new ArgumentException($"Could not load session for key {key}");
+            throw new SessionException(key);
         }
 
         return JsonSerializer.Deserialize<Session>(sessionJson)

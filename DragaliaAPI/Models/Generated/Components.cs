@@ -1,5 +1,6 @@
 #nullable disable
 
+using DragaliaAPI.MessagePackFormatters;
 using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
 
@@ -4682,7 +4683,9 @@ public class CharaList
     public int status_plus_count { get; set; }
     public int combo_buildup_count { get; set; }
     public int is_unlock_edit_skill { get; set; }
-    public int gettime { get; set; }
+
+    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    public DateTimeOffset gettime { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }
     public int is_temporary { get; set; }
     public int list_view_flag { get; set; }
@@ -4710,7 +4713,7 @@ public class CharaList
         int status_plus_count,
         int combo_buildup_count,
         int is_unlock_edit_skill,
-        int gettime,
+        DateTimeOffset gettime,
         IEnumerable<int> mana_circle_piece_id_list,
         int is_temporary,
         int list_view_flag
@@ -5385,7 +5388,9 @@ public class DragonList
     public int exp { get; set; }
     public int is_lock { get; set; }
     public int is_new { get; set; }
-    public int get_time { get; set; }
+
+    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    public DateTimeOffset get_time { get; set; }
     public int skill_1_level { get; set; }
     public int ability_1_level { get; set; }
     public int ability_2_level { get; set; }
@@ -5401,7 +5406,7 @@ public class DragonList
         int exp,
         int is_lock,
         int is_new,
-        int get_time,
+        DateTimeOffset get_time,
         int skill_1_level,
         int ability_1_level,
         int ability_2_level,
@@ -5436,15 +5441,19 @@ public class DragonReliabilityList
     public int dragon_id { get; set; }
     public int reliability_level { get; set; }
     public int reliability_total_exp { get; set; }
-    public int gettime { get; set; }
-    public int last_contact_time { get; set; }
+
+    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    public DateTimeOffset gettime { get; set; }
+
+    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    public DateTimeOffset last_contact_time { get; set; }
 
     public DragonReliabilityList(
         int dragon_id,
         int reliability_level,
         int reliability_total_exp,
-        int gettime,
-        int last_contact_time
+        DateTimeOffset gettime,
+        DateTimeOffset last_contact_time
     )
     {
         this.dragon_id = dragon_id;
@@ -8288,8 +8297,8 @@ public class SummonHistoryList
 {
     public int key_id { get; set; }
     public int summon_id { get; set; }
-    public int summon_exec_type { get; set; }
-    public int exec_date { get; set; }
+    public SummonExecTypes summon_exec_type { get; set; }
+    public DateTimeOffset exec_date { get; set; }
     public int payment_type { get; set; }
     public int entity_type { get; set; }
     public int entity_id { get; set; }
@@ -8307,8 +8316,8 @@ public class SummonHistoryList
     public SummonHistoryList(
         int key_id,
         int summon_id,
-        int summon_exec_type,
-        int exec_date,
+        SummonExecTypes summon_exec_type,
+        DateTimeOffset exec_date,
         int payment_type,
         int entity_type,
         int entity_id,

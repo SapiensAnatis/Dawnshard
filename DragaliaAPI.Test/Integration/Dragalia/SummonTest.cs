@@ -46,7 +46,7 @@ public class SummonTest : IClassFixture<IntegrationTestFixture>
     {
         SummonGetOddsDataData response = (
             await client.PostMsgpack<SummonGetOddsDataData>(
-                "summon/get_odds",
+                "summon/get_odds_data",
                 new SummonGetOddsDataRequest(1020203)
             )
         ).data;
@@ -87,7 +87,10 @@ public class SummonTest : IClassFixture<IntegrationTestFixture>
         }
 
         SummonGetSummonHistoryData response = (
-            await client.PostMsgpack<SummonGetSummonHistoryData>("summon/get_odds", new { })
+            await client.PostMsgpack<SummonGetSummonHistoryData>(
+                "summon/get_summon_history",
+                new SummonGetSummonHistoryRequest()
+            )
         ).data;
 
         // Too lazy to set up automapper to check exact result and it is covered more or less in SummonRepositoryTests.cs

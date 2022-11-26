@@ -30,6 +30,10 @@ public class DbPlayerDragonReliability : IDbHasAccountId, IHasXp
     [Required]
     [TypeConverter(typeof(DateTimeOffsetConverter))]
     public DateTimeOffset LastContactTime { get; set; }
+
+    [Required]
+    [TypeConverter(typeof(DateTimeOffsetConverter))]
+    public DateTimeOffset GetTime { get; set; }
 }
 
 public static class DbPlayerDragonReliabilityFactory
@@ -42,6 +46,7 @@ public static class DbPlayerDragonReliabilityFactory
             DragonId = id,
             Level = 1,
             Exp = 0,
+            GetTime = DateTimeOffset.UtcNow,
             LastContactTime = DateTimeOffset.UtcNow
         };
     }

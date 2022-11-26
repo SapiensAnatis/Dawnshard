@@ -130,11 +130,7 @@ public class RedoableSummonController : DragaliaControllerBase
             JsonSerializer.Serialize(summonResult)
         );
 
-        return this.Ok(
-            new RedoableSummonPreExecData(
-                new UserRedoableSummonData(1, new List<AtgenRedoableSummonResultUnitList>())
-            )
-        );
+        return this.Ok(new RedoableSummonPreExecData(new UserRedoableSummonData(1, summonResult)));
     }
 
     [HttpPost]

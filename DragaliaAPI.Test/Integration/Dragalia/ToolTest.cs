@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 using MessagePack;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
@@ -48,12 +49,19 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task Signup_IncorrectIdToken_ReturnsErrorResponse()
     {
-        HttpResponseMessage response = await client.PostAsync(
+        DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
             "/tool/signup",
-            TestUtils.CreateMsgpackContent(new ToolSignupRequest() { id_token = "wrong_id_token" })
+            new ToolSignupRequest() { id_token = "wrong_id_token" }
         );
 
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
+        response
+            .Should()
+            .BeEquivalentTo(
+                new DragaliaResponse<ResultCodeData>(
+                    new DataHeaders(ResultCode.SessionError),
+                    new ResultCodeData(ResultCode.SessionError)
+                )
+            );
     }
 
     [Fact]
@@ -95,11 +103,18 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task Auth_IncorrectIdToken_ReturnsErrorResponse()
     {
-        HttpResponseMessage response = await client.PostAsync(
+        DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
             "/tool/auth",
-            TestUtils.CreateMsgpackContent(new ToolAuthRequest() { id_token = "wrong_id_token" })
+            new ToolAuthRequest() { id_token = "wrong_id_token" }
         );
 
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
+        response
+            .Should()
+            .BeEquivalentTo(
+                new DragaliaResponse<ResultCodeData>(
+                    new DataHeaders(ResultCode.SessionError),
+                    new ResultCodeData(ResultCode.SessionError)
+                )
+            );
     }
 }

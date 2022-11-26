@@ -9,10 +9,7 @@ public class SummonMapProfile : Profile
     public SummonMapProfile()
     {
         this.CreateMap<DbPlayerSummonHistory, SummonHistoryList>()
-            .ForCtorParam(
-                nameof(SummonHistoryList.summon_point_id),
-                o => o.MapFrom(x => x.SummonId)
-            );
+            .ForMember(nameof(SummonHistoryList.summon_point_id), o => o.MapFrom(x => x.SummonId));
 
         this.SourceMemberNamingConvention = new PascalCaseNamingConvention();
         this.DestinationMemberNamingConvention = new LowerUnderscoreNamingConvention();

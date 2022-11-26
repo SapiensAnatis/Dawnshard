@@ -13,7 +13,12 @@ public class PartyMapProfile : Profile
             .ReverseMap()
             .ForMember(x => x.Units, opts => opts.MapFrom(x => x.party_setting_list));
 
-        this.CreateMap<DbPartyUnit, PartySettingList>().ReverseMap();
+        this.CreateMap<DbPartyUnit, PartySettingList>()
+            .ForMember(nameof(PartySettingList.equip_weapon_key_id), opts => opts.Ignore())
+            .ForMember(nameof(PartySettingList.equip_amulet_key_id), opts => opts.Ignore())
+            .ForMember(nameof(PartySettingList.equip_amulet_2_key_id), opts => opts.Ignore())
+            .ForMember(nameof(PartySettingList.equip_skin_weapon_id), opts => opts.Ignore())
+            .ReverseMap();
 
         this.SourceMemberNamingConvention = new PascalCaseNamingConvention();
         this.DestinationMemberNamingConvention = new LowerUnderscoreNamingConvention();
