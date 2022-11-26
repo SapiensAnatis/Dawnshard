@@ -75,9 +75,10 @@ public class SessionService : ISessionService
     public async Task PrepareSession(DeviceAccount deviceAccount, string idToken)
     {
         // Check if there is an existing session, and if so, remove it
-        string existingSessionId = await _cache.GetStringAsync(
+        string? existingSessionId = await _cache.GetStringAsync(
             Schema.SessionId_DeviceAccountId(deviceAccount.id)
         );
+
         if (!string.IsNullOrEmpty(existingSessionId))
         {
             // TODO: Consider abstracting this into a RemoveSession method, in case it needs to be done elsewhere
@@ -93,6 +94,7 @@ public class SessionService : ISessionService
             JsonSerializer.Serialize(session),
             _cacheOptions
         );
+
         _logger.LogInformation(
             "Preparing session: DeviceAccount '{id}', id-token '{id_token}'",
             deviceAccount.id,
