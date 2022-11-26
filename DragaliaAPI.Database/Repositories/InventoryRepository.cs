@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class InventoryRepository : IInventoryRepository
+public class InventoryRepository : BaseRepository, IInventoryRepository
 {
     private readonly ApiContext apiContext;
 
-    public InventoryRepository(ApiContext apiContext)
+    public InventoryRepository(ApiContext apiContext) : base(apiContext)
     {
         this.apiContext = apiContext;
     }

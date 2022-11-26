@@ -2,6 +2,7 @@
 
 public enum Charas
 {
+    Empty = 0,
     Addis = 10240302,
     Aeleen = 10540301,
     Akasha = 10850301,

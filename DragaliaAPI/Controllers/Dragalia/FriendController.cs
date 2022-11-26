@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Responses;
+﻿using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
@@ -7,12 +8,17 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class FriendController : ControllerBase
+public class FriendController : DragaliaControllerBase
 {
     [HttpPost]
     [Route("get_support_chara")]
     public DragaliaResult GetSupportChara()
     {
-        return Ok(new GetSupportCharaResponse(GetSupportCharaFactory.CreateData()));
+        return Ok(
+            new FriendGetSupportCharaData(
+                0,
+                new SettingSupport(Charas.ThePrince, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+            )
+        );
     }
 }

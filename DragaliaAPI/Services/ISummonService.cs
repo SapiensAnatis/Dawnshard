@@ -1,25 +1,15 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Services;
 
 public interface ISummonService
 {
-    IEnumerable<SummonReward> GenerateRewardList(
-        IEnumerable<SimpleSummonReward> baseRewardList,
-        IEnumerable<DbPlayerCharaData> repositoryCharaOutput,
-        (
-            IEnumerable<DbPlayerDragonData> newDragons,
-            IEnumerable<DbPlayerDragonReliability> newReliability
-        ) repositoryDragonOutput,
-        bool giveDewPoint = true
+    List<AtgenResultUnitList> GenerateRewardList(
+        string deviceAccountId,
+        IEnumerable<AtgenRedoableSummonResultUnitList> baseRewardList
     );
-    List<SimpleSummonReward> GenerateSummonResult(int numSummons);
-    UpdateDataList GenerateUpdateData(
-        IEnumerable<DbPlayerCharaData> repositoryCharaOutput,
-        (
-            IEnumerable<DbPlayerDragonData> newDragons,
-            IEnumerable<DbPlayerDragonReliability> newReliability
-        ) repositoryDragonOutput
-    );
+
+    List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(int numSummons);
 }

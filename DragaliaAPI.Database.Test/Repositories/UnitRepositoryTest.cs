@@ -12,13 +12,19 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
     private readonly ICharaDataService charaDataService;
+    private readonly IDragonDataService dragonDataService;
     private readonly IUnitRepository unitRepository;
 
     public UnitRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
         this.charaDataService = new CharaDataService();
-        this.unitRepository = new UnitRepository(fixture.ApiContext, this.charaDataService);
+        this.dragonDataService = new DragonDataService();
+        this.unitRepository = new UnitRepository(
+            fixture.ApiContext,
+            this.charaDataService,
+            this.dragonDataService
+        );
     }
 
     [Fact]
@@ -141,7 +147,8 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         List<Charas> idList = new() { Charas.ThePrince, Charas.Chrom, Charas.Chrom };
 
         (await this.unitRepository.AddCharas(DeviceAccountId, idList))
-            .Select(x => x.CharaId)
+            .Where(x => x.isNew)
+            .Select(x => x.id)
             .Should()
             .BeEquivalentTo(new List<Charas>() { Charas.Chrom });
     }
@@ -152,6 +159,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         List<Charas> idList = new() { Charas.Addis, Charas.Aeleen };
 
         await this.unitRepository.AddCharas(DeviceAccountId, idList);
+        await this.unitRepository.SaveChangesAsync();
 
         (
             await this.fixture.ApiContext.PlayerCharaData
@@ -172,20 +180,11 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 
         List<Dragons> idList = new() { Dragons.Marishiten, Dragons.Barbatos, Dragons.Marishiten };
 
-        (
-            IEnumerable<DbPlayerDragonData> newDragons,
-            IEnumerable<DbPlayerDragonReliability> newReliabilities
-        ) = await this.unitRepository.AddDragons(DeviceAccountId, idList);
+        var result = await this.unitRepository.AddDragons(DeviceAccountId, idList);
 
-        newDragons
-            .Select(x => x.DragonId)
-            .Should()
-            .BeEquivalentTo(
-                new List<Dragons>() { Dragons.Marishiten, Dragons.Barbatos, Dragons.Marishiten, }
-            );
-
-        newReliabilities
-            .Select(x => x.DragonId)
+        result
+            .Where(x => x.isNew)
+            .Select(x => x.id)
             .Should()
             .BeEquivalentTo(new List<Dragons>() { Dragons.Marishiten });
     }
@@ -204,6 +203,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             new() { Dragons.GalaRebornAgni, Dragons.GalaRebornZephyr, Dragons.GalaRebornZephyr };
 
         await this.unitRepository.AddDragons(DeviceAccountId, idList);
+        await this.unitRepository.SaveChangesAsync();
 
         (
             await this.fixture.ApiContext.PlayerDragonData

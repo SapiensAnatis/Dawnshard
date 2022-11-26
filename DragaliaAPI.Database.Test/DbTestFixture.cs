@@ -13,7 +13,7 @@ public class DbTestFixture : IDisposable
     public DbTestFixture()
     {
         DbContextOptions<ApiContext> options = new DbContextOptionsBuilder<ApiContext>()
-            .UseInMemoryDatabase($"ApiRepositoryTest-{Guid.NewGuid()}")
+            .UseInMemoryDatabase($"DbTestFixture-{Guid.NewGuid()}")
             .Options;
 
         this.ApiContext = new ApiContext(options);
@@ -23,6 +23,7 @@ public class DbTestFixture : IDisposable
             new CharaDataService()
         );
         deviceAccountRepository.CreateNewSavefile("id");
+        deviceAccountRepository.SaveChangesAsync().Wait();
     }
 
     public async Task AddToDatabase<TEntity>(TEntity data)

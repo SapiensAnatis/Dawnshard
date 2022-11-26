@@ -1,13 +1,13 @@
-﻿using DragaliaAPI.Models.Responses;
+﻿using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class GetResourceVersionTest : IClassFixture<IntegrationTestFixture>
+public class GetDeployVersionTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
     private readonly IntegrationTestFixture fixture;
 
-    public GetResourceVersionTest(IntegrationTestFixture fixture)
+    public GetDeployVersionTest(IntegrationTestFixture fixture)
     {
         this.fixture = fixture;
         client = fixture.CreateClient(
@@ -16,20 +16,15 @@ public class GetResourceVersionTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
-    public async Task GetResourceVersion_ReturnsCorrectResponse()
+    public async Task GetDeployVersion_ReturnsCorrectResponse()
     {
-        GetResourceVersionResponse expectedResponse =
-            new(new GetResourceVersionData(GetResourceVersionStatic.ResourceVersion));
+        DeployGetDeployVersionData response = (
+            await client.PostMsgpack<DeployGetDeployVersionData>(
+                "deploy/get_deploy_version",
+                new DeployGetDeployVersionRequest()
+            )
+        ).data;
 
-        // Corresponds to JSON: "{}"
-        byte[] payload = new byte[] { 0x80 };
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync(
-            "version/get_resource_version",
-            content
-        );
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.deploy_hash.Should().Be("13bb2827ce9e6a66015ac2808112e3442740e862");
     }
 }

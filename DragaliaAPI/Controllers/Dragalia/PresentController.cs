@@ -1,7 +1,6 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.MessagePackFormatters;
-using DragaliaAPI.Models.Components;
-using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models.Generated;
 using MessagePack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +11,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class PresentController : ControllerBase
+public class PresentController : DragaliaControllerBase
 {
     private ApiContext _apiContext;
 
@@ -38,39 +37,11 @@ public class PresentController : ControllerBase
             (await _apiContext.DeviceAccounts.FirstAsync(x => x.Id == "1")).HashedPassword
         );
         return Ok(
-            new GetPresentListResponse(
-                new GetPresentListData(
-                    new(),
-                    new()
-                    {
-                        new Present(
-                            122414502,
-                            1,
-                            0,
-                            0,
-                            24,
-                            0,
-                            120,
-                            0,
-                            0,
-                            0,
-                            2010003,
-                            100010101,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            DateTimeOffset.UtcNow,
-                            DateTimeOffset.UtcNow.AddDays(7)
-                        )
-                    },
-                    new(new PresentNotice(0, 1), new()),
-                    new(new List<BaseNewEntity>(), new List<BaseNewEntity>())
-                )
+            new PresentGetPresentListData(
+                new List<PresentDetailList>(),
+                new List<PresentDetailList>(),
+                new() { present_notice = new(1, 1) },
+                new()
             )
         );
     }

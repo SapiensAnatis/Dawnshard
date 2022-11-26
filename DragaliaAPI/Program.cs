@@ -1,9 +1,14 @@
 using System.Reflection;
 using DragaliaAPI.Database;
 using DragaliaAPI.MessagePackFormatters;
+using DragaliaAPI.Models;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared;
+using MessagePack;
 using MessagePack.Resolvers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 
@@ -24,19 +29,19 @@ builder.Services
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
-    options.InstanceName = "RedisInstance";
-});
-
 builder.Services
     .ConfigureDatabaseServices(builder.Configuration)
     .ConfigureSharedServices()
+    .AddAutoMapper(Assembly.GetExecutingAssembly())
+    .AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
+        options.InstanceName = "RedisInstance";
+    })
     .AddScoped<ISessionService, SessionService>()
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
     .AddScoped<ISummonService, SummonService>()
-    .AddAutoMapper(Assembly.GetExecutingAssembly());
+    .AddScoped<IUpdateDataService, UpdateDataService>();
 
 WebApplication app = builder.Build();
 
@@ -106,22 +111,45 @@ app.Use(
 app.Use(
     async (context, next) =>
     {
-        ISessionService sessionService =
-            context.RequestServices.GetRequiredService<ISessionService>();
-
-        if (!context.Request.Headers.TryGetValue("SID", out StringValues sessionId))
+        try
         {
-            // Requests prior to /tool/auth will not include SID
-            await next();
+            ISessionService sessionService =
+                context.RequestServices.GetRequiredService<ISessionService>();
+
+            if (!context.Request.Headers.TryGetValue("SID", out StringValues sessionId))
+            {
+                // Requests prior to /tool/auth will not include SID
+                await next();
+            }
+            else
+            {
+                context.Items.Add(
+                    "DeviceAccountId",
+                    await sessionService.GetDeviceAccountId_SessionId(sessionId)
+                );
+
+                await next();
+            }
         }
-        else
+        catch (SessionException)
         {
-            context.Items.Add(
-                "DeviceAccountId",
-                await sessionService.GetDeviceAccountId_SessionId(sessionId)
-            );
+            IActionResultExecutor<ObjectResult> executor =
+                context.RequestServices.GetRequiredService<IActionResultExecutor<ObjectResult>>();
 
-            await next();
+            ActionContext actionContext =
+                new(context, context.GetRouteData(), new ActionDescriptor());
+
+            actionContext.HttpContext.Response.ContentType = "application/octet-stream";
+
+            await executor.ExecuteAsync(
+                actionContext,
+                new OkObjectResult(
+                    new DragaliaResponse<ResultCodeData>(
+                        new(ResultCode.SessionError),
+                        ResultCode.SessionError
+                    )
+                )
+            );
         }
     }
 );

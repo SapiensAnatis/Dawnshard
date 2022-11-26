@@ -1,12 +1,11 @@
-﻿using DragaliaAPI.Models.Responses;
-using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("information")]
 [Produces("application/json")]
 [ApiController]
-public class InformationController : ControllerBase
+public class InformationController : DragaliaControllerBase
 {
     [HttpGet]
     [Route("top")]
@@ -15,3 +14,4 @@ public class InformationController : ControllerBase
         return Ok(new InformationTopResponse(InformationTopFactory.CreateData()));
     }
 }
+*/

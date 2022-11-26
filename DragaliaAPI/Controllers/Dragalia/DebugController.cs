@@ -5,7 +5,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Route("debug_controller")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class DebugController : ControllerBase
+public class DebugController : DragaliaControllerBase
 {
     [HttpGet]
     public object Get()
