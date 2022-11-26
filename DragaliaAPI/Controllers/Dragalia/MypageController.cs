@@ -8,7 +8,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class MypageController : ControllerBase
+public class MypageController : DragaliaControllerBase
 {
     [Route("info")]
     [HttpPost]

@@ -12,15 +12,21 @@ public class AutoMapperProfileTest
     }
 
     [Fact]
-    public void StoryMapProfile_IsValid()
+    public void InventoryMapProfile_IsValid()
     {
-        TestProfile<StoryMapProfile>();
+        TestProfile<InventoryMapProfile>();
     }
 
     [Fact]
     public void UnitMapProfile_IsValid()
     {
         TestProfile<UnitMapProfile>();
+    }
+
+    [Fact]
+    public void PartyMapProfile_IsValid()
+    {
+        TestProfile<PartyMapProfile>();
     }
 
     [Fact]

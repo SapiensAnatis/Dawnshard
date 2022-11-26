@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class SummonRepository : ISummonRepository
+public class SummonRepository : BaseRepository, ISummonRepository
 {
     private readonly ApiContext apiContext;
 
-    public SummonRepository(ApiContext apiContext)
+    public SummonRepository(ApiContext apiContext) : base(apiContext)
     {
         this.apiContext = apiContext;
     }
@@ -32,8 +32,7 @@ public class SummonRepository : ISummonRepository
     public async Task<DbPlayerBannerData> AddPlayerBannerData(string deviceAccountId, int bannerId)
     {
         DbPlayerBannerData bannerData = DbPlayerBannerDataFactory.Create(deviceAccountId, bannerId);
-        bannerData = apiContext.PlayerBannerData.Add(bannerData).Entity;
-        await apiContext.SaveChangesAsync();
+        bannerData = (await apiContext.PlayerBannerData.AddAsync(bannerData)).Entity;
 
         return bannerData;
     }

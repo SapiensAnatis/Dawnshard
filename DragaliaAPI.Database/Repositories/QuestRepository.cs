@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class QuestRepository : IQuestRepository
+public class QuestRepository : BaseRepository, IQuestRepository
 {
     private readonly ApiContext apiContext;
 
-    public QuestRepository(ApiContext apiContext)
+    public QuestRepository(ApiContext apiContext) : base(apiContext)
     {
         this.apiContext = apiContext;
     }
@@ -38,7 +38,5 @@ public class QuestRepository : IQuestRepository
         }
 
         storyData.State = (byte)state;
-
-        await apiContext.SaveChangesAsync();
     }
 }

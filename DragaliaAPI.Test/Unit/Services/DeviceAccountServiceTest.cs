@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -81,6 +81,7 @@ public class DeviceAccountServiceTest
         mockRepository
             .Setup(x => x.CreateNewSavefile(It.IsAny<string>()))
             .Returns(Task.CompletedTask);
+        mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
 
         await deviceAccountService.RegisterDeviceAccount();
 

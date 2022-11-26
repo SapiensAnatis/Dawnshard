@@ -6,15 +6,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class UnitRepository : IUnitRepository
+public class UnitRepository : BaseRepository, IUnitRepository
 {
     private readonly ApiContext apiContext;
     private readonly ICharaDataService charaDataService;
+    private readonly IDragonDataService dragonDataService;
 
-    public UnitRepository(ApiContext apiContext, ICharaDataService charaDataService)
+    public UnitRepository(
+        ApiContext apiContext,
+        ICharaDataService charaDataService,
+        IDragonDataService dragonDataService
+    ) : base(apiContext)
     {
         this.apiContext = apiContext;
         this.charaDataService = charaDataService;
+        this.dragonDataService = dragonDataService;
     }
 
     public IQueryable<DbPlayerCharaData> GetAllCharaData(string deviceAccountId)
@@ -52,7 +58,7 @@ public class UnitRepository : IUnitRepository
     /// <param name="idList"></param>
     /// <returns>A list of tuples which adds an additional dimension onto the input list,
     /// where the second item shows whether the given character id was a duplicate.</returns>
-    public async Task<IEnumerable<DbPlayerCharaData>> AddCharas(
+    public async Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(
         string deviceAccountId,
         IEnumerable<Charas> idList
     )
@@ -78,21 +84,13 @@ public class UnitRepository : IUnitRepository
             await apiContext.PlayerCharaData.AddRangeAsync(dbEntries);
         }
 
-        IEnumerable<DbPlayerCharaData> result = apiContext.ChangeTracker
-            .Entries<DbPlayerCharaData>()
-            .Where(x => x.State == EntityState.Added)
-            .Select(x => x.Entity)
-            .ToList();
-
-        await apiContext.SaveChangesAsync();
-
-        return result;
+        return newMapping;
     }
 
-    public async Task<(
-        IEnumerable<DbPlayerDragonData> newDragons,
-        IEnumerable<DbPlayerDragonReliability> newReliabilities
-    )> AddDragons(string deviceAccountId, IEnumerable<Dragons> idList)
+    public async Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(
+        string deviceAccountId,
+        IEnumerable<Dragons> idList
+    )
     {
         IEnumerable<Dragons> ownedDragons = await this.GetAllDragonData(deviceAccountId)
             .Select(x => x.DragonId)
@@ -115,22 +113,7 @@ public class UnitRepository : IUnitRepository
             idList.Select(id => DbPlayerDragonDataFactory.Create(deviceAccountId, id))
         );
 
-        // Get after so that identity column is set
-        IEnumerable<DbPlayerDragonData> addedDragons = apiContext.ChangeTracker
-            .Entries<DbPlayerDragonData>()
-            .Where(x => x.State == EntityState.Added)
-            .Select(x => x.Entity)
-            .ToList();
-
-        IEnumerable<DbPlayerDragonReliability> addedReliability = apiContext.ChangeTracker
-            .Entries<DbPlayerDragonReliability>()
-            .Where(x => x.State == EntityState.Added)
-            .Select(x => x.Entity)
-            .ToList();
-
-        await apiContext.SaveChangesAsync();
-
-        return (addedDragons, addedReliability);
+        return newMapping;
     }
 
     private static IEnumerable<(TEnum id, bool isNew)> MarkNewIds<TEnum>(
