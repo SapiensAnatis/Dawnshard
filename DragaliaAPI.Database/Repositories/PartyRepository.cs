@@ -15,7 +15,7 @@ public class PartyRepository : BaseRepository, IPartyRepository
     public IQueryable<DbParty> GetParties(string deviceAccountId)
     {
         return apiContext.PlayerParties
-            .Include(x => x.Units.OrderBy(x => x.Id))
+            .Include(x => x.Units.OrderBy(x => x.UnitNo))
             .Where(x => x.DeviceAccountId == deviceAccountId);
     }
 
