@@ -10,7 +10,7 @@ WORKDIR /src
 COPY ["DragaliaAPI/DragaliaAPI.csproj", "DragaliaAPI/"]
 RUN dotnet restore "DragaliaAPI/DragaliaAPI.csproj"
 COPY . .
-WORKDIR "/src/DragaliaAPI
+WORKDIR "/src/DragaliaAPI"
 RUN dotnet build "DragaliaAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
