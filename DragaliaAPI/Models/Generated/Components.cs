@@ -5526,9 +5526,6 @@ public class DrillMissionList
 }
 
 [MessagePackObject(true)]
-public class dummy { }
-
-[MessagePackObject(true)]
 public class EarnEventUserList
 {
     public int event_id { get; set; }

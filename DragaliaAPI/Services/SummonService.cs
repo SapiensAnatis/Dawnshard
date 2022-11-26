@@ -119,12 +119,18 @@ public class SummonService : ISummonService
             if (isDragon)
             {
                 Dragons id = NextEnum<Dragons>(random);
+                while (id == 0)
+                    id = NextEnum<Dragons>(random);
+
                 int rarity = _dragonDataService.GetData(id).Rarity;
                 resultList.Add(new((int)EntityTypes.Dragon, (int)id, rarity));
             }
             else
             {
                 Charas id = NextEnum<Charas>(random);
+                while (id == 0)
+                    id = NextEnum<Charas>(random);
+
                 int rarity = _charaDataService.GetData(id).Rarity;
                 resultList.Add(new((int)EntityTypes.Chara, (int)id, rarity));
             }
@@ -197,6 +203,7 @@ public class SummonService : ISummonService
     private static T NextEnum<T>(Random random) where T : struct, Enum
     {
         T[] values = Enum.GetValues<T>();
+
         return (T)(
             values.GetValue(random.Next(values.Length))
             ?? throw new Exception("Invalid random value!")
