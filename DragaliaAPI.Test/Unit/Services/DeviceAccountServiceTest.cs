@@ -19,7 +19,7 @@ public class DeviceAccountServiceTest
         mockLogger = new(MockBehavior.Loose);
         mockRepository = new(MockBehavior.Strict);
 
-        var inMemoryConfiguration = new Dictionary<string, string> { { "HashSalt", "dragalia" }, };
+        var inMemoryConfiguration = new Dictionary<string, string?> { { "HashSalt", "dragalia" }, };
 
         IConfiguration configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(inMemoryConfiguration)
@@ -32,7 +32,7 @@ public class DeviceAccountServiceTest
     public async Task AuthenticateDeviceAccount_CorrectCredentials_ReturnsTrue()
     {
         DeviceAccount deviceAccount = new("id", "password");
-        DbDeviceAccount dbDeviceAccount = new("id", "NMvdakTznEF6khwWcz17i6GTnDA=");
+        DbDeviceAccount dbDeviceAccount = new("id", "mZlZ+wpg+n3l63y9D25f93v0KLM=");
         mockRepository
             .Setup(x => x.GetDeviceAccountById(deviceAccount.id))
             .ReturnsAsync(dbDeviceAccount);
@@ -55,20 +55,6 @@ public class DeviceAccountServiceTest
         bool result = await deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
 
         result.Should().BeFalse();
-        mockRepository.VerifyAll();
-    }
-
-    [Fact]
-    public async Task AuthenticateDeviceAccount_NoPassword_ThrowsException()
-    {
-        DeviceAccount deviceAccount = new("id", null);
-
-        Func<Task> act = async () =>
-        {
-            await deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
-        };
-
-        await act.Should().ThrowAsync<ArgumentNullException>();
         mockRepository.VerifyAll();
     }
 

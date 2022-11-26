@@ -137,7 +137,7 @@ public class RedoableSummonController : DragaliaControllerBase
     [Route("fix_exec")]
     public async Task<DragaliaResult> FixExec([FromHeader(Name = "SID")] string sessionId)
     {
-        string cachedResultJson = await cache.GetStringAsync(
+        string? cachedResultJson = await cache.GetStringAsync(
             Schema.SessionId_CachedSummonResult(sessionId)
         );
 
