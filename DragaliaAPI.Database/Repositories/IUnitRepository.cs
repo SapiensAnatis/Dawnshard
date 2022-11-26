@@ -3,7 +3,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public interface IUnitRepository
+public interface IUnitRepository : IBaseRepository
 {
     IQueryable<DbPlayerCharaData> GetAllCharaData(string deviceAccountId);
     IQueryable<DbPlayerDragonData> GetAllDragonData(string deviceAccountId);
@@ -12,13 +12,13 @@ public interface IUnitRepository
 
     Task<bool> CheckHasDragons(string deviceAccountId, IEnumerable<Dragons> idList);
 
-    Task<IEnumerable<DbPlayerCharaData>> AddCharas(
+    Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(
         string deviceAccountId,
         IEnumerable<Charas> idList
     );
 
-    Task<(
-        IEnumerable<DbPlayerDragonData> newDragons,
-        IEnumerable<DbPlayerDragonReliability> newReliabilities
-    )> AddDragons(string deviceAccountId, IEnumerable<Dragons> idList);
+    Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(
+        string deviceAccountId,
+        IEnumerable<Dragons> idList
+    );
 }

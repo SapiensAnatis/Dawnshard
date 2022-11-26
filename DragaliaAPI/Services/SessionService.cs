@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Components;
+﻿using DragaliaAPI.Models.Nintendo;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
@@ -60,7 +60,10 @@ public class SessionService : ISessionService
 
     private static class Schema
     {
-        public static string Session_IdToken(string idToken) => $":session:id_token:{idToken}";
+        public static string Session_IdToken(string idToken)
+        {
+            return $":session:id_token:{idToken}";
+        }
 
         public static string Session_SessionId(string sessionId) =>
             $":session:session_id:{sessionId}";
@@ -163,7 +166,7 @@ public class SessionService : ISessionService
         string sessionJson = await _cache.GetStringAsync(key);
         if (string.IsNullOrEmpty(sessionJson))
         {
-            throw new ArgumentException($"Could not load session for key {key}");
+            throw new SessionException(key);
         }
 
         return JsonSerializer.Deserialize<Session>(sessionJson)

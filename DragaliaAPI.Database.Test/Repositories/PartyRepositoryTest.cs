@@ -46,6 +46,7 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
             };
 
         await this.partyRepository.SetParty(DeviceAccountId, toAdd);
+        await this.partyRepository.SaveChangesAsync();
 
         DbParty dbEntry = await this.fixture.ApiContext.PlayerParties
             .Where(x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == 3)
@@ -80,6 +81,7 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
             };
 
         await this.partyRepository.SetParty(DeviceAccountId, toAdd);
+        await this.partyRepository.SaveChangesAsync();
 
         DbParty dbEntry = await this.fixture.ApiContext.PlayerParties
             .Where(x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == 5)

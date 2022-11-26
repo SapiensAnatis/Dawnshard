@@ -2,7 +2,7 @@
 
 namespace DragaliaAPI.Database.Repositories;
 
-public interface IDeviceAccountRepository
+public interface IDeviceAccountRepository : IBaseRepository
 {
     Task AddNewDeviceAccount(string id, string hashedPassword);
 

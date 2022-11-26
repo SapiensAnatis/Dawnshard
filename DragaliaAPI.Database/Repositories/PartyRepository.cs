@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class PartyRepository : IPartyRepository
+public class PartyRepository : BaseRepository, IPartyRepository
 {
     private readonly ApiContext apiContext;
 
-    public PartyRepository(ApiContext apiContext)
+    public PartyRepository(ApiContext apiContext) : base(apiContext)
     {
         this.apiContext = apiContext;
     }
@@ -15,7 +15,7 @@ public class PartyRepository : IPartyRepository
     public IQueryable<DbParty> GetParties(string deviceAccountId)
     {
         return apiContext.PlayerParties
-            .Include(x => x.Units.OrderBy(x => x.Id))
+            .Include(x => x.Units.OrderBy(x => x.UnitNo))
             .Where(x => x.DeviceAccountId == deviceAccountId);
     }
 
@@ -38,7 +38,5 @@ public class PartyRepository : IPartyRepository
                     ?? new() { UnitNo = i, CharaId = 0 }
             );
         }
-
-        await apiContext.SaveChangesAsync();
     }
 }

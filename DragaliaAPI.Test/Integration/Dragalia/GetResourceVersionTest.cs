@@ -1,13 +1,16 @@
-﻿using DragaliaAPI.Models.Responses;
+﻿using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class GetDeployVersionTest : IClassFixture<IntegrationTestFixture>
+/// <summary>
+/// Tests <see cref="Controllers.Dragalia.GetResourceVersionController"/>
+/// </summary>
+public class GetResourceVersionTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
     private readonly IntegrationTestFixture fixture;
 
-    public GetDeployVersionTest(IntegrationTestFixture fixture)
+    public GetResourceVersionTest(IntegrationTestFixture fixture)
     {
         this.fixture = fixture;
         client = fixture.CreateClient(
@@ -16,17 +19,15 @@ public class GetDeployVersionTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
-    public async Task GetDeployVersion_ReturnsCorrectResponse()
+    public async Task GetResourceVersion_ReturnsCorrectResponse()
     {
-        GetDeployVersionResponse expectedResponse =
-            new(new GetDeployVersionData(GetDeployVersionStatic.DeployHash));
+        VersionGetResourceVersionData response = (
+            await client.PostMsgpack<VersionGetResourceVersionData>(
+                "version/get_resource_version",
+                new VersionGetResourceVersionRequest(0, "whatever")
+            )
+        ).data;
 
-        // Corresponds to JSON: "{}"
-        byte[] payload = new byte[] { 0x80 };
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("deploy/get_deploy_version", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.resource_version.Should().Be("y2XM6giU6zz56wCm");
     }
 }

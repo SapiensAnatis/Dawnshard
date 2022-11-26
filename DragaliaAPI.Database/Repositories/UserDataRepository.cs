@@ -6,11 +6,11 @@ namespace DragaliaAPI.Database.Repositories;
 /// <summary>
 /// Provides methods to interface with the UserData table.
 /// </summary>
-public class UserDataRepository : IUserDataRepository
+public class UserDataRepository : BaseRepository, IUserDataRepository
 {
     private readonly ApiContext apiContext;
 
-    public UserDataRepository(ApiContext apiContext)
+    public UserDataRepository(ApiContext apiContext) : base(apiContext)
     {
         this.apiContext = apiContext;
     }
@@ -29,7 +29,6 @@ public class UserDataRepository : IUserDataRepository
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
 
         userData.TutorialStatus = newStatus;
-        await apiContext.SaveChangesAsync();
         return userData;
     }
 
@@ -48,7 +47,6 @@ public class UserDataRepository : IUserDataRepository
         ISet<int> flags = TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag);
         flags.Add(flag);
         userData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(flags);
-        await apiContext.SaveChangesAsync();
         return userData;
     }
 
@@ -57,7 +55,6 @@ public class UserDataRepository : IUserDataRepository
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
 
         userData.Name = newName;
-        await apiContext.SaveChangesAsync();
     }
 
     public async Task SetTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags)
@@ -68,8 +65,6 @@ public class UserDataRepository : IUserDataRepository
             tutorialFlags,
             userData.TutorialFlag
         );
-
-        await apiContext.SaveChangesAsync();
     }
 
     public async Task SetMainPartyNo(string deviceAccountId, int partyNo)
@@ -77,7 +72,6 @@ public class UserDataRepository : IUserDataRepository
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
 
         userData.MainPartyNo = partyNo;
-        await apiContext.SaveChangesAsync();
     }
 
     private async Task<DbPlayerUserData> LookupUserData(string deviceAccountId)

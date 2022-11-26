@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using DragaliaAPI.Database;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Models.Responses;
 
 namespace DragaliaAPI.Controllers.Nintendo;
 
@@ -89,3 +88,4 @@ public class NintendoMarketsController : ControllerBase
         );
     }
 }
+*/

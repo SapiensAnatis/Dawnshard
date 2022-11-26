@@ -1,7 +1,6 @@
 ﻿using DragaliaAPI.Database;
-using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models.Generated;
 using MessagePack;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
@@ -24,11 +23,10 @@ public class UpdateNamechangeTest : IClassFixture<IntegrationTestFixture>
     {
         string newName = "Euden 2";
 
-        var data = new { name = newName };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/update/namechange", content);
+        await client.PostMsgpack<UpdateNamechangeData>(
+            "/update/namechange",
+            new UpdateNamechangeRequest() { name = newName }
+        );
 
         using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
@@ -42,14 +40,13 @@ public class UpdateNamechangeTest : IClassFixture<IntegrationTestFixture>
     public async Task UpdateNamechange_ReturnsCorrectResponse()
     {
         string newName = "Euden 2";
-        UpdateNamechangeResponse expectedResponse = new(new(newName));
+        UpdateNamechangeData response = (
+            await client.PostMsgpack<UpdateNamechangeData>(
+                "/update/namechange",
+                new UpdateNamechangeRequest() { name = newName }
+            )
+        ).data;
 
-        var data = new { name = newName };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/update/namechange", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.checked_name.Should().Be(newName);
     }
 }

@@ -29,6 +29,8 @@ public class DeviceAccountRepositoryTest : IClassFixture<DbTestFixture>
     public async Task AddNewDeviceAccount_CanGetAfterwards()
     {
         await deviceAccountRepository.AddNewDeviceAccount("id 2", "hashed password 2");
+        await deviceAccountRepository.SaveChangesAsync();
+
         DbDeviceAccount? result = await deviceAccountRepository.GetDeviceAccountById("id 2");
 
         result.Should().NotBeNull();
@@ -48,7 +50,9 @@ public class DeviceAccountRepositoryTest : IClassFixture<DbTestFixture>
     public async Task CreateNewSavefile_HasExpectedProperties()
     {
         string newId = "id 2";
+
         await this.deviceAccountRepository.CreateNewSavefile(newId);
+        await this.deviceAccountRepository.SaveChangesAsync();
 
         (
             await this.fixture.ApiContext.PlayerUserData.SingleOrDefaultAsync(

@@ -1,12 +1,15 @@
 ﻿using MessagePack.Resolvers;
 using MessagePack;
 using Microsoft.Extensions.DependencyInjection;
-using DragaliaAPI.Models.Responses;
-using DragaliaAPI.Models.Components;
 using DragaliaAPI.Database;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
+/// <summary>
+/// Tests <see cref="Controllers.Dragalia.RedoableSummonController"/>
+/// </summary>
 public class RedoableSummonTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
@@ -23,75 +26,47 @@ public class RedoableSummonTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task RedoableSummonGetData_ReturnsData()
     {
-        RedoableSummonGetDataResponse expectedResponse =
-            new(RedoableSummonGetDataFactory.CreateData());
+        RedoableSummonGetDataData response = (
+            await client.PostMsgpack<RedoableSummonGetDataData>(
+                "redoable_summon/get_data",
+                new RedoableSummonGetDataRequest()
+            )
+        ).data;
 
-        // Corresponds to JSON: "{}"
-        byte[] payload = new byte[] { 0x80 };
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("redoable_summon/get_data", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.Should().NotBeNull();
     }
 
     [Fact]
     public async Task RedoableSummonPreExec_ReturnsValidResult()
     {
-        RedoableSummonPreExecResponse expectedResponse =
-            new(RedoableSummonPreExecFactory.CreateData(new()));
+        RedoableSummonPreExecData response = (
+            await client.PostMsgpack<RedoableSummonPreExecData>(
+                "redoable_summon/pre_exec",
+                new RedoableSummonPreExecRequest(0)
+            )
+        ).data;
 
-        // Corresponds to JSON: "{}"
-        byte[] payload = new byte[] { 0x80 };
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("redoable_summon/pre_exec", content);
-
-        response.IsSuccessStatusCode.Should().BeTrue();
-
-        byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-        var deserializedResponse = MessagePackSerializer.Deserialize<RedoableSummonPreExecResponse>(
-            responseBytes,
-            ContractlessStandardResolver.Options
-        );
-
-        List<SimpleSummonReward> summonResult = deserializedResponse
-            .data
-            .user_redoable_summon_data
-            .redoable_summon_result_unit_list;
-
-        summonResult.Count.Should().Be(50);
+        response.user_redoable_summon_data.redoable_summon_result_unit_list.Count().Should().Be(50);
     }
 
     [Fact]
     public async Task RedoableSummonFixExec_UpdatesDatabase()
     {
-        // Corresponds to JSON: "{}"
-        byte[] payload = new byte[] { 0x80 };
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
         // Set up cached summon result
-        await client.PostAsync("redoable_summon/pre_exec", content);
+        await client.PostAsync("redoable_summon/pre_exec", TestUtils.CreateMsgpackContent(new { }));
 
-        HttpResponseMessage fixResponse = await client.PostAsync(
-            "redoable_summon/fix_exec",
-            content
-        );
+        RedoableSummonFixExecData response = (
+            await client.PostMsgpack<RedoableSummonFixExecData>(
+                "redoable_summon/fix_exec",
+                new RedoableSummonFixExecRequest()
+            )
+        ).data;
 
-        fixResponse.IsSuccessStatusCode.Should().BeTrue();
-
-        byte[] fixBytes = await fixResponse.Content.ReadAsByteArrayAsync();
-
-        var fixDeserialized = MessagePackSerializer.Deserialize<RedoableSummonPreExecResponse>(
-            fixBytes,
-            ContractlessStandardResolver.Options
-        );
-
-        IEnumerable<int> newCharaIds = fixDeserialized.data.update_data_list.chara_list!
+        IEnumerable<int> newCharaIds = response.update_data_list.chara_list!
             .Select(x => (int)x.chara_id)
             .OrderBy(x => x);
 
-        IEnumerable<int> newDragonIds = fixDeserialized.data.update_data_list.dragon_list!
+        IEnumerable<int> newDragonIds = response.update_data_list.dragon_list!
             .Select(x => (int)x.dragon_id)
             .OrderBy(x => x);
 

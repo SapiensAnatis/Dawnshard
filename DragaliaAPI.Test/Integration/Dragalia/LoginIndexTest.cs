@@ -1,7 +1,4 @@
-﻿using DragaliaAPI.Models.Responses;
-using MessagePack;
-
-namespace DragaliaAPI.Test.Integration.Dragalia;
+﻿namespace DragaliaAPI.Test.Integration.Dragalia;
 
 public class LoginIndexTest : IClassFixture<IntegrationTestFixture>
 {

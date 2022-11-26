@@ -1,8 +1,7 @@
 ﻿using System.Net;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.Components;
-using DragaliaAPI.Models.Requests;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
+/// <summary>
+/// Tests <see cref="Controllers.Dragalia.PartyController"/>
+/// </summary>
 public class PartyTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
@@ -26,26 +28,23 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task SetPartySetting_ValidRequest_UpdatesDatabase()
     {
-        await fixture.AddCharacter((int)Charas.Ilia);
+        await fixture.AddCharacter(Charas.Ilia);
 
-        PartySetPartySettingRequest request =
-            new(
+        await client.PostMsgpack<PartySetPartySettingData>(
+            "/party/set_party_setting",
+            new PartySetPartySettingRequest(
                 1,
-                "My New Party",
-                new List<PartyUnit>()
+                new List<PartySettingList>()
                 {
-                    new PartyUnit(1, (int)Charas.Ilia, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-                }
-            );
+                    new(1, Charas.Ilia, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                },
+                "My New Party",
+                0,
+                0
+            )
+        );
 
-        byte[] payload = MessagePackSerializer.Serialize(request);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/party/set_party_setting", content);
-
-        response.IsSuccessStatusCode.Should().BeTrue();
-
-        using var scope = fixture.Services.CreateScope();
+        using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
         DbParty dbparty = await apiContext.PlayerParties
             .Include(x => x.Units)
@@ -63,15 +62,16 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
         PartySetPartySettingRequest request =
             new(
                 1,
-                "My New Party",
-                new List<PartyUnit>()
+                new List<PartySettingList>()
                 {
-                    new PartyUnit(1, (int)Charas.GalaGatov, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-                }
+                    new(1, Charas.GalaGatov, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                },
+                "My New Party",
+                0,
+                0
             );
 
-        byte[] payload = MessagePackSerializer.Serialize(request);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
+        HttpContent content = TestUtils.CreateMsgpackContent(request);
 
         HttpResponseMessage response = await client.PostAsync("/party/set_party_setting", content);
 
@@ -84,15 +84,16 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
         PartySetPartySettingRequest request =
             new(
                 1,
-                "My New Party",
-                new List<PartyUnit>()
+                new List<PartySettingList>()
                 {
-                    new PartyUnit(1, (int)Charas.ThePrince, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-                }
+                    new(1, Charas.ThePrince, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                },
+                "My New Party",
+                0,
+                0
             );
 
-        byte[] payload = MessagePackSerializer.Serialize(request);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
+        HttpContent content = TestUtils.CreateMsgpackContent(request);
 
         HttpResponseMessage response = await client.PostAsync("/party/set_party_setting", content);
 
@@ -102,12 +103,10 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task SetMainPartyNo_UpdatesDatabase()
     {
-        PartySetMainPartyNoRequest request = new(2);
-
-        byte[] payload = MessagePackSerializer.Serialize(request);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/party/set_main_party_no", content);
+        await client.PostMsgpack<PartySetMainPartyNoRequest>(
+            "/party/set_main_party_no",
+            new PartySetMainPartyNoRequest(2)
+        );
 
         using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();

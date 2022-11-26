@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Components;
+﻿using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Distributed;

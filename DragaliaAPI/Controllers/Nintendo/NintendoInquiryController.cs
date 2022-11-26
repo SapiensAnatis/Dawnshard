@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Services;
-using DragaliaAPI.Models.Responses;
 using DragaliaAPI.Database;
 
 namespace DragaliaAPI.Controllers.Nintendo;
@@ -8,13 +7,13 @@ namespace DragaliaAPI.Controllers.Nintendo;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class NintendoInquiryController : ControllerBase
+public class NintendoInquiryController : DragaliaControllerBase
 {
     private const string MarketGoogle = "GOOGLE";
     private const string MarketIOS = "IOSMAYBEDUNNO";
 
-    private ISessionService _sessionService;
-    private ApiContext _apiContext;
+    private readonly ISessionService _sessionService;
+    private readonly ApiContext _apiContext;
 
     public NintendoInquiryController(ISessionService sessionService, ApiContext apiContext)
     {
@@ -62,3 +61,4 @@ public class NintendoInquiryController : ControllerBase
         );
     }
 }
+*/

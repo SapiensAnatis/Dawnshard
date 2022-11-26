@@ -157,8 +157,8 @@ public static class ManaNodesUtil
                 atkAdd: atkPlus
             );
 
-        public static ManaNodeInfo CreateHpAtkNode(Materials? material) =>
-            new ManaNodeInfo(EffectTypes.Mat, matId: material);
+        public static ManaNodeInfo CreateHpAtkNode(Materials? MaterialList) =>
+            new ManaNodeInfo(EffectTypes.Mat, matId: MaterialList);
 
         public static ManaNodeInfo CreateAbilityUpgradeNode(UpgradeAbilityTypes type) =>
             new ManaNodeInfo((EffectTypes)type);

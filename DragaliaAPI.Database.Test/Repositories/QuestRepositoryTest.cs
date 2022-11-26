@@ -59,6 +59,7 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
     public async Task UpdateQuestStory_NewStory_UpdatesDatabase()
     {
         await this.questRepository.UpdateQuestStory(DeviceAccountId, 1, 2);
+        await this.questRepository.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerStoryState
             .Single(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 1)
@@ -88,6 +89,7 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
         );
 
         await this.questRepository.UpdateQuestStory(DeviceAccountId, 3, 2);
+        await this.questRepository.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerStoryState
             .Single(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 3)

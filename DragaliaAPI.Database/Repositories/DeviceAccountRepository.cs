@@ -11,26 +11,26 @@ namespace DragaliaAPI.Database.Repositories;
 /// <summary>
 /// Repository to
 /// </summary>
-public class DeviceAccountRepository : IDeviceAccountRepository
+public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
 {
-    private readonly ApiContext _apiContext;
-    private readonly ICharaDataService _charaDataService;
+    private readonly ApiContext apiContext;
+    private readonly ICharaDataService charaDataService;
 
-    public DeviceAccountRepository(ApiContext context, ICharaDataService charaDataService)
+    public DeviceAccountRepository(ApiContext apiContext, ICharaDataService charaDataService)
+        : base(apiContext)
     {
-        _apiContext = context;
-        _charaDataService = charaDataService;
+        this.apiContext = apiContext;
+        this.charaDataService = charaDataService;
     }
 
     public async Task AddNewDeviceAccount(string id, string hashedPassword)
     {
-        await _apiContext.DeviceAccounts.AddAsync(new DbDeviceAccount(id, hashedPassword));
-        await _apiContext.SaveChangesAsync();
+        await apiContext.DeviceAccounts.AddAsync(new DbDeviceAccount(id, hashedPassword));
     }
 
     public async Task<DbDeviceAccount?> GetDeviceAccountById(string id)
     {
-        return await _apiContext.DeviceAccounts.FirstOrDefaultAsync(x => x.Id == id);
+        return await apiContext.DeviceAccounts.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task CreateNewSavefile(string deviceAccountId)
@@ -41,12 +41,12 @@ public class DeviceAccountRepository : IDeviceAccountRepository
         userData.TutorialStatus = 10151;
 #endif
 
-        await _apiContext.PlayerUserData.AddAsync(userData);
+        await apiContext.PlayerUserData.AddAsync(userData);
 
-        await _apiContext.PlayerCharaData.AddAsync(
+        await apiContext.PlayerCharaData.AddAsync(
             DbPlayerCharaDataFactory.Create(
                 deviceAccountId,
-                _charaDataService.GetData(Charas.ThePrince)
+                charaDataService.GetData(Charas.ThePrince)
             )
         );
 
@@ -63,14 +63,15 @@ public class DeviceAccountRepository : IDeviceAccountRepository
                     PartyNo = i,
                     Units = new List<DbPartyUnit>()
                     {
-                        new() { UnitNo = 1, CharaId = Charas.ThePrince }
+                        new() { UnitNo = 1, CharaId = Charas.ThePrince },
+                        new() { UnitNo = 2, CharaId = Charas.Empty },
+                        new() { UnitNo = 3, CharaId = Charas.Empty },
+                        new() { UnitNo = 4, CharaId = Charas.Empty }
                     }
                 }
             );
         }
 
-        await _apiContext.PlayerParties.AddRangeAsync(defaultParties);
-
-        await _apiContext.SaveChangesAsync();
+        await apiContext.PlayerParties.AddRangeAsync(defaultParties);
     }
 }

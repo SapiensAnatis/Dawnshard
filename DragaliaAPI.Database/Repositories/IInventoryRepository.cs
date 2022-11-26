@@ -3,7 +3,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public interface IInventoryRepository
+public interface IInventoryRepository : IBaseRepository
 {
     IQueryable<DbPlayerCurrency> GetCurrencies(string deviceAccountId);
     Task<DbPlayerCurrency?> GetCurrency(string deviceAccountId, CurrencyTypes type);

@@ -1,13 +1,13 @@
-﻿using System.Text.Json;
+﻿using System.Collections.Generic;
+using System.Text.Json;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models.Components;
-using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace DragaliaAPI.Controllers.Dragalia;
@@ -16,15 +16,14 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class RedoableSummonController : ControllerBase
+public class RedoableSummonController : DragaliaControllerBase
 {
-    private readonly ISummonService _summonService;
+    private readonly ISummonService summonService;
     private readonly IQuestRepository questRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
-    private readonly IMapper mapper;
-    private readonly IDistributedCache _cache;
-    private readonly ISessionService _sessionService;
+    private readonly IUpdateDataService updateDataService;
+    private readonly IDistributedCache cache;
 
     private static class Schema
     {
@@ -32,38 +31,83 @@ public class RedoableSummonController : ControllerBase
             $":{sessionId}:cachedSummonResult";
     }
 
+    private static readonly OddsRate OddsRate =
+        new(
+            new List<AtgenRarityList>()
+            {
+                new(5, "placeholder"),
+                new(4, "placeholder"),
+                new(3, "placeholder")
+            },
+            new List<AtgenRarityGroupList>()
+            {
+                new(false, 5, "placeholder", "placeholder", "placeholder", "placeholder")
+            },
+            new(
+                new List<OddsUnitDetail>()
+                {
+                    new(
+                        false,
+                        5,
+                        new List<AtgenUnitList>() { new((int)Charas.Addis, "placeholder") }
+                    )
+                },
+                new List<OddsUnitDetail>()
+                {
+                    new(
+                        false,
+                        5,
+                        new List<AtgenUnitList>() { new((int)Dragons.Agni, "placeholder") }
+                    )
+                },
+                new List<OddsUnitDetail>()
+                {
+                    new(
+                        false,
+                        5,
+                        new List<AtgenUnitList>()
+                        {
+                            new(40050001, "lol you can still summon prints")
+                        }
+                    )
+                }
+            )
+        );
+
+    private static readonly RedoableSummonGetDataData CachedData =
+        new(null, new RedoableSummonOddsRateList(OddsRate, OddsRate));
+
     public RedoableSummonController(
         ISummonService summonService,
         IQuestRepository questRepository,
         IUserDataRepository userDataRepository,
         IUnitRepository unitRepository,
-        IMapper mapper,
-        IDistributedCache cache,
-        ISessionService sessionService
+        IUpdateDataService updateDataService,
+        IDistributedCache cache
     )
     {
-        _summonService = summonService;
+        this.summonService = summonService;
         this.questRepository = questRepository;
         this.userDataRepository = userDataRepository;
         this.unitRepository = unitRepository;
-        this.mapper = mapper;
-        _cache = cache;
-        _sessionService = sessionService;
+        this.updateDataService = updateDataService;
+        this.cache = cache;
     }
 
     [HttpPost]
     [Route("get_data")]
     public DragaliaResult GetData()
     {
-        RedoableSummonGetDataResponse response = new(RedoableSummonGetDataFactory.CreateData());
-        return Ok(response);
+        return this.Ok(CachedData);
     }
 
     [HttpPost]
     [Route("pre_exec")]
     public async Task<DragaliaResult> PreExec([FromHeader(Name = "SID")] string sessionId)
     {
-        List<SimpleSummonReward> summonResult = _summonService.GenerateSummonResult(50);
+        IEnumerable<AtgenRedoableSummonResultUnitList> summonResult = summonService
+            .GenerateSummonResult(50)
+            .Cast<AtgenRedoableSummonResultUnitList>();
         /*
         int testtype = 23;
         int testid = 0;
@@ -81,67 +125,87 @@ public class RedoableSummonController : ControllerBase
             new(testtype, testid, 5)
         }; */
 
-        await _cache.SetStringAsync(
+        await cache.SetStringAsync(
             Schema.SessionId_CachedSummonResult(sessionId),
             JsonSerializer.Serialize(summonResult)
         );
 
-        RedoableSummonPreExecResponse response =
-            new(RedoableSummonPreExecFactory.CreateData(summonResult));
-
-        return Ok(response);
+        return this.Ok(new RedoableSummonPreExecData(new UserRedoableSummonData(1, summonResult)));
     }
 
     [HttpPost]
     [Route("fix_exec")]
     public async Task<DragaliaResult> FixExec([FromHeader(Name = "SID")] string sessionId)
     {
-        string cachedResultJson = await _cache.GetStringAsync(
+        string cachedResultJson = await cache.GetStringAsync(
             Schema.SessionId_CachedSummonResult(sessionId)
         );
 
         if (string.IsNullOrEmpty(cachedResultJson))
-            return BadRequest();
+            return this.BadRequest();
 
-        List<SimpleSummonReward> cachedResult =
-            JsonSerializer.Deserialize<List<SimpleSummonReward>>(cachedResultJson)
+        List<AtgenRedoableSummonResultUnitList> cachedResult =
+            JsonSerializer.Deserialize<List<AtgenRedoableSummonResultUnitList>>(cachedResultJson)
             ?? throw new JsonException("Null deserialization result!");
 
-        string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
+        await userDataRepository.UpdateTutorialStatus(this.DeviceAccountId, 10152);
+        await this.questRepository.UpdateQuestStory(this.DeviceAccountId, 1000100, 1); // Complete prologue story
 
-        await userDataRepository.UpdateTutorialStatus(deviceAccountId, 10152);
-        await this.questRepository.UpdateQuestStory(deviceAccountId, 1000100, 1); // Complete prologue story
+        IEnumerable<(Charas id, bool isNew)> repositoryCharaOuput =
+            await this.unitRepository.AddCharas(
+                this.DeviceAccountId,
+                cachedResult
+                    .Where(x => x.entity_type == (int)EntityTypes.Chara)
+                    .Select(x => (Charas)x.id)
+            );
 
-        IEnumerable<DbPlayerCharaData> repositoryCharaOuput = await this.unitRepository.AddCharas(
-            deviceAccountId,
-            cachedResult
-                .Where(x => x.entity_type == (int)EntityTypes.Chara)
-                .Select(x => (Charas)x.id)
-        );
+        IEnumerable<(Dragons id, bool isNew)> repositoryDragonOutput =
+            await this.unitRepository.AddDragons(
+                this.DeviceAccountId,
+                cachedResult
+                    .Where(x => x.entity_type == (int)EntityTypes.Dragon)
+                    .Select(x => (Dragons)x.id)
+            );
 
-        (
-            IEnumerable<DbPlayerDragonData> newDragons,
-            IEnumerable<DbPlayerDragonReliability> newReliability
-        ) repositoryDragonOutput = await this.unitRepository.AddDragons(
-            deviceAccountId,
-            cachedResult
-                .Where(x => x.entity_type == (int)EntityTypes.Dragon)
-                .Select(x => (Dragons)x.id)
-        );
+        UpdateDataList updateData = this.updateDataService.GetUpdateDataList(this.DeviceAccountId);
 
-        UpdateDataList updateData = _summonService.GenerateUpdateData(
-            repositoryCharaOuput,
-            repositoryDragonOutput
-        );
+        await this.unitRepository.SaveChangesAsync();
 
-        updateData.user_data = this.mapper.Map<UserData>(
-            await userDataRepository.GetUserData(deviceAccountId).SingleAsync()
-        );
+        IEnumerable<AtgenDuplicateEntityList> newCharas = repositoryCharaOuput
+            .Where(x => x.isNew)
+            .Select(
+                x =>
+                    new AtgenDuplicateEntityList()
+                    {
+                        entity_type = (int)EntityTypes.Chara,
+                        entity_id = (int)x.id
+                    }
+            );
+        IEnumerable<AtgenDuplicateEntityList> newDragons = repositoryDragonOutput
+            .Where(x => x.isNew)
+            .Select(
+                x =>
+                    new AtgenDuplicateEntityList()
+                    {
+                        entity_type = (int)EntityTypes.Dragon,
+                        entity_id = (int)x.id
+                    }
+            );
 
-        return Ok(
-            new RedoableSummonFixExecResponse(
-                RedoableSummonFixExecFactory.CreateData(cachedResult, updateData)
-            )
+        return this.Ok(
+            new RedoableSummonFixExecData()
+            {
+                user_redoable_summon_data = new UserRedoableSummonData()
+                {
+                    is_fixed_result = 1,
+                    redoable_summon_result_unit_list = cachedResult
+                },
+                update_data_list = updateData,
+                entity_result = new EntityResult()
+                {
+                    new_get_entity_list = newCharas.Concat(newDragons)
+                }
+            }
         );
     }
 }

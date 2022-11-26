@@ -3,8 +3,8 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
-using DragaliaAPI.Models.Components;
-using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -12,7 +12,6 @@ using DragaliaAPI.Shared.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
-using static DragaliaAPI.Models.Requests.CharaRequests;
 using static DragaliaAPI.Shared.Definitions.Enums.ManaNodesUtil;
 
 namespace DragaliaAPI.Controllers.Dragalia;
@@ -21,13 +20,13 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class CharaController : ControllerBase
+public class CharaController : DragaliaControllerBase
 {
     private ICharaDataService _charaDataService;
-    private ISessionService _sessionService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
     private readonly IInventoryRepository inventoryRepository;
+    private readonly IUpdateDataService updateDataService;
     private readonly IMapper mapper;
     private ApiContext _apiContext;
 
@@ -35,19 +34,19 @@ public class CharaController : ControllerBase
         IUserDataRepository userDataRepository,
         IUnitRepository unitRepository,
         IInventoryRepository inventoryRepository,
+        IUpdateDataService updateDataService,
         IMapper mapper,
         ApiContext apiContext,
-        ICharaDataService charaDataService,
-        ISessionService sessionService
+        ICharaDataService charaDataService
     )
     {
         this.userDataRepository = userDataRepository;
         this.unitRepository = unitRepository;
         this.inventoryRepository = inventoryRepository;
+        this.updateDataService = updateDataService;
         this.mapper = mapper;
         _apiContext = apiContext;
         _charaDataService = charaDataService;
-        _sessionService = sessionService;
     }
 
     [Route("awake")]
@@ -59,18 +58,17 @@ public class CharaController : ControllerBase
     {
         try
         {
-            string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
             if (request.next_rarity > 5)
             {
                 throw new ArgumentException("Cannot enhance beyond rarity 5");
             }
 
             DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(accountId)
+                .GetUserData(this.DeviceAccountId)
                 .FirstAsync();
             DbPlayerCharaData playerCharData = await unitRepository
-                .GetAllCharaData(accountId)
-                .FirstAsync(chara => chara.CharaId == request.chara_id);
+                .GetAllCharaData(this.DeviceAccountId)
+                .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
             DataAdventurer charData = _charaDataService.GetData((int)request.chara_id);
             playerCharData.HpBase += (ushort)(
                 request.next_rarity == 4
@@ -85,34 +83,14 @@ public class CharaController : ControllerBase
             playerCharData.Rarity = (byte)request.next_rarity;
             //TODO Get and update missions relating to promoting characters
             //MissionNoticeData missionNoticeData = null;
-            await _apiContext.SaveChangesAsync();
-            MissionNotice dummy = new(0, 0, new List<object>(), 0, 0, 0, 0);
-            return Ok(
-                new CharaBuildupResponse(
-                    new CharaBuildupData(
-                        new CharBuildupUpdateDataList()
-                        {
-                            chara_list = new() { mapper.Map<Chara>(playerCharData) },
-                            material_list = new(),
-                            user_data = SavefileUserDataFactory.Create(userData),
-                            mission_notice = new(
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy
-                            ),
-                            current_main_story_mission = new(),
-                            functional_maintanance_list = new()
-                        },
-                        new EntityResult(new List<BaseNewEntity>(), new List<BaseNewEntity>())
-                    )
-                )
+
+            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+                this.DeviceAccountId
             );
+
+            await _apiContext.SaveChangesAsync();
+
+            return Ok(new CharaBuildupData(updateDataList, new()));
         }
         catch (Exception)
         {
@@ -129,17 +107,19 @@ public class CharaController : ControllerBase
     {
         try
         {
-            string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-            IEnumerable<Materials> matIds = request.material_list.Select(x => x.id);
+            IEnumerable<Materials> matIds = request.material_list
+                .Select(x => x.id)
+                .Cast<Materials>();
+
             Dictionary<Materials, DbPlayerMaterial> dbMats = await this.inventoryRepository
-                .GetMaterials(accountId)
+                .GetMaterials(this.DeviceAccountId)
                 .Where(dbMat => matIds.Contains(dbMat.MaterialId))
                 .ToDictionaryAsync(dbMat => dbMat.MaterialId);
-            foreach (BuildupMaterial mat in request.material_list)
+            foreach (AtgenEnemyPiece mat in request.material_list)
             {
                 if (mat.quantity < 0)
                 {
-                    throw new ArgumentException("Invalid quantity for material");
+                    throw new ArgumentException("Invalid quantity for MaterialList");
                 }
                 if (
                     mat.id != Materials.BronzeCrystal
@@ -149,7 +129,7 @@ public class CharaController : ControllerBase
                     && mat.id != Materials.FortifyingCrystal
                 )
                 {
-                    throw new ArgumentException("Invalid material in request");
+                    throw new ArgumentException("Invalid MaterialList in request");
                 }
                 if (!dbMats.ContainsKey(mat.id) || dbMats[mat.id].Quantity < mat.quantity)
                 {
@@ -157,51 +137,30 @@ public class CharaController : ControllerBase
                 }
             }
             DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(accountId)
+                .GetUserData(this.DeviceAccountId)
                 .FirstAsync();
             DbPlayerCharaData playerCharData = await this.unitRepository
-                .GetAllCharaData(accountId)
-                .FirstAsync(chara => chara.CharaId == request.chara_id);
+                .GetAllCharaData(this.DeviceAccountId)
+                .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
 
             Dictionary<int, int> usedMaterials = new();
             CharaLevelUp(request.material_list, ref playerCharData, ref usedMaterials);
-            List<Material> remainingMaterials = new List<Material>();
+            List<MaterialList> remainingMaterials = new();
             foreach (KeyValuePair<int, int> mat in usedMaterials)
             {
                 dbMats[(Materials)mat.Key].Quantity -= mat.Value;
-                remainingMaterials.Add(MaterialFactory.Create(dbMats[(Materials)mat.Key]));
+                remainingMaterials.Add(this.mapper.Map<MaterialList>(dbMats[(Materials)mat.Key]));
             }
 
             //TODO Add element/weapontype bonus if applicable
 
-            await _apiContext.SaveChangesAsync();
-            MissionNotice dummy = new(0, 0, new List<object>(), 0, 0, 0, 0);
-            return Ok(
-                new CharaBuildupResponse(
-                    new CharaBuildupData(
-                        new CharBuildupUpdateDataList()
-                        {
-                            chara_list = new() { mapper.Map<Chara>(playerCharData) },
-                            material_list = remainingMaterials,
-                            user_data = SavefileUserDataFactory.Create(userData),
-                            mission_notice = new(
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy
-                            ),
-                            current_main_story_mission = new(),
-                            functional_maintanance_list = new()
-                        },
-                        new EntityResult(new List<BaseNewEntity>(), new List<BaseNewEntity>())
-                    )
-                )
+            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+                this.DeviceAccountId
             );
+
+            await _apiContext.SaveChangesAsync();
+
+            return Ok(new CharaBuildupData(updateDataList, new()));
         }
         catch (Exception)
         {
@@ -210,7 +169,7 @@ public class CharaController : ControllerBase
     }
 
     private void CharaLevelUp(
-        List<BuildupMaterial> materials,
+        IEnumerable<AtgenEnemyPiece> materials,
         ref DbPlayerCharaData playerCharData,
         ref Dictionary<int, int> usedMaterials
     )
@@ -220,41 +179,44 @@ public class CharaController : ControllerBase
             CharaConstants.GetMaxLevelFor(playerCharData.Rarity) + playerCharData.AdditionalMaxLevel
         );
         //TODO: Maybe make this generic for IHasXp
-        foreach (BuildupMaterial material in materials)
+        foreach (AtgenEnemyPiece MaterialList in materials)
         {
-            switch (material.id)
+            switch (MaterialList.id)
             {
                 case Materials.BronzeCrystal:
                 case Materials.SilverCrystal:
                 case Materials.GoldCrystal:
                     playerCharData.Exp = playerCharData.Exp = Math.Min(
                         playerCharData.Exp
-                            + (UpgradeMaterials.buildupXpValues[material.id] * material.quantity),
+                            + (
+                                UpgradeMaterials.buildupXpValues[MaterialList.id]
+                                * MaterialList.quantity
+                            ),
                         CharaConstants.XpLimits[maxLevel - 1]
                     );
                     break;
                 case Materials.AmplifyingCrystal:
                     playerCharData.AttackPlusCount = (byte)
                         Math.Min(
-                            playerCharData.AttackPlusCount + material.quantity,
+                            playerCharData.AttackPlusCount + MaterialList.quantity,
                             CharaConstants.MaxAtkEnhance
                         );
                     break;
                 case Materials.FortifyingCrystal:
                     playerCharData.HpPlusCount = (byte)
                         Math.Min(
-                            playerCharData.HpPlusCount + material.quantity,
+                            playerCharData.HpPlusCount + MaterialList.quantity,
                             CharaConstants.MaxHpEnhance
                         );
                     break;
                 default:
-                    throw new ArgumentException("Invalid Material");
+                    throw new ArgumentException("Invalid MaterialList");
             }
-            if (!usedMaterials.ContainsKey((int)material.id))
+            if (!usedMaterials.ContainsKey((int)MaterialList.id))
             {
-                usedMaterials.Add((int)material.id, 0);
+                usedMaterials.Add((int)MaterialList.id, 0);
             }
-            usedMaterials[(int)material.id] += material.quantity;
+            usedMaterials[(int)MaterialList.id] += MaterialList.quantity;
         }
         if (playerCharData.Exp > CharaConstants.XpLimits[playerCharData.Level - 1])
         {
@@ -316,10 +278,7 @@ public class CharaController : ControllerBase
 
     [Route("buildup_mana")]
     [HttpPost]
-    public async Task<DragaliaResult> CharaBuildupMana(
-        [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] CharaUpdateManaRequest request
-    )
+    public async Task<DragaliaResult> CharaBuildupMana([FromBody] CharaBuildupManaRequest request)
     {
         if (request.mana_circle_piece_id_list == null)
         {
@@ -327,13 +286,12 @@ public class CharaController : ControllerBase
         }
         try
         {
-            string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
             DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(accountId)
+                .GetUserData(this.DeviceAccountId)
                 .FirstAsync();
             DbPlayerCharaData playerCharData = await this.unitRepository
-                .GetAllCharaData(accountId)
-                .FirstAsync(chara => chara.CharaId == request.chara_id);
+                .GetAllCharaData(this.DeviceAccountId)
+                .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
             Dictionary<CurrencyTypes, int> usedCurrencies = new();
             Dictionary<Materials, int> usedMaterials = new();
             HashSet<int> unlockedStories = new();
@@ -343,38 +301,18 @@ public class CharaController : ControllerBase
                 usedCurrencies,
                 usedMaterials,
                 unlockedStories,
-                request.is_use_grow_material
+                request.is_use_grow_material == 1
                     ? CharaUpgradeMaterialTypes.GrowthMaterial
                     : CharaUpgradeMaterialTypes.Standard
             );
             await _apiContext.SaveChangesAsync();
             //TODO: Party power calculation call
-            bool isUpdateAlbum = false;
-            MissionNotice dummy = new(0, 0, new List<object>(), 0, 0, 0, 0);
-            return Ok(
-                new CharaBuildupResponse(
-                    new CharaBuildupData(
-                        new()
-                        {
-                            album_passive_notice = new AlbumPassiveNotice(isUpdateAlbum, false),
-                            chara_list = new() { mapper.Map<Chara>(playerCharData) },
-                            mission_notice = new(
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy
-                            ),
-                            user_data = SavefileUserDataFactory.Create(userData)
-                        },
-                        new(new List<BaseNewEntity>(), new List<BaseNewEntity>())
-                    )
-                )
+
+            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+                this.DeviceAccountId
             );
+
+            return this.Ok(new CharaBuildupData(updateDataList, new()));
         }
         catch (Exception)
         {
@@ -384,10 +322,7 @@ public class CharaController : ControllerBase
 
     [Route("limit_break")]
     [HttpPost]
-    public async Task<DragaliaResult> CharaLimitBreak(
-        [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] CharaUpdateManaRequest request
-    )
+    public async Task<DragaliaResult> CharaLimitBreak([FromBody] CharaLimitBreakRequest request)
     {
         if (request.next_limit_break_count == null)
         {
@@ -395,13 +330,12 @@ public class CharaController : ControllerBase
         }
         try
         {
-            string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
             DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(accountId)
+                .GetUserData(this.DeviceAccountId)
                 .FirstAsync();
             DbPlayerCharaData playerCharData = await this.unitRepository
-                .GetAllCharaData(accountId)
-                .FirstAsync(chara => chara.CharaId == request.chara_id);
+                .GetAllCharaData(this.DeviceAccountId)
+                .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
             Dictionary<CurrencyTypes, int> usedCurrencies = new();
             Dictionary<Materials, int> usedMaterials = new();
             playerCharData.LimitBreakCount = (byte)request.next_limit_break_count;
@@ -409,33 +343,14 @@ public class CharaController : ControllerBase
             {
                 playerCharData.AdditionalMaxLevel += 5;
             }
-            await _apiContext.SaveChangesAsync();
-            bool isUpdateAlbum = false;
-            MissionNotice dummy = new(0, 0, new List<object>(), 0, 0, 0, 0);
-            return Ok(
-                new CharaBuildupResponse(
-                    new CharaBuildupData(
-                        new()
-                        {
-                            album_passive_notice = new AlbumPassiveNotice(isUpdateAlbum, false),
-                            chara_list = new() { mapper.Map<Chara>(playerCharData) },
-                            mission_notice = new(
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy
-                            ),
-                            user_data = SavefileUserDataFactory.Create(userData)
-                        },
-                        new(new List<BaseNewEntity>(), new List<BaseNewEntity>())
-                    )
-                )
+
+            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+                this.DeviceAccountId
             );
+
+            await _apiContext.SaveChangesAsync();
+
+            return Ok(new CharaBuildupData(updateDataList, new()));
         }
         catch (Exception)
         {
@@ -447,7 +362,7 @@ public class CharaController : ControllerBase
     [HttpPost]
     public async Task<DragaliaResult> CharaLimitBreakAndMana(
         [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] CharaUpdateManaRequest request
+        [FromBody] CharaLimitBreakAndBuildupManaRequest request
     )
     {
         if (
@@ -462,12 +377,11 @@ public class CharaController : ControllerBase
         }
         try
         {
-            string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
             DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(accountId)
+                .GetUserData(this.DeviceAccountId)
                 .FirstAsync();
             DbPlayerCharaData playerCharData = await this.unitRepository
-                .GetAllCharaData(accountId)
+                .GetAllCharaData(this.DeviceAccountId)
                 .FirstAsync(chara => chara.CharaId == request.chara_id);
             Dictionary<CurrencyTypes, int> usedCurrencies = new();
             Dictionary<Materials, int> usedMaterials = new();
@@ -486,38 +400,19 @@ public class CharaController : ControllerBase
                     usedCurrencies,
                     usedMaterials,
                     unlockedStories,
-                    request.is_use_grow_material
+                    request.is_use_grow_material == 1
                         ? CharaUpgradeMaterialTypes.GrowthMaterial
                         : CharaUpgradeMaterialTypes.Standard
                 );
             }
-            await _apiContext.SaveChangesAsync();
-            bool isUpdateAlbum = false;
-            MissionNotice dummy = new(0, 0, new List<object>(), 0, 0, 0, 0);
-            return Ok(
-                new CharaBuildupResponse(
-                    new CharaBuildupData(
-                        new()
-                        {
-                            album_passive_notice = new AlbumPassiveNotice(isUpdateAlbum, false),
-                            chara_list = new() { mapper.Map<Chara>(playerCharData) },
-                            mission_notice = new(
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy
-                            ),
-                            user_data = SavefileUserDataFactory.Create(userData)
-                        },
-                        new(new List<BaseNewEntity>(), new List<BaseNewEntity>())
-                    )
-                )
+
+            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+                this.DeviceAccountId
             );
+
+            await _apiContext.SaveChangesAsync();
+
+            return Ok(new CharaBuildupData(updateDataList, new()));
         }
         catch (Exception)
         {
@@ -529,18 +424,17 @@ public class CharaController : ControllerBase
     [HttpPost]
     public async Task<DragaliaResult> CharaBuildupPlatinum(
         [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] CharaBuildupBaseRequest request
+        [FromBody] CharaBuildupPlatinumRequest request
     )
     {
         try
         {
-            string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
             DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(accountId)
+                .GetUserData(this.DeviceAccountId)
                 .FirstAsync();
             DbPlayerCharaData playerCharaData = await this.unitRepository
-                .GetAllCharaData(accountId)
-                .FirstAsync(chara => chara.CharaId == request.chara_id);
+                .GetAllCharaData(this.DeviceAccountId)
+                .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
             DataAdventurer charaData = _charaDataService.GetData(playerCharaData.CharaId);
             playerCharaData.Rarity = 5;
             //TODO: get max values for chars with spiral, for now always unspiralled
@@ -561,32 +455,13 @@ public class CharaController : ControllerBase
                 unlockedStories,
                 CharaUpgradeMaterialTypes.Omnicite
             );
-            await _apiContext.SaveChangesAsync();
-            MissionNotice dummy = new(0, 0, new List<object>(), 0, 0, 0, 0);
-            return Ok(
-                new CharaBuildupResponse(
-                    new CharaBuildupData(
-                        new()
-                        {
-                            album_passive_notice = new AlbumPassiveNotice(true, false),
-                            chara_list = new() { mapper.Map<Chara>(playerCharaData) },
-                            mission_notice = new(
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy
-                            ),
-                            user_data = SavefileUserDataFactory.Create(userData)
-                        },
-                        new(new List<BaseNewEntity>(), new List<BaseNewEntity>())
-                    )
-                )
+            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+                this.DeviceAccountId
             );
+
+            await _apiContext.SaveChangesAsync();
+
+            return Ok(new CharaBuildupData(updateDataList, new()));
         }
         catch (Exception)
         {
@@ -807,17 +682,16 @@ public class CharaController : ControllerBase
     [HttpPost]
     public async Task<DragaliaResult> CharaUnlockEditSkill(
         [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] CharaBuildupBaseRequest request
+        [FromBody] CharaUnlockEditSkillRequest request
     )
     {
         try
         {
-            string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
             DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(accountId)
+                .GetUserData(this.DeviceAccountId)
                 .FirstAsync();
             DbPlayerCharaData playerCharData = await this.unitRepository
-                .GetAllCharaData(accountId)
+                .GetAllCharaData(this.DeviceAccountId)
                 .FirstAsync(chara => chara.CharaId == request.chara_id);
             DataAdventurer charData = _charaDataService.GetData(playerCharData.CharaId);
             //TODO: For now trust the client won't send the id of a chara who isn't allowed to share
@@ -832,7 +706,7 @@ public class CharaController : ControllerBase
             Materials usedMat = UpgradeMaterials.tomes[charData.ElementalType];
             int usedMatCount = charData.EditSkillCost;
             DbPlayerMaterial? dbMat = await this.inventoryRepository.GetMaterial(
-                accountId,
+                this.DeviceAccountId,
                 usedMat
             );
             if (dbMat == null || dbMat.Quantity < usedMatCount)
@@ -841,37 +715,13 @@ public class CharaController : ControllerBase
             }
             playerCharData.IsUnlockEditSkill = true;
             dbMat.Quantity -= usedMatCount;
-            await _apiContext.SaveChangesAsync();
-            List<Material> remainingMaterials = new List<Material>()
-            {
-                new Material(usedMat, dbMat.Quantity)
-            };
-            MissionNotice dummy = new(0, 0, new List<object>(), 0, 0, 0, 0);
-            return Ok(
-                new CharaBuildupResponse(
-                    new CharaBuildupData(
-                        new CharBuildupUpdateDataList()
-                        {
-                            chara_list = new() { mapper.Map<Chara>(playerCharData) },
-                            material_list = remainingMaterials,
-                            mission_notice = new(
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy,
-                                dummy
-                            ),
-                            current_main_story_mission = new(),
-                            functional_maintanance_list = new()
-                        },
-                        new EntityResult(new List<BaseNewEntity>(), new List<BaseNewEntity>())
-                    )
-                )
+            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+                this.DeviceAccountId
             );
+
+            await _apiContext.SaveChangesAsync();
+
+            return Ok(new CharaBuildupData(updateDataList, new()));
         }
         catch (Exception)
         {

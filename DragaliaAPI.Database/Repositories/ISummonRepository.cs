@@ -2,7 +2,7 @@
 
 namespace DragaliaAPI.Database.Repositories;
 
-public interface ISummonRepository
+public interface ISummonRepository : IBaseRepository
 {
     Task<DbPlayerBannerData> AddPlayerBannerData(string deviceAccountId, int bannerId);
     Task AddSummonHistory(IEnumerable<DbPlayerSummonHistory> summonHistory);
