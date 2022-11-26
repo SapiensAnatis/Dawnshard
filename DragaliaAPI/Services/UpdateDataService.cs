@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace DragaliaAPI.Services;
 
@@ -31,18 +31,19 @@ public class UpdateDataService : IUpdateDataService
 
         return new()
         {
-            chara_list = this.ConvertEntities<Chara, DbPlayerCharaData>(updatedEntities),
-            dragon_list = this.ConvertEntities<Dragon, DbPlayerDragonData>(updatedEntities),
+            chara_list = this.ConvertEntities<CharaList, DbPlayerCharaData>(updatedEntities),
+            dragon_list = this.ConvertEntities<DragonList, DbPlayerDragonData>(updatedEntities),
             dragon_reliability_list = this.ConvertEntities<
-                DragonReliability,
+                DragonReliabilityList,
                 DbPlayerDragonReliability
             >(updatedEntities),
             user_data = this.ConvertEntities<UserData, DbPlayerUserData>(updatedEntities)
                 ?.SingleOrDefault(),
-            party_list = this.ConvertEntities<Party, DbParty>(updatedEntities),
-            quest_story_list = this.ConvertEntities<QuestStory, DbPlayerStoryState>(
+            party_list = this.ConvertEntities<PartyList, DbParty>(updatedEntities),
+            quest_story_list = this.ConvertEntities<QuestStoryList, DbPlayerStoryState>(
                 updatedEntities
             ),
+            material_list = this.ConvertEntities<MaterialList, DbPlayerMaterial>(updatedEntities),
         };
     }
 

@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Responses.Base;
+﻿using DragaliaAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
@@ -7,20 +7,20 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class LoginController : ControllerBase
+public class LoginController : DragaliaControllerBase
 {
     [HttpPost]
     [Route("index")]
-    public ActionResult<OkResponse> Index()
+    public DragaliaResult Index()
     {
         // TODO: Implement daily login bonuses/notifications
-        return Ok(new OkResponse());
+        return Ok(new ResultCodeData(ResultCode.Success));
     }
 
     [HttpPost]
     [Route("verify_jws")]
-    public ActionResult<OkResponse> VerifyJws()
+    public DragaliaResult VerifyJws()
     {
-        return Ok(new OkResponse());
+        return Ok(new ResultCodeData(ResultCode.Success));
     }
 }

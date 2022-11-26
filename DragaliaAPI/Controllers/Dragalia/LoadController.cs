@@ -4,9 +4,9 @@ using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
-using DragaliaAPI.Models.Responses;
-using DragaliaAPI.Models.Components;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -47,45 +47,43 @@ public class LoadController : ControllerBase
     {
         string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
 
-        UserData userData = SavefileUserDataFactory.Create(
+        UserData userData = mapper.Map<UserData>(
             await this.userDataRepository.GetUserData(deviceAccountId).SingleAsync()
         );
-        IEnumerable<Chara> charas = (
+        IEnumerable<CharaList> charas = (
             await this.unitRepository.GetAllCharaData(deviceAccountId).ToListAsync()
-        ).Select(mapper.Map<Chara>);
-        IEnumerable<Dragon> dragons = (
+        ).Select(mapper.Map<CharaList>);
+        IEnumerable<DragonList> dragons = (
             await this.unitRepository.GetAllDragonData(deviceAccountId).ToListAsync()
-        ).Select(DragonFactory.Create);
-        IEnumerable<Party> parties = (
+        ).Select(mapper.Map<DragonList>);
+        IEnumerable<PartyList> parties = (
             await this.partyRepository.GetParties(deviceAccountId).ToListAsync()
-        ).Select(PartyFactory.CreateDto);
-        IEnumerable<QuestStory> questStories = (
+        ).Select(mapper.Map<PartyList>);
+        IEnumerable<QuestStoryList> questStories = (
             await this.questRepository.GetQuestStoryList(deviceAccountId).ToListAsync()
-        ).Select(mapper.Map<QuestStory>);
+        ).Select(mapper.Map<QuestStoryList>);
 
         LoadIndexData data =
-            new(
-                user_data: userData,
-                quest_story_list: questStories,
-                current_main_story_mission: new List<object>(),
-                party_power_data: new(999999),
-                friend_notice: new { friend_new_count = 0, apply_new_count = 0 },
-                present_notice: new { present_count = 0, present_limit_count = 0 },
-                guild_notice: new(),
-                mission_notice: GetMissionListFactory.emptyMissionNoticeData,
-                shop_notice: new { is_shop_notification = 0 },
-                ability_crest_list: new List<object>(),
-                chara_list: charas,
-                dragon_list: dragons,
-                party_list: parties,
-                server_time: DateTimeOffset.UtcNow,
-                material_list: new List<Material>(),
-                functional_maintenance_list: new()
-            );
+            new()
+            {
+                user_data = userData,
+                quest_story_list = questStories,
+                party_power_data = new(999999),
+                friend_notice = new(0, 0),
+                present_notice = new(0, 0),
+                guild_notice = new(0, 0, 0, 0, 0),
+                mission_notice = null,
+                shop_notice = new ShopNotice(0),
+                ability_crest_list = new List<AbilityCrestList>(),
+                chara_list = charas,
+                dragon_list = dragons,
+                party_list = parties,
+                server_time = DateTimeOffset.UtcNow,
+                material_list = new List<MaterialList>(),
+                functional_maintenance_list = new List<FunctionalMaintenanceList>()
+            };
 
-        LoadIndexResponse response = new(data);
-
-        return this.Ok(response);
+        return this.Ok(data);
     }
 #endif
 

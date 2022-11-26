@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DragaliaAPI.Models.Components;
 
 namespace DragaliaAPI.Controllers.Nintendo;
 
+/*
 [Route("bigdata/v1/analytics/events/config")]
 [Consumes("application/json")]
 [Produces("application/json")]
@@ -28,3 +28,4 @@ public class AnalyticsController : ControllerBase
         return StatusCode(202);
     }
 }
+*/

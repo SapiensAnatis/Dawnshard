@@ -1,10 +1,8 @@
 ﻿using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.Components;
-using DragaliaAPI.Models.Requests;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -12,7 +10,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public partial class TutorialController : DragaliaController
+public partial class TutorialController : DragaliaControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
     private readonly IUpdateDataService updateDataService;
@@ -38,22 +36,16 @@ public partial class TutorialController : DragaliaController
 
         await this.userDataRepository.SaveChangesAsync();
 
-        TutorialUpdateStepResponse response =
-            new(new TutorialUpdateStepData(request.step, updateDataList));
-
-        return this.Ok(response);
+        return this.Ok(new TutorialUpdateStepData(request.step, updateDataList, new()));
     }
 
     [HttpPost]
     [Route("update_flags")]
-    public async Task<DragaliaResult> UpdateFlags(UpdateFlagsRequest flagRequest)
+    public async Task<DragaliaResult> UpdateFlags(TutorialUpdateFlagsRequest flagRequest)
     {
         int flag_id = flagRequest.flag_id;
 
-        DbPlayerUserData userData = await this.userDataRepository.AddTutorialFlag(
-            this.DeviceAccountId,
-            flag_id
-        );
+        await this.userDataRepository.AddTutorialFlag(this.DeviceAccountId, flag_id);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -61,15 +53,8 @@ public partial class TutorialController : DragaliaController
 
         await this.userDataRepository.SaveChangesAsync();
 
-        TutorialUpdateFlagsResponse response =
-            new(
-                new TutorialUpdateFlagsData(
-                    new() { flag_id },
-                    updateDataList,
-                    new(new List<BaseNewEntity>(), new List<BaseNewEntity>())
-                )
-            );
-
-        return this.Ok(response);
+        return this.Ok(
+            new TutorialUpdateFlagsData(new List<int>() { flag_id }, updateDataList, new())
+        );
     }
 }

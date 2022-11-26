@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Components;
+﻿using DragaliaAPI.Models.Nintendo;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 

@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models.Components;
-using DragaliaAPI.Models.Requests;
-using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -51,7 +50,7 @@ public class PartyController : ControllerBase
     [Route("index")]
     public DragaliaResult Index()
     {
-        return this.Ok(new PartyIndexResponse(new PartyIndexData(new(), new())));
+        return this.Ok(new PartyIndexData(new List<BuildList>()));
     }
 
     [Route("set_party_setting")]
@@ -68,7 +67,7 @@ public class PartyController : ControllerBase
         // TODO: Talisman validation
         // TODO: Shared skill validation
 
-        foreach (PartyUnit partyUnit in requestParty.request_party_setting_list)
+        foreach (PartySettingList partyUnit in requestParty.request_party_setting_list)
         {
             if (
                 !await this.ValidateCharacterId(partyUnit.chara_id, deviceAccountId)
@@ -80,7 +79,7 @@ public class PartyController : ControllerBase
         }
 
         DbParty dbEntry = mapper.Map<DbParty>(
-            new Party(
+            new PartyList(
                 requestParty.party_no,
                 requestParty.party_name,
                 requestParty.request_party_setting_list
@@ -90,9 +89,7 @@ public class PartyController : ControllerBase
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(deviceAccountId);
         await partyRepository.SaveChangesAsync();
 
-        UpdateDataListResponse response = new(new(updateDataList));
-
-        return this.Ok(response);
+        return this.Ok(new PartySetPartySettingData(updateDataList, new()));
     }
 
     [Route("set_main_party_no")]
@@ -106,31 +103,15 @@ public class PartyController : ControllerBase
         await this.userDataRepository.SetMainPartyNo(deviceAccountId, request.main_party_no);
         await this.userDataRepository.SaveChangesAsync();
 
-        return this.Ok(new PartySetMainPartyNoResponse(new(request.main_party_no)));
+        return this.Ok(new PartySetMainPartyNoData(request.main_party_no));
     }
 
-    private async Task<bool> ValidateCharacterId(int id, string deviceAccountId)
+    private async Task<bool> ValidateCharacterId(Charas id, string deviceAccountId)
     {
-        // Empty slot
-        if (id == 0)
-        {
-            return true;
-        }
-
         IEnumerable<Charas> ownedCharaIds = await this.unitRepository
             .GetAllCharaData(deviceAccountId)
             .Select(x => x.CharaId)
             .ToListAsync();
-
-        if (!Enum.IsDefined(typeof(Charas), id))
-        {
-            logger.LogError(
-                "Request from DeviceAccount {id} contained invalid character id {id}",
-                deviceAccountId,
-                id
-            );
-            return false;
-        }
 
         Charas c = (Charas)Enum.ToObject(typeof(Charas), id);
 

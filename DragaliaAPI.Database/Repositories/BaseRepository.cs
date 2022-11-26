@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DragaliaAPI.Database.Repositories;
+﻿namespace DragaliaAPI.Database.Repositories;
 
 public abstract class BaseRepository : IBaseRepository
 {

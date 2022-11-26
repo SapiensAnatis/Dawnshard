@@ -1,6 +1,4 @@
-﻿using DragaliaAPI.Models.Components;
-using DragaliaAPI.Models.Requests;
-using DragaliaAPI.Models.Responses;
+﻿using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 

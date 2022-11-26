@@ -1,0 +1,17 @@
+﻿using MessagePack;
+
+namespace DragaliaAPI.Models;
+
+[MessagePackObject(keyAsPropertyName: true)]
+public record DragaliaResponse<TData> where TData : class
+{
+    public DataHeaders data_headers { get; init; }
+
+    public TData data { get; init; }
+
+    public DragaliaResponse(TData data, ResultCode result_code = ResultCode.Success)
+    {
+        this.data = data;
+        this.data_headers = new(result_code);
+    }
+}

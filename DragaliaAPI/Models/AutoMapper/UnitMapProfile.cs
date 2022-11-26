@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Models.AutoMapper;
 
@@ -8,15 +8,15 @@ public class UnitMapProfile : Profile
 {
     public UnitMapProfile()
     {
-        this.CreateMap<DbPlayerDragonData, Dragon>();
-        this.CreateMap<DbPlayerCharaData, Chara>();
-        this.CreateMap<DbPlayerDragonReliability, DragonReliability>()
+        this.CreateMap<DbPlayerDragonData, DragonList>();
+        this.CreateMap<DbPlayerCharaData, CharaList>();
+        this.CreateMap<DbPlayerDragonReliability, DragonReliabilityList>()
             .ForCtorParam(
-                nameof(DragonReliability.reliability_level),
+                nameof(DragonReliabilityList.reliability_level),
                 o => o.MapFrom(src => src.Level)
             )
             .ForCtorParam(
-                nameof(DragonReliability.reliability_total_exp),
+                nameof(DragonReliabilityList.reliability_total_exp),
                 o => o.MapFrom(src => src.Exp)
             );
 

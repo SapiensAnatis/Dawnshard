@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Services;
 using Microsoft.EntityFrameworkCore;
-using DragaliaAPI.Models.Requests;
-using DragaliaAPI.Models.Responses;
-using DragaliaAPI.Models.Components;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using AutoMapper;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -15,7 +14,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class SummonController : ControllerBase
+public class SummonController : DragaliaControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
@@ -24,6 +23,108 @@ public class SummonController : ControllerBase
     private readonly ISummonRepository summonRepository;
     private readonly ISessionService _sessionService;
     private readonly ISummonService _summonService;
+
+    // Repeated from RedoableSummonController, but no point putting this in a shared location
+    // as it's all bullshit anyway
+    private static class Data
+    {
+        public static readonly OddsRate OddsRate =
+            new(
+                new List<AtgenRarityList>()
+                {
+                    new(5, "placeholder"),
+                    new(4, "placeholder"),
+                    new(3, "placeholder")
+                },
+                new List<AtgenRarityGroupList>()
+                {
+                    new(false, 5, "placeholder", "placeholder", "placeholder", "placeholder")
+                },
+                new(
+                    new List<OddsUnitDetail>()
+                    {
+                        new(
+                            false,
+                            5,
+                            new List<AtgenUnitList>() { new((int)Charas.Addis, "placeholder") }
+                        )
+                    },
+                    new List<OddsUnitDetail>()
+                    {
+                        new(
+                            false,
+                            5,
+                            new List<AtgenUnitList>() { new((int)Dragons.Agni, "placeholder") }
+                        )
+                    },
+                    new List<OddsUnitDetail>()
+                    {
+                        new(
+                            false,
+                            5,
+                            new List<AtgenUnitList>()
+                            {
+                                new(40050001, "lol you can still summon prints")
+                            }
+                        )
+                    }
+                )
+            );
+
+        public static readonly SummonPrizeOddsRate PrizeOddsRate =
+            new(new List<AtgenSummonPrizeRankList>(), new List<AtgenSummonPrizeEntitySetList>());
+
+        public static readonly SummonGetSummonListData SummonListData =
+            new(
+                new List<SummonList>()
+                {
+                    new(
+                        1020203,
+                        0,
+                        (int)BannerTypes.Normal,
+                        120,
+                        120,
+                        1200,
+                        1200,
+                        5,
+                        30,
+                        1,
+                        2,
+                        300,
+                        1,
+                        (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                        (int)DateTimeOffset.UtcNow.AddDays(7).ToUnixTimeSeconds(),
+                        0,
+                        1,
+                        0,
+                        0,
+                        (int)SummonCampaignTypes.Normal,
+                        0,
+                        1,
+                        1,
+                        0,
+                        0
+                    )
+                },
+                new List<SummonList>(),
+                new List<SummonList>(),
+                new List<SummonList>(),
+                new List<SummonList>(),
+                new List<SummonList>(),
+                new List<SummonList>(),
+                new List<SummonList>(),
+                new List<SummonList>(),
+                new(
+                    new List<SummonList>(),
+                    new List<SummonList>(),
+                    new List<SummonList>(),
+                    new List<SummonList>(),
+                    new List<SummonList>()
+                ),
+                new List<SummonTicketList>(),
+                new List<SummonPointList>()
+            );
+    }
 
     public SummonController(
         IUserDataRepository userDataRepository,
@@ -48,58 +149,44 @@ public class SummonController : ControllerBase
     /// Returns excluded/excludable units for special banners
     /// </summary>
     /// <param name="sessionId"></param>
-    /// <param name="bannerIdRequest"></param>
+    /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost]
     [Route("~/summon_exclude/get_list")]
-    public async Task<DragaliaResult> SummonExcludeGetList(
-        [FromHeader(Name = "SID")] string sessionId,
-        BannerIdRequest bannerIdRequest
-    )
+    public async Task<DragaliaResult> SummonExcludeGetList(SummonExcludeGetListRequest request)
     {
-        int bannerId = bannerIdRequest.summon_id;
-        string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
+        int bannerId = request.summon_id;
         DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(accountId)
+            .GetUserData(this.DeviceAccountId)
             .FirstAsync();
         //TODO Replace DummyData with real exludes from BannerInfo
-        List<BaseNewEntity> excludableList = new();
+        List<AtgenDuplicateEntityList> excludableList = new();
         foreach (Charas c in Enum.GetValues<Charas>())
         {
-            excludableList.Add(new BaseNewEntity((int)EntityTypes.Chara, (int)c));
+            excludableList.Add(new AtgenDuplicateEntityList((int)EntityTypes.Chara, (int)c));
         }
         foreach (Dragons d in Enum.GetValues<Dragons>())
         {
-            excludableList.Add(new BaseNewEntity((int)EntityTypes.Dragon, (int)d));
+            excludableList.Add(new AtgenDuplicateEntityList((int)EntityTypes.Dragon, (int)d));
         }
-        return this.Ok(
-            new SummonExcludeGetListResponse(
-                SummonExcludeGetListResponseFactory.CreateData(
-                    excludableList,
-                    new UpdateDataList() { user_data = SavefileUserDataFactory.Create(userData) }
-                )
-            )
-        );
+
+        return this.Ok(new SummonExcludeGetListData(excludableList));
     }
 
     [HttpPost]
     [Route("get_odds_data")]
-    public async Task<DragaliaResult> GetOddsData(
-        [FromHeader(Name = "SID")] string sessionId,
-        BannerIdRequest bannerIdRequest
-    )
+    public async Task<DragaliaResult> GetOddsData(SummonGetOddsDataRequest request)
     {
-        int bannerId = bannerIdRequest.summon_id;
-        string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
+        int bannerId = request.summon_id;
         DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(accountId)
+            .GetUserData(this.DeviceAccountId)
             .FirstAsync();
         //TODO Replace Dummy data with oddscalculation
+
         return this.Ok(
-            new SummonGetOddsDataResponse(
-                SummonGetOddsDataResponseFactory.CreateDummyData(
-                    SavefileUserDataFactory.Create(userData)
-                )
+            new SummonGetOddsDataData(
+                new OddsRateList(0, Data.OddsRate, Data.OddsRate),
+                new(Data.PrizeOddsRate, Data.PrizeOddsRate)
             )
         );
     }
@@ -110,17 +197,11 @@ public class SummonController : ControllerBase
     {
         string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
         DbPlayerUserData userData = await userDataRepository.GetUserData(accountId).FirstAsync();
-        List<SummonHistory> dbList = (await summonRepository.GetSummonHistory(accountId))
-            .Select(mapper.Map<SummonHistory>)
-            .ToList();
-        return Ok(
-            new SummonGetSummonHistoryResponse(
-                SummonGetSummonHistoryResponseFactory.CreateData(
-                    dbList,
-                    new UpdateDataList() { user_data = SavefileUserDataFactory.Create(userData) }
-                )
-            )
-        );
+        IEnumerable<SummonHistoryList> dbList = (
+            await summonRepository.GetSummonHistory(accountId)
+        ).Select(mapper.Map<SummonHistoryList>);
+
+        return Ok(new SummonGetSummonHistoryData(dbList));
     }
 
     [HttpPost]
@@ -128,52 +209,20 @@ public class SummonController : ControllerBase
     public async Task<DragaliaResult> GetSummonList([FromHeader(Name = "SID")] string sessionId)
     {
         string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-        SummonGetSummonListResponseData data = SummonGetSummonListResponseFactory.CreateDummyData();
-        //TODO Replace DummyData
-        DbPlayerBannerData dummy = await this.summonRepository.GetPlayerBannerData(
-            accountId,
-            1020203
-        );
-        data.summon_point_list.Add(
-            new(
-                dummy.SummonBannerId,
-                dummy.SummonPoints,
-                dummy.ConsecutionSummonPoints,
-                dummy.ConsecutionSummonPointsMinDate,
-                dummy.ConsecutionSummonPointsMaxDate
-            )
-        );
-        dummy = await this.summonRepository.GetPlayerBannerData(accountId, 1110003);
-        data.summon_point_list.Add(
-            new(
-                dummy.SummonBannerId,
-                dummy.SummonPoints,
-                dummy.ConsecutionSummonPoints,
-                dummy.ConsecutionSummonPointsMinDate,
-                dummy.ConsecutionSummonPointsMaxDate
-            )
-        );
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(accountId)
-            .FirstAsync();
-        data = data with
-        {
-            update_data_list = new UpdateDataList()
-            {
-                user_data = SavefileUserDataFactory.Create(userData)
-            }
-        };
-        return Ok(new SummonGetSummonListResponse(data));
+
+        // PS nano I removed all the DB stuff because I was too lazy to make it work again
+
+        return Ok(Data.SummonListData);
     }
 
     [HttpPost]
     [Route("get_summon_point_trade")]
     public async Task<DragaliaResult> GetSummonPointTrade(
         [FromHeader(Name = "SID")] string sessionId,
-        BannerIdRequest bannerIdRequest
+        SummonGetSummonPointTradeRequest request
     )
     {
-        int bannerId = bannerIdRequest.summon_id;
+        int bannerId = request.summon_id;
         string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
         DbPlayerUserData userData = await this.userDataRepository
             .GetUserData(accountId)
@@ -184,84 +233,67 @@ public class SummonController : ControllerBase
             bannerId
         );
         //TODO get real list from persisted BannerInfo or dynamic List from Db, dunno yet
-        List<TradableEntity> tradableUnits =
+        List<AtgenSummonPointTradeList> tradableUnits =
             new()
             {
-                new TradableEntity(
-                    bannerId * 1000 + 1,
-                    (int)EntityTypes.Chara,
-                    (int)Charas.Celliera
-                ),
-                new TradableEntity(
-                    bannerId * 1000 + 2,
-                    (int)EntityTypes.Chara,
-                    (int)Charas.SummerCelliera
-                )
+                new(bannerId * 1000 + 1, (int)EntityTypes.Chara, (int)Charas.Celliera),
+                new(bannerId * 1000 + 2, (int)EntityTypes.Chara, (int)Charas.SummerCelliera)
             };
 
-        SummonGetSummonPointTradeResponse response = new SummonGetSummonPointTradeResponse(
-            SummonGetSummonPointTradeResponseResponseFactory.CreateData(
+        return Ok(
+            new SummonGetSummonPointTradeData(
                 tradableUnits,
-                new(
-                    bannerId,
-                    playerBannerData.SummonPoints,
-                    playerBannerData.ConsecutionSummonPoints,
-                    playerBannerData.ConsecutionSummonPointsMinDate,
-                    playerBannerData.ConsecutionSummonPointsMaxDate
-                ),
-                SavefileUserDataFactory.Create(userData)
+                new List<SummonPointList>() { new(bannerId, 0, 0, 0, int.MaxValue) },
+                new(),
+                new()
             )
         );
-        return Ok(response);
     }
 
     //TODO: Fully implement and refactor
     [HttpPost]
     [Route("request")]
-    public async Task<DragaliaResult> RequestSummon(
-        [FromHeader(Name = "SID")] string sessionId,
-        SummonRequest summonRequest
-    )
+    public async Task<DragaliaResult> RequestSummon(SummonRequestRequest summonRequest)
     {
         //TODO Fetch real data by bannerId
-        BannerData bannerData = new BannerData(
-            1020203,
-            null,
-            BannerTypes.Normal,
-            120,
-            120,
-            1200,
-            1200,
-            30,
-            30,
-            1,
-            2,
-            300,
-            1,
-            DateTimeOffset.UtcNow,
-            DateTimeOffset.UtcNow.AddDays(7),
-            0,
-            0,
-            0,
-            0,
-            SummonCampaignTypes.Normal,
-            0,
-            false,
-            false,
-            0
-        );
+        SummonList bannerData =
+            new(
+                1020203,
+                0,
+                (int)BannerTypes.Normal,
+                120,
+                120,
+                1200,
+                1200,
+                5,
+                30,
+                1,
+                2,
+                300,
+                1,
+                (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                (int)DateTimeOffset.UtcNow.AddDays(7).ToUnixTimeSeconds(),
+                0,
+                1,
+                0,
+                0,
+                (int)SummonCampaignTypes.Normal,
+                0,
+                1,
+                1,
+                0,
+                0
+            );
 
         DateTimeOffset summonDate = DateTimeOffset.UtcNow;
 
-        string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-
         DbPlayerBannerData playerBannerData = await this.summonRepository.GetPlayerBannerData(
-            accountId,
+            this.DeviceAccountId,
             bannerData.summon_id
         );
 
         DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(accountId)
+            .GetUserData(this.DeviceAccountId)
             .FirstAsync();
 
         int numSummons =
@@ -304,7 +336,7 @@ public class SummonController : ControllerBase
             case PaymentTypes.FreeDailyTenfold:
                 paymentHeldSetter = x =>
                 {
-                    if (bannerData.is_beginner_campaign)
+                    if (bannerData.is_beginner_campaign == 1)
                         playerBannerData.IsBeginnerFreeSummonAvailable = 0;
                 };
                 paymentCost = 0;
@@ -319,39 +351,33 @@ public class SummonController : ControllerBase
         List<SimpleSummonReward> summonResult = _summonService.GenerateSummonResult(numSummons);
         //TODO: Roll prize summon and commit prize summon results
 
-        IEnumerable<DbPlayerCharaData> repositoryCharaOuput = await this.unitRepository.AddCharas(
-            accountId,
+        await this.unitRepository.AddCharas(
+            this.DeviceAccountId,
             summonResult
                 .Where(x => x.entity_type == (int)EntityTypes.Chara)
                 .Select(x => (Charas)x.id)
         );
 
-        (
-            IEnumerable<DbPlayerDragonData> newDragons,
-            IEnumerable<DbPlayerDragonReliability> newReliability
-        ) repositoryDragonOutput = await this.unitRepository.AddDragons(
-            accountId,
+        await this.unitRepository.AddDragons(
+            this.DeviceAccountId,
             summonResult
                 .Where(x => x.entity_type == (int)EntityTypes.Dragon)
                 .Select(x => (Dragons)x.id)
         );
 
-        IEnumerable<SummonReward> rewardList = _summonService.GenerateRewardList(
-            summonResult,
-            repositoryCharaOuput,
-            repositoryDragonOutput
+        IEnumerable<AtgenResultUnitList> rewardList = _summonService.GenerateRewardList(
+            this.DeviceAccountId,
+            summonResult
         );
 
         paymentHeldSetter(paymentCost);
         playerBannerData.SummonPoints += numSummons * summonPointMultiplier;
         playerBannerData.SummonCount += numSummons;
 
-        List<BaseNewEntity> newEntities = rewardList
+        List<AtgenDuplicateEntityList> newEntities = rewardList
             .Where(x => x.is_new)
-            .Select(x => new BaseNewEntity(x.entity_type, x.id))
+            .Select(x => new AtgenDuplicateEntityList(x.entity_type, x.id))
             .ToList();
-
-        EntityResult entityResult = new(new List<BaseNewEntity>(), newEntities);
 
         List<DbPlayerSummonHistory> historyEntries = new();
 
@@ -398,7 +424,7 @@ public class SummonController : ControllerBase
             historyEntries.Add(
                 new DbPlayerSummonHistory()
                 {
-                    DeviceAccountId = accountId,
+                    DeviceAccountId = this.DeviceAccountId,
                     SummonId = bannerData.summon_id,
                     SummonExecType = summonRequest.exec_type,
                     ExecDate = summonDate,
@@ -453,35 +479,32 @@ public class SummonController : ControllerBase
             }
         }
 
-        UpdateDataList updateDataList = updateDataService.GetUpdateDataList(accountId);
+        UpdateDataList updateDataList = updateDataService.GetUpdateDataList(this.DeviceAccountId);
         await this.summonRepository.SaveChangesAsync();
 
-        SummonRequestResponse response =
-            new(
-                new SummonRequestResponseData(
-                    reversalIndex,
-                    new List<int>() { sageEffect, circleEffect },
-                    rewardList,
-                    new List<SummonPrize>(),
-                    new List<SummonTicket>(),
-                    playerBannerData.SummonPoints,
-                    new List<UserSummon>()
-                    {
-                        new UserSummon(
-                            bannerData.summon_id,
-                            playerBannerData.SummonCount,
-                            bannerData.campaign_type,
-                            bannerData.free_count_rest,
-                            bannerData.is_beginner_campaign,
-                            bannerData.beginner_campaign_count_rest,
-                            bannerData.consecution_campaign_count_rest
-                        )
-                    },
-                    updateDataList,
-                    entityResult
-                )
-            );
-
-        return this.Ok(response);
+        return this.Ok(
+            new SummonRequestData(
+                rewardList,
+                new List<AtgenResultPrizeList>(),
+                new List<int>() { sageEffect, circleEffect },
+                reversalIndex,
+                updateDataList,
+                new EntityResult(),
+                new List<SummonTicketList>(),
+                playerBannerData.SummonPoints,
+                new List<UserSummonList>()
+                {
+                    new(
+                        bannerData.summon_id,
+                        playerBannerData.SummonCount,
+                        bannerData.campaign_type,
+                        bannerData.free_count_rest,
+                        bannerData.is_beginner_campaign,
+                        bannerData.beginner_campaign_count_rest,
+                        bannerData.consecution_campaign_count_rest
+                    )
+                }
+            )
+        );
     }
 }

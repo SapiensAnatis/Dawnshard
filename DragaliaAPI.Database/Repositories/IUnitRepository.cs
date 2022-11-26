@@ -12,13 +12,13 @@ public interface IUnitRepository : IBaseRepository
 
     Task<bool> CheckHasDragons(string deviceAccountId, IEnumerable<Dragons> idList);
 
-    Task<IEnumerable<DbPlayerCharaData>> AddCharas(
+    Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(
         string deviceAccountId,
         IEnumerable<Charas> idList
     );
 
-    Task<(
-        IEnumerable<DbPlayerDragonData> newDragons,
-        IEnumerable<DbPlayerDragonReliability> newReliabilities
-    )> AddDragons(string deviceAccountId, IEnumerable<Dragons> idList);
+    Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(
+        string deviceAccountId,
+        IEnumerable<Dragons> idList
+    );
 }

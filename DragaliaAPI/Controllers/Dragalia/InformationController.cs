@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Models.Responses;
-using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -15,3 +14,4 @@ public class InformationController : ControllerBase
         return Ok(new InformationTopResponse(InformationTopFactory.CreateData()));
     }
 }
+*/

@@ -4,11 +4,11 @@ using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Models.AutoMapper;
 
-public class UserDataMapProfile : Profile
+public class InventoryMapProfile : Profile
 {
-    public UserDataMapProfile()
+    public InventoryMapProfile()
     {
-        this.CreateMap<DbPlayerUserData, UserData>();
+        this.CreateMap<DbPlayerMaterial, MaterialList>();
 
         this.SourceMemberNamingConvention = new PascalCaseNamingConvention();
         this.DestinationMemberNamingConvention = new LowerUnderscoreNamingConvention();

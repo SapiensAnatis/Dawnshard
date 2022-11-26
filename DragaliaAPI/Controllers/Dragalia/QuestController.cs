@@ -1,7 +1,6 @@
 ﻿using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models.Components;
-using DragaliaAPI.Models.Requests;
-using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +10,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/x-msgpack")]
 [ApiController]
-public class QuestController : DragaliaController
+public class QuestController : DragaliaControllerBase
 {
     private readonly IQuestRepository questRepository;
     private readonly IUpdateDataService updateDataService;
@@ -39,20 +38,20 @@ public class QuestController : DragaliaController
 
         QuestReadStoryData responseData =
             new(
-                quest_story_reward_list: new()
+                updateData,
+                new()
+                {
+                    new_get_entity_list = new List<AtgenDuplicateEntityList>() /* { new(1, (int)Charas.Ilia) } */
+                },
+                quest_story_reward_list: new List<AtgenQuestStoryRewardList>()
                 /*
                 {
                     new(23, 0, 25, 0, 0),
                     new(1, (int)Charas.Ilia, 1, 5, 0)
                 }*/,
-                new(),
-                updateData,
-                new(
-                    converted_entity_list: new List<BaseNewEntity>(),
-                    new_get_entity_list: new List<BaseNewEntity>() /* { new(1, (int)Charas.Ilia) } */
-                )
+                new List<ConvertedEntityList>()
             );
 
-        return this.Ok(new QuestReadStoryResponse(responseData));
+        return this.Ok(responseData);
     }
 }

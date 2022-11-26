@@ -2,7 +2,7 @@
 using System.Text;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Nintendo;
 
 namespace DragaliaAPI.Services;
 
@@ -46,8 +46,8 @@ public class DeviceAccountService : IDeviceAccountService
 
     public async Task<DeviceAccount> RegisterDeviceAccount()
     {
-        string id = this.GenerateRandomString(16);
-        string password = this.GenerateRandomString(40);
+        string id = GenerateRandomString(16);
+        string password = GenerateRandomString(40);
         string hashedPassword = this.GetHashedPassword(password);
 
         await this.deviceAccountRepository.AddNewDeviceAccount(id, hashedPassword);
@@ -73,7 +73,7 @@ public class DeviceAccountService : IDeviceAccountService
         return Convert.ToBase64String(hashBytes);
     }
 
-    private string GenerateRandomString(int nChars)
+    private static string GenerateRandomString(int nChars)
     {
         // Not a great idea to use the standard RNG for making passwords, but again, security is not a big deal
         string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

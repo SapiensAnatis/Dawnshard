@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Components;
+﻿using DragaliaAPI.Models;
 
 namespace DragaliaAPI.Services;
 

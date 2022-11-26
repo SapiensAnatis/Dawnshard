@@ -1,9 +1,7 @@
-﻿using DragaliaAPI.Models.Components;
-using DragaliaAPI.Models.Requests;
-using DragaliaAPI.Models.Responses;
+﻿using DragaliaAPI.Models.Generated;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragaliaAPI.Controllers.Dragalia.Eula;
+namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("eula")]
 [Consumes("application/octet-stream")]
@@ -11,25 +9,32 @@ namespace DragaliaAPI.Controllers.Dragalia.Eula;
 [ApiController]
 public class EulaController : ControllerBase
 {
+    private static readonly List<EulaVersion> AllEulaVersions =
+        new()
+        {
+            // TODO: Add the complete list of versions
+            new("gb", "en_us", 1, 1),
+            new("gb", "en_eu", 1, 1),
+            new("us", "en_us", 1, 6),
+            new("us", "en_eu", 1, 6)
+        };
+
     [HttpPost]
     [Route("get_version")]
     public DragaliaResult GetVersion(EulaGetVersionRequest request)
     {
         EulaVersion version =
-            EulaStatic.AllEulaVersions.FirstOrDefault(
+            AllEulaVersions.FirstOrDefault(
                 x => x.region == request.region && x.lang == request.lang
-            ) ?? EulaStatic.AllEulaVersions[0];
+            ) ?? AllEulaVersions[0];
 
-        EulaGetVersionResponse response = new(new EulaGetVersionData(version));
-        return this.Ok(response);
+        return this.Ok(new EulaGetVersionData(version, false, 1));
     }
 
     [HttpPost]
     [Route("get_version_list")]
-    public ActionResult<EulaGetVersionListResponse> GetVersionList()
+    public DragaliaResult GetVersionList()
     {
-        EulaGetVersionListResponse response =
-            new(new EulaGetVersionListData(EulaStatic.AllEulaVersions));
-        return this.Ok(response);
+        return this.Ok(new EulaGetVersionListData(AllEulaVersions));
     }
 }

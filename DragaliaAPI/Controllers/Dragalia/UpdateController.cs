@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Services;
-using DragaliaAPI.Models.Requests;
-using DragaliaAPI.Models.Responses;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -10,7 +9,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class UpdateController : DragaliaController
+public class UpdateController : DragaliaControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
     private readonly ISessionService _sessionService;
@@ -28,8 +27,6 @@ public class UpdateController : DragaliaController
         await userDataRepository.UpdateName(this.DeviceAccountId, request.name);
         await userDataRepository.SaveChangesAsync();
 
-        UpdateNamechangeResponse response = new(new NamechangeData(request.name));
-
-        return this.Ok(response);
+        return this.Ok(new UpdateNamechangeData(request.name));
     }
 }

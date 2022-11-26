@@ -1,9 +1,7 @@
 ﻿using System.Text.Json;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models.Requests;
-using DragaliaAPI.Models.Responses;
-using DragaliaAPI.Models.Responses.Base;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,63 +33,46 @@ public class ToolController : ControllerBase
 
     [HttpPost]
     [Route("signup")]
-    public async Task<DragaliaResult> Signup(IdTokenRequest request)
+    public async Task<DragaliaResult> Signup(ToolSignupRequest request)
     {
         long viewerId;
 
-        try
-        {
-            string deviceAccountId = await this.sessionService.GetDeviceAccountId_IdToken(
-                request.id_token
-            );
+        string deviceAccountId = await this.sessionService.GetDeviceAccountId_IdToken(
+            request.id_token
+        );
 
-            viewerId = await this.userDataRepository
-                .GetUserData(deviceAccountId)
-                .Select(x => x.ViewerId)
-                .SingleAsync();
-        }
-        catch (Exception e) when (e is ArgumentException or JsonException)
-        {
-            return this.Ok(new ServerErrorResponse());
-        }
+        viewerId = await this.userDataRepository
+            .GetUserData(deviceAccountId)
+            .Select(x => x.ViewerId)
+            .SingleAsync();
 
-        SignupResponse response = new(new SignupData(viewerId));
-        return this.Ok(response);
+        return this.Ok(
+            new ToolSignupData((ulong)viewerId, (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+        );
     }
 
     [HttpPost]
     [Route("get_service_status")]
-    public ActionResult<ServiceStatusResponse> GetServiceStatus()
+    public ActionResult<DragaliaResult> GetServiceStatus()
     {
-        ServiceStatusResponse response = new(new ServiceStatusData(1));
-        return this.Ok(response);
+        return this.Ok(new ToolGetServiceStatusData(1));
     }
 
     [HttpPost]
     [Route("auth")]
-    public async Task<DragaliaResult> Auth(IdTokenRequest request)
+    public async Task<DragaliaResult> Auth(ToolAuthRequest request)
     {
         string sessionId;
         long viewerId;
 
-        try
-        {
-            sessionId = await this.sessionService.ActivateSession(request.id_token);
-            string deviceAccountId = await this.sessionService.GetDeviceAccountId_SessionId(
-                sessionId
-            );
-            IQueryable<DbPlayerUserData> playerInfo = this.userDataRepository.GetUserData(
-                deviceAccountId
-            );
-            viewerId = await playerInfo.Select(x => x.ViewerId).SingleAsync();
-        }
-        catch (Exception e) when (e is ArgumentException or JsonException)
-        {
-            return this.Ok(new ServerErrorResponse());
-        }
+        sessionId = await this.sessionService.ActivateSession(request.id_token);
+        string deviceAccountId = await this.sessionService.GetDeviceAccountId_SessionId(sessionId);
+        IQueryable<DbPlayerUserData> playerInfo = this.userDataRepository.GetUserData(
+            deviceAccountId
+        );
+        viewerId = await playerInfo.Select(x => x.ViewerId).SingleAsync();
 
-        AuthResponseData data = new(viewerId, sessionId, "placeholder nonce");
-        ToolAuthResponse response = new(data);
-        return this.Ok(response);
+        ToolAuthData data = new((ulong)viewerId, sessionId, "placeholder nonce");
+        return this.Ok(data);
     }
 }
