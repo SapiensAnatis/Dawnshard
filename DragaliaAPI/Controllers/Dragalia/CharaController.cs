@@ -724,4 +724,23 @@ public class CharaController : DragaliaControllerBase
             return BadRequest();
         }
     }
+
+    //TODO: Finish when generated message classes are available
+    [Route("set_chara_unit_set")]
+    [HttpPost]
+    public async Task<DragaliaResult> SetCharaUnitSet(
+        [FromHeader(Name = "SID")] string sessionId,
+        [FromBody] object request
+    )
+    {
+        string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
+        DbSetUnit setUnitData = await unitRepository.GetOrCreateCharaSetData(
+            accountId,
+            Charas.Celliera,
+            0
+        );
+        //TODO: Update data
+        await unitRepository.SaveChangesAsync();
+        return Ok();
+    }
 }

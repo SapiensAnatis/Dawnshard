@@ -116,6 +116,34 @@ public class UnitRepository : BaseRepository, IUnitRepository
         return newMapping;
     }
 
+    public async Task<DbSetUnit> GetOrCreateCharaSetData(
+        string deviceAccountId,
+        Charas charaId,
+        int setNo
+    )
+    {
+        return apiContext.PlayerSetUnits
+            .Where(
+                x =>
+                    x.DeviceAccountId == deviceAccountId
+                    && x.CharaId == charaId
+                    && x.UnitSetNo == setNo
+            )
+            .FirstOrDefault(
+                apiContext.PlayerSetUnits
+                    .Add(
+                        new DbSetUnit()
+                        {
+                            DeviceAccountId = deviceAccountId,
+                            CharaId = charaId,
+                            UnitSetNo = setNo,
+                            UnitSetName = $"Set {setNo}"
+                        }
+                    )
+                    .Entity
+            );
+    }
+
     private static IEnumerable<(TEnum id, bool isNew)> MarkNewIds<TEnum>(
         IEnumerable<TEnum> owned,
         IEnumerable<TEnum> idList
