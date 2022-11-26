@@ -12,9 +12,9 @@ public class AutoMapperProfileTest
     }
 
     [Fact]
-    public void StoryMapProfile_IsValid()
+    public void InventoryMapProfile_IsValid()
     {
-        TestProfile<StoryMapProfile>();
+        TestProfile<InventoryMapProfile>();
     }
 
     [Fact]

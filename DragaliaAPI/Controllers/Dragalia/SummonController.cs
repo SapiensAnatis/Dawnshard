@@ -348,7 +348,9 @@ public class SummonController : DragaliaControllerBase
         if (paymentHeld < paymentCost)
             return BadRequest();
 
-        List<SimpleSummonReward> summonResult = _summonService.GenerateSummonResult(numSummons);
+        List<AtgenRedoableSummonResultUnitList> summonResult = _summonService.GenerateSummonResult(
+            numSummons
+        );
         //TODO: Roll prize summon and commit prize summon results
 
         await this.unitRepository.AddCharas(
@@ -389,7 +391,7 @@ public class SummonController : DragaliaControllerBase
 
         for (int i = 0; i < summonResult.Count; i++)
         {
-            SimpleSummonReward summon = summonResult[i];
+            AtgenRedoableSummonResultUnitList summon = summonResult[i];
             topRarity = topRarity > summon.rarity ? topRarity : summon.rarity;
             EntityTypes entityType = (EntityTypes)summon.entity_type;
             if (summon.rarity == 5)

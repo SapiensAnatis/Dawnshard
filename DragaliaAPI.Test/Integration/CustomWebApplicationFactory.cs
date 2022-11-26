@@ -1,12 +1,9 @@
 ﻿using DragaliaAPI.Database;
-using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Test.Integration;
 

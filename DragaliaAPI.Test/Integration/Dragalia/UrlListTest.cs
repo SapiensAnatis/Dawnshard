@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Models.Responses;
+﻿using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -16,17 +16,15 @@ public class UrlListTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
-    public async Task UrlList_ReturnsCorrectList()
+    public async Task UrlList_ReturnsList()
     {
-        WebviewUrlListResponse expectedResponse =
-            new(new WebviewUrlListData(WebviewUrlListStatic.GetAllUrls("localhost")));
+        WebviewVersionUrlListData response = (
+            await client.PostMsgpack<WebviewVersionUrlListData>(
+                "webview_version/url_list",
+                new WebviewVersionUrlListRequest("region")
+            )
+        ).data;
 
-        // Corresponds to JSON: "{}"
-        byte[] payload = new byte[] { 0x80 };
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("webview_version/url_list", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.webview_url_list.Should().NotBeEmpty();
     }
 }

@@ -7,9 +7,9 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class EulaController : ControllerBase
+public class EulaController : DragaliaControllerBase
 {
-    private static readonly List<EulaVersion> AllEulaVersions =
+    private static readonly List<AtgenVersionHash> AllEulaVersions =
         new()
         {
             // TODO: Add the complete list of versions
@@ -23,7 +23,7 @@ public class EulaController : ControllerBase
     [Route("get_version")]
     public DragaliaResult GetVersion(EulaGetVersionRequest request)
     {
-        EulaVersion version =
+        AtgenVersionHash version =
             AllEulaVersions.FirstOrDefault(
                 x => x.region == request.region && x.lang == request.lang
             ) ?? AllEulaVersions[0];

@@ -23,14 +23,15 @@ public class CharaDataServiceTest
     {
         foreach (Charas c in Enum.GetValues<Charas>())
         {
-            charaDataService.Invoking(x => x.GetData(c)).Should().NotThrow();
+            if (c != 0)
+                charaDataService.Invoking(x => x.GetData(c)).Should().NotThrow();
         }
     }
 
     [Fact]
     public void Get_InvalidId_ThrowsKeyNotFoundException()
     {
-        charaDataService.Invoking(x => x.GetData(0)).Should().Throw<KeyNotFoundException>();
+        charaDataService.Invoking(x => x.GetData(-44)).Should().Throw<KeyNotFoundException>();
     }
 
     [Fact]

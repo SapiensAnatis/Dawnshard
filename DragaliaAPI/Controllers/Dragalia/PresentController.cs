@@ -11,7 +11,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class PresentController : ControllerBase
+public class PresentController : DragaliaControllerBase
 {
     private ApiContext _apiContext;
 

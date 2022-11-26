@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
-using DragaliaAPI.Models.Components;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Services;
@@ -71,6 +71,13 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
                 StoryId = 2,
                 StoryType = StoryTypes.Quest
             };
+        DbPlayerMaterial materialData =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                MaterialId = Materials.AlmightyOnesMaskFragment,
+                Quantity = 10
+            };
 
         this.fixture.ApiContext.AddRange(
             new List<IDbHasAccountId>()
@@ -80,7 +87,8 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
                 dragonData,
                 reliabilityData,
                 partyData,
-                storyState
+                storyState,
+                materialData
             }
         );
 
@@ -89,24 +97,31 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         list.user_data.Should().BeEquivalentTo(this.mapper.Map<UserData>(userData));
         list.chara_list
             .Should()
-            .BeEquivalentTo(new List<Chara>() { this.mapper.Map<Chara>(charaData) });
+            .BeEquivalentTo(new List<CharaList>() { this.mapper.Map<CharaList>(charaData) });
         list.dragon_list
             .Should()
-            .BeEquivalentTo(new List<Dragon>() { this.mapper.Map<Dragon>(dragonData) });
+            .BeEquivalentTo(new List<DragonList>() { this.mapper.Map<DragonList>(dragonData) });
         list.dragon_reliability_list
             .Should()
             .BeEquivalentTo(
-                new List<DragonReliability>()
+                new List<DragonReliabilityList>()
                 {
-                    this.mapper.Map<DragonReliability>(reliabilityData)
+                    this.mapper.Map<DragonReliabilityList>(reliabilityData)
                 }
             );
         list.party_list
             .Should()
-            .BeEquivalentTo(new List<Party>() { this.mapper.Map<Party>(partyData) });
+            .BeEquivalentTo(new List<PartyList>() { this.mapper.Map<PartyList>(partyData) });
         list.quest_story_list
             .Should()
-            .BeEquivalentTo(new List<QuestStory>() { this.mapper.Map<QuestStory>(storyState) });
+            .BeEquivalentTo(
+                new List<QuestStoryList>() { this.mapper.Map<QuestStoryList>(storyState) }
+            );
+        list.material_list
+            .Should()
+            .BeEquivalentTo(
+                new List<MaterialList>() { this.mapper.Map<MaterialList>(materialData) }
+            );
 
         this.output.WriteLine(
             "{0}",

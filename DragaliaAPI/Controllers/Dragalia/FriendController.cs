@@ -8,7 +8,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class FriendController : ControllerBase
+public class FriendController : DragaliaControllerBase
 {
     [HttpPost]
     [Route("get_support_chara")]

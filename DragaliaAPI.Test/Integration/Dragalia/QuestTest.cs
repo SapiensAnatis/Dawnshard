@@ -1,8 +1,6 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.Components;
-using DragaliaAPI.Models.Requests;
-using DragaliaAPI.Models.Responses;
+using DragaliaAPI.Models.Generated;
 using MessagePack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,33 +26,27 @@ public class QuestTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task ReadStory_ReturnCorrectResponse()
     {
-        QuestReadStoryRequest request = new(400);
-        byte[] payload = MessagePackSerializer.Serialize(request);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
+        QuestReadStoryData response = (
+            await client.PostMsgpack<QuestReadStoryData>(
+                "/tool/auth",
+                new QuestReadStoryRequest() { quest_story_id = 400 }
+            )
+        ).data;
 
-        HttpResponseMessage response = await client.PostAsync("/quest/read_story", content);
-
-        response.IsSuccessStatusCode.Should().BeTrue();
-
-        byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-        QuestReadStoryResponse deserialized =
-            MessagePackSerializer.Deserialize<QuestReadStoryResponse>(responseBytes);
-
-        deserialized.data.update_data_list.quest_story_list
+        response.update_data_list.quest_story_list
             .Should()
-            .ContainEquivalentOf(new QuestStory(400, 1));
+            .ContainEquivalentOf(new QuestStoryList() { quest_story_id = 400, state = 1 });
     }
 
     [Fact]
     public async Task ReadStory_UpdatesDatabase()
     {
-        QuestReadStoryRequest request = new(700);
-        byte[] payload = MessagePackSerializer.Serialize(request);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/quest/read_story", content);
-
-        response.IsSuccessStatusCode.Should().BeTrue();
+        QuestReadStoryData response = (
+            await client.PostMsgpack<QuestReadStoryData>(
+                "/tool/auth",
+                new QuestReadStoryRequest() { quest_story_id = 700 }
+            )
+        ).data;
 
         using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();

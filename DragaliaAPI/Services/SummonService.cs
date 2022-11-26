@@ -94,7 +94,7 @@ public class SummonService : ISummonService
          return pool;
      }*/
 
-    public List<SimpleSummonReward> GenerateSummonResult(int numSummons)
+    public List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(int numSummons)
     {
         return this.GenerateSummonResult(
             numSummons,
@@ -103,7 +103,7 @@ public class SummonService : ISummonService
         );
     }
 
-    public List<SimpleSummonReward> GenerateSummonResult(
+    public List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(
         int numSummons,
         int summonsUntilNextPity,
         float pity /*,
@@ -111,7 +111,7 @@ public class SummonService : ISummonService
     )
     {
         Random random = new((int)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-        List<SimpleSummonReward> resultList = new();
+        List<AtgenRedoableSummonResultUnitList> resultList = new();
 
         for (int i = 0; i < numSummons; i++)
         {
@@ -138,7 +138,7 @@ public class SummonService : ISummonService
     /// </summary>
     public List<AtgenResultUnitList> GenerateRewardList(
         string deviceAccountId,
-        IEnumerable<SimpleSummonReward> baseRewardList
+        IEnumerable<AtgenRedoableSummonResultUnitList> baseRewardList
     )
     {
         List<AtgenResultUnitList> result = new();
@@ -149,7 +149,7 @@ public class SummonService : ISummonService
             .GetAllDragonData(deviceAccountId)
             .Select(x => x.DragonId);
 
-        foreach (SimpleSummonReward reward in baseRewardList)
+        foreach (AtgenRedoableSummonResultUnitList reward in baseRewardList)
         {
             if (reward.entity_type == (int)EntityTypes.Chara)
             {
@@ -159,6 +159,7 @@ public class SummonService : ISummonService
                         reward.id,
                         reward.rarity,
                         false,
+                        3,
                         DewValueData.DupeSummon[reward.rarity]
                     );
 
@@ -167,7 +168,8 @@ public class SummonService : ISummonService
                     && !result.Any(x => x.id == toAdd.id)
                 )
                 {
-                    toAdd = toAdd with { is_new = true, dew_point = 0 };
+                    toAdd.is_new = true;
+                    toAdd.dew_point = 0;
                 }
 
                 result.Add(toAdd);
@@ -175,14 +177,14 @@ public class SummonService : ISummonService
             else if (reward.entity_type == (int)EntityTypes.Dragon)
             {
                 AtgenResultUnitList toAdd =
-                    new(reward.entity_type, reward.id, reward.rarity, false, 0);
+                    new(reward.entity_type, reward.id, reward.rarity, false, 3, 0);
 
                 if (
                     ownedDragons.Any(x => x == (Dragons)toAdd.id)
                     && !result.Any(x => x.id == toAdd.id)
                 )
                 {
-                    toAdd = toAdd with { is_new = true };
+                    toAdd.is_new = true;
                 }
 
                 result.Add(toAdd);

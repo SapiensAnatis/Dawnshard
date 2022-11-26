@@ -7,7 +7,7 @@ namespace DragaliaAPI.Controllers.Nintendo;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class NintendoInquiryController : ControllerBase
+public class NintendoInquiryController : DragaliaControllerBase
 {
     private const string MarketGoogle = "GOOGLE";
     private const string MarketIOS = "IOSMAYBEDUNNO";

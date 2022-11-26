@@ -14,7 +14,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class LoadController : ControllerBase
+public class LoadController : DragaliaControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;

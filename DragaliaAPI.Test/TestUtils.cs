@@ -1,59 +1,20 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
-using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models;
 using FluentAssertions.Equivalency;
 using MessagePack;
 using MessagePack.Resolvers;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 
 namespace DragaliaAPI.Test;
 
 public static class TestUtils
 {
-    public static void InitializeCacheForTests(IDistributedCache cache)
+    public static HttpContent CreateMsgpackContent(object content, string sessionId = "session_id")
     {
-        // Downside of making Session a private nested class: I have to type this manually :(
-        string preparedSessionJson = """
-            {
-                "SessionId": "prepared_session_id",
-                "DeviceAccountId": "prepared_id"
-            }
-            """;
-        cache.SetString(":session:id_token:id_token", preparedSessionJson);
-
-        string sessionJson = """
-                {
-                    "SessionId": "session_id",
-                    "DeviceAccountId": "logged_in_id"
-                }
-                """;
-        cache.SetString(":session:session_id:session_id", sessionJson);
-        cache.SetString(":session_id:device_account_id:logged_in_id", "session_id");
-    }
-
-    public static List<DbDeviceAccount> GetDeviceAccountsSeed()
-    {
-        return new()
-        {
-            // Password is a hash of the string "password"
-            new("id", "NMvdakTznEF6khwWcz17i6GTnDA="),
-        };
-    }
-
-    public static List<DbPlayerUserData> GetSavefilePlayerInfoSeed()
-    {
-        return new()
-        {
-            DbSavefileUserDataFactory.Create("id"),
-            DbSavefileUserDataFactory.Create("prepared_id"),
-            DbSavefileUserDataFactory.Create("logged_in_id")
-        };
-    }
-
-    public static HttpContent CreateMsgpackContent(byte[] content, string sessionId = "session_id")
-    {
-        ByteArrayContent result = new(content);
+        ByteArrayContent result = new(MessagePackSerializer.Serialize(content));
         result.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
         result.Headers.Add("SID", sessionId);
         return result;
@@ -98,5 +59,21 @@ public static class TestUtils
 
         config ??= options => options;
         deserializedResponse.Should().BeEquivalentTo(expectedResponse, config);
+    }
+
+    public static async Task<DragaliaResponse<TResponse>> PostMsgpack<TResponse>(
+        this HttpClient client,
+        string endpoint,
+        object request
+    ) where TResponse : class
+    {
+        HttpContent content = CreateMsgpackContent(request);
+
+        HttpResponseMessage response = await client.PostAsync(endpoint, content);
+
+        response.EnsureSuccessStatusCode();
+
+        byte[] body = await response.Content.ReadAsByteArrayAsync();
+        return MessagePackSerializer.Deserialize<DragaliaResponse<TResponse>>(body);
     }
 }

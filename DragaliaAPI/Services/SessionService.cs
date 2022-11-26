@@ -60,7 +60,10 @@ public class SessionService : ISessionService
 
     private static class Schema
     {
-        public static string Session_IdToken(string idToken) => $":session:id_token:{idToken}";
+        public static string Session_IdToken(string idToken)
+        {
+            return $":session:id_token:{idToken}";
+        }
 
         public static string Session_SessionId(string sessionId) =>
             $":session:session_id:{sessionId}";

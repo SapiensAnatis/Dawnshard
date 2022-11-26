@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using NuGet.Protocol.Core.Types;
 
 namespace DragaliaAPI.Test.Integration;
 
@@ -25,16 +19,20 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
     /// <summary>
     /// The device account ID which links to the seeded savefiles <see cref="SeedDatabase"/>
     /// </summary>
-    public string DeviceAccountId => "logged_in_id";
+    public readonly string DeviceAccountId = "logged_in_id";
 
-    public string PreparedDeviceAccountId => "prepared_id";
+    public readonly string PreparedDeviceAccountId = "prepared_id";
 
-    public async Task AddCharacter(int id)
+    public readonly IMapper Mapper = new MapperConfiguration(
+        cfg => cfg.AddMaps(typeof(Program).Assembly)
+    ).CreateMapper();
+
+    public async Task AddCharacter(Charas id)
     {
         using IServiceScope scope = this.Services.CreateScope();
         IUnitRepository unitRepository =
             scope.ServiceProvider.GetRequiredService<IUnitRepository>();
-        await unitRepository.AddCharas(this.DeviceAccountId, new List<Charas>() { (Charas)id });
+        await unitRepository.AddCharas(DeviceAccountId, new List<Charas>() { id });
         await unitRepository.SaveChangesAsync();
     }
 
@@ -77,8 +75,8 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
             }
         );
 
-        repository.CreateNewSavefile(this.PreparedDeviceAccountId);
-        repository.CreateNewSavefile(this.DeviceAccountId);
+        repository.CreateNewSavefile(PreparedDeviceAccountId);
+        repository.CreateNewSavefile(DeviceAccountId);
         context.SaveChanges();
     }
 }

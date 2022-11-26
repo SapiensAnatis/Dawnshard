@@ -7,7 +7,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class UrlListController : ControllerBase
+public class UrlListController : DragaliaControllerBase
 {
     private const string PlaceholderUrl = "localhost";
 

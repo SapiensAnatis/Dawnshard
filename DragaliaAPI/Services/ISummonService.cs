@@ -8,8 +8,8 @@ public interface ISummonService
 {
     List<AtgenResultUnitList> GenerateRewardList(
         string deviceAccountId,
-        IEnumerable<SimpleSummonReward> baseRewardList
+        IEnumerable<AtgenRedoableSummonResultUnitList> baseRewardList
     );
 
-    List<SimpleSummonReward> GenerateSummonResult(int numSummons);
+    List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(int numSummons);
 }

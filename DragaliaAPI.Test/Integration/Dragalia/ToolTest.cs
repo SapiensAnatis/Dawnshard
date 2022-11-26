@@ -1,8 +1,5 @@
-﻿using DragaliaAPI.Models.Responses;
-using DragaliaAPI.Models.Responses.Base;
+﻿using DragaliaAPI.Models.Generated;
 using MessagePack;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -23,90 +20,86 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
-    public async Task ServiceStatus_ReturnsCorrectJSON()
+    public async Task ServiceStatus_ReturnsCorrectResponse()
     {
-        ServiceStatusResponse expectedResponse = new(new ServiceStatusData(1));
+        ToolGetServiceStatusData response = (
+            await client.PostMsgpack<ToolGetServiceStatusData>(
+                "tool/get_service_status",
+                new ToolGetServiceStatusRequest()
+            )
+        ).data;
 
-        // Corresponds to JSON: "{}"
-        byte[] payload = new byte[] { 0x80 };
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("tool/get_service_status", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.service_status.Should().Be(1);
     }
 
     [Fact]
     public async Task Signup_CorrectIdToken_ReturnsOKResponse()
     {
-        SignupResponse expectedResponse = new(new SignupData(1));
+        ToolSignupData response = (
+            await client.PostMsgpack<ToolSignupData>(
+                "/tool/signup",
+                new ToolSignupRequest() { id_token = "id_token" }
+            )
+        ).data;
 
-        var data = new { id_token = "id_token" };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/tool/signup", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.viewer_id.Should().Be(1);
     }
 
     [Fact]
     public async Task Signup_IncorrectIdToken_ReturnsErrorResponse()
     {
-        ServerErrorResponse expectedResponse = new();
+        HttpResponseMessage response = await client.PostAsync(
+            "/tool/signup",
+            TestUtils.CreateMsgpackContent(new ToolSignupRequest() { id_token = "wrong_id_token" })
+        );
 
-        var data = new { id_token = "wrong_id_token" };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/tool/signup", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
     }
 
     [Fact]
     public async Task Auth_CorrectIdToken_ReturnsOKResponse()
     {
-        ToolAuthResponse expectedResponse =
-            new(new AuthResponseData(1, "prepared_session_id", "placeholder nonce"));
+        ToolAuthData response = (
+            await client.PostMsgpack<ToolAuthData>(
+                "/tool/auth",
+                new ToolAuthRequest() { id_token = "id_token" }
+            )
+        ).data;
 
-        var data = new { uuid = "unused", id_token = "id_token" };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/tool/auth", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response
+            .Should()
+            .BeEquivalentTo(
+                new ToolAuthData()
+                {
+                    viewer_id = 1,
+                    session_id = "prepared_session_id",
+                    nonce = "placeholder nonce"
+                }
+            );
     }
 
     [Fact]
     public async Task Auth_CalledTwice_ReturnsSameSessionId()
     {
-        ToolAuthResponse expectedResponse =
-            new(new AuthResponseData(1, "prepared_session_id", "placeholder nonce"));
+        ToolAuthData expectedResponse = new(1, "prepared_session_id", "placeholder nonce");
 
-        var data = new { uuid = "unused", id_token = "id_token" };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
+        ToolAuthRequest data = new() { uuid = "unused", id_token = "id_token" };
 
-        HttpResponseMessage response = await client.PostAsync("/tool/auth", content);
-        HttpResponseMessage responseTwo = await client.PostAsync("/tool/auth", content);
+        ToolAuthData response = (await client.PostMsgpack<ToolAuthData>("/tool/auth", data)).data;
+        ToolAuthData response2 = (await client.PostMsgpack<ToolAuthData>("/tool/auth", data)).data;
 
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
-        await TestUtils.CheckMsgpackResponse(responseTwo, expectedResponse);
+        response.Should().BeEquivalentTo(expectedResponse);
+        response2.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Fact]
     public async Task Auth_IncorrectIdToken_ReturnsErrorResponse()
     {
-        ServerErrorResponse expectedResponse = new();
+        HttpResponseMessage response = await client.PostAsync(
+            "/tool/auth",
+            TestUtils.CreateMsgpackContent(new ToolAuthRequest() { id_token = "wrong_id_token" })
+        );
 
-        var data = new { uuid = "unused", id_token = "wrong_id_token" };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/tool/auth", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
     }
 }

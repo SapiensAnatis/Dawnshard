@@ -14,7 +14,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class PartyController : ControllerBase
+public class PartyController : DragaliaControllerBase
 {
     private readonly IPartyRepository partyRepository;
     private readonly IUnitRepository unitRepository;

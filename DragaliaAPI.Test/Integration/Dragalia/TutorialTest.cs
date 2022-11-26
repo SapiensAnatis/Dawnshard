@@ -1,13 +1,13 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models.Components;
-using DragaliaAPI.Models.Responses;
-using DragaliaAPI.Models.Requests;
 using MessagePack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -32,11 +32,12 @@ public class TutorialTest : IClassFixture<IntegrationTestFixture>
     {
         int step = 2;
 
-        var data = new { step = step };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/tutorial/update_step", content);
+        TutorialUpdateStepData response = (
+            await client.PostMsgpack<TutorialUpdateStepData>(
+                "/tutorial/update_step",
+                new TutorialUpdateStepRequest(step, 0, 0, 0)
+            )
+        ).data;
 
         using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
@@ -50,6 +51,7 @@ public class TutorialTest : IClassFixture<IntegrationTestFixture>
     public async Task TutorialUpdateStep_ReturnsCorrectResponse()
     {
         int step = 2;
+
         using IServiceScope scope = fixture.Services.CreateScope();
         IUserDataRepository userDataRepository =
             scope.ServiceProvider.GetRequiredService<IUserDataRepository>();
@@ -57,17 +59,18 @@ public class TutorialTest : IClassFixture<IntegrationTestFixture>
             .GetUserData("logged_in_id")
             .SingleAsync();
 
-        UserData userData = SavefileUserDataFactory.Create(dbUserData);
-        UpdateDataList updateData = new() { user_data = userData with { tutorial_status = step } };
-        TutorialUpdateStepResponse expectedResponse = new(new(step, updateData));
+        UserData expUserData = fixture.Mapper.Map<UserData>(dbUserData);
+        expUserData.tutorial_status = step;
+        UpdateDataList expUpdateData = new() { user_data = expUserData };
 
-        var data = new { step };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
+        TutorialUpdateStepData response = (
+            await client.PostMsgpack<TutorialUpdateStepData>(
+                "/tutorial/update_step",
+                new TutorialUpdateStepRequest(step, 0, 0, 0)
+            )
+        ).data;
 
-        HttpResponseMessage response = await client.PostAsync("/tutorial/update_step", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.update_data_list.Should().BeEquivalentTo(expUpdateData);
     }
 
     [Fact]
@@ -75,11 +78,12 @@ public class TutorialTest : IClassFixture<IntegrationTestFixture>
     {
         int flag = 1020;
 
-        UpdateFlagsRequest request = new(flag);
-        byte[] payload = MessagePackSerializer.Serialize(request);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/tutorial/update_flags", content);
+        TutorialUpdateFlagsData response = (
+            await client.PostMsgpack<TutorialUpdateFlagsData>(
+                "/tool/auth",
+                new TutorialUpdateFlagsRequest() { flag_id = flag }
+            )
+        ).data;
 
         using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();

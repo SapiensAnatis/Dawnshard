@@ -20,7 +20,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class ToolController : ControllerBase
+public class ToolController : DragaliaControllerBase
 {
     private readonly ISessionService sessionService;
     private readonly IUserDataRepository userDataRepository;

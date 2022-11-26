@@ -7,7 +7,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class MissionController : ControllerBase
+public class MissionController : DragaliaControllerBase
 {
     private static class Data
     {

@@ -1,8 +1,11 @@
-﻿using DragaliaAPI.Models.Responses;
+﻿using DragaliaAPI.Models.Generated;
 using MessagePack;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
+/// <summary>
+/// Tests <see cref="Controllers.Dragalia.LoginController"/>
+/// </summary>
 public class LoginVerifyJwsTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
@@ -19,14 +22,13 @@ public class LoginVerifyJwsTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task VerifyJws_ReturnsOK()
     {
-        VerifyJwsResponse expectedResponse = new(new VerifyJwsData());
+        LoginVerifyJwsData response = (
+            await client.PostMsgpack<LoginVerifyJwsData>(
+                "/update/namechange",
+                new LoginVerifyJwsRequest()
+            )
+        ).data;
 
-        var data = new { jws_result = "unused" };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await client.PostAsync("/login/verify_jws", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.Should().BeEquivalentTo(new LoginVerifyJwsData());
     }
 }

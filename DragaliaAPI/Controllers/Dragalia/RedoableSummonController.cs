@@ -177,17 +177,39 @@ public class RedoableSummonController : DragaliaControllerBase
 
         IEnumerable<AtgenDuplicateEntityList> newCharas = repositoryCharaOuput
             .Where(x => x.isNew)
-            .Select(x => new AtgenDuplicateEntityList((int)EntityTypes.Chara, (int)x.id));
+            .Select(
+                x =>
+                    new AtgenDuplicateEntityList()
+                    {
+                        entity_type = (int)EntityTypes.Chara,
+                        entity_id = (int)x.id
+                    }
+            );
         IEnumerable<AtgenDuplicateEntityList> newDragons = repositoryDragonOutput
             .Where(x => x.isNew)
-            .Select(x => new AtgenDuplicateEntityList((int)EntityTypes.Dragon, (int)x.id));
+            .Select(
+                x =>
+                    new AtgenDuplicateEntityList()
+                    {
+                        entity_type = (int)EntityTypes.Dragon,
+                        entity_id = (int)x.id
+                    }
+            );
 
         return this.Ok(
-            new RedoableSummonFixExecData(
-                new UserRedoableSummonData(1, cachedResult),
-                updateData,
-                new EntityResult() { new_get_entity_list = newCharas.Concat(newDragons) }
-            )
+            new RedoableSummonFixExecData()
+            {
+                user_redoable_summon_data = new UserRedoableSummonData()
+                {
+                    is_fixed_result = 1,
+                    redoable_summon_result_unit_list = cachedResult
+                },
+                update_data_list = updateData,
+                entity_result = new EntityResult()
+                {
+                    new_get_entity_list = newCharas.Concat(newDragons)
+                }
+            }
         );
     }
 }
