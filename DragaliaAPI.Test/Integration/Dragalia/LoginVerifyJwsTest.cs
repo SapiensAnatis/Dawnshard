@@ -7,6 +7,7 @@ namespace DragaliaAPI.Test.Integration.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.LoginController"/>
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class LoginVerifyJwsTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
@@ -30,6 +31,6 @@ public class LoginVerifyJwsTest : IClassFixture<IntegrationTestFixture>
             )
         ).data;
 
-        response.Should().BeEquivalentTo(new ResultCodeData(ResultCode.Success));
+        response.Should().BeEquivalentTo(new ResultCodeData(ResultCode.SUCCESS));
     }
 }

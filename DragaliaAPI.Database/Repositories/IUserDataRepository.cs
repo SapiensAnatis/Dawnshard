@@ -9,6 +9,7 @@ public interface IUserDataRepository : IBaseRepository
     IQueryable<DbPlayerUserData> GetUserData(string deviceAccountId);
     Task SetMainPartyNo(string deviceAccountId, int partyNo);
     Task SetTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags);
+    Task SkipTutorial(string deviceAccountId);
     Task UpdateName(string deviceAccountId, string newName);
     Task<DbPlayerUserData> UpdateTutorialStatus(string deviceAccountId, int newStatus);
 }

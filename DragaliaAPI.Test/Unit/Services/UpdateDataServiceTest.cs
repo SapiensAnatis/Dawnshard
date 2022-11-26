@@ -78,6 +78,16 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
                 MaterialId = Materials.AlmightyOnesMaskFragment,
                 Quantity = 10
             };
+        DbQuest questData =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                QuestId = 100010104,
+                IsMissionClear1 = true,
+                IsMissionClear2 = true,
+                IsMissionClear3 = true,
+                State = 3
+            };
 
         this.fixture.ApiContext.AddRange(
             new List<IDbHasAccountId>()
@@ -88,7 +98,8 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
                 reliabilityData,
                 partyData,
                 storyState,
-                materialData
+                materialData,
+                questData
             }
         );
 
@@ -117,6 +128,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             .BeEquivalentTo(
                 new List<QuestStoryList>() { this.mapper.Map<QuestStoryList>(storyState) }
             );
+        list.quest_list
+            .Should()
+            .BeEquivalentTo(new List<QuestList> { this.mapper.Map<QuestList>(questData) });
         list.material_list
             .Should()
             .BeEquivalentTo(

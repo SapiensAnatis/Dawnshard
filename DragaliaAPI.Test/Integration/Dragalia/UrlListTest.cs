@@ -2,6 +2,7 @@
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
+[Collection("DragaliaIntegration")]
 public class UrlListTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;

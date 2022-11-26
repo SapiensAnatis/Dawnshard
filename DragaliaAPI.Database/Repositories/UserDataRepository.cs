@@ -74,6 +74,14 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         userData.MainPartyNo = partyNo;
     }
 
+    public async Task SkipTutorial(string deviceAccountId)
+    {
+        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+
+        userData.TutorialStatus = 60999;
+        userData.TutorialFlagList = Enumerable.Range(1, 30).Select(x => x + 1000).ToHashSet();
+    }
+
     private async Task<DbPlayerUserData> LookupUserData(string deviceAccountId)
     {
         return await apiContext.PlayerUserData.FindAsync(deviceAccountId)

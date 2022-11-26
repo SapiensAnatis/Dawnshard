@@ -1,12 +1,16 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using FluentAssertions.Equivalency;
 using MessagePack;
 using MessagePack.Resolvers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
+using Xunit.Abstractions;
 
 namespace DragaliaAPI.Test;
 
@@ -31,34 +35,23 @@ public static class TestUtils
         return JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
     }
 
-    /// <summary>
-    /// For a HttpResponse with a msgpack body:
-    /// 1. Checks it has a success status code
-    /// 2. Deserializes it into the model type representing the body
-    /// 3. Checks the deserialization result matches an expected value
-    /// </summary>
-    /// <typeparam name="TResponse">The type of response expected in the body.</typeparam>
-    /// <param name="response">The received response.</param>
-    /// <param name="expectedResponse">The expected response body object.</param>
-    public static async Task CheckMsgpackResponse<TResponse>(
-        HttpResponseMessage response,
-        TResponse expectedResponse,
-        Func<
-            EquivalencyAssertionOptions<TResponse>,
-            EquivalencyAssertionOptions<TResponse>
-        >? config = null
-    )
+    public static ControllerContext MockControllerContext =>
+        new()
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                Items = new Dictionary<object, object?>() { { "DeviceAccountId", "id" } }
+            }
+        };
+
+    public const string DeviceAccountId = "id";
+
+    public static T? GetData<T>(this ActionResult<DragaliaResponse<object>> response)
+        where T : class
     {
-        response.IsSuccessStatusCode.Should().BeTrue();
-
-        byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-        TResponse? deserializedResponse = MessagePackSerializer.Deserialize<TResponse>(
-            responseBytes,
-            ContractlessStandardResolver.Options
-        );
-
-        config ??= options => options;
-        deserializedResponse.Should().BeEquivalentTo(expectedResponse, config);
+        DragaliaResponse<object>? innerResponse =
+            (response.Result as OkObjectResult)?.Value as DragaliaResponse<object>;
+        return innerResponse?.data as T;
     }
 
     public static async Task<DragaliaResponse<TResponse>> PostMsgpack<TResponse>(
@@ -74,6 +67,16 @@ public static class TestUtils
         response.EnsureSuccessStatusCode();
 
         byte[] body = await response.Content.ReadAsByteArrayAsync();
-        return MessagePackSerializer.Deserialize<DragaliaResponse<TResponse>>(body);
+        return MessagePackSerializer.Deserialize<DragaliaResponse<TResponse>>(
+            body,
+            CustomResolver.Options
+        );
+    }
+
+    public static void WriteAsJson(this ITestOutputHelper output, object value)
+    {
+        output.WriteLine(
+            JsonSerializer.Serialize(value, new JsonSerializerOptions() { WriteIndented = true })
+        );
     }
 }

@@ -1,6 +1,4 @@
-﻿#define SKIP_TUTORIAL
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -15,6 +13,8 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
 {
     private readonly ApiContext apiContext;
     private readonly ICharaDataService charaDataService;
+
+    private const int PartySlotCount = 54;
 
     public DeviceAccountRepository(ApiContext apiContext, ICharaDataService charaDataService)
         : base(apiContext)
@@ -36,11 +36,9 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
     public async Task CreateNewSavefile(string deviceAccountId)
     {
         DbPlayerUserData userData = DbSavefileUserDataFactory.Create(deviceAccountId);
-
-#if SKIP_TUTORIAL
+#if DEBUG
         userData.TutorialStatus = 10151;
 #endif
-
         await apiContext.PlayerUserData.AddAsync(userData);
 
         await apiContext.PlayerCharaData.AddAsync(
@@ -51,9 +49,7 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
         );
 
         List<DbParty> defaultParties = new();
-
-        // New savefiles come with 54 parties, for some reason
-        for (int i = 1; i <= 54; i++)
+        for (int i = 1; i <= PartySlotCount; i++)
         {
             defaultParties.Add(
                 new()
@@ -73,5 +69,30 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
         }
 
         await apiContext.PlayerParties.AddRangeAsync(defaultParties);
+
+        await apiContext.PlayerWeapons.AddAsync(
+            new DbWeaponBody()
+            {
+                DeviceAccountId = deviceAccountId,
+                WeaponBodyId = WeaponBodies.PrimalCrimson,
+                BuildupCount = 80,
+                LimitBreakCount = 8,
+                LimitOverCount = 1,
+                IsNew = false,
+                GetTime = DateTime.UtcNow,
+            }
+        );
+
+        await apiContext.PlayerAbilityCrests.AddAsync(
+            new DbAbilityCrest()
+            {
+                DeviceAccountId = deviceAccountId,
+                AbilityCrestId = AbilityCrests.ValiantCrown,
+                BuildupCount = 50,
+                LimitBreakCount = 4,
+                GetTime = DateTime.UtcNow,
+                IsNew = false
+            }
+        );
     }
 }
