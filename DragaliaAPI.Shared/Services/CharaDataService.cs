@@ -2,9 +2,7 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using System.Collections.Immutable;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using static DragaliaAPI.Shared.Definitions.Enums.ManaNodesUtil;
 
 namespace DragaliaAPI.Shared.Services;

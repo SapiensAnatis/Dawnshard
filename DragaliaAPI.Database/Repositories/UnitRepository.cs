@@ -143,7 +143,7 @@ public class UnitRepository : BaseRepository, IUnitRepository
                 .Entity;
     }
 
-    public IEnumerable<DbSetUnit>? GetCharaSets(string deviceAccountId, Charas charaId)
+    public IEnumerable<DbSetUnit> GetCharaSets(string deviceAccountId, Charas charaId)
     {
         return apiContext.PlayerSetUnits.Where(
             x => x.DeviceAccountId == deviceAccountId && x.CharaId == charaId

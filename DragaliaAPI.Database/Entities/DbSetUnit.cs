@@ -10,7 +10,7 @@ public class DbSetUnit : IDbHasAccountId
 {
     [Required]
     [ForeignKey("DbDeviceAccountId")]
-    public string DeviceAccountId { get; set; } = null!;
+    public required string DeviceAccountId { get; set; }
 
     [Required]
     public Charas CharaId { get; set; }
@@ -18,7 +18,7 @@ public class DbSetUnit : IDbHasAccountId
     [Required]
     public int UnitSetNo { get; set; }
 
-    public string UnitSetName { get; set; } = null!;
+    public required string UnitSetName { get; set; }
 
     public long EquipDragonKeyId { get; set; }
 
