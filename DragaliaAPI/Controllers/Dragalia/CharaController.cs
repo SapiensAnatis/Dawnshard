@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
@@ -6,6 +7,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -47,6 +49,7 @@ public class CharaController : DragaliaControllerBase
         this.updateDataService = updateDataService;
         this.mapper = mapper;
         _charaDataService = charaDataService;
+        _sessionService = sessionService;
     }
 
     [Route("awake")]
@@ -88,7 +91,7 @@ public class CharaController : DragaliaControllerBase
                 this.DeviceAccountId
             );
 
-            await _apiContext.SaveChangesAsync();
+            await unitRepository.SaveChangesAsync();
 
             return Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -158,7 +161,7 @@ public class CharaController : DragaliaControllerBase
                 this.DeviceAccountId
             );
 
-            await _apiContext.SaveChangesAsync();
+            await unitRepository.SaveChangesAsync();
 
             return Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -348,7 +351,7 @@ public class CharaController : DragaliaControllerBase
                 this.DeviceAccountId
             );
 
-            await _apiContext.SaveChangesAsync();
+            await unitRepository.SaveChangesAsync();
 
             return Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -410,7 +413,7 @@ public class CharaController : DragaliaControllerBase
                 this.DeviceAccountId
             );
 
-            await _apiContext.SaveChangesAsync();
+            await unitRepository.SaveChangesAsync();
 
             return Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -459,7 +462,7 @@ public class CharaController : DragaliaControllerBase
                 this.DeviceAccountId
             );
 
-            await _apiContext.SaveChangesAsync();
+            await unitRepository.SaveChangesAsync();
 
             return Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -715,7 +718,7 @@ public class CharaController : DragaliaControllerBase
                 this.DeviceAccountId
             );
 
-            await _apiContext.SaveChangesAsync();
+            await unitRepository.SaveChangesAsync();
 
             return Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -725,22 +728,124 @@ public class CharaController : DragaliaControllerBase
         }
     }
 
-    //TODO: Finish when generated message classes are available
+    [Route("get_chara_unit_set")]
+    [HttpPost]
+    public async Task<DragaliaResult> GetCharaUnitSet(
+        [FromHeader(Name = "SID")] string sessionId,
+        [FromBody] CharaGetCharaUnitSetRequest request
+    )
+    {
+        string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
+        IDictionary<Charas, IEnumerable<DbSetUnit>> setUnitData = unitRepository.GetCharaSets(
+            accountId,
+            request.chara_id_list.Select(x => (Charas)x)
+        );
+        return Ok(
+            new CharaGetCharaUnitSetData()
+            {
+                chara_unit_set_list = setUnitData.Select(
+                    x =>
+                        new CharaUnitSetList()
+                        {
+                            chara_id = (int)x.Key,
+                            chara_unit_set_detail_list = x.Value.Select(
+                                y =>
+                                    new AtgenCharaUnitSetDetailList()
+                                    {
+                                        unit_set_no = y.UnitSetNo,
+                                        unit_set_name = y.UnitSetName,
+                                        dragon_key_id = (ulong)y.EquipDragonKeyId,
+                                        weapon_body_id = y.EquipWeaponBodyId,
+                                        crest_slot_type_1_crest_id_1 =
+                                            y.EquipCrestSlotType1CrestId1,
+                                        crest_slot_type_1_crest_id_2 =
+                                            y.EquipCrestSlotType1CrestId2,
+                                        crest_slot_type_1_crest_id_3 =
+                                            y.EquipCrestSlotType1CrestId3,
+                                        crest_slot_type_2_crest_id_1 =
+                                            y.EquipCrestSlotType2CrestId1,
+                                        crest_slot_type_2_crest_id_2 =
+                                            y.EquipCrestSlotType2CrestId2,
+                                        crest_slot_type_3_crest_id_1 =
+                                            y.EquipCrestSlotType3CrestId1,
+                                        crest_slot_type_3_crest_id_2 =
+                                            y.EquipCrestSlotType3CrestId2,
+                                        talisman_key_id = (ulong)y.EquipTalismanKeyId
+                                    }
+                            )
+                        }
+                )
+            }
+        );
+    }
+
     [Route("set_chara_unit_set")]
     [HttpPost]
     public async Task<DragaliaResult> SetCharaUnitSet(
         [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] object request
+        [FromBody] CharaSetCharaUnitSetRequest request
     )
     {
         string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
         DbSetUnit setUnitData = await unitRepository.GetOrCreateCharaSetData(
             accountId,
-            Charas.Celliera,
-            0
+            request.chara_id,
+            request.unit_set_no
         );
-        //TODO: Update data
+
+        setUnitData.UnitSetName = request.unit_set_name;
+        setUnitData.EquipDragonKeyId = (long)request.request_chara_unit_set_data.dragon_key_id;
+        setUnitData.EquipWeaponBodyId = request.request_chara_unit_set_data.weapon_body_id;
+        setUnitData.EquipCrestSlotType1CrestId1 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_1_crest_id_1;
+        setUnitData.EquipCrestSlotType1CrestId2 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_1_crest_id_2;
+        setUnitData.EquipCrestSlotType1CrestId3 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_1_crest_id_3;
+        setUnitData.EquipCrestSlotType2CrestId1 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_2_crest_id_1;
+        setUnitData.EquipCrestSlotType2CrestId2 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_2_crest_id_2;
+        setUnitData.EquipCrestSlotType3CrestId1 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_3_crest_id_1;
+        setUnitData.EquipCrestSlotType3CrestId2 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_3_crest_id_2;
+        setUnitData.EquipTalismanKeyId = (long)request.request_chara_unit_set_data.talisman_key_id;
+
         await unitRepository.SaveChangesAsync();
-        return Ok();
+        CharaUnitSetList setList = new CharaUnitSetList()
+        {
+            chara_id = (int)request.chara_id,
+            chara_unit_set_detail_list = unitRepository
+                .GetCharaSets(accountId, request.chara_id)
+                .Select(
+                    x =>
+                        new AtgenCharaUnitSetDetailList()
+                        {
+                            unit_set_no = x.UnitSetNo,
+                            unit_set_name = x.UnitSetName,
+                            dragon_key_id = (ulong)x.EquipDragonKeyId,
+                            weapon_body_id = x.EquipWeaponBodyId,
+                            crest_slot_type_1_crest_id_1 = x.EquipCrestSlotType1CrestId1,
+                            crest_slot_type_1_crest_id_2 = x.EquipCrestSlotType1CrestId2,
+                            crest_slot_type_1_crest_id_3 = x.EquipCrestSlotType1CrestId3,
+                            crest_slot_type_2_crest_id_1 = x.EquipCrestSlotType2CrestId1,
+                            crest_slot_type_2_crest_id_2 = x.EquipCrestSlotType2CrestId2,
+                            crest_slot_type_3_crest_id_1 = x.EquipCrestSlotType3CrestId1,
+                            crest_slot_type_3_crest_id_2 = x.EquipCrestSlotType3CrestId2,
+                            talisman_key_id = (ulong)x.EquipTalismanKeyId
+                        }
+                )
+        };
+        UpdateDataList ul = updateDataService.GetUpdateDataList(accountId);
+        ul.chara_unit_set_list = new List<CharaUnitSetList> { setList };
+        return Ok(new CharaSetCharaUnitSetData() { update_data_list = ul, entity_result = null });
     }
 }

@@ -5,7 +5,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 namespace DragaliaAPI.Database.Entities;
 
 //TODO: This and PartyUnit share a lot of properties, maybe extract those and make these into subclasses which inherit them
-[Table("SetUnit")]
+[Table("PlayerSetUnit")]
 public class DbSetUnit : IDbHasAccountId
 {
     [Required]
@@ -23,8 +23,6 @@ public class DbSetUnit : IDbHasAccountId
     public long EquipDragonKeyId { get; set; }
 
     public int EquipWeaponBodyId { get; set; }
-
-    public int EquipWeaponSkinId { get; set; }
 
     public int EquipCrestSlotType1CrestId1 { get; set; }
 

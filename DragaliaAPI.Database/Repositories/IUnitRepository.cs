@@ -16,12 +16,12 @@ public interface IUnitRepository : IBaseRepository
         string deviceAccountId,
         IEnumerable<Charas> idList
     );
-
-    Task<(
-        IEnumerable<DbPlayerDragonData> newDragons,
-        IEnumerable<DbPlayerDragonReliability> newReliabilities
-    )> AddDragons(string deviceAccountId, IEnumerable<Dragons> idList);
     Task<DbSetUnit> GetOrCreateCharaSetData(string deviceAccountId, Charas charaId, int setNo);
+    IEnumerable<DbSetUnit> GetCharaSets(string deviceAccountId, Charas charaId);
+    IDictionary<Charas, IEnumerable<DbSetUnit>> GetCharaSets(
+        string deviceAccountId,
+        IEnumerable<Charas> charaId
+    );
     Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(
         string deviceAccountId,
         IEnumerable<Dragons> idList

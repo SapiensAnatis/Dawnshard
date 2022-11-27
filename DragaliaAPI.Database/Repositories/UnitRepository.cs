@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Services;
@@ -122,26 +124,41 @@ public class UnitRepository : BaseRepository, IUnitRepository
         int setNo
     )
     {
-        return apiContext.PlayerSetUnits
-            .Where(
+        return await apiContext.PlayerSetUnits.FirstOrDefaultAsync(
                 x =>
                     x.DeviceAccountId == deviceAccountId
                     && x.CharaId == charaId
                     && x.UnitSetNo == setNo
             )
-            .FirstOrDefault(
-                apiContext.PlayerSetUnits
-                    .Add(
-                        new DbSetUnit()
-                        {
-                            DeviceAccountId = deviceAccountId,
-                            CharaId = charaId,
-                            UnitSetNo = setNo,
-                            UnitSetName = $"Set {setNo}"
-                        }
-                    )
-                    .Entity
-            );
+            ?? apiContext.PlayerSetUnits
+                .Add(
+                    new DbSetUnit()
+                    {
+                        DeviceAccountId = deviceAccountId,
+                        CharaId = charaId,
+                        UnitSetNo = setNo,
+                        UnitSetName = $"Set {setNo}"
+                    }
+                )
+                .Entity;
+    }
+
+    public IEnumerable<DbSetUnit>? GetCharaSets(string deviceAccountId, Charas charaId)
+    {
+        return apiContext.PlayerSetUnits.Where(
+            x => x.DeviceAccountId == deviceAccountId && x.CharaId == charaId
+        );
+    }
+
+    public IDictionary<Charas, IEnumerable<DbSetUnit>> GetCharaSets(
+        string deviceAccountId,
+        IEnumerable<Charas> charaIds
+    )
+    {
+        return apiContext.PlayerSetUnits
+            .Where(x => charaIds.Contains(x.CharaId))
+            .GroupBy(x => x.CharaId)
+            .ToDictionary(x => x.Key, x => x.AsEnumerable());
     }
 
     private static IEnumerable<(TEnum id, bool isNew)> MarkNewIds<TEnum>(
