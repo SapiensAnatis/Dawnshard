@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Linq;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -34,6 +35,28 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
             scope.ServiceProvider.GetRequiredService<IUnitRepository>();
         await unitRepository.AddCharas(DeviceAccountId, new List<Charas>() { id });
         await unitRepository.SaveChangesAsync();
+    }
+
+    public async Task PopulateAllMaterials()
+    {
+        using (IServiceScope scope = this.Services.CreateScope())
+        {
+            ApiContext inventoryRepo = scope.ServiceProvider.GetRequiredService<ApiContext>();
+            inventoryRepo.PlayerStorage.AddRange(
+                Enum.GetValues(typeof(Materials))
+                    .OfType<Materials>()
+                    .Select(
+                        x =>
+                            new DbPlayerMaterial()
+                            {
+                                DeviceAccountId = DeviceAccountId,
+                                MaterialId = x,
+                                Quantity = 99999999
+                            }
+                    )
+            );
+            await inventoryRepo.SaveChangesAsync();
+        }
     }
 
     /// <summary>

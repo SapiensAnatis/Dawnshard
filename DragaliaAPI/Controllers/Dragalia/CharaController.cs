@@ -308,12 +308,13 @@ public class CharaController : DragaliaControllerBase
                     ? CharaUpgradeMaterialTypes.GrowthMaterial
                     : CharaUpgradeMaterialTypes.Standard
             );
-            await userDataRepository.SaveChangesAsync();
             //TODO: Party power calculation call
 
             UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
                 this.DeviceAccountId
             );
+
+            await userDataRepository.SaveChangesAsync();
 
             return this.Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -440,13 +441,19 @@ public class CharaController : DragaliaControllerBase
                 .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
             DataAdventurer charaData = _charaDataService.GetData(playerCharaData.CharaId);
             playerCharaData.Rarity = 5;
-            //TODO: get max values for chars with spiral, for now always unspiralled
-            playerCharaData.Level = CharaConstants.MaxLevel;
+            bool hasSpiral = charaData.MaxLimitBreakCount > 4;
+            playerCharaData.Level = (byte)(
+                CharaConstants.MaxLevel + (hasSpiral ? CharaConstants.AddMaxLevel : 0)
+            );
             playerCharaData.Exp = CharaConstants.XpLimits[playerCharaData.Level - 1];
-            playerCharaData.HpBase = (ushort)charaData.MaxHp;
-            playerCharaData.AttackBase = (ushort)charaData.MaxAtk;
-            playerCharaData.LimitBreakCount = ManaNodesUtil.MaxLimitbreak;
-            ManaNodes maxManaNodes = ManaNodesUtil.MaxManaNodes;
+            playerCharaData.HpBase = hasSpiral
+                ? (ushort)charaData.AddMaxHp1
+                : (ushort)charaData.MaxHp;
+            playerCharaData.AttackBase = hasSpiral
+                ? (ushort)charaData.AddMaxAtk1
+                : (ushort)charaData.MaxAtk;
+            playerCharaData.LimitBreakCount = (byte)charaData.MaxLimitBreakCount;
+            ManaNodes maxManaNodes = hasSpiral ? ManaNodes.Circle7 : ManaNodesUtil.MaxManaNodes;
             Dictionary<CurrencyTypes, int> usedCurrencies = new();
             Dictionary<Materials, int> usedMaterials = new();
             HashSet<int> unlockedStories = new();
@@ -545,7 +552,7 @@ public class CharaController : DragaliaControllerBase
                 throw new ArgumentException($"No nodeInfo found for node {nodeNr}");
             }
             ManaNodeInfo manaNodeInfo = manaNodeInfos[nodeNr - 1];
-            int floor = Math.Min(nodeNr / 10, 5);
+            int floor = Math.Clamp((nodeNr - 1) / 10, 0, 5);
             Dictionary<CurrencyTypes, int> currencyCosts = new();
             Dictionary<Materials, int> materialCosts = new();
             switch (manaNodeInfo.NodeType)
