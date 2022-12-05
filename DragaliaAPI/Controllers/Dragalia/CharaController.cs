@@ -279,6 +279,58 @@ public class CharaController : DragaliaControllerBase
         }
     }
 
+    [Route("reset_plus_count")]
+    [HttpPost]
+    public async Task<DragaliaResult> CharaResetPlusCount(
+        [FromBody] CharaResetPlusCountRequest request
+    )
+    {
+        DbPlayerUserData userData = await this.userDataRepository
+            .GetUserData(this.DeviceAccountId)
+            .FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository
+            .GetAllCharaData(this.DeviceAccountId)
+            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        Materials mat =
+            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
+                ? Materials.AmplifyingCrystal
+                : Materials.FortifyingCrystal;
+
+        DbPlayerMaterial upgradeMat = await inventoryRepository.GetOrAddMaterial(
+            DeviceAccountId,
+            mat
+        );
+        DbPlayerCurrency playerCurrency =
+            await inventoryRepository.GetCurrency(DeviceAccountId, CurrencyTypes.Rupies)
+            ?? throw new ArgumentException("Insufficient Rupies for reset");
+        int cost =
+            20000
+            * (
+                (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
+                    ? playerCharData.AttackPlusCount
+                    : playerCharData.HpPlusCount
+            );
+        if (playerCurrency.Quantity < cost)
+        {
+            throw new ArgumentException("Insufficient Rupies for reset");
+        }
+        playerCurrency.Quantity -= cost;
+        upgradeMat.Quantity +=
+            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
+                ? playerCharData.AttackPlusCount
+                : playerCharData.HpPlusCount;
+        _ =
+            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
+                ? playerCharData.AttackPlusCount = 0
+                : playerCharData.HpPlusCount = 0;
+
+        UpdateDataList updateDataList = updateDataService.GetUpdateDataList(DeviceAccountId);
+
+        await userDataRepository.SaveChangesAsync();
+
+        return Ok(new CharaResetPlusCountData(updateDataList, new()));
+    }
+
     [Route("buildup_mana")]
     [HttpPost]
     public async Task<DragaliaResult> CharaBuildupMana([FromBody] CharaBuildupManaRequest request)
