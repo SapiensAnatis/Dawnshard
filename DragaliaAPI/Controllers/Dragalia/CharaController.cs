@@ -221,12 +221,16 @@ public class CharaController : DragaliaControllerBase
             }
             usedMaterials[(int)MaterialList.id] += MaterialList.quantity;
         }
-        if (playerCharData.Exp > CharaConstants.XpLimits[playerCharData.Level - 1])
+        if (
+            playerCharData.Level < maxLevel
+            && playerCharData.Level < CharaConstants.XpLimits.Count
+            && !(playerCharData.Exp < CharaConstants.XpLimits[playerCharData.Level])
+        )
         {
             while (
-                playerCharData.Exp > CharaConstants.XpLimits[playerCharData.Level - 1]
-                && playerCharData.Level < maxLevel
+                playerCharData.Level < maxLevel
                 && playerCharData.Level < CharaConstants.XpLimits.Count
+                && !(playerCharData.Exp < CharaConstants.XpLimits[playerCharData.Level])
             )
             {
                 playerCharData.Level++;
