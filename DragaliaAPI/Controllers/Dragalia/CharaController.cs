@@ -126,7 +126,7 @@ public class CharaController : DragaliaControllerBase
                 }
                 if (
                     mat.id != Materials.BronzeCrystal
-                    && mat.id == Materials.SilverCrystal
+                    && mat.id != Materials.SilverCrystal
                     && mat.id != Materials.GoldCrystal
                     && mat.id != Materials.AmplifyingCrystal
                     && mat.id != Materials.FortifyingCrystal
