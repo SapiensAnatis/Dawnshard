@@ -100,6 +100,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
 
         repository.CreateNewSavefile(PreparedDeviceAccountId);
         repository.CreateNewSavefile(DeviceAccountId);
+        PopulateAllMaterials().Wait();
         context.SaveChanges();
     }
 }

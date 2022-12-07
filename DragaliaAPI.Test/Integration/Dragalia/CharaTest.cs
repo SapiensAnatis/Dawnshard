@@ -28,9 +28,8 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
         client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
-        fixture.AddCharacter(Charas.Celliera);
-        fixture.AddCharacter(Charas.SummerCelliera);
-        fixture.PopulateAllMaterials();
+        fixture.AddCharacter(Charas.Celliera).Wait();
+        fixture.AddCharacter(Charas.SummerCelliera).Wait();
     }
 
     [Fact]
@@ -213,7 +212,9 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
         responseCharaData.level.Should().Be(100);
         responseCharaData.exp.Should().Be(CharaConstants.XpLimits[99]);
         responseCharaData.limit_break_count.Should().Be(5);
-        responseCharaData.mana_circle_piece_id_list.Should().Contain(1).And.Contain(70);
+        responseCharaData.mana_circle_piece_id_list
+            .Should()
+            .BeEquivalentTo(Enumerable.Range(1, 70));
     }
 
     [Fact]

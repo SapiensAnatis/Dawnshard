@@ -296,10 +296,9 @@ public class CharaController : DragaliaControllerBase
                 ? Materials.AmplifyingCrystal
                 : Materials.FortifyingCrystal;
 
-        DbPlayerMaterial upgradeMat = await inventoryRepository.GetOrAddMaterial(
-            DeviceAccountId,
-            mat
-        );
+        DbPlayerMaterial upgradeMat =
+            await inventoryRepository.GetMaterial(DeviceAccountId, mat)
+            ?? inventoryRepository.AddMaterial(DeviceAccountId, mat);
         DbPlayerCurrency playerCurrency =
             await inventoryRepository.GetCurrency(DeviceAccountId, CurrencyTypes.Rupies)
             ?? throw new ArgumentException("Insufficient Rupies for reset");
@@ -682,10 +681,15 @@ public class CharaController : DragaliaControllerBase
                     playerCharData.ExAbility2Level++;
                     break;
                 case ManaNodeInfo.NodeTypes.Mat:
-                    DbPlayerMaterial? mat = await this.inventoryRepository.GetOrAddMaterial(
-                        playerCharData.DeviceAccountId,
-                        Materials.DamascusCrystal
-                    );
+                    DbPlayerMaterial mat =
+                        await this.inventoryRepository.GetMaterial(
+                            playerCharData.DeviceAccountId,
+                            Materials.DamascusCrystal
+                        )
+                        ?? inventoryRepository.AddMaterial(
+                            DeviceAccountId,
+                            Materials.DamascusCrystal
+                        );
                     mat.Quantity++;
                     break;
                 case ManaNodeInfo.NodeTypes.StdAtkUp:
@@ -846,11 +850,10 @@ public class CharaController : DragaliaControllerBase
     )
     {
         string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-        DbSetUnit setUnitData = await unitRepository.GetOrCreateCharaSetData(
-            accountId,
-            request.chara_id,
-            request.unit_set_no
-        );
+        DbSetUnit setUnitData =
+            await unitRepository.GetCharaSetData(accountId, request.chara_id, request.unit_set_no)
+            ?? unitRepository.AddCharaSetData(accountId, request.chara_id, request.unit_set_no);
+        ;
 
         setUnitData.UnitSetName = request.unit_set_name;
         setUnitData.EquipDragonKeyId = (long)request.request_chara_unit_set_data.dragon_key_id;

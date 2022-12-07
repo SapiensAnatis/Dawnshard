@@ -35,6 +35,11 @@ public class UnitRepository : BaseRepository, IUnitRepository
         return apiContext.PlayerDragonData.Where(x => x.DeviceAccountId == deviceAccountId);
     }
 
+    public IQueryable<DbPlayerDragonReliability> GetAllDragonReliabilityData(string deviceAccountId)
+    {
+        return apiContext.PlayerDragonReliability.Where(x => x.DeviceAccountId == deviceAccountId);
+    }
+
     public async Task<bool> CheckHasCharas(string deviceAccountId, IEnumerable<Charas> idList)
     {
         IEnumerable<Charas> owned = await this.GetAllCharaData(deviceAccountId)
@@ -118,29 +123,36 @@ public class UnitRepository : BaseRepository, IUnitRepository
         return newMapping;
     }
 
-    public async Task<DbSetUnit> GetOrCreateCharaSetData(
-        string deviceAccountId,
-        Charas charaId,
-        int setNo
-    )
+    public async Task RemoveDragons(string deviceAccountId, IEnumerable<long> keyIdList)
+    {
+        IEnumerable<DbPlayerDragonData> ownedDragons = await this.GetAllDragonData(deviceAccountId)
+            .Where(x => x.DeviceAccountId == deviceAccountId && keyIdList.Contains(x.DragonKeyId))
+            .ToListAsync();
+
+        apiContext.PlayerDragonData.RemoveRange(ownedDragons);
+    }
+
+    public async Task<DbSetUnit?> GetCharaSetData(string deviceAccountId, Charas charaId, int setNo)
     {
         return await apiContext.PlayerSetUnits.FirstOrDefaultAsync(
-                x =>
-                    x.DeviceAccountId == deviceAccountId
-                    && x.CharaId == charaId
-                    && x.UnitSetNo == setNo
+            x =>
+                x.DeviceAccountId == deviceAccountId && x.CharaId == charaId && x.UnitSetNo == setNo
+        );
+    }
+
+    public DbSetUnit AddCharaSetData(string deviceAccountId, Charas charaId, int setNo)
+    {
+        return apiContext.PlayerSetUnits
+            .Add(
+                new DbSetUnit()
+                {
+                    DeviceAccountId = deviceAccountId,
+                    CharaId = charaId,
+                    UnitSetNo = setNo,
+                    UnitSetName = $"Set {setNo}"
+                }
             )
-            ?? apiContext.PlayerSetUnits
-                .Add(
-                    new DbSetUnit()
-                    {
-                        DeviceAccountId = deviceAccountId,
-                        CharaId = charaId,
-                        UnitSetNo = setNo,
-                        UnitSetName = $"Set {setNo}"
-                    }
-                )
-                .Entity;
+            .Entity;
     }
 
     public IEnumerable<DbSetUnit> GetCharaSets(string deviceAccountId, Charas charaId)

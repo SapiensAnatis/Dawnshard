@@ -13,19 +13,18 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
         this.apiContext = apiContext;
     }
 
-    public async Task<DbPlayerCurrency> GetOrAddCurrency(string deviceAccountId, CurrencyTypes type)
+    public DbPlayerCurrency AddCurrency(string deviceAccountId, CurrencyTypes type)
     {
-        return (await GetCurrency(deviceAccountId, type))
-            ?? this.apiContext.PlayerWallet
-                .Add(
-                    new DbPlayerCurrency()
-                    {
-                        DeviceAccountId = deviceAccountId,
-                        CurrencyType = type,
-                        Quantity = 0
-                    }
-                )
-                .Entity;
+        return apiContext.PlayerWallet
+            .Add(
+                new DbPlayerCurrency()
+                {
+                    DeviceAccountId = deviceAccountId,
+                    CurrencyType = type,
+                    Quantity = 0
+                }
+            )
+            .Entity;
     }
 
     public async Task<DbPlayerCurrency?> GetCurrency(string deviceAccountId, CurrencyTypes type)
@@ -42,19 +41,18 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
         );
     }
 
-    public async Task<DbPlayerMaterial> GetOrAddMaterial(string deviceAccountId, Materials type)
+    public DbPlayerMaterial AddMaterial(string deviceAccountId, Materials type)
     {
-        return (await GetMaterial(deviceAccountId, type))
-            ?? this.apiContext.PlayerStorage
-                .Add(
-                    new DbPlayerMaterial()
-                    {
-                        DeviceAccountId = deviceAccountId,
-                        MaterialId = type,
-                        Quantity = 0
-                    }
-                )
-                .Entity;
+        return apiContext.PlayerStorage
+            .Add(
+                new DbPlayerMaterial()
+                {
+                    DeviceAccountId = deviceAccountId,
+                    MaterialId = type,
+                    Quantity = 0
+                }
+            )
+            .Entity;
     }
 
     public async Task<DbPlayerMaterial?> GetMaterial(string deviceAccountId, Materials materialId)
