@@ -90,7 +90,7 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
             .First();
         responseCharaData.level
             .Should()
-            .Be(Math.Min(CharaConstants.XpLimits.FindIndex(0, x => x > expectedXp) + 1, maxLevel));
+            .Be(Math.Min(CharaConstants.XpLimits.FindIndex(0, x => x > expectedXp), maxLevel));
         responseCharaData.exp.Should().Be(expectedXp);
 
         response.update_data_list.material_list
