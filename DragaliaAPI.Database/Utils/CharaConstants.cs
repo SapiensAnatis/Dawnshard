@@ -8,12 +8,12 @@ public static class CharaConstants
 {
     public static byte GetMaxLevelFor(int rarity)
     {
-        if (rarity < 3 || rarity > 5)
-            throw new ArgumentException("Invalid Rarity");
-        return (byte)(MinMaxLevel + (rarity - 3) * 10);
+        return rarity < 3 || rarity > 5
+            ? throw new ArgumentException("Invalid Rarity")
+            : (byte)(MinMaxLevel + ((rarity - 3) * 10));
     }
 
-    public static int calcMight(
+    public static int CalcMight(
         DbPlayerCharaData dbCharData,
         DataAdventurer charData,
         bool addSharedSkillMight = false,

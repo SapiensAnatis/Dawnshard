@@ -7,6 +7,7 @@ public interface IUnitRepository : IBaseRepository
 {
     IQueryable<DbPlayerCharaData> GetAllCharaData(string deviceAccountId);
     IQueryable<DbPlayerDragonData> GetAllDragonData(string deviceAccountId);
+    IQueryable<DbPlayerDragonReliability> GetAllDragonReliabilityData(string deviceAccountId);
 
     Task<bool> CheckHasCharas(string deviceAccountId, IEnumerable<Charas> idList);
 
@@ -16,9 +17,16 @@ public interface IUnitRepository : IBaseRepository
         string deviceAccountId,
         IEnumerable<Charas> idList
     );
-
+    Task<DbSetUnit?> GetCharaSetData(string deviceAccountId, Charas charaId, int setNo);
+    DbSetUnit AddCharaSetData(string deviceAccountId, Charas charaId, int setNo);
+    IEnumerable<DbSetUnit> GetCharaSets(string deviceAccountId, Charas charaId);
+    IDictionary<Charas, IEnumerable<DbSetUnit>> GetCharaSets(
+        string deviceAccountId,
+        IEnumerable<Charas> charaId
+    );
     Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(
         string deviceAccountId,
         IEnumerable<Dragons> idList
     );
+    Task RemoveDragons(string deviceAccountId, IEnumerable<long> keyIdList);
 }

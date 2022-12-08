@@ -528,7 +528,7 @@ public enum CharaUpgradeMaterialTypes
     Omnicite = 2
 }
 
-public enum CharaUpgradeEnhanceTypes
+public enum UpgradeEnhanceTypes
 {
     AtkPlus = 0,
     HpPlus = 1
@@ -543,7 +543,10 @@ public static class UpgradeMaterials
     {
         { Materials.BronzeCrystal, 150 },
         { Materials.SilverCrystal, 1000 },
-        { Materials.GoldCrystal, 3500 }
+        { Materials.GoldCrystal, 3500 },
+        { Materials.Dragonfruit, 150 },
+        { Materials.RipeDragonfruit, 1000 },
+        { Materials.SucculentDragonfruit, 3500 }
     };
 
     public readonly static Dictionary<UnitElement, Materials> tomes = new Dictionary<
