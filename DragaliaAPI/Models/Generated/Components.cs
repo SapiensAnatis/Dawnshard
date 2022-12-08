@@ -7399,7 +7399,7 @@ public class PresentDetailList
     public ulong present_id { get; set; }
     public int master_id { get; set; }
     public int state { get; set; }
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
     public int entity_level { get; set; }
@@ -7410,14 +7410,18 @@ public class PresentDetailList
     public int message_param_value_2 { get; set; }
     public int message_param_value_3 { get; set; }
     public int message_param_value_4 { get; set; }
-    public int receive_limit_time { get; set; }
-    public int create_time { get; set; }
+
+    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    public DateTimeOffset receive_limit_time { get; set; }
+
+    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    public DateTimeOffset create_time { get; set; }
 
     public PresentDetailList(
         ulong present_id,
         int master_id,
         int state,
-        int entity_type,
+        EntityTypes entity_type,
         int entity_id,
         int entity_quantity,
         int entity_level,
@@ -7428,8 +7432,8 @@ public class PresentDetailList
         int message_param_value_2,
         int message_param_value_3,
         int message_param_value_4,
-        int receive_limit_time,
-        int create_time
+        DateTimeOffset receive_limit_time,
+        DateTimeOffset create_time
     )
     {
         this.present_id = present_id;
@@ -7457,7 +7461,7 @@ public class PresentDetailList
 public class PresentHistoryList
 {
     public ulong id { get; set; }
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
     public int entity_level { get; set; }
@@ -7468,11 +7472,13 @@ public class PresentHistoryList
     public int message_param_value_2 { get; set; }
     public int message_param_value_3 { get; set; }
     public int message_param_value_4 { get; set; }
-    public int create_time { get; set; }
+
+    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    public DateTimeOffset create_time { get; set; }
 
     public PresentHistoryList(
         ulong id,
-        int entity_type,
+        EntityTypes entity_type,
         int entity_id,
         int entity_quantity,
         int entity_level,
@@ -7483,7 +7489,7 @@ public class PresentHistoryList
         int message_param_value_2,
         int message_param_value_3,
         int message_param_value_4,
-        int create_time
+        DateTimeOffset create_time
     )
     {
         this.id = id;

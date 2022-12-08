@@ -1,4 +1,7 @@
 using System.Collections.Immutable;
+using System.ComponentModel;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace DragaliaAPI.Shared.Definitions.Enums;
 
@@ -30,6 +33,7 @@ public static class ManaNodesUtil
     public const byte MaxLimitbreak = 4;
     public const byte MaxLimitbreakSpiral = 5;
     public const ManaNodes MaxManaNodes = ManaNodes.Circle5 - 1;
+    public const ManaNodes MaxManaNodesSpiral = ManaNodes.Circle7 - 1;
 
     public static ManaNodes SetManaCircleNodesFromSet(
         IEnumerable<int> enumerable,
@@ -88,79 +92,52 @@ public static class ManaNodesUtil
         return nodes;
     }
 
-    public class ManaNodeInfo
+    public struct ManaNodeInfo
     {
-        public enum UpgradeAbilityTypes
+        public enum NodeTypes
         {
-            FS = EffectTypes.FS,
-            S1 = EffectTypes.S1,
-            S2 = EffectTypes.S2,
-            A1 = EffectTypes.A1,
-            A2 = EffectTypes.A2,
-            A3 = EffectTypes.A3,
-            Ex = EffectTypes.Ex,
-            MaxLvUp = EffectTypes.MaxLvUp,
-            StdAtkUp = EffectTypes.StdAtkUp
+            Hp = 10101,
+            Atk = 10102,
+            HpAtk = 10103,
+            FS = 10201,
+            S1 = 10401,
+            S2 = 10402,
+            A1 = 10301,
+            A2 = 10302,
+            A3 = 10303,
+            Ex = 10501,
+            Mat = 10601,
+            MaxLvUp = 10801,
+            StdAtkUp = 10701
         }
 
-        [Flags]
-        public enum EffectTypes
-        {
-            Hp = 1,
-            Atk = 2,
-            FS = 4,
-            S1 = 8,
-            S2 = 16,
-            A1 = 32,
-            A2 = 64,
-            A3 = 128,
-            Ex = 256,
-            Mat = 512,
-            MaxLvUp = 1024,
-            StdAtkUp = 2048
-        }
+        [JsonPropertyName("MC")]
+        public string ManaCircleName { get; set; }
 
-        public int? StoryId { get; }
-        public Materials? MatId { get; }
-        public EffectTypes EffectType { get; }
-        public int? HpAdd { get; }
-        public int? AtkAdd { get; }
+        public bool IsReleaseStory { get; set; }
 
-        private ManaNodeInfo() { }
+        [JsonPropertyName("TypeId")]
+        public NodeTypes NodeType { get; set; }
 
-        private ManaNodeInfo(
-            EffectTypes effectType,
-            int? storyId = null,
-            Materials? matId = null,
-            int? hpAdd = null,
-            int? atkAdd = null
+        [JsonPropertyName("NodeNr")]
+        public int NodeNr { get; set; }
+
+        public ManaNodeInfo(
+            NodeTypes nodeType,
+            int nodeNr,
+            string manaCircleName = "",
+            bool isReleaseStory = false
         )
         {
-            this.EffectType = effectType;
-            this.MatId = matId;
-            this.StoryId = storyId;
-            this.HpAdd = hpAdd;
-            this.AtkAdd = atkAdd;
+            ManaCircleName = manaCircleName;
+            NodeType = nodeType;
+            NodeNr = nodeNr;
+            IsReleaseStory = isReleaseStory;
         }
 
-        public static ManaNodeInfo CreateHpNode(int hpPlus, int? storyId = null) =>
-            new ManaNodeInfo(EffectTypes.Hp, storyId: storyId, hpAdd: hpPlus);
-
-        public static ManaNodeInfo CreateAtkNode(int atkPlus, int? storyId = null) =>
-            new ManaNodeInfo(EffectTypes.Atk, storyId: storyId, atkAdd: atkPlus);
-
-        public static ManaNodeInfo CreateHpAtkNode(int hpPlus, int atkPlus, int? storyId = null) =>
-            new ManaNodeInfo(
-                EffectTypes.Atk | EffectTypes.Hp,
-                storyId,
-                hpAdd: hpPlus,
-                atkAdd: atkPlus
-            );
-
-        public static ManaNodeInfo CreateHpAtkNode(Materials? MaterialList) =>
-            new ManaNodeInfo(EffectTypes.Mat, matId: MaterialList);
-
-        public static ManaNodeInfo CreateAbilityUpgradeNode(UpgradeAbilityTypes type) =>
-            new ManaNodeInfo((EffectTypes)type);
+        public override string ToString()
+        {
+            return $"ManaCircleName={ManaCircleName}, NodeNr={NodeNr}, NodeType={NodeType}, IsReleaseStory={IsReleaseStory}";
+        }
     }
 }

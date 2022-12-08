@@ -37,6 +37,10 @@ public class ApiContext : DbContext
         modelBuilder.Entity<DbParty>().HasKey(e => new { e.DeviceAccountId, e.PartyNo });
 
         modelBuilder
+            .Entity<DbSetUnit>()
+            .HasKey(key => new { key.DeviceAccountId, key.CharaId, key.UnitSetNo });
+
+        modelBuilder
             .Entity<DbPlayerBannerData>()
             .HasKey(key => new { key.DeviceAccountId, key.SummonBannerId });
 
@@ -83,6 +87,7 @@ public class ApiContext : DbContext
     public DbSet<DbParty> PlayerParties { get; set; } = null!;
 
     public DbSet<DbPartyUnit> PlayerPartyUnits { get; set; } = null!;
+    public DbSet<DbSetUnit> PlayerSetUnits { get; set; } = null!;
     public DbSet<DbPlayerCurrency> PlayerWallet { get; set; } = null!;
     public DbSet<DbPlayerMaterial> PlayerStorage { get; set; } = null!;
 }

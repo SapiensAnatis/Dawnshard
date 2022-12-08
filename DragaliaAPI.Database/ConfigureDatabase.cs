@@ -22,6 +22,7 @@ public static class DatabaseConfiguration
             .AddScoped<IDeviceAccountRepository, DeviceAccountRepository>()
             .AddScoped<IUserDataRepository, UserDataRepository>()
             .AddScoped<IUnitRepository, UnitRepository>()
+            .AddScoped<IInventoryRepository, InventoryRepository>()
             .AddScoped<ISummonRepository, SummonRepository>()
             .AddScoped<IPartyRepository, PartyRepository>()
             .AddScoped<IQuestRepository, QuestRepository>();
