@@ -43,9 +43,12 @@ public class DbPlayerCharaData : IDbHasAccountId
     [Required]
     public byte AttackPlusCount { get; set; }
 
-    [Column("LimitBreakCount")]
-    [Required]
-    public byte LimitBreakCount { get; set; }
+    [NotMapped]
+    public byte LimitBreakCount
+    {
+        get => (byte)Math.Min(ManaNodeUnlockCount >> 10, ManaNodesUtil.MaxLimitbreakSpiral);
+        set => ManaNodeUnlockCount = (ushort)(value << 10);
+    }
 
     [Column("IsNew")]
     [Required]

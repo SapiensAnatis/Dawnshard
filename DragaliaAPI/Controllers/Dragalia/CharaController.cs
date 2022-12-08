@@ -1,10 +1,13 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Immutable;
+using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -22,13 +25,13 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [ApiController]
 public class CharaController : DragaliaControllerBase
 {
-    private ICharaDataService _charaDataService;
+    private readonly ICharaDataService _charaDataService;
+    private readonly ISessionService _sessionService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
     private readonly IInventoryRepository inventoryRepository;
     private readonly IUpdateDataService updateDataService;
     private readonly IMapper mapper;
-    private ApiContext _apiContext;
 
     public CharaController(
         IUserDataRepository userDataRepository,
@@ -36,8 +39,8 @@ public class CharaController : DragaliaControllerBase
         IInventoryRepository inventoryRepository,
         IUpdateDataService updateDataService,
         IMapper mapper,
-        ApiContext apiContext,
-        ICharaDataService charaDataService
+        ICharaDataService charaDataService,
+        ISessionService sessionService
     )
     {
         this.userDataRepository = userDataRepository;
@@ -45,8 +48,8 @@ public class CharaController : DragaliaControllerBase
         this.inventoryRepository = inventoryRepository;
         this.updateDataService = updateDataService;
         this.mapper = mapper;
-        _apiContext = apiContext;
         _charaDataService = charaDataService;
+        _sessionService = sessionService;
     }
 
     [Route("awake")]
@@ -88,7 +91,7 @@ public class CharaController : DragaliaControllerBase
                 this.DeviceAccountId
             );
 
-            await _apiContext.SaveChangesAsync();
+            await unitRepository.SaveChangesAsync();
 
             return Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -123,7 +126,7 @@ public class CharaController : DragaliaControllerBase
                 }
                 if (
                     mat.id != Materials.BronzeCrystal
-                    && mat.id == Materials.SilverCrystal
+                    && mat.id != Materials.SilverCrystal
                     && mat.id != Materials.GoldCrystal
                     && mat.id != Materials.AmplifyingCrystal
                     && mat.id != Materials.FortifyingCrystal
@@ -158,7 +161,7 @@ public class CharaController : DragaliaControllerBase
                 this.DeviceAccountId
             );
 
-            await _apiContext.SaveChangesAsync();
+            await unitRepository.SaveChangesAsync();
 
             return Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -218,12 +221,16 @@ public class CharaController : DragaliaControllerBase
             }
             usedMaterials[(int)MaterialList.id] += MaterialList.quantity;
         }
-        if (playerCharData.Exp > CharaConstants.XpLimits[playerCharData.Level - 1])
+        if (
+            playerCharData.Level < maxLevel
+            && playerCharData.Level < CharaConstants.XpLimits.Count
+            && !(playerCharData.Exp < CharaConstants.XpLimits[playerCharData.Level])
+        )
         {
             while (
-                playerCharData.Exp > CharaConstants.XpLimits[playerCharData.Level - 1]
-                && playerCharData.Level < maxLevel
+                playerCharData.Level < maxLevel
                 && playerCharData.Level < CharaConstants.XpLimits.Count
+                && !(playerCharData.Exp < CharaConstants.XpLimits[playerCharData.Level])
             )
             {
                 playerCharData.Level++;
@@ -276,6 +283,57 @@ public class CharaController : DragaliaControllerBase
         }
     }
 
+    [Route("reset_plus_count")]
+    [HttpPost]
+    public async Task<DragaliaResult> CharaResetPlusCount(
+        [FromBody] CharaResetPlusCountRequest request
+    )
+    {
+        DbPlayerUserData userData = await this.userDataRepository
+            .GetUserData(this.DeviceAccountId)
+            .FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository
+            .GetAllCharaData(this.DeviceAccountId)
+            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        Materials mat =
+            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
+                ? Materials.AmplifyingCrystal
+                : Materials.FortifyingCrystal;
+
+        DbPlayerMaterial upgradeMat =
+            await inventoryRepository.GetMaterial(DeviceAccountId, mat)
+            ?? inventoryRepository.AddMaterial(DeviceAccountId, mat);
+        DbPlayerCurrency playerCurrency =
+            await inventoryRepository.GetCurrency(DeviceAccountId, CurrencyTypes.Rupies)
+            ?? throw new ArgumentException("Insufficient Rupies for reset");
+        int cost =
+            20000
+            * (
+                (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
+                    ? playerCharData.AttackPlusCount
+                    : playerCharData.HpPlusCount
+            );
+        if (playerCurrency.Quantity < cost)
+        {
+            throw new ArgumentException("Insufficient Rupies for reset");
+        }
+        playerCurrency.Quantity -= cost;
+        upgradeMat.Quantity +=
+            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
+                ? playerCharData.AttackPlusCount
+                : playerCharData.HpPlusCount;
+        _ =
+            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
+                ? playerCharData.AttackPlusCount = 0
+                : playerCharData.HpPlusCount = 0;
+
+        UpdateDataList updateDataList = updateDataService.GetUpdateDataList(DeviceAccountId);
+
+        await userDataRepository.SaveChangesAsync();
+
+        return Ok(new CharaResetPlusCountData(updateDataList, new()));
+    }
+
     [Route("buildup_mana")]
     [HttpPost]
     public async Task<DragaliaResult> CharaBuildupMana([FromBody] CharaBuildupManaRequest request)
@@ -305,12 +363,13 @@ public class CharaController : DragaliaControllerBase
                     ? CharaUpgradeMaterialTypes.GrowthMaterial
                     : CharaUpgradeMaterialTypes.Standard
             );
-            await _apiContext.SaveChangesAsync();
             //TODO: Party power calculation call
 
             UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
                 this.DeviceAccountId
             );
+
+            await userDataRepository.SaveChangesAsync();
 
             return this.Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -348,7 +407,7 @@ public class CharaController : DragaliaControllerBase
                 this.DeviceAccountId
             );
 
-            await _apiContext.SaveChangesAsync();
+            await unitRepository.SaveChangesAsync();
 
             return Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -410,7 +469,7 @@ public class CharaController : DragaliaControllerBase
                 this.DeviceAccountId
             );
 
-            await _apiContext.SaveChangesAsync();
+            await unitRepository.SaveChangesAsync();
 
             return Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -437,13 +496,19 @@ public class CharaController : DragaliaControllerBase
                 .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
             DataAdventurer charaData = _charaDataService.GetData(playerCharaData.CharaId);
             playerCharaData.Rarity = 5;
-            //TODO: get max values for chars with spiral, for now always unspiralled
-            playerCharaData.Level = CharaConstants.MaxLevel;
+            bool hasSpiral = charaData.MaxLimitBreakCount > 4;
+            playerCharaData.Level = (byte)(
+                CharaConstants.MaxLevel + (hasSpiral ? CharaConstants.AddMaxLevel : 0)
+            );
             playerCharaData.Exp = CharaConstants.XpLimits[playerCharaData.Level - 1];
-            playerCharaData.HpBase = (ushort)charaData.MaxHp;
-            playerCharaData.AttackNode = (ushort)charaData.MaxAtk;
-            playerCharaData.LimitBreakCount = ManaNodesUtil.MaxLimitbreak;
-            ManaNodes maxManaNodes = ManaNodesUtil.MaxManaNodes;
+            playerCharaData.HpBase = hasSpiral
+                ? (ushort)charaData.AddMaxHp1
+                : (ushort)charaData.MaxHp;
+            playerCharaData.AttackBase = hasSpiral
+                ? (ushort)charaData.AddMaxAtk1
+                : (ushort)charaData.MaxAtk;
+            playerCharaData.LimitBreakCount = (byte)charaData.MaxLimitBreakCount;
+            ManaNodes maxManaNodes = hasSpiral ? ManaNodes.Circle7 : ManaNodesUtil.MaxManaNodes;
             Dictionary<CurrencyTypes, int> usedCurrencies = new();
             Dictionary<Materials, int> usedMaterials = new();
             HashSet<int> unlockedStories = new();
@@ -459,7 +524,7 @@ public class CharaController : DragaliaControllerBase
                 this.DeviceAccountId
             );
 
-            await _apiContext.SaveChangesAsync();
+            await unitRepository.SaveChangesAsync();
 
             return Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -488,8 +553,7 @@ public class CharaController : DragaliaControllerBase
     )
     {
         DataAdventurer charaData = _charaDataService.GetData(playerCharData.CharaId);
-        //TODO: Get Nodes for Chara from somewhere
-        List<ManaNodeInfo> manaNodeInfos = new();
+        ImmutableList<ManaNodeInfo> manaNodeInfos = charaData.ManaNodes;
         List<int>[] hpNodesOnFloor = new List<int>[] { new(), new(), new(), new(), new(), new() };
         List<int>[] atkNodesOnFloor = new List<int>[] { new(), new(), new(), new(), new(), new() };
         List<int>[] hpAtkNodesOnFloor = new List<int>[]
@@ -502,19 +566,18 @@ public class CharaController : DragaliaControllerBase
             new()
         };
 
-        for (int i = 0; i < manaNodeInfos.Count && (int)(i / 10) * 10 < hpNodesOnFloor.Length; i++)
+        for (int i = 0; i < manaNodeInfos.Count && i < 71; i++)
         {
-            int startIndex = Math.Min(manaNodeInfos.Count, i * 10);
-            int floor = Math.Max(i / 10, 5);
-            switch (manaNodeInfos[i].EffectType)
+            int floor = Math.Min(i / 10, 5);
+            switch (manaNodeInfos[i].NodeType)
             {
-                case (ManaNodeInfo.EffectTypes.Hp | ManaNodeInfo.EffectTypes.Atk):
+                case ManaNodeInfo.NodeTypes.HpAtk:
                     hpAtkNodesOnFloor[floor].Add(i + 1);
                     break;
-                case ManaNodeInfo.EffectTypes.Hp:
+                case ManaNodeInfo.NodeTypes.Hp:
                     hpNodesOnFloor[floor].Add(i + 1);
                     break;
-                case ManaNodeInfo.EffectTypes.Atk:
+                case ManaNodeInfo.NodeTypes.Atk:
                     atkNodesOnFloor[floor].Add(i + 1);
                     break;
             }
@@ -541,118 +604,112 @@ public class CharaController : DragaliaControllerBase
         {
             if (manaNodeInfos.Count < nodeNr)
             {
-                //TODO: Skip everything for now, throw new ArgumentException("No nodeInfo for nodeNr") when NodeInfos exist
-                continue;
+                throw new ArgumentException($"No nodeInfo found for node {nodeNr}");
             }
-            ManaNodeInfo manaNodeInfo = manaNodeInfos[nodeNr];
-            int floor = Math.Max(nodeNr / 10, 5);
+            ManaNodeInfo manaNodeInfo = manaNodeInfos[nodeNr - 1];
+            int floor = Math.Clamp((nodeNr - 1) / 10, 0, 5);
             Dictionary<CurrencyTypes, int> currencyCosts = new();
             Dictionary<Materials, int> materialCosts = new();
-            switch (manaNodeInfo.EffectType)
+            switch (manaNodeInfo.NodeType)
             {
-                case ManaNodeInfo.EffectTypes.Hp | ManaNodeInfo.EffectTypes.Atk:
+                case ManaNodeInfo.NodeTypes.HpAtk:
                     ushort hpToAdd = (ushort)(
                         hpPerCircleTotals[floor] / hpAtkNodesOnFloor[floor].Count
                     );
                     if (
                         hpPerCircleTotals[floor] % hpAtkNodesOnFloor[floor].Count
-                        > hpAtkNodesOnFloor[floor].IndexOf(nodeNr)
+                        > hpAtkNodesOnFloor[floor].Count
+                            - 1
+                            - hpAtkNodesOnFloor[floor].IndexOf(nodeNr)
                     )
                     {
                         hpToAdd++;
                     }
-                    playerCharData.HpNode += hpToAdd;
                     ushort atkToAdd = (ushort)(
                         atkPerCircleTotals[floor] / hpAtkNodesOnFloor[floor].Count
                     );
                     if (
                         atkPerCircleTotals[floor] % hpAtkNodesOnFloor[floor].Count
-                        > hpAtkNodesOnFloor[floor].IndexOf(nodeNr)
+                        > hpAtkNodesOnFloor[floor].Count
+                            - 1
+                            - hpAtkNodesOnFloor[floor].IndexOf(nodeNr)
                     )
                     {
                         atkToAdd++;
                     }
+                    playerCharData.HpNode += hpToAdd;
                     playerCharData.AttackNode += atkToAdd;
                     break;
-                case ManaNodeInfo.EffectTypes.Hp:
+                case ManaNodeInfo.NodeTypes.Hp:
                     hpToAdd = (ushort)(hpPerCircleTotals[floor] / hpNodesOnFloor[floor].Count);
                     if (
                         hpPerCircleTotals[floor] % hpNodesOnFloor[floor].Count
-                        > hpNodesOnFloor[floor].IndexOf(nodeNr)
+                        > hpNodesOnFloor[floor].Count - 1 - hpNodesOnFloor[floor].IndexOf(nodeNr)
                     )
                     {
                         hpToAdd++;
                     }
                     playerCharData.HpNode += hpToAdd;
                     break;
-                case ManaNodeInfo.EffectTypes.Atk:
+                case ManaNodeInfo.NodeTypes.Atk:
                     atkToAdd = (ushort)(atkPerCircleTotals[floor] / atkNodesOnFloor[floor].Count);
                     if (
                         atkPerCircleTotals[floor] % atkNodesOnFloor[floor].Count
-                        > atkNodesOnFloor[floor].IndexOf(nodeNr)
+                        > atkNodesOnFloor[floor].Count - 1 - atkNodesOnFloor[floor].IndexOf(nodeNr)
                     )
                     {
                         atkToAdd++;
                     }
                     playerCharData.AttackNode += atkToAdd;
                     break;
-                case ManaNodeInfo.EffectTypes.FS:
+                case ManaNodeInfo.NodeTypes.FS:
                     playerCharData.BurstAttackLevel++;
                     break;
-                case ManaNodeInfo.EffectTypes.S1:
+                case ManaNodeInfo.NodeTypes.S1:
                     playerCharData.Skill1Level++;
                     break;
-                case ManaNodeInfo.EffectTypes.S2:
+                case ManaNodeInfo.NodeTypes.S2:
                     playerCharData.Skill2Level++;
                     break;
-                case ManaNodeInfo.EffectTypes.A1:
+                case ManaNodeInfo.NodeTypes.A1:
                     playerCharData.Ability1Level++;
                     break;
-                case ManaNodeInfo.EffectTypes.A2:
+                case ManaNodeInfo.NodeTypes.A2:
                     playerCharData.Ability2Level++;
                     break;
-                case ManaNodeInfo.EffectTypes.A3:
+                case ManaNodeInfo.NodeTypes.A3:
                     playerCharData.Ability3Level++;
                     break;
-                case ManaNodeInfo.EffectTypes.Ex:
+                case ManaNodeInfo.NodeTypes.Ex:
                     playerCharData.ExAbilityLevel++;
                     playerCharData.ExAbility2Level++;
                     break;
-                case ManaNodeInfo.EffectTypes.Mat:
-                    DbPlayerMaterial? mat = await this.inventoryRepository.GetMaterial(
-                        playerCharData.DeviceAccountId,
-                        manaNodeInfo.MatId ?? Materials.DamascusCrystal
-                    );
-                    if (mat == null)
-                    {
-                        mat = new DbPlayerMaterial()
-                        {
-                            DeviceAccountId = playerCharData.DeviceAccountId,
-                            MaterialId = manaNodeInfo.MatId ?? Materials.DamascusCrystal,
-                            Quantity = 0
-                        };
-                        _apiContext.PlayerStorage.Add(mat);
-                    }
+                case ManaNodeInfo.NodeTypes.Mat:
+                    DbPlayerMaterial mat =
+                        await this.inventoryRepository.GetMaterial(
+                            playerCharData.DeviceAccountId,
+                            Materials.DamascusCrystal
+                        )
+                        ?? inventoryRepository.AddMaterial(
+                            DeviceAccountId,
+                            Materials.DamascusCrystal
+                        );
                     mat.Quantity++;
                     break;
-                case ManaNodeInfo.EffectTypes.StdAtkUp:
+                case ManaNodeInfo.NodeTypes.StdAtkUp:
                     //TODO: Unsure but seems like this is it. Maybe rename it to something more appropriate
                     playerCharData.ComboBuildupCount++;
                     break;
-                case ManaNodeInfo.EffectTypes.MaxLvUp:
+                case ManaNodeInfo.NodeTypes.MaxLvUp:
                     playerCharData.AdditionalMaxLevel += 5;
                     break;
                 default:
                     break;
             }
-            if (manaNodeInfo.StoryId != null)
+            if (manaNodeInfo.IsReleaseStory)
             {
-                unlockedStories.Add((int)manaNodeInfo.StoryId);
-            }
-            if (nodeNr == 50)
-            {
-                playerCharData.HpNode += (ushort)charaData.McFullBonusHp5;
-                playerCharData.AttackNode += (ushort)charaData.McFullBonusAtk5;
+                //TODO: Get relevant story
+                //unlockedStories.Add((int)manaNodeInfo.StoryId);
             }
 
             foreach (KeyValuePair<CurrencyTypes, int> curCost in currencyCosts)
@@ -674,7 +731,16 @@ public class CharaController : DragaliaControllerBase
         }
 
         SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
+        bool isUnlockFullMCBonusOmnicite =
+            nodes.Count < 50 && isUseSpecialMaterial == CharaUpgradeMaterialTypes.Omnicite;
         nodes.AddRange(manaNodes);
+
+        if (nodes.Count == 50 || isUnlockFullMCBonusOmnicite)
+        {
+            playerCharData.HpNode += (ushort)charaData.McFullBonusHp5;
+            playerCharData.AttackNode += (ushort)charaData.McFullBonusAtk5;
+        }
+
         playerCharData.ManaCirclePieceIdList = nodes;
     }
 
@@ -719,7 +785,7 @@ public class CharaController : DragaliaControllerBase
                 this.DeviceAccountId
             );
 
-            await _apiContext.SaveChangesAsync();
+            await unitRepository.SaveChangesAsync();
 
             return Ok(new CharaBuildupData(updateDataList, new()));
         }
@@ -727,5 +793,125 @@ public class CharaController : DragaliaControllerBase
         {
             return BadRequest();
         }
+    }
+
+    [Route("get_chara_unit_set")]
+    [HttpPost]
+    public async Task<DragaliaResult> GetCharaUnitSet(
+        [FromHeader(Name = "SID")] string sessionId,
+        [FromBody] CharaGetCharaUnitSetRequest request
+    )
+    {
+        string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
+        IDictionary<Charas, IEnumerable<DbSetUnit>> setUnitData = unitRepository.GetCharaSets(
+            accountId,
+            request.chara_id_list.Select(x => (Charas)x)
+        );
+        return Ok(
+            new CharaGetCharaUnitSetData()
+            {
+                chara_unit_set_list = setUnitData.Select(
+                    x =>
+                        new CharaUnitSetList()
+                        {
+                            chara_id = (int)x.Key,
+                            chara_unit_set_detail_list = x.Value.Select(
+                                y =>
+                                    new AtgenCharaUnitSetDetailList()
+                                    {
+                                        unit_set_no = y.UnitSetNo,
+                                        unit_set_name = y.UnitSetName,
+                                        dragon_key_id = (ulong)y.EquipDragonKeyId,
+                                        weapon_body_id = y.EquipWeaponBodyId,
+                                        crest_slot_type_1_crest_id_1 =
+                                            y.EquipCrestSlotType1CrestId1,
+                                        crest_slot_type_1_crest_id_2 =
+                                            y.EquipCrestSlotType1CrestId2,
+                                        crest_slot_type_1_crest_id_3 =
+                                            y.EquipCrestSlotType1CrestId3,
+                                        crest_slot_type_2_crest_id_1 =
+                                            y.EquipCrestSlotType2CrestId1,
+                                        crest_slot_type_2_crest_id_2 =
+                                            y.EquipCrestSlotType2CrestId2,
+                                        crest_slot_type_3_crest_id_1 =
+                                            y.EquipCrestSlotType3CrestId1,
+                                        crest_slot_type_3_crest_id_2 =
+                                            y.EquipCrestSlotType3CrestId2,
+                                        talisman_key_id = (ulong)y.EquipTalismanKeyId
+                                    }
+                            )
+                        }
+                )
+            }
+        );
+    }
+
+    [Route("set_chara_unit_set")]
+    [HttpPost]
+    public async Task<DragaliaResult> SetCharaUnitSet(
+        [FromHeader(Name = "SID")] string sessionId,
+        [FromBody] CharaSetCharaUnitSetRequest request
+    )
+    {
+        string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
+        DbSetUnit setUnitData =
+            await unitRepository.GetCharaSetData(accountId, request.chara_id, request.unit_set_no)
+            ?? unitRepository.AddCharaSetData(accountId, request.chara_id, request.unit_set_no);
+        ;
+
+        setUnitData.UnitSetName = request.unit_set_name;
+        setUnitData.EquipDragonKeyId = (long)request.request_chara_unit_set_data.dragon_key_id;
+        setUnitData.EquipWeaponBodyId = request.request_chara_unit_set_data.weapon_body_id;
+        setUnitData.EquipCrestSlotType1CrestId1 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_1_crest_id_1;
+        setUnitData.EquipCrestSlotType1CrestId2 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_1_crest_id_2;
+        setUnitData.EquipCrestSlotType1CrestId3 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_1_crest_id_3;
+        setUnitData.EquipCrestSlotType2CrestId1 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_2_crest_id_1;
+        setUnitData.EquipCrestSlotType2CrestId2 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_2_crest_id_2;
+        setUnitData.EquipCrestSlotType3CrestId1 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_3_crest_id_1;
+        setUnitData.EquipCrestSlotType3CrestId2 = request
+            .request_chara_unit_set_data
+            .crest_slot_type_3_crest_id_2;
+        setUnitData.EquipTalismanKeyId = (long)request.request_chara_unit_set_data.talisman_key_id;
+
+        await unitRepository.SaveChangesAsync();
+        CharaUnitSetList setList = new CharaUnitSetList()
+        {
+            chara_id = (int)request.chara_id,
+            chara_unit_set_detail_list = unitRepository
+                .GetCharaSets(accountId, request.chara_id)
+                .Select(
+                    x =>
+                        new AtgenCharaUnitSetDetailList()
+                        {
+                            unit_set_no = x.UnitSetNo,
+                            unit_set_name = x.UnitSetName,
+                            dragon_key_id = (ulong)x.EquipDragonKeyId,
+                            weapon_body_id = x.EquipWeaponBodyId,
+                            crest_slot_type_1_crest_id_1 = x.EquipCrestSlotType1CrestId1,
+                            crest_slot_type_1_crest_id_2 = x.EquipCrestSlotType1CrestId2,
+                            crest_slot_type_1_crest_id_3 = x.EquipCrestSlotType1CrestId3,
+                            crest_slot_type_2_crest_id_1 = x.EquipCrestSlotType2CrestId1,
+                            crest_slot_type_2_crest_id_2 = x.EquipCrestSlotType2CrestId2,
+                            crest_slot_type_3_crest_id_1 = x.EquipCrestSlotType3CrestId1,
+                            crest_slot_type_3_crest_id_2 = x.EquipCrestSlotType3CrestId2,
+                            talisman_key_id = (ulong)x.EquipTalismanKeyId
+                        }
+                )
+        };
+        UpdateDataList ul = updateDataService.GetUpdateDataList(accountId);
+        ul.chara_unit_set_list = new List<CharaUnitSetList> { setList };
+        return Ok(new CharaSetCharaUnitSetData() { update_data_list = ul, entity_result = null });
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
 
@@ -65,5 +66,11 @@ public record DataAdventurer(
     int ExAbility2Data3,
     int ExAbility2Data4,
     int ExAbility2Data5,
-    string Availability
-);
+    string Availability,
+    string ManaCircleName
+)
+{
+    [JsonIgnore]
+    public ImmutableList<ManaNodesUtil.ManaNodeInfo> ManaNodes =
+        ImmutableList.Create<ManaNodesUtil.ManaNodeInfo>();
+};
