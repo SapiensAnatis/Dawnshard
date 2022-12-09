@@ -1,17 +1,14 @@
 using System.Reflection;
 using DragaliaAPI.Database;
+using DragaliaAPI.MessagePack;
 using DragaliaAPI.MessagePackFormatters;
-using DragaliaAPI.Models;
+using DragaliaAPI.Middleware;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Health;
 using DragaliaAPI.Shared;
-using MessagePack;
 using MessagePack.Resolvers;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Primitives;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -23,12 +20,16 @@ builder.Services
     .AddMvc()
     .AddMvcOptions(option =>
     {
-        option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(StandardResolver.Options));
-        option.InputFormatters.Add(new CustomMessagePackInputFormatter(StandardResolver.Options));
+        option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));
+        option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
     });
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services
+    .AddHealthChecks()
+    .AddCheck<SqlServerHealthCheck>("SqlServer", failureStatus: HealthStatus.Unhealthy)
+    .AddCheck<RedisHealthCheck>("Redis", failureStatus: HealthStatus.Unhealthy);
 
 builder.Services
     .ConfigureDatabaseServices(builder.Configuration)
@@ -42,13 +43,10 @@ builder.Services
     .AddScoped<ISessionService, SessionService>()
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
     .AddScoped<ISummonService, SummonService>()
-    .AddScoped<IUpdateDataService, UpdateDataService>();
+    .AddScoped<IUpdateDataService, UpdateDataService>()
+    .AddScoped<IDungeonService, DungeonService>();
 
 WebApplication app = builder.Build();
-
-// Skip past /version/ path base
-// Doesn't seem to work
-app.UsePathBase("/2.19.0_20220714193707");
 
 using (
     IServiceScope serviceScope = app.Services
@@ -108,55 +106,18 @@ app.Use(
     }
 );
 
-// Session lookup middleware
-app.Use(
-    async (context, next) =>
-    {
-        try
-        {
-            ISessionService sessionService =
-                context.RequestServices.GetRequiredService<ISessionService>();
+// Latest Android app version
+app.UsePathBase("/2.19.0_20220714193707");
 
-            if (!context.Request.Headers.TryGetValue("SID", out StringValues sessionId))
-            {
-                // Requests prior to /tool/auth will not include SID
-                await next();
-            }
-            else
-            {
-                context.Items.Add(
-                    "DeviceAccountId",
-                    await sessionService.GetDeviceAccountId_SessionId(sessionId)
-                );
+// Latest iOS app version
+app.UsePathBase("/2.19.0_20220719103923");
 
-                await next();
-            }
-        }
-        catch (SessionException)
-        {
-            IActionResultExecutor<ObjectResult> executor =
-                context.RequestServices.GetRequiredService<IActionResultExecutor<ObjectResult>>();
-
-            ActionContext actionContext =
-                new(context, context.GetRouteData(), new ActionDescriptor());
-
-            actionContext.HttpContext.Response.ContentType = "application/octet-stream";
-
-            await executor.ExecuteAsync(
-                actionContext,
-                new OkObjectResult(
-                    new DragaliaResponse<ResultCodeData>(
-                        new(ResultCode.SessionError),
-                        ResultCode.SessionError
-                    )
-                )
-            );
-        }
-    }
-);
-
+app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/health");
+
+app.UseMiddleware<SessionLookupMiddleware>();
 
 app.Run();
 

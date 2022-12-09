@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Entities;
@@ -20,27 +21,27 @@ public class DbPartyUnit
 
     public long EquipDragonKeyId { get; set; }
 
-    public int EquipWeaponBodyId { get; set; }
+    public WeaponBodies EquipWeaponBodyId { get; set; }
 
     public int EquipWeaponSkinId { get; set; }
 
-    public int EquipCrestSlotType1CrestId1 { get; set; }
+    public AbilityCrests EquipCrestSlotType1CrestId1 { get; set; }
 
-    public int EquipCrestSlotType1CrestId2 { get; set; }
+    public AbilityCrests EquipCrestSlotType1CrestId2 { get; set; }
 
-    public int EquipCrestSlotType1CrestId3 { get; set; }
+    public AbilityCrests EquipCrestSlotType1CrestId3 { get; set; }
 
-    public int EquipCrestSlotType2CrestId1 { get; set; }
+    public AbilityCrests EquipCrestSlotType2CrestId1 { get; set; }
 
-    public int EquipCrestSlotType2CrestId2 { get; set; }
+    public AbilityCrests EquipCrestSlotType2CrestId2 { get; set; }
 
-    public int EquipCrestSlotType3CrestId1 { get; set; }
+    public AbilityCrests EquipCrestSlotType3CrestId1 { get; set; }
 
-    public int EquipCrestSlotType3CrestId2 { get; set; }
+    public AbilityCrests EquipCrestSlotType3CrestId2 { get; set; }
 
     public long EquipTalismanKeyId { get; set; }
 
-    public int EditSkill1CharaId { get; set; }
+    public Charas EditSkill1CharaId { get; set; }
 
-    public int EditSkill2CharaId { get; set; }
+    public Charas EditSkill2CharaId { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿//#define TEST
+﻿#define TEST
 
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -45,23 +45,30 @@ public class LoadController : DragaliaControllerBase
 #if !TEST
     [Route("index")]
     [HttpPost]
-    public async Task<DragaliaResult> Index([FromHeader(Name = "SID")] string sessionId)
+    public async Task<DragaliaResult> Index()
     {
-        string deviceAccountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-
         UserData userData = mapper.Map<UserData>(
-            await this.userDataRepository.GetUserData(deviceAccountId).SingleAsync()
+            await this.userDataRepository.GetUserData(this.DeviceAccountId).SingleAsync()
         );
+
         IEnumerable<CharaList> charas = (
-            await this.unitRepository.GetAllCharaData(deviceAccountId).ToListAsync()
+            await this.unitRepository.GetAllCharaData(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<CharaList>);
 
         IEnumerable<DragonList> dragons = (
-            await this.unitRepository.GetAllDragonData(deviceAccountId).ToListAsync()
+            await this.unitRepository.GetAllDragonData(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<DragonList>);
 
+        IEnumerable<AbilityCrestList> crests = (
+            await this.unitRepository.GetAllAbilityCrestData(this.DeviceAccountId).ToListAsync()
+        ).Select(mapper.Map<AbilityCrestList>);
+
+        IEnumerable<WeaponBodyList> weapons = (
+            await this.unitRepository.GetAllWeaponBodyData(this.DeviceAccountId).ToListAsync()
+        ).Select(mapper.Map<WeaponBodyList>);
+
         IEnumerable<PartyList> parties = (
-            await this.partyRepository.GetParties(deviceAccountId).ToListAsync()
+            await this.partyRepository.GetParties(this.DeviceAccountId).ToListAsync()
         )
             .Select(mapper.Map<PartyList>)
             .Select(
@@ -75,26 +82,32 @@ public class LoadController : DragaliaControllerBase
             );
 
         IEnumerable<QuestStoryList> questStories = (
-            await this.questRepository.GetQuestStoryList(deviceAccountId).ToListAsync()
+            await this.questRepository.GetQuestStoryList(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<QuestStoryList>);
+
+        IEnumerable<QuestList> quests = (
+            await this.questRepository.GetQuests(this.DeviceAccountId).ToListAsync()
+        ).Select(mapper.Map<QuestList>);
 
         LoadIndexData data =
             new()
             {
                 user_data = userData,
+                chara_list = charas,
+                dragon_list = dragons,
+                ability_crest_list = crests,
+                weapon_body_list = weapons,
+                party_list = parties,
                 quest_story_list = questStories,
+                quest_list = quests,
+                material_list = new List<MaterialList>(),
                 party_power_data = new(999999),
                 friend_notice = new(0, 0),
                 present_notice = new(0, 0),
                 guild_notice = new(0, 0, 0, 0, 0),
                 mission_notice = null,
                 shop_notice = new ShopNotice(0),
-                ability_crest_list = new List<AbilityCrestList>(),
-                chara_list = charas,
-                dragon_list = dragons,
-                party_list = parties,
                 server_time = DateTimeOffset.UtcNow,
-                material_list = new List<MaterialList>(),
                 functional_maintenance_list = new List<FunctionalMaintenanceList>()
             };
 
@@ -108,7 +121,7 @@ public class LoadController : DragaliaControllerBase
     [HttpPost]
     public ActionResult<object> Index()
     {
-        byte[] blob = System.IO.File.ReadAllBytes("Resources/new_savefile");
+        byte[] blob = System.IO.File.ReadAllBytes("Resources/endgame_savefile");
         dynamic preset_savefile = MessagePackSerializer.Deserialize<dynamic>(
             blob,
             ContractlessStandardResolver.Options
@@ -174,7 +187,7 @@ public class LoadController : DragaliaControllerBase
                 preset_savefile["data"].Remove("walker_data");
                 preset_savefile["data"].Remove("update_data_list");
         */
-        preset_savefile["data"]["user_data"]["tutorial_status"] = 10301;
+        //preset_savefile["data"]["user_data"]["tutorial_status"] = 10301;
 
         return preset_savefile;
     }

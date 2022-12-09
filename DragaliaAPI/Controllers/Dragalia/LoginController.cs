@@ -15,13 +15,13 @@ public class LoginController : DragaliaControllerBase
     public DragaliaResult Index()
     {
         // TODO: Implement daily login bonuses/notifications
-        return Ok(new ResultCodeData(ResultCode.Success));
+        return Ok(new ResultCodeData(ResultCode.SUCCESS));
     }
 
     [HttpPost]
     [Route("verify_jws")]
     public DragaliaResult VerifyJws()
     {
-        return Ok(new ResultCodeData(ResultCode.Success));
+        return Ok(new ResultCodeData(ResultCode.SUCCESS));
     }
 }

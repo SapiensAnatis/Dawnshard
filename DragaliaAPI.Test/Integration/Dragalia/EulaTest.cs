@@ -6,6 +6,7 @@ namespace DragaliaAPI.Test.Integration.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.EulaController"/>
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class EulaTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;

@@ -1,5 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Formats.Tar;
+using AutoMapper;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.AutoMapper;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Test.Unit;
 
@@ -21,12 +25,6 @@ public class AutoMapperProfileTest
     public void UnitMapProfile_IsValid()
     {
         TestProfile<UnitMapProfile>();
-    }
-
-    [Fact]
-    public void PartyMapProfile_IsValid()
-    {
-        TestProfile<PartyMapProfile>();
     }
 
     [Fact]

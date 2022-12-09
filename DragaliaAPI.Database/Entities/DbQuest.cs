@@ -3,10 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DragaliaAPI.Database.Entities;
 
-public class DbQuest
+public class DbQuest : IDbHasAccountId
 {
+    public virtual DbDeviceAccount Owner { get; set; } = null!;
+
     [Required]
-    [ForeignKey("DbDeviceAccount")]
+    [ForeignKey(nameof(this.Owner))]
     public string DeviceAccountId { get; set; } = string.Empty;
 
     [Required]
@@ -14,35 +16,25 @@ public class DbQuest
 
     [Required]
     [Range(2, 3)]
-    public byte State { get; set; }
+    public byte State { get; set; } = 0;
 
-    [Required]
-    public bool IsMissionClear1 { get; set; }
+    public bool IsMissionClear1 { get; set; } = false;
 
-    [Required]
-    public bool IsMissionClear2 { get; set; }
+    public bool IsMissionClear2 { get; set; } = false;
 
-    [Required]
-    public bool IsMissionClear3 { get; set; }
+    public bool IsMissionClear3 { get; set; } = false;
 
-    [Required]
-    public int PlayCount { get; set; }
+    public int PlayCount { get; set; } = 0;
 
-    [Required]
-    public int DailyPlayCount { get; set; }
+    public int DailyPlayCount { get; set; } = 0;
 
-    [Required]
-    public int WeeklyPlayCount { get; set; }
+    public int WeeklyPlayCount { get; set; } = 0;
 
-    [Required]
-    public int LastDailyResetTime { get; set; }
+    public int LastDailyResetTime { get; set; } = 0;
 
-    [Required]
-    public int LastWeeklyResetTime { get; set; }
+    public int LastWeeklyResetTime { get; set; } = 0;
 
-    [Required]
-    public bool IsAppear { get; set; }
+    public bool IsAppear { get; set; } = true;
 
-    [Required]
-    public float BestClearTime { get; set; }
+    public float BestClearTime { get; set; } = -1.0f;
 }

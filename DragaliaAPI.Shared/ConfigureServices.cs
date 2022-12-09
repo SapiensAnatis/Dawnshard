@@ -9,6 +9,8 @@ public static class ServiceConfiguration
     {
         return services
             .AddSingleton<ICharaDataService>(new CharaDataService())
-            .AddSingleton<IDragonDataService>(new DragonDataService());
+            .AddSingleton<IDragonDataService>(new DragonDataService())
+            .AddSingleton<IQuestDataService>(new QuestDataService())
+            .AddSingleton<IEnemyListDataService>(new EnemyListDataService());
     }
 }

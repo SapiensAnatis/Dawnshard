@@ -9,7 +9,7 @@ public class DragaliaResponse<TData> where TData : class
 
     public TData data { get; init; }
 
-    public DragaliaResponse(TData data, ResultCode result_code = ResultCode.Success)
+    public DragaliaResponse(TData data, ResultCode result_code = ResultCode.SUCCESS)
     {
         this.data = data;
         this.data_headers = new(result_code);

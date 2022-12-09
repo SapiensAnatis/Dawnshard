@@ -1,3 +1,4 @@
+using System.Reflection;
 using DragaliaAPI.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,6 +47,8 @@ public class ApiContext : DbContext
 
         modelBuilder.Entity<DbQuest>().HasKey(e => new { e.DeviceAccountId, e.QuestId });
 
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
         if (this.Database.IsSqlite())
         {
             // SQLite doesn't support identity columns that aren't primary keys
@@ -68,26 +71,35 @@ public class ApiContext : DbContext
          */
     }
 
-    public DbSet<DbDeviceAccount> DeviceAccounts { get; set; } = null!;
+    public DbSet<DbDeviceAccount> DeviceAccounts { get; set; }
 
-    public DbSet<DbPlayerUserData> PlayerUserData { get; set; } = null!;
+    public DbSet<DbPlayerUserData> PlayerUserData { get; set; }
 
-    public DbSet<DbPlayerCharaData> PlayerCharaData { get; set; } = null!;
+    public DbSet<DbPlayerCharaData> PlayerCharaData { get; set; }
 
-    public DbSet<DbPlayerDragonData> PlayerDragonData { get; set; } = null!;
+    public DbSet<DbPlayerDragonData> PlayerDragonData { get; set; }
 
-    public DbSet<DbPlayerDragonReliability> PlayerDragonReliability { get; set; } = null!;
+    public DbSet<DbPlayerDragonReliability> PlayerDragonReliability { get; set; }
 
-    public DbSet<DbPlayerStoryState> PlayerStoryState { get; set; } = null!;
+    public DbSet<DbPlayerStoryState> PlayerStoryState { get; set; }
 
-    public DbSet<DbPlayerSummonHistory> PlayerSummonHistory { get; set; } = null!;
+    public DbSet<DbQuest> PlayerQuests { get; set; }
 
-    public DbSet<DbPlayerBannerData> PlayerBannerData { get; set; } = null!;
+    public DbSet<DbPlayerSummonHistory> PlayerSummonHistory { get; set; }
 
-    public DbSet<DbParty> PlayerParties { get; set; } = null!;
+    public DbSet<DbPlayerBannerData> PlayerBannerData { get; set; }
 
-    public DbSet<DbPartyUnit> PlayerPartyUnits { get; set; } = null!;
-    public DbSet<DbSetUnit> PlayerSetUnits { get; set; } = null!;
-    public DbSet<DbPlayerCurrency> PlayerWallet { get; set; } = null!;
-    public DbSet<DbPlayerMaterial> PlayerStorage { get; set; } = null!;
+    public DbSet<DbParty> PlayerParties { get; set; }
+
+    public DbSet<DbPartyUnit> PlayerPartyUnits { get; set; }
+
+    public DbSet<DbPlayerCurrency> PlayerWallet { get; set; }
+
+    public DbSet<DbPlayerMaterial> PlayerStorage { get; set; }
+
+    public DbSet<DbSetUnit> PlayerSetUnits { get; set; }
+
+    public DbSet<DbAbilityCrest> PlayerAbilityCrests { get; set; }
+
+    public DbSet<DbWeaponBody> PlayerWeapons { get; set; }
 }

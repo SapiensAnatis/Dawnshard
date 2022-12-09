@@ -6,6 +6,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Route("eula")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
+[NoSession]
 [ApiController]
 public class EulaController : DragaliaControllerBase
 {

@@ -17,7 +17,7 @@ public class AbilityCrestList
     public int attack_plus_count { get; set; }
     public int is_favorite { get; set; }
     public int is_new { get; set; }
-    public int gettime { get; set; }
+    public DateTimeOffset gettime { get; set; }
     public int ability_1_level { get; set; }
     public int ability_2_level { get; set; }
 
@@ -30,7 +30,7 @@ public class AbilityCrestList
         int attack_plus_count,
         int is_favorite,
         int is_new,
-        int gettime,
+        DateTimeOffset gettime,
         int ability_1_level,
         int ability_2_level
     )
@@ -1889,10 +1889,17 @@ public class AtgenDropObj
 {
     public int obj_id { get; set; }
     public int obj_type { get; set; }
-    public int is_rare { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_rare { get; set; }
     public IEnumerable<AtgenDropList> drop_list { get; set; }
 
-    public AtgenDropObj(int obj_id, int obj_type, int is_rare, IEnumerable<AtgenDropList> drop_list)
+    public AtgenDropObj(
+        int obj_id,
+        int obj_type,
+        bool is_rare,
+        IEnumerable<AtgenDropList> drop_list
+    )
     {
         this.obj_id = obj_id;
         this.obj_type = obj_type;
@@ -1940,16 +1947,20 @@ public class AtgenEnemy
 {
     public int piece { get; set; }
     public int enemy_idx { get; set; }
-    public int is_pop { get; set; }
-    public int is_rare { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_pop { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_rare { get; set; }
     public int param_id { get; set; }
     public IEnumerable<EnemyDropList> enemy_drop_list { get; set; }
 
     public AtgenEnemy(
         int piece,
         int enemy_idx,
-        int is_pop,
-        int is_rare,
+        bool is_pop,
+        bool is_rare,
         int param_id,
         IEnumerable<EnemyDropList> enemy_drop_list
     )
@@ -3571,7 +3582,7 @@ public class AtgenSupportAmulet
 [MessagePackObject(true)]
 public class AtgenSupportChara
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int level { get; set; }
     public int additional_max_level { get; set; }
     public int rarity { get; set; }
@@ -3587,10 +3598,12 @@ public class AtgenSupportChara
     public int ex_ability_2_level { get; set; }
     public int skill_1_level { get; set; }
     public int skill_2_level { get; set; }
-    public int is_unlock_edit_skill { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_unlock_edit_skill { get; set; }
 
     public AtgenSupportChara(
-        int chara_id,
+        Charas chara_id,
         int level,
         int additional_max_level,
         int rarity,
@@ -3606,7 +3619,7 @@ public class AtgenSupportChara
         int ex_ability_2_level,
         int skill_1_level,
         int skill_2_level,
-        int is_unlock_edit_skill
+        bool is_unlock_edit_skill
     )
     {
         this.chara_id = chara_id;
@@ -4661,7 +4674,7 @@ public class CharaFriendshipList
 [MessagePackObject(true)]
 public class CharaList
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int exp { get; set; }
     public int level { get; set; }
     public int additional_max_level { get; set; }
@@ -4684,14 +4697,14 @@ public class CharaList
     public int combo_buildup_count { get; set; }
     public int is_unlock_edit_skill { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset gettime { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }
     public int is_temporary { get; set; }
     public int list_view_flag { get; set; }
 
     public CharaList(
-        int chara_id,
+        Charas chara_id,
         int exp,
         int level,
         int additional_max_level,
@@ -5389,7 +5402,7 @@ public class DragonList
     public int is_lock { get; set; }
     public int is_new { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset get_time { get; set; }
     public int skill_1_level { get; set; }
     public int ability_1_level { get; set; }
@@ -5442,10 +5455,10 @@ public class DragonReliabilityList
     public int reliability_level { get; set; }
     public int reliability_total_exp { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset gettime { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset last_contact_time { get; set; }
 
     public DragonReliabilityList(
@@ -5640,7 +5653,8 @@ public class EntityResult
     public IEnumerable<AtgenBuildEventRewardEntityList> over_present_entity_list { get; set; }
     public IEnumerable<AtgenBuildEventRewardEntityList> over_present_limit_entity_list { get; set; }
     public IEnumerable<AtgenDuplicateEntityList> new_get_entity_list { get; set; }
-    public IEnumerable<ConvertedEntityList> converted_entity_list { get; set; }
+    public IEnumerable<ConvertedEntityList> converted_entity_list { get; set; } =
+        new List<ConvertedEntityList>();
 
     public EntityResult(
         IEnumerable<AtgenBuildEventRewardEntityList> over_discard_entity_list,
@@ -5988,7 +6002,7 @@ public class FunctionalMaintenanceList
 [MessagePackObject(true)]
 public class GameAbilityCrest
 {
-    public int ability_crest_id { get; set; }
+    public AbilityCrests ability_crest_id { get; set; }
     public int buildup_count { get; set; }
     public int limit_break_count { get; set; }
     public int equipable_count { get; set; }
@@ -5998,7 +6012,7 @@ public class GameAbilityCrest
     public int attack_plus_count { get; set; }
 
     public GameAbilityCrest(
-        int ability_crest_id,
+        AbilityCrests ability_crest_id,
         int buildup_count,
         int limit_break_count,
         int equipable_count,
@@ -6024,7 +6038,7 @@ public class GameAbilityCrest
 [MessagePackObject(true)]
 public class GameWeaponBody
 {
-    public int weapon_body_id { get; set; }
+    public WeaponBodies weapon_body_id { get; set; }
     public int buildup_count { get; set; }
     public int limit_break_count { get; set; }
     public int limit_over_count { get; set; }
@@ -6039,7 +6053,7 @@ public class GameWeaponBody
     public int additional_effect_count { get; set; }
 
     public GameWeaponBody(
-        int weapon_body_id,
+        WeaponBodies weapon_body_id,
         int buildup_count,
         int limit_break_count,
         int limit_over_count,
@@ -6480,15 +6494,27 @@ public class IngameData
     public int continue_limit { get; set; }
     public int continue_count { get; set; }
     public int reborn_limit { get; set; }
-    public int start_time { get; set; }
+
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
+    public DateTimeOffset start_time { get; set; }
     public PartyInfo party_info { get; set; }
     public IEnumerable<AreaInfoList> area_info_list { get; set; }
     public int use_stone { get; set; }
-    public int is_host { get; set; }
-    public int is_fever_time { get; set; }
-    public int is_bot_tutorial { get; set; }
-    public int is_receivable_carry_bonus { get; set; }
-    public int is_use_event_chara_ability { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_host { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_fever_time { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_bot_tutorial { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_receivable_carry_bonus { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_use_event_chara_ability { get; set; }
     public IEnumerable<EventAbilityCharaList> event_ability_chara_list { get; set; }
     public IEnumerable<ulong> first_clear_viewer_id_list { get; set; }
     public int multi_disconnect_type { get; set; }
@@ -6505,15 +6531,15 @@ public class IngameData
         int continue_limit,
         int continue_count,
         int reborn_limit,
-        int start_time,
+        DateTimeOffset start_time,
         PartyInfo party_info,
         IEnumerable<AreaInfoList> area_info_list,
         int use_stone,
-        int is_host,
-        int is_fever_time,
-        int is_bot_tutorial,
-        int is_receivable_carry_bonus,
-        int is_use_event_chara_ability,
+        bool is_host,
+        bool is_fever_time,
+        bool is_bot_tutorial,
+        bool is_receivable_carry_bonus,
+        bool is_use_event_chara_ability,
         IEnumerable<EventAbilityCharaList> event_ability_chara_list,
         IEnumerable<ulong> first_clear_viewer_id_list,
         int multi_disconnect_type,
@@ -6554,16 +6580,22 @@ public class IngameQuestData
 {
     public int quest_id { get; set; }
     public int play_count { get; set; }
-    public int is_mission_clear_1 { get; set; }
-    public int is_mission_clear_2 { get; set; }
-    public int is_mission_clear_3 { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_mission_clear_1 { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_mission_clear_2 { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_mission_clear_3 { get; set; }
 
     public IngameQuestData(
         int quest_id,
         int play_count,
-        int is_mission_clear_1,
-        int is_mission_clear_2,
-        int is_mission_clear_3
+        bool is_mission_clear_1,
+        bool is_mission_clear_2,
+        bool is_mission_clear_3
     )
     {
         this.quest_id = quest_id;
@@ -6584,13 +6616,19 @@ public class IngameResultData
     public int quest_id { get; set; }
     public RewardRecord reward_record { get; set; }
     public GrowRecord grow_record { get; set; }
-    public int start_time { get; set; }
-    public int end_time { get; set; }
-    public int is_clear { get; set; }
+    public DateTimeOffset start_time { get; set; }
+    public DateTimeOffset end_time { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_clear { get; set; }
     public int state { get; set; }
     public int dungeon_skip_type { get; set; }
-    public int is_host { get; set; }
-    public int is_fever_time { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_host { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_fever_time { get; set; }
     public int wave_count { get; set; }
     public int current_play_count { get; set; }
     public int reborn_count { get; set; }
@@ -6602,7 +6640,9 @@ public class IngameResultData
     public IEnumerable<AtgenBonusFactorList> bonus_factor_list { get; set; }
     public IEnumerable<AtgenEventPassiveUpList> event_passive_up_list { get; set; }
     public float clear_time { get; set; }
-    public int is_best_clear_time { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_best_clear_time { get; set; }
     public long total_play_damage { get; set; }
     public IEnumerable<ConvertedEntityList> converted_entity_list { get; set; }
 
@@ -6612,13 +6652,13 @@ public class IngameResultData
         int quest_id,
         RewardRecord reward_record,
         GrowRecord grow_record,
-        int start_time,
-        int end_time,
-        int is_clear,
+        DateTimeOffset start_time,
+        DateTimeOffset end_time,
+        bool is_clear,
         int state,
         int dungeon_skip_type,
-        int is_host,
-        int is_fever_time,
+        bool is_host,
+        bool is_fever_time,
         int wave_count,
         int current_play_count,
         int reborn_count,
@@ -6630,7 +6670,7 @@ public class IngameResultData
         IEnumerable<AtgenBonusFactorList> bonus_factor_list,
         IEnumerable<AtgenEventPassiveUpList> event_passive_up_list,
         float clear_time,
-        int is_best_clear_time,
+        bool is_best_clear_time,
         long total_play_damage,
         IEnumerable<ConvertedEntityList> converted_entity_list
     )
@@ -7029,24 +7069,39 @@ public class OddsUnitDetail
 [MessagePackObject(true)]
 public class OptionData
 {
-    public int is_enable_auto_lock_unit { get; set; }
-    public int is_auto_lock_dragon_sr { get; set; }
-    public int is_auto_lock_dragon_ssr { get; set; }
-    public int is_auto_lock_weapon_sr { get; set; }
-    public int is_auto_lock_weapon_ssr { get; set; }
-    public int is_auto_lock_weapon_sssr { get; set; }
-    public int is_auto_lock_amulet_sr { get; set; }
-    public int is_auto_lock_amulet_ssr { get; set; }
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_enable_auto_lock_unit { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_auto_lock_dragon_sr { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_auto_lock_dragon_ssr { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_auto_lock_weapon_sr { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_auto_lock_weapon_ssr { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_auto_lock_weapon_sssr { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_auto_lock_amulet_sr { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_auto_lock_amulet_ssr { get; set; }
 
     public OptionData(
-        int is_enable_auto_lock_unit,
-        int is_auto_lock_dragon_sr,
-        int is_auto_lock_dragon_ssr,
-        int is_auto_lock_weapon_sr,
-        int is_auto_lock_weapon_ssr,
-        int is_auto_lock_weapon_sssr,
-        int is_auto_lock_amulet_sr,
-        int is_auto_lock_amulet_ssr
+        bool is_enable_auto_lock_unit,
+        bool is_auto_lock_dragon_sr,
+        bool is_auto_lock_dragon_ssr,
+        bool is_auto_lock_weapon_sr,
+        bool is_auto_lock_weapon_ssr,
+        bool is_auto_lock_weapon_sssr,
+        bool is_auto_lock_amulet_sr,
+        bool is_auto_lock_amulet_ssr
     )
     {
         this.is_enable_auto_lock_unit = is_enable_auto_lock_unit;
@@ -7133,15 +7188,15 @@ public class PartySettingList
     public ulong equip_amulet_key_id { get; set; }
     public ulong equip_amulet_2_key_id { get; set; }
     public int equip_skin_weapon_id { get; set; }
-    public int equip_weapon_body_id { get; set; }
+    public WeaponBodies equip_weapon_body_id { get; set; }
     public int equip_weapon_skin_id { get; set; }
-    public int equip_crest_slot_type_1_crest_id_1 { get; set; }
-    public int equip_crest_slot_type_1_crest_id_2 { get; set; }
-    public int equip_crest_slot_type_1_crest_id_3 { get; set; }
-    public int equip_crest_slot_type_2_crest_id_1 { get; set; }
-    public int equip_crest_slot_type_2_crest_id_2 { get; set; }
-    public int equip_crest_slot_type_3_crest_id_1 { get; set; }
-    public int equip_crest_slot_type_3_crest_id_2 { get; set; }
+    public AbilityCrests equip_crest_slot_type_1_crest_id_1 { get; set; }
+    public AbilityCrests equip_crest_slot_type_1_crest_id_2 { get; set; }
+    public AbilityCrests equip_crest_slot_type_1_crest_id_3 { get; set; }
+    public AbilityCrests equip_crest_slot_type_2_crest_id_1 { get; set; }
+    public AbilityCrests equip_crest_slot_type_2_crest_id_2 { get; set; }
+    public AbilityCrests equip_crest_slot_type_3_crest_id_1 { get; set; }
+    public AbilityCrests equip_crest_slot_type_3_crest_id_2 { get; set; }
     public ulong equip_talisman_key_id { get; set; }
     public int edit_skill_1_chara_id { get; set; }
     public int edit_skill_2_chara_id { get; set; }
@@ -7154,15 +7209,15 @@ public class PartySettingList
         ulong equip_amulet_key_id,
         ulong equip_amulet_2_key_id,
         int equip_skin_weapon_id,
-        int equip_weapon_body_id,
+        WeaponBodies equip_weapon_body_id,
         int equip_weapon_skin_id,
-        int equip_crest_slot_type_1_crest_id_1,
-        int equip_crest_slot_type_1_crest_id_2,
-        int equip_crest_slot_type_1_crest_id_3,
-        int equip_crest_slot_type_2_crest_id_1,
-        int equip_crest_slot_type_2_crest_id_2,
-        int equip_crest_slot_type_3_crest_id_1,
-        int equip_crest_slot_type_3_crest_id_2,
+        AbilityCrests equip_crest_slot_type_1_crest_id_1,
+        AbilityCrests equip_crest_slot_type_1_crest_id_2,
+        AbilityCrests equip_crest_slot_type_1_crest_id_3,
+        AbilityCrests equip_crest_slot_type_2_crest_id_1,
+        AbilityCrests equip_crest_slot_type_2_crest_id_2,
+        AbilityCrests equip_crest_slot_type_3_crest_id_1,
+        AbilityCrests equip_crest_slot_type_3_crest_id_2,
         ulong equip_talisman_key_id,
         int edit_skill_1_chara_id,
         int edit_skill_2_chara_id
@@ -7192,22 +7247,28 @@ public class PartySettingList
     public PartySettingList() { }
 }
 
+#nullable enable
+
 [MessagePackObject(true)]
 public class PartyUnitList
 {
     public int position { get; set; }
-    public CharaList chara_data { get; set; }
-    public DragonList dragon_data { get; set; }
-    public GameWeaponSkin weapon_skin_data { get; set; }
-    public GameWeaponBody weapon_body_data { get; set; }
-    public IEnumerable<GameAbilityCrest> crest_slot_type_1_crest_list { get; set; }
-    public IEnumerable<GameAbilityCrest> crest_slot_type_2_crest_list { get; set; }
-    public IEnumerable<GameAbilityCrest> crest_slot_type_3_crest_list { get; set; }
-    public TalismanList talisman_data { get; set; }
-    public EditSkillCharaData edit_skill_1_chara_data { get; set; }
-    public EditSkillCharaData edit_skill_2_chara_data { get; set; }
-    public IEnumerable<WeaponPassiveAbilityList> game_weapon_passive_ability_list { get; set; }
-    public int dragon_reliability_level { get; set; }
+    public CharaList? chara_data { get; set; }
+    public DragonList? dragon_data { get; set; }
+    public GameWeaponSkin? weapon_skin_data { get; set; }
+    public GameWeaponBody? weapon_body_data { get; set; }
+    public IEnumerable<GameAbilityCrest> crest_slot_type_1_crest_list { get; set; } =
+        new List<GameAbilityCrest>();
+    public IEnumerable<GameAbilityCrest> crest_slot_type_2_crest_list { get; set; } =
+        new List<GameAbilityCrest>();
+    public IEnumerable<GameAbilityCrest> crest_slot_type_3_crest_list { get; set; } =
+        new List<GameAbilityCrest>();
+    public TalismanList? talisman_data { get; set; }
+    public EditSkillCharaData? edit_skill_1_chara_data { get; set; }
+    public EditSkillCharaData? edit_skill_2_chara_data { get; set; }
+    public IEnumerable<WeaponPassiveAbilityList> game_weapon_passive_ability_list { get; set; } =
+        new List<WeaponPassiveAbilityList>();
+    public int dragon_reliability_level { get; set; } = 0;
 
     public PartyUnitList(
         int position,
@@ -7242,6 +7303,8 @@ public class PartyUnitList
 
     public PartyUnitList() { }
 }
+
+#nullable disable
 
 [MessagePackObject(true)]
 public class PaymentTarget
@@ -7411,10 +7474,10 @@ public class PresentDetailList
     public int message_param_value_3 { get; set; }
     public int message_param_value_4 { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset receive_limit_time { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset create_time { get; set; }
 
     public PresentDetailList(
@@ -7473,7 +7536,7 @@ public class PresentHistoryList
     public int message_param_value_3 { get; set; }
     public int message_param_value_4 { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset create_time { get; set; }
 
     public PresentHistoryList(
@@ -8387,6 +8450,35 @@ public class SummonList
     public int beginner_campaign_count_rest { get; set; }
     public int consecution_campaign_count_rest { get; set; }
 
+    /// UNKNOWN: params: priority, summon_type, status, daily(unsure), campaign_type, [x]_rest
+    /// <summary>
+    /// Banner Data<br/>
+    /// This is composed from static banner data and DB saved player-banner data
+    /// </summary>
+    /// <param name="summon_id">Banner Id</param>
+    /// <param name="priority">Unknown</param>
+    /// <param name="summon_type">Unknown, maybe for special banners like platinum only banners</param>
+    /// <param name="single_crystal">1x summon Wyrmite cost (Negative numbers won't allow summons, 0 for default)</param>
+    /// <param name="single_diamond">Client uses <see cref="single_crystal"/> for displaying both wyrmite and diamantium cost<br/>Most likely 1x summon Diamantium cost (Negative numbers won't allow summons, 0 for default)</param>
+    /// <param name="multi_crystal">10x summon Wyrmite cost (Negative numbers won't allow summons, 0 for default)</param>
+    /// <param name="multi_diamond">Client uses <see cref="multi_crystal"/> for displaying both wyrmite and diamantium cost<br/>Most likely 10x summon Diamantium cost (Negative numbers won't allow summons, 0 for default)</param>
+    /// <param name="limited_crystal">Unknown: Presumably Wyrmite cost of the limited 1x summon button but it never existed</param>
+    /// <param name="limited_diamond">Diamantium cost of the limited 1x summon button</param>
+    /// <param name="add_summon_point">Summon points for a 1x Wyrmite summon</param>
+    /// <param name="add_summon_point_stone">Summon points for a 1x Diamantium summon</param>
+    /// <param name="exchange_summon_point">Summon point cost for sparking, the client doesn't seem to care though</param>
+    /// <param name="status">Unknown function, maybe just active = 1, inactive = 0 but no change in normal banner</param>
+    /// <param name="commence_date">Banner start date</param>
+    /// <param name="complete_date">Banner end date</param>
+    /// <param name="daily_count">Currently used summons for the daily discounted diamantium summon</param>
+    /// <param name="daily_limit">Total limit for the daily discounted diamantium summon</param>
+    /// <param name="total_limit">Total amount of summons limit(seems ignored for normal banners)</param>
+    /// <param name="total_count">Current total amount of summons(seems ignored for normal banners)</param>
+    /// <param name="campaign_type">Unknown, maybe used for </param>
+    /// <param name="free_count_rest">Most likely free summons for certain banner/campaign types</param>
+    /// <param name="is_beginner_campaign">If this banner is part of the beginner campaign</param>
+    /// <param name="beginner_campaign_count_rest">Begginer banner has a free tenfold available(only if <see cref="is_beginner_campaign"/> is set)</param>
+    /// <param name="consecution_campaign_count_rest">Unknown</param>
     public SummonList(
         int summon_id,
         int summon_type,
@@ -9131,7 +9223,9 @@ public class UserSupportList
     public ulong viewer_id { get; set; }
     public string name { get; set; }
     public int level { get; set; }
-    public int last_login_date { get; set; }
+
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
+    public DateTimeOffset last_login_date { get; set; }
     public int emblem_id { get; set; }
     public int max_party_power { get; set; }
     public AtgenGuild guild { get; set; }
@@ -9150,7 +9244,7 @@ public class UserSupportList
         ulong viewer_id,
         string name,
         int level,
-        int last_login_date,
+        DateTimeOffset last_login_date,
         int emblem_id,
         int max_party_power,
         AtgenGuild guild,
@@ -9237,7 +9331,7 @@ public class WeaponBodyList
     public IEnumerable<int> unlock_weapon_passive_ability_no_list { get; set; }
     public int fort_passive_chara_weapon_buildup_count { get; set; }
     public int is_new { get; set; }
-    public int gettime { get; set; }
+    public DateTimeOffset gettime { get; set; }
     public int skill_no { get; set; }
     public int skill_level { get; set; }
     public int ability_1_level { get; set; }
@@ -9256,7 +9350,7 @@ public class WeaponBodyList
         IEnumerable<int> unlock_weapon_passive_ability_no_list,
         int fort_passive_chara_weapon_buildup_count,
         int is_new,
-        int gettime,
+        DateTimeOffset gettime,
         int skill_no,
         int skill_level,
         int ability_1_level,

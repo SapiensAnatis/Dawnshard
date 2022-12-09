@@ -25,7 +25,8 @@ public static class DatabaseConfiguration
             .AddScoped<IInventoryRepository, InventoryRepository>()
             .AddScoped<ISummonRepository, SummonRepository>()
             .AddScoped<IPartyRepository, PartyRepository>()
-            .AddScoped<IQuestRepository, QuestRepository>();
+            .AddScoped<IQuestRepository, QuestRepository>()
+            .AddScoped<IInventoryRepository, InventoryRepository>();
 
         return services;
     }

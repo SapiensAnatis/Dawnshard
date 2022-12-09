@@ -27,16 +27,23 @@ public class PartyRepository : BaseRepository, IPartyRepository
             .SingleAsync();
 
         existingParty.PartyName = newParty.PartyName;
+        existingParty.Units = CleanUnitList(newParty.Units);
 
-        // For some reason, pressing 'Optimize' sends a request to /party/set_party_setting with like 8 units in it
-        // Take the first one under each number
-        existingParty.Units.Clear();
+        apiContext.Entry(existingParty).State = EntityState.Modified;
+    }
+
+    private static ICollection<DbPartyUnit> CleanUnitList(ICollection<DbPartyUnit> original)
+    {
+        // For some reason, pressing 'Optimize' can send a request to /party/set_party_setting with like 8 units in it
+        // Take the first one under each number, and fill in blanks if needed.
+        List<DbPartyUnit> result = new();
         for (int i = 1; i <= 4; i++)
         {
-            existingParty.Units.Add(
-                newParty.Units.FirstOrDefault(x => x.UnitNo == i)
-                    ?? new() { UnitNo = i, CharaId = 0 }
+            result.Add(
+                original.FirstOrDefault(x => x.UnitNo == i) ?? new() { UnitNo = i, CharaId = 0 }
             );
         }
+
+        return result;
     }
 }

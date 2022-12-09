@@ -21,8 +21,8 @@ public class CustomMessagePackOutputFormatter : MessagePackOutputFormatter
     {
         this.options = options;
 
-        SupportedMediaTypes.Add(ContentType);
-        SupportedMediaTypes.Add("application/x-msgpack");
+        this.SupportedMediaTypes.Add(ContentType);
+        this.SupportedMediaTypes.Add("application/x-msgpack");
     }
 
     public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context) =>
@@ -40,7 +40,7 @@ public class CustomMessagePackInputFormatter : MessagePackInputFormatter
     {
         this.options = options;
 
-        SupportedMediaTypes.Add(ContentType);
+        this.SupportedMediaTypes.Add(ContentType);
     }
 
     public override async Task<InputFormatterResult> ReadRequestBodyAsync(

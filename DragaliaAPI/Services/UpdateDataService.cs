@@ -20,7 +20,9 @@ public class UpdateDataService : IUpdateDataService
 
     public UpdateDataList GetUpdateDataList(string deviceAccountId)
     {
-        IEnumerable<IDbHasAccountId> updatedEntities = this.apiContext.ChangeTracker
+        this.apiContext.ChangeTracker.LazyLoadingEnabled = false;
+
+        IEnumerable<IDbHasAccountId> entities = this.apiContext.ChangeTracker
             .Entries<IDbHasAccountId>()
             .Where(
                 x =>
@@ -29,22 +31,31 @@ public class UpdateDataService : IUpdateDataService
             )
             .Select(x => x.Entity);
 
-        return new()
-        {
-            chara_list = this.ConvertEntities<CharaList, DbPlayerCharaData>(updatedEntities),
-            dragon_list = this.ConvertEntities<DragonList, DbPlayerDragonData>(updatedEntities),
-            dragon_reliability_list = this.ConvertEntities<
-                DragonReliabilityList,
-                DbPlayerDragonReliability
-            >(updatedEntities),
-            user_data = this.ConvertEntities<UserData, DbPlayerUserData>(updatedEntities)
-                ?.SingleOrDefault(),
-            party_list = this.ConvertEntities<PartyList, DbParty>(updatedEntities),
-            quest_story_list = this.ConvertEntities<QuestStoryList, DbPlayerStoryState>(
-                updatedEntities
-            ),
-            material_list = this.ConvertEntities<MaterialList, DbPlayerMaterial>(updatedEntities),
-        };
+        UpdateDataList result =
+            new()
+            {
+                user_data = this.ConvertEntities<UserData, DbPlayerUserData>(entities)?.Single(),
+                chara_list = this.ConvertEntities<CharaList, DbPlayerCharaData>(entities),
+                dragon_list = this.ConvertEntities<DragonList, DbPlayerDragonData>(entities),
+                dragon_reliability_list = this.ConvertEntities<
+                    DragonReliabilityList,
+                    DbPlayerDragonReliability
+                >(entities),
+                weapon_body_list = this.ConvertEntities<WeaponBodyList, DbWeaponBody>(entities),
+                ability_crest_list = this.ConvertEntities<AbilityCrestList, DbAbilityCrest>(
+                    entities
+                ),
+                party_list = this.ConvertEntities<PartyList, DbParty>(entities),
+                quest_story_list = this.ConvertEntities<QuestStoryList, DbPlayerStoryState>(
+                    entities
+                ),
+                material_list = this.ConvertEntities<MaterialList, DbPlayerMaterial>(entities),
+                quest_list = this.ConvertEntities<QuestList, DbQuest>(entities)
+            };
+
+        this.apiContext.ChangeTracker.LazyLoadingEnabled = true;
+
+        return result;
     }
 
     private IEnumerable<TNetwork>? ConvertEntities<TNetwork, TDatabase>(

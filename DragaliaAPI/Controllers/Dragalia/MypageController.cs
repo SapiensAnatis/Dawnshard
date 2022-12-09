@@ -20,6 +20,6 @@ public class MypageController : DragaliaControllerBase
             ContractlessStandardResolver.Options
         );
 
-        return Ok(preset_mypage);
+        return preset_mypage;
     }
 }

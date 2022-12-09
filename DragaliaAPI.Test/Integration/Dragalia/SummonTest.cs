@@ -13,6 +13,7 @@ namespace DragaliaAPI.Test.Integration.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.SummonController"/>
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class SummonTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;

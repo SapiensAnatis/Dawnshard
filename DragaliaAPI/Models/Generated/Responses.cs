@@ -3745,7 +3745,7 @@ public class LoadIndexData
     public int quest_skip_point_use_limit_max { get; set; }
     public int spec_upgrade_time { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset server_time { get; set; }
     public int quest_bonus_stack_base_time { get; set; }
     public IEnumerable<AtgenQuestBonus> quest_bonus { get; set; }
@@ -5216,7 +5216,9 @@ public class RaidEventGetEventDataData
     public IEnumerable<EventTradeList> event_trade_list { get; set; }
     public IEnumerable<EventPassiveList> event_passive_list { get; set; }
     public IEnumerable<EventAbilityCharaList> event_ability_chara_list { get; set; }
-    public int is_receive_event_damage_reward { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_receive_event_damage_reward { get; set; }
     public AtgenEventDamageData event_damage_data { get; set; }
 
     public RaidEventGetEventDataData(
@@ -5226,7 +5228,7 @@ public class RaidEventGetEventDataData
         IEnumerable<EventTradeList> event_trade_list,
         IEnumerable<EventPassiveList> event_passive_list,
         IEnumerable<EventAbilityCharaList> event_ability_chara_list,
-        int is_receive_event_damage_reward,
+        bool is_receive_event_damage_reward,
         AtgenEventDamageData event_damage_data
     )
     {

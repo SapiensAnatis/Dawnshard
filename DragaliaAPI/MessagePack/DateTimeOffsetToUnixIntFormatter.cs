@@ -4,9 +4,9 @@ using MessagePack.Formatters;
 namespace DragaliaAPI.MessagePackFormatters;
 
 /// <summary>
-/// Formatter for MessagePack to use Dates in code but send Linux time (as int) to the client
+/// Formatter for MessagePack to use Dates in code but send Unix time (as int) to the client
 /// </summary>
-public class DateTimeOffsetToUnixIntFormatter : IMessagePackFormatter<DateTimeOffset>
+public class DateTimeOffsetIntFormatter : IMessagePackFormatter<DateTimeOffset>
 {
     public DateTimeOffset Deserialize(
         ref MessagePackReader reader,

@@ -28,6 +28,8 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         cfg => cfg.AddMaps(typeof(Program).Assembly)
     ).CreateMapper();
 
+    public ApiContext ApiContext => this.Services.GetRequiredService<ApiContext>();
+
     public async Task AddCharacter(Charas id)
     {
         using IServiceScope scope = this.Services.CreateScope();
@@ -95,6 +97,8 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
             {
                 // Password is a hash of the string "password"
                 new("id", "mZlZ+wpg+n3l63y9D25f93v0KLM="),
+                // Needed for foreign key constraints
+                new(this.DeviceAccountId, "some password"),
             }
         );
 
