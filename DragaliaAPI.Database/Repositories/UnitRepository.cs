@@ -44,7 +44,7 @@ public class UnitRepository : BaseRepository, IUnitRepository
     {
         return apiContext.PlayerWeapons.Where(x => x.DeviceAccountId == deviceAccountId);
     }
-    
+
     public IQueryable<DbPlayerDragonReliability> GetAllDragonReliabilityData(string deviceAccountId)
     {
         return apiContext.PlayerDragonReliability.Where(x => x.DeviceAccountId == deviceAccountId);
