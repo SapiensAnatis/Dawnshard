@@ -76,14 +76,6 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetAllDragonData_ReturnsOnlyDataForGivenId()
     {
-        await this.fixture.AddToDatabase(
-            DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.Andromeda)
-        );
-
-        await this.fixture.AddToDatabase(
-            DbPlayerDragonDataFactory.Create("other id", Dragons.Apollo)
-        );
-
         (await this.unitRepository.GetAllCharaData(DeviceAccountId).ToListAsync())
             .Should()
             .AllSatisfy(x => x.DeviceAccountId.Should().Be(DeviceAccountId));
@@ -233,5 +225,129 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         )
             .Should()
             .Contain(new List<Dragons>() { Dragons.GalaRebornAgni, Dragons.GalaRebornZephyr, });
+    }
+
+    [Fact]
+    public async Task BuildDetailedPartyUnit_ReturnsCorrectResult()
+    {
+        DbPlayerCharaData chara = DbPlayerCharaDataFactory.Create(
+            DeviceAccountId,
+            charaDataService.GetData(Charas.BondforgedPrince)
+        );
+
+        DbPlayerCharaData chara1 = DbPlayerCharaDataFactory.Create(
+            DeviceAccountId,
+            charaDataService.GetData(Charas.GalaEmile)
+        );
+        chara1.IsUnlockEditSkill = true;
+
+        DbPlayerCharaData chara2 = DbPlayerCharaDataFactory.Create(
+            DeviceAccountId,
+            charaDataService.GetData(Charas.SummerCleo)
+        );
+        chara2.IsUnlockEditSkill = true;
+        chara2.Skill1Level = 2;
+
+        DbPlayerDragonData dragon = DbPlayerDragonDataFactory.Create(
+            DeviceAccountId,
+            Dragons.MidgardsormrZero
+        );
+        dragon.DragonKeyId = 400;
+
+        DbPlayerDragonReliability reliability = DbPlayerDragonReliabilityFactory.Create(
+            DeviceAccountId,
+            Dragons.MidgardsormrZero
+        );
+        reliability.Level = 30;
+
+        DbWeaponBody weapon =
+            new() { DeviceAccountId = DeviceAccountId, WeaponBodyId = WeaponBodies.Excalibur };
+
+        List<DbAbilityCrest> crests =
+            new()
+            {
+                new()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    AbilityCrestId = AbilityCrests.SweetSurprise
+                },
+                new()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    AbilityCrestId = AbilityCrests.TheRedImpulse
+                },
+                new()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    AbilityCrestId = AbilityCrests.ThePrinceofDragonyule
+                },
+                new()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    AbilityCrestId = AbilityCrests.SnipersAllure
+                },
+                new()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    AbilityCrestId = AbilityCrests.DragonsNest
+                },
+                new()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon
+                },
+                new()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon
+                }
+            };
+
+        await this.fixture.AddToDatabase(chara);
+        await this.fixture.AddToDatabase(chara1);
+        await this.fixture.AddToDatabase(chara2);
+        await this.fixture.AddToDatabase(dragon);
+        await this.fixture.AddToDatabase(reliability);
+        await this.fixture.AddToDatabase(weapon);
+        await this.fixture.AddRangeToDatabase(crests);
+
+        (
+            await this.unitRepository.BuildDetailedPartyUnit(
+                new DbPartyUnit()
+                {
+                    Party = new() { DeviceAccountId = DeviceAccountId, PartyNo = 1 },
+                    UnitNo = 1,
+                    CharaId = Charas.BondforgedPrince,
+                    EquipWeaponBodyId = WeaponBodies.Excalibur,
+                    EquipDragonKeyId = 400,
+                    EquipCrestSlotType1CrestId1 = AbilityCrests.SweetSurprise,
+                    EquipCrestSlotType1CrestId2 = AbilityCrests.TheRedImpulse,
+                    EquipCrestSlotType1CrestId3 = AbilityCrests.ThePrinceofDragonyule,
+                    EquipCrestSlotType2CrestId1 = AbilityCrests.SnipersAllure,
+                    EquipCrestSlotType2CrestId2 = AbilityCrests.DragonsNest,
+                    EquipCrestSlotType3CrestId1 = AbilityCrests.CrownofLightSerpentsBoon,
+                    EquipCrestSlotType3CrestId2 = AbilityCrests.TutelarysDestinyWolfsBoon,
+                    EditSkill1CharaId = Charas.GalaEmile,
+                    EditSkill2CharaId = Charas.SummerCleo,
+                }
+            )
+        )
+            .Should()
+            .BeEquivalentTo(
+                new DbDetailedPartyUnit()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    Position = 1,
+                    CharaData = chara,
+                    DragonData = dragon,
+                    WeaponBodyData = weapon,
+                    CrestSlotType1CrestList = crests.GetRange(0, 3),
+                    CrestSlotType2CrestList = crests.GetRange(3, 2),
+                    CrestSlotType3CrestList = crests.GetRange(5, 2),
+                    DragonReliabilityLevel = 30,
+                    EditSkill1CharaData = new() { CharaId = Charas.GalaEmile, EditSkillLevel = 1, },
+                    EditSkill2CharaData = new() { CharaId = Charas.SummerCleo, EditSkillLevel = 2, }
+                }
+            );
     }
 }

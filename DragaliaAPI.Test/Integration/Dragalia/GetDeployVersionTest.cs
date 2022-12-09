@@ -2,6 +2,7 @@
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
+[Collection("DragaliaIntegration")]
 public class GetDeployVersionTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;

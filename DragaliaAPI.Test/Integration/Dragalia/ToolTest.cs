@@ -7,6 +7,7 @@ namespace DragaliaAPI.Test.Integration.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.ToolController"/>
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class ToolTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
@@ -58,8 +59,8 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
             .Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeData>(
-                    new DataHeaders(ResultCode.SessionError),
-                    new ResultCodeData(ResultCode.SessionError)
+                    new DataHeaders(ResultCode.COMMON_SESSION_RESTORE_ERROR),
+                    new ResultCodeData(ResultCode.COMMON_SESSION_RESTORE_ERROR)
                 )
             );
     }
@@ -112,8 +113,8 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
             .Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeData>(
-                    new DataHeaders(ResultCode.SessionError),
-                    new ResultCodeData(ResultCode.SessionError)
+                    new DataHeaders(ResultCode.COMMON_SESSION_RESTORE_ERROR),
+                    new ResultCodeData(ResultCode.COMMON_SESSION_RESTORE_ERROR)
                 )
             );
     }

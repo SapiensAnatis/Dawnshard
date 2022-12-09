@@ -1,8 +1,10 @@
 ﻿using System.Text.Json;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +21,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Route("tool")]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
+[NoSession]
 [ApiController]
 public class ToolController : DragaliaControllerBase
 {
@@ -36,10 +39,23 @@ public class ToolController : DragaliaControllerBase
     public async Task<DragaliaResult> Signup(ToolSignupRequest request)
     {
         long viewerId;
+        string deviceAccountId;
 
-        string deviceAccountId = await this.sessionService.GetDeviceAccountId_IdToken(
-            request.id_token
-        );
+        try
+        {
+            deviceAccountId = await this.sessionService.GetDeviceAccountId_IdToken(
+                request.id_token
+            );
+        }
+        catch (SessionException)
+        {
+            return new OkObjectResult(
+                new DragaliaResponse<ResultCodeData>(
+                    new(ResultCode.COMMON_SESSION_RESTORE_ERROR),
+                    ResultCode.COMMON_SESSION_RESTORE_ERROR
+                )
+            );
+        }
 
         viewerId = await this.userDataRepository
             .GetUserData(deviceAccountId)
@@ -62,11 +78,27 @@ public class ToolController : DragaliaControllerBase
     [Route("auth")]
     public async Task<DragaliaResult> Auth(ToolAuthRequest request)
     {
+        // return this.ResultCodeError(ResultCode.FORT_MAP_NOT_FREE);
+
         string sessionId;
+        string deviceAccountId;
         long viewerId;
 
-        sessionId = await this.sessionService.ActivateSession(request.id_token);
-        string deviceAccountId = await this.sessionService.GetDeviceAccountId_SessionId(sessionId);
+        try
+        {
+            sessionId = await this.sessionService.ActivateSession(request.id_token);
+            deviceAccountId = await this.sessionService.GetDeviceAccountId_SessionId(sessionId);
+        }
+        catch (SessionException)
+        {
+            return new OkObjectResult(
+                new DragaliaResponse<ResultCodeData>(
+                    new(ResultCode.COMMON_SESSION_RESTORE_ERROR),
+                    ResultCode.COMMON_SESSION_RESTORE_ERROR
+                )
+            );
+        }
+
         IQueryable<DbPlayerUserData> playerInfo = this.userDataRepository.GetUserData(
             deviceAccountId
         );

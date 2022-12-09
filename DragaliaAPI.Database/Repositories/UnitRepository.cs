@@ -35,6 +35,16 @@ public class UnitRepository : BaseRepository, IUnitRepository
         return apiContext.PlayerDragonData.Where(x => x.DeviceAccountId == deviceAccountId);
     }
 
+    public IQueryable<DbAbilityCrest> GetAllAbilityCrestData(string deviceAccountId)
+    {
+        return apiContext.PlayerAbilityCrests.Where(x => x.DeviceAccountId == deviceAccountId);
+    }
+
+    public IQueryable<DbWeaponBody> GetAllWeaponBodyData(string deviceAccountId)
+    {
+        return apiContext.PlayerWeapons.Where(x => x.DeviceAccountId == deviceAccountId);
+    }
+
     public IQueryable<DbPlayerDragonReliability> GetAllDragonReliabilityData(string deviceAccountId)
     {
         return apiContext.PlayerDragonReliability.Where(x => x.DeviceAccountId == deviceAccountId);
@@ -105,15 +115,13 @@ public class UnitRepository : BaseRepository, IUnitRepository
 
         IEnumerable<(Dragons id, bool isNew)> newMapping = MarkNewIds(ownedDragons, idList);
 
-        IEnumerable<Dragons> newDragons = newMapping.Where(x => x.isNew).Select(x => x.id);
+        IEnumerable<DbPlayerDragonReliability> newReliabilities = newMapping
+            .Where(x => x.isNew)
+            .Select(x => DbPlayerDragonReliabilityFactory.Create(deviceAccountId, x.id));
 
-        if (newDragons.Any())
+        if (newReliabilities.Any())
         {
-            await apiContext.AddRangeAsync(
-                newDragons.Select(
-                    id => DbPlayerDragonReliabilityFactory.Create(deviceAccountId, id)
-                )
-            );
+            await apiContext.AddRangeAsync(newReliabilities);
         }
 
         await apiContext.AddRangeAsync(
@@ -186,5 +194,70 @@ public class UnitRepository : BaseRepository, IUnitRepository
         }
 
         return result;
+    }
+
+    public async Task<DbDetailedPartyUnit> BuildDetailedPartyUnit(DbPartyUnit input)
+    {
+        string deviceAccountId = input.Party.DeviceAccountId;
+
+        DbPlayerDragonData? dragonData = await this.GetAllDragonData(deviceAccountId)
+            .SingleOrDefaultAsync(x => x.DragonKeyId == input.EquipDragonKeyId);
+
+        IQueryable<DbPlayerCharaData> charaData = this.GetAllCharaData(deviceAccountId);
+
+        IQueryable<DbAbilityCrest> crestData = this.GetAllAbilityCrestData(deviceAccountId);
+
+        // You get cookies if you can tell me how to do this with a join
+        return new()
+        {
+            DeviceAccountId = deviceAccountId,
+            Position = input.UnitNo,
+            CharaData = await charaData.SingleAsync(x => x.CharaId == input.CharaId),
+            DragonData = dragonData,
+            DragonReliabilityLevel = 30, // TODO: implement dragon reliability nav property to get this from dragon data
+            WeaponBodyData = await this.GetAllWeaponBodyData(deviceAccountId)
+                .SingleOrDefaultAsync(x => x.WeaponBodyId == input.EquipWeaponBodyId),
+            CrestSlotType1CrestList = await crestData
+                .Where(
+                    x =>
+                        x.AbilityCrestId == input.EquipCrestSlotType1CrestId1
+                        || x.AbilityCrestId == input.EquipCrestSlotType1CrestId2
+                        || x.AbilityCrestId == input.EquipCrestSlotType1CrestId3
+                )
+                .ToListAsync(),
+            CrestSlotType2CrestList = await crestData
+                .Where(
+                    x =>
+                        x.AbilityCrestId == input.EquipCrestSlotType2CrestId1
+                        || x.AbilityCrestId == input.EquipCrestSlotType2CrestId2
+                )
+                .ToListAsync(),
+            CrestSlotType3CrestList = await crestData
+                .Where(
+                    x =>
+                        x.AbilityCrestId == input.EquipCrestSlotType3CrestId1
+                        || x.AbilityCrestId == input.EquipCrestSlotType3CrestId2
+                )
+                .ToListAsync(),
+            EditSkill1CharaData = await this.GetEditSkill(charaData, input.EditSkill1CharaId),
+            EditSkill2CharaData = await this.GetEditSkill(charaData, input.EditSkill2CharaId)
+        };
+    }
+
+    private async Task<DbEditSkillData?> GetEditSkill(
+        IQueryable<DbPlayerCharaData> charaData,
+        Charas id
+    )
+    {
+        if (id == Charas.Empty)
+            return null;
+
+        return await charaData
+            .Where(x => x.CharaId == id && x.IsUnlockEditSkill)
+            .Select(
+                // TODO: make this derive from the correct skill level (may sometimes be s2 level)
+                x => new DbEditSkillData() { CharaId = x.CharaId, EditSkillLevel = x.Skill1Level }
+            )
+            .SingleOrDefaultAsync();
     }
 }

@@ -3,4 +3,4 @@
 namespace DragaliaAPI.Models;
 
 [MessagePackObject(true)]
-public record ResultCodeData(ResultCode result_code);
+public record ResultCodeData(ResultCode result_code, string? message = null);

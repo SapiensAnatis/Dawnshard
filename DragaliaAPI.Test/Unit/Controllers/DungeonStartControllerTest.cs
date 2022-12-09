@@ -1,0 +1,206 @@
+﻿using AutoMapper;
+using DragaliaAPI.Controllers.Dragalia;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Services;
+using DragaliaAPI.Shared.Services;
+using DragaliaAPI.Models.Generated;
+using static DragaliaAPI.Test.TestUtils;
+using DragaliaAPI.Database.Entities;
+using MockQueryable.Moq;
+using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DragaliaAPI.Test.Unit.Controllers;
+
+public class DungeonStartControllerTest
+{
+    private readonly DungeonStartController dungeonStartController;
+    private readonly Mock<IPartyRepository> mockPartyRepository;
+    private readonly Mock<IUserDataRepository> mockUserDataRepository;
+    private readonly Mock<IUnitRepository> mockUnitRepository;
+    private readonly Mock<IQuestRepository> mockQuestRepository;
+    private readonly Mock<IDungeonService> mockDungeonService;
+    private readonly Mock<IUpdateDataService> mockUpdateDataService;
+    private readonly IMapper mapper;
+    private readonly IQuestDataService questDataService = new QuestDataService();
+    private readonly IEnemyListDataService enemyListDataService = new EnemyListDataService();
+
+    private const int questId = 100010103;
+    private readonly DbPartyUnit unit = new() { CharaId = Charas.ThePrince };
+
+    public DungeonStartControllerTest()
+    {
+        this.mockPartyRepository = new(MockBehavior.Strict);
+        this.mockUserDataRepository = new(MockBehavior.Strict);
+        this.mockUnitRepository = new(MockBehavior.Strict);
+        this.mockQuestRepository = new(MockBehavior.Strict);
+        this.mockDungeonService = new(MockBehavior.Strict);
+        this.mockUpdateDataService = new(MockBehavior.Strict);
+
+        this.mapper = new MapperConfiguration(
+            cfg => cfg.AddMaps(typeof(Program).Assembly)
+        ).CreateMapper();
+
+        this.dungeonStartController = new(
+            mockPartyRepository.Object,
+            mockUserDataRepository.Object,
+            mockUnitRepository.Object,
+            mockQuestRepository.Object,
+            mockDungeonService.Object,
+            mockUpdateDataService.Object,
+            questDataService,
+            enemyListDataService,
+            mapper
+        );
+
+        dungeonStartController.ControllerContext = MockControllerContext;
+
+        this.mockUpdateDataService
+            .Setup(x => x.GetUpdateDataList(DeviceAccountId))
+            .Returns(
+                new UpdateDataList()
+                {
+                    quest_list = new List<QuestList>() { new() { quest_id = questId } }
+                }
+            );
+
+        this.mockUserDataRepository
+            .Setup(x => x.GetUserData(DeviceAccountId))
+            .Returns(new List<DbPlayerUserData>()
+                {
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        Name = "Euden",
+                        ViewerId = 1
+                    }
+                }.AsQueryable().BuildMock());
+
+        this.mockPartyRepository
+            .Setup(x => x.GetParties(DeviceAccountId))
+            .Returns(new List<DbParty>()
+                {
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        PartyName = "Party",
+                        PartyNo = 1,
+                        Units = new List<DbPartyUnit>() { unit }
+                    }
+                }.AsQueryable().BuildMock());
+
+        this.mockUnitRepository
+            .Setup(x => x.BuildDetailedPartyUnit(unit))
+            .ReturnsAsync(
+                new DbDetailedPartyUnit()
+                {
+                    Position = 1,
+                    DeviceAccountId = DeviceAccountId,
+                    CharaData = new() { CharaId = Charas.ThePrince, Ability1Level = 1, },
+                    CrestSlotType1CrestList = new List<DbAbilityCrest>()
+                    {
+                        new()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            AbilityCrestId = AbilityCrests.ABouquet
+                        }
+                    },
+                    CrestSlotType2CrestList = new List<DbAbilityCrest>()
+                    {
+                        new()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            AbilityCrestId = AbilityCrests.ABouquet
+                        }
+                    },
+                    CrestSlotType3CrestList = new List<DbAbilityCrest>()
+                    {
+                        new()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            AbilityCrestId = AbilityCrests.ABriefRepose
+                        }
+                    },
+                    EditSkill1CharaData = new() { CharaId = Charas.Vida },
+                    EditSkill2CharaData = new() { },
+                    DragonData = new() { DragonId = Dragons.Midgardsormr },
+                    DragonReliabilityLevel = 30,
+                    WeaponBodyData = new() { }
+                }
+            );
+
+        this.mockDungeonService
+            .Setup(x => x.StartDungeon(It.Is<DungeonSession>(x => x.DungeonId == questId)))
+            .ReturnsAsync("key");
+    }
+
+    [Fact]
+    public async Task Start_QuestAlreadyCompleted_DoesNotUpdateQuestInDb()
+    {
+        this.mockQuestRepository
+            .Setup(x => x.GetQuests(DeviceAccountId))
+            .Returns(new List<DbQuest>()
+                {
+                    new() { QuestId = questId, State = 3 }
+                }.AsQueryable().BuildMock());
+
+        ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
+            new DungeonStartStartRequest()
+            {
+                quest_id = questId,
+                party_no_list = new List<int>() { 1 },
+            }
+        );
+
+        DungeonStartStartData? data = response.GetData<DungeonStartStartData>();
+        data.Should().NotBeNull();
+
+        data!.ingame_data.dungeon_key.Should().Be("key");
+        data!.ingame_data.viewer_id.Should().Be(1);
+        data!.ingame_data.quest_id.Should().Be(questId);
+
+        // Automapper complaining about this for some reason
+        // PartyUnitList expectedUnit = mapper.Map<PartyUnitList>(detailedUnit);
+        // response3!.ingame_data.party_info.party_unit_list
+        //     .Should()
+        //     .ContainEquivalentOf(expectedUnit);
+
+        this.mockPartyRepository.VerifyAll();
+        this.mockUserDataRepository.VerifyAll();
+        this.mockUnitRepository.VerifyAll();
+        this.mockQuestRepository.VerifyAll();
+        this.mockDungeonService.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task Start_QuestNotCompleted_UpdatesQuestInDb()
+    {
+        this.mockQuestRepository
+            .Setup(x => x.GetQuests(DeviceAccountId))
+            .Returns(new List<DbQuest>().AsQueryable().BuildMock());
+
+        this.mockQuestRepository
+            .Setup(x => x.UpdateQuestState(DeviceAccountId, questId, 2))
+            .Returns(Task.CompletedTask);
+
+        ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
+            new DungeonStartStartRequest()
+            {
+                quest_id = questId,
+                party_no_list = new List<int>() { 1 },
+            }
+        );
+
+        DungeonStartStartData? data = response.GetData<DungeonStartStartData>();
+        data.Should().NotBeNull();
+
+        this.mockPartyRepository.VerifyAll();
+        this.mockUserDataRepository.VerifyAll();
+        this.mockUnitRepository.VerifyAll();
+        this.mockQuestRepository.VerifyAll();
+        this.mockDungeonService.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
+    }
+}
