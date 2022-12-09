@@ -10,6 +10,7 @@ namespace DragaliaAPI.Test.Integration.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.RedoableSummonController"/>
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class RedoableSummonTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;

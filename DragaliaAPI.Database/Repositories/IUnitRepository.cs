@@ -29,4 +29,7 @@ public interface IUnitRepository : IBaseRepository
         IEnumerable<Dragons> idList
     );
     Task RemoveDragons(string deviceAccountId, IEnumerable<long> keyIdList);
+    IQueryable<DbWeaponBody> GetAllWeaponBodyData(string deviceAccountId);
+    IQueryable<DbAbilityCrest> GetAllAbilityCrestData(string deviceAccountId);
+    Task<DbDetailedPartyUnit> BuildDetailedPartyUnit(DbPartyUnit input);
 }

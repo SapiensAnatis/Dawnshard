@@ -5,6 +5,7 @@ namespace DragaliaAPI.Test.Integration.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.GetResourceVersionController"/>
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class GetResourceVersionTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;

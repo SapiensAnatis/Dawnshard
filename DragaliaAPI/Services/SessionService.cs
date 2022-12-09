@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Nintendo;
+using DragaliaAPI.Services.Exceptions;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
@@ -44,17 +45,27 @@ public class SessionService : ISessionService
 
         if (environment.IsDevelopment())
         {
-            // Create non-expiring 'development' session for manual testing
-            Session devSession = new("session id", "id");
-            string devSessionSchema1 = Schema.Session_SessionId(devSession.SessionId);
-            string devSessionSchema2 = Schema.SessionId_DeviceAccountId(devSession.DeviceAccountId);
+            try
+            {
+                // Create non-expiring 'development' session for manual testing
+                Session devSession = new("session id", "id");
+                string devSessionSchema1 = Schema.Session_SessionId(devSession.SessionId);
+                string devSessionSchema2 = Schema.SessionId_DeviceAccountId(
+                    devSession.DeviceAccountId
+                );
 
-            // This is a scoped service -- so make sure it doesn't already exist
-            if (string.IsNullOrEmpty(_cache.GetString(devSessionSchema1)))
-                _cache.SetString(devSessionSchema1, JsonSerializer.Serialize(devSession));
+                // This is a scoped service -- so make sure it doesn't already exist
+                if (string.IsNullOrEmpty(_cache.GetString(devSessionSchema1)))
+                    _cache.SetString(devSessionSchema1, JsonSerializer.Serialize(devSession));
 
-            if (string.IsNullOrEmpty(_cache.GetString(devSessionSchema2)))
-                _cache.SetString(devSessionSchema2, devSession.SessionId);
+                if (string.IsNullOrEmpty(_cache.GetString(devSessionSchema2)))
+                    _cache.SetString(devSessionSchema2, devSession.SessionId);
+            }
+            catch (Exception ex)
+            {
+                // We do not want to throw a 500 in this case because that defeats the point of the Redis health check
+                this._logger.LogError(ex, "Unable to create development session");
+            }
         }
     }
 

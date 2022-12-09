@@ -47,20 +47,15 @@ public class PartyController : DragaliaControllerBase
     /// Does not seem to do anything useful.
     /// ILSpy indicates the response should contain halidom info, but it is always empty and only called on fresh accounts.
     /// </summary>
-    [Route("index")]
+    [HttpPost("index")]
     public DragaliaResult Index()
     {
         return this.Ok(new PartyIndexData(new List<BuildList>()));
     }
 
-    [Route("set_party_setting")]
-    public async Task<DragaliaResult> SetPartySetting(
-        [FromHeader(Name = "SID")] string sessionId,
-        PartySetPartySettingRequest requestParty
-    )
+    [HttpPost("set_party_setting")]
+    public async Task<DragaliaResult> SetPartySetting(PartySetPartySettingRequest requestParty)
     {
-        string deviceAccountId = await sessionService.GetDeviceAccountId_SessionId(sessionId);
-
         // Validate the player owns all the entities they have requested to add
         // TODO: Weapon validation
         // TODO: Amulet validation
@@ -70,37 +65,41 @@ public class PartyController : DragaliaControllerBase
         foreach (PartySettingList partyUnit in requestParty.request_party_setting_list)
         {
             if (
-                !await this.ValidateCharacterId(partyUnit.chara_id, deviceAccountId)
-                || !await this.ValidateDragonKeyId(partyUnit.equip_dragon_key_id, deviceAccountId)
+                !await this.ValidateCharacterId(partyUnit.chara_id, this.DeviceAccountId)
+                || !await this.ValidateDragonKeyId(
+                    partyUnit.equip_dragon_key_id,
+                    this.DeviceAccountId
+                )
             )
             {
                 return this.BadRequest();
             }
         }
 
-        DbParty dbEntry = mapper.Map<DbParty>(
-            new PartyList(
+        // This is ugly but if I do it inline with the .Map() call, wyrmprints don't get saved????
+        // Automapper bug possibly
+        PartyList requestParty2 =
+            new(
                 requestParty.party_no,
                 requestParty.party_name,
                 requestParty.request_party_setting_list
-            )
+            );
+
+        DbParty dbEntry = mapper.Map<DbParty>(requestParty2);
+
+        await partyRepository.SetParty(this.DeviceAccountId, dbEntry);
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
         );
-        await partyRepository.SetParty(deviceAccountId, dbEntry);
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(deviceAccountId);
         await partyRepository.SaveChangesAsync();
 
         return this.Ok(new PartySetPartySettingData(updateDataList, new()));
     }
 
-    [Route("set_main_party_no")]
-    public async Task<DragaliaResult> SetMainPartyNo(
-        [FromHeader(Name = "SID")] string sessionId,
-        PartySetMainPartyNoRequest request
-    )
+    [HttpPost("set_main_party_no")]
+    public async Task<DragaliaResult> SetMainPartyNo(PartySetMainPartyNoRequest request)
     {
-        string deviceAccountId = await sessionService.GetDeviceAccountId_SessionId(sessionId);
-
-        await this.userDataRepository.SetMainPartyNo(deviceAccountId, request.main_party_no);
+        await this.userDataRepository.SetMainPartyNo(this.DeviceAccountId, request.main_party_no);
         await this.userDataRepository.SaveChangesAsync();
 
         return this.Ok(new PartySetMainPartyNoData(request.main_party_no));
@@ -108,6 +107,9 @@ public class PartyController : DragaliaControllerBase
 
     private async Task<bool> ValidateCharacterId(Charas id, string deviceAccountId)
     {
+        if (id == Charas.Empty)
+            return true;
+
         IEnumerable<Charas> ownedCharaIds = await this.unitRepository
             .GetAllCharaData(deviceAccountId)
             .Select(x => x.CharaId)
@@ -132,9 +134,7 @@ public class PartyController : DragaliaControllerBase
     {
         // Empty slot
         if (keyId == 0)
-        {
             return true;
-        }
 
         IEnumerable<long> ownedDragonKeyIds = await this.unitRepository
             .GetAllDragonData(deviceAccountId)

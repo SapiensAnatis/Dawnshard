@@ -26,49 +26,38 @@ public class DbPlayerDragonData : IDbHasAccountId, IHasXp
     public Dragons DragonId { get; set; }
 
     [Column("Exp")]
-    [Required]
-    public int Exp { get; set; }
+    public int Exp { get; set; } = 0;
 
     [Column("Level")]
-    [Required]
-    public byte Level { get; set; }
+    public byte Level { get; set; } = 1;
 
     [Column("HpPlusCount")]
-    [Required]
-    public byte HpPlusCount { get; set; }
+    public byte HpPlusCount { get; set; } = 0;
 
     [Column("AttackPlusCount")]
-    [Required]
-    public byte AttackPlusCount { get; set; }
+    public byte AttackPlusCount { get; set; } = 0;
 
     [Column("LimitBreakCount")]
-    [Required]
-    public byte LimitBreakCount { get; set; }
+    public byte LimitBreakCount { get; set; } = 0;
 
     [Column("IsLocked")]
-    [Required]
     [TypeConverter(typeof(BooleanConverter))]
-    public bool IsLock { get; set; }
+    public bool IsLock { get; set; } = false;
 
     [Column("IsNew")]
-    [Required]
     [TypeConverter(typeof(BooleanConverter))]
-    public bool IsNew { get; set; }
+    public bool IsNew { get; set; } = true;
 
     [Column("Skill1Level")]
-    [Required]
-    public byte Skill1Level { get; set; }
+    public byte Skill1Level { get; set; } = 1;
 
     [Column("Abil1Level")]
-    [Required]
-    public byte Ability1Level { get; set; }
+    public byte Ability1Level { get; set; } = 1;
 
     [Column("Abil2Level")]
-    [Required]
-    public byte Ability2Level { get; set; }
+    public byte Ability2Level { get; set; } = 1;
 
     [Column("GetTime")]
-    [Required]
     [TypeConverter(typeof(DateTimeOffsetConverter))]
-    public DateTimeOffset GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; } = DateTimeOffset.UtcNow;
 }

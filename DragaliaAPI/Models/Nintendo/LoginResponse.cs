@@ -12,14 +12,19 @@ public record LoginResponse
     public object behaviorSettings { get; } = new { };
     public Capability capability { get; } = new();
     public string? error { get; } = null;
-    public int expiresIn { get; } = 600;
+
+    /// <summary>
+    /// Session expiry time in seconds, after which /sdk/login will be called again and a new ID token issued.
+    /// </summary>
+    public int expiresIn { get; init; }
     public string? market { get; } = null;
 
-    public LoginResponse(string idToken, DeviceAccount deviceAccount)
+    public LoginResponse(string idToken, DeviceAccount deviceAccount, int expiresIn)
     {
         this.idToken = idToken;
         this.accessToken = idToken;
         this.user = new(deviceAccount);
+        this.expiresIn = expiresIn;
     }
 
     public record Capability

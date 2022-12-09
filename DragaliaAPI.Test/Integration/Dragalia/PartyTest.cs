@@ -12,6 +12,7 @@ namespace DragaliaAPI.Test.Integration.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.PartyController"/>
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class PartyTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
@@ -36,7 +37,13 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
                 1,
                 new List<PartySettingList>()
                 {
-                    new(1, Charas.Ilia, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                    new()
+                    {
+                        unit_no = 1,
+                        chara_id = Charas.Ilia,
+                        equip_weapon_body_id = WeaponBodies.DivineTrigger,
+                        equip_crest_slot_type_1_crest_id_1 = AbilityCrests.ADragonyuleforIlia
+                    }
                 },
                 "My New Party",
                 0,
@@ -51,9 +58,52 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
             .Where(x => x.DeviceAccountId == fixture.DeviceAccountId && x.PartyNo == 1)
             .SingleAsync();
 
-        dbparty.PartyName.Should().Be("My New Party");
-        dbparty.Units.Should().HaveCount(4);
-        dbparty.Units.Single(x => x.UnitNo == 1).CharaId.Should().Be(Charas.Ilia);
+        dbparty
+            .Should()
+            .BeEquivalentTo(
+                new DbParty()
+                {
+                    DeviceAccountId = fixture.DeviceAccountId,
+                    PartyNo = 1,
+                    PartyName = "My New Party",
+                },
+                opts => opts.Excluding(x => x.Units)
+            );
+
+        dbparty.Units
+            .Should()
+            .BeEquivalentTo(
+                new List<DbPartyUnit>()
+                {
+                    new()
+                    {
+                        UnitNo = 1,
+                        CharaId = Charas.Ilia,
+                        EquipCrestSlotType1CrestId1 = AbilityCrests.ADragonyuleforIlia,
+                        EquipWeaponBodyId = WeaponBodies.DivineTrigger,
+                        Party = dbparty,
+                    },
+                    new()
+                    {
+                        UnitNo = 2,
+                        CharaId = Charas.Empty,
+                        Party = dbparty,
+                    },
+                    new()
+                    {
+                        UnitNo = 3,
+                        CharaId = Charas.Empty,
+                        Party = dbparty,
+                    },
+                    new()
+                    {
+                        UnitNo = 4,
+                        CharaId = Charas.Empty,
+                        Party = dbparty,
+                    },
+                },
+                opts => opts.Excluding(x => x.Id)
+            );
     }
 
     [Fact]
