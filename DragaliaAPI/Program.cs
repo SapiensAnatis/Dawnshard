@@ -125,6 +125,7 @@ app.UsePathBase("/2.19.0_20220714193707");
 app.UsePathBase("/2.19.0_20220719103923");
 
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health");

@@ -27,10 +27,10 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        /*if (this.Context.GetEndpoint()?.Metadata.GetMetadata<AuthorizeAttribute>() is null)
+        if (this.Context.GetEndpoint()?.Metadata.GetMetadata<AuthorizeAttribute>() is null)
         {
             return Task.FromResult(AuthenticateResult.NoResult());
-        }*/
+        }
 
         string expectedToken =
             this.configuration.GetValue<string>("DeveloperToken")
