@@ -4696,8 +4696,6 @@ public class CharaList
     public int status_plus_count { get; set; }
     public int combo_buildup_count { get; set; }
     public int is_unlock_edit_skill { get; set; }
-
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset gettime { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }
     public int is_temporary { get; set; }

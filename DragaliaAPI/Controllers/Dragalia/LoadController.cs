@@ -1,4 +1,4 @@
-﻿#define TEST
+﻿//#define TEST
 
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;

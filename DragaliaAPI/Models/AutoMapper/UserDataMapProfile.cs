@@ -9,7 +9,8 @@ public class UserDataMapProfile : Profile
     public UserDataMapProfile()
     {
         this.CreateMap<DbPlayerUserData, UserData>()
-            .ForMember(x => x.age_group, opts => opts.Ignore());
+            .ForMember(x => x.age_group, opts => opts.Ignore())
+            .ReverseMap();
 
         this.SourceMemberNamingConvention = new PascalCaseNamingConvention();
         this.DestinationMemberNamingConvention = new LowerUnderscoreNamingConvention();
