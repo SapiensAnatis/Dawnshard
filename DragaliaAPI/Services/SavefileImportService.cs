@@ -12,17 +12,13 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DragaliaAPI.Services;
 
-public class SavefileImportService : ISavefileImportService
+public class SavefileService : ISavefileService
 {
     private readonly ApiContext apiContext;
     private readonly IMapper mapper;
-    private readonly ILogger<SavefileImportService> logger;
+    private readonly ILogger<SavefileService> logger;
 
-    public SavefileImportService(
-        ApiContext apiContext,
-        IMapper mapper,
-        ILogger<SavefileImportService> logger
-    )
+    public SavefileService(ApiContext apiContext, IMapper mapper, ILogger<SavefileService> logger)
     {
         this.apiContext = apiContext;
         this.mapper = mapper;
@@ -116,6 +112,12 @@ public class SavefileImportService : ISavefileImportService
             )
         );
 
+        this.apiContext.PlayerStorage.AddRange(
+            savefile.material_list.Select(
+                x => MapWithDeviceAccount<DbPlayerMaterial>(x, deviceAccountId)
+            )
+        );
+
         // TODO: kaleido prints, unit sets
         // TODO much later: halidom, endeavours, kaleido data
 
@@ -132,7 +134,7 @@ public class SavefileImportService : ISavefileImportService
         );
     }
 
-    private async Task ClearSavefile(string deviceAccountId)
+    public async Task ClearSavefile(string deviceAccountId)
     {
         await this.apiContext.PlayerCharaData
             .Where(x => x.DeviceAccountId == deviceAccountId)
@@ -159,6 +161,9 @@ public class SavefileImportService : ISavefileImportService
             .Where(x => x.DeviceAccountId == deviceAccountId)
             .ExecuteDeleteAsync();
         await this.apiContext.PlayerWeapons
+            .Where(x => x.DeviceAccountId == deviceAccountId)
+            .ExecuteDeleteAsync();
+        await this.apiContext.PlayerStorage
             .Where(x => x.DeviceAccountId == deviceAccountId)
             .ExecuteDeleteAsync();
     }

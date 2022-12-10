@@ -12,7 +12,7 @@ public class UserDataMapProfile : Profile
             .ForMember(x => x.age_group, opts => opts.Ignore())
             .ReverseMap();
 
-        this.SourceMemberNamingConvention = new PascalCaseNamingConvention();
-        this.DestinationMemberNamingConvention = new LowerUnderscoreNamingConvention();
+        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
+        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }

@@ -61,7 +61,7 @@ public class UnitMapProfile : Profile
             .ForMember(nameof(PartySettingList.equip_amulet_2_key_id), opts => opts.Ignore())
             .ForMember(nameof(PartySettingList.equip_skin_weapon_id), opts => opts.Ignore());
 
-        this.SourceMemberNamingConvention = PascalCaseNamingConvention.Instance;
+        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
         this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }

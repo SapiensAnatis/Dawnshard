@@ -13,9 +13,9 @@ namespace DragaliaAPI.Controllers;
 [ApiController]
 public class SavefileImportController : ControllerBase
 {
-    private readonly ISavefileImportService savefileImportService;
+    private readonly ISavefileService savefileImportService;
 
-    public SavefileImportController(ISavefileImportService savefileImportService)
+    public SavefileImportController(ISavefileService savefileImportService)
     {
         this.savefileImportService = savefileImportService;
     }

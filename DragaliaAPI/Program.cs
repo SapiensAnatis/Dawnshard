@@ -56,7 +56,7 @@ builder.Services
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<IUpdateDataService, UpdateDataService>()
     .AddScoped<IDungeonService, DungeonService>()
-    .AddScoped<ISavefileImportService, SavefileImportService>();
+    .AddScoped<ISavefileService, SavefileService>();
 
 WebApplication app = builder.Build();
 

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Services;
 
 namespace DragaliaAPI.Models.AutoMapper;
 
@@ -14,7 +15,12 @@ public class UnitReverseMapProfile : Profile
             .ForMember(x => x.DragonKeyId, opts => opts.Ignore());
 
         this.CreateMap<CharaList, DbPlayerCharaData>()
-            .ForMember(x => x.LimitBreakCount, opts => opts.Ignore());
+            .ForMember(x => x.LimitBreakCount, opts => opts.Ignore())
+            .ForMember(x => x.ManaNodeUnlockCount, opts => opts.Ignore())
+            .ForMember(x => x.AttackBase, opts => opts.MapFrom<CharaBaseAtkResolver>())
+            .ForMember(x => x.HpBase, opts => opts.MapFrom<CharaBaseHpResolver>())
+            .ForMember(x => x.AttackNode, opts => opts.MapFrom<CharaNodeAtkResolver>())
+            .ForMember(x => x.HpNode, opts => opts.MapFrom<CharaNodeHpResolver>());
 
         this.CreateMap<DragonReliabilityList, DbPlayerDragonReliability>()
             .ForMember(x => x.Level, opts => opts.MapFrom(src => src.reliability_level))

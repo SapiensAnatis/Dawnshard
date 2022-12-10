@@ -13,25 +13,19 @@ public class QuestMapProfile : Profile
         this.CreateMap<DbQuest, QuestList>().ReverseMap();
 
         this.CreateMap<DbPlayerStoryState, QuestStoryList>()
-            .ForMember(x => x.quest_story_id, o => o.MapFrom(nameof(DbPlayerStoryState.StoryId)))
-            .ReverseMap()
-            .ForMember(x => x.StoryType, o => o.MapFrom(src => StoryTypes.Quest));
+            .ForMember(x => x.quest_story_id, o => o.MapFrom(nameof(DbPlayerStoryState.StoryId)));
 
         this.CreateMap<DbPlayerStoryState, UnitStoryList>()
             .ForMember(x => x.unit_story_id, o => o.MapFrom(src => src.StoryId))
-            .ForMember(x => x.is_read, o => o.MapFrom(src => src.State))
-            .ReverseMap()
-            .ForMember(x => x.StoryType, o => o.MapFrom(src => StoryTypes.Chara));
+            .ForMember(x => x.is_read, o => o.MapFrom(src => src.State));
 
         this.CreateMap<DbPlayerStoryState, CastleStoryList>()
             .ForMember(x => x.castle_story_id, o => o.MapFrom(src => src.StoryId))
-            .ForMember(x => x.is_read, o => o.MapFrom(src => src.State))
-            .ReverseMap()
-            .ForMember(x => x.StoryType, o => o.MapFrom(src => StoryTypes.Castle));
+            .ForMember(x => x.is_read, o => o.MapFrom(src => src.State));
 
         this.CreateMap<DataQuestAreaInfo, AreaInfoList>();
 
-        this.SourceMemberNamingConvention = new PascalCaseNamingConvention();
-        this.DestinationMemberNamingConvention = new LowerUnderscoreNamingConvention();
+        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
+        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }
