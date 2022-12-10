@@ -34,9 +34,6 @@ public class UnitReverseMapProfile : Profile
             .ForMember(x => x.Units, opts => opts.MapFrom(src => src.party_setting_list));
 
         this.CreateMap<PartySettingList, DbPartyUnit>()
-            // Do not want to transport primary keys from official servers to my db
-            .ForMember(x => x.EquipDragonKeyId, opts => opts.MapFrom(src => 0))
-            .ForMember(x => x.EquipTalismanKeyId, opts => opts.MapFrom(src => 0))
             // Auto-generated primary key
             .ForMember(x => x.Id, opts => opts.Ignore())
             // Foreign keys

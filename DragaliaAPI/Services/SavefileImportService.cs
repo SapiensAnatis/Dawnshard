@@ -74,9 +74,21 @@ public class SavefileService : ISavefileService
             )
         );
 
-        this.apiContext.PlayerParties.AddRange(
-            savefile.party_list.Select(x => MapWithDeviceAccount<DbParty>(x, deviceAccountId))
-        );
+        // Zero out dragon and talisman key ids, as these won't exist in my database
+        var parties = savefile.party_list
+            .Select(x => MapWithDeviceAccount<DbParty>(x, deviceAccountId))
+            .ToList();
+
+        foreach (var party in parties)
+        {
+            foreach (var unit in party.Units)
+            {
+                unit.EquipDragonKeyId = 0;
+                unit.EquipTalismanKeyId = 0;
+            }
+        }
+
+        this.apiContext.PlayerParties.AddRange(parties);
 
         this.apiContext.PlayerAbilityCrests.AddRange(
             savefile.ability_crest_list.Select(

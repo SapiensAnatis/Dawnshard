@@ -52,6 +52,8 @@ public class UnitMapProfile : Profile
             .ForMember(x => x.game_weapon_passive_ability_list, opts => opts.Ignore())
             .ForMember(x => x.talisman_data, opts => opts.Ignore());
 
+        this.CreateMap<DbEditSkillData, EditSkillCharaData>();
+
         this.CreateMap<DbParty, PartyList>()
             .ForMember(nameof(PartyList.party_setting_list), opts => opts.MapFrom(x => x.Units));
 

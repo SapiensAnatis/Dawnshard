@@ -171,6 +171,9 @@ public class DungeonStartController : DragaliaControllerBase
             }
         );
 
+        var areaInfoList = areaInfo.Select(this.mapper.Map<AreaInfoList>);
+        var partyUnitList = detailedPartyUnits.Select(mapper.Map<PartyUnitList>);
+
         DungeonStartStartData response =
             new()
             {
@@ -187,12 +190,12 @@ public class DungeonStartController : DragaliaControllerBase
                     start_time = DateTime.UtcNow,
                     party_info = new()
                     {
-                        party_unit_list = detailedPartyUnits.Select(mapper.Map<PartyUnitList>),
+                        party_unit_list = partyUnitList,
                         fort_bonus_list = StubData.EmptyBonusList,
                         event_boost = new() { effect_value = 0, event_effect = 0 },
                         event_passive_grow_list = new List<AtgenEventPassiveUpList>(),
                     },
-                    area_info_list = areaInfo.Select(this.mapper.Map<AreaInfoList>),
+                    area_info_list = areaInfoList,
                     use_stone = 50,
                     is_fever_time = false,
                     repeat_state = 0,
