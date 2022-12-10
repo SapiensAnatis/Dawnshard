@@ -15,7 +15,6 @@ public class UnitReverseMapProfile : Profile
             .ForMember(x => x.DragonKeyId, opts => opts.Ignore());
 
         this.CreateMap<CharaList, DbPlayerCharaData>()
-            .ForMember(x => x.LimitBreakCount, opts => opts.Ignore())
             .ForMember(x => x.ManaNodeUnlockCount, opts => opts.Ignore())
             .ForMember(x => x.AttackBase, opts => opts.MapFrom<CharaBaseAtkResolver>())
             .ForMember(x => x.HpBase, opts => opts.MapFrom<CharaBaseHpResolver>())
