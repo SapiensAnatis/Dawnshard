@@ -22,20 +22,14 @@ public class PartyRepository : BaseRepository, IPartyRepository
     public async Task SetParty(string deviceAccountId, DbParty newParty)
     {
         DbParty existingParty = await apiContext.PlayerParties
-            .Include(x => x.Units)
             .Where(x => x.DeviceAccountId == deviceAccountId && x.PartyNo == newParty.PartyNo)
+            .Include(x => x.Units)
             .SingleAsync();
 
-        foreach (DbPartyUnit newUnit in CleanUnitList(newParty.Units))
-        {
-            DbPartyUnit existingUnit = existingParty.Units.Single(x => x.UnitNo == newUnit.UnitNo);
+        existingParty.PartyName = newParty.PartyName;
+        existingParty.Units = CleanUnitList(newParty.Units);
 
-            existingUnit.EquipDragonKeyId = newUnit.EquipDragonKeyId;
-        }
-
-        await apiContext.SaveChangesAsync();
-
-        apiContext.PlayerParties.Entry(existingParty).State = EntityState.Modified;
+        apiContext.Entry(existingParty).State = EntityState.Modified;
     }
 
     private static ICollection<DbPartyUnit> CleanUnitList(ICollection<DbPartyUnit> original)
