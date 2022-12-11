@@ -33,15 +33,15 @@ public class DungeonStartController : DragaliaControllerBase
 
     private static class StubData
     {
-        private static readonly IEnumerable<AtgenParamBonus> EmptyWeaponBonus = Enumerable
+        private static readonly IEnumerable<AtgenParamBonus> WeaponBonus = Enumerable
             .Range(1, 9)
             .Select(
                 x =>
                     new AtgenParamBonus()
                     {
                         weapon_type = x,
-                        hp = 0,
-                        attack = 0
+                        hp = 20,
+                        attack = 20
                     }
             );
 
@@ -52,16 +52,16 @@ public class DungeonStartController : DragaliaControllerBase
                     new AtgenElementBonus()
                     {
                         elemental_type = x,
-                        hp = 0,
-                        attack = 0
+                        hp = 20,
+                        attack = 20
                     }
             )
             .Append(
                 new AtgenElementBonus()
                 {
                     elemental_type = 99,
-                    hp = 0,
-                    attack = 0
+                    hp = 20,
+                    attack = 20
                 }
             );
 
@@ -72,30 +72,30 @@ public class DungeonStartController : DragaliaControllerBase
                     new AtgenDragonBonus()
                     {
                         elemental_type = x,
-                        hp = 0,
-                        attack = 0
+                        hp = 20,
+                        attack = 20
                     }
             )
             .Append(
                 new AtgenDragonBonus()
                 {
                     elemental_type = 99,
-                    hp = 0,
-                    attack = 0
+                    hp = 20,
+                    attack = 20
                 }
             );
 
         public static readonly FortBonusList EmptyBonusList =
             new()
             {
-                param_bonus = EmptyWeaponBonus,
-                param_bonus_by_weapon = EmptyWeaponBonus,
+                param_bonus = WeaponBonus,
+                param_bonus_by_weapon = WeaponBonus,
                 element_bonus = EmptyElementBonus,
                 chara_bonus_by_album = EmptyElementBonus,
-                all_bonus = new() { hp = 0, attack = 0 },
+                all_bonus = new() { hp = 20, attack = 20 },
                 dragon_bonus = EmptyDragonBonus,
                 dragon_bonus_by_album = EmptyElementBonus,
-                dragon_time_bonus = new() { dragon_time_bonus = 0 }
+                dragon_time_bonus = new() { dragon_time_bonus = 20 }
             };
     }
 

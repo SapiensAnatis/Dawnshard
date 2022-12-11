@@ -21,6 +21,6 @@ public class UnixDateTimeJsonConverter : JsonConverter<DateTimeOffset>
         JsonSerializerOptions options
     )
     {
-        throw new NotImplementedException();
+        writer.WriteNumberValue(value.ToUnixTimeSeconds());
     }
 }

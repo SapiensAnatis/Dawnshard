@@ -9,18 +9,26 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Storage;
+using DragaliaAPI.Database.Repositories;
 
 namespace DragaliaAPI.Services;
 
 public class SavefileService : ISavefileService
 {
     private readonly ApiContext apiContext;
+    private readonly IDeviceAccountRepository deviceAccountRepository;
     private readonly IMapper mapper;
     private readonly ILogger<SavefileService> logger;
 
-    public SavefileService(ApiContext apiContext, IMapper mapper, ILogger<SavefileService> logger)
+    public SavefileService(
+        ApiContext apiContext,
+        IDeviceAccountRepository deviceAccountRepository,
+        IMapper mapper,
+        ILogger<SavefileService> logger
+    )
     {
         this.apiContext = apiContext;
+        this.deviceAccountRepository = deviceAccountRepository;
         this.mapper = mapper;
         this.logger = logger;
     }
@@ -39,7 +47,7 @@ public class SavefileService : ISavefileService
             deviceAccountId
         );
 
-        await this.ClearSavefile(deviceAccountId);
+        await this.Delete(deviceAccountId);
 
         apiContext.PlayerUserData.Remove(userData);
         apiContext.PlayerUserData.Add(
@@ -146,7 +154,7 @@ public class SavefileService : ISavefileService
         );
     }
 
-    public async Task ClearSavefile(string deviceAccountId)
+    private async Task Delete(string deviceAccountId)
     {
         await this.apiContext.PlayerCharaData
             .Where(x => x.DeviceAccountId == deviceAccountId)
@@ -178,6 +186,21 @@ public class SavefileService : ISavefileService
         await this.apiContext.PlayerStorage
             .Where(x => x.DeviceAccountId == deviceAccountId)
             .ExecuteDeleteAsync();
+    }
+
+    public async Task Reset(long viewerId)
+    {
+        DbPlayerUserData userData = await this.apiContext.PlayerUserData.SingleAsync(
+            x => x.ViewerId == viewerId
+        );
+
+        string deviceAccountId = userData.DeviceAccountId;
+        await this.Delete(deviceAccountId);
+
+        this.apiContext.Remove(userData);
+
+        await this.deviceAccountRepository.CreateNewSavefile(deviceAccountId);
+        await this.apiContext.SaveChangesAsync();
     }
 
     private TDest MapWithDeviceAccount<TDest>(object source, string deviceAccountId)

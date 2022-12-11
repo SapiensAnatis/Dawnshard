@@ -4,6 +4,6 @@ namespace DragaliaAPI.Services;
 
 public interface ISavefileService
 {
-    Task ClearSavefile(string deviceAccountId);
+    Task Reset(long viewerId);
     Task Import(long viewerId, LoadIndexData savefile);
 }

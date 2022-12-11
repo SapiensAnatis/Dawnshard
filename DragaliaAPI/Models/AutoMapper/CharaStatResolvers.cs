@@ -102,7 +102,7 @@ public class CharaNodeAtkResolver : IValueResolver<CharaList, DbPlayerCharaData,
         DataAdventurer adventurer = this.charaDataService.GetData(source.chara_id);
 
         return (ushort)(
-            source.attack - CharaUtils.CalculateBaseHp(adventurer, source.level, source.rarity)
+            source.attack - CharaUtils.CalculateBaseAttack(adventurer, source.level, source.rarity)
         );
     }
 }
