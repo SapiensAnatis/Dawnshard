@@ -11,7 +11,7 @@ public class SummonMapProfile : Profile
         this.CreateMap<DbPlayerSummonHistory, SummonHistoryList>()
             .ForMember(nameof(SummonHistoryList.summon_point_id), o => o.MapFrom(x => x.SummonId));
 
-        this.SourceMemberNamingConvention = new PascalCaseNamingConvention();
-        this.DestinationMemberNamingConvention = new LowerUnderscoreNamingConvention();
+        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
+        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }

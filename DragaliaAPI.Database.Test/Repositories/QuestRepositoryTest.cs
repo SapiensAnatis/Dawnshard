@@ -38,7 +38,7 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
                     DeviceAccountId = DeviceAccountId,
                     State = 2,
                     StoryId = 10,
-                    StoryType = StoryTypes.Castle
+                    StoryType = StoryTypes.Quest
                 },
                 new()
                 {
@@ -50,7 +50,7 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
             }
         );
 
-        (await this.questRepository.GetQuestStoryList(DeviceAccountId).ToListAsync())
+        (await this.questRepository.GetStories(DeviceAccountId, StoryTypes.Quest).ToListAsync())
             .Should()
             .AllSatisfy(x => x.DeviceAccountId.Should().Be(DeviceAccountId));
     }

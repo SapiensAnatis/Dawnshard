@@ -9,9 +9,11 @@ public class SqlServerHealthCheck : IHealthCheck
     private readonly string connectionString;
     private const string TestQuery = "SELECT 1";
 
-    public SqlServerHealthCheck(string connectionString)
+    public SqlServerHealthCheck(IConfiguration configuration)
     {
-        this.connectionString = connectionString;
+        this.connectionString =
+            configuration.GetConnectionString("SqlConnection")
+            ?? throw new NullReferenceException("Missing SQL connection string!");
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(
