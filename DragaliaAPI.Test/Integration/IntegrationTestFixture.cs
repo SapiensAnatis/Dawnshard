@@ -6,6 +6,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 namespace DragaliaAPI.Test.Integration;
 
@@ -29,6 +30,8 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
     ).CreateMapper();
 
     public ApiContext ApiContext => this.Services.GetRequiredService<ApiContext>();
+
+    public IConfiguration Configuration => this.Services.GetRequiredService<IConfiguration>();
 
     public async Task AddCharacter(Charas id)
     {

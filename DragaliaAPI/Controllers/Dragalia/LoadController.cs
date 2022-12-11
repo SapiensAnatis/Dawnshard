@@ -1,4 +1,4 @@
-﻿#define TEST
+﻿//#define TEST
 
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +9,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models;
 using MessagePack;
 using MessagePack.Resolvers;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -22,7 +23,7 @@ public class LoadController : DragaliaControllerBase
     private readonly IUnitRepository unitRepository;
     private readonly IPartyRepository partyRepository;
     private readonly IQuestRepository questRepository;
-    private readonly ISessionService _sessionService;
+    private readonly IInventoryRepository inventoryRepository;
     private readonly IMapper mapper;
 
     public LoadController(
@@ -30,7 +31,7 @@ public class LoadController : DragaliaControllerBase
         IUnitRepository unitRepository,
         IPartyRepository partyRepository,
         IQuestRepository questRepository,
-        ISessionService sessionService,
+        IInventoryRepository inventoryRepository,
         IMapper mapper
     )
     {
@@ -38,7 +39,7 @@ public class LoadController : DragaliaControllerBase
         this.unitRepository = unitRepository;
         this.partyRepository = partyRepository;
         this.questRepository = questRepository;
-        _sessionService = sessionService;
+        this.inventoryRepository = inventoryRepository;
         this.mapper = mapper;
     }
 
@@ -58,6 +59,12 @@ public class LoadController : DragaliaControllerBase
         IEnumerable<DragonList> dragons = (
             await this.unitRepository.GetAllDragonData(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<DragonList>);
+
+        IEnumerable<DragonReliabilityList> dragonReliabilities = (
+            await this.unitRepository
+                .GetAllDragonReliabilityData(this.DeviceAccountId)
+                .ToListAsync()
+        ).Select(mapper.Map<DragonReliabilityList>);
 
         IEnumerable<AbilityCrestList> crests = (
             await this.unitRepository.GetAllAbilityCrestData(this.DeviceAccountId).ToListAsync()
@@ -82,12 +89,30 @@ public class LoadController : DragaliaControllerBase
             );
 
         IEnumerable<QuestStoryList> questStories = (
-            await this.questRepository.GetQuestStoryList(this.DeviceAccountId).ToListAsync()
+            await this.questRepository
+                .GetStories(this.DeviceAccountId, StoryTypes.Quest)
+                .ToListAsync()
         ).Select(mapper.Map<QuestStoryList>);
+
+        IEnumerable<CastleStoryList> castleStories = (
+            await this.questRepository
+                .GetStories(this.DeviceAccountId, StoryTypes.Castle)
+                .ToListAsync()
+        ).Select(mapper.Map<CastleStoryList>);
+
+        IEnumerable<UnitStoryList> unitStories = (
+            await this.questRepository
+                .GetStories(this.DeviceAccountId, StoryTypes.Chara)
+                .ToListAsync()
+        ).Select(mapper.Map<UnitStoryList>);
 
         IEnumerable<QuestList> quests = (
             await this.questRepository.GetQuests(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<QuestList>);
+
+        IEnumerable<MaterialList> materials = (
+            await this.inventoryRepository.GetMaterials(this.DeviceAccountId).ToListAsync()
+        ).Select(mapper.Map<MaterialList>);
 
         LoadIndexData data =
             new()
@@ -95,12 +120,15 @@ public class LoadController : DragaliaControllerBase
                 user_data = userData,
                 chara_list = charas,
                 dragon_list = dragons,
+                dragon_reliability_list = dragonReliabilities,
                 ability_crest_list = crests,
                 weapon_body_list = weapons,
                 party_list = parties,
                 quest_story_list = questStories,
+                unit_story_list = unitStories,
+                castle_story_list = castleStories,
                 quest_list = quests,
-                material_list = new List<MaterialList>(),
+                material_list = materials,
                 party_power_data = new(999999),
                 friend_notice = new(0, 0),
                 present_notice = new(0, 0),
@@ -108,7 +136,11 @@ public class LoadController : DragaliaControllerBase
                 mission_notice = null,
                 shop_notice = new ShopNotice(0),
                 server_time = DateTimeOffset.UtcNow,
-                functional_maintenance_list = new List<FunctionalMaintenanceList>()
+                stamina_multi_system_max = 99,
+                stamina_multi_user_max = 12,
+                quest_skip_point_system_max = 400,
+                quest_skip_point_use_limit_max = 30,
+                functional_maintenance_list = new List<FunctionalMaintenanceList>(),
             };
 
         return this.Ok(data);

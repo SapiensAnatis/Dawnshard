@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration;
@@ -31,8 +32,8 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             services.Remove(redisDescriptor);
 
             connection.Open();
-            services.AddDbContext<ApiContext>(options => options.UseSqlite(connection));
 
+            services.AddDbContext<ApiContext>(options => options.UseSqlite(connection));
             services.AddDistributedMemoryCache();
 
             ApiContext context = services

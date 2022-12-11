@@ -39,13 +39,13 @@ public abstract class DragaliaControllerBase : ControllerBase
     private string LoadDeviceAccountId()
     {
         if (
-            !this.HttpContext.Items.TryGetValue("DeviceAccountId", out object? deviceAccountId)
-            || deviceAccountId is null
+            this.HttpContext.Items.TryGetValue("DeviceAccountId", out object? deviceAccountId)
+            && deviceAccountId is not null
         )
         {
-            throw new SessionException("Internal controller session lookup error");
+            return (string)deviceAccountId;
         }
 
-        return (string)deviceAccountId;
+        throw new SessionException("Internal controller session lookup error");
     }
 }

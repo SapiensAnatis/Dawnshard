@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json;
 using DragaliaAPI.Database;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.MessagePackFormatters;
@@ -7,6 +8,8 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Shared;
 using MessagePack.Resolvers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -22,7 +25,11 @@ builder.Services
     {
         option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
-    });
+    })
+    .AddJsonOptions(
+        // For savefile import
+        option => option.JsonSerializerOptions.Converters.Add(new UnixDateTimeJsonConverter())
+    );
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -30,6 +37,10 @@ builder.Services
     .AddHealthChecks()
     .AddCheck<SqlServerHealthCheck>("SqlServer", failureStatus: HealthStatus.Unhealthy)
     .AddCheck<RedisHealthCheck>("Redis", failureStatus: HealthStatus.Unhealthy);
+
+builder.Services.AddAuthentication(
+    opts => opts.AddScheme<DeveloperAuthenticationHandler>("DeveloperAuthentication", null)
+);
 
 builder.Services
     .ConfigureDatabaseServices(builder.Configuration)
@@ -44,7 +55,8 @@ builder.Services
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<IUpdateDataService, UpdateDataService>()
-    .AddScoped<IDungeonService, DungeonService>();
+    .AddScoped<IDungeonService, DungeonService>()
+    .AddScoped<ISavefileService, SavefileService>();
 
 WebApplication app = builder.Build();
 
@@ -113,6 +125,7 @@ app.UsePathBase("/2.19.0_20220714193707");
 app.UsePathBase("/2.19.0_20220719103923");
 
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health");

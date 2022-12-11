@@ -9,39 +9,29 @@ namespace DragaliaAPI.Test.Unit;
 
 public class AutoMapperProfileTest
 {
-    [Fact]
-    public void QuestMapProfile_IsValid()
+    public class AutoMapperTheoryData : TheoryData<Type>
     {
-        TestProfile<QuestMapProfile>();
+        public AutoMapperTheoryData()
+        {
+            IEnumerable<Type> types = typeof(Program).Assembly
+                .GetTypes()
+                .Where(x => x.IsSubclassOf(typeof(Profile)));
+
+            foreach (Type t in types)
+                this.Add(t);
+        }
     }
 
-    [Fact]
-    public void InventoryMapProfile_IsValid()
+    [Theory]
+    [ClassData(typeof(AutoMapperTheoryData))]
+    public void Profile_IsValid(Type profileType)
     {
-        TestProfile<InventoryMapProfile>();
-    }
+        Profile instance =
+            (Profile?)Activator.CreateInstance(profileType)
+            ?? throw new NullReferenceException($"Failed to create instance of {profileType.Name}");
 
-    [Fact]
-    public void UnitMapProfile_IsValid()
-    {
-        TestProfile<UnitMapProfile>();
-    }
+        MapperConfiguration config = new(cfg => cfg.AddProfile(instance));
 
-    [Fact]
-    public void UserDataMapProfile_IsValid()
-    {
-        TestProfile<UserDataMapProfile>();
-    }
-
-    [Fact]
-    public void SummonMapProfile_IsValid()
-    {
-        TestProfile<SummonMapProfile>();
-    }
-
-    private static void TestProfile<TProfile>() where TProfile : Profile, new()
-    {
-        MapperConfiguration config = new(cfg => cfg.AddProfile(new TProfile()));
         config.Invoking(x => x.AssertConfigurationIsValid()).Should().NotThrow();
     }
 }

@@ -244,10 +244,8 @@ public class CharaController : DragaliaControllerBase
             int lvlBase;
             if (playerCharData.Level > CharaConstants.MaxLevel)
             {
-                hpStep =
-                    (double)(charaData.AddMaxHp1 - charaData.MaxHp) / CharaConstants.AddMaxLevel;
-                atkStep =
-                    (double)(charaData.AddMaxAtk1 - charaData.MaxAtk) / CharaConstants.AddMaxLevel;
+                hpStep = (charaData.AddMaxHp1 - charaData.MaxHp) / CharaConstants.AddMaxLevel;
+                atkStep = (charaData.AddMaxAtk1 - charaData.MaxAtk) / CharaConstants.AddMaxLevel;
                 hpBase = charaData.MaxHp;
                 atkBase = charaData.MaxAtk;
                 lvlBase = CharaConstants.MaxLevel;
@@ -267,11 +265,11 @@ public class CharaController : DragaliaControllerBase
                     charaData.MinAtk5
                 };
                 hpStep =
-                    (double)(charaData.MaxHp - charaData.MinHp5)
-                    / (double)(CharaConstants.MaxLevel - CharaConstants.MinLevel);
+                    (charaData.MaxHp - charaData.MinHp5)
+                    / (CharaConstants.MaxLevel - CharaConstants.MinLevel);
                 atkStep =
-                    (double)(charaData.MaxAtk - charaData.MinAtk5)
-                    / (double)(CharaConstants.MaxLevel - CharaConstants.MinLevel);
+                    (charaData.MaxAtk - charaData.MinAtk5)
+                    / (CharaConstants.MaxLevel - CharaConstants.MinLevel);
                 hpBase = charMinHps[playerCharData.Rarity - 3];
                 atkBase = charMinAtks[playerCharData.Rarity - 3];
                 lvlBase = CharaConstants.MinLevel;

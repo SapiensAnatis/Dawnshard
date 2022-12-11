@@ -78,6 +78,8 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
                     new()
                     {
                         UnitNo = 1,
+                        PartyNo = 1,
+                        DeviceAccountId = fixture.DeviceAccountId,
                         CharaId = Charas.Ilia,
                         EquipCrestSlotType1CrestId1 = AbilityCrests.ADragonyuleforIlia,
                         EquipWeaponBodyId = WeaponBodies.DivineTrigger,
@@ -86,18 +88,24 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
                     new()
                     {
                         UnitNo = 2,
+                        PartyNo = 1,
+                        DeviceAccountId = fixture.DeviceAccountId,
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
                     new()
                     {
                         UnitNo = 3,
+                        PartyNo = 1,
+                        DeviceAccountId = fixture.DeviceAccountId,
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
                     new()
                     {
                         UnitNo = 4,
+                        PartyNo = 1,
+                        DeviceAccountId = fixture.DeviceAccountId,
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },

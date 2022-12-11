@@ -11,7 +11,12 @@ public class DbPartyUnit
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
+    [ForeignKey($"{nameof(this.DeviceAccountId)},{nameof(this.PartyNo)}")]
     public virtual DbParty Party { get; set; } = null!;
+
+    public string DeviceAccountId { get; set; } = null!;
+
+    public int PartyNo { get; set; }
 
     [Required]
     public int UnitNo { get; set; }
@@ -19,7 +24,7 @@ public class DbPartyUnit
     [Required]
     public Charas CharaId { get; set; }
 
-    public long EquipDragonKeyId { get; set; }
+    public long EquipDragonKeyId { get; set; } = 0;
 
     public WeaponBodies EquipWeaponBodyId { get; set; }
 

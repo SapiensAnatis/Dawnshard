@@ -24,24 +24,19 @@ public class DbPlayerCharaData : IDbHasAccountId
     public byte Rarity { get; set; }
 
     [Column("Exp")]
-    [Required]
-    public int Exp { get; set; }
+    public int Exp { get; set; } = 0;
 
     [Column("Level")]
-    [Required]
-    public byte Level { get; set; }
+    public byte Level { get; set; } = 1;
 
     [Column("AddMaxLevel")]
-    [Required]
-    public byte AdditionalMaxLevel { get; set; }
+    public byte AdditionalMaxLevel { get; set; } = 0;
 
     [Column("HpPlusCount")]
-    [Required]
-    public byte HpPlusCount { get; set; }
+    public byte HpPlusCount { get; set; } = 0;
 
     [Column("AtkPlusCount")]
-    [Required]
-    public byte AttackPlusCount { get; set; }
+    public byte AttackPlusCount { get; set; } = 0;
 
     [NotMapped]
     public byte LimitBreakCount
@@ -51,37 +46,29 @@ public class DbPlayerCharaData : IDbHasAccountId
     }
 
     [Column("IsNew")]
-    [Required]
     [TypeConverter(typeof(BooleanConverter))]
-    public bool IsNew { get; set; }
+    public bool IsNew { get; set; } = true;
 
     [Column("Skill1Lvl")]
-    [Required]
-    public byte Skill1Level { get; set; }
+    public byte Skill1Level { get; set; } = 1;
 
     [Column("Skill2Lvl")]
-    [Required]
-    public byte Skill2Level { get; set; }
+    public byte Skill2Level { get; set; } = 1;
 
     [Column("Abil1Lvl")]
-    [Required]
-    public byte Ability1Level { get; set; }
+    public byte Ability1Level { get; set; } = 1;
 
     [Column("Abil2Lvl")]
-    [Required]
-    public byte Ability2Level { get; set; }
+    public byte Ability2Level { get; set; } = 1;
 
     [Column("Abil3Lvl")]
-    [Required]
-    public byte Ability3Level { get; set; }
+    public byte Ability3Level { get; set; } = 1;
 
     [Column("BurstAtkLvl")]
-    [Required]
-    public byte BurstAttackLevel { get; set; }
+    public byte BurstAttackLevel { get; set; } = 1;
 
     [Column("ComboBuildupCount")]
-    [Required]
-    public int ComboBuildupCount { get; set; }
+    public int ComboBuildupCount { get; set; } = 0;
 
     [Column("HpBase")]
     [Required]

@@ -1,5 +1,6 @@
 #nullable disable
 
+using System.Text.Json.Serialization;
 using DragaliaAPI.MessagePackFormatters;
 using MessagePack;
 
@@ -3752,6 +3753,7 @@ public class LoadIndexData
     public AtgenMultiServer multi_server { get; set; }
     public AtgenWalkerData walker_data { get; set; }
 
+    [JsonConstructor]
     public LoadIndexData(
         UserData user_data,
         PartyPowerData party_power_data,

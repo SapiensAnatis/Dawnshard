@@ -5,9 +5,10 @@
 
 ## Setup
 
-1. Install Docker Desktop.
-2. For security, change the database password in `docker-compose.yml`, and then update the connection string in `appsettings.json` with the new password. You may also wish to change the default password hashing salt in `appsettings.json`.
-3. Build and start the app using `docker-compose up --build --force-recreate dragaliaapi`
+1. Install Docker.
+2. Configure secrets with `dotnet user-secrets init` and the following secrets:
+	- `dotnet user-secrets set DeveloperToken`: A token that is required in the headers to authenticate against admin-only controllers.
+3. Build and start the app using `docker-compose up dragaliaapi`
 4. Hopefully, Docker should work its magic; there should be no other dependencies and it should ✨ just work ✨.
 
 Once the server is running, you should be able to make requests to `localhost:5000` (HTTP) or `localhost:5001` (HTTPS) -- these ports can be changed in `docker-compose.yml`.

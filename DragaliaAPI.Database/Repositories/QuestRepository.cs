@@ -13,10 +13,10 @@ public class QuestRepository : BaseRepository, IQuestRepository
         this.apiContext = apiContext;
     }
 
-    public IQueryable<DbPlayerStoryState> GetQuestStoryList(string deviceAccountId)
+    public IQueryable<DbPlayerStoryState> GetStories(string deviceAccountId, StoryTypes type)
     {
         return this.apiContext.PlayerStoryState.Where(
-            x => x.DeviceAccountId == deviceAccountId && x.StoryType == StoryTypes.Quest
+            x => x.DeviceAccountId == deviceAccountId && x.StoryType == type
         );
     }
 

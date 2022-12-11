@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
+		<UserSecretsId>268b9782-58c6-4dc3-9e8f-fefbf22e3b6b</UserSecretsId>
 		<IsPackable>false</IsPackable>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -49,6 +50,12 @@
 
 	<ItemGroup>
 		<None Include="C:\Users\jay0\Documents\Programming\dragalia\DragaliaAPI\DragaliaAPI.Test\.editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Data\endgame_savefile.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>

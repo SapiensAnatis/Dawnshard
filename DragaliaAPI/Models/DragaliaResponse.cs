@@ -1,4 +1,5 @@
-﻿using MessagePack;
+﻿using System.Text.Json.Serialization;
+using MessagePack;
 
 namespace DragaliaAPI.Models;
 
@@ -15,6 +16,7 @@ public class DragaliaResponse<TData> where TData : class
         this.data_headers = new(result_code);
     }
 
+    [JsonConstructor]
     [SerializationConstructor]
     public DragaliaResponse(DataHeaders data_headers, TData data)
     {

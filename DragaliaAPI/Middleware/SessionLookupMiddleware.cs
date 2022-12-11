@@ -25,7 +25,7 @@ public class SessionLookupMiddleware
         if (
             controller is null
             || controller.DisplayName == "Health checks"
-            || controller.Metadata.Any(x => x is NoSessionAttribute)
+            || controller.Metadata.GetMetadata<NoSessionAttribute>() is not null
         )
         {
             await this.next.Invoke(context);
@@ -34,6 +34,7 @@ public class SessionLookupMiddleware
 
         if (!context.Request.Headers.TryGetValue("SID", out StringValues sessionId))
             throw new BadHttpRequestException("Missing SID header!");
+
         string? sessionIdString = sessionId;
 
         try
