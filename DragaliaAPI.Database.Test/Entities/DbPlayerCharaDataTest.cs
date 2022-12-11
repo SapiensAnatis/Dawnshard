@@ -28,7 +28,7 @@ public class DbPlayerCharaDataTest
             this.charaDataService.GetData(Charas.GalaNedrick)
         );
 
-        var input = new SortedSet<int>(Enumerable.Range(1, 50));
+        SortedSet<int> input = new(Enumerable.Range(1, 50));
 
         chara.ManaCirclePieceIdList = input;
         chara.LimitBreakCount = 5;

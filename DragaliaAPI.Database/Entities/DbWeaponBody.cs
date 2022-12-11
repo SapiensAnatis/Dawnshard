@@ -14,7 +14,7 @@ public class DbWeaponBody : IDbHasAccountId
 {
     /// <inheritdoc />
     [ForeignKey(nameof(DbDeviceAccount))]
-    public string DeviceAccountId { get; set; }
+    public string DeviceAccountId { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets a value that dictates the weapon's identity.
@@ -75,8 +75,8 @@ public class DbWeaponBody : IDbHasAccountId
     {
         // I will consider replacing this with a bitmask if we generate a unified helper for them
         // Currently opposed to having another util class
-        get => UnlockWeaponPassiveAbilityNoString.Split(",").Select(int.Parse);
-        set => UnlockWeaponPassiveAbilityNoString = string.Join(",", value);
+        get => this.UnlockWeaponPassiveAbilityNoString.Split(",").Select(int.Parse);
+        set => this.UnlockWeaponPassiveAbilityNoString = string.Join(",", value);
     }
 
     /// <summary>
