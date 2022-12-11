@@ -205,7 +205,7 @@ public class QuestController : DragaliaControllerBase
             );
 
             newGetEntityList.Add(
-                new() { entity_id = (int)Charas.Elisanne, entity_type = (int)EntityTypes.Chara }
+                new() { entity_id = (int)Charas.Elisanne, entity_type = EntityTypes.Chara }
             );
             rewardList.Add(
                 new()
@@ -214,7 +214,7 @@ public class QuestController : DragaliaControllerBase
                     entity_level = 1,
                     entity_limit_break_count = 0,
                     entity_quantity = 1,
-                    entity_type = (int)EntityTypes.Chara
+                    entity_type = EntityTypes.Chara
                 }
             );
         }

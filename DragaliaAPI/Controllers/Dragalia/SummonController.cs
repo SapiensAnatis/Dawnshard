@@ -163,11 +163,11 @@ public class SummonController : DragaliaControllerBase
         List<AtgenDuplicateEntityList> excludableList = new();
         foreach (Charas c in Enum.GetValues<Charas>())
         {
-            excludableList.Add(new AtgenDuplicateEntityList((int)EntityTypes.Chara, (int)c));
+            excludableList.Add(new AtgenDuplicateEntityList(EntityTypes.Chara, (int)c));
         }
         foreach (Dragons d in Enum.GetValues<Dragons>())
         {
-            excludableList.Add(new AtgenDuplicateEntityList((int)EntityTypes.Dragon, (int)d));
+            excludableList.Add(new AtgenDuplicateEntityList(EntityTypes.Dragon, (int)d));
         }
 
         return this.Ok(new SummonExcludeGetListData(excludableList));
@@ -238,8 +238,8 @@ public class SummonController : DragaliaControllerBase
         List<AtgenSummonPointTradeList> tradableUnits =
             new()
             {
-                new(bannerId * 1000 + 1, (int)EntityTypes.Chara, (int)Charas.Celliera),
-                new(bannerId * 1000 + 2, (int)EntityTypes.Chara, (int)Charas.SummerCelliera)
+                new(bannerId * 1000 + 1, EntityTypes.Chara, (int)Charas.Celliera),
+                new(bannerId * 1000 + 2, EntityTypes.Chara, (int)Charas.SummerCelliera)
             };
 
         return Ok(
@@ -358,14 +358,14 @@ public class SummonController : DragaliaControllerBase
         await this.unitRepository.AddCharas(
             this.DeviceAccountId,
             summonResult
-                .Where(x => x.entity_type == (int)EntityTypes.Chara)
+                .Where(x => x.entity_type == EntityTypes.Chara)
                 .Select(x => (Charas)x.id)
         );
 
         await this.unitRepository.AddDragons(
             this.DeviceAccountId,
             summonResult
-                .Where(x => x.entity_type == (int)EntityTypes.Dragon)
+                .Where(x => x.entity_type == EntityTypes.Dragon)
                 .Select(x => (Dragons)x.id)
         );
 
@@ -416,7 +416,7 @@ public class SummonController : DragaliaControllerBase
                 && !rewardList.Any(x => x.entity_type == summon.entity_type && x.id == summon.id);
 
             int dewGained = 0;
-            if (!isNew && summon.entity_type == (int)EntityTypes.Chara)
+            if (!isNew && summon.entity_type == EntityTypes.Chara)
             {
                 dewGained = DewValueData.DupeSummon[summon.rarity];
                 userData.DewPoint += dewGained;

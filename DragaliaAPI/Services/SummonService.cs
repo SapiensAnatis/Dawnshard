@@ -1,8 +1,7 @@
-using System.Collections.Immutable;
+using System.Diagnostics;
 using AutoMapper;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Services;
@@ -11,10 +10,12 @@ namespace DragaliaAPI.Services;
 
 public class SummonService : ISummonService
 {
-    private readonly ICharaDataService _charaDataService;
-    private readonly IDragonDataService _dragonDataService;
+    private readonly ICharaDataService charaDataService;
+    private readonly IDragonDataService dragonDataService;
     private readonly IUnitRepository unitRepository;
     private readonly IMapper mapper;
+
+    private readonly Random random;
 
     private const float SSRSummonRateChara = 0.5f;
     private const float SSRSummonRateDragon = 0.8f;
@@ -30,10 +31,11 @@ public class SummonService : ISummonService
         IMapper mapper
     )
     {
-        _charaDataService = charaDataService;
-        _dragonDataService = dragonDataService;
+        this.charaDataService = charaDataService;
+        this.dragonDataService = dragonDataService;
         this.unitRepository = unitRepository;
         this.mapper = mapper;
+        this.random = Random.Shared;
     }
 
     /* public record BannerSummonInfo(
@@ -110,7 +112,6 @@ public class SummonService : ISummonService
         BannerSummonInfo bannerInfo */
     )
     {
-        Random random = new((int)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         List<AtgenRedoableSummonResultUnitList> resultList = new();
 
         for (int i = 0; i < numSummons; i++)
@@ -118,21 +119,21 @@ public class SummonService : ISummonService
             bool isDragon = random.NextSingle() > 0.5;
             if (isDragon)
             {
-                Dragons id = NextEnum<Dragons>(random);
+                Dragons id = random.NextEnum<Dragons>();
                 while (id == 0)
-                    id = NextEnum<Dragons>(random);
+                    id = random.NextEnum<Dragons>();
 
-                int rarity = _dragonDataService.GetData(id).Rarity;
-                resultList.Add(new((int)EntityTypes.Dragon, (int)id, rarity));
+                int rarity = dragonDataService.GetData(id).Rarity;
+                resultList.Add(new(EntityTypes.Dragon, (int)id, rarity));
             }
             else
             {
-                Charas id = NextEnum<Charas>(random);
+                Charas id = random.NextEnum<Charas>();
                 while (id == 0)
-                    id = NextEnum<Charas>(random);
+                    id = random.NextEnum<Charas>();
 
-                int rarity = _charaDataService.GetData(id).Rarity;
-                resultList.Add(new((int)EntityTypes.Chara, (int)id, rarity));
+                int rarity = charaDataService.GetData(id).Rarity;
+                resultList.Add(new(EntityTypes.Chara, (int)id, rarity));
             }
         }
 
@@ -147,66 +148,61 @@ public class SummonService : ISummonService
         IEnumerable<AtgenRedoableSummonResultUnitList> baseRewardList
     )
     {
-        List<AtgenResultUnitList> result = new();
+        List<AtgenResultUnitList> newUnits = new();
+
         IEnumerable<Charas> ownedCharas = this.unitRepository
             .GetAllCharaData(deviceAccountId)
             .Select(x => x.CharaId);
+
         IEnumerable<Dragons> ownedDragons = this.unitRepository
             .GetAllDragonData(deviceAccountId)
             .Select(x => x.DragonId);
 
         foreach (AtgenRedoableSummonResultUnitList reward in baseRewardList)
         {
-            if (reward.entity_type == (int)EntityTypes.Chara)
+            bool isNew = newUnits.All(x => x.id != reward.id);
+
+            switch (reward.entity_type)
             {
-                AtgenResultUnitList toAdd =
-                    new(
-                        reward.entity_type,
-                        reward.id,
-                        reward.rarity,
-                        false,
-                        3,
-                        DewValueData.DupeSummon[reward.rarity]
-                    );
+                case EntityTypes.Chara:
+                    {
+                        isNew |= ownedCharas.All(x => x != (Charas)reward.id);
 
-                if (
-                    ownedCharas.Any(x => x == (Charas)toAdd.id)
-                    && !result.Any(x => x.id == toAdd.id)
-                )
-                {
-                    toAdd.is_new = true;
-                    toAdd.dew_point = 0;
-                }
+                        AtgenResultUnitList toAdd =
+                            new(
+                                reward.entity_type,
+                                reward.id,
+                                reward.rarity,
+                                isNew,
+                                3,
+                                isNew ? 0 : DewValueData.DupeSummon[reward.rarity]
+                            );
 
-                result.Add(toAdd);
-            }
-            else if (reward.entity_type == (int)EntityTypes.Dragon)
-            {
-                AtgenResultUnitList toAdd =
-                    new(reward.entity_type, reward.id, reward.rarity, false, 3, 0);
+                        newUnits.Add(toAdd);
+                        break;
+                    }
+                case EntityTypes.Dragon:
+                    {
+                        isNew |= ownedDragons.All(x => x != (Dragons)reward.id);
 
-                if (
-                    ownedDragons.Any(x => x == (Dragons)toAdd.id)
-                    && !result.Any(x => x.id == toAdd.id)
-                )
-                {
-                    toAdd.is_new = true;
-                }
+                        AtgenResultUnitList toAdd =
+                            new(
+                                reward.entity_type,
+                                reward.id,
+                                reward.rarity,
+                                isNew,
+                                3,
+                                0
+                            );
 
-                result.Add(toAdd);
+                        newUnits.Add(toAdd);
+                        break;
+                    }
+                default:
+                    throw new UnreachableException("Invalid entity type for redoable summon result.");
             }
         }
 
-        return result;
-    }
-
-    private static T NextEnum<T>(Random random) where T : struct, Enum
-    {
-        T[] values = Enum.GetValues<T>();
-
-        return (T)(
-            values.GetValue(random.Next(values.Length))
-            ?? throw new Exception("Invalid random value!")
-        );
+        return newUnits;
     }
 }
