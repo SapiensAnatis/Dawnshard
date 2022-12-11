@@ -76,21 +76,20 @@ public class PartyController : DragaliaControllerBase
             }
         }
 
-        // This is ugly but if I do it inline with the .Map() call, wyrmprints don't get saved????
-        // Automapper bug possibly
-        PartyList requestParty2 =
-            new(
+        DbParty dbEntry = mapper.Map<DbParty>(
+            new PartyList(
                 requestParty.party_no,
                 requestParty.party_name,
                 requestParty.request_party_setting_list
-            );
-
-        DbParty dbEntry = mapper.Map<DbParty>(requestParty2);
+            )
+        );
 
         await partyRepository.SetParty(this.DeviceAccountId, dbEntry);
+
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
+
         await partyRepository.SaveChangesAsync();
 
         return this.Ok(new PartySetPartySettingData(updateDataList, new()));

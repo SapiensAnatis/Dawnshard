@@ -10,7 +10,7 @@ public class InventoryMapProfile : Profile
     {
         this.CreateMap<DbPlayerMaterial, MaterialList>();
 
-        this.SourceMemberNamingConvention = new PascalCaseNamingConvention();
-        this.DestinationMemberNamingConvention = new LowerUnderscoreNamingConvention();
+        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
+        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
     }
 }

@@ -4696,8 +4696,6 @@ public class CharaList
     public int status_plus_count { get; set; }
     public int combo_buildup_count { get; set; }
     public int is_unlock_edit_skill { get; set; }
-
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset gettime { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }
     public int is_temporary { get; set; }
@@ -8758,7 +8756,27 @@ public class UpdateDataList
     public IEnumerable<AbilityCrestList> ability_crest_list { get; set; }
     public IEnumerable<AbilityCrestSetList> ability_crest_set_list { get; set; }
     public IEnumerable<TalismanList> talisman_list { get; set; }
-    public IEnumerable<PartyList> party_list { get; set; }
+
+    private IEnumerable<PartyList> _party_list;
+    public IEnumerable<PartyList> party_list
+    {
+        get => this._party_list;
+        set
+        {
+            if (value is null)
+                return;
+
+            this._party_list = value.Select(
+                x =>
+                    new PartyList()
+                    {
+                        party_name = x.party_name,
+                        party_no = x.party_no,
+                        party_setting_list = x.party_setting_list.OrderBy(y => y.unit_no)
+                    }
+            );
+        }
+    }
     public IEnumerable<MuseumList> museum_list { get; set; }
     public IEnumerable<AlbumDragonData> album_dragon_list { get; set; }
     public IEnumerable<AlbumWeaponList> album_weapon_list { get; set; }
