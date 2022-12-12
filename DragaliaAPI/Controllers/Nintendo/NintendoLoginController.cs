@@ -41,11 +41,11 @@ public class NintendoLoginController : ControllerBase
 
         if (deviceAccount is null)
         {
-            createdDeviceAccount = await deviceAccountService.RegisterDeviceAccount();
+            createdDeviceAccount = await this.deviceAccountService.RegisterDeviceAccount();
             deviceAccount = createdDeviceAccount;
         }
 
-        bool authenticationSuccess = await deviceAccountService.AuthenticateDeviceAccount(
+        bool authenticationSuccess = await this.deviceAccountService.AuthenticateDeviceAccount(
             deviceAccount
         );
 
@@ -59,7 +59,7 @@ public class NintendoLoginController : ControllerBase
         await this.sessionService.PrepareSession(deviceAccount, token);
 
         TimeSpan reloginTime =
-            TimeSpan.FromMinutes(configuration.GetValue<int>("SessionExpiryTimeMinutes"))
+            TimeSpan.FromMinutes(this.configuration.GetValue<int>("SessionExpiryTimeMinutes"))
             - TimeSpan.FromSeconds(5);
 
         LoginResponse response =
