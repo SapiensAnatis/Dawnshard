@@ -59,6 +59,26 @@ public class DeviceAccountServiceTest
     }
 
     [Fact]
+    public async Task AuthenticateDeviceAccount_ForeignDeviceAccount_CallsAddNewDeviceAccount()
+    {
+        mockRepository
+            .Setup(x => x.AddNewDeviceAccount("foreign id", It.IsAny<string>()))
+            .Returns(Task.CompletedTask);
+        mockRepository.Setup(x => x.CreateNewSavefile("foreign id")).Returns(Task.CompletedTask);
+        mockRepository
+            .Setup(x => x.GetDeviceAccountById("foreign id"))
+            .ReturnsAsync((DbDeviceAccount?)null);
+        mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
+
+        bool result = await deviceAccountService.AuthenticateDeviceAccount(
+            new DeviceAccount("foreign id", "password")
+        );
+
+        result.Should().BeTrue();
+        mockRepository.VerifyAll();
+    }
+
+    [Fact]
     public async Task CreateDeviceAccount_CallsAddNewDeviceAccount()
     {
         mockRepository

@@ -15,10 +15,10 @@ namespace DragaliaAPI.Controllers.Nintendo;
 [Route("/core/v1/gateway/sdk/login")]
 public class NintendoLoginController : ControllerBase
 {
-    private readonly ILogger<NintendoLoginController> _logger;
+    private readonly ILogger<NintendoLoginController> logger;
     private readonly IConfiguration configuration;
-    private readonly ISessionService _sessionService;
-    private readonly IDeviceAccountService _deviceAccountService;
+    private readonly ISessionService sessionService;
+    private readonly IDeviceAccountService deviceAccountService;
 
     public NintendoLoginController(
         ILogger<NintendoLoginController> logger,
@@ -27,10 +27,10 @@ public class NintendoLoginController : ControllerBase
         IDeviceAccountService deviceAccountService
     )
     {
-        _logger = logger;
+        this.logger = logger;
         this.configuration = configuration;
-        _sessionService = sessionService;
-        _deviceAccountService = deviceAccountService;
+        this.sessionService = sessionService;
+        this.deviceAccountService = deviceAccountService;
     }
 
     [HttpPost]
@@ -38,20 +38,25 @@ public class NintendoLoginController : ControllerBase
     {
         DeviceAccount? deviceAccount = request.deviceAccount;
         DeviceAccount? createdDeviceAccount = null;
+
         if (deviceAccount is null)
         {
-            createdDeviceAccount = await _deviceAccountService.RegisterDeviceAccount();
+            createdDeviceAccount = await deviceAccountService.RegisterDeviceAccount();
             deviceAccount = createdDeviceAccount;
         }
 
-        bool authenticationSuccess = await _deviceAccountService.AuthenticateDeviceAccount(
+        bool authenticationSuccess = await deviceAccountService.AuthenticateDeviceAccount(
             deviceAccount
         );
+
         if (!authenticationSuccess)
+        {
+            this.logger.LogWarning("Access denied to DeviceAccount ID '{id}'", deviceAccount.id);
             return Unauthorized();
+        }
 
         string token = Guid.NewGuid().ToString();
-        await _sessionService.PrepareSession(deviceAccount, token);
+        await this.sessionService.PrepareSession(deviceAccount, token);
 
         TimeSpan reloginTime =
             TimeSpan.FromMinutes(configuration.GetValue<int>("SessionExpiryTimeMinutes"))
