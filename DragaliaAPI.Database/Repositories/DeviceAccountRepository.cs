@@ -30,7 +30,7 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
 
     public async Task<DbDeviceAccount?> GetDeviceAccountById(string id)
     {
-        return await apiContext.DeviceAccounts.FirstOrDefaultAsync(x => x.Id == id);
+        return await apiContext.DeviceAccounts.SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task CreateNewSavefile(string deviceAccountId)

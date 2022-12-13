@@ -25,29 +25,45 @@ public class DeviceAccountService : IDeviceAccountService
 
     public async Task<bool> AuthenticateDeviceAccount(DeviceAccount deviceAccount)
     {
-        // TODO: If the user attempts to connect with an id that is not in the database,
-        // just create it for them instead of returning unauthorized. Use case: for when
-        // I nuke the DB after fucking up a migration and the app keeps my old credentials
-
         if (deviceAccount.password is null)
-        {
             throw new ArgumentNullException(paramName: deviceAccount.password);
-        }
 
         DbDeviceAccount? dbDeviceAccount = await this.deviceAccountRepository.GetDeviceAccountById(
             deviceAccount.id
         );
 
         if (dbDeviceAccount is null)
-            return false;
-
-        return this.GetHashedPassword(deviceAccount.password) == dbDeviceAccount.HashedPassword;
+        {
+            this.logger.LogInformation(
+                "Foreign device account ID '{id}' received",
+                deviceAccount.id
+            );
+            await this.RegisterDeviceAccount(deviceAccount.id, deviceAccount.password);
+            return true;
+        }
+        else
+        {
+            return this.GetHashedPassword(deviceAccount.password) == dbDeviceAccount.HashedPassword;
+        }
     }
 
     public async Task<DeviceAccount> RegisterDeviceAccount()
     {
         string id = GenerateRandomString(16);
         string password = GenerateRandomString(40);
+
+        return await this.RegisterDeviceAccount(id, password);
+    }
+
+    private async Task<DeviceAccount> RegisterDeviceAccount(string id, string password)
+    {
+        if (await this.deviceAccountRepository.GetDeviceAccountById(id) is not null)
+        {
+            throw new ArgumentException(
+                $"Could not register device account: ID {id} already exists"
+            );
+        }
+
         string hashedPassword = this.GetHashedPassword(password);
 
         await this.deviceAccountRepository.AddNewDeviceAccount(id, hashedPassword);
