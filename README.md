@@ -6,9 +6,15 @@
 ## Setup
 
 1. Install Docker.
-2. Configure secrets with `dotnet user-secrets init` and the following secrets:
-	- `dotnet user-secrets set DeveloperToken`: A token that is required in the headers to authenticate against admin-only controllers.
-3. Build and start the app using `docker-compose up dragaliaapi`
+2. Configure secrets:
+	- Run `dotnet user-secrets init` and `dotnet user-secrets set DeveloperToken <TOKEN>`. This is a token that is required in the headers to authenticate against admin-only controllers (e.g. savefile import).
+	- Create a file called `postgres.env` next to the `docker-compose.yml` file with contents as described below, choosing a secure combination for your database username and password.
+
+		```
+		POSTGRES_USER=
+		POSTGRES_PASSWORD=
+		```
+3. Build and start the app using `docker compose up -d`.
 4. Hopefully, Docker should work its magic; there should be no other dependencies and it should ✨ just work ✨.
 
 Once the server is running, you should be able to make requests to `localhost:5000` (HTTP) or `localhost:5001` (HTTPS) -- these ports can be changed in `docker-compose.yml`.

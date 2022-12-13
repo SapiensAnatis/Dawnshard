@@ -2,8 +2,7 @@ version: '3.4'
 name: DragaliaAPI
 
 volumes:
-  pgvolume:
-    name: postgres_volume
+  pgdata:
 
 services:
   dragaliaapi:
@@ -33,6 +32,8 @@ services:
       - postgres.env
     ports:
       - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   redis:
     hostname: redis
