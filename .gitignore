@@ -1,6 +1,6 @@
 DragaliaAPI.Database/Migrations/*
 !DragaliaAPI.Database/Migrations/.gitkeep
-postgres.env
+.env
 
 
 ## Ignore Visual Studio temporary files, build results, and

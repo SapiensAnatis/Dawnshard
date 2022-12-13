@@ -8,7 +8,7 @@
 1. Install Docker.
 2. Configure secrets:
 	- Run `dotnet user-secrets init` and `dotnet user-secrets set DeveloperToken <TOKEN>`. This is a token that is required in the headers to authenticate against admin-only controllers (e.g. savefile import).
-	- Create a file called `postgres.env` next to the `docker-compose.yml` file with contents as described below, choosing a secure combination for your database username and password.
+	- Create a file called `.env` next to the `docker-compose.yml` file with contents as described below, choosing a secure combination username and password combination for your database.
 
 		```
 		POSTGRES_USER=
