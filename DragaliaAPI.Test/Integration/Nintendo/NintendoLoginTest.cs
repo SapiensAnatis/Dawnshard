@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using DragaliaAPI.Models.Nintendo;
@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Nintendo;
 
+[Collection("DragaliaIntegration")]
 public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
@@ -24,18 +25,9 @@ public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task PostLogin_NullDeviceAccount_ReturnsSuccessResponseAndCreatesDeviceAccount()
     {
-        StringContent requestContent =
-            new(
-                """
-            {
-            }
-            """
-            );
-        requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
-
         HttpResponseMessage response = await client.PostAsync(
             "/core/v1/gateway/sdk/login",
-            requestContent
+            JsonContent.Create(new object())
         );
 
         response.IsSuccessStatusCode.Should().BeTrue();
@@ -44,7 +36,7 @@ public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
         PartialLoginResponse? deserializedResponse =
             JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
         deserializedResponse.Should().NotBeNull();
-        DeviceAccount createdDeviceAccount = deserializedResponse!.createdDeviceAccount;
+        DeviceAccount createdDeviceAccount = deserializedResponse!.CreatedDeviceAccount;
 
         // Ensure new DeviceAccount was registered against the DB, and will authenticate successfully
         using IServiceScope scope = fixture.Services.CreateScope();
@@ -59,53 +51,48 @@ public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
     public async Task PostLogin_DeviceAccountCorrectCredentials_ReturnsSuccessResponse()
     {
         DeviceAccount deviceAccount = new("id", "password");
-        StringContent requestContent =
-            new(
-                """
-            {
-                "deviceAccount": {
-                    "id": "id",
-                    "password": "password"
-                }
-            }
-            """
-            );
-        requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
         HttpResponseMessage response = await client.PostAsync(
             "/core/v1/gateway/sdk/login",
-            requestContent
+            JsonContent.Create(new LoginRequest(deviceAccount))
         );
 
-        response.IsSuccessStatusCode.Should().BeTrue();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         string jsonString = await response.Content.ReadAsStringAsync();
         PartialLoginResponse? deserializedResponse =
             JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
-        deserializedResponse.Should().NotBeNull();
 
-        deserializedResponse!.user.deviceAccounts.Should().Contain(deviceAccount);
+        deserializedResponse.Should().NotBeNull();
+        deserializedResponse!.User.DeviceAccounts.Should().Contain(deviceAccount);
+    }
+
+    [Fact]
+    public async Task PostLogin_ForeignDeviceAccount_CreatesAndReturnsSuccessResponse()
+    {
+        DeviceAccount deviceAccount = new("foreign id", "password");
+
+        HttpResponseMessage response = await client.PostAsync(
+            "/core/v1/gateway/sdk/login",
+            JsonContent.Create(new LoginRequest(deviceAccount))
+        );
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        string jsonString = await response.Content.ReadAsStringAsync();
+        PartialLoginResponse? deserializedResponse =
+            JsonSerializer.Deserialize<PartialLoginResponse>(jsonString);
+
+        deserializedResponse.Should().NotBeNull();
+        deserializedResponse!.User.DeviceAccounts.Should().Contain(deviceAccount);
     }
 
     [Fact]
     public async Task PostLogin_DeviceAccountIncorrectCredentials_ReturnsUnauthorizedResponse()
     {
-        StringContent requestContent =
-            new(
-                """
-            {
-                "deviceAccount": {
-                    "id": "id",
-                    "password": "wrong password"
-                }
-            }
-            """
-            );
-        requestContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
-
         HttpResponseMessage response = await client.PostAsync(
             "/core/v1/gateway/sdk/login",
-            requestContent
+            JsonContent.Create(new LoginRequest(new DeviceAccount("id", "wrong password")))
         );
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -115,24 +102,28 @@ public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
     // and the deserializer doesn't really seem to like it for reasons that aren't worth figuring out
     public record PartialLoginResponse
     {
-        public DeviceAccount createdDeviceAccount { get; init; }
-        public PartialUser user { get; init; }
+        [JsonPropertyName("createdDeviceAccount")]
+        public DeviceAccount CreatedDeviceAccount { get; init; }
+
+        [JsonPropertyName("user")]
+        public PartialUser User { get; init; }
 
         [JsonConstructor]
         public PartialLoginResponse(DeviceAccount createdDeviceAccount, PartialUser user)
         {
-            this.createdDeviceAccount = createdDeviceAccount;
-            this.user = user;
+            this.CreatedDeviceAccount = createdDeviceAccount;
+            this.User = user;
         }
 
         public record PartialUser
         {
-            public List<DeviceAccount> deviceAccounts { get; init; }
+            [JsonPropertyName("deviceAccounts")]
+            public List<DeviceAccount> DeviceAccounts { get; init; }
 
             [JsonConstructor]
             public PartialUser(List<DeviceAccount> deviceAccounts)
             {
-                this.deviceAccounts = deviceAccounts;
+                this.DeviceAccounts = deviceAccounts;
             }
         }
     }
