@@ -1,4 +1,5 @@
 DragaliaAPI.Database/Migrations/*
+!DragaliaAPI.Database/Migrations/.gitkeep
 postgres.env
 
 
