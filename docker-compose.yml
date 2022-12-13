@@ -2,12 +2,11 @@ version: '3.4'
 name: DragaliaAPI
 
 volumes:
-  sqlvolume:
-    name: dragaliaapi_sqlvolume
+  pgvolume:
+    name: postgres_volume
 
 services:
   dragaliaapi:
-    container_name: dragaliaapi
     hostname: dragaliaapi
     image: ${DOCKER_REGISTRY-}dragaliaapi
     build:
@@ -19,22 +18,23 @@ services:
       - "5000:80"
       - "5001:443"
     links:
-      - sqlserver
+      - postgres
+    env_file:
+      - postgres.env
     
-  sqlserver:
-    container_name: sqlserver
-    hostname: sqlserver
-    image: mcr.microsoft.com/mssql/server:2022-latest
+  postgres:
+    hostname: postgres
+    image: postgres:latest
     environment:
-      - "MSSQL_SA_PASSWORD=DragaliaLost123"
-      - "ACCEPT_EULA=Y"
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB: database
+    env_file:
+      - postgres.env
     ports:
-      - "1433:1433"
-    volumes:
-      - sqlvolume:/var/opt/mssql
+      - 5432:5432
 
   redis:
-    container_name: redis
     hostname: redis
     image: redis/redis-stack
     ports:

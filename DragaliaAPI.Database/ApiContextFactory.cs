@@ -18,7 +18,7 @@ public class ApiContextFactory : IDesignTimeDbContextFactory<ApiContext>
     public ApiContext CreateDbContext(string[] args)
     {
         DbContextOptionsBuilder<ApiContext> optionsBuilder = new();
-        optionsBuilder.UseSqlServer("Server=sqlserver;User ID=SA;Password=DragaliaLost123");
+        optionsBuilder.UseNpgsql(DatabaseConfiguration.GetConnectionString());
 
         return new ApiContext(optionsBuilder.Options);
     }

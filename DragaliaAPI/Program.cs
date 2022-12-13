@@ -35,7 +35,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services
     .AddHealthChecks()
-    .AddCheck<SqlServerHealthCheck>("SqlServer", failureStatus: HealthStatus.Unhealthy)
+    .AddDbContextCheck<ApiContext>()
     .AddCheck<RedisHealthCheck>("Redis", failureStatus: HealthStatus.Unhealthy);
 
 builder.Services.AddAuthentication(
@@ -43,7 +43,7 @@ builder.Services.AddAuthentication(
 );
 
 builder.Services
-    .ConfigureDatabaseServices(builder.Configuration)
+    .ConfigureDatabaseServices()
     .ConfigureSharedServices()
     .AddAutoMapper(Assembly.GetExecutingAssembly())
     .AddStackExchangeRedisCache(options =>
