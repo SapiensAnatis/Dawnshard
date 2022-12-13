@@ -24,7 +24,6 @@ public class SavefileTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly IntegrationTestFixture fixture;
     private readonly HttpClient client;
-    private readonly long viewerId;
 
     public SavefileTest(IntegrationTestFixture fixture)
     {
@@ -42,7 +41,7 @@ public class SavefileTest : IClassFixture<IntegrationTestFixture>
         this.client.DefaultRequestHeaders.Remove("Developer-Token");
 
         HttpResponseMessage importResponse = await this.client.PostAsync(
-            $"savefile/import/{viewerId}",
+            $"savefile/import/1",
             JsonContent.Create(new { })
         );
 
