@@ -655,7 +655,7 @@ public class AtgenBoxSummonData
 public class AtgenBoxSummonDetail
 {
     public int id { get; set; }
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
     public int limit { get; set; }
@@ -666,7 +666,7 @@ public class AtgenBoxSummonDetail
 
     public AtgenBoxSummonDetail(
         int id,
-        int entity_type,
+        EntityTypes entity_type,
         int entity_id,
         int entity_quantity,
         int limit,
@@ -732,11 +732,15 @@ public class AtgenBoxSummonResult
 [MessagePackObject(true)]
 public class AtgenBuildEventRewardEntityList
 {
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
 
-    public AtgenBuildEventRewardEntityList(int entity_type, int entity_id, int entity_quantity)
+    public AtgenBuildEventRewardEntityList(
+        EntityTypes entity_type,
+        int entity_id,
+        int entity_quantity
+    )
     {
         this.entity_type = entity_type;
         this.entity_id = entity_id;
@@ -1819,7 +1823,7 @@ public class AtgenDrawDetails
 {
     public int id { get; set; }
     public int is_new { get; set; }
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
     public int view_rarity { get; set; }
@@ -1827,7 +1831,7 @@ public class AtgenDrawDetails
     public AtgenDrawDetails(
         int id,
         int is_new,
-        int entity_type,
+        EntityTypes entity_type,
         int entity_id,
         int entity_quantity,
         int view_rarity
@@ -1913,10 +1917,10 @@ public class AtgenDropObj
 [MessagePackObject(true)]
 public class AtgenDuplicateEntityList
 {
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
 
-    public AtgenDuplicateEntityList(int entity_type, int entity_id)
+    public AtgenDuplicateEntityList(EntityTypes entity_type, int entity_id)
     {
         this.entity_type = entity_type;
         this.entity_id = entity_id;
@@ -2356,13 +2360,13 @@ public class AtgenInquiryFaqList
 [MessagePackObject(true)]
 public class AtgenItemSummonRateList
 {
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
     public string entity_rate { get; set; }
 
     public AtgenItemSummonRateList(
-        int entity_type,
+        EntityTypes entity_type,
         int entity_id,
         int entity_quantity,
         string entity_rate
@@ -2397,7 +2401,7 @@ public class AtgenLoginBonusList
     public int login_bonus_id { get; set; }
     public int total_login_day { get; set; }
     public int reward_day { get; set; }
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
     public int entity_level { get; set; }
@@ -2408,7 +2412,7 @@ public class AtgenLoginBonusList
         int login_bonus_id,
         int total_login_day,
         int reward_day,
-        int entity_type,
+        EntityTypes entity_type,
         int entity_id,
         int entity_quantity,
         int entity_level,
@@ -2433,7 +2437,7 @@ public class AtgenLoginBonusList
 public class AtgenLoginLotteryRewardList
 {
     public int login_lottery_id { get; set; }
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
     public int is_pickup { get; set; }
@@ -2441,7 +2445,7 @@ public class AtgenLoginLotteryRewardList
 
     public AtgenLoginLotteryRewardList(
         int login_lottery_id,
-        int entity_type,
+        EntityTypes entity_type,
         int entity_id,
         int entity_quantity,
         int is_pickup,
@@ -2463,10 +2467,10 @@ public class AtgenLoginLotteryRewardList
 public class AtgenLostUnitList
 {
     public int unit_no { get; set; }
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
 
-    public AtgenLostUnitList(int unit_no, int entity_type, int entity_id)
+    public AtgenLostUnitList(int unit_no, EntityTypes entity_type, int entity_id)
     {
         this.unit_no = unit_no;
         this.entity_type = entity_type;
@@ -2630,13 +2634,13 @@ public class AtgenNAccountInfo
 [MessagePackObject(true)]
 public class AtgenNeedTradeEntityList
 {
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
     public int limit_break_count { get; set; }
 
     public AtgenNeedTradeEntityList(
-        int entity_type,
+        EntityTypes entity_type,
         int entity_id,
         int entity_quantity,
         int limit_break_count
@@ -3074,14 +3078,14 @@ public class AtgenQuestRebornBonusInfoList
 [MessagePackObject(true)]
 public class AtgenQuestStoryRewardList
 {
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
     public int entity_level { get; set; }
     public int entity_limit_break_count { get; set; }
 
     public AtgenQuestStoryRewardList(
-        int entity_type,
+        EntityTypes entity_type,
         int entity_id,
         int entity_quantity,
         int entity_level,
@@ -3185,11 +3189,11 @@ public class AtgenRecoverData
 [MessagePackObject(true)]
 public class AtgenRedoableSummonResultUnitList
 {
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int id { get; set; }
     public int rarity { get; set; }
 
-    public AtgenRedoableSummonResultUnitList(int entity_type, int id, int rarity)
+    public AtgenRedoableSummonResultUnitList(EntityTypes entity_type, int id, int rarity)
     {
         this.entity_type = entity_type;
         this.id = id;
@@ -3315,7 +3319,7 @@ public class AtgenResultPrizeList
 [MessagePackObject(true)]
 public class AtgenResultUnitList
 {
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int id { get; set; }
     public int rarity { get; set; }
     public bool is_new { get; set; }
@@ -3323,7 +3327,7 @@ public class AtgenResultUnitList
     public int dew_point { get; set; }
 
     public AtgenResultUnitList(
-        int entity_type,
+        EntityTypes entity_type,
         int id,
         int rarity,
         bool is_new,
@@ -3485,10 +3489,10 @@ public class AtgenStoneBonus
 public class AtgenSummonPointTradeList
 {
     public int trade_id { get; set; }
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
 
-    public AtgenSummonPointTradeList(int trade_id, int entity_type, int entity_id)
+    public AtgenSummonPointTradeList(int trade_id, EntityTypes entity_type, int entity_id)
     {
         this.trade_id = trade_id;
         this.entity_type = entity_type;
@@ -5480,12 +5484,17 @@ public class DragonReliabilityList
 [MessagePackObject(true)]
 public class DragonRewardEntityList
 {
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
     public int is_over { get; set; }
 
-    public DragonRewardEntityList(int entity_type, int entity_id, int entity_quantity, int is_over)
+    public DragonRewardEntityList(
+        EntityTypes entity_type,
+        int entity_id,
+        int entity_quantity,
+        int is_over
+    )
     {
         this.entity_type = entity_type;
         this.entity_id = entity_id;
@@ -8364,7 +8373,7 @@ public class SummonHistoryList
     public SummonExecTypes summon_exec_type { get; set; }
     public DateTimeOffset exec_date { get; set; }
     public int payment_type { get; set; }
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
     public int entity_level { get; set; }
@@ -8383,7 +8392,7 @@ public class SummonHistoryList
         SummonExecTypes summon_exec_type,
         DateTimeOffset exec_date,
         int payment_type,
-        int entity_type,
+        EntityTypes entity_type,
         int entity_id,
         int entity_quantity,
         int entity_level,
