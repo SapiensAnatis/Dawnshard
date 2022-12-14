@@ -4033,9 +4033,9 @@ public class TutorialUpdateStepRequest
     public int step { get; set; }
     public int is_skip { get; set; }
     public int entity_id { get; set; }
-    public int entity_type { get; set; }
+    public EntityTypes entity_type { get; set; }
 
-    public TutorialUpdateStepRequest(int step, int is_skip, int entity_id, int entity_type)
+    public TutorialUpdateStepRequest(int step, int is_skip, int entity_id, EntityTypes entity_type)
     {
         this.step = step;
         this.is_skip = is_skip;
