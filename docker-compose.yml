@@ -3,6 +3,7 @@ name: DragaliaAPI
 
 volumes:
   pgdata:
+  logs:
 
 services:
   dragaliaapi:
@@ -20,6 +21,8 @@ services:
       - postgres
     env_file:
       - .env
+    volumes:
+      - logs:/app/logs
     
   postgres:
     hostname: postgres

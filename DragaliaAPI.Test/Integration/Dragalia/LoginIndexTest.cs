@@ -1,5 +1,6 @@
 ﻿namespace DragaliaAPI.Test.Integration.Dragalia;
 
+[Collection("DragaliaIntegration")]
 public class LoginIndexTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;

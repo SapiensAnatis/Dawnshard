@@ -35,13 +35,6 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
             services.AddDbContext<ApiContext>(options => options.UseSqlite(connection));
             services.AddDistributedMemoryCache();
-
-            ApiContext context = services
-                .BuildServiceProvider()
-                .CreateScope()
-                .ServiceProvider.GetRequiredService<ApiContext>();
-
-            context.Database.EnsureCreated();
         });
 
         builder.UseEnvironment("Testing");
