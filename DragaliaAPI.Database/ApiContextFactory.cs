@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +18,17 @@ public class ApiContextFactory : IDesignTimeDbContextFactory<ApiContext>
 {
     public ApiContext CreateDbContext(string[] args)
     {
+        IConfiguration configuration = new ConfigurationBuilder()
+            .SetBasePath(Path.Join(Directory.GetCurrentDirectory(), "..", "DragaliaAPI"))
+            .AddJsonFile("appsettings.json")
+            .Build();
+
         DbContextOptionsBuilder<ApiContext> optionsBuilder = new();
-        optionsBuilder.UseNpgsql(DatabaseConfiguration.GetConnectionString());
+        optionsBuilder.UseNpgsql(
+            DatabaseConfiguration.GetConnectionString(
+                configuration.GetConnectionString("PostgresHost")
+            )
+        );
 
         return new ApiContext(optionsBuilder.Options);
     }

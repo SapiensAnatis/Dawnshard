@@ -39,12 +39,12 @@ builder.Services.AddAuthentication(
 );
 
 builder.Services
-    .ConfigureDatabaseServices()
+    .ConfigureDatabaseServices(builder.Configuration.GetConnectionString("PostgresHost"))
     .ConfigureSharedServices()
     .AddAutoMapper(Assembly.GetExecutingAssembly())
     .AddStackExchangeRedisCache(options =>
     {
-        options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
+        options.Configuration = builder.Configuration.GetConnectionString("RedisHost");
         options.InstanceName = "RedisInstance";
     })
     .AddScoped<ISessionService, SessionService>()

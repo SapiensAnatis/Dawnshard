@@ -14,10 +14,13 @@ public static class DatabaseConfiguration
 {
     private const int MigrationMaxRetries = 5;
 
-    public static IServiceCollection ConfigureDatabaseServices(this IServiceCollection services)
+    public static IServiceCollection ConfigureDatabaseServices(
+        this IServiceCollection services,
+        string? host
+    )
     {
         services = services
-            .AddDbContext<ApiContext>(options => options.UseNpgsql(GetConnectionString()))
+            .AddDbContext<ApiContext>(options => options.UseNpgsql(GetConnectionString(host)))
             .AddScoped<IDeviceAccountRepository, DeviceAccountRepository>()
             .AddScoped<IUserDataRepository, UserDataRepository>()
             .AddScoped<IUnitRepository, UnitRepository>()
@@ -30,12 +33,12 @@ public static class DatabaseConfiguration
         return services;
     }
 
-    public static string GetConnectionString()
+    public static string GetConnectionString(string? host)
     {
         NpgsqlConnectionStringBuilder connectionStringBuilder =
             new()
             {
-                Host = "postgres",
+                Host = host ?? "postgres",
                 Database = "database",
                 Username = Environment.GetEnvironmentVariable("POSTGRES_USER"),
                 Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
