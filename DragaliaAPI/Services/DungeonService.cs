@@ -1,7 +1,6 @@
 ﻿using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Identity.Client;
 using System.Text.Json;
 
 namespace DragaliaAPI.Services;
