@@ -165,41 +165,36 @@ public class SummonService : ISummonService
             switch (reward.entity_type)
             {
                 case EntityTypes.Chara:
-                    {
-                        isNew |= ownedCharas.All(x => x != (Charas)reward.id);
+                {
+                    isNew |= ownedCharas.All(x => x != (Charas)reward.id);
 
-                        AtgenResultUnitList toAdd =
-                            new(
-                                reward.entity_type,
-                                reward.id,
-                                reward.rarity,
-                                isNew,
-                                3,
-                                isNew ? 0 : DewValueData.DupeSummon[reward.rarity]
-                            );
+                    AtgenResultUnitList toAdd =
+                        new(
+                            reward.entity_type,
+                            reward.id,
+                            reward.rarity,
+                            isNew,
+                            3,
+                            isNew ? 0 : DewValueData.DupeSummon[reward.rarity]
+                        );
 
-                        newUnits.Add(toAdd);
-                        break;
-                    }
+                    newUnits.Add(toAdd);
+                    break;
+                }
                 case EntityTypes.Dragon:
-                    {
-                        isNew |= ownedDragons.All(x => x != (Dragons)reward.id);
+                {
+                    isNew |= ownedDragons.All(x => x != (Dragons)reward.id);
 
-                        AtgenResultUnitList toAdd =
-                            new(
-                                reward.entity_type,
-                                reward.id,
-                                reward.rarity,
-                                isNew,
-                                3,
-                                0
-                            );
+                    AtgenResultUnitList toAdd =
+                        new(reward.entity_type, reward.id, reward.rarity, isNew, 3, 0);
 
-                        newUnits.Add(toAdd);
-                        break;
-                    }
+                    newUnits.Add(toAdd);
+                    break;
+                }
                 default:
-                    throw new UnreachableException("Invalid entity type for redoable summon result.");
+                    throw new UnreachableException(
+                        "Invalid entity type for redoable summon result."
+                    );
             }
         }
 

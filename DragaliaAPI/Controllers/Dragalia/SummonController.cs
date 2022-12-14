@@ -357,16 +357,12 @@ public class SummonController : DragaliaControllerBase
 
         await this.unitRepository.AddCharas(
             this.DeviceAccountId,
-            summonResult
-                .Where(x => x.entity_type == EntityTypes.Chara)
-                .Select(x => (Charas)x.id)
+            summonResult.Where(x => x.entity_type == EntityTypes.Chara).Select(x => (Charas)x.id)
         );
 
         await this.unitRepository.AddDragons(
             this.DeviceAccountId,
-            summonResult
-                .Where(x => x.entity_type == EntityTypes.Dragon)
-                .Select(x => (Dragons)x.id)
+            summonResult.Where(x => x.entity_type == EntityTypes.Dragon).Select(x => (Dragons)x.id)
         );
 
         IEnumerable<AtgenResultUnitList> rewardList = _summonService.GenerateRewardList(

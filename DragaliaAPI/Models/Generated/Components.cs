@@ -736,7 +736,11 @@ public class AtgenBuildEventRewardEntityList
     public int entity_id { get; set; }
     public int entity_quantity { get; set; }
 
-    public AtgenBuildEventRewardEntityList(EntityTypes entity_type, int entity_id, int entity_quantity)
+    public AtgenBuildEventRewardEntityList(
+        EntityTypes entity_type,
+        int entity_id,
+        int entity_quantity
+    )
     {
         this.entity_type = entity_type;
         this.entity_id = entity_id;
@@ -5485,7 +5489,12 @@ public class DragonRewardEntityList
     public int entity_quantity { get; set; }
     public int is_over { get; set; }
 
-    public DragonRewardEntityList(EntityTypes entity_type, int entity_id, int entity_quantity, int is_over)
+    public DragonRewardEntityList(
+        EntityTypes entity_type,
+        int entity_id,
+        int entity_quantity,
+        int is_over
+    )
     {
         this.entity_type = entity_type;
         this.entity_id = entity_id;
