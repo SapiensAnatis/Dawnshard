@@ -179,7 +179,7 @@ public class SummonTest : IClassFixture<IntegrationTestFixture>
         using IServiceScope scope = fixture.Services.CreateScope();
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
 
-        if (reward.entity_type == (int)EntityTypes.Dragon)
+        if (reward.entity_type == EntityTypes.Dragon)
         {
             List<DbPlayerDragonData> dragonData = await apiContext.PlayerDragonData
                 .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)

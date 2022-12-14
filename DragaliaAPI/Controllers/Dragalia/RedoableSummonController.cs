@@ -155,7 +155,7 @@ public class RedoableSummonController : DragaliaControllerBase
             await this.unitRepository.AddCharas(
                 this.DeviceAccountId,
                 cachedResult
-                    .Where(x => x.entity_type == (int)EntityTypes.Chara)
+                    .Where(x => x.entity_type == EntityTypes.Chara)
                     .Select(x => (Charas)x.id)
             );
 
@@ -163,7 +163,7 @@ public class RedoableSummonController : DragaliaControllerBase
             await this.unitRepository.AddDragons(
                 this.DeviceAccountId,
                 cachedResult
-                    .Where(x => x.entity_type == (int)EntityTypes.Dragon)
+                    .Where(x => x.entity_type == EntityTypes.Dragon)
                     .Select(x => (Dragons)x.id)
             );
 
@@ -177,7 +177,7 @@ public class RedoableSummonController : DragaliaControllerBase
                 x =>
                     new AtgenDuplicateEntityList()
                     {
-                        entity_type = (int)EntityTypes.Chara,
+                        entity_type = EntityTypes.Chara,
                         entity_id = (int)x.id
                     }
             );
@@ -187,7 +187,7 @@ public class RedoableSummonController : DragaliaControllerBase
                 x =>
                     new AtgenDuplicateEntityList()
                     {
-                        entity_type = (int)EntityTypes.Dragon,
+                        entity_type = EntityTypes.Dragon,
                         entity_id = (int)x.id
                     }
             );
