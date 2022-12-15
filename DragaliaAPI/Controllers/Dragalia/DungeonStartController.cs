@@ -40,8 +40,8 @@ public class DungeonStartController : DragaliaControllerBase
                     new AtgenParamBonus()
                     {
                         weapon_type = x,
-                        hp = 20,
-                        attack = 20
+                        hp = 200,
+                        attack = 200
                     }
             );
 
@@ -52,8 +52,8 @@ public class DungeonStartController : DragaliaControllerBase
                     new AtgenElementBonus()
                     {
                         elemental_type = x,
-                        hp = 20,
-                        attack = 20
+                        hp = 200,
+                        attack = 200
                     }
             )
             .Append(
@@ -72,16 +72,17 @@ public class DungeonStartController : DragaliaControllerBase
                     new AtgenDragonBonus()
                     {
                         elemental_type = x,
-                        hp = 20,
-                        attack = 20
+                        dragon_bonus = 200,
+                        hp = 200,
+                        attack = 200
                     }
             )
             .Append(
                 new AtgenDragonBonus()
                 {
                     elemental_type = 99,
-                    hp = 20,
-                    attack = 20
+                    hp = 200,
+                    attack = 200
                 }
             );
 
@@ -92,7 +93,7 @@ public class DungeonStartController : DragaliaControllerBase
                 param_bonus_by_weapon = WeaponBonus,
                 element_bonus = EmptyElementBonus,
                 chara_bonus_by_album = EmptyElementBonus,
-                all_bonus = new() { hp = 20, attack = 20 },
+                all_bonus = new() { hp = 200, attack = 200 },
                 dragon_bonus = EmptyDragonBonus,
                 dragon_bonus_by_album = EmptyElementBonus,
                 dragon_time_bonus = new() { dragon_time_bonus = 20 }
@@ -134,45 +135,68 @@ public class DungeonStartController : DragaliaControllerBase
 
         UpdateDataList updateData = this.updateDataService.GetUpdateDataList(this.DeviceAccountId);
 
-        int partyNo = request.party_no_list.ElementAt(0);
+        await this.questRepository.SaveChangesAsync();
 
-        DbParty party = await this.partyRepository
+        DbParty party1 = await this.partyRepository
             .GetParties(this.DeviceAccountId)
             .Where(x => x.PartyNo == request.party_no_list.ElementAt(0))
             .Include(x => x.Units)
             .SingleAsync();
 
+        List<DbPartyUnit> units = party1.Units.ToList();
+
+        if (request.party_no_list.Count() > 1)
+        {
+            // Separate query isn't ideal, but need to preserve ordering
+            DbParty party2 = await this.partyRepository
+                .GetParties(this.DeviceAccountId)
+                .Where(x => x.PartyNo == request.party_no_list.ElementAt(1))
+                .Include(x => x.Units)
+                .SingleAsync();
+
+            foreach (DbPartyUnit unit in party2.Units)
+            {
+                // Offset database value to get sequence (1, 2, 3, 4, 5) instead of (1, 1, 2, 2, ...)
+                unit.UnitNo += 4;
+                units.Add(unit);
+            }
+        }
+
         // Would love to do a fancy async LINQ trick instead of basic for loop, but this needs to be
         // performed one-by-one due to the DbContext not accepting multithreaded access
-        List<DbDetailedPartyUnit> detailedPartyUnits = new();
-        foreach (DbPartyUnit p in party.Units.Where(x => x.CharaId != Charas.Empty))
-            detailedPartyUnits.Add(await this.unitRepository.BuildDetailedPartyUnit(p));
+        List<PartyUnitList> detailedPartyUnits = new();
 
-        // TODO: add this to the base controller via middleware
+        foreach (
+            DbPartyUnit u in units.Where(x => x.CharaId != Charas.Empty).OrderBy(x => x.UnitNo)
+        )
+        {
+            DbDetailedPartyUnit unit = await this.unitRepository.BuildDetailedPartyUnit(
+                this.DeviceAccountId,
+                u
+            );
+
+            detailedPartyUnits.Add(this.mapper.Map<PartyUnitList>(unit));
+        }
+
         long viewerId = await this.userDataRepository
             .GetUserData(this.DeviceAccountId)
             .Select(x => x.ViewerId)
             .SingleAsync();
 
-        IEnumerable<DataQuestAreaInfo> areaInfo = this.questDataService.GetMapData(
-            request.quest_id
-        );
+        DataQuest questInfo = this.questDataService.GetData(request.quest_id);
 
-        IEnumerable<int> enemyList = this.enemyListDataService
+        /*IEnumerable<int> enemyList = this.enemyListDataService
             .GetData(areaInfo.ElementAt(0))
-            .Enemies;
+            .Enemies;*/
 
         string dungeonKey = await this.dungeonService.StartDungeon(
             new DungeonSession()
             {
                 DungeonId = request.quest_id,
-                Party = party.Units.Select(mapper.Map<PartySettingList>),
-                AreaInfo = areaInfo
+                Party = units.Select(mapper.Map<PartySettingList>),
+                AreaInfo = questInfo.AreaInfo,
             }
         );
-
-        var areaInfoList = areaInfo.Select(this.mapper.Map<AreaInfoList>);
-        var partyUnitList = detailedPartyUnits.Select(mapper.Map<PartyUnitList>);
 
         DungeonStartStartData response =
             new()
@@ -181,8 +205,8 @@ public class DungeonStartController : DragaliaControllerBase
                 {
                     viewer_id = (ulong)viewerId,
                     dungeon_key = dungeonKey,
-                    dungeon_type = 1,
-                    play_type = 1,
+                    dungeon_type = questInfo.DungeonType,
+                    play_type = questInfo.QuestPlayModeType,
                     quest_id = request.quest_id,
                     is_host = true,
                     continue_limit = 3,
@@ -190,12 +214,12 @@ public class DungeonStartController : DragaliaControllerBase
                     start_time = DateTime.UtcNow,
                     party_info = new()
                     {
-                        party_unit_list = partyUnitList,
+                        party_unit_list = detailedPartyUnits,
                         fort_bonus_list = StubData.EmptyBonusList,
                         event_boost = new() { effect_value = 0, event_effect = 0 },
                         event_passive_grow_list = new List<AtgenEventPassiveUpList>(),
                     },
-                    area_info_list = areaInfoList,
+                    area_info_list = questInfo.AreaInfo.Select(mapper.Map<AreaInfoList>),
                     use_stone = 50,
                     is_fever_time = false,
                     repeat_state = 0,
@@ -234,7 +258,7 @@ public class DungeonStartController : DragaliaControllerBase
                             },
                             obj_id = 1,
                             obj_type = 2,
-                            is_rare = false,
+                            is_rare = true,
                         }
                     },
                     enemy = new List<AtgenEnemy>()
@@ -243,15 +267,15 @@ public class DungeonStartController : DragaliaControllerBase
                         {
                             param_id = 100010106,
                             is_pop = true,
-                            is_rare = false,
+                            is_rare = true,
                             piece = 0,
                             enemy_drop_list = new List<EnemyDropList>()
                             {
                                 new()
                                 {
                                     drop_list = new List<AtgenDropList>(),
-                                    coin = 1,
-                                    mana = 2,
+                                    coin = 10000,
+                                    mana = 20000,
                                 }
                             },
                             enemy_idx = 0,

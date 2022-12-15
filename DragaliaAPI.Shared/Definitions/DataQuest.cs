@@ -1,12 +1,32 @@
 ﻿using System.Text.Json.Serialization;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.Definitions;
 
 public class DataQuest : IDataItem<int>
 {
+    public IEnumerable<DataQuestAreaInfo> AreaInfo =>
+        new List<DataQuestAreaInfo>()
+        {
+            new(this.Scene1, this.AreaName1),
+            new(this.Scene2, this.AreaName2),
+            new(this.Scene3, this.AreaName3),
+            new(this.Scene4, this.AreaName4),
+            new(this.Scene5, this.AreaName5),
+            new(this.Scene6, this.AreaName6),
+        }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
+
     [JsonPropertyName("_Id")]
     [JsonRequired]
     public required int Id { get; set; }
+
+    [JsonPropertyName("_DungeonType")]
+    [JsonRequired]
+    public required DungeonTypes DungeonType { get; set; }
+
+    [JsonPropertyName("_QuestPlayModeType")]
+    [JsonRequired]
+    public required QuestPlayModeTypes QuestPlayModeType { get; set; }
 
     [JsonPropertyName("_Scene01")]
     [JsonRequired]
