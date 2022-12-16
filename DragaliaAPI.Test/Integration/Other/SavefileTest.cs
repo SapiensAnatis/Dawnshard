@@ -58,6 +58,7 @@ public class SavefileTest : IClassFixture<IntegrationTestFixture>
 
         JsonSerializerOptions options = new(JsonSerializerDefaults.General);
         options.Converters.Add(new UnixDateTimeJsonConverter());
+        options.Converters.Add(new BoolIntJsonConverter());
 
         LoadIndexData savefile = (
             JsonSerializer.Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, options)
@@ -93,8 +94,6 @@ public class SavefileTest : IClassFixture<IntegrationTestFixture>
                     // Properties with no implementation
                     opts.Excluding(x => x.Name.Contains("album"));
                     opts.Excluding(x => x.Name.Contains("shop"));
-
-                    opts.Excluding(x => x.talisman_list);
 
                     opts.Excluding(x => x.fort_bonus_list);
                     opts.Excluding(x => x.fort_plant_list);

@@ -50,6 +50,11 @@ public class UnitRepository : BaseRepository, IUnitRepository
         return apiContext.PlayerDragonReliability.Where(x => x.DeviceAccountId == deviceAccountId);
     }
 
+    public IQueryable<DbTalisman> GetAllTalismanData(string deviceAccountId)
+    {
+        return this.apiContext.PlayerTalismans.Where(x => x.DeviceAccountId == deviceAccountId);
+    }
+
     public async Task<bool> CheckHasCharas(string deviceAccountId, IEnumerable<Charas> idList)
     {
         IEnumerable<Charas> owned = await this.GetAllCharaData(deviceAccountId)
@@ -208,6 +213,8 @@ public class UnitRepository : BaseRepository, IUnitRepository
 
         IQueryable<DbAbilityCrest> crestData = this.GetAllAbilityCrestData(deviceAccountId);
 
+        IQueryable<DbTalisman> talismanData = this.GetAllTalismanData(deviceAccountId);
+
         // You get cookies if you can tell me how to do this with a join
         return new()
         {
@@ -240,6 +247,9 @@ public class UnitRepository : BaseRepository, IUnitRepository
                         || x.AbilityCrestId == input.EquipCrestSlotType3CrestId2
                 )
                 .ToListAsync(),
+            TalismanData = await talismanData.SingleOrDefaultAsync(
+                x => x.TalismanKeyId == input.EquipTalismanKeyId
+            ),
             EditSkill1CharaData = await this.GetEditSkill(charaData, input.EditSkill1CharaId),
             EditSkill2CharaData = await this.GetEditSkill(charaData, input.EditSkill2CharaId)
         };

@@ -303,6 +303,14 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                 }
             };
 
+        DbTalisman talisman =
+            new()
+            {
+                DeviceAccountId = DeviceAccountId,
+                TalismanId = Talismans.GalaNedrick,
+                TalismanKeyId = 44444
+            };
+
         await this.fixture.AddToDatabase(chara);
         await this.fixture.AddToDatabase(chara1);
         await this.fixture.AddToDatabase(chara2);
@@ -310,6 +318,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddToDatabase(reliability);
         await this.fixture.AddToDatabase(weapon);
         await this.fixture.AddRangeToDatabase(crests);
+        await this.fixture.AddToDatabase(talisman);
 
         (
             await this.unitRepository.BuildDetailedPartyUnit(
@@ -321,6 +330,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                     CharaId = Charas.BondforgedPrince,
                     EquipWeaponBodyId = WeaponBodies.Excalibur,
                     EquipDragonKeyId = 400,
+                    EquipTalismanKeyId = 44444,
                     EquipCrestSlotType1CrestId1 = AbilityCrests.SweetSurprise,
                     EquipCrestSlotType1CrestId2 = AbilityCrests.TheRedImpulse,
                     EquipCrestSlotType1CrestId3 = AbilityCrests.ThePrinceofDragonyule,
@@ -342,6 +352,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                     CharaData = chara,
                     DragonData = dragon,
                     WeaponBodyData = weapon,
+                    TalismanData = talisman,
                     CrestSlotType1CrestList = crests.GetRange(0, 3),
                     CrestSlotType2CrestList = crests.GetRange(3, 2),
                     CrestSlotType3CrestList = crests.GetRange(5, 2),
