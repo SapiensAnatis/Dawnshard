@@ -137,29 +137,24 @@ public class DungeonStartController : DragaliaControllerBase
 
         await this.questRepository.SaveChangesAsync();
 
-        DbParty party1 = await this.partyRepository
+        IEnumerable<DbParty> parties = await this.partyRepository
             .GetParties(this.DeviceAccountId)
-            .Where(x => x.PartyNo == request.party_no_list.ElementAt(0))
+            .Where(x => request.party_no_list.Contains(x.PartyNo))
             .Include(x => x.Units)
-            .SingleAsync();
+            .ToListAsync();
 
-        List<DbPartyUnit> units = party1.Units.ToList();
+        int unitNoOffset = 0;
+        List<DbPartyUnit> units = new();
 
-        if (request.party_no_list.Count() > 1)
+        foreach (int no in request.party_no_list)
         {
-            // Separate query isn't ideal, but need to preserve ordering
-            DbParty party2 = await this.partyRepository
-                .GetParties(this.DeviceAccountId)
-                .Where(x => x.PartyNo == request.party_no_list.ElementAt(1))
-                .Include(x => x.Units)
-                .SingleAsync();
-
-            foreach (DbPartyUnit unit in party2.Units)
+            foreach (DbPartyUnit unit in parties.First(x => x.PartyNo == no).Units)
             {
-                // Offset database value to get sequence (1, 2, 3, 4, 5) instead of (1, 1, 2, 2, ...)
-                unit.UnitNo += 4;
+                unit.UnitNo += unitNoOffset;
                 units.Add(unit);
             }
+
+            unitNoOffset += 4;
         }
 
         // Would love to do a fancy async LINQ trick instead of basic for loop, but this needs to be
