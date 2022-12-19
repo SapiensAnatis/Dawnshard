@@ -2165,9 +2165,11 @@ public class AtgenFailQuestDetail
     public int quest_id { get; set; }
     public int wall_id { get; set; }
     public int wall_level { get; set; }
-    public int is_host { get; set; }
 
-    public AtgenFailQuestDetail(int quest_id, int wall_id, int wall_level, int is_host)
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_host { get; set; }
+
+    public AtgenFailQuestDetail(int quest_id, int wall_id, int wall_level, bool is_host)
     {
         this.quest_id = quest_id;
         this.wall_id = wall_id;
