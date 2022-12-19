@@ -237,16 +237,17 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 
         DbPlayerCharaData chara1 = DbPlayerCharaDataFactory.Create(
             DeviceAccountId,
-            charaDataService.GetData(Charas.GalaEmile)
+            charaDataService.GetData(Charas.GalaMym)
         );
         chara1.IsUnlockEditSkill = true;
+        chara1.Skill1Level = 3;
 
         DbPlayerCharaData chara2 = DbPlayerCharaDataFactory.Create(
             DeviceAccountId,
             charaDataService.GetData(Charas.SummerCleo)
         );
         chara2.IsUnlockEditSkill = true;
-        chara2.Skill1Level = 2;
+        chara2.Skill2Level = 2;
 
         DbPlayerDragonData dragon = DbPlayerDragonDataFactory.Create(
             DeviceAccountId,
@@ -338,7 +339,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                     EquipCrestSlotType2CrestId2 = AbilityCrests.DragonsNest,
                     EquipCrestSlotType3CrestId1 = AbilityCrests.CrownofLightSerpentsBoon,
                     EquipCrestSlotType3CrestId2 = AbilityCrests.TutelarysDestinyWolfsBoon,
-                    EditSkill1CharaId = Charas.GalaEmile,
+                    EditSkill1CharaId = Charas.GalaMym,
                     EditSkill2CharaId = Charas.SummerCleo,
                 }
             )
@@ -357,7 +358,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                     CrestSlotType2CrestList = crests.GetRange(3, 2),
                     CrestSlotType3CrestList = crests.GetRange(5, 2),
                     DragonReliabilityLevel = 30,
-                    EditSkill1CharaData = new() { CharaId = Charas.GalaEmile, EditSkillLevel = 1, },
+                    EditSkill1CharaData = new() { CharaId = Charas.GalaMym, EditSkillLevel = 3, },
                     EditSkill2CharaData = new() { CharaId = Charas.SummerCleo, EditSkillLevel = 2, }
                 }
             );

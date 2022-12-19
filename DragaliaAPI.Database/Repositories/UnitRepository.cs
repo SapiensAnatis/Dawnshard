@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
+using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Services;
 using Microsoft.EntityFrameworkCore;
@@ -262,15 +263,17 @@ public class UnitRepository : BaseRepository, IUnitRepository
         if (id == Charas.Empty)
             return null;
 
+        DataAdventurer data = this.charaDataService.GetData(id);
+        bool isFirstSkill = data.EditSkillId == data.Skill1ID;
+
         return await charaData
             .Where(x => x.CharaId == id && x.IsUnlockEditSkill)
             .Select(
-                // TODO: make this derive from the correct skill level (may sometimes be s2 level)
                 x =>
                     new DbEditSkillData()
                     {
                         CharaId = x.CharaId,
-                        EditSkillLevel = this.charaDataService.GetData(x.CharaId).EditSkillId
+                        EditSkillLevel = isFirstSkill ? x.Skill1Level : x.Skill2Level,
                     }
             )
             .SingleOrDefaultAsync();
