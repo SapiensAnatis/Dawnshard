@@ -142,7 +142,7 @@ public class SavefileService : ISavefileService
             savefile.talisman_list.Select(x => MapWithDeviceAccount<DbTalisman>(x, deviceAccountId))
         );
 
-        // TODO: kaleido prints, unit sets
+        // TODO: unit sets
         // TODO much later: halidom, endeavours, kaleido data
 
         this.logger.LogInformation(

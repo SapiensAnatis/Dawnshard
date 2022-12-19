@@ -215,7 +215,6 @@ public class UnitRepository : BaseRepository, IUnitRepository
 
         IQueryable<DbTalisman> talismanData = this.GetAllTalismanData(deviceAccountId);
 
-        // You get cookies if you can tell me how to do this with a join
         return new()
         {
             DeviceAccountId = deviceAccountId,
@@ -267,7 +266,12 @@ public class UnitRepository : BaseRepository, IUnitRepository
             .Where(x => x.CharaId == id && x.IsUnlockEditSkill)
             .Select(
                 // TODO: make this derive from the correct skill level (may sometimes be s2 level)
-                x => new DbEditSkillData() { CharaId = x.CharaId, EditSkillLevel = x.Skill1Level }
+                x =>
+                    new DbEditSkillData()
+                    {
+                        CharaId = x.CharaId,
+                        EditSkillLevel = this.charaDataService.GetData(x.CharaId).EditSkillId
+                    }
             )
             .SingleOrDefaultAsync();
     }
