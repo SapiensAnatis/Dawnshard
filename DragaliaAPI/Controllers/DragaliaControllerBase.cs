@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Controllers;
 
 [ApiController]
+[DragaliaController]
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 public abstract class DragaliaControllerBase : ControllerBase

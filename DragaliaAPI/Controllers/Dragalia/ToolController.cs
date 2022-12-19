@@ -78,33 +78,52 @@ public class ToolController : DragaliaControllerBase
     [Route("auth")]
     public async Task<DragaliaResult> Auth(ToolAuthRequest request)
     {
-        // return this.ResultCodeError(ResultCode.FORT_MAP_NOT_FREE);
+        (long viewerId, string sessionId) = await this.DoAuth(request.id_token);
 
+        return this.Ok(
+            new ToolAuthData()
+            {
+                session_id = sessionId,
+                viewer_id = (ulong)viewerId,
+                nonce = "nonce"
+            }
+        );
+    }
+
+    [HttpPost("reauth")]
+    public async Task<DragaliaResult> Reauth(ToolReauthRequest request)
+    {
+        (long viewerId, string sessionId) = await this.DoAuth(request.id_token);
+
+        return this.Ok(
+            new ToolReauthData()
+            {
+                session_id = sessionId,
+                viewer_id = (ulong)viewerId,
+                nonce = "nonce"
+            }
+        );
+    }
+
+    private async Task<(long viewerId, string sessionId)> DoAuth(string idToken)
+    {
         string sessionId;
         string deviceAccountId;
-        long viewerId;
 
         try
         {
-            sessionId = await this.sessionService.ActivateSession(request.id_token);
+            sessionId = await this.sessionService.ActivateSession(idToken);
             deviceAccountId = await this.sessionService.GetDeviceAccountId_SessionId(sessionId);
         }
         catch (SessionException)
         {
-            return new OkObjectResult(
-                new DragaliaResponse<ResultCodeData>(
-                    new(ResultCode.COMMON_SESSION_RESTORE_ERROR),
-                    ResultCode.COMMON_SESSION_RESTORE_ERROR
-                )
-            );
+            throw new Exception("luke replace this");
         }
 
         IQueryable<DbPlayerUserData> playerInfo = this.userDataRepository.GetUserData(
             deviceAccountId
         );
-        viewerId = await playerInfo.Select(x => x.ViewerId).SingleAsync();
 
-        ToolAuthData data = new((ulong)viewerId, sessionId, "placeholder nonce");
-        return this.Ok(data);
+        return (await playerInfo.Select(x => x.ViewerId).SingleAsync(), sessionId);
     }
 }

@@ -29,10 +29,7 @@ public class UrlListController : DragaliaControllerBase
                     new("faq", PlaceholderUrl),
                     new("help_comic", PlaceholderUrl),
                     new("help", PlaceholderUrl),
-                    new(
-                        "information",
-                        "http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/schr.html#c1"
-                    ),
+                    new("information", "192.168.1.104:5000/News"),
                     new("inquiry_attention", PlaceholderUrl),
                     new("dragon_battle_info", PlaceholderUrl),
                     new("quest_info", PlaceholderUrl),
