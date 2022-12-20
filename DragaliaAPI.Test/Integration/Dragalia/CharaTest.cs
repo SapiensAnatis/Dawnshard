@@ -15,6 +15,8 @@ namespace DragaliaAPI.Test.Integration.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.CharaController"/>
 /// </summary>
+
+[Collection("DragaliaIntegration")]
 public class CharaTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;

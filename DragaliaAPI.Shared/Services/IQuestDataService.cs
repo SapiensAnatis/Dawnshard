@@ -2,7 +2,4 @@
 
 namespace DragaliaAPI.Shared.Services;
 
-public interface IQuestDataService
-{
-    IEnumerable<DataQuestAreaInfo> GetMapData(int id);
-}
+public interface IQuestDataService : IBaseDataService<DataQuest, int> { }

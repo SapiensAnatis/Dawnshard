@@ -27,7 +27,6 @@ public class DungeonStartControllerTest
     private readonly IEnemyListDataService enemyListDataService = new EnemyListDataService();
 
     private const int questId = 100010103;
-    private readonly DbPartyUnit unit = new() { CharaId = Charas.ThePrince };
 
     public DungeonStartControllerTest()
     {
@@ -86,12 +85,31 @@ public class DungeonStartControllerTest
                         DeviceAccountId = DeviceAccountId,
                         PartyName = "Party",
                         PartyNo = 1,
-                        Units = new List<DbPartyUnit>() { unit }
+                        Units = new List<DbPartyUnit>()
+                        {
+                            new() { UnitNo = 1, CharaId = Charas.ThePrince }
+                        }
+                    },
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        PartyName = "Party",
+                        PartyNo = 2,
+                        Units = new List<DbPartyUnit>()
+                        {
+                            new() { UnitNo = 1, CharaId = Charas.Elisanne }
+                        }
                     }
                 }.AsQueryable().BuildMock());
 
         this.mockUnitRepository
-            .Setup(x => x.BuildDetailedPartyUnit(unit))
+            .Setup(
+                x =>
+                    x.BuildDetailedPartyUnit(
+                        DeviceAccountId,
+                        It.Is<DbPartyUnit>(x => x.CharaId == Charas.ThePrince)
+                    )
+            )
             .ReturnsAsync(
                 new DbDetailedPartyUnit()
                 {
@@ -145,6 +163,8 @@ public class DungeonStartControllerTest
                     new() { QuestId = questId, State = 3 }
                 }.AsQueryable().BuildMock());
 
+        this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
             new DungeonStartStartRequest()
             {
@@ -185,6 +205,8 @@ public class DungeonStartControllerTest
             .Setup(x => x.UpdateQuestState(DeviceAccountId, questId, 2))
             .Returns(Task.CompletedTask);
 
+        this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
             new DungeonStartStartRequest()
             {
@@ -195,6 +217,95 @@ public class DungeonStartControllerTest
 
         DungeonStartStartData? data = response.GetData<DungeonStartStartData>();
         data.Should().NotBeNull();
+
+        this.mockPartyRepository.VerifyAll();
+        this.mockUserDataRepository.VerifyAll();
+        this.mockUnitRepository.VerifyAll();
+        this.mockQuestRepository.VerifyAll();
+        this.mockDungeonService.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task Start_MultipleParties_BuildsCorrectPartyList()
+    {
+        this.mockQuestRepository
+            .Setup(x => x.GetQuests(DeviceAccountId))
+            .Returns(new List<DbQuest>()
+                {
+                    new() { QuestId = questId, State = 3 }
+                }.AsQueryable().BuildMock());
+
+        this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+
+        this.mockUnitRepository
+            .Setup(
+                x =>
+                    x.BuildDetailedPartyUnit(
+                        DeviceAccountId,
+                        It.Is<DbPartyUnit>(x => x.CharaId == Charas.Elisanne && x.UnitNo == 5)
+                    )
+            )
+            .ReturnsAsync(
+                new DbDetailedPartyUnit()
+                {
+                    Position = 5,
+                    DeviceAccountId = DeviceAccountId,
+                    CharaData = new() { CharaId = Charas.Elisanne, Ability1Level = 1, },
+                    CrestSlotType1CrestList = new List<DbAbilityCrest>()
+                    {
+                        new()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            AbilityCrestId = AbilityCrests.SweetSurprise,
+                        }
+                    },
+                    CrestSlotType2CrestList = new List<DbAbilityCrest>()
+                    {
+                        new()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                        }
+                    },
+                    CrestSlotType3CrestList = new List<DbAbilityCrest>()
+                    {
+                        new()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            AbilityCrestId = AbilityCrests.AnAncientOath
+                        }
+                    },
+                    EditSkill1CharaData = new() { CharaId = Charas.Isaac },
+                    EditSkill2CharaData = new() { },
+                    DragonData = new() { DragonId = Dragons.GalaBeastCiella },
+                    DragonReliabilityLevel = 30,
+                    WeaponBodyData = new() { WeaponBodyId = WeaponBodies.MegaLance }
+                }
+            );
+
+        ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
+            new DungeonStartStartRequest()
+            {
+                quest_id = questId,
+                party_no_list = new List<int>() { 1, 2 },
+            }
+        );
+
+        DungeonStartStartData? data = response.GetData<DungeonStartStartData>();
+        data.Should().NotBeNull();
+
+        data!.ingame_data.party_info.party_unit_list
+            .ElementAt(0)
+            .chara_data!.chara_id.Should()
+            .Be(Charas.ThePrince);
+        data!.ingame_data.party_info.party_unit_list.ElementAt(0).position.Should().Be(1);
+
+        data!.ingame_data.party_info.party_unit_list
+            .ElementAt(1)
+            .chara_data!.chara_id.Should()
+            .Be(Charas.Elisanne);
+        data!.ingame_data.party_info.party_unit_list.ElementAt(1).position.Should().Be(5);
 
         this.mockPartyRepository.VerifyAll();
         this.mockUserDataRepository.VerifyAll();

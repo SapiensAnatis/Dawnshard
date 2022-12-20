@@ -7,7 +7,7 @@ namespace DragaliaAPI.Controllers;
 
 [ApiController]
 [Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
+[Produces("application/x-msgpack")]
 public abstract class DragaliaControllerBase : ControllerBase
 {
     private string? deviceAccountId = null;

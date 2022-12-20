@@ -10,7 +10,7 @@ To deploy the server to a production environment, start by following the steps b
 1. Install Docker.
 2. Configure secrets:
 	- Run `dotnet user-secrets init` and `dotnet user-secrets set DeveloperToken <TOKEN>`. This is a token that is required in the headers to authenticate against admin-only controllers (e.g. savefile import).
-	- Edit the .env file and choose a secure username and password combination for the database.
+	- Copy `.env.default` to `.env` and choose a secure username and password combination for the database.
 3. Migrate the database using the EntityFramework SQL script.
 	- To generate this, clone the source code and run `dotnet ef migrations script` in the `DragaliaAPI.Database` folder.
 4. Build and start the app using `docker compose up -d`.

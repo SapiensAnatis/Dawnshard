@@ -6494,8 +6494,8 @@ public class IngameData
 {
     public ulong viewer_id { get; set; }
     public string dungeon_key { get; set; }
-    public int dungeon_type { get; set; }
-    public int play_type { get; set; }
+    public DungeonTypes dungeon_type { get; set; }
+    public QuestPlayModeTypes play_type { get; set; }
     public int quest_id { get; set; }
     public int bonus_type { get; set; }
     public int continue_limit { get; set; }
@@ -6531,8 +6531,8 @@ public class IngameData
     public IngameData(
         ulong viewer_id,
         string dungeon_key,
-        int dungeon_type,
-        int play_type,
+        DungeonTypes dungeon_type,
+        QuestPlayModeTypes play_type,
         int quest_id,
         int bonus_type,
         int continue_limit,
