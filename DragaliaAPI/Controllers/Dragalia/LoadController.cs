@@ -114,6 +114,10 @@ public class LoadController : DragaliaControllerBase
             await this.inventoryRepository.GetMaterials(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<MaterialList>);
 
+        IEnumerable<TalismanList> talismans = (
+            await this.unitRepository.GetAllTalismanData(this.DeviceAccountId).ToListAsync()
+        ).Select(mapper.Map<TalismanList>);
+
         LoadIndexData data =
             new()
             {
@@ -122,6 +126,7 @@ public class LoadController : DragaliaControllerBase
                 dragon_list = dragons,
                 dragon_reliability_list = dragonReliabilities,
                 ability_crest_list = crests,
+                talisman_list = talismans,
                 weapon_body_list = weapons,
                 party_list = parties,
                 quest_story_list = questStories,

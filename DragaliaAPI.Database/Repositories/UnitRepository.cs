@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
+using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Services;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,11 @@ public class UnitRepository : BaseRepository, IUnitRepository
     public IQueryable<DbPlayerDragonReliability> GetAllDragonReliabilityData(string deviceAccountId)
     {
         return apiContext.PlayerDragonReliability.Where(x => x.DeviceAccountId == deviceAccountId);
+    }
+
+    public IQueryable<DbTalisman> GetAllTalismanData(string deviceAccountId)
+    {
+        return this.apiContext.PlayerTalismans.Where(x => x.DeviceAccountId == deviceAccountId);
     }
 
     public async Task<bool> CheckHasCharas(string deviceAccountId, IEnumerable<Charas> idList)
@@ -208,7 +214,8 @@ public class UnitRepository : BaseRepository, IUnitRepository
 
         IQueryable<DbAbilityCrest> crestData = this.GetAllAbilityCrestData(deviceAccountId);
 
-        // You get cookies if you can tell me how to do this with a join
+        IQueryable<DbTalisman> talismanData = this.GetAllTalismanData(deviceAccountId);
+
         return new()
         {
             DeviceAccountId = deviceAccountId,
@@ -240,6 +247,9 @@ public class UnitRepository : BaseRepository, IUnitRepository
                         || x.AbilityCrestId == input.EquipCrestSlotType3CrestId2
                 )
                 .ToListAsync(),
+            TalismanData = await talismanData.SingleOrDefaultAsync(
+                x => x.TalismanKeyId == input.EquipTalismanKeyId
+            ),
             EditSkill1CharaData = await this.GetEditSkill(charaData, input.EditSkill1CharaId),
             EditSkill2CharaData = await this.GetEditSkill(charaData, input.EditSkill2CharaId)
         };
@@ -253,11 +263,18 @@ public class UnitRepository : BaseRepository, IUnitRepository
         if (id == Charas.Empty)
             return null;
 
+        DataAdventurer data = this.charaDataService.GetData(id);
+        bool isFirstSkill = data.EditSkillId == data.Skill1ID;
+
         return await charaData
             .Where(x => x.CharaId == id && x.IsUnlockEditSkill)
             .Select(
-                // TODO: make this derive from the correct skill level (may sometimes be s2 level)
-                x => new DbEditSkillData() { CharaId = x.CharaId, EditSkillLevel = x.Skill1Level }
+                x =>
+                    new DbEditSkillData()
+                    {
+                        CharaId = x.CharaId,
+                        EditSkillLevel = isFirstSkill ? x.Skill1Level : x.Skill2Level,
+                    }
             )
             .SingleOrDefaultAsync();
     }

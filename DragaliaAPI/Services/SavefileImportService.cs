@@ -138,7 +138,11 @@ public class SavefileService : ISavefileService
             )
         );
 
-        // TODO: kaleido prints, unit sets
+        this.apiContext.PlayerTalismans.AddRange(
+            savefile.talisman_list.Select(x => MapWithDeviceAccount<DbTalisman>(x, deviceAccountId))
+        );
+
+        // TODO: unit sets
         // TODO much later: halidom, endeavours, kaleido data
 
         this.logger.LogInformation(

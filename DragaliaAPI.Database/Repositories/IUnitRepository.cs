@@ -31,5 +31,6 @@ public interface IUnitRepository : IBaseRepository
     Task RemoveDragons(string deviceAccountId, IEnumerable<long> keyIdList);
     IQueryable<DbWeaponBody> GetAllWeaponBodyData(string deviceAccountId);
     IQueryable<DbAbilityCrest> GetAllAbilityCrestData(string deviceAccountId);
+    IQueryable<DbTalisman> GetAllTalismanData(string deviceAccountId);
     Task<DbDetailedPartyUnit> BuildDetailedPartyUnit(string deviceAccountId, DbPartyUnit input);
 }

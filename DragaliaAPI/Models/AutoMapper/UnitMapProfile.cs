@@ -57,6 +57,8 @@ public class UnitMapProfile : Profile
         this.CreateMap<DbParty, PartyList>()
             .ForMember(nameof(PartyList.party_setting_list), opts => opts.MapFrom(x => x.Units));
 
+        this.CreateMap<DbTalisman, TalismanList>();
+
         this.CreateMap<DbPartyUnit, PartySettingList>()
             .ForMember(nameof(PartySettingList.equip_weapon_key_id), opts => opts.Ignore())
             .ForMember(nameof(PartySettingList.equip_amulet_key_id), opts => opts.Ignore())

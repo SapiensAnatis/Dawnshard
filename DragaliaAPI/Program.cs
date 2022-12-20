@@ -23,9 +23,12 @@ builder.Services
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
     })
     .AddJsonOptions(
-        // For savefile import
-        option => option.JsonSerializerOptions.Converters.Add(new UnixDateTimeJsonConverter())
-    );
+    // For savefile import
+    option =>
+    {
+        option.JsonSerializerOptions.Converters.Add(new UnixDateTimeJsonConverter());
+        // Cannot add the boolean one if we want Nintendo login to keep working
+    });
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
