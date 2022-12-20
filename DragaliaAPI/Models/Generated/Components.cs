@@ -1,5 +1,7 @@
 #nullable disable
 
+using System.Text.Json.Serialization;
+using DragaliaAPI.MessagePack;
 using DragaliaAPI.MessagePackFormatters;
 using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
@@ -8633,9 +8635,15 @@ public class TalismanList
     public int talisman_ability_id_3 { get; set; }
     public int additional_hp { get; set; }
     public int additional_attack { get; set; }
-    public int is_new { get; set; }
-    public int is_lock { get; set; }
-    public int gettime { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_new { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_lock { get; set; }
+    public DateTimeOffset gettime { get; set; }
 
     public TalismanList(
         ulong talisman_key_id,
@@ -8645,9 +8653,9 @@ public class TalismanList
         int talisman_ability_id_3,
         int additional_hp,
         int additional_attack,
-        int is_new,
-        int is_lock,
-        int gettime
+        bool is_new,
+        bool is_lock,
+        DateTimeOffset gettime
     )
     {
         this.talisman_key_id = talisman_key_id;
