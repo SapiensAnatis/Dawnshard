@@ -21,7 +21,6 @@ public class PartyController : DragaliaControllerBase
     private readonly IUserDataRepository userDataRepository;
     private readonly IUpdateDataService updateDataService;
     private readonly IMapper mapper;
-    private readonly ISessionService sessionService;
     private readonly ILogger<PartyController> logger;
 
     public PartyController(
@@ -30,7 +29,6 @@ public class PartyController : DragaliaControllerBase
         IUserDataRepository userDataRepository,
         IUpdateDataService updateDataService,
         IMapper mapper,
-        ISessionService sessionService,
         ILogger<PartyController> logger
     )
     {
@@ -39,7 +37,6 @@ public class PartyController : DragaliaControllerBase
         this.userDataRepository = userDataRepository;
         this.updateDataService = updateDataService;
         this.mapper = mapper;
-        this.sessionService = sessionService;
         this.logger = logger;
     }
 
@@ -102,6 +99,24 @@ public class PartyController : DragaliaControllerBase
         await this.userDataRepository.SaveChangesAsync();
 
         return this.Ok(new PartySetMainPartyNoData(request.main_party_no));
+    }
+
+    [HttpPost("update_party_name")]
+    public async Task<DragaliaResult> UpdatePartyName(PartyUpdatePartyNameRequest request)
+    {
+        await this.partyRepository.UpdatePartyName(
+            this.DeviceAccountId,
+            request.party_no,
+            request.party_name
+        );
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await this.partyRepository.SaveChangesAsync();
+
+        return this.Ok(new PartyUpdatePartyNameData() { update_data_list = updateDataList });
     }
 
     private async Task<bool> ValidateCharacterId(Charas id, string deviceAccountId)

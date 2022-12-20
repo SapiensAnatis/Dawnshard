@@ -6,4 +6,5 @@ public interface IPartyRepository : IBaseRepository
 {
     IQueryable<DbParty> GetParties(string deviceAccountId);
     Task SetParty(string deviceAccountId, DbParty newParty);
+    Task UpdatePartyName(string deviceAccountId, int partyNo, string newName);
 }

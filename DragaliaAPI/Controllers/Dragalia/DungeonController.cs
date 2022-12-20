@@ -75,4 +75,26 @@ public class DungeonController : DragaliaControllerBase
             }
         );
     }
+
+    [HttpPost("fail")]
+    public async Task<DragaliaResult> Fail(DungeonFailRequest request)
+    {
+        DungeonSession session = await this.dungeonService.FinishDungeon(request.dungeon_key);
+
+        return this.Ok(
+            new DungeonFailData()
+            {
+                result = 1,
+                fail_helper_list = new List<UserSupportList>(),
+                fail_helper_detail_list = new List<AtgenHelperDetailList>(),
+                fail_quest_detail = new()
+                {
+                    quest_id = session.DungeonId,
+                    wall_id = 0,
+                    wall_level = 0,
+                    is_host = true,
+                }
+            }
+        );
+    }
 }
