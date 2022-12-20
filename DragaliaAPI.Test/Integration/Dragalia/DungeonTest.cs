@@ -24,25 +24,15 @@ public class DungeonTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task GetAreaOdds_ReturnsExpectedResponse()
     {
-        DungeonSession mockSession =
-            new()
-            {
-                DungeonId = 1,
-                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
-                AreaInfo = new List<DataQuestAreaInfo>()
-                {
-                    new("Main/01/MAIN_01_0104_01", "MAIN_01_0104_01")
-                }
-            };
-
-        string key;
-
-        using (IServiceScope scope = fixture.Services.CreateScope())
-        {
-            key = await this.fixture.Services
-                .GetRequiredService<IDungeonService>()
-                .StartDungeon(mockSession);
-        }
+        string key = (
+            await this.client.PostMsgpack<DungeonStartStartData>(
+                "/dungeon_start/start",
+                new DungeonStartStartRequest() { party_no_list = new[] { 2 }, quest_id = 100010306 }
+            )
+        )
+            .data
+            .ingame_data
+            .dungeon_key;
 
         DungeonGetAreaOddsData response = (
             await this.client.PostMsgpack<DungeonGetAreaOddsData>(
@@ -53,5 +43,38 @@ public class DungeonTest : IClassFixture<IntegrationTestFixture>
 
         // there isn't too much to test here
         response.odds_info.area_index.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task Fail_ReturnsCorrectResponse()
+    {
+        string key = (
+            await this.client.PostMsgpack<DungeonStartStartData>(
+                "/dungeon_start/start",
+                new DungeonStartStartRequest() { party_no_list = new[] { 1 }, quest_id = 100010207 }
+            )
+        )
+            .data
+            .ingame_data
+            .dungeon_key;
+
+        DungeonFailData response = (
+            await this.client.PostMsgpack<DungeonFailData>(
+                "/dungeon/fail",
+                new DungeonFailRequest() { dungeon_key = key }
+            )
+        ).data;
+
+        response.fail_quest_detail
+            .Should()
+            .BeEquivalentTo(
+                new AtgenFailQuestDetail()
+                {
+                    is_host = true,
+                    quest_id = 100010207,
+                    wall_id = 0,
+                    wall_level = 0
+                }
+            );
     }
 }

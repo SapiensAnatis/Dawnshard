@@ -25,9 +25,8 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
 
     public readonly string PreparedDeviceAccountId = "prepared_id";
 
-    public readonly IMapper Mapper = new MapperConfiguration(
-        cfg => cfg.AddMaps(typeof(Program).Assembly)
-    ).CreateMapper();
+    public IMapper Mapper =>
+        new MapperConfiguration(cfg => cfg.AddMaps(typeof(Program).Assembly)).CreateMapper();
 
     public ApiContext ApiContext => this.Services.GetRequiredService<ApiContext>();
 
