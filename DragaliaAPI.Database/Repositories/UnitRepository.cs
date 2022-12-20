@@ -196,10 +196,11 @@ public class UnitRepository : BaseRepository, IUnitRepository
         return result;
     }
 
-    public async Task<DbDetailedPartyUnit> BuildDetailedPartyUnit(DbPartyUnit input)
+    public async Task<DbDetailedPartyUnit> BuildDetailedPartyUnit(
+        string deviceAccountId,
+        DbPartyUnit input
+    )
     {
-        string deviceAccountId = input.Party.DeviceAccountId;
-
         DbPlayerDragonData? dragonData = await this.GetAllDragonData(deviceAccountId)
             .SingleOrDefaultAsync(x => x.DragonKeyId == input.EquipDragonKeyId);
 
