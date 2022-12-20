@@ -85,7 +85,7 @@ public class ToolController : DragaliaControllerBase
             {
                 session_id = sessionId,
                 viewer_id = (ulong)viewerId,
-                nonce = "nonce"
+                nonce = "placeholder nonce"
             }
         );
     }
@@ -100,7 +100,7 @@ public class ToolController : DragaliaControllerBase
             {
                 session_id = sessionId,
                 viewer_id = (ulong)viewerId,
-                nonce = "nonce"
+                nonce = "placeholder nonce"
             }
         );
     }
