@@ -313,6 +313,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 
         (
             await this.unitRepository.BuildDetailedPartyUnit(
+                DeviceAccountId,
                 new DbPartyUnit()
                 {
                     Party = new() { DeviceAccountId = DeviceAccountId, PartyNo = 1 },
