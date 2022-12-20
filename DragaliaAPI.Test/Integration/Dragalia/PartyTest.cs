@@ -161,7 +161,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task SetMainPartyNo_UpdatesDatabase()
     {
-        await client.PostMsgpack<PartySetMainPartyNoRequest>(
+        await client.PostMsgpack<PartySetMainPartyNoData>(
             "/party/set_main_party_no",
             new PartySetMainPartyNoRequest(2)
         );
@@ -173,5 +173,41 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
             .SingleAsync();
 
         userData.MainPartyNo.Should().Be(2);
+    }
+
+    [Fact]
+    public async Task UpdatePartyName_UpdatesDatabase()
+    {
+        DbParty party =
+            await this.fixture.ApiContext.PlayerParties.FindAsync(fixture.DeviceAccountId, 1)
+            ?? throw new NullReferenceException();
+
+        await client.PostMsgpack<PartyUpdatePartyNameData>(
+            "/party/update_party_name",
+            new PartyUpdatePartyNameRequest() { party_no = 1, party_name = "LIblis Full Auto" }
+        );
+
+        await this.fixture.ApiContext.Entry(party).ReloadAsync();
+
+        party.PartyName.Should().Be("LIblis Full Auto");
+    }
+
+    [Fact]
+    public async Task UpdatePartyName_ReturnsCorrectResponse()
+    {
+        PartyUpdatePartyNameData response = (
+            await client.PostMsgpack<PartyUpdatePartyNameData>(
+                "/party/update_party_name",
+                new PartyUpdatePartyNameRequest() { party_no = 1, party_name = "LIblis Full Auto" }
+            )
+        ).data;
+
+        response.update_data_list.Should().NotBeNull();
+
+        PartyList updateParty = response.update_data_list.party_list.ElementAt(0);
+        updateParty.party_name.Should().Be("LIblis Full Auto");
+        updateParty.party_no.Should().Be(1);
+        updateParty.party_setting_list.Should().NotBeEmpty();
+        updateParty.party_setting_list.Should().BeInAscendingOrder(x => x.unit_no);
     }
 }

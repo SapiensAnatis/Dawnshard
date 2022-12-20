@@ -32,6 +32,16 @@ public class PartyRepository : BaseRepository, IPartyRepository
         apiContext.Entry(existingParty).State = EntityState.Modified;
     }
 
+    public async Task UpdatePartyName(string deviceAccountId, int partyNo, string newName)
+    {
+        DbParty existingParty = await apiContext.PlayerParties
+            .Where(x => x.DeviceAccountId == deviceAccountId && x.PartyNo == partyNo)
+            .Include(x => x.Units) // Need to return full unit list in update_data_list
+            .SingleAsync();
+
+        existingParty.PartyName = newName;
+    }
+
     private static ICollection<DbPartyUnit> CleanUnitList(ICollection<DbPartyUnit> original)
     {
         // For some reason, pressing 'Optimize' can send a request to /party/set_party_setting with like 8 units in it
