@@ -11,20 +11,16 @@ public class UrlListController : DragaliaControllerBase
 {
     private const string PlaceholderUrl = "localhost";
 
-    private readonly string BaseAddress;
-
-    public UrlListController()
-    {
-        BaseAddress = this.HttpContext.Request.Host.ToString();
-        // Use this URL instead if using mitmproxy and developing locally
-        // (replacing it with <host local IP>:<container port> as needed
-        // BaseAddress = "192.168.1.104:5000"
-    }
-
     [HttpPost]
     [Route("url_list")]
     public DragaliaResult UrlList()
     {
+        string baseAddress = this.HttpContext.Request.Host.ToString();
+
+        // Use this URL instead if using mitmproxy and developing locally
+        // (replacing it with <host local IP>:<container port> as needed)
+        // string baseAddress = "192.168.1.104:5000"
+
         return Ok(
             new WebviewVersionUrlListData(
                 new List<AtgenWebviewUrlList>()
@@ -37,7 +33,7 @@ public class UrlListController : DragaliaControllerBase
                     new("faq", PlaceholderUrl),
                     new("help_comic", PlaceholderUrl),
                     new("help", PlaceholderUrl),
-                    new("information", BaseAddress + "/News"),
+                    new("information", baseAddress + "/News"),
                     new("inquiry_attention", PlaceholderUrl),
                     new("dragon_battle_info", PlaceholderUrl),
                     new("quest_info", PlaceholderUrl),
