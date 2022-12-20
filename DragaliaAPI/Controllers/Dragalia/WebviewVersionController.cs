@@ -7,19 +7,18 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class UrlListController : DragaliaControllerBase
+public class WebviewVersionController : DragaliaControllerBase
 {
     private const string PlaceholderUrl = "localhost";
 
-    [HttpPost]
-    [Route("url_list")]
+    [HttpPost("url_list")]
     public DragaliaResult UrlList()
     {
         string baseAddress = this.HttpContext.Request.Host.ToString();
 
         // Use this URL instead if using mitmproxy and developing locally
         // (replacing it with <host local IP>:<container port> as needed)
-        // string baseAddress = "192.168.1.104:5000"
+        // baseAddress = "192.168.1.104:5000";
 
         return Ok(
             new WebviewVersionUrlListData(
