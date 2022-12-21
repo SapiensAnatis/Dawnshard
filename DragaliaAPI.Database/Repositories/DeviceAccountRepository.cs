@@ -185,14 +185,16 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
         );
 
         await this.apiContext.PlayerDragonReliability.AddRangeAsync(
-            DefaultDragons.Select(x => DbPlayerDragonReliabilityFactory.Create(deviceAccountId, x))
+            DefaultSavefileData.Dragons.Select(
+                x => DbPlayerDragonReliabilityFactory.Create(deviceAccountId, x)
+            )
         );
     }
 
     private async Task AddDefaultWeapons(string deviceAccountId)
     {
         await this.apiContext.PlayerWeapons.AddRangeAsync(
-            DefaultSavefileData.WeaponBodies.Select(
+            DefaultSavefileData.Weapons.Select(
                 x =>
                     new DbWeaponBody()
                     {
