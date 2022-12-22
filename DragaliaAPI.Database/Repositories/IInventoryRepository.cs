@@ -11,4 +11,5 @@ public interface IInventoryRepository : IBaseRepository
     DbPlayerMaterial AddMaterial(string deviceAccountId, Materials type);
     Task<DbPlayerMaterial?> GetMaterial(string deviceAccountId, Materials materialId);
     IQueryable<DbPlayerMaterial> GetMaterials(string deviceAccountId);
+    Task AddMaterials(string deviceAccountId, IEnumerable<Materials> list, int quantity);
 }

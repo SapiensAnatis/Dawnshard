@@ -1854,12 +1854,12 @@ public class AtgenDrawDetails
 public class AtgenDropAll
 {
     public int id { get; set; }
-    public int type { get; set; }
+    public EntityTypes type { get; set; }
     public int quantity { get; set; }
     public int place { get; set; }
     public float factor { get; set; }
 
-    public AtgenDropAll(int id, int type, int quantity, int place, float factor)
+    public AtgenDropAll(int id, EntityTypes type, int quantity, int place, float factor)
     {
         this.id = id;
         this.type = type;

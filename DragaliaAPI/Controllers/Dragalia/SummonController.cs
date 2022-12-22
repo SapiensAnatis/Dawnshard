@@ -7,6 +7,9 @@ using DragaliaAPI.Database.Repositories;
 using AutoMapper;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models;
+using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
+using System.Linq;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -353,98 +356,96 @@ public class SummonController : DragaliaControllerBase
         List<AtgenRedoableSummonResultUnitList> summonResult = _summonService.GenerateSummonResult(
             numSummons
         );
-        //TODO: Roll prize summon and commit prize summon results
 
-        await this.unitRepository.AddCharas(
+        IEnumerable<(Charas id, bool isNew)> addCharaResult = await this.unitRepository.AddCharas(
             this.DeviceAccountId,
             summonResult.Where(x => x.entity_type == EntityTypes.Chara).Select(x => (Charas)x.id)
         );
 
-        await this.unitRepository.AddDragons(
-            this.DeviceAccountId,
-            summonResult.Where(x => x.entity_type == EntityTypes.Dragon).Select(x => (Dragons)x.id)
-        );
+        IEnumerable<(Dragons id, bool isNew)> addDragonResult =
+            await this.unitRepository.AddDragons(
+                this.DeviceAccountId,
+                summonResult
+                    .Where(x => x.entity_type == EntityTypes.Dragon)
+                    .Select(x => (Dragons)x.id)
+            );
 
-        IEnumerable<AtgenResultUnitList> rewardList = _summonService.GenerateRewardList(
-            this.DeviceAccountId,
-            summonResult
+        IEnumerable<AtgenResultUnitList> charaRewardList =
+            from chara in addCharaResult
+            // Assumes that you cannot summon a given id at more than one possible rarity
+            let rarity = summonResult
+                .First(x => x.entity_type == EntityTypes.Chara && (Charas)x.id == chara.id)
+                .rarity
+            let dewPoint = chara.isNew ? 0 : DewValueData.DupeSummon[rarity]
+            select new AtgenResultUnitList
+            {
+                id = (int)chara.id,
+                dew_point = dewPoint,
+                entity_type = EntityTypes.Chara,
+                is_new = chara.isNew,
+                rarity = rarity
+            };
+
+        IEnumerable<AtgenResultUnitList> dragonRewardList =
+            from dragon in addDragonResult
+            let rarity = summonResult
+                .First(x => x.entity_type == EntityTypes.Dragon && (Dragons)x.id == dragon.id)
+                .rarity
+            let dewPoint = dragon.isNew ? 0 : DewValueData.DupeSummon[rarity]
+            select new AtgenResultUnitList
+            {
+                id = (int)dragon.id,
+                dew_point = dewPoint,
+                entity_type = EntityTypes.Dragon,
+                is_new = dragon.isNew,
+                rarity = rarity
+            };
+
+        IEnumerable<AtgenResultUnitList> fullRewardList = charaRewardList.Concat(dragonRewardList);
+        userData.DewPoint += fullRewardList.Sum(x => x.dew_point);
+
+        await summonRepository.AddSummonHistory(
+            fullRewardList.Select(
+                x =>
+                    new DbPlayerSummonHistory()
+                    {
+                        DeviceAccountId = this.DeviceAccountId,
+                        SummonId = bannerData.summon_id,
+                        SummonExecType = summonRequest.exec_type,
+                        ExecDate = summonDate,
+                        PaymentType = summonRequest.payment_type,
+                        EntityType = x.entity_type,
+                        EntityId = x.id,
+                        EntityQuantity = 1,
+                        EntityLevel = 1,
+                        EntityRarity = (byte)x.rarity,
+                        EntityLimitBreakCount = 0,
+                        EntityHpPlusCount = 0,
+                        EntityAttackPlusCount = 0,
+                        SummonPrizeRank = SummonPrizeRanks.None,
+                        SummonPoint = summonPointMultiplier,
+                        GetDewPointQuantity = x.dew_point,
+                    }
+            )
         );
 
         paymentHeldSetter(paymentCost);
         playerBannerData.SummonPoints += numSummons * summonPointMultiplier;
         playerBannerData.SummonCount += numSummons;
 
-        List<AtgenDuplicateEntityList> newEntities = rewardList
-            .Where(x => x.is_new)
-            .Select(x => new AtgenDuplicateEntityList(x.entity_type, x.id))
-            .ToList();
-
-        List<DbPlayerSummonHistory> historyEntries = new();
-
-        int lastIndexOfRare5 = -1;
-        int countOfRare5Char = 0;
-        int countOfRare5Dragon = 0;
-        int countOfRare4 = 0;
-        int topRarity = 3;
-
-        for (int i = 0; i < summonResult.Count; i++)
-        {
-            AtgenRedoableSummonResultUnitList summon = summonResult[i];
-            topRarity = topRarity > summon.rarity ? topRarity : summon.rarity;
-            EntityTypes entityType = (EntityTypes)summon.entity_type;
-            if (summon.rarity == 5)
-            {
-                lastIndexOfRare5 = i;
-                if (entityType == EntityTypes.Chara)
-                    countOfRare5Char++;
-                else if (entityType == EntityTypes.Dragon)
-                {
-                    countOfRare5Dragon++;
-                }
-            }
-            if (summon.rarity == 4)
-                countOfRare4++;
-
-            bool isNew =
-                newEntities.Find(
-                    x => x.entity_type == summon.entity_type && x.entity_id == summon.id
-                ) != null
-                && !rewardList.Any(x => x.entity_type == summon.entity_type && x.id == summon.id);
-
-            int dewGained = 0;
-            if (!isNew && summon.entity_type == EntityTypes.Chara)
-            {
-                dewGained = DewValueData.DupeSummon[summon.rarity];
-                userData.DewPoint += dewGained;
-            }
-
-            //TODO: Get prize rank for this reward
-            SummonPrizeRanks prizeRank = SummonPrizeRanks.None;
-
-            historyEntries.Add(
-                new DbPlayerSummonHistory()
-                {
-                    DeviceAccountId = this.DeviceAccountId,
-                    SummonId = bannerData.summon_id,
-                    SummonExecType = summonRequest.exec_type,
-                    ExecDate = summonDate,
-                    PaymentType = summonRequest.payment_type,
-                    EntityType = (EntityTypes)summon.entity_type,
-                    EntityId = summon.id,
-                    EntityQuantity = 1,
-                    EntityLevel = 1,
-                    EntityRarity = (byte)summon.rarity,
-                    EntityLimitBreakCount = 0,
-                    EntityHpPlusCount = 0,
-                    EntityAttackPlusCount = 0,
-                    SummonPrizeRank = prizeRank,
-                    SummonPoint = summonPointMultiplier,
-                    GetDewPointQuantity = dewGained
-                }
-            );
-        }
-
-        await summonRepository.AddSummonHistory(historyEntries);
+        int lastIndexOfRare5 = fullRewardList
+            .Select((value, index) => new { value, index })
+            .Where(x => x.value.rarity == 5)
+            .Select(x => x.index)
+            .LastOrDefault(-1);
+        int countOfRare5Char = fullRewardList
+            .Where(x => x.rarity == 5 && x.entity_type == EntityTypes.Chara)
+            .Count();
+        int countOfRare5Dragon = fullRewardList
+            .Where(x => x.rarity == 5 && x.entity_type == EntityTypes.Dragon)
+            .Count();
+        int countOfRare4 = fullRewardList.Where(x => x.rarity == 4).Count();
+        int topRarity = fullRewardList.Select(x => x.rarity).Max();
 
         int reversalIndex = lastIndexOfRare5;
         if (reversalIndex != -1 && new Random().NextSingle() < 0.95)
@@ -484,7 +485,7 @@ public class SummonController : DragaliaControllerBase
 
         return this.Ok(
             new SummonRequestData(
-                rewardList,
+                fullRewardList,
                 new List<AtgenResultPrizeList>(),
                 new List<int>() { sageEffect, circleEffect },
                 reversalIndex,

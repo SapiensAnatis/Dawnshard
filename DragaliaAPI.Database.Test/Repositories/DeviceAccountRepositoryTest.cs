@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 
+[Collection("RepositoryTest")]
 public class DeviceAccountRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
