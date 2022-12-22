@@ -1,6 +1,7 @@
 [
     {
-        "Headline": "alpha-0.1 released",
-        "Description": "This release includes a re-implementation of the reroll summon as well as the first part of the in-game story tutorial."
+        "Headline": "v1.0.0-alpha release",
+        "Timestamp": 1671485237,
+        "Description": "This is the first public release of the server. Welcome everyone!"
     }
 ]

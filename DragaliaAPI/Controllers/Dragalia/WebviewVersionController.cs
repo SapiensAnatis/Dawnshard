@@ -7,16 +7,19 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class UrlListController : DragaliaControllerBase
+public class WebviewVersionController : DragaliaControllerBase
 {
     private const string PlaceholderUrl = "localhost";
 
-    [HttpPost]
-    [Route("url_list")]
+    [HttpPost("url_list")]
     public DragaliaResult UrlList()
     {
-        // Webview URLs such as localhost:5000/News are not considered acceptable by the game;
-        // the webview pages will only load when the server is deployed to a dedicated domain.
+        string baseAddress = this.HttpContext.Request.Host.ToString();
+
+        // Use this URL instead if using mitmproxy and developing locally
+        // (replacing it with <host local IP>:<container port> as needed)
+        // baseAddress = "192.168.1.104:5000";
+
         return Ok(
             new WebviewVersionUrlListData(
                 new List<AtgenWebviewUrlList>()
@@ -29,10 +32,7 @@ public class UrlListController : DragaliaControllerBase
                     new("faq", PlaceholderUrl),
                     new("help_comic", PlaceholderUrl),
                     new("help", PlaceholderUrl),
-                    new(
-                        "information",
-                        "http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/schr.html#c1"
-                    ),
+                    new("information", baseAddress + "/News"),
                     new("inquiry_attention", PlaceholderUrl),
                     new("dragon_battle_info", PlaceholderUrl),
                     new("quest_info", PlaceholderUrl),

@@ -24,7 +24,7 @@ public class SessionLookupMiddleware
 
         if (
             controller is null
-            || controller.DisplayName == "Health checks"
+            || controller.Metadata.GetMetadata<DragaliaControllerAttribute>() is null
             || controller.Metadata.GetMetadata<NoSessionAttribute>() is not null
         )
         {
