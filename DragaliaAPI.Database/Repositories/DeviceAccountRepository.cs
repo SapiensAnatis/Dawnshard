@@ -52,6 +52,7 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
         await this.AddDefaultWyrmprints(deviceAccountId);
         await this.AddDefaultDragons(deviceAccountId);
         await this.AddDefaultWeapons(deviceAccountId);
+        await this.AddDefaultMaterials(deviceAccountId);
     }
 
     private async Task AddDefaultParties(string deviceAccountId)
@@ -215,6 +216,21 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
         );
     }
 
+    private async Task AddDefaultMaterials(string deviceAccountId, int defaultQuantity = 10000)
+    {
+        await this.apiContext.PlayerStorage.AddRangeAsync(
+            DefaultSavefileData.UpgradeMaterials.Select(
+                x =>
+                    new DbPlayerMaterial()
+                    {
+                        DeviceAccountId = deviceAccountId,
+                        MaterialId = x,
+                        Quantity = defaultQuantity
+                    }
+            )
+        );
+    }
+
     private static class DefaultSavefileData
     {
         public static readonly IReadOnlyList<AbilityCrests> FiveStarCrests =
@@ -355,6 +371,13 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
             WeaponBodies.UmbralChaser,
             WeaponBodies.ConsumingDarkness,
             WeaponBodies.DuskTrigger
+        };
+
+        public static readonly IReadOnlyList<Materials> UpgradeMaterials = new List<Materials>()
+        {
+            Materials.GoldCrystal,
+            Materials.SilverCrystal,
+            Materials.BronzeCrystal
         };
     }
 }
