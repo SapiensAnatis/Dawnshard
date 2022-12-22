@@ -3,11 +3,127 @@
 @using DragaliaAPI.Pages
 
 <div>
-	<h1 id="title" style="text-align: center">News</h1>
-	@foreach (NewsItem item in Model.NewsItems) {
-		<h2>@item.Headline</h2>
+	<h1 class="title">Welcome to SapiensAnatis's Dragalia Server Emulator</h1>
+	<h3 class="title">Version: @Model.Version</h3>
+	<hr />
+
+	<div id="news">
+	<h1 class="title">News</h1>
+	@foreach (NewsItem item in Model.NewsItems)
+	{
+		<div class="news-headline">
+			<h3 class="news-headline-item">@item.Headline</h3>
+			<h4 class="date">@item.Date</h4>
+		</div>
 		<p>@item.Description</p>
 	}
-	<NewsList />
+	</div>
+
+	<h2 class="title">About / FAQ</h2>
+
+	<p>This project is in a very experimental stage, and many features are still yet to be implemented.</p>
+
+	<p>The server owner can be contacted via Discord at <code>dreadfullydistinct#1458</code>. Alternatively, this server and others can be discussed in the <a href="https://discord.gg/j9zSttjjWj">Dragalia Lost Reverse Engineering Discord server</a>.</p>
+	
+	<p>The database may be wiped without warning and any progress removed, so please try not to get too attached to progress you make on this server.</p>
+
+	<h2>What should work</h2>
+	<ul>
+		<li>The tutorial up until halfway through Ch. 1</li>
+		<li>Editing parties</li>
+		<li>Most single-player quests*</li>
+		<li>Summoning</li>
+		<li>Upgrading characters and their mana circles</li>
+	</ul>
+	<p>*All halidom boosts are set to 200%, and every quest has 3 continues and retries, so the difficulty isn't the same.</p>
+
+	<h2>What does not work</h2>
+	<ul>
+		<li>Weapon skills</li>
+		<li>Helpers</li>
+		<li>Quest drops</li>
+		<li>Upgrading dragons and weapons</li>
+		<li>Events and event compendium</li>
+		<li>Co-op, including battle royale and raids</li>
+		<li>The Halidom and related functionality</li>
+		<li>Endeavours</li>
+		<li>Kaleidoscape</li>
+		<li>The shop</li>
+		<li>Treasure trade</li>
+	</ul>
+
+	<h2>Importing a save</h2>
+	<p>It is possible to import a downloaded savefile from the official servers. To import a savefile, contact the server owner. Please note that your party setups will have their dragons and portrait prints unequipped due to technical constraints.</p>
+
+	<h2>Errors</h2>
+	<p>Receiving a 'Failed to connect to server' error usually means you have tried to do something that isn't implemented yet (HTTP 404). However, if you receive a pop-up saying 'Server error. Returning to title screen' or 'There was a problem with the received data', then something has actually gone wrong internally and these errors should be reported.</p>
+
+	<h1>Acknowledgements</h1>
+	<p>Special thanks to the following users, who have contributed to the server source code:</p>
+	<ul>
+		<li><code>Nano#9384</code></li>
+		<li><code>LukeFZ#4035</code></li>
+	</ul>
+	<p>Interested in contributing? This server is written in C# using the ASP.NET Core stack. See the <a href="https://github.com/SapiensAnatis/DragaliaAPI">GitHub repository</a> for more information.</p>
 </div>
 
+<!-- You're not meant to do this, apparently, but CSS isolation via .cshtml.css wasn't working -->
+<style>
+	body {
+		font-family: sans-serif;
+		margin: 10% 5% 0% 5%;
+	}
+
+	h1 {
+		font-size: 54px;
+	}
+
+	h2 {
+		font-size: 48px;
+	}
+
+	h3 {
+		font-size: 40px;
+	}
+
+	h4 {
+		font-size: 36px;
+	}
+
+	p {
+		font-size: 36px;
+	}
+
+	li {
+		font-size: 36px;
+	}
+
+	code {
+		font-size: 36px;
+	}
+
+	.title {
+		text-align: center;
+	}
+
+	#news {
+		margin-bottom: 10%;
+	}
+
+	.news-headline {
+		display: flex;
+		flex-direction: row;
+		gap: 2rem;
+	}
+
+	.news-headline-item {
+		margin-top: auto;
+		margin-bottom: auto;
+	}
+
+	.date {
+		margin-left: auto;
+		margin-top: auto;
+		margin-bottom: auto;
+	}
+</style>
