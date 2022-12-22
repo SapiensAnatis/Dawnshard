@@ -30,7 +30,7 @@ public class SavefileTest : IClassFixture<IntegrationTestFixture>
         this.fixture = fixture;
         this.client = fixture.CreateClient();
         this.client.DefaultRequestHeaders.Add(
-            "Developer-Token",
+            "Authorization",
             $"Bearer {fixture.Configuration.GetValue<string>("DeveloperToken")}"
         );
     }
