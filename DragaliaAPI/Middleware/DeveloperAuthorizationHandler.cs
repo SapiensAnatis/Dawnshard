@@ -33,7 +33,7 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
         }
 
         string expectedToken =
-            this.configuration.GetValue<string>("DeveloperToken")
+            Environment.GetEnvironmentVariable("DEVELOPER_TOKEN")
             ?? throw new NullReferenceException("No developer token specified!");
 
         if (!this.Request.Headers.ContainsKey("Authorization"))
