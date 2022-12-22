@@ -5,17 +5,18 @@ on:
   push:
     branches:
       - master
+      - develop
 
 env:
   HUSKY: 0
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: [ '6.0.x' ]
+        dotnet-version: [ '7.0.x' ]
+        project: ['DragaliaAPI.Test', 'DragaliaAPI.Database.Test', 'DragaliaAPI.Shared.Test']
 
     steps:
       - uses: actions/checkout@v3
@@ -24,6 +25,6 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
-        run: dotnet restore DragaliaAPI.Test
+        run: dotnet restore ${{ matrix.project }}
       - name: Test
-        run: dotnet test DragaliaAPI.Test --no-restore
+        run: dotnet test ${{ matrix.project }} --no-restore

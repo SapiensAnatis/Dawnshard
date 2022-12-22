@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Models.Database;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -8,16 +10,16 @@ namespace DragaliaAPI.Test.Unit.Services;
 public class DeviceAccountServiceTest
 {
     private readonly Mock<ILogger<DeviceAccountService>> mockLogger;
-    private readonly Mock<IApiRepository> mockRepository;
+    private readonly Mock<IDeviceAccountRepository> mockRepository;
 
     private readonly DeviceAccountService deviceAccountService;
 
     public DeviceAccountServiceTest()
     {
-        mockLogger = new(MockBehavior.Loose);
-        mockRepository = new(MockBehavior.Strict);
+        this.mockLogger = new(MockBehavior.Loose);
+        this.mockRepository = new(MockBehavior.Strict);
 
-        var inMemoryConfiguration = new Dictionary<string, string> { { "HashSalt", "dragalia" }, };
+        Dictionary<string, string?> inMemoryConfiguration = new() { { "HashSalt", "dragalia" }, };
 
         IConfiguration configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(inMemoryConfiguration)
@@ -30,15 +32,15 @@ public class DeviceAccountServiceTest
     public async Task AuthenticateDeviceAccount_CorrectCredentials_ReturnsTrue()
     {
         DeviceAccount deviceAccount = new("id", "password");
-        DbDeviceAccount dbDeviceAccount = new("id", "NMvdakTznEF6khwWcz17i6GTnDA=");
-        mockRepository
+        DbDeviceAccount dbDeviceAccount = new("id", "mZlZ+wpg+n3l63y9D25f93v0KLM=");
+        this.mockRepository
             .Setup(x => x.GetDeviceAccountById(deviceAccount.id))
             .ReturnsAsync(dbDeviceAccount);
 
         bool result = await deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
 
         result.Should().BeTrue();
-        mockRepository.VerifyAll();
+        this.mockRepository.VerifyAll();
     }
 
     [Fact]
@@ -46,42 +48,54 @@ public class DeviceAccountServiceTest
     {
         DeviceAccount deviceAccount = new("id", "password");
         DbDeviceAccount dbDeviceAccount = new("id", "non-matching hash");
-        mockRepository
+        this.mockRepository
             .Setup(x => x.GetDeviceAccountById(deviceAccount.id))
             .ReturnsAsync(dbDeviceAccount);
 
         bool result = await deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
 
         result.Should().BeFalse();
-        mockRepository.VerifyAll();
+        this.mockRepository.VerifyAll();
     }
 
     [Fact]
-    public async Task AuthenticateDeviceAccount_NoPassword_ThrowsException()
+    public async Task AuthenticateDeviceAccount_ForeignDeviceAccount_CallsAddNewDeviceAccount()
     {
-        DeviceAccount deviceAccount = new("id", null);
+        this.mockRepository
+            .Setup(x => x.AddNewDeviceAccount("foreign id", It.IsAny<string>()))
+            .Returns(Task.CompletedTask);
+        this.mockRepository
+            .Setup(x => x.CreateNewSavefile("foreign id"))
+            .Returns(Task.CompletedTask);
+        this.mockRepository
+            .Setup(x => x.GetDeviceAccountById("foreign id"))
+            .ReturnsAsync((DbDeviceAccount?)null);
+        this.mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
 
-        Func<Task> act = async () =>
-        {
-            await deviceAccountService.AuthenticateDeviceAccount(deviceAccount);
-        };
+        bool result = await deviceAccountService.AuthenticateDeviceAccount(
+            new DeviceAccount("foreign id", "password")
+        );
 
-        await act.Should().ThrowAsync<ArgumentNullException>();
-        mockRepository.VerifyAll();
+        result.Should().BeTrue();
+        this.mockRepository.VerifyAll();
     }
 
     [Fact]
     public async Task CreateDeviceAccount_CallsAddNewDeviceAccount()
     {
-        mockRepository
+        this.mockRepository
             .Setup(x => x.AddNewDeviceAccount(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(Task.CompletedTask);
-        mockRepository
-            .Setup(x => x.AddNewPlayerInfo(It.IsAny<string>()))
+        this.mockRepository
+            .Setup(x => x.CreateNewSavefile(It.IsAny<string>()))
             .Returns(Task.CompletedTask);
+        this.mockRepository
+            .Setup(x => x.GetDeviceAccountById(It.IsAny<string>()))
+            .ReturnsAsync((DbDeviceAccount?)null);
+        this.mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
 
         await deviceAccountService.RegisterDeviceAccount();
 
-        mockRepository.VerifyAll();
+        this.mockRepository.VerifyAll();
     }
 }

@@ -1,0 +1,8264 @@
+{
+  "MC_0301": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0301"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0301"
+    }
+  ],
+  "MC_0401": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0401"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0401"
+    }
+  ],
+  "MC_0402": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0402"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0402"
+    }
+  ],
+  "MC_0403": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0403"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0403"
+    }
+  ],
+  "MC_0404": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0404"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0404"
+    }
+  ],
+  "MC_0405": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0405"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0405"
+    }
+  ],
+  "MC_0406": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0406"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0406"
+    }
+  ],
+  "MC_0501": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0501"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0501"
+    }
+  ],
+  "MC_0502": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0502"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0502"
+    }
+  ],
+  "MC_0503": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0503"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0503"
+    }
+  ],
+  "MC_0504": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0504"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0504"
+    }
+  ],
+  "MC_0505": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0505"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0505"
+    }
+  ],
+  "MC_0506": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0506"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0506"
+    }
+  ],
+  "MC_0507": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0507"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0507"
+    }
+  ],
+  "MC_0508": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0508"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0508"
+    }
+  ],
+  "MC_0509": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0509"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0509"
+    }
+  ],
+  "MC_0510": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0510"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0510"
+    }
+  ],
+  "MC_0511": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0511"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0511"
+    }
+  ],
+  "MC_0512": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0512"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0512"
+    }
+  ],
+  "MC_0513": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0513"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0513"
+    }
+  ],
+  "MC_0514": [
+    {
+      "NodeNr": 1,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 2,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 3,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 4,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 5,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 6,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 7,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 8,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 9,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 10,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 11,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 12,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 13,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 14,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 15,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 16,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 17,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 18,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 19,
+      "IsReleaseStory": true,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 20,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 21,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 22,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 23,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 24,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 25,
+      "IsReleaseStory": true,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 26,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 27,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 28,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 29,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 30,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 31,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 32,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 33,
+      "IsReleaseStory": false,
+      "TypeId": 10201,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 34,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 35,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 36,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 37,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 38,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 39,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 40,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 41,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 42,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 43,
+      "IsReleaseStory": false,
+      "TypeId": 10601,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 44,
+      "IsReleaseStory": false,
+      "TypeId": 10102,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 45,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 46,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 47,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 48,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 49,
+      "IsReleaseStory": false,
+      "TypeId": 10501,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 50,
+      "IsReleaseStory": false,
+      "TypeId": 10101,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 51,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 52,
+      "IsReleaseStory": false,
+      "TypeId": 10301,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 53,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 54,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 55,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 56,
+      "IsReleaseStory": false,
+      "TypeId": 10401,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 57,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 58,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 59,
+      "IsReleaseStory": false,
+      "TypeId": 10303,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 60,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 61,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 62,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 63,
+      "IsReleaseStory": false,
+      "TypeId": 10302,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 64,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 65,
+      "IsReleaseStory": false,
+      "TypeId": 10801,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 66,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 67,
+      "IsReleaseStory": false,
+      "TypeId": 10402,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 68,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 69,
+      "IsReleaseStory": false,
+      "TypeId": 10103,
+      "MC": "MC_0514"
+    },
+    {
+      "NodeNr": 70,
+      "IsReleaseStory": false,
+      "TypeId": 10701,
+      "MC": "MC_0514"
+    }
+  ]
+}

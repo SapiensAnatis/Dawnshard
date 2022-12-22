@@ -1,33 +1,34 @@
-﻿namespace DragaliaAPI.Test.Integration.Dragalia;
+﻿using DragaliaAPI.Models.Generated;
 
-public class GetDeployVersionTest : IClassFixture<CustomWebApplicationFactory<Program>>
+namespace DragaliaAPI.Test.Integration.Dragalia;
+
+/// <summary>
+/// Tests <see cref="Controllers.Dragalia.GetResourceVersionController"/>
+/// </summary>
+[Collection("DragaliaIntegration")]
+public class GetResourceVersionTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public GetDeployVersionTest(CustomWebApplicationFactory<Program> factory)
+    public GetResourceVersionTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
     }
 
     [Fact]
-    public async Task GetDeployVersion_ReturnsCorrectResponse()
+    public async Task GetResourceVersion_ReturnsCorrectResponse()
     {
-        GetDeployVersionResponse expectedResponse =
-            new(new GetDeployVersionData(GetDeployVersionStatic.DeployHash));
+        VersionGetResourceVersionData response = (
+            await client.PostMsgpack<VersionGetResourceVersionData>(
+                "version/get_resource_version",
+                new VersionGetResourceVersionRequest(0, "whatever")
+            )
+        ).data;
 
-        // Corresponds to JSON: "{}"
-        byte[] payload = new byte[] { 0x80 };
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await _client.PostAsync(
-            "deploy/get_deploy_version",
-            content
-        );
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.resource_version.Should().Be("y2XM6giU6zz56wCm");
     }
 }

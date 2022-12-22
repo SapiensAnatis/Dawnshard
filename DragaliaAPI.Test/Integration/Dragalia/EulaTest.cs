@@ -1,17 +1,21 @@
-﻿using DragaliaAPI.Models.Dragalia.Responses.Common;
+﻿using DragaliaAPI.Models.Generated;
 using MessagePack;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
+/// <summary>
+/// Tests <see cref="Controllers.Dragalia.EulaController"/>
+/// </summary>
+[Collection("DragaliaIntegration")]
+public class EulaTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public EulaTest(CustomWebApplicationFactory<Program> factory)
+    public EulaTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
     }
@@ -19,45 +23,57 @@ public class EulaTest : IClassFixture<CustomWebApplicationFactory<Program>>
     [Fact]
     public async Task EulaGetVersionList_ReturnsAllVersions()
     {
-        EulaGetVersionListResponse expectedResponse =
-            new(new EulaGetVersionListData(EulaStatic.AllEulaVersions));
+        EulaGetVersionListData response = (
+            await client.PostMsgpack<EulaGetVersionListData>(
+                "eula/get_version_list",
+                new EulaGetVersionListRequest()
+            )
+        ).data;
 
-        // Corresponds to JSON: "{}"
-        byte[] payload = new byte[] { 0x80 };
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await _client.PostAsync("eula/get_version_list", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.version_hash_list
+            .Should()
+            .BeEquivalentTo(
+                new List<AtgenVersionHash>()
+                {
+                    new("gb", "en_us", 1, 1),
+                    new("gb", "en_eu", 1, 1),
+                    new("us", "en_us", 1, 6),
+                    new("us", "en_eu", 1, 6)
+                }
+            );
     }
 
     [Fact]
     public async Task EulaGetVersion_ValidRegionAndLocale_ReturnsEulaData()
     {
-        EulaGetVersionData expectedData = new(new EulaVersion("gb", "en_eu", 1, 1));
-        EulaGetVersionResponse expectedResponse = new(expectedData);
+        EulaGetVersionData response = (
+            await client.PostMsgpack<EulaGetVersionData>(
+                "eula/get_version",
+                new EulaGetVersionRequest("id_token", "gb", "en_eu")
+            )
+        ).data;
 
-        var data = new { region = "gb", lang = "en_eu" };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await _client.PostAsync("eula/get_version", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response
+            .Should()
+            .BeEquivalentTo(
+                new EulaGetVersionData(new AtgenVersionHash("gb", "en_eu", 1, 1), false, 1)
+            );
     }
 
     [Fact]
     public async Task EulaGetVersion_InvalidRegionOrLocale_ReturnsDefault()
     {
-        EulaGetVersionData expectedData = new(new EulaVersion("gb", "en_us", 1, 1));
-        EulaGetVersionResponse expectedResponse = new(expectedData);
+        EulaGetVersionData response = (
+            await client.PostMsgpack<EulaGetVersionData>(
+                "eula/get_version",
+                new EulaGetVersionRequest("id_token", "not even a country", "c#")
+            )
+        ).data;
 
-        var data = new { region = "microsoft", lang = "en_c#" };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await _client.PostAsync("eula/get_version", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response
+            .Should()
+            .BeEquivalentTo(
+                new EulaGetVersionData(new AtgenVersionHash("gb", "en_us", 1, 1), false, 1)
+            );
     }
 }

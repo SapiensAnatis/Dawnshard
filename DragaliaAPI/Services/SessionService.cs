@@ -1,6 +1,5 @@
-﻿using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Nintendo;
-using Microsoft.EntityFrameworkCore;
+﻿using DragaliaAPI.Models.Nintendo;
+using DragaliaAPI.Services.Exceptions;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
@@ -46,23 +45,36 @@ public class SessionService : ISessionService
 
         if (environment.IsDevelopment())
         {
-            // Create non-expiring 'development' session for manual testing
-            Session devSession = new("session id", "id");
-            string devSessionSchema1 = Schema.Session_SessionId(devSession.SessionId);
-            string devSessionSchema2 = Schema.SessionId_DeviceAccountId(devSession.DeviceAccountId);
+            try
+            {
+                // Create non-expiring 'development' session for manual testing
+                Session devSession = new("session id", "id");
+                string devSessionSchema1 = Schema.Session_SessionId(devSession.SessionId);
+                string devSessionSchema2 = Schema.SessionId_DeviceAccountId(
+                    devSession.DeviceAccountId
+                );
 
-            // This is a scoped service -- so make sure it doesn't already exist
-            if (string.IsNullOrEmpty(_cache.GetString(devSessionSchema1)))
-                _cache.SetString(devSessionSchema1, JsonSerializer.Serialize(devSession));
+                // This is a scoped service -- so make sure it doesn't already exist
+                if (string.IsNullOrEmpty(_cache.GetString(devSessionSchema1)))
+                    _cache.SetString(devSessionSchema1, JsonSerializer.Serialize(devSession));
 
-            if (string.IsNullOrEmpty(_cache.GetString(devSessionSchema2)))
-                _cache.SetString(devSessionSchema2, devSession.SessionId);
+                if (string.IsNullOrEmpty(_cache.GetString(devSessionSchema2)))
+                    _cache.SetString(devSessionSchema2, devSession.SessionId);
+            }
+            catch (Exception ex)
+            {
+                // We do not want to throw a 500 in this case because that defeats the point of the Redis health check
+                this._logger.LogError(ex, "Unable to create development session");
+            }
         }
     }
 
     private static class Schema
     {
-        public static string Session_IdToken(string idToken) => $":session:id_token:{idToken}";
+        public static string Session_IdToken(string idToken)
+        {
+            return $":session:id_token:{idToken}";
+        }
 
         public static string Session_SessionId(string sessionId) =>
             $":session:session_id:{sessionId}";
@@ -74,9 +86,10 @@ public class SessionService : ISessionService
     public async Task PrepareSession(DeviceAccount deviceAccount, string idToken)
     {
         // Check if there is an existing session, and if so, remove it
-        string existingSessionId = await _cache.GetStringAsync(
+        string? existingSessionId = await _cache.GetStringAsync(
             Schema.SessionId_DeviceAccountId(deviceAccount.id)
         );
+
         if (!string.IsNullOrEmpty(existingSessionId))
         {
             // TODO: Consider abstracting this into a RemoveSession method, in case it needs to be done elsewhere
@@ -92,6 +105,7 @@ public class SessionService : ISessionService
             JsonSerializer.Serialize(session),
             _cacheOptions
         );
+
         _logger.LogInformation(
             "Preparing session: DeviceAccount '{id}', id-token '{id_token}'",
             deviceAccount.id,
@@ -106,9 +120,10 @@ public class SessionService : ISessionService
         // Move key to sessionId
         // Don't remove -- sometimes /tool/auth is called multiple times consecutively?
         // await _cache.RemoveAsync(Schema.Session_IdToken(idToken));
-        string sessionJson = await _cache.GetStringAsync(
+        string? sessionJson = await _cache.GetStringAsync(
             Schema.Session_SessionId(session.SessionId)
         );
+
         if (!string.IsNullOrEmpty(sessionJson))
         {
             // Issue existing session ID if session has already been activated
@@ -120,11 +135,13 @@ public class SessionService : ISessionService
 
             return existingSession.SessionId;
         }
+
         await _cache.SetStringAsync(
             Schema.Session_SessionId(session.SessionId),
             JsonSerializer.Serialize(session),
             _cacheOptions
         );
+
         // Register in existent sessions
         await _cache.SetStringAsync(
             Schema.SessionId_DeviceAccountId(session.DeviceAccountId),
@@ -137,12 +154,13 @@ public class SessionService : ISessionService
             idToken,
             session.SessionId
         );
+
         return session.SessionId;
     }
 
     public async Task<bool> ValidateSession(string sessionId)
     {
-        string sessionJson = await _cache.GetStringAsync(Schema.Session_SessionId(sessionId));
+        string? sessionJson = await _cache.GetStringAsync(Schema.Session_SessionId(sessionId));
         return !string.IsNullOrEmpty(sessionJson);
     }
 
@@ -162,10 +180,10 @@ public class SessionService : ISessionService
 
     private async Task<Session> LoadSession(string key)
     {
-        string sessionJson = await _cache.GetStringAsync(key);
+        string? sessionJson = await _cache.GetStringAsync(key);
         if (string.IsNullOrEmpty(sessionJson))
         {
-            throw new ArgumentException($"Could not load session for key {key}");
+            throw new SessionException(key);
         }
 
         return JsonSerializer.Deserialize<Session>(sessionJson)

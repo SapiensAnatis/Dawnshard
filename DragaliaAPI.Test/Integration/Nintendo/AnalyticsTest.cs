@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Test.Integration.Nintendo;
+﻿/*namespace DragaliaAPI.Test.Integration.Nintendo;
 
 public class AnalyticsTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {
@@ -29,3 +29,4 @@ public class AnalyticsTest : IClassFixture<CustomWebApplicationFactory<Program>>
         response.IsSuccessStatusCode.Should().BeTrue();
     }
 }
+*/

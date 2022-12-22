@@ -1,16 +1,22 @@
-﻿using MessagePack;
+﻿using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
+using MessagePack;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class LoginVerifyJwsTest : IClassFixture<CustomWebApplicationFactory<Program>>
+/// <summary>
+/// Tests <see cref="Controllers.Dragalia.LoginController"/>
+/// </summary>
+[Collection("DragaliaIntegration")]
+public class LoginVerifyJwsTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public LoginVerifyJwsTest(CustomWebApplicationFactory<Program> factory)
+    public LoginVerifyJwsTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
     }
@@ -18,14 +24,13 @@ public class LoginVerifyJwsTest : IClassFixture<CustomWebApplicationFactory<Prog
     [Fact]
     public async Task VerifyJws_ReturnsOK()
     {
-        VerifyJwsResponse expectedResponse = new(new VerifyJwsData());
+        ResultCodeData response = (
+            await client.PostMsgpack<ResultCodeData>(
+                "/login/verify_jws",
+                new LoginVerifyJwsRequest()
+            )
+        ).data;
 
-        var data = new { jws_result = "unused" };
-        byte[] payload = MessagePackSerializer.Serialize(data);
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await _client.PostAsync("/login/verify_jws", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.Should().BeEquivalentTo(new ResultCodeData(ResultCode.SUCCESS));
     }
 }
