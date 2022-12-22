@@ -9,4 +9,5 @@ public interface IDeviceAccountRepository : IBaseRepository
     Task<DbDeviceAccount?> GetDeviceAccountById(string id);
 
     Task CreateNewSavefile(string deviceAccountId);
+    Task CreateNewSavefileBase(string deviceAccountId);
 }

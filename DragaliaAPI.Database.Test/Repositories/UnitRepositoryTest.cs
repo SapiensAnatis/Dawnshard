@@ -8,6 +8,7 @@ using static DragaliaAPI.Database.Test.DbTestFixture;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 
+[Collection("RepositoryTest")]
 public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
@@ -188,14 +189,13 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     public async Task AddDragons_UpdatesDatabase()
     {
         await fixture.AddToDatabase(
-            DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.GalaRebornAgni)
+            DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.KonohanaSakuya)
         );
         await fixture.AddToDatabase(
-            DbPlayerDragonReliabilityFactory.Create(DeviceAccountId, Dragons.GalaRebornAgni)
+            DbPlayerDragonReliabilityFactory.Create(DeviceAccountId, Dragons.KonohanaSakuya)
         );
 
-        List<Dragons> idList =
-            new() { Dragons.GalaRebornAgni, Dragons.GalaRebornZephyr, Dragons.GalaRebornZephyr };
+        List<Dragons> idList = new() { Dragons.KonohanaSakuya, Dragons.Michael, Dragons.Michael };
 
         await this.unitRepository.AddDragons(DeviceAccountId, idList);
         await this.unitRepository.SaveChangesAsync();
@@ -210,10 +210,10 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             .Contain(
                 new List<Dragons>()
                 {
-                    Dragons.GalaRebornAgni,
-                    Dragons.GalaRebornAgni,
-                    Dragons.GalaRebornZephyr,
-                    Dragons.GalaRebornZephyr
+                    Dragons.KonohanaSakuya,
+                    Dragons.KonohanaSakuya,
+                    Dragons.Michael,
+                    Dragons.Michael
                 }
             );
 
@@ -224,7 +224,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                 .ToListAsync()
         )
             .Should()
-            .Contain(new List<Dragons>() { Dragons.GalaRebornAgni, Dragons.GalaRebornZephyr, });
+            .Contain(new List<Dragons>() { Dragons.KonohanaSakuya, Dragons.Michael, });
     }
 
     [Fact]
@@ -270,7 +270,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                 new()
                 {
                     DeviceAccountId = DeviceAccountId,
-                    AbilityCrestId = AbilityCrests.SweetSurprise
+                    AbilityCrestId = AbilityCrests.ADogsDay
                 },
                 new()
                 {
@@ -285,12 +285,12 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                 new()
                 {
                     DeviceAccountId = DeviceAccountId,
-                    AbilityCrestId = AbilityCrests.SnipersAllure
+                    AbilityCrestId = AbilityCrests.TaikoTandem
                 },
                 new()
                 {
                     DeviceAccountId = DeviceAccountId,
-                    AbilityCrestId = AbilityCrests.DragonsNest
+                    AbilityCrestId = AbilityCrests.AChoiceBlend
                 },
                 new()
                 {
@@ -300,7 +300,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                 new()
                 {
                     DeviceAccountId = DeviceAccountId,
-                    AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon
+                    AbilityCrestId = AbilityCrests.AKingsPrideSwordsBoon
                 }
             };
 
@@ -332,13 +332,13 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                     EquipWeaponBodyId = WeaponBodies.Excalibur,
                     EquipDragonKeyId = 400,
                     EquipTalismanKeyId = 44444,
-                    EquipCrestSlotType1CrestId1 = AbilityCrests.SweetSurprise,
+                    EquipCrestSlotType1CrestId1 = AbilityCrests.ADogsDay,
                     EquipCrestSlotType1CrestId2 = AbilityCrests.TheRedImpulse,
                     EquipCrestSlotType1CrestId3 = AbilityCrests.ThePrinceofDragonyule,
-                    EquipCrestSlotType2CrestId1 = AbilityCrests.SnipersAllure,
-                    EquipCrestSlotType2CrestId2 = AbilityCrests.DragonsNest,
+                    EquipCrestSlotType2CrestId1 = AbilityCrests.TaikoTandem,
+                    EquipCrestSlotType2CrestId2 = AbilityCrests.AChoiceBlend,
                     EquipCrestSlotType3CrestId1 = AbilityCrests.CrownofLightSerpentsBoon,
-                    EquipCrestSlotType3CrestId2 = AbilityCrests.TutelarysDestinyWolfsBoon,
+                    EquipCrestSlotType3CrestId2 = AbilityCrests.AKingsPrideSwordsBoon,
                     EditSkill1CharaId = Charas.GalaMym,
                     EditSkill2CharaId = Charas.SummerCleo,
                 }

@@ -55,6 +55,32 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
             .Entity;
     }
 
+    public async Task AddMaterials(
+        string deviceAccountId,
+        IEnumerable<Materials> list,
+        int quantity
+    )
+    {
+        foreach (Materials m in list)
+        {
+            // Db query (find) in loop??? Any way to do this better???
+            DbPlayerMaterial material =
+                await this.apiContext.PlayerStorage.FindAsync(deviceAccountId, m)
+                ?? (
+                    await this.apiContext.AddAsync(
+                        new DbPlayerMaterial()
+                        {
+                            DeviceAccountId = deviceAccountId,
+                            MaterialId = m,
+                            Quantity = 0
+                        }
+                    )
+                ).Entity;
+
+            material.Quantity += quantity;
+        }
+    }
+
     public async Task<DbPlayerMaterial?> GetMaterial(string deviceAccountId, Materials materialId)
     {
         return await this.apiContext.PlayerStorage.FirstOrDefaultAsync(
