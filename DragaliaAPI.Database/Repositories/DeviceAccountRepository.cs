@@ -33,7 +33,7 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
         return await apiContext.DeviceAccounts.SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task CreateNewSavefile(string deviceAccountId)
+    public async Task CreateNewSavefileBase(string deviceAccountId)
     {
         DbPlayerUserData userData = DbSavefileUserDataFactory.Create(deviceAccountId);
 #if DEBUG
@@ -49,6 +49,12 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
         );
 
         await this.AddDefaultParties(deviceAccountId);
+    }
+
+    public async Task CreateNewSavefile(string deviceAccountId)
+    {
+        await this.CreateNewSavefileBase(deviceAccountId);
+
         await this.AddDefaultWyrmprints(deviceAccountId);
         await this.AddDefaultDragons(deviceAccountId);
         await this.AddDefaultWeapons(deviceAccountId);
