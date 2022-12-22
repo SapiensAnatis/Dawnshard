@@ -12,7 +12,7 @@ namespace DragaliaAPI.MessagePackFormatters;
 /// </summary>
 public class CustomMessagePackOutputFormatter : MessagePackOutputFormatter
 {
-    private const string ContentType = "application/octet-stream";
+    public const string ContentType = "application/octet-stream";
     private readonly MessagePackSerializerOptions options;
 
     public CustomMessagePackOutputFormatter() : this(null) { }

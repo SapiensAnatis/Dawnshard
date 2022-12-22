@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
+[Collection("DragaliaIntegration")]
 public class DungeonRecordTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
