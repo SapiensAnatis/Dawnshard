@@ -1,10 +1,7 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 using DragaliaAPI.Services.Exceptions;
 
 namespace DragaliaAPI.Middleware;
@@ -33,41 +30,23 @@ public class SessionLookupMiddleware
         }
 
         if (!context.Request.Headers.TryGetValue("SID", out StringValues sessionId))
-            throw new BadHttpRequestException("Missing SID header!");
+            throw new DragaliaException(
+                ResultCode.SESSION_SESSION_ID_NOT_FOUND,
+                "Missing SID header!"
+            );
 
         string? sessionIdString = sessionId;
 
-        try
-        {
-            context.Items.Add(
-                "DeviceAccountId",
-                await sessionService.GetDeviceAccountId_SessionId(
-                    sessionIdString ?? throw new BadHttpRequestException("Null SID header!")
-                )
-            );
-        }
-        catch (SessionException)
-        {
-            IActionResultExecutor<ObjectResult> executor =
-                context.RequestServices.GetRequiredService<IActionResultExecutor<ObjectResult>>();
-
-            ActionContext actionContext =
-                new(context, context.GetRouteData(), new ActionDescriptor());
-
-            actionContext.HttpContext.Response.ContentType = "application/octet-stream";
-
-            await executor.ExecuteAsync(
-                actionContext,
-                new OkObjectResult(
-                    new DragaliaResponse<ResultCodeData>(
-                        new(ResultCode.COMMON_SESSION_RESTORE_ERROR),
-                        ResultCode.COMMON_SESSION_RESTORE_ERROR
-                    )
-                )
+        if (sessionIdString == null)
+            throw new DragaliaException(
+                ResultCode.SESSION_SESSION_ID_NOT_FOUND,
+                "Null SID header!"
             );
 
-            return;
-        }
+        context.Items.Add(
+            "DeviceAccountId",
+            await sessionService.GetDeviceAccountId_SessionId(sessionIdString)
+        );
 
         await this.next.Invoke(context);
     }
