@@ -9,6 +9,7 @@ public class InventoryMapProfile : Profile
     public InventoryMapProfile()
     {
         this.CreateMap<DbPlayerMaterial, MaterialList>();
+        this.CreateMap<DbPlayerMaterial, ItemList>();
 
         this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
         this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;

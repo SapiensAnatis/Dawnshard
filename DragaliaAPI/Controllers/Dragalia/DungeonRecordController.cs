@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Diagnostics;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -6,6 +7,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging.Signing;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -48,6 +50,10 @@ public class DungeonRecordController : DragaliaControllerBase
         userData.Exp += 1;
         userData.ManaPoint += 1000;
         userData.Coin += 1000;
+        userData.Crystal += 25;
+
+        IEnumerable<Materials> drops = DefaultDrops.GetRandomList();
+        await this.inventoryRepository.AddMaterials(this.DeviceAccountId, drops, 10);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -65,7 +71,7 @@ public class DungeonRecordController : DragaliaControllerBase
                     quest_id = session.DungeonId,
                     reward_record = new()
                     {
-                        drop_all = new List<AtgenDropAll>()
+                        /*drop_all = new List<AtgenDropAll>()
                         {
                             new()
                             {
@@ -75,7 +81,18 @@ public class DungeonRecordController : DragaliaControllerBase
                                 place = 0,
                                 factor = 0
                             }
-                        },
+                        },*/
+                        drop_all = drops.Select(
+                            x =>
+                                new AtgenDropAll()
+                                {
+                                    type = EntityTypes.Material,
+                                    id = (int)x,
+                                    quantity = 10,
+                                    place = 0,
+                                    factor = 0,
+                                }
+                        ),
                         first_clear_set = new List<AtgenFirstClearSet>()
                         {
                             new()
@@ -105,7 +122,7 @@ public class DungeonRecordController : DragaliaControllerBase
                             {
                                 type = (int)EntityTypes.Wyrmite,
                                 id = 0,
-                                quantity = 1234
+                                quantity = 5
                             }
                         },
                         enemy_piece = new List<AtgenEnemyPiece>(),
@@ -162,6 +179,8 @@ public class DungeonRecordController : DragaliaControllerBase
     [HttpPost("record_multi")]
     public async Task<DragaliaResult> RecordMulti(DungeonRecordRecordMultiRequest request)
     {
+        return RedirectToAction("Record", request);
+
         DungeonSession session = await this.dungeonService.FinishDungeon(request.dungeon_key);
 
         await this.userDataRepository.AddTutorialFlag(this.DeviceAccountId, 1022);
@@ -195,7 +214,7 @@ public class DungeonRecordController : DragaliaControllerBase
                         {
                             new()
                             {
-                                type = (int)EntityTypes.Material,
+                                type = EntityTypes.Material,
                                 id = 201014003, // Squishum
                                 quantity = 1,
                                 place = 0,
@@ -283,5 +302,107 @@ public class DungeonRecordController : DragaliaControllerBase
                 entity_result = new(),
             }
         );
+    }
+
+    private static class DefaultDrops
+    {
+        public static readonly IReadOnlyList<Materials> Orbs = new List<Materials>()
+        {
+            // Flame
+            Materials.FlameOrb,
+            Materials.BlazeOrb,
+            Materials.InfernoOrb,
+            Materials.IncandescenceOrb,
+            // Water
+            Materials.WaterOrb,
+            Materials.StreamOrb,
+            Materials.DelugeOrb,
+            Materials.TsunamiOrb,
+            // Wind
+            Materials.WindOrb,
+            Materials.StormOrb,
+            Materials.MaelstromOrb,
+            Materials.TempestOrb,
+            // Light
+            Materials.LightOrb,
+            Materials.RadianceOrb,
+            Materials.RefulgenceOrb,
+            Materials.ResplendenceOrb,
+            // Shadow
+            Materials.ShadowOrb,
+            Materials.NightfallOrb,
+            Materials.NetherOrb,
+            Materials.AbaddonOrb,
+            // Misc
+            Materials.RainbowOrb,
+        };
+
+        public static readonly IReadOnlyList<Materials> DragonParts = new List<Materials>()
+        {
+            // Brunhilda
+            Materials.FlamewyrmsScale,
+            Materials.FlamewyrmsScaldscale,
+            Materials.FlamewyrmsGreatsphere,
+            Materials.FlamewyrmsSphere,
+            Materials.HighFlamewyrmsHorn,
+            Materials.HighFlamewyrmsTail,
+            // Mercury
+            Materials.WaterwyrmsScale,
+            Materials.WaterwyrmsGlistscale,
+            Materials.WaterwyrmsGreatsphere,
+            Materials.WaterwyrmsSphere,
+            Materials.HighWaterwyrmsHorn,
+            Materials.HighWaterwyrmsTail,
+            // Mids
+            Materials.WindwyrmsScale,
+            Materials.WindwyrmsSquallscale,
+            Materials.WindwyrmsGreatsphere,
+            Materials.WindwyrmsSphere,
+            Materials.HighWindwyrmsHorn,
+            Materials.HighWindwyrmsTail,
+            // Jupiter
+            Materials.LightwyrmsScale,
+            Materials.LightwyrmsGlowscale,
+            Materials.LightwyrmsGreatsphere,
+            Materials.LightwyrmsSphere,
+            Materials.HighLightwyrmsHorn,
+            Materials.HighLightwyrmsTail,
+            // Zodiark
+            Materials.ShadowwyrmsScale,
+            Materials.ShadowwyrmsDarkscale,
+            Materials.ShadowwyrmsGreatsphere,
+            Materials.ShadowwyrmsSphere,
+            Materials.HighShadowwyrmsHorn,
+            Materials.HighShadowwyrmsTail,
+        };
+
+        public static readonly IReadOnlyList<Materials> MiscUpgrade = new List<Materials>()
+        {
+            // === Testaments ===
+            Materials.ChampionsTestament,
+            Materials.KnightsTestament,
+            // === Void ===
+            Materials.VoidSeed,
+            Materials.BurningHeart,
+            Materials.AzureHeart,
+            Materials.VerdantHeart,
+            Materials.CoronalHeart,
+            Materials.EbonyHeart,
+            Materials.LongingHeart,
+            // === Misc ===
+            Materials.Omnicite,
+        };
+
+        public static IReadOnlyList<Materials> GetRandomList()
+        {
+            Random r = new();
+            return r.Next(0, 3) switch
+            {
+                0 => Orbs,
+                1 => DragonParts,
+                2 => MiscUpgrade,
+                _ => throw new UnreachableException("r.Next(3) returned something odd"),
+            };
+        }
     }
 }
