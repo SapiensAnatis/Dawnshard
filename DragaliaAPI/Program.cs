@@ -1,12 +1,34 @@
-using DragaliaAPI;
-using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Dragalia.Responses;
+using System.Reflection;
+using DragaliaAPI.Database;
+using DragaliaAPI.MessagePack;
+using DragaliaAPI.MessagePackFormatters;
+using DragaliaAPI.Middleware;
 using DragaliaAPI.Services;
-using MessagePack.Resolvers;
-using Microsoft.EntityFrameworkCore;
+using DragaliaAPI.Services.Health;
+using DragaliaAPI.Shared;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Serilog;
+using Serilog.Events;
+
+Log.Logger = new LoggerConfiguration().MinimumLevel
+    .Debug()
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog();
+builder.Host.UseSerilog(
+    (context, services, loggerConfig) =>
+        loggerConfig.ReadFrom
+            .Configuration(context.Configuration)
+            .ReadFrom.Services(services)
+            .Enrich.FromLogContext()
+);
 
 // Add services to the container.
 
@@ -15,91 +37,86 @@ builder.Services
     .AddMvc()
     .AddMvcOptions(option =>
     {
-        // Must use ContractlessResolver because the DefaultResolver doesn't like serializing the generic BaseResponse<T>
-        // record, even when it is properly annotated with the MessagePackObject decorator.
-        option.OutputFormatters.Add(
-            new DragaliaAPI.CustomMessagePackOutputFormatter(StandardResolver.Options)
-        );
-        option.InputFormatters.Add(
-            new DragaliaAPI.CustomMessagePackInputFormatter(StandardResolver.Options)
-        );
+        option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));
+        option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
+    })
+    .AddJsonOptions(
+    // For savefile import
+    option =>
+    {
+        option.JsonSerializerOptions.Converters.Add(new UnixDateTimeJsonConverter());
+        // Cannot add the boolean one if we want Nintendo login to keep working
     });
 
-builder.Services.AddDbContext<ApiContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"))
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+builder.Services
+    .AddHealthChecks()
+    .AddDbContextCheck<ApiContext>()
+    .AddCheck<RedisHealthCheck>("Redis", failureStatus: HealthStatus.Unhealthy);
+
+builder.Services.AddAuthentication(
+    opts => opts.AddScheme<DeveloperAuthenticationHandler>("DeveloperAuthentication", null)
 );
 
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
-    options.InstanceName = "RedisInstance";
-});
-
 builder.Services
+    .ConfigureDatabaseServices(builder.Configuration.GetConnectionString("PostgresHost"))
+    .ConfigureSharedServices()
+    .AddAutoMapper(Assembly.GetExecutingAssembly())
+    .AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration.GetConnectionString("RedisHost");
+        options.InstanceName = "RedisInstance";
+    })
     .AddScoped<ISessionService, SessionService>()
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
-    .AddScoped<IApiRepository, ApiRepository>();
+    .AddScoped<ISummonService, SummonService>()
+    .AddScoped<IUpdateDataService, UpdateDataService>()
+    .AddScoped<IDungeonService, DungeonService>()
+    .AddScoped<ISavefileService, SavefileService>();
 
 WebApplication app = builder.Build();
 
-using (
-    IServiceScope serviceScope = app.Services
-        .GetRequiredService<IServiceScopeFactory>()
-        .CreateScope()
-)
+app.UseSerilogRequestLogging(
+    options =>
+        options.EnrichDiagnosticContext = (diagContext, httpContext) =>
+        {
+            httpContext.Items.TryGetValue("DeviceAccountId", out object? deviceAccountObj);
+            diagContext.Set("DeviceAccountId", deviceAccountObj?.ToString() ?? "unknown");
+        }
+);
+
+if (app.Environment.IsDevelopment())
 {
-    ApiContext context = serviceScope.ServiceProvider.GetRequiredService<ApiContext>();
+    app.MigrateDatabase();
+}
+else if (app.Environment.EnvironmentName == "Testing")
+{
+    using IServiceScope scope = app.Services
+        .GetRequiredService<IServiceScopeFactory>()
+        .CreateScope();
 
-    if (context.Database.IsRelational() && !app.Environment.IsEnvironment("Testing"))
-    {
-        ILogger<Program> logger = serviceScope.ServiceProvider.GetRequiredService<
-            ILogger<Program>
-        >();
-        logger.LogInformation("Migrating database...");
-
-        while (!context.Database.CanConnect())
-        {
-            logger.LogInformation("Database not ready yet; waiting...");
-            Thread.Sleep(1000);
-        }
-
-        try
-        {
-            serviceScope.ServiceProvider.GetRequiredService<ApiContext>().Database.Migrate();
-            logger.LogInformation("Database migrated successfully.");
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "An error occurred while migrating the database.");
-        }
-    }
+    ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
+    context.Database.EnsureCreated();
 }
 
 //app.UseHttpsRedirection();
+app.MapRazorPages();
 
-app.Use(
-    async (context, next) =>
-    {
-        context.Response.OnStarting(() =>
-        {
-            DateTime expires = DateTime.UtcNow + TimeSpan.FromMinutes(30);
+// Latest Android app version
+app.UsePathBase("/2.19.0_20220714193707");
 
-            context.Response.Headers["Access-Control-Allow-Origin"] = "*";
-            context.Response.Headers["Expires"] =
-                DateTime.UtcNow.ToString("ddd, dd MMM yyyy HH:mm:ss") + " GMT";
-            context.Response.Headers["Cache-Control"] = "max-age=0, no-cache, no-store";
-            context.Response.Headers["Pragma"] = "no-cache";
-            context.Response.Headers["Connection"] = "keep-alive";
+// Latest iOS app version
+app.UsePathBase("/2.19.0_20220719103923");
 
-            return Task.CompletedTask;
-        });
-
-        await next();
-    }
-);
-
+app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/health");
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseMiddleware<SessionLookupMiddleware>();
 
 app.Run();
 

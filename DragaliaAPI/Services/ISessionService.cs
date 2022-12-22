@@ -1,6 +1,4 @@
-﻿using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Database.Savefile;
-using DragaliaAPI.Models.Nintendo;
+﻿using DragaliaAPI.Models.Nintendo;
 
 namespace DragaliaAPI.Services;
 

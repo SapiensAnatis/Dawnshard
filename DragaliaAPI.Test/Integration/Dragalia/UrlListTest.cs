@@ -1,30 +1,31 @@
-﻿namespace DragaliaAPI.Test.Integration.Dragalia;
+﻿using DragaliaAPI.Models.Generated;
 
-public class UrlListTest : IClassFixture<CustomWebApplicationFactory<Program>>
+namespace DragaliaAPI.Test.Integration.Dragalia;
+
+[Collection("DragaliaIntegration")]
+public class UrlListTest : IClassFixture<IntegrationTestFixture>
 {
-    private readonly HttpClient _client;
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
 
-    public UrlListTest(CustomWebApplicationFactory<Program> factory)
+    public UrlListTest(IntegrationTestFixture fixture)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(
+        this.fixture = fixture;
+        client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
     }
 
     [Fact]
-    public async Task UrlList_ReturnsCorrectList()
+    public async Task UrlList_ReturnsList()
     {
-        WebviewUrlListResponse expectedResponse =
-            new(new WebviewUrlListData(WebviewUrlListStatic.AllUrls));
+        WebviewVersionUrlListData response = (
+            await client.PostMsgpack<WebviewVersionUrlListData>(
+                "webview_version/url_list",
+                new WebviewVersionUrlListRequest("region")
+            )
+        ).data;
 
-        // Corresponds to JSON: "{}"
-        byte[] payload = new byte[] { 0x80 };
-        HttpContent content = TestUtils.CreateMsgpackContent(payload);
-
-        HttpResponseMessage response = await _client.PostAsync("webview_version/url_list", content);
-
-        await TestUtils.CheckMsgpackResponse(response, expectedResponse);
+        response.webview_url_list.Should().NotBeEmpty();
     }
 }

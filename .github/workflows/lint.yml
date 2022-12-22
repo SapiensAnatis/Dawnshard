@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - develop
 
 env:
   HUSKY: 0
@@ -14,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: [ '6.0.x' ]
+        dotnet-version: [ '7.0.x' ]
 
     steps:
       - uses: actions/checkout@v3

@@ -1,79 +1,26 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
-using DragaliaAPI.Models.Database;
-using DragaliaAPI.Models.Database.Savefile;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.MessagePack;
+using DragaliaAPI.Models;
 using FluentAssertions.Equivalency;
 using MessagePack;
 using MessagePack.Resolvers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
+using Xunit.Abstractions;
 
-namespace DragaliaAPI.Test.Integration;
+namespace DragaliaAPI.Test;
 
 public static class TestUtils
 {
-    public static void InitializeDbForTests(ApiContext db)
+    public static HttpContent CreateMsgpackContent(object content, string sessionId = "session_id")
     {
-        db.DeviceAccounts.RemoveRange(db.DeviceAccounts);
-        db.SavefileUserData.RemoveRange(db.SavefileUserData);
-
-        db.DeviceAccounts.AddRange(GetDeviceAccountsSeed());
-        db.SavefileUserData.AddRange(GetSavefilePlayerInfoSeed());
-
-        db.SaveChanges();
-    }
-
-    public static void InitializeCacheForTests(IDistributedCache cache)
-    {
-        // Downside of making Session a private nested class: I have to type this manually :(
-        string preparedSessionJson = """
-            {
-                "SessionId": "prepared_session_id",
-                "DeviceAccountId": "prepared_id"
-            }
-            """;
-        cache.SetString(":session:id_token:id_token", preparedSessionJson);
-
-        string sessionJson = """
-                {
-                    "SessionId": "session_id",
-                    "DeviceAccountId": "logged_in_id"
-                }
-                """;
-        cache.SetString(":session:session_id:session_id", sessionJson);
-        cache.SetString(":session_id:device_account_id:logged_in_id", "session_id");
-    }
-
-    public static List<DbDeviceAccount> GetDeviceAccountsSeed()
-    {
-        return new()
-        {
-            // Password is a hash of the string "password"
-            new("id", "NMvdakTznEF6khwWcz17i6GTnDA="),
-        };
-    }
-
-    public static List<DbSavefileUserData> GetSavefilePlayerInfoSeed()
-    {
-        var playerInfoOne = DbSavefileUserDataFactory.Create("id");
-        playerInfoOne.ViewerId = 10000000001;
-        var playerInfoTwo = DbSavefileUserDataFactory.Create("prepared_id");
-        playerInfoTwo.ViewerId = 10000000002;
-        var playerInfoThree = DbSavefileUserDataFactory.Create("logged_in_id");
-        playerInfoThree.ViewerId = 10000000003;
-
-        return new() { playerInfoOne, playerInfoTwo, playerInfoThree };
-    }
-
-    public static DbSavefileUserData GetLoggedInSavefileSeed()
-    {
-        return GetSavefilePlayerInfoSeed()[2];
-    }
-
-    public static HttpContent CreateMsgpackContent(byte[] content)
-    {
-        ByteArrayContent result = new(content);
+        ByteArrayContent result = new(MessagePackSerializer.Serialize(content));
         result.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
-        result.Headers.Add("SID", "session_id");
+        result.Headers.Add("SID", sessionId);
         return result;
     }
 
@@ -88,33 +35,48 @@ public static class TestUtils
         return JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
     }
 
-    /// <summary>
-    /// For a HttpResponse with a msgpack body:
-    /// 1. Checks it has a success status code
-    /// 2. Deserializes it into the model type representing the body
-    /// 3. Checks the deserialization result matches an expected value
-    /// </summary>
-    /// <typeparam name="TResponse">The type of response expected in the body.</typeparam>
-    /// <param name="response">The received response.</param>
-    /// <param name="expectedResponse">The expected response body object.</param>
-    public static async Task CheckMsgpackResponse<TResponse>(
-        HttpResponseMessage response,
-        TResponse expectedResponse,
-        Func<
-            EquivalencyAssertionOptions<TResponse>,
-            EquivalencyAssertionOptions<TResponse>
-        >? config = null
-    )
+    public static ControllerContext MockControllerContext =>
+        new()
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                Items = new Dictionary<object, object?>() { { "DeviceAccountId", "id" } }
+            }
+        };
+
+    public const string DeviceAccountId = "id";
+
+    public static T? GetData<T>(this ActionResult<DragaliaResponse<object>> response)
+        where T : class
     {
-        response.IsSuccessStatusCode.Should().BeTrue();
+        DragaliaResponse<object>? innerResponse =
+            (response.Result as OkObjectResult)?.Value as DragaliaResponse<object>;
+        return innerResponse?.data as T;
+    }
 
-        byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-        TResponse? deserializedResponse = MessagePackSerializer.Deserialize<TResponse>(
-            responseBytes,
-            ContractlessStandardResolver.Options
+    public static async Task<DragaliaResponse<TResponse>> PostMsgpack<TResponse>(
+        this HttpClient client,
+        string endpoint,
+        object request
+    ) where TResponse : class
+    {
+        HttpContent content = CreateMsgpackContent(request);
+
+        HttpResponseMessage response = await client.PostAsync(endpoint, content);
+
+        response.EnsureSuccessStatusCode();
+
+        byte[] body = await response.Content.ReadAsByteArrayAsync();
+        return MessagePackSerializer.Deserialize<DragaliaResponse<TResponse>>(
+            body,
+            CustomResolver.Options
         );
+    }
 
-        config ??= options => options;
-        deserializedResponse.Should().BeEquivalentTo(expectedResponse, config);
+    public static void WriteAsJson(this ITestOutputHelper output, object value)
+    {
+        output.WriteLine(
+            JsonSerializer.Serialize(value, new JsonSerializerOptions() { WriteIndented = true })
+        );
     }
 }

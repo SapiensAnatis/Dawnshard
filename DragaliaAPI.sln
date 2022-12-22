@@ -9,6 +9,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Test", "Dragali
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{6E4BCC4D-1998-4135-A474-681EC6E6AF57}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BC72B633-A158-4169-9B47-3CB9C689A57E}"
+	ProjectSection(SolutionItems) = preProject
+		.env = .env
+		.env.default = .env.default
+		.gitignore = .gitignore
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\lint.yml = .github\workflows\lint.yml
+		README.md = README.md
+		.github\workflows\test.yml = .github\workflows\test.yml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database", "DragaliaAPI.Database\DragaliaAPI.Database.csproj", "{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Shared", "DragaliaAPI.Shared\DragaliaAPI.Shared.csproj", "{A8051BCA-7E23-417C-986A-943DE4F81E1B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Shared.Test", "DragaliaAPI.Shared.Test\DragaliaAPI.Shared.Test.csproj", "{283F16C6-1EB5-4062-90C6-663D975977FE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database.Test", "DragaliaAPI.Database.Test\DragaliaAPI.Database.Test.csproj", "{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,8 +44,24 @@ Global
 		{A1E6C76A-4D4F-427D-80AF-CF289CBBAF00}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E4BCC4D-1998-4135-A474-681EC6E6AF57}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8051BCA-7E23-417C-986A-943DE4F81E1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8051BCA-7E23-417C-986A-943DE4F81E1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8051BCA-7E23-417C-986A-943DE4F81E1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8051BCA-7E23-417C-986A-943DE4F81E1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{283F16C6-1EB5-4062-90C6-663D975977FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{283F16C6-1EB5-4062-90C6-663D975977FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{283F16C6-1EB5-4062-90C6-663D975977FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{283F16C6-1EB5-4062-90C6-663D975977FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

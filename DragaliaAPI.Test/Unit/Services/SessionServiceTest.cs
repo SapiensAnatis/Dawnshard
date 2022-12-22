@@ -1,14 +1,11 @@
-﻿using Castle.Core.Logging;
-using DragaliaAPI.Models.Database.Savefile;
+﻿using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Unit.Services;
 
