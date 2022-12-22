@@ -1,5 +1,3 @@
-DragaliaAPI.Database/Migrations/*
-!DragaliaAPI.Database/Migrations/.gitkeep
 .env
 
 

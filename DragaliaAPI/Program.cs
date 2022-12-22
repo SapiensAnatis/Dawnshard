@@ -86,11 +86,14 @@ app.UseSerilogRequestLogging(
         }
 );
 
-if (app.Environment.IsDevelopment())
+if (Environment.GetEnvironmentVariable("AUTO_MIGRATE_DB") == "true")
 {
+    Log.Information("Migrating database...");
     app.MigrateDatabase();
+    Log.Information("Database migrated successfully.");
 }
-else if (app.Environment.EnvironmentName == "Testing")
+
+if (app.Environment.EnvironmentName == "Testing")
 {
     using IServiceScope scope = app.Services
         .GetRequiredService<IServiceScopeFactory>()
