@@ -1,10 +1,7 @@
-﻿using System.Text.Json;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,11 +15,8 @@ namespace DragaliaAPI.Controllers.Dragalia;
 /// As a result, this controller just retrieves the existing savefile and
 /// responds with its viewer_id.
 /// </summary>
-[Route("tool")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
 [NoSession]
-[ApiController]
+[Route("tool")]
 public class ToolController : DragaliaControllerBase
 {
     private readonly ISessionService sessionService;
@@ -38,26 +32,11 @@ public class ToolController : DragaliaControllerBase
     [Route("signup")]
     public async Task<DragaliaResult> Signup(ToolSignupRequest request)
     {
-        long viewerId;
-        string deviceAccountId;
+        string deviceAccountId = await this.sessionService.GetDeviceAccountId_IdToken(
+            request.id_token
+        );
 
-        try
-        {
-            deviceAccountId = await this.sessionService.GetDeviceAccountId_IdToken(
-                request.id_token
-            );
-        }
-        catch (SessionException)
-        {
-            return new OkObjectResult(
-                new DragaliaResponse<ResultCodeData>(
-                    new(ResultCode.COMMON_SESSION_RESTORE_ERROR),
-                    ResultCode.COMMON_SESSION_RESTORE_ERROR
-                )
-            );
-        }
-
-        viewerId = await this.userDataRepository
+        long viewerId = await this.userDataRepository
             .GetUserData(deviceAccountId)
             .Select(x => x.ViewerId)
             .SingleAsync();
@@ -110,15 +89,8 @@ public class ToolController : DragaliaControllerBase
         string sessionId;
         string deviceAccountId;
 
-        try
-        {
-            sessionId = await this.sessionService.ActivateSession(idToken);
-            deviceAccountId = await this.sessionService.GetDeviceAccountId_SessionId(sessionId);
-        }
-        catch (SessionException)
-        {
-            throw new Exception("luke replace this");
-        }
+        sessionId = await this.sessionService.ActivateSession(idToken);
+        deviceAccountId = await this.sessionService.GetDeviceAccountId_SessionId(sessionId);
 
         IQueryable<DbPlayerUserData> playerInfo = this.userDataRepository.GetUserData(
             deviceAccountId

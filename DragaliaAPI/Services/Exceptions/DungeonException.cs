@@ -1,7 +1,9 @@
-﻿namespace DragaliaAPI.Services.Exceptions;
+﻿using DragaliaAPI.Models;
 
-public class DungeonException : Exception
+namespace DragaliaAPI.Services.Exceptions;
+
+public class DungeonException : DragaliaException
 {
-    public DungeonException(string dungeonKeyId) : base($"Failed to lookup dungeon: {dungeonKeyId}")
-    { }
+    public DungeonException(string dungeonKeyId)
+        : base(ResultCode.DUNGEON_AREA_NOT_FOUND, $"Failed to lookup dungeon: {dungeonKeyId}") { }
 }

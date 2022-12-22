@@ -26,16 +26,7 @@ public class DungeonController : DragaliaControllerBase
     [HttpPost("get_area_odds")]
     public async Task<DragaliaResult> GetAreaOdds(DungeonGetAreaOddsRequest request)
     {
-        DungeonSession session;
-
-        try
-        {
-            session = await this.dungeonService.GetDungeon(request.dungeon_key);
-        }
-        catch (DungeonException)
-        {
-            return this.ResultCodeError(ResultCode.DUNGEON_AREA_NOT_FOUND);
-        }
+        DungeonSession session = await this.dungeonService.GetDungeon(request.dungeon_key);
 
         List<int> enemyList = this.enemyListDataService
             // TODO: certain areas seem to be missing from the dict, use actual area_idx

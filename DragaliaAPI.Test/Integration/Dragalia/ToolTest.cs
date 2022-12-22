@@ -59,8 +59,8 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
             .Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeData>(
-                    new DataHeaders(ResultCode.COMMON_SESSION_RESTORE_ERROR),
-                    new ResultCodeData(ResultCode.COMMON_SESSION_RESTORE_ERROR)
+                    new DataHeaders(ResultCode.SESSION_SESSION_NOT_FOUND),
+                    new ResultCodeData(ResultCode.SESSION_SESSION_NOT_FOUND)
                 )
             );
     }
@@ -99,5 +99,23 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
 
         response.Should().BeEquivalentTo(expectedResponse);
         response2.Should().BeEquivalentTo(expectedResponse);
+    }
+
+    [Fact]
+    public async Task Auth_IncorrectIdToken_ReturnsErrorResponse()
+    {
+        DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
+            "/tool/auth",
+            new ToolAuthRequest() { id_token = "wrong_id_token" }
+        );
+
+        response
+            .Should()
+            .BeEquivalentTo(
+                new DragaliaResponse<ResultCodeData>(
+                    new DataHeaders(ResultCode.SESSION_SESSION_NOT_FOUND),
+                    new ResultCodeData(ResultCode.SESSION_SESSION_NOT_FOUND)
+                )
+            );
     }
 }

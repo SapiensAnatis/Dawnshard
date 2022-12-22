@@ -1,11 +1,11 @@
 ﻿using DragaliaAPI.Models;
-using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers;
 
 [ApiController]
+[SerializeException]
 [DragaliaController]
 [Consumes("application/octet-stream")]
 [Produces("application/x-msgpack")]
