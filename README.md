@@ -25,7 +25,7 @@ See also the [API documentation](https://dragalia-api-docs.readthedocs.io/en/lat
 
 ### Development environment
 
-To set up a development environment, the steps are similar to setting up a deployment, but it may be more convenient to generate a code migration instead by using `dotnet ef migrations add <migration name>`, as these are automatically applied on app startup when running in development mode.
+To set up a development environment, the steps are similar to setting up a deployment, but it may be more convenient to generate a code migration instead by using `dotnet ef migrations add <NAME> -s DragaliaAPI\DragaliaAPI.csproj -p DragaliaAPI.Database\DragaliaAPI.Database.csproj`, as these are automatically applied on app startup when running in development mode.
 
 If you wish to connect to your locally-hosted instance of the server with a Dragalia client, you will need to set up the workflow for this. Please contact the repository owner for more information. If you simply wish to test individual endpoints in a less end-to-end fashion, you could write automated integration tests or use [this tool](https://gist.github.com/SapiensAnatis/e76f067aad0ac425c9f9008db94e143c) to send msgpack-formatted requests from your desktop.
 
