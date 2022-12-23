@@ -15,6 +15,10 @@ RUN dotnet build "DragaliaAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "DragaliaAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
+WORKDIR "/src/DragaliaAPI"
+RUN dotnet tool restore
+RUN dotnet ef migrations script -o /app/publish/migrate-script.sql
+RUN dotnet ef migrations bundle -o /app/publish/migrate-bundle --self-contained -r linux-x64 
 
 FROM base AS final
 WORKDIR /app

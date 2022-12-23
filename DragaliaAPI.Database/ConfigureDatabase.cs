@@ -69,7 +69,7 @@ public static class DatabaseConfiguration
                 );
             }
 
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
         }
 
         context.Database.Migrate();
