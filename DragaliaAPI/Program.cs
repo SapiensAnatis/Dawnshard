@@ -86,7 +86,7 @@ app.UseSerilogRequestLogging(
         }
 );
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.MigrateDatabase();
 }

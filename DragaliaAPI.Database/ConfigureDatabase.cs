@@ -56,8 +56,6 @@ public static class DatabaseConfiguration
 
     public static void MigrateDatabase(this WebApplication app)
     {
-        logger.Information("Automatically migrating database...");
-
         using IServiceScope scope = app.Services
             .GetRequiredService<IServiceScopeFactory>()
             .CreateScope();
@@ -66,6 +64,12 @@ public static class DatabaseConfiguration
 
         if (!context.Database.IsRelational())
             return;
+
+        IEnumerable<string> migrations = context.Database.GetPendingMigrations();
+        if (!migrations.Any())
+            return;
+
+        logger.Information("Applying migrations {@migrations}", migrations);
 
         int tries = 0;
         while (!context.Database.CanConnect())
