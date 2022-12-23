@@ -29,16 +29,15 @@ public class SavefileTest : IClassFixture<IntegrationTestFixture>
     {
         this.fixture = fixture;
         this.client = fixture.CreateClient();
-        this.client.DefaultRequestHeaders.Add(
-            "Developer-Token",
-            $"Bearer {fixture.Configuration.GetValue<string>("DeveloperToken")}"
-        );
+
+        Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
+        this.client.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
     }
 
     [Fact]
     public async Task Import_NoDeveloperToken_Returns401()
     {
-        this.client.DefaultRequestHeaders.Remove("Developer-Token");
+        this.client.DefaultRequestHeaders.Remove("Authorization");
 
         HttpResponseMessage importResponse = await this.client.PostAsync(
             $"savefile/import/1",

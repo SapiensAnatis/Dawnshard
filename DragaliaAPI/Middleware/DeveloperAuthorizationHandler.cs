@@ -33,23 +33,24 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
         }
 
         string expectedToken =
-            this.configuration.GetValue<string>("DeveloperToken")
+            Environment.GetEnvironmentVariable("DEVELOPER_TOKEN")
             ?? throw new NullReferenceException("No developer token specified!");
 
-        if (!this.Request.Headers.ContainsKey("Developer-Token"))
-            return Task.FromResult(AuthenticateResult.NoResult());
+        if (!this.Request.Headers.ContainsKey("Authorization"))
+            return Task.FromResult(AuthenticateResult.Fail("Missing Authorization header"));
 
         try
         {
-            var authHeader = AuthenticationHeaderValue.Parse(
-                this.Request.Headers["Developer-Token"]
+            AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(
+                this.Request.Headers["Authorization"]
             );
+
             if (authHeader.Parameter != expectedToken)
-                return Task.FromResult(AuthenticateResult.Fail("Invalid Developer-Token header!"));
+                return Task.FromResult(AuthenticateResult.Fail("Invalid Authorization header"));
         }
         catch
         {
-            return Task.FromResult(AuthenticateResult.Fail("Invalid Developer-Token header!"));
+            return Task.FromResult(AuthenticateResult.Fail("Invalid Authorization header!"));
         }
 
         Claim[] claims = new[] { new Claim(ClaimTypes.NameIdentifier, "Developer"), };
