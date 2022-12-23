@@ -19,7 +19,6 @@ RUN dotnet publish "DragaliaAPI.csproj" -c Release -o /app/publish /p:UseAppHost
 RUN dotnet tool restore
 WORKDIR "/src/DragaliaAPI.Database"
 RUN dotnet ef migrations add "latest" --startup-project "../DragaliaAPI/DragaliaAPI.csproj"
-RUN dotnet ef migrations script -o /app/publish/migrate-script.sql --startup-project "../DragaliaAPI/DragaliaAPI.csproj"
 RUN dotnet ef migrations bundle -o /app/publish/migrate-bundle --startup-project "../DragaliaAPI/DragaliaAPI.csproj" --self-contained -r linux-x64
 
 FROM base AS final
