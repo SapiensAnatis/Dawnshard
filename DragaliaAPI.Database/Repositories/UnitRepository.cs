@@ -121,13 +121,22 @@ public class UnitRepository : BaseRepository, IUnitRepository
 
         IEnumerable<(Dragons id, bool isNew)> newMapping = MarkNewIds(ownedDragons, idList);
 
-        IEnumerable<DbPlayerDragonReliability> newReliabilities = newMapping
-            .Where(x => x.isNew)
-            .Select(x => DbPlayerDragonReliabilityFactory.Create(deviceAccountId, x.id));
+        IEnumerable<DbPlayerDragonReliability> newReliabilities = newMapping.Select(
+            x => DbPlayerDragonReliabilityFactory.Create(deviceAccountId, x.id)
+        );
 
-        if (newReliabilities.Any())
+        foreach ((Dragons id, _) in newMapping.Where(x => x.isNew))
         {
-            await apiContext.AddRangeAsync(newReliabilities);
+            // Not being in the dragon table doesn't mean a reliability doesn't exist
+            // as the dragon could've been sold
+            if (
+                await this.apiContext.PlayerDragonReliability.FindAsync(deviceAccountId, id) is null
+            )
+            {
+                await apiContext.AddAsync(
+                    DbPlayerDragonReliabilityFactory.Create(deviceAccountId, id)
+                );
+            }
         }
 
         await apiContext.AddRangeAsync(
