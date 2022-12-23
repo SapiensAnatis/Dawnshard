@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Npgsql;
+using Serilog;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DragaliaAPI.Database.Test")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DragaliaAPI.Test")]
@@ -13,14 +13,21 @@ namespace DragaliaAPI.Database;
 public static class DatabaseConfiguration
 {
     private const int MigrationMaxRetries = 5;
+    private static readonly ILogger logger = Log.ForContext(typeof(DatabaseConfiguration));
 
     public static IServiceCollection ConfigureDatabaseServices(
         this IServiceCollection services,
         string? host
     )
     {
+        string connectionString = GetConnectionString(host);
+        logger.Information(
+            "Connecting to database using connection string {string}...",
+            connectionString
+        );
+
         services = services
-            .AddDbContext<ApiContext>(options => options.UseNpgsql(GetConnectionString(host)))
+            .AddDbContext<ApiContext>(options => options.UseNpgsql(connectionString))
             .AddScoped<IDeviceAccountRepository, DeviceAccountRepository>()
             .AddScoped<IUserDataRepository, UserDataRepository>()
             .AddScoped<IUnitRepository, UnitRepository>()
@@ -39,7 +46,6 @@ public static class DatabaseConfiguration
             new()
             {
                 Host = host ?? "postgres",
-                Database = "database",
                 Username = Environment.GetEnvironmentVariable("POSTGRES_USER"),
                 Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
             };
@@ -49,6 +55,8 @@ public static class DatabaseConfiguration
 
     public static void MigrateDatabase(this WebApplication app)
     {
+        logger.Information("Automatically migrating database...");
+
         using IServiceScope scope = app.Services
             .GetRequiredService<IServiceScopeFactory>()
             .CreateScope();
@@ -62,6 +70,12 @@ public static class DatabaseConfiguration
         while (!context.Database.CanConnect())
         {
             tries++;
+            logger.Warning(
+                "Failed to connect to database for migration. Retrying... ({x}/{y})",
+                tries,
+                MigrationMaxRetries
+            );
+
             if (tries >= MigrationMaxRetries)
             {
                 throw new InvalidOperationException(
