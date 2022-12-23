@@ -32,4 +32,4 @@ jobs:
           context: .
           file: DragaliaAPI/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dragalia-api:develop
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dragalia-api:latest

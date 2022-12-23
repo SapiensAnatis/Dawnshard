@@ -10,15 +10,17 @@ WORKDIR /src
 COPY ["DragaliaAPI/DragaliaAPI.csproj", "DragaliaAPI/"]
 RUN dotnet restore "DragaliaAPI/DragaliaAPI.csproj"
 COPY . .
+RUN ls
 WORKDIR "/src/DragaliaAPI"
 RUN dotnet build "DragaliaAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "DragaliaAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
-WORKDIR "/src/DragaliaAPI"
 RUN dotnet tool restore
-RUN dotnet ef migrations script -o /app/publish/migrate-script.sql
-RUN dotnet ef migrations bundle -o /app/publish/migrate-bundle --self-contained -r linux-x64 
+WORKDIR "/src/DragaliaAPI.Database"
+RUN dotnet ef migrations add "latest" --startup-project "../DragaliaAPI/DragaliaAPI.csproj"
+RUN dotnet ef migrations script -o /app/publish/migrate-script.sql --startup-project "../DragaliaAPI/DragaliaAPI.csproj"
+RUN dotnet ef migrations bundle -o /app/publish/migrate-bundle --startup-project "../DragaliaAPI/DragaliaAPI.csproj" --self-contained -r linux-x64
 
 FROM base AS final
 WORKDIR /app
