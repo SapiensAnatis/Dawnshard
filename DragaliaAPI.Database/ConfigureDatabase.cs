@@ -47,7 +47,8 @@ public static class DatabaseConfiguration
             {
                 Host = host ?? "postgres",
                 Username = Environment.GetEnvironmentVariable("POSTGRES_USER"),
-                Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
+                Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD"),
+                LogParameters = true,
             };
 
         return connectionStringBuilder.ConnectionString;
