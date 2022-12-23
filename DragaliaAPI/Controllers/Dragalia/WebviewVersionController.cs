@@ -32,7 +32,7 @@ public class WebviewVersionController : DragaliaControllerBase
                     new("faq", PlaceholderUrl),
                     new("help_comic", PlaceholderUrl),
                     new("help", PlaceholderUrl),
-                    new("information", baseAddress + "/News"),
+                    new("information", $"https://{baseAddress}/News"),
                     new("inquiry_attention", PlaceholderUrl),
                     new("dragon_battle_info", PlaceholderUrl),
                     new("quest_info", PlaceholderUrl),
