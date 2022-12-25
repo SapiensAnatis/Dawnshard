@@ -136,6 +136,10 @@ public class SessionService : ISessionService
             return existingSession.SessionId;
         }
 
+        // Refresh id token
+        await _cache.RefreshAsync(Schema.Session_IdToken(idToken));
+
+        // Register in sessions
         await _cache.SetStringAsync(
             Schema.Session_SessionId(session.SessionId),
             JsonSerializer.Serialize(session),

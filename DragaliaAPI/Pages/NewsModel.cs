@@ -12,7 +12,7 @@ public record NewsItem(string Headline, string Description, long Timestamp)
 
 public class NewsModel : PageModel
 {
-    public List<NewsItem> NewsItems { get; } =
+    public List<NewsItem> NewsItems =>
         JsonSerializer.Deserialize<List<NewsItem>>(
             System.IO.File.ReadAllText(Path.Join(folder, filename))
         ) ?? throw new JsonException("Deserialization failure");
