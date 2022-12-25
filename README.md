@@ -1,21 +1,8 @@
 # DragaliaAPI
 
-[![build](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/build.yml)
 [![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yml/badge.svg)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yml)
 
-## Setup
-
-To deploy the server to a production environment, start by following the steps below:
-
-1. Install Docker.
-2. Configure secrets:
-	- Copy `.env.default` to `.env` and choose a secure username and password combination for the database, as well as a developer token used to import savefiles.
-3. Migrate the database using the EntityFramework SQL script.
-	- To generate this, clone the source code and run `dotnet ef migrations script` in the `DragaliaAPI.Database` folder.
-4. Build and start the app using `docker compose up -d`.
-5. Hopefully, Docker should work its magic; there should be no other dependencies and it should ✨ just work ✨.
-
-Once the server is running, you should be able to make requests to `localhost:5000` (HTTP) or `localhost:5001` (HTTPS) -- these ports can be changed in `docker-compose.yml`.
+DragaliaAPI is a server emulator for Dragalia Lost.
 
 ## Contributing
 
@@ -29,3 +16,8 @@ To set up a development environment, the steps are similar to setting up a deplo
 
 If you wish to connect to your locally-hosted instance of the server with a Dragalia client, you will need to set up the workflow for this. Please contact the repository owner for more information. If you simply wish to test individual endpoints in a less end-to-end fashion, you could write automated integration tests or use [this tool](https://gist.github.com/SapiensAnatis/e76f067aad0ac425c9f9008db94e143c) to send msgpack-formatted requests from your desktop.
 
+## Deploying to production
+
+If you are interested in hosting your own instance, it is recommended to use the [Kubernetes helm chart](https://github.com/SapiensAnatis/helm-charts). 
+
+The application is deployed as three services: the main ASP.NET service which is stateless, and two stateful services in Redis (session management) and PostgreSQL (savefile storage). 
