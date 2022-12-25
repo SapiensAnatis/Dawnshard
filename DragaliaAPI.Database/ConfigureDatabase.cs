@@ -65,12 +65,6 @@ public static class DatabaseConfiguration
         if (!context.Database.IsRelational())
             return;
 
-        IEnumerable<string> migrations = context.Database.GetPendingMigrations();
-        if (!migrations.Any())
-            return;
-
-        logger.Information("Applying migrations {@migrations}", migrations);
-
         int tries = 0;
         while (!context.Database.CanConnect())
         {
@@ -88,8 +82,14 @@ public static class DatabaseConfiguration
                 );
             }
 
-            Thread.Sleep(2000);
+            Thread.Sleep(3000);
         }
+
+        IEnumerable<string> migrations = context.Database.GetPendingMigrations();
+        if (!migrations.Any())
+            return;
+
+        logger.Information("Applying migrations {@migrations}", migrations);
 
         context.Database.Migrate();
     }
