@@ -13,7 +13,6 @@ jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    needs: publish
 
     steps:
       - name: ssh and restart pods
