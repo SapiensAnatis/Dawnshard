@@ -1,17 +1,22 @@
 name: deploy
 
 on:
-  push:
-    branches:
+  workflow_run:
+    workflows: 
+      - publish
+    branches: 
       - develop
+    types:
+      - completed    
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     needs: publish
 
     steps:
-      - name: restart pods
+      - name: ssh and restart pods
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.SSH_HOST }}
