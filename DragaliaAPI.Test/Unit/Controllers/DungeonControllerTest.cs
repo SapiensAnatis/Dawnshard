@@ -22,7 +22,7 @@ public class DungeonControllerTest
         this.mockDungeonService = new(MockBehavior.Strict);
 
         this.dungeonController = new(this.mockDungeonService.Object, new EnemyListDataService());
-        dungeonController.ControllerContext = TestUtils.MockControllerContext;
+        dungeonController.SetupMockContext();
     }
 
     [Fact]

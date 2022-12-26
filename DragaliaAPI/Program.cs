@@ -1,4 +1,6 @@
 using System.Reflection;
+using System.Security.Claims;
+using System.Text.Json;
 using DragaliaAPI.Database;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.MessagePackFormatters;
@@ -55,9 +57,11 @@ builder.Services
     .AddDbContextCheck<ApiContext>()
     .AddCheck<RedisHealthCheck>("Redis", failureStatus: HealthStatus.Unhealthy);
 
-builder.Services.AddAuthentication(
-    opts => opts.AddScheme<DeveloperAuthenticationHandler>("DeveloperAuthentication", null)
-);
+builder.Services.AddAuthentication(opts =>
+{
+    opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
+    opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
+});
 
 builder.Services
     .ConfigureDatabaseServices(builder.Configuration.GetConnectionString("PostgresHost"))
@@ -80,10 +84,10 @@ WebApplication app = builder.Build();
 app.UseSerilogRequestLogging(
     options =>
         options.EnrichDiagnosticContext = (diagContext, httpContext) =>
-        {
-            httpContext.Items.TryGetValue("DeviceAccountId", out object? deviceAccountObj);
-            diagContext.Set("DeviceAccountId", deviceAccountObj?.ToString() ?? "unknown");
-        }
+            diagContext.Set(
+                "DeviceAccountId",
+                httpContext.User.FindFirstValue(CustomClaimType.AccountId) ?? "unknown"
+            )
 );
 
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
@@ -116,7 +120,6 @@ app.MapControllers();
 app.MapHealthChecks("/health");
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
-app.UseMiddleware<SessionLookupMiddleware>();
 
 app.Run();
 
