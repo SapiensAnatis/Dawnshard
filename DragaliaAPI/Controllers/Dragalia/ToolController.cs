@@ -1,10 +1,13 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.IdentityModel.Tokens.Jwt;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -22,28 +25,31 @@ public class ToolController : DragaliaControllerBase
 {
     private readonly ISessionService sessionService;
     private readonly IUserDataRepository userDataRepository;
+    private readonly IAuthService authService;
 
-    public ToolController(ISessionService sessionService, IUserDataRepository userDataRepository)
+    public ToolController(
+        ISessionService sessionService,
+        IUserDataRepository userDataRepository,
+        IAuthService authService
+    )
     {
         this.sessionService = sessionService;
         this.userDataRepository = userDataRepository;
+        this.authService = authService;
     }
 
     [HttpPost]
     [Route("signup")]
     public async Task<DragaliaResult> Signup(ToolSignupRequest request)
     {
-        string deviceAccountId = await this.sessionService.GetDeviceAccountId_IdToken(
-            request.id_token
-        );
-
-        long viewerId = await this.userDataRepository
-            .GetUserData(deviceAccountId)
-            .Select(x => x.ViewerId)
-            .SingleAsync();
+        (long viewerId, _) = await this.authService.DoAuth(request.id_token);
 
         return this.Ok(
-            new ToolSignupData((ulong)viewerId, (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+            new ToolSignupData()
+            {
+                viewer_id = (ulong)viewerId,
+                servertime = DateTimeOffset.UtcNow,
+            }
         );
     }
 
@@ -58,7 +64,7 @@ public class ToolController : DragaliaControllerBase
     [Route("auth")]
     public async Task<DragaliaResult> Auth(ToolAuthRequest request)
     {
-        (long viewerId, string sessionId) = await this.DoAuth(request.id_token);
+        (long viewerId, string sessionId) = await this.authService.DoAuth(request.id_token);
 
         return this.Ok(
             new ToolAuthData()
@@ -73,7 +79,7 @@ public class ToolController : DragaliaControllerBase
     [HttpPost("reauth")]
     public async Task<DragaliaResult> Reauth(ToolReauthRequest request)
     {
-        (long viewerId, string sessionId) = await this.DoAuth(request.id_token);
+        (long viewerId, string sessionId) = await this.authService.DoAuth(request.id_token);
 
         return this.Ok(
             new ToolReauthData()
@@ -83,20 +89,5 @@ public class ToolController : DragaliaControllerBase
                 nonce = "placeholder nonce"
             }
         );
-    }
-
-    private async Task<(long viewerId, string sessionId)> DoAuth(string idToken)
-    {
-        string sessionId;
-        string deviceAccountId;
-
-        sessionId = await this.sessionService.ActivateSession(idToken);
-        deviceAccountId = await this.sessionService.GetDeviceAccountId_SessionId(sessionId);
-
-        IQueryable<DbPlayerUserData> playerInfo = this.userDataRepository.GetUserData(
-            deviceAccountId
-        );
-
-        return (await playerInfo.Select(x => x.ViewerId).SingleAsync(), sessionId);
     }
 }

@@ -82,7 +82,8 @@ builder.Services
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<IUpdateDataService, UpdateDataService>()
     .AddScoped<IDungeonService, DungeonService>()
-    .AddScoped<ISavefileService, SavefileService>();
+    .AddScoped<ISavefileService, SavefileService>()
+    .AddScoped<IAuthService, AuthService>();
 
 WebApplication app = builder.Build();
 
