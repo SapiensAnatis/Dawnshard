@@ -10,6 +10,7 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Helpers;
+using DragaliaAPI.Services.Options;
 using DragaliaAPI.Shared;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
@@ -25,6 +26,7 @@ Log.Logger = new LoggerConfiguration().MinimumLevel
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 ConfigurationManager configuration = builder.Configuration;
+builder.Services.Configure<DragaliaAuthOptions>(configuration.GetSection("DragaliaAuth"));
 builder.Services.Configure<DragalipatchConfig>(configuration.GetRequiredSection("Dragalipatch"));
 
 builder.Logging.ClearProviders();
