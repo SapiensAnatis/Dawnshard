@@ -1,7 +1,10 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Services.Exceptions;
+using DragaliaAPI.Services.Helpers;
+using DragaliaAPI.Services.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,44 +13,45 @@ namespace DragaliaAPI.Services;
 
 public class AuthService : IAuthService
 {
+    private readonly IBaasRequestHelper baasRequestHelper;
     private readonly ISessionService sessionService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IDeviceAccountRepository deviceAccountRepository;
-    private readonly HttpClient client;
+    private readonly IOptionsMonitor<DragaliaAuthOptions> options;
     private readonly ILogger<AuthService> logger;
-    private readonly string? baasUrl;
-    private readonly bool useLegacyLogin;
 
     private static TokenValidationParameters? ValidationParams;
 
-    private const string KeySetEndpoint = "/.well-known/jwks.json";
-    private const string TokenAudience = "baas-Id";
-    private const string TokenIssuer = "LukeFZ";
-
     public AuthService(
+        IBaasRequestHelper baasRequestHelper,
         ISessionService sessionService,
         IUserDataRepository userDataRepository,
         IDeviceAccountRepository deviceAccountRepository,
-        IConfiguration configuration,
-        HttpClient client,
+        IOptionsMonitor<DragaliaAuthOptions> options,
         ILogger<AuthService> logger
     )
     {
+        this.baasRequestHelper = baasRequestHelper;
         this.sessionService = sessionService;
         this.userDataRepository = userDataRepository;
         this.deviceAccountRepository = deviceAccountRepository;
-        this.client = client;
+        this.options = options;
         this.logger = logger;
-        IConfigurationSection authSection = configuration.GetRequiredSection("DragaliaAuth");
-        this.useLegacyLogin = authSection.GetValue<bool>("UseLegacyLogin");
-        this.baasUrl = authSection.GetValue<string>("BaasUrl");
     }
 
     public async Task<(long viewerId, string sessionId)> DoAuth(string idToken)
     {
-        return this.useLegacyLogin
+        (long viewerId, string sessionId) result = this.options.CurrentValue.UseLegacyLogin
             ? await this.DoLegacyAuth(idToken)
             : await this.DoBaasAuth(idToken);
+
+        this.logger.LogInformation(
+            "Authenticated user with viewer ID {viewerid} and issued session ID {sid}",
+            result.viewerId,
+            result.sessionId
+        );
+
+        return result;
     }
 
     private async Task<(long viewerId, string sessionId)> DoLegacyAuth(string idToken)
@@ -124,26 +128,11 @@ public class AuthService : IAuthService
 
     private async Task<TokenValidationParameters> ConstructValidationParameters()
     {
-        HttpResponseMessage keySetResponse = await this.client.GetAsync(
-            this.baasUrl + KeySetEndpoint
-        );
-
-        if (!keySetResponse.IsSuccessStatusCode)
-        {
-            logger.LogError("Received failure response from BaaS: {@response}", keySetResponse);
-
-            throw new DragaliaException(
-                Models.ResultCode.COMMON_AUTH_ERROR,
-                "Received failure response from BaaS"
-            );
-        }
-
-        JsonWebKeySet keySet = new(await keySetResponse.Content.ReadAsStringAsync());
         return new TokenValidationParameters()
         {
-            IssuerSigningKeys = keySet.GetSigningKeys(),
-            ValidAudience = TokenAudience,
-            ValidIssuer = TokenIssuer,
+            IssuerSigningKeys = await this.baasRequestHelper.GetKeys(),
+            ValidAudience = this.options.CurrentValue.TokenAudience,
+            ValidIssuer = this.options.CurrentValue.TokenIssuer,
         };
     }
 }

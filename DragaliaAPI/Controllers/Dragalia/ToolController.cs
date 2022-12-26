@@ -23,18 +23,10 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [AllowAnonymous]
 public class ToolController : DragaliaControllerBase
 {
-    private readonly ISessionService sessionService;
-    private readonly IUserDataRepository userDataRepository;
     private readonly IAuthService authService;
 
-    public ToolController(
-        ISessionService sessionService,
-        IUserDataRepository userDataRepository,
-        IAuthService authService
-    )
+    public ToolController(IAuthService authService)
     {
-        this.sessionService = sessionService;
-        this.userDataRepository = userDataRepository;
         this.authService = authService;
     }
 

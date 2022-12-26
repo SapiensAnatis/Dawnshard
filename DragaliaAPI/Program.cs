@@ -9,6 +9,7 @@ using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Health;
+using DragaliaAPI.Services.Helpers;
 using DragaliaAPI.Shared;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
@@ -83,7 +84,8 @@ builder.Services
     .AddScoped<IUpdateDataService, UpdateDataService>()
     .AddScoped<IDungeonService, DungeonService>()
     .AddScoped<ISavefileService, SavefileService>()
-    .AddScoped<IAuthService, AuthService>();
+    .AddScoped<IAuthService, AuthService>()
+    .AddScoped<IBaasRequestHelper, BaasRequestHelper>();
 
 WebApplication app = builder.Build();
 

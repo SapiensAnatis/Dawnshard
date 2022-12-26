@@ -7,15 +7,28 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+using System.Security.Claims;
 
 namespace DragaliaAPI.Test.Integration;
 
 public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
 {
+    private readonly IList<SecurityKey> mockSecurityKeys = new List<SecurityKey>();
+
     public IntegrationTestFixture()
     {
         this.SeedDatabase();
         this.SeedCache();
+
+        RSA rsa = RSA.Create(2048);
+        RsaSecurityKey key = new(rsa.ExportParameters(true));
+
+        this.mockSecurityKeys.Add(key);
+
+        this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(this.mockSecurityKeys);
     }
 
     /// <summary>
@@ -61,6 +74,24 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
             );
             await inventoryRepo.SaveChangesAsync();
         }
+    }
+
+    public string BuildValidToken() => this.BuildValidToken(DateTime.UtcNow.AddHours(1));
+
+    public string BuildValidToken(DateTime expires)
+    {
+        SigningCredentials creds = new(this.mockSecurityKeys.First(), SecurityAlgorithms.RsaSha256);
+
+        JwtSecurityToken token =
+            new(
+                issuer: "LukeFZ",
+                audience: "baas-Id",
+                expires: expires,
+                signingCredentials: creds,
+                claims: new List<Claim>() { new Claim("sub", this.PreparedDeviceAccountId) }
+            );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
     /// <summary>
