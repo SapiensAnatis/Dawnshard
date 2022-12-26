@@ -4,9 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("version")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
-[ApiController]
 public class VersionController : DragaliaControllerBase
 {
     private const string AndroidResourceVersion = "y2XM6giU6zz56wCm";
