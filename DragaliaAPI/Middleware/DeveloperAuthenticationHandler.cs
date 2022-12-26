@@ -53,7 +53,7 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
             return Task.FromResult(AuthenticateResult.Fail("Invalid Authorization header!"));
         }
 
-        Claim[] claims = new[] { new Claim(ClaimTypes.NameIdentifier, "Developer"), };
+        Claim[] claims = new[] { new Claim(ClaimTypes.Role, "Developer"), };
         ClaimsIdentity identity = new(claims, this.Scheme.Name);
         ClaimsPrincipal principal = new(identity);
         AuthenticationTicket ticket = new(principal, this.Scheme.Name);

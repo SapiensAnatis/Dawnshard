@@ -11,7 +11,6 @@ namespace DragaliaAPI.Controllers.Nintendo;
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
-[NoSession]
 [Route("/core/v1/gateway/sdk/login")]
 public class NintendoLoginController : ControllerBase
 {

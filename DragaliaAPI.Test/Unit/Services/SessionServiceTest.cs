@@ -18,18 +18,20 @@ public class SessionServiceTest
     private readonly DeviceAccount deviceAccount = new("id", "password");
     private readonly DeviceAccount deviceAccountTwo = new("id 2", "password 2");
 
+    private readonly IDistributedCache testCache;
+
     public SessionServiceTest()
     {
         mockLogger = new(MockBehavior.Loose);
         mockEnvironment = new(MockBehavior.Loose);
 
-        var opts = Options.Create(new MemoryDistributedCacheOptions());
-        IDistributedCache testCache = new MemoryDistributedCache(opts);
+        IOptions<MemoryDistributedCacheOptions> opts = Options.Create(
+            new MemoryDistributedCacheOptions()
+        );
+        this.testCache = new MemoryDistributedCache(opts);
 
-        var inMemoryConfiguration = new Dictionary<string, string>
-        {
-            { "SessionExpiryTimeMinutes", "5" },
-        };
+        Dictionary<string, string?> inMemoryConfiguration =
+            new() { { "SessionExpiryTimeMinutes", "5" }, };
 
         IConfiguration configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(inMemoryConfiguration)
@@ -43,9 +45,7 @@ public class SessionServiceTest
     {
         string sessionId = await PrepareAndRegisterSession("id_token", deviceAccount);
 
-        bool valid = await sessionService.ValidateSession(sessionId);
-
-        valid.Should().Be(true);
+        this.testCache.GetString($":session:session_id:{sessionId}").Should().NotBeNull();
     }
 
     [Fact]
@@ -54,11 +54,9 @@ public class SessionServiceTest
         string firstSessionId = await PrepareAndRegisterSession("id_token", deviceAccount);
         string secondSessionId = await PrepareAndRegisterSession("id_token", deviceAccount);
 
-        bool firstValid = await sessionService.ValidateSession(firstSessionId);
-        bool secondValid = await sessionService.ValidateSession(secondSessionId);
+        this.testCache.GetString($":session:session_id:{firstSessionId}").Should().BeNull();
+        this.testCache.GetString($":session:session_id:{secondSessionId}").Should().NotBeNull();
 
-        firstValid.Should().Be(false);
-        secondValid.Should().Be(true);
         secondSessionId.Should().NotBeEquivalentTo(firstSessionId);
     }
 
@@ -68,20 +66,10 @@ public class SessionServiceTest
         string firstSessionId = await PrepareAndRegisterSession("id_token_1", deviceAccount);
         string secondSessionId = await PrepareAndRegisterSession("id_token_2", deviceAccountTwo);
 
-        bool firstValid = await sessionService.ValidateSession(firstSessionId);
-        bool secondValid = await sessionService.ValidateSession(secondSessionId);
+        this.testCache.GetString($":session:session_id:{firstSessionId}").Should().NotBeNull();
+        this.testCache.GetString($":session:session_id:{secondSessionId}").Should().NotBeNull();
 
-        firstValid.Should().Be(true);
-        secondValid.Should().Be(true);
         secondSessionId.Should().NotBeEquivalentTo(firstSessionId);
-    }
-
-    [Fact]
-    public async Task ValidateSession_NonExistentSession_ReturnsFalse()
-    {
-        bool result = await sessionService.ValidateSession("sessionId");
-
-        result.Should().Be(false);
     }
 
     private async Task<string> PrepareAndRegisterSession(

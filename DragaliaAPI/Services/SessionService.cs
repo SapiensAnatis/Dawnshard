@@ -48,7 +48,7 @@ public class SessionService : ISessionService
             try
             {
                 // Create non-expiring 'development' session for manual testing
-                Session devSession = new("session id", "id");
+                Session devSession = new("session id", "id token", "id");
                 string devSessionSchema1 = Schema.Session_SessionId(devSession.SessionId);
                 string devSessionSchema2 = Schema.SessionId_DeviceAccountId(
                     devSession.DeviceAccountId
@@ -99,7 +99,7 @@ public class SessionService : ISessionService
 
         string sessionId = Guid.NewGuid().ToString();
 
-        Session session = new(sessionId, deviceAccount.id);
+        Session session = new(sessionId, idToken, deviceAccount.id);
         await _cache.SetStringAsync(
             Schema.Session_IdToken(idToken),
             JsonSerializer.Serialize(session),
@@ -136,9 +136,6 @@ public class SessionService : ISessionService
             return existingSession.SessionId;
         }
 
-        // Refresh id token
-        await _cache.RefreshAsync(Schema.Session_IdToken(idToken));
-
         // Register in sessions
         await _cache.SetStringAsync(
             Schema.Session_SessionId(session.SessionId),
@@ -162,15 +159,12 @@ public class SessionService : ISessionService
         return session.SessionId;
     }
 
-    public async Task<bool> ValidateSession(string sessionId)
-    {
-        string? sessionJson = await _cache.GetStringAsync(Schema.Session_SessionId(sessionId));
-        return !string.IsNullOrEmpty(sessionJson);
-    }
-
     public async Task<string> GetDeviceAccountId_SessionId(string sessionId)
     {
         Session session = await LoadSession(Schema.Session_SessionId(sessionId));
+
+        // Refresh id token
+        await _cache.RefreshAsync(Schema.Session_IdToken(session.IdToken));
 
         return session.DeviceAccountId;
     }
@@ -196,5 +190,5 @@ public class SessionService : ISessionService
             );
     }
 
-    private record Session(string SessionId, string DeviceAccountId);
+    private record Session(string SessionId, string IdToken, string DeviceAccountId);
 }

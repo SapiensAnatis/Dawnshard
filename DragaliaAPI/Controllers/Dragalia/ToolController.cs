@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,8 +16,8 @@ namespace DragaliaAPI.Controllers.Dragalia;
 /// As a result, this controller just retrieves the existing savefile and
 /// responds with its viewer_id.
 /// </summary>
-[NoSession]
 [Route("tool")]
+[AllowAnonymous]
 public class ToolController : DragaliaControllerBase
 {
     private readonly ISessionService sessionService;

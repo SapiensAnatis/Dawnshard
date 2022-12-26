@@ -1,6 +1,8 @@
-﻿using DragaliaAPI.Models;
+﻿using DragaliaAPI.Middleware;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,8 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Controllers.Other;
 
 [Route("savefile")]
-[NoSession]
-[Authorize(AuthenticationSchemes = "DeveloperAuthentication")]
+[Authorize(AuthenticationSchemes = SchemeName.Developer)]
 [ApiController]
 public class SavefileController : ControllerBase
 {

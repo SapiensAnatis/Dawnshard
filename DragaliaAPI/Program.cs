@@ -55,9 +55,11 @@ builder.Services
     .AddDbContextCheck<ApiContext>()
     .AddCheck<RedisHealthCheck>("Redis", failureStatus: HealthStatus.Unhealthy);
 
-builder.Services.AddAuthentication(
-    opts => opts.AddScheme<DeveloperAuthenticationHandler>("DeveloperAuthentication", null)
-);
+builder.Services.AddAuthentication(opts =>
+{
+    opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
+    opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
+});
 
 builder.Services
     .ConfigureDatabaseServices(builder.Configuration.GetConnectionString("PostgresHost"))
@@ -116,7 +118,6 @@ app.MapControllers();
 app.MapHealthChecks("/health");
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
-app.UseMiddleware<SessionLookupMiddleware>();
 
 app.Run();
 

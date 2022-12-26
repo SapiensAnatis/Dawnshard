@@ -1,26 +1,23 @@
-﻿using DragaliaAPI.Models;
+﻿using System.Security.Claims;
+using DragaliaAPI.Middleware;
+using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers;
 
 [ApiController]
 [SerializeException]
-[DragaliaController]
+[Authorize(AuthenticationSchemes = SchemeName.Session)]
 [Consumes("application/octet-stream")]
 [Produces("application/x-msgpack")]
 public abstract class DragaliaControllerBase : ControllerBase
 {
-    private string? deviceAccountId = null;
-
-    protected string DeviceAccountId
-    {
-        get
-        {
-            this.deviceAccountId ??= this.LoadDeviceAccountId();
-            return this.deviceAccountId;
-        }
-    }
+    protected string DeviceAccountId =>
+        this.User.FindFirstValue(CustomClaimType.AccountId)
+        ?? throw new InvalidOperationException("No AccountId claim value found");
 
     public override OkObjectResult Ok(object? value)
     {
@@ -30,23 +27,5 @@ public abstract class DragaliaControllerBase : ControllerBase
                 ResultCode.SUCCESS
             )
         );
-    }
-
-    public OkObjectResult ResultCodeError(ResultCode value)
-    {
-        return base.Ok(new DragaliaResponse<ResultCodeData>(new(value), value));
-    }
-
-    private string LoadDeviceAccountId()
-    {
-        if (
-            this.HttpContext.Items.TryGetValue("DeviceAccountId", out object? deviceAccountId)
-            && deviceAccountId is not null
-        )
-        {
-            return (string)deviceAccountId;
-        }
-
-        throw new SessionException("Internal controller session lookup error");
     }
 }
