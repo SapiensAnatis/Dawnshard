@@ -43,7 +43,7 @@ public class PartyControllerTest
             mapper,
             this.mockLogger.Object
         );
-        this.partyController.ControllerContext = MockControllerContext;
+        this.partyController.SetupMockContext();
     }
 
     [Fact]

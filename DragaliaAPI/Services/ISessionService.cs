@@ -19,13 +19,6 @@ public interface ISessionService
     Task<string> ActivateSession(string idToken);
 
     /// <summary>
-    /// Check if a session with the given device account and id exists.
-    /// </summary>
-    /// <param name="sessionId"></param>
-    /// <returns>true if the session exists, false if it does not.</returns>
-    Task<bool> ValidateSession(string sessionId);
-
-    /// <summary>
     /// Get a queryable for a player's savefile from an id token.
     /// Warning: Will fail if ActivateSession() has been called.
     /// </summary>

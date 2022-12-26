@@ -53,7 +53,7 @@ public class DungeonStartControllerTest
             mapper
         );
 
-        dungeonStartController.ControllerContext = MockControllerContext;
+        dungeonStartController.SetupMockContext();
 
         this.mockUpdateDataService
             .Setup(x => x.GetUpdateDataList(DeviceAccountId))

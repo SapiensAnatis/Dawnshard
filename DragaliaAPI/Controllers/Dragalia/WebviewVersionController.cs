@@ -18,7 +18,7 @@ public class WebviewVersionController : DragaliaControllerBase
 
         // Use this URL instead if using mitmproxy and developing locally
         // (replacing it with <host local IP>:<container port> as needed)
-        baseAddress = "dd-api.lukefz.xyz";
+        // baseAddress = "dd-api.lukefz.xyz";
 
         return Ok(
             new WebviewVersionUrlListData(

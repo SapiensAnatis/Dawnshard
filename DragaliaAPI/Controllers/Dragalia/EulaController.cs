@@ -1,13 +1,11 @@
 ﻿using DragaliaAPI.Models.Generated;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("eula")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
-[NoSession]
-[ApiController]
+[AllowAnonymous]
 public class EulaController : DragaliaControllerBase
 {
     private static readonly List<AtgenVersionHash> AllEulaVersions =
@@ -20,8 +18,7 @@ public class EulaController : DragaliaControllerBase
             new("us", "en_eu", 1, 6)
         };
 
-    [HttpPost]
-    [Route("get_version")]
+    [HttpPost("get_version")]
     public DragaliaResult GetVersion(EulaGetVersionRequest request)
     {
         AtgenVersionHash version =
@@ -32,8 +29,7 @@ public class EulaController : DragaliaControllerBase
         return this.Ok(new EulaGetVersionData(version, false, 1));
     }
 
-    [HttpPost]
-    [Route("get_version_list")]
+    [HttpPost("get_version_list")]
     public DragaliaResult GetVersionList()
     {
         return this.Ok(new EulaGetVersionListData(AllEulaVersions));

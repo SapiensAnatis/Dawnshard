@@ -1,11 +1,15 @@
 ﻿using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text.Json;
+using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.MessagePack;
+using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using FluentAssertions.Equivalency;
 using MessagePack;
 using MessagePack.Resolvers;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
@@ -35,17 +39,19 @@ public static class TestUtils
         return JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
     }
 
-    public static ControllerContext MockControllerContext =>
-        new()
-        {
-            HttpContext = new DefaultHttpContext
-            {
-                Items = new Dictionary<object, object?>() { { "DeviceAccountId", "id" } }
-            }
-        };
-
+    /// <summary>
+    /// Consistent account id to be used in setups for unit tests.
+    /// This is also what the user is authenticated as in the mock controller context.
+    /// </summary>
     public const string DeviceAccountId = "id";
 
+    /// <summary>
+    /// Cast the data of a <see cref="ActionResult{DragaliaResponse}"/> to a given type.
+    /// <remarks>Uses 'as' casting, and will return null if the cast failed.</remarks>
+    /// </summary>
+    /// <typeparam name="T">The type of response.data which the cast should yield.</typeparam>
+    /// <param name="response">The ActionResult response from the controller</param>
+    /// <returns>The inner data.</returns>
     public static T? GetData<T>(this ActionResult<DragaliaResponse<object>> response)
         where T : class
     {
@@ -54,6 +60,14 @@ public static class TestUtils
         return innerResponse?.data as T;
     }
 
+    /// <summary>
+    /// Helper to post a msgpack request and deserialize the inner response data.
+    /// </summary>
+    /// <typeparam name="TResponse">The inner response data type</typeparam>
+    /// <param name="client">HTTP client</param>
+    /// <param name="endpoint">Endpoint to POST to</param>
+    /// <param name="request">Request object to send</param>
+    /// <returns></returns>
     public static async Task<DragaliaResponse<TResponse>> PostMsgpack<TResponse>(
         this HttpClient client,
         string endpoint,
@@ -73,10 +87,42 @@ public static class TestUtils
         );
     }
 
-    public static void WriteAsJson(this ITestOutputHelper output, object value)
+    /// <summary>
+    /// Post a msgpack request, but do not attempt to deserialize it.
+    /// Used for checking cases that should return non-200 codes.
+    /// </summary>
+    /// <param name="client">HTTP client.</param>
+    /// <param name="endpoint">The endpoint to POST to.</param>
+    /// <param name="request">The request to send.</param>
+    /// <returns></returns>
+    public static async Task<HttpResponseMessage> PostMsgpackBasic(
+        this HttpClient client,
+        string endpoint,
+        object request
+    )
     {
-        output.WriteLine(
-            JsonSerializer.Serialize(value, new JsonSerializerOptions() { WriteIndented = true })
-        );
+        HttpContent content = CreateMsgpackContent(request);
+
+        return await client.PostAsync(endpoint, content);
+    }
+
+    /// <summary>
+    /// Add a <see cref="CustomClaimType.AccountId"/> to the controller's User, allowing the lookup of account ID.
+    /// Uses the TestFixture's <see cref="DeviceAccountId"/>.
+    /// </summary>
+    /// <param name="controller"></param>
+    public static void SetupMockContext(this DragaliaControllerBase controller)
+    {
+        controller.ControllerContext = new()
+        {
+            HttpContext = new DefaultHttpContext()
+            {
+                User = new(
+                    new ClaimsIdentity(
+                        new List<Claim>() { new Claim(CustomClaimType.AccountId, DeviceAccountId) }
+                    )
+                )
+            }
+        };
     }
 }
