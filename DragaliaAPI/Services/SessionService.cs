@@ -26,47 +26,21 @@ namespace DragaliaAPI.Services;
 /// </summary>
 public class SessionService : ISessionService
 {
-    private readonly IDistributedCache _cache;
-    private readonly DistributedCacheEntryOptions _cacheOptions;
-    private readonly ILogger<SessionService> _logger;
+    private readonly IDistributedCache cache;
+    private readonly DistributedCacheEntryOptions cacheOptions;
+    private readonly ILogger<SessionService> logger;
 
     public SessionService(
         IDistributedCache cache,
         IConfiguration configuration,
-        IWebHostEnvironment environment,
         ILogger<SessionService> logger
     )
     {
-        _cache = cache;
-        _logger = logger;
+        this.cache = cache;
+        this.logger = logger;
 
         int expiryTimeMinutes = configuration.GetValue<int>("SessionExpiryTimeMinutes");
-        _cacheOptions = new() { SlidingExpiration = TimeSpan.FromMinutes(expiryTimeMinutes) };
-
-        if (environment.IsDevelopment())
-        {
-            try
-            {
-                // Create non-expiring 'development' session for manual testing
-                Session devSession = new("session id", "id token", "id");
-                string devSessionSchema1 = Schema.Session_SessionId(devSession.SessionId);
-                string devSessionSchema2 = Schema.SessionId_DeviceAccountId(
-                    devSession.DeviceAccountId
-                );
-
-                // This is a scoped service -- so make sure it doesn't already exist
-                if (string.IsNullOrEmpty(_cache.GetString(devSessionSchema1)))
-                    _cache.SetString(devSessionSchema1, JsonSerializer.Serialize(devSession));
-
-                if (string.IsNullOrEmpty(_cache.GetString(devSessionSchema2)))
-                    _cache.SetString(devSessionSchema2, devSession.SessionId);
-            }
-            catch (Exception ex)
-            {
-                // We do not want to throw a 500 in this case because that defeats the point of the Redis health check
-                this._logger.LogError(ex, "Unable to create development session");
-            }
-        }
+        cacheOptions = new() { SlidingExpiration = TimeSpan.FromMinutes(expiryTimeMinutes) };
     }
 
     private static class Schema
@@ -86,27 +60,27 @@ public class SessionService : ISessionService
     public async Task PrepareSession(DeviceAccount deviceAccount, string idToken)
     {
         // Check if there is an existing session, and if so, remove it
-        string? existingSessionId = await _cache.GetStringAsync(
+        string? existingSessionId = await cache.GetStringAsync(
             Schema.SessionId_DeviceAccountId(deviceAccount.id)
         );
 
         if (!string.IsNullOrEmpty(existingSessionId))
         {
             // TODO: Consider abstracting this into a RemoveSession method, in case it needs to be done elsewhere
-            await _cache.RemoveAsync(Schema.Session_SessionId(existingSessionId));
-            await _cache.RemoveAsync(Schema.SessionId_DeviceAccountId(deviceAccount.id));
+            await cache.RemoveAsync(Schema.Session_SessionId(existingSessionId));
+            await cache.RemoveAsync(Schema.SessionId_DeviceAccountId(deviceAccount.id));
         }
 
         string sessionId = Guid.NewGuid().ToString();
 
-        Session session = new(sessionId, idToken, deviceAccount.id);
-        await _cache.SetStringAsync(
+        Session session = new(sessionId, deviceAccount.id);
+        await cache.SetStringAsync(
             Schema.Session_IdToken(idToken),
             JsonSerializer.Serialize(session),
-            _cacheOptions
+            cacheOptions
         );
 
-        _logger.LogInformation(
+        logger.LogInformation(
             "Preparing session: DeviceAccount '{id}', id-token '{id_token}'",
             deviceAccount.id,
             idToken
@@ -120,7 +94,7 @@ public class SessionService : ISessionService
         // Move key to sessionId
         // Don't remove -- sometimes /tool/auth is called multiple times consecutively?
         // await _cache.RemoveAsync(Schema.Session_IdToken(idToken));
-        string? sessionJson = await _cache.GetStringAsync(
+        string? sessionJson = await cache.GetStringAsync(
             Schema.Session_SessionId(session.SessionId)
         );
 
@@ -137,20 +111,20 @@ public class SessionService : ISessionService
         }
 
         // Register in sessions
-        await _cache.SetStringAsync(
+        await cache.SetStringAsync(
             Schema.Session_SessionId(session.SessionId),
             JsonSerializer.Serialize(session),
-            _cacheOptions
+            cacheOptions
         );
 
         // Register in existent sessions
-        await _cache.SetStringAsync(
+        await cache.SetStringAsync(
             Schema.SessionId_DeviceAccountId(session.DeviceAccountId),
             session.SessionId,
-            _cacheOptions
+            cacheOptions
         );
 
-        _logger.LogInformation(
+        this.logger.LogInformation(
             "Activated session: id-token '{id_token}', issued session id '{session_id}'",
             idToken,
             session.SessionId
@@ -162,9 +136,6 @@ public class SessionService : ISessionService
     public async Task<string> GetDeviceAccountId_SessionId(string sessionId)
     {
         Session session = await LoadSession(Schema.Session_SessionId(sessionId));
-
-        // Refresh id token
-        await _cache.RefreshAsync(Schema.Session_IdToken(session.IdToken));
 
         return session.DeviceAccountId;
     }
@@ -178,7 +149,7 @@ public class SessionService : ISessionService
 
     private async Task<Session> LoadSession(string key)
     {
-        string? sessionJson = await _cache.GetStringAsync(key);
+        string? sessionJson = await cache.GetStringAsync(key);
         if (string.IsNullOrEmpty(sessionJson))
         {
             throw new SessionException(key);
@@ -190,5 +161,5 @@ public class SessionService : ISessionService
             );
     }
 
-    private record Session(string SessionId, string IdToken, string DeviceAccountId);
+    private record Session(string SessionId, string DeviceAccountId);
 }

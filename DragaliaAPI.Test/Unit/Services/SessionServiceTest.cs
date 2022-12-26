@@ -12,7 +12,6 @@ namespace DragaliaAPI.Test.Unit.Services;
 public class SessionServiceTest
 {
     private readonly Mock<ILogger<SessionService>> mockLogger;
-    private readonly Mock<IWebHostEnvironment> mockEnvironment;
     private readonly SessionService sessionService;
 
     private readonly DeviceAccount deviceAccount = new("id", "password");
@@ -23,7 +22,6 @@ public class SessionServiceTest
     public SessionServiceTest()
     {
         mockLogger = new(MockBehavior.Loose);
-        mockEnvironment = new(MockBehavior.Loose);
 
         IOptions<MemoryDistributedCacheOptions> opts = Options.Create(
             new MemoryDistributedCacheOptions()
@@ -37,7 +35,7 @@ public class SessionServiceTest
             .AddInMemoryCollection(inMemoryConfiguration)
             .Build();
 
-        sessionService = new(testCache, configuration, mockEnvironment.Object, mockLogger.Object);
+        sessionService = new(testCache, configuration, mockLogger.Object);
     }
 
     [Fact]

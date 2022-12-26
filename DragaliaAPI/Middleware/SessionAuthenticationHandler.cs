@@ -36,8 +36,8 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
 
         string? sid = value.FirstOrDefault();
 
-        if (string.IsNullOrWhiteSpace(sid))
-            return AuthenticateResult.Fail("Invalid SID header: null or whitespace");
+        if (sid is null)
+            return AuthenticateResult.Fail("Invalid SID header: value was null");
 
         // This will throw SessionException if not found, and return a BadRequest which prompts the client to re-login
         string id = await sessionService.GetDeviceAccountId_SessionId(sid);
