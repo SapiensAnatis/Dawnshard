@@ -3,15 +3,15 @@
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.GetResourceVersionController"/>
+/// Tests <see cref="Controllers.Dragalia.VersionController"/>
 /// </summary>
 [Collection("DragaliaIntegration")]
-public class GetResourceVersionTest : IClassFixture<IntegrationTestFixture>
+public class VersionTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
     private readonly IntegrationTestFixture fixture;
 
-    public GetResourceVersionTest(IntegrationTestFixture fixture)
+    public VersionTest(IntegrationTestFixture fixture)
     {
         this.fixture = fixture;
         client = fixture.CreateClient(
@@ -19,16 +19,21 @@ public class GetResourceVersionTest : IClassFixture<IntegrationTestFixture>
         );
     }
 
-    [Fact]
-    public async Task GetResourceVersion_ReturnsCorrectResponse()
+    [Theory]
+    [InlineData(1, "b1HyoeTFegeTexC0")]
+    [InlineData(2, "y2XM6giU6zz56wCm")]
+    public async Task GetResourceVersion_ReturnsCorrectResponse(
+        int platform,
+        string expectedVersion
+    )
     {
         VersionGetResourceVersionData response = (
             await client.PostMsgpack<VersionGetResourceVersionData>(
                 "version/get_resource_version",
-                new VersionGetResourceVersionRequest(0, "whatever")
+                new VersionGetResourceVersionRequest(platform, "whatever")
             )
         ).data;
 
-        response.resource_version.Should().Be("y2XM6giU6zz56wCm");
+        response.resource_version.Should().Be(expectedVersion);
     }
 }
