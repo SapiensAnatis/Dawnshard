@@ -72,7 +72,8 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     {
         DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
             "/tool/signup",
-            new ToolAuthRequest() { id_token = "im blue dabba dee dabba doo" }
+            new ToolAuthRequest() { id_token = "im blue dabba dee dabba doo" },
+            ensureSuccessHeader: false
         );
 
         response
@@ -138,7 +139,8 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     {
         DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
             "/tool/auth",
-            new ToolAuthRequest() { id_token = "im blue dabba dee dabba doo" }
+            new ToolAuthRequest() { id_token = "im blue dabba dee dabba doo" },
+            ensureSuccessHeader: false
         );
 
         response

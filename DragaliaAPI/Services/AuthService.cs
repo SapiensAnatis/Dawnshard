@@ -20,8 +20,6 @@ public class AuthService : IAuthService
     private readonly IOptionsMonitor<DragaliaAuthOptions> options;
     private readonly ILogger<AuthService> logger;
 
-    private static TokenValidationParameters? ValidationParams;
-
     public AuthService(
         IBaasRequestHelper baasRequestHelper,
         ISessionService sessionService,
@@ -82,12 +80,15 @@ public class AuthService : IAuthService
 
     private async Task<TokenValidationResult> ValidateToken(string idToken)
     {
-        ValidationParams ??= await this.ConstructValidationParameters();
-
         JwtSecurityTokenHandler handler = new();
         TokenValidationResult validationResult = await handler.ValidateTokenAsync(
             idToken,
-            ValidationParams
+            new()
+            {
+                IssuerSigningKeys = await this.baasRequestHelper.GetKeys(),
+                ValidAudience = this.options.CurrentValue.TokenAudience,
+                ValidIssuer = this.options.CurrentValue.TokenIssuer,
+            }
         );
 
         if (!validationResult.IsValid)
@@ -124,15 +125,5 @@ public class AuthService : IAuthService
         }
 
         return await userDataQuery.Select(x => x.ViewerId).SingleAsync();
-    }
-
-    private async Task<TokenValidationParameters> ConstructValidationParameters()
-    {
-        return new TokenValidationParameters()
-        {
-            IssuerSigningKeys = await this.baasRequestHelper.GetKeys(),
-            ValidAudience = this.options.CurrentValue.TokenAudience,
-            ValidIssuer = this.options.CurrentValue.TokenIssuer,
-        };
     }
 }

@@ -16,19 +16,12 @@ namespace DragaliaAPI.Test.Integration;
 
 public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
 {
-    private readonly IList<SecurityKey> mockSecurityKeys = new List<SecurityKey>();
-
     public IntegrationTestFixture()
     {
         this.SeedDatabase();
         this.SeedCache();
 
-        RSA rsa = RSA.Create(2048);
-        RsaSecurityKey key = new(rsa.ExportParameters(true));
-
-        this.mockSecurityKeys.Add(key);
-
-        this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(this.mockSecurityKeys);
+        this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
     }
 
     /// <summary>
@@ -80,7 +73,8 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
 
     public string BuildValidToken(DateTime expires)
     {
-        SigningCredentials creds = new(this.mockSecurityKeys.First(), SecurityAlgorithms.RsaSha256);
+        SigningCredentials creds =
+            new(TestUtils.SecurityKeys.First(), SecurityAlgorithms.RsaSha256);
 
         JwtSecurityToken token =
             new(

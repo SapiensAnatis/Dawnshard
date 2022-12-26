@@ -87,7 +87,8 @@ builder.Services
     .AddScoped<IDungeonService, DungeonService>()
     .AddScoped<ISavefileService, SavefileService>()
     .AddScoped<IAuthService, AuthService>()
-    .AddScoped<IBaasRequestHelper, BaasRequestHelper>();
+    .AddSingleton<IBaasRequestHelper, BaasRequestHelper>()
+    .AddHttpClient<BaasRequestHelper>();
 
 WebApplication app = builder.Build();
 

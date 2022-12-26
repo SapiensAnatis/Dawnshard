@@ -14,6 +14,7 @@ using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Unit.Services;
 
+[Collection("DragaliaIntegration")]
 public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
 {
     private readonly AuthService authService;
@@ -45,7 +46,7 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
         );
 
         this.fixture = fixture;
-        this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(this.fixture.SecurityKeys);
+        this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
     }
 
     [Fact]
@@ -89,7 +90,7 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
                     TokenIssuer = "issuer"
                 }
             );
-        this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(this.fixture.SecurityKeys);
+        this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
 
         string token = fixture.GetToken(
             this.mockOptions.Object.CurrentValue.TokenIssuer,
@@ -129,7 +130,7 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
                     TokenIssuer = "issuer"
                 }
             );
-        this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(this.fixture.SecurityKeys);
+        this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
 
         string token = fixture.GetToken(
             this.mockOptions.Object.CurrentValue.TokenIssuer,

@@ -12,6 +12,8 @@ public class BaasRequestHelper : IBaasRequestHelper
     private readonly ILogger<BaasRequestHelper> logger;
     private const string KeySetEndpoint = "/.well-known/jwks.json";
 
+    private IList<SecurityKey>? cachedKeys;
+
     public BaasRequestHelper(
         IOptionsMonitor<DragaliaAuthOptions> options,
         HttpClient client,
@@ -25,6 +27,11 @@ public class BaasRequestHelper : IBaasRequestHelper
 
     public async Task<IList<SecurityKey>> GetKeys()
     {
+        if (this.cachedKeys is not null)
+        {
+            return cachedKeys;
+        }
+
         HttpResponseMessage keySetResponse = await this.client.GetAsync(
             this.options.CurrentValue.BaasUrl + KeySetEndpoint
         );
@@ -41,6 +48,7 @@ public class BaasRequestHelper : IBaasRequestHelper
 
         JsonWebKeySet jwks = new(await keySetResponse.Content.ReadAsStringAsync());
 
-        return jwks.GetSigningKeys();
+        cachedKeys = jwks.GetSigningKeys();
+        return cachedKeys;
     }
 }

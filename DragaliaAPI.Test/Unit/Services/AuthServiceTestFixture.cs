@@ -16,9 +16,6 @@ namespace DragaliaAPI.Test.Unit.Services;
 /// </summary>
 public class AuthServiceTestFixture
 {
-    public List<SecurityKey> SecurityKeys { get; } =
-        new() { new RsaSecurityKey(RSA.Create(2048).ExportParameters(true)) };
-
     public string GetToken(string issuer, string audience, DateTime expiryTime, string accountId)
     {
         JwtSecurityToken tokenObject =
@@ -27,7 +24,7 @@ public class AuthServiceTestFixture
                 audience: audience,
                 expires: expiryTime,
                 signingCredentials: new SigningCredentials(
-                    this.SecurityKeys.First(),
+                    TestUtils.SecurityKeys.First(),
                     SecurityAlgorithms.RsaSha256
                 ),
                 claims: new List<Claim>() { new Claim("sub", accountId) }

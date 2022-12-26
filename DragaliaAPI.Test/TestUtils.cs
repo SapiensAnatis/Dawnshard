@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text.Json;
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 using Xunit.Abstractions;
 
@@ -20,6 +22,13 @@ namespace DragaliaAPI.Test;
 
 public static class TestUtils
 {
+    static TestUtils()
+    {
+        RSA rsa = RSA.Create();
+        rsa.ImportFromPem(File.ReadAllText("RSA_key.pem").AsSpan());
+        SecurityKeys.Add(new RsaSecurityKey(rsa) { KeyId = "key" });
+    }
+
     public static HttpContent CreateMsgpackContent(object content, string sessionId = "session_id")
     {
         ByteArrayContent result = new(MessagePackSerializer.Serialize(content));
@@ -38,6 +47,11 @@ public static class TestUtils
 
         return JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
     }
+
+    /// <summary>
+    /// Consistent security key.
+    /// </summary>
+    public static IList<SecurityKey> SecurityKeys { get; } = new List<SecurityKey>();
 
     /// <summary>
     /// Consistent account id to be used in setups for unit tests.
@@ -71,7 +85,8 @@ public static class TestUtils
     public static async Task<DragaliaResponse<TResponse>> PostMsgpack<TResponse>(
         this HttpClient client,
         string endpoint,
-        object request
+        object request,
+        bool ensureSuccessHeader = true
     ) where TResponse : class
     {
         HttpContent content = CreateMsgpackContent(request);
@@ -81,10 +96,15 @@ public static class TestUtils
         response.EnsureSuccessStatusCode();
 
         byte[] body = await response.Content.ReadAsByteArrayAsync();
-        return MessagePackSerializer.Deserialize<DragaliaResponse<TResponse>>(
+        var deserialized = MessagePackSerializer.Deserialize<DragaliaResponse<TResponse>>(
             body,
             CustomResolver.Options
         );
+
+        if (ensureSuccessHeader)
+            deserialized.data_headers.result_code.Should().Be(ResultCode.SUCCESS);
+
+        return deserialized;
     }
 
     /// <summary>
