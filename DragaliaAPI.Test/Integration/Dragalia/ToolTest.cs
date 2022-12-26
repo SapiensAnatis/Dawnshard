@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models;
+﻿using System.Net.Http.Headers;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using MessagePack;
 
@@ -50,19 +51,17 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task Signup_IncorrectIdToken_ReturnsErrorResponse()
     {
-        DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
+        HttpResponseMessage response = await client.PostMsgpackBasic(
             "/tool/signup",
-            new ToolSignupRequest() { id_token = "wrong_id_token" }
+            new ToolAuthRequest() { id_token = "wrong_id_token" }
         );
 
-        response
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        response.Headers.Should().ContainKey("Is-Required-Refresh-Id-Token");
+        response.Headers
+            .GetValues("Is-Required-Refresh-Id-Token")
             .Should()
-            .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeData>(
-                    new DataHeaders(ResultCode.SESSION_SESSION_NOT_FOUND),
-                    new ResultCodeData(ResultCode.SESSION_SESSION_NOT_FOUND)
-                )
-            );
+            .BeEquivalentTo(new List<string>() { "true" });
     }
 
     [Fact]
@@ -104,18 +103,16 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task Auth_IncorrectIdToken_ReturnsErrorResponse()
     {
-        DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
+        HttpResponseMessage response = await client.PostMsgpackBasic(
             "/tool/auth",
             new ToolAuthRequest() { id_token = "wrong_id_token" }
         );
 
-        response
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        response.Headers.Should().ContainKey("Is-Required-Refresh-Id-Token");
+        response.Headers
+            .GetValues("Is-Required-Refresh-Id-Token")
             .Should()
-            .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeData>(
-                    new DataHeaders(ResultCode.SESSION_SESSION_NOT_FOUND),
-                    new ResultCodeData(ResultCode.SESSION_SESSION_NOT_FOUND)
-                )
-            );
+            .BeEquivalentTo(new List<string>() { "true" });
     }
 }

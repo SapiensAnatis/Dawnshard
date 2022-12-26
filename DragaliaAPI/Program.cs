@@ -1,4 +1,6 @@
 using System.Reflection;
+using System.Security.Claims;
+using System.Text.Json;
 using DragaliaAPI.Database;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.MessagePackFormatters;
@@ -82,10 +84,10 @@ WebApplication app = builder.Build();
 app.UseSerilogRequestLogging(
     options =>
         options.EnrichDiagnosticContext = (diagContext, httpContext) =>
-        {
-            httpContext.Items.TryGetValue("DeviceAccountId", out object? deviceAccountObj);
-            diagContext.Set("DeviceAccountId", deviceAccountObj?.ToString() ?? "unknown");
-        }
+            diagContext.Set(
+                "DeviceAccountId",
+                httpContext.User.FindFirstValue(CustomClaimType.AccountId) ?? "unknown"
+            )
 );
 
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
