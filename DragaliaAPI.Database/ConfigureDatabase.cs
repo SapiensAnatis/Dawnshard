@@ -21,10 +21,7 @@ public static class DatabaseConfiguration
     )
     {
         string connectionString = GetConnectionString(host);
-        logger.Information(
-            "Connecting to database using connection string {string}...",
-            connectionString
-        );
+        logger.Information("Connecting to database using host {host}...", host);
 
         services = services
             .AddDbContext<ApiContext>(options => options.UseNpgsql(connectionString))
