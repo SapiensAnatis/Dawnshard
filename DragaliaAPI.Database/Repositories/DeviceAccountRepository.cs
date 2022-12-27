@@ -87,6 +87,14 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
 
     private async Task AddDefaultWyrmprints(string deviceAccountId)
     {
+        await this.apiContext.PlayerAbilityCrests.AddAsync(
+            new DbAbilityCrest()
+            {
+                DeviceAccountId = deviceAccountId,
+                AbilityCrestId = AbilityCrests.ManaFount
+            }
+        );
+
         await this.apiContext.PlayerAbilityCrests.AddRangeAsync(
             DefaultSavefileData.FiveStarCrests
                 .Select(

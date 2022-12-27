@@ -31,7 +31,7 @@ public class TutorialTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task TutorialUpdateStep_UpdatesDB()
     {
-        int step = 2;
+        int step = 20000;
 
         TutorialUpdateStepData response = (
             await client.PostMsgpack<TutorialUpdateStepData>(
@@ -51,7 +51,7 @@ public class TutorialTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task TutorialUpdateStep_ReturnsCorrectResponse()
     {
-        int step = 2;
+        int step = 20000;
 
         using IServiceScope scope = fixture.Services.CreateScope();
         IUserDataRepository userDataRepository =
