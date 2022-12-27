@@ -9,6 +9,7 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Services;
@@ -20,13 +21,9 @@ using static DragaliaAPI.Shared.Definitions.Enums.ManaNodesUtil;
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("chara")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
-[ApiController]
 public class CharaController : DragaliaControllerBase
 {
     private readonly ICharaDataService _charaDataService;
-    private readonly ISessionService _sessionService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
     private readonly IInventoryRepository inventoryRepository;
@@ -39,8 +36,7 @@ public class CharaController : DragaliaControllerBase
         IInventoryRepository inventoryRepository,
         IUpdateDataService updateDataService,
         IMapper mapper,
-        ICharaDataService charaDataService,
-        ISessionService sessionService
+        ICharaDataService charaDataService
     )
     {
         this.userDataRepository = userDataRepository;
@@ -49,126 +45,106 @@ public class CharaController : DragaliaControllerBase
         this.updateDataService = updateDataService;
         this.mapper = mapper;
         _charaDataService = charaDataService;
-        _sessionService = sessionService;
     }
 
     [Route("awake")]
     [HttpPost]
-    public async Task<DragaliaResult> Awake(
-        [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] CharaAwakeRequest request
-    )
+    public async Task<DragaliaResult> Awake([FromBody] CharaAwakeRequest request)
     {
-        try
+        if (request.next_rarity > 5)
         {
-            if (request.next_rarity > 5)
-            {
-                throw new ArgumentException("Cannot enhance beyond rarity 5");
-            }
-
-            DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(this.DeviceAccountId)
-                .FirstAsync();
-            DbPlayerCharaData playerCharData = await unitRepository
-                .GetAllCharaData(this.DeviceAccountId)
-                .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
-            DataAdventurer charData = _charaDataService.GetData((int)request.chara_id);
-            playerCharData.HpBase += (ushort)(
-                request.next_rarity == 4
-                    ? charData.MinHp4 - charData.MinHp3
-                    : charData.MinHp5 - charData.MinHp4
+            throw new DragaliaException(
+                ResultCode.CHARA_GROW_AWAKE_RARITY_INVALID,
+                "Invalid requested rarity"
             );
-            playerCharData.AttackBase += (ushort)(
-                request.next_rarity == 4
-                    ? charData.MinAtk4 - charData.MinAtk3
-                    : charData.MinAtk5 - charData.MinAtk4
-            );
-            playerCharData.Rarity = (byte)request.next_rarity;
-            //TODO Get and update missions relating to promoting characters
-            //MissionNoticeData missionNoticeData = null;
-
-            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-                this.DeviceAccountId
-            );
-
-            await unitRepository.SaveChangesAsync();
-
-            return Ok(new CharaBuildupData(updateDataList, new()));
         }
-        catch (Exception)
-        {
-            return BadRequest();
-        }
+
+        DbPlayerUserData userData = await this.userDataRepository
+            .GetUserData(this.DeviceAccountId)
+            .FirstAsync();
+        DbPlayerCharaData playerCharData = await unitRepository
+            .GetAllCharaData(this.DeviceAccountId)
+            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        DataAdventurer charData = _charaDataService.GetData((int)request.chara_id);
+        playerCharData.HpBase += (ushort)(
+            request.next_rarity == 4
+                ? charData.MinHp4 - charData.MinHp3
+                : charData.MinHp5 - charData.MinHp4
+        );
+        playerCharData.AttackBase += (ushort)(
+            request.next_rarity == 4
+                ? charData.MinAtk4 - charData.MinAtk3
+                : charData.MinAtk5 - charData.MinAtk4
+        );
+        playerCharData.Rarity = (byte)request.next_rarity;
+        //TODO Get and update missions relating to promoting characters
+        //MissionNoticeData missionNoticeData = null;
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await unitRepository.SaveChangesAsync();
+
+        return Ok(new CharaBuildupData(updateDataList, new()));
     }
 
     [Route("buildup")]
     [HttpPost]
-    public async Task<DragaliaResult> Buildup(
-        [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] CharaBuildupRequest request
-    )
+    public async Task<DragaliaResult> Buildup([FromBody] CharaBuildupRequest request)
     {
-        try
+        IEnumerable<Materials> matIds = request.material_list.Select(x => x.id).Cast<Materials>();
+
+        Dictionary<Materials, DbPlayerMaterial> dbMats = await this.inventoryRepository
+            .GetMaterials(this.DeviceAccountId)
+            .Where(dbMat => matIds.Contains(dbMat.MaterialId))
+            .ToDictionaryAsync(dbMat => dbMat.MaterialId);
+        foreach (AtgenEnemyPiece mat in request.material_list)
         {
-            IEnumerable<Materials> matIds = request.material_list
-                .Select(x => x.id)
-                .Cast<Materials>();
-
-            Dictionary<Materials, DbPlayerMaterial> dbMats = await this.inventoryRepository
-                .GetMaterials(this.DeviceAccountId)
-                .Where(dbMat => matIds.Contains(dbMat.MaterialId))
-                .ToDictionaryAsync(dbMat => dbMat.MaterialId);
-            foreach (AtgenEnemyPiece mat in request.material_list)
+            if (mat.quantity < 0)
             {
-                if (mat.quantity < 0)
-                {
-                    throw new ArgumentException("Invalid quantity for MaterialList");
-                }
-                if (
-                    mat.id != Materials.BronzeCrystal
-                    && mat.id != Materials.SilverCrystal
-                    && mat.id != Materials.GoldCrystal
-                    && mat.id != Materials.AmplifyingCrystal
-                    && mat.id != Materials.FortifyingCrystal
-                )
-                {
-                    throw new ArgumentException("Invalid MaterialList in request");
-                }
-                if (!dbMats.ContainsKey(mat.id) || dbMats[mat.id].Quantity < mat.quantity)
-                {
-                    throw new ArgumentException("Insufficient materials for buildup");
-                }
+                throw new ArgumentException("Invalid quantity for MaterialList");
             }
-            DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(this.DeviceAccountId)
-                .FirstAsync();
-            DbPlayerCharaData playerCharData = await this.unitRepository
-                .GetAllCharaData(this.DeviceAccountId)
-                .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
-
-            Dictionary<int, int> usedMaterials = new();
-            CharaLevelUp(request.material_list, ref playerCharData, ref usedMaterials);
-            List<MaterialList> remainingMaterials = new();
-            foreach (KeyValuePair<int, int> mat in usedMaterials)
+            if (
+                mat.id != Materials.BronzeCrystal
+                && mat.id != Materials.SilverCrystal
+                && mat.id != Materials.GoldCrystal
+                && mat.id != Materials.AmplifyingCrystal
+                && mat.id != Materials.FortifyingCrystal
+            )
             {
-                dbMats[(Materials)mat.Key].Quantity -= mat.Value;
-                remainingMaterials.Add(this.mapper.Map<MaterialList>(dbMats[(Materials)mat.Key]));
+                throw new ArgumentException("Invalid MaterialList in request");
             }
-
-            //TODO Add element/weapontype bonus if applicable
-
-            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-                this.DeviceAccountId
-            );
-
-            await unitRepository.SaveChangesAsync();
-
-            return Ok(new CharaBuildupData(updateDataList, new()));
+            if (!dbMats.ContainsKey(mat.id) || dbMats[mat.id].Quantity < mat.quantity)
+            {
+                throw new ArgumentException("Insufficient materials for buildup");
+            }
         }
-        catch (Exception)
+        DbPlayerUserData userData = await this.userDataRepository
+            .GetUserData(this.DeviceAccountId)
+            .FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository
+            .GetAllCharaData(this.DeviceAccountId)
+            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+
+        Dictionary<int, int> usedMaterials = new();
+        CharaLevelUp(request.material_list, ref playerCharData, ref usedMaterials);
+        List<MaterialList> remainingMaterials = new();
+        foreach (KeyValuePair<int, int> mat in usedMaterials)
         {
-            return BadRequest();
+            dbMats[(Materials)mat.Key].Quantity -= mat.Value;
+            remainingMaterials.Add(this.mapper.Map<MaterialList>(dbMats[(Materials)mat.Key]));
         }
+
+        //TODO Add element/weapontype bonus if applicable
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await unitRepository.SaveChangesAsync();
+
+        return Ok(new CharaBuildupData(updateDataList, new()));
     }
 
     private void CharaLevelUp(
@@ -336,22 +312,84 @@ public class CharaController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> CharaBuildupMana([FromBody] CharaBuildupManaRequest request)
     {
-        if (request.mana_circle_piece_id_list == null)
+        DbPlayerUserData userData = await this.userDataRepository
+            .GetUserData(this.DeviceAccountId)
+            .FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository
+            .GetAllCharaData(this.DeviceAccountId)
+            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        Dictionary<CurrencyTypes, int> usedCurrencies = new();
+        Dictionary<Materials, int> usedMaterials = new();
+        HashSet<int> unlockedStories = new();
+        await CharaManaNodeUnlock(
+            request.mana_circle_piece_id_list,
+            playerCharData,
+            usedCurrencies,
+            usedMaterials,
+            unlockedStories,
+            request.is_use_grow_material == 1
+                ? CharaUpgradeMaterialTypes.GrowthMaterial
+                : CharaUpgradeMaterialTypes.Standard
+        );
+        //TODO: Party power calculation call
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await userDataRepository.SaveChangesAsync();
+
+        return this.Ok(new CharaBuildupData(updateDataList, new()));
+    }
+
+    [Route("limit_break")]
+    [HttpPost]
+    public async Task<DragaliaResult> CharaLimitBreak([FromBody] CharaLimitBreakRequest request)
+    {
+        DbPlayerUserData userData = await this.userDataRepository
+            .GetUserData(this.DeviceAccountId)
+            .FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository
+            .GetAllCharaData(this.DeviceAccountId)
+            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        Dictionary<CurrencyTypes, int> usedCurrencies = new();
+        Dictionary<Materials, int> usedMaterials = new();
+        playerCharData.LimitBreakCount = (byte)request.next_limit_break_count;
+        if (request.next_limit_break_count == 6)
         {
-            return BadRequest();
+            playerCharData.AdditionalMaxLevel += 5;
         }
-        try
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await unitRepository.SaveChangesAsync();
+
+        return Ok(new CharaBuildupData(updateDataList, new()));
+    }
+
+    [Route("limit_break_and_buildup_mana")]
+    [HttpPost]
+    public async Task<DragaliaResult> CharaLimitBreakAndMana(
+        [FromBody] CharaLimitBreakAndBuildupManaRequest request
+    )
+    {
+        DbPlayerUserData userData = await this.userDataRepository
+            .GetUserData(this.DeviceAccountId)
+            .FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository
+            .GetAllCharaData(this.DeviceAccountId)
+            .FirstAsync(chara => chara.CharaId == request.chara_id);
+        Dictionary<CurrencyTypes, int> usedCurrencies = new();
+        Dictionary<Materials, int> usedMaterials = new();
+        HashSet<int> unlockedStories = new();
+
+        playerCharData.LimitBreakCount = (byte)request.next_limit_break_count;
+
+        if (request.mana_circle_piece_id_list.Any())
         {
-            DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(this.DeviceAccountId)
-                .FirstAsync();
-            DbPlayerCharaData playerCharData = await this.unitRepository
-                .GetAllCharaData(this.DeviceAccountId)
-                .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
-            Dictionary<CurrencyTypes, int> usedCurrencies = new();
-            Dictionary<Materials, int> usedMaterials = new();
-            HashSet<int> unlockedStories = new();
-            CharaManaNodeUnlock(
+            await CharaManaNodeUnlock(
                 request.mana_circle_piece_id_list,
                 playerCharData,
                 usedCurrencies,
@@ -361,175 +399,65 @@ public class CharaController : DragaliaControllerBase
                     ? CharaUpgradeMaterialTypes.GrowthMaterial
                     : CharaUpgradeMaterialTypes.Standard
             );
-            //TODO: Party power calculation call
-
-            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-                this.DeviceAccountId
-            );
-
-            await userDataRepository.SaveChangesAsync();
-
-            return this.Ok(new CharaBuildupData(updateDataList, new()));
         }
-        catch (Exception)
-        {
-            return BadRequest();
-        }
-    }
 
-    [Route("limit_break")]
-    [HttpPost]
-    public async Task<DragaliaResult> CharaLimitBreak([FromBody] CharaLimitBreakRequest request)
-    {
-        if (request.next_limit_break_count == null)
-        {
-            return BadRequest();
-        }
-        try
-        {
-            DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(this.DeviceAccountId)
-                .FirstAsync();
-            DbPlayerCharaData playerCharData = await this.unitRepository
-                .GetAllCharaData(this.DeviceAccountId)
-                .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
-            Dictionary<CurrencyTypes, int> usedCurrencies = new();
-            Dictionary<Materials, int> usedMaterials = new();
-            playerCharData.LimitBreakCount = (byte)request.next_limit_break_count;
-            if (request.next_limit_break_count == 6)
-            {
-                playerCharData.AdditionalMaxLevel += 5;
-            }
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
 
-            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-                this.DeviceAccountId
-            );
+        await unitRepository.SaveChangesAsync();
 
-            await unitRepository.SaveChangesAsync();
-
-            return Ok(new CharaBuildupData(updateDataList, new()));
-        }
-        catch (Exception)
-        {
-            return BadRequest();
-        }
-    }
-
-    [Route("limit_break_and_buildup_mana")]
-    [HttpPost]
-    public async Task<DragaliaResult> CharaLimitBreakAndMana(
-        [FromHeader(Name = "SID")] string sessionId,
-        [FromBody] CharaLimitBreakAndBuildupManaRequest request
-    )
-    {
-        if (
-            request.next_limit_break_count == null
-            && (
-                request.mana_circle_piece_id_list == null
-                || !request.mana_circle_piece_id_list.Any()
-            )
-        )
-        {
-            return BadRequest();
-        }
-        try
-        {
-            DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(this.DeviceAccountId)
-                .FirstAsync();
-            DbPlayerCharaData playerCharData = await this.unitRepository
-                .GetAllCharaData(this.DeviceAccountId)
-                .FirstAsync(chara => chara.CharaId == request.chara_id);
-            Dictionary<CurrencyTypes, int> usedCurrencies = new();
-            Dictionary<Materials, int> usedMaterials = new();
-            HashSet<int> unlockedStories = new();
-            if (request.next_limit_break_count != null)
-            {
-                playerCharData.LimitBreakCount = (byte)request.next_limit_break_count;
-            }
-            if (
-                request.mana_circle_piece_id_list != null && request.mana_circle_piece_id_list.Any()
-            )
-            {
-                CharaManaNodeUnlock(
-                    request.mana_circle_piece_id_list,
-                    playerCharData,
-                    usedCurrencies,
-                    usedMaterials,
-                    unlockedStories,
-                    request.is_use_grow_material == 1
-                        ? CharaUpgradeMaterialTypes.GrowthMaterial
-                        : CharaUpgradeMaterialTypes.Standard
-                );
-            }
-
-            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-                this.DeviceAccountId
-            );
-
-            await unitRepository.SaveChangesAsync();
-
-            return Ok(new CharaBuildupData(updateDataList, new()));
-        }
-        catch (Exception)
-        {
-            return BadRequest();
-        }
+        return Ok(new CharaBuildupData(updateDataList, new()));
     }
 
     [Route("buildup_platinum")]
     [HttpPost]
     public async Task<DragaliaResult> CharaBuildupPlatinum(
-        [FromHeader(Name = "SID")] string sessionId,
         [FromBody] CharaBuildupPlatinumRequest request
     )
     {
-        try
+        DbPlayerUserData userData = await this.userDataRepository
+            .GetUserData(this.DeviceAccountId)
+            .FirstAsync();
+        DbPlayerCharaData playerCharaData = await this.unitRepository
+            .GetAllCharaData(this.DeviceAccountId)
+            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        DataAdventurer charaData = _charaDataService.GetData(playerCharaData.CharaId);
+        playerCharaData.Rarity = 5;
+        bool hasSpiral = charaData.MaxLimitBreakCount > 4;
+        playerCharaData.Level = (byte)(
+            CharaConstants.MaxLevel + (hasSpiral ? CharaConstants.AddMaxLevel : 0)
+        );
+        playerCharaData.Exp = CharaConstants.XpLimits[playerCharaData.Level - 1];
+        playerCharaData.HpBase = hasSpiral ? (ushort)charaData.AddMaxHp1 : (ushort)charaData.MaxHp;
+        playerCharaData.AttackBase = hasSpiral
+            ? (ushort)charaData.AddMaxAtk1
+            : (ushort)charaData.MaxAtk;
+        if (playerCharaData.ManaNodeUnlockCount < 50)
         {
-            DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(this.DeviceAccountId)
-                .FirstAsync();
-            DbPlayerCharaData playerCharaData = await this.unitRepository
-                .GetAllCharaData(this.DeviceAccountId)
-                .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
-            DataAdventurer charaData = _charaDataService.GetData(playerCharaData.CharaId);
-            playerCharaData.Rarity = 5;
-            bool hasSpiral = charaData.MaxLimitBreakCount > 4;
-            playerCharaData.Level = (byte)(
-                CharaConstants.MaxLevel + (hasSpiral ? CharaConstants.AddMaxLevel : 0)
-            );
-            playerCharaData.Exp = CharaConstants.XpLimits[playerCharaData.Level - 1];
-            playerCharaData.HpBase = hasSpiral
-                ? (ushort)charaData.AddMaxHp1
-                : (ushort)charaData.MaxHp;
-            playerCharaData.AttackBase = hasSpiral
-                ? (ushort)charaData.AddMaxAtk1
-                : (ushort)charaData.MaxAtk;
-            playerCharaData.LimitBreakCount = (byte)charaData.MaxLimitBreakCount;
-            ManaNodes maxManaNodes = hasSpiral ? ManaNodes.Circle7 : ManaNodesUtil.MaxManaNodes;
-            Dictionary<CurrencyTypes, int> usedCurrencies = new();
-            Dictionary<Materials, int> usedMaterials = new();
-            HashSet<int> unlockedStories = new();
-            CharaManaNodeUnlock(
-                ManaNodesUtil.GetSetFromManaNodes(maxManaNodes),
-                playerCharaData,
-                usedCurrencies,
-                usedMaterials,
-                unlockedStories,
-                CharaUpgradeMaterialTypes.Omnicite
-            );
-            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-                this.DeviceAccountId
-            );
-
-            await unitRepository.SaveChangesAsync();
-
-            return Ok(new CharaBuildupData(updateDataList, new()));
+            playerCharaData.HpNode += (ushort)charaData.McFullBonusHp5;
+            playerCharaData.AttackNode += (ushort)charaData.McFullBonusAtk5;
         }
-        catch (Exception)
-        {
-            return BadRequest();
-        }
+        playerCharaData.LimitBreakCount = (byte)charaData.MaxLimitBreakCount;
+        ManaNodes maxManaNodes = hasSpiral ? ManaNodes.Circle7 : ManaNodesUtil.MaxManaNodes;
+        Dictionary<CurrencyTypes, int> usedCurrencies = new();
+        Dictionary<Materials, int> usedMaterials = new();
+        HashSet<int> unlockedStories = new();
+        await CharaManaNodeUnlock(
+            ManaNodesUtil.GetSetFromManaNodes(maxManaNodes),
+            playerCharaData,
+            usedCurrencies,
+            usedMaterials,
+            unlockedStories,
+            CharaUpgradeMaterialTypes.Omnicite
+        );
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await unitRepository.SaveChangesAsync();
+
+        return Ok(new CharaBuildupData(updateDataList, new()));
     }
 
     /// <summary>
@@ -541,7 +469,7 @@ public class CharaController : DragaliaControllerBase
     /// <param name="manaNodes">Mananodes to unlock</param>
     /// <param name="isUseSpecialMaterial"></param>
     /// <returns></returns>
-    private async void CharaManaNodeUnlock(
+    private async Task CharaManaNodeUnlock(
         IEnumerable<int> manaNodes,
         DbPlayerCharaData playerCharData,
         Dictionary<CurrencyTypes, int> usedCurrency,
@@ -729,11 +657,9 @@ public class CharaController : DragaliaControllerBase
         }
 
         SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
-        bool isUnlockFullMCBonusOmnicite =
-            nodes.Count < 50 && isUseSpecialMaterial == CharaUpgradeMaterialTypes.Omnicite;
         nodes.AddRange(manaNodes);
 
-        if (nodes.Count == 50 || isUnlockFullMCBonusOmnicite)
+        if (nodes.Count == 50)
         {
             playerCharData.HpNode += (ushort)charaData.McFullBonusHp5;
             playerCharData.AttackNode += (ushort)charaData.McFullBonusAtk5;
@@ -745,64 +671,54 @@ public class CharaController : DragaliaControllerBase
     [Route("unlock_edit_skill")]
     [HttpPost]
     public async Task<DragaliaResult> CharaUnlockEditSkill(
-        [FromHeader(Name = "SID")] string sessionId,
         [FromBody] CharaUnlockEditSkillRequest request
     )
     {
-        try
+        DbPlayerUserData userData = await this.userDataRepository
+            .GetUserData(this.DeviceAccountId)
+            .FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository
+            .GetAllCharaData(this.DeviceAccountId)
+            .FirstAsync(chara => chara.CharaId == request.chara_id);
+        DataAdventurer charData = _charaDataService.GetData(playerCharData.CharaId);
+        //TODO: For now trust the client won't send the id of a chara who isn't allowed to share
+        if (
+            playerCharData.Level < 80
+            || (ManaNodes)playerCharData.ManaNodeUnlockCount < (ManaNodes.Circle5 - 1)
+        )
         {
-            DbPlayerUserData userData = await this.userDataRepository
-                .GetUserData(this.DeviceAccountId)
-                .FirstAsync();
-            DbPlayerCharaData playerCharData = await this.unitRepository
-                .GetAllCharaData(this.DeviceAccountId)
-                .FirstAsync(chara => chara.CharaId == request.chara_id);
-            DataAdventurer charData = _charaDataService.GetData(playerCharData.CharaId);
-            //TODO: For now trust the client won't send the id of a chara who isn't allowed to share
-            if (
-                playerCharData.Level < 80
-                || (ManaNodes)playerCharData.ManaNodeUnlockCount < (ManaNodes.Circle5 - 1)
-            )
-            {
-                throw new ArgumentException("Adventurer not eligible to share skill");
-            }
-
-            Materials usedMat = UpgradeMaterials.tomes[charData.ElementalType];
-            int usedMatCount = charData.EditSkillCost;
-            DbPlayerMaterial? dbMat = await this.inventoryRepository.GetMaterial(
-                this.DeviceAccountId,
-                usedMat
-            );
-            if (dbMat == null || dbMat.Quantity < usedMatCount)
-            {
-                throw new ArgumentException("Insufficient materials in storage");
-            }
-            playerCharData.IsUnlockEditSkill = true;
-            dbMat.Quantity -= usedMatCount;
-            UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-                this.DeviceAccountId
-            );
-
-            await unitRepository.SaveChangesAsync();
-
-            return Ok(new CharaBuildupData(updateDataList, new()));
+            throw new ArgumentException("Adventurer not eligible to share skill");
         }
-        catch (Exception)
+
+        Materials usedMat = UpgradeMaterials.tomes[charData.ElementalType];
+        int usedMatCount = charData.EditSkillCost;
+        DbPlayerMaterial? dbMat = await this.inventoryRepository.GetMaterial(
+            this.DeviceAccountId,
+            usedMat
+        );
+        if (dbMat == null || dbMat.Quantity < usedMatCount)
         {
-            return BadRequest();
+            throw new ArgumentException("Insufficient materials in storage");
         }
+        playerCharData.IsUnlockEditSkill = true;
+        dbMat.Quantity -= usedMatCount;
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await unitRepository.SaveChangesAsync();
+
+        return Ok(new CharaBuildupData(updateDataList, new()));
     }
 
     [Route("get_chara_unit_set")]
     [HttpPost]
     public async Task<DragaliaResult> GetCharaUnitSet(
-        [FromHeader(Name = "SID")] string sessionId,
         [FromBody] CharaGetCharaUnitSetRequest request
     )
     {
-        string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
         IDictionary<Charas, IEnumerable<DbSetUnit>> setUnitData = unitRepository.GetCharaSets(
-            accountId,
+            DeviceAccountId,
             request.chara_id_list.Select(x => (Charas)x)
         );
         return Ok(
@@ -847,14 +763,20 @@ public class CharaController : DragaliaControllerBase
     [Route("set_chara_unit_set")]
     [HttpPost]
     public async Task<DragaliaResult> SetCharaUnitSet(
-        [FromHeader(Name = "SID")] string sessionId,
         [FromBody] CharaSetCharaUnitSetRequest request
     )
     {
-        string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
         DbSetUnit setUnitData =
-            await unitRepository.GetCharaSetData(accountId, request.chara_id, request.unit_set_no)
-            ?? unitRepository.AddCharaSetData(accountId, request.chara_id, request.unit_set_no);
+            await unitRepository.GetCharaSetData(
+                DeviceAccountId,
+                request.chara_id,
+                request.unit_set_no
+            )
+            ?? unitRepository.AddCharaSetData(
+                DeviceAccountId,
+                request.chara_id,
+                request.unit_set_no
+            );
         ;
 
         setUnitData.UnitSetName = request.unit_set_name;
@@ -888,7 +810,7 @@ public class CharaController : DragaliaControllerBase
         {
             chara_id = (int)request.chara_id,
             chara_unit_set_detail_list = unitRepository
-                .GetCharaSets(accountId, request.chara_id)
+                .GetCharaSets(DeviceAccountId, request.chara_id)
                 .Select(
                     x =>
                         new AtgenCharaUnitSetDetailList()
@@ -908,7 +830,7 @@ public class CharaController : DragaliaControllerBase
                         }
                 )
         };
-        UpdateDataList ul = updateDataService.GetUpdateDataList(accountId);
+        UpdateDataList ul = updateDataService.GetUpdateDataList(DeviceAccountId);
         ul.chara_unit_set_list = new List<CharaUnitSetList> { setList };
         return Ok(new CharaSetCharaUnitSetData() { update_data_list = ul, entity_result = null });
     }

@@ -35,7 +35,7 @@ public class DbPlayerUserData : IDbHasAccountId
     /// <summary>
     /// The player's rupie balance.
     /// </summary>
-    public int Coin { get; set; }
+    public long Coin { get; set; }
 
     public int MaxDragonQuantity { get; set; }
 

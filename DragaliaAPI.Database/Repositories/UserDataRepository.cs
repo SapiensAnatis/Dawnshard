@@ -24,12 +24,12 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         return infoQuery;
     }
 
-    public async Task<DbPlayerUserData> UpdateTutorialStatus(string deviceAccountId, int newStatus)
+    public async Task UpdateTutorialStatus(string deviceAccountId, int newStatus)
     {
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
 
-        userData.TutorialStatus = newStatus;
-        return userData;
+        if (newStatus > userData.TutorialStatus)
+            userData.TutorialStatus = newStatus;
     }
 
     public async Task<ISet<int>> GetTutorialFlags(string deviceAccountId)
