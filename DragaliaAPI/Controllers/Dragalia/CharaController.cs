@@ -45,7 +45,6 @@ public class CharaController : DragaliaControllerBase
         this.updateDataService = updateDataService;
         this.mapper = mapper;
         _charaDataService = charaDataService;
-        _sessionService = sessionService;
     }
 
     [Route("awake")]
