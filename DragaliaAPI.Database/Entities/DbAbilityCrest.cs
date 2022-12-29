@@ -32,7 +32,6 @@ public class DbAbilityCrest : IDbHasAccountId
 
     /// <summary>
     /// Gets or sets a value indicating how many copies of the wyrmprint are owned.
-    /// <remarks>Misspelling of 'equippable' is intended for compatibility with the game.</remarks>
     /// </summary>
     public int EquipableCount { get; set; } = 1;
 
