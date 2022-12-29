@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using DragaliaAPI.Database;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.MessagePackFormatters;
@@ -49,6 +50,7 @@ builder.Services
     // For savefile import
     option =>
     {
+        option.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         option.JsonSerializerOptions.Converters.Add(new UnixDateTimeJsonConverter());
         // Cannot add the boolean one if we want Nintendo login to keep working
     });
