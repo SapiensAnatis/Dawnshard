@@ -1,7 +1,7 @@
 #nullable disable
 
 using System.Text.Json.Serialization;
-using DragaliaAPI.MessagePackFormatters;
+using DragaliaAPI.MessagePack;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Generated;

@@ -1,8 +1,8 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Helpers;
-using DragaliaAPI.Services.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -17,7 +17,8 @@ public class AuthService : IAuthService
     private readonly ISessionService sessionService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IDeviceAccountRepository deviceAccountRepository;
-    private readonly IOptionsMonitor<DragaliaAuthOptions> options;
+    private readonly IOptionsMonitor<LoginOptions> loginOptions;
+    private readonly IOptionsMonitor<BaasOptions> baasOptions;
     private readonly ILogger<AuthService> logger;
 
     public AuthService(
@@ -25,7 +26,8 @@ public class AuthService : IAuthService
         ISessionService sessionService,
         IUserDataRepository userDataRepository,
         IDeviceAccountRepository deviceAccountRepository,
-        IOptionsMonitor<DragaliaAuthOptions> options,
+        IOptionsMonitor<LoginOptions> loginOptions,
+        IOptionsMonitor<BaasOptions> baasOptions,
         ILogger<AuthService> logger
     )
     {
@@ -33,15 +35,16 @@ public class AuthService : IAuthService
         this.sessionService = sessionService;
         this.userDataRepository = userDataRepository;
         this.deviceAccountRepository = deviceAccountRepository;
-        this.options = options;
+        this.loginOptions = loginOptions;
+        this.baasOptions = baasOptions;
         this.logger = logger;
     }
 
     public async Task<(long viewerId, string sessionId)> DoAuth(string idToken)
     {
-        (long viewerId, string sessionId) result = this.options.CurrentValue.UseLegacyLogin
-            ? await this.DoLegacyAuth(idToken)
-            : await this.DoBaasAuth(idToken);
+        (long viewerId, string sessionId) result = this.loginOptions.CurrentValue.UseBaasLogin
+            ? await this.DoBaasAuth(idToken)
+            : await this.DoLegacyAuth(idToken);
 
         this.logger.LogInformation(
             "Authenticated user with viewer ID {viewerid} and issued session ID {sid}",
@@ -86,8 +89,8 @@ public class AuthService : IAuthService
             new()
             {
                 IssuerSigningKeys = await this.baasRequestHelper.GetKeys(),
-                ValidAudience = this.options.CurrentValue.TokenAudience,
-                ValidIssuer = this.options.CurrentValue.TokenIssuer,
+                ValidAudience = this.baasOptions.CurrentValue.TokenAudience,
+                ValidIssuer = this.baasOptions.CurrentValue.TokenIssuer,
             }
         );
 

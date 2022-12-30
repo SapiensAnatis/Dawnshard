@@ -1,15 +1,11 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Helpers;
-using DragaliaAPI.Services.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Unit.Services;
@@ -23,7 +19,8 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
     private readonly Mock<ISessionService> mockSessionService;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IDeviceAccountRepository> mockDeviceAccountRepository;
-    private readonly Mock<IOptionsMonitor<DragaliaAuthOptions>> mockOptions;
+    private readonly Mock<IOptionsMonitor<LoginOptions>> mockLoginOptions;
+    private readonly Mock<IOptionsMonitor<BaasOptions>> mockBaasOptions;
     private readonly Mock<ILogger<AuthService>> mockLogger;
     private readonly AuthServiceTestFixture fixture;
 
@@ -33,7 +30,8 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
         this.mockSessionService = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockDeviceAccountRepository = new(MockBehavior.Strict);
-        this.mockOptions = new(MockBehavior.Strict);
+        this.mockBaasOptions = new(MockBehavior.Strict);
+        this.mockLoginOptions = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
 
         this.authService = new(
@@ -41,7 +39,8 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
             this.mockSessionService.Object,
             this.mockUserDataRepository.Object,
             this.mockDeviceAccountRepository.Object,
-            this.mockOptions.Object,
+            this.mockLoginOptions.Object,
+            this.mockBaasOptions.Object,
             this.mockLogger.Object
         );
 
@@ -52,9 +51,9 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
     [Fact]
     public async Task DoAuth_LegacyAuthEnabled_UsesLegacyAuth()
     {
-        this.mockOptions
+        this.mockLoginOptions
             .Setup(x => x.CurrentValue)
-            .Returns(new DragaliaAuthOptions() { UseLegacyLogin = true });
+            .Returns(new LoginOptions() { UseBaasLogin = false });
 
         // These session service methods are not used in the new auth
         this.mockSessionService
@@ -74,27 +73,23 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
         this.mockSessionService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockDeviceAccountRepository.VerifyAll();
-        this.mockOptions.VerifyAll();
+        this.mockBaasOptions.VerifyAll();
     }
 
     [Fact]
     public async Task DoAuth_ValidToken_ReturnsViewerId()
     {
-        this.mockOptions
+        this.mockBaasOptions
             .Setup(x => x.CurrentValue)
-            .Returns(
-                new DragaliaAuthOptions()
-                {
-                    UseLegacyLogin = false,
-                    TokenAudience = "audience",
-                    TokenIssuer = "issuer"
-                }
-            );
+            .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
+        this.mockLoginOptions
+            .Setup(x => x.CurrentValue)
+            .Returns(new LoginOptions() { UseBaasLogin = true });
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
 
         string token = fixture.GetToken(
-            this.mockOptions.Object.CurrentValue.TokenIssuer,
-            this.mockOptions.Object.CurrentValue.TokenAudience,
+            this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
+            this.mockBaasOptions.Object.CurrentValue.TokenAudience,
             DateTime.UtcNow.AddHours(1),
             "account id"
         );
@@ -113,28 +108,24 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
         this.mockSessionService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockDeviceAccountRepository.VerifyAll();
-        this.mockOptions.VerifyAll();
-        // Not verifying BaasRequestHelper as it is only sometimes used
+        this.mockBaasOptions.VerifyAll();
+        this.mockBaasRequestHelper.VerifyAll();
     }
 
     [Fact]
     public async Task DoAuth_ExpiredToken_ThrowsSessionException()
     {
-        this.mockOptions
+        this.mockBaasOptions
             .Setup(x => x.CurrentValue)
-            .Returns(
-                new DragaliaAuthOptions()
-                {
-                    UseLegacyLogin = false,
-                    TokenAudience = "audience",
-                    TokenIssuer = "issuer"
-                }
-            );
+            .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
+        this.mockLoginOptions
+            .Setup(x => x.CurrentValue)
+            .Returns(new LoginOptions() { UseBaasLogin = true });
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
 
         string token = fixture.GetToken(
-            this.mockOptions.Object.CurrentValue.TokenIssuer,
-            this.mockOptions.Object.CurrentValue.TokenAudience,
+            this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
+            this.mockBaasOptions.Object.CurrentValue.TokenAudience,
             DateTime.UtcNow.AddHours(-1),
             "account id"
         );
@@ -147,23 +138,19 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
         this.mockSessionService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockDeviceAccountRepository.VerifyAll();
-        this.mockOptions.VerifyAll();
+        this.mockBaasOptions.VerifyAll();
+        this.mockBaasRequestHelper.VerifyAll();
     }
 
     [Fact]
     public async Task DoAuth_InvalidToken_ThrowsDragaliaException()
     {
-        this.mockOptions
+        this.mockBaasOptions
             .Setup(x => x.CurrentValue)
-            .Returns(
-                new DragaliaAuthOptions()
-                {
-                    UseLegacyLogin = false,
-                    TokenAudience = "audience",
-                    TokenIssuer = "issuer"
-                }
-            );
-
+            .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
+        this.mockLoginOptions
+            .Setup(x => x.CurrentValue)
+            .Returns(new LoginOptions() { UseBaasLogin = true });
         await this.authService
             .Invoking(
                 x =>
@@ -178,6 +165,7 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
         this.mockSessionService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockDeviceAccountRepository.VerifyAll();
-        this.mockOptions.VerifyAll();
+        this.mockBaasOptions.VerifyAll();
+        this.mockBaasRequestHelper.VerifyAll();
     }
 }

@@ -1,5 +1,5 @@
-﻿using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Services.Options;
+﻿using DragaliaAPI.Models.Options;
+using DragaliaAPI.Services.Exceptions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -7,7 +7,7 @@ namespace DragaliaAPI.Services.Helpers;
 
 public class BaasRequestHelper : IBaasRequestHelper
 {
-    private readonly IOptionsMonitor<DragaliaAuthOptions> options;
+    private readonly IOptionsMonitor<BaasOptions> options;
     private readonly HttpClient client;
     private readonly ILogger<BaasRequestHelper> logger;
     private const string KeySetEndpoint = "/.well-known/jwks.json";
@@ -15,7 +15,7 @@ public class BaasRequestHelper : IBaasRequestHelper
     private IList<SecurityKey>? cachedKeys;
 
     public BaasRequestHelper(
-        IOptionsMonitor<DragaliaAuthOptions> options,
+        IOptionsMonitor<BaasOptions> options,
         HttpClient client,
         ILogger<BaasRequestHelper> logger
     )

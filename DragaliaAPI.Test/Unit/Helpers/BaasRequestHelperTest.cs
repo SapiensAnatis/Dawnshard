@@ -5,9 +5,9 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Helpers;
-using DragaliaAPI.Services.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -19,7 +19,7 @@ namespace DragaliaAPI.Test.Unit.Helpers;
 public class BaasRequestHelperTest
 {
     private readonly IBaasRequestHelper baasRequestHelper;
-    private readonly Mock<IOptionsMonitor<DragaliaAuthOptions>> mockOptions;
+    private readonly Mock<IOptionsMonitor<BaasOptions>> mockOptions;
     private readonly Mock<HttpMessageHandler> mockHttpMessageHandler;
     private readonly Mock<ILogger<BaasRequestHelper>> mockLogger;
 
@@ -41,7 +41,7 @@ public class BaasRequestHelperTest
     {
         this.mockOptions
             .SetupGet(x => x.CurrentValue)
-            .Returns(new DragaliaAuthOptions() { BaasUrl = "https://www.taylorswift.com/" });
+            .Returns(new BaasOptions() { BaasUrl = "https://www.taylorswift.com/" });
         this.mockHttpMessageHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -75,6 +75,9 @@ public class BaasRequestHelperTest
             );
 
         (await this.baasRequestHelper.GetKeys()).Should().ContainSingle();
+
+        this.mockOptions.VerifyAll();
+        this.mockHttpMessageHandler.VerifyAll();
     }
 
     [Fact]
@@ -82,7 +85,7 @@ public class BaasRequestHelperTest
     {
         this.mockOptions
             .SetupGet(x => x.CurrentValue)
-            .Returns(new DragaliaAuthOptions() { BaasUrl = "https://www.taylorswift.com/" });
+            .Returns(new BaasOptions() { BaasUrl = "https://www.taylorswift.com/" });
         this.mockHttpMessageHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -99,5 +102,8 @@ public class BaasRequestHelperTest
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
             .Where(x => x.Code == Models.ResultCode.COMMON_AUTH_ERROR);
+
+        this.mockOptions.VerifyAll();
+        this.mockHttpMessageHandler.VerifyAll();
     }
 }

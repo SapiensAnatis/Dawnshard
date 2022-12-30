@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Json;
 using DragaliaAPI.Models;
+using DragaliaAPI.Models.Options;
 
 namespace DragaliaAPI.Test.Integration.Other;
 
+[Collection("DragaliaIntegration")]
 public class DragalipatchTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly IntegrationTestFixture fixture;
-    private HttpClient client;
+    private readonly HttpClient client;
 
     public DragalipatchTest(IntegrationTestFixture fixture)
     {
@@ -27,13 +23,14 @@ public class DragalipatchTest : IClassFixture<IntegrationTestFixture>
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
-        DragalipatchConfig? config = await response.Content.ReadFromJsonAsync<DragalipatchConfig>();
+        DragalipatchResponse? config =
+            await response.Content.ReadFromJsonAsync<DragalipatchResponse>();
 
         config.Should().NotBeNull();
         config
             .Should()
             .BeEquivalentTo(
-                new DragalipatchConfig()
+                new DragalipatchResponse()
                 {
                     Mode = "RAW",
                     CdnUrl = "https://github.com",
