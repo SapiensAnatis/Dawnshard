@@ -1,10 +1,12 @@
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using DragaliaAPI.Database;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.MessagePackFormatters;
 using DragaliaAPI.Middleware;
+using DragaliaAPI.Models;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Shared;
@@ -20,7 +22,9 @@ Log.Logger = new LoggerConfiguration().MinimumLevel
     .CreateBootstrapLogger();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
 ConfigurationManager configuration = builder.Configuration;
+builder.Services.Configure<DragalipatchConfig>(configuration.GetRequiredSection("Dragalipatch"));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
@@ -46,6 +50,7 @@ builder.Services
     // For savefile import
     option =>
     {
+        option.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         option.JsonSerializerOptions.Converters.Add(new UnixDateTimeJsonConverter());
         // Cannot add the boolean one if we want Nintendo login to keep working
     });
