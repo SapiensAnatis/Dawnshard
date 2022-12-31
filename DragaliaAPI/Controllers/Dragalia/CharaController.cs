@@ -477,7 +477,10 @@ public class CharaController : DragaliaControllerBase
     )
     {
         CharaData charaData = MasterAsset.CharaData.Get(playerCharData.CharaId);
-        ImmutableList<ManaNode> manaNodeInfos = charaData.GetManaNodes().ToImmutableList();
+        ImmutableList<ManaNode> manaNodeInfos = charaData
+            .GetManaNodes()
+            .OrderBy(x => x.MC_0)
+            .ToImmutableList();
         List<int>[] hpNodesOnFloor = new List<int>[] { new(), new(), new(), new(), new(), new() };
         List<int>[] atkNodesOnFloor = new List<int>[] { new(), new(), new(), new(), new(), new() };
         List<int>[] hpAtkNodesOnFloor = new List<int>[]
