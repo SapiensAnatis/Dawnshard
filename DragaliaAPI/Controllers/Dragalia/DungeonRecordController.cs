@@ -38,24 +38,26 @@ public class DungeonRecordController : DragaliaControllerBase
     public async Task<DragaliaResult> Record(DungeonRecordRecordRequest request)
     {
         DungeonSession session = await this.dungeonService.FinishDungeon(request.dungeon_key);
+
         DbQuest? oldQuestData = await this.questRepository
             .GetQuests(this.DeviceAccountId)
             .SingleOrDefaultAsync(x => x.QuestId == session.DungeonId);
 
-        bool isFirstClear = oldQuestData is null || oldQuestData.PlayCount == 0;
-        bool? oldMissionClear1 = oldQuestData?.IsMissionClear1;
-        bool? oldMissionClear2 = oldQuestData?.IsMissionClear2;
-        bool? oldMissionClear3 = oldQuestData?.IsMissionClear3;
+        bool isFirstClear = oldQuestData is null || oldQuestData?.PlayCount == 0;
+        bool oldMissionClear1 = oldQuestData?.IsMissionClear1 ?? false;
+        bool oldMissionClear2 = oldQuestData?.IsMissionClear2 ?? false;
+        bool oldMissionClear3 = oldQuestData?.IsMissionClear3 ?? false;
+
+        float clear_time = request.play_record?.time ?? -1.0f;
 
         await this.userDataRepository.AddTutorialFlag(this.DeviceAccountId, 1022);
 
         // oldQuestData and newQuestData actually reference the same object so this is somewhat redundant
-        // keeping it for clarity and also bc newQuestData is definitely not null while oldQuestData
-        // could have been null at one point
+        // keeping it for clarity and because oldQuestData is null in some tests
         DbQuest newQuestData = await this.questRepository.CompleteQuest(
             this.DeviceAccountId,
             session.DungeonId,
-            request.play_record.time
+            clear_time
         );
 
         DbPlayerUserData userData = await this.userDataRepository
@@ -69,9 +71,9 @@ public class DungeonRecordController : DragaliaControllerBase
         bool[] clearedMissions = new bool[5]
         {
             isFirstClear,
-            oldMissionClear1 != newQuestData.IsMissionClear1 && newQuestData.IsMissionClear1,
-            oldMissionClear2 != newQuestData.IsMissionClear2 && newQuestData.IsMissionClear2,
-            oldMissionClear3 != newQuestData.IsMissionClear3 && newQuestData.IsMissionClear3,
+            newQuestData.IsMissionClear1 && !oldMissionClear1,
+            newQuestData.IsMissionClear2 && !oldMissionClear2,
+            newQuestData.IsMissionClear3 && !oldMissionClear3,
             false
         };
 
@@ -199,8 +201,8 @@ public class DungeonRecordController : DragaliaControllerBase
                     scoring_enemy_point_list = new List<AtgenScoringEnemyPointList>(),
                     score_mission_success_list = new List<AtgenScoreMissionSuccessList>(),
                     event_passive_up_list = new List<AtgenEventPassiveUpList>(),
-                    clear_time = request.play_record.time,
-                    is_best_clear_time = request.play_record.time == newQuestData.BestClearTime,
+                    clear_time = clear_time,
+                    is_best_clear_time = clear_time == newQuestData.BestClearTime,
                     converted_entity_list = new List<ConvertedEntityList>(),
                     dungeon_skip_type = 0,
                     total_play_damage = 0,
