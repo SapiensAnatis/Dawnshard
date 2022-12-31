@@ -38,9 +38,25 @@ public class DungeonRecordController : DragaliaControllerBase
     public async Task<DragaliaResult> Record(DungeonRecordRecordRequest request)
     {
         DungeonSession session = await this.dungeonService.FinishDungeon(request.dungeon_key);
+        DbQuest? oldQuestData = await this.questRepository
+            .GetQuests(this.DeviceAccountId)
+            .SingleOrDefaultAsync(x => x.QuestId == session.DungeonId);
+
+        bool isFirstClear = oldQuestData is null || oldQuestData.PlayCount == 0;
+        bool? oldMissionClear1 = oldQuestData?.IsMissionClear1;
+        bool? oldMissionClear2 = oldQuestData?.IsMissionClear2;
+        bool? oldMissionClear3 = oldQuestData?.IsMissionClear3;
 
         await this.userDataRepository.AddTutorialFlag(this.DeviceAccountId, 1022);
-        await this.questRepository.CompleteQuest(this.DeviceAccountId, session.DungeonId);
+
+        // oldQuestData and newQuestData actually reference the same object so this is somewhat redundant
+        // keeping it for clarity and also bc newQuestData is definitely not null while oldQuestData
+        // could have been null at one point
+        DbQuest newQuestData = await this.questRepository.CompleteQuest(
+            this.DeviceAccountId,
+            session.DungeonId,
+            request.play_record.time
+        );
 
         DbPlayerUserData userData = await this.userDataRepository
             .GetUserData(this.DeviceAccountId)
@@ -49,7 +65,23 @@ public class DungeonRecordController : DragaliaControllerBase
         userData.Exp += 1;
         userData.ManaPoint += 1000;
         userData.Coin += 1000;
-        userData.Crystal += 25;
+
+        bool[] clearedMissions = new bool[5]
+        {
+            isFirstClear,
+            oldMissionClear1 != newQuestData.IsMissionClear1 && newQuestData.IsMissionClear1,
+            oldMissionClear2 != newQuestData.IsMissionClear2 && newQuestData.IsMissionClear2,
+            oldMissionClear3 != newQuestData.IsMissionClear3 && newQuestData.IsMissionClear3,
+            false
+        };
+
+        clearedMissions[4] =
+            clearedMissions.Any(x => x)
+            && newQuestData.IsMissionClear1
+            && newQuestData.IsMissionClear2
+            && newQuestData.IsMissionClear3;
+
+        userData.Crystal += clearedMissions.Where(x => x).Count() * 5;
 
         IEnumerable<Materials> drops = DefaultDrops.GetRandomList();
         await this.inventoryRepository.AddMaterials(this.DeviceAccountId, drops, 100);
@@ -92,38 +124,42 @@ public class DungeonRecordController : DragaliaControllerBase
                                     factor = 0,
                                 }
                         ),
-                        first_clear_set = new List<AtgenFirstClearSet>()
-                        {
-                            new()
+                        first_clear_set = clearedMissions[0]
+                            ? new List<AtgenFirstClearSet>()
                             {
-                                type = (int)EntityTypes.Wyrmite,
-                                id = 0,
-                                quantity = 5
+                                new()
+                                {
+                                    type = (int)EntityTypes.Wyrmite,
+                                    id = 0,
+                                    quantity = 5
+                                }
                             }
-                        },
+                            : new List<AtgenFirstClearSet>(),
                         take_coin = 1000,
                         take_astral_item_quantity = 300,
-                        missions_clear_set = Enumerable
-                            .Range(1, 3)
+                        missions_clear_set = clearedMissions
+                            .Where((x, index) => (index is > 0 and < 4) && x)
                             .Select(
-                                x =>
+                                (x, index) =>
                                     new AtgenMissionsClearSet()
                                     {
                                         type = 23,
                                         id = 0,
                                         quantity = 5,
-                                        mission_no = x
+                                        mission_no = index
                                     }
                             ),
-                        mission_complete = new List<AtgenFirstClearSet>()
-                        {
-                            new()
+                        mission_complete = clearedMissions[4]
+                            ? new List<AtgenFirstClearSet>()
                             {
-                                type = (int)EntityTypes.Wyrmite,
-                                id = 0,
-                                quantity = 5
+                                new()
+                                {
+                                    type = (int)EntityTypes.Wyrmite,
+                                    id = 0,
+                                    quantity = 5
+                                }
                             }
-                        },
+                            : new List<AtgenFirstClearSet>(),
                         enemy_piece = new List<AtgenEnemyPiece>(),
                         reborn_bonus = new List<AtgenFirstClearSet>(),
                         quest_bonus_list = new List<AtgenFirstClearSet>(),
@@ -163,8 +199,8 @@ public class DungeonRecordController : DragaliaControllerBase
                     scoring_enemy_point_list = new List<AtgenScoringEnemyPointList>(),
                     score_mission_success_list = new List<AtgenScoreMissionSuccessList>(),
                     event_passive_up_list = new List<AtgenEventPassiveUpList>(),
-                    clear_time = 70,
-                    is_best_clear_time = true,
+                    clear_time = request.play_record.time,
+                    is_best_clear_time = request.play_record.time == newQuestData.BestClearTime,
                     converted_entity_list = new List<ConvertedEntityList>(),
                     dungeon_skip_type = 0,
                     total_play_damage = 0,
