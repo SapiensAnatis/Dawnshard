@@ -1,10 +1,8 @@
 ﻿using System.Diagnostics;
-using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -57,7 +55,8 @@ public class DungeonRecordController : DragaliaControllerBase
         DbQuest newQuestData = await this.questRepository.CompleteQuest(
             this.DeviceAccountId,
             session.DungeonId,
-            request.play_record.time);
+            request.play_record.time
+        );
 
         DbPlayerUserData userData = await this.userDataRepository
             .GetUserData(this.DeviceAccountId)
@@ -76,7 +75,11 @@ public class DungeonRecordController : DragaliaControllerBase
             false
         };
 
-        clearedMissions[4] = clearedMissions.Any(x => x) && newQuestData.IsMissionClear1 && newQuestData.IsMissionClear2 && newQuestData.IsMissionClear3;
+        clearedMissions[4] =
+            clearedMissions.Any(x => x)
+            && newQuestData.IsMissionClear1
+            && newQuestData.IsMissionClear2
+            && newQuestData.IsMissionClear3;
 
         userData.Crystal += clearedMissions.Where(x => x).Count() * 5;
 
@@ -121,20 +124,23 @@ public class DungeonRecordController : DragaliaControllerBase
                                     factor = 0,
                                 }
                         ),
-                        first_clear_set = clearedMissions[0] ? new List<AtgenFirstClearSet>()
-                        {
-                            new()
+                        first_clear_set = clearedMissions[0]
+                            ? new List<AtgenFirstClearSet>()
                             {
-                                type = (int)EntityTypes.Wyrmite,
-                                id = 0,
-                                quantity = 5
+                                new()
+                                {
+                                    type = (int)EntityTypes.Wyrmite,
+                                    id = 0,
+                                    quantity = 5
+                                }
                             }
-                        } : new List<AtgenFirstClearSet>(),
+                            : new List<AtgenFirstClearSet>(),
                         take_coin = 1000,
                         take_astral_item_quantity = 300,
                         missions_clear_set = clearedMissions
                             .Where((x, index) => (index is > 0 and < 4) && x)
-                            .Select((x, index) =>
+                            .Select(
+                                (x, index) =>
                                     new AtgenMissionsClearSet()
                                     {
                                         type = 23,
@@ -143,15 +149,17 @@ public class DungeonRecordController : DragaliaControllerBase
                                         mission_no = index
                                     }
                             ),
-                        mission_complete = clearedMissions[4] ? new List<AtgenFirstClearSet>()
-                        {
-                            new()
+                        mission_complete = clearedMissions[4]
+                            ? new List<AtgenFirstClearSet>()
                             {
-                                type = (int)EntityTypes.Wyrmite,
-                                id = 0,
-                                quantity = 5
+                                new()
+                                {
+                                    type = (int)EntityTypes.Wyrmite,
+                                    id = 0,
+                                    quantity = 5
+                                }
                             }
-                        } : new List<AtgenFirstClearSet>(),
+                            : new List<AtgenFirstClearSet>(),
                         enemy_piece = new List<AtgenEnemyPiece>(),
                         reborn_bonus = new List<AtgenFirstClearSet>(),
                         quest_bonus_list = new List<AtgenFirstClearSet>(),
