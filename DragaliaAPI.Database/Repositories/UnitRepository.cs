@@ -267,7 +267,7 @@ public class UnitRepository : BaseRepository, IUnitRepository
             return null;
 
         CharaData data = MasterAsset.CharaData.Get(id);
-        bool isFirstSkill = data.EditSkillId == data.Skill1ID;
+        bool isFirstSkill = data.EditSkillId == data.Skill1;
 
         return await charaData
             .Where(x => x.CharaId == id && x.IsUnlockEditSkill)

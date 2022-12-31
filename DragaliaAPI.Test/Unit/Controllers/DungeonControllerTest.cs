@@ -43,7 +43,7 @@ public class DungeonControllerTest
         ).GetData<DungeonFailData>();
 
         response.Should().NotBeNull();
-        response!.fail_quest_detail.quest_id.Should().Be(2);
+        response!.fail_quest_detail.quest_id.Should().Be(227060105);
 
         this.mockDungeonService.VerifyAll();
     }

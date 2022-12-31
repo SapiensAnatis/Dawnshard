@@ -50,7 +50,7 @@ public class DungeonRecordTest : IClassFixture<IntegrationTestFixture>
 
         // TODO: Add more asserts as we add logic into this endpoint
         response.ingame_result_data.dungeon_key.Should().Be(key);
-        response.ingame_result_data.quest_id.Should().Be(1);
+        response.ingame_result_data.quest_id.Should().Be(227100106);
 
         response.update_data_list.user_data.Should().NotBeNull();
         response.update_data_list.quest_list.Should().NotBeNull();
