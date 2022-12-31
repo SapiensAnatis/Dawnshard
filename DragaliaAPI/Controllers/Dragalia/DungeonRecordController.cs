@@ -68,22 +68,23 @@ public class DungeonRecordController : DragaliaControllerBase
         userData.ManaPoint += 1000;
         userData.Coin += 1000;
 
-        bool[] clearedMissions = new bool[5]
+        bool[] clearedMissions = new bool[3]
         {
-            isFirstClear,
             newQuestData.IsMissionClear1 && !oldMissionClear1,
             newQuestData.IsMissionClear2 && !oldMissionClear2,
             newQuestData.IsMissionClear3 && !oldMissionClear3,
-            false
         };
 
-        clearedMissions[4] =
+        bool allMissionsCleared =
             clearedMissions.Any(x => x)
             && newQuestData.IsMissionClear1
             && newQuestData.IsMissionClear2
             && newQuestData.IsMissionClear3;
 
-        userData.Crystal += clearedMissions.Where(x => x).Count() * 5;
+        userData.Crystal +=
+            (isFirstClear ? 5 : 0)
+            + (clearedMissions.Where(x => x).Count() * 5)
+            + (allMissionsCleared ? 5 : 0);
 
         IEnumerable<Materials> drops = DefaultDrops.GetRandomList();
         await this.inventoryRepository.AddMaterials(this.DeviceAccountId, drops, 100);
@@ -126,7 +127,7 @@ public class DungeonRecordController : DragaliaControllerBase
                                     factor = 0,
                                 }
                         ),
-                        first_clear_set = clearedMissions[0]
+                        first_clear_set = isFirstClear
                             ? new List<AtgenFirstClearSet>()
                             {
                                 new()
@@ -140,7 +141,7 @@ public class DungeonRecordController : DragaliaControllerBase
                         take_coin = 1000,
                         take_astral_item_quantity = 300,
                         missions_clear_set = clearedMissions
-                            .Where((x, index) => (index is > 0 and < 4) && x)
+                            .Where(x => x)
                             .Select(
                                 (x, index) =>
                                     new AtgenMissionsClearSet()
@@ -148,10 +149,10 @@ public class DungeonRecordController : DragaliaControllerBase
                                         type = 23,
                                         id = 0,
                                         quantity = 5,
-                                        mission_no = index
+                                        mission_no = index + 1
                                     }
                             ),
-                        mission_complete = clearedMissions[4]
+                        mission_complete = allMissionsCleared
                             ? new List<AtgenFirstClearSet>()
                             {
                                 new()
