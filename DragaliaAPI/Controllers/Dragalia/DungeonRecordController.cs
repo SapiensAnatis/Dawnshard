@@ -54,8 +54,8 @@ public class DungeonRecordController : DragaliaControllerBase
         // oldQuestData and newQuestData actually reference the same object so this is somewhat redundant
         // keeping it for clarity and also bc newQuestData is definitely not null while oldQuestData
         // could have been null at one point
-        DbQuest newQuestData = await this.questRepository
-            .CompleteQuest(this.DeviceAccountId, session.DungeonId, request.play_record.time);
+        DbQuest newQuestData = await this.questRepository.CompleteQuest(
+            this.DeviceAccountId, session.DungeonId, request.play_record.time);
 
         DbPlayerUserData userData = await this.userDataRepository
             .GetUserData(this.DeviceAccountId)
