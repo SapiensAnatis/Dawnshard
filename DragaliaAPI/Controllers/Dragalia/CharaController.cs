@@ -12,7 +12,8 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Services;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
@@ -23,7 +24,6 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Route("chara")]
 public class CharaController : DragaliaControllerBase
 {
-    private readonly ICharaDataService _charaDataService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
     private readonly IInventoryRepository inventoryRepository;
@@ -35,8 +35,7 @@ public class CharaController : DragaliaControllerBase
         IUnitRepository unitRepository,
         IInventoryRepository inventoryRepository,
         IUpdateDataService updateDataService,
-        IMapper mapper,
-        ICharaDataService charaDataService
+        IMapper mapper
     )
     {
         this.userDataRepository = userDataRepository;
@@ -44,7 +43,6 @@ public class CharaController : DragaliaControllerBase
         this.inventoryRepository = inventoryRepository;
         this.updateDataService = updateDataService;
         this.mapper = mapper;
-        _charaDataService = charaDataService;
     }
 
     [Route("awake")]
@@ -65,7 +63,7 @@ public class CharaController : DragaliaControllerBase
         DbPlayerCharaData playerCharData = await unitRepository
             .GetAllCharaData(this.DeviceAccountId)
             .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
-        DataAdventurer charData = _charaDataService.GetData((int)request.chara_id);
+        CharaData charData = MasterAsset.CharaData.Get(request.chara_id);
         playerCharData.HpBase += (ushort)(
             request.next_rarity == 4
                 ? charData.MinHp4 - charData.MinHp3
@@ -212,7 +210,7 @@ public class CharaController : DragaliaControllerBase
                 playerCharData.Level++;
             }
 
-            DataAdventurer charaData = _charaDataService.GetData(playerCharData.CharaId);
+            CharaData charaData = MasterAsset.CharaData.Get(playerCharData.CharaId);
             double hpStep;
             double atkStep;
             int hpBase;
@@ -422,7 +420,7 @@ public class CharaController : DragaliaControllerBase
         DbPlayerCharaData playerCharaData = await this.unitRepository
             .GetAllCharaData(this.DeviceAccountId)
             .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
-        DataAdventurer charaData = _charaDataService.GetData(playerCharaData.CharaId);
+        CharaData charaData = MasterAsset.CharaData.Get(playerCharaData.CharaId);
         playerCharaData.Rarity = 5;
         bool hasSpiral = charaData.MaxLimitBreakCount > 4;
         playerCharaData.Level = (byte)(
@@ -478,8 +476,8 @@ public class CharaController : DragaliaControllerBase
         CharaUpgradeMaterialTypes isUseSpecialMaterial
     )
     {
-        DataAdventurer charaData = _charaDataService.GetData(playerCharData.CharaId);
-        ImmutableList<ManaNodeInfo> manaNodeInfos = charaData.ManaNodes;
+        CharaData charaData = MasterAsset.CharaData.Get(playerCharData.CharaId);
+        ImmutableList<ManaNode> manaNodeInfos = charaData.GetManaNodes().ToImmutableList();
         List<int>[] hpNodesOnFloor = new List<int>[] { new(), new(), new(), new(), new(), new() };
         List<int>[] atkNodesOnFloor = new List<int>[] { new(), new(), new(), new(), new(), new() };
         List<int>[] hpAtkNodesOnFloor = new List<int>[]
@@ -495,15 +493,15 @@ public class CharaController : DragaliaControllerBase
         for (int i = 0; i < manaNodeInfos.Count && i < 71; i++)
         {
             int floor = Math.Min(i / 10, 5);
-            switch (manaNodeInfos[i].NodeType)
+            switch (manaNodeInfos[i].ManaPieceType)
             {
-                case ManaNodeInfo.NodeTypes.HpAtk:
+                case ManaNodeTypes.HpAtk:
                     hpAtkNodesOnFloor[floor].Add(i + 1);
                     break;
-                case ManaNodeInfo.NodeTypes.Hp:
+                case ManaNodeTypes.Hp:
                     hpNodesOnFloor[floor].Add(i + 1);
                     break;
-                case ManaNodeInfo.NodeTypes.Atk:
+                case ManaNodeTypes.Atk:
                     atkNodesOnFloor[floor].Add(i + 1);
                     break;
             }
@@ -532,13 +530,13 @@ public class CharaController : DragaliaControllerBase
             {
                 throw new ArgumentException($"No nodeInfo found for node {nodeNr}");
             }
-            ManaNodeInfo manaNodeInfo = manaNodeInfos[nodeNr - 1];
+            ManaNode manaNodeInfo = manaNodeInfos[nodeNr - 1];
             int floor = Math.Clamp((nodeNr - 1) / 10, 0, 5);
             Dictionary<CurrencyTypes, int> currencyCosts = new();
             Dictionary<Materials, int> materialCosts = new();
-            switch (manaNodeInfo.NodeType)
+            switch (manaNodeInfo.ManaPieceType)
             {
-                case ManaNodeInfo.NodeTypes.HpAtk:
+                case ManaNodeTypes.HpAtk:
                     ushort hpToAdd = (ushort)(
                         hpPerCircleTotals[floor] / hpAtkNodesOnFloor[floor].Count
                     );
@@ -566,7 +564,7 @@ public class CharaController : DragaliaControllerBase
                     playerCharData.HpNode += hpToAdd;
                     playerCharData.AttackNode += atkToAdd;
                     break;
-                case ManaNodeInfo.NodeTypes.Hp:
+                case ManaNodeTypes.Hp:
                     hpToAdd = (ushort)(hpPerCircleTotals[floor] / hpNodesOnFloor[floor].Count);
                     if (
                         hpPerCircleTotals[floor] % hpNodesOnFloor[floor].Count
@@ -577,7 +575,7 @@ public class CharaController : DragaliaControllerBase
                     }
                     playerCharData.HpNode += hpToAdd;
                     break;
-                case ManaNodeInfo.NodeTypes.Atk:
+                case ManaNodeTypes.Atk:
                     atkToAdd = (ushort)(atkPerCircleTotals[floor] / atkNodesOnFloor[floor].Count);
                     if (
                         atkPerCircleTotals[floor] % atkNodesOnFloor[floor].Count
@@ -588,29 +586,29 @@ public class CharaController : DragaliaControllerBase
                     }
                     playerCharData.AttackNode += atkToAdd;
                     break;
-                case ManaNodeInfo.NodeTypes.FS:
+                case ManaNodeTypes.FS:
                     playerCharData.BurstAttackLevel++;
                     break;
-                case ManaNodeInfo.NodeTypes.S1:
+                case ManaNodeTypes.S1:
                     playerCharData.Skill1Level++;
                     break;
-                case ManaNodeInfo.NodeTypes.S2:
+                case ManaNodeTypes.S2:
                     playerCharData.Skill2Level++;
                     break;
-                case ManaNodeInfo.NodeTypes.A1:
+                case ManaNodeTypes.A1:
                     playerCharData.Ability1Level++;
                     break;
-                case ManaNodeInfo.NodeTypes.A2:
+                case ManaNodeTypes.A2:
                     playerCharData.Ability2Level++;
                     break;
-                case ManaNodeInfo.NodeTypes.A3:
+                case ManaNodeTypes.A3:
                     playerCharData.Ability3Level++;
                     break;
-                case ManaNodeInfo.NodeTypes.Ex:
+                case ManaNodeTypes.Ex:
                     playerCharData.ExAbilityLevel++;
                     playerCharData.ExAbility2Level++;
                     break;
-                case ManaNodeInfo.NodeTypes.Mat:
+                case ManaNodeTypes.Mat:
                     DbPlayerMaterial mat =
                         await this.inventoryRepository.GetMaterial(
                             playerCharData.DeviceAccountId,
@@ -622,17 +620,17 @@ public class CharaController : DragaliaControllerBase
                         );
                     mat.Quantity++;
                     break;
-                case ManaNodeInfo.NodeTypes.StdAtkUp:
+                case ManaNodeTypes.StdAtkUp:
                     //TODO: Unsure but seems like this is it. Maybe rename it to something more appropriate
                     playerCharData.ComboBuildupCount++;
                     break;
-                case ManaNodeInfo.NodeTypes.MaxLvUp:
+                case ManaNodeTypes.MaxLvUp:
                     playerCharData.AdditionalMaxLevel += 5;
                     break;
                 default:
                     break;
             }
-            if (manaNodeInfo.IsReleaseStory)
+            if (manaNodeInfo.IsReleaseStoryBool)
             {
                 //TODO: Get relevant story
                 //unlockedStories.Add((int)manaNodeInfo.StoryId);
@@ -680,7 +678,7 @@ public class CharaController : DragaliaControllerBase
         DbPlayerCharaData playerCharData = await this.unitRepository
             .GetAllCharaData(this.DeviceAccountId)
             .FirstAsync(chara => chara.CharaId == request.chara_id);
-        DataAdventurer charData = _charaDataService.GetData(playerCharData.CharaId);
+        CharaData charData = MasterAsset.CharaData.Get(playerCharData.CharaId);
         //TODO: For now trust the client won't send the id of a chara who isn't allowed to share
         if (
             playerCharData.Level < 80

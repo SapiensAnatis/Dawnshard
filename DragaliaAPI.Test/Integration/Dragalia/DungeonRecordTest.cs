@@ -3,6 +3,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
@@ -27,12 +28,8 @@ public class DungeonRecordTest : IClassFixture<IntegrationTestFixture>
         DungeonSession mockSession =
             new()
             {
-                DungeonId = 1,
                 Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
-                AreaInfo = new List<DataQuestAreaInfo>()
-                {
-                    new("Main/01/MAIN_01_0104_01", "MAIN_01_0104_01")
-                }
+                QuestData = MasterAsset.QuestData.Get(227100106)
             };
 
         string key;

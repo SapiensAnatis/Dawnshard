@@ -3,6 +3,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
@@ -37,8 +38,7 @@ public class DungeonServiceTest
         DungeonSession session =
             new()
             {
-                AreaInfo = new List<DataQuestAreaInfo>() { new("area", "scene") },
-                DungeonId = 1,
+                QuestData = MasterAsset.QuestData.Get(100010303),
                 Party = new List<PartySettingList>()
                 {
                     new() { chara_id = Shared.Definitions.Enums.Charas.Addis }
@@ -56,8 +56,7 @@ public class DungeonServiceTest
         DungeonSession session =
             new()
             {
-                AreaInfo = new List<DataQuestAreaInfo>() { new("area2", "scene2") },
-                DungeonId = 4,
+                QuestData = MasterAsset.QuestData.Get(100230302),
                 Party = new List<PartySettingList>()
                 {
                     new() { chara_id = Shared.Definitions.Enums.Charas.Botan }

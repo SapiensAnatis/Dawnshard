@@ -1,12 +1,13 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Database.Factories;
 
 internal static class DbPlayerCharaDataFactory
 {
-    internal static DbPlayerCharaData Create(string deviceAccountId, DataAdventurer data)
+    internal static DbPlayerCharaData Create(string deviceAccountId, CharaData data)
     {
         byte rarity = (byte)data.Rarity;
         ushort rarityHp;
@@ -32,7 +33,7 @@ internal static class DbPlayerCharaDataFactory
         return new DbPlayerCharaData()
         {
             DeviceAccountId = deviceAccountId,
-            CharaId = (Charas)data.IdLong,
+            CharaId = data.Id,
             Rarity = rarity,
             Exp = 0,
             Level = 1,
@@ -53,7 +54,7 @@ internal static class DbPlayerCharaDataFactory
             ExAbilityLevel = 1,
             ExAbility2Level = 1,
             IsTemporary = false,
-            IsUnlockEditSkill = data.Availability == "Story",
+            IsUnlockEditSkill = false,
             ManaCirclePieceIdList = new SortedSet<int>(),
             ListViewFlag = false,
             GetTime = DateTimeOffset.UtcNow

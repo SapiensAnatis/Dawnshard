@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Shared.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Database.Factories;
+using DragaliaAPI.Shared.MasterAsset;
 
 namespace DragaliaAPI.Database.Repositories;
 
@@ -12,15 +12,11 @@ namespace DragaliaAPI.Database.Repositories;
 public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
 {
     private readonly ApiContext apiContext;
-    private readonly ICharaDataService charaDataService;
-
     private const int PartySlotCount = 54;
 
-    public DeviceAccountRepository(ApiContext apiContext, ICharaDataService charaDataService)
-        : base(apiContext)
+    public DeviceAccountRepository(ApiContext apiContext) : base(apiContext)
     {
         this.apiContext = apiContext;
-        this.charaDataService = charaDataService;
     }
 
     [Obsolete("Used by pre-BaaS login flow")]
@@ -47,7 +43,7 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
         await apiContext.PlayerCharaData.AddAsync(
             DbPlayerCharaDataFactory.Create(
                 deviceAccountId,
-                charaDataService.GetData(Charas.ThePrince)
+                MasterAsset.CharaData.Get(Charas.ThePrince)
             )
         );
 
