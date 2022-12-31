@@ -630,7 +630,7 @@ public class CharaController : DragaliaControllerBase
                 default:
                     break;
             }
-            if (manaNodeInfo.IsReleaseStoryBool)
+            if (manaNodeInfo.IsReleaseStory)
             {
                 //TODO: Get relevant story
                 //unlockedStories.Add((int)manaNodeInfo.StoryId);

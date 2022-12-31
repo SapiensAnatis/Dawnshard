@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset;
 
@@ -36,18 +38,19 @@ public class MasterAssetData<TKey, TItem>
             jsonFilename
         );
 
+        JsonSerializerOptions jsonOpts =
+            new() { PropertyNamingPolicy = new MasterAssetNamingPolicy() };
+        jsonOpts.Converters.Add(new BoolIntJsonConverter());
         IEnumerable<TItem>? items = JsonSerializer.Deserialize<IEnumerable<TItem>>(
             File.ReadAllText(path),
-            new JsonSerializerOptions() { PropertyNamingPolicy = new MasterAssetNamingPolicy() }
+            jsonOpts
         );
 
         if (items is null)
             return;
 
-        int j = 0;
         foreach (TItem i in items)
         {
-            j++;
             this.internalKeyCollection.Add(i);
         }
     }
@@ -57,5 +60,5 @@ public class MasterAssetData<TKey, TItem>
         return this.internalKeyCollection[key];
     }
 
-    public IEnumerable<TItem> Data => this.internalKeyCollection.AsEnumerable();
+    public IEnumerable<TItem> Enumerable => this.internalKeyCollection.AsEnumerable();
 }

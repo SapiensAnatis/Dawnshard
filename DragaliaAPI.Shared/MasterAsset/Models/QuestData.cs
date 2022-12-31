@@ -25,7 +25,7 @@ public record QuestData(
     string AreaName06
 )
 {
-    public IEnumerable<AreaInfo> SceneData =>
+    public IEnumerable<AreaInfo> AreaInfo =>
         new List<AreaInfo>()
         {
             new(this.Scene01, this.AreaName01),

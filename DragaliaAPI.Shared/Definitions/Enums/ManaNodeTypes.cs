@@ -8,6 +8,7 @@ namespace DragaliaAPI.Shared.Definitions.Enums;
 
 public enum ManaNodeTypes
 {
+    None = 0,
     Hp = 10101,
     Atk = 10102,
     HpAtk = 10103,

@@ -1,15 +1,17 @@
 ﻿using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 public record CharaData(
     Charas Id,
-    WeaponTypes WeaponTypeId,
+    WeaponTypes WeaponType,
     int Rarity,
     int MaxLimitBreakCount,
     UnitElement ElementalType,
+    bool IsPlayable,
     int MinHp3,
     int MinHp4,
     int MinHp5,
@@ -55,6 +57,11 @@ public record CharaData(
 
     public IEnumerable<ManaNode> GetManaNodes()
     {
-        return MasterAsset.ManaNode.Data.Where(x => x.ManaCircleName == this.ManaCircleName);
+        // There is a quirk in the DB where every mana circle has a node with index 0 and type 0, such that
+        // characters always have 51/71 nodes instead of 50/70 as expected.
+        // These are scattered through the data so it is easier to check in code than modify the auto-generated JSON.
+        return MasterAsset.ManaNode.Enumerable.Where(
+            x => x.ManaCircleName == this.ManaCircleName && x.ManaPieceType != ManaNodeTypes.None
+        );
     }
 }

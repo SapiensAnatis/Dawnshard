@@ -137,7 +137,7 @@ public class DungeonStartController : DragaliaControllerBase
                         event_boost = new() { effect_value = 0, event_effect = 0 },
                         event_passive_grow_list = new List<AtgenEventPassiveUpList>(),
                     },
-                    area_info_list = questInfo.SceneData.Select(mapper.Map<AreaInfoList>),
+                    area_info_list = questInfo.AreaInfo.Select(mapper.Map<AreaInfoList>),
                     use_stone = 50,
                     is_fever_time = false,
                     repeat_state = 0,

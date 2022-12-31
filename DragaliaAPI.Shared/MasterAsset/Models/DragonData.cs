@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -7,14 +8,15 @@ public record DragonData(
     Dragons Id,
     int Rarity,
     UnitElement ElementalType,
+    bool IsPlayable,
     int MinHp,
     int MaxHp,
     int AddMaxHp1,
     int MinAtk,
     int MaxAtk,
     int AddMaxAtk1,
-    int SkillID,
-    int Skill2ID,
+    int Skill1,
+    int Skill2,
     int Abilities11,
     int Abilities12,
     int Abilities13,
@@ -27,6 +29,7 @@ public record DragonData(
     int Abilities24,
     int Abilities25,
     int Abilities26,
+    int DefaultReliabilityLevel,
     int DmodePassiveAbilityId,
     int MaxLimitBreakCount,
     int LimitBreakMaterialId,

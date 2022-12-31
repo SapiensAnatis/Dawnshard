@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace DragaliaAPI.MessagePack;
+namespace DragaliaAPI.Shared.Json;
 
 public class BoolIntJsonConverter : JsonConverter<bool>
 {
