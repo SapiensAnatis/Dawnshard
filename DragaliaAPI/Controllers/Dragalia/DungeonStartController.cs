@@ -9,7 +9,8 @@ using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Services;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,8 +18,6 @@ namespace DragaliaAPI.Controllers.Dragalia;
 
 [ApiController]
 [Route("dungeon_start")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
 public class DungeonStartController : DragaliaControllerBase
 {
     private readonly IPartyRepository partyRepository;
@@ -27,78 +26,7 @@ public class DungeonStartController : DragaliaControllerBase
     private readonly IQuestRepository questRepository;
     private readonly IDungeonService dungeonService;
     private readonly IUpdateDataService updateDataService;
-    private readonly IQuestDataService questDataService;
-    private readonly IEnemyListDataService enemyListDataService;
     private readonly IMapper mapper;
-
-    private static class StubData
-    {
-        private static readonly IEnumerable<AtgenParamBonus> WeaponBonus = Enumerable
-            .Range(1, 9)
-            .Select(
-                x =>
-                    new AtgenParamBonus()
-                    {
-                        weapon_type = x,
-                        hp = 200,
-                        attack = 200
-                    }
-            );
-
-        private static readonly IEnumerable<AtgenElementBonus> EmptyElementBonus = Enumerable
-            .Range(1, 5)
-            .Select(
-                x =>
-                    new AtgenElementBonus()
-                    {
-                        elemental_type = x,
-                        hp = 200,
-                        attack = 200
-                    }
-            )
-            .Append(
-                new AtgenElementBonus()
-                {
-                    elemental_type = 99,
-                    hp = 20,
-                    attack = 20
-                }
-            );
-
-        private static readonly IEnumerable<AtgenDragonBonus> EmptyDragonBonus = Enumerable
-            .Range(1, 5)
-            .Select(
-                x =>
-                    new AtgenDragonBonus()
-                    {
-                        elemental_type = x,
-                        dragon_bonus = 200,
-                        hp = 200,
-                        attack = 200
-                    }
-            )
-            .Append(
-                new AtgenDragonBonus()
-                {
-                    elemental_type = 99,
-                    hp = 200,
-                    attack = 200
-                }
-            );
-
-        public static readonly FortBonusList EmptyBonusList =
-            new()
-            {
-                param_bonus = WeaponBonus,
-                param_bonus_by_weapon = WeaponBonus,
-                element_bonus = EmptyElementBonus,
-                chara_bonus_by_album = EmptyElementBonus,
-                all_bonus = new() { hp = 200, attack = 200 },
-                dragon_bonus = EmptyDragonBonus,
-                dragon_bonus_by_album = EmptyElementBonus,
-                dragon_time_bonus = new() { dragon_time_bonus = 20 }
-            };
-    }
 
     public DungeonStartController(
         IPartyRepository partyRepository,
@@ -107,8 +35,6 @@ public class DungeonStartController : DragaliaControllerBase
         IQuestRepository questRepository,
         IDungeonService dungeonService,
         IUpdateDataService updateDataService,
-        IQuestDataService questDataService,
-        IEnemyListDataService enemyListDataService,
         IMapper mapper
     )
     {
@@ -118,8 +44,6 @@ public class DungeonStartController : DragaliaControllerBase
         this.questRepository = questRepository;
         this.dungeonService = dungeonService;
         this.updateDataService = updateDataService;
-        this.questDataService = questDataService;
-        this.enemyListDataService = enemyListDataService;
         this.mapper = mapper;
     }
 
@@ -178,7 +102,7 @@ public class DungeonStartController : DragaliaControllerBase
             .Select(x => x.ViewerId)
             .SingleAsync();
 
-        DataQuest questInfo = this.questDataService.GetData(request.quest_id);
+        QuestData questInfo = MasterAsset.QuestData.Get(request.quest_id);
 
         /*IEnumerable<int> enemyList = this.enemyListDataService
             .GetData(areaInfo.ElementAt(0))
@@ -187,9 +111,8 @@ public class DungeonStartController : DragaliaControllerBase
         string dungeonKey = await this.dungeonService.StartDungeon(
             new DungeonSession()
             {
-                DungeonId = request.quest_id,
                 Party = units.Select(mapper.Map<PartySettingList>),
-                AreaInfo = questInfo.AreaInfo,
+                QuestData = questInfo,
             }
         );
 
@@ -282,5 +205,74 @@ public class DungeonStartController : DragaliaControllerBase
             };
 
         return this.Ok(response);
+    }
+
+    private static class StubData
+    {
+        private static readonly IEnumerable<AtgenParamBonus> WeaponBonus = Enumerable
+            .Range(1, 9)
+            .Select(
+                x =>
+                    new AtgenParamBonus()
+                    {
+                        weapon_type = x,
+                        hp = 200,
+                        attack = 200
+                    }
+            );
+
+        private static readonly IEnumerable<AtgenElementBonus> EmptyElementBonus = Enumerable
+            .Range(1, 5)
+            .Select(
+                x =>
+                    new AtgenElementBonus()
+                    {
+                        elemental_type = x,
+                        hp = 200,
+                        attack = 200
+                    }
+            )
+            .Append(
+                new AtgenElementBonus()
+                {
+                    elemental_type = 99,
+                    hp = 20,
+                    attack = 20
+                }
+            );
+
+        private static readonly IEnumerable<AtgenDragonBonus> EmptyDragonBonus = Enumerable
+            .Range(1, 5)
+            .Select(
+                x =>
+                    new AtgenDragonBonus()
+                    {
+                        elemental_type = x,
+                        dragon_bonus = 200,
+                        hp = 200,
+                        attack = 200
+                    }
+            )
+            .Append(
+                new AtgenDragonBonus()
+                {
+                    elemental_type = 99,
+                    hp = 200,
+                    attack = 200
+                }
+            );
+
+        public static readonly FortBonusList EmptyBonusList =
+            new()
+            {
+                param_bonus = WeaponBonus,
+                param_bonus_by_weapon = WeaponBonus,
+                element_bonus = EmptyElementBonus,
+                chara_bonus_by_album = EmptyElementBonus,
+                all_bonus = new() { hp = 200, attack = 200 },
+                dragon_bonus = EmptyDragonBonus,
+                dragon_bonus_by_album = EmptyElementBonus,
+                dragon_time_bonus = new() { dragon_time_bonus = 20 }
+            };
     }
 }

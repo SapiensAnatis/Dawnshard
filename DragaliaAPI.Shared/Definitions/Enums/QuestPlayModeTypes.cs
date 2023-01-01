@@ -2,10 +2,10 @@
 
 public enum QuestPlayModeTypes
 {
-    NONE,
-    NORMAL,
-    SOLO,
-    MULTI,
-    RANDOM_MATCHING,
-    RANDOM_MATCHING_SIXTEEN
+    None,
+    Normal,
+    Solo,
+    Multi,
+    RandomMatching,
+    RandomMatchingSixteen
 }

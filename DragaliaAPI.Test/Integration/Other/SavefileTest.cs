@@ -5,6 +5,7 @@ using System.Text.Json;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Test.Integration.Other;
 

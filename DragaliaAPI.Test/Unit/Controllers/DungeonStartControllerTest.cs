@@ -2,7 +2,6 @@
 using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.Services;
 using DragaliaAPI.Models.Generated;
 using static DragaliaAPI.Test.TestUtils;
 using DragaliaAPI.Database.Entities;
@@ -23,8 +22,6 @@ public class DungeonStartControllerTest
     private readonly Mock<IDungeonService> mockDungeonService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly IMapper mapper;
-    private readonly IQuestDataService questDataService = new QuestDataService();
-    private readonly IEnemyListDataService enemyListDataService = new EnemyListDataService();
 
     private const int questId = 100010103;
 
@@ -48,8 +45,6 @@ public class DungeonStartControllerTest
             mockQuestRepository.Object,
             mockDungeonService.Object,
             mockUpdateDataService.Object,
-            questDataService,
-            enemyListDataService,
             mapper
         );
 
@@ -149,7 +144,7 @@ public class DungeonStartControllerTest
             );
 
         this.mockDungeonService
-            .Setup(x => x.StartDungeon(It.Is<DungeonSession>(x => x.DungeonId == questId)))
+            .Setup(x => x.StartDungeon(It.Is<DungeonSession>(x => x.QuestData.Id == questId)))
             .ReturnsAsync("key");
     }
 

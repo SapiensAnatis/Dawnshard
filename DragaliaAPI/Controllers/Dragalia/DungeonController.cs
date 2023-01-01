@@ -3,7 +3,6 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions;
-using DragaliaAPI.Shared.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
@@ -12,26 +11,16 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class DungeonController : DragaliaControllerBase
 {
     private readonly IDungeonService dungeonService;
-    private readonly IEnemyListDataService enemyListDataService;
 
-    public DungeonController(
-        IDungeonService dungeonService,
-        IEnemyListDataService enemyListDataService
-    )
+    public DungeonController(IDungeonService dungeonService)
     {
         this.dungeonService = dungeonService;
-        this.enemyListDataService = enemyListDataService;
     }
 
     [HttpPost("get_area_odds")]
     public async Task<DragaliaResult> GetAreaOdds(DungeonGetAreaOddsRequest request)
     {
         DungeonSession session = await this.dungeonService.GetDungeon(request.dungeon_key);
-
-        List<int> enemyList = this.enemyListDataService
-            // TODO: certain areas seem to be missing from the dict, use actual area_idx
-            .GetData(session.AreaInfo.ElementAt(0))
-            .Enemies;
 
         return this.Ok(
             new DungeonGetAreaOddsData()
@@ -80,7 +69,7 @@ public class DungeonController : DragaliaControllerBase
                 fail_helper_detail_list = new List<AtgenHelperDetailList>(),
                 fail_quest_detail = new()
                 {
-                    quest_id = session.DungeonId,
+                    quest_id = session.QuestData.Id,
                     wall_id = 0,
                     wall_level = 0,
                     is_host = true,
