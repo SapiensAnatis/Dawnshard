@@ -78,5 +78,7 @@
 		<Folder Include="Extensions\" />
 	</ItemGroup>
 
+	<ProjectExtensions><VisualStudio><UserProperties resources_4news_1json__JsonSchema="news.schema.json" /></VisualStudio></ProjectExtensions>
+
 
 </Project>

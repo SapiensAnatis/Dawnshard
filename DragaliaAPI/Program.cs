@@ -56,7 +56,11 @@ builder.Services
         // Cannot add the boolean one if we want Nintendo login to keep working
     });
 
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(
+    options =>
+        // Make root URL redirect to news instead of 404
+        options.Conventions.AddPageRoute("/News", "~/")
+);
 builder.Services.AddServerSideBlazor();
 builder.Services
     .AddHealthChecks()

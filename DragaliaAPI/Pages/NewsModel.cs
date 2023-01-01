@@ -7,7 +7,7 @@ namespace DragaliaAPI.Pages;
 
 public record NewsItem(string Headline, string Description, long Timestamp)
 {
-    public string Date => DateTimeOffset.FromUnixTimeSeconds(this.Timestamp).ToString("G");
+    public string Date => $"{DateTimeOffset.FromUnixTimeSeconds(this.Timestamp):G} UTC";
 }
 
 public class NewsModel : PageModel
