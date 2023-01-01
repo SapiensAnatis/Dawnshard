@@ -1,6 +1,9 @@
-﻿using DragaliaAPI.Models.Nintendo;
+﻿using System.Net;
+using DragaliaAPI.Models.Nintendo;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Controllers.Nintendo;
 
@@ -19,23 +22,37 @@ public class NintendoLoginController : ControllerBase
     private readonly IConfiguration configuration;
     private readonly ISessionService sessionService;
     private readonly IDeviceAccountService deviceAccountService;
+    private readonly IOptionsMonitor<LoginOptions> options;
 
     public NintendoLoginController(
         ILogger<NintendoLoginController> logger,
         IConfiguration configuration,
         ISessionService sessionService,
-        IDeviceAccountService deviceAccountService
+        IDeviceAccountService deviceAccountService,
+        IOptionsMonitor<LoginOptions> options
     )
     {
         this.logger = logger;
         this.configuration = configuration;
         this.sessionService = sessionService;
         this.deviceAccountService = deviceAccountService;
+        this.options = options;
     }
 
     [HttpPost]
     public async Task<ActionResult<LoginResponse>> Post(LoginRequest request)
     {
+        if (this.options.CurrentValue.UseBaasLogin)
+        {
+            // If BaaS login is enabled, modern patched clients should not be calling this endpoint.
+            // However if an outdated client does call it, the "token" it receives will fail to decode
+            // and throw an exception at /tool/auth. So return an obvious error code before this can happen.
+            this.logger.LogWarning(
+                "Received Nintendo login request, but BaaS login is enabled. Returning 418 - I'm a teapot."
+            );
+            return this.StatusCode(418);
+        }
+
         DeviceAccount? deviceAccount = request.deviceAccount;
         DeviceAccount? createdDeviceAccount = null;
 

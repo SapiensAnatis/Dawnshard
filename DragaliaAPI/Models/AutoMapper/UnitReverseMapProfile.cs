@@ -34,8 +34,7 @@ public class UnitReverseMapProfile : Profile
             .ForMember(x => x.Units, opts => opts.MapFrom(src => src.party_setting_list));
 
         this.CreateMap<TalismanList, DbTalisman>()
-            .ForMember(x => x.TalismanKeyId, opts => opts.Ignore())
-            .ForMember(x => x.Owner, opts => opts.Ignore());
+            .ForMember(x => x.TalismanKeyId, opts => opts.Ignore());
 
         this.CreateMap<PartySettingList, DbPartyUnit>()
             // Auto-generated primary key
