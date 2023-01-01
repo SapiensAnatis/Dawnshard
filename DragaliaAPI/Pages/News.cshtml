@@ -2,7 +2,9 @@
 @model NewsModel
 @using DragaliaAPI.Pages
 
-<div>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+
+<div id="root">
 	<h1 class="title">Welcome to SapiensAnatis's Dragalia Server Emulator</h1>
 	<h3 class="title">Version: @Model.Version</h3>
 	<hr />
@@ -39,7 +41,6 @@
 
 	<h2>What does not work</h2>
 	<ul>
-		<li>Weapon skills</li>
 		<li>Helpers</li>
 		<li>Quest drops</li>
 		<li>Upgrading dragons and weapons</li>
@@ -75,36 +76,34 @@
 
 <!-- You're not meant to do this, apparently, but CSS isolation via .cshtml.css wasn't working -->
 <style>
+	html {
+		font-size: calc(12px + 0.4vw);
+	}
+
 	body {
 		font-family: sans-serif;
 		margin: 10% 5% 0% 5%;
+		width: min(90%, 1000px);
 	}
 
 	h1 {
-		font-size: 54px;
+		font-size: 1.5rem;
 	}
+	
 
 	h2 {
-		font-size: 48px;
+		font-size: 1.3rem;
 	}
 
 	h3 {
-		font-size: 40px;
+		font-size: 1.125rem;
 	}
 
 	h4 {
-		font-size: 36px;
+		font-size: 1.1rem;
 	}
 
-	p {
-		font-size: 36px;
-	}
-
-	li {
-		font-size: 36px;
-	}
-
-	code {
+	@@media (max-width: 1000px) p {
 		font-size: 36px;
 	}
 
