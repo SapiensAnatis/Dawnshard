@@ -41,7 +41,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         ToolSignupData response = (
             await client.PostMsgpack<ToolSignupData>(
                 "/tool/signup",
-                new ToolSignupRequest() { id_token = "id_token" }
+                new ToolSignupRequest() { id_token = this.fixture.BuildValidToken() }
             )
         ).data;
 
@@ -49,11 +49,14 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
-    public async Task Signup_IncorrectIdToken_ReturnsErrorResponse()
+    public async Task Signup_ExpiredIdToken_ReturnsRefreshRequest()
     {
         HttpResponseMessage response = await client.PostMsgpackBasic(
             "/tool/signup",
-            new ToolAuthRequest() { id_token = "wrong_id_token" }
+            new ToolAuthRequest()
+            {
+                id_token = fixture.BuildValidToken(DateTime.UtcNow.AddHours(-1))
+            }
         );
 
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
@@ -62,6 +65,26 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
             .GetValues("Is-Required-Refresh-Id-Token")
             .Should()
             .BeEquivalentTo(new List<string>() { "true" });
+    }
+
+    [Fact]
+    public async Task Signup_InvalidIdToken_ReturnsResultCodeError()
+    {
+        DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
+            "/tool/signup",
+            new ToolAuthRequest() { id_token = "im blue dabba dee dabba doo" },
+            ensureSuccessHeader: false
+        );
+
+        response
+            .Should()
+            .BeEquivalentTo(
+                new DragaliaResponse<ResultCodeData>()
+                {
+                    data_headers = new(ResultCode.COMMON_AUTH_ERROR),
+                    data = new(ResultCode.COMMON_AUTH_ERROR)
+                }
+            );
     }
 
     [Fact]
@@ -70,42 +93,37 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         ToolAuthData response = (
             await client.PostMsgpack<ToolAuthData>(
                 "/tool/auth",
-                new ToolAuthRequest() { id_token = "id_token" }
+                new ToolAuthRequest() { id_token = this.fixture.BuildValidToken() }
             )
         ).data;
 
-        response
-            .Should()
-            .BeEquivalentTo(
-                new ToolAuthData()
-                {
-                    viewer_id = 1,
-                    session_id = "prepared_session_id",
-                    nonce = "placeholder nonce"
-                }
-            );
+        response.viewer_id.Should().Be(1);
+        Guid.TryParse(response.session_id, out _).Should().BeTrue();
     }
 
     [Fact]
     public async Task Auth_CalledTwice_ReturnsSameSessionId()
     {
-        ToolAuthData expectedResponse = new(1, "prepared_session_id", "placeholder nonce");
-
-        ToolAuthRequest data = new() { uuid = "unused", id_token = "id_token" };
+        ToolAuthRequest data = new() { uuid = "unused", id_token = this.fixture.BuildValidToken() };
 
         ToolAuthData response = (await client.PostMsgpack<ToolAuthData>("/tool/auth", data)).data;
         ToolAuthData response2 = (await client.PostMsgpack<ToolAuthData>("/tool/auth", data)).data;
 
-        response.Should().BeEquivalentTo(expectedResponse);
-        response2.Should().BeEquivalentTo(expectedResponse);
+        response.viewer_id.Should().Be(1);
+        Guid.TryParse(response.session_id, out _).Should().BeTrue();
+        response2.viewer_id.Should().Be(1);
+        Guid.TryParse(response2.session_id, out _).Should().BeTrue();
     }
 
     [Fact]
-    public async Task Auth_IncorrectIdToken_ReturnsErrorResponse()
+    public async Task Auth_ExpiredIdToken_ReturnsRefreshRequest()
     {
         HttpResponseMessage response = await client.PostMsgpackBasic(
             "/tool/auth",
-            new ToolAuthRequest() { id_token = "wrong_id_token" }
+            new ToolAuthRequest()
+            {
+                id_token = fixture.BuildValidToken(DateTime.UtcNow.AddHours(-1))
+            }
         );
 
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
@@ -114,5 +132,25 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
             .GetValues("Is-Required-Refresh-Id-Token")
             .Should()
             .BeEquivalentTo(new List<string>() { "true" });
+    }
+
+    [Fact]
+    public async Task Auth_InvalidIdToken_ReturnsResultCodeError()
+    {
+        DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
+            "/tool/auth",
+            new ToolAuthRequest() { id_token = "im blue dabba dee dabba doo" },
+            ensureSuccessHeader: false
+        );
+
+        response
+            .Should()
+            .BeEquivalentTo(
+                new DragaliaResponse<ResultCodeData>()
+                {
+                    data_headers = new(ResultCode.COMMON_AUTH_ERROR),
+                    data = new(ResultCode.COMMON_AUTH_ERROR)
+                }
+            );
     }
 }

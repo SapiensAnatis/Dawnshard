@@ -9,6 +9,7 @@ namespace DragaliaAPI.Controllers.Nintendo;
 /// If a Nintendo account were linked, it would return information about the user, but that is not yet implemented.
 /// </summary>
 [ApiController]
+[Obsolete("An external login server is now used, except for in the development environment.")]
 [Consumes("application/json")]
 [Produces("application/json")]
 [Route("/core/v1/gateway/sdk/login")]
