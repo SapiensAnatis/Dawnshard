@@ -40,7 +40,7 @@ public class DungeonRecordController : DragaliaControllerBase
         DungeonSession session = await this.dungeonService.FinishDungeon(request.dungeon_key);
 
         await this.userDataRepository.AddTutorialFlag(this.DeviceAccountId, 1022);
-        await this.questRepository.CompleteQuest(this.DeviceAccountId, session.DungeonId);
+        await this.questRepository.CompleteQuest(this.DeviceAccountId, session.QuestData.Id);
 
         DbPlayerUserData userData = await this.userDataRepository
             .GetUserData(this.DeviceAccountId)
@@ -67,7 +67,7 @@ public class DungeonRecordController : DragaliaControllerBase
                 {
                     dungeon_key = request.dungeon_key,
                     play_type = 1,
-                    quest_id = session.DungeonId,
+                    quest_id = session.QuestData.Id,
                     reward_record = new()
                     {
                         /*drop_all = new List<AtgenDropAll>()

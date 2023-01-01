@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions;
+using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Database.Utils;
 
@@ -15,7 +16,7 @@ public static class CharaConstants
 
     public static int CalcMight(
         DbPlayerCharaData dbCharData,
-        DataAdventurer charData,
+        CharaData charData,
         bool addSharedSkillMight = false,
         bool isLeader = false
     )

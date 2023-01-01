@@ -4,7 +4,8 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Services;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
@@ -12,18 +13,10 @@ namespace DragaliaAPI.Database.Repositories;
 public class UnitRepository : BaseRepository, IUnitRepository
 {
     private readonly ApiContext apiContext;
-    private readonly ICharaDataService charaDataService;
-    private readonly IDragonDataService dragonDataService;
 
-    public UnitRepository(
-        ApiContext apiContext,
-        ICharaDataService charaDataService,
-        IDragonDataService dragonDataService
-    ) : base(apiContext)
+    public UnitRepository(ApiContext apiContext) : base(apiContext)
     {
         this.apiContext = apiContext;
-        this.charaDataService = charaDataService;
-        this.dragonDataService = dragonDataService;
     }
 
     public IQueryable<DbPlayerCharaData> GetAllCharaData(string deviceAccountId)
@@ -101,7 +94,8 @@ public class UnitRepository : BaseRepository, IUnitRepository
         if (newCharas.Any())
         {
             IEnumerable<DbPlayerCharaData> dbEntries = newCharas.Select(
-                id => DbPlayerCharaDataFactory.Create(deviceAccountId, charaDataService.GetData(id))
+                id =>
+                    DbPlayerCharaDataFactory.Create(deviceAccountId, MasterAsset.CharaData.Get(id))
             );
 
             await apiContext.PlayerCharaData.AddRangeAsync(dbEntries);
@@ -272,8 +266,8 @@ public class UnitRepository : BaseRepository, IUnitRepository
         if (id == Charas.Empty)
             return null;
 
-        DataAdventurer data = this.charaDataService.GetData(id);
-        bool isFirstSkill = data.EditSkillId == data.Skill1ID;
+        CharaData data = MasterAsset.CharaData.Get(id);
+        bool isFirstSkill = data.EditSkillId == data.Skill1;
 
         return await charaData
             .Where(x => x.CharaId == id && x.IsUnlockEditSkill)

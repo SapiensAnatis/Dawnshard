@@ -555,10 +555,10 @@ public static class UpgradeMaterials
     >()
     {
         { UnitElement.Water, Materials.WaterTome },
-        { UnitElement.Flame, Materials.FlameTome },
+        { UnitElement.Fire, Materials.FlameTome },
         { UnitElement.Wind, Materials.WindTome },
         { UnitElement.Light, Materials.LightTome },
-        { UnitElement.Shadow, Materials.ShadowTome }
+        { UnitElement.Dark, Materials.ShadowTome }
     };
 
     /*

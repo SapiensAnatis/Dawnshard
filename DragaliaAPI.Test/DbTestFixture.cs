@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Test;
@@ -20,8 +19,7 @@ public class DbTestFixture : IDisposable
         this.ApiContext = new ApiContext(options);
 
         IDeviceAccountRepository deviceAccountRepository = new DeviceAccountRepository(
-            this.ApiContext,
-            new CharaDataService()
+            this.ApiContext
         );
         deviceAccountRepository.CreateNewSavefile("id");
         deviceAccountRepository.SaveChangesAsync().Wait();

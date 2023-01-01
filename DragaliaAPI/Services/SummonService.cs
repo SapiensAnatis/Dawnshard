@@ -4,14 +4,12 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Services;
+using DragaliaAPI.Shared.MasterAsset;
 
 namespace DragaliaAPI.Services;
 
 public class SummonService : ISummonService
 {
-    private readonly ICharaDataService charaDataService;
-    private readonly IDragonDataService dragonDataService;
     private readonly IUnitRepository unitRepository;
     private readonly IMapper mapper;
 
@@ -24,15 +22,8 @@ public class SummonService : ISummonService
     private const float SRSummonRateTotal = SRSummonRateTotalNormal + SRSummonRateTotalFeatured;
     private const float RSummonRateChara = 4.0f;
 
-    public SummonService(
-        ICharaDataService charaDataService,
-        IDragonDataService dragonDataService,
-        IUnitRepository unitRepository,
-        IMapper mapper
-    )
+    public SummonService(IUnitRepository unitRepository, IMapper mapper)
     {
-        this.charaDataService = charaDataService;
-        this.dragonDataService = dragonDataService;
         this.unitRepository = unitRepository;
         this.mapper = mapper;
         this.random = Random.Shared;
@@ -123,7 +114,7 @@ public class SummonService : ISummonService
                 while (id == 0)
                     id = random.NextEnum<Dragons>();
 
-                int rarity = dragonDataService.GetData(id).Rarity;
+                int rarity = MasterAsset.DragonData.Get(id).Rarity;
                 resultList.Add(new(EntityTypes.Dragon, (int)id, rarity));
             }
             else
@@ -132,7 +123,7 @@ public class SummonService : ISummonService
                 while (id == 0)
                     id = random.NextEnum<Charas>();
 
-                int rarity = charaDataService.GetData(id).Rarity;
+                int rarity = MasterAsset.CharaData.Get(id).Rarity;
                 resultList.Add(new(EntityTypes.Chara, (int)id, rarity));
             }
         }

@@ -8,7 +8,7 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions;
-using DragaliaAPI.Shared.Services;
+using DragaliaAPI.Shared.MasterAsset;
 
 namespace DragaliaAPI.Test.Unit.Controllers;
 
@@ -21,7 +21,7 @@ public class DungeonControllerTest
     {
         this.mockDungeonService = new(MockBehavior.Strict);
 
-        this.dungeonController = new(this.mockDungeonService.Object, new EnemyListDataService());
+        this.dungeonController = new(this.mockDungeonService.Object);
         dungeonController.SetupMockContext();
     }
 
@@ -33,8 +33,7 @@ public class DungeonControllerTest
             .ReturnsAsync(
                 new DungeonSession()
                 {
-                    DungeonId = 2,
-                    AreaInfo = new List<DataQuestAreaInfo>(),
+                    QuestData = MasterAsset.QuestData.Get(227060105),
                     Party = new List<PartySettingList>()
                 }
             );
@@ -44,7 +43,7 @@ public class DungeonControllerTest
         ).GetData<DungeonFailData>();
 
         response.Should().NotBeNull();
-        response!.fail_quest_detail.quest_id.Should().Be(2);
+        response!.fail_quest_detail.quest_id.Should().Be(227060105);
 
         this.mockDungeonService.VerifyAll();
     }
