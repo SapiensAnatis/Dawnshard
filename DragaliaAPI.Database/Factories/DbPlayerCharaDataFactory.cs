@@ -54,7 +54,7 @@ internal static class DbPlayerCharaDataFactory
             ExAbilityLevel = 1,
             ExAbility2Level = 1,
             IsTemporary = false,
-            IsUnlockEditSkill = false,
+            IsUnlockEditSkill = data.Availability == CharaAvailabilities.Story,
             ManaCirclePieceIdList = new SortedSet<int>(),
             ListViewFlag = false,
             GetTime = DateTimeOffset.UtcNow

@@ -64,4 +64,23 @@ public record CharaData(
             x => x.ManaCircleName == this.ManaCircleName && x.ManaPieceType != ManaNodeTypes.None
         );
     }
+
+    public CharaAvailabilities Availability =>
+        AvailabilityMap.TryGetValue(this.Id, out CharaAvailabilities availability)
+            ? availability
+            : CharaAvailabilities.Default;
+
+    private static readonly IReadOnlyDictionary<Charas, CharaAvailabilities> AvailabilityMap =
+        new Dictionary<Charas, CharaAvailabilities>()
+        {
+            { Charas.ThePrince, CharaAvailabilities.Story },
+            { Charas.Elisanne, CharaAvailabilities.Story },
+            { Charas.Ranzal, CharaAvailabilities.Story },
+            { Charas.Cleo, CharaAvailabilities.Story },
+            { Charas.Luca, CharaAvailabilities.Story },
+            { Charas.Alex, CharaAvailabilities.Story },
+            { Charas.Laxi, CharaAvailabilities.Story },
+            { Charas.Chelle, CharaAvailabilities.Story },
+            { Charas.Zena, CharaAvailabilities.Story }
+        };
 }

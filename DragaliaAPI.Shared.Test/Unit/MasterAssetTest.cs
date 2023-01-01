@@ -86,6 +86,20 @@ public class MasterAssetTest
         chara.GetManaNodes().Should().HaveCount(expectedCount);
     }
 
+    [Theory]
+    [InlineData(Charas.Elisanne, CharaAvailabilities.Story)]
+    [InlineData(Charas.Annelie, CharaAvailabilities.Default)]
+    [InlineData(Charas.Chelle, CharaAvailabilities.Story)]
+    public void CharaData_Availability_ReturnsExpectedResult(
+        Charas id,
+        CharaAvailabilities expected
+    )
+    {
+        CharaData chara = MasterAsset.MasterAsset.CharaData.Get(id);
+
+        chara.Availability.Should().Be(expected);
+    }
+
     [Fact]
     public void DragonData_Get_ReturnsExpectedProperties()
     {
