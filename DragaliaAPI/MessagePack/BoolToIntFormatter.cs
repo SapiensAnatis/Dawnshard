@@ -1,7 +1,7 @@
 ﻿using MessagePack;
 using MessagePack.Formatters;
 
-namespace DragaliaAPI.MessagePackFormatters;
+namespace DragaliaAPI.MessagePack;
 
 public class BoolToIntFormatter : IMessagePackFormatter<bool>
 {

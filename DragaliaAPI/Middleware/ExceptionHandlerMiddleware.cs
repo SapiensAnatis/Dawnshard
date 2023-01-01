@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using DragaliaAPI.Controllers;
 using DragaliaAPI.MessagePack;
-using DragaliaAPI.MessagePackFormatters;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
 using MessagePack;

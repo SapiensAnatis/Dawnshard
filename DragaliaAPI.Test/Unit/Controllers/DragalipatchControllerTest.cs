@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DragaliaAPI.Controllers.Other;
-using DragaliaAPI.Models;
+using DragaliaAPI.Models.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -13,31 +13,36 @@ namespace DragaliaAPI.Test.Unit.Controllers;
 public class DragalipatchControllerTest
 {
     private readonly DragalipatchController controller;
-    private readonly Mock<IOptionsMonitor<DragalipatchConfig>> mockOptions;
+    private readonly Mock<IOptionsMonitor<DragalipatchOptions>> mockPatchOptions;
+    private readonly Mock<IOptionsMonitor<LoginOptions>> mockLoginOptions;
 
     public DragalipatchControllerTest()
     {
-        this.mockOptions = new(MockBehavior.Strict);
-        this.controller = new(this.mockOptions.Object);
+        this.mockPatchOptions = new(MockBehavior.Strict);
+        this.mockLoginOptions = new(MockBehavior.Strict);
+
+        this.controller = new(this.mockPatchOptions.Object, this.mockLoginOptions.Object);
     }
 
     [Fact]
     public void DragalipatchController_ReturnsConfiguredValues()
     {
-        DragalipatchConfig expectedConfig =
+        DragalipatchOptions expectedPatchConfig =
             new()
             {
                 Mode = "RAW",
                 CdnUrl = "https://taylorswift.com",
                 ConeshellKey = "key",
-                UseUnifiedLogin = true,
             };
 
-        this.mockOptions.SetupGet(x => x.CurrentValue).Returns(expectedConfig);
+        LoginOptions expectedLoginConfig = new() { UseBaasLogin = true, };
 
-        ObjectResult? result = this.controller.Config() as ObjectResult;
+        this.mockPatchOptions.SetupGet(x => x.CurrentValue).Returns(expectedPatchConfig);
+        this.mockLoginOptions.SetupGet(x => x.CurrentValue).Returns(expectedLoginConfig);
+
+        ObjectResult? result = this.controller.Config().Result as ObjectResult;
 
         result.Should().NotBeNull();
-        result!.Value.Should().BeEquivalentTo(expectedConfig);
+        result!.Value.Should().BeEquivalentTo(expectedPatchConfig);
     }
 }

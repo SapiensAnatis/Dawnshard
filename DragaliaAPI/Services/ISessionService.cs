@@ -32,4 +32,5 @@ public interface ISessionService
     /// <param name="sessionId">The session id.</param>
     /// <returns></returns>
     Task<string> GetDeviceAccountId_SessionId(string sessionId);
+    Task<string> CreateSession(string accountId, string idToken);
 }

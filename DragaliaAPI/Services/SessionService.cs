@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services.Exceptions;
 using Microsoft.Extensions.Caching.Distributed;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace DragaliaAPI.Services;
@@ -57,6 +58,7 @@ public class SessionService : ISessionService
             $":session_id:device_account_id:{deviceAccountId}";
     }
 
+    [Obsolete("Used for old pre-BaaS login flow")]
     public async Task PrepareSession(DeviceAccount deviceAccount, string idToken)
     {
         // Check if there is an existing session, and if so, remove it
@@ -87,6 +89,7 @@ public class SessionService : ISessionService
         );
     }
 
+    [Obsolete("Used for old pre-BaaS login flow")]
     public async Task<string> ActivateSession(string idToken)
     {
         Session session = await LoadSession(Schema.Session_IdToken(idToken));
@@ -133,6 +136,32 @@ public class SessionService : ISessionService
         return session.SessionId;
     }
 
+    public async Task<string> CreateSession(string accountId, string idToken)
+    {
+        // Check for existing session
+        Session? existingSession = await this.TryLoadSession(Schema.Session_IdToken(idToken));
+        if (existingSession is not null)
+            return existingSession.SessionId;
+
+        string sessionId = Guid.NewGuid().ToString();
+        Session session = new(sessionId, accountId);
+
+        // Register in sessions by id token (for reauth)
+        await cache.SetStringAsync(
+            Schema.Session_IdToken(idToken),
+            JsonSerializer.Serialize(session),
+            cacheOptions
+        );
+
+        // Register in sessions by session id (for account id retrieval)
+        await cache.SetStringAsync(
+            Schema.Session_SessionId(sessionId),
+            JsonSerializer.Serialize(session)
+        );
+
+        return sessionId;
+    }
+
     public async Task<string> GetDeviceAccountId_SessionId(string sessionId)
     {
         Session session = await LoadSession(Schema.Session_SessionId(sessionId));
@@ -159,6 +188,16 @@ public class SessionService : ISessionService
             ?? throw new JsonException(
                 $"Loaded session JSON {sessionJson} could not be deserialized."
             );
+    }
+
+    private async Task<Session?> TryLoadSession(string key)
+    {
+        string? json = await this.cache.GetStringAsync(key);
+
+        if (json is null)
+            return null;
+
+        return JsonSerializer.Deserialize<Session>(json);
     }
 
     private record Session(string SessionId, string DeviceAccountId);

@@ -6,6 +6,7 @@ using DragaliaAPI.Models.Nintendo;
 
 namespace DragaliaAPI.Services;
 
+[Obsolete("Used for pre-BaaS auth flow")]
 public class DeviceAccountService : IDeviceAccountService
 {
     private readonly IDeviceAccountRepository deviceAccountRepository;

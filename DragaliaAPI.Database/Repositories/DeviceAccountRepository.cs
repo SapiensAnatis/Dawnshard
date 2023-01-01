@@ -23,16 +23,19 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
         this.charaDataService = charaDataService;
     }
 
+    [Obsolete("Used by pre-BaaS login flow")]
     public async Task AddNewDeviceAccount(string id, string hashedPassword)
     {
         await apiContext.DeviceAccounts.AddAsync(new DbDeviceAccount(id, hashedPassword));
     }
 
+    [Obsolete("Used by pre-BaaS login flow")]
     public async Task<DbDeviceAccount?> GetDeviceAccountById(string id)
     {
         return await apiContext.DeviceAccounts.SingleOrDefaultAsync(x => x.Id == id);
     }
 
+    // TODO: move into savefileservice
     public async Task CreateNewSavefileBase(string deviceAccountId)
     {
         DbPlayerUserData userData = DbSavefileUserDataFactory.Create(deviceAccountId);
@@ -51,6 +54,7 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
         await this.AddDefaultParties(deviceAccountId);
     }
 
+    // TODO: move into savefileservice
     public async Task CreateNewSavefile(string deviceAccountId)
     {
         await this.CreateNewSavefileBase(deviceAccountId);
