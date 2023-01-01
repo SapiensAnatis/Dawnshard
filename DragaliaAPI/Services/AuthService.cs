@@ -47,8 +47,9 @@ public class AuthService : IAuthService
             : await this.DoLegacyAuth(idToken);
 
         this.logger.LogInformation(
-            "Authenticated user with viewer ID {viewerid} and issued session ID {sid}",
+            "Authenticated user with viewer ID {viewerid} using token ...{token} and issued session ID {sid}",
             result.viewerId,
+            idToken[^5..],
             result.sessionId
         );
 
