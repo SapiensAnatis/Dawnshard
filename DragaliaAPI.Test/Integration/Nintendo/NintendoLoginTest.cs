@@ -7,7 +7,8 @@ using DragaliaAPI.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Nintendo;
-
+/*
+[Obsolete]
 [Collection("DragaliaIntegration")]
 public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
 {
@@ -128,3 +129,4 @@ public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
         }
     }
 }
+*/

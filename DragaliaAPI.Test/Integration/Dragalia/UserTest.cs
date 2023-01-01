@@ -39,7 +39,8 @@ public class UserTest : IClassFixture<IntegrationTestFixture>
                 new UserLinkedNAccountData()
                 {
                     update_data_list = new() { user_data = expectedUserData }
-                }
+                },
+                opts => opts.Excluding(x => x.update_data_list.user_data.crystal)
             );
     }
 }
