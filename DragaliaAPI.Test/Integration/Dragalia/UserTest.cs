@@ -46,4 +46,28 @@ public class UserTest : IClassFixture<IntegrationTestFixture>
                 opts => opts.Excluding(x => x.update_data_list.user_data.crystal)
             );
     }
+
+    [Fact]
+    public async Task GetNAccountInfo_ReturnsExpectedResponse()
+    {
+        (
+            await this.client.PostMsgpack<UserGetNAccountInfoData>(
+                "/user/get_n_account_info",
+                new UserGetNAccountInfoRequest()
+            )
+        ).data
+            .Should()
+            .BeEquivalentTo(
+                new UserGetNAccountInfoData()
+                {
+                    n_account_info = new()
+                    {
+                        email = "placeholder@email.com",
+                        nickname = "placeholder nickname"
+                    },
+                    update_data_list = new()
+                },
+                opts => opts.Excluding(x => x.update_data_list.user_data.crystal)
+            );
+    }
 }

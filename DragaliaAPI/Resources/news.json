@@ -1,5 +1,10 @@
 [
     {
+        "Headline": "Savefile imports",
+        "Timestamp": 1672674212,
+        "Description": "The necessary work to pull savefiles from the BaaS login system has been completed. You can now import a savefile without needing to ask the server owner. See the \"Importing a save\" section below for more details."
+    },
+    {
         "Headline": "New login server",
         "Timestamp": 1672555688,
         "Description": "Courtesy of LukeFZ#4035, the server now calls into an external login service which means account linking is now possible! It will also be possible soon to import a save via this service without having to direct message anyone."

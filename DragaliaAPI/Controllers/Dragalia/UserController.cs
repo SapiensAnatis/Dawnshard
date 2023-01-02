@@ -43,4 +43,21 @@ public class UserController : DragaliaControllerBase
 
         return this.Ok(new UserLinkedNAccountData() { update_data_list = updateDataList });
     }
+
+    [HttpPost("get_n_account_info")]
+    public DragaliaResult GetNAccountInfo(UserGetNAccountInfoRequest request)
+    {
+        // TODO: Replace this with an API call to BaaS to return actual information
+        return this.Ok(
+            new UserGetNAccountInfoData()
+            {
+                n_account_info = new()
+                {
+                    email = "placeholder@email.com",
+                    nickname = "placeholder nickname"
+                },
+                update_data_list = new()
+            }
+        );
+    }
 }
