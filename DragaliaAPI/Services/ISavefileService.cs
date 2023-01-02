@@ -7,5 +7,5 @@ public interface ISavefileService
     Task Create(string deviceAccountId);
     Task CreateBase(string deviceAccountId);
     Task Import(string deviceAccountId, LoadIndexData savefile);
-    Task Reset(string deviceAccountId);
+    Task Clear(string deviceAccountId, bool recreate = true);
 }

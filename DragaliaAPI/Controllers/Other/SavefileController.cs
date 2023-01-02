@@ -46,7 +46,7 @@ public class SavefileController : ControllerBase
     [HttpDelete("delete/{viewerId}")]
     public async Task<IActionResult> Delete(long viewerId)
     {
-        await this.savefileService.Reset(await this.LookupAccountId(viewerId));
+        await this.savefileService.Clear(await this.LookupAccountId(viewerId));
 
         return this.NoContent();
     }

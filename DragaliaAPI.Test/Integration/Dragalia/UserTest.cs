@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -69,5 +73,32 @@ public class UserTest : IClassFixture<IntegrationTestFixture>
                 },
                 opts => opts.Excluding(x => x.update_data_list.user_data.crystal)
             );
+    }
+
+    [Fact]
+    public async Task Withdrawal_ClearsDatabase()
+    {
+        (
+            await this.client.PostMsgpack<UserWithdrawalData>(
+                "/user/withdrawal",
+                new UserWithdrawalData()
+            )
+        ).data
+            .Should()
+            .BeEquivalentTo(new UserWithdrawalData() { result = 1 });
+
+        (
+            await this.fixture.ApiContext.PlayerUserData.SingleOrDefaultAsync(
+                x => x.DeviceAccountId == fixture.DeviceAccountId
+            )
+        )
+            .Should()
+            .BeNull();
+
+        // Avoid fucking up whichever test has the misfortune of running after this one
+        fixture.ApiContext.ChangeTracker.Clear();
+        await this.fixture.Services
+            .GetRequiredService<ISavefileService>()
+            .Create(this.fixture.DeviceAccountId);
     }
 }

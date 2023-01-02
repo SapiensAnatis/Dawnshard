@@ -191,12 +191,16 @@ public class SavefileService : ISavefileService
         );
     }
 
-    public async Task Reset(string deviceAccountId)
+    public async Task Clear(string deviceAccountId, bool recreate = true)
     {
         this.Delete(deviceAccountId);
 
         // Unlike importing, this will not preserve the viewer id
-        await this.Create(deviceAccountId);
+        if (recreate)
+        {
+            await this.Create(deviceAccountId);
+        }
+
         await this.apiContext.SaveChangesAsync();
     }
 

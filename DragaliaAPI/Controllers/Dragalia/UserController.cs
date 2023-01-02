@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,16 +14,19 @@ public class UserController : DragaliaControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
     private readonly IUpdateDataService updateDataService;
+    private readonly ISavefileService savefileService;
     private readonly IMapper mapper;
 
     public UserController(
         IUserDataRepository userDataRepository,
         IUpdateDataService updateDataService,
+        ISavefileService savefileService,
         IMapper mapper
     )
     {
         this.userDataRepository = userDataRepository;
         this.updateDataService = updateDataService;
+        this.savefileService = savefileService;
         this.mapper = mapper;
     }
 
@@ -59,5 +63,13 @@ public class UserController : DragaliaControllerBase
                 update_data_list = new()
             }
         );
+    }
+
+    [HttpPost("withdrawal")]
+    public async Task<DragaliaResult> Withdrawal(UserWithdrawalRequest request)
+    {
+        await this.savefileService.Clear(this.DeviceAccountId, recreate: false);
+
+        return this.Ok(new UserWithdrawalData() { result = (int)ResultCode.SUCCESS });
     }
 }
