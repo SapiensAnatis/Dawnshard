@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
+using DragaliaAPI.Database.Test;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -34,11 +35,8 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     {
         string deviceAccountId = "new id";
 
-        DbPlayerUserData userData = DbSavefileUserDataFactory.Create(deviceAccountId);
-        DbPlayerCharaData charaData = DbPlayerCharaDataFactory.Create(
-            deviceAccountId,
-            MasterAsset.CharaData.Get(Charas.GalaLeonidas)
-        );
+        DbPlayerUserData userData = new(deviceAccountId);
+        DbPlayerCharaData charaData = new(deviceAccountId, Charas.GalaLeonidas);
         DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
             deviceAccountId,
             Dragons.DreadkingRathalos
@@ -172,9 +170,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public void GetUpdateDataList_NoDataFromOtherAccounts()
     {
-        this.fixture.ApiContext.Add(
-            DbPlayerCharaDataFactory.Create("id 1", MasterAsset.CharaData.Get(Charas.GalaZethia))
-        );
+        this.fixture.ApiContext.PlayerCharaData.Add(new("id 1", Charas.GalaZethia));
 
         this.updateDataService.GetUpdateDataList("id 2").chara_list.Should().BeNull();
     }
@@ -182,9 +178,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public void GetUpdateDataList_NullAfterSave()
     {
-        this.fixture.ApiContext.Add(
-            DbPlayerCharaDataFactory.Create("id", MasterAsset.CharaData.Get(Charas.HalloweenLowen))
-        );
+        this.fixture.ApiContext.PlayerCharaData.Add(new("id", Charas.HalloweenLowen));
 
         this.fixture.ApiContext.SaveChanges();
 

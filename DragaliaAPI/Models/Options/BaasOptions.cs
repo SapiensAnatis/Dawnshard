@@ -7,4 +7,6 @@ public class BaasOptions
     public string TokenAudience { get; set; } = string.Empty;
 
     public string BaasUrl { get; set; } = string.Empty;
+
+    public Uri BaasUrlParsed => new(this.BaasUrl);
 }

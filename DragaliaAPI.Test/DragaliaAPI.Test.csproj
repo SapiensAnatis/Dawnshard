@@ -40,6 +40,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\DragaliaAPI.Database.Test\DragaliaAPI.Database.Test.csproj" />
 		<ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
 		<ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj" />
 	</ItemGroup>

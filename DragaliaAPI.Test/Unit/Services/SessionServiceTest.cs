@@ -11,6 +11,7 @@ namespace DragaliaAPI.Test.Unit.Services;
 
 public class SessionServiceTest
 {
+    // TODO: Refactor this file to use the new methods
     private readonly Mock<ILogger<SessionService>> mockLogger;
     private readonly SessionService sessionService;
 

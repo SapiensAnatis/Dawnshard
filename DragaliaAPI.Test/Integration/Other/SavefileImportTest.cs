@@ -13,12 +13,12 @@ namespace DragaliaAPI.Test.Integration.Other;
 /// Tests <see cref="Controllers.Other.SavefileController"/>
 /// </summary>
 [Collection("DragaliaIntegration")]
-public class SavefileTest : IClassFixture<IntegrationTestFixture>
+public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly IntegrationTestFixture fixture;
     private readonly HttpClient client;
 
-    public SavefileTest(IntegrationTestFixture fixture)
+    public SavefileImportTest(IntegrationTestFixture fixture)
     {
         this.fixture = fixture;
         this.client = fixture.CreateClient();
@@ -82,6 +82,9 @@ public class SavefileTest : IClassFixture<IntegrationTestFixture>
                     opts.Excluding(x => x.user_data.viewer_id);
                     opts.Excluding(x => x.server_time);
                     opts.Excluding(x => x.spec_upgrade_time);
+
+                    // Ignored properties
+                    opts.Excluding(x => x.user_data.prologue_end_time);
 
                     // Properties with no implementation
                     opts.Excluding(x => x.Name.Contains("album"));

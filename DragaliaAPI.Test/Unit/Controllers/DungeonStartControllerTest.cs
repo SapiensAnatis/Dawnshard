@@ -110,7 +110,7 @@ public class DungeonStartControllerTest
                 {
                     Position = 1,
                     DeviceAccountId = DeviceAccountId,
-                    CharaData = new() { CharaId = Charas.ThePrince, Ability1Level = 1, },
+                    CharaData = new(DeviceAccountId, Charas.ThePrince),
                     CrestSlotType1CrestList = new List<DbAbilityCrest>()
                     {
                         new()
@@ -246,7 +246,7 @@ public class DungeonStartControllerTest
                 {
                     Position = 5,
                     DeviceAccountId = DeviceAccountId,
-                    CharaData = new() { CharaId = Charas.Elisanne, Ability1Level = 1, },
+                    CharaData = new(DeviceAccountId, Charas.Elisanne),
                     CrestSlotType1CrestList = new List<DbAbilityCrest>()
                     {
                         new()

@@ -68,7 +68,6 @@ public class DeviceAccountService : IDeviceAccountService
         string hashedPassword = this.GetHashedPassword(password);
 
         await this.deviceAccountRepository.AddNewDeviceAccount(id, hashedPassword);
-        await this.deviceAccountRepository.CreateNewSavefile(id);
         await this.deviceAccountRepository.SaveChangesAsync();
 
         this.logger.LogInformation("Registered new account: DeviceAccount ID '{id}'", id);

@@ -1,7 +1,9 @@
 ﻿using System.Net.Http.Headers;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using MessagePack;
+using NuGet.Common;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -41,11 +43,19 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         ToolSignupData response = (
             await client.PostMsgpack<ToolSignupData>(
                 "/tool/signup",
-                new ToolSignupRequest() { id_token = this.fixture.BuildValidToken() }
+                new ToolSignupRequest()
+                {
+                    id_token = TestUtils.TokenToString(
+                        TestUtils.GetToken(
+                            DateTime.UtcNow + TimeSpan.FromMinutes(5),
+                            fixture.DeviceAccountId
+                        )
+                    )
+                }
             )
         ).data;
 
-        response.viewer_id.Should().Be(1);
+        response.viewer_id.Should().Be(2);
     }
 
     [Fact]
@@ -55,7 +65,12 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
             "/tool/signup",
             new ToolAuthRequest()
             {
-                id_token = fixture.BuildValidToken(DateTime.UtcNow.AddHours(-1))
+                id_token = TestUtils.TokenToString(
+                    TestUtils.GetToken(
+                        DateTime.UtcNow - TimeSpan.FromMinutes(5),
+                        fixture.DeviceAccountId
+                    )
+                )
             }
         );
 
@@ -93,26 +108,45 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         ToolAuthData response = (
             await client.PostMsgpack<ToolAuthData>(
                 "/tool/auth",
-                new ToolAuthRequest() { id_token = this.fixture.BuildValidToken() }
+                new ToolAuthRequest()
+                {
+                    id_token = TestUtils.TokenToString(
+                        TestUtils.GetToken(
+                            DateTime.UtcNow + TimeSpan.FromMinutes(5),
+                            fixture.DeviceAccountId
+                        )
+                    )
+                }
             )
         ).data;
 
-        response.viewer_id.Should().Be(1);
+        response.viewer_id.Should().Be(2);
         Guid.TryParse(response.session_id, out _).Should().BeTrue();
     }
 
     [Fact]
     public async Task Auth_CalledTwice_ReturnsSameSessionId()
     {
-        ToolAuthRequest data = new() { uuid = "unused", id_token = this.fixture.BuildValidToken() };
+        ToolAuthRequest data =
+            new()
+            {
+                uuid = "unused",
+                id_token = TestUtils.TokenToString(
+                    TestUtils.GetToken(
+                        DateTime.UtcNow + TimeSpan.FromMinutes(5),
+                        fixture.DeviceAccountId
+                    )
+                )
+            };
 
         ToolAuthData response = (await client.PostMsgpack<ToolAuthData>("/tool/auth", data)).data;
         ToolAuthData response2 = (await client.PostMsgpack<ToolAuthData>("/tool/auth", data)).data;
 
-        response.viewer_id.Should().Be(1);
+        response.viewer_id.Should().Be(2);
         Guid.TryParse(response.session_id, out _).Should().BeTrue();
-        response2.viewer_id.Should().Be(1);
+        response2.viewer_id.Should().Be(2);
         Guid.TryParse(response2.session_id, out _).Should().BeTrue();
+        response.session_id.Should().Be(response2.session_id);
     }
 
     [Fact]
@@ -122,7 +156,12 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
             "/tool/auth",
             new ToolAuthRequest()
             {
-                id_token = fixture.BuildValidToken(DateTime.UtcNow.AddHours(-1))
+                id_token = TestUtils.TokenToString(
+                    TestUtils.GetToken(
+                        DateTime.UtcNow - TimeSpan.FromMinutes(5),
+                        fixture.DeviceAccountId
+                    )
+                )
             }
         );
 
@@ -152,5 +191,61 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
                     data = new(ResultCode.COMMON_AUTH_ERROR)
                 }
             );
+    }
+
+    [Fact]
+    public async Task Auth_ValidIdToken_PendingSavefile_ImportsSavefile()
+    {
+        this.fixture.ApiContext.PlayerUserData
+            .Find(this.fixture.DeviceAccountId)!
+            .LastSaveImportTime = DateTime.MinValue;
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        string token = TestUtils.TokenToString(
+            TestUtils.GetToken(
+                DateTime.UtcNow + TimeSpan.FromMinutes(5),
+                fixture.DeviceAccountId,
+                savefileAvailable: true,
+                savefileTime: DateTime.UtcNow - TimeSpan.FromDays(1)
+            )
+        );
+        ToolAuthRequest data = new() { uuid = "unused", id_token = token };
+
+        await client.PostMsgpack<ToolAuthData>("/tool/auth", data);
+
+        DbPlayerUserData userData = fixture.ApiContext.PlayerUserData.Find(
+            fixture.DeviceAccountId
+        )!;
+        await this.fixture.ApiContext.Entry(userData).ReloadAsync();
+        userData.Name.Should().Be("Imported Save");
+    }
+
+    [Fact]
+    public async Task Auth_ValidIdToken_OldSavefile_DoesNotImportSavefile()
+    {
+        this.fixture.ApiContext.PlayerUserData
+            .Find(this.fixture.DeviceAccountId)!
+            .LastSaveImportTime = DateTime.UtcNow;
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        string token = TestUtils.TokenToString(
+            TestUtils.GetToken(
+                DateTime.UtcNow + TimeSpan.FromMinutes(5),
+                fixture.DeviceAccountId,
+                savefileAvailable: true,
+                savefileTime: DateTime.UtcNow - TimeSpan.FromDays(1)
+            )
+        );
+        ToolAuthRequest data = new() { uuid = "unused", id_token = token };
+
+        await client.PostMsgpack<ToolAuthData>("/tool/auth", data);
+
+        this.fixture.mockBaasRequestHelper.Verify(x => x.GetSavefile(token), Times.Never);
+
+        DbPlayerUserData userData = fixture.ApiContext.PlayerUserData.Find(
+            fixture.DeviceAccountId
+        )!;
+        this.fixture.ApiContext.Entry(userData).Reload();
+        userData.Name.Should().Be("Euden");
     }
 }

@@ -116,7 +116,6 @@ else if (app.Environment.EnvironmentName == "Testing")
     context.Database.EnsureCreated();
 }
 
-//app.UseHttpsRedirection();
 app.MapRazorPages();
 
 // Latest Android app version

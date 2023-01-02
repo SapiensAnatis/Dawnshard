@@ -9039,10 +9039,10 @@ public class UserData
     public int crystal { get; set; }
     public int dew_point { get; set; }
     public int stamina_single { get; set; }
-    public int last_stamina_single_update_time { get; set; }
+    public DateTimeOffset last_stamina_single_update_time { get; set; }
     public int stamina_single_surplus_second { get; set; }
     public int stamina_multi { get; set; }
-    public int last_stamina_multi_update_time { get; set; }
+    public DateTimeOffset last_stamina_multi_update_time { get; set; }
     public int stamina_multi_surplus_second { get; set; }
     public int max_dragon_quantity { get; set; }
     public int max_weapon_quantity { get; set; }
@@ -9054,12 +9054,16 @@ public class UserData
     public int emblem_id { get; set; }
     public int active_memory_event_id { get; set; }
     public int mana_point { get; set; }
-    public int last_login_time { get; set; }
+    public DateTimeOffset last_login_time { get; set; }
     public int tutorial_status { get; set; }
     public IEnumerable<int> tutorial_flag_list { get; set; }
+
+    [Obsolete]
     public int prologue_end_time { get; set; }
-    public int fort_open_time { get; set; }
-    public int create_time { get; set; }
+    public DateTimeOffset fort_open_time { get; set; }
+    public DateTimeOffset create_time { get; set; }
+
+    [Obsolete]
     public int is_optin { get; set; }
 
     public UserData(
@@ -9071,10 +9075,10 @@ public class UserData
         int crystal,
         int dew_point,
         int stamina_single,
-        int last_stamina_single_update_time,
+        DateTimeOffset last_stamina_single_update_time,
         int stamina_single_surplus_second,
         int stamina_multi,
-        int last_stamina_multi_update_time,
+        DateTimeOffset last_stamina_multi_update_time,
         int stamina_multi_surplus_second,
         int max_dragon_quantity,
         int max_weapon_quantity,
@@ -9086,12 +9090,12 @@ public class UserData
         int emblem_id,
         int active_memory_event_id,
         int mana_point,
-        int last_login_time,
+        DateTimeOffset last_login_time,
         int tutorial_status,
         IEnumerable<int> tutorial_flag_list,
         int prologue_end_time,
-        int fort_open_time,
-        int create_time,
+        DateTimeOffset fort_open_time,
+        DateTimeOffset create_time,
         int is_optin
     )
     {
