@@ -60,7 +60,7 @@ public class DungeonRecordControllerTest
 
         this.mockUserDataRepository
             .Setup(x => x.AddTutorialFlag(DeviceAccountId, 1022))
-            .ReturnsAsync(new DbPlayerUserData { });
+            .ReturnsAsync(new DbPlayerUserData { DeviceAccountId = DeviceAccountId });
 
         this.mockUserDataRepository
             .Setup(x => x.GetUserData(DeviceAccountId))
