@@ -37,12 +37,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetAllCharaData_ReturnsOnlyDataForGivenId()
     {
-        await this.fixture.AddToDatabase(
-            Factories.DbPlayerCharaDataFactory.Create(
-                "other id",
-                MasterAsset.CharaData.Get(Charas.Ilia)
-            )
-        );
+        await this.fixture.AddToDatabase(new DbPlayerCharaData("other id", Charas.Ilia));
 
         (await this.unitRepository.GetAllCharaData(DeviceAccountId).ToListAsync())
             .Should()
@@ -222,22 +217,13 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task BuildDetailedPartyUnit_ReturnsCorrectResult()
     {
-        DbPlayerCharaData chara = DbPlayerCharaDataFactory.Create(
-            DeviceAccountId,
-            MasterAsset.CharaData.Get(Charas.BondforgedPrince)
-        );
+        DbPlayerCharaData chara = new(DeviceAccountId, Charas.BondforgedPrince);
 
-        DbPlayerCharaData chara1 = DbPlayerCharaDataFactory.Create(
-            DeviceAccountId,
-            MasterAsset.CharaData.Get(Charas.GalaMym)
-        );
+        DbPlayerCharaData chara1 = new(DeviceAccountId, Charas.GalaMym);
         chara1.IsUnlockEditSkill = true;
         chara1.Skill1Level = 3;
 
-        DbPlayerCharaData chara2 = DbPlayerCharaDataFactory.Create(
-            DeviceAccountId,
-            MasterAsset.CharaData.Get(Charas.SummerCleo)
-        );
+        DbPlayerCharaData chara2 = new(DeviceAccountId, Charas.SummerCleo);
         chara2.IsUnlockEditSkill = true;
         chara2.Skill2Level = 2;
 

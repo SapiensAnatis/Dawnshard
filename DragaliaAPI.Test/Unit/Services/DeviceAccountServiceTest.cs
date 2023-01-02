@@ -66,9 +66,6 @@ public class DeviceAccountServiceTest
             .Setup(x => x.AddNewDeviceAccount("foreign id", It.IsAny<string>()))
             .Returns(Task.CompletedTask);
         this.mockRepository
-            .Setup(x => x.CreateNewSavefile("foreign id"))
-            .Returns(Task.CompletedTask);
-        this.mockRepository
             .Setup(x => x.GetDeviceAccountById("foreign id"))
             .ReturnsAsync((DbDeviceAccount?)null);
         this.mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
@@ -86,9 +83,6 @@ public class DeviceAccountServiceTest
     {
         this.mockRepository
             .Setup(x => x.AddNewDeviceAccount(It.IsAny<string>(), It.IsAny<string>()))
-            .Returns(Task.CompletedTask);
-        this.mockRepository
-            .Setup(x => x.CreateNewSavefile(It.IsAny<string>()))
             .Returns(Task.CompletedTask);
         this.mockRepository
             .Setup(x => x.GetDeviceAccountById(It.IsAny<string>()))
