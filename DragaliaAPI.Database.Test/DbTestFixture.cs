@@ -23,12 +23,15 @@ public class DbTestFixture : IDisposable
         this.ApiContext = new ApiContext(options);
         Mock<ILogger<SavefileService>> mockLogger = new(MockBehavior.Loose);
 
-        ISavefileService deviceAccountRepository = new SavefileService(
-            this.ApiContext,
-            new MapperConfiguration(opts => opts.AddMaps(typeof(Program).Assembly)).CreateMapper(),
-            mockLogger.Object
-        );
-        deviceAccountRepository.CreateNewSavefile("id").Wait();
+        SavefileService savefileService =
+            new(
+                this.ApiContext,
+                new MapperConfiguration(
+                    opts => opts.AddMaps(typeof(Program).Assembly)
+                ).CreateMapper(),
+                mockLogger.Object
+            );
+        savefileService.CreateNewSavefile("id").Wait();
     }
 
     public async Task AddToDatabase<TEntity>(TEntity data)

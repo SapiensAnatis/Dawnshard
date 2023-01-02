@@ -48,26 +48,24 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         await unitRepository.SaveChangesAsync();
     }
 
-    public async Task PopulateAllMaterials()
+    public void PopulateAllMaterials()
     {
-        using (IServiceScope scope = this.Services.CreateScope())
-        {
-            ApiContext inventoryRepo = scope.ServiceProvider.GetRequiredService<ApiContext>();
-            inventoryRepo.PlayerStorage.AddRange(
-                Enum.GetValues(typeof(Materials))
-                    .OfType<Materials>()
-                    .Select(
-                        x =>
-                            new DbPlayerMaterial()
-                            {
-                                DeviceAccountId = DeviceAccountId,
-                                MaterialId = x,
-                                Quantity = 99999999
-                            }
-                    )
-            );
-            await inventoryRepo.SaveChangesAsync();
-        }
+        using IServiceScope scope = this.Services.CreateScope();
+        ApiContext inventoryRepo = scope.ServiceProvider.GetRequiredService<ApiContext>();
+        inventoryRepo.PlayerStorage.AddRange(
+            Enum.GetValues(typeof(Materials))
+                .OfType<Materials>()
+                .Select(
+                    x =>
+                        new DbPlayerMaterial()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            MaterialId = x,
+                            Quantity = 99999999
+                        }
+                )
+        );
+        inventoryRepo.SaveChanges();
     }
 
     public string BuildValidToken() => this.BuildValidToken(DateTime.UtcNow.AddHours(1));
@@ -121,7 +119,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
 
         savefileService.CreateNewSavefileBase(PreparedDeviceAccountId).Wait();
         savefileService.CreateNewSavefileBase(DeviceAccountId).Wait();
-        PopulateAllMaterials().Wait();
+        PopulateAllMaterials();
         context.SaveChanges();
     }
 }
