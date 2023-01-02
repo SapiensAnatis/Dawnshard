@@ -26,6 +26,8 @@ public class TutorialTest : IClassFixture<IntegrationTestFixture>
         client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
+
+        TestUtils.ApplyDateTimeAssertionOptions();
     }
 
     [Fact]

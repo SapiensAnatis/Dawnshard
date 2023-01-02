@@ -94,8 +94,7 @@ public class UnitRepository : BaseRepository, IUnitRepository
         if (newCharas.Any())
         {
             IEnumerable<DbPlayerCharaData> dbEntries = newCharas.Select(
-                id =>
-                    DbPlayerCharaDataFactory.Create(deviceAccountId, MasterAsset.CharaData.Get(id))
+                id => new DbPlayerCharaData(deviceAccountId, id)
             );
 
             await apiContext.PlayerCharaData.AddRangeAsync(dbEntries);
@@ -253,12 +252,12 @@ public class UnitRepository : BaseRepository, IUnitRepository
             TalismanData = await talismanData.SingleOrDefaultAsync(
                 x => x.TalismanKeyId == input.EquipTalismanKeyId
             ),
-            EditSkill1CharaData = await this.GetEditSkill(charaData, input.EditSkill1CharaId),
-            EditSkill2CharaData = await this.GetEditSkill(charaData, input.EditSkill2CharaId)
+            EditSkill1CharaData = await GetEditSkill(charaData, input.EditSkill1CharaId),
+            EditSkill2CharaData = await GetEditSkill(charaData, input.EditSkill2CharaId)
         };
     }
 
-    private async Task<DbEditSkillData?> GetEditSkill(
+    private static async Task<DbEditSkillData?> GetEditSkill(
         IQueryable<DbPlayerCharaData> charaData,
         Charas id
     )

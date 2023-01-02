@@ -24,6 +24,11 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         return infoQuery;
     }
 
+    public IQueryable<DbPlayerUserData> GetUserData(long viewerId)
+    {
+        return apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId);
+    }
+
     public async Task UpdateTutorialStatus(string deviceAccountId, int newStatus)
     {
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
@@ -80,6 +85,13 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
 
         userData.TutorialStatus = 60999;
         userData.TutorialFlagList = Enumerable.Range(1, 30).Select(x => x + 1000).ToHashSet();
+    }
+
+    public async Task UpdateSaveImportTime(string deviceAccountId)
+    {
+        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+
+        userData.LastSaveImportTime = DateTimeOffset.UtcNow;
     }
 
     private async Task<DbPlayerUserData> LookupUserData(string deviceAccountId)

@@ -3,6 +3,7 @@ using System;
 using DragaliaAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230102092047_develop_4")]
+    partial class develop4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -575,9 +578,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.Property<long>("Coin")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTimeOffset>("CreateTime")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int>("Crystal")
                         .HasColumnType("integer");
 
@@ -590,19 +590,7 @@ namespace DragaliaAPI.Database.Migrations
                     b.Property<int>("Exp")
                         .HasColumnType("integer");
 
-                    b.Property<DateTimeOffset>("FortOpenTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("LastLoginTime")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<DateTimeOffset>("LastSaveImportTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("LastStaminaMultiUpdateTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("LastStaminaSingleUpdateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Level")

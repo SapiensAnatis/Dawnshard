@@ -1,4 +1,7 @@
-﻿using DragaliaAPI.Models.Options;
+﻿using DragaliaAPI.MessagePack;
+using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +14,7 @@ public class BaasRequestHelper : IBaasRequestHelper
     private readonly HttpClient client;
     private readonly ILogger<BaasRequestHelper> logger;
     private const string KeySetEndpoint = "/.well-known/jwks.json";
+    private const string SavefileEndpoint = "/gameplay/v1/savefile";
 
     private IList<SecurityKey>? cachedKeys;
 
@@ -33,7 +37,7 @@ public class BaasRequestHelper : IBaasRequestHelper
         }
 
         HttpResponseMessage keySetResponse = await this.client.GetAsync(
-            this.options.CurrentValue.BaasUrl + KeySetEndpoint
+            new Uri(this.options.CurrentValue.BaasUrlParsed, KeySetEndpoint)
         );
 
         if (!keySetResponse.IsSuccessStatusCode)
@@ -50,5 +54,29 @@ public class BaasRequestHelper : IBaasRequestHelper
 
         cachedKeys = jwks.GetSigningKeys();
         return cachedKeys;
+    }
+
+    public async Task<LoadIndexData> GetSavefile(string idToken)
+    {
+        HttpResponseMessage savefileResponse = await this.client.PostAsJsonAsync<object>(
+            new Uri(this.options.CurrentValue.BaasUrlParsed, SavefileEndpoint),
+            new { idToken }
+        );
+
+        if (!savefileResponse.IsSuccessStatusCode)
+        {
+            logger.LogError("Received failure response from BaaS: {@response}", savefileResponse);
+
+            throw new DragaliaException(
+                ResultCode.TRANSITION_LINKED_DATA_NOT_FOUND,
+                "Received failure response from BaaS"
+            );
+        }
+
+        return (
+                await savefileResponse.Content.ReadFromJsonAsync<DragaliaResponse<LoadIndexData>>(
+                    options: UnixDateTimeJsonConverter.Options
+                )
+            )?.data ?? throw new NullReferenceException("Received null savefile from response");
     }
 }
