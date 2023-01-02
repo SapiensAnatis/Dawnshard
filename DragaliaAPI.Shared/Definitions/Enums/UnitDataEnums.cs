@@ -2,10 +2,10 @@
 
 public enum UnitElement
 {
-    None = -1,
-    Water = 0,
-    Flame = 1,
-    Wind = 2,
-    Light = 3,
-    Shadow = 4
+    Fire = 1,
+    Water = 2,
+    Wind = 3,
+    Light = 4,
+    Dark = 5,
+    None = 99,
 }

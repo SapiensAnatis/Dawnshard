@@ -5,10 +5,7 @@ namespace DragaliaAPI.Database.Entities;
 
 public class DbQuest : IDbHasAccountId
 {
-    public virtual DbDeviceAccount Owner { get; set; } = null!;
-
     [Required]
-    [ForeignKey(nameof(this.Owner))]
     public string DeviceAccountId { get; set; } = string.Empty;
 
     [Required]

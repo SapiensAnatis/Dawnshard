@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Shared.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Database.Factories;
+using DragaliaAPI.Shared.MasterAsset;
 
 namespace DragaliaAPI.Database.Repositories;
 
@@ -12,27 +12,26 @@ namespace DragaliaAPI.Database.Repositories;
 public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
 {
     private readonly ApiContext apiContext;
-    private readonly ICharaDataService charaDataService;
-
     private const int PartySlotCount = 54;
 
-    public DeviceAccountRepository(ApiContext apiContext, ICharaDataService charaDataService)
-        : base(apiContext)
+    public DeviceAccountRepository(ApiContext apiContext) : base(apiContext)
     {
         this.apiContext = apiContext;
-        this.charaDataService = charaDataService;
     }
 
+    [Obsolete("Used by pre-BaaS login flow")]
     public async Task AddNewDeviceAccount(string id, string hashedPassword)
     {
         await apiContext.DeviceAccounts.AddAsync(new DbDeviceAccount(id, hashedPassword));
     }
 
+    [Obsolete("Used by pre-BaaS login flow")]
     public async Task<DbDeviceAccount?> GetDeviceAccountById(string id)
     {
         return await apiContext.DeviceAccounts.SingleOrDefaultAsync(x => x.Id == id);
     }
 
+    // TODO: move into savefileservice
     public async Task CreateNewSavefileBase(string deviceAccountId)
     {
         DbPlayerUserData userData = DbSavefileUserDataFactory.Create(deviceAccountId);
@@ -44,13 +43,14 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
         await apiContext.PlayerCharaData.AddAsync(
             DbPlayerCharaDataFactory.Create(
                 deviceAccountId,
-                charaDataService.GetData(Charas.ThePrince)
+                MasterAsset.CharaData.Get(Charas.ThePrince)
             )
         );
 
         await this.AddDefaultParties(deviceAccountId);
     }
 
+    // TODO: move into savefileservice
     public async Task CreateNewSavefile(string deviceAccountId)
     {
         await this.CreateNewSavefileBase(deviceAccountId);

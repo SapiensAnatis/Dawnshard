@@ -2,8 +2,8 @@
 
 using System.Text.Json.Serialization;
 using DragaliaAPI.MessagePack;
-using DragaliaAPI.MessagePackFormatters;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Json;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Generated;

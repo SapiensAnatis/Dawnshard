@@ -799,8 +799,6 @@ namespace DragaliaAPI.Database.Migrations
 
                     b.HasKey("TalismanKeyId");
 
-                    b.HasIndex("DeviceAccountId");
-
                     b.ToTable("PlayerTalismans");
                 });
 
@@ -860,28 +858,6 @@ namespace DragaliaAPI.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("Party");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbQuest", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbDeviceAccount", "Owner")
-                        .WithMany()
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbTalisman", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbDeviceAccount", "Owner")
-                        .WithMany()
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbParty", b =>

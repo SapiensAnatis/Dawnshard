@@ -4,6 +4,10 @@
 
 DragaliaAPI is a server emulator for Dragalia Lost.
 
+You can play using the [Dragalipatch](https://github.com/lukeFZ/dragalipatch) app by LukeFZ to redirect server traffic to https://dragalia.sapiensanatis.com.
+
+If you haven't already, please also consider joining the Dragalia Lost Reverse Engineering [Discord server](https://discord.gg/j9zSttjjWj); this is where development is discussed and where bugs/issues are most easily reported.
+
 ## Contributing
 
 Contributions are more than welcome! Feel free to fork the repository and open a pull request with these changes. Please also include integration-style tests for any new controllers, and unit tests for any new services. See the DragaliaAPI.Test project for examples (these are by no means a gold standard, however).

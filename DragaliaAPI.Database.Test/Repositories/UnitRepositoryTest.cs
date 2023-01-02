@@ -2,7 +2,7 @@
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Services;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
@@ -12,20 +12,12 @@ namespace DragaliaAPI.Database.Test.Repositories;
 public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly ICharaDataService charaDataService;
-    private readonly IDragonDataService dragonDataService;
     private readonly IUnitRepository unitRepository;
 
     public UnitRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.charaDataService = new CharaDataService();
-        this.dragonDataService = new DragonDataService();
-        this.unitRepository = new UnitRepository(
-            fixture.ApiContext,
-            this.charaDataService,
-            this.dragonDataService
-        );
+        this.unitRepository = new UnitRepository(fixture.ApiContext);
     }
 
     [Fact]
@@ -48,7 +40,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddToDatabase(
             Factories.DbPlayerCharaDataFactory.Create(
                 "other id",
-                this.charaDataService.GetData(Charas.Ilia)
+                MasterAsset.CharaData.Get(Charas.Ilia)
             )
         );
 
@@ -232,19 +224,19 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     {
         DbPlayerCharaData chara = DbPlayerCharaDataFactory.Create(
             DeviceAccountId,
-            charaDataService.GetData(Charas.BondforgedPrince)
+            MasterAsset.CharaData.Get(Charas.BondforgedPrince)
         );
 
         DbPlayerCharaData chara1 = DbPlayerCharaDataFactory.Create(
             DeviceAccountId,
-            charaDataService.GetData(Charas.GalaMym)
+            MasterAsset.CharaData.Get(Charas.GalaMym)
         );
         chara1.IsUnlockEditSkill = true;
         chara1.Skill1Level = 3;
 
         DbPlayerCharaData chara2 = DbPlayerCharaDataFactory.Create(
             DeviceAccountId,
-            charaDataService.GetData(Charas.SummerCleo)
+            MasterAsset.CharaData.Get(Charas.SummerCleo)
         );
         chara2.IsUnlockEditSkill = true;
         chara2.Skill2Level = 2;
