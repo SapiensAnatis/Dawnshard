@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Entities;
 
@@ -9,7 +11,6 @@ public class DbPlayerUserData : IDbHasAccountId
 {
     /// <inheritdoc/>
     [Key]
-    [ForeignKey("DbDeviceAccount")]
     public string DeviceAccountId { get; set; } = null!;
 
     /// <summary>
@@ -21,9 +22,9 @@ public class DbPlayerUserData : IDbHasAccountId
     /// <summary>
     /// The player's display name.
     /// </summary>
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = string.Empty;
 
-    public int Level { get; set; }
+    public int Level { get; set; } = 1;
 
     public int Exp { get; set; }
 
@@ -37,17 +38,13 @@ public class DbPlayerUserData : IDbHasAccountId
     /// </summary>
     public long Coin { get; set; }
 
-    public int MaxDragonQuantity { get; set; }
-
-    public int MaxWeaponQuantity { get; set; }
-
-    public int MaxAmuletQuantity { get; set; }
+    public int MaxDragonQuantity { get; set; } = 200;
 
     public int QuestSkipPoint { get; set; }
 
-    public int MainPartyNo { get; set; }
+    public int MainPartyNo { get; set; } = 1;
 
-    public int EmblemId { get; set; }
+    public Emblems EmblemId { get; set; } = Emblems.DragonbloodPrince;
 
     public int ActiveMemoryEventId { get; set; }
 
@@ -57,17 +54,17 @@ public class DbPlayerUserData : IDbHasAccountId
 
     public int BuildTimePoint { get; set; }
 
-    public int LastLoginTime { get; set; } // Year 2038 problem!
+    public DateTimeOffset LastLoginTime { get; set; } = DateTimeOffset.UtcNow;
 
-    public int StaminaSingle { get; set; }
+    public int StaminaSingle { get; set; } = 18;
 
-    public int LastStaminaSingleUpdateTime { get; set; }
+    public DateTimeOffset LastStaminaSingleUpdateTime { get; set; } = DateTimeOffset.UtcNow;
 
     public int StaminaSingleSurplusSecond { get; set; }
 
-    public int StaminaMulti { get; set; }
+    public int StaminaMulti { get; set; } = 12;
 
-    public int LastStaminaMultiUpdateTime { get; set; }
+    public DateTimeOffset LastStaminaMultiUpdateTime { get; set; } = DateTimeOffset.UtcNow;
 
     public int StaminaMultiSurplusSecond { get; set; }
 
@@ -82,32 +79,26 @@ public class DbPlayerUserData : IDbHasAccountId
         set => TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(value);
     }
 
-    public int PrologueEndTime { get; set; }
+    public DateTimeOffset FortOpenTime { get; set; } = DateTimeOffset.UtcNow;
 
-    public int IsOptin { get; set; }
+    public DateTimeOffset CreateTime { get; set; } = DateTimeOffset.UtcNow;
 
-    public int FortOpenTime { get; set; }
+    /// <summary>
+    /// The last time at which a savefile for this user was imported from BaaS.
+    /// </summary>
+    public DateTimeOffset LastSaveImportTime { get; set; }
 
-    public int CreateTime { get; set; }
-}
+    /// <summary>
+    /// EF Core / testing constructor method.
+    /// </summary>
+    public DbPlayerUserData() { }
 
-public static class DbSavefileUserDataFactory
-{
-    public static DbPlayerUserData Create(string deviceAccountId)
+    /// <summary>
+    /// Use this method to construct a new instance manually.
+    /// </summary>
+    /// <param name="deviceAccountId">The unique ID of this user.</param>
+    public DbPlayerUserData(string deviceAccountId)
     {
-        return new()
-        {
-            DeviceAccountId = deviceAccountId,
-            Name = "Euden",
-            Level = 1,
-            MaxDragonQuantity = 160,
-            MainPartyNo = 1,
-            EmblemId = 40000001,
-            StaminaSingle = 18,
-            StaminaMulti = 12,
-            Crystal = 120000,
-            // Matches internal datatype of the game -- I guess they anticipated EOS before 2038
-            CreateTime = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-        };
+        this.DeviceAccountId = deviceAccountId;
     }
 }

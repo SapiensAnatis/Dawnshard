@@ -5,6 +5,7 @@ using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,6 +16,7 @@ public class AuthService : IAuthService
 {
     private readonly IBaasRequestHelper baasRequestHelper;
     private readonly ISessionService sessionService;
+    private readonly ISavefileService savefileService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IDeviceAccountRepository deviceAccountRepository;
     private readonly IOptionsMonitor<LoginOptions> loginOptions;
@@ -24,6 +26,7 @@ public class AuthService : IAuthService
     public AuthService(
         IBaasRequestHelper baasRequestHelper,
         ISessionService sessionService,
+        ISavefileService savefileService,
         IUserDataRepository userDataRepository,
         IDeviceAccountRepository deviceAccountRepository,
         IOptionsMonitor<LoginOptions> loginOptions,
@@ -33,6 +36,7 @@ public class AuthService : IAuthService
     {
         this.baasRequestHelper = baasRequestHelper;
         this.sessionService = sessionService;
+        this.savefileService = savefileService;
         this.userDataRepository = userDataRepository;
         this.deviceAccountRepository = deviceAccountRepository;
         this.loginOptions = loginOptions;
@@ -74,10 +78,10 @@ public class AuthService : IAuthService
     private async Task<(long viewerId, string sessionId)> DoBaasAuth(string idToken)
     {
         TokenValidationResult result = await this.ValidateToken(idToken);
-        string id = ((JwtSecurityToken)result.SecurityToken).Subject;
+        JwtSecurityToken jwt = (JwtSecurityToken)result.SecurityToken;
 
-        long viewerId = await this.DoLogin(id);
-        string sessionId = await this.sessionService.CreateSession(id, idToken);
+        long viewerId = await this.DoLogin(jwt);
+        string sessionId = await this.sessionService.CreateSession(jwt.Subject, idToken);
 
         return new(viewerId, sessionId);
     }
@@ -119,8 +123,10 @@ public class AuthService : IAuthService
         return validationResult;
     }
 
-    private async Task<long> DoLogin(string accountId)
+    private async Task<long> DoLogin(JwtSecurityToken jwt)
     {
+        string accountId = jwt.Subject;
+
         IQueryable<DbPlayerUserData> userDataQuery = this.userDataRepository.GetUserData(accountId);
         if (!userDataQuery.Any())
         {
@@ -128,6 +134,13 @@ public class AuthService : IAuthService
             await this.deviceAccountRepository.SaveChangesAsync();
         }
 
+        // A user needs to h
+
         return await userDataQuery.Select(x => x.ViewerId).SingleAsync();
+    }
+
+    private async Task PollSaveImport(JsonWebToken token, DbPlayerUserData userData)
+    {
+        //this.savefileService.Import();
     }
 }

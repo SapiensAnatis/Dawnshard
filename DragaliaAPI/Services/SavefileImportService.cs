@@ -33,31 +33,32 @@ public class SavefileService : ISavefileService
         this.logger = logger;
     }
 
-    public async Task Import(long viewerId, LoadIndexData savefile)
+    public async Task Import(string deviceAccountId, LoadIndexData savefile)
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
 
-        DbPlayerUserData userData = await this.apiContext.PlayerUserData.SingleAsync(
-            x => x.ViewerId == viewerId
-        );
+        // Preserve the existing viewer ID if there is one.
+        // Could reassign, but this makes it easier for people to remember their ID.
+        long? oldViewerId = await this.apiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == deviceAccountId)
+            .Select(x => x.ViewerId)
+            .SingleOrDefaultAsync();
 
-        string deviceAccountId = userData.DeviceAccountId;
         this.logger.LogInformation(
-            "Beginning savefile import for account {deviceAccountId}",
+            "Beginning savefile import for account {accountId}",
             deviceAccountId
         );
 
         await this.Delete(deviceAccountId);
 
-        apiContext.PlayerUserData.Remove(userData);
         apiContext.PlayerUserData.Add(
             this.mapper.Map<DbPlayerUserData>(
                 savefile.user_data,
                 opts =>
                     opts.AfterMap(
-                        (src, dest) =>
+                        (_, dest) =>
                         {
-                            dest.ViewerId = viewerId;
+                            dest.ViewerId = oldViewerId ?? default;
                             dest.DeviceAccountId = deviceAccountId;
                         }
                     )
@@ -83,13 +84,13 @@ public class SavefileService : ISavefileService
         );
 
         // Zero out dragon and talisman key ids, as these won't exist in my database
-        var parties = savefile.party_list
+        List<DbParty> parties = savefile.party_list
             .Select(x => MapWithDeviceAccount<DbParty>(x, deviceAccountId))
             .ToList();
 
-        foreach (var party in parties)
+        foreach (DbParty party in parties)
         {
-            foreach (var unit in party.Units)
+            foreach (DbPartyUnit unit in party.Units)
             {
                 unit.EquipDragonKeyId = 0;
                 unit.EquipTalismanKeyId = 0;
@@ -160,6 +161,9 @@ public class SavefileService : ISavefileService
 
     private async Task Delete(string deviceAccountId)
     {
+        await this.apiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == deviceAccountId)
+            .ExecuteDeleteAsync();
         await this.apiContext.PlayerCharaData
             .Where(x => x.DeviceAccountId == deviceAccountId)
             .ExecuteDeleteAsync();
@@ -192,16 +196,9 @@ public class SavefileService : ISavefileService
             .ExecuteDeleteAsync();
     }
 
-    public async Task Reset(long viewerId)
+    public async Task Reset(string deviceAccountId)
     {
-        DbPlayerUserData userData = await this.apiContext.PlayerUserData.SingleAsync(
-            x => x.ViewerId == viewerId
-        );
-
-        string deviceAccountId = userData.DeviceAccountId;
         await this.Delete(deviceAccountId);
-
-        this.apiContext.Remove(userData);
 
         await this.deviceAccountRepository.CreateNewSavefile(deviceAccountId);
         await this.apiContext.SaveChangesAsync();

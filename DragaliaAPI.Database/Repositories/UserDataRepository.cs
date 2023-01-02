@@ -24,6 +24,11 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         return infoQuery;
     }
 
+    public IQueryable<DbPlayerUserData> GetUserData(long viewerId)
+    {
+        return apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId);
+    }
+
     public async Task UpdateTutorialStatus(string deviceAccountId, int newStatus)
     {
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);

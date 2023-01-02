@@ -34,7 +34,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     {
         string deviceAccountId = "new id";
 
-        DbPlayerUserData userData = DbSavefileUserDataFactory.Create(deviceAccountId);
+        DbPlayerUserData userData = new(deviceAccountId);
         DbPlayerCharaData charaData = DbPlayerCharaDataFactory.Create(
             deviceAccountId,
             MasterAsset.CharaData.Get(Charas.GalaLeonidas)

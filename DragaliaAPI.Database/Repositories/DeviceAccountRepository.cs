@@ -34,7 +34,7 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
     // TODO: move into savefileservice
     public async Task CreateNewSavefileBase(string deviceAccountId)
     {
-        DbPlayerUserData userData = DbSavefileUserDataFactory.Create(deviceAccountId);
+        DbPlayerUserData userData = new(deviceAccountId);
 #if DEBUG
         userData.TutorialStatus = 10151;
 #endif

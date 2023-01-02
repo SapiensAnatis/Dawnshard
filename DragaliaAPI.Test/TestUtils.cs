@@ -145,4 +145,21 @@ public static class TestUtils
             }
         };
     }
+
+    /// <summary>
+    /// Set up FluentAssertions assertion options rules.
+    /// </summary>
+    public static void ApplyDateTimeAssertionOptions()
+    {
+        // Compare DateTimeOffsets to the nearest second instead of exactly, because of SQLite rounding.
+        AssertionOptions.AssertEquivalencyUsing(
+            options =>
+                options
+                    .Using<DateTimeOffset>(
+                        ctx =>
+                            ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))
+                    )
+                    .WhenTypeIs<DateTimeOffset>()
+        );
+    }
 }

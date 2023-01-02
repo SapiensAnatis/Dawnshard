@@ -17,6 +17,7 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
 
     private readonly Mock<IBaasRequestHelper> mockBaasRequestHelper;
     private readonly Mock<ISessionService> mockSessionService;
+    private readonly Mock<ISavefileService> mockSavefileService;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IDeviceAccountRepository> mockDeviceAccountRepository;
     private readonly Mock<IOptionsMonitor<LoginOptions>> mockLoginOptions;
@@ -28,6 +29,7 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
     {
         this.mockBaasRequestHelper = new(MockBehavior.Strict);
         this.mockSessionService = new(MockBehavior.Strict);
+        this.mockSavefileService = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockDeviceAccountRepository = new(MockBehavior.Strict);
         this.mockBaasOptions = new(MockBehavior.Strict);
@@ -37,6 +39,7 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
         this.authService = new(
             this.mockBaasRequestHelper.Object,
             this.mockSessionService.Object,
+            this.mockSavefileService.Object,
             this.mockUserDataRepository.Object,
             this.mockDeviceAccountRepository.Object,
             this.mockLoginOptions.Object,

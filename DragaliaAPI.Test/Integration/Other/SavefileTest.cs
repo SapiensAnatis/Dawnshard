@@ -83,6 +83,9 @@ public class SavefileTest : IClassFixture<IntegrationTestFixture>
                     opts.Excluding(x => x.server_time);
                     opts.Excluding(x => x.spec_upgrade_time);
 
+                    // Ignored properties
+                    opts.Excluding(x => x.user_data.prologue_end_time);
+
                     // Properties with no implementation
                     opts.Excluding(x => x.Name.Contains("album"));
                     opts.Excluding(x => x.Name.Contains("shop"));
