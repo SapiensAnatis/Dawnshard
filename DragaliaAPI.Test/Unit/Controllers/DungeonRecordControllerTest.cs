@@ -141,7 +141,7 @@ public class DungeonRecordControllerTest
                 }.AsQueryable().BuildMock());
 
         this.mockQuestRepository
-            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, clearTime))
+            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
             .ReturnsAsync(
                 new DbQuest()
                 {
