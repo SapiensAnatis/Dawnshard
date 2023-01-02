@@ -41,7 +41,7 @@ public class DungeonRecordController : DragaliaControllerBase
 
         DbQuest? oldQuestData = await this.questRepository
             .GetQuests(this.DeviceAccountId)
-            .SingleOrDefaultAsync(x => x.QuestId == session.DungeonId);
+            .SingleOrDefaultAsync(x => x.QuestId == session.QuestData.Id);
 
         bool isFirstClear = oldQuestData is null || oldQuestData?.PlayCount == 0;
         bool oldMissionClear1 = oldQuestData?.IsMissionClear1 ?? false;
@@ -56,7 +56,7 @@ public class DungeonRecordController : DragaliaControllerBase
         // keeping it for clarity and because oldQuestData is null in some tests
         DbQuest newQuestData = await this.questRepository.CompleteQuest(
             this.DeviceAccountId,
-            session.DungeonId,
+            session.QuestData.Id,
             clear_time
         );
 
