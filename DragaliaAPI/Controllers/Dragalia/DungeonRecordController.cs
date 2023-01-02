@@ -141,15 +141,16 @@ public class DungeonRecordController : DragaliaControllerBase
                         take_coin = 1000,
                         take_astral_item_quantity = 300,
                         missions_clear_set = clearedMissions
-                            .Where(x => x)
+                            .Select((x, index) => new { x, index })
+                            .Where(x => x.x)
                             .Select(
-                                (x, index) =>
+                                x =>
                                     new AtgenMissionsClearSet()
                                     {
-                                        type = 23,
+                                        type = (int)EntityTypes.Wyrmite,
                                         id = 0,
                                         quantity = 5,
-                                        mission_no = index + 1
+                                        mission_no = x.index + 1
                                     }
                             ),
                         mission_complete = allMissionsCleared
