@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;
 
@@ -11,7 +12,7 @@ public class DbPlayerUserData : IDbHasAccountId
 {
     /// <inheritdoc/>
     [Key]
-    public string DeviceAccountId { get; set; } = null!;
+    public required string DeviceAccountId { get; set; }
 
     /// <summary>
     /// The player's unique ID, i.e. the one that is used to send friend requests.
@@ -22,7 +23,7 @@ public class DbPlayerUserData : IDbHasAccountId
     /// <summary>
     /// The player's display name.
     /// </summary>
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = "Euden";
 
     public int Level { get; set; } = 1;
 
@@ -97,6 +98,7 @@ public class DbPlayerUserData : IDbHasAccountId
     /// Use this method to construct a new instance manually.
     /// </summary>
     /// <param name="deviceAccountId">The unique ID of this user.</param>
+    [SetsRequiredMembers]
     public DbPlayerUserData(string deviceAccountId)
     {
         this.DeviceAccountId = deviceAccountId;

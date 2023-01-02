@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
@@ -6,12 +8,13 @@ using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Helpers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Unit.Services;
 
 [Collection("DragaliaIntegration")]
-public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
+public class AuthServiceTest
 {
     private readonly AuthService authService;
 
@@ -23,9 +26,8 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
     private readonly Mock<IOptionsMonitor<LoginOptions>> mockLoginOptions;
     private readonly Mock<IOptionsMonitor<BaasOptions>> mockBaasOptions;
     private readonly Mock<ILogger<AuthService>> mockLogger;
-    private readonly AuthServiceTestFixture fixture;
 
-    public AuthServiceTest(AuthServiceTestFixture fixture)
+    public AuthServiceTest()
     {
         this.mockBaasRequestHelper = new(MockBehavior.Strict);
         this.mockSessionService = new(MockBehavior.Strict);
@@ -47,7 +49,6 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
             this.mockLogger.Object
         );
 
-        this.fixture = fixture;
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
     }
 
@@ -67,9 +68,10 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
             .ReturnsAsync("device account id");
         this.mockUserDataRepository
             .Setup(x => x.GetUserData("device account id"))
-            .Returns(
-                new List<DbPlayerUserData>() { new() { ViewerId = 1 } }.AsQueryable().BuildMock()
-            );
+            .Returns(new List<DbPlayerUserData>()
+                {
+                    new() { DeviceAccountId = "id", ViewerId = 1 }
+                }.AsQueryable().BuildMock());
 
         (await this.authService.DoAuth("id token")).Should().BeEquivalentTo((1, "session id"));
 
@@ -90,7 +92,7 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
             .Returns(new LoginOptions() { UseBaasLogin = true });
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
 
-        string token = fixture.GetToken(
+        string token = GetToken(
             this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
             this.mockBaasOptions.Object.CurrentValue.TokenAudience,
             DateTime.UtcNow.AddHours(1),
@@ -99,9 +101,10 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
 
         this.mockUserDataRepository
             .Setup(x => x.GetUserData("account id"))
-            .Returns(
-                new List<DbPlayerUserData>() { new() { ViewerId = 1 } }.AsQueryable().BuildMock()
-            );
+            .Returns(new List<DbPlayerUserData>()
+                {
+                    new() { DeviceAccountId = "id", ViewerId = 1 }
+                }.AsQueryable().BuildMock());
         this.mockSessionService
             .Setup(x => x.CreateSession("account id", token))
             .ReturnsAsync("session id");
@@ -126,7 +129,7 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
             .Returns(new LoginOptions() { UseBaasLogin = true });
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
 
-        string token = fixture.GetToken(
+        string token = GetToken(
             this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
             this.mockBaasOptions.Object.CurrentValue.TokenAudience,
             DateTime.UtcNow.AddHours(-1),
@@ -170,5 +173,27 @@ public class AuthServiceTest : IClassFixture<AuthServiceTestFixture>
         this.mockDeviceAccountRepository.VerifyAll();
         this.mockBaasOptions.VerifyAll();
         this.mockBaasRequestHelper.VerifyAll();
+    }
+
+    private static string GetToken(
+        string issuer,
+        string audience,
+        DateTime expiryTime,
+        string accountId
+    )
+    {
+        JwtSecurityToken tokenObject =
+            new(
+                issuer: issuer,
+                audience: audience,
+                expires: expiryTime,
+                signingCredentials: new SigningCredentials(
+                    TestUtils.SecurityKeys.First(),
+                    SecurityAlgorithms.RsaSha256
+                ),
+                claims: new List<Claim>() { new Claim("sub", accountId) }
+            );
+
+        return new JwtSecurityTokenHandler().WriteToken(tokenObject);
     }
 }

@@ -38,6 +38,8 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
 #if DEBUG
         userData.TutorialStatus = 10151;
 #endif
+        userData.Crystal = 120_000;
+
         await apiContext.PlayerUserData.AddAsync(userData);
 
         await apiContext.PlayerCharaData.AddAsync(

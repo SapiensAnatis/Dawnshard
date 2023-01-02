@@ -10,6 +10,7 @@ using DragaliaAPI.Models;
 using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 using System.Linq;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
+using DragaliaAPI.Services.Exceptions;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -347,11 +348,19 @@ public class SummonController : DragaliaControllerBase
                 paymentCost = 0;
                 break;
             default:
-                return BadRequest();
+                throw new DragaliaException(
+                    ResultCode.SUMMON_TYPE_UNEXPECTED,
+                    "Invalid payment type"
+                );
         }
 
         if (paymentHeld < paymentCost)
-            return BadRequest();
+        {
+            throw new DragaliaException(
+                ResultCode.SUMMON_STONE_SHORT,
+                $"User did not have enough {summonRequest.payment_type}."
+            );
+        }
 
         List<AtgenRedoableSummonResultUnitList> summonResult = _summonService.GenerateSummonResult(
             numSummons
