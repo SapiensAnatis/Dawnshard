@@ -102,7 +102,7 @@ public class DungeonRecordController : DragaliaControllerBase
                 {
                     dungeon_key = request.dungeon_key,
                     play_type = 1,
-                    quest_id = session.DungeonId,
+                    quest_id = session.QuestData.Id,
                     reward_record = new()
                     {
                         /*drop_all = new List<AtgenDropAll>()

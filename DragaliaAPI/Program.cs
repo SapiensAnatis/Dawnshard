@@ -1,14 +1,13 @@
 using System.Reflection;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using DragaliaAPI.Database;
 using DragaliaAPI.MessagePack;
-using DragaliaAPI.MessagePackFormatters;
 using DragaliaAPI.Middleware;
-using DragaliaAPI.Models;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Health;
+using DragaliaAPI.Services.Helpers;
 using DragaliaAPI.Shared;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
@@ -24,7 +23,9 @@ Log.Logger = new LoggerConfiguration().MinimumLevel
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 ConfigurationManager configuration = builder.Configuration;
-builder.Services.Configure<DragalipatchConfig>(configuration.GetRequiredSection("Dragalipatch"));
+builder.Services.Configure<BaasOptions>(configuration.GetRequiredSection("Baas"));
+builder.Services.Configure<LoginOptions>(configuration.GetRequiredSection("Login"));
+builder.Services.Configure<DragalipatchOptions>(configuration.GetRequiredSection("Dragalipatch"));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
@@ -55,7 +56,11 @@ builder.Services
         // Cannot add the boolean one if we want Nintendo login to keep working
     });
 
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(
+    options =>
+        // Make root URL redirect to news instead of 404
+        options.Conventions.AddPageRoute("/News", "~/")
+);
 builder.Services.AddServerSideBlazor();
 builder.Services
     .AddHealthChecks()
@@ -70,7 +75,6 @@ builder.Services.AddAuthentication(opts =>
 
 builder.Services
     .ConfigureDatabaseServices(builder.Configuration.GetConnectionString("PostgresHost"))
-    .ConfigureSharedServices()
     .AddAutoMapper(Assembly.GetExecutingAssembly())
     .AddStackExchangeRedisCache(options =>
     {
@@ -82,7 +86,10 @@ builder.Services
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<IUpdateDataService, UpdateDataService>()
     .AddScoped<IDungeonService, DungeonService>()
-    .AddScoped<ISavefileService, SavefileService>();
+    .AddScoped<ISavefileService, SavefileService>()
+    .AddScoped<IAuthService, AuthService>()
+    .AddSingleton<IBaasRequestHelper, BaasRequestHelper>()
+    .AddHttpClient<BaasRequestHelper>();
 
 WebApplication app = builder.Build();
 

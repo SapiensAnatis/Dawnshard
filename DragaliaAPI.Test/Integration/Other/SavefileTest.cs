@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
-using Microsoft.Extensions.Configuration;
-using Xunit.Abstractions;
+using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Test.Integration.Other;
 

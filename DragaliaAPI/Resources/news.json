@@ -1,5 +1,10 @@
 [
     {
+        "Headline": "New login server",
+        "Timestamp": 1672555688,
+        "Description": "Courtesy of LukeFZ#4035, the server now calls into an external login service which means account linking is now possible! It will also be possible soon to import a save via this service without having to direct message anyone."
+    },
+    {
         "Headline": "v1.0.0-alpha release",
         "Timestamp": 1671485237,
         "Description": "This is the first public release of the server. Welcome everyone!"

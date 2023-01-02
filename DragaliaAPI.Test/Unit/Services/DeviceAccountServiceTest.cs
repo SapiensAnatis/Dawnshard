@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Test.Unit.Services;
 
+[Obsolete("Used for pre-BaaS auth flow")]
 public class DeviceAccountServiceTest
 {
     private readonly Mock<ILogger<DeviceAccountService>> mockLogger;

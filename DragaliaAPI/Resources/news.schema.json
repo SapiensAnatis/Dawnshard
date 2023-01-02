@@ -1,0 +1,19 @@
+{
+    "description": "News",
+    "type": "array",
+    "contains": {
+        "type": "object",
+        "required": [ "Headline", "Description", "Timestamp" ],
+        "properties": {
+            "Headline": {
+                "type": "string"
+            },
+            "Timestamp": {
+                "type": "integer"
+            },
+            "Description": {
+                "type": "string"
+            }
+        }
+    }
+}
