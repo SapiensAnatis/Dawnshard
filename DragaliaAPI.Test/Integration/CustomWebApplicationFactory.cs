@@ -17,7 +17,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 {
     private readonly SqliteConnection connection = new("Filename=:memory:");
 
-    protected readonly Mock<IBaasRequestHelper> mockBaasRequestHelper = new();
+    public readonly Mock<IBaasRequestHelper> mockBaasRequestHelper = new();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

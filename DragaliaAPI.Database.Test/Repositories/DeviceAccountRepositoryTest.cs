@@ -39,37 +39,4 @@ public class DeviceAccountRepositoryTest : IClassFixture<DbTestFixture>
 
         result.Should().BeNull();
     }
-
-    [Fact]
-    public async Task CreateNewSavefile_HasExpectedProperties()
-    {
-        string newId = "id 2";
-
-        await this.deviceAccountRepository.CreateNewSavefile(newId);
-        await this.deviceAccountRepository.SaveChangesAsync();
-
-        (
-            await this.fixture.ApiContext.PlayerUserData.SingleOrDefaultAsync(
-                x => x.DeviceAccountId == newId
-            )
-        )
-            .Should()
-            .NotBeNull();
-
-        (
-            await this.fixture.ApiContext.PlayerCharaData.SingleOrDefaultAsync(
-                x => x.DeviceAccountId == newId && x.CharaId == Charas.ThePrince
-            )
-        )
-            .Should()
-            .NotBeNull();
-
-        (
-            await this.fixture.ApiContext.PlayerParties
-                .Where(x => x.DeviceAccountId == newId)
-                .ToListAsync()
-        )
-            .Should()
-            .HaveCount(54);
-    }
 }
