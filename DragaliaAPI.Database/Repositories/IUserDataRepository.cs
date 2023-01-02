@@ -12,5 +12,6 @@ public interface IUserDataRepository : IBaseRepository
     Task SetTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags);
     Task SkipTutorial(string deviceAccountId);
     Task UpdateName(string deviceAccountId, string newName);
+    Task UpdateSaveImportTime(string deviceAccountId);
     Task UpdateTutorialStatus(string deviceAccountId, int newStatus);
 }

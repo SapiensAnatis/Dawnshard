@@ -87,6 +87,13 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         userData.TutorialFlagList = Enumerable.Range(1, 30).Select(x => x + 1000).ToHashSet();
     }
 
+    public async Task UpdateSaveImportTime(string deviceAccountId)
+    {
+        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+
+        userData.LastSaveImportTime = DateTimeOffset.UtcNow;
+    }
+
     private async Task<DbPlayerUserData> LookupUserData(string deviceAccountId)
     {
         return await apiContext.PlayerUserData.FindAsync(deviceAccountId)

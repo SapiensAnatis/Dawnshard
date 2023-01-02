@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Helpers;
@@ -127,20 +128,63 @@ public class AuthService : IAuthService
     {
         string accountId = jwt.Subject;
 
-        IQueryable<DbPlayerUserData> userDataQuery = this.userDataRepository.GetUserData(accountId);
-        if (!userDataQuery.Any())
+        DbPlayerUserData? userData = await this.userDataRepository
+            .GetUserData(accountId)
+            .SingleOrDefaultAsync();
+
+        LoadIndexData? pendingSave = await GetPendingSaveImport(jwt, userData);
+        if (pendingSave is not null)
+        {
+            await this.savefileService.Import(accountId, pendingSave);
+            await this.userDataRepository.UpdateSaveImportTime(accountId);
+        }
+
+        if (userData is null && pendingSave is null)
         {
             await this.deviceAccountRepository.CreateNewSavefile(accountId);
             await this.deviceAccountRepository.SaveChangesAsync();
         }
 
-        // A user needs to h
-
-        return await userDataQuery.Select(x => x.ViewerId).SingleAsync();
+        return await this.userDataRepository
+            .GetUserData(accountId)
+            .Select(x => x.ViewerId)
+            .SingleAsync();
     }
 
-    private async Task PollSaveImport(JsonWebToken token, DbPlayerUserData userData)
+    private async Task<LoadIndexData?> GetPendingSaveImport(
+        JwtSecurityToken token,
+        DbPlayerUserData? userData
+    )
     {
-        //this.savefileService.Import();
+        this.logger.LogInformation("Polling save import for user {id}...", token.Subject);
+
+        if (!token.Payload.TryGetValue("sav:a", out object? saveAvailableObj))
+            return null;
+
+        bool saveAvailable = (bool)saveAvailableObj;
+        if (!saveAvailable)
+        {
+            this.logger.LogInformation("No savefile was available to import.");
+            return null;
+        }
+
+        if (!token.Payload.TryGetValue("sav:ts", out object? saveTimestampObj))
+            return null;
+
+        DateTimeOffset saveDateTime = DateTimeOffset.FromUnixTimeSeconds((long)saveTimestampObj);
+        DateTimeOffset lastImportTime = userData?.LastSaveImportTime ?? DateTimeOffset.MinValue;
+        if (lastImportTime >= saveDateTime)
+        {
+            this.logger.LogInformation(
+                "The remote savefile was older than the stored one. (stored: {t1}, remote: {t2})",
+                lastImportTime,
+                saveDateTime
+            );
+
+            return null;
+        }
+
+        this.logger.LogInformation("Detected pending save import for user {id}", token.Subject);
+        return await this.baasRequestHelper.GetSavefile(token.ToString());
     }
 }
