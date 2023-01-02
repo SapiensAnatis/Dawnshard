@@ -5,6 +5,7 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ public class DungeonRecordControllerTest
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
 
     private const string dungeonKey = "key";
-    private const int questId = 320180103;
+    private const int questId = 100010101;
     private const int clearTime = 60;
 
     public DungeonRecordControllerTest()
@@ -49,55 +50,17 @@ public class DungeonRecordControllerTest
             .ReturnsAsync(
                 new DungeonSession()
                 {
-                    Party = new List<PartySettingList>(),
-                    QuestData = new QuestData(
-                        Id: questId,
-                        QuestPlayModeType: QuestPlayModeTypes.None,
-                        LimitedElementalType: 0,
-                        LimitedElementalType2: 0,
-                        LimitedWeaponTypePatternId: 0,
-                        PayStaminaSingle: 0,
-                        PayStaminaMulti: 0,
-                        DungeonType: DungeonTypes.None,
-                        Scene01: "",
-                        AreaName01: "",
-                        Scene02: "",
-                        AreaName02: "",
-                        Scene03: "",
-                        AreaName03: "",
-                        Scene04: "",
-                        AreaName04: "",
-                        Scene05: "",
-                        AreaName05: "",
-                        Scene06: "",
-                        AreaName06: ""
-                    )
+                    Party = new List<PartySettingList>()
+                    {
+                        new() { unit_no = 1, chara_id = Charas.ThePrince }
+                    },
+                    QuestData = MasterAsset.QuestData.Get(questId)
                 }
             );
-
-        this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
-                {
-                    new() { DeviceAccountId = DeviceAccountId, QuestId = questId }
-                }.AsQueryable().BuildMock());
 
         this.mockUserDataRepository
             .Setup(x => x.AddTutorialFlag(DeviceAccountId, 1022))
-            .ReturnsAsync(new DbPlayerUserData { });
-
-        this.mockQuestRepository
-            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
-            .ReturnsAsync(
-                new DbQuest()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    QuestId = questId,
-                    IsMissionClear1 = true,
-                    IsMissionClear2 = true,
-                    IsMissionClear3 = true
-                }
-            );
+            .ReturnsAsync(new DbPlayerUserData { DeviceAccountId = DeviceAccountId });
 
         this.mockUserDataRepository
             .Setup(x => x.GetUserData(DeviceAccountId))
@@ -124,6 +87,41 @@ public class DungeonRecordControllerTest
         this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
     }
 
+    // Tests that QuestId and party data show up in response
+    [Fact]
+    public async Task QuestIdAndPartyDataAppearInResponse()
+    {
+        this.mockQuestRepository
+            .Setup(x => x.GetQuests(DeviceAccountId))
+            .Returns(new List<DbQuest>()
+                {
+                    new() { DeviceAccountId = DeviceAccountId, QuestId = questId }
+                }.AsQueryable().BuildMock());
+
+        this.mockQuestRepository
+            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
+            .ReturnsAsync(new DbQuest() { DeviceAccountId = DeviceAccountId, QuestId = questId });
+
+        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
+
+        ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
+            request
+        );
+
+        DungeonRecordRecordData? data = response.GetData<DungeonRecordRecordData>();
+        data.Should().NotBeNull();
+
+        data!.ingame_result_data.quest_id.Should().Be(questId);
+        data!.ingame_result_data.quest_party_setting_list
+            .Should()
+            .BeEquivalentTo(
+                new List<PartySettingList>()
+                {
+                    new() { unit_no = 1, chara_id = Charas.ThePrince }
+                }
+            );
+    }
+
     // Tests that CompleteQuest returning the same clear time as GetQuests marks time as best clear time
     [Fact]
     public async Task BestClearDisplaysTimeAsBestTime()
@@ -141,7 +139,7 @@ public class DungeonRecordControllerTest
                 }.AsQueryable().BuildMock());
 
         this.mockQuestRepository
-            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
+            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, clearTime))
             .ReturnsAsync(
                 new DbQuest()
                 {
@@ -193,7 +191,7 @@ public class DungeonRecordControllerTest
                 }.AsQueryable().BuildMock());
 
         this.mockQuestRepository
-            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
+            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, clearTime))
             .ReturnsAsync(
                 new DbQuest()
                 {
@@ -245,6 +243,19 @@ public class DungeonRecordControllerTest
                         IsMissionClear3 = false
                     }
                 }.AsQueryable().BuildMock());
+
+        this.mockQuestRepository
+            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
+            .ReturnsAsync(
+                new DbQuest()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    QuestId = questId,
+                    IsMissionClear1 = true,
+                    IsMissionClear2 = true,
+                    IsMissionClear3 = true
+                }
+            );
 
         DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
 
@@ -301,6 +312,19 @@ public class DungeonRecordControllerTest
                     }
                 }.AsQueryable().BuildMock());
 
+        this.mockQuestRepository
+            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
+            .ReturnsAsync(
+                new DbQuest()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    QuestId = questId,
+                    IsMissionClear1 = true,
+                    IsMissionClear2 = true,
+                    IsMissionClear3 = true
+                }
+            );
+
         DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
@@ -338,11 +362,10 @@ public class DungeonRecordControllerTest
 
     // Tests that when previous missions have been completed that the right amount of wyrmite is
     // given as well as their corresponding mission numbers in missions_clear_set
-    [Fact]
-    public async Task VariousPreviousMissionClearStatusesGiveCorrectMissions()
+    [Theory]
+    [ClassData(typeof(MissionCompletionGenerator))]
+    public async Task VariousPreviousMissionClearStatusesGiveCorrectMissions(bool[] missions)
     {
-        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
-
         this.mockQuestRepository
             .Setup(x => x.GetQuests(DeviceAccountId))
             .Returns(new List<DbQuest>()
@@ -352,146 +375,55 @@ public class DungeonRecordControllerTest
                         DeviceAccountId = DeviceAccountId,
                         QuestId = questId,
                         PlayCount = 1,
-                        IsMissionClear1 = true,
-                        IsMissionClear2 = false,
-                        IsMissionClear3 = false
+                        IsMissionClear1 = missions[0],
+                        IsMissionClear2 = missions[1],
+                        IsMissionClear3 = missions[2]
                     }
                 }.AsQueryable().BuildMock());
+
+        this.mockQuestRepository
+            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
+            .ReturnsAsync(
+                new DbQuest()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    QuestId = questId,
+                    IsMissionClear1 = true,
+                    IsMissionClear2 = true,
+                    IsMissionClear3 = true
+                }
+            );
+
+        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
             request
         );
 
-        DungeonRecordRecordData? missionTwoThreeCleared =
-            response.GetData<DungeonRecordRecordData>();
-        missionTwoThreeCleared.Should().NotBeNull();
+        DungeonRecordRecordData? data = response.GetData<DungeonRecordRecordData>();
+        data.Should().NotBeNull();
 
-        this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
-                {
-                    new()
-                    {
-                        DeviceAccountId = DeviceAccountId,
-                        QuestId = questId,
-                        PlayCount = 1,
-                        IsMissionClear1 = true,
-                        IsMissionClear2 = true,
-                        IsMissionClear3 = false
-                    }
-                }.AsQueryable().BuildMock());
+        List<AtgenMissionsClearSet> missionsCleared = new();
 
-        ActionResult<DragaliaResponse<object>> response2 =
-            await this.dungeonRecordController.Record(request);
-
-        DungeonRecordRecordData? missionThreeCleared = response2.GetData<DungeonRecordRecordData>();
-        missionThreeCleared.Should().NotBeNull();
-
-        this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
-                {
-                    new()
-                    {
-                        DeviceAccountId = DeviceAccountId,
-                        QuestId = questId,
-                        PlayCount = 1,
-                        IsMissionClear1 = true,
-                        IsMissionClear2 = false,
-                        IsMissionClear3 = true
-                    }
-                }.AsQueryable().BuildMock());
-
-        ActionResult<DragaliaResponse<object>> response3 =
-            await this.dungeonRecordController.Record(request);
-
-        DungeonRecordRecordData? missionTwoCleared = response3.GetData<DungeonRecordRecordData>();
-        missionTwoCleared.Should().NotBeNull();
-
-        this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
-                {
-                    new()
-                    {
-                        DeviceAccountId = DeviceAccountId,
-                        QuestId = questId,
-                        PlayCount = 1,
-                        IsMissionClear1 = false,
-                        IsMissionClear2 = true,
-                        IsMissionClear3 = false
-                    }
-                }.AsQueryable().BuildMock());
-
-        ActionResult<DragaliaResponse<object>> response4 =
-            await this.dungeonRecordController.Record(request);
-
-        DungeonRecordRecordData? missionOneThreeCleared =
-            response4.GetData<DungeonRecordRecordData>();
-        missionOneThreeCleared.Should().NotBeNull();
-
-        using (new AssertionScope())
+        for (int i = 0; i < 3; i++)
         {
-            missionTwoThreeCleared!.ingame_result_data.reward_record.first_clear_set
-                .Should()
-                .BeEquivalentTo(new List<AtgenFirstClearSet>() { });
-
-            missionTwoThreeCleared!.ingame_result_data.reward_record.missions_clear_set
-                .Should()
-                .BeEquivalentTo(
-                    new List<AtgenMissionsClearSet>()
-                    {
-                        this.CreateMissionReward(2),
-                        this.CreateMissionReward(3)
-                    }
-                );
-
-            missionTwoThreeCleared!.ingame_result_data.reward_record.mission_complete
-                .Should()
-                .BeEquivalentTo(new List<AtgenFirstClearSet>() { this.CreateClearReward() });
-
-            missionThreeCleared!.ingame_result_data.reward_record.first_clear_set
-                .Should()
-                .BeEquivalentTo(new List<AtgenFirstClearSet>() { });
-
-            missionThreeCleared!.ingame_result_data.reward_record.missions_clear_set
-                .Should()
-                .BeEquivalentTo(new List<AtgenMissionsClearSet>() { this.CreateMissionReward(3) });
-
-            missionThreeCleared!.ingame_result_data.reward_record.mission_complete
-                .Should()
-                .BeEquivalentTo(new List<AtgenFirstClearSet>() { this.CreateClearReward() });
-
-            missionTwoCleared!.ingame_result_data.reward_record.first_clear_set
-                .Should()
-                .BeEquivalentTo(new List<AtgenFirstClearSet>() { });
-
-            missionTwoCleared!.ingame_result_data.reward_record.missions_clear_set
-                .Should()
-                .BeEquivalentTo(new List<AtgenMissionsClearSet>() { this.CreateMissionReward(2) });
-
-            missionTwoCleared!.ingame_result_data.reward_record.mission_complete
-                .Should()
-                .BeEquivalentTo(new List<AtgenFirstClearSet>() { this.CreateClearReward() });
-
-            missionOneThreeCleared!.ingame_result_data.reward_record.first_clear_set
-                .Should()
-                .BeEquivalentTo(new List<AtgenFirstClearSet>() { });
-
-            missionOneThreeCleared!.ingame_result_data.reward_record.missions_clear_set
-                .Should()
-                .BeEquivalentTo(
-                    new List<AtgenMissionsClearSet>()
-                    {
-                        this.CreateMissionReward(1),
-                        this.CreateMissionReward(3)
-                    }
-                );
-
-            missionOneThreeCleared!.ingame_result_data.reward_record.mission_complete
-                .Should()
-                .BeEquivalentTo(new List<AtgenFirstClearSet>() { this.CreateClearReward() });
+            if (!missions[i])
+            {
+                missionsCleared.Add(this.CreateMissionReward(i + 1));
+            }
         }
+
+        data!.ingame_result_data.reward_record.first_clear_set
+            .Should()
+            .BeEquivalentTo(new List<AtgenFirstClearSet>() { });
+
+        data!.ingame_result_data.reward_record.missions_clear_set
+            .Should()
+            .BeEquivalentTo(missionsCleared);
+
+        data!.ingame_result_data.reward_record.mission_complete
+            .Should()
+            .BeEquivalentTo(new List<AtgenFirstClearSet>() { this.CreateClearReward() });
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
@@ -518,6 +450,19 @@ public class DungeonRecordControllerTest
                         IsMissionClear3 = true
                     }
                 }.AsQueryable().BuildMock());
+
+        this.mockQuestRepository
+            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
+            .ReturnsAsync(
+                new DbQuest()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    QuestId = questId,
+                    IsMissionClear1 = true,
+                    IsMissionClear2 = true,
+                    IsMissionClear3 = true
+                }
+            );
 
         DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
 
@@ -575,5 +520,18 @@ public class DungeonRecordControllerTest
             quantity = quantity,
             mission_no = index
         };
+    }
+
+    public class MissionCompletionGenerator : TheoryData<bool[]>
+    {
+        public MissionCompletionGenerator()
+        {
+            Add(new bool[] { true, false, false });
+            Add(new bool[] { false, true, false });
+            Add(new bool[] { false, false, true });
+            Add(new bool[] { true, true, false });
+            Add(new bool[] { true, false, true });
+            Add(new bool[] { false, true, true });
+        }
     }
 }
