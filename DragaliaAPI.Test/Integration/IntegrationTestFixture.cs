@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Security.Claims;
 using DragaliaAPI.Services;
+using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Test.Integration;
 
@@ -23,6 +24,26 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         this.SeedCache();
 
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
+        this.mockBaasRequestHelper
+            .Setup(x => x.GetSavefile(It.IsAny<string>()))
+            .ReturnsAsync(
+                new LoadIndexData()
+                {
+                    user_data = new() { name = "Imported Save" },
+                    ability_crest_list = new List<AbilityCrestList>(),
+                    chara_list = new List<CharaList>(),
+                    dragon_list = new List<DragonList>(),
+                    talisman_list = new List<TalismanList>(),
+                    party_list = new List<PartyList>(),
+                    dragon_reliability_list = new List<DragonReliabilityList>(),
+                    weapon_body_list = new List<WeaponBodyList>(),
+                    quest_list = new List<QuestList>(),
+                    quest_story_list = new List<QuestStoryList>(),
+                    castle_story_list = new List<CastleStoryList>(),
+                    unit_story_list = new List<UnitStoryList>(),
+                    material_list = new List<MaterialList>(),
+                }
+            );
     }
 
     /// <summary>
@@ -68,25 +89,6 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         inventoryRepo.SaveChanges();
     }
 
-    public string BuildValidToken() => this.BuildValidToken(DateTime.UtcNow.AddHours(1));
-
-    public string BuildValidToken(DateTime expires)
-    {
-        SigningCredentials creds =
-            new(TestUtils.SecurityKeys.First(), SecurityAlgorithms.RsaSha256);
-
-        JwtSecurityToken token =
-            new(
-                issuer: "LukeFZ",
-                audience: "baas-Id",
-                expires: expires,
-                signingCredentials: creds,
-                claims: new List<Claim>() { new Claim("sub", this.PreparedDeviceAccountId) }
-            );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-
     /// <summary>
     /// Seed the cache with a valid session, so that controllers can lookup database entries.
     /// </summary>
@@ -117,8 +119,8 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         ApiContext context = this.Services.GetRequiredService<ApiContext>();
         ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
 
-        savefileService.CreateNewSavefileBase(PreparedDeviceAccountId).Wait();
-        savefileService.CreateNewSavefileBase(DeviceAccountId).Wait();
+        savefileService.CreateBase(PreparedDeviceAccountId).Wait();
+        savefileService.CreateBase(DeviceAccountId).Wait();
         PopulateAllMaterials();
         context.SaveChanges();
     }

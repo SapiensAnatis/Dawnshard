@@ -4,8 +4,8 @@ namespace DragaliaAPI.Services;
 
 public interface ISavefileService
 {
-    Task CreateNewSavefile(string deviceAccountId);
-    Task CreateNewSavefileBase(string deviceAccountId);
+    Task Create(string deviceAccountId);
+    Task CreateBase(string deviceAccountId);
     Task Import(string deviceAccountId, LoadIndexData savefile);
     Task Reset(string deviceAccountId);
 }

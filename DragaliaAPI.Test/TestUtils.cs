@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -52,6 +53,68 @@ public static class TestUtils
     /// Consistent security key.
     /// </summary>
     public static IList<SecurityKey> SecurityKeys { get; } = new List<SecurityKey>();
+
+    public static string TokenToString(JwtSecurityToken token)
+    {
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public static JwtSecurityToken GetToken(
+        string issuer,
+        string audience,
+        DateTime expiryTime,
+        string accountId
+    )
+    {
+        return new(
+            issuer: issuer,
+            audience: audience,
+            expires: expiryTime,
+            signingCredentials: new SigningCredentials(
+                SecurityKeys.First(),
+                SecurityAlgorithms.RsaSha256
+            ),
+            claims: new List<Claim>() { new Claim("sub", accountId) }
+        );
+    }
+
+    public static JwtSecurityToken GetToken(DateTime expiryTime, string accountId)
+    {
+        return GetToken("LukeFZ", "baas-Id", expiryTime, accountId);
+    }
+
+    public static JwtSecurityToken GetToken(
+        DateTime expiryTime,
+        string accountId,
+        bool savefileAvailable,
+        DateTimeOffset savefileTime
+    )
+    {
+        return GetToken(
+            "LukeFZ",
+            "baas-Id",
+            expiryTime,
+            accountId,
+            savefileAvailable,
+            savefileTime
+        );
+    }
+
+    public static JwtSecurityToken GetToken(
+        string issuer,
+        string audience,
+        DateTime expiryTime,
+        string accountId,
+        bool savefileAvailable,
+        DateTimeOffset savefileTime
+    )
+    {
+        JwtSecurityToken result = GetToken(issuer, audience, expiryTime, accountId);
+        result.Payload.Add("sav:a", savefileAvailable);
+        result.Payload.Add("sav:ts", savefileTime.ToUnixTimeSeconds());
+
+        return result;
+    }
 
     /// <summary>
     /// Consistent account id to be used in setups for unit tests.

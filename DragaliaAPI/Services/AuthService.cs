@@ -19,17 +19,16 @@ public class AuthService : IAuthService
     private readonly ISessionService sessionService;
     private readonly ISavefileService savefileService;
     private readonly IUserDataRepository userDataRepository;
-    private readonly IDeviceAccountRepository deviceAccountRepository;
     private readonly IOptionsMonitor<LoginOptions> loginOptions;
     private readonly IOptionsMonitor<BaasOptions> baasOptions;
     private readonly ILogger<AuthService> logger;
+    private readonly JwtSecurityTokenHandler TokenHandler = new();
 
     public AuthService(
         IBaasRequestHelper baasRequestHelper,
         ISessionService sessionService,
         ISavefileService savefileService,
         IUserDataRepository userDataRepository,
-        IDeviceAccountRepository deviceAccountRepository,
         IOptionsMonitor<LoginOptions> loginOptions,
         IOptionsMonitor<BaasOptions> baasOptions,
         ILogger<AuthService> logger
@@ -39,7 +38,6 @@ public class AuthService : IAuthService
         this.sessionService = sessionService;
         this.savefileService = savefileService;
         this.userDataRepository = userDataRepository;
-        this.deviceAccountRepository = deviceAccountRepository;
         this.loginOptions = loginOptions;
         this.baasOptions = baasOptions;
         this.logger = logger;
@@ -81,6 +79,19 @@ public class AuthService : IAuthService
         TokenValidationResult result = await this.ValidateToken(idToken);
         JwtSecurityToken jwt = (JwtSecurityToken)result.SecurityToken;
 
+        if (
+            GetPendingSaveImport(
+                jwt,
+                await this.userDataRepository.GetUserData(jwt.Subject).SingleOrDefaultAsync()
+            )
+        )
+        {
+            LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
+            await this.savefileService.Import(jwt.Subject, pendingSave);
+            await this.userDataRepository.UpdateSaveImportTime(jwt.Subject);
+            await this.userDataRepository.SaveChangesAsync();
+        }
+
         long viewerId = await this.DoLogin(jwt);
         string sessionId = await this.sessionService.CreateSession(jwt.Subject, idToken);
 
@@ -89,8 +100,7 @@ public class AuthService : IAuthService
 
     private async Task<TokenValidationResult> ValidateToken(string idToken)
     {
-        JwtSecurityTokenHandler handler = new();
-        TokenValidationResult validationResult = await handler.ValidateTokenAsync(
+        TokenValidationResult validationResult = await TokenHandler.ValidateTokenAsync(
             idToken,
             new()
             {
@@ -126,50 +136,34 @@ public class AuthService : IAuthService
 
     private async Task<long> DoLogin(JwtSecurityToken jwt)
     {
-        string accountId = jwt.Subject;
+        IQueryable<DbPlayerUserData> userDataQuery = this.userDataRepository.GetUserData(
+            jwt.Subject
+        );
 
-        DbPlayerUserData? userData = await this.userDataRepository
-            .GetUserData(accountId)
-            .SingleOrDefaultAsync();
+        DbPlayerUserData? userData = await userDataQuery.SingleOrDefaultAsync();
 
-        LoadIndexData? pendingSave = await GetPendingSaveImport(jwt, userData);
-        if (pendingSave is not null)
-        {
-            await this.savefileService.Import(accountId, pendingSave);
-            await this.userDataRepository.UpdateSaveImportTime(accountId);
-        }
+        if (userData is null)
+            await this.savefileService.Create(jwt.Subject);
 
-        if (userData is null && pendingSave is null)
-        {
-            await this.savefileService.CreateNewSavefile(accountId);
-            await this.deviceAccountRepository.SaveChangesAsync();
-        }
-
-        return await this.userDataRepository
-            .GetUserData(accountId)
-            .Select(x => x.ViewerId)
-            .SingleAsync();
+        return await userDataQuery.Select(x => x.ViewerId).SingleAsync();
     }
 
-    private async Task<LoadIndexData?> GetPendingSaveImport(
-        JwtSecurityToken token,
-        DbPlayerUserData? userData
-    )
+    private bool GetPendingSaveImport(JwtSecurityToken token, DbPlayerUserData? userData)
     {
         this.logger.LogInformation("Polling save import for user {id}...", token.Subject);
 
         if (!token.Payload.TryGetValue("sav:a", out object? saveAvailableObj))
-            return null;
+            return false;
 
-        bool saveAvailable = (bool)saveAvailableObj;
-        if (!saveAvailable)
+        bool? saveAvailable = saveAvailableObj as bool?;
+        if (saveAvailable != true)
         {
             this.logger.LogInformation("No savefile was available to import.");
-            return null;
+            return false;
         }
 
         if (!token.Payload.TryGetValue("sav:ts", out object? saveTimestampObj))
-            return null;
+            return false;
 
         DateTimeOffset saveDateTime = DateTimeOffset.FromUnixTimeSeconds((long)saveTimestampObj);
         DateTimeOffset lastImportTime = userData?.LastSaveImportTime ?? DateTimeOffset.MinValue;
@@ -181,10 +175,15 @@ public class AuthService : IAuthService
                 saveDateTime
             );
 
-            return null;
+            return false;
         }
 
-        this.logger.LogInformation("Detected pending save import for user {id}", token.Subject);
-        return await this.baasRequestHelper.GetSavefile(token.ToString());
+        this.logger.LogInformation(
+            "Detected pending save import for user {id} (stored: {t1}, remote: {t2})",
+            token.Subject,
+            lastImportTime,
+            saveDateTime
+        );
+        return true;
     }
 }

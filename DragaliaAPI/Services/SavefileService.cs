@@ -196,7 +196,7 @@ public class SavefileService : ISavefileService
         this.Delete(deviceAccountId);
 
         // Unlike importing, this will not preserve the viewer id
-        await this.CreateNewSavefile(deviceAccountId);
+        await this.Create(deviceAccountId);
         await this.apiContext.SaveChangesAsync();
     }
 
@@ -209,7 +209,7 @@ public class SavefileService : ISavefileService
         );
     }
 
-    public async Task CreateNewSavefileBase(string deviceAccountId)
+    public async Task CreateBase(string deviceAccountId)
     {
         DbPlayerUserData userData =
             new(deviceAccountId)
@@ -227,11 +227,11 @@ public class SavefileService : ISavefileService
         await this.apiContext.SaveChangesAsync();
     }
 
-    public async Task CreateNewSavefile(string deviceAccountId)
+    public async Task Create(string deviceAccountId)
     {
         this.logger.LogInformation("Creating new savefile for account ID {id}", deviceAccountId);
 
-        await this.CreateNewSavefileBase(deviceAccountId);
+        await this.CreateBase(deviceAccountId);
 
         await this.AddDefaultWyrmprints(deviceAccountId);
         await this.AddDefaultDragons(deviceAccountId);

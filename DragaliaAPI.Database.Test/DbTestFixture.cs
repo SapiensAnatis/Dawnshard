@@ -31,7 +31,7 @@ public class DbTestFixture : IDisposable
                 ).CreateMapper(),
                 mockLogger.Object
             );
-        savefileService.CreateNewSavefile("id").Wait();
+        savefileService.Create("id").Wait();
     }
 
     public async Task AddToDatabase<TEntity>(TEntity data)

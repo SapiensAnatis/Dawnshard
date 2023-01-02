@@ -1,5 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
+using DragaliaAPI.MessagePack;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
@@ -109,9 +111,7 @@ public class BaasRequestHelperTest
     [Fact]
     public async Task GetSavefile_Success_ReturnsSavefile()
     {
-        LoadIndexData sampleSavefile = JsonSerializer.Deserialize<LoadIndexData>(
-            File.ReadAllText(Path.Join("Data", "endgame_savefile.json"))
-        )!;
+        string sampleSaveJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
         this.mockOptions
             .SetupGet(x => x.CurrentValue)
@@ -132,11 +132,20 @@ public class BaasRequestHelperTest
                 new HttpResponseMessage()
                 {
                     StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = JsonContent.Create(sampleSavefile)
+                    Content = new StringContent(sampleSaveJson)
                 }
             );
 
-        (await this.baasRequestHelper.GetSavefile("token")).Should().BeEquivalentTo(sampleSavefile);
+        (await this.baasRequestHelper.GetSavefile("token"))
+            .Should()
+            .BeEquivalentTo(
+                JsonSerializer
+                    .Deserialize<DragaliaResponse<LoadIndexData>>(
+                        sampleSaveJson,
+                        UnixDateTimeJsonConverter.Options
+                    )!
+                    .data
+            );
     }
 
     [Fact]

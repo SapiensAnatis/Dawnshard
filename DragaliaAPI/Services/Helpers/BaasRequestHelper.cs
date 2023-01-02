@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.MessagePack;
+using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using Microsoft.Extensions.Options;
@@ -66,12 +68,15 @@ public class BaasRequestHelper : IBaasRequestHelper
             logger.LogError("Received failure response from BaaS: {@response}", savefileResponse);
 
             throw new DragaliaException(
-                Models.ResultCode.TRANSITION_LINKED_DATA_NOT_FOUND,
+                ResultCode.TRANSITION_LINKED_DATA_NOT_FOUND,
                 "Received failure response from BaaS"
             );
         }
 
-        return await savefileResponse.Content.ReadFromJsonAsync<LoadIndexData>()
-            ?? throw new NullReferenceException("Received null savefile from response");
+        return (
+                await savefileResponse.Content.ReadFromJsonAsync<DragaliaResponse<LoadIndexData>>(
+                    options: UnixDateTimeJsonConverter.Options
+                )
+            )?.data ?? throw new NullReferenceException("Received null savefile from response");
     }
 }
