@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Security.Claims;
+using DragaliaAPI.Services;
 
 namespace DragaliaAPI.Test.Integration;
 
@@ -116,21 +117,10 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
     private void SeedDatabase()
     {
         ApiContext context = this.Services.GetRequiredService<ApiContext>();
-        IDeviceAccountRepository repository =
-            this.Services.GetRequiredService<IDeviceAccountRepository>();
+        ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
 
-        context.DeviceAccounts.AddRange(
-            new List<DbDeviceAccount>()
-            {
-                // Password is a hash of the string "password"
-                new("id", "mZlZ+wpg+n3l63y9D25f93v0KLM="),
-                // Needed for foreign key constraints
-                new(this.DeviceAccountId, "some password"),
-            }
-        );
-
-        repository.CreateNewSavefileBase(PreparedDeviceAccountId).Wait();
-        repository.CreateNewSavefileBase(DeviceAccountId).Wait();
+        savefileService.CreateNewSavefileBase(PreparedDeviceAccountId).Wait();
+        savefileService.CreateNewSavefileBase(DeviceAccountId).Wait();
         PopulateAllMaterials().Wait();
         context.SaveChanges();
     }

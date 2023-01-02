@@ -13,12 +13,12 @@ namespace DragaliaAPI.Test.Integration.Other;
 /// Tests <see cref="Controllers.Other.SavefileController"/>
 /// </summary>
 [Collection("DragaliaIntegration")]
-public class SavefileTest : IClassFixture<IntegrationTestFixture>
+public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly IntegrationTestFixture fixture;
     private readonly HttpClient client;
 
-    public SavefileTest(IntegrationTestFixture fixture)
+    public SavefileImportTest(IntegrationTestFixture fixture)
     {
         this.fixture = fixture;
         this.client = fixture.CreateClient();

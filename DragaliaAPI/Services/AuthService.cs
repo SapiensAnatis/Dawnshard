@@ -141,7 +141,7 @@ public class AuthService : IAuthService
 
         if (userData is null && pendingSave is null)
         {
-            await this.deviceAccountRepository.CreateNewSavefile(accountId);
+            await this.savefileService.CreateNewSavefile(accountId);
             await this.deviceAccountRepository.SaveChangesAsync();
         }
 

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Helpers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Moq.Protected;
 
 namespace DragaliaAPI.Test.Unit.Helpers;
@@ -46,7 +40,12 @@ public class BaasRequestHelperTest
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
-                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.Is<HttpRequestMessage>(
+                    x =>
+                        x.RequestUri!.ToString()
+                            == "https://www.taylorswift.com/.well-known/jwks.json"
+                        && x.Method == HttpMethod.Get
+                ),
                 ItExpr.IsAny<CancellationToken>()
             )
             .ReturnsAsync(
@@ -105,5 +104,62 @@ public class BaasRequestHelperTest
 
         this.mockOptions.VerifyAll();
         this.mockHttpMessageHandler.VerifyAll();
+    }
+
+    [Fact]
+    public async Task GetSavefile_Success_ReturnsSavefile()
+    {
+        LoadIndexData sampleSavefile = JsonSerializer.Deserialize<LoadIndexData>(
+            File.ReadAllText(Path.Join("Data", "endgame_savefile.json"))
+        )!;
+
+        this.mockOptions
+            .SetupGet(x => x.CurrentValue)
+            .Returns(new BaasOptions() { BaasUrl = "https://www.taylorswift.com/" });
+        this.mockHttpMessageHandler
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.Is<HttpRequestMessage>(
+                    x =>
+                        x.RequestUri!.ToString()
+                            == "https://www.taylorswift.com/gameplay/v1/savefile"
+                        && x.Method == HttpMethod.Post
+                ),
+                ItExpr.IsAny<CancellationToken>()
+            )
+            .ReturnsAsync(
+                new HttpResponseMessage()
+                {
+                    StatusCode = System.Net.HttpStatusCode.OK,
+                    Content = JsonContent.Create(sampleSavefile)
+                }
+            );
+
+        (await this.baasRequestHelper.GetSavefile("token")).Should().BeEquivalentTo(sampleSavefile);
+    }
+
+    [Fact]
+    public async Task GetSavefile_Fail_Throws()
+    {
+        this.mockOptions
+            .SetupGet(x => x.CurrentValue)
+            .Returns(new BaasOptions() { BaasUrl = "https://www.taylorswift.com/" });
+        this.mockHttpMessageHandler
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>()
+            )
+            .ReturnsAsync(
+                new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.BadRequest, }
+            );
+
+        await this.baasRequestHelper
+            .Invoking(x => x.GetSavefile("token"))
+            .Should()
+            .ThrowExactlyAsync<DragaliaException>()
+            .Where(x => x.Code == Models.ResultCode.TRANSITION_LINKED_DATA_NOT_FOUND);
     }
 }

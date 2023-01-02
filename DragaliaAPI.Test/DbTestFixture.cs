@@ -1,6 +1,9 @@
-﻿using DragaliaAPI.Database;
+﻿using AutoMapper;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Test;
 
@@ -17,12 +20,14 @@ public class DbTestFixture : IDisposable
             .Options;
 
         this.ApiContext = new ApiContext(options);
+        Mock<ILogger<SavefileService>> mockLogger = new(MockBehavior.Loose);
 
-        IDeviceAccountRepository deviceAccountRepository = new DeviceAccountRepository(
-            this.ApiContext
+        ISavefileService deviceAccountRepository = new SavefileService(
+            this.ApiContext,
+            new MapperConfiguration(opts => opts.AddMaps(typeof(Program).Assembly)).CreateMapper(),
+            mockLogger.Object
         );
-        deviceAccountRepository.CreateNewSavefile("id");
-        deviceAccountRepository.SaveChangesAsync().Wait();
+        deviceAccountRepository.CreateNewSavefile("id").Wait();
     }
 
     public async Task AddToDatabase<TEntity>(TEntity data)
