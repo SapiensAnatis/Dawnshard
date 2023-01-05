@@ -10,7 +10,9 @@ If you haven't already, please also consider joining the Dragalia Lost Reverse E
 
 ## Contributing
 
-Contributions are more than welcome! Feel free to fork the repository and open a pull request with these changes. Please also include integration-style tests for any new controllers, and unit tests for any new services. See the DragaliaAPI.Test project for examples (these are by no means a gold standard, however).
+Contributions are more than welcome! Feel free to fork the repository and open a pull request with these changes. 
+
+For guidance on contributing, including the process for setting up a development environment, please see the [GitHub Wiki](https://github.com/SapiensAnatis/DragaliaAPI/wiki).
 
 See also the [API documentation](https://dragalia-api-docs.readthedocs.io/en/latest/) for reference on what existing endpoints do and how to implement new ones.
 
