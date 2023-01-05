@@ -6,9 +6,6 @@ namespace DragaliaAPI.Database.Entities;
 
 public class DbTalisman : IDbHasAccountId
 {
-    public virtual DbDeviceAccount? Owner { get; set; }
-
-    [ForeignKey(nameof(Owner))]
     public required string DeviceAccountId { get; set; }
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

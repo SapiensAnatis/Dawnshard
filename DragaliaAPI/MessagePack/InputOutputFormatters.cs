@@ -5,7 +5,7 @@ using MessagePack;
 using MessagePack.AspNetCoreMvcFormatter;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
-namespace DragaliaAPI.MessagePackFormatters;
+namespace DragaliaAPI.MessagePack;
 
 /// <summary>
 /// Wrapper to MessagePack formatters that accept application/octet-stream.

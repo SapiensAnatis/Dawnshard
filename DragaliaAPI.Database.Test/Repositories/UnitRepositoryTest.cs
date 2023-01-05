@@ -2,7 +2,7 @@
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Services;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
@@ -12,20 +12,12 @@ namespace DragaliaAPI.Database.Test.Repositories;
 public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly ICharaDataService charaDataService;
-    private readonly IDragonDataService dragonDataService;
     private readonly IUnitRepository unitRepository;
 
     public UnitRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.charaDataService = new CharaDataService();
-        this.dragonDataService = new DragonDataService();
-        this.unitRepository = new UnitRepository(
-            fixture.ApiContext,
-            this.charaDataService,
-            this.dragonDataService
-        );
+        this.unitRepository = new UnitRepository(fixture.ApiContext);
     }
 
     [Fact]
@@ -45,12 +37,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetAllCharaData_ReturnsOnlyDataForGivenId()
     {
-        await this.fixture.AddToDatabase(
-            Factories.DbPlayerCharaDataFactory.Create(
-                "other id",
-                this.charaDataService.GetData(Charas.Ilia)
-            )
-        );
+        await this.fixture.AddToDatabase(new DbPlayerCharaData("other id", Charas.Ilia));
 
         (await this.unitRepository.GetAllCharaData(DeviceAccountId).ToListAsync())
             .Should()
@@ -230,22 +217,13 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task BuildDetailedPartyUnit_ReturnsCorrectResult()
     {
-        DbPlayerCharaData chara = DbPlayerCharaDataFactory.Create(
-            DeviceAccountId,
-            charaDataService.GetData(Charas.BondforgedPrince)
-        );
+        DbPlayerCharaData chara = new(DeviceAccountId, Charas.BondforgedPrince);
 
-        DbPlayerCharaData chara1 = DbPlayerCharaDataFactory.Create(
-            DeviceAccountId,
-            charaDataService.GetData(Charas.GalaMym)
-        );
+        DbPlayerCharaData chara1 = new(DeviceAccountId, Charas.GalaMym);
         chara1.IsUnlockEditSkill = true;
         chara1.Skill1Level = 3;
 
-        DbPlayerCharaData chara2 = DbPlayerCharaDataFactory.Create(
-            DeviceAccountId,
-            charaDataService.GetData(Charas.SummerCleo)
-        );
+        DbPlayerCharaData chara2 = new(DeviceAccountId, Charas.SummerCleo);
         chara2.IsUnlockEditSkill = true;
         chara2.Skill2Level = 2;
 

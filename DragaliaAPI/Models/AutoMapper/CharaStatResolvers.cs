@@ -1,13 +1,9 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using AutoMapper;
-using AutoMapper.Execution;
-using AutoMapper.Internal;
+﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions;
-using DragaliaAPI.Shared.Services;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Models.AutoMapper;
 
@@ -17,13 +13,6 @@ namespace DragaliaAPI.Models.AutoMapper;
 
 public class CharaBaseHpResolver : IValueResolver<CharaList, DbPlayerCharaData, ushort>
 {
-    private readonly ICharaDataService charaDataService;
-
-    public CharaBaseHpResolver(ICharaDataService charaDataService)
-    {
-        this.charaDataService = charaDataService;
-    }
-
     public ushort Resolve(
         CharaList source,
         DbPlayerCharaData destination,
@@ -31,7 +20,7 @@ public class CharaBaseHpResolver : IValueResolver<CharaList, DbPlayerCharaData, 
         ResolutionContext context
     )
     {
-        DataAdventurer adventurer = this.charaDataService.GetData(source.chara_id);
+        CharaData adventurer = MasterAsset.CharaData.Get(source.chara_id);
 
         return (ushort)CharaUtils.CalculateBaseHp(adventurer, source.level, source.rarity);
     }
@@ -39,13 +28,6 @@ public class CharaBaseHpResolver : IValueResolver<CharaList, DbPlayerCharaData, 
 
 public class CharaBaseAtkResolver : IValueResolver<CharaList, DbPlayerCharaData, ushort>
 {
-    private readonly ICharaDataService charaDataService;
-
-    public CharaBaseAtkResolver(ICharaDataService charaDataService)
-    {
-        this.charaDataService = charaDataService;
-    }
-
     public ushort Resolve(
         CharaList source,
         DbPlayerCharaData destination,
@@ -53,7 +35,7 @@ public class CharaBaseAtkResolver : IValueResolver<CharaList, DbPlayerCharaData,
         ResolutionContext context
     )
     {
-        DataAdventurer adventurer = this.charaDataService.GetData(source.chara_id);
+        CharaData adventurer = MasterAsset.CharaData.Get(source.chara_id);
 
         return (ushort)CharaUtils.CalculateBaseAttack(adventurer, source.level, source.rarity);
     }
@@ -61,13 +43,6 @@ public class CharaBaseAtkResolver : IValueResolver<CharaList, DbPlayerCharaData,
 
 public class CharaNodeHpResolver : IValueResolver<CharaList, DbPlayerCharaData, ushort>
 {
-    private readonly ICharaDataService charaDataService;
-
-    public CharaNodeHpResolver(ICharaDataService charaDataService)
-    {
-        this.charaDataService = charaDataService;
-    }
-
     public ushort Resolve(
         CharaList source,
         DbPlayerCharaData destination,
@@ -75,7 +50,7 @@ public class CharaNodeHpResolver : IValueResolver<CharaList, DbPlayerCharaData, 
         ResolutionContext context
     )
     {
-        DataAdventurer adventurer = this.charaDataService.GetData(source.chara_id);
+        CharaData adventurer = MasterAsset.CharaData.Get(source.chara_id);
 
         return (ushort)(
             source.hp - CharaUtils.CalculateBaseHp(adventurer, source.level, source.rarity)
@@ -85,13 +60,6 @@ public class CharaNodeHpResolver : IValueResolver<CharaList, DbPlayerCharaData, 
 
 public class CharaNodeAtkResolver : IValueResolver<CharaList, DbPlayerCharaData, ushort>
 {
-    private readonly ICharaDataService charaDataService;
-
-    public CharaNodeAtkResolver(ICharaDataService charaDataService)
-    {
-        this.charaDataService = charaDataService;
-    }
-
     public ushort Resolve(
         CharaList source,
         DbPlayerCharaData destination,
@@ -99,7 +67,7 @@ public class CharaNodeAtkResolver : IValueResolver<CharaList, DbPlayerCharaData,
         ResolutionContext context
     )
     {
-        DataAdventurer adventurer = this.charaDataService.GetData(source.chara_id);
+        CharaData adventurer = MasterAsset.CharaData.Get(source.chara_id);
 
         return (ushort)(
             source.attack - CharaUtils.CalculateBaseAttack(adventurer, source.level, source.rarity)

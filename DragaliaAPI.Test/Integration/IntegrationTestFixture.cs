@@ -7,6 +7,12 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+using System.Security.Claims;
+using DragaliaAPI.Services;
+using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Test.Integration;
 
@@ -16,6 +22,28 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
     {
         this.SeedDatabase();
         this.SeedCache();
+
+        this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
+        this.mockBaasRequestHelper
+            .Setup(x => x.GetSavefile(It.IsAny<string>()))
+            .ReturnsAsync(
+                new LoadIndexData()
+                {
+                    user_data = new() { name = "Imported Save" },
+                    ability_crest_list = new List<AbilityCrestList>(),
+                    chara_list = new List<CharaList>(),
+                    dragon_list = new List<DragonList>(),
+                    talisman_list = new List<TalismanList>(),
+                    party_list = new List<PartyList>(),
+                    dragon_reliability_list = new List<DragonReliabilityList>(),
+                    weapon_body_list = new List<WeaponBodyList>(),
+                    quest_list = new List<QuestList>(),
+                    quest_story_list = new List<QuestStoryList>(),
+                    castle_story_list = new List<CastleStoryList>(),
+                    unit_story_list = new List<UnitStoryList>(),
+                    material_list = new List<MaterialList>(),
+                }
+            );
     }
 
     /// <summary>
@@ -41,26 +69,24 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         await unitRepository.SaveChangesAsync();
     }
 
-    public async Task PopulateAllMaterials()
+    public void PopulateAllMaterials()
     {
-        using (IServiceScope scope = this.Services.CreateScope())
-        {
-            ApiContext inventoryRepo = scope.ServiceProvider.GetRequiredService<ApiContext>();
-            inventoryRepo.PlayerStorage.AddRange(
-                Enum.GetValues(typeof(Materials))
-                    .OfType<Materials>()
-                    .Select(
-                        x =>
-                            new DbPlayerMaterial()
-                            {
-                                DeviceAccountId = DeviceAccountId,
-                                MaterialId = x,
-                                Quantity = 99999999
-                            }
-                    )
-            );
-            await inventoryRepo.SaveChangesAsync();
-        }
+        using IServiceScope scope = this.Services.CreateScope();
+        ApiContext inventoryRepo = scope.ServiceProvider.GetRequiredService<ApiContext>();
+        inventoryRepo.PlayerStorage.AddRange(
+            Enum.GetValues(typeof(Materials))
+                .OfType<Materials>()
+                .Select(
+                    x =>
+                        new DbPlayerMaterial()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            MaterialId = x,
+                            Quantity = 99999999
+                        }
+                )
+        );
+        inventoryRepo.SaveChanges();
     }
 
     /// <summary>
@@ -91,22 +117,11 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
     private void SeedDatabase()
     {
         ApiContext context = this.Services.GetRequiredService<ApiContext>();
-        IDeviceAccountRepository repository =
-            this.Services.GetRequiredService<IDeviceAccountRepository>();
+        ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
 
-        context.DeviceAccounts.AddRange(
-            new List<DbDeviceAccount>()
-            {
-                // Password is a hash of the string "password"
-                new("id", "mZlZ+wpg+n3l63y9D25f93v0KLM="),
-                // Needed for foreign key constraints
-                new(this.DeviceAccountId, "some password"),
-            }
-        );
-
-        repository.CreateNewSavefileBase(PreparedDeviceAccountId).Wait();
-        repository.CreateNewSavefileBase(DeviceAccountId).Wait();
-        PopulateAllMaterials().Wait();
+        savefileService.CreateBase(PreparedDeviceAccountId).Wait();
+        savefileService.CreateBase(DeviceAccountId).Wait();
+        PopulateAllMaterials();
         context.SaveChanges();
     }
 }

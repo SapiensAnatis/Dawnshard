@@ -18,7 +18,7 @@ public class WebviewVersionController : DragaliaControllerBase
 
         // Use this URL instead if using mitmproxy and developing locally
         // (replacing it with <host local IP>:<container port> as needed)
-        // baseAddress = "192.168.1.104:5000";
+        // baseAddress = "dd-api.lukefz.xyz";
 
         return Ok(
             new WebviewVersionUrlListData(
@@ -32,7 +32,7 @@ public class WebviewVersionController : DragaliaControllerBase
                     new("faq", PlaceholderUrl),
                     new("help_comic", PlaceholderUrl),
                     new("help", PlaceholderUrl),
-                    new("information", baseAddress + "/News"),
+                    new("information", $"https://{baseAddress}/News"),
                     new("inquiry_attention", PlaceholderUrl),
                     new("dragon_battle_info", PlaceholderUrl),
                     new("quest_info", PlaceholderUrl),

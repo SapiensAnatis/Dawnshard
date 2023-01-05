@@ -1,10 +1,13 @@
 using System.Reflection;
+using System.Security.Claims;
+using System.Text.Json.Serialization;
 using DragaliaAPI.Database;
 using DragaliaAPI.MessagePack;
-using DragaliaAPI.MessagePackFormatters;
 using DragaliaAPI.Middleware;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Health;
+using DragaliaAPI.Services.Helpers;
 using DragaliaAPI.Shared;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
@@ -18,7 +21,11 @@ Log.Logger = new LoggerConfiguration().MinimumLevel
     .CreateBootstrapLogger();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
 ConfigurationManager configuration = builder.Configuration;
+builder.Services.Configure<BaasOptions>(configuration.GetRequiredSection("Baas"));
+builder.Services.Configure<LoginOptions>(configuration.GetRequiredSection("Login"));
+builder.Services.Configure<DragalipatchOptions>(configuration.GetRequiredSection("Dragalipatch"));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
@@ -44,24 +51,30 @@ builder.Services
     // For savefile import
     option =>
     {
+        option.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         option.JsonSerializerOptions.Converters.Add(new UnixDateTimeJsonConverter());
         // Cannot add the boolean one if we want Nintendo login to keep working
     });
 
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(
+    options =>
+        // Make root URL redirect to news instead of 404
+        options.Conventions.AddPageRoute("/News", "~/")
+);
 builder.Services.AddServerSideBlazor();
 builder.Services
     .AddHealthChecks()
     .AddDbContextCheck<ApiContext>()
     .AddCheck<RedisHealthCheck>("Redis", failureStatus: HealthStatus.Unhealthy);
 
-builder.Services.AddAuthentication(
-    opts => opts.AddScheme<DeveloperAuthenticationHandler>("DeveloperAuthentication", null)
-);
+builder.Services.AddAuthentication(opts =>
+{
+    opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
+    opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
+});
 
 builder.Services
     .ConfigureDatabaseServices(builder.Configuration.GetConnectionString("PostgresHost"))
-    .ConfigureSharedServices()
     .AddAutoMapper(Assembly.GetExecutingAssembly())
     .AddStackExchangeRedisCache(options =>
     {
@@ -73,20 +86,23 @@ builder.Services
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<IUpdateDataService, UpdateDataService>()
     .AddScoped<IDungeonService, DungeonService>()
-    .AddScoped<ISavefileService, SavefileService>();
+    .AddScoped<ISavefileService, SavefileService>()
+    .AddScoped<IAuthService, AuthService>()
+    .AddSingleton<IBaasRequestHelper, BaasRequestHelper>()
+    .AddHttpClient<BaasRequestHelper>();
 
 WebApplication app = builder.Build();
 
 app.UseSerilogRequestLogging(
     options =>
         options.EnrichDiagnosticContext = (diagContext, httpContext) =>
-        {
-            httpContext.Items.TryGetValue("DeviceAccountId", out object? deviceAccountObj);
-            diagContext.Set("DeviceAccountId", deviceAccountObj?.ToString() ?? "unknown");
-        }
+            diagContext.Set(
+                "DeviceAccountId",
+                httpContext.User.FindFirstValue(CustomClaimType.AccountId) ?? "unknown"
+            )
 );
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.MigrateDatabase();
 }
@@ -100,7 +116,6 @@ else if (app.Environment.EnvironmentName == "Testing")
     context.Database.EnsureCreated();
 }
 
-//app.UseHttpsRedirection();
 app.MapRazorPages();
 
 // Latest Android app version
@@ -116,7 +131,6 @@ app.MapControllers();
 app.MapHealthChecks("/health");
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
-app.UseMiddleware<SessionLookupMiddleware>();
 
 app.Run();
 

@@ -3,6 +3,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
@@ -27,12 +28,8 @@ public class DungeonRecordTest : IClassFixture<IntegrationTestFixture>
         DungeonSession mockSession =
             new()
             {
-                DungeonId = 1,
                 Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
-                AreaInfo = new List<DataQuestAreaInfo>()
-                {
-                    new("Main/01/MAIN_01_0104_01", "MAIN_01_0104_01")
-                }
+                QuestData = MasterAsset.QuestData.Get(227100106)
             };
 
         string key;
@@ -53,7 +50,7 @@ public class DungeonRecordTest : IClassFixture<IntegrationTestFixture>
 
         // TODO: Add more asserts as we add logic into this endpoint
         response.ingame_result_data.dungeon_key.Should().Be(key);
-        response.ingame_result_data.quest_id.Should().Be(1);
+        response.ingame_result_data.quest_id.Should().Be(227100106);
 
         response.update_data_list.user_data.Should().NotBeNull();
         response.update_data_list.quest_list.Should().NotBeNull();

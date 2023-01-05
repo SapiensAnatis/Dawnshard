@@ -7,14 +7,16 @@ namespace DragaliaAPI.Pages;
 
 public record NewsItem(string Headline, string Description, long Timestamp)
 {
-    public string Date => DateTimeOffset.FromUnixTimeSeconds(this.Timestamp).ToString("G");
+    public string Date =>
+        $"{DateTimeOffset.FromUnixTimeSeconds(this.Timestamp):dd/MM/yyyy HH:mm} UTC";
 }
 
 public class NewsModel : PageModel
 {
-    public List<NewsItem> NewsItems { get; } =
+    public List<NewsItem> NewsItems =>
         JsonSerializer.Deserialize<List<NewsItem>>(
-            System.IO.File.ReadAllText(Path.Join(folder, filename))
+            System.IO.File.ReadAllText(Path.Join(folder, filename)),
+            new JsonSerializerOptions(JsonSerializerDefaults.Web)
         ) ?? throw new JsonException("Deserialization failure");
 
     public string? Version =>

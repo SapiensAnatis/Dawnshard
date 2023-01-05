@@ -1,7 +1,7 @@
 #nullable disable
 
 using System.Text.Json.Serialization;
-using DragaliaAPI.MessagePackFormatters;
+using DragaliaAPI.MessagePack;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Generated;
@@ -6197,9 +6197,9 @@ public class ToolReauthData
 public class ToolSignupData
 {
     public ulong viewer_id { get; set; }
-    public int servertime { get; set; }
+    public DateTimeOffset servertime { get; set; }
 
-    public ToolSignupData(ulong viewer_id, int servertime)
+    public ToolSignupData(ulong viewer_id, DateTimeOffset servertime)
     {
         this.viewer_id = viewer_id;
         this.servertime = servertime;

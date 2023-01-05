@@ -2,6 +2,7 @@
 
 namespace DragaliaAPI.Database.Entities;
 
+[Obsolete("Pre-BaaS login flow")]
 public class DbDeviceAccount
 {
     [Required]

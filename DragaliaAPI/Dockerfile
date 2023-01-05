@@ -1,4 +1,4 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
@@ -10,6 +10,7 @@ WORKDIR /src
 COPY ["DragaliaAPI/DragaliaAPI.csproj", "DragaliaAPI/"]
 RUN dotnet restore "DragaliaAPI/DragaliaAPI.csproj"
 COPY . .
+RUN ls
 WORKDIR "/src/DragaliaAPI"
 RUN dotnet build "DragaliaAPI.csproj" -c Release -o /app/build
 
