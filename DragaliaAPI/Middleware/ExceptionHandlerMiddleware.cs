@@ -1,6 +1,6 @@
-﻿using DragaliaAPI.Controllers;
+﻿using System.Net;
+using DragaliaAPI.Controllers;
 using DragaliaAPI.MessagePack;
-using DragaliaAPI.MessagePackFormatters;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
 using MessagePack;
@@ -25,6 +25,14 @@ public class ExceptionHandlerMiddleware
         try
         {
             await this.next(context);
+        }
+        catch (SessionException)
+        {
+            this.logger.LogInformation(
+                "Returning ID token refresh request due to SessionException"
+            );
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            context.Response.Headers.Add("Is-Required-Refresh-Id-Token", "true");
         }
         catch (Exception ex)
         {

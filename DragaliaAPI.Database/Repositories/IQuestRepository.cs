@@ -5,7 +5,7 @@ namespace DragaliaAPI.Database.Repositories;
 
 public interface IQuestRepository : IBaseRepository
 {
-    Task CompleteQuest(string deviceAccountId, int questId);
+    Task<DbQuest> CompleteQuest(string deviceAccountId, int questId, float clearTime);
     IQueryable<DbQuest> GetQuests(string deviceAccountId);
     IQueryable<DbPlayerStoryState> GetStories(string deviceAccountId, StoryTypes type);
     Task UpdateQuestState(string deviceAccountId, int questId, int state);

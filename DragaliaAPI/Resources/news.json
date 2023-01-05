@@ -1,7 +1,22 @@
 [
     {
-        "Headline": "v1.0.0-alpha release",
-        "Timestamp": 1671485237,
-        "Description": "This is the first public release of the server. Welcome everyone!"
+        "headline": "v1.1.0-alpha release",
+        "timestamp": 1672957090,
+        "description": "This version encapsulates the BaaS upgrades and various miscellaneous fixes since v1.0.0-alpha."
+    },
+    {
+        "headline": "Savefile imports",
+        "timestamp": 1672674212,
+        "description": "The necessary work to pull savefiles from the BaaS login system has been completed. You can now import a savefile without needing to ask the server owner. See the \"Importing a save\" section below for more details."
+    },
+    {
+        "headline": "New login server",
+        "timestamp": 1672555688,
+        "description": "Courtesy of LukeFZ#4035, the server now calls into an external login service which means account linking is now possible! It will also be possible soon to import a save via this service without having to direct message anyone."
+    },
+    {
+        "headline": "v1.0.0-alpha release",
+        "timestamp": 1671485237,
+        "description": "This is the first public release of the server. Welcome everyone!"
     }
 ]

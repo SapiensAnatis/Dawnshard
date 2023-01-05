@@ -1,7 +1,7 @@
 ﻿using MessagePack;
 using MessagePack.Formatters;
 
-namespace DragaliaAPI.MessagePackFormatters;
+namespace DragaliaAPI.MessagePack;
 
 /// <summary>
 /// Formatter for MessagePack to use Dates in code but send Unix time (as int) to the client

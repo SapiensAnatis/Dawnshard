@@ -31,13 +31,29 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task UpdateTutorialStatus_UpdatesTutorialStatus()
     {
-        await this.userDataRepository.UpdateTutorialStatus("id", 200);
+        await this.userDataRepository.UpdateTutorialStatus("id", 80000);
         await this.userDataRepository.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerUserData
             .Single(x => x.DeviceAccountId == "id")
             .TutorialStatus.Should()
-            .Be(200);
+            .Be(80000);
+    }
+
+    [Fact]
+    public async Task UpdateTutorialStatus_LowerStatus_DoesNotUpdateTutorialStatus()
+    {
+        int existingStatus = this.fixture.ApiContext.PlayerUserData
+            .Single(x => x.DeviceAccountId == "id")
+            .TutorialStatus;
+
+        await this.userDataRepository.UpdateTutorialStatus("id", 0);
+        await this.userDataRepository.SaveChangesAsync();
+
+        this.fixture.ApiContext.PlayerUserData
+            .Single(x => x.DeviceAccountId == "id")
+            .TutorialStatus.Should()
+            .Be(existingStatus);
     }
 
     [Fact]

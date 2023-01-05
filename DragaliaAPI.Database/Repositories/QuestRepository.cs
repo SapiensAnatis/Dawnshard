@@ -65,7 +65,7 @@ public class QuestRepository : BaseRepository, IQuestRepository
         questData.State = (byte)state;
     }
 
-    public async Task CompleteQuest(string deviceAccountId, int questId)
+    public async Task<DbQuest> CompleteQuest(string deviceAccountId, int questId, float clearTime)
     {
         DbQuest? questData = await apiContext.PlayerQuests.SingleOrDefaultAsync(
             x => x.DeviceAccountId == deviceAccountId && x.QuestId == questId
@@ -87,6 +87,12 @@ public class QuestRepository : BaseRepository, IQuestRepository
         questData.DailyPlayCount++;
         questData.WeeklyPlayCount++;
         questData.IsAppear = true;
-        questData.BestClearTime = 4;
+
+        if (clearTime < questData.BestClearTime || questData.BestClearTime == -1.0f)
+        {
+            questData.BestClearTime = clearTime;
+        }
+
+        return questData;
     }
 }

@@ -207,11 +207,16 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
         ).data;
 
         CharaList responseCharaData = response.update_data_list.chara_list
-            .Where(x => (Charas)x.chara_id == Charas.SummerCelliera)
+            .Where(x => x.chara_id == Charas.SummerCelliera)
             .First();
 
         responseCharaData.level.Should().Be(100);
         responseCharaData.exp.Should().Be(CharaConstants.XpLimits[99]);
+
+        // Values from wiki
+        responseCharaData.hp.Should().Be(956);
+        responseCharaData.attack.Should().Be(574);
+
         responseCharaData.limit_break_count.Should().Be(5);
         responseCharaData.mana_circle_piece_id_list
             .Should()

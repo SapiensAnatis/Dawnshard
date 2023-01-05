@@ -1,6 +1,9 @@
-﻿using DragaliaAPI.Models;
+﻿using System.Net.Http.Headers;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using MessagePack;
+using NuGet.Common;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -40,28 +43,62 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         ToolSignupData response = (
             await client.PostMsgpack<ToolSignupData>(
                 "/tool/signup",
-                new ToolSignupRequest() { id_token = "id_token" }
+                new ToolSignupRequest()
+                {
+                    id_token = TestUtils.TokenToString(
+                        TestUtils.GetToken(
+                            DateTime.UtcNow + TimeSpan.FromMinutes(5),
+                            fixture.DeviceAccountId
+                        )
+                    )
+                }
             )
         ).data;
 
-        response.viewer_id.Should().Be(1);
+        response.viewer_id.Should().Be(2);
     }
 
     [Fact]
-    public async Task Signup_IncorrectIdToken_ReturnsErrorResponse()
+    public async Task Signup_ExpiredIdToken_ReturnsRefreshRequest()
+    {
+        HttpResponseMessage response = await client.PostMsgpackBasic(
+            "/tool/signup",
+            new ToolAuthRequest()
+            {
+                id_token = TestUtils.TokenToString(
+                    TestUtils.GetToken(
+                        DateTime.UtcNow - TimeSpan.FromMinutes(5),
+                        fixture.DeviceAccountId
+                    )
+                )
+            }
+        );
+
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        response.Headers.Should().ContainKey("Is-Required-Refresh-Id-Token");
+        response.Headers
+            .GetValues("Is-Required-Refresh-Id-Token")
+            .Should()
+            .BeEquivalentTo(new List<string>() { "true" });
+    }
+
+    [Fact]
+    public async Task Signup_InvalidIdToken_ReturnsResultCodeError()
     {
         DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
             "/tool/signup",
-            new ToolSignupRequest() { id_token = "wrong_id_token" }
+            new ToolAuthRequest() { id_token = "im blue dabba dee dabba doo" },
+            ensureSuccessHeader: false
         );
 
         response
             .Should()
             .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeData>(
-                    new DataHeaders(ResultCode.SESSION_SESSION_NOT_FOUND),
-                    new ResultCodeData(ResultCode.SESSION_SESSION_NOT_FOUND)
-                )
+                new DragaliaResponse<ResultCodeData>()
+                {
+                    data_headers = new(ResultCode.COMMON_AUTH_ERROR),
+                    data = new(ResultCode.COMMON_AUTH_ERROR)
+                }
             );
     }
 
@@ -71,51 +108,144 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         ToolAuthData response = (
             await client.PostMsgpack<ToolAuthData>(
                 "/tool/auth",
-                new ToolAuthRequest() { id_token = "id_token" }
+                new ToolAuthRequest()
+                {
+                    id_token = TestUtils.TokenToString(
+                        TestUtils.GetToken(
+                            DateTime.UtcNow + TimeSpan.FromMinutes(5),
+                            fixture.DeviceAccountId
+                        )
+                    )
+                }
             )
         ).data;
 
-        response
-            .Should()
-            .BeEquivalentTo(
-                new ToolAuthData()
-                {
-                    viewer_id = 1,
-                    session_id = "prepared_session_id",
-                    nonce = "placeholder nonce"
-                }
-            );
+        response.viewer_id.Should().Be(2);
+        Guid.TryParse(response.session_id, out _).Should().BeTrue();
     }
 
     [Fact]
     public async Task Auth_CalledTwice_ReturnsSameSessionId()
     {
-        ToolAuthData expectedResponse = new(1, "prepared_session_id", "placeholder nonce");
-
-        ToolAuthRequest data = new() { uuid = "unused", id_token = "id_token" };
+        ToolAuthRequest data =
+            new()
+            {
+                uuid = "unused",
+                id_token = TestUtils.TokenToString(
+                    TestUtils.GetToken(
+                        DateTime.UtcNow + TimeSpan.FromMinutes(5),
+                        fixture.DeviceAccountId
+                    )
+                )
+            };
 
         ToolAuthData response = (await client.PostMsgpack<ToolAuthData>("/tool/auth", data)).data;
         ToolAuthData response2 = (await client.PostMsgpack<ToolAuthData>("/tool/auth", data)).data;
 
-        response.Should().BeEquivalentTo(expectedResponse);
-        response2.Should().BeEquivalentTo(expectedResponse);
+        response.viewer_id.Should().Be(2);
+        Guid.TryParse(response.session_id, out _).Should().BeTrue();
+        response2.viewer_id.Should().Be(2);
+        Guid.TryParse(response2.session_id, out _).Should().BeTrue();
+        response.session_id.Should().Be(response2.session_id);
     }
 
     [Fact]
-    public async Task Auth_IncorrectIdToken_ReturnsErrorResponse()
+    public async Task Auth_ExpiredIdToken_ReturnsRefreshRequest()
+    {
+        HttpResponseMessage response = await client.PostMsgpackBasic(
+            "/tool/auth",
+            new ToolAuthRequest()
+            {
+                id_token = TestUtils.TokenToString(
+                    TestUtils.GetToken(
+                        DateTime.UtcNow - TimeSpan.FromMinutes(5),
+                        fixture.DeviceAccountId
+                    )
+                )
+            }
+        );
+
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        response.Headers.Should().ContainKey("Is-Required-Refresh-Id-Token");
+        response.Headers
+            .GetValues("Is-Required-Refresh-Id-Token")
+            .Should()
+            .BeEquivalentTo(new List<string>() { "true" });
+    }
+
+    [Fact]
+    public async Task Auth_InvalidIdToken_ReturnsResultCodeError()
     {
         DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
             "/tool/auth",
-            new ToolAuthRequest() { id_token = "wrong_id_token" }
+            new ToolAuthRequest() { id_token = "im blue dabba dee dabba doo" },
+            ensureSuccessHeader: false
         );
 
         response
             .Should()
             .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeData>(
-                    new DataHeaders(ResultCode.SESSION_SESSION_NOT_FOUND),
-                    new ResultCodeData(ResultCode.SESSION_SESSION_NOT_FOUND)
-                )
+                new DragaliaResponse<ResultCodeData>()
+                {
+                    data_headers = new(ResultCode.COMMON_AUTH_ERROR),
+                    data = new(ResultCode.COMMON_AUTH_ERROR)
+                }
             );
+    }
+
+    [Fact]
+    public async Task Auth_ValidIdToken_PendingSavefile_ImportsSavefile()
+    {
+        this.fixture.ApiContext.PlayerUserData
+            .Find(this.fixture.DeviceAccountId)!
+            .LastSaveImportTime = DateTime.MinValue;
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        string token = TestUtils.TokenToString(
+            TestUtils.GetToken(
+                DateTime.UtcNow + TimeSpan.FromMinutes(5),
+                fixture.DeviceAccountId,
+                savefileAvailable: true,
+                savefileTime: DateTime.UtcNow - TimeSpan.FromDays(1)
+            )
+        );
+        ToolAuthRequest data = new() { uuid = "unused", id_token = token };
+
+        await client.PostMsgpack<ToolAuthData>("/tool/auth", data);
+
+        DbPlayerUserData userData = fixture.ApiContext.PlayerUserData.Find(
+            fixture.DeviceAccountId
+        )!;
+        await this.fixture.ApiContext.Entry(userData).ReloadAsync();
+        userData.Name.Should().Be("Imported Save");
+    }
+
+    [Fact]
+    public async Task Auth_ValidIdToken_OldSavefile_DoesNotImportSavefile()
+    {
+        this.fixture.ApiContext.PlayerUserData
+            .Find(this.fixture.DeviceAccountId)!
+            .LastSaveImportTime = DateTime.UtcNow;
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        string token = TestUtils.TokenToString(
+            TestUtils.GetToken(
+                DateTime.UtcNow + TimeSpan.FromMinutes(5),
+                fixture.DeviceAccountId,
+                savefileAvailable: true,
+                savefileTime: DateTime.UtcNow - TimeSpan.FromDays(1)
+            )
+        );
+        ToolAuthRequest data = new() { uuid = "unused", id_token = token };
+
+        await client.PostMsgpack<ToolAuthData>("/tool/auth", data);
+
+        this.fixture.mockBaasRequestHelper.Verify(x => x.GetSavefile(token), Times.Never);
+
+        DbPlayerUserData userData = fixture.ApiContext.PlayerUserData.Find(
+            fixture.DeviceAccountId
+        )!;
+        this.fixture.ApiContext.Entry(userData).Reload();
+        userData.Name.Should().Be("Euden");
     }
 }

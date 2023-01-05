@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.MessagePackFormatters;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 using MessagePack.Resolvers;
 

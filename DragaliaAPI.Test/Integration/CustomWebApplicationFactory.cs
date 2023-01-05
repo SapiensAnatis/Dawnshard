@@ -1,10 +1,13 @@
-﻿using DragaliaAPI.Database;
+﻿using System.Security.Cryptography;
+using DragaliaAPI.Database;
+using DragaliaAPI.Services.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Test.Integration;
 
@@ -13,6 +16,8 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
     where TStartup : class
 {
     private readonly SqliteConnection connection = new("Filename=:memory:");
+
+    public readonly Mock<IBaasRequestHelper> mockBaasRequestHelper = new();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -35,6 +40,8 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
             services.AddDbContext<ApiContext>(options => options.UseSqlite(connection));
             services.AddDistributedMemoryCache();
+
+            services.AddScoped(x => mockBaasRequestHelper.Object);
         });
 
         builder.UseEnvironment("Testing");

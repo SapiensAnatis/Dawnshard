@@ -4,7 +4,8 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Services;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
@@ -12,18 +13,10 @@ namespace DragaliaAPI.Database.Repositories;
 public class UnitRepository : BaseRepository, IUnitRepository
 {
     private readonly ApiContext apiContext;
-    private readonly ICharaDataService charaDataService;
-    private readonly IDragonDataService dragonDataService;
 
-    public UnitRepository(
-        ApiContext apiContext,
-        ICharaDataService charaDataService,
-        IDragonDataService dragonDataService
-    ) : base(apiContext)
+    public UnitRepository(ApiContext apiContext) : base(apiContext)
     {
         this.apiContext = apiContext;
-        this.charaDataService = charaDataService;
-        this.dragonDataService = dragonDataService;
     }
 
     public IQueryable<DbPlayerCharaData> GetAllCharaData(string deviceAccountId)
@@ -101,7 +94,7 @@ public class UnitRepository : BaseRepository, IUnitRepository
         if (newCharas.Any())
         {
             IEnumerable<DbPlayerCharaData> dbEntries = newCharas.Select(
-                id => DbPlayerCharaDataFactory.Create(deviceAccountId, charaDataService.GetData(id))
+                id => new DbPlayerCharaData(deviceAccountId, id)
             );
 
             await apiContext.PlayerCharaData.AddRangeAsync(dbEntries);
@@ -121,13 +114,22 @@ public class UnitRepository : BaseRepository, IUnitRepository
 
         IEnumerable<(Dragons id, bool isNew)> newMapping = MarkNewIds(ownedDragons, idList);
 
-        IEnumerable<DbPlayerDragonReliability> newReliabilities = newMapping
-            .Where(x => x.isNew)
-            .Select(x => DbPlayerDragonReliabilityFactory.Create(deviceAccountId, x.id));
+        IEnumerable<DbPlayerDragonReliability> newReliabilities = newMapping.Select(
+            x => DbPlayerDragonReliabilityFactory.Create(deviceAccountId, x.id)
+        );
 
-        if (newReliabilities.Any())
+        foreach ((Dragons id, _) in newMapping.Where(x => x.isNew))
         {
-            await apiContext.AddRangeAsync(newReliabilities);
+            // Not being in the dragon table doesn't mean a reliability doesn't exist
+            // as the dragon could've been sold
+            if (
+                await this.apiContext.PlayerDragonReliability.FindAsync(deviceAccountId, id) is null
+            )
+            {
+                await apiContext.AddAsync(
+                    DbPlayerDragonReliabilityFactory.Create(deviceAccountId, id)
+                );
+            }
         }
 
         await apiContext.AddRangeAsync(
@@ -250,12 +252,12 @@ public class UnitRepository : BaseRepository, IUnitRepository
             TalismanData = await talismanData.SingleOrDefaultAsync(
                 x => x.TalismanKeyId == input.EquipTalismanKeyId
             ),
-            EditSkill1CharaData = await this.GetEditSkill(charaData, input.EditSkill1CharaId),
-            EditSkill2CharaData = await this.GetEditSkill(charaData, input.EditSkill2CharaId)
+            EditSkill1CharaData = await GetEditSkill(charaData, input.EditSkill1CharaId),
+            EditSkill2CharaData = await GetEditSkill(charaData, input.EditSkill2CharaId)
         };
     }
 
-    private async Task<DbEditSkillData?> GetEditSkill(
+    private static async Task<DbEditSkillData?> GetEditSkill(
         IQueryable<DbPlayerCharaData> charaData,
         Charas id
     )
@@ -263,8 +265,8 @@ public class UnitRepository : BaseRepository, IUnitRepository
         if (id == Charas.Empty)
             return null;
 
-        DataAdventurer data = this.charaDataService.GetData(id);
-        bool isFirstSkill = data.EditSkillId == data.Skill1ID;
+        CharaData data = MasterAsset.CharaData.Get(id);
+        bool isFirstSkill = data.EditSkillId == data.Skill1;
 
         return await charaData
             .Where(x => x.CharaId == id && x.IsUnlockEditSkill)

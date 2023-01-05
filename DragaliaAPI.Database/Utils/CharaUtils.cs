@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Shared.Definitions;
+using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Database.Utils;
 
@@ -15,7 +15,7 @@ public static class CharaUtils
 
     public static int CalcMight(
         DbPlayerCharaData dbCharData,
-        DataAdventurer charData,
+        CharaData charData,
         bool addSharedSkillMight = false,
         bool isLeader = false
     )
@@ -40,7 +40,7 @@ public static class CharaUtils
             + (isLeader ? 200 : 0);
     }
 
-    public static int CalculateBaseHp(DataAdventurer adventurer, int level, int rarity)
+    public static int CalculateBaseHp(CharaData adventurer, int level, int rarity)
     {
         double hpStep;
         int hpBase;
@@ -68,7 +68,7 @@ public static class CharaUtils
         return (int)Math.Ceiling((hpStep * (level - lvlBase)) + hpBase);
     }
 
-    public static int CalculateBaseAttack(DataAdventurer adventurer, int level, int rarity)
+    public static int CalculateBaseAttack(CharaData adventurer, int level, int rarity)
     {
         double atkStep;
         int atkBase;
