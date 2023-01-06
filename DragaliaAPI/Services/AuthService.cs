@@ -101,7 +101,7 @@ public class AuthService : IAuthService
             }
         }
 
-        long viewerId = await this.DoLogin(jwt);
+        long viewerId = await this.DoLogin(jwt.Subject);
         string sessionId = await this.sessionService.CreateSession(jwt.Subject, idToken);
 
         return new(viewerId, sessionId);
@@ -143,16 +143,14 @@ public class AuthService : IAuthService
         return validationResult;
     }
 
-    private async Task<long> DoLogin(JwtSecurityToken jwt)
+    private async Task<long> DoLogin(string accountId)
     {
-        IQueryable<DbPlayerUserData> userDataQuery = this.userDataRepository.GetUserData(
-            jwt.Subject
-        );
+        IQueryable<DbPlayerUserData> userDataQuery = this.userDataRepository.GetUserData(accountId);
 
         DbPlayerUserData? userData = await userDataQuery.SingleOrDefaultAsync();
 
         if (userData is null)
-            await this.savefileService.Create(jwt.Subject);
+            await this.savefileService.Create(accountId);
 
         return await userDataQuery.Select(x => x.ViewerId).SingleAsync();
     }
@@ -179,7 +177,7 @@ public class AuthService : IAuthService
         if (lastImportTime >= saveDateTime)
         {
             this.logger.LogInformation(
-                "The remote savefile was older than the stored one. (stored: {t1}, remote: {t2})",
+                "The remote savefile was older. (stored: {t1}, remote: {t2})",
                 lastImportTime,
                 saveDateTime
             );
