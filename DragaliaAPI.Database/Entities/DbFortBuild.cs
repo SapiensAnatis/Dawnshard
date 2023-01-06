@@ -4,8 +4,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Entities;
 
-[Table("FortBuildList")]
-public class DbFortBuildList
+public class DbFortBuild
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -50,7 +49,15 @@ public class DbFortBuildList
 
     /// <remarks>Unknown what this does.</remarks>
     [NotMapped]
-    public TimeSpan RemainTime { get; set; }
+    public TimeSpan RemainTime
+    {
+        get
+        {
+            TimeSpan result = this.BuildEndDate - DateTime.UtcNow;
+
+            return result > TimeSpan.Zero ? result : TimeSpan.Zero;
+        }
+    }
 
     /// <remarks>Does not appear in the client model, but needs to be tracked for deriving LastIncomeTime.</remarks>
     public DateTimeOffset LastIncomeDate { get; set; } = DateTimeOffset.UnixEpoch;

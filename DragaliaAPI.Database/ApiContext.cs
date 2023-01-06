@@ -104,4 +104,6 @@ public class ApiContext : DbContext
     public DbSet<DbWeaponBody> PlayerWeapons { get; set; }
 
     public DbSet<DbTalisman> PlayerTalismans { get; set; }
+
+    public DbSet<DbFortBuild> PlayerFortBuilds { get; set; }
 }
