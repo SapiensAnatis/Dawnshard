@@ -5407,8 +5407,6 @@ public class DragonList
     public int exp { get; set; }
     public int is_lock { get; set; }
     public int is_new { get; set; }
-
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset get_time { get; set; }
     public int skill_1_level { get; set; }
     public int ability_1_level { get; set; }
@@ -5461,10 +5459,8 @@ public class DragonReliabilityList
     public int reliability_level { get; set; }
     public int reliability_total_exp { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset gettime { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset last_contact_time { get; set; }
 
     public DragonReliabilityList(
@@ -6505,8 +6501,6 @@ public class IngameData
     public int continue_limit { get; set; }
     public int continue_count { get; set; }
     public int reborn_limit { get; set; }
-
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset start_time { get; set; }
     public PartyInfo party_info { get; set; }
     public IEnumerable<AreaInfoList> area_info_list { get; set; }
@@ -7484,11 +7478,7 @@ public class PresentDetailList
     public int message_param_value_2 { get; set; }
     public int message_param_value_3 { get; set; }
     public int message_param_value_4 { get; set; }
-
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset receive_limit_time { get; set; }
-
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset create_time { get; set; }
 
     public PresentDetailList(
@@ -7547,7 +7537,6 @@ public class PresentHistoryList
     public int message_param_value_3 { get; set; }
     public int message_param_value_4 { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset create_time { get; set; }
 
     public PresentHistoryList(
@@ -9265,7 +9254,6 @@ public class UserSupportList
     public string name { get; set; }
     public int level { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset last_login_date { get; set; }
     public int emblem_id { get; set; }
     public int max_party_power { get; set; }

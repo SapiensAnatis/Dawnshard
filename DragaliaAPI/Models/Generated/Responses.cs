@@ -3747,8 +3747,6 @@ public class LoadIndexData
     public int quest_skip_point_system_max { get; set; }
     public int quest_skip_point_use_limit_max { get; set; }
     public int spec_upgrade_time { get; set; }
-
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset server_time { get; set; }
     public int quest_bonus_stack_base_time { get; set; }
     public IEnumerable<AtgenQuestBonus> quest_bonus { get; set; }
