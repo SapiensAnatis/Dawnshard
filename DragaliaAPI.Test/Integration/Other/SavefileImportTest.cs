@@ -25,6 +25,8 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
 
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
         this.client.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
+
+        TestUtils.ApplyDateTimeAssertionOptions();
     }
 
     [Fact]
@@ -41,23 +43,31 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
+    public async Task Import_WrongDeveloperToken_Returns401()
+    {
+        this.client.DefaultRequestHeaders.Remove("Authorization");
+        this.client.DefaultRequestHeaders.Add("Authorization", "blub blub blub");
+
+        HttpResponseMessage importResponse = await this.client.PostAsync(
+            $"savefile/import/1",
+            JsonContent.Create(new { })
+        );
+
+        importResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
     public async Task Import_LoadIndexReturnsImportedSavefile()
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
-        long viewerId = fixture.ApiContext.PlayerUserData
+        long viewerId = this.fixture.ApiContext.PlayerUserData
             .Single(x => x.DeviceAccountId == fixture.DeviceAccountId)
             .ViewerId;
 
-        JsonSerializerOptions options = new(JsonSerializerDefaults.General);
-        options.Converters.Add(new UnixDateTimeJsonConverter());
-        options.Converters.Add(new BoolIntJsonConverter());
+        LoadIndexData savefile = JsonSerializer
+            .Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, ApiJsonOptions.Instance)!
+            .data;
 
-        LoadIndexData savefile = (
-            JsonSerializer.Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, options)
-            ?? throw new Exception("Failed to load example savefile!")
-        ).data;
-
-        // JsonContent(savefile) doesn't appear to work, producing 400 Bad Request
         HttpContent content = new StringContent(savefileJson);
         content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
@@ -79,20 +89,20 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                 {
                     // Modified properties
                     opts.Excluding(x => x.Name.Contains("key_id"));
+                    opts.Excluding(x => x.Name.Contains("plant_detail_id"));
                     opts.Excluding(x => x.user_data.viewer_id);
                     opts.Excluding(x => x.server_time);
                     opts.Excluding(x => x.spec_upgrade_time);
 
                     // Ignored properties
                     opts.Excluding(x => x.user_data.prologue_end_time);
+                    opts.Excluding(x => x.fort_plant_list);
 
                     // Properties with no implementation
                     opts.Excluding(x => x.Name.Contains("album"));
                     opts.Excluding(x => x.Name.Contains("shop"));
 
                     opts.Excluding(x => x.fort_bonus_list);
-                    opts.Excluding(x => x.fort_plant_list);
-                    opts.Excluding(x => x.build_list);
 
                     opts.Excluding(x => x.quest_event_list);
                     opts.Excluding(x => x.quest_bonus);

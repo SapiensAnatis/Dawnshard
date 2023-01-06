@@ -9,6 +9,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Helpers;
 using DragaliaAPI.Shared;
+using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Events;
@@ -47,13 +48,12 @@ builder.Services
         option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
     })
-    .AddJsonOptions(
-    // For savefile import
-    option =>
+    .AddJsonOptions(options =>
     {
-        option.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-        option.JsonSerializerOptions.Converters.Add(new UnixDateTimeJsonConverter());
-        // Cannot add the boolean one if we want Nintendo login to keep working
+        // Microsoft made everything readonly so I can't use ApiJsonOptions :(
+        options.JsonSerializerOptions.Converters.Add(new DateTimeUnixJsonConverter());
+        options.JsonSerializerOptions.Converters.Add(new TimeSpanUnixJsonConverter());
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
 
 builder.Services.AddRazorPages(

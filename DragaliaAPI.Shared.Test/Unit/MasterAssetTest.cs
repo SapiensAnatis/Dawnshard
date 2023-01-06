@@ -210,10 +210,7 @@ public class MasterAssetTest
     [Fact]
     public void FortPlant_Get_ReturnsExpectedProperties()
     {
-        int level = 5;
-        FortPlantDetail fortPlant = MasterAsset.MasterAsset.FortPlant.Get(
-            int.Parse($"{FortPlants.RupieMine}{level:00}")
-        );
+        FortPlantDetail fortPlant = MasterAsset.MasterAsset.GetFortPlant(FortPlants.FlameTree, 6);
 
         fortPlant
             .Should()

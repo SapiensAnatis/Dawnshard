@@ -121,11 +121,10 @@ public class LoadController : DragaliaControllerBase
             await this.unitRepository.GetAllTalismanData(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<TalismanList>);
 
-        List<Database.Entities.DbFortBuild> buildEntities = await this.fortRepository
-            .GetBuilds(this.DeviceAccountId)
-            .ToListAsync();
-        IEnumerable<BuildList> buildDetails = buildEntities.Select(mapper.Map<BuildList>);
-        IEnumerable<FortPlantList> buildSummary = buildEntities.Select(mapper.Map<FortPlantList>);
+        IEnumerable<BuildList> buildDetails = (
+            await this.fortRepository.GetBuilds(this.DeviceAccountId).ToListAsync()
+        ).Select(mapper.Map<BuildList>);
+        //IEnumerable<FortPlantList> buildSummary = new FortPlants[] { FortPlants.RupieMine, FortPlants.FlameAltar, , 100403, 100404, 100405, 100701, 100702, 100703, 100704, 100705 }
 
         LoadIndexData data =
             new()
@@ -148,7 +147,7 @@ public class LoadController : DragaliaControllerBase
                 present_notice = new(0, 0),
                 guild_notice = new(0, 0, 0, 0, 0),
                 build_list = buildDetails,
-                fort_plant_list = buildSummary,
+                //fort_plant_list = buildSummary,
                 shop_notice = new ShopNotice(0),
                 server_time = DateTimeOffset.UtcNow,
                 stamina_multi_system_max = 99,

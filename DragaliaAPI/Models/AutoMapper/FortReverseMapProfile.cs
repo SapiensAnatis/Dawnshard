@@ -8,7 +8,7 @@ public class FortReverseMapProfile : Profile
 {
     public FortReverseMapProfile()
     {
-        this.AddGlobalIgnore("AccountId");
+        this.AddGlobalIgnore("DeviceAccount");
 
         this.CreateMap<BuildList, DbFortBuild>()
             .ForMember(

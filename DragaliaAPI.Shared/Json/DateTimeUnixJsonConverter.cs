@@ -4,12 +4,12 @@ using System.Text.Json.Serialization.Metadata;
 
 namespace DragaliaAPI.MessagePack;
 
-public class UnixDateTimeJsonConverter : JsonConverter<DateTimeOffset>
+public class DateTimeUnixJsonConverter : JsonConverter<DateTimeOffset>
 {
-    static UnixDateTimeJsonConverter()
+    static DateTimeUnixJsonConverter()
     {
         Options = new();
-        Options.Converters.Add(new UnixDateTimeJsonConverter());
+        Options.Converters.Add(new DateTimeUnixJsonConverter());
     }
 
     public static JsonSerializerOptions Options { get; }

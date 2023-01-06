@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+﻿using System.Runtime.CompilerServices;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Shared.MasterAsset;
@@ -24,4 +25,7 @@ public static class MasterAsset
     private static readonly Lazy<MasterAssetData<int, FortPlantDetail>> _FortPlant =
         new(() => new("FortPlantDetail.json", x => x.Id));
     public static MasterAssetData<int, FortPlantDetail> FortPlant => _FortPlant.Value;
+
+    public static FortPlantDetail GetFortPlant(FortPlants id, int level) =>
+        FortPlant.Get(int.Parse($"{(int)id}{level:00}"));
 }

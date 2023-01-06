@@ -214,7 +214,7 @@ public static class TestUtils
     /// </summary>
     public static void ApplyDateTimeAssertionOptions()
     {
-        // Compare DateTimeOffsets to the nearest second instead of exactly, because of SQLite rounding.
+        // Compare time values to the nearest second instead of exactly, because of SQLite rounding.
         AssertionOptions.AssertEquivalencyUsing(
             options =>
                 options
@@ -223,6 +223,16 @@ public static class TestUtils
                             ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))
                     )
                     .WhenTypeIs<DateTimeOffset>()
+        );
+
+        AssertionOptions.AssertEquivalencyUsing(
+            options =>
+                options
+                    .Using<TimeSpan>(
+                        ctx =>
+                            ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))
+                    )
+                    .WhenTypeIs<TimeSpan>()
         );
     }
 }

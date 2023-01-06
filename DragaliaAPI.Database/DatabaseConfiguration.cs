@@ -87,7 +87,7 @@ public static class DatabaseConfiguration
         IEnumerable<string> appliedMigrations = context.Database.GetAppliedMigrations();
         IEnumerable<string> pendingMigrations = context.Database.GetPendingMigrations();
 
-        logger.Information("Applied migrations: {@migrations}", appliedMigrations);
+        logger.Information("Existing migrations: {@migrations}", appliedMigrations);
         logger.Information("Pending migrations: {@migrations}", pendingMigrations);
 
         if (!pendingMigrations.Any())

@@ -6,6 +6,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Helpers;
+using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq.Protected;
@@ -142,7 +143,7 @@ public class BaasRequestHelperTest
                 JsonSerializer
                     .Deserialize<DragaliaResponse<LoadIndexData>>(
                         sampleSaveJson,
-                        UnixDateTimeJsonConverter.Options
+                        ApiJsonOptions.Instance
                     )!
                     .data
             );

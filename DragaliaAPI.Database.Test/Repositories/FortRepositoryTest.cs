@@ -42,10 +42,10 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddRangeToDatabase(
             new List<DbFortBuild>()
             {
-                new() { AccountId = "id", PlantId = FortPlants.TheHalidom, },
-                new() { AccountId = "id", PlantId = FortPlants.CircusTent, },
-                new() { AccountId = "id 2", PlantId = FortPlants.JackOLantern, },
-                new() { AccountId = "id 3", PlantId = FortPlants.WaterAltar, },
+                new() { DeviceAccountId = "id", PlantId = FortPlants.TheHalidom, },
+                new() { DeviceAccountId = "id", PlantId = FortPlants.CircusTent, },
+                new() { DeviceAccountId = "id 2", PlantId = FortPlants.JackOLantern, },
+                new() { DeviceAccountId = "id 3", PlantId = FortPlants.WaterAltar, },
             }
         );
 
@@ -54,8 +54,8 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             .BeEquivalentTo(
                 new List<DbFortBuild>()
                 {
-                    new() { AccountId = "id", PlantId = FortPlants.TheHalidom, },
-                    new() { AccountId = "id", PlantId = FortPlants.CircusTent },
+                    new() { DeviceAccountId = "id", PlantId = FortPlants.TheHalidom, },
+                    new() { DeviceAccountId = "id", PlantId = FortPlants.CircusTent },
                 },
                 opts => opts.Excluding(x => x.BuildId)
             );

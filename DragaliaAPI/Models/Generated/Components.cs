@@ -4613,6 +4613,7 @@ public class BuildList
     public TimeSpan last_income_time { get; set; }
 
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
     public bool is_new { get; set; }
 
     public BuildList(

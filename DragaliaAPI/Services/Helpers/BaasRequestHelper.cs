@@ -3,6 +3,7 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
+using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -75,7 +76,7 @@ public class BaasRequestHelper : IBaasRequestHelper
 
         return (
                 await savefileResponse.Content.ReadFromJsonAsync<DragaliaResponse<LoadIndexData>>(
-                    options: UnixDateTimeJsonConverter.Options
+                    ApiJsonOptions.Instance
                 )
             )?.data ?? throw new NullReferenceException("Received null savefile from response");
     }

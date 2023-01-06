@@ -4,13 +4,13 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Entities;
 
-public class DbFortBuild
+public class DbFortBuild : IDbHasAccountId
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long BuildId { get; set; }
 
-    public required string AccountId { get; set; }
+    public required string DeviceAccountId { get; set; }
 
     public FortPlants PlantId { get; set; }
 

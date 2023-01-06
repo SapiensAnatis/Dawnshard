@@ -42,6 +42,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
                     castle_story_list = new List<CastleStoryList>(),
                     unit_story_list = new List<UnitStoryList>(),
                     material_list = new List<MaterialList>(),
+                    build_list = new List<BuildList>(),
                 }
             );
     }

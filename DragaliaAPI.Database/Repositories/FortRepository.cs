@@ -17,5 +17,5 @@ public class FortRepository : IFortRepository
     }
 
     public IQueryable<DbFortBuild> GetBuilds(string accountId) =>
-        this.ApiContext.PlayerFortBuilds.Where(x => x.AccountId == accountId);
+        this.ApiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == accountId);
 }
