@@ -13,6 +13,7 @@ namespace DragaliaAPI.Database;
 public static class DatabaseConfiguration
 {
     private const int MigrationMaxRetries = 5;
+    private const int RetrySleepMs = 3000;
     private static readonly ILogger logger = Log.ForContext(typeof(DatabaseConfiguration));
 
     public static IServiceCollection ConfigureDatabaseServices(
@@ -32,7 +33,8 @@ public static class DatabaseConfiguration
             .AddScoped<ISummonRepository, SummonRepository>()
             .AddScoped<IPartyRepository, PartyRepository>()
             .AddScoped<IQuestRepository, QuestRepository>()
-            .AddScoped<IInventoryRepository, InventoryRepository>();
+            .AddScoped<IInventoryRepository, InventoryRepository>()
+            .AddScoped<IFortRepository, FortRepository>();
 
         return services;
     }
@@ -67,7 +69,7 @@ public static class DatabaseConfiguration
         {
             tries++;
             logger.Warning(
-                "Failed to connect to database for migration. Retrying... ({x}/{y})",
+                "Failed to connect to database to check migration status. Retrying... ({x}/{y})",
                 tries,
                 MigrationMaxRetries
             );
@@ -79,14 +81,17 @@ public static class DatabaseConfiguration
                 );
             }
 
-            Thread.Sleep(3000);
+            Thread.Sleep(RetrySleepMs);
         }
 
-        IEnumerable<string> migrations = context.Database.GetPendingMigrations();
-        if (!migrations.Any())
-            return;
+        IEnumerable<string> appliedMigrations = context.Database.GetAppliedMigrations();
+        IEnumerable<string> pendingMigrations = context.Database.GetPendingMigrations();
 
-        logger.Information("Applying migrations {@migrations}", migrations);
+        logger.Information("Applied migrations: {@migrations}", appliedMigrations);
+        logger.Information("Pending migrations: {@migrations}", pendingMigrations);
+
+        if (!pendingMigrations.Any())
+            return;
 
         context.Database.Migrate();
     }

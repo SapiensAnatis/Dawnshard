@@ -7,7 +7,7 @@ using DragaliaAPI.Database.Entities;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class FortRepository
+public class FortRepository : IFortRepository
 {
     private readonly ApiContext ApiContext;
 

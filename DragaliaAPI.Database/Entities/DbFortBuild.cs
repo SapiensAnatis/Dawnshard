@@ -17,11 +17,11 @@ public class DbFortBuild
     public int Level { get; set; } = 1;
 
     [NotMapped]
-    public int FortPlantDetailId => int.Parse($"{this.PlantId}{this.Level:00}");
+    public int FortPlantDetailId => int.Parse($"{(int)this.PlantId}{this.Level:00}");
 
     public int PositionX { get; set; }
 
-    public int PositionY { get; set; }
+    public int PositionZ { get; set; }
 
     [NotMapped]
     public FortBuildStatus BuildStatus
