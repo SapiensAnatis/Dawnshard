@@ -21,7 +21,7 @@ public static class MasterAsset
         new(() => new("QuestData.json", x => x.Id));
     public static MasterAssetData<int, QuestData> QuestData => _QuestData.Value;
 
-    private static readonly Lazy<MasterAssetData<int, FortPlant>> _FortPlant =
+    private static readonly Lazy<MasterAssetData<int, FortPlantDetail>> _FortPlant =
         new(() => new("FortPlantDetail.json", x => x.Id));
-    public static MasterAssetData<int, FortPlant> FortPlant => _FortPlant.Value;
+    public static MasterAssetData<int, FortPlantDetail> FortPlant => _FortPlant.Value;
 }
