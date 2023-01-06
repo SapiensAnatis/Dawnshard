@@ -24,6 +24,7 @@ public class LoadController : DragaliaControllerBase
     private readonly IPartyRepository partyRepository;
     private readonly IQuestRepository questRepository;
     private readonly IInventoryRepository inventoryRepository;
+    private readonly IFortRepository fortRepository;
     private readonly IMapper mapper;
 
     public LoadController(
@@ -32,6 +33,7 @@ public class LoadController : DragaliaControllerBase
         IPartyRepository partyRepository,
         IQuestRepository questRepository,
         IInventoryRepository inventoryRepository,
+        IFortRepository fortRepository,
         IMapper mapper
     )
     {
@@ -40,6 +42,7 @@ public class LoadController : DragaliaControllerBase
         this.partyRepository = partyRepository;
         this.questRepository = questRepository;
         this.inventoryRepository = inventoryRepository;
+        this.fortRepository = fortRepository;
         this.mapper = mapper;
     }
 
@@ -118,6 +121,12 @@ public class LoadController : DragaliaControllerBase
             await this.unitRepository.GetAllTalismanData(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<TalismanList>);
 
+        List<Database.Entities.DbFortBuild> buildEntities = await this.fortRepository
+            .GetBuilds(this.DeviceAccountId)
+            .ToListAsync();
+        IEnumerable<BuildList> buildDetails = buildEntities.Select(mapper.Map<BuildList>);
+        IEnumerable<FortPlantList> buildSummary = buildEntities.Select(mapper.Map<FortPlantList>);
+
         LoadIndexData data =
             new()
             {
@@ -138,7 +147,8 @@ public class LoadController : DragaliaControllerBase
                 friend_notice = new(0, 0),
                 present_notice = new(0, 0),
                 guild_notice = new(0, 0, 0, 0, 0),
-                mission_notice = null,
+                build_list = buildDetails,
+                fort_plant_list = buildSummary,
                 shop_notice = new ShopNotice(0),
                 server_time = DateTimeOffset.UtcNow,
                 stamina_multi_system_max = 99,

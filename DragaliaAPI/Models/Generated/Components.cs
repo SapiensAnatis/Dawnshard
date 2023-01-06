@@ -4607,11 +4607,13 @@ public class BuildList
     public int position_x { get; set; }
     public int position_z { get; set; }
     public int build_status { get; set; }
-    public int build_start_date { get; set; }
-    public int build_end_date { get; set; }
-    public int remain_time { get; set; }
-    public int last_income_time { get; set; }
-    public int is_new { get; set; }
+    public DateTimeOffset build_start_date { get; set; }
+    public DateTimeOffset build_end_date { get; set; }
+    public TimeSpan remain_time { get; set; }
+    public TimeSpan last_income_time { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_new { get; set; }
 
     public BuildList(
         ulong build_id,
@@ -4621,11 +4623,11 @@ public class BuildList
         int position_x,
         int position_z,
         int build_status,
-        int build_start_date,
-        int build_end_date,
-        int remain_time,
-        int last_income_time,
-        int is_new
+        DateTimeOffset build_start_date,
+        DateTimeOffset build_end_date,
+        TimeSpan remain_time,
+        TimeSpan last_income_time,
+        bool is_new
     )
     {
         this.build_id = build_id;
