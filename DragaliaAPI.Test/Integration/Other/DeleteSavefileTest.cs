@@ -32,6 +32,17 @@ public class DeleteSavefileTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
+    public async Task Delete_WrongDeveloperToken_Returns401()
+    {
+        this.client.DefaultRequestHeaders.Remove("Authorization");
+        this.client.DefaultRequestHeaders.Add("Authorization", $"Bearer imfeeling22");
+
+        HttpResponseMessage importResponse = await this.client.DeleteAsync($"savefile/delete/4");
+
+        importResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
     public async Task Delete_LoadIndexResponseHasNewSavefile()
     {
         long viewerId = fixture.ApiContext.PlayerUserData
