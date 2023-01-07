@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - develop
+    paths-ignore:
+      - "**/*.yaml"
+      - "**/*.yml"
+      - "**/*.md"
 
 env:
   HUSKY: 0
