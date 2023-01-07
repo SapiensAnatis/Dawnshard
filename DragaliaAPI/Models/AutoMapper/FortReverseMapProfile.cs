@@ -11,10 +11,8 @@ public class FortReverseMapProfile : Profile
         this.AddGlobalIgnore("DeviceAccount");
 
         this.CreateMap<BuildList, DbFortBuild>()
-            .ForMember(
-                x => x.LastIncomeDate,
-                opts => opts.MapFrom(src => DateTime.UtcNow - src.last_income_time)
-            );
+            .ForMember(x => x.LastIncomeDate, opts => opts.MapFrom(src => DateTime.UnixEpoch))
+            .ForMember(x => x.BuildId, opts => opts.Ignore());
 
         this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
         this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;

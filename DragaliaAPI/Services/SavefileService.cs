@@ -193,6 +193,9 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerStorage.RemoveRange(
             this.apiContext.PlayerStorage.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PlayerFortBuilds.RemoveRange(
+            this.apiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset(string deviceAccountId)

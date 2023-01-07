@@ -2616,7 +2616,7 @@ public class FortGetDataData
     public AtgenProductionRp production_df { get; set; }
     public AtgenProductionRp production_st { get; set; }
     public int dragon_contact_free_gift_count { get; set; }
-    public int current_server_time { get; set; }
+    public DateTimeOffset current_server_time { get; set; }
 
     public FortGetDataData(
         FortDetail fort_detail,
@@ -2626,7 +2626,7 @@ public class FortGetDataData
         AtgenProductionRp production_df,
         AtgenProductionRp production_st,
         int dragon_contact_free_gift_count,
-        int current_server_time
+        DateTimeOffset current_server_time
     )
     {
         this.fort_detail = fort_detail;

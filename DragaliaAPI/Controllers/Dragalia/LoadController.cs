@@ -14,9 +14,6 @@ using DragaliaAPI.Shared.Definitions.Enums;
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("load")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
-[ApiController]
 public class LoadController : DragaliaControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
@@ -129,6 +126,7 @@ public class LoadController : DragaliaControllerBase
         LoadIndexData data =
             new()
             {
+                build_list = buildDetails,
                 user_data = userData,
                 chara_list = charas,
                 dragon_list = dragons,
@@ -146,7 +144,6 @@ public class LoadController : DragaliaControllerBase
                 friend_notice = new(0, 0),
                 present_notice = new(0, 0),
                 guild_notice = new(0, 0, 0, 0, 0),
-                build_list = buildDetails,
                 //fort_plant_list = buildSummary,
                 shop_notice = new ShopNotice(0),
                 server_time = DateTimeOffset.UtcNow,
