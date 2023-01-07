@@ -1,6 +1,6 @@
 # DragaliaAPI
 
-[![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yml/badge.svg)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yml)
+[![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml/badge.svg?branch=develop)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml)
 
 DragaliaAPI is a server emulator for Dragalia Lost.
 
