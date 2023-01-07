@@ -14,10 +14,10 @@ env:
 
 jobs:
   publish:
-    uses: sapiensanatis/dragalia-api/.github/workflows/publish-base.yaml
+    uses: ./.github/workflows/publish-base.yaml
     with:
       ref: develop
       image-tag: latest
   deploy:
     needs: publish
-    uses: sapiensanatis/dragalia-api/.github/workflows/deploy.yaml
+    uses: ./.github/workflows/deploy.yaml
