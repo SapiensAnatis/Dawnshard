@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ github.ref_name }}"
+          ref: ${{ github.ref_name }}
       - uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -34,4 +34,4 @@ jobs:
           context: .
           file: DragaliaAPI/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dragalia-api:${{ github.ref_name }}"
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dragalia-api:${{ github.ref_name }}
