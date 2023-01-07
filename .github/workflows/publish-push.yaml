@@ -18,6 +18,8 @@ jobs:
     with:
       ref: develop
       image-tag: latest
+    secrets: inherit
   deploy:
     needs: publish
     uses: ./.github/workflows/deploy.yaml
+    secrets: inherit

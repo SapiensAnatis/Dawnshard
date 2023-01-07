@@ -17,4 +17,5 @@ jobs:
     with:
       ref: ${{ inputs.tag }}
       image-tag: ${{ inputs.tag }}
+    secrets: inherit
     
