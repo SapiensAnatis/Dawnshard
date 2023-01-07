@@ -16,8 +16,9 @@ For guidance on contributing, including the process for setting up a development
 
 See also the [API documentation](https://dragalia-api-docs.readthedocs.io/en/latest/) for reference on what existing endpoints do and how to implement new ones.
 
-## Deploying to production
+## Hosting your own instance
 
-If you are interested in hosting your own instance, it is recommended to use the [Kubernetes helm chart](https://github.com/SapiensAnatis/helm-charts). 
+- On a dedicated server, it is recommended to use the [Kubernetes helm chart](https://github.com/SapiensAnatis/helm-charts). The application is deployed as three services: the main ASP.NET service which is stateless, and two stateful services in Redis (session management) and PostgreSQL (savefile storage). 
+- If you don't want to use Kubernetes, or are looking to host a local instance, you can use the docker-compose.yml file here with [the published Docker image](https://hub.docker.com/repository/docker/sapiensanatis/dragalia-api/general).
+- If you don't want to use Docker at all, see the [no-docker branch](https://github.com/sapiensAnatis/dragaliaAPI/tree/no-docker) which uses an SQLite DB and an in-memory IDistributedCache for session management. Please note that this version is not regularly updated and no guarantees are made that it functions correctly.
 
-The application is deployed as three services: the main ASP.NET service which is stateless, and two stateful services in Redis (session management) and PostgreSQL (savefile storage). 
