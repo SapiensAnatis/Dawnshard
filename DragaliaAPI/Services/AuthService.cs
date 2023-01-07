@@ -48,9 +48,9 @@ public class AuthService : IAuthService
     {
         (long viewerId, string sessionId) result = this.loginOptions.CurrentValue.UseBaasLogin
             ? await this.DoBaasAuth(idToken)
-#pragma warning disable CS0612 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
             : await this.DoLegacyAuth(idToken);
-#pragma warning restore CS0612 // Type or member is obsolete
+#pragma warning restore CS0618 // Type or member is obsolete
 
         this.logger.LogInformation(
             "Authenticated user with viewer ID {viewerid} using token ...{token} and issued session ID {sid}",
@@ -62,7 +62,7 @@ public class AuthService : IAuthService
         return result;
     }
 
-    [Obsolete]
+    [Obsolete("From pre-BaaS login flow")]
     private async Task<(long viewerId, string sessionId)> DoLegacyAuth(string idToken)
     {
         string sessionId;
