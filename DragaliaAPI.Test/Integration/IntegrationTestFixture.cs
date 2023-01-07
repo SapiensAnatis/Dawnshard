@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using System.Linq;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -7,10 +6,6 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
-using System.Security.Claims;
 using DragaliaAPI.Services;
 using DragaliaAPI.Models.Generated;
 
@@ -45,6 +40,10 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
                     build_list = new List<BuildList>(),
                 }
             );
+
+        this.mockLoginOptions
+            .Setup(x => x.CurrentValue)
+            .Returns(new Models.Options.LoginOptions() { UseBaasLogin = true });
     }
 
     /// <summary>
