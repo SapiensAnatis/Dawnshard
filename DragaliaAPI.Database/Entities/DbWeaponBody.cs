@@ -13,7 +13,6 @@ namespace DragaliaAPI.Database.Entities;
 public class DbWeaponBody : IDbHasAccountId
 {
     /// <inheritdoc />
-    [ForeignKey(nameof(DbDeviceAccount))]
     public string DeviceAccountId { get; set; } = null!;
 
     /// <summary>

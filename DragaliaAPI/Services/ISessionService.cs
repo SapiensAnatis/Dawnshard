@@ -9,6 +9,7 @@ public interface ISessionService
     /// </summary>
     /// <param name="deviceAccount">The device account to associate with the new session.</param>
     /// <param name="idToken">The id token to use as the key in the database.</param>
+    [Obsolete("Used for pre-BaaS login flow")]
     Task PrepareSession(DeviceAccount deviceAccount, string idToken);
 
     /// <summary>
@@ -16,6 +17,7 @@ public interface ISessionService
     /// </summary>
     /// <param name="idToken">The ID token to use to look up the pre-registered session</param>
     /// <returns>The session id.</returns>
+    [Obsolete("Used for pre-BaaS login flow")]
     Task<string> ActivateSession(string idToken);
 
     /// <summary>

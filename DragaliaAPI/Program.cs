@@ -81,8 +81,10 @@ builder.Services
         options.Configuration = builder.Configuration.GetConnectionString("RedisHost");
         options.InstanceName = "RedisInstance";
     })
+#pragma warning disable CS0618 // Type or member is obsolete
     .AddScoped<ISessionService, SessionService>()
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
+#pragma warning restore CS0618 // Type or member is obsolete
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<IUpdateDataService, UpdateDataService>()
     .AddScoped<IDungeonService, DungeonService>()

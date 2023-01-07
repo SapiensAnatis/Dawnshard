@@ -50,15 +50,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="C:\Users\jay0\Documents\Programming\dragalia\DragaliaAPI\DragaliaAPI.Test\.editorconfig" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Update="Data\endgame_savefile.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="RSA_key.pem">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 
