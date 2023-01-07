@@ -1,6 +1,6 @@
 # DragaliaAPI
 
-[![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yml/badge.svg)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yml)
+[![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml/badge.svg?branch=develop)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml)
 
 DragaliaAPI is a server emulator for Dragalia Lost.
 
@@ -10,18 +10,15 @@ If you haven't already, please also consider joining the Dragalia Lost Reverse E
 
 ## Contributing
 
-Contributions are more than welcome! Feel free to fork the repository and open a pull request with these changes. Please also include integration-style tests for any new controllers, and unit tests for any new services. See the DragaliaAPI.Test project for examples (these are by no means a gold standard, however).
+Contributions are more than welcome! Feel free to fork the repository and open a pull request with these changes. 
+
+For guidance on contributing, including the process for setting up a development environment, please see the [GitHub Wiki](https://github.com/SapiensAnatis/DragaliaAPI/wiki).
 
 See also the [API documentation](https://dragalia-api-docs.readthedocs.io/en/latest/) for reference on what existing endpoints do and how to implement new ones.
 
-### Development environment
+## Hosting your own instance
 
-To set up a development environment, the steps are similar to setting up a deployment, but it may be more convenient to generate a code migration instead by using `dotnet ef migrations add <NAME> -s DragaliaAPI\DragaliaAPI.csproj -p DragaliaAPI.Database\DragaliaAPI.Database.csproj`, as these are automatically applied on app startup when running in development mode.
+- On a dedicated server, it is recommended to use the [Kubernetes helm chart](https://github.com/SapiensAnatis/helm-charts). The application is deployed as three services: the main ASP.NET service which is stateless, and two stateful services in Redis (session management) and PostgreSQL (savefile storage). 
+- If you don't want to use Kubernetes, or are looking to host a local instance, you can use the docker-compose.yml file here with [the published Docker image](https://hub.docker.com/repository/docker/sapiensanatis/dragalia-api/general).
+- If you don't want to use Docker at all, see the [no-docker branch](https://github.com/sapiensAnatis/dragaliaAPI/tree/no-docker) which uses an SQLite DB and an in-memory IDistributedCache for session management. Please note that this version is not regularly updated and no guarantees are made that it functions correctly.
 
-If you wish to connect to your locally-hosted instance of the server with a Dragalia client, you will need to set up the workflow for this. Please contact the repository owner for more information. If you simply wish to test individual endpoints in a less end-to-end fashion, you could write automated integration tests or use [this tool](https://gist.github.com/SapiensAnatis/e76f067aad0ac425c9f9008db94e143c) to send msgpack-formatted requests from your desktop.
-
-## Deploying to production
-
-If you are interested in hosting your own instance, it is recommended to use the [Kubernetes helm chart](https://github.com/SapiensAnatis/helm-charts). 
-
-The application is deployed as three services: the main ASP.NET service which is stateless, and two stateful services in Redis (session management) and PostgreSQL (savefile storage). 

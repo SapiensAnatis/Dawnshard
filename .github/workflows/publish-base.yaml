@@ -1,9 +1,16 @@
 name: publish
 
 on:
-  push:
-    branches:
-      - develop
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+        description: ref to checkout
+      image-tag:
+        required: true
+        type: string
+        description: Docker image tag
 
 env:
   HUSKY: 0
@@ -17,6 +24,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
       - uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -32,4 +41,4 @@ jobs:
           context: .
           file: DragaliaAPI/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dragalia-api:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dragalia-api:${{ inputs.image-tag }}

@@ -1,0 +1,17 @@
+name: publish-tag
+
+on:
+  push:
+    tags:
+      - "*"
+
+env:
+  HUSKY: 0
+
+jobs:
+  publish:
+    uses: ./.github/workflows/publish-base.yaml
+    with:
+      ref: ${{ github.ref_name }}
+      image-tag: ${{ github.ref_name }}
+    secrets: inherit
