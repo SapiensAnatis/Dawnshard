@@ -22,6 +22,13 @@ public class DateTimeOffsetIntFormatter : IMessagePackFormatter<DateTimeOffset>
         MessagePackSerializerOptions options
     )
     {
-        writer.WriteInt32((int)value.ToUnixTimeSeconds());
+        // Outgoing DateTimeOffsets may be out of the range of a 32-bit timestamp
+        // However, we don't expect this from the game so it's not a concern for incoming values
+        checked
+        {
+            writer.WriteInt32(
+                (int)Math.Clamp(value.ToUnixTimeSeconds(), int.MinValue, int.MaxValue)
+            );
+        }
     }
 }

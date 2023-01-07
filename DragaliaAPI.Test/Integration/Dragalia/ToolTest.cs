@@ -94,11 +94,10 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         response
             .Should()
             .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeData>()
-                {
-                    data_headers = new(ResultCode.COMMON_AUTH_ERROR),
-                    data = new(ResultCode.COMMON_AUTH_ERROR)
-                }
+                new DragaliaResponse<ResultCodeData>(
+                    new DataHeaders(ResultCode.COMMON_AUTH_ERROR),
+                    new(ResultCode.COMMON_AUTH_ERROR)
+                )
             );
     }
 
@@ -185,11 +184,10 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         response
             .Should()
             .BeEquivalentTo(
-                new DragaliaResponse<ResultCodeData>()
-                {
-                    data_headers = new(ResultCode.COMMON_AUTH_ERROR),
-                    data = new(ResultCode.COMMON_AUTH_ERROR)
-                }
+                new DragaliaResponse<ResultCodeData>(
+                    new DataHeaders(ResultCode.COMMON_AUTH_ERROR),
+                    new(ResultCode.COMMON_AUTH_ERROR)
+                )
             );
     }
 

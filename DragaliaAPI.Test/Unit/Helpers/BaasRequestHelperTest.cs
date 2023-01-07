@@ -6,6 +6,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Helpers;
+using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq.Protected;
@@ -25,6 +26,10 @@ public class BaasRequestHelperTest
         this.mockHttpMessageHandler = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
 
+        this.mockOptions
+            .SetupGet(x => x.CurrentValue)
+            .Returns(new BaasOptions() { BaasUrl = "https://www.taylorswift.com/" });
+
         this.baasRequestHelper = new BaasRequestHelper(
             mockOptions.Object,
             new HttpClient(mockHttpMessageHandler.Object),
@@ -35,9 +40,6 @@ public class BaasRequestHelperTest
     [Fact]
     public async Task GetKeys_Success_ReturnsSecurityKey()
     {
-        this.mockOptions
-            .SetupGet(x => x.CurrentValue)
-            .Returns(new BaasOptions() { BaasUrl = "https://www.taylorswift.com/" });
         this.mockHttpMessageHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -84,9 +86,6 @@ public class BaasRequestHelperTest
     [Fact]
     public async Task GetKeys_Fail_Throws()
     {
-        this.mockOptions
-            .SetupGet(x => x.CurrentValue)
-            .Returns(new BaasOptions() { BaasUrl = "https://www.taylorswift.com/" });
         this.mockHttpMessageHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -113,9 +112,6 @@ public class BaasRequestHelperTest
     {
         string sampleSaveJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
-        this.mockOptions
-            .SetupGet(x => x.CurrentValue)
-            .Returns(new BaasOptions() { BaasUrl = "https://www.taylorswift.com/" });
         this.mockHttpMessageHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -142,7 +138,7 @@ public class BaasRequestHelperTest
                 JsonSerializer
                     .Deserialize<DragaliaResponse<LoadIndexData>>(
                         sampleSaveJson,
-                        UnixDateTimeJsonConverter.Options
+                        ApiJsonOptions.Instance
                     )!
                     .data
             );
@@ -151,9 +147,6 @@ public class BaasRequestHelperTest
     [Fact]
     public async Task GetSavefile_Fail_Throws()
     {
-        this.mockOptions
-            .SetupGet(x => x.CurrentValue)
-            .Returns(new BaasOptions() { BaasUrl = "https://www.taylorswift.com/" });
         this.mockHttpMessageHandler
             .Protected()
             .Setup<Task<HttpResponseMessage>>(

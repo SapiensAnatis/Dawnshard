@@ -3,6 +3,7 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
+using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,7 +17,7 @@ public class BaasRequestHelper : IBaasRequestHelper
     private const string KeySetEndpoint = "/.well-known/jwks.json";
     private const string SavefileEndpoint = "/gameplay/v1/savefile";
 
-    private IList<SecurityKey>? cachedKeys;
+    private static IList<SecurityKey>? CachedKeys;
 
     public BaasRequestHelper(
         IOptionsMonitor<BaasOptions> options,
@@ -27,18 +28,18 @@ public class BaasRequestHelper : IBaasRequestHelper
         this.options = options;
         this.client = client;
         this.logger = logger;
+
+        this.client.BaseAddress = this.options.CurrentValue.BaasUrlParsed;
     }
 
     public async Task<IList<SecurityKey>> GetKeys()
     {
-        if (this.cachedKeys is not null)
+        if (CachedKeys is not null)
         {
-            return cachedKeys;
+            return CachedKeys;
         }
 
-        HttpResponseMessage keySetResponse = await this.client.GetAsync(
-            new Uri(this.options.CurrentValue.BaasUrlParsed, KeySetEndpoint)
-        );
+        HttpResponseMessage keySetResponse = await this.client.GetAsync(KeySetEndpoint);
 
         if (!keySetResponse.IsSuccessStatusCode)
         {
@@ -52,14 +53,14 @@ public class BaasRequestHelper : IBaasRequestHelper
 
         JsonWebKeySet jwks = new(await keySetResponse.Content.ReadAsStringAsync());
 
-        cachedKeys = jwks.GetSigningKeys();
-        return cachedKeys;
+        CachedKeys = jwks.GetSigningKeys();
+        return CachedKeys;
     }
 
     public async Task<LoadIndexData> GetSavefile(string idToken)
     {
         HttpResponseMessage savefileResponse = await this.client.PostAsJsonAsync<object>(
-            new Uri(this.options.CurrentValue.BaasUrlParsed, SavefileEndpoint),
+            SavefileEndpoint,
             new { idToken }
         );
 
@@ -75,7 +76,7 @@ public class BaasRequestHelper : IBaasRequestHelper
 
         return (
                 await savefileResponse.Content.ReadFromJsonAsync<DragaliaResponse<LoadIndexData>>(
-                    options: UnixDateTimeJsonConverter.Options
+                    ApiJsonOptions.Instance
                 )
             )?.data ?? throw new NullReferenceException("Received null savefile from response");
     }

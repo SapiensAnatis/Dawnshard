@@ -12,6 +12,7 @@ public class DeviceAccountServiceTest
 {
     private readonly Mock<ILogger<DeviceAccountService>> mockLogger;
     private readonly Mock<IDeviceAccountRepository> mockRepository;
+    private readonly Mock<ISavefileService> mockSavefileService;
 
     private readonly DeviceAccountService deviceAccountService;
 
@@ -19,6 +20,7 @@ public class DeviceAccountServiceTest
     {
         this.mockLogger = new(MockBehavior.Loose);
         this.mockRepository = new(MockBehavior.Strict);
+        this.mockSavefileService = new(MockBehavior.Strict);
 
         Dictionary<string, string?> inMemoryConfiguration = new() { { "HashSalt", "dragalia" }, };
 
@@ -26,7 +28,12 @@ public class DeviceAccountServiceTest
             .AddInMemoryCollection(inMemoryConfiguration)
             .Build();
 
-        deviceAccountService = new(mockRepository.Object, configuration, mockLogger.Object);
+        deviceAccountService = new(
+            mockRepository.Object,
+            mockSavefileService.Object,
+            configuration,
+            mockLogger.Object
+        );
     }
 
     [Fact]
@@ -69,6 +76,7 @@ public class DeviceAccountServiceTest
             .Setup(x => x.GetDeviceAccountById("foreign id"))
             .ReturnsAsync((DbDeviceAccount?)null);
         this.mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
+        this.mockSavefileService.Setup(x => x.Create("foreign id")).Returns(Task.CompletedTask);
 
         bool result = await deviceAccountService.AuthenticateDeviceAccount(
             new DeviceAccount("foreign id", "password")
@@ -88,6 +96,9 @@ public class DeviceAccountServiceTest
             .Setup(x => x.GetDeviceAccountById(It.IsAny<string>()))
             .ReturnsAsync((DbDeviceAccount?)null);
         this.mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
+        this.mockSavefileService
+            .Setup(x => x.Create(It.IsAny<string>()))
+            .Returns(Task.CompletedTask);
 
         await deviceAccountService.RegisterDeviceAccount();
 

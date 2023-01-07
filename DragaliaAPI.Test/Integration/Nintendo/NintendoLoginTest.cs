@@ -3,12 +3,13 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using DragaliaAPI.Models.Nintendo;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Nintendo;
-/*
-[Obsolete]
+
+[Obsolete("From pre-BaaS login flow")]
 [Collection("DragaliaIntegration")]
 public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
 {
@@ -21,6 +22,10 @@ public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
         this.client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
+
+        fixture.mockLoginOptions
+            .Setup(x => x.CurrentValue)
+            .Returns(new LoginOptions() { UseBaasLogin = false });
     }
 
     [Fact]
@@ -31,7 +36,7 @@ public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
             JsonContent.Create(new object())
         );
 
-        response.IsSuccessStatusCode.Should().BeTrue();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         string jsonString = await response.Content.ReadAsStringAsync();
         PartialLoginResponse? deserializedResponse =
@@ -129,4 +134,3 @@ public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
         }
     }
 }
-*/

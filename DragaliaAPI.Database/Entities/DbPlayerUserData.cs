@@ -80,7 +80,7 @@ public class DbPlayerUserData : IDbHasAccountId
         set => TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(value);
     }
 
-    public DateTimeOffset FortOpenTime { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset FortOpenTime { get; set; } = DateTimeOffset.UnixEpoch;
 
     public DateTimeOffset CreateTime { get; set; } = DateTimeOffset.UtcNow;
 

@@ -10,16 +10,19 @@ namespace DragaliaAPI.Services;
 public class DeviceAccountService : IDeviceAccountService
 {
     private readonly IDeviceAccountRepository deviceAccountRepository;
+    private readonly ISavefileService savefileService;
     private readonly IConfiguration configuration;
     private readonly ILogger<DeviceAccountService> logger;
 
     public DeviceAccountService(
         IDeviceAccountRepository repository,
+        ISavefileService savefileService,
         IConfiguration configuration,
         ILogger<DeviceAccountService> logger
     )
     {
         this.deviceAccountRepository = repository;
+        this.savefileService = savefileService;
         this.configuration = configuration;
         this.logger = logger;
     }
@@ -68,6 +71,7 @@ public class DeviceAccountService : IDeviceAccountService
         string hashedPassword = this.GetHashedPassword(password);
 
         await this.deviceAccountRepository.AddNewDeviceAccount(id, hashedPassword);
+        await this.savefileService.Create(id);
         await this.deviceAccountRepository.SaveChangesAsync();
 
         this.logger.LogInformation("Registered new account: DeviceAccount ID '{id}'", id);
