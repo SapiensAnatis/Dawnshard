@@ -3728,6 +3728,8 @@ public class LoadIndexData
     public IEnumerable<GatherItemList> gather_item_list { get; set; }
     public IEnumerable<FortPlantList> fort_plant_list { get; set; }
     public UserGuildData user_guild_data { get; set; }
+
+    [JsonIgnore] // This is sometimes [] which fucks up the parsing and it isn't even added yet
     public GuildData guild_data { get; set; }
     public PresentNotice present_notice { get; set; }
     public FriendNotice friend_notice { get; set; }
