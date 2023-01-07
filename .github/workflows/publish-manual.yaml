@@ -1,0 +1,20 @@
+name: publish-tag-manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        required: true
+        description: "Tag to publish"
+
+env:
+  HUSKY: 0
+
+jobs:
+  publish:
+    uses: sapiensanatis/dragalia-api/.github/workflows/publish-base.yaml
+    with:
+      ref: ${{ inputs.tag }}
+      image-tag: ${{ inputs.tag }}
+    

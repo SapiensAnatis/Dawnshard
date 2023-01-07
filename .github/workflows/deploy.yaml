@@ -1,13 +1,7 @@
 name: deploy
 
 on:
-  workflow_run:
-    workflows: 
-      - publish
-    branches: 
-      - develop
-    types:
-      - completed    
+  workflow_call: 
 
 jobs:
   deploy:
