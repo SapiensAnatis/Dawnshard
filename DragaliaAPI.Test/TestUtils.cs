@@ -209,18 +209,24 @@ public static class TestUtils
         };
     }
 
+    public const int TimeComparisonThresholdSec = 1;
+
     /// <summary>
-    /// Set up FluentAssertions assertion options rules.
+    /// Applies an assertion rule to set the threshold of DateTimeOffset/TimeSpan comparisons to +- 1s.
+    /// <remarks>Prevents exact match failures due to SQLite rounding.</remarks>
+    /// <remarks>Only works indirectly with objects and .BeEquivalentTo, for direct value comparison,
+    /// use .BeCloseTo.</remarks>
     /// </summary>
-    public static void ApplyDateTimeAssertionOptions()
+    public static void ApplyDateTimeAssertionOptions(int thresholdSec = TimeComparisonThresholdSec)
     {
-        // Compare time values to the nearest second instead of exactly, because of SQLite rounding.
         AssertionOptions.AssertEquivalencyUsing(
             options =>
                 options
                     .Using<DateTimeOffset>(
                         ctx =>
-                            ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))
+                            ctx.Subject
+                                .Should()
+                                .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(thresholdSec))
                     )
                     .WhenTypeIs<DateTimeOffset>()
         );
@@ -230,7 +236,9 @@ public static class TestUtils
                 options
                     .Using<TimeSpan>(
                         ctx =>
-                            ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))
+                            ctx.Subject
+                                .Should()
+                                .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(thresholdSec))
                     )
                     .WhenTypeIs<TimeSpan>()
         );

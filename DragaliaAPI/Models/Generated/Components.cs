@@ -4601,12 +4601,12 @@ public class BuildEventUserList
 public class BuildList
 {
     public ulong build_id { get; set; }
-    public int plant_id { get; set; }
+    public FortPlants plant_id { get; set; }
     public int level { get; set; }
     public int fort_plant_detail_id { get; set; }
     public int position_x { get; set; }
     public int position_z { get; set; }
-    public int build_status { get; set; }
+    public FortBuildStatus build_status { get; set; }
     public DateTimeOffset build_start_date { get; set; }
     public DateTimeOffset build_end_date { get; set; }
     public TimeSpan remain_time { get; set; }
@@ -4618,12 +4618,12 @@ public class BuildList
 
     public BuildList(
         ulong build_id,
-        int plant_id,
+        FortPlants plant_id,
         int level,
         int fort_plant_detail_id,
         int position_x,
         int position_z,
-        int build_status,
+        FortBuildStatus build_status,
         DateTimeOffset build_start_date,
         DateTimeOffset build_end_date,
         TimeSpan remain_time,

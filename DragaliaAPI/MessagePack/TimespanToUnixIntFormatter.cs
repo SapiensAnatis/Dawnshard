@@ -7,7 +7,7 @@ public class TimespanToUnixIntFormatter : IMessagePackFormatter<TimeSpan>
 {
     public TimeSpan Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
     {
-        return new TimeSpan(reader.ReadInt32());
+        return TimeSpan.FromSeconds(reader.ReadInt32());
     }
 
     public void Serialize(
