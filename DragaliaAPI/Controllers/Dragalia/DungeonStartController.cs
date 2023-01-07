@@ -25,6 +25,7 @@ public class DungeonStartController : DragaliaControllerBase
     private readonly IUnitRepository unitRepository;
     private readonly IQuestRepository questRepository;
     private readonly IDungeonService dungeonService;
+    private readonly IHelperService helperService;
     private readonly IUpdateDataService updateDataService;
     private readonly IMapper mapper;
 
@@ -34,6 +35,7 @@ public class DungeonStartController : DragaliaControllerBase
         IUnitRepository unitRepository,
         IQuestRepository questRepository,
         IDungeonService dungeonService,
+        IHelperService helperService,
         IUpdateDataService updateDataService,
         IMapper mapper
     )
@@ -43,6 +45,7 @@ public class DungeonStartController : DragaliaControllerBase
         this.unitRepository = unitRepository;
         this.questRepository = questRepository;
         this.dungeonService = dungeonService;
+        this.helperService = helperService;
         this.updateDataService = updateDataService;
         this.mapper = mapper;
     }
@@ -114,6 +117,16 @@ public class DungeonStartController : DragaliaControllerBase
                 Party = units.Select(mapper.Map<PartySettingList>),
                 QuestData = questInfo,
             }
+        );
+
+        QuestGetSupportUserListData helperList = await this.helperService.GetHelpers();
+        UserSupportList? helperInfo = this.helperService.GetHelperInfo(
+            helperList,
+            request.support_viewer_id
+        );
+        AtgenSupportUserDetailList? helperDetails = this.helperService.GetHelperDetail(
+            helperList,
+            request.support_viewer_id
         );
 
         DungeonStartStartData response =
@@ -203,6 +216,14 @@ public class DungeonStartController : DragaliaControllerBase
                 },
                 update_data_list = updateData
             };
+
+        if (helperInfo is not null && helperDetails is not null)
+        {
+            response.ingame_data.party_info.support_data = this.helperService.BuildHelperData(
+                helperInfo,
+                helperDetails
+            );
+        }
 
         return this.Ok(response);
     }

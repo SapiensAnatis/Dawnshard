@@ -87,6 +87,7 @@ builder.Services
     .AddScoped<IUpdateDataService, UpdateDataService>()
     .AddScoped<IDungeonService, DungeonService>()
     .AddScoped<ISavefileService, SavefileService>()
+    .AddScoped<IHelperService, HelperService>()
     .AddScoped<IAuthService, AuthService>()
     .AddSingleton<IBaasRequestHelper, BaasRequestHelper>()
     .AddHttpClient<BaasRequestHelper>();

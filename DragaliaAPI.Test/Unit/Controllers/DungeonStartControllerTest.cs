@@ -20,6 +20,7 @@ public class DungeonStartControllerTest
     private readonly Mock<IUnitRepository> mockUnitRepository;
     private readonly Mock<IQuestRepository> mockQuestRepository;
     private readonly Mock<IDungeonService> mockDungeonService;
+    private readonly Mock<IHelperService> mockHelperService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly IMapper mapper;
 
@@ -32,6 +33,7 @@ public class DungeonStartControllerTest
         this.mockUnitRepository = new(MockBehavior.Strict);
         this.mockQuestRepository = new(MockBehavior.Strict);
         this.mockDungeonService = new(MockBehavior.Strict);
+        this.mockHelperService = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
 
         this.mapper = new MapperConfiguration(
@@ -44,6 +46,7 @@ public class DungeonStartControllerTest
             mockUnitRepository.Object,
             mockQuestRepository.Object,
             mockDungeonService.Object,
+            mockHelperService.Object,
             mockUpdateDataService.Object,
             mapper
         );

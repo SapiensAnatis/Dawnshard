@@ -78,7 +78,7 @@ public class DungeonRecordControllerTest
             .Setup(
                 x => x.AddMaterials(DeviceAccountId, It.IsAny<List<Materials>>(), It.IsAny<int>())
             )
-            .Returns(Task.FromResult(0));
+            .Returns(Task.CompletedTask);
 
         this.mockUpdateDataService
             .Setup(x => x.GetUpdateDataList(DeviceAccountId))

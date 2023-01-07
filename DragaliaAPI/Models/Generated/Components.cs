@@ -4703,7 +4703,9 @@ public class CharaList
     public int attack_plus_count { get; set; }
     public int status_plus_count { get; set; }
     public int combo_buildup_count { get; set; }
-    public int is_unlock_edit_skill { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_unlock_edit_skill { get; set; }
     public DateTimeOffset gettime { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }
     public int is_temporary { get; set; }
@@ -4731,7 +4733,7 @@ public class CharaList
         int attack_plus_count,
         int status_plus_count,
         int combo_buildup_count,
-        int is_unlock_edit_skill,
+        bool is_unlock_edit_skill,
         DateTimeOffset gettime,
         IEnumerable<int> mana_circle_piece_id_list,
         int is_temporary,
