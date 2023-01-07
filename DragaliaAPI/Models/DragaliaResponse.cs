@@ -23,6 +23,4 @@ public class DragaliaResponse<TData> where TData : class
         this.data_headers = data_headers;
         this.data = data;
     }
-
-    public DragaliaResponse() { }
 }

@@ -9049,13 +9049,9 @@ public class UserData
     public DateTimeOffset last_login_time { get; set; }
     public int tutorial_status { get; set; }
     public IEnumerable<int> tutorial_flag_list { get; set; }
-
-    [Obsolete]
     public int prologue_end_time { get; set; }
     public DateTimeOffset fort_open_time { get; set; }
     public DateTimeOffset create_time { get; set; }
-
-    [Obsolete]
     public int is_optin { get; set; }
 
     public UserData(
