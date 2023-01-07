@@ -71,7 +71,9 @@ public class ApiContext : DbContext
          */
     }
 
+#pragma warning disable CS0618 // Type or member is obsolete
     public DbSet<DbDeviceAccount> DeviceAccounts { get; set; }
+#pragma warning restore CS0618 // Type or member is obsolete
 
     public DbSet<DbPlayerUserData> PlayerUserData { get; set; }
 
@@ -104,4 +106,6 @@ public class ApiContext : DbContext
     public DbSet<DbWeaponBody> PlayerWeapons { get; set; }
 
     public DbSet<DbTalisman> PlayerTalismans { get; set; }
+
+    public DbSet<DbFortBuild> PlayerFortBuilds { get; set; }
 }

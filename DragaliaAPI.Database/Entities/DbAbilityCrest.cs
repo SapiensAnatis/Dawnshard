@@ -12,7 +12,6 @@ namespace DragaliaAPI.Database.Entities;
 public class DbAbilityCrest : IDbHasAccountId
 {
     /// <inheritdoc />
-    [ForeignKey(nameof(DbDeviceAccount))]
     public required string DeviceAccountId { get; set; }
 
     /// <summary>

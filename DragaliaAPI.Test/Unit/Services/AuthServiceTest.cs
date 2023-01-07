@@ -53,6 +53,7 @@ public class AuthServiceTest
     }
 
     [Fact]
+    [Obsolete("From pre-BaaS login flow")]
     public async Task DoAuth_LegacyAuthEnabled_UsesLegacyAuth()
     {
         this.mockLoginOptions

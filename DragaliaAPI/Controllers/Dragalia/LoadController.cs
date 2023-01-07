@@ -14,9 +14,6 @@ using DragaliaAPI.Shared.Definitions.Enums;
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("load")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
-[ApiController]
 public class LoadController : DragaliaControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
@@ -24,6 +21,7 @@ public class LoadController : DragaliaControllerBase
     private readonly IPartyRepository partyRepository;
     private readonly IQuestRepository questRepository;
     private readonly IInventoryRepository inventoryRepository;
+    private readonly IFortRepository fortRepository;
     private readonly IMapper mapper;
 
     public LoadController(
@@ -32,6 +30,7 @@ public class LoadController : DragaliaControllerBase
         IPartyRepository partyRepository,
         IQuestRepository questRepository,
         IInventoryRepository inventoryRepository,
+        IFortRepository fortRepository,
         IMapper mapper
     )
     {
@@ -40,6 +39,7 @@ public class LoadController : DragaliaControllerBase
         this.partyRepository = partyRepository;
         this.questRepository = questRepository;
         this.inventoryRepository = inventoryRepository;
+        this.fortRepository = fortRepository;
         this.mapper = mapper;
     }
 
@@ -118,9 +118,15 @@ public class LoadController : DragaliaControllerBase
             await this.unitRepository.GetAllTalismanData(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<TalismanList>);
 
+        IEnumerable<BuildList> buildDetails = (
+            await this.fortRepository.GetBuilds(this.DeviceAccountId).ToListAsync()
+        ).Select(mapper.Map<BuildList>);
+        //IEnumerable<FortPlantList> buildSummary = new FortPlants[] { FortPlants.RupieMine, FortPlants.FlameAltar, , 100403, 100404, 100405, 100701, 100702, 100703, 100704, 100705 }
+
         LoadIndexData data =
             new()
             {
+                build_list = buildDetails,
                 user_data = userData,
                 chara_list = charas,
                 dragon_list = dragons,
@@ -138,7 +144,7 @@ public class LoadController : DragaliaControllerBase
                 friend_notice = new(0, 0),
                 present_notice = new(0, 0),
                 guild_notice = new(0, 0, 0, 0, 0),
-                mission_notice = null,
+                //fort_plant_list = buildSummary,
                 shop_notice = new ShopNotice(0),
                 server_time = DateTimeOffset.UtcNow,
                 stamina_multi_system_max = 99,

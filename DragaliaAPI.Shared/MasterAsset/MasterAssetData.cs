@@ -38,12 +38,9 @@ public class MasterAssetData<TKey, TItem>
             jsonFilename
         );
 
-        JsonSerializerOptions jsonOpts =
-            new() { PropertyNamingPolicy = new MasterAssetNamingPolicy() };
-        jsonOpts.Converters.Add(new BoolIntJsonConverter());
         IEnumerable<TItem>? items = JsonSerializer.Deserialize<IEnumerable<TItem>>(
             File.ReadAllText(path),
-            jsonOpts
+            MasterAssetJsonOptions.Instance
         );
 
         if (items is null)
