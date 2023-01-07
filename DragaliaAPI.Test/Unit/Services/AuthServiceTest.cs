@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MockQueryable.Moq;
+using Newtonsoft.Json;
 
 namespace DragaliaAPI.Test.Unit.Services;
 
@@ -227,6 +228,61 @@ public class AuthServiceTest
             .Returns(Task.CompletedTask);
 
         await this.authService.DoAuth(token);
+
+        this.mockBaasOptions.VerifyAll();
+        this.mockLoginOptions.VerifyAll();
+        this.mockUserDataRepository.VerifyAll();
+        this.mockSessionService.VerifyAll();
+        this.mockSavefileService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task DoAuth_SavefileUploaded_IsNewer_SaveInvalid_HandlesException()
+    {
+        this.mockBaasOptions
+            .Setup(x => x.CurrentValue)
+            .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
+
+        string token = TestUtils.TokenToString(
+            TestUtils.GetToken(
+                this.mockBaasOptions.Object.CurrentValue.TokenIssuer,
+                this.mockBaasOptions.Object.CurrentValue.TokenAudience,
+                DateTime.UtcNow.AddHours(1),
+                AccountId,
+                savefileAvailable: true,
+                savefileTime: DateTimeOffset.UtcNow
+            )
+        );
+
+        LoadIndexData importSavefile = new() { user_data = new() { name = "Euden 2" } };
+
+        this.mockLoginOptions
+            .Setup(x => x.CurrentValue)
+            .Returns(new LoginOptions() { UseBaasLogin = true });
+
+        this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
+        this.mockBaasRequestHelper
+            .Setup(x => x.GetSavefile(token))
+            .ThrowsAsync(new JsonException());
+
+        this.mockUserDataRepository
+            .Setup(x => x.GetUserData(AccountId))
+            .Returns(new List<DbPlayerUserData>()
+                {
+                    new()
+                    {
+                        DeviceAccountId = AccountId,
+                        Name = "Euden",
+                        ViewerId = 1,
+                        LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(1)
+                    }
+                }.AsQueryable().BuildMock());
+
+        this.mockSessionService
+            .Setup(x => x.CreateSession(AccountId, token))
+            .ReturnsAsync("session id");
+
+        await this.authService.Invoking(x => x.DoAuth(token)).Should().NotThrowAsync();
 
         this.mockBaasOptions.VerifyAll();
         this.mockLoginOptions.VerifyAll();
