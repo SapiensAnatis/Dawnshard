@@ -122,7 +122,7 @@ public class DeleteSavefileTest : IClassFixture<IntegrationTestFixture>
 
             storedSavefile.quest_story_list.Should().BeEmpty();
             storedSavefile.castle_story_list.Should().BeEmpty();
-            storedSavefile.build_list.Should().BeEmpty();
+            storedSavefile.build_list.Should().BeNull();
         }
     }
 }
