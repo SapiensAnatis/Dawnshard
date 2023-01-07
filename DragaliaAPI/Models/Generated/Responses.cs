@@ -2616,7 +2616,7 @@ public class FortGetDataData
     public AtgenProductionRp production_df { get; set; }
     public AtgenProductionRp production_st { get; set; }
     public int dragon_contact_free_gift_count { get; set; }
-    public int current_server_time { get; set; }
+    public DateTimeOffset current_server_time { get; set; }
 
     public FortGetDataData(
         FortDetail fort_detail,
@@ -2626,7 +2626,7 @@ public class FortGetDataData
         AtgenProductionRp production_df,
         AtgenProductionRp production_st,
         int dragon_contact_free_gift_count,
-        int current_server_time
+        DateTimeOffset current_server_time
     )
     {
         this.fort_detail = fort_detail;
@@ -3747,8 +3747,6 @@ public class LoadIndexData
     public int quest_skip_point_system_max { get; set; }
     public int quest_skip_point_use_limit_max { get; set; }
     public int spec_upgrade_time { get; set; }
-
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset server_time { get; set; }
     public int quest_bonus_stack_base_time { get; set; }
     public IEnumerable<AtgenQuestBonus> quest_bonus { get; set; }

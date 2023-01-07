@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Security.Claims;
-using System.Text.Json.Serialization;
 using DragaliaAPI.Database;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
@@ -8,7 +7,7 @@ using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Helpers;
-using DragaliaAPI.Shared;
+using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Events;
@@ -47,13 +46,9 @@ builder.Services
         option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
     })
-    .AddJsonOptions(
-    // For savefile import
-    option =>
+    .AddJsonOptions(options =>
     {
-        option.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-        option.JsonSerializerOptions.Converters.Add(new UnixDateTimeJsonConverter());
-        // Cannot add the boolean one if we want Nintendo login to keep working
+        ApiJsonOptions.Action.Invoke(options.JsonSerializerOptions);
     });
 
 builder.Services.AddRazorPages(
@@ -81,15 +76,16 @@ builder.Services
         options.Configuration = builder.Configuration.GetConnectionString("RedisHost");
         options.InstanceName = "RedisInstance";
     })
+#pragma warning disable CS0618 // Type or member is obsolete
     .AddScoped<ISessionService, SessionService>()
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
+#pragma warning restore CS0618 // Type or member is obsolete
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<IUpdateDataService, UpdateDataService>()
     .AddScoped<IDungeonService, DungeonService>()
     .AddScoped<ISavefileService, SavefileService>()
     .AddScoped<IAuthService, AuthService>()
-    .AddSingleton<IBaasRequestHelper, BaasRequestHelper>()
-    .AddHttpClient<BaasRequestHelper>();
+    .AddHttpClient<IBaasRequestHelper, BaasRequestHelper>();
 
 WebApplication app = builder.Build();
 

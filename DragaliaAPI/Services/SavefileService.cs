@@ -138,6 +138,10 @@ public class SavefileService : ISavefileService
             savefile.talisman_list.Select(x => MapWithDeviceAccount<DbTalisman>(x, deviceAccountId))
         );
 
+        this.apiContext.PlayerFortBuilds.AddRange(
+            savefile.build_list.Select(x => MapWithDeviceAccount<DbFortBuild>(x, deviceAccountId))
+        );
+
         // TODO: unit sets
         // TODO much later: halidom, endeavours, kaleido data
 
@@ -188,6 +192,9 @@ public class SavefileService : ISavefileService
         );
         this.apiContext.PlayerStorage.RemoveRange(
             this.apiContext.PlayerStorage.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerFortBuilds.RemoveRange(
+            this.apiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == deviceAccountId)
         );
     }
 
@@ -241,6 +248,7 @@ public class SavefileService : ISavefileService
         await this.apiContext.SaveChangesAsync();
     }
 
+    #region Default save data
     private async Task AddDefaultParties(string deviceAccountId)
     {
         await this.apiContext.PlayerParties.AddRangeAsync(
@@ -576,4 +584,5 @@ public class SavefileService : ISavefileService
             Materials.BronzeCrystal
         };
     }
+    #endregion
 }

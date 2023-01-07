@@ -4601,31 +4601,34 @@ public class BuildEventUserList
 public class BuildList
 {
     public ulong build_id { get; set; }
-    public int plant_id { get; set; }
+    public FortPlants plant_id { get; set; }
     public int level { get; set; }
     public int fort_plant_detail_id { get; set; }
     public int position_x { get; set; }
     public int position_z { get; set; }
-    public int build_status { get; set; }
-    public int build_start_date { get; set; }
-    public int build_end_date { get; set; }
-    public int remain_time { get; set; }
-    public int last_income_time { get; set; }
-    public int is_new { get; set; }
+    public FortBuildStatus build_status { get; set; }
+    public DateTimeOffset build_start_date { get; set; }
+    public DateTimeOffset build_end_date { get; set; }
+    public TimeSpan remain_time { get; set; }
+    public TimeSpan last_income_time { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_new { get; set; }
 
     public BuildList(
         ulong build_id,
-        int plant_id,
+        FortPlants plant_id,
         int level,
         int fort_plant_detail_id,
         int position_x,
         int position_z,
-        int build_status,
-        int build_start_date,
-        int build_end_date,
-        int remain_time,
-        int last_income_time,
-        int is_new
+        FortBuildStatus build_status,
+        DateTimeOffset build_start_date,
+        DateTimeOffset build_end_date,
+        TimeSpan remain_time,
+        TimeSpan last_income_time,
+        bool is_new
     )
     {
         this.build_id = build_id;
@@ -5407,8 +5410,6 @@ public class DragonList
     public int exp { get; set; }
     public int is_lock { get; set; }
     public int is_new { get; set; }
-
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset get_time { get; set; }
     public int skill_1_level { get; set; }
     public int ability_1_level { get; set; }
@@ -5461,10 +5462,8 @@ public class DragonReliabilityList
     public int reliability_level { get; set; }
     public int reliability_total_exp { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset gettime { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset last_contact_time { get; set; }
 
     public DragonReliabilityList(
@@ -6505,8 +6504,6 @@ public class IngameData
     public int continue_limit { get; set; }
     public int continue_count { get; set; }
     public int reborn_limit { get; set; }
-
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset start_time { get; set; }
     public PartyInfo party_info { get; set; }
     public IEnumerable<AreaInfoList> area_info_list { get; set; }
@@ -7484,11 +7481,7 @@ public class PresentDetailList
     public int message_param_value_2 { get; set; }
     public int message_param_value_3 { get; set; }
     public int message_param_value_4 { get; set; }
-
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset receive_limit_time { get; set; }
-
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset create_time { get; set; }
 
     public PresentDetailList(
@@ -7547,7 +7540,6 @@ public class PresentHistoryList
     public int message_param_value_3 { get; set; }
     public int message_param_value_4 { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset create_time { get; set; }
 
     public PresentHistoryList(
@@ -9057,13 +9049,9 @@ public class UserData
     public DateTimeOffset last_login_time { get; set; }
     public int tutorial_status { get; set; }
     public IEnumerable<int> tutorial_flag_list { get; set; }
-
-    [Obsolete]
     public int prologue_end_time { get; set; }
     public DateTimeOffset fort_open_time { get; set; }
     public DateTimeOffset create_time { get; set; }
-
-    [Obsolete]
     public int is_optin { get; set; }
 
     public UserData(
@@ -9265,7 +9253,6 @@ public class UserSupportList
     public string name { get; set; }
     public int level { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset last_login_date { get; set; }
     public int emblem_id { get; set; }
     public int max_party_power { get; set; }

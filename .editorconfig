@@ -8,7 +8,7 @@ root = true
 
 # Indentation and spacing
 indent_size = 4
-indent_style = space
+indent_style = tab
 tab_width = 4
 
 # New line preferences
@@ -23,10 +23,10 @@ dotnet_sort_system_directives_first = true
 file_header_template = unset
 
 # this. and Me. preferences
-dotnet_style_qualification_for_event = true:warning
-dotnet_style_qualification_for_field = true
-dotnet_style_qualification_for_method = true
-dotnet_style_qualification_for_property = true:warning
+dotnet_style_qualification_for_event = false
+dotnet_style_qualification_for_field = false
+dotnet_style_qualification_for_method = false
+dotnet_style_qualification_for_property = false
 
 # Language keywords vs BCL types preferences
 dotnet_style_predefined_type_for_locals_parameters_members = true:warning
@@ -52,7 +52,7 @@ dotnet_style_operator_placement_when_wrapping = beginning_of_line
 dotnet_style_prefer_auto_properties = true:warning
 dotnet_style_prefer_compound_assignment = true:warning
 dotnet_style_prefer_conditional_expression_over_assignment = true:warning
-dotnet_style_prefer_conditional_expression_over_return = true:warning
+dotnet_style_prefer_conditional_expression_over_return = false
 dotnet_style_prefer_foreach_explicit_cast_in_source = when_strongly_typed
 dotnet_style_prefer_inferred_anonymous_type_member_names = true:warning
 dotnet_style_prefer_inferred_tuple_names = true:warning
@@ -81,14 +81,14 @@ csharp_style_var_for_built_in_types = false:warning
 csharp_style_var_when_type_is_apparent = false:warning
 
 # Expression-bodied members
-csharp_style_expression_bodied_accessors = true:warning
+csharp_style_expression_bodied_accessors = true:suggestion
 csharp_style_expression_bodied_constructors = false:warning
-csharp_style_expression_bodied_indexers = true:warning
-csharp_style_expression_bodied_lambdas = true:warning
-csharp_style_expression_bodied_local_functions = true:warning
+csharp_style_expression_bodied_indexers = true:suggestion
+csharp_style_expression_bodied_lambdas = true:suggestion
+csharp_style_expression_bodied_local_functions = true:suggestion
 csharp_style_expression_bodied_methods = false:suggestion
 csharp_style_expression_bodied_operators = false:warning
-csharp_style_expression_bodied_properties = true:warning
+csharp_style_expression_bodied_properties = true:suggestion
 
 # Pattern matching preferences
 csharp_style_pattern_matching_over_as_with_null_check = true:warning

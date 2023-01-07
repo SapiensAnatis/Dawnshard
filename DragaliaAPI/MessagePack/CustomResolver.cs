@@ -37,6 +37,12 @@ public class CustomResolver : IFormatterResolver
                 return;
             }
 
+            if (typeof(T) == typeof(TimeSpan))
+            {
+                Formatter = (IMessagePackFormatter<T>)new TimespanToUnixIntFormatter();
+                return;
+            }
+
             foreach (IFormatterResolver resolver in Resolvers)
             {
                 IMessagePackFormatter<T>? f = resolver.GetFormatter<T>();

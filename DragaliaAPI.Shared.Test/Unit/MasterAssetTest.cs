@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+﻿using System.Reflection.Emit;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -203,6 +204,50 @@ public class MasterAssetTest
                     new("Main/01/MAIN_01_0101_01", "MAIN_01_0101_01"),
                     new("Boss/BG001_5001_00/BG001_5001_00_00", "MAIN_01_0101_02")
                 }
+            );
+    }
+
+    [Fact]
+    public void FortPlant_Get_ReturnsExpectedProperties()
+    {
+        FortPlantDetail fortPlant = MasterAsset.MasterAsset.GetFortPlant(FortPlants.FlameTree, 6);
+
+        fortPlant
+            .Should()
+            .BeEquivalentTo(
+                new FortPlantDetail(
+                    Id: 10230106,
+                    AssetGroup: FortPlants.FlameTree,
+                    Level: 6,
+                    NextAssetGroup: 10230107,
+                    LevelType: 1,
+                    NeedLevel: 1,
+                    Time: 43200,
+                    Cost: 50000,
+                    MaterialsId1: Materials.DestituteOnesMaskFragment,
+                    MaterialsNum1: 30,
+                    MaterialsId2: 0,
+                    MaterialsNum2: 0,
+                    MaterialsId3: 0,
+                    MaterialsNum3: 0,
+                    MaterialsId4: 0,
+                    MaterialsNum4: 0,
+                    MaterialsId5: 0,
+                    MaterialsNum5: 0,
+                    EffectId: FortEffectTypes.Element,
+                    EffType1: 1,
+                    EffType2: 0,
+                    EffArgs1: 7.0,
+                    EffArgs2: 6.5,
+                    CostMaxTime: 0,
+                    CostMax: 0,
+                    MaterialMaxTime: 0,
+                    MaterialMax: 0,
+                    StaminaMaxTime: 0,
+                    StaminaMax: 0,
+                    EventEffectType: 0,
+                    EventEffectArgs: 0.0
+                )
             );
     }
 }
