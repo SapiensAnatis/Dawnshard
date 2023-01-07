@@ -5404,12 +5404,16 @@ public class DragonGiftList
 [MessagePackObject(true)]
 public class DragonList
 {
-    public int dragon_id { get; set; }
+    public Dragons dragon_id { get; set; }
     public ulong dragon_key_id { get; set; }
     public int level { get; set; }
     public int exp { get; set; }
-    public int is_lock { get; set; }
-    public int is_new { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_lock { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_new { get; set; }
     public DateTimeOffset get_time { get; set; }
     public int skill_1_level { get; set; }
     public int ability_1_level { get; set; }
@@ -5420,12 +5424,12 @@ public class DragonList
     public int status_plus_count { get; set; }
 
     public DragonList(
-        int dragon_id,
+        Dragons dragon_id,
         ulong dragon_key_id,
         int level,
         int exp,
-        int is_lock,
-        int is_new,
+        bool is_lock,
+        bool is_new,
         DateTimeOffset get_time,
         int skill_1_level,
         int ability_1_level,
@@ -5458,7 +5462,7 @@ public class DragonList
 [MessagePackObject(true)]
 public class DragonReliabilityList
 {
-    public int dragon_id { get; set; }
+    public Dragons dragon_id { get; set; }
     public int reliability_level { get; set; }
     public int reliability_total_exp { get; set; }
 
@@ -5467,7 +5471,7 @@ public class DragonReliabilityList
     public DateTimeOffset last_contact_time { get; set; }
 
     public DragonReliabilityList(
-        int dragon_id,
+        Dragons dragon_id,
         int reliability_level,
         int reliability_total_exp,
         DateTimeOffset gettime,
@@ -6839,10 +6843,10 @@ public class MainStoryMissionList
 [MessagePackObject(true)]
 public class MaterialList
 {
-    public int material_id { get; set; }
+    public Materials material_id { get; set; }
     public int quantity { get; set; }
 
-    public MaterialList(int material_id, int quantity)
+    public MaterialList(Materials material_id, int quantity)
     {
         this.material_id = material_id;
         this.quantity = quantity;

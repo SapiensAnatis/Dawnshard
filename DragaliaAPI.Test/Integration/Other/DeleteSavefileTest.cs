@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using Microsoft.Extensions.Configuration;
+using FluentAssertions.Execution;
+using static DragaliaAPI.Services.SavefileService;
 
 namespace DragaliaAPI.Test.Integration.Other;
 
@@ -54,17 +50,79 @@ public class DeleteSavefileTest : IClassFixture<IntegrationTestFixture>
             await this.client.PostMsgpack<LoadIndexData>("load/index", new LoadIndexRequest())
         ).data;
 
-        // Very lackluster test, because the test fixture savefile is basically empty anyway
-        storedSavefile.chara_list
-            .Should()
-            .ContainSingle()
-            .And.AllSatisfy(x => x.chara_id.Should().Be(Charas.ThePrince));
-        // Not so due to the default data being given
-        // storedSavefile.material_list.Should().BeEmpty();
-        // storedSavefile.dragon_list.Should().BeEmpty();
-        // storedSavefile.dragon_reliability_list.Should().BeEmpty();
-        storedSavefile.quest_story_list.Should().BeEmpty();
-        storedSavefile.castle_story_list.Should().BeEmpty();
-        storedSavefile.build_list.Should().BeEmpty();
+        // This test also provides us a good way to check out the default savefile
+        using (new AssertionScope())
+        {
+            storedSavefile.chara_list
+                .Select(x => x.chara_id)
+                .Should()
+                .BeEquivalentTo(new List<Charas>() { Charas.ThePrince });
+
+            storedSavefile.party_list
+                .Should()
+                .HaveCount(54)
+                .And.AllSatisfy(x =>
+                {
+                    x.party_name.Should().Be("Default");
+                    x.party_setting_list
+                        .Select(x => x.chara_id)
+                        .Should()
+                        .BeEquivalentTo(
+                            new List<Charas>()
+                            {
+                                Charas.ThePrince,
+                                Charas.Empty,
+                                Charas.Empty,
+                                Charas.Empty
+                            }
+                        );
+                });
+
+            storedSavefile.dragon_list
+                .Select(x => x.dragon_id)
+                .Should()
+                .BeEquivalentTo(
+                    DefaultSavefileData.Dragons.SelectMany(x => Enumerable.Repeat(x, 4))
+                );
+            storedSavefile.dragon_list
+                .Should()
+                .AllSatisfy(
+                    x =>
+                        x.Should()
+                            .BeEquivalentTo(
+                                new DragonList()
+                                {
+                                    level = 100,
+                                    limit_break_count = 4,
+                                    ability_1_level = 5,
+                                    ability_2_level = 5,
+                                    skill_1_level = 2,
+                                    attack_plus_count = 50,
+                                    hp_plus_count = 50,
+                                    exp = 1_240_020,
+                                    is_lock = false,
+                                    is_new = false
+                                },
+                                opts =>
+                                    opts.Excluding(x => x.dragon_id)
+                                        .Excluding(x => x.dragon_key_id)
+                                        .Excluding(x => x.get_time)
+                            )
+                );
+            ;
+            storedSavefile.dragon_reliability_list
+                .Select(x => x.dragon_id)
+                .Should()
+                .BeEquivalentTo(DefaultSavefileData.Dragons);
+            storedSavefile.material_list
+                .Select(x => x.material_id)
+                .Should()
+                .BeEquivalentTo(DefaultSavefileData.UpgradeMaterials);
+            storedSavefile.material_list.Select(x => x.quantity).Should().AllBeEquivalentTo(10000);
+
+            storedSavefile.quest_story_list.Should().BeEmpty();
+            storedSavefile.castle_story_list.Should().BeEmpty();
+            storedSavefile.build_list.Should().BeEmpty();
+        }
     }
 }
