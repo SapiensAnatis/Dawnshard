@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Security.Claims;
-using System.Text.Json.Serialization;
 using DragaliaAPI.Database;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
@@ -8,7 +7,6 @@ using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Helpers;
-using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
@@ -50,10 +48,7 @@ builder.Services
     })
     .AddJsonOptions(options =>
     {
-        // Microsoft made everything readonly so I can't use ApiJsonOptions :(
-        options.JsonSerializerOptions.Converters.Add(new DateTimeUnixJsonConverter());
-        options.JsonSerializerOptions.Converters.Add(new TimeSpanUnixJsonConverter());
-        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        ApiJsonOptions.Action.Invoke(options.JsonSerializerOptions);
     });
 
 builder.Services.AddRazorPages(

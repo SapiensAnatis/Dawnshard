@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using DragaliaAPI.MessagePack;
 
@@ -17,14 +19,17 @@ public class ApiJsonOptions
 {
     public static readonly JsonSerializerOptions Instance;
 
+    public static readonly Action<JsonSerializerOptions> Action = options =>
+    {
+        options.Converters.Add(new DateTimeUnixJsonConverter());
+        options.Converters.Add(new TimeSpanUnixJsonConverter());
+        options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+    };
+
     static ApiJsonOptions()
     {
         Instance = new();
-        // Cannot add this as we occasionally need to use JSON to communicate with
-        // APIs that are not stupid about booleans
-        // Instance.Converters.Add(new BoolIntJsonConverter());
-        Instance.Converters.Add(new DateTimeUnixJsonConverter());
-        Instance.Converters.Add(new TimeSpanUnixJsonConverter());
-        Instance.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        Action.Invoke(Instance);
     }
 }
