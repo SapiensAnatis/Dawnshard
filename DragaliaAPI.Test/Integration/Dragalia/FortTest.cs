@@ -35,14 +35,14 @@ public class FortTest : IntegrationTestBase
             new Database.Entities.DbFortBuild()
             {
                 DeviceAccountId = this.fixture.DeviceAccountId,
-                PlantId = FortPlants.TheHalidom,
+                PlantId = FortPlants.AxeDojo,
                 Level = 10,
                 PositionX = 10,
                 PositionZ = 10,
                 BuildStartDate = start,
                 BuildEndDate = end,
                 IsNew = true,
-                LastIncomeDate = income,
+                LastIncomeDate = income, // Axe dojos don't make you money but let's pretend they do
             }
         );
         await this.fixture.ApiContext.SaveChangesAsync();
@@ -59,13 +59,13 @@ public class FortTest : IntegrationTestBase
                 {
                     new()
                     {
-                        plant_id = FortPlants.TheHalidom,
+                        plant_id = FortPlants.AxeDojo,
                         level = 10,
                         position_x = 10,
                         position_z = 10,
                         build_start_date = start,
                         build_end_date = end,
-                        fort_plant_detail_id = 10010110,
+                        fort_plant_detail_id = 10050410,
                         build_status = FortBuildStatus.Construction,
                         is_new = true,
                         remain_time = end - DateTimeOffset.UtcNow,

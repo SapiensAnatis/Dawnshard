@@ -12,7 +12,7 @@ public class TimeSpanUnixJsonConverter : JsonConverter<TimeSpan>
         JsonSerializerOptions options
     )
     {
-        return new TimeSpan(reader.GetInt32());
+        return TimeSpan.FromSeconds(reader.GetInt32());
     }
 
     public override void Write(Utf8JsonWriter writer, TimeSpan value, JsonSerializerOptions options)
