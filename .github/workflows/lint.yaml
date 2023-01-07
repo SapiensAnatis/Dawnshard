@@ -1,4 +1,4 @@
-name: test
+name: lint
 
 on:
   pull_request:
@@ -6,17 +6,20 @@ on:
     branches:
       - master
       - develop
+    paths-ignore:
+      - "**/*.yaml"
+      - "**/*.yml"
+      - "**/*.md"
 
 env:
   HUSKY: 0
 
 jobs:
-  test:
+  csharpier:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         dotnet-version: [ '7.0.x' ]
-        project: ['DragaliaAPI.Test', 'DragaliaAPI.Database.Test', 'DragaliaAPI.Shared.Test']
 
     steps:
       - uses: actions/checkout@v3
@@ -24,7 +27,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Install dependencies
-        run: dotnet restore ${{ matrix.project }}
-      - name: Test
-        run: dotnet test ${{ matrix.project }} --no-restore
+      - name: Install tool dependencies
+        run: dotnet tool restore
+      - name: CSharpier check
+        run: dotnet csharpier . --check

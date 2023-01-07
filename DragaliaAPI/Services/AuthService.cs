@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Serilog;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -86,10 +87,18 @@ public class AuthService : IAuthService
             )
         )
         {
-            LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
-            await this.savefileService.Import(jwt.Subject, pendingSave);
-            await this.userDataRepository.UpdateSaveImportTime(jwt.Subject);
-            await this.userDataRepository.SaveChangesAsync();
+            try
+            {
+                LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
+                await this.savefileService.Import(jwt.Subject, pendingSave);
+                await this.userDataRepository.UpdateSaveImportTime(jwt.Subject);
+                await this.userDataRepository.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                this.logger.LogError("Error importing save", e);
+                // Let them log in regardless
+            }
         }
 
         long viewerId = await this.DoLogin(jwt);

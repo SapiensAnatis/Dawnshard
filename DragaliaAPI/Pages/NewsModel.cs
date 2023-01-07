@@ -15,7 +15,8 @@ public class NewsModel : PageModel
 {
     public List<NewsItem> NewsItems =>
         JsonSerializer.Deserialize<List<NewsItem>>(
-            System.IO.File.ReadAllText(Path.Join(folder, filename))
+            System.IO.File.ReadAllText(Path.Join(folder, filename)),
+            new JsonSerializerOptions(JsonSerializerDefaults.Web)
         ) ?? throw new JsonException("Deserialization failure");
 
     public string? Version =>

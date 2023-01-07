@@ -1,0 +1,25 @@
+name: publish-push
+
+on:
+  push:
+    branches:
+      - develop
+    paths-ignore:
+      - "**/*.yaml"
+      - "**/*.yml"
+      - "**/*.md"
+
+env:
+  HUSKY: 0
+
+jobs:
+  publish:
+    uses: ./.github/workflows/publish-base.yaml
+    with:
+      ref: develop
+      image-tag: latest
+    secrets: inherit
+  deploy:
+    needs: publish
+    uses: ./.github/workflows/deploy.yaml
+    secrets: inherit

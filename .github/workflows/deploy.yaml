@@ -1,17 +1,10 @@
 name: deploy
 
 on:
-  workflow_run:
-    workflows: 
-      - publish
-    branches: 
-      - develop
-    types:
-      - completed    
+  workflow_call: 
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
