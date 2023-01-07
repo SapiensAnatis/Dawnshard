@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using DragaliaAPI.Models.Options;
+﻿using DragaliaAPI.Models.Options;
 
 namespace DragaliaAPI.Models;
 

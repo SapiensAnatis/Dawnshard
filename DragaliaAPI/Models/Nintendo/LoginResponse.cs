@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace DragaliaAPI.Models.Nintendo;
+﻿namespace DragaliaAPI.Models.Nintendo;
 
 // Conversely, we should probably fill in all the useless data in the response in case the client expects it
 [Obsolete("From pre-BaaS login flow")]

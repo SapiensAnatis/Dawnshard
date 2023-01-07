@@ -89,7 +89,9 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                 {
                     // Modified properties
                     opts.Excluding(x => x.Name.Contains("key_id"));
+                    opts.Excluding(x => x.Name.Contains("build_id"));
                     opts.Excluding(x => x.Name.Contains("plant_detail_id"));
+                    opts.Excluding(x => x.Name.Contains("last_income_time"));
                     opts.Excluding(x => x.user_data.viewer_id);
                     opts.Excluding(x => x.server_time);
                     opts.Excluding(x => x.spec_upgrade_time);

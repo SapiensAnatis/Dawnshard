@@ -6,14 +6,6 @@ namespace DragaliaAPI.MessagePack;
 
 public class TimeSpanUnixJsonConverter : JsonConverter<TimeSpan>
 {
-    static TimeSpanUnixJsonConverter()
-    {
-        Options = new();
-        Options.Converters.Add(new DateTimeUnixJsonConverter());
-    }
-
-    public static JsonSerializerOptions Options { get; }
-
     public override TimeSpan Read(
         ref Utf8JsonReader reader,
         Type typeToConvert,

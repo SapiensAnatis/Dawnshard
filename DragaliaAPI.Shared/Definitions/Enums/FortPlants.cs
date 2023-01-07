@@ -47,7 +47,7 @@ public enum FortPlants
     Snowdrake = 101602,
     LibraryObscura = 101701,
     Lectern = 101702,
-    Dragoñata = 101801,
+    Dragonata = 101801,
     EggyLuca = 101802,
     EggySarisse = 101803,
     MagmaSlimeStatue = 101901,

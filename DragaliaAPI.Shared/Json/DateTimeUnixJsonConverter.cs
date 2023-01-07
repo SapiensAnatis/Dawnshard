@@ -6,14 +6,6 @@ namespace DragaliaAPI.MessagePack;
 
 public class DateTimeUnixJsonConverter : JsonConverter<DateTimeOffset>
 {
-    static DateTimeUnixJsonConverter()
-    {
-        Options = new();
-        Options.Converters.Add(new DateTimeUnixJsonConverter());
-    }
-
-    public static JsonSerializerOptions Options { get; }
-
     public override DateTimeOffset Read(
         ref Utf8JsonReader reader,
         Type typeToConvert,
