@@ -13,7 +13,7 @@ env:
 
 jobs:
   publish:
-    uses: sapiensanatis/dragalia-api/.github/workflows/publish-base.yaml
+    uses: ./.github/workflows/publish-base.yaml
     with:
       ref: ${{ inputs.tag }}
       image-tag: ${{ inputs.tag }}

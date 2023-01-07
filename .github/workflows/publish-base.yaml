@@ -41,4 +41,4 @@ jobs:
           context: .
           file: DragaliaAPI/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dragalia-api:{{ inputs.image-tag }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dragalia-api:${{ inputs.image-tag }}
