@@ -98,7 +98,7 @@ app.UseSerilogRequestLogging(
         options.EnrichDiagnosticContext = (diagContext, httpContext) =>
             diagContext.Set(
                 "DeviceAccountId",
-                httpContext.User.FindFirstValue(CustomClaimType.AccountId) ?? "anonymous"
+                httpContext.User.FindFirstValue(CustomClaimType.AccountId) ?? "unknown"
             )
 );
 
