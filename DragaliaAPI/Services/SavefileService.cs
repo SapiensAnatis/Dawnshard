@@ -224,12 +224,12 @@ public class SavefileService : ISavefileService
 #if DEBUG
                 TutorialStatus = 10151,
 #endif
-                Crystal = 120_000
+                Crystal = 1_200_000
             };
 
         await apiContext.PlayerUserData.AddAsync(userData);
-        await apiContext.PlayerCharaData.AddAsync(new(deviceAccountId, Charas.ThePrince));
         await this.AddDefaultParties(deviceAccountId);
+        await this.AddDefaultCharacters(deviceAccountId);
 
         await this.apiContext.SaveChangesAsync();
     }
@@ -270,6 +270,13 @@ public class SavefileService : ISavefileService
                             }
                         }
                 )
+        );
+    }
+
+    private async Task AddDefaultCharacters(string deviceAccountId)
+    {
+        await this.apiContext.PlayerCharaData.AddRangeAsync(
+            DefaultSavefileData.Characters.Select(x => new DbPlayerCharaData(deviceAccountId, x))
         );
     }
 
@@ -382,7 +389,7 @@ public class SavefileService : ISavefileService
                                 IsNew = false,
                             }
                     ),
-                    4
+                    DefaultSavefileData.FreeDragonCount
                 )
                 .SelectMany(x => x)
         );
@@ -433,8 +440,13 @@ public class SavefileService : ISavefileService
         );
     }
 
-    private static class DefaultSavefileData
+    internal static class DefaultSavefileData
     {
+        public static readonly IReadOnlyList<Charas> Characters = new List<Charas>()
+        {
+            Charas.ThePrince
+        };
+
         public const int PartySlotCount = 54;
 
         public static readonly IReadOnlyList<AbilityCrests> FiveStarCrests =
@@ -509,6 +521,8 @@ public class SavefileService : ISavefileService
             AbilityCrests.RavenousFireCrownsBoon,
             AbilityCrests.MaskofDeterminationBowsBoon
         };
+
+        public const int FreeDragonCount = 4;
 
         public static readonly IReadOnlyList<Dragons> Dragons = new List<Dragons>()
         {
