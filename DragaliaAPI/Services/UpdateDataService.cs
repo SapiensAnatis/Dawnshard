@@ -3,6 +3,7 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services;
@@ -34,7 +35,7 @@ public class UpdateDataService : IUpdateDataService
         UpdateDataList result =
             new()
             {
-                user_data = this.ConvertEntities<UserData, DbPlayerUserData>(entities)?.Single(),
+                user_data = this.ConvertEntities<UserData, DbPlayerUserData>(entities)?.Single(), // Can't use SingleOrDefault if the list itself is null
                 chara_list = this.ConvertEntities<CharaList, DbPlayerCharaData>(entities),
                 dragon_list = this.ConvertEntities<DragonList, DbPlayerDragonData>(entities),
                 dragon_reliability_list = this.ConvertEntities<
@@ -47,10 +48,20 @@ public class UpdateDataService : IUpdateDataService
                 ),
                 party_list = this.ConvertEntities<PartyList, DbParty>(entities),
                 quest_story_list = this.ConvertEntities<QuestStoryList, DbPlayerStoryState>(
-                    entities
+                    entities,
+                    x => x.StoryType == StoryTypes.Quest
+                ),
+                unit_story_list = this.ConvertEntities<UnitStoryList, DbPlayerStoryState>(
+                    entities,
+                    x => x.StoryType == StoryTypes.Chara
+                ),
+                castle_story_list = this.ConvertEntities<CastleStoryList, DbPlayerStoryState>(
+                    entities,
+                    x => x.StoryType == StoryTypes.Castle
                 ),
                 material_list = this.ConvertEntities<MaterialList, DbPlayerMaterial>(entities),
-                quest_list = this.ConvertEntities<QuestList, DbQuest>(entities)
+                quest_list = this.ConvertEntities<QuestList, DbQuest>(entities),
+                build_list = this.ConvertEntities<BuildList, DbFortBuild>(entities),
             };
 
         this.apiContext.ChangeTracker.LazyLoadingEnabled = true;
@@ -59,10 +70,16 @@ public class UpdateDataService : IUpdateDataService
     }
 
     private IEnumerable<TNetwork>? ConvertEntities<TNetwork, TDatabase>(
-        IEnumerable<IDbHasAccountId> baseEntries
+        IEnumerable<IDbHasAccountId> baseEntries,
+        Func<TDatabase, bool>? filterPredicate = null
     ) where TDatabase : IDbHasAccountId
     {
         IEnumerable<TDatabase> typedEntries = baseEntries.OfType<TDatabase>();
+
+        if (filterPredicate is not null)
+        {
+            typedEntries = typedEntries.Where(filterPredicate);
+        }
 
         return typedEntries.Any()
             ? typedEntries.Select(x => this.mapper.Map<TNetwork>(x)).ToList()

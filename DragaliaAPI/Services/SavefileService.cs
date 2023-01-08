@@ -248,7 +248,7 @@ public class SavefileService : ISavefileService
         await this.apiContext.SaveChangesAsync();
     }
 
-    #region Default save data
+	#region Default save data
     private async Task AddDefaultParties(string deviceAccountId)
     {
         await this.apiContext.PlayerParties.AddRangeAsync(
@@ -581,8 +581,9 @@ public class SavefileService : ISavefileService
         {
             Materials.GoldCrystal,
             Materials.SilverCrystal,
-            Materials.BronzeCrystal
+            Materials.BronzeCrystal,
+            Materials.LookingGlass
         };
     }
-    #endregion
+	#endregion
 }

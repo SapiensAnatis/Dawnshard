@@ -87,7 +87,7 @@ public class DungeonRecordController : DragaliaControllerBase
             + (allMissionsCleared ? 5 : 0);
 
         IEnumerable<Materials> drops = DefaultDrops.GetRandomList();
-        await this.inventoryRepository.AddMaterials(this.DeviceAccountId, drops, 100);
+        await this.inventoryRepository.AddMaterialQuantity(this.DeviceAccountId, drops, 100);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -312,6 +312,7 @@ public class DungeonRecordController : DragaliaControllerBase
             Materials.LongingHeart,
             // === Misc ===
             Materials.Omnicite,
+            Materials.LookingGlass,
         };
 
         public static IReadOnlyList<Materials> GetRandomList()

@@ -6,6 +6,8 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using FluentAssertions.Execution;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Xunit.Abstractions;
 
@@ -28,6 +30,8 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             cfg => cfg.AddMaps(typeof(Program).Assembly)
         ).CreateMapper();
         this.updateDataService = new UpdateDataService(this.fixture.ApiContext, this.mapper);
+
+        TestUtils.ApplyDateTimeAssertionOptions();
     }
 
     [Fact]
@@ -36,7 +40,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         string deviceAccountId = "new id";
 
         DbPlayerUserData userData = new(deviceAccountId);
+
         DbPlayerCharaData charaData = new(deviceAccountId, Charas.GalaLeonidas);
+
         DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
             deviceAccountId,
             Dragons.DreadkingRathalos
@@ -45,6 +51,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             deviceAccountId,
             Dragons.DreadkingRathalos
         );
+
         DbParty partyData =
             new()
             {
@@ -56,7 +63,8 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
                     new() { CharaId = Charas.GalaAlex, UnitNo = 1 }
                 }
             };
-        DbPlayerStoryState storyState =
+
+        DbPlayerStoryState questStoryState =
             new()
             {
                 DeviceAccountId = deviceAccountId,
@@ -64,6 +72,32 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
                 StoryId = 2,
                 StoryType = StoryTypes.Quest
             };
+        DbPlayerStoryState charaStoryState =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                State = 3,
+                StoryId = 4,
+                StoryType = StoryTypes.Chara,
+            };
+        DbPlayerStoryState castleStoryState =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                State = 5,
+                StoryId = 6,
+                StoryType = StoryTypes.Castle,
+            };
+
+        DbPlayerStoryState dragonStoryState =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                State = 7,
+                StoryId = 8,
+                StoryType = StoryTypes.Dragon,
+            };
+
         DbPlayerMaterial materialData =
             new()
             {
@@ -71,6 +105,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
                 MaterialId = Materials.AlmightyOnesMaskFragment,
                 Quantity = 10
             };
+
         DbQuest questData =
             new()
             {
@@ -82,6 +117,21 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
                 State = 3
             };
 
+        DbFortBuild buildData =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                BuildId = 1,
+                Level = 2,
+                PositionX = 3,
+                PositionZ = 4,
+                PlantId = FortPlants.AbyssalBell,
+                IsNew = true,
+                LastIncomeDate = DateTimeOffset.FromUnixTimeSeconds(5),
+                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(10),
+                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(15)
+            };
+
         this.fixture.ApiContext.AddRange(
             new List<IDbHasAccountId>()
             {
@@ -90,45 +140,41 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
                 dragonData,
                 reliabilityData,
                 partyData,
-                storyState,
+                questStoryState,
+                charaStoryState,
+                castleStoryState,
+                dragonStoryState,
                 materialData,
-                questData
+                questData,
+                buildData
             }
         );
 
         UpdateDataList list = this.updateDataService.GetUpdateDataList(deviceAccountId);
 
+        using AssertionScope scope = new();
+
         list.user_data.Should().BeEquivalentTo(this.mapper.Map<UserData>(userData));
-        list.chara_list
-            .Should()
-            .BeEquivalentTo(new List<CharaList>() { this.mapper.Map<CharaList>(charaData) });
-        list.dragon_list
-            .Should()
-            .BeEquivalentTo(new List<DragonList>() { this.mapper.Map<DragonList>(dragonData) });
-        list.dragon_reliability_list
-            .Should()
-            .BeEquivalentTo(
-                new List<DragonReliabilityList>()
-                {
-                    this.mapper.Map<DragonReliabilityList>(reliabilityData)
-                }
-            );
-        list.party_list
-            .Should()
-            .BeEquivalentTo(new List<PartyList>() { this.mapper.Map<PartyList>(partyData) });
-        list.quest_story_list
-            .Should()
-            .BeEquivalentTo(
-                new List<QuestStoryList>() { this.mapper.Map<QuestStoryList>(storyState) }
-            );
-        list.quest_list
-            .Should()
-            .BeEquivalentTo(new List<QuestList> { this.mapper.Map<QuestList>(questData) });
-        list.material_list
-            .Should()
-            .BeEquivalentTo(
-                new List<MaterialList>() { this.mapper.Map<MaterialList>(materialData) }
-            );
+
+        AssertOnlyContains<CharaList>(list.chara_list, charaData);
+
+        AssertOnlyContains<DragonList>(list.dragon_list, dragonData);
+
+        AssertOnlyContains<DragonReliabilityList>(list.dragon_reliability_list, reliabilityData);
+
+        AssertOnlyContains<PartyList>(list.party_list, partyData);
+
+        AssertOnlyContains<QuestStoryList>(list.quest_story_list, questStoryState);
+
+        AssertOnlyContains<UnitStoryList>(list.unit_story_list, charaStoryState);
+
+        AssertOnlyContains<CastleStoryList>(list.castle_story_list, castleStoryState);
+
+        AssertOnlyContains<QuestList>(list.quest_list, questData);
+
+        AssertOnlyContains<MaterialList>(list.material_list, materialData);
+
+        AssertOnlyContains<BuildList>(list.build_list, buildData);
 
         this.output.WriteLine(
             "{0}",
@@ -183,5 +229,16 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         this.fixture.ApiContext.SaveChanges();
 
         this.updateDataService.GetUpdateDataList("id").chara_list.Should().BeNull();
+    }
+
+    private void AssertOnlyContains<TNetwork>(
+        IEnumerable<TNetwork> member,
+        IDbHasAccountId dbEntity
+    )
+    {
+        member
+            .Should()
+            .ContainSingle()
+            .And.ContainEquivalentOf(this.mapper.Map<TNetwork>(dbEntity));
     }
 }

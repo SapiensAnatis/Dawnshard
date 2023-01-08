@@ -76,7 +76,12 @@ public class DungeonRecordControllerTest
 
         this.mockInventoryRepository
             .Setup(
-                x => x.AddMaterials(DeviceAccountId, It.IsAny<List<Materials>>(), It.IsAny<int>())
+                x =>
+                    x.AddMaterialQuantity(
+                        DeviceAccountId,
+                        It.IsAny<List<Materials>>(),
+                        It.IsAny<int>()
+                    )
             )
             .Returns(Task.FromResult(0));
 
