@@ -312,6 +312,7 @@ public class DungeonRecordController : DragaliaControllerBase
             Materials.LongingHeart,
             // === Misc ===
             Materials.Omnicite,
+            Materials.LookingGlass,
         };
 
         public static IReadOnlyList<Materials> GetRandomList()

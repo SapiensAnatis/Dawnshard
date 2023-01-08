@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
 
+// TODO: add tests
 public class InventoryRepository : BaseRepository, IInventoryRepository
 {
     private readonly ApiContext apiContext;
