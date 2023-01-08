@@ -55,7 +55,33 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
             .Entity;
     }
 
-    public async Task AddMaterials(
+    public async Task AddMaterialQuantity(string deviceAccountId, Materials item, int quantity)
+    {
+        DbPlayerMaterial material =
+            await this.apiContext.PlayerStorage.FindAsync(deviceAccountId, item)
+            ?? (
+                await this.apiContext.AddAsync(
+                    new DbPlayerMaterial()
+                    {
+                        DeviceAccountId = deviceAccountId,
+                        MaterialId = item,
+                        Quantity = 0
+                    }
+                )
+            ).Entity;
+
+        if (material.Quantity + quantity < 0)
+        {
+            // TODO: move DragaliaException into shared
+            throw new InvalidOperationException(
+                $"Could not modify material {item} by quantity {quantity}: existing quantity {material.Quantity} was too low"
+            );
+        }
+
+        material.Quantity += quantity;
+    }
+
+    public async Task AddMaterialQuantity(
         string deviceAccountId,
         IEnumerable<Materials> list,
         int quantity
@@ -64,20 +90,7 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
         foreach (Materials m in list)
         {
             // Db query (find) in loop??? Any way to do this better???
-            DbPlayerMaterial material =
-                await this.apiContext.PlayerStorage.FindAsync(deviceAccountId, m)
-                ?? (
-                    await this.apiContext.AddAsync(
-                        new DbPlayerMaterial()
-                        {
-                            DeviceAccountId = deviceAccountId,
-                            MaterialId = m,
-                            Quantity = 0
-                        }
-                    )
-                ).Entity;
-
-            material.Quantity += quantity;
+            await this.AddMaterialQuantity(deviceAccountId, m, quantity);
         }
     }
 
