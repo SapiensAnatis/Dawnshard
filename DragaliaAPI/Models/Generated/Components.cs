@@ -5410,9 +5410,11 @@ public class DragonList
     public int exp { get; set; }
 
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
     public bool is_lock { get; set; }
 
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
     public bool is_new { get; set; }
     public DateTimeOffset get_time { get; set; }
     public int skill_1_level { get; set; }
