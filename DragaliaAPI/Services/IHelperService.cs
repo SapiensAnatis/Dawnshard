@@ -9,9 +9,4 @@ public interface IHelperService
         UserSupportList helperInfo,
         AtgenSupportUserDetailList helperDetails
     );
-    UserSupportList? GetHelperInfo(QuestGetSupportUserListData helperList, ulong viewerId);
-    AtgenSupportUserDetailList? GetHelperDetail(
-        QuestGetSupportUserListData helperList,
-        ulong viewerId
-    );
 }

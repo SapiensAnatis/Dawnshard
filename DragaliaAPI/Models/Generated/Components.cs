@@ -4708,6 +4708,7 @@ public class CharaList
     public int combo_buildup_count { get; set; }
 
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
     public bool is_unlock_edit_skill { get; set; }
     public DateTimeOffset gettime { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }

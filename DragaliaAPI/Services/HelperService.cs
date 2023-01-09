@@ -71,41 +71,6 @@ public class HelperService : IHelperService
         };
     }
 
-    public UserSupportList? GetHelperInfo(QuestGetSupportUserListData helperList, ulong viewerId)
-    {
-        UserSupportList? helperInfo = null;
-
-        foreach (UserSupportList helper in helperList.support_user_list)
-        {
-            if (helper.viewer_id == viewerId)
-            {
-                helperInfo = helper;
-                break;
-            }
-        }
-
-        return helperInfo;
-    }
-
-    public AtgenSupportUserDetailList? GetHelperDetail(
-        QuestGetSupportUserListData helperList,
-        ulong viewerId
-    )
-    {
-        AtgenSupportUserDetailList? helperDetail = null;
-
-        foreach (AtgenSupportUserDetailList helper in helperList.support_user_detail_list)
-        {
-            if (helper.viewer_id == viewerId)
-            {
-                helperDetail = helper;
-                break;
-            }
-        }
-
-        return helperDetail;
-    }
-
     private static class StubData
     {
         public static readonly QuestGetSupportUserListData SupportListData =

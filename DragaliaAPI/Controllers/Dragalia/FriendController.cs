@@ -40,15 +40,17 @@ public class FriendController : DragaliaControllerBase
     {
         // this eventually needs to pull from the database from another user's account based on viewer id
         QuestGetSupportUserListData helperList = await this.helperService.GetHelpers();
+
         UserSupportList helperInfo =
-            this.helperService.GetHelperInfo(helperList, request.support_viewer_id)
-            ?? new()
-            {
-                support_chara = new() { chara_id = Charas.ThePrince, level = 0 }
-            };
+            helperList.support_user_list
+                .Where(helper => helper.viewer_id == request.support_viewer_id)
+                .FirstOrDefault(defaultValue: null)
+            ?? new() { support_chara = new() { chara_id = Charas.ThePrince } };
+
         AtgenSupportUserDetailList helperDetail =
-            this.helperService.GetHelperDetail(helperList, request.support_viewer_id)
-            ?? new() { is_friend = 0 };
+            helperList.support_user_detail_list
+                .Where(helper => helper.viewer_id == request.support_viewer_id)
+                .FirstOrDefault(defaultValue: null) ?? new() { is_friend = 0 };
 
         FriendGetSupportCharaDetailData response =
             new()
@@ -59,7 +61,7 @@ public class FriendController : DragaliaControllerBase
                     fort_bonus_list = StubData.EmptyBonusList,
                     mana_circle_piece_id_list = Enumerable.Range(
                         1,
-                        helperInfo.support_chara.additional_max_level == 0 ? 50 : 70
+                        helperInfo.support_chara.additional_max_level == 20 ? 70 : 50
                     ),
                     dragon_reliability_level = 30,
                     is_friend = helperDetail.is_friend,

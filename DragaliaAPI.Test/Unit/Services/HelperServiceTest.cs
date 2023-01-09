@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -25,41 +20,19 @@ public class HelperServiceTest
     }
 
     [Fact]
-    public void GetHelperInfoReturnsCorrectType()
-    {
-        this.helperService
-            .GetHelperInfo(StubData.HelperList, 1000)
-            .Should()
-            .BeOfType<UserSupportList>();
-    }
-
-    [Fact]
-    public void GetHelperInfoReturnsNullWhenNotFound()
-    {
-        this.helperService.GetHelperInfo(StubData.HelperList, 0).Should().BeNull();
-    }
-
-    [Fact]
-    public void GetHelperDetailReturnsCorrectType()
-    {
-        this.helperService
-            .GetHelperDetail(StubData.HelperList, 1000)
-            .Should()
-            .BeOfType<AtgenSupportUserDetailList>();
-    }
-
-    [Fact]
-    public void GetHelperDetailReturnsNullWhenNotFound()
-    {
-        this.helperService.GetHelperDetail(StubData.HelperList, 0).Should().BeNull();
-    }
-
-    [Fact]
     public void BuildHelperDataContainsCorrectInformationWhenFriended()
     {
+        UserSupportList? helperInfo = StubData.HelperList.support_user_list
+            .Where(helper => helper.viewer_id == 1000)
+            .FirstOrDefault(defaultValue: null);
+
+        AtgenSupportUserDetailList? helperDetails = StubData.HelperList.support_user_detail_list
+            .Where(helper => helper.viewer_id == 1000)
+            .FirstOrDefault(defaultValue: null);
+
         AtgenSupportData supportData = this.helperService.BuildHelperData(
-            this.helperService.GetHelperInfo(StubData.HelperList, 1000)!,
-            this.helperService.GetHelperDetail(StubData.HelperList, 1000)!
+            helperInfo!,
+            helperDetails!
         );
 
         supportData.viewer_id.Should().Be(1000);
@@ -76,9 +49,17 @@ public class HelperServiceTest
     [Fact]
     public void BuildHelperDataContainsCorrectInformationWhenNotFriended()
     {
+        UserSupportList? helperInfo = StubData.HelperList.support_user_list
+            .Where(helper => helper.viewer_id == 1001)
+            .FirstOrDefault(defaultValue: null);
+
+        AtgenSupportUserDetailList? helperDetails = StubData.HelperList.support_user_detail_list
+            .Where(helper => helper.viewer_id == 1001)
+            .FirstOrDefault(defaultValue: null);
+
         AtgenSupportData supportData = this.helperService.BuildHelperData(
-            this.helperService.GetHelperInfo(StubData.HelperList, 1001)!,
-            this.helperService.GetHelperDetail(StubData.HelperList, 1001)!
+            helperInfo!,
+            helperDetails!
         );
 
         supportData.viewer_id.Should().Be(1001);

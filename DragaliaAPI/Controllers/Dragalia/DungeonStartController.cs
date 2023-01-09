@@ -120,14 +120,14 @@ public class DungeonStartController : DragaliaControllerBase
         );
 
         QuestGetSupportUserListData helperList = await this.helperService.GetHelpers();
-        UserSupportList? helperInfo = this.helperService.GetHelperInfo(
-            helperList,
-            request.support_viewer_id
-        );
-        AtgenSupportUserDetailList? helperDetails = this.helperService.GetHelperDetail(
-            helperList,
-            request.support_viewer_id
-        );
+
+        UserSupportList? helperInfo = helperList.support_user_list
+            .Where(helper => helper.viewer_id == request.support_viewer_id)
+            .FirstOrDefault(defaultValue: null);
+
+        AtgenSupportUserDetailList? helperDetails = helperList.support_user_detail_list
+            .Where(helper => helper.viewer_id == request.support_viewer_id)
+            .FirstOrDefault(defaultValue: null);
 
         DungeonStartStartData response =
             new()
