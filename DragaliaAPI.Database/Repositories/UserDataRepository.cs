@@ -94,6 +94,13 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         userData.LastSaveImportTime = DateTimeOffset.UtcNow;
     }
 
+    public async Task GiveWyrmite(string deviceAccountId, int quantity)
+    {
+        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+
+        userData.Crystal += quantity;
+    }
+
     private async Task<DbPlayerUserData> LookupUserData(string deviceAccountId)
     {
         return await apiContext.PlayerUserData.FindAsync(deviceAccountId)
