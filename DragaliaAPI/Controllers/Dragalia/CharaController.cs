@@ -353,7 +353,7 @@ public class CharaController : DragaliaControllerBase
         Dictionary<CurrencyTypes, int> usedCurrencies = new();
         Dictionary<Materials, int> usedMaterials = new();
         playerCharData.LimitBreakCount = (byte)request.next_limit_break_count;
-        if (request.next_limit_break_count == 6)
+        if (request.next_limit_break_count == 5)
         {
             playerCharData.AdditionalMaxLevel += 5;
         }
@@ -420,35 +420,43 @@ public class CharaController : DragaliaControllerBase
         DbPlayerCharaData playerCharaData = await this.unitRepository
             .GetAllCharaData(this.DeviceAccountId)
             .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+
         CharaData charaData = MasterAsset.CharaData.Get(playerCharaData.CharaId);
+
         playerCharaData.Rarity = 5;
-        bool hasSpiral = charaData.MaxLimitBreakCount > 4;
         playerCharaData.Level = (byte)(
-            CharaConstants.MaxLevel + (hasSpiral ? CharaConstants.AddMaxLevel : 0)
+            CharaConstants.MaxLevel + (charaData.HasManaSpiral ? CharaConstants.AddMaxLevel : 0)
         );
         playerCharaData.Exp = CharaConstants.XpLimits[playerCharaData.Level - 1];
-        playerCharaData.HpBase = hasSpiral ? (ushort)charaData.AddMaxHp1 : (ushort)charaData.MaxHp;
-        playerCharaData.AttackBase = hasSpiral
+        playerCharaData.HpBase = charaData.HasManaSpiral
+            ? (ushort)charaData.AddMaxHp1
+            : (ushort)charaData.MaxHp;
+        playerCharaData.AttackBase = charaData.HasManaSpiral
             ? (ushort)charaData.AddMaxAtk1
             : (ushort)charaData.MaxAtk;
-        if (playerCharaData.ManaNodeUnlockCount < 50)
-        {
-            playerCharaData.HpNode += (ushort)charaData.McFullBonusHp5;
-            playerCharaData.AttackNode += (ushort)charaData.McFullBonusAtk5;
-        }
         playerCharaData.LimitBreakCount = (byte)charaData.MaxLimitBreakCount;
-        ManaNodes maxManaNodes = hasSpiral ? ManaNodes.Circle7 : ManaNodesUtil.MaxManaNodes;
+
+        IEnumerable<int> maxManaNodes = ManaNodesUtil.GetSetFromManaNodes(
+            charaData.HasManaSpiral ? ManaNodes.Circle7 : ManaNodesUtil.MaxManaNodes
+        );
         Dictionary<CurrencyTypes, int> usedCurrencies = new();
         Dictionary<Materials, int> usedMaterials = new();
         HashSet<int> unlockedStories = new();
+
         await CharaManaNodeUnlock(
-            ManaNodesUtil.GetSetFromManaNodes(maxManaNodes),
+            maxManaNodes,
             playerCharaData,
             usedCurrencies,
             usedMaterials,
             unlockedStories,
             CharaUpgradeMaterialTypes.Omnicite
         );
+
+        if (charaData.HasManaSpiral)
+        {
+            playerCharaData.AdditionalMaxLevel = 20;
+        }
+
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
@@ -527,6 +535,21 @@ public class CharaController : DragaliaControllerBase
             charaData.PlusAtk4,
             charaData.PlusAtk5
         };
+
+        if (isUseSpecialMaterial == CharaUpgradeMaterialTypes.Omnicite)
+        {
+            playerCharData.Skill1Level = 1;
+            playerCharData.Skill2Level = 0;
+            playerCharData.Ability1Level = (byte)charaData.DefaultAbility1Level;
+            playerCharData.Ability2Level = (byte)charaData.DefaultAbility2Level;
+            playerCharData.Ability3Level = (byte)charaData.DefaultAbility3Level;
+            playerCharData.BurstAttackLevel = (byte)charaData.DefaultBurstAttackLevel;
+            playerCharData.HpNode = 0;
+            playerCharData.AttackNode = 0;
+            playerCharData.ExAbilityLevel = 1;
+            playerCharData.ExAbility2Level = 1;
+        }
+
         foreach (int nodeNr in manaNodes)
         {
             if (manaNodeInfos.Count < nodeNr)
@@ -660,7 +683,7 @@ public class CharaController : DragaliaControllerBase
         SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
         nodes.AddRange(manaNodes);
 
-        if (nodes.Count == 50)
+        if (nodes.Count >= 50 && manaNodes.Select(x => x <= 50).Any())
         {
             playerCharData.HpNode += (ushort)charaData.McFullBonusHp5;
             playerCharData.AttackNode += (ushort)charaData.McFullBonusAtk5;

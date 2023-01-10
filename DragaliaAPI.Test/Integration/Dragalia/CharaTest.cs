@@ -31,6 +31,7 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
         );
         fixture.AddCharacter(Charas.Celliera).Wait();
         fixture.AddCharacter(Charas.SummerCelliera).Wait();
+        fixture.AddCharacter(Charas.Harle).Wait();
     }
 
     [Fact]
@@ -197,7 +198,7 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
-    public async Task CharaBuildupPlatinum_ReturnsFullyBuilt()
+    public async Task CharaBuildupPlatinum_ReturnsFullyBuiltWithSpiralledCharacter()
     {
         CharaBuildupPlatinumData response = (
             await client.PostMsgpack<CharaBuildupPlatinumData>(
@@ -212,6 +213,7 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
 
         responseCharaData.level.Should().Be(100);
         responseCharaData.exp.Should().Be(CharaConstants.XpLimits[99]);
+        responseCharaData.additional_max_level.Should().Be(20);
 
         // Values from wiki
         responseCharaData.hp.Should().Be(956);
@@ -221,6 +223,142 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
         responseCharaData.mana_circle_piece_id_list
             .Should()
             .BeEquivalentTo(Enumerable.Range(1, 70));
+
+        responseCharaData.skill_1_level.Should().Be(4);
+        responseCharaData.skill_2_level.Should().Be(3);
+        responseCharaData.ability_1_level.Should().Be(3);
+        responseCharaData.ability_2_level.Should().Be(3);
+        responseCharaData.ability_3_level.Should().Be(3);
+    }
+
+    [Fact]
+    public async Task CharaBuildupPlatinum_ReturnsFullyBuiltWithNonSpiralledCharacter()
+    {
+        CharaBuildupPlatinumData response = (
+            await client.PostMsgpack<CharaBuildupPlatinumData>(
+                "chara/buildup_platinum",
+                new CharaBuildupPlatinumRequest(Charas.Harle)
+            )
+        ).data;
+
+        CharaList responseCharaData = response.update_data_list.chara_list
+            .Where(x => x.chara_id == Charas.Harle)
+            .First();
+
+        responseCharaData.level.Should().Be(80);
+        responseCharaData.exp.Should().Be(CharaConstants.XpLimits[79]);
+        responseCharaData.additional_max_level.Should().Be(0);
+
+        responseCharaData.hp.Should().Be(741);
+        responseCharaData.attack.Should().Be(470);
+
+        responseCharaData.limit_break_count.Should().Be(4);
+        responseCharaData.mana_circle_piece_id_list
+            .Should()
+            .BeEquivalentTo(Enumerable.Range(1, 50));
+
+        responseCharaData.skill_1_level.Should().Be(3);
+        responseCharaData.skill_2_level.Should().Be(2);
+        responseCharaData.ability_1_level.Should().Be(2);
+        responseCharaData.ability_2_level.Should().Be(2);
+        responseCharaData.ability_3_level.Should().Be(2);
+    }
+
+    [Theory]
+    [InlineData(20)]
+    [InlineData(40)]
+    [InlineData(50)]
+    [InlineData(60)]
+    [InlineData(70)]
+    public async Task CharaBuildupPlatinum_ReturnsFullyBuiltWithSpiralledCharacterWhenAlreadyHalfBuilt(
+        int manaNodes
+    )
+    {
+        await client.PostMsgpack<CharaBuildupManaData>(
+            "chara/buildup_mana",
+            new CharaBuildupManaRequest(
+                Charas.Celliera,
+                Enumerable.Range(1, manaNodes),
+                (int)CharaUpgradeMaterialTypes.Standard
+            )
+        );
+
+        CharaBuildupPlatinumData response = (
+            await client.PostMsgpack<CharaBuildupPlatinumData>(
+                "chara/buildup_platinum",
+                new CharaBuildupPlatinumRequest(Charas.Celliera)
+            )
+        ).data;
+
+        CharaList responseCharaData = response.update_data_list.chara_list
+            .Where(x => x.chara_id == Charas.Celliera)
+            .First();
+
+        responseCharaData.level.Should().Be(100);
+        responseCharaData.exp.Should().Be(CharaConstants.XpLimits[99]);
+
+        // Values from wiki
+        responseCharaData.hp.Should().Be(846);
+        responseCharaData.attack.Should().Be(589);
+
+        responseCharaData.limit_break_count.Should().Be(5);
+        responseCharaData.mana_circle_piece_id_list
+            .Should()
+            .BeEquivalentTo(Enumerable.Range(1, 70));
+
+        responseCharaData.skill_1_level.Should().Be(4);
+        responseCharaData.skill_2_level.Should().Be(3);
+        responseCharaData.ability_1_level.Should().Be(3);
+        responseCharaData.ability_2_level.Should().Be(3);
+        responseCharaData.ability_3_level.Should().Be(2);
+    }
+
+    [Theory]
+    [InlineData(10)]
+    [InlineData(20)]
+    [InlineData(30)]
+    [InlineData(40)]
+    [InlineData(50)]
+    public async Task CharaBuildupPlatinum_ReturnsFullyBuiltWithNonSpiralledCharacterWhenAlreadyHalfBuilt(
+        int manaNodes
+    )
+    {
+        await client.PostMsgpack<CharaBuildupManaData>(
+            "chara/buildup_mana",
+            new CharaBuildupManaRequest(
+                Charas.Harle,
+                Enumerable.Range(1, manaNodes),
+                (int)CharaUpgradeMaterialTypes.Standard
+            )
+        );
+        CharaBuildupPlatinumData response = (
+            await client.PostMsgpack<CharaBuildupPlatinumData>(
+                "chara/buildup_platinum",
+                new CharaBuildupPlatinumRequest(Charas.Harle)
+            )
+        ).data;
+
+        CharaList responseCharaData = response.update_data_list.chara_list
+            .Where(x => x.chara_id == Charas.Harle)
+            .First();
+
+        responseCharaData.level.Should().Be(80);
+        responseCharaData.exp.Should().Be(CharaConstants.XpLimits[79]);
+        responseCharaData.additional_max_level.Should().Be(0);
+
+        responseCharaData.hp.Should().Be(741);
+        responseCharaData.attack.Should().Be(470);
+
+        responseCharaData.limit_break_count.Should().Be(4);
+        responseCharaData.mana_circle_piece_id_list
+            .Should()
+            .BeEquivalentTo(Enumerable.Range(1, 50));
+
+        responseCharaData.skill_1_level.Should().Be(3);
+        responseCharaData.skill_2_level.Should().Be(2);
+        responseCharaData.ability_1_level.Should().Be(2);
+        responseCharaData.ability_2_level.Should().Be(2);
+        responseCharaData.ability_3_level.Should().Be(2);
     }
 
     [Fact]
