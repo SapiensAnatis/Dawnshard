@@ -9,6 +9,8 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -32,6 +34,14 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
         fixture.AddCharacter(Charas.Celliera).Wait();
         fixture.AddCharacter(Charas.SummerCelliera).Wait();
         fixture.AddCharacter(Charas.Harle).Wait();
+        fixture.AddCharacter(Charas.Ezelith).Wait();
+        fixture.AddCharacter(Charas.Xander).Wait();
+        fixture.AddCharacter(Charas.Vixel).Wait();
+        fixture.AddCharacter(Charas.Nefaria).Wait();
+        fixture.AddCharacter(Charas.Mitsuba).Wait();
+        fixture.AddCharacter(Charas.Pipple).Wait();
+        fixture.AddCharacter(Charas.GalaZethia).Wait();
+        fixture.AddCharacter(Charas.Vida).Wait();
     }
 
     [Fact]
@@ -265,19 +275,19 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Theory]
-    [InlineData(20)]
-    [InlineData(40)]
-    [InlineData(50)]
-    [InlineData(60)]
-    [InlineData(70)]
+    [InlineData(40, Charas.Ezelith)]
+    [InlineData(50, Charas.Xander)]
+    [InlineData(60, Charas.Vixel)]
+    [InlineData(70, Charas.Nefaria)]
     public async Task CharaBuildupPlatinum_ReturnsFullyBuiltWithSpiralledCharacterWhenAlreadyHalfBuilt(
-        int manaNodes
+        int manaNodes,
+        Charas id
     )
     {
         await client.PostMsgpack<CharaBuildupManaData>(
             "chara/buildup_mana",
             new CharaBuildupManaRequest(
-                Charas.Celliera,
+                id,
                 Enumerable.Range(1, manaNodes),
                 (int)CharaUpgradeMaterialTypes.Standard
             )
@@ -286,20 +296,44 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
         CharaBuildupPlatinumData response = (
             await client.PostMsgpack<CharaBuildupPlatinumData>(
                 "chara/buildup_platinum",
-                new CharaBuildupPlatinumRequest(Charas.Celliera)
+                new CharaBuildupPlatinumRequest(id)
             )
         ).data;
 
         CharaList responseCharaData = response.update_data_list.chara_list
-            .Where(x => x.chara_id == Charas.Celliera)
+            .Where(x => x.chara_id == id)
             .First();
 
         responseCharaData.level.Should().Be(100);
         responseCharaData.exp.Should().Be(CharaConstants.XpLimits[99]);
 
+        CharaData charaData = MasterAsset.CharaData.Get(id);
+
         // Values from wiki
-        responseCharaData.hp.Should().Be(846);
-        responseCharaData.attack.Should().Be(589);
+        responseCharaData.hp
+            .Should()
+            .Be(
+                charaData.AddMaxHp1
+                    + charaData.PlusHp0
+                    + charaData.PlusHp1
+                    + charaData.PlusHp2
+                    + charaData.PlusHp3
+                    + charaData.PlusHp4
+                    + charaData.PlusHp5
+                    + charaData.McFullBonusHp5
+            );
+        responseCharaData.attack
+            .Should()
+            .Be(
+                charaData.AddMaxAtk1
+                    + charaData.PlusAtk0
+                    + charaData.PlusAtk1
+                    + charaData.PlusAtk2
+                    + charaData.PlusAtk3
+                    + charaData.PlusAtk4
+                    + charaData.PlusAtk5
+                    + charaData.McFullBonusAtk5
+            );
 
         responseCharaData.limit_break_count.Should().Be(5);
         responseCharaData.mana_circle_piece_id_list
@@ -308,25 +342,25 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
 
         responseCharaData.skill_1_level.Should().Be(4);
         responseCharaData.skill_2_level.Should().Be(3);
-        responseCharaData.ability_1_level.Should().Be(3);
-        responseCharaData.ability_2_level.Should().Be(3);
-        responseCharaData.ability_3_level.Should().Be(2);
+        responseCharaData.ability_1_level.Should().Be(charaData.MaxAbility1Level);
+        responseCharaData.ability_2_level.Should().Be(charaData.MaxAbility2Level);
+        responseCharaData.ability_3_level.Should().Be(charaData.MaxAbility3Level);
     }
 
     [Theory]
-    [InlineData(10)]
-    [InlineData(20)]
-    [InlineData(30)]
-    [InlineData(40)]
-    [InlineData(50)]
+    [InlineData(1, Charas.Mitsuba)]
+    [InlineData(25, Charas.Pipple)]
+    [InlineData(40, Charas.GalaZethia)]
+    [InlineData(50, Charas.Vida)]
     public async Task CharaBuildupPlatinum_ReturnsFullyBuiltWithNonSpiralledCharacterWhenAlreadyHalfBuilt(
-        int manaNodes
+        int manaNodes,
+        Charas id
     )
     {
         await client.PostMsgpack<CharaBuildupManaData>(
             "chara/buildup_mana",
             new CharaBuildupManaRequest(
-                Charas.Harle,
+                id,
                 Enumerable.Range(1, manaNodes),
                 (int)CharaUpgradeMaterialTypes.Standard
             )
@@ -334,20 +368,42 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
         CharaBuildupPlatinumData response = (
             await client.PostMsgpack<CharaBuildupPlatinumData>(
                 "chara/buildup_platinum",
-                new CharaBuildupPlatinumRequest(Charas.Harle)
+                new CharaBuildupPlatinumRequest(id)
             )
         ).data;
 
         CharaList responseCharaData = response.update_data_list.chara_list
-            .Where(x => x.chara_id == Charas.Harle)
+            .Where(x => x.chara_id == id)
             .First();
 
         responseCharaData.level.Should().Be(80);
         responseCharaData.exp.Should().Be(CharaConstants.XpLimits[79]);
         responseCharaData.additional_max_level.Should().Be(0);
 
-        responseCharaData.hp.Should().Be(741);
-        responseCharaData.attack.Should().Be(470);
+        CharaData charaData = MasterAsset.CharaData.Get(id);
+
+        responseCharaData.hp
+            .Should()
+            .Be(
+                charaData.MaxHp
+                    + charaData.PlusHp0
+                    + charaData.PlusHp1
+                    + charaData.PlusHp2
+                    + charaData.PlusHp3
+                    + charaData.PlusHp4
+                    + charaData.McFullBonusHp5
+            );
+        responseCharaData.attack
+            .Should()
+            .Be(
+                charaData.MaxAtk
+                    + charaData.PlusAtk0
+                    + charaData.PlusAtk1
+                    + charaData.PlusAtk2
+                    + charaData.PlusAtk3
+                    + charaData.PlusAtk4
+                    + charaData.McFullBonusAtk5
+            );
 
         responseCharaData.limit_break_count.Should().Be(4);
         responseCharaData.mana_circle_piece_id_list
@@ -355,10 +411,10 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
             .BeEquivalentTo(Enumerable.Range(1, 50));
 
         responseCharaData.skill_1_level.Should().Be(3);
-        responseCharaData.skill_2_level.Should().Be(2);
-        responseCharaData.ability_1_level.Should().Be(2);
-        responseCharaData.ability_2_level.Should().Be(2);
-        responseCharaData.ability_3_level.Should().Be(2);
+        responseCharaData.skill_2_level.Should().Be(id == Charas.GalaZethia ? 0 : 2);
+        responseCharaData.ability_1_level.Should().Be(charaData.MaxAbility1Level);
+        responseCharaData.ability_2_level.Should().Be(charaData.MaxAbility2Level);
+        responseCharaData.ability_3_level.Should().Be(charaData.MaxAbility3Level);
     }
 
     [Fact]
