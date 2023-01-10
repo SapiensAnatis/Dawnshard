@@ -39,11 +39,37 @@ public class HelperServiceTest
         supportData.name.Should().BeEquivalentTo("Euden");
         supportData.is_friend.Should().Be(1);
         supportData.chara_data.Should().BeOfType<CharaList>();
+        supportData.chara_data.chara_id.Should().Be(Charas.ThePrince);
         supportData.dragon_data.Should().BeOfType<DragonList>();
         supportData.weapon_body_data.Should().BeOfType<GameWeaponBody>();
-        supportData.crest_slot_type_1_crest_list.Should().BeOfType<List<GameAbilityCrest>>();
-        supportData.crest_slot_type_2_crest_list.Should().BeOfType<List<GameAbilityCrest>>();
-        supportData.crest_slot_type_3_crest_list.Should().BeOfType<List<GameAbilityCrest>>();
+        supportData.crest_slot_type_1_crest_list
+            .Should()
+            .BeEquivalentTo(
+                new List<GameAbilityCrest>()
+                {
+                    new() { ability_crest_id = 0 },
+                    new() { ability_crest_id = 0 },
+                    new() { ability_crest_id = 0 },
+                }
+            );
+        supportData.crest_slot_type_2_crest_list
+            .Should()
+            .BeEquivalentTo(
+                new List<GameAbilityCrest>()
+                {
+                    new() { ability_crest_id = 0 },
+                    new() { ability_crest_id = 0 },
+                }
+            );
+        supportData.crest_slot_type_3_crest_list
+            .Should()
+            .BeEquivalentTo(
+                new List<GameAbilityCrest>()
+                {
+                    new() { ability_crest_id = 0 },
+                    new() { ability_crest_id = 0 },
+                }
+            );
     }
 
     [Fact]
@@ -66,11 +92,37 @@ public class HelperServiceTest
         supportData.name.Should().BeEquivalentTo("Elisanne");
         supportData.is_friend.Should().Be(0);
         supportData.chara_data.Should().BeOfType<CharaList>();
+        supportData.chara_data.chara_id.Should().Be(Charas.Elisanne);
         supportData.dragon_data.Should().BeOfType<DragonList>();
         supportData.weapon_body_data.Should().BeOfType<GameWeaponBody>();
-        supportData.crest_slot_type_1_crest_list.Should().BeOfType<List<GameAbilityCrest>>();
-        supportData.crest_slot_type_2_crest_list.Should().BeOfType<List<GameAbilityCrest>>();
-        supportData.crest_slot_type_3_crest_list.Should().BeOfType<List<GameAbilityCrest>>();
+        supportData.crest_slot_type_1_crest_list
+            .Should()
+            .BeEquivalentTo(
+                new List<GameAbilityCrest>()
+                {
+                    new() { ability_crest_id = 0 },
+                    new() { ability_crest_id = 0 },
+                    new() { ability_crest_id = 0 },
+                }
+            );
+        supportData.crest_slot_type_2_crest_list
+            .Should()
+            .BeEquivalentTo(
+                new List<GameAbilityCrest>()
+                {
+                    new() { ability_crest_id = 0 },
+                    new() { ability_crest_id = 0 },
+                }
+            );
+        supportData.crest_slot_type_3_crest_list
+            .Should()
+            .BeEquivalentTo(
+                new List<GameAbilityCrest>()
+                {
+                    new() { ability_crest_id = 0 },
+                    new() { ability_crest_id = 0 },
+                }
+            );
     }
 
     private static class StubData
