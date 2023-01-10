@@ -37,36 +37,15 @@ public class HelperService : IHelperService
             chara_data = this.mapper.Map<CharaList>(helperInfo.support_chara),
             dragon_data = this.mapper.Map<DragonList>(helperInfo.support_dragon),
             weapon_body_data = this.mapper.Map<GameWeaponBody>(helperInfo.support_weapon_body),
-            crest_slot_type_1_crest_list = new List<GameAbilityCrest>()
-            {
-                this.mapper.Map<GameAbilityCrest>(
-                    helperInfo.support_crest_slot_type_1_list.ElementAt(0)
-                ),
-                this.mapper.Map<GameAbilityCrest>(
-                    helperInfo.support_crest_slot_type_1_list.ElementAt(1)
-                ),
-                this.mapper.Map<GameAbilityCrest>(
-                    helperInfo.support_crest_slot_type_1_list.ElementAt(2)
-                )
-            },
-            crest_slot_type_2_crest_list = new List<GameAbilityCrest>()
-            {
-                this.mapper.Map<GameAbilityCrest>(
-                    helperInfo.support_crest_slot_type_1_list.ElementAt(0)
-                ),
-                this.mapper.Map<GameAbilityCrest>(
-                    helperInfo.support_crest_slot_type_1_list.ElementAt(1)
-                )
-            },
-            crest_slot_type_3_crest_list = new List<GameAbilityCrest>()
-            {
-                this.mapper.Map<GameAbilityCrest>(
-                    helperInfo.support_crest_slot_type_1_list.ElementAt(0)
-                ),
-                this.mapper.Map<GameAbilityCrest>(
-                    helperInfo.support_crest_slot_type_1_list.ElementAt(1)
-                )
-            },
+            crest_slot_type_1_crest_list = helperInfo.support_crest_slot_type_1_list.Select(
+                this.mapper.Map<GameAbilityCrest>
+            ),
+            crest_slot_type_2_crest_list = helperInfo.support_crest_slot_type_2_list.Select(
+                this.mapper.Map<GameAbilityCrest>
+            ),
+            crest_slot_type_3_crest_list = helperInfo.support_crest_slot_type_3_list.Select(
+                this.mapper.Map<GameAbilityCrest>
+            ),
             talisman_data = this.mapper.Map<TalismanList>(helperInfo.support_talisman)
         };
     }
