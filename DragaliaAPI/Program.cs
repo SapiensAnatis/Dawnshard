@@ -69,6 +69,7 @@ builder.Services.AddAuthentication(opts =>
 });
 
 builder.Services
+    .AddResponseCompression()
     .ConfigureDatabaseServices(builder.Configuration.GetConnectionString("PostgresHost"))
     .AddAutoMapper(Assembly.GetExecutingAssembly())
     .AddStackExchangeRedisCache(options =>
@@ -125,6 +126,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseResponseCompression();
 app.MapHealthChecks("/health");
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
