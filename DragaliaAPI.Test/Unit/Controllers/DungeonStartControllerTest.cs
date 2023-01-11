@@ -207,7 +207,7 @@ public class DungeonStartControllerTest
                     },
                     support_user_detail_list = new List<AtgenSupportUserDetailList>()
                     {
-                        new() { viewer_id = 1000, is_friend = 1, },
+                        new() { viewer_id = 1000, is_friend = true, },
                     }
                 }
             );

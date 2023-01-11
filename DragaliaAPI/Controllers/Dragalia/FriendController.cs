@@ -44,13 +44,13 @@ public class FriendController : DragaliaControllerBase
         UserSupportList helperInfo =
             helperList.support_user_list
                 .Where(helper => helper.viewer_id == request.support_viewer_id)
-                .FirstOrDefault(defaultValue: null)
+                .FirstOrDefault()
             ?? new() { support_chara = new() { chara_id = Charas.ThePrince } };
 
         AtgenSupportUserDetailList helperDetail =
             helperList.support_user_detail_list
                 .Where(helper => helper.viewer_id == request.support_viewer_id)
-                .FirstOrDefault(defaultValue: null) ?? new() { is_friend = 0 };
+                .FirstOrDefault() ?? new() { is_friend = false };
 
         FriendGetSupportCharaDetailData response =
             new()

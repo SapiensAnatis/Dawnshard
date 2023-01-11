@@ -88,7 +88,7 @@ public class FriendControllerTest
                     },
                     support_user_detail_list = new List<AtgenSupportUserDetailList>()
                     {
-                        new() { viewer_id = 1000, is_friend = 1, },
+                        new() { viewer_id = 1000, is_friend = true, },
                     }
                 }
             );
@@ -125,7 +125,7 @@ public class FriendControllerTest
                     is_unlock_edit_skill = true
                 }
             );
-        data!.support_user_data_detail.is_friend.Should().Be(1);
+        data!.support_user_data_detail.is_friend.Should().Be(true);
 
         this.mockHelperService.VerifyAll();
     }
@@ -194,7 +194,7 @@ public class FriendControllerTest
                     },
                     support_user_detail_list = new List<AtgenSupportUserDetailList>()
                     {
-                        new() { viewer_id = 1000, is_friend = 1, },
+                        new() { viewer_id = 1000, is_friend = true },
                     }
                 }
             );
@@ -213,7 +213,7 @@ public class FriendControllerTest
                 new UserSupportList() { support_chara = new() { chara_id = Charas.ThePrince } }
             );
 
-        data!.support_user_data_detail.is_friend.Should().Be(0);
+        data!.support_user_data_detail.is_friend.Should().Be(false);
 
         this.mockHelperService.VerifyAll();
     }

@@ -3687,7 +3687,9 @@ public class AtgenSupportData
 {
     public ulong viewer_id { get; set; }
     public string name { get; set; }
-    public int is_friend { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_friend { get; set; }
     public CharaList chara_data { get; set; }
     public DragonList dragon_data { get; set; }
     public WeaponList weapon_data { get; set; }
@@ -3704,7 +3706,7 @@ public class AtgenSupportData
     public AtgenSupportData(
         ulong viewer_id,
         string name,
-        int is_friend,
+        bool is_friend,
         CharaList chara_data,
         DragonList dragon_data,
         WeaponList weapon_data,
@@ -3842,7 +3844,9 @@ public class AtgenSupportUserDataDetail
     public FortBonusList fort_bonus_list { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }
     public int dragon_reliability_level { get; set; }
-    public int is_friend { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_friend { get; set; }
     public int apply_send_status { get; set; }
 
     public AtgenSupportUserDataDetail(
@@ -3850,7 +3854,7 @@ public class AtgenSupportUserDataDetail
         FortBonusList fort_bonus_list,
         IEnumerable<int> mana_circle_piece_id_list,
         int dragon_reliability_level,
-        int is_friend,
+        bool is_friend,
         int apply_send_status
     )
     {
@@ -3870,9 +3874,11 @@ public class AtgenSupportUserDetailList
 {
     public ulong viewer_id { get; set; }
     public int gettable_mana_point { get; set; }
-    public int is_friend { get; set; }
 
-    public AtgenSupportUserDetailList(ulong viewer_id, int gettable_mana_point, int is_friend)
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_friend { get; set; }
+
+    public AtgenSupportUserDetailList(ulong viewer_id, int gettable_mana_point, bool is_friend)
     {
         this.viewer_id = viewer_id;
         this.gettable_mana_point = gettable_mana_point;

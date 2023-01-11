@@ -123,11 +123,11 @@ public class DungeonStartController : DragaliaControllerBase
 
         UserSupportList? helperInfo = helperList.support_user_list
             .Where(helper => helper.viewer_id == request.support_viewer_id)
-            .FirstOrDefault(defaultValue: null);
+            .FirstOrDefault();
 
         AtgenSupportUserDetailList? helperDetails = helperList.support_user_detail_list
             .Where(helper => helper.viewer_id == request.support_viewer_id)
-            .FirstOrDefault(defaultValue: null);
+            .FirstOrDefault();
 
         DungeonStartStartData response =
             new()

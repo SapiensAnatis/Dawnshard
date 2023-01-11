@@ -24,11 +24,11 @@ public class HelperServiceTest
     {
         UserSupportList? helperInfo = StubData.HelperList.support_user_list
             .Where(helper => helper.viewer_id == 1000)
-            .FirstOrDefault(defaultValue: null);
+            .FirstOrDefault();
 
         AtgenSupportUserDetailList? helperDetails = StubData.HelperList.support_user_detail_list
             .Where(helper => helper.viewer_id == 1000)
-            .FirstOrDefault(defaultValue: null);
+            .FirstOrDefault();
 
         AtgenSupportData supportData = this.helperService.BuildHelperData(
             helperInfo!,
@@ -37,7 +37,7 @@ public class HelperServiceTest
 
         supportData.viewer_id.Should().Be(1000);
         supportData.name.Should().BeEquivalentTo("Euden");
-        supportData.is_friend.Should().Be(1);
+        supportData.is_friend.Should().Be(true);
         supportData.chara_data.Should().BeOfType<CharaList>();
         supportData.chara_data.chara_id.Should().Be(Charas.ThePrince);
         supportData.dragon_data.Should().BeOfType<DragonList>();
@@ -77,11 +77,11 @@ public class HelperServiceTest
     {
         UserSupportList? helperInfo = StubData.HelperList.support_user_list
             .Where(helper => helper.viewer_id == 1001)
-            .FirstOrDefault(defaultValue: null);
+            .FirstOrDefault();
 
         AtgenSupportUserDetailList? helperDetails = StubData.HelperList.support_user_detail_list
             .Where(helper => helper.viewer_id == 1001)
-            .FirstOrDefault(defaultValue: null);
+            .FirstOrDefault();
 
         AtgenSupportData supportData = this.helperService.BuildHelperData(
             helperInfo!,
@@ -90,7 +90,7 @@ public class HelperServiceTest
 
         supportData.viewer_id.Should().Be(1001);
         supportData.name.Should().BeEquivalentTo("Elisanne");
-        supportData.is_friend.Should().Be(0);
+        supportData.is_friend.Should().Be(false);
         supportData.chara_data.Should().BeOfType<CharaList>();
         supportData.chara_data.chara_id.Should().Be(Charas.Elisanne);
         supportData.dragon_data.Should().BeOfType<DragonList>();
@@ -231,8 +231,8 @@ public class HelperServiceTest
                 },
                 support_user_detail_list = new List<AtgenSupportUserDetailList>()
                 {
-                    new() { viewer_id = 1000, is_friend = 1, },
-                    new() { viewer_id = 1001, is_friend = 0, }
+                    new() { viewer_id = 1000, is_friend = true },
+                    new() { viewer_id = 1001, is_friend = false }
                 }
             };
     }

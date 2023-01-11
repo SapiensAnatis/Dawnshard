@@ -2240,103 +2240,103 @@ public class HelperService : IHelperService
                     {
                         viewer_id = 1000,
                         gettable_mana_point = 25,
-                        is_friend = 0,
+                        is_friend = false
                     },
                     new()
                     {
                         viewer_id = 1001,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1002,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1003,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1004,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1005,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1006,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1007,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1008,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1009,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1010,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1011,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1012,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1013,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1014,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1015,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1016,
                         gettable_mana_point = 25,
-                        is_friend = 1,
+                        is_friend = true
                     },
                 }
             };
