@@ -550,12 +550,20 @@ public class CharaController : DragaliaControllerBase
             playerCharData.ExAbility2Level = 1;
         }
 
+        bool is50MCBonusNew = false;
+
         foreach (int nodeNr in manaNodes)
         {
             if (manaNodeInfos.Count < nodeNr)
             {
                 throw new ArgumentException($"No nodeInfo found for node {nodeNr}");
             }
+
+            if (nodeNr <= 50)
+            {
+                is50MCBonusNew = true;
+            }
+
             ManaNode manaNodeInfo = manaNodeInfos[nodeNr - 1];
             int floor = Math.Clamp((nodeNr - 1) / 10, 0, 5);
             Dictionary<CurrencyTypes, int> currencyCosts = new();
@@ -683,7 +691,7 @@ public class CharaController : DragaliaControllerBase
         SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
         nodes.AddRange(manaNodes);
 
-        if (nodes.Count >= 50 && manaNodes.Select(x => x <= 50).Any())
+        if (nodes.Count >= 50 && is50MCBonusNew)
         {
             playerCharData.HpNode += (ushort)charaData.McFullBonusHp5;
             playerCharData.AttackNode += (ushort)charaData.McFullBonusAtk5;
