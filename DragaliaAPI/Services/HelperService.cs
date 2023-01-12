@@ -135,7 +135,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.GalaBahamut,
+                            dragon_id = Dragons.GalaBahamut,
                             level = 100,
                             hp = 368,
                             attack = 128,
@@ -148,7 +148,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.AqueousPrison,
+                            weapon_body_id = WeaponBodies.AqueousPrison,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -160,7 +160,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.GalaEmile,
+                            talisman_id = Talismans.GalaEmile,
                             additional_attack = 100,
                             additional_hp = 100
                         },
@@ -168,7 +168,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ARoyalTeaParty,
+                                ability_crest_id = AbilityCrests.ARoyalTeaParty,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -177,7 +177,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.QueenoftheBlueSeas,
+                                ability_crest_id = AbilityCrests.QueenoftheBlueSeas,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -186,7 +186,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.PeacefulWaterfront,
+                                ability_crest_id = AbilityCrests.PeacefulWaterfront,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -198,7 +198,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.HisCleverBrother,
+                                ability_crest_id = AbilityCrests.HisCleverBrother,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -207,7 +207,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.GreatwyrmMercury,
+                                ability_crest_id = AbilityCrests.GreatwyrmMercury,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -219,7 +219,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.TutelarysDestinyWolfsBoon,
+                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -228,7 +228,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CrownofLightSerpentsBoon,
+                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -268,7 +268,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.Ramiel,
+                            dragon_id = Dragons.Ramiel,
                             level = 120,
                             hp = 388,
                             attack = 148,
@@ -281,7 +281,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.PrimalHex,
+                            weapon_body_id = WeaponBodies.PrimalHex,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -293,7 +293,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.Alberius,
+                            talisman_id = Talismans.Alberius,
                             talisman_ability_id_1 = 340000030,
                             talisman_ability_id_2 = 340000132
                         },
@@ -301,7 +301,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.WelcometotheOpera,
+                                ability_crest_id = AbilityCrests.WelcometotheOpera,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -310,7 +310,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.AManUnchanging,
+                                ability_crest_id = AbilityCrests.AManUnchanging,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -319,7 +319,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.PrayersUntoHim,
+                                ability_crest_id = AbilityCrests.PrayersUntoHim,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -331,7 +331,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ChariotDrift,
+                                ability_crest_id = AbilityCrests.ChariotDrift,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -340,7 +340,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.DragonsNest,
+                                ability_crest_id = AbilityCrests.DragonsNest,
                                 buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -352,7 +352,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.TutelarysDestinyWolfsBoon,
+                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -361,7 +361,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CrownofLightSerpentsBoon,
+                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -401,7 +401,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.Ramiel,
+                            dragon_id = Dragons.Ramiel,
                             level = 120,
                             hp = 388,
                             attack = 148,
@@ -414,7 +414,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.ConsumingDarkness,
+                            weapon_body_id = WeaponBodies.ConsumingDarkness,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -426,7 +426,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.Grace,
+                            talisman_id = Talismans.Grace,
                             talisman_ability_id_1 = 340000070,
                             talisman_ability_id_2 = 340000134
                         },
@@ -434,7 +434,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.GentleWinds,
+                                ability_crest_id = AbilityCrests.GentleWinds,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -443,7 +443,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.TheChocolatiers,
+                                ability_crest_id = AbilityCrests.TheChocolatiers,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -452,7 +452,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ProperMaintenance,
+                                ability_crest_id = AbilityCrests.ProperMaintenance,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -464,7 +464,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.AWidowsLament,
+                                ability_crest_id = AbilityCrests.AWidowsLament,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -473,7 +473,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.DragonsNest,
+                                ability_crest_id = AbilityCrests.DragonsNest,
                                 buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -485,7 +485,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.RavenousFireCrownsBoon,
+                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -494,7 +494,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.PromisedPietyStaffsBoon,
+                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -534,7 +534,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.Ramiel,
+                            dragon_id = Dragons.Ramiel,
                             level = 120,
                             hp = 388,
                             attack = 148,
@@ -547,7 +547,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.ConsumingDarkness,
+                            weapon_body_id = WeaponBodies.ConsumingDarkness,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -559,7 +559,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.SummerVerica,
+                            talisman_id = Talismans.SummerVerica,
                             talisman_ability_id_1 = 340000010,
                             talisman_ability_id_2 = 340000134
                         },
@@ -567,7 +567,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CastleCheerCorps,
+                                ability_crest_id = AbilityCrests.CastleCheerCorps,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -576,7 +576,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.StudyRabbits,
+                                ability_crest_id = AbilityCrests.StudyRabbits,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -585,7 +585,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ProperMaintenance,
+                                ability_crest_id = AbilityCrests.ProperMaintenance,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -597,7 +597,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.FromWhenceHeComes,
+                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -606,7 +606,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.DragonsNest,
+                                ability_crest_id = AbilityCrests.DragonsNest,
                                 buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -618,7 +618,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.RavenousFireCrownsBoon,
+                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -627,7 +627,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.PromisedPietyStaffsBoon,
+                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -667,7 +667,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.PrimalBrunhilda,
+                            dragon_id = Dragons.PrimalBrunhilda,
                             level = 100,
                             hp = 369,
                             attack = 127,
@@ -680,7 +680,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.OmniflameLance,
+                            weapon_body_id = WeaponBodies.OmniflameLance,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -692,7 +692,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.KimonoElisanne,
+                            talisman_id = Talismans.KimonoElisanne,
                             talisman_ability_id_1 = 340000010,
                             talisman_ability_id_2 = 340000134
                         },
@@ -700,7 +700,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CastleCheerCorps,
+                                ability_crest_id = AbilityCrests.CastleCheerCorps,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -709,7 +709,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.StudyRabbits,
+                                ability_crest_id = AbilityCrests.StudyRabbits,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -718,7 +718,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ProperMaintenance,
+                                ability_crest_id = AbilityCrests.ProperMaintenance,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -730,7 +730,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.FromWhenceHeComes,
+                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -739,7 +739,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.SaintStarfallsCircus,
+                                ability_crest_id = AbilityCrests.SaintStarfallsCircus,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -751,7 +751,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.RavenousFireCrownsBoon,
+                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -760,7 +760,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.PromisedPietyStaffsBoon,
+                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -800,7 +800,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.GalaBahamut,
+                            dragon_id = Dragons.GalaBahamut,
                             level = 100,
                             hp = 368,
                             attack = 128,
@@ -813,7 +813,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.LimpidCascade,
+                            weapon_body_id = WeaponBodies.LimpidCascade,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -825,7 +825,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.Elisanne,
+                            talisman_id = Talismans.Elisanne,
                             talisman_ability_id_1 = 340000010,
                             talisman_ability_id_2 = 340000134
                         },
@@ -833,7 +833,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CastleCheerCorps,
+                                ability_crest_id = AbilityCrests.CastleCheerCorps,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -842,7 +842,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.StudyRabbits,
+                                ability_crest_id = AbilityCrests.StudyRabbits,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -851,7 +851,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ProperMaintenance,
+                                ability_crest_id = AbilityCrests.ProperMaintenance,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -863,7 +863,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.FromWhenceHeComes,
+                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -872,7 +872,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.SaintStarfallsCircus,
+                                ability_crest_id = AbilityCrests.SaintStarfallsCircus,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -884,7 +884,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.RavenousFireCrownsBoon,
+                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -893,7 +893,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.PromisedPietyStaffsBoon,
+                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -933,7 +933,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.GalaBahamut,
+                            dragon_id = Dragons.GalaBahamut,
                             level = 100,
                             hp = 368,
                             attack = 128,
@@ -946,7 +946,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.NobleHorizon,
+                            weapon_body_id = WeaponBodies.NobleHorizon,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -958,7 +958,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.Tobias,
+                            talisman_id = Talismans.Tobias,
                             talisman_ability_id_1 = 340000010,
                             talisman_ability_id_2 = 340000134
                         },
@@ -966,7 +966,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CastleCheerCorps,
+                                ability_crest_id = AbilityCrests.CastleCheerCorps,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -975,7 +975,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.StudyRabbits,
+                                ability_crest_id = AbilityCrests.StudyRabbits,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -984,7 +984,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ProperMaintenance,
+                                ability_crest_id = AbilityCrests.ProperMaintenance,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -996,7 +996,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.FromWhenceHeComes,
+                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1005,7 +1005,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.AChoiceBlend,
+                                ability_crest_id = AbilityCrests.AChoiceBlend,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1017,7 +1017,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.RavenousFireCrownsBoon,
+                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1026,7 +1026,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.PromisedPietyStaffsBoon,
+                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1066,7 +1066,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.GalaBahamut,
+                            dragon_id = Dragons.GalaBahamut,
                             level = 100,
                             hp = 368,
                             attack = 128,
@@ -1079,7 +1079,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.NobleHorizon,
+                            weapon_body_id = WeaponBodies.NobleHorizon,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -1091,7 +1091,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.Akasha,
+                            talisman_id = Talismans.Akasha,
                             talisman_ability_id_1 = 340000010,
                             talisman_ability_id_2 = 340000134
                         },
@@ -1099,7 +1099,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CastleCheerCorps,
+                                ability_crest_id = AbilityCrests.CastleCheerCorps,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1108,7 +1108,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.StudyRabbits,
+                                ability_crest_id = AbilityCrests.StudyRabbits,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1117,7 +1117,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ProperMaintenance,
+                                ability_crest_id = AbilityCrests.ProperMaintenance,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1129,7 +1129,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.FromWhenceHeComes,
+                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1138,7 +1138,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.WhataHandful,
+                                ability_crest_id = AbilityCrests.WhataHandful,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1150,7 +1150,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.RavenousFireCrownsBoon,
+                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1159,7 +1159,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.PromisedPietyStaffsBoon,
+                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1199,7 +1199,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.Ramiel,
+                            dragon_id = Dragons.Ramiel,
                             level = 120,
                             hp = 388,
                             attack = 148,
@@ -1212,7 +1212,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.EbonPlagueLance,
+                            weapon_body_id = WeaponBodies.EbonPlagueLance,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -1224,7 +1224,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.Patia,
+                            talisman_id = Talismans.Patia,
                             talisman_ability_id_1 = 340000010,
                             talisman_ability_id_2 = 340000134
                         },
@@ -1232,7 +1232,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CastleCheerCorps,
+                                ability_crest_id = AbilityCrests.CastleCheerCorps,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1241,7 +1241,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.StudyRabbits,
+                                ability_crest_id = AbilityCrests.StudyRabbits,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1250,7 +1250,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ProperMaintenance,
+                                ability_crest_id = AbilityCrests.ProperMaintenance,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1262,7 +1262,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.FromWhenceHeComes,
+                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1271,7 +1271,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.DragonsNest,
+                                ability_crest_id = AbilityCrests.DragonsNest,
                                 buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1283,7 +1283,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.RavenousFireCrownsBoon,
+                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1292,7 +1292,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.PromisedPietyStaffsBoon,
+                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1332,7 +1332,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.Ramiel,
+                            dragon_id = Dragons.Ramiel,
                             level = 120,
                             hp = 388,
                             attack = 148,
@@ -1345,7 +1345,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.ShaderulersFang,
+                            weapon_body_id = WeaponBodies.ShaderulersFang,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -1357,7 +1357,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.Delphi,
+                            talisman_id = Talismans.Delphi,
                             talisman_ability_id_1 = 340000030,
                             talisman_ability_id_2 = 340000132
                         },
@@ -1365,7 +1365,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.WelcometotheOpera,
+                                ability_crest_id = AbilityCrests.WelcometotheOpera,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1374,7 +1374,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.AManUnchanging,
+                                ability_crest_id = AbilityCrests.AManUnchanging,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1383,7 +1383,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.WorthyRivals,
+                                ability_crest_id = AbilityCrests.WorthyRivals,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1395,7 +1395,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ChariotDrift,
+                                ability_crest_id = AbilityCrests.ChariotDrift,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1404,7 +1404,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.DragonsNest,
+                                ability_crest_id = AbilityCrests.DragonsNest,
                                 buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1416,7 +1416,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.TutelarysDestinyWolfsBoon,
+                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1425,7 +1425,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CrownofLightSerpentsBoon,
+                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1465,7 +1465,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.GalaBahamut,
+                            dragon_id = Dragons.GalaBahamut,
                             level = 100,
                             hp = 368,
                             attack = 128,
@@ -1478,7 +1478,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.AqueousPrison,
+                            weapon_body_id = WeaponBodies.AqueousPrison,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -1490,7 +1490,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.Lily,
+                            talisman_id = Talismans.Lily,
                             talisman_ability_id_1 = 340000030,
                             talisman_ability_id_2 = 340000132
                         },
@@ -1498,7 +1498,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.WingsofRebellionatRest,
+                                ability_crest_id = AbilityCrests.WingsofRebellionatRest,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1507,7 +1507,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.WorthyRivals,
+                                ability_crest_id = AbilityCrests.WorthyRivals,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1516,7 +1516,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.SeasidePrincess,
+                                ability_crest_id = AbilityCrests.SeasidePrincess,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1528,7 +1528,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ChariotDrift,
+                                ability_crest_id = AbilityCrests.ChariotDrift,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1537,7 +1537,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.LordoftheSkies,
+                                ability_crest_id = AbilityCrests.LordoftheSkies,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1549,7 +1549,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.TutelarysDestinyWolfsBoon,
+                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1558,7 +1558,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CrownofLightSerpentsBoon,
+                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1598,7 +1598,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.GalaBahamut,
+                            dragon_id = Dragons.GalaBahamut,
                             level = 100,
                             hp = 368,
                             attack = 128,
@@ -1611,7 +1611,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.PrimalTempest,
+                            weapon_body_id = WeaponBodies.PrimalTempest,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -1623,7 +1623,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.GalaLeif,
+                            talisman_id = Talismans.GalaLeif,
                             talisman_ability_id_1 = 340000030,
                             talisman_ability_id_2 = 340000132
                         },
@@ -1631,7 +1631,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.AManUnchanging,
+                                ability_crest_id = AbilityCrests.AManUnchanging,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1640,7 +1640,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.GoingUndercover,
+                                ability_crest_id = AbilityCrests.GoingUndercover,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1649,7 +1649,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.WorthyRivals,
+                                ability_crest_id = AbilityCrests.WorthyRivals,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1661,7 +1661,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ChariotDrift,
+                                ability_crest_id = AbilityCrests.ChariotDrift,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1670,7 +1670,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.LordoftheSkies,
+                                ability_crest_id = AbilityCrests.LordoftheSkies,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1682,7 +1682,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.TutelarysDestinyWolfsBoon,
+                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1691,7 +1691,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CrownofLightSerpentsBoon,
+                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1731,7 +1731,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.Ramiel,
+                            dragon_id = Dragons.Ramiel,
                             level = 120,
                             hp = 388,
                             attack = 148,
@@ -1744,7 +1744,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.ShaderulersFang,
+                            weapon_body_id = WeaponBodies.ShaderulersFang,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -1756,7 +1756,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.Delphi,
+                            talisman_id = Talismans.Delphi,
                             talisman_ability_id_1 = 340000030,
                             talisman_ability_id_2 = 340000132
                         },
@@ -1764,7 +1764,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.WelcometotheOpera,
+                                ability_crest_id = AbilityCrests.WelcometotheOpera,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1773,7 +1773,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.AManUnchanging,
+                                ability_crest_id = AbilityCrests.AManUnchanging,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1782,7 +1782,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.WorthyRivals,
+                                ability_crest_id = AbilityCrests.WorthyRivals,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1794,7 +1794,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ChariotDrift,
+                                ability_crest_id = AbilityCrests.ChariotDrift,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1803,7 +1803,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.DragonsNest,
+                                ability_crest_id = AbilityCrests.DragonsNest,
                                 buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1815,7 +1815,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.TutelarysDestinyWolfsBoon,
+                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1824,7 +1824,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CrownofLightSerpentsBoon,
+                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1864,7 +1864,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.GalaElysium,
+                            dragon_id = Dragons.GalaElysium,
                             level = 100,
                             hp = 371,
                             attack = 124,
@@ -1877,7 +1877,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.CosmicRuler,
+                            weapon_body_id = WeaponBodies.CosmicRuler,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -1889,7 +1889,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.Vixel,
+                            talisman_id = Talismans.Vixel,
                             talisman_ability_id_1 = 340000010,
                             talisman_ability_id_2 = 340000134
                         },
@@ -1897,7 +1897,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CastleCheerCorps,
+                                ability_crest_id = AbilityCrests.CastleCheerCorps,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1906,7 +1906,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.StudyRabbits,
+                                ability_crest_id = AbilityCrests.StudyRabbits,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1915,7 +1915,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ProperMaintenance,
+                                ability_crest_id = AbilityCrests.ProperMaintenance,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1927,7 +1927,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.FromWhenceHeComes,
+                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1936,7 +1936,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.WhataHandful,
+                                ability_crest_id = AbilityCrests.WhataHandful,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -1948,7 +1948,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.RavenousFireCrownsBoon,
+                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1957,7 +1957,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.PromisedPietyStaffsBoon,
+                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -1997,7 +1997,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.GalaElysium,
+                            dragon_id = Dragons.GalaElysium,
                             level = 100,
                             hp = 371,
                             attack = 124,
@@ -2010,7 +2010,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.CosmicRuler,
+                            weapon_body_id = WeaponBodies.CosmicRuler,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -2022,7 +2022,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.GalaZena,
+                            talisman_id = Talismans.GalaZena,
                             talisman_ability_id_1 = 340000010,
                             talisman_ability_id_2 = 340000134
                         },
@@ -2030,7 +2030,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CastleCheerCorps,
+                                ability_crest_id = AbilityCrests.CastleCheerCorps,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -2039,7 +2039,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.StudyRabbits,
+                                ability_crest_id = AbilityCrests.StudyRabbits,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -2048,7 +2048,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ProperMaintenance,
+                                ability_crest_id = AbilityCrests.ProperMaintenance,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -2060,7 +2060,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.FromWhenceHeComes,
+                                ability_crest_id = AbilityCrests.FromWhenceHeComes,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -2069,7 +2069,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.WhataHandful,
+                                ability_crest_id = AbilityCrests.WhataHandful,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -2081,7 +2081,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.RavenousFireCrownsBoon,
+                                ability_crest_id = AbilityCrests.RavenousFireCrownsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -2090,7 +2090,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.PromisedPietyStaffsBoon,
+                                ability_crest_id = AbilityCrests.PromisedPietyStaffsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -2130,7 +2130,7 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = (int)Dragons.GalaBahamut,
+                            dragon_id = Dragons.GalaBahamut,
                             level = 100,
                             hp = 368,
                             attack = 128,
@@ -2143,7 +2143,7 @@ public class HelperService : IHelperService
                         },
                         support_weapon_body = new()
                         {
-                            weapon_body_id = (int)WeaponBodies.WindrulersFang,
+                            weapon_body_id = WeaponBodies.WindrulersFang,
                             buildup_count = 80,
                             limit_break_count = 8,
                             limit_over_count = 1,
@@ -2155,7 +2155,7 @@ public class HelperService : IHelperService
                         support_talisman = new()
                         {
                             talisman_key_id = 0,
-                            talisman_id = (int)Talismans.GalaNotte,
+                            talisman_id = Talismans.GalaNotte,
                             talisman_ability_id_1 = 340000030,
                             talisman_ability_id_2 = 340000132
                         },
@@ -2163,7 +2163,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.GoingUndercover,
+                                ability_crest_id = AbilityCrests.GoingUndercover,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -2172,7 +2172,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.AManUnchanging,
+                                ability_crest_id = AbilityCrests.AManUnchanging,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -2181,7 +2181,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.WorthyRivals,
+                                ability_crest_id = AbilityCrests.WorthyRivals,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -2193,7 +2193,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.ChariotDrift,
+                                ability_crest_id = AbilityCrests.ChariotDrift,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -2202,7 +2202,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.LordoftheSkies,
+                                ability_crest_id = AbilityCrests.LordoftheSkies,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -2214,7 +2214,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.TutelarysDestinyWolfsBoon,
+                                ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,
@@ -2223,7 +2223,7 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = (int)AbilityCrests.CrownofLightSerpentsBoon,
+                                ability_crest_id = AbilityCrests.CrownofLightSerpentsBoon,
                                 buildup_count = 30,
                                 limit_break_count = 4,
                                 hp_plus_count = 40,

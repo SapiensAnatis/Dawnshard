@@ -3655,7 +3655,7 @@ public class AtgenSupportChara
 [MessagePackObject(true)]
 public class AtgenSupportCrestSlotType1List
 {
-    public int ability_crest_id { get; set; }
+    public AbilityCrests ability_crest_id { get; set; }
     public int buildup_count { get; set; }
     public int limit_break_count { get; set; }
     public int hp_plus_count { get; set; }
@@ -3663,7 +3663,7 @@ public class AtgenSupportCrestSlotType1List
     public int equipable_count { get; set; }
 
     public AtgenSupportCrestSlotType1List(
-        int ability_crest_id,
+        AbilityCrests ability_crest_id,
         int buildup_count,
         int limit_break_count,
         int hp_plus_count,
@@ -3745,7 +3745,7 @@ public class AtgenSupportData
 public class AtgenSupportDragon
 {
     public ulong dragon_key_id { get; set; }
-    public int dragon_id { get; set; }
+    public Dragons dragon_id { get; set; }
     public int level { get; set; }
     public int hp { get; set; }
     public int attack { get; set; }
@@ -3759,7 +3759,7 @@ public class AtgenSupportDragon
 
     public AtgenSupportDragon(
         ulong dragon_key_id,
-        int dragon_id,
+        Dragons dragon_id,
         int level,
         int hp,
         int attack,
@@ -3808,7 +3808,7 @@ public class AtgenSupportReward
 public class AtgenSupportTalisman
 {
     public ulong talisman_key_id { get; set; }
-    public int talisman_id { get; set; }
+    public Talismans talisman_id { get; set; }
     public int talisman_ability_id_1 { get; set; }
     public int talisman_ability_id_2 { get; set; }
     public int talisman_ability_id_3 { get; set; }
@@ -3817,7 +3817,7 @@ public class AtgenSupportTalisman
 
     public AtgenSupportTalisman(
         ulong talisman_key_id,
-        int talisman_id,
+        Talismans talisman_id,
         int talisman_ability_id_1,
         int talisman_ability_id_2,
         int talisman_ability_id_3,
@@ -3930,7 +3930,7 @@ public class AtgenSupportWeapon
 [MessagePackObject(true)]
 public class AtgenSupportWeaponBody
 {
-    public int weapon_body_id { get; set; }
+    public WeaponBodies weapon_body_id { get; set; }
     public int buildup_count { get; set; }
     public int limit_break_count { get; set; }
     public int limit_over_count { get; set; }
@@ -3941,7 +3941,7 @@ public class AtgenSupportWeaponBody
     public int additional_crest_slot_type_3_count { get; set; }
 
     public AtgenSupportWeaponBody(
-        int weapon_body_id,
+        WeaponBodies weapon_body_id,
         int buildup_count,
         int limit_break_count,
         int limit_over_count,
