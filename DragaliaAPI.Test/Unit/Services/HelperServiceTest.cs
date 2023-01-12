@@ -38,38 +38,25 @@ public class HelperServiceTest
         supportData.viewer_id.Should().Be(1000);
         supportData.name.Should().BeEquivalentTo("Euden");
         supportData.is_friend.Should().Be(true);
-        supportData.chara_data.Should().BeOfType<CharaList>();
-        supportData.chara_data.chara_id.Should().Be(Charas.ThePrince);
-        supportData.dragon_data.Should().BeOfType<DragonList>();
-        supportData.weapon_body_data.Should().BeOfType<GameWeaponBody>();
+        supportData.chara_data.Should().BeEquivalentTo(TestData.supportListEuden.support_chara);
+        supportData.dragon_data
+            .Should()
+            .BeEquivalentTo(
+                TestData.supportListEuden.support_dragon,
+                o => o.Excluding(x => x.hp).Excluding(x => x.attack)
+            );
+        supportData.weapon_body_data
+            .Should()
+            .BeEquivalentTo(TestData.supportListEuden.support_weapon_body);
         supportData.crest_slot_type_1_crest_list
             .Should()
-            .BeEquivalentTo(
-                new List<GameAbilityCrest>()
-                {
-                    new() { ability_crest_id = 0 },
-                    new() { ability_crest_id = 0 },
-                    new() { ability_crest_id = 0 },
-                }
-            );
+            .BeEquivalentTo(TestData.supportListEuden.support_crest_slot_type_1_list);
         supportData.crest_slot_type_2_crest_list
             .Should()
-            .BeEquivalentTo(
-                new List<GameAbilityCrest>()
-                {
-                    new() { ability_crest_id = 0 },
-                    new() { ability_crest_id = 0 },
-                }
-            );
+            .BeEquivalentTo(TestData.supportListEuden.support_crest_slot_type_2_list);
         supportData.crest_slot_type_3_crest_list
             .Should()
-            .BeEquivalentTo(
-                new List<GameAbilityCrest>()
-                {
-                    new() { ability_crest_id = 0 },
-                    new() { ability_crest_id = 0 },
-                }
-            );
+            .BeEquivalentTo(TestData.supportListEuden.support_crest_slot_type_3_list);
     }
 
     [Fact]
@@ -91,38 +78,25 @@ public class HelperServiceTest
         supportData.viewer_id.Should().Be(1001);
         supportData.name.Should().BeEquivalentTo("Elisanne");
         supportData.is_friend.Should().Be(false);
-        supportData.chara_data.Should().BeOfType<CharaList>();
-        supportData.chara_data.chara_id.Should().Be(Charas.Elisanne);
-        supportData.dragon_data.Should().BeOfType<DragonList>();
-        supportData.weapon_body_data.Should().BeOfType<GameWeaponBody>();
+        supportData.chara_data.Should().BeEquivalentTo(TestData.supportListElisanne.support_chara);
+        supportData.dragon_data
+            .Should()
+            .BeEquivalentTo(
+                TestData.supportListElisanne.support_dragon,
+                o => o.Excluding(x => x.hp).Excluding(x => x.attack)
+            );
+        supportData.weapon_body_data
+            .Should()
+            .BeEquivalentTo(TestData.supportListElisanne.support_weapon_body);
         supportData.crest_slot_type_1_crest_list
             .Should()
-            .BeEquivalentTo(
-                new List<GameAbilityCrest>()
-                {
-                    new() { ability_crest_id = 0 },
-                    new() { ability_crest_id = 0 },
-                    new() { ability_crest_id = 0 },
-                }
-            );
+            .BeEquivalentTo(TestData.supportListElisanne.support_crest_slot_type_1_list);
         supportData.crest_slot_type_2_crest_list
             .Should()
-            .BeEquivalentTo(
-                new List<GameAbilityCrest>()
-                {
-                    new() { ability_crest_id = 0 },
-                    new() { ability_crest_id = 0 },
-                }
-            );
+            .BeEquivalentTo(TestData.supportListElisanne.support_crest_slot_type_2_list);
         supportData.crest_slot_type_3_crest_list
             .Should()
-            .BeEquivalentTo(
-                new List<GameAbilityCrest>()
-                {
-                    new() { ability_crest_id = 0 },
-                    new() { ability_crest_id = 0 },
-                }
-            );
+            .BeEquivalentTo(TestData.supportListElisanne.support_crest_slot_type_3_list);
     }
 
     private static class StubData
@@ -132,102 +106,8 @@ public class HelperServiceTest
             {
                 support_user_list = new List<UserSupportList>()
                 {
-                    new()
-                    {
-                        viewer_id = 1000,
-                        name = "Euden",
-                        level = 10,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 40000002,
-                        max_party_power = 9999,
-                        support_chara = new()
-                        {
-                            chara_id = Charas.ThePrince,
-                            level = 10,
-                            additional_max_level = 0,
-                            rarity = 5,
-                            hp = 60,
-                            attack = 40,
-                            hp_plus_count = 0,
-                            attack_plus_count = 0,
-                            ability_1_level = 0,
-                            ability_2_level = 0,
-                            ability_3_level = 0,
-                            ex_ability_level = 1,
-                            ex_ability_2_level = 1,
-                            skill_1_level = 1,
-                            skill_2_level = 0,
-                            is_unlock_edit_skill = true
-                        },
-                        support_dragon = new() { dragon_key_id = 0, },
-                        support_weapon_body = new() { weapon_body_id = 0, },
-                        support_talisman = new() { talisman_key_id = 0, },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
-                        {
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                        },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
-                        {
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                        },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
-                        {
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                        },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
-                    },
-                    new()
-                    {
-                        viewer_id = 1001,
-                        name = "Elisanne",
-                        level = 10,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 40000002,
-                        max_party_power = 9999,
-                        support_chara = new()
-                        {
-                            chara_id = Charas.Elisanne,
-                            level = 10,
-                            additional_max_level = 0,
-                            rarity = 5,
-                            hp = 60,
-                            attack = 40,
-                            hp_plus_count = 0,
-                            attack_plus_count = 0,
-                            ability_1_level = 0,
-                            ability_2_level = 0,
-                            ability_3_level = 0,
-                            ex_ability_level = 1,
-                            ex_ability_2_level = 1,
-                            skill_1_level = 1,
-                            skill_2_level = 0,
-                            is_unlock_edit_skill = true
-                        },
-                        support_dragon = new() { dragon_key_id = 0, },
-                        support_weapon_body = new() { weapon_body_id = 0, },
-                        support_talisman = new() { talisman_key_id = 0, },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
-                        {
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                        },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
-                        {
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                        },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
-                        {
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                        },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
-                    },
+                    TestData.supportListEuden,
+                    TestData.supportListElisanne
                 },
                 support_user_detail_list = new List<AtgenSupportUserDetailList>()
                 {
