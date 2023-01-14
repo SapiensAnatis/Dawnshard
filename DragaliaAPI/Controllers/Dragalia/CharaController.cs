@@ -550,18 +550,14 @@ public class CharaController : DragaliaControllerBase
             playerCharData.ExAbility2Level = 1;
         }
 
-        bool is50MCBonusNew = false;
+        SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
+        bool is50MCBonusNew = nodes.Count <= 50;
 
         foreach (int nodeNr in manaNodes)
         {
             if (manaNodeInfos.Count < nodeNr)
             {
                 throw new ArgumentException($"No nodeInfo found for node {nodeNr}");
-            }
-
-            if (nodeNr <= 50)
-            {
-                is50MCBonusNew = true;
             }
 
             ManaNode manaNodeInfo = manaNodeInfos[nodeNr - 1];
@@ -688,7 +684,6 @@ public class CharaController : DragaliaControllerBase
             }
         }
 
-        SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
         nodes.AddRange(manaNodes);
 
         if (nodes.Count >= 50 && is50MCBonusNew)
