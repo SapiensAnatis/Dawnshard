@@ -536,7 +536,9 @@ public class CharaController : DragaliaControllerBase
             charaData.PlusAtk5
         };
 
-        if (isUseSpecialMaterial == CharaUpgradeMaterialTypes.Omnicite)
+        bool isOmnicite = isUseSpecialMaterial == CharaUpgradeMaterialTypes.Omnicite;
+
+        if (isOmnicite)
         {
             playerCharData.Skill1Level = 1;
             playerCharData.Skill2Level = 0;
@@ -551,7 +553,7 @@ public class CharaController : DragaliaControllerBase
         }
 
         SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
-        bool is50MCBonusNew = nodes.Count <= 50;
+        bool is50MCBonusNew = nodes.Count < 50 || isOmnicite;
 
         foreach (int nodeNr in manaNodes)
         {

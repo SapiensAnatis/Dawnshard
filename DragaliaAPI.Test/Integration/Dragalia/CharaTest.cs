@@ -42,6 +42,7 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
         fixture.AddCharacter(Charas.Pipple).Wait();
         fixture.AddCharacter(Charas.GalaZethia).Wait();
         fixture.AddCharacter(Charas.Vida).Wait();
+        fixture.AddCharacter(Charas.Delphi).Wait();
     }
 
     [Fact]
@@ -204,6 +205,102 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
                 24,
                 25,
                 28
+            );
+    }
+
+    [Fact]
+    public async Task CharaManaNodeBuildupHasCorrectInfoOnBothSidesOfSpiral()
+    {
+        CharaLimitBreakAndBuildupManaData preSpiralResponse = (
+            await client.PostMsgpack<CharaLimitBreakAndBuildupManaData>(
+                "chara/limit_break_and_buildup_mana",
+                new CharaLimitBreakAndBuildupManaRequest(
+                    Charas.Delphi,
+                    4,
+                    Enumerable.Range(1, 50),
+                    (int)CharaUpgradeMaterialTypes.Standard
+                )
+            )
+        ).data;
+
+        CharaList preSpiralResponseCharaData = preSpiralResponse.update_data_list.chara_list
+            .Where(x => (Charas)x.chara_id == Charas.Delphi)
+            .First();
+
+        CharaData charaData = MasterAsset.CharaData.Get(Charas.Delphi);
+
+        preSpiralResponseCharaData.level.Should().Be(1);
+        preSpiralResponseCharaData.mana_circle_piece_id_list.Count().Should().Be(50);
+        preSpiralResponseCharaData.additional_max_level.Should().Be(0);
+        preSpiralResponseCharaData.hp
+            .Should()
+            .Be(
+                charaData.PlusHp0
+                    + charaData.PlusHp1
+                    + charaData.PlusHp2
+                    + charaData.PlusHp3
+                    + charaData.PlusHp4
+                    + charaData.McFullBonusHp5
+                    + 67
+            );
+        preSpiralResponseCharaData.attack
+            .Should()
+            .Be(
+                charaData.PlusAtk0
+                    + charaData.PlusAtk1
+                    + charaData.PlusAtk2
+                    + charaData.PlusAtk3
+                    + charaData.PlusAtk4
+                    + charaData.McFullBonusAtk5
+                    + 40
+            );
+
+        await client.PostMsgpack<CharaLimitBreakData>(
+            "chara/limit_break",
+            new CharaLimitBreakRequest(Charas.Delphi, 5, 0)
+        );
+
+        CharaBuildupManaData postSpiralResponse = (
+            await client.PostMsgpack<CharaBuildupManaData>(
+                "chara/buildup_mana",
+                new CharaBuildupManaRequest(
+                    Charas.Delphi,
+                    Enumerable.Range(51, 20),
+                    (int)CharaUpgradeMaterialTypes.Standard
+                )
+            )
+        ).data;
+
+        CharaList postSpiralResponseCharaData = postSpiralResponse.update_data_list.chara_list
+            .Where(x => (Charas)x.chara_id == Charas.Delphi)
+            .First();
+
+        postSpiralResponseCharaData.level.Should().Be(1);
+        postSpiralResponseCharaData.mana_circle_piece_id_list.Count().Should().Be(70);
+        postSpiralResponseCharaData.additional_max_level.Should().Be(20);
+        postSpiralResponseCharaData.hp
+            .Should()
+            .Be(
+                charaData.PlusHp0
+                    + charaData.PlusHp1
+                    + charaData.PlusHp2
+                    + charaData.PlusHp3
+                    + charaData.PlusHp4
+                    + charaData.PlusHp5
+                    + charaData.McFullBonusHp5
+                    + 67
+            );
+        postSpiralResponseCharaData.attack
+            .Should()
+            .Be(
+                charaData.PlusAtk0
+                    + charaData.PlusAtk1
+                    + charaData.PlusAtk2
+                    + charaData.PlusAtk3
+                    + charaData.PlusAtk4
+                    + charaData.PlusAtk5
+                    + charaData.McFullBonusAtk5
+                    + 40
             );
     }
 
