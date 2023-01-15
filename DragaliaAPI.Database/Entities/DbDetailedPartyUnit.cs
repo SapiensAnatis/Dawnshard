@@ -8,29 +8,32 @@ public class DbDetailedPartyUnit
 {
     public required string DeviceAccountId { get; set; }
 
-    public required int Position { get; set; }
+    public int Position { get; set; }
 
     public required DbPlayerCharaData CharaData { get; set; }
 
-    public required DbPlayerDragonData? DragonData { get; set; }
+    public DbPlayerDragonData? DragonData { get; set; }
 
-    public required int DragonReliabilityLevel { get; set; }
+    public int DragonReliabilityLevel { get; set; }
 
-    public required DbWeaponBody? WeaponBodyData { get; set; }
+    public DbWeaponBody? WeaponBodyData { get; set; }
 
-    public required IEnumerable<DbAbilityCrest> CrestSlotType1CrestList { get; set; }
+    public IEnumerable<DbAbilityCrest> CrestSlotType1CrestList { get; set; } =
+        Enumerable.Empty<DbAbilityCrest>();
 
-    public required IEnumerable<DbAbilityCrest> CrestSlotType2CrestList { get; set; }
+    public IEnumerable<DbAbilityCrest> CrestSlotType2CrestList { get; set; } =
+        Enumerable.Empty<DbAbilityCrest>();
 
-    public required IEnumerable<DbAbilityCrest> CrestSlotType3CrestList { get; set; }
+    public IEnumerable<DbAbilityCrest> CrestSlotType3CrestList { get; set; } =
+        Enumerable.Empty<DbAbilityCrest>();
 
     public object? WeaponSkinData { get; set; } = null;
 
-    public object? TalismanData { get; set; } = null;
+    public DbTalisman? TalismanData { get; set; } = null;
 
-    public required DbEditSkillData? EditSkill1CharaData { get; set; }
+    public DbEditSkillData? EditSkill1CharaData { get; set; }
 
-    public required DbEditSkillData? EditSkill2CharaData { get; set; }
+    public DbEditSkillData? EditSkill2CharaData { get; set; }
 
     public IEnumerable<object> GameWeaponPassiveAbilityList { get; set; } = new List<object> { };
 }

@@ -19,8 +19,25 @@ public class PartyRepository : BaseRepository, IPartyRepository
             .Where(x => x.DeviceAccountId == deviceAccountId);
     }
 
+    public IQueryable<DbPartyUnit> GetPartyUnits(string deviceAccountId, IEnumerable<int> partyNos)
+    {
+        return apiContext.PlayerPartyUnits
+            .Where(
+                x =>
+                    x.DeviceAccountId == deviceAccountId
+                    && (
+                        x.PartyNo == partyNos.ElementAt(0)
+                        || x.PartyNo == partyNos.ElementAtOrDefault(1)
+                    )
+            )
+            .OrderBy(x => x.PartyNo == partyNos.First())
+            .ThenBy(x => x.UnitNo);
+    }
+
     public async Task SetParty(string deviceAccountId, DbParty newParty)
     {
+        // TODO: this method executes a query where it deletes the old units and adds the new ones
+        // Could it be optimized by updating the units instead? Anticipate that most changes will be small
         DbParty existingParty = await apiContext.PlayerParties
             .Where(x => x.DeviceAccountId == deviceAccountId && x.PartyNo == newParty.PartyNo)
             .Include(x => x.Units)

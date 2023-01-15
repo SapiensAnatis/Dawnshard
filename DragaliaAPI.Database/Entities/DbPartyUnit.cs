@@ -18,11 +18,9 @@ public class DbPartyUnit
 
     public int PartyNo { get; set; }
 
-    [Required]
-    public int UnitNo { get; set; }
+    public required int UnitNo { get; set; }
 
-    [Required]
-    public Charas CharaId { get; set; }
+    public required Charas CharaId { get; set; }
 
     public long EquipDragonKeyId { get; set; } = 0;
 
