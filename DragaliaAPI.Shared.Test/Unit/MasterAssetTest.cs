@@ -51,7 +51,23 @@ public class MasterAssetTest
                     EditSkillId: 103501021,
                     EditSkillLevelNum: 1,
                     EditSkillCost: 5,
-                    ManaCircleName: "MC_0511"
+                    ManaCircleName: "MC_0511",
+                    DefaultAbility1Level: 1,
+                    DefaultAbility2Level: 0,
+                    DefaultAbility3Level: 0,
+                    DefaultBurstAttackLevel: 0,
+                    Abilities11: 1063,
+                    Abilities12: 1064,
+                    Abilities13: 2030,
+                    Abilities14: 0,
+                    Abilities21: 1077,
+                    Abilities22: 1078,
+                    Abilities23: 2037,
+                    Abilities24: 0,
+                    Abilities31: 1071,
+                    Abilities32: 1074,
+                    Abilities33: 2041,
+                    Abilities34: 0
                 )
             );
     }
@@ -85,6 +101,24 @@ public class MasterAssetTest
         CharaData chara = MasterAsset.MasterAsset.CharaData.Get(id);
 
         chara.GetManaNodes().Should().HaveCount(expectedCount);
+    }
+
+    [Theory]
+    [InlineData(Charas.ThePrince, 3, 3, 3)]
+    [InlineData(Charas.Harle, 2, 2, 2)]
+    [InlineData(Charas.Celliera, 3, 3, 2)]
+    public void CharaData_MaxAbilityLevels_HaveExpectedCounts(
+        Charas id,
+        int expectedAbility1Level,
+        int expectedAbility2Level,
+        int expectedAbility3Level
+    )
+    {
+        CharaData chara = MasterAsset.MasterAsset.CharaData.Get(id);
+
+        chara.MaxAbility1Level.Should().Be(expectedAbility1Level);
+        chara.MaxAbility2Level.Should().Be(expectedAbility2Level);
+        chara.MaxAbility3Level.Should().Be(expectedAbility3Level);
     }
 
     [Theory]

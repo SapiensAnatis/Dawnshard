@@ -42,10 +42,59 @@ public record CharaData(
     int EditSkillId,
     int EditSkillLevelNum,
     int EditSkillCost,
-    string ManaCircleName
+    string ManaCircleName,
+    int DefaultAbility1Level,
+    int DefaultAbility2Level,
+    int DefaultAbility3Level,
+    int DefaultBurstAttackLevel,
+    int Abilities11,
+    int Abilities12,
+    int Abilities13,
+    int Abilities14,
+    int Abilities21,
+    int Abilities22,
+    int Abilities23,
+    int Abilities24,
+    int Abilities31,
+    int Abilities32,
+    int Abilities33,
+    int Abilities34
 )
 {
     public bool HasManaSpiral => this.MaxLimitBreakCount > 4;
+
+    public int MaxAbility1Level =
+        Abilities14 != 0
+            ? 4
+            : Abilities13 != 0
+                ? 3
+                : Abilities12 != 0
+                    ? 2
+                    : Abilities11 != 0
+                        ? 1
+                        : 0;
+
+    public int MaxAbility2Level =
+        Abilities24 != 0
+            ? 4
+            : Abilities23 != 0
+                ? 3
+                : Abilities22 != 0
+                    ? 2
+                    : Abilities21 != 0
+                        ? 1
+                        : 0;
+
+    public int MaxAbility3Level =
+        Abilities34 != 0
+            ? 4
+            : Abilities33 != 0
+                ? 3
+                : Abilities32 != 0
+                    ? 2
+                    : Abilities31 != 0
+                        ? 1
+                        : 0;
 
     public ManaNode GetManaNode(int num)
     {

@@ -163,5 +163,8 @@ public class DbPlayerCharaData : IDbHasAccountId
         this.CharaId = id;
         this.HpBase = rarityHp;
         this.AttackBase = rarityAtk;
+        this.Ability1Level = (byte)data.DefaultAbility1Level;
+        this.Ability2Level = (byte)data.DefaultAbility2Level;
+        this.Ability3Level = (byte)data.DefaultAbility3Level;
     }
 }
