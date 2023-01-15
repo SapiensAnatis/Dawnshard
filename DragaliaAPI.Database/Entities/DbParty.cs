@@ -6,9 +6,12 @@ namespace DragaliaAPI.Database.Entities;
 [Table("PartyData")]
 public class DbParty : IDbHasAccountId
 {
-    [Required]
-    [ForeignKey("DbDeviceAccount")]
-    public string DeviceAccountId { get; set; } = null!;
+    /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
+    public required string DeviceAccountId { get; set; }
 
     [Required]
     public int PartyNo { get; set; }

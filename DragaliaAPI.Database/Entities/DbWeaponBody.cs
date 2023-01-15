@@ -13,7 +13,11 @@ namespace DragaliaAPI.Database.Entities;
 public class DbWeaponBody : IDbHasAccountId
 {
     /// <inheritdoc />
-    public string DeviceAccountId { get; set; } = null!;
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
+    public required string DeviceAccountId { get; set; }
 
     /// <summary>
     /// Gets or sets a value that dictates the weapon's identity.

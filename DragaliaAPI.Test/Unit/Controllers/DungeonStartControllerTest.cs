@@ -10,6 +10,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using DragaliaAPI.Database.Entities.Scaffold;
 
 namespace DragaliaAPI.Test.Unit.Controllers;
 
@@ -141,9 +142,13 @@ public class DungeonStartControllerTest
                         },
                         EditSkill1CharaData = new() { CharaId = Charas.Vida },
                         EditSkill2CharaData = new() { },
-                        DragonData = new() { DragonId = Dragons.Midgardsormr },
+                        DragonData = new()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            DragonId = Dragons.Midgardsormr
+                        },
                         DragonReliabilityLevel = 30,
-                        WeaponBodyData = new() { }
+                        WeaponBodyData = new() { DeviceAccountId = DeviceAccountId }
                     }
                 }.AsQueryable().BuildMock());
 
@@ -182,7 +187,12 @@ public class DungeonStartControllerTest
             .Setup(x => x.GetQuests(DeviceAccountId))
             .Returns(new List<DbQuest>()
                 {
-                    new() { QuestId = questId, State = 3 }
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        QuestId = questId,
+                        State = 3
+                    }
                 }.AsQueryable().BuildMock());
 
         this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
@@ -263,7 +273,12 @@ public class DungeonStartControllerTest
             .Setup(x => x.GetQuests(DeviceAccountId))
             .Returns(new List<DbQuest>()
                 {
-                    new() { QuestId = questId, State = 3 }
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        QuestId = questId,
+                        State = 3
+                    }
                 }.AsQueryable().BuildMock());
 
         this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
@@ -322,9 +337,13 @@ public class DungeonStartControllerTest
                         },
                         EditSkill1CharaData = new() { CharaId = Charas.Vida },
                         EditSkill2CharaData = new() { },
-                        DragonData = new() { DragonId = Dragons.Midgardsormr },
+                        DragonData = new()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            DragonId = Dragons.Midgardsormr
+                        },
                         DragonReliabilityLevel = 30,
-                        WeaponBodyData = new() { }
+                        WeaponBodyData = new() { DeviceAccountId = DeviceAccountId }
                     },
                     new()
                     {
@@ -357,9 +376,17 @@ public class DungeonStartControllerTest
                         },
                         EditSkill1CharaData = new() { CharaId = Charas.Isaac },
                         EditSkill2CharaData = new() { },
-                        DragonData = new() { DragonId = Dragons.GalaBeastCiella },
+                        DragonData = new()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            DragonId = Dragons.GalaBeastCiella
+                        },
                         DragonReliabilityLevel = 30,
-                        WeaponBodyData = new() { WeaponBodyId = WeaponBodies.MegaLance }
+                        WeaponBodyData = new()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            WeaponBodyId = WeaponBodies.MegaLance
+                        }
                     }
                 }.AsQueryable().BuildMock());
 
@@ -401,7 +428,12 @@ public class DungeonStartControllerTest
             .Setup(x => x.GetQuests(DeviceAccountId))
             .Returns(new List<DbQuest>()
                 {
-                    new() { QuestId = questId, State = 3 }
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        QuestId = questId,
+                        State = 3
+                    }
                 }.AsQueryable().BuildMock());
 
         this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
@@ -441,7 +473,12 @@ public class DungeonStartControllerTest
             .Setup(x => x.GetQuests(DeviceAccountId))
             .Returns(new List<DbQuest>()
                 {
-                    new() { QuestId = questId, State = 3 }
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        QuestId = questId,
+                        State = 3
+                    }
                 }.AsQueryable().BuildMock());
 
         this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);

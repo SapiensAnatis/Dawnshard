@@ -13,8 +13,11 @@ namespace DragaliaAPI.Database.Entities;
 [Table("PlayerCharaData")]
 public class DbPlayerCharaData : IDbHasAccountId
 {
-    /// <inheritdoc/>
-    [Column("DeviceAccountId")]
+    /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
     public required string DeviceAccountId { get; set; }
 
     [Column("CharaId")]

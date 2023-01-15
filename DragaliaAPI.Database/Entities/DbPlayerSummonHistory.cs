@@ -12,10 +12,12 @@ public class DbPlayerSummonHistory : IDbHasAccountId
     [Key]
     public long KeyId { get; set; }
 
-    [Column("DeviceAccountId")]
-    [ForeignKey("DbDeviceAccount")]
-    [Required]
-    public string DeviceAccountId { get; set; } = null!;
+    /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
+    public required string DeviceAccountId { get; set; }
 
     [Column("BannerId")]
     [Required]

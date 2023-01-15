@@ -256,6 +256,27 @@ public class SavefileService : ISavefileService
         await this.apiContext.SaveChangesAsync();
     }
 
+    public IQueryable<DbPlayer> Load(string deviceAccountId)
+    {
+        return this.apiContext.Players
+            .Where(x => x.AccountId == deviceAccountId)
+            .Include(x => x.UserData)
+            .Include(x => x.AbilityCrestList)
+            .Include(x => x.CharaList)
+            .Include(x => x.Currencies)
+            .Include(x => x.DragonList)
+            .Include(x => x.DragonReliabilityList)
+            .Include(x => x.BuildList)
+            .Include(x => x.QuestList)
+            .Include(x => x.StoryStates)
+            .Include(x => x.PartyList)
+            .ThenInclude(x => x.Units.OrderBy(x => x.UnitNo))
+            .Include(x => x.TalismanList)
+            .Include(x => x.WeaponBodyList)
+            .Include(x => x.MaterialList)
+            .AsSplitQuery();
+    }
+
     private TDest MapWithDeviceAccount<TDest>(object source, string deviceAccountId)
         where TDest : IDbHasAccountId
     {
@@ -267,6 +288,8 @@ public class SavefileService : ISavefileService
 
     public async Task CreateBase(string deviceAccountId)
     {
+        this.apiContext.Players.Add(new() { AccountId = deviceAccountId });
+
         DbPlayerUserData userData =
             new(deviceAccountId)
             {

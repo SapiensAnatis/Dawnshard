@@ -10,7 +10,11 @@ namespace DragaliaAPI.Database.Entities;
 [Table("PlayerUserData")]
 public class DbPlayerUserData : IDbHasAccountId
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
     [Key]
     public required string DeviceAccountId { get; set; }
 

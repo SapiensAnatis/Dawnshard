@@ -12,6 +12,10 @@ namespace DragaliaAPI.Database.Entities;
 public class DbAbilityCrest : IDbHasAccountId
 {
     /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
     public required string DeviceAccountId { get; set; }
 
     /// <summary>

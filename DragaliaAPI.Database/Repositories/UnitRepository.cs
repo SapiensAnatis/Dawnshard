@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;

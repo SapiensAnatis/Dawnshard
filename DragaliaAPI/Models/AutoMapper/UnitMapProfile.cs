@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Models.AutoMapper;

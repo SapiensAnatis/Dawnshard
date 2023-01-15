@@ -8,8 +8,11 @@ namespace DragaliaAPI.Database.Entities;
 [Table("PlayerSetUnit")]
 public class DbSetUnit : IDbHasAccountId
 {
-    [Required]
-    [ForeignKey("DbDeviceAccountId")]
+    /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
     public required string DeviceAccountId { get; set; }
 
     [Required]

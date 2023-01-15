@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;

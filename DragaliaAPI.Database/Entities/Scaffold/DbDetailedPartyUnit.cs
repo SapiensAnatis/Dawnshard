@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Database.Entities;
+﻿namespace DragaliaAPI.Database.Entities.Scaffold;
 
 /// <summary>
 /// Similar to DbPartyUnit, but contains actual chara/dragon objects instead of just IDs.

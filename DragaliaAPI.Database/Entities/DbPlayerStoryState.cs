@@ -7,9 +7,12 @@ namespace DragaliaAPI.Database.Entities;
 [Table("PlayerStoryState")]
 public class DbPlayerStoryState : IDbHasAccountId
 {
-    [Column("DeviceAccountId")]
-    [Required]
-    public string DeviceAccountId { get; set; } = null!;
+    /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
+    public required string DeviceAccountId { get; set; }
 
     [Column("StoryType")]
     [Required]

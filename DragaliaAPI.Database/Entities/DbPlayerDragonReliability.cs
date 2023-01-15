@@ -8,10 +8,12 @@ namespace DragaliaAPI.Database.Entities;
 [Table("PlayerDragonReliability")]
 public class DbPlayerDragonReliability : IDbHasAccountId, IHasXp
 {
-    [Column("DeviceAccountId")]
-    [Required]
-    [ForeignKey("DbDeviceAccount")]
-    public string DeviceAccountId { get; set; } = null!;
+    /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
+    public required string DeviceAccountId { get; set; }
 
     [Column("DragonId")]
     [Required]
