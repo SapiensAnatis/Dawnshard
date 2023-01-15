@@ -20,6 +20,7 @@ public class DungeonStartControllerTest
     private readonly Mock<IUnitRepository> mockUnitRepository;
     private readonly Mock<IQuestRepository> mockQuestRepository;
     private readonly Mock<IDungeonService> mockDungeonService;
+    private readonly Mock<IHelperService> mockHelperService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly IMapper mapper;
 
@@ -32,6 +33,7 @@ public class DungeonStartControllerTest
         this.mockUnitRepository = new(MockBehavior.Strict);
         this.mockQuestRepository = new(MockBehavior.Strict);
         this.mockDungeonService = new(MockBehavior.Strict);
+        this.mockHelperService = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
 
         this.mapper = new MapperConfiguration(
@@ -44,6 +46,7 @@ public class DungeonStartControllerTest
             mockUnitRepository.Object,
             mockQuestRepository.Object,
             mockDungeonService.Object,
+            mockHelperService.Object,
             mockUpdateDataService.Object,
             mapper
         );
@@ -142,6 +145,29 @@ public class DungeonStartControllerTest
                     WeaponBodyData = new() { }
                 }
             );
+
+        this.mockHelperService
+            .Setup(x => x.GetHelpers())
+            .ReturnsAsync(
+                new QuestGetSupportUserListData()
+                {
+                    support_user_list = new List<UserSupportList>() { TestData.supportListEuden },
+                    support_user_detail_list = new List<AtgenSupportUserDetailList>()
+                    {
+                        new() { viewer_id = 1000, is_friend = true, },
+                    }
+                }
+            );
+
+        this.mockHelperService
+            .Setup(
+                x =>
+                    x.BuildHelperData(
+                        It.Is<UserSupportList>(x => x.viewer_id == 1000),
+                        It.Is<AtgenSupportUserDetailList>(x => x.viewer_id == 1000)
+                    )
+            )
+            .Returns(new AtgenSupportData() { viewer_id = 1000 });
 
         this.mockDungeonService
             .Setup(x => x.StartDungeon(It.Is<DungeonSession>(x => x.QuestData.Id == questId)))
@@ -301,6 +327,76 @@ public class DungeonStartControllerTest
             .chara_data!.chara_id.Should()
             .Be(Charas.Elisanne);
         data!.ingame_data.party_info.party_unit_list.ElementAt(1).position.Should().Be(5);
+
+        this.mockPartyRepository.VerifyAll();
+        this.mockUserDataRepository.VerifyAll();
+        this.mockUnitRepository.VerifyAll();
+        this.mockQuestRepository.VerifyAll();
+        this.mockDungeonService.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task StartDungeonWithSupportIncludesSupportData()
+    {
+        this.mockQuestRepository
+            .Setup(x => x.GetQuests(DeviceAccountId))
+            .Returns(new List<DbQuest>()
+                {
+                    new() { QuestId = questId, State = 3 }
+                }.AsQueryable().BuildMock());
+
+        this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+
+        ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
+            new DungeonStartStartRequest()
+            {
+                quest_id = questId,
+                party_no_list = new List<int>() { 1 },
+                support_viewer_id = 1000
+            }
+        );
+
+        DungeonStartStartData? data = response.GetData<DungeonStartStartData>();
+        data.Should().NotBeNull();
+
+        data!.ingame_data.party_info.support_data
+            .Should()
+            .BeEquivalentTo(new AtgenSupportData() { viewer_id = 1000 });
+
+        this.mockPartyRepository.VerifyAll();
+        this.mockUserDataRepository.VerifyAll();
+        this.mockUnitRepository.VerifyAll();
+        this.mockQuestRepository.VerifyAll();
+        this.mockDungeonService.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task StartDungeonWithoutSupportDoesntIncludeSupportData()
+    {
+        this.mockQuestRepository
+            .Setup(x => x.GetQuests(DeviceAccountId))
+            .Returns(new List<DbQuest>()
+                {
+                    new() { QuestId = questId, State = 3 }
+                }.AsQueryable().BuildMock());
+
+        this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+
+        ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
+            new DungeonStartStartRequest()
+            {
+                quest_id = questId,
+                party_no_list = new List<int>() { 1 },
+                support_viewer_id = 0
+            }
+        );
+
+        DungeonStartStartData? data = response.GetData<DungeonStartStartData>();
+        data.Should().NotBeNull();
+
+        data!.ingame_data.party_info.support_data.Should().BeNull();
 
         this.mockPartyRepository.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
