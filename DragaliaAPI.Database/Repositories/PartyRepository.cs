@@ -67,7 +67,14 @@ public class PartyRepository : BaseRepository, IPartyRepository
         for (int i = 1; i <= 4; i++)
         {
             result.Add(
-                original.FirstOrDefault(x => x.UnitNo == i) ?? new() { UnitNo = i, CharaId = 0 }
+                original.FirstOrDefault(x => x.UnitNo == i)
+                    ?? new()
+                    {
+                        DeviceAccountId = original.First().DeviceAccountId,
+                        PartyNo = original.First().PartyNo,
+                        UnitNo = i,
+                        CharaId = 0
+                    }
             );
         }
 

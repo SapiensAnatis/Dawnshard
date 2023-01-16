@@ -4,10 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerUserData")]
+[Index(nameof(DeviceAccountId))]
 public class DbPlayerUserData : IDbHasAccountId
 {
     /// <inheritdoc />

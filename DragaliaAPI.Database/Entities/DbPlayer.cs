@@ -4,7 +4,6 @@ namespace DragaliaAPI.Database.Entities;
 
 /// <summary>
 /// Container class for all savefile data to enable foreign keys.
-/// Required properties: those that are set when creating a new savefile
 /// </summary>
 public class DbPlayer
 {

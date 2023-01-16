@@ -56,6 +56,8 @@ namespace DragaliaAPI.Database.Migrations
 
                     b.HasKey("DeviceAccountId", "AbilityCrestId");
 
+                    b.HasIndex("DeviceAccountId");
+
                     b.ToTable("PlayerAbilityCrests");
                 });
 
@@ -131,6 +133,8 @@ namespace DragaliaAPI.Database.Migrations
 
                     b.HasKey("DeviceAccountId", "PartyNo");
 
+                    b.HasIndex("DeviceAccountId");
+
                     b.ToTable("PartyData");
                 });
 
@@ -192,6 +196,8 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DeviceAccountId");
 
                     b.HasIndex("DeviceAccountId", "PartyNo");
 
@@ -258,6 +264,8 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnName("SummonPoints");
 
                     b.HasKey("DeviceAccountId", "SummonBannerId");
+
+                    b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PlayerBannerData");
                 });
@@ -373,6 +381,8 @@ namespace DragaliaAPI.Database.Migrations
 
                     b.HasKey("DeviceAccountId", "CharaId");
 
+                    b.HasIndex("DeviceAccountId");
+
                     b.ToTable("PlayerCharaData");
                 });
 
@@ -390,6 +400,8 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnName("Quantity");
 
                     b.HasKey("DeviceAccountId", "CurrencyType");
+
+                    b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PlayerCurrency");
                 });
@@ -488,6 +500,8 @@ namespace DragaliaAPI.Database.Migrations
 
                     b.HasKey("DeviceAccountId", "DragonId");
 
+                    b.HasIndex("DeviceAccountId");
+
                     b.ToTable("PlayerDragonReliability");
                 });
 
@@ -505,6 +519,8 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnName("Quantity");
 
                     b.HasKey("DeviceAccountId", "MaterialId");
+
+                    b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PlayerMaterial");
                 });
@@ -527,6 +543,8 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnName("State");
 
                     b.HasKey("DeviceAccountId", "StoryType", "StoryId");
+
+                    b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PlayerStoryState");
                 });
@@ -699,6 +717,9 @@ namespace DragaliaAPI.Database.Migrations
 
                     b.HasKey("DeviceAccountId");
 
+                    b.HasIndex("DeviceAccountId")
+                        .IsUnique();
+
                     b.ToTable("PlayerUserData");
                 });
 
@@ -744,6 +765,8 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("DeviceAccountId", "QuestId");
+
+                    b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PlayerQuests");
                 });
@@ -794,6 +817,8 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("DeviceAccountId", "CharaId", "UnitSetNo");
+
+                    b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PlayerSetUnit");
                 });
@@ -887,6 +912,8 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("DeviceAccountId", "WeaponBodyId");
+
+                    b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PlayerWeapons");
                 });

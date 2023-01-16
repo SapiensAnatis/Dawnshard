@@ -34,6 +34,10 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
                     )
                     .WhenTypeIs<TimeSpan>()
         );
+
+        AssertionOptions.AssertEquivalencyUsing(
+            options => options.Excluding(x => x.Name == "Owner")
+        );
     }
 
     [Fact]

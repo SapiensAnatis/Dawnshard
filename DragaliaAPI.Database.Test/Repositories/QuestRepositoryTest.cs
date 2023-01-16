@@ -16,6 +16,10 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
     {
         this.fixture = fixture;
         this.questRepository = new QuestRepository(fixture.ApiContext);
+
+        AssertionOptions.AssertEquivalencyUsing(
+            options => options.Excluding(x => x.Name == "Owner")
+        );
     }
 
     [Fact]

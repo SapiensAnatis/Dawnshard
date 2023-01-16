@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
+[Index(nameof(DeviceAccountId))]
 public class DbQuest : IDbHasAccountId
 {
     /// <inheritdoc />

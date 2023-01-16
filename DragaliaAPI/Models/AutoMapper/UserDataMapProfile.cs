@@ -8,7 +8,7 @@ public class UserDataMapProfile : Profile
 {
     public UserDataMapProfile()
     {
-        this.CreateMap<DbPlayerUserData?, UserData>()
+        this.CreateMap<DbPlayerUserData, UserData>()
             .ForMember(x => x.age_group, opts => opts.Ignore())
             .ForMember(x => x.max_amulet_quantity, opts => opts.MapFrom(x => 0))
             .ForMember(x => x.max_weapon_quantity, opts => opts.MapFrom(x => 0))

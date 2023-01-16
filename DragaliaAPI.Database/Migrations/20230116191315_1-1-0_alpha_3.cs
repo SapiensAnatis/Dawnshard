@@ -22,6 +22,17 @@ namespace DragaliaAPI.Database.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_PlayerWeapons_DeviceAccountId",
+                table: "PlayerWeapons",
+                column: "DeviceAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerUserData_DeviceAccountId",
+                table: "PlayerUserData",
+                column: "DeviceAccountId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PlayerTalismans_DeviceAccountId",
                 table: "PlayerTalismans",
                 column: "DeviceAccountId");
@@ -32,13 +43,68 @@ namespace DragaliaAPI.Database.Migrations
                 column: "DeviceAccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PlayerStoryState_DeviceAccountId",
+                table: "PlayerStoryState",
+                column: "DeviceAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerSetUnit_DeviceAccountId",
+                table: "PlayerSetUnit",
+                column: "DeviceAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerQuests_DeviceAccountId",
+                table: "PlayerQuests",
+                column: "DeviceAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerPartyUnits_DeviceAccountId",
+                table: "PlayerPartyUnits",
+                column: "DeviceAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerMaterial_DeviceAccountId",
+                table: "PlayerMaterial",
+                column: "DeviceAccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PlayerFortBuilds_DeviceAccountId",
                 table: "PlayerFortBuilds",
                 column: "DeviceAccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PlayerDragonReliability_DeviceAccountId",
+                table: "PlayerDragonReliability",
+                column: "DeviceAccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PlayerDragonData_DeviceAccountId",
                 table: "PlayerDragonData",
+                column: "DeviceAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerCurrency_DeviceAccountId",
+                table: "PlayerCurrency",
+                column: "DeviceAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerCharaData_DeviceAccountId",
+                table: "PlayerCharaData",
+                column: "DeviceAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerBannerData_DeviceAccountId",
+                table: "PlayerBannerData",
+                column: "DeviceAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerAbilityCrests_DeviceAccountId",
+                table: "PlayerAbilityCrests",
+                column: "DeviceAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PartyData_DeviceAccountId",
+                table: "PartyData",
                 column: "DeviceAccountId");
 
             migrationBuilder.AddForeignKey(
@@ -241,6 +307,14 @@ namespace DragaliaAPI.Database.Migrations
                 name: "Players");
 
             migrationBuilder.DropIndex(
+                name: "IX_PlayerWeapons_DeviceAccountId",
+                table: "PlayerWeapons");
+
+            migrationBuilder.DropIndex(
+                name: "IX_PlayerUserData_DeviceAccountId",
+                table: "PlayerUserData");
+
+            migrationBuilder.DropIndex(
                 name: "IX_PlayerTalismans_DeviceAccountId",
                 table: "PlayerTalismans");
 
@@ -249,12 +323,56 @@ namespace DragaliaAPI.Database.Migrations
                 table: "PlayerSummonHistory");
 
             migrationBuilder.DropIndex(
+                name: "IX_PlayerStoryState_DeviceAccountId",
+                table: "PlayerStoryState");
+
+            migrationBuilder.DropIndex(
+                name: "IX_PlayerSetUnit_DeviceAccountId",
+                table: "PlayerSetUnit");
+
+            migrationBuilder.DropIndex(
+                name: "IX_PlayerQuests_DeviceAccountId",
+                table: "PlayerQuests");
+
+            migrationBuilder.DropIndex(
+                name: "IX_PlayerPartyUnits_DeviceAccountId",
+                table: "PlayerPartyUnits");
+
+            migrationBuilder.DropIndex(
+                name: "IX_PlayerMaterial_DeviceAccountId",
+                table: "PlayerMaterial");
+
+            migrationBuilder.DropIndex(
                 name: "IX_PlayerFortBuilds_DeviceAccountId",
                 table: "PlayerFortBuilds");
 
             migrationBuilder.DropIndex(
+                name: "IX_PlayerDragonReliability_DeviceAccountId",
+                table: "PlayerDragonReliability");
+
+            migrationBuilder.DropIndex(
                 name: "IX_PlayerDragonData_DeviceAccountId",
                 table: "PlayerDragonData");
+
+            migrationBuilder.DropIndex(
+                name: "IX_PlayerCurrency_DeviceAccountId",
+                table: "PlayerCurrency");
+
+            migrationBuilder.DropIndex(
+                name: "IX_PlayerCharaData_DeviceAccountId",
+                table: "PlayerCharaData");
+
+            migrationBuilder.DropIndex(
+                name: "IX_PlayerBannerData_DeviceAccountId",
+                table: "PlayerBannerData");
+
+            migrationBuilder.DropIndex(
+                name: "IX_PlayerAbilityCrests_DeviceAccountId",
+                table: "PlayerAbilityCrests");
+
+            migrationBuilder.DropIndex(
+                name: "IX_PartyData_DeviceAccountId",
+                table: "PartyData");
         }
     }
 }

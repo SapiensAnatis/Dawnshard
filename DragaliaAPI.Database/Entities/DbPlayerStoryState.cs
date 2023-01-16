@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerStoryState")]
+[Index(nameof(DeviceAccountId))]
 public class DbPlayerStoryState : IDbHasAccountId
 {
     /// <inheritdoc />

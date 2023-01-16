@@ -288,7 +288,8 @@ public class SavefileService : ISavefileService
 
     public async Task CreateBase(string deviceAccountId)
     {
-        this.apiContext.Players.Add(new() { AccountId = deviceAccountId });
+        if (await this.apiContext.Players.FindAsync(deviceAccountId) is null)
+            this.apiContext.Players.Add(new() { AccountId = deviceAccountId });
 
         DbPlayerUserData userData =
             new(deviceAccountId)
@@ -335,10 +336,34 @@ public class SavefileService : ISavefileService
                             PartyNo = x,
                             Units = new List<DbPartyUnit>()
                             {
-                                new() { UnitNo = 1, CharaId = Charas.ThePrince },
-                                new() { UnitNo = 2, CharaId = Charas.Empty },
-                                new() { UnitNo = 3, CharaId = Charas.Empty },
-                                new() { UnitNo = 4, CharaId = Charas.Empty }
+                                new()
+                                {
+                                    DeviceAccountId = deviceAccountId,
+                                    PartyNo = x,
+                                    UnitNo = 1,
+                                    CharaId = Charas.ThePrince
+                                },
+                                new()
+                                {
+                                    DeviceAccountId = deviceAccountId,
+                                    PartyNo = x,
+                                    UnitNo = 2,
+                                    CharaId = Charas.Empty
+                                },
+                                new()
+                                {
+                                    DeviceAccountId = deviceAccountId,
+                                    PartyNo = x,
+                                    UnitNo = 3,
+                                    CharaId = Charas.Empty
+                                },
+                                new()
+                                {
+                                    DeviceAccountId = deviceAccountId,
+                                    PartyNo = x,
+                                    UnitNo = 4,
+                                    CharaId = Charas.Empty
+                                }
                             }
                         }
                 )

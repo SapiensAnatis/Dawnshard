@@ -10,6 +10,7 @@ namespace DragaliaAPI.Database.Entities;
 /// <summary>
 /// Weapon database entity.
 /// </summary>
+[Index(nameof(DeviceAccountId))]
 public class DbWeaponBody : IDbHasAccountId
 {
     /// <inheritdoc />

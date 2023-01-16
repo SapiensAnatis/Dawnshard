@@ -12,6 +12,7 @@ using MessagePack.Resolvers;
 using DragaliaAPI.Shared.Definitions.Enums;
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
+using System;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -45,19 +46,46 @@ public class LoadController : DragaliaControllerBase
 
         this.logger.LogInformation("{time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
 
-        LoadIndexData data = this.mapper.Map<LoadIndexData>(savefile);
-
-        data.party_power_data = new(999999);
-        data.friend_notice = new(0, 0);
-        data.present_notice = new(0, 0);
-        data.guild_notice = new(0, 0, 0, 0, 0);
-        data.shop_notice = new ShopNotice(0);
-        data.server_time = DateTimeOffset.UtcNow;
-        data.stamina_multi_system_max = 99;
-        data.stamina_multi_user_max = 12;
-        data.quest_skip_point_system_max = 400;
-        data.quest_skip_point_use_limit_max = 30;
-        data.functional_maintenance_list = new List<FunctionalMaintenanceList>();
+        LoadIndexData data =
+            new()
+            {
+                build_list = savefile.BuildList.Select(this.mapper.Map<BuildList>),
+                user_data = this.mapper.Map<UserData>(savefile.UserData),
+                chara_list = savefile.CharaList.Select(this.mapper.Map<CharaList>),
+                dragon_list = savefile.DragonList.Select(this.mapper.Map<DragonList>),
+                dragon_reliability_list = savefile.DragonReliabilityList.Select(
+                    this.mapper.Map<DragonReliabilityList>
+                ),
+                ability_crest_list = savefile.AbilityCrestList.Select(
+                    this.mapper.Map<AbilityCrestList>
+                ),
+                talisman_list = savefile.TalismanList.Select(this.mapper.Map<TalismanList>),
+                weapon_body_list = savefile.WeaponBodyList.Select(this.mapper.Map<WeaponBodyList>),
+                party_list = savefile.PartyList.Select(this.mapper.Map<PartyList>),
+                quest_story_list = savefile.StoryStates
+                    .Where(x => x.StoryType == StoryTypes.Quest)
+                    .Select(mapper.Map<QuestStoryList>),
+                unit_story_list = savefile.StoryStates
+                    .Where(x => x.StoryType == StoryTypes.Chara)
+                    .Select(mapper.Map<UnitStoryList>),
+                castle_story_list = savefile.StoryStates
+                    .Where(x => x.StoryType == StoryTypes.Castle)
+                    .Select(mapper.Map<CastleStoryList>),
+                quest_list = savefile.QuestList.Select(mapper.Map<QuestList>),
+                material_list = savefile.MaterialList.Select(mapper.Map<MaterialList>),
+                party_power_data = new(999999),
+                friend_notice = new(0, 0),
+                present_notice = new(0, 0),
+                guild_notice = new(0, 0, 0, 0, 0),
+                //fort_plant_list = buildSummary,
+                shop_notice = new ShopNotice(0),
+                server_time = DateTimeOffset.UtcNow,
+                stamina_multi_system_max = 99,
+                stamina_multi_user_max = 12,
+                quest_skip_point_system_max = 400,
+                quest_skip_point_use_limit_max = 30,
+                functional_maintenance_list = new List<FunctionalMaintenanceList>(),
+            };
 
         this.logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);
 

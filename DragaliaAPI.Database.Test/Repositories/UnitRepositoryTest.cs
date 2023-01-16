@@ -293,6 +293,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         DbPartyUnit unit =
             new()
             {
+                DeviceAccountId = DeviceAccountId,
                 UnitNo = 1,
                 PartyNo = 1,
                 CharaId = Charas.BondforgedPrince,

@@ -243,4 +243,14 @@ public static class TestUtils
                     .WhenTypeIs<TimeSpan>()
         );
     }
+
+    /// <summary>
+    /// Ignores the 'Owner' navigation property in database entities
+    /// </summary>
+    public static void IgnoreNavigationAssertions()
+    {
+        AssertionOptions.AssertEquivalencyUsing(
+            options => options.Excluding(x => x.Name == "Owner")
+        );
+    }
 }

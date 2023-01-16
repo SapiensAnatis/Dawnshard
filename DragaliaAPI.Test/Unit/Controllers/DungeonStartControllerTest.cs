@@ -288,12 +288,14 @@ public class DungeonStartControllerTest
                 {
                     new()
                     {
+                        DeviceAccountId = DeviceAccountId,
                         CharaId = Charas.ThePrince,
                         UnitNo = 1,
                         PartyNo = 1
                     },
                     new()
                     {
+                        DeviceAccountId = DeviceAccountId,
                         CharaId = Charas.Elisanne,
                         UnitNo = 1,
                         PartyNo = 2

@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerBannerData")]
+[Index(nameof(DeviceAccountId))]
 public class DbPlayerBannerData : IDbHasAccountId
 {
     /// <inheritdoc />
