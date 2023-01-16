@@ -14,9 +14,9 @@ public class DbPartyUnit
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
     [ForeignKey($"{nameof(DeviceAccountId)},{nameof(PartyNo)}")]
-    public virtual DbParty? Party { get; set; } = null!;
+    public virtual DbParty? Party { get; set; }
 
-    public string DeviceAccountId { get; set; }
+    public string DeviceAccountId { get; set; } = string.Empty;
 
     public int PartyNo { get; set; }
 
