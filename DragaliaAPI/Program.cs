@@ -95,7 +95,7 @@ app.UseSerilogRequestLogging(
     options =>
         options.EnrichDiagnosticContext = (diagContext, httpContext) =>
             diagContext.Set(
-                "DeviceAccountId",
+                CustomClaimType.AccountId,
                 httpContext.User.FindFirstValue(CustomClaimType.AccountId) ?? "anonymous"
             )
 );
@@ -129,6 +129,7 @@ app.MapControllers();
 app.UseResponseCompression();
 app.MapHealthChecks("/health");
 
+app.UseMiddleware<AccountIdEnricherMiddleware>();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.Run();
