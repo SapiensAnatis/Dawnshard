@@ -667,13 +667,13 @@ public class HelperService : IHelperService
                         support_dragon = new()
                         {
                             dragon_key_id = 0,
-                            dragon_id = Dragons.PrimalBrunhilda,
+                            dragon_id = Dragons.Horus,
                             level = 100,
                             hp = 369,
                             attack = 127,
                             skill_1_level = 2,
                             ability_1_level = 5,
-                            ability_2_level = 5,
+                            ability_2_level = 0,
                             hp_plus_count = 50,
                             attack_plus_count = 50,
                             limit_break_count = 4
