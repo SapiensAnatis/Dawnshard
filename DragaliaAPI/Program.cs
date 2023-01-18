@@ -10,6 +10,7 @@ using DragaliaAPI.Services.Helpers;
 using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
+using Serilog.Core;
 using Serilog.Events;
 
 Log.Logger = new LoggerConfiguration().MinimumLevel
@@ -77,8 +78,9 @@ builder.Services
         options.Configuration = builder.Configuration.GetConnectionString("RedisHost");
         options.InstanceName = "RedisInstance";
     })
-#pragma warning disable CS0618 // Type or member is obsolete
+    .AddHttpContextAccessor()
     .AddScoped<ISessionService, SessionService>()
+#pragma warning disable CS0618 // Type or member is obsolete
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
 #pragma warning restore CS0618 // Type or member is obsolete
     .AddScoped<ISummonService, SummonService>()
@@ -87,6 +89,7 @@ builder.Services
     .AddScoped<ISavefileService, SavefileService>()
     .AddScoped<IHelperService, HelperService>()
     .AddScoped<IAuthService, AuthService>()
+    .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddHttpClient<IBaasRequestHelper, BaasRequestHelper>();
 
 WebApplication app = builder.Build();
@@ -129,7 +132,6 @@ app.MapControllers();
 app.UseResponseCompression();
 app.MapHealthChecks("/health");
 
-app.UseMiddleware<AccountIdEnricherMiddleware>();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.Run();
