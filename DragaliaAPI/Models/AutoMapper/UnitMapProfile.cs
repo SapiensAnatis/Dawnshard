@@ -25,12 +25,12 @@ public class UnitMapProfile : Profile
             );
 
         this.CreateMap<DbAbilityCrest, AbilityCrestList>()
-            .ForMember(x => x.ability_1_level, opts => opts.Ignore())
-            .ForMember(x => x.ability_2_level, opts => opts.Ignore());
+            .ForMember(x => x.ability_1_level, opts => opts.MapFrom(x => 3))
+            .ForMember(x => x.ability_2_level, opts => opts.MapFrom(x => 3));
 
         this.CreateMap<DbAbilityCrest, GameAbilityCrest>()
-            .ForMember(x => x.ability_1_level, opts => opts.Ignore())
-            .ForMember(x => x.ability_2_level, opts => opts.Ignore());
+            .ForMember(x => x.ability_1_level, opts => opts.MapFrom(x => 3))
+            .ForMember(x => x.ability_2_level, opts => opts.MapFrom(x => 3));
 
         this.CreateMap<DbWeaponBody, WeaponBodyList>()
             .ForMember(x => x.ability_1_level, opts => opts.Ignore())
