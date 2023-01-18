@@ -83,7 +83,7 @@ public class DungeonRecordControllerTest
                         It.IsAny<int>()
                     )
             )
-            .Returns(Task.FromResult(0));
+            .Returns(Task.CompletedTask);
 
         this.mockUpdateDataService
             .Setup(x => x.GetUpdateDataList(DeviceAccountId))

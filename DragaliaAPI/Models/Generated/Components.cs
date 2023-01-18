@@ -3655,7 +3655,7 @@ public class AtgenSupportChara
 [MessagePackObject(true)]
 public class AtgenSupportCrestSlotType1List
 {
-    public int ability_crest_id { get; set; }
+    public AbilityCrests ability_crest_id { get; set; }
     public int buildup_count { get; set; }
     public int limit_break_count { get; set; }
     public int hp_plus_count { get; set; }
@@ -3663,7 +3663,7 @@ public class AtgenSupportCrestSlotType1List
     public int equipable_count { get; set; }
 
     public AtgenSupportCrestSlotType1List(
-        int ability_crest_id,
+        AbilityCrests ability_crest_id,
         int buildup_count,
         int limit_break_count,
         int hp_plus_count,
@@ -3687,7 +3687,9 @@ public class AtgenSupportData
 {
     public ulong viewer_id { get; set; }
     public string name { get; set; }
-    public int is_friend { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_friend { get; set; }
     public CharaList chara_data { get; set; }
     public DragonList dragon_data { get; set; }
     public WeaponList weapon_data { get; set; }
@@ -3704,7 +3706,7 @@ public class AtgenSupportData
     public AtgenSupportData(
         ulong viewer_id,
         string name,
-        int is_friend,
+        bool is_friend,
         CharaList chara_data,
         DragonList dragon_data,
         WeaponList weapon_data,
@@ -3743,7 +3745,7 @@ public class AtgenSupportData
 public class AtgenSupportDragon
 {
     public ulong dragon_key_id { get; set; }
-    public int dragon_id { get; set; }
+    public Dragons dragon_id { get; set; }
     public int level { get; set; }
     public int hp { get; set; }
     public int attack { get; set; }
@@ -3757,7 +3759,7 @@ public class AtgenSupportDragon
 
     public AtgenSupportDragon(
         ulong dragon_key_id,
-        int dragon_id,
+        Dragons dragon_id,
         int level,
         int hp,
         int attack,
@@ -3806,7 +3808,7 @@ public class AtgenSupportReward
 public class AtgenSupportTalisman
 {
     public ulong talisman_key_id { get; set; }
-    public int talisman_id { get; set; }
+    public Talismans talisman_id { get; set; }
     public int talisman_ability_id_1 { get; set; }
     public int talisman_ability_id_2 { get; set; }
     public int talisman_ability_id_3 { get; set; }
@@ -3815,7 +3817,7 @@ public class AtgenSupportTalisman
 
     public AtgenSupportTalisman(
         ulong talisman_key_id,
-        int talisman_id,
+        Talismans talisman_id,
         int talisman_ability_id_1,
         int talisman_ability_id_2,
         int talisman_ability_id_3,
@@ -3842,7 +3844,9 @@ public class AtgenSupportUserDataDetail
     public FortBonusList fort_bonus_list { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }
     public int dragon_reliability_level { get; set; }
-    public int is_friend { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_friend { get; set; }
     public int apply_send_status { get; set; }
 
     public AtgenSupportUserDataDetail(
@@ -3850,7 +3854,7 @@ public class AtgenSupportUserDataDetail
         FortBonusList fort_bonus_list,
         IEnumerable<int> mana_circle_piece_id_list,
         int dragon_reliability_level,
-        int is_friend,
+        bool is_friend,
         int apply_send_status
     )
     {
@@ -3870,9 +3874,11 @@ public class AtgenSupportUserDetailList
 {
     public ulong viewer_id { get; set; }
     public int gettable_mana_point { get; set; }
-    public int is_friend { get; set; }
 
-    public AtgenSupportUserDetailList(ulong viewer_id, int gettable_mana_point, int is_friend)
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_friend { get; set; }
+
+    public AtgenSupportUserDetailList(ulong viewer_id, int gettable_mana_point, bool is_friend)
     {
         this.viewer_id = viewer_id;
         this.gettable_mana_point = gettable_mana_point;
@@ -3924,7 +3930,7 @@ public class AtgenSupportWeapon
 [MessagePackObject(true)]
 public class AtgenSupportWeaponBody
 {
-    public int weapon_body_id { get; set; }
+    public WeaponBodies weapon_body_id { get; set; }
     public int buildup_count { get; set; }
     public int limit_break_count { get; set; }
     public int limit_over_count { get; set; }
@@ -3935,7 +3941,7 @@ public class AtgenSupportWeaponBody
     public int additional_crest_slot_type_3_count { get; set; }
 
     public AtgenSupportWeaponBody(
-        int weapon_body_id,
+        WeaponBodies weapon_body_id,
         int buildup_count,
         int limit_break_count,
         int limit_over_count,
@@ -4706,7 +4712,10 @@ public class CharaList
     public int attack_plus_count { get; set; }
     public int status_plus_count { get; set; }
     public int combo_buildup_count { get; set; }
-    public int is_unlock_edit_skill { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_unlock_edit_skill { get; set; }
     public DateTimeOffset gettime { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }
     public int is_temporary { get; set; }
@@ -4734,7 +4743,7 @@ public class CharaList
         int attack_plus_count,
         int status_plus_count,
         int combo_buildup_count,
-        int is_unlock_edit_skill,
+        bool is_unlock_edit_skill,
         DateTimeOffset gettime,
         IEnumerable<int> mana_circle_piece_id_list,
         int is_temporary,
@@ -5404,12 +5413,18 @@ public class DragonGiftList
 [MessagePackObject(true)]
 public class DragonList
 {
-    public int dragon_id { get; set; }
+    public Dragons dragon_id { get; set; }
     public ulong dragon_key_id { get; set; }
     public int level { get; set; }
     public int exp { get; set; }
-    public int is_lock { get; set; }
-    public int is_new { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_lock { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_new { get; set; }
     public DateTimeOffset get_time { get; set; }
     public int skill_1_level { get; set; }
     public int ability_1_level { get; set; }
@@ -5420,12 +5435,12 @@ public class DragonList
     public int status_plus_count { get; set; }
 
     public DragonList(
-        int dragon_id,
+        Dragons dragon_id,
         ulong dragon_key_id,
         int level,
         int exp,
-        int is_lock,
-        int is_new,
+        bool is_lock,
+        bool is_new,
         DateTimeOffset get_time,
         int skill_1_level,
         int ability_1_level,
@@ -5458,7 +5473,7 @@ public class DragonList
 [MessagePackObject(true)]
 public class DragonReliabilityList
 {
-    public int dragon_id { get; set; }
+    public Dragons dragon_id { get; set; }
     public int reliability_level { get; set; }
     public int reliability_total_exp { get; set; }
 
@@ -5467,7 +5482,7 @@ public class DragonReliabilityList
     public DateTimeOffset last_contact_time { get; set; }
 
     public DragonReliabilityList(
-        int dragon_id,
+        Dragons dragon_id,
         int reliability_level,
         int reliability_total_exp,
         DateTimeOffset gettime,
@@ -6839,10 +6854,10 @@ public class MainStoryMissionList
 [MessagePackObject(true)]
 public class MaterialList
 {
-    public int material_id { get; set; }
+    public Materials material_id { get; set; }
     public int quantity { get; set; }
 
-    public MaterialList(int material_id, int quantity)
+    public MaterialList(Materials material_id, int quantity)
     {
         this.material_id = material_id;
         this.quantity = quantity;

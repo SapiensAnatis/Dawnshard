@@ -16,77 +16,13 @@ public class QuestController : DragaliaControllerBase
     private readonly IQuestRepository questRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
+    private readonly IHelperService helperService;
     private readonly IUpdateDataService updateDataService;
     private const int ReadStoryState = 1;
     private const int MaxStoryId = 1000103;
 
     private static class StubData
     {
-        public static QuestGetSupportUserListData SupportUserData =
-            new()
-            {
-                support_user_list = new List<UserSupportList>()
-                {
-                    new()
-                    {
-                        viewer_id = 100,
-                        name = "dreadfullydistinct",
-                        level = 400,
-                        last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 40000002,
-                        max_party_power = 9999,
-                        support_chara = new()
-                        {
-                            chara_id = Charas.DragonyuleIlia,
-                            level = 10,
-                            additional_max_level = 0,
-                            rarity = 5,
-                            hp = 60,
-                            attack = 40,
-                            hp_plus_count = 0,
-                            attack_plus_count = 0,
-                            ability_1_level = 0,
-                            ability_2_level = 0,
-                            ability_3_level = 0,
-                            ex_ability_level = 1,
-                            ex_ability_2_level = 1,
-                            skill_1_level = 1,
-                            skill_2_level = 0,
-                            is_unlock_edit_skill = true
-                        },
-                        support_dragon = new() { dragon_key_id = 0, },
-                        support_weapon_body = new() { weapon_body_id = 0, },
-                        support_talisman = new() { talisman_key_id = 0, },
-                        support_crest_slot_type_1_list = new List<AtgenSupportCrestSlotType1List>()
-                        {
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                        },
-                        support_crest_slot_type_2_list = new List<AtgenSupportCrestSlotType1List>()
-                        {
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                        },
-                        support_crest_slot_type_3_list = new List<AtgenSupportCrestSlotType1List>()
-                        {
-                            new() { ability_crest_id = 0 },
-                            new() { ability_crest_id = 0 },
-                        },
-                        guild = new() { guild_id = 0, guild_name = "Guild" }
-                    }
-                },
-                support_user_detail_list = new List<AtgenSupportUserDetailList>()
-                {
-                    new()
-                    {
-                        viewer_id = 100,
-                        gettable_mana_point = 25,
-                        is_friend = 0,
-                    }
-                }
-            };
-
         public static QuestGetQuestClearPartyData ClearPartyData =
             new()
             {
@@ -173,12 +109,14 @@ public class QuestController : DragaliaControllerBase
         IQuestRepository questRepository,
         IUserDataRepository userDataRepository,
         IUnitRepository unitRepository,
+        IHelperService helperService,
         IUpdateDataService updateDataService
     )
     {
         this.questRepository = questRepository;
         this.userDataRepository = userDataRepository;
         this.unitRepository = unitRepository;
+        this.helperService = helperService;
         this.updateDataService = updateDataService;
     }
 
@@ -235,10 +173,11 @@ public class QuestController : DragaliaControllerBase
     }
 
     [HttpPost("get_support_user_list")]
-    public DragaliaResult GetUserSupportList()
+    public async Task<DragaliaResult> GetUserSupportList()
     {
         // TODO: this is actually going to be a pretty complicated system
-        return Ok(StubData.SupportUserData);
+        QuestGetSupportUserListData response = await this.helperService.GetHelpers();
+        return Ok(response);
     }
 
     [HttpPost("get_quest_clear_party")]

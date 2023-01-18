@@ -25,6 +25,7 @@ public class DungeonStartController : DragaliaControllerBase
     private readonly IUnitRepository unitRepository;
     private readonly IQuestRepository questRepository;
     private readonly IDungeonService dungeonService;
+    private readonly IHelperService helperService;
     private readonly IUpdateDataService updateDataService;
     private readonly IMapper mapper;
 
@@ -34,6 +35,7 @@ public class DungeonStartController : DragaliaControllerBase
         IUnitRepository unitRepository,
         IQuestRepository questRepository,
         IDungeonService dungeonService,
+        IHelperService helperService,
         IUpdateDataService updateDataService,
         IMapper mapper
     )
@@ -43,6 +45,7 @@ public class DungeonStartController : DragaliaControllerBase
         this.unitRepository = unitRepository;
         this.questRepository = questRepository;
         this.dungeonService = dungeonService;
+        this.helperService = helperService;
         this.updateDataService = updateDataService;
         this.mapper = mapper;
     }
@@ -115,6 +118,16 @@ public class DungeonStartController : DragaliaControllerBase
                 QuestData = questInfo,
             }
         );
+
+        QuestGetSupportUserListData helperList = await this.helperService.GetHelpers();
+
+        UserSupportList? helperInfo = helperList.support_user_list
+            .Where(helper => helper.viewer_id == request.support_viewer_id)
+            .FirstOrDefault();
+
+        AtgenSupportUserDetailList? helperDetails = helperList.support_user_detail_list
+            .Where(helper => helper.viewer_id == request.support_viewer_id)
+            .FirstOrDefault();
 
         DungeonStartStartData response =
             new()
@@ -203,6 +216,14 @@ public class DungeonStartController : DragaliaControllerBase
                 },
                 update_data_list = updateData
             };
+
+        if (helperInfo is not null && helperDetails is not null)
+        {
+            response.ingame_data.party_info.support_data = this.helperService.BuildHelperData(
+                helperInfo,
+                helperDetails
+            );
+        }
 
         return this.Ok(response);
     }
