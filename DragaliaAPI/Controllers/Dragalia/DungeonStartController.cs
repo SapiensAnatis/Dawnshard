@@ -116,11 +116,6 @@ public class DungeonStartController : DragaliaControllerBase
 
         this.logger.LogInformation("{time} ms: Built party", stopwatch.ElapsedMilliseconds);
 
-        long viewerId = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .Select(x => x.ViewerId)
-            .SingleAsync();
-
         this.logger.LogInformation("{time} ms: Viewer ID looked up", stopwatch.ElapsedMilliseconds);
 
         QuestData questInfo = MasterAsset.QuestData.Get(request.quest_id);
@@ -153,7 +148,7 @@ public class DungeonStartController : DragaliaControllerBase
             {
                 ingame_data = new()
                 {
-                    viewer_id = (ulong)viewerId,
+                    viewer_id = (ulong)this.ViewerId,
                     dungeon_key = dungeonKey,
                     dungeon_type = questInfo.DungeonType,
                     play_type = questInfo.QuestPlayModeType,
