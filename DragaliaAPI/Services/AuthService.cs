@@ -103,7 +103,7 @@ public class AuthService : IAuthService
                 }
                 catch (Exception e)
                 {
-                    this.logger.LogError("Error importing save", e);
+                    this.logger.LogError(e, "Error importing save");
                     // Let them log in regardless
                 }
             }
