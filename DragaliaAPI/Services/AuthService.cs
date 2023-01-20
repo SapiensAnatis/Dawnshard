@@ -107,7 +107,7 @@ public class AuthService : IAuthService
         }
 
         long viewerId = await this.DoLogin(jwt.Subject);
-        string sessionId = await this.sessionService.CreateSession(jwt.Subject, idToken, viewerId);
+        string sessionId = await this.sessionService.CreateSession(idToken, jwt.Subject, viewerId);
 
         using IDisposable vIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
 

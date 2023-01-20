@@ -109,7 +109,7 @@ public class AuthServiceTest
                     new() { DeviceAccountId = "id", ViewerId = 1 }
                 }.AsQueryable().BuildMock());
         this.mockSessionService
-            .Setup(x => x.CreateSession(AccountId, token, 1))
+            .Setup(x => x.CreateSession(token, AccountId, 1))
             .ReturnsAsync("session id");
 
         (await this.authService.DoAuth(token)).Should().BeEquivalentTo((1, "session id"));
@@ -221,7 +221,7 @@ public class AuthServiceTest
         this.mockUserDataRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
 
         this.mockSessionService
-            .Setup(x => x.CreateSession(AccountId, token, 1))
+            .Setup(x => x.CreateSession(token, AccountId, 1))
             .ReturnsAsync("session id");
 
         this.mockSavefileService
@@ -280,7 +280,7 @@ public class AuthServiceTest
                 }.AsQueryable().BuildMock());
 
         this.mockSessionService
-            .Setup(x => x.CreateSession(AccountId, token, 1))
+            .Setup(x => x.CreateSession(token, AccountId, 1))
             .ReturnsAsync("session id");
 
         await this.authService.Invoking(x => x.DoAuth(token)).Should().NotThrowAsync();
@@ -330,7 +330,7 @@ public class AuthServiceTest
                 }.AsQueryable().BuildMock());
 
         this.mockSessionService
-            .Setup(x => x.CreateSession(AccountId, token, 1))
+            .Setup(x => x.CreateSession(token, AccountId, 1))
             .ReturnsAsync("session id");
 
         await this.authService.DoAuth(token);
@@ -384,7 +384,7 @@ public class AuthServiceTest
                 }.AsQueryable().BuildMock());
 
         this.mockSessionService
-            .Setup(x => x.CreateSession(AccountId, token, 1))
+            .Setup(x => x.CreateSession(token, AccountId, 1))
             .ReturnsAsync("session id");
 
         await this.authService.DoAuth(token);
