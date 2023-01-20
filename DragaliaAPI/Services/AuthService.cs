@@ -48,8 +48,6 @@ public class AuthService : IAuthService
 
     public async Task<(long viewerId, string sessionId)> DoAuth(string idToken)
     {
-        throw new DragaliaException(Models.ResultCode.CommonAccountBan, "lol");
-
         (long viewerId, string sessionId) result = this.loginOptions.CurrentValue.UseBaasLogin
             ? await this.DoBaasAuth(idToken)
 #pragma warning disable CS0618 // Type or member is obsolete

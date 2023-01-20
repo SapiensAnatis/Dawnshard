@@ -169,7 +169,7 @@ public class AuthServiceTest
             )
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
-            .Where(x => x.Code == Models.ResultCode.COMMON_AUTH_ERROR);
+            .Where(x => x.Code == Models.ResultCode.IdTokenError);
 
         this.mockBaasOptions.VerifyAll();
         this.mockLoginOptions.VerifyAll();
