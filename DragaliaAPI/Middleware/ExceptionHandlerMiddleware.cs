@@ -9,7 +9,7 @@ namespace DragaliaAPI.Middleware;
 
 public class ExceptionHandlerMiddleware
 {
-    private const ResultCode ServerErrorCode = ResultCode.COMMON_SERVER_ERROR;
+    private const ResultCode ServerErrorCode = ResultCode.CommonServerError;
 
     private readonly RequestDelegate next;
     private readonly ILogger logger;

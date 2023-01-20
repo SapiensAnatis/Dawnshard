@@ -63,7 +63,7 @@ public class CastleStoryController : DragaliaControllerBase
             if (lookingGlassCount < 1)
             {
                 throw new DragaliaException(
-                    ResultCode.CASTLE_STORY_OUT_OF_PERIOD,
+                    ResultCode.CastleStoryOutOfPeriod,
                     "Insufficient looking glasses"
                 );
             }
