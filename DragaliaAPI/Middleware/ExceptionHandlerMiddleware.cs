@@ -9,7 +9,7 @@ namespace DragaliaAPI.Middleware;
 
 public class ExceptionHandlerMiddleware
 {
-    private const ResultCode ServerErrorCode = ResultCode.COMMON_SERVER_ERROR;
+    private const ResultCode ServerErrorCode = ResultCode.CommonServerError;
 
     private readonly RequestDelegate next;
     private readonly ILogger logger;
@@ -48,6 +48,8 @@ public class ExceptionHandlerMiddleware
             ResultCode code = ex is DragaliaException dragaliaException
                 ? dragaliaException.Code
                 : ServerErrorCode;
+
+            this.logger.LogError("Returning result_code {code}", code);
 
             DragaliaResponse<DataHeaders> gameResponse = new(new DataHeaders(code), code);
 

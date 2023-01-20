@@ -165,7 +165,7 @@ public static class TestUtils
         );
 
         if (ensureSuccessHeader)
-            deserialized.data_headers.result_code.Should().Be(ResultCode.SUCCESS);
+            deserialized.data_headers.result_code.Should().Be(ResultCode.Success);
 
         return deserialized;
     }

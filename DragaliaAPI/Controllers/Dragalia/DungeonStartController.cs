@@ -97,10 +97,7 @@ public class DungeonStartController : DragaliaControllerBase
             int offset = request.party_no_list.FindIndex(x => x == unit.PartyNo) * 4;
             if (offset == -1)
             {
-                throw new DragaliaException(
-                    ResultCode.PARTY_SETTING_TEMPORARY_CHARA_ERROR,
-                    "Invalid PartyNo"
-                );
+                throw new DragaliaException(ResultCode.PartyUnexpected, "Invalid PartyNo");
             }
 
             unit.UnitNo += offset;

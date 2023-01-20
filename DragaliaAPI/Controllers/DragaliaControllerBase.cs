@@ -22,8 +22,20 @@ public abstract class DragaliaControllerBase : ControllerBase
         return base.Ok(
             new DragaliaResponse<object>(
                 value ?? throw new ArgumentNullException(nameof(value)),
-                ResultCode.SUCCESS
+                ResultCode.Success
             )
         );
+    }
+
+    public OkObjectResult Code(ResultCode code, string message)
+    {
+        return base.Ok(
+            new DragaliaResponse<ResultCodeData>(new DataHeaders(code), new(code, message))
+        );
+    }
+
+    public OkObjectResult Code(ResultCode code)
+    {
+        return this.Code(code, string.Empty);
     }
 }

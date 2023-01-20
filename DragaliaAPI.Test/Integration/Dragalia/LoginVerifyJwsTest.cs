@@ -31,6 +31,6 @@ public class LoginVerifyJwsTest : IClassFixture<IntegrationTestFixture>
             )
         ).data;
 
-        response.Should().BeEquivalentTo(new ResultCodeData(ResultCode.SUCCESS));
+        response.Should().BeEquivalentTo(new ResultCodeData(ResultCode.Success, string.Empty));
     }
 }
