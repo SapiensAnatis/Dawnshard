@@ -1,6 +1,8 @@
 ﻿using DragaliaAPI.Models.Nintendo;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
@@ -28,28 +30,29 @@ namespace DragaliaAPI.Services;
 public class SessionService : ISessionService
 {
     private readonly IDistributedCache cache;
-    private readonly DistributedCacheEntryOptions cacheOptions;
+    private readonly IOptionsMonitor<RedisOptions> options;
     private readonly ILogger<SessionService> logger;
+
+    private DistributedCacheEntryOptions CacheOptions =>
+        new()
+        {
+            SlidingExpiration = TimeSpan.FromMinutes(options.CurrentValue.SessionExpiryTimeMinutes)
+        };
 
     public SessionService(
         IDistributedCache cache,
-        IConfiguration configuration,
+        IOptionsMonitor<RedisOptions> options,
         ILogger<SessionService> logger
     )
     {
         this.cache = cache;
+        this.options = options;
         this.logger = logger;
-
-        int expiryTimeMinutes = configuration.GetValue<int>("SessionExpiryTimeMinutes");
-        cacheOptions = new() { SlidingExpiration = TimeSpan.FromMinutes(expiryTimeMinutes) };
     }
 
     private static class Schema
     {
-        public static string Session_IdToken(string idToken)
-        {
-            return $":session:id_token:{idToken}";
-        }
+        public static string Session_IdToken(string idToken) => $":session:id_token:{idToken}";
 
         public static string Session_SessionId(string sessionId) =>
             $":session:session_id:{sessionId}";
@@ -68,18 +71,18 @@ public class SessionService : ISessionService
 
         if (!string.IsNullOrEmpty(existingSessionId))
         {
-            // TODO: Consider abstracting this into a RemoveSession method, in case it needs to be done elsewhere
             await cache.RemoveAsync(Schema.Session_SessionId(existingSessionId));
             await cache.RemoveAsync(Schema.SessionId_DeviceAccountId(deviceAccount.id));
         }
 
         string sessionId = Guid.NewGuid().ToString();
 
-        Session session = new(sessionId, deviceAccount.id);
+        // Filler viewerid for session as this flow is deprecated
+        Session session = new(sessionId, idToken, deviceAccount.id, 47337);
         await cache.SetStringAsync(
             Schema.Session_IdToken(idToken),
             JsonSerializer.Serialize(session),
-            cacheOptions
+            CacheOptions
         );
 
         logger.LogInformation(
@@ -117,14 +120,14 @@ public class SessionService : ISessionService
         await cache.SetStringAsync(
             Schema.Session_SessionId(session.SessionId),
             JsonSerializer.Serialize(session),
-            cacheOptions
+            CacheOptions
         );
 
         // Register in existent sessions
         await cache.SetStringAsync(
             Schema.SessionId_DeviceAccountId(session.DeviceAccountId),
             session.SessionId,
-            cacheOptions
+            CacheOptions
         );
 
         this.logger.LogInformation(
@@ -136,7 +139,7 @@ public class SessionService : ISessionService
         return session.SessionId;
     }
 
-    public async Task<string> CreateSession(string accountId, string idToken)
+    public async Task<string> CreateSession(string idToken, string accountId, long viewerId)
     {
         // Check for existing session
         Session? existingSession = await this.TryLoadSession(Schema.Session_IdToken(idToken));
@@ -144,51 +147,33 @@ public class SessionService : ISessionService
             return existingSession.SessionId;
 
         string sessionId = Guid.NewGuid().ToString();
-        Session session = new(sessionId, accountId);
+        Session session = new(sessionId, idToken, accountId, viewerId);
 
         // Register in sessions by id token (for reauth)
         await cache.SetStringAsync(
             Schema.Session_IdToken(idToken),
             JsonSerializer.Serialize(session),
-            cacheOptions
+            CacheOptions
         );
 
-        // Register in sessions by session id (for account id retrieval)
+        // Register in sessions by session id (for all other endpoints)
         await cache.SetStringAsync(
             Schema.Session_SessionId(sessionId),
-            JsonSerializer.Serialize(session)
+            JsonSerializer.Serialize(session),
+            CacheOptions
         );
 
         return sessionId;
     }
 
-    public async Task<string> GetDeviceAccountId_SessionId(string sessionId)
-    {
-        Session session = await LoadSession(Schema.Session_SessionId(sessionId));
+    public async Task<Session> LoadSessionIdToken(string idToken) =>
+        await this.LoadSession(Schema.Session_IdToken(idToken));
 
-        return session.DeviceAccountId;
-    }
+    public async Task<Session> LoadSessionSessionId(string sessionId) =>
+        await this.LoadSession(Schema.Session_SessionId(sessionId));
 
-    public async Task<string> GetDeviceAccountId_IdToken(string idToken)
-    {
-        Session session = await LoadSession(Schema.Session_IdToken(idToken));
-
-        return session.DeviceAccountId;
-    }
-
-    private async Task<Session> LoadSession(string key)
-    {
-        string? sessionJson = await cache.GetStringAsync(key);
-        if (string.IsNullOrEmpty(sessionJson))
-        {
-            throw new SessionException(key);
-        }
-
-        return JsonSerializer.Deserialize<Session>(sessionJson)
-            ?? throw new JsonException(
-                $"Loaded session JSON {sessionJson} could not be deserialized."
-            );
-    }
+    private async Task<Session> LoadSession(string key) =>
+        await this.TryLoadSession(key) ?? throw new SessionException(key);
 
     private async Task<Session?> TryLoadSession(string key)
     {
@@ -199,6 +184,4 @@ public class SessionService : ISessionService
 
         return JsonSerializer.Deserialize<Session>(json);
     }
-
-    private record Session(string SessionId, string DeviceAccountId);
 }

@@ -21,18 +21,27 @@ public interface ISessionService
     Task<string> ActivateSession(string idToken);
 
     /// <summary>
-    /// Get a queryable for a player's savefile from an id token.
-    /// Warning: Will fail if ActivateSession() has been called.
+    /// Create a new session.
     /// </summary>
-    /// <param name="idToken"></param>
-    /// <returns></returns>
-    Task<string> GetDeviceAccountId_IdToken(string idToken);
+    /// <param name="idToken">The BaaS ID token/</param>
+    /// <param name="accountId">The BaaS subject.</param>
+    /// <param name="viewerId">The UserData ViewerID.</param>
+    /// <returns>The session ID.</returns>
+    Task<string> CreateSession(string idToken, string accountId, long viewerId);
 
     /// <summary>
-    /// Get a queryable for a player's savefile from a session id.
+    /// Get a session from an id.
     /// </summary>
     /// <param name="sessionId">The session id.</param>
-    /// <returns></returns>
-    Task<string> GetDeviceAccountId_SessionId(string sessionId);
-    Task<string> CreateSession(string accountId, string idToken);
+    /// <returns>The session object.</returns>
+    /// <exception cref="Exceptions.SessionException">A matching key was not found in the cache.</exception>
+    Task<Session> LoadSessionSessionId(string sessionId);
+
+    /// <summary>
+    /// Get a session from an id token.
+    /// </summary>
+    /// <param name="idToken">The ID token.</param>
+    /// <returns>The session object.</returns>
+    /// <exception cref="Exceptions.SessionException">A matching key was not found in the cache.</exception>
+    Task<Session> LoadSessionIdToken(string idToken);
 }

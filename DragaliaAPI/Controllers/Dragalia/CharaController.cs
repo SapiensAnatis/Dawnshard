@@ -746,7 +746,7 @@ public class CharaController : DragaliaControllerBase
         [FromBody] CharaGetCharaUnitSetRequest request
     )
     {
-        IDictionary<Charas, IEnumerable<DbSetUnit>> setUnitData = unitRepository.GetCharaSets(
+        IDictionary<Charas, IEnumerable<DbSetUnit>> setUnitData = await unitRepository.GetCharaSets(
             DeviceAccountId,
             request.chara_id_list.Select(x => (Charas)x)
         );

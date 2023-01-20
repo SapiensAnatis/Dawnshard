@@ -23,9 +23,11 @@ Log.Logger = new LoggerConfiguration().MinimumLevel
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 ConfigurationManager configuration = builder.Configuration;
-builder.Services.Configure<BaasOptions>(configuration.GetRequiredSection("Baas"));
-builder.Services.Configure<LoginOptions>(configuration.GetRequiredSection("Login"));
-builder.Services.Configure<DragalipatchOptions>(configuration.GetRequiredSection("Dragalipatch"));
+builder.Services
+    .Configure<BaasOptions>(configuration.GetRequiredSection("Baas"))
+    .Configure<LoginOptions>(configuration.GetRequiredSection("Login"))
+    .Configure<DragalipatchOptions>(configuration.GetRequiredSection("Dragalipatch"))
+    .Configure<RedisOptions>(configuration.GetRequiredSection("Redis"));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
@@ -99,7 +101,7 @@ app.UseSerilogRequestLogging(
         options.EnrichDiagnosticContext = (diagContext, httpContext) =>
             diagContext.Set(
                 CustomClaimType.AccountId,
-                httpContext.User.FindFirstValue(CustomClaimType.AccountId) ?? "anonymous"
+                httpContext.User.FindFirstValue(CustomClaimType.AccountId)
             )
 );
 

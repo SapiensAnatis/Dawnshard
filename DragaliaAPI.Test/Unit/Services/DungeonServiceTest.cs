@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions;
@@ -13,23 +14,23 @@ namespace DragaliaAPI.Test.Unit.Services;
 
 public class DungeonServiceTest
 {
+    private readonly Mock<IOptionsMonitor<RedisOptions>> mockOptions;
     private readonly IDungeonService dungeonService;
 
     public DungeonServiceTest()
     {
+        mockOptions = new(MockBehavior.Strict);
+
         IOptions<MemoryDistributedCacheOptions> opts = Options.Create(
             new MemoryDistributedCacheOptions()
         );
         IDistributedCache testCache = new MemoryDistributedCache(opts);
 
-        Dictionary<string, string?> inMemoryConfiguration =
-            new() { { "DungeonExpiryTimeMinutes", "5" }, };
+        this.mockOptions
+            .SetupGet(x => x.CurrentValue)
+            .Returns(new RedisOptions() { DungeonExpiryTimeMinutes = 1 });
 
-        IConfiguration configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(inMemoryConfiguration)
-            .Build();
-
-        dungeonService = new DungeonService(testCache, configuration);
+        dungeonService = new DungeonService(testCache, mockOptions.Object);
     }
 
     [Fact]

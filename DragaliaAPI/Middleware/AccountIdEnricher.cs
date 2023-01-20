@@ -28,5 +28,18 @@ public class AccountIdEnricher : ILogEventEnricher
             );
             logEvent.AddPropertyIfAbsent(property);
         }
+
+        string? viewerId = contextAccessor.HttpContext?.User.FindFirstValue(
+            CustomClaimType.ViewerId
+        );
+
+        if (!string.IsNullOrEmpty(viewerId))
+        {
+            LogEventProperty property = propertyFactory.CreateProperty(
+                CustomClaimType.ViewerId,
+                viewerId
+            );
+            logEvent.AddPropertyIfAbsent(property);
+        }
     }
 }

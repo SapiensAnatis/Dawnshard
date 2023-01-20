@@ -21,7 +21,7 @@ public interface IUnitRepository : IBaseRepository
     Task<DbSetUnit?> GetCharaSetData(string deviceAccountId, Charas charaId, int setNo);
     DbSetUnit AddCharaSetData(string deviceAccountId, Charas charaId, int setNo);
     IEnumerable<DbSetUnit> GetCharaSets(string deviceAccountId, Charas charaId);
-    IDictionary<Charas, IEnumerable<DbSetUnit>> GetCharaSets(
+    Task<IDictionary<Charas, IEnumerable<DbSetUnit>>> GetCharaSets(
         string deviceAccountId,
         IEnumerable<Charas> charaId
     );

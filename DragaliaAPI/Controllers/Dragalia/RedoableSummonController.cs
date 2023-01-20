@@ -127,7 +127,11 @@ public class RedoableSummonController : DragaliaControllerBase
 
         await cache.SetStringAsync(
             Schema.SessionId_CachedSummonResult(sessionId),
-            JsonSerializer.Serialize(summonResult)
+            JsonSerializer.Serialize(summonResult),
+            new DistributedCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60)
+            }
         );
 
         return this.Ok(new RedoableSummonPreExecData(new UserRedoableSummonData(1, summonResult)));

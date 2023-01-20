@@ -76,7 +76,8 @@ public class NintendoLoginController : ControllerBase
         await this.sessionService.PrepareSession(deviceAccount, token);
 
         TimeSpan reloginTime =
-            TimeSpan.FromMinutes(this.configuration.GetValue<int>("SessionExpiryTimeMinutes")) / 2;
+            TimeSpan.FromMinutes(this.configuration.GetValue<int>("Redis:SessionExpiryTimeMinutes"))
+            / 2;
 
         LoginResponse response =
             new(token, deviceAccount, (int)reloginTime.TotalSeconds)

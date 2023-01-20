@@ -123,6 +123,11 @@ public static class TestUtils
     public const string DeviceAccountId = "id";
 
     /// <summary>
+    /// Same for ViewerId.
+    /// </summary>
+    public const int ViewerId = 1;
+
+    /// <summary>
     /// Cast the data of a <see cref="ActionResult{DragaliaResponse}"/> to a given type.
     /// <remarks>Uses 'as' casting, and will return null if the cast failed.</remarks>
     /// </summary>
@@ -202,7 +207,11 @@ public static class TestUtils
             {
                 User = new(
                     new ClaimsIdentity(
-                        new List<Claim>() { new Claim(CustomClaimType.AccountId, DeviceAccountId) }
+                        new List<Claim>()
+                        {
+                            new Claim(CustomClaimType.AccountId, DeviceAccountId),
+                            new Claim(CustomClaimType.ViewerId, ViewerId.ToString())
+                        }
                     )
                 )
             }

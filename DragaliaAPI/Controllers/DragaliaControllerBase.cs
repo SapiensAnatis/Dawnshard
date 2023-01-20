@@ -17,6 +17,12 @@ public abstract class DragaliaControllerBase : ControllerBase
         this.User.FindFirstValue(CustomClaimType.AccountId)
         ?? throw new InvalidOperationException("No AccountId claim value found");
 
+    protected long ViewerId =>
+        long.Parse(
+            this.User.FindFirstValue(CustomClaimType.ViewerId)
+                ?? throw new InvalidOperationException("No ViewerId claim value found")
+        );
+
     public override OkObjectResult Ok(object? value)
     {
         return base.Ok(
