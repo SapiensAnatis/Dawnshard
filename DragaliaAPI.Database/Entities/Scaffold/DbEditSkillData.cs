@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.Database.Entities;
+namespace DragaliaAPI.Database.Entities.Scaffold;
 
 /// <summary>
 /// Mapping template class for shared skill data. Not tracked in DB.

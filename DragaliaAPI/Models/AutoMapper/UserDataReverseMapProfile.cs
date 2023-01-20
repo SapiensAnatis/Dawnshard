@@ -9,6 +9,7 @@ public class UserDataReverseMapProfile : Profile
     public UserDataReverseMapProfile()
     {
         this.AddGlobalIgnore("DeviceAccount");
+        this.AddGlobalIgnore("Owner");
 
         this.CreateMap<UserData, DbPlayerUserData>()
             .ForMember(x => x.TutorialFlag, opts => opts.Ignore()) // Mapped from TutorialFlagList

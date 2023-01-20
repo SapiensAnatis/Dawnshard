@@ -18,6 +18,7 @@ public class DbTestFixture : IDisposable
     {
         DbContextOptions<ApiContext> options = new DbContextOptionsBuilder<ApiContext>()
             .UseInMemoryDatabase($"DbTestFixture-{Guid.NewGuid()}")
+            .EnableSensitiveDataLogging()
             .Options;
 
         this.ApiContext = new ApiContext(options);

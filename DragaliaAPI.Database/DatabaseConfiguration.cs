@@ -51,6 +51,7 @@ public static class DatabaseConfiguration
                 Username = Environment.GetEnvironmentVariable("POSTGRES_USER"),
                 Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD"),
                 LogParameters = true,
+                IncludeErrorDetail = true,
             };
 
         return connectionStringBuilder.ConnectionString;

@@ -11,6 +11,7 @@ public class QuestReverseMapProfile : Profile
     public QuestReverseMapProfile()
     {
         this.AddGlobalIgnore("DeviceAccount");
+        this.AddGlobalIgnore("Owner");
 
         this.CreateMap<QuestStoryList, DbPlayerStoryState>()
             .ForMember(x => x.StoryId, o => o.MapFrom(x => x.quest_story_id))

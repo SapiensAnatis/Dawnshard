@@ -9,6 +9,7 @@ public class FortReverseMapProfile : Profile
     public FortReverseMapProfile()
     {
         this.AddGlobalIgnore("DeviceAccount");
+        this.AddGlobalIgnore("Owner");
 
         this.CreateMap<BuildList, DbFortBuild>()
             .ForMember(x => x.LastIncomeDate, opts => opts.MapFrom(src => DateTime.UnixEpoch))

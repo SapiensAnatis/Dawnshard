@@ -1,9 +1,11 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
+using MockQueryable.Moq;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
 namespace DragaliaAPI.Database.Test.Repositories;
@@ -219,13 +221,11 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     {
         DbPlayerCharaData chara = new(DeviceAccountId, Charas.BondforgedPrince);
 
-        DbPlayerCharaData chara1 = new(DeviceAccountId, Charas.GalaMym);
-        chara1.IsUnlockEditSkill = true;
-        chara1.Skill1Level = 3;
+        DbPlayerCharaData chara1 =
+            new(DeviceAccountId, Charas.GalaMym) { IsUnlockEditSkill = true, Skill1Level = 3 };
 
-        DbPlayerCharaData chara2 = new(DeviceAccountId, Charas.SummerCleo);
-        chara2.IsUnlockEditSkill = true;
-        chara2.Skill2Level = 2;
+        DbPlayerCharaData chara2 =
+            new(DeviceAccountId, Charas.SummerCleo) { IsUnlockEditSkill = true, Skill2Level = 2 };
 
         DbPlayerDragonData dragon = DbPlayerDragonDataFactory.Create(
             DeviceAccountId,
@@ -237,7 +237,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             DeviceAccountId,
             Dragons.MidgardsormrZero
         );
-        reliability.Level = 30;
+        reliability.Level = 15;
 
         DbWeaponBody weapon =
             new() { DeviceAccountId = DeviceAccountId, WeaponBodyId = WeaponBodies.Excalibur };
@@ -290,6 +290,27 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                 TalismanKeyId = 44444
             };
 
+        DbPartyUnit unit =
+            new()
+            {
+                DeviceAccountId = DeviceAccountId,
+                UnitNo = 1,
+                PartyNo = 1,
+                CharaId = Charas.BondforgedPrince,
+                EquipWeaponBodyId = WeaponBodies.Excalibur,
+                EquipDragonKeyId = 400,
+                EquipTalismanKeyId = 44444,
+                EquipCrestSlotType1CrestId1 = AbilityCrests.ADogsDay,
+                EquipCrestSlotType1CrestId2 = AbilityCrests.TheRedImpulse,
+                EquipCrestSlotType1CrestId3 = AbilityCrests.ThePrinceofDragonyule,
+                EquipCrestSlotType2CrestId1 = AbilityCrests.TaikoTandem,
+                EquipCrestSlotType2CrestId2 = AbilityCrests.AChoiceBlend,
+                EquipCrestSlotType3CrestId1 = AbilityCrests.CrownofLightSerpentsBoon,
+                EquipCrestSlotType3CrestId2 = AbilityCrests.AKingsPrideSwordsBoon,
+                EditSkill1CharaId = Charas.GalaMym,
+                EditSkill2CharaId = Charas.SummerCleo,
+            };
+
         await this.fixture.AddToDatabase(chara);
         await this.fixture.AddToDatabase(chara1);
         await this.fixture.AddToDatabase(chara2);
@@ -299,29 +320,27 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddRangeToDatabase(crests);
         await this.fixture.AddToDatabase(talisman);
 
-        (
-            await this.unitRepository.BuildDetailedPartyUnit(
-                DeviceAccountId,
-                new DbPartyUnit()
-                {
-                    Party = new() { DeviceAccountId = DeviceAccountId, PartyNo = 1 },
-                    UnitNo = 1,
-                    CharaId = Charas.BondforgedPrince,
-                    EquipWeaponBodyId = WeaponBodies.Excalibur,
-                    EquipDragonKeyId = 400,
-                    EquipTalismanKeyId = 44444,
-                    EquipCrestSlotType1CrestId1 = AbilityCrests.ADogsDay,
-                    EquipCrestSlotType1CrestId2 = AbilityCrests.TheRedImpulse,
-                    EquipCrestSlotType1CrestId3 = AbilityCrests.ThePrinceofDragonyule,
-                    EquipCrestSlotType2CrestId1 = AbilityCrests.TaikoTandem,
-                    EquipCrestSlotType2CrestId2 = AbilityCrests.AChoiceBlend,
-                    EquipCrestSlotType3CrestId1 = AbilityCrests.CrownofLightSerpentsBoon,
-                    EquipCrestSlotType3CrestId2 = AbilityCrests.AKingsPrideSwordsBoon,
-                    EditSkill1CharaId = Charas.GalaMym,
-                    EditSkill2CharaId = Charas.SummerCleo,
-                }
-            )
-        )
+        // Set up party
+        DbParty party = await this.fixture.ApiContext.PlayerParties
+            .Where(x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == 1)
+            .FirstAsync();
+
+        party.Units = new List<DbPartyUnit>() { unit };
+
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        var unitQuery = this.fixture.ApiContext.PlayerPartyUnits.Where(
+            x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == 1
+        );
+
+        IQueryable<DbDetailedPartyUnit> buildQuery = this.unitRepository.BuildDetailedPartyUnit(
+            DeviceAccountId,
+            unitQuery
+        );
+
+        DbDetailedPartyUnit result = await buildQuery.FirstAsync();
+
+        (result)
             .Should()
             .BeEquivalentTo(
                 new DbDetailedPartyUnit()
@@ -335,7 +354,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                     CrestSlotType1CrestList = crests.GetRange(0, 3),
                     CrestSlotType2CrestList = crests.GetRange(3, 2),
                     CrestSlotType3CrestList = crests.GetRange(5, 2),
-                    DragonReliabilityLevel = 30,
+                    DragonReliabilityLevel = 15,
                     EditSkill1CharaData = new() { CharaId = Charas.GalaMym, EditSkillLevel = 3, },
                     EditSkill2CharaData = new() { CharaId = Charas.SummerCleo, EditSkillLevel = 2, }
                 }

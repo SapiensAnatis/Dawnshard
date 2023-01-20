@@ -102,6 +102,9 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                             && (x.Name == "ability_1_level" || x.Name == "ability_2_level")
                     );
 
+                    // Free wyrmite
+                    opts.Excluding(x => x.user_data.crystal);
+
                     // Ignored properties
                     opts.Excluding(x => x.user_data.prologue_end_time);
                     opts.Excluding(x => x.fort_plant_list);

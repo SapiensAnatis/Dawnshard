@@ -16,6 +16,10 @@ public class SummonRepositoryTest : IClassFixture<DbTestFixture>
     {
         this.fixture = fixture;
         this.summonRepository = new SummonRepository(this.fixture.ApiContext);
+
+        AssertionOptions.AssertEquivalencyUsing(
+            options => options.Excluding(x => x.Name == "Owner")
+        );
     }
 
     [Fact]

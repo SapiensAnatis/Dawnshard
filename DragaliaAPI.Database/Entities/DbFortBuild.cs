@@ -1,15 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
+[Index(nameof(DeviceAccountId))]
 public class DbFortBuild : IDbHasAccountId
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long BuildId { get; set; }
 
+    /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
     public required string DeviceAccountId { get; set; }
 
     public FortPlants PlantId { get; set; }
@@ -32,7 +39,9 @@ public class DbFortBuild : IDbHasAccountId
                 this.BuildStartDate == DateTimeOffset.UnixEpoch
                 && this.BuildEndDate == DateTimeOffset.UnixEpoch
             )
+            {
                 return FortBuildStatus.None;
+            }
 
             if (DateTimeOffset.UtcNow < this.BuildEndDate)
                 return FortBuildStatus.Construction;

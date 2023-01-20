@@ -27,12 +27,13 @@ public class DungeonTest : IClassFixture<IntegrationTestFixture>
         string key = (
             await this.client.PostMsgpack<DungeonStartStartData>(
                 "/dungeon_start/start",
-                new DungeonStartStartRequest() { party_no_list = new[] { 2 }, quest_id = 100010306 }
+                new DungeonStartStartRequest()
+                {
+                    party_no_list = new List<int>() { 2 },
+                    quest_id = 100010306
+                }
             )
-        )
-            .data
-            .ingame_data
-            .dungeon_key;
+        ).data.ingame_data.dungeon_key;
 
         DungeonGetAreaOddsData response = (
             await this.client.PostMsgpack<DungeonGetAreaOddsData>(
@@ -51,12 +52,13 @@ public class DungeonTest : IClassFixture<IntegrationTestFixture>
         string key = (
             await this.client.PostMsgpack<DungeonStartStartData>(
                 "/dungeon_start/start",
-                new DungeonStartStartRequest() { party_no_list = new[] { 1 }, quest_id = 100010207 }
+                new DungeonStartStartRequest()
+                {
+                    party_no_list = new List<int>() { 1 },
+                    quest_id = 100010207
+                }
             )
-        )
-            .data
-            .ingame_data
-            .dungeon_key;
+        ).data.ingame_data.dungeon_key;
 
         DungeonFailData response = (
             await this.client.PostMsgpack<DungeonFailData>(

@@ -14,6 +14,8 @@ public class CastleStoryTest : IntegrationTestBase
     {
         this.fixture = fixture;
         this.client = fixture.CreateClient();
+
+        TestUtils.IgnoreNavigationAssertions();
     }
 
     [Fact]
