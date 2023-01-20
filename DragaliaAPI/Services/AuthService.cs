@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
@@ -10,6 +11,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Serilog;
+using Serilog.Context;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace DragaliaAPI.Services;
@@ -83,31 +85,34 @@ public class AuthService : IAuthService
         TokenValidationResult result = await this.ValidateToken(idToken);
         JwtSecurityToken jwt = (JwtSecurityToken)result.SecurityToken;
 
-        if (
-            GetPendingSaveImport(
-                jwt,
-                await this.userDataRepository.GetUserData(jwt.Subject).SingleOrDefaultAsync()
-            )
-        )
+        using (LogContext.PushProperty(CustomClaimType.AccountId, jwt.Subject))
         {
-            try
+            if (
+                GetPendingSaveImport(
+                    jwt,
+                    await this.userDataRepository.GetUserData(jwt.Subject).SingleOrDefaultAsync()
+                )
+            )
             {
-                LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
-                await this.savefileService.Import(jwt.Subject, pendingSave);
-                await this.userDataRepository.UpdateSaveImportTime(jwt.Subject);
-                await this.userDataRepository.SaveChangesAsync();
+                try
+                {
+                    LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
+                    await this.savefileService.Import(jwt.Subject, pendingSave);
+                    await this.userDataRepository.UpdateSaveImportTime(jwt.Subject);
+                    await this.userDataRepository.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    this.logger.LogError("Error importing save", e);
+                    // Let them log in regardless
+                }
             }
-            catch (Exception e)
-            {
-                this.logger.LogError("Error importing save", e);
-                // Let them log in regardless
-            }
+
+            long viewerId = await this.DoLogin(jwt.Subject);
+            string sessionId = await this.sessionService.CreateSession(jwt.Subject, idToken);
+
+            return new(viewerId, sessionId);
         }
-
-        long viewerId = await this.DoLogin(jwt.Subject);
-        string sessionId = await this.sessionService.CreateSession(jwt.Subject, idToken);
-
-        return new(viewerId, sessionId);
     }
 
     private async Task<TokenValidationResult> ValidateToken(string idToken)

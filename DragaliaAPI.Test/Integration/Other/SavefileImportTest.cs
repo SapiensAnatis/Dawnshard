@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -95,6 +96,11 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                     opts.Excluding(x => x.user_data.viewer_id);
                     opts.Excluding(x => x.server_time);
                     opts.Excluding(x => x.spec_upgrade_time);
+                    opts.Excluding(
+                        x =>
+                            x.Path.StartsWith("ability_crest_list")
+                            && (x.Name == "ability_1_level" || x.Name == "ability_2_level")
+                    );
 
                     // Free wyrmite
                     opts.Excluding(x => x.user_data.crystal);

@@ -1,8 +1,6 @@
 ﻿using System.Security.Claims;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
-using DragaliaAPI.Services.Exceptions;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
