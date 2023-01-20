@@ -116,8 +116,6 @@ public class DungeonStartController : DragaliaControllerBase
 
         this.logger.LogInformation("{time} ms: Built party", stopwatch.ElapsedMilliseconds);
 
-        this.logger.LogInformation("{time} ms: Viewer ID looked up", stopwatch.ElapsedMilliseconds);
-
         QuestData questInfo = MasterAsset.QuestData.Get(request.quest_id);
 
         /*IEnumerable<int> enemyList = this.enemyListDataService

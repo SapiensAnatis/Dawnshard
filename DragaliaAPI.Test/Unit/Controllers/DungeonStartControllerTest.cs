@@ -67,18 +67,6 @@ public class DungeonStartControllerTest
                 }
             );
 
-        this.mockUserDataRepository
-            .Setup(x => x.GetUserData(DeviceAccountId))
-            .Returns(new List<DbPlayerUserData>()
-                {
-                    new()
-                    {
-                        DeviceAccountId = DeviceAccountId,
-                        Name = "Euden",
-                        ViewerId = 1
-                    }
-                }.AsQueryable().BuildMock());
-
         /* this.mockPartyRepository
              .Setup(x => x.Get(DeviceAccountId))
              .Returns(new List<DbParty>()
