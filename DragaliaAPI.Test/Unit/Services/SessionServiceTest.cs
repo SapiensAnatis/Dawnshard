@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Nintendo;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Distributed;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 
 namespace DragaliaAPI.Test.Unit.Services;
 
@@ -13,32 +15,57 @@ public class SessionServiceTest
 {
     // TODO: Refactor this file to use the new methods
     private readonly Mock<ILogger<SessionService>> mockLogger;
+    private readonly Mock<IOptionsMonitor<RedisOptions>> mockOptions;
     private readonly SessionService sessionService;
 
+    [Obsolete]
     private readonly DeviceAccount deviceAccount = new("id", "password");
+
+    [Obsolete]
     private readonly DeviceAccount deviceAccountTwo = new("id 2", "password 2");
 
     private readonly IDistributedCache testCache;
 
     public SessionServiceTest()
     {
-        mockLogger = new(MockBehavior.Loose);
+        this.mockLogger = new(MockBehavior.Loose);
+        this.mockOptions = new(MockBehavior.Strict);
 
         IOptions<MemoryDistributedCacheOptions> opts = Options.Create(
             new MemoryDistributedCacheOptions()
         );
+
         this.testCache = new MemoryDistributedCache(opts);
+        this.mockOptions
+            .SetupGet(x => x.CurrentValue)
+            .Returns(new RedisOptions() { SessionExpiryTimeMinutes = 1 });
 
-        Dictionary<string, string?> inMemoryConfiguration =
-            new() { { "SessionExpiryTimeMinutes", "5" }, };
-
-        IConfiguration configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(inMemoryConfiguration)
-            .Build();
-
-        sessionService = new(testCache, configuration, mockLogger.Object);
+        sessionService = new(testCache, mockOptions.Object, mockLogger.Object);
     }
 
+    [Fact]
+    public async Task CreateSession_CanGetAfterwards()
+    {
+        string sessionId = await this.sessionService.CreateSession("token", "id", 1);
+
+        Session session = await this.sessionService.LoadSessionSessionId(sessionId);
+
+        session.SessionId.Should().Be(sessionId);
+        session.IdToken.Should().Be("token");
+        session.DeviceAccountId.Should().Be("id");
+        session.ViewerId.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task CreateSession_SetsExpectedKeys()
+    {
+        string sessionId = await this.sessionService.CreateSession("token", "id", 1);
+
+        this.testCache.GetString($":session:session_id:{sessionId}").Should().NotBeNull();
+        this.testCache.GetString($":session:id_token:token").Should().NotBeNull();
+    }
+
+    [Obsolete("From pre-BaaS login flow")]
     [Fact]
     public async Task NewSession_CreatesValidSession()
     {
@@ -47,6 +74,7 @@ public class SessionServiceTest
         this.testCache.GetString($":session:session_id:{sessionId}").Should().NotBeNull();
     }
 
+    [Obsolete("From pre-BaaS login flow")]
     [Fact]
     public async Task NewSession_ExistingSession_ReplacesOldSession()
     {
@@ -59,6 +87,7 @@ public class SessionServiceTest
         secondSessionId.Should().NotBeEquivalentTo(firstSessionId);
     }
 
+    [Obsolete("From pre-BaaS login flow")]
     [Fact]
     public async Task NewSession_TwoCreated_BothValid()
     {
@@ -71,6 +100,7 @@ public class SessionServiceTest
         secondSessionId.Should().NotBeEquivalentTo(firstSessionId);
     }
 
+    [Obsolete("From pre-BaaS login flow")]
     private async Task<string> PrepareAndRegisterSession(
         string idToken,
         DeviceAccount deviceAccount

@@ -54,13 +54,6 @@ public class AuthService : IAuthService
             : await this.DoLegacyAuth(idToken);
 #pragma warning restore CS0618 // Type or member is obsolete
 
-        this.logger.LogInformation(
-            "Authenticated user with viewer ID {viewerid} using token ...{token} and issued session ID {sid}",
-            result.viewerId,
-            idToken[^5..],
-            result.sessionId
-        );
-
         return result;
     }
 
@@ -71,7 +64,9 @@ public class AuthService : IAuthService
         string deviceAccountId;
 
         sessionId = await this.sessionService.ActivateSession(idToken);
-        deviceAccountId = await this.sessionService.GetDeviceAccountId_SessionId(sessionId);
+        deviceAccountId = (
+            await this.sessionService.LoadSessionSessionId(sessionId)
+        ).DeviceAccountId;
 
         IQueryable<DbPlayerUserData> playerInfo = this.userDataRepository.GetUserData(
             deviceAccountId
@@ -85,34 +80,44 @@ public class AuthService : IAuthService
         TokenValidationResult result = await this.ValidateToken(idToken);
         JwtSecurityToken jwt = (JwtSecurityToken)result.SecurityToken;
 
-        using (LogContext.PushProperty(CustomClaimType.AccountId, jwt.Subject))
-        {
-            if (
-                GetPendingSaveImport(
-                    jwt,
-                    await this.userDataRepository.GetUserData(jwt.Subject).SingleOrDefaultAsync()
-                )
+        using IDisposable accIdLog = LogContext.PushProperty(
+            CustomClaimType.AccountId,
+            jwt.Subject
+        );
+
+        if (
+            GetPendingSaveImport(
+                jwt,
+                await this.userDataRepository.GetUserData(jwt.Subject).SingleOrDefaultAsync()
             )
+        )
+        {
+            try
             {
-                try
-                {
-                    LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
-                    await this.savefileService.Import(jwt.Subject, pendingSave);
-                    await this.userDataRepository.UpdateSaveImportTime(jwt.Subject);
-                    await this.userDataRepository.SaveChangesAsync();
-                }
-                catch (Exception e)
-                {
-                    this.logger.LogError(e, "Error importing save");
-                    // Let them log in regardless
-                }
+                LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
+                await this.savefileService.Import(jwt.Subject, pendingSave);
+                await this.userDataRepository.UpdateSaveImportTime(jwt.Subject);
+                await this.userDataRepository.SaveChangesAsync();
             }
-
-            long viewerId = await this.DoLogin(jwt.Subject);
-            string sessionId = await this.sessionService.CreateSession(jwt.Subject, idToken);
-
-            return new(viewerId, sessionId);
+            catch (Exception e)
+            {
+                this.logger.LogError(e, "Error importing save");
+                // Let them log in regardless
+            }
         }
+
+        long viewerId = await this.DoLogin(jwt.Subject);
+        string sessionId = await this.sessionService.CreateSession(jwt.Subject, idToken, viewerId);
+
+        using IDisposable vIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
+
+        this.logger.LogInformation(
+            "Authenticated user with viewer ID {viewerid} and issued session ID {sid}",
+            viewerId,
+            sessionId
+        );
+
+        return new(viewerId, sessionId);
     }
 
     private async Task<TokenValidationResult> ValidateToken(string idToken)
