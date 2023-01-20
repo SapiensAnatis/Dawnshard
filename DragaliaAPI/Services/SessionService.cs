@@ -71,7 +71,6 @@ public class SessionService : ISessionService
 
         if (!string.IsNullOrEmpty(existingSessionId))
         {
-            // TODO: Consider abstracting this into a RemoveSession method, in case it needs to be done elsewhere
             await cache.RemoveAsync(Schema.Session_SessionId(existingSessionId));
             await cache.RemoveAsync(Schema.SessionId_DeviceAccountId(deviceAccount.id));
         }
