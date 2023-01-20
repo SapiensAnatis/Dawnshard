@@ -28,7 +28,7 @@ public class RedoableSummonController : DragaliaControllerBase
     private static class Schema
     {
         public static string SessionId_CachedSummonResult(string sessionId) =>
-            $":{sessionId}:cachedSummonResult";
+            $":cachedSummonResult:{sessionId}";
     }
 
     private static readonly OddsRate OddsRate =
