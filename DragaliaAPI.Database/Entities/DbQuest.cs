@@ -1,12 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
+[Index(nameof(DeviceAccountId))]
 public class DbQuest : IDbHasAccountId
 {
-    [Required]
-    public string DeviceAccountId { get; set; } = string.Empty;
+    /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
+    public required string DeviceAccountId { get; set; }
 
     [Required]
     public int QuestId { get; set; }

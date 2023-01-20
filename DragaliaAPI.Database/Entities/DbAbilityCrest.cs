@@ -9,9 +9,14 @@ namespace DragaliaAPI.Database.Entities;
 /// <summary>
 /// Wyrmprint database entity.
 /// </summary>
+[Index(nameof(DeviceAccountId))]
 public class DbAbilityCrest : IDbHasAccountId
 {
     /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
     public required string DeviceAccountId { get; set; }
 
     /// <summary>

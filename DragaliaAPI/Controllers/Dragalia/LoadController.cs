@@ -10,37 +10,28 @@ using DragaliaAPI.Models;
 using MessagePack;
 using MessagePack.Resolvers;
 using DragaliaAPI.Shared.Definitions.Enums;
+using System.Diagnostics;
+using DragaliaAPI.Database.Entities;
+using System;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("load")]
 public class LoadController : DragaliaControllerBase
 {
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IUnitRepository unitRepository;
-    private readonly IPartyRepository partyRepository;
-    private readonly IQuestRepository questRepository;
-    private readonly IInventoryRepository inventoryRepository;
-    private readonly IFortRepository fortRepository;
+    private readonly ISavefileService savefileService;
     private readonly IMapper mapper;
+    private readonly ILogger<LoadController> logger;
 
     public LoadController(
-        IUserDataRepository userDataRepository,
-        IUnitRepository unitRepository,
-        IPartyRepository partyRepository,
-        IQuestRepository questRepository,
-        IInventoryRepository inventoryRepository,
-        IFortRepository fortRepository,
-        IMapper mapper
+        ISavefileService savefileService,
+        IMapper mapper,
+        ILogger<LoadController> logger
     )
     {
-        this.userDataRepository = userDataRepository;
-        this.unitRepository = unitRepository;
-        this.partyRepository = partyRepository;
-        this.questRepository = questRepository;
-        this.inventoryRepository = inventoryRepository;
-        this.fortRepository = fortRepository;
+        this.savefileService = savefileService;
         this.mapper = mapper;
+        this.logger = logger;
     }
 
 #if !TEST
@@ -48,98 +39,40 @@ public class LoadController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> Index()
     {
-        UserData userData = mapper.Map<UserData>(
-            await this.userDataRepository.GetUserData(this.DeviceAccountId).SingleAsync()
-        );
+        Stopwatch stopwatch = new();
+        stopwatch.Start();
 
-        IEnumerable<CharaList> charas = (
-            await this.unitRepository.GetAllCharaData(this.DeviceAccountId).ToListAsync()
-        ).Select(mapper.Map<CharaList>);
+        DbPlayer savefile = await this.savefileService.Load(this.DeviceAccountId).SingleAsync();
 
-        IEnumerable<DragonList> dragons = (
-            await this.unitRepository.GetAllDragonData(this.DeviceAccountId).ToListAsync()
-        ).Select(mapper.Map<DragonList>);
-
-        IEnumerable<DragonReliabilityList> dragonReliabilities = (
-            await this.unitRepository
-                .GetAllDragonReliabilityData(this.DeviceAccountId)
-                .ToListAsync()
-        ).Select(mapper.Map<DragonReliabilityList>);
-
-        IEnumerable<AbilityCrestList> crests = (
-            await this.unitRepository.GetAllAbilityCrestData(this.DeviceAccountId).ToListAsync()
-        ).Select(mapper.Map<AbilityCrestList>);
-
-        IEnumerable<WeaponBodyList> weapons = (
-            await this.unitRepository.GetAllWeaponBodyData(this.DeviceAccountId).ToListAsync()
-        ).Select(mapper.Map<WeaponBodyList>);
-
-        IEnumerable<PartyList> parties = (
-            await this.partyRepository.GetParties(this.DeviceAccountId).ToListAsync()
-        )
-            .Select(mapper.Map<PartyList>)
-            .Select(
-                x =>
-                    new PartyList()
-                    {
-                        party_name = x.party_name,
-                        party_no = x.party_no,
-                        party_setting_list = x.party_setting_list.OrderBy(x => x.unit_no)
-                    }
-            );
-
-        IEnumerable<QuestStoryList> questStories = (
-            await this.questRepository
-                .GetStories(this.DeviceAccountId, StoryTypes.Quest)
-                .ToListAsync()
-        ).Select(mapper.Map<QuestStoryList>);
-
-        IEnumerable<CastleStoryList> castleStories = (
-            await this.questRepository
-                .GetStories(this.DeviceAccountId, StoryTypes.Castle)
-                .ToListAsync()
-        ).Select(mapper.Map<CastleStoryList>);
-
-        IEnumerable<UnitStoryList> unitStories = (
-            await this.questRepository
-                .GetStories(this.DeviceAccountId, StoryTypes.Chara)
-                .ToListAsync()
-        ).Select(mapper.Map<UnitStoryList>);
-
-        IEnumerable<QuestList> quests = (
-            await this.questRepository.GetQuests(this.DeviceAccountId).ToListAsync()
-        ).Select(mapper.Map<QuestList>);
-
-        IEnumerable<MaterialList> materials = (
-            await this.inventoryRepository.GetMaterials(this.DeviceAccountId).ToListAsync()
-        ).Select(mapper.Map<MaterialList>);
-
-        IEnumerable<TalismanList> talismans = (
-            await this.unitRepository.GetAllTalismanData(this.DeviceAccountId).ToListAsync()
-        ).Select(mapper.Map<TalismanList>);
-
-        IEnumerable<BuildList> buildDetails = (
-            await this.fortRepository.GetBuilds(this.DeviceAccountId).ToListAsync()
-        ).Select(mapper.Map<BuildList>);
-        //IEnumerable<FortPlantList> buildSummary = new FortPlants[] { FortPlants.RupieMine, FortPlants.FlameAltar, , 100403, 100404, 100405, 100701, 100702, 100703, 100704, 100705 }
+        this.logger.LogInformation("{time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
 
         LoadIndexData data =
             new()
             {
-                build_list = buildDetails,
-                user_data = userData,
-                chara_list = charas,
-                dragon_list = dragons,
-                dragon_reliability_list = dragonReliabilities,
-                ability_crest_list = crests,
-                talisman_list = talismans,
-                weapon_body_list = weapons,
-                party_list = parties,
-                quest_story_list = questStories,
-                unit_story_list = unitStories,
-                castle_story_list = castleStories,
-                quest_list = quests,
-                material_list = materials,
+                build_list = savefile.BuildList.Select(this.mapper.Map<BuildList>),
+                user_data = this.mapper.Map<UserData>(savefile.UserData),
+                chara_list = savefile.CharaList.Select(this.mapper.Map<CharaList>),
+                dragon_list = savefile.DragonList.Select(this.mapper.Map<DragonList>),
+                dragon_reliability_list = savefile.DragonReliabilityList.Select(
+                    this.mapper.Map<DragonReliabilityList>
+                ),
+                ability_crest_list = savefile.AbilityCrestList.Select(
+                    this.mapper.Map<AbilityCrestList>
+                ),
+                talisman_list = savefile.TalismanList.Select(this.mapper.Map<TalismanList>),
+                weapon_body_list = savefile.WeaponBodyList.Select(this.mapper.Map<WeaponBodyList>),
+                party_list = savefile.PartyList.Select(this.mapper.Map<PartyList>),
+                quest_story_list = savefile.StoryStates
+                    .Where(x => x.StoryType == StoryTypes.Quest)
+                    .Select(mapper.Map<QuestStoryList>),
+                unit_story_list = savefile.StoryStates
+                    .Where(x => x.StoryType == StoryTypes.Chara)
+                    .Select(mapper.Map<UnitStoryList>),
+                castle_story_list = savefile.StoryStates
+                    .Where(x => x.StoryType == StoryTypes.Castle)
+                    .Select(mapper.Map<CastleStoryList>),
+                quest_list = savefile.QuestList.Select(mapper.Map<QuestList>),
+                material_list = savefile.MaterialList.Select(mapper.Map<MaterialList>),
                 party_power_data = new(999999),
                 friend_notice = new(0, 0),
                 present_notice = new(0, 0),
@@ -153,6 +86,8 @@ public class LoadController : DragaliaControllerBase
                 quest_skip_point_use_limit_max = 30,
                 functional_maintenance_list = new List<FunctionalMaintenanceList>(),
             };
+
+        this.logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);
 
         return this.Ok(data);
     }

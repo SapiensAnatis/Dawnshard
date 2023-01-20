@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Repositories;
@@ -32,5 +33,8 @@ public interface IUnitRepository : IBaseRepository
     IQueryable<DbWeaponBody> GetAllWeaponBodyData(string deviceAccountId);
     IQueryable<DbAbilityCrest> GetAllAbilityCrestData(string deviceAccountId);
     IQueryable<DbTalisman> GetAllTalismanData(string deviceAccountId);
-    Task<DbDetailedPartyUnit> BuildDetailedPartyUnit(string deviceAccountId, DbPartyUnit input);
+    IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(
+        string deviceAccountId,
+        IQueryable<DbPartyUnit> units
+    );
 }

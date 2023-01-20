@@ -16,6 +16,10 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
     {
         this.fixture = fixture;
         this.partyRepository = new PartyRepository(this.fixture.ApiContext);
+
+        AssertionOptions.AssertEquivalencyUsing(
+            options => options.Excluding(x => x.Name == "Owner")
+        );
     }
 
     [Fact]

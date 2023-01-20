@@ -6,15 +6,19 @@ using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerCharaData")]
+[Index(nameof(DeviceAccountId))]
 public class DbPlayerCharaData : IDbHasAccountId
 {
-    /// <inheritdoc/>
-    [Column("DeviceAccountId")]
+    /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
     public required string DeviceAccountId { get; set; }
 
     [Column("CharaId")]

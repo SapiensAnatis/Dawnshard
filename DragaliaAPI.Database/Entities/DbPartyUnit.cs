@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
+[Index(nameof(DeviceAccountId))]
 public class DbPartyUnit
 {
     // In theory, a composite primary key of [Party, UnitNo] would work great.
@@ -11,18 +13,16 @@ public class DbPartyUnit
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
-    [ForeignKey($"{nameof(this.DeviceAccountId)},{nameof(this.PartyNo)}")]
-    public virtual DbParty Party { get; set; } = null!;
+    [ForeignKey($"{nameof(DeviceAccountId)},{nameof(PartyNo)}")]
+    public virtual DbParty? Party { get; set; }
 
-    public string DeviceAccountId { get; set; } = null!;
+    public string DeviceAccountId { get; set; } = string.Empty;
 
     public int PartyNo { get; set; }
 
-    [Required]
-    public int UnitNo { get; set; }
+    public required int UnitNo { get; set; }
 
-    [Required]
-    public Charas CharaId { get; set; }
+    public required Charas CharaId { get; set; }
 
     public long EquipDragonKeyId { get; set; } = 0;
 

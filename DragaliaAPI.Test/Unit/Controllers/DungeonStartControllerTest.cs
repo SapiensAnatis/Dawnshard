@@ -9,6 +9,8 @@ using MockQueryable.Moq;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using DragaliaAPI.Database.Entities.Scaffold;
 
 namespace DragaliaAPI.Test.Unit.Controllers;
 
@@ -23,6 +25,7 @@ public class DungeonStartControllerTest
     private readonly Mock<IHelperService> mockHelperService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly IMapper mapper;
+    private readonly Mock<ILogger<DungeonStartController>> mockLogger;
 
     private const int questId = 100010103;
 
@@ -35,6 +38,7 @@ public class DungeonStartControllerTest
         this.mockDungeonService = new(MockBehavior.Strict);
         this.mockHelperService = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
+        this.mockLogger = new();
 
         this.mapper = new MapperConfiguration(
             cfg => cfg.AddMaps(typeof(Program).Assembly)
@@ -48,7 +52,8 @@ public class DungeonStartControllerTest
             mockDungeonService.Object,
             mockHelperService.Object,
             mockUpdateDataService.Object,
-            mapper
+            mapper,
+            mockLogger.Object
         );
 
         dungeonStartController.SetupMockContext();
@@ -74,77 +79,78 @@ public class DungeonStartControllerTest
                     }
                 }.AsQueryable().BuildMock());
 
-        this.mockPartyRepository
-            .Setup(x => x.GetParties(DeviceAccountId))
-            .Returns(new List<DbParty>()
-                {
-                    new()
-                    {
-                        DeviceAccountId = DeviceAccountId,
-                        PartyName = "Party",
-                        PartyNo = 1,
-                        Units = new List<DbPartyUnit>()
-                        {
-                            new() { UnitNo = 1, CharaId = Charas.ThePrince }
-                        }
-                    },
-                    new()
-                    {
-                        DeviceAccountId = DeviceAccountId,
-                        PartyName = "Party",
-                        PartyNo = 2,
-                        Units = new List<DbPartyUnit>()
-                        {
-                            new() { UnitNo = 1, CharaId = Charas.Elisanne }
-                        }
-                    }
-                }.AsQueryable().BuildMock());
+        /* this.mockPartyRepository
+             .Setup(x => x.Get(DeviceAccountId))
+             .Returns(new List<DbParty>()
+                 {
+                     new()
+                     {
+                         DeviceAccountId = DeviceAccountId,
+                         PartyName = "Party",
+                         PartyNo = 1,
+                         Units = new List<DbPartyUnit>()
+                         {
+                             new() { UnitNo = 1, CharaId = Charas.ThePrince }
+                         }
+                     },
+                     new()
+                     {
+                         DeviceAccountId = DeviceAccountId,
+                         PartyName = "Party",
+                         PartyNo = 2,
+                         Units = new List<DbPartyUnit>()
+                         {
+                             new() { UnitNo = 1, CharaId = Charas.Elisanne }
+                         }
+                     }
+                 }.AsQueryable().BuildMock());*/
 
         this.mockUnitRepository
             .Setup(
-                x =>
-                    x.BuildDetailedPartyUnit(
-                        DeviceAccountId,
-                        It.Is<DbPartyUnit>(x => x.CharaId == Charas.ThePrince)
-                    )
+                x => x.BuildDetailedPartyUnit(DeviceAccountId, It.IsAny<IQueryable<DbPartyUnit>>())
             )
-            .ReturnsAsync(
-                new DbDetailedPartyUnit()
+            .Returns(new List<DbDetailedPartyUnit>()
                 {
-                    Position = 1,
-                    DeviceAccountId = DeviceAccountId,
-                    CharaData = new(DeviceAccountId, Charas.ThePrince),
-                    CrestSlotType1CrestList = new List<DbAbilityCrest>()
+                    new()
                     {
-                        new()
+                        Position = 1,
+                        DeviceAccountId = DeviceAccountId,
+                        CharaData = new(DeviceAccountId, Charas.ThePrince),
+                        CrestSlotType1CrestList = new List<DbAbilityCrest>()
+                        {
+                            new()
+                            {
+                                DeviceAccountId = DeviceAccountId,
+                                AbilityCrestId = AbilityCrests.ABouquet
+                            }
+                        },
+                        CrestSlotType2CrestList = new List<DbAbilityCrest>()
+                        {
+                            new()
+                            {
+                                DeviceAccountId = DeviceAccountId,
+                                AbilityCrestId = AbilityCrests.ABouquet
+                            }
+                        },
+                        CrestSlotType3CrestList = new List<DbAbilityCrest>()
+                        {
+                            new()
+                            {
+                                DeviceAccountId = DeviceAccountId,
+                                AbilityCrestId = AbilityCrests.ABriefRepose
+                            }
+                        },
+                        EditSkill1CharaData = new() { CharaId = Charas.Vida },
+                        EditSkill2CharaData = new() { },
+                        DragonData = new()
                         {
                             DeviceAccountId = DeviceAccountId,
-                            AbilityCrestId = AbilityCrests.ABouquet
-                        }
-                    },
-                    CrestSlotType2CrestList = new List<DbAbilityCrest>()
-                    {
-                        new()
-                        {
-                            DeviceAccountId = DeviceAccountId,
-                            AbilityCrestId = AbilityCrests.ABouquet
-                        }
-                    },
-                    CrestSlotType3CrestList = new List<DbAbilityCrest>()
-                    {
-                        new()
-                        {
-                            DeviceAccountId = DeviceAccountId,
-                            AbilityCrestId = AbilityCrests.ABriefRepose
-                        }
-                    },
-                    EditSkill1CharaData = new() { CharaId = Charas.Vida },
-                    EditSkill2CharaData = new() { },
-                    DragonData = new() { DragonId = Dragons.Midgardsormr },
-                    DragonReliabilityLevel = 30,
-                    WeaponBodyData = new() { }
-                }
-            );
+                            DragonId = Dragons.Midgardsormr
+                        },
+                        DragonReliabilityLevel = 30,
+                        WeaponBodyData = new() { DeviceAccountId = DeviceAccountId }
+                    }
+                }.AsQueryable().BuildMock());
 
         this.mockHelperService
             .Setup(x => x.GetHelpers())
@@ -181,10 +187,19 @@ public class DungeonStartControllerTest
             .Setup(x => x.GetQuests(DeviceAccountId))
             .Returns(new List<DbQuest>()
                 {
-                    new() { QuestId = questId, State = 3 }
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        QuestId = questId,
+                        State = 3
+                    }
                 }.AsQueryable().BuildMock());
 
         this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+
+        this.mockPartyRepository
+            .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1 }))
+            .Returns(new List<DbPartyUnit>().AsQueryable().BuildMock());
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
             new DungeonStartStartRequest()
@@ -228,6 +243,10 @@ public class DungeonStartControllerTest
 
         this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
 
+        this.mockPartyRepository
+            .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1 }))
+            .Returns(new List<DbPartyUnit>().AsQueryable().BuildMock());
+
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
             new DungeonStartStartRequest()
             {
@@ -254,56 +273,124 @@ public class DungeonStartControllerTest
             .Setup(x => x.GetQuests(DeviceAccountId))
             .Returns(new List<DbQuest>()
                 {
-                    new() { QuestId = questId, State = 3 }
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        QuestId = questId,
+                        State = 3
+                    }
                 }.AsQueryable().BuildMock());
 
         this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+        this.mockPartyRepository
+            .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1, 2 }))
+            .Returns(new List<DbPartyUnit>()
+                {
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        CharaId = Charas.ThePrince,
+                        UnitNo = 1,
+                        PartyNo = 1
+                    },
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        CharaId = Charas.Elisanne,
+                        UnitNo = 1,
+                        PartyNo = 2
+                    }
+                }.AsQueryable().BuildMock());
 
         this.mockUnitRepository
             .Setup(
-                x =>
-                    x.BuildDetailedPartyUnit(
-                        DeviceAccountId,
-                        It.Is<DbPartyUnit>(x => x.CharaId == Charas.Elisanne && x.UnitNo == 5)
-                    )
+                x => x.BuildDetailedPartyUnit(DeviceAccountId, It.IsAny<IQueryable<DbPartyUnit>>())
             )
-            .ReturnsAsync(
-                new DbDetailedPartyUnit()
+            .Returns(new List<DbDetailedPartyUnit>()
                 {
-                    Position = 5,
-                    DeviceAccountId = DeviceAccountId,
-                    CharaData = new(DeviceAccountId, Charas.Elisanne),
-                    CrestSlotType1CrestList = new List<DbAbilityCrest>()
+                    new()
                     {
-                        new()
+                        Position = 1,
+                        DeviceAccountId = DeviceAccountId,
+                        CharaData = new(DeviceAccountId, Charas.ThePrince),
+                        CrestSlotType1CrestList = new List<DbAbilityCrest>()
+                        {
+                            new()
+                            {
+                                DeviceAccountId = DeviceAccountId,
+                                AbilityCrestId = AbilityCrests.ABouquet
+                            }
+                        },
+                        CrestSlotType2CrestList = new List<DbAbilityCrest>()
+                        {
+                            new()
+                            {
+                                DeviceAccountId = DeviceAccountId,
+                                AbilityCrestId = AbilityCrests.ABouquet
+                            }
+                        },
+                        CrestSlotType3CrestList = new List<DbAbilityCrest>()
+                        {
+                            new()
+                            {
+                                DeviceAccountId = DeviceAccountId,
+                                AbilityCrestId = AbilityCrests.ABriefRepose
+                            }
+                        },
+                        EditSkill1CharaData = new() { CharaId = Charas.Vida },
+                        EditSkill2CharaData = new() { },
+                        DragonData = new()
                         {
                             DeviceAccountId = DeviceAccountId,
-                            AbilityCrestId = AbilityCrests.SweetSurprise,
-                        }
+                            DragonId = Dragons.Midgardsormr
+                        },
+                        DragonReliabilityLevel = 30,
+                        WeaponBodyData = new() { DeviceAccountId = DeviceAccountId }
                     },
-                    CrestSlotType2CrestList = new List<DbAbilityCrest>()
+                    new()
                     {
-                        new()
+                        Position = 1,
+                        DeviceAccountId = DeviceAccountId,
+                        CharaData = new(DeviceAccountId, Charas.Elisanne),
+                        CrestSlotType1CrestList = new List<DbAbilityCrest>()
+                        {
+                            new()
+                            {
+                                DeviceAccountId = DeviceAccountId,
+                                AbilityCrestId = AbilityCrests.SweetSurprise,
+                            }
+                        },
+                        CrestSlotType2CrestList = new List<DbAbilityCrest>()
+                        {
+                            new()
+                            {
+                                DeviceAccountId = DeviceAccountId,
+                                AbilityCrestId = AbilityCrests.FromWhenceHeComes,
+                            }
+                        },
+                        CrestSlotType3CrestList = new List<DbAbilityCrest>()
+                        {
+                            new()
+                            {
+                                DeviceAccountId = DeviceAccountId,
+                                AbilityCrestId = AbilityCrests.AnAncientOath
+                            }
+                        },
+                        EditSkill1CharaData = new() { CharaId = Charas.Isaac },
+                        EditSkill2CharaData = new() { },
+                        DragonData = new()
                         {
                             DeviceAccountId = DeviceAccountId,
-                            AbilityCrestId = AbilityCrests.FromWhenceHeComes,
-                        }
-                    },
-                    CrestSlotType3CrestList = new List<DbAbilityCrest>()
-                    {
-                        new()
+                            DragonId = Dragons.GalaBeastCiella
+                        },
+                        DragonReliabilityLevel = 30,
+                        WeaponBodyData = new()
                         {
                             DeviceAccountId = DeviceAccountId,
-                            AbilityCrestId = AbilityCrests.AnAncientOath
+                            WeaponBodyId = WeaponBodies.MegaLance
                         }
-                    },
-                    EditSkill1CharaData = new() { CharaId = Charas.Isaac },
-                    EditSkill2CharaData = new() { },
-                    DragonData = new() { DragonId = Dragons.GalaBeastCiella },
-                    DragonReliabilityLevel = 30,
-                    WeaponBodyData = new() { WeaponBodyId = WeaponBodies.MegaLance }
-                }
-            );
+                    }
+                }.AsQueryable().BuildMock());
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
             new DungeonStartStartRequest()
@@ -343,10 +430,19 @@ public class DungeonStartControllerTest
             .Setup(x => x.GetQuests(DeviceAccountId))
             .Returns(new List<DbQuest>()
                 {
-                    new() { QuestId = questId, State = 3 }
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        QuestId = questId,
+                        State = 3
+                    }
                 }.AsQueryable().BuildMock());
 
         this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+
+        this.mockPartyRepository
+            .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1 }))
+            .Returns(new List<DbPartyUnit>() { }.AsQueryable().BuildMock());
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
             new DungeonStartStartRequest()
@@ -379,10 +475,18 @@ public class DungeonStartControllerTest
             .Setup(x => x.GetQuests(DeviceAccountId))
             .Returns(new List<DbQuest>()
                 {
-                    new() { QuestId = questId, State = 3 }
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        QuestId = questId,
+                        State = 3
+                    }
                 }.AsQueryable().BuildMock());
 
         this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+        this.mockPartyRepository
+            .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1 }))
+            .Returns(new List<DbPartyUnit>() { }.AsQueryable().BuildMock());
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
             new DungeonStartStartRequest()

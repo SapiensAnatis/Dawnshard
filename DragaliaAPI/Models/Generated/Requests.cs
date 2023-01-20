@@ -1373,7 +1373,7 @@ public class DungeonStartStartRequest
 {
     public int quest_id { get; set; }
     public int party_no { get; set; }
-    public IEnumerable<int> party_no_list { get; set; }
+    public List<int> party_no_list { get; set; }
     public int bet_count { get; set; }
     public int repeat_state { get; set; }
     public ulong support_viewer_id { get; set; }
@@ -1382,7 +1382,7 @@ public class DungeonStartStartRequest
     public DungeonStartStartRequest(
         int quest_id,
         int party_no,
-        IEnumerable<int> party_no_list,
+        List<int> party_no_list,
         int bet_count,
         int repeat_state,
         ulong support_viewer_id,

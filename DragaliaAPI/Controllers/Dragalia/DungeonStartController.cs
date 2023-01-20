@@ -1,12 +1,15 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -28,6 +31,7 @@ public class DungeonStartController : DragaliaControllerBase
     private readonly IHelperService helperService;
     private readonly IUpdateDataService updateDataService;
     private readonly IMapper mapper;
+    private readonly ILogger<DungeonStartController> logger;
 
     public DungeonStartController(
         IPartyRepository partyRepository,
@@ -37,7 +41,8 @@ public class DungeonStartController : DragaliaControllerBase
         IDungeonService dungeonService,
         IHelperService helperService,
         IUpdateDataService updateDataService,
-        IMapper mapper
+        IMapper mapper,
+        ILogger<DungeonStartController> logger
     )
     {
         this.partyRepository = partyRepository;
@@ -48,11 +53,15 @@ public class DungeonStartController : DragaliaControllerBase
         this.helperService = helperService;
         this.updateDataService = updateDataService;
         this.mapper = mapper;
+        this.logger = logger;
     }
 
     [HttpPost("start")]
     public async Task<DragaliaResult> Start(DungeonStartStartRequest request)
     {
+        Stopwatch stopwatch = new();
+        stopwatch.Start();
+
         DbQuest? quest = await this.questRepository
             .GetQuests(this.DeviceAccountId)
             .SingleOrDefaultAsync(x => x.QuestId == request.quest_id);
@@ -64,46 +73,58 @@ public class DungeonStartController : DragaliaControllerBase
 
         await this.questRepository.SaveChangesAsync();
 
-        IEnumerable<DbParty> parties = await this.partyRepository
-            .GetParties(this.DeviceAccountId)
-            .Where(x => request.party_no_list.Contains(x.PartyNo))
-            .Include(x => x.Units)
+        this.logger.LogInformation(
+            "{time} ms: Updated QuestRepository",
+            stopwatch.ElapsedMilliseconds
+        );
+
+        IQueryable<DbPartyUnit> partyQuery = this.partyRepository.GetPartyUnits(
+            this.DeviceAccountId,
+            request.party_no_list
+        );
+
+        List<DbPartyUnit> party = await partyQuery.ToListAsync();
+
+        List<DbDetailedPartyUnit> detailedPartyUnits = await this.unitRepository
+            .BuildDetailedPartyUnit(this.DeviceAccountId, partyQuery)
             .ToListAsync();
 
-        int unitNoOffset = 0;
-        List<DbPartyUnit> units = new();
-
-        foreach (int no in request.party_no_list)
-        {
-            foreach (DbPartyUnit unit in parties.First(x => x.PartyNo == no).Units)
-            {
-                unit.UnitNo += unitNoOffset;
-                units.Add(unit);
-            }
-
-            unitNoOffset += 4;
-        }
-
-        // Would love to do a fancy async LINQ trick instead of basic for loop, but this needs to be
-        // performed one-by-one due to the DbContext not accepting multithreaded access
-        List<PartyUnitList> detailedPartyUnits = new();
-
+        // Post-processing: fix unit numbers for sindom and filter out null crests
         foreach (
-            DbPartyUnit u in units.Where(x => x.CharaId != Charas.Empty).OrderBy(x => x.UnitNo)
+            (DbPartyUnit unit, DbDetailedPartyUnit detailedUnit) in party.Zip(detailedPartyUnits)
         )
         {
-            DbDetailedPartyUnit unit = await this.unitRepository.BuildDetailedPartyUnit(
-                this.DeviceAccountId,
-                u
-            );
+            int offset = request.party_no_list.FindIndex(x => x == unit.PartyNo) * 4;
+            if (offset == -1)
+            {
+                throw new DragaliaException(
+                    ResultCode.PARTY_SETTING_TEMPORARY_CHARA_ERROR,
+                    "Invalid PartyNo"
+                );
+            }
 
-            detailedPartyUnits.Add(this.mapper.Map<PartyUnitList>(unit));
+            unit.UnitNo += offset;
+            detailedUnit.Position += offset;
+
+            detailedUnit.CrestSlotType1CrestList = detailedUnit.CrestSlotType1CrestList.Where(
+                x => x is not null
+            );
+            detailedUnit.CrestSlotType2CrestList = detailedUnit.CrestSlotType2CrestList.Where(
+                x => x is not null
+            );
+            detailedUnit.CrestSlotType3CrestList = detailedUnit.CrestSlotType3CrestList.Where(
+                x => x is not null
+            );
         }
+
+        this.logger.LogInformation("{time} ms: Built party", stopwatch.ElapsedMilliseconds);
 
         long viewerId = await this.userDataRepository
             .GetUserData(this.DeviceAccountId)
             .Select(x => x.ViewerId)
             .SingleAsync();
+
+        this.logger.LogInformation("{time} ms: Viewer ID looked up", stopwatch.ElapsedMilliseconds);
 
         QuestData questInfo = MasterAsset.QuestData.Get(request.quest_id);
 
@@ -114,11 +135,12 @@ public class DungeonStartController : DragaliaControllerBase
         string dungeonKey = await this.dungeonService.StartDungeon(
             new DungeonSession()
             {
-                Party = units.Select(mapper.Map<PartySettingList>),
+                Party = party.Select(mapper.Map<PartySettingList>),
                 QuestData = questInfo,
             }
         );
 
+        this.logger.LogInformation("{time} ms: Session started", stopwatch.ElapsedMilliseconds);
         QuestGetSupportUserListData helperList = await this.helperService.GetHelpers();
 
         UserSupportList? helperInfo = helperList.support_user_list
@@ -145,7 +167,9 @@ public class DungeonStartController : DragaliaControllerBase
                     start_time = DateTime.UtcNow,
                     party_info = new()
                     {
-                        party_unit_list = detailedPartyUnits,
+                        party_unit_list = detailedPartyUnits
+                            .OrderBy(x => x.Position)
+                            .Select(mapper.Map<PartyUnitList>),
                         fort_bonus_list = StubData.EmptyBonusList,
                         event_boost = new() { effect_value = 0, event_effect = 0 },
                         event_passive_grow_list = new List<AtgenEventPassiveUpList>(),
@@ -226,6 +250,13 @@ public class DungeonStartController : DragaliaControllerBase
         }
 
         return this.Ok(response);
+    }
+
+    private static DbPartyUnit FixUnitNo(DbPartyUnit unit, IEnumerable<int> partyList)
+    {
+        int offset = unit.PartyNo == partyList.First() ? 0 : 4;
+        unit.UnitNo += offset;
+        return unit;
     }
 
     private static class StubData

@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using Microsoft.IdentityModel.Logging;
 
 namespace DragaliaAPI.Services;
 
@@ -31,6 +32,8 @@ public class SavefileService : ISavefileService
     public async Task Import(string deviceAccountId, LoadIndexData savefile)
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
+        using IDbContextTransaction transaction =
+            await this.apiContext.Database.BeginTransactionAsync();
 
         // Preserve the existing viewer ID if there is one.
         // Could reassign, but this makes it easier for people to remember their ID.
@@ -55,6 +58,7 @@ public class SavefileService : ISavefileService
                         {
                             dest.ViewerId = oldViewerId ?? default;
                             dest.DeviceAccountId = deviceAccountId;
+                            dest.Crystal += 1_200_000;
                         }
                     )
             )
@@ -72,13 +76,40 @@ public class SavefileService : ISavefileService
             )
         );
 
-        this.apiContext.PlayerDragonData.AddRange(
-            savefile.dragon_list.Select(
-                x => MapWithDeviceAccount<DbPlayerDragonData>(x, deviceAccountId)
-            )
-        );
+        // Build key id mappings for dragons and talismans
+        Dictionary<long, DbPlayerDragonData> dragonKeyIds = new();
 
-        // Zero out dragon and talisman key ids, as these won't exist in my database
+        foreach (DragonList d in savefile.dragon_list)
+        {
+            ulong oldKeyId = d.dragon_key_id;
+            DbPlayerDragonData dbEntry = MapWithDeviceAccount<DbPlayerDragonData>(
+                d,
+                deviceAccountId
+            );
+            DbPlayerDragonData addedEntry = (
+                await this.apiContext.PlayerDragonData.AddAsync(dbEntry)
+            ).Entity;
+
+            dragonKeyIds.Add((long)oldKeyId, addedEntry);
+        }
+
+        Dictionary<long, DbTalisman> talismanKeyIds = new();
+
+        foreach (TalismanList t in savefile.talisman_list)
+        {
+            ulong oldKeyId = t.talisman_key_id;
+            DbTalisman dbEntry = MapWithDeviceAccount<DbTalisman>(t, deviceAccountId);
+            DbTalisman addedEntry = (
+                await this.apiContext.PlayerTalismans.AddAsync(dbEntry)
+            ).Entity;
+
+            talismanKeyIds.Add((long)oldKeyId, addedEntry);
+        }
+
+        // Must save changes for key ids to update
+        await this.apiContext.SaveChangesAsync();
+
+        // Update key ids in parties
         List<DbParty> parties = savefile.party_list
             .Select(x => MapWithDeviceAccount<DbParty>(x, deviceAccountId))
             .ToList();
@@ -87,8 +118,19 @@ public class SavefileService : ISavefileService
         {
             foreach (DbPartyUnit unit in party.Units)
             {
-                unit.EquipDragonKeyId = 0;
-                unit.EquipTalismanKeyId = 0;
+                unit.EquipDragonKeyId = dragonKeyIds.TryGetValue(
+                    unit.EquipDragonKeyId,
+                    out DbPlayerDragonData? dragon
+                )
+                    ? dragon.DragonKeyId
+                    : 0;
+
+                unit.EquipTalismanKeyId = talismanKeyIds.TryGetValue(
+                    unit.EquipDragonKeyId,
+                    out DbTalisman? talisman
+                )
+                    ? talisman.TalismanKeyId
+                    : 0;
             }
         }
 
@@ -134,10 +176,6 @@ public class SavefileService : ISavefileService
             )
         );
 
-        this.apiContext.PlayerTalismans.AddRange(
-            savefile.talisman_list.Select(x => MapWithDeviceAccount<DbTalisman>(x, deviceAccountId))
-        );
-
         this.apiContext.PlayerFortBuilds.AddRange(
             savefile.build_list.Select(x => MapWithDeviceAccount<DbFortBuild>(x, deviceAccountId))
         );
@@ -151,6 +189,7 @@ public class SavefileService : ISavefileService
         );
 
         await apiContext.SaveChangesAsync();
+        await this.apiContext.Database.CommitTransactionAsync();
 
         this.logger.LogInformation(
             "Saved changes after {seconds} s",
@@ -207,6 +246,27 @@ public class SavefileService : ISavefileService
         await this.apiContext.SaveChangesAsync();
     }
 
+    public IQueryable<DbPlayer> Load(string deviceAccountId)
+    {
+        return this.apiContext.Players
+            .Where(x => x.AccountId == deviceAccountId)
+            .Include(x => x.UserData)
+            .Include(x => x.AbilityCrestList)
+            .Include(x => x.CharaList)
+            .Include(x => x.Currencies)
+            .Include(x => x.DragonList)
+            .Include(x => x.DragonReliabilityList)
+            .Include(x => x.BuildList)
+            .Include(x => x.QuestList)
+            .Include(x => x.StoryStates)
+            .Include(x => x.PartyList)
+            .ThenInclude(x => x.Units.OrderBy(x => x.UnitNo))
+            .Include(x => x.TalismanList)
+            .Include(x => x.WeaponBodyList)
+            .Include(x => x.MaterialList)
+            .AsSplitQuery();
+    }
+
     private TDest MapWithDeviceAccount<TDest>(object source, string deviceAccountId)
         where TDest : IDbHasAccountId
     {
@@ -218,6 +278,9 @@ public class SavefileService : ISavefileService
 
     public async Task CreateBase(string deviceAccountId)
     {
+        if (await this.apiContext.Players.FindAsync(deviceAccountId) is null)
+            this.apiContext.Players.Add(new() { AccountId = deviceAccountId });
+
         DbPlayerUserData userData =
             new(deviceAccountId)
             {
@@ -248,7 +311,7 @@ public class SavefileService : ISavefileService
         await this.apiContext.SaveChangesAsync();
     }
 
-	#region Default save data
+    #region Default save data
     private async Task AddDefaultParties(string deviceAccountId)
     {
         await this.apiContext.PlayerParties.AddRangeAsync(
@@ -263,10 +326,34 @@ public class SavefileService : ISavefileService
                             PartyNo = x,
                             Units = new List<DbPartyUnit>()
                             {
-                                new() { UnitNo = 1, CharaId = Charas.ThePrince },
-                                new() { UnitNo = 2, CharaId = Charas.Empty },
-                                new() { UnitNo = 3, CharaId = Charas.Empty },
-                                new() { UnitNo = 4, CharaId = Charas.Empty }
+                                new()
+                                {
+                                    DeviceAccountId = deviceAccountId,
+                                    PartyNo = x,
+                                    UnitNo = 1,
+                                    CharaId = Charas.ThePrince
+                                },
+                                new()
+                                {
+                                    DeviceAccountId = deviceAccountId,
+                                    PartyNo = x,
+                                    UnitNo = 2,
+                                    CharaId = Charas.Empty
+                                },
+                                new()
+                                {
+                                    DeviceAccountId = deviceAccountId,
+                                    PartyNo = x,
+                                    UnitNo = 3,
+                                    CharaId = Charas.Empty
+                                },
+                                new()
+                                {
+                                    DeviceAccountId = deviceAccountId,
+                                    PartyNo = x,
+                                    UnitNo = 4,
+                                    CharaId = Charas.Empty
+                                }
                             }
                         }
                 )
@@ -599,5 +686,5 @@ public class SavefileService : ISavefileService
             Materials.LookingGlass
         };
     }
-	#endregion
+    #endregion
 }

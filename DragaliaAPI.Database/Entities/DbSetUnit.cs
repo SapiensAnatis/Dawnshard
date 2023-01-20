@@ -1,15 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
 //TODO: This and PartyUnit share a lot of properties, maybe extract those and make these into subclasses which inherit them
 [Table("PlayerSetUnit")]
+[Index(nameof(DeviceAccountId))]
 public class DbSetUnit : IDbHasAccountId
 {
-    [Required]
-    [ForeignKey("DbDeviceAccountId")]
+    /// <inheritdoc />
+    public virtual DbPlayer? Owner { get; set; }
+
+    /// <inheritdoc />
+    [ForeignKey(nameof(Owner))]
     public required string DeviceAccountId { get; set; }
 
     [Required]
