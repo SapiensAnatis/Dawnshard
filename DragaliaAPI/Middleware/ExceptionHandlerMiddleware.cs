@@ -49,6 +49,8 @@ public class ExceptionHandlerMiddleware
                 ? dragaliaException.Code
                 : ServerErrorCode;
 
+            this.logger.LogError("Returning result_code {code}", code);
+
             DragaliaResponse<DataHeaders> gameResponse = new(new DataHeaders(code), code);
 
             await context.Response.Body.WriteAsync(
