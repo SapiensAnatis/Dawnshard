@@ -179,15 +179,15 @@ public class UnitRepository : BaseRepository, IUnitRepository
         );
     }
 
-    public IDictionary<Charas, IEnumerable<DbSetUnit>> GetCharaSets(
+    public async Task<IDictionary<Charas, IEnumerable<DbSetUnit>>> GetCharaSets(
         string deviceAccountId,
         IEnumerable<Charas> charaIds
     )
     {
-        return apiContext.PlayerSetUnits
+        return await apiContext.PlayerSetUnits
             .Where(x => charaIds.Contains(x.CharaId))
             .GroupBy(x => x.CharaId)
-            .ToDictionary(x => x.Key, x => x.AsEnumerable());
+            .ToDictionaryAsync(x => x.Key, x => x.AsEnumerable());
     }
 
     private static IEnumerable<(TEnum id, bool isNew)> MarkNewIds<TEnum>(

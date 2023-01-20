@@ -25,7 +25,6 @@ public class SummonController : DragaliaControllerBase
     private readonly IUpdateDataService updateDataService;
     private readonly IMapper mapper;
     private readonly ISummonRepository summonRepository;
-    private readonly ISessionService _sessionService;
     private readonly ISummonService _summonService;
 
     // Repeated from RedoableSummonController, but no point putting this in a shared location
@@ -136,7 +135,6 @@ public class SummonController : DragaliaControllerBase
         IUpdateDataService updateDataService,
         IMapper mapper,
         ISummonRepository summonRepository,
-        ISessionService sessionService,
         ISummonService summonService
     )
     {
@@ -145,7 +143,6 @@ public class SummonController : DragaliaControllerBase
         this.updateDataService = updateDataService;
         this.mapper = mapper;
         this.summonRepository = summonRepository;
-        _sessionService = sessionService;
         _summonService = summonService;
     }
 
@@ -212,30 +209,22 @@ public class SummonController : DragaliaControllerBase
 
     [HttpPost]
     [Route("get_summon_list")]
-    public async Task<DragaliaResult> GetSummonList([FromHeader(Name = "SID")] string sessionId)
+    public async Task<DragaliaResult> GetSummonList()
     {
-        string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
-
-        // PS nano I removed all the DB stuff because I was too lazy to make it work again
-
         return Ok(Data.SummonListData);
     }
 
     [HttpPost]
     [Route("get_summon_point_trade")]
-    public async Task<DragaliaResult> GetSummonPointTrade(
-        [FromHeader(Name = "SID")] string sessionId,
-        SummonGetSummonPointTradeRequest request
-    )
+    public async Task<DragaliaResult> GetSummonPointTrade(SummonGetSummonPointTradeRequest request)
     {
         int bannerId = request.summon_id;
-        string accountId = await _sessionService.GetDeviceAccountId_SessionId(sessionId);
         DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(accountId)
+            .GetUserData(DeviceAccountId)
             .FirstAsync();
         //TODO maybe throw BadRequest on bad banner id, for now generate empty data if not exists
         DbPlayerBannerData playerBannerData = await this.summonRepository.GetPlayerBannerData(
-            accountId,
+            DeviceAccountId,
             bannerId
         );
         //TODO get real list from persisted BannerInfo or dynamic List from Db, dunno yet

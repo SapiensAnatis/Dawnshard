@@ -1,6 +1,8 @@
 ﻿using DragaliaAPI.Models;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace DragaliaAPI.Services;
@@ -8,7 +10,12 @@ namespace DragaliaAPI.Services;
 public class DungeonService : IDungeonService
 {
     private readonly IDistributedCache cache;
-    private readonly DistributedCacheEntryOptions cacheOptions;
+    private readonly IOptionsMonitor<RedisOptions> options;
+    private DistributedCacheEntryOptions CacheOptions =>
+        new()
+        {
+            SlidingExpiration = TimeSpan.FromMinutes(options.CurrentValue.DungeonExpiryTimeMinutes)
+        };
 
     private static class Schema
     {
@@ -18,21 +25,16 @@ public class DungeonService : IDungeonService
         }
     }
 
-    public DungeonService(IDistributedCache cache, IConfiguration configuration)
+    public DungeonService(IDistributedCache cache, IOptionsMonitor<RedisOptions> options)
     {
-        int expiryTimeMinutes = configuration.GetValue<int>("DungeonExpiryTimeMinutes");
-        this.cacheOptions = new()
-        {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(expiryTimeMinutes)
-        };
-
         this.cache = cache;
+        this.options = options;
     }
 
     public async Task<string> StartDungeon(DungeonSession dungeonSession)
     {
         string key = Guid.NewGuid().ToString();
-        await cache.SetStringAsync(key, JsonSerializer.Serialize(dungeonSession), cacheOptions);
+        await cache.SetStringAsync(key, JsonSerializer.Serialize(dungeonSession), CacheOptions);
         return key;
     }
 

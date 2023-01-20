@@ -71,7 +71,9 @@ public class AuthService : IAuthService
         string deviceAccountId;
 
         sessionId = await this.sessionService.ActivateSession(idToken);
-        deviceAccountId = await this.sessionService.GetDeviceAccountId_SessionId(sessionId);
+        deviceAccountId = (
+            await this.sessionService.LoadSessionSessionId(sessionId)
+        ).DeviceAccountId;
 
         IQueryable<DbPlayerUserData> playerInfo = this.userDataRepository.GetUserData(
             deviceAccountId
@@ -109,7 +111,11 @@ public class AuthService : IAuthService
             }
 
             long viewerId = await this.DoLogin(jwt.Subject);
-            string sessionId = await this.sessionService.CreateSession(jwt.Subject, idToken);
+            string sessionId = await this.sessionService.CreateSession(
+                jwt.Subject,
+                idToken,
+                viewerId
+            );
 
             return new(viewerId, sessionId);
         }
