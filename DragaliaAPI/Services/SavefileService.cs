@@ -126,7 +126,7 @@ public class SavefileService : ISavefileService
                     : 0;
 
                 unit.EquipTalismanKeyId = talismanKeyIds.TryGetValue(
-                    unit.EquipDragonKeyId,
+                    unit.EquipTalismanKeyId,
                     out DbTalisman? talisman
                 )
                     ? talisman.TalismanKeyId
@@ -184,16 +184,16 @@ public class SavefileService : ISavefileService
         // TODO much later: halidom, endeavours, kaleido data
 
         this.logger.LogInformation(
-            "Mapping completed after {seconds} s",
-            stopwatch.Elapsed.TotalSeconds
+            "Mapping completed after {t} ms",
+            stopwatch.Elapsed.TotalMilliseconds
         );
 
         await apiContext.SaveChangesAsync();
         await this.apiContext.Database.CommitTransactionAsync();
 
         this.logger.LogInformation(
-            "Saved changes after {seconds} s",
-            stopwatch.Elapsed.TotalSeconds
+            "Saved changes after {t} ms",
+            stopwatch.Elapsed.TotalMilliseconds
         );
     }
 
