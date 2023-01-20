@@ -40,13 +40,31 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
             return AuthenticateResult.Fail("Invalid SID header: value was null");
 
         // This will throw SessionException if not found, and return a BadRequest which prompts the client to re-login
-        Session session = await this.sessionService.LoadSessionSessionId(sid);
 
-        Claim[] claims = new[]
+        List<Claim> claims = new();
+
+        try
         {
-            new Claim(CustomClaimType.AccountId, session.DeviceAccountId),
-            new Claim(CustomClaimType.ViewerId, session.ViewerId.ToString())
-        };
+            Session session = await this.sessionService.LoadSessionSessionId(sid);
+
+            claims.Add(new(CustomClaimType.AccountId, session.DeviceAccountId));
+            claims.Add(new(CustomClaimType.ViewerId, session.ViewerId.ToString()));
+        }
+        catch (SessionException)
+        {
+            if (
+                this.Context.GetEndpoint()?.Metadata.GetMetadata<AllowAnonymousAttribute>()
+                is not null
+            )
+            {
+                return AuthenticateResult.NoResult();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
         ClaimsIdentity identity = new(claims, this.Scheme.Name);
         ClaimsPrincipal principal = new(identity);
         AuthenticationTicket ticket = new(principal, this.Scheme.Name);
