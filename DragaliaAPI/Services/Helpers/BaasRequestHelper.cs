@@ -46,7 +46,7 @@ public class BaasRequestHelper : IBaasRequestHelper
             logger.LogError("Received failure response from BaaS: {@response}", keySetResponse);
 
             throw new DragaliaException(
-                Models.ResultCode.COMMON_AUTH_ERROR,
+                ResultCode.CommonAuthError,
                 "Received failure response from BaaS"
             );
         }
@@ -69,7 +69,7 @@ public class BaasRequestHelper : IBaasRequestHelper
             logger.LogError("Received failure response from BaaS: {@response}", savefileResponse);
 
             throw new DragaliaException(
-                ResultCode.TRANSITION_LINKED_DATA_NOT_FOUND,
+                ResultCode.TransitionLinkedDataNotFound,
                 "Received failure response from BaaS"
             );
         }

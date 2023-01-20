@@ -52,7 +52,7 @@ public class CharaController : DragaliaControllerBase
         if (request.next_rarity > 5)
         {
             throw new DragaliaException(
-                ResultCode.CHARA_GROW_AWAKE_RARITY_INVALID,
+                ResultCode.CharaGrowAwakeRarityInvalid,
                 "Invalid requested rarity"
             );
         }

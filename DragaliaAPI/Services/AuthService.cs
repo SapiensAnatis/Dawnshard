@@ -142,7 +142,7 @@ public class AuthService : IAuthService
             else
             {
                 throw new DragaliaException(
-                    Models.ResultCode.COMMON_AUTH_ERROR,
+                    Models.ResultCode.IdTokenError,
                     "Failed to validate BaaS token!"
                 );
             }

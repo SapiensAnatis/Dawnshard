@@ -83,7 +83,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
-    public async Task Signup_InvalidIdToken_ReturnsResultCodeError()
+    public async Task Signup_InvalidIdToken_ReturnsIdTokenError()
     {
         DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
             "/tool/signup",
@@ -95,8 +95,8 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
             .Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeData>(
-                    new DataHeaders(ResultCode.COMMON_AUTH_ERROR),
-                    new(ResultCode.COMMON_AUTH_ERROR)
+                    new DataHeaders(ResultCode.IdTokenError),
+                    new(ResultCode.IdTokenError)
                 )
             );
     }
@@ -173,7 +173,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
-    public async Task Auth_InvalidIdToken_ReturnsResultCodeError()
+    public async Task Auth_InvalidIdToken_ReturnsIdTokenError()
     {
         DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
             "/tool/auth",
@@ -185,8 +185,8 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
             .Should()
             .BeEquivalentTo(
                 new DragaliaResponse<ResultCodeData>(
-                    new DataHeaders(ResultCode.COMMON_AUTH_ERROR),
-                    new(ResultCode.COMMON_AUTH_ERROR)
+                    new DataHeaders(ResultCode.IdTokenError),
+                    new(ResultCode.IdTokenError)
                 )
             );
     }

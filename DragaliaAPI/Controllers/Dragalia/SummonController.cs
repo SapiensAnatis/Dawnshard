@@ -349,7 +349,7 @@ public class SummonController : DragaliaControllerBase
                 break;
             default:
                 throw new DragaliaException(
-                    ResultCode.SUMMON_TYPE_UNEXPECTED,
+                    ResultCode.SummonTypeUnexpected,
                     "Invalid payment type"
                 );
         }
@@ -357,7 +357,7 @@ public class SummonController : DragaliaControllerBase
         if (paymentHeld < paymentCost)
         {
             throw new DragaliaException(
-                ResultCode.SUMMON_STONE_SHORT,
+                ResultCode.SummonPointShort,
                 $"User did not have enough {summonRequest.payment_type}."
             );
         }
