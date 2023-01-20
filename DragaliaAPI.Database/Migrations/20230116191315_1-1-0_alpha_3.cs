@@ -21,6 +21,14 @@ namespace DragaliaAPI.Database.Migrations
                     table.PrimaryKey("PK_Players", x => x.AccountId);
                 });
 
+            // Legacy compatibility with existing deployed database
+            migrationBuilder.Sql(
+                """
+                INSERT INTO "Players" ("AccountId")
+                SELECT "DeviceAccountId" FROM "PlayerUserData"
+                """
+            );
+
             migrationBuilder.CreateIndex(
                 name: "IX_PlayerWeapons_DeviceAccountId",
                 table: "PlayerWeapons",
