@@ -58,7 +58,7 @@ public class SessionService : ISessionService
             $":session:session_id:{sessionId}";
 
         public static string SessionId_DeviceAccountId(string deviceAccountId) =>
-            $":session_id:device_account_id:{deviceAccountId}";
+            $":session:device_account_id:{deviceAccountId}";
     }
 
     [Obsolete("Used for old pre-BaaS login flow")]
