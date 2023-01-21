@@ -113,7 +113,7 @@ public class AuthService : IAuthService
         );
 
         this.logger.LogInformation(
-            "Authenticated user with viewer ID {viewerid} and issued session ID {sid}",
+            "Authenticated user with viewer ID {id} and issued session ID {sid}",
             viewerId,
             sessionId
         );
