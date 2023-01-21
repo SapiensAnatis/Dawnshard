@@ -35,7 +35,7 @@ public class SavefileController : ControllerBase
         [FromBody] DragaliaResponse<LoadIndexData> loadIndexResponse
     )
     {
-        await this.savefileService.Import(
+        await this.savefileService.ThreadSafeImport(
             await this.LookupAccountId(viewerId),
             loadIndexResponse.data
         );

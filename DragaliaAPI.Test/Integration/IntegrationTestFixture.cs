@@ -8,6 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using DragaliaAPI.Services;
 using DragaliaAPI.Models.Generated;
+using System.Text.Json;
+using DragaliaAPI.Models;
+using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Test.Integration;
 
@@ -19,31 +22,24 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         this.SeedCache();
 
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TestUtils.SecurityKeys);
-        this.mockBaasRequestHelper
-            .Setup(x => x.GetSavefile(It.IsAny<string>()))
-            .ReturnsAsync(
-                new LoadIndexData()
-                {
-                    user_data = new() { name = "Imported Save" },
-                    ability_crest_list = new List<AbilityCrestList>(),
-                    chara_list = new List<CharaList>(),
-                    dragon_list = new List<DragonList>(),
-                    talisman_list = new List<TalismanList>(),
-                    party_list = new List<PartyList>(),
-                    dragon_reliability_list = new List<DragonReliabilityList>(),
-                    weapon_body_list = new List<WeaponBodyList>(),
-                    quest_list = new List<QuestList>(),
-                    quest_story_list = new List<QuestStoryList>(),
-                    castle_story_list = new List<CastleStoryList>(),
-                    unit_story_list = new List<UnitStoryList>(),
-                    material_list = new List<MaterialList>(),
-                    build_list = new List<BuildList>(),
-                }
-            );
 
         this.mockLoginOptions
             .Setup(x => x.CurrentValue)
             .Returns(new Models.Options.LoginOptions() { UseBaasLogin = true });
+    }
+
+    public void SetupSaveImport()
+    {
+        this.mockBaasRequestHelper
+            .Setup(x => x.GetSavefile(It.IsAny<string>()))
+            .ReturnsAsync(
+                JsonSerializer
+                    .Deserialize<DragaliaResponse<LoadIndexData>>(
+                        File.ReadAllText(Path.Join("Data", "endgame_savefile.json")),
+                        ApiJsonOptions.Instance
+                    )!
+                    .data
+            );
     }
 
     /// <summary>

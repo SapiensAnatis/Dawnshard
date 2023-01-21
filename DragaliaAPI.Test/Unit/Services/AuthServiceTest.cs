@@ -215,17 +215,13 @@ public class AuthServiceTest
                         LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(1)
                     }
                 }.AsQueryable().BuildMock());
-        this.mockUserDataRepository
-            .Setup(x => x.UpdateSaveImportTime(AccountId))
-            .Returns(Task.CompletedTask);
-        this.mockUserDataRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
 
         this.mockSessionService
             .Setup(x => x.CreateSession(token, AccountId, 1))
             .ReturnsAsync("session id");
 
         this.mockSavefileService
-            .Setup(x => x.Import(AccountId, importSavefile))
+            .Setup(x => x.ThreadSafeImport(AccountId, importSavefile))
             .Returns(Task.CompletedTask);
 
         await this.authService.DoAuth(token);

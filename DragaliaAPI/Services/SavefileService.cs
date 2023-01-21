@@ -1,37 +1,103 @@
 ﻿using System.Diagnostics;
 using AutoMapper;
-using AutoMapper.Configuration.Conventions;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Models.Generated;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Linq;
 using Microsoft.EntityFrameworkCore.Storage;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset;
-using Microsoft.IdentityModel.Logging;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace DragaliaAPI.Services;
 
 public class SavefileService : ISavefileService
 {
     private readonly ApiContext apiContext;
+    private readonly IDistributedCache cache;
     private readonly IMapper mapper;
     private readonly ILogger<SavefileService> logger;
 
-    public SavefileService(ApiContext apiContext, IMapper mapper, ILogger<SavefileService> logger)
+    private const int RecheckLockMs = 1000;
+    private const int LockFailsafeExpiryMin = 5;
+
+    public SavefileService(
+        ApiContext apiContext,
+        IDistributedCache cache,
+        IMapper mapper,
+        ILogger<SavefileService> logger
+    )
     {
         this.apiContext = apiContext;
+        this.cache = cache;
         this.mapper = mapper;
         this.logger = logger;
     }
 
+    private static class RedisSchema
+    {
+        public static string PendingImport(string deviceAccountId) =>
+            $":pending_save_import:{deviceAccountId}";
+    }
+
+    private static readonly DistributedCacheEntryOptions RedisOptions =
+        new()
+        {
+            // Keys should be automatically removed, but just in case
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(LockFailsafeExpiryMin)
+        };
+
+    /// <summary>
+    /// Thread safe version of <see cref="Import(string, LoadIndexData)"/>.
+    /// </summary>
+    /// <param name="deviceAccountId">The primary key to import for.</param>
+    /// <param name="savefile">The savefile to import/</param>
+    /// <returns>The task.</returns>
+    public async Task ThreadSafeImport(string deviceAccountId, LoadIndexData savefile)
+    {
+        string key = RedisSchema.PendingImport(deviceAccountId);
+
+        if (!string.IsNullOrEmpty(await this.cache.GetStringAsync(key)))
+        {
+            this.logger.LogInformation("Savefile import is locked, waiting...");
+            while (!string.IsNullOrEmpty(await this.cache.GetStringAsync(key)))
+            {
+                await Task.Delay(RecheckLockMs);
+                this.logger.LogInformation("Savefile import is still locked.");
+            }
+
+            this.logger.LogInformation("Savefile import lock released.");
+            return;
+        }
+
+        try
+        {
+            await this.Import(deviceAccountId, savefile);
+        }
+        catch (Exception)
+        {
+            await this.cache.RemoveAsync(RedisSchema.PendingImport(deviceAccountId));
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Import a savefile.
+    /// <remarks>Not thread safe if called for the same account id from two different threads.</remarks>
+    /// </summary>
+    /// <param name="deviceAccountId">Primary key to import for.</param>
+    /// <param name="savefile">Savefile data.</param>
+    /// <returns>The task.</returns>
     public async Task Import(string deviceAccountId, LoadIndexData savefile)
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
+
+        // Place a lock preventing any concurrent save imports
+        await this.cache.SetStringAsync(
+            RedisSchema.PendingImport(deviceAccountId),
+            "true",
+            RedisOptions
+        );
+
         using IDbContextTransaction transaction =
             await this.apiContext.Database.BeginTransactionAsync();
 
@@ -40,12 +106,18 @@ public class SavefileService : ISavefileService
         long? oldViewerId = await this.apiContext.PlayerUserData
             .Where(x => x.DeviceAccountId == deviceAccountId)
             .Select(x => x.ViewerId)
+            .Cast<long?>()
             .SingleOrDefaultAsync();
 
         this.logger.LogInformation(
             "Beginning savefile import for account {accountId}",
             deviceAccountId
         );
+
+        if (await this.apiContext.Players.FindAsync(deviceAccountId) is null)
+        {
+            await this.apiContext.Players.AddAsync(new DbPlayer() { AccountId = deviceAccountId });
+        }
 
         this.Delete(deviceAccountId);
 
@@ -59,6 +131,7 @@ public class SavefileService : ISavefileService
                             dest.ViewerId = oldViewerId ?? default;
                             dest.DeviceAccountId = deviceAccountId;
                             dest.Crystal += 1_200_000;
+                            dest.LastSaveImportTime = DateTimeOffset.UtcNow;
                         }
                     )
             )
@@ -190,6 +263,9 @@ public class SavefileService : ISavefileService
 
         await apiContext.SaveChangesAsync();
         await this.apiContext.Database.CommitTransactionAsync();
+
+        // Remove lock
+        await this.cache.RemoveAsync(RedisSchema.PendingImport(deviceAccountId));
 
         this.logger.LogInformation(
             "Saved changes after {t} ms",
