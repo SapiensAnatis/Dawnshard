@@ -3,7 +3,7 @@ name: DragaliaAPI
 
 volumes:
   pgdata:
-  logs:
+  #logs:
 
 services:
   dragaliaapi:
@@ -42,12 +42,12 @@ services:
       - 6379:6379
       - 8001:8001
 
-  seq:
-    image: datalust/seq:latest
-    ports:
-      - 5340:80
-      - 5341:5341
-    environment:
-      ACCEPT_EULA: "Y"
-    volumes:
-      - logs:/data
+  #seq:
+  #  image: datalust/seq:latest
+  #  ports:
+  #    - 5340:80
+  #    - 5341:5341
+  #  environment:
+  #    ACCEPT_EULA: "Y"
+  #  volumes:
+  #    - logs:/data
