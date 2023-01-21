@@ -7,6 +7,8 @@ using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Helpers;
 using DragaliaAPI.Shared.Json;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq.Protected;
@@ -19,6 +21,7 @@ public class BaasRequestHelperTest
     private readonly Mock<IOptionsMonitor<BaasOptions>> mockOptions;
     private readonly Mock<HttpMessageHandler> mockHttpMessageHandler;
     private readonly Mock<ILogger<BaasRequestHelper>> mockLogger;
+    private IDistributedCache cache;
 
     public BaasRequestHelperTest()
     {
@@ -30,9 +33,15 @@ public class BaasRequestHelperTest
             .SetupGet(x => x.CurrentValue)
             .Returns(new BaasOptions() { BaasUrl = "https://www.taylorswift.com/" });
 
+        IOptions<MemoryDistributedCacheOptions> opts = Options.Create(
+            new MemoryDistributedCacheOptions()
+        );
+        this.cache = new MemoryDistributedCache(opts);
+
         this.baasRequestHelper = new BaasRequestHelper(
             mockOptions.Object,
             new HttpClient(mockHttpMessageHandler.Object),
+            this.cache,
             mockLogger.Object
         );
     }
@@ -76,6 +85,35 @@ public class BaasRequestHelperTest
                     )
                 }
             );
+
+        (await this.baasRequestHelper.GetKeys()).Should().ContainSingle();
+
+        this.mockOptions.VerifyAll();
+        this.mockHttpMessageHandler.VerifyAll();
+    }
+
+    [Fact]
+    public async Task GetKeys_Cached_UsesCache()
+    {
+        this.cache.SetString(
+            ":jwks:baas",
+            """
+            {
+                "keys": [
+                {
+                    "alg": "RS256",
+                    "kty": "RSA",
+                    "use": "sig",
+                    "x5c": [],
+                    "n": "waYgIYhr3xvlbRgEjGwJO4hwMiPUqdKHfo6WIRJZsBGXwty8MBI7p8rIIhYFaLP_4rqVYGgAwP_X5gqd7lGUvg9xMrpHglzTQhwzE4TTmiVunkihj0ICpClboKV1Hd_owZwazeDSfAgrFS9fx8EGAc1qQY7KjlWPli9SjyZjSgJQzzVyiCEAu9Cuhc-4gtREePPYrUO9DUB2a_TWaonh2VLY4-2HhIFMC8-Kf2PVzIrxezNY6e1Dk0Jk__RtM8sGsq-TO-Rr1q3CXAgLstC7RXhwWRggaZ29or-OrkoLeIvCodAnPElrZWjXj9j0cJxDLJt-H4jCGdou_miIN-w3KQ",
+                    "e": "AQAB",
+                    "kid": "396f3735-4fa4-4a75-8924-f4e7a21ee62d",
+                    "x5t": null
+                }
+                ]
+            }
+            """
+        );
 
         (await this.baasRequestHelper.GetKeys()).Should().ContainSingle();
 
