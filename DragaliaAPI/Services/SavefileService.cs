@@ -58,11 +58,10 @@ public class SavefileService : ISavefileService
 
         if (!string.IsNullOrEmpty(await this.cache.GetStringAsync(key)))
         {
-            this.logger.LogInformation("Savefile import is locked, waiting...");
             while (!string.IsNullOrEmpty(await this.cache.GetStringAsync(key)))
             {
+                this.logger.LogInformation("Savefile import is locked, waiting...");
                 await Task.Delay(RecheckLockMs);
-                this.logger.LogInformation("Savefile import is still locked.");
             }
 
             this.logger.LogInformation("Savefile import lock released.");
