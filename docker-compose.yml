@@ -3,7 +3,7 @@ name: DragaliaAPI
 
 volumes:
   pgdata:
-  #logs:
+  logs:
 
 services:
   dragaliaapi:
@@ -34,6 +34,7 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - logs:/app/logs
 
   redis:
     hostname: redis
