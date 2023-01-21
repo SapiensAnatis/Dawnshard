@@ -21,8 +21,6 @@ services:
       - postgres
     env_file:
       - .env
-    volumes:
-      - logs:/app/logs
     
   postgres:
     hostname: postgres
@@ -36,6 +34,7 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - logs:/app/logs
 
   redis:
     hostname: redis
@@ -43,3 +42,13 @@ services:
     ports:
       - 6379:6379
       - 8001:8001
+
+  #seq:
+  #  image: datalust/seq:latest
+  #  ports:
+  #    - 5340:80
+  #    - 5341:5341
+  #  environment:
+  #    ACCEPT_EULA: "Y"
+  #  volumes:
+  #    - logs:/data
