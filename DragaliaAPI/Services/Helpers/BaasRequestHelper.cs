@@ -1,9 +1,9 @@
-﻿using DragaliaAPI.MessagePack;
-using DragaliaAPI.Models;
+﻿using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Json;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -13,20 +13,23 @@ public class BaasRequestHelper : IBaasRequestHelper
 {
     private readonly IOptionsMonitor<BaasOptions> options;
     private readonly HttpClient client;
+    private readonly IDistributedCache cache;
     private readonly ILogger<BaasRequestHelper> logger;
+
     private const string KeySetEndpoint = "/.well-known/jwks.json";
     private const string SavefileEndpoint = "/gameplay/v1/savefile";
-
-    private static IList<SecurityKey>? CachedKeys;
+    private const string RedisKey = ":jwks:baas";
 
     public BaasRequestHelper(
         IOptionsMonitor<BaasOptions> options,
         HttpClient client,
+        IDistributedCache cache,
         ILogger<BaasRequestHelper> logger
     )
     {
         this.options = options;
         this.client = client;
+        this.cache = cache;
         this.logger = logger;
 
         this.client.BaseAddress = this.options.CurrentValue.BaasUrlParsed;
@@ -34,9 +37,11 @@ public class BaasRequestHelper : IBaasRequestHelper
 
     public async Task<IList<SecurityKey>> GetKeys()
     {
-        if (CachedKeys is not null)
+        string? cachedKeys = await this.cache.GetStringAsync(RedisKey);
+        if (!string.IsNullOrEmpty(cachedKeys))
         {
-            return CachedKeys;
+            JsonWebKeySet cachedJwks = new(cachedKeys);
+            return cachedJwks.GetSigningKeys();
         }
 
         HttpResponseMessage keySetResponse = await this.client.GetAsync(KeySetEndpoint);
@@ -51,10 +56,11 @@ public class BaasRequestHelper : IBaasRequestHelper
             );
         }
 
-        JsonWebKeySet jwks = new(await keySetResponse.Content.ReadAsStringAsync());
+        string response = await keySetResponse.Content.ReadAsStringAsync();
+        await this.cache.SetStringAsync(RedisKey, response);
 
-        CachedKeys = jwks.GetSigningKeys();
-        return CachedKeys;
+        JsonWebKeySet jwks = new(response);
+        return jwks.GetSigningKeys();
     }
 
     public async Task<LoadIndexData> GetSavefile(string idToken)

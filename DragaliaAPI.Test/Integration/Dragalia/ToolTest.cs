@@ -19,6 +19,8 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     public ToolTest(IntegrationTestFixture fixture)
     {
         this.fixture = fixture;
+        this.fixture.SetupSaveImport();
+
         client = fixture.CreateClient(
             new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
         );
@@ -194,6 +196,8 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task Auth_ValidIdToken_PendingSavefile_ImportsSavefile()
     {
+        string deviceAccountId = "save import id";
+
         this.fixture.ApiContext.PlayerUserData
             .Find(this.fixture.DeviceAccountId)!
             .LastSaveImportTime = DateTime.MinValue;
@@ -202,7 +206,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         string token = TestUtils.TokenToString(
             TestUtils.GetToken(
                 DateTime.UtcNow + TimeSpan.FromMinutes(5),
-                fixture.DeviceAccountId,
+                deviceAccountId,
                 savefileAvailable: true,
                 savefileTime: DateTime.UtcNow - TimeSpan.FromDays(1)
             )
@@ -211,11 +215,9 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
 
         await client.PostMsgpack<ToolAuthData>("/tool/auth", data);
 
-        DbPlayerUserData userData = fixture.ApiContext.PlayerUserData.Find(
-            fixture.DeviceAccountId
-        )!;
+        DbPlayerUserData userData = fixture.ApiContext.PlayerUserData.Find(deviceAccountId)!;
         await this.fixture.ApiContext.Entry(userData).ReloadAsync();
-        userData.Name.Should().Be("Imported Save");
+        userData.Name.Should().Be("Jay");
     }
 
     [Fact]
@@ -246,4 +248,46 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         this.fixture.ApiContext.Entry(userData).Reload();
         userData.Name.Should().Be("Euden");
     }
+
+    /*[Fact]
+     public async Task Auth_SaveImport_CalledTwice_DoesNotError()
+     {
+         // This test is useless because it passes without the thread safety mechanism.
+         // Possibly because of the SQLite DB being fast.
+         // Perhaps this should be revisited with proper end-to-end tests.
+         string deviceAccountId = "save import id";
+
+         this.fixture.ApiContext.PlayerUserData
+             .Find(this.fixture.DeviceAccountId)!
+             .LastSaveImportTime = DateTime.MinValue;
+         await this.fixture.ApiContext.SaveChangesAsync();
+
+         string token = TestUtils.TokenToString(
+             TestUtils.GetToken(
+                 DateTime.UtcNow + TimeSpan.FromMinutes(5),
+                 deviceAccountId,
+                 savefileAvailable: true,
+                 savefileTime: DateTime.UtcNow - TimeSpan.FromDays(1)
+             )
+         );
+
+         Task<DragaliaResponse<ToolAuthData>> response1 = client.PostMsgpack<ToolAuthData>(
+             "/tool/auth",
+             new ToolAuthRequest() { uuid = "unused", id_token = token },
+             ensureSuccessHeader: false
+         );
+
+         await Task.Delay(100);
+
+         Task<DragaliaResponse<ToolAuthData>> response2 = client.PostMsgpack<ToolAuthData>(
+             "/tool/auth",
+             new ToolAuthRequest() { uuid = "unused", id_token = token },
+             ensureSuccessHeader: false
+         );
+
+         DragaliaResponse<ToolAuthData>[] result = await Task.WhenAll(response1, response2);
+
+         result[0].data_headers.result_code.Should().Be(ResultCode.Success);
+         result[1].data_headers.result_code.Should().Be(ResultCode.Success);
+     }*/
 }

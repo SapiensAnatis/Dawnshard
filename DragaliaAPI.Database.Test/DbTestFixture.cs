@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -23,10 +24,13 @@ public class DbTestFixture : IDisposable
 
         this.ApiContext = new ApiContext(options);
         Mock<ILogger<SavefileService>> mockLogger = new(MockBehavior.Loose);
+        // Unused for creating saves
+        Mock<IDistributedCache> mockCache = new(MockBehavior.Loose);
 
         SavefileService savefileService =
             new(
                 this.ApiContext,
+                mockCache.Object,
                 new MapperConfiguration(
                     opts => opts.AddMaps(typeof(Program).Assembly)
                 ).CreateMapper(),

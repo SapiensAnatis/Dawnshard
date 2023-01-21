@@ -95,9 +95,7 @@ public class AuthService : IAuthService
             try
             {
                 LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
-                await this.savefileService.Import(jwt.Subject, pendingSave);
-                await this.userDataRepository.UpdateSaveImportTime(jwt.Subject);
-                await this.userDataRepository.SaveChangesAsync();
+                await this.savefileService.ThreadSafeImport(jwt.Subject, pendingSave);
             }
             catch (Exception e)
             {
@@ -109,7 +107,10 @@ public class AuthService : IAuthService
         long viewerId = await this.DoLogin(jwt.Subject);
         string sessionId = await this.sessionService.CreateSession(idToken, jwt.Subject, viewerId);
 
-        using IDisposable vIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
+        using IDisposable vIdLog = LogContext.PushProperty(
+            CustomClaimType.ViewerId,
+            viewerId.ToString()
+        );
 
         this.logger.LogInformation(
             "Authenticated user with viewer ID {viewerid} and issued session ID {sid}",
