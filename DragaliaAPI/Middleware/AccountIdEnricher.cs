@@ -37,7 +37,7 @@ public class AccountIdEnricher : ILogEventEnricher
         {
             LogEventProperty property = propertyFactory.CreateProperty(
                 CustomClaimType.ViewerId,
-                viewerId
+                long.Parse(viewerId)
             );
             logEvent.AddPropertyIfAbsent(property);
         }
