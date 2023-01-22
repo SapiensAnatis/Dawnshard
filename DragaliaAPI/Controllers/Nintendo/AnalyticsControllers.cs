@@ -2,7 +2,6 @@
 
 namespace DragaliaAPI.Controllers.Nintendo;
 
-/*
 [Route("bigdata/v1/analytics/events/config")]
 [Consumes("application/json")]
 [Produces("application/json")]
@@ -10,9 +9,9 @@ namespace DragaliaAPI.Controllers.Nintendo;
 public class AnalyticsConfigController : ControllerBase
 {
     [HttpGet]
-    public ActionResult<AnalyticsConfigResponse> Get()
+    public ActionResult<object> Get()
     {
-        return Ok(new AnalyticsConfigResponse());
+        return Ok(new object());
     }
 }
 
@@ -28,4 +27,3 @@ public class AnalyticsController : ControllerBase
         return StatusCode(202);
     }
 }
-*/

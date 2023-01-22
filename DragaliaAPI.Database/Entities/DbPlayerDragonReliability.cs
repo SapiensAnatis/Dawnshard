@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,7 +45,7 @@ public static class DbPlayerDragonReliabilityFactory
 {
     public static DbPlayerDragonReliability Create(string deviceAccountId, Dragons id)
     {
-        return new()
+        DbPlayerDragonReliability newReliability = new DbPlayerDragonReliability()
         {
             DeviceAccountId = deviceAccountId,
             DragonId = id,
@@ -53,5 +54,11 @@ public static class DbPlayerDragonReliabilityFactory
             GetTime = DateTimeOffset.UtcNow,
             LastContactTime = DateTimeOffset.UtcNow
         };
+        if (DragonConstants.fullBondDragons.Contains(id))
+        {
+            newReliability.Exp = DragonConstants.bondXpLimits[^1];
+            newReliability.Level = (byte)DragonConstants.bondXpLimits.Length;
+        }
+        return newReliability;
     }
 }

@@ -42,7 +42,7 @@ public class InventoryRepository : IInventoryRepository
     public async Task<DbPlayerCurrency?> GetCurrency(string deviceAccountId, CurrencyTypes type)
     {
         return await this.apiContext.PlayerWallet.FirstOrDefaultAsync(
-            entry => entry.CurrencyType == type
+            entry => entry.DeviceAccountId == deviceAccountId && entry.CurrencyType == type
         );
     }
 
@@ -173,5 +173,33 @@ public class InventoryRepository : IInventoryRepository
         }
 
         return true;
+    }
+
+    public DbPlayerDragonGift AddDragonGift(string deviceAccountId, DragonGifts giftId)
+    {
+        return apiContext.PlayerDragonGifts
+            .Add(
+                new DbPlayerDragonGift()
+                {
+                    DeviceAccountId = deviceAccountId,
+                    DragonGiftId = giftId,
+                    Quantity = 0
+                }
+            )
+            .Entity;
+    }
+
+    public async Task<DbPlayerDragonGift?> GetDragonGift(string deviceAccountId, DragonGifts giftId)
+    {
+        return await this.apiContext.PlayerDragonGifts.FirstOrDefaultAsync(
+            entry => entry.DeviceAccountId == deviceAccountId && entry.DragonGiftId == giftId
+        );
+    }
+
+    public IQueryable<DbPlayerDragonGift> GetDragonGifts(string deviceAccountId)
+    {
+        return this.apiContext.PlayerDragonGifts.Where(
+            gifts => gifts.DeviceAccountId == deviceAccountId
+        );
     }
 }

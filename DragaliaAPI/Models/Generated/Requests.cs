@@ -943,10 +943,13 @@ public class DragonBuildupRequest
 [MessagePackObject(true)]
 public class DragonBuyGiftToSendMultipleRequest
 {
-    public int dragon_id { get; set; }
-    public IEnumerable<int> dragon_gift_id_list { get; set; }
+    public Dragons dragon_id { get; set; }
+    public IEnumerable<DragonGifts> dragon_gift_id_list { get; set; }
 
-    public DragonBuyGiftToSendMultipleRequest(int dragon_id, IEnumerable<int> dragon_gift_id_list)
+    public DragonBuyGiftToSendMultipleRequest(
+        Dragons dragon_id,
+        IEnumerable<DragonGifts> dragon_gift_id_list
+    )
     {
         this.dragon_id = dragon_id;
         this.dragon_gift_id_list = dragon_gift_id_list;
@@ -958,10 +961,10 @@ public class DragonBuyGiftToSendMultipleRequest
 [MessagePackObject(true)]
 public class DragonBuyGiftToSendRequest
 {
-    public int dragon_id { get; set; }
-    public int dragon_gift_id { get; set; }
+    public Dragons dragon_id { get; set; }
+    public DragonGifts dragon_gift_id { get; set; }
 
-    public DragonBuyGiftToSendRequest(int dragon_id, int dragon_gift_id)
+    public DragonBuyGiftToSendRequest(Dragons dragon_id, DragonGifts dragon_gift_id)
     {
         this.dragon_id = dragon_id;
         this.dragon_gift_id = dragon_gift_id;
@@ -1022,11 +1025,15 @@ public class DragonSellRequest
 [MessagePackObject(true)]
 public class DragonSendGiftMultipleRequest
 {
-    public int dragon_id { get; set; }
-    public int dragon_gift_id { get; set; }
+    public Dragons dragon_id { get; set; }
+    public DragonGifts dragon_gift_id { get; set; }
     public int quantity { get; set; }
 
-    public DragonSendGiftMultipleRequest(int dragon_id, int dragon_gift_id, int quantity)
+    public DragonSendGiftMultipleRequest(
+        Dragons dragon_id,
+        DragonGifts dragon_gift_id,
+        int quantity
+    )
     {
         this.dragon_id = dragon_id;
         this.dragon_gift_id = dragon_gift_id;
@@ -1039,10 +1046,10 @@ public class DragonSendGiftMultipleRequest
 [MessagePackObject(true)]
 public class DragonSendGiftRequest
 {
-    public int dragon_id { get; set; }
-    public int dragon_gift_id { get; set; }
+    public Dragons dragon_id { get; set; }
+    public DragonGifts dragon_gift_id { get; set; }
 
-    public DragonSendGiftRequest(int dragon_id, int dragon_gift_id)
+    public DragonSendGiftRequest(Dragons dragon_id, DragonGifts dragon_gift_id)
     {
         this.dragon_id = dragon_id;
         this.dragon_gift_id = dragon_gift_id;
@@ -1055,9 +1062,11 @@ public class DragonSendGiftRequest
 public class DragonSetLockRequest
 {
     public ulong dragon_key_id { get; set; }
-    public int is_lock { get; set; }
 
-    public DragonSetLockRequest(ulong dragon_key_id, int is_lock)
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_lock { get; set; }
+
+    public DragonSetLockRequest(ulong dragon_key_id, bool is_lock)
     {
         this.dragon_key_id = dragon_key_id;
         this.is_lock = is_lock;
@@ -3797,6 +3806,15 @@ public class SummonGetSummonPointTradeRequest
     public SummonGetSummonPointTradeRequest() { }
 }
 
+//TODO: HasUnknown
+/// <summary>
+/// A summoning request
+/// </summary>
+/// <param name="summon_id">Id of the summon banner</param>
+/// <param name="exec_type">Distinguishing single(1) from tenfold(2) summons, maybe more</param>
+/// <param name="exec_count">Seemingly only passed for multiple single summons, 0 for tenfold</param>
+/// <param name="payment_type">Type of currency used</param>
+/// <param name="payment_target"><b>See: <see cref="PaymentTarget"/></b></param>
 [MessagePackObject(true)]
 public class SummonRequestRequest
 {

@@ -27,6 +27,7 @@ public class CharaController : DragaliaControllerBase
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
     private readonly IInventoryRepository inventoryRepository;
+    private readonly IStoryRepository storyRepository;
     private readonly IUpdateDataService updateDataService;
     private readonly ILogger<CharaController> logger;
     private readonly IMapper mapper;
@@ -35,6 +36,7 @@ public class CharaController : DragaliaControllerBase
         IUserDataRepository userDataRepository,
         IUnitRepository unitRepository,
         IInventoryRepository inventoryRepository,
+        IStoryRepository storyRepository,
         IUpdateDataService updateDataService,
         ILogger<CharaController> logger,
         IMapper mapper
@@ -43,6 +45,7 @@ public class CharaController : DragaliaControllerBase
         this.userDataRepository = userDataRepository;
         this.unitRepository = unitRepository;
         this.inventoryRepository = inventoryRepository;
+        this.storyRepository = storyRepository;
         this.updateDataService = updateDataService;
         this.logger = logger;
         this.mapper = mapper;
@@ -172,7 +175,7 @@ public class CharaController : DragaliaControllerBase
                 case Materials.BronzeCrystal:
                 case Materials.SilverCrystal:
                 case Materials.GoldCrystal:
-                    playerCharData.Exp = playerCharData.Exp = Math.Min(
+                    playerCharData.Exp = Math.Min(
                         playerCharData.Exp
                             + (
                                 UpgradeMaterials.buildupXpValues[MaterialList.id]
@@ -516,7 +519,7 @@ public class CharaController : DragaliaControllerBase
             new()
         };
 
-        for (int i = 0; i < manaNodeInfos.Count && i < 71; i++)
+        for (int i = 0; i < manaNodeInfos.Count && i < 70; i++)
         {
             int floor = Math.Min(i / 10, 5);
 
@@ -685,6 +688,21 @@ public class CharaController : DragaliaControllerBase
             {
                 //TODO: Get relevant story
                 //unlockedStories.Add((int)manaNodeInfo.StoryId);
+                int[] charaStories = _charaDataService.GetStoryData(playerCharData.CharaId);
+                int nextStoryUnlockIndex = await storyRepository
+                    .GetStoryList(DeviceAccountId)
+                    .Where(x => charaStories.Contains(x.StoryId))
+                    .CountAsync();
+                if (charaStories.Length - 1 > nextStoryUnlockIndex)
+                {
+                    throw new ArgumentException("Too many story unlocks");
+                }
+                await storyRepository.GetOrCreateStory(
+                    DeviceAccountId,
+                    StoryTypes.Chara,
+                    charaStories[nextStoryUnlockIndex]
+                );
+                unlockedStories.Add(charaStories[nextStoryUnlockIndex]);
             }
 
             foreach (KeyValuePair<CurrencyTypes, int> curCost in currencyCosts)
