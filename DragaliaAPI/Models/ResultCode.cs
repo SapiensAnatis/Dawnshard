@@ -1,5 +1,6 @@
 ﻿namespace DragaliaAPI.Models;
 
+/*
 public enum ResultCode
 {
     Success = 1,
