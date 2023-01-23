@@ -46,7 +46,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 {
                     Username = "test",
                     Password = "test",
-                    Host = "host.docker.internal",
+                    Host = "postgres-test",
                     Port = 9060,
                     IncludeErrorDetail = true,
                 };
