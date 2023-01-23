@@ -16,31 +16,15 @@ env:
   CI_PIPELINE: true
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    services:
-      postgres-test:
-        image: postgres:latest
-        ports:
-          - 9060:5432
-        env:
-          POSTGRES_USERNAME: test
-          POSTGRES_PASSWORD: test
- 
-    concurrency: none
-
-    strategy:
-      matrix:
-        dotnet-version: [ '7.0.x' ]
-        project: ['DragaliaAPI.Test', 'DragaliaAPI.Database.Test', 'DragaliaAPI.Shared.Test']
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Install dependencies
-        run: dotnet restore ${{ matrix.project }}
-      - name: Test
-        run: dotnet test ${{ matrix.project }} --no-restore
+  test-database:
+    uses: ./.github/workflows/test-base.yaml
+    with:
+      project: DragaliaAPI.Database
+  test-api:
+    uses: ./.github/workflows/test-base.yaml
+    with:
+      project: DragaliaAPI.Test
+  test-shared:
+    uses: ./.github/workflows/test-base.yaml
+    with:
+      project: DragaliaAPI.Shared
