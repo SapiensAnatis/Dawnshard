@@ -13,6 +13,7 @@ on:
 
 env:
   HUSKY: 0
+  CI_PIPELINE: true
 
 jobs:
   test:

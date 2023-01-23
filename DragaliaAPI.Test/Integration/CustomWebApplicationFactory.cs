@@ -16,8 +16,6 @@ namespace DragaliaAPI.Test.Integration;
 public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>
     where TStartup : class
 {
-    private readonly SqliteConnection connection = new("Filename=:memory:");
-
     public readonly Mock<IBaasRequestHelper> mockBaasRequestHelper = new();
 
     public readonly Mock<IOptionsMonitor<LoginOptions>> mockLoginOptions = new();
@@ -39,14 +37,16 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             services.Remove(sqlDescriptor);
             services.Remove(redisDescriptor);
 
-            connection.Open();
+            string host = Environment.GetEnvironmentVariable("CI_PIPELINE") is not null
+                ? "postgres-test"
+                : "host.docker.internal";
 
             NpgsqlConnectionStringBuilder builder =
                 new()
                 {
                     Username = "test",
                     Password = "test",
-                    Host = "postgres-test",
+                    Host = host,
                     Port = 9060,
                     IncludeErrorDetail = true,
                 };
