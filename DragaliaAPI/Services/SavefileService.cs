@@ -289,8 +289,8 @@ public class SavefileService : ISavefileService
 
     private void Delete(string deviceAccountId)
     {
-        this.apiContext.Players.Remove(
-            this.apiContext.Players.Single(x => x.AccountId == deviceAccountId)
+        this.apiContext.Players.RemoveRange(
+            this.apiContext.Players.Where(x => x.AccountId == deviceAccountId)
         );
         this.apiContext.Players.RemoveRange(
             this.apiContext.Players.Where(x => x.AccountId == deviceAccountId)
