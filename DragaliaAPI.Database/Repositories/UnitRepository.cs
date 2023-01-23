@@ -185,7 +185,7 @@ public class UnitRepository : BaseRepository, IUnitRepository
     )
     {
         return await apiContext.PlayerSetUnits
-            .Where(x => charaIds.Contains(x.CharaId))
+            .Where(x => charaIds.Contains(x.CharaId) && x.DeviceAccountId == deviceAccountId)
             .GroupBy(x => x.CharaId)
             .ToDictionaryAsync(x => x.Key, x => x.AsEnumerable());
     }
