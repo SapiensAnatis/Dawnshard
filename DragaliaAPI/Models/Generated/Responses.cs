@@ -3689,35 +3689,64 @@ public class ItemUseRecoveryStaminaData
 [MessagePackObject(true)]
 public class LoadIndexData
 {
+    [JsonRequired]
     public UserData user_data { get; set; }
     public PartyPowerData party_power_data { get; set; }
+
+    [JsonRequired]
     public IEnumerable<PartyList> party_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<CharaList> chara_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<DragonList> dragon_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<QuestList> quest_list { get; set; }
     public IEnumerable<QuestEventList> quest_event_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<MaterialList> material_list { get; set; }
     public IEnumerable<AstralItemList> astral_item_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<WeaponList> weapon_list { get; set; }
     public IEnumerable<AlbumWeaponList> album_weapon_list { get; set; }
     public IEnumerable<AmuletList> amulet_list { get; set; }
     public IEnumerable<WeaponSkinList> weapon_skin_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<WeaponBodyList> weapon_body_list { get; set; }
     public IEnumerable<WeaponPassiveAbilityList> weapon_passive_ability_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<AbilityCrestList> ability_crest_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<TalismanList> talisman_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<DragonReliabilityList> dragon_reliability_list { get; set; }
     public IEnumerable<DragonGiftList> dragon_gift_list { get; set; }
     public IEnumerable<AlbumDragonData> album_dragon_list { get; set; }
     public IEnumerable<EquipStampList> equip_stamp_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<UnitStoryList> unit_story_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<CastleStoryList> castle_story_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<QuestStoryList> quest_story_list { get; set; }
     public IEnumerable<QuestTreasureList> quest_treasure_list { get; set; }
     public IEnumerable<QuestWallList> quest_wall_list { get; set; }
     public IEnumerable<QuestCarryList> quest_carry_list { get; set; }
     public IEnumerable<QuestEntryConditionList> quest_entry_condition_list { get; set; }
     public FortBonusList fort_bonus_list { get; set; }
+
+    [JsonRequired]
     public IEnumerable<BuildList> build_list { get; set; }
     public IEnumerable<CraftList> craft_list { get; set; }
     public IEnumerable<UserSummonList> user_summon_list { get; set; }
@@ -3727,6 +3756,8 @@ public class LoadIndexData
     public IEnumerable<ExchangeTicketList> exchange_ticket_list { get; set; }
     public IEnumerable<GatherItemList> gather_item_list { get; set; }
     public IEnumerable<FortPlantList> fort_plant_list { get; set; }
+
+    [JsonIgnore] // This is sometimes [] which fucks up the parsing and it isn't even added yet
     public UserGuildData user_guild_data { get; set; }
 
     [JsonIgnore] // This is sometimes [] which fucks up the parsing and it isn't even added yet

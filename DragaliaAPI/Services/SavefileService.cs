@@ -113,12 +113,11 @@ public class SavefileService : ISavefileService
             deviceAccountId
         );
 
-        if (await this.apiContext.Players.FindAsync(deviceAccountId) is null)
-        {
-            await this.apiContext.Players.AddAsync(new DbPlayer() { AccountId = deviceAccountId });
-        }
-
         this.Delete(deviceAccountId);
+
+        await this.apiContext.Players.AddAsync(new DbPlayer() { AccountId = deviceAccountId });
+
+        this.logger.LogDebug("Added new Player entry");
 
         apiContext.PlayerUserData.Add(
             this.mapper.Map<DbPlayerUserData>(
@@ -136,11 +135,15 @@ public class SavefileService : ISavefileService
             )
         );
 
+        this.logger.LogDebug("Added UserData entry");
+
         this.apiContext.PlayerCharaData.AddRange(
             savefile.chara_list.Select(
                 x => MapWithDeviceAccount<DbPlayerCharaData>(x, deviceAccountId)
             )
         );
+
+        this.logger.LogDebug("Added character entries");
 
         this.apiContext.PlayerDragonReliability.AddRange(
             savefile.dragon_reliability_list.Select(
@@ -165,6 +168,8 @@ public class SavefileService : ISavefileService
             dragonKeyIds.Add((long)oldKeyId, addedEntry);
         }
 
+        this.logger.LogDebug("Added dragon entries and mapped key ids");
+
         Dictionary<long, DbTalisman> talismanKeyIds = new();
 
         foreach (TalismanList t in savefile.talisman_list)
@@ -177,6 +182,8 @@ public class SavefileService : ISavefileService
 
             talismanKeyIds.Add((long)oldKeyId, addedEntry);
         }
+
+        this.logger.LogDebug("Added portrait prints and mapped key ids");
 
         // Must save changes for key ids to update
         await this.apiContext.SaveChangesAsync();
@@ -208,11 +215,15 @@ public class SavefileService : ISavefileService
 
         this.apiContext.PlayerParties.AddRange(parties);
 
+        this.logger.LogDebug("Added parties");
+
         this.apiContext.PlayerAbilityCrests.AddRange(
             savefile.ability_crest_list.Select(
                 x => MapWithDeviceAccount<DbAbilityCrest>(x, deviceAccountId)
             )
         );
+
+        this.logger.LogDebug("Added wyrmprints");
 
         this.apiContext.PlayerWeapons.AddRange(
             savefile.weapon_body_list.Select(
@@ -220,9 +231,13 @@ public class SavefileService : ISavefileService
             )
         );
 
+        this.logger.LogDebug("Added weapons");
+
         this.apiContext.PlayerQuests.AddRange(
             savefile.quest_list.Select(x => MapWithDeviceAccount<DbQuest>(x, deviceAccountId))
         );
+
+        this.logger.LogDebug("Added wyrmprints");
 
         this.apiContext.PlayerStoryState.AddRange(
             savefile.quest_story_list.Select(
@@ -242,15 +257,21 @@ public class SavefileService : ISavefileService
             )
         );
 
+        this.logger.LogDebug("Added stories");
+
         this.apiContext.PlayerStorage.AddRange(
             savefile.material_list.Select(
                 x => MapWithDeviceAccount<DbPlayerMaterial>(x, deviceAccountId)
             )
         );
 
+        this.logger.LogDebug("Added materials");
+
         this.apiContext.PlayerFortBuilds.AddRange(
             savefile.build_list.Select(x => MapWithDeviceAccount<DbFortBuild>(x, deviceAccountId))
         );
+
+        this.logger.LogDebug("Added builds");
 
         // TODO: unit sets
         // TODO much later: halidom, endeavours, kaleido data
@@ -274,41 +295,8 @@ public class SavefileService : ISavefileService
 
     private void Delete(string deviceAccountId)
     {
-        this.apiContext.PlayerUserData.RemoveRange(
-            this.apiContext.PlayerUserData.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerCharaData.RemoveRange(
-            this.apiContext.PlayerCharaData.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerDragonReliability.RemoveRange(
-            this.apiContext.PlayerDragonReliability.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerDragonData.RemoveRange(
-            this.apiContext.PlayerDragonData.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerAbilityCrests.RemoveRange(
-            this.apiContext.PlayerAbilityCrests.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerStoryState.RemoveRange(
-            this.apiContext.PlayerStoryState.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerQuests.RemoveRange(
-            this.apiContext.PlayerQuests.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerParties.RemoveRange(
-            this.apiContext.PlayerParties.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerPartyUnits.RemoveRange(
-            this.apiContext.PlayerPartyUnits.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerWeapons.RemoveRange(
-            this.apiContext.PlayerWeapons.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerStorage.RemoveRange(
-            this.apiContext.PlayerStorage.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerFortBuilds.RemoveRange(
-            this.apiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == deviceAccountId)
+        this.apiContext.Players.Remove(
+            this.apiContext.Players.Single(x => x.AccountId == deviceAccountId)
         );
     }
 
