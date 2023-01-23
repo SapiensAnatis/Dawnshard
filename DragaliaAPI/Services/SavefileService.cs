@@ -292,6 +292,45 @@ public class SavefileService : ISavefileService
         this.apiContext.Players.Remove(
             this.apiContext.Players.Single(x => x.AccountId == deviceAccountId)
         );
+        this.apiContext.Players.RemoveRange(
+            this.apiContext.Players.Where(x => x.AccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerUserData.RemoveRange(
+            this.apiContext.PlayerUserData.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerCharaData.RemoveRange(
+            this.apiContext.PlayerCharaData.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerDragonReliability.RemoveRange(
+            this.apiContext.PlayerDragonReliability.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerDragonData.RemoveRange(
+            this.apiContext.PlayerDragonData.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerAbilityCrests.RemoveRange(
+            this.apiContext.PlayerAbilityCrests.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerStoryState.RemoveRange(
+            this.apiContext.PlayerStoryState.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerQuests.RemoveRange(
+            this.apiContext.PlayerQuests.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerParties.RemoveRange(
+            this.apiContext.PlayerParties.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerPartyUnits.RemoveRange(
+            this.apiContext.PlayerPartyUnits.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerWeapons.RemoveRange(
+            this.apiContext.PlayerWeapons.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerStorage.RemoveRange(
+            this.apiContext.PlayerStorage.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerFortBuilds.RemoveRange(
+            this.apiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset(string deviceAccountId)
