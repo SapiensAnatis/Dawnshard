@@ -97,10 +97,10 @@ public class DbPlayerCharaData : IDbHasAccountId
     }
 
     [Column("ExAbility1Lvl")]
-    public byte ExAbilityLevel { get; set; }
+    public byte ExAbilityLevel { get; set; } = 1;
 
     [Column("ExAbility2Lvl")]
-    public byte ExAbility2Level { get; set; }
+    public byte ExAbility2Level { get; set; } = 1;
 
     [Column("IsTemp")]
     public bool IsTemporary { get; set; }
