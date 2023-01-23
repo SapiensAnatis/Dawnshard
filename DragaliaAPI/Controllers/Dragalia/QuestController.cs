@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("quest")]
-[Consumes("application/octet-stream")]
-[Produces("application/x-msgpack")]
 [ApiController]
 public class QuestController : DragaliaControllerBase
 {
@@ -18,6 +16,7 @@ public class QuestController : DragaliaControllerBase
     private readonly IUnitRepository unitRepository;
     private readonly IHelperService helperService;
     private readonly IUpdateDataService updateDataService;
+    private readonly ILogger<QuestController> logger;
     private const int ReadStoryState = 1;
     private const int MaxStoryId = 1000103;
 
@@ -110,7 +109,8 @@ public class QuestController : DragaliaControllerBase
         IUserDataRepository userDataRepository,
         IUnitRepository unitRepository,
         IHelperService helperService,
-        IUpdateDataService updateDataService
+        IUpdateDataService updateDataService,
+        ILogger<QuestController> logger
     )
     {
         this.questRepository = questRepository;
@@ -118,12 +118,15 @@ public class QuestController : DragaliaControllerBase
         this.unitRepository = unitRepository;
         this.helperService = helperService;
         this.updateDataService = updateDataService;
+        this.logger = logger;
     }
 
     [HttpPost]
     [Route("read_story")]
     public async Task<DragaliaResult> ReadStory(QuestReadStoryRequest request)
     {
+        this.logger.LogDebug("Reading quest story id {storyId}", request.quest_story_id);
+
         await this.questRepository.UpdateQuestStory(
             this.DeviceAccountId,
             request.quest_story_id,

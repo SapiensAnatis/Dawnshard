@@ -23,7 +23,10 @@ public class QuestRepository : BaseRepository, IQuestRepository
     public async Task UpdateQuestStory(string deviceAccountId, int storyId, int state)
     {
         DbPlayerStoryState? storyData = await apiContext.PlayerStoryState.SingleOrDefaultAsync(
-            x => x.DeviceAccountId == deviceAccountId && x.StoryId == storyId
+            x =>
+                x.DeviceAccountId == deviceAccountId
+                && x.StoryId == storyId
+                && x.StoryType == StoryTypes.Quest
         );
 
         if (storyData is null)
