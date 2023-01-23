@@ -41,13 +41,17 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 ? "postgres-test"
                 : "host.docker.internal";
 
+            int port = Environment.GetEnvironmentVariable("CI_PIPELINE") is not null
+                ? default
+                : 9060;
+
             NpgsqlConnectionStringBuilder builder =
                 new()
                 {
                     Username = "test",
                     Password = "test",
                     Host = host,
-                    Port = 9060,
+                    Port = port,
                     IncludeErrorDetail = true,
                 };
 
