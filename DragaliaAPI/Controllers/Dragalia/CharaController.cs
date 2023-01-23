@@ -104,6 +104,10 @@ public class CharaController : DragaliaControllerBase
         {
             if (mat.quantity < 0)
             {
+                this.logger.LogError(
+                    "Request had invalid material with invalid quantity {mat}",
+                    mat
+                );
                 throw new ArgumentException("Invalid quantity for MaterialList");
             }
             if (
@@ -114,6 +118,7 @@ public class CharaController : DragaliaControllerBase
                 && mat.id != Materials.FortifyingCrystal
             )
             {
+                this.logger.LogError("Request had invalid material id {mat}", mat);
                 throw new ArgumentException("Invalid MaterialList in request");
             }
             if (!dbMats.ContainsKey(mat.id) || dbMats[mat.id].Quantity < mat.quantity)
@@ -154,6 +159,7 @@ public class CharaController : DragaliaControllerBase
         ref Dictionary<int, int> usedMaterials
     )
     {
+        this.logger.LogDebug("Levelling up chara {chara}", playerCharData);
         //TODO: For now we'll trust the client to not allow leveling up/enhancing beyond allowed limits
         byte maxLevel = (byte)(
             CharaConstants.GetMaxLevelFor(playerCharData.Rarity) + playerCharData.AdditionalMaxLevel
@@ -256,6 +262,8 @@ public class CharaController : DragaliaControllerBase
             playerCharData.AttackBase = (ushort)
                 Math.Ceiling((atkStep * (playerCharData.Level - lvlBase)) + atkBase);
         }
+
+        this.logger.LogDebug("New char data: {chara}", playerCharData);
     }
 
     [Route("reset_plus_count")]
@@ -287,6 +295,11 @@ public class CharaController : DragaliaControllerBase
             );
         if (userData.Coin < cost)
         {
+            this.logger.LogError(
+                "User rupie count {count} less than augment reset requirement {req}",
+                userData.Coin,
+                cost
+            );
             throw new ArgumentException("Insufficient Rupies for reset");
         }
         userData.Coin -= cost;
@@ -310,6 +323,7 @@ public class CharaController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> CharaBuildupMana([FromBody] CharaBuildupManaRequest request)
     {
+        this.logger.LogDebug("Received mana node request {@request}", request);
         DbPlayerUserData userData = await this.userDataRepository
             .GetUserData(this.DeviceAccountId)
             .FirstAsync();
@@ -504,6 +518,7 @@ public class CharaController : DragaliaControllerBase
         for (int i = 0; i < manaNodeInfos.Count && i < 71; i++)
         {
             int floor = Math.Min(i / 10, 5);
+
             switch (manaNodeInfos[i].ManaPieceType)
             {
                 case ManaNodeTypes.HpAtk:
@@ -540,6 +555,7 @@ public class CharaController : DragaliaControllerBase
 
         if (isOmnicite)
         {
+            this.logger.LogDebug("Omnicite was used");
             playerCharData.Skill1Level = 1;
             playerCharData.Skill2Level = 0;
             playerCharData.Ability1Level = (byte)charaData.DefaultAbility1Level;
@@ -557,6 +573,7 @@ public class CharaController : DragaliaControllerBase
 
         foreach (int nodeNr in manaNodes)
         {
+            this.logger.LogDebug("Unlocking node {nodeNr}", nodeNr);
             if (manaNodeInfos.Count < nodeNr)
             {
                 throw new ArgumentException($"No nodeInfo found for node {nodeNr}");
@@ -690,11 +707,23 @@ public class CharaController : DragaliaControllerBase
 
         if (nodes.Count >= 50 && is50MCBonusNew)
         {
+            this.logger.LogDebug("Applying 50MC bonus");
             playerCharData.HpNode += (ushort)charaData.McFullBonusHp5;
             playerCharData.AttackNode += (ushort)charaData.McFullBonusAtk5;
         }
 
         playerCharData.ManaCirclePieceIdList = nodes;
+        this.logger.LogDebug("New PieceIdList: {list}", playerCharData.ManaCirclePieceIdList);
+        this.logger.LogDebug(
+            "New bitmask: {bitmask}",
+            Convert.ToString(playerCharData.ManaNodeUnlockCount, 2)
+        );
+        this.logger.LogDebug(
+            "New limit break count: {limitbreakcount}",
+            playerCharData.LimitBreakCount
+        );
+        this.logger.LogDebug("usedMaterials: {usedMaterials}", usedMaterials);
+        this.logger.LogDebug("usedCurrency: {usedCurrency}", usedCurrency);
     }
 
     [Route("unlock_edit_skill")]
@@ -716,6 +745,10 @@ public class CharaController : DragaliaControllerBase
             || (ManaNodes)playerCharData.ManaNodeUnlockCount < (ManaNodes.Circle5 - 1)
         )
         {
+            this.logger.LogError(
+                "Illegal skill share unlock attempt for {charaData}",
+                playerCharData
+            );
             throw new ArgumentException("Adventurer not eligible to share skill");
         }
 
