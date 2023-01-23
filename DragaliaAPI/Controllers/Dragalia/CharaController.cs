@@ -159,7 +159,7 @@ public class CharaController : DragaliaControllerBase
         ref Dictionary<int, int> usedMaterials
     )
     {
-        this.logger.LogDebug("Levelling up chara {chara}", playerCharData);
+        this.logger.LogDebug("Levelling up chara {@chara}", playerCharData);
         //TODO: For now we'll trust the client to not allow leveling up/enhancing beyond allowed limits
         byte maxLevel = (byte)(
             CharaConstants.GetMaxLevelFor(playerCharData.Rarity) + playerCharData.AdditionalMaxLevel
@@ -263,7 +263,7 @@ public class CharaController : DragaliaControllerBase
                 Math.Ceiling((atkStep * (playerCharData.Level - lvlBase)) + atkBase);
         }
 
-        this.logger.LogDebug("New char data: {chara}", playerCharData);
+        this.logger.LogDebug("New char data: {@chara}", playerCharData);
     }
 
     [Route("reset_plus_count")]
@@ -498,6 +498,7 @@ public class CharaController : DragaliaControllerBase
         CharaUpgradeMaterialTypes isUseSpecialMaterial
     )
     {
+        this.logger.LogDebug("Pre-upgrade CharaData: {@charaData}", playerCharData);
         CharaData charaData = MasterAsset.CharaData.Get(playerCharData.CharaId);
         ImmutableList<ManaNode> manaNodeInfos = charaData
             .GetManaNodes()
@@ -571,9 +572,10 @@ public class CharaController : DragaliaControllerBase
         SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
         bool is50MCBonusNew = nodes.Count < 50 || isOmnicite;
 
+        this.logger.LogDebug("Unlocking nodes {@nodes}", manaNodes);
+
         foreach (int nodeNr in manaNodes)
         {
-            this.logger.LogDebug("Unlocking node {nodeNr}", nodeNr);
             if (manaNodeInfos.Count < nodeNr)
             {
                 throw new ArgumentException($"No nodeInfo found for node {nodeNr}");
@@ -713,14 +715,11 @@ public class CharaController : DragaliaControllerBase
         }
 
         playerCharData.ManaCirclePieceIdList = nodes;
-        this.logger.LogDebug("New PieceIdList: {list}", playerCharData.ManaCirclePieceIdList);
+        this.logger.LogDebug("New CharaData: {@charaData}", playerCharData);
+
         this.logger.LogDebug(
             "New bitmask: {bitmask}",
             Convert.ToString(playerCharData.ManaNodeUnlockCount, 2)
-        );
-        this.logger.LogDebug(
-            "New limit break count: {limitbreakcount}",
-            playerCharData.LimitBreakCount
         );
         this.logger.LogDebug("usedMaterials: {usedMaterials}", usedMaterials);
         this.logger.LogDebug("usedCurrency: {usedCurrency}", usedCurrency);
@@ -746,7 +745,7 @@ public class CharaController : DragaliaControllerBase
         )
         {
             this.logger.LogError(
-                "Illegal skill share unlock attempt for {charaData}",
+                "Illegal skill share unlock attempt for {@charaData}",
                 playerCharData
             );
             throw new ArgumentException("Adventurer not eligible to share skill");
@@ -761,7 +760,7 @@ public class CharaController : DragaliaControllerBase
         if (dbMat == null || dbMat.Quantity < usedMatCount)
         {
             this.logger.LogError(
-                "Insufficient material quantity in entity {dbMat} (needs: {q}) to unlock skill for {chara}",
+                "Insufficient material quantity in entity {@dbMat} (needs: {q}) to unlock skill for {@chara}",
                 dbMat,
                 usedMatCount,
                 request.chara_id

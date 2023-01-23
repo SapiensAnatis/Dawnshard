@@ -32,10 +32,10 @@ public class ExceptionHandlerMiddleware
             if (endpoint?.Metadata.GetMetadata<SerializeExceptionAttribute>() == null)
                 throw;
 
-            if (ex is TaskCanceledException)
+            if (ex is TaskCanceledException or MessagePackSerializationException)
             {
-                // The client will retry a 5xx twice before showing an error, and this
-                // exception is usually a one-off
+                // The client will retry a 5xx twice before showing an error, and these
+                // exceptions are usually a one-off
                 this.logger.LogWarning(
                     ex,
                     "TaskCancelledException detected, returning Service Unavailable..."
