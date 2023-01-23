@@ -36,6 +36,15 @@ services:
       - pgdata:/var/lib/postgresql/data
       - logs:/app/logs
 
+  postgres-test:
+    hostname: postgres-test
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+    ports:
+      - 9060:5432
+
   redis:
     hostname: redis
     image: redis/redis-stack

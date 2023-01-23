@@ -13,10 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.env = .env
 		.github\workflows\deploy.yaml = .github\workflows\deploy.yaml
-		.github\workflows\lint.yml = .github\workflows\lint.yml
-		.github\workflows\publish.yml = .github\workflows\publish.yml
+		.github\workflows\lint.yaml = .github\workflows\lint.yaml
+		.github\workflows\publish-base.yaml = .github\workflows\publish-base.yaml
+		.github\workflows\publish-manual.yaml = .github\workflows\publish-manual.yaml
+		.github\workflows\publish-push.yaml = .github\workflows\publish-push.yaml
+		.github\workflows\publish-tag.yaml = .github\workflows\publish-tag.yaml
 		README.md = README.md
-		.github\workflows\test.yml = .github\workflows\test.yml
+		.github\workflows\test.yaml = .github\workflows\test.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database", "DragaliaAPI.Database\DragaliaAPI.Database.csproj", "{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}"

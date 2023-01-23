@@ -2,11 +2,13 @@
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Helpers;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Npgsql;
 
 namespace DragaliaAPI.Test.Integration;
 
@@ -22,7 +24,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices(services =>
+        builder.ConfigureTestServices(services =>
         {
             ServiceDescriptor sqlDescriptor = services.Single(
                 d => d.ServiceType == typeof(DbContextOptions<ApiContext>)
@@ -39,7 +41,20 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
             connection.Open();
 
-            services.AddDbContext<ApiContext>(options => options.UseSqlite(connection));
+            NpgsqlConnectionStringBuilder builder =
+                new()
+                {
+                    Username = "test",
+                    Password = "test",
+                    Host = "host.docker.internal",
+                    Port = 9060,
+                    IncludeErrorDetail = true,
+                };
+
+            services.AddDbContext<ApiContext>(
+                options =>
+                    options.UseNpgsql(builder.ConnectionString).EnableSensitiveDataLogging(true)
+            );
             services.AddDistributedMemoryCache();
 
             services.AddScoped(x => mockBaasRequestHelper.Object);

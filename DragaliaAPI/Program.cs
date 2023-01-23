@@ -109,15 +109,6 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.MigrateDatabase();
 }
-else if (app.Environment.EnvironmentName == "Testing")
-{
-    using IServiceScope scope = app.Services
-        .GetRequiredService<IServiceScopeFactory>()
-        .CreateScope();
-
-    ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
-    context.Database.EnsureCreated();
-}
 
 app.MapRazorPages();
 

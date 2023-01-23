@@ -17,6 +17,15 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres-test:
+        image: postgres:latest
+        ports:
+          - 9060:5432
+        env:
+          POSTGRES_USERNAME: test
+          POSTGRES_PASSWORD: test
+
     strategy:
       matrix:
         dotnet-version: [ '7.0.x' ]

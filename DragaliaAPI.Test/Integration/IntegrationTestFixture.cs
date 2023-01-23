@@ -18,6 +18,9 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
 {
     public IntegrationTestFixture()
     {
+        this.ApiContext.Database.EnsureDeleted();
+        this.ApiContext.Database.EnsureCreated();
+
         this.SeedDatabase();
         this.SeedCache();
 
