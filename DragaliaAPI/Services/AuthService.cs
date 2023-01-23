@@ -95,6 +95,7 @@ public class AuthService : IAuthService
             try
             {
                 LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
+                this.logger.LogDebug("UserData: {@userData}", pendingSave.user_data);
                 await this.savefileService.ThreadSafeImport(jwt.Subject, pendingSave);
             }
             catch (Exception e)

@@ -147,7 +147,10 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                     opts.Excluding(x => x.exchange_ticket_list);
                     opts.Excluding(x => x.lottery_ticket_list);
                     opts.Excluding(x => x.gather_item_list);
+
                     opts.Excluding(x => x.present_notice);
+                    opts.Excluding(x => x.friend_notice);
+                    opts.Excluding(x => x.guild_notice);
 
                     return opts;
                 }

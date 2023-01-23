@@ -134,7 +134,7 @@ public class PartyController : DragaliaControllerBase
         if (!ownedCharaIds.Contains(c))
         {
             logger.LogError(
-                "Request from DeviceAccount {id} contained not-owned character id {id}",
+                "Request from DeviceAccount {account} contained not-owned character id {id}",
                 deviceAccountId,
                 id
             );

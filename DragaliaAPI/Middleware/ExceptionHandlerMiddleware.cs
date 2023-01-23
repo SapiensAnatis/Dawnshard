@@ -26,19 +26,34 @@ public class ExceptionHandlerMiddleware
         {
             await this.next(context);
         }
-        catch (SessionException)
-        {
-            this.logger.LogInformation(
-                "Returning ID token refresh request due to SessionException"
-            );
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            context.Response.Headers.Add("Is-Required-Refresh-Id-Token", "true");
-        }
         catch (Exception ex)
         {
             Endpoint? endpoint = context.GetEndpoint();
             if (endpoint?.Metadata.GetMetadata<SerializeExceptionAttribute>() == null)
                 throw;
+
+            if (ex is TaskCanceledException)
+            {
+                // The client will retry a 5xx twice before showing an error, and this
+                // exception is usually a one-off
+                this.logger.LogWarning(
+                    ex,
+                    "TaskCancelledException detected, returning Service Unavailable..."
+                );
+                context.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+
+                return;
+            }
+            else if (ex is SessionException)
+            {
+                this.logger.LogInformation(
+                    "Returning ID token refresh request due to SessionException"
+                );
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                context.Response.Headers.Add("Is-Required-Refresh-Id-Token", "true");
+
+                return;
+            }
 
             this.logger.LogError("Encountered unhandled exception: {exception}", ex);
 
