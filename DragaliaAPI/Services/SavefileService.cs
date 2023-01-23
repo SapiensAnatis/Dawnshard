@@ -341,8 +341,7 @@ public class SavefileService : ISavefileService
 
     public async Task CreateBase(string deviceAccountId)
     {
-        if (await this.apiContext.Players.FindAsync(deviceAccountId) is null)
-            this.apiContext.Players.Add(new() { AccountId = deviceAccountId });
+        this.apiContext.Players.Add(new() { AccountId = deviceAccountId });
 
         DbPlayerUserData userData =
             new(deviceAccountId)
