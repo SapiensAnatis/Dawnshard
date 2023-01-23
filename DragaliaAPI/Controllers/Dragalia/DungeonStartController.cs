@@ -57,8 +57,11 @@ public class DungeonStartController : DragaliaControllerBase
     }
 
     [HttpPost("start")]
+    [HttpPost("start_multi")]
     public async Task<DragaliaResult> Start(DungeonStartStartRequest request)
     {
+        this.logger.LogInformation("Starting dungeon for quest id {questId}", request.quest_id);
+
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
@@ -131,6 +134,8 @@ public class DungeonStartController : DragaliaControllerBase
         );
 
         this.logger.LogInformation("{time} ms: Session started", stopwatch.ElapsedMilliseconds);
+        this.logger.LogInformation("Issued dungeon key {dungeonKey}", dungeonKey);
+
         QuestGetSupportUserListData helperList = await this.helperService.GetHelpers();
 
         UserSupportList? helperInfo = helperList.support_user_list

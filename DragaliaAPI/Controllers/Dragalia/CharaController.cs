@@ -28,6 +28,7 @@ public class CharaController : DragaliaControllerBase
     private readonly IUnitRepository unitRepository;
     private readonly IInventoryRepository inventoryRepository;
     private readonly IUpdateDataService updateDataService;
+    private readonly ILogger<CharaController> logger;
     private readonly IMapper mapper;
 
     public CharaController(
@@ -35,6 +36,7 @@ public class CharaController : DragaliaControllerBase
         IUnitRepository unitRepository,
         IInventoryRepository inventoryRepository,
         IUpdateDataService updateDataService,
+        ILogger<CharaController> logger,
         IMapper mapper
     )
     {
@@ -42,6 +44,7 @@ public class CharaController : DragaliaControllerBase
         this.unitRepository = unitRepository;
         this.inventoryRepository = inventoryRepository;
         this.updateDataService = updateDataService;
+        this.logger = logger;
         this.mapper = mapper;
     }
 
@@ -275,9 +278,6 @@ public class CharaController : DragaliaControllerBase
         DbPlayerMaterial upgradeMat =
             await inventoryRepository.GetMaterial(DeviceAccountId, mat)
             ?? inventoryRepository.AddMaterial(DeviceAccountId, mat);
-        DbPlayerCurrency playerCurrency =
-            await inventoryRepository.GetCurrency(DeviceAccountId, CurrencyTypes.Rupies)
-            ?? throw new ArgumentException("Insufficient Rupies for reset");
         int cost =
             20000
             * (
@@ -285,11 +285,11 @@ public class CharaController : DragaliaControllerBase
                     ? playerCharData.AttackPlusCount
                     : playerCharData.HpPlusCount
             );
-        if (playerCurrency.Quantity < cost)
+        if (userData.Coin < cost)
         {
             throw new ArgumentException("Insufficient Rupies for reset");
         }
-        playerCurrency.Quantity -= cost;
+        userData.Coin -= cost;
         upgradeMat.Quantity +=
             (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
                 ? playerCharData.AttackPlusCount
@@ -727,6 +727,12 @@ public class CharaController : DragaliaControllerBase
         );
         if (dbMat == null || dbMat.Quantity < usedMatCount)
         {
+            this.logger.LogError(
+                "Insufficient material quantity in entity {dbMat} (needs: {q}) to unlock skill for {chara}",
+                dbMat,
+                usedMatCount,
+                request.chara_id
+            );
             throw new ArgumentException("Insufficient materials in storage");
         }
         playerCharData.IsUnlockEditSkill = true;

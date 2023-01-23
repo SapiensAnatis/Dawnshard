@@ -3709,8 +3709,6 @@ public class LoadIndexData
     [JsonRequired]
     public IEnumerable<MaterialList> material_list { get; set; }
     public IEnumerable<AstralItemList> astral_item_list { get; set; }
-
-    [JsonRequired]
     public IEnumerable<WeaponList> weapon_list { get; set; }
     public IEnumerable<AlbumWeaponList> album_weapon_list { get; set; }
     public IEnumerable<AmuletList> amulet_list { get; set; }
