@@ -1,5 +1,10 @@
 [
     {
+        "headline": "Mana circles bug fixed",
+        "timestamp": 1674589107,
+        "description": "A nasty bug has been fixed with coability levels causing UI glitches/softlocks when unlocking mana nodes. If you were previously affected by this issue, please re-test and let us know if you encounter any further issues. Please note that unit stories cannot be unlocked at this time."
+    },
+    {
         "headline": "v1.1.0-alpha release",
         "timestamp": 1672957090,
         "description": "This version encapsulates the BaaS upgrades and various miscellaneous fixes since v1.0.0-alpha."
