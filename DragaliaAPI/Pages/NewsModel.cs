@@ -13,11 +13,16 @@ public record NewsItem(string Headline, string Description, long Timestamp)
 
 public class NewsModel : PageModel
 {
-    public List<NewsItem> NewsItems =>
-        JsonSerializer.Deserialize<List<NewsItem>>(
-            System.IO.File.ReadAllText(Path.Join(folder, filename)),
-            new JsonSerializerOptions(JsonSerializerDefaults.Web)
-        ) ?? throw new JsonException("Deserialization failure");
+    private const int MaxNewsItems = 5;
+
+    public IEnumerable<NewsItem> NewsItems =>
+        JsonSerializer
+            .Deserialize<List<NewsItem>>(
+                System.IO.File.ReadAllText(Path.Join(folder, filename)),
+                new JsonSerializerOptions(JsonSerializerDefaults.Web)
+            )
+            ?.OrderByDescending(x => x.Timestamp)
+            ?.Take(MaxNewsItems) ?? throw new JsonException("Deserialization failure");
 
     public string? Version =>
         FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
