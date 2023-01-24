@@ -3,15 +3,15 @@
     "type": "array",
     "contains": {
         "type": "object",
-        "required": [ "Headline", "Description", "Timestamp" ],
+        "required": [ "headline", "description", "timestamp" ],
         "properties": {
-            "Headline": {
+            "headline": {
                 "type": "string"
             },
-            "Timestamp": {
+            "timestamp": {
                 "type": "integer"
             },
-            "Description": {
+            "description": {
                 "type": "string"
             }
         }

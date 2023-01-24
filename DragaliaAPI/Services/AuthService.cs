@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Middleware;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
@@ -9,10 +10,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using Serilog;
 using Serilog.Context;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
 
 namespace DragaliaAPI.Services;
 
@@ -98,6 +99,10 @@ public class AuthService : IAuthService
                 this.logger.LogDebug("UserData: {@userData}", pendingSave.user_data);
                 await this.savefileService.ThreadSafeImport(jwt.Subject, pendingSave);
             }
+            catch (JsonException e)
+            {
+                this.logger.LogWarning(e, "Savefile had invalid JSON.");
+            }
             catch (Exception e)
             {
                 this.logger.LogError(e, "Error importing save");
@@ -136,21 +141,32 @@ public class AuthService : IAuthService
 
         if (!validationResult.IsValid)
         {
-            logger.LogError("ID token was invalid: {@validationResult}", validationResult);
+            string idTokenTrace = idToken[..^5];
+            string? accountId = (validationResult.SecurityToken as JwtSecurityToken)?.Subject;
+
+            LogContext.PushProperty(CustomClaimType.AccountId, accountId);
 
             if (validationResult.Exception is SecurityTokenExpiredException)
             {
                 // Return a 400 to make the client call /login again
                 logger.LogInformation(
-                    "The token was expired. Sending client to request a new one."
+                    "ID token ..{token} was expired: {@validationResult}. Sending client to request a new one.",
+                    idTokenTrace,
+                    validationResult
                 );
                 throw new SessionException();
             }
             else
             {
+                logger.LogWarning(
+                    "ID token ..{token} was invalid: {@validationResult}",
+                    idTokenTrace,
+                    validationResult
+                );
                 throw new DragaliaException(
                     Models.ResultCode.IdTokenError,
-                    "Failed to validate BaaS token!"
+                    "Failed to validate BaaS token!",
+                    validationResult.Exception
                 );
             }
         }

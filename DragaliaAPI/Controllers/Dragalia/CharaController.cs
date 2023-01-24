@@ -765,7 +765,11 @@ public class CharaController : DragaliaControllerBase
                 usedMatCount,
                 request.chara_id
             );
-            throw new ArgumentException("Insufficient materials in storage");
+
+            throw new DragaliaException(
+                ResultCode.CharaEditSkillCannotUnlock,
+                "Insufficient materials in storage"
+            );
         }
         playerCharData.IsUnlockEditSkill = true;
         dbMat.Quantity -= usedMatCount;
