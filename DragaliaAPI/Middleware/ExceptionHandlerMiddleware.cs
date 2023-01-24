@@ -14,7 +14,6 @@ public class ExceptionHandlerMiddleware
     private const ResultCode ServerErrorCode = ResultCode.CommonServerError;
 
     private const string RefreshIdToken = "Is-Required-Refresh-Id-Token";
-    private const string SessionExpired = "Session-Expired";
     private const string True = "true";
 
     private readonly RequestDelegate next;
@@ -54,16 +53,6 @@ public class ExceptionHandlerMiddleware
                 );
                 context.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
 
-                return;
-            }
-            else if (ex is SessionException)
-            {
-                // Should trigger /reauth/ to get new session
-                this.logger.LogInformation(
-                    "Returning session refresh request due to SessionException"
-                );
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                context.Response.Headers.Add(SessionExpired, True);
                 return;
             }
             else if (ex is SecurityTokenExpiredException)

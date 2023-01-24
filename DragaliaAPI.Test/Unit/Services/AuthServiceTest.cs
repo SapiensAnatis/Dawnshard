@@ -144,7 +144,7 @@ public class AuthServiceTest
         await this.authService
             .Invoking(x => x.DoAuth(token))
             .Should()
-            .ThrowExactlyAsync<SessionException>();
+            .ThrowExactlyAsync<SecurityTokenExpiredException>();
 
         this.mockBaasOptions.VerifyAll();
         this.mockLoginOptions.VerifyAll();

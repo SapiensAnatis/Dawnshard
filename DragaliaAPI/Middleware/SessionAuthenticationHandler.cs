@@ -15,6 +15,9 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
 {
     private readonly ISessionService sessionService;
 
+    private const string SessionExpired = "Session-Expired";
+    private const string True = "true";
+
     public SessionAuthenticationHandler(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
@@ -39,8 +42,6 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         if (sid is null)
             return AuthenticateResult.Fail("Invalid SID header: value was null");
 
-        // This will throw SessionException if not found, and return a BadRequest which prompts the client to re-login
-
         List<Claim> claims = new();
 
         try
@@ -52,8 +53,7 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         }
         catch (SessionException)
         {
-            this.Logger.LogDebug("Failed to look up session ID {sid}", sid);
-            return AuthenticateResult.Fail("Failed to lookup SID header");
+            return AuthenticateResult.Fail($"Failed to look up SID {sid}");
         }
 
         ClaimsIdentity identity = new(claims, this.Scheme.Name);
@@ -61,5 +61,15 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         AuthenticationTicket ticket = new(principal, this.Scheme.Name);
 
         return AuthenticateResult.Success(ticket);
+    }
+
+    protected override Task HandleChallengeAsync(AuthenticationProperties properties)
+    {
+        // Should make the client go back to /tool/reauth
+        this.Logger.LogDebug("Returning Session-Expired BadRequest response");
+        this.Response.StatusCode = 400;
+        this.Response.Headers.Add(SessionExpired, True);
+
+        return Task.CompletedTask;
     }
 }
