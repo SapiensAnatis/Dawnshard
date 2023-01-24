@@ -52,17 +52,8 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         }
         catch (SessionException)
         {
-            if (
-                this.Context.GetEndpoint()?.Metadata.GetMetadata<AllowAnonymousAttribute>()
-                is not null
-            )
-            {
-                return AuthenticateResult.NoResult();
-            }
-            else
-            {
-                throw;
-            }
+            this.Logger.LogDebug("Failed to look up session ID {sid}", sid);
+            return AuthenticateResult.Fail("Failed to lookup SID header");
         }
 
         ClaimsIdentity identity = new(claims, this.Scheme.Name);

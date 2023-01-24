@@ -1,15 +1,21 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using DragaliaAPI.Controllers;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
 using MessagePack;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Middleware;
 
 public class ExceptionHandlerMiddleware
 {
     private const ResultCode ServerErrorCode = ResultCode.CommonServerError;
+
+    private const string RefreshIdToken = "Is-Required-Refresh-Id-Token";
+    private const string SessionExpired = "Session-Expired";
+    private const string True = "true";
 
     private readonly RequestDelegate next;
     private readonly ILogger logger;
@@ -32,7 +38,13 @@ public class ExceptionHandlerMiddleware
             if (endpoint?.Metadata.GetMetadata<SerializeExceptionAttribute>() == null)
                 throw;
 
-            if (ex is TaskCanceledException or MessagePackSerializationException)
+            if (
+                ex is TaskCanceledException
+                || (
+                    ex is MessagePackSerializationException
+                    && ex.InnerException is TaskCanceledException or OperationCanceledException
+                )
+            )
             {
                 // The client will retry a 5xx twice before showing an error, and these
                 // exceptions are usually a one-off
@@ -46,11 +58,22 @@ public class ExceptionHandlerMiddleware
             }
             else if (ex is SessionException)
             {
+                // Should trigger /reauth/ to get new session
                 this.logger.LogInformation(
-                    "Returning ID token refresh request due to SessionException"
+                    "Returning session refresh request due to SessionException"
                 );
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                context.Response.Headers.Add("Is-Required-Refresh-Id-Token", "true");
+                context.Response.Headers.Add(SessionExpired, True);
+                return;
+            }
+            else if (ex is SecurityTokenExpiredException)
+            {
+                // Will send back to BaaS to login
+                this.logger.LogInformation(
+                    "Returning ID token refresh request due to SecurityTokenExpiredException"
+                );
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                context.Response.Headers.Add(RefreshIdToken, True);
 
                 return;
             }

@@ -1,12 +1,11 @@
 ﻿using DragaliaAPI.Models.Generated;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("webview_version")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
-[ApiController]
+[AllowAnonymous]
 public class WebviewVersionController : DragaliaControllerBase
 {
     private const string PlaceholderUrl = "localhost";

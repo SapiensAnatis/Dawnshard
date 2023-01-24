@@ -148,13 +148,14 @@ public class AuthService : IAuthService
 
             if (validationResult.Exception is SecurityTokenExpiredException)
             {
-                // Return a 400 to make the client call /login again
+                // Go to ExceptionHandlerMiddleware to make the client receive a 400 and login again
                 logger.LogInformation(
                     "ID token ..{token} was expired: {@validationResult}. Sending client to request a new one.",
                     idTokenTrace,
                     validationResult
                 );
-                throw new SessionException();
+
+                throw validationResult.Exception;
             }
             else
             {
