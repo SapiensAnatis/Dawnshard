@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
@@ -115,7 +116,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
-    public async Task SetPartySetting_InvalidRequest_NotOwnedCharacter_ReturnsBadRequest()
+    public async Task SetPartySetting_InvalidRequest_NotOwnedCharacter_ReturnsResultCode()
     {
         PartySetPartySettingRequest request =
             new(
@@ -129,15 +130,24 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
                 0
             );
 
-        HttpContent content = TestUtils.CreateMsgpackContent(request);
-
-        HttpResponseMessage response = await client.PostAsync("/party/set_party_setting", content);
-
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        (
+            await this.client.PostMsgpack<ResultCodeData>(
+                "/party/set_party_setting",
+                request,
+                ensureSuccessHeader: false
+            )
+        )
+            .Should()
+            .BeEquivalentTo(
+                new DragaliaResponse<ResultCodeData>(
+                    new DataHeaders(ResultCode.PartySwitchSettingCharaShort),
+                    new ResultCodeData(ResultCode.PartySwitchSettingCharaShort)
+                )
+            );
     }
 
     [Fact]
-    public async Task SetPartySetting_InvalidRequest_NotOwnedDragonKeyId_ReturnsBadRequest()
+    public async Task SetPartySetting_InvalidRequest_NotOwnedDragonKeyId_ReturnsResultCode()
     {
         PartySetPartySettingRequest request =
             new(
@@ -151,11 +161,20 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
                 0
             );
 
-        HttpContent content = TestUtils.CreateMsgpackContent(request);
-
-        HttpResponseMessage response = await client.PostAsync("/party/set_party_setting", content);
-
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        (
+            await this.client.PostMsgpack<ResultCodeData>(
+                "/party/set_party_setting",
+                request,
+                ensureSuccessHeader: false
+            )
+        )
+            .Should()
+            .BeEquivalentTo(
+                new DragaliaResponse<ResultCodeData>(
+                    new DataHeaders(ResultCode.PartySwitchSettingCharaShort),
+                    new ResultCodeData(ResultCode.PartySwitchSettingCharaShort)
+                )
+            );
     }
 
     [Fact]

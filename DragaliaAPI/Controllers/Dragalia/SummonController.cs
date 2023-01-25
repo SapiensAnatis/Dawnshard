@@ -488,7 +488,20 @@ public class SummonController : DragaliaControllerBase
                 new List<int>() { sageEffect, circleEffect },
                 reversalIndex,
                 updateDataList,
-                new EntityResult(),
+                new EntityResult()
+                {
+                    new_get_entity_list = charaRewardList
+                        .Concat(dragonRewardList)
+                        .Where(x => x.is_new)
+                        .Select(
+                            x =>
+                                new AtgenDuplicateEntityList()
+                                {
+                                    entity_id = x.id,
+                                    entity_type = x.entity_type
+                                }
+                        )
+                },
                 new List<SummonTicketList>(),
                 playerBannerData.SummonPoints,
                 new List<UserSummonList>()

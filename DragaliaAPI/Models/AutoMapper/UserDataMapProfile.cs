@@ -15,8 +15,9 @@ public class UserDataMapProfile : Profile
             .ForMember(x => x.is_optin, opts => opts.MapFrom(x => 0))
             .ForMember(x => x.prologue_end_time, opts => opts.MapFrom(x => 0))
             // TODO: add proper stamina/getherwing increases with level
-            .ForMember(x => x.stamina_single, opts => opts.MapFrom(x => 99))
-            .ForMember(x => x.stamina_multi, opts => opts.MapFrom(x => 99));
+            .ForMember(x => x.stamina_single, opts => opts.MapFrom(x => 999))
+            .ForMember(x => x.stamina_multi, opts => opts.MapFrom(x => 99))
+            .ForMember(x => x.level, opts => opts.MapFrom(x => 200));
 
         this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
         this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
