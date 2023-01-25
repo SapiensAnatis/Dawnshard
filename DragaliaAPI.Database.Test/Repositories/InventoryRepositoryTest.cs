@@ -30,14 +30,14 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
     {
         await this.inventoryRepository.AddMaterialQuantity(
             DeviceAccountId,
-            Materials.FirestormPrism,
+            Materials.WaterwyrmsGreatsphere,
             10
         );
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
                 DeviceAccountId,
-                Materials.FirestormPrism
+                Materials.WaterwyrmsGreatsphere
             )
         )!.Quantity
             .Should()
@@ -147,7 +147,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             {
                 new()
                 {
-                    DeviceAccountId = "other id",
+                    DeviceAccountId = "other id 2",
                     MaterialId = Materials.AbaddonOrb,
                     Quantity = 5
                 },
