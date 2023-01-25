@@ -258,7 +258,7 @@ public class SavefileService : ISavefileService
 
         this.logger.LogDebug("Added stories");
 
-        this.apiContext.PlayerStorage.AddRange(
+        this.apiContext.PlayerMaterials.AddRange(
             MapWithDeviceAccount<DbPlayerMaterial>(savefile.material_list, deviceAccountId)
         );
 
@@ -328,8 +328,8 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerWeapons.RemoveRange(
             this.apiContext.PlayerWeapons.Where(x => x.DeviceAccountId == deviceAccountId)
         );
-        this.apiContext.PlayerStorage.RemoveRange(
-            this.apiContext.PlayerStorage.Where(x => x.DeviceAccountId == deviceAccountId)
+        this.apiContext.PlayerMaterials.RemoveRange(
+            this.apiContext.PlayerMaterials.Where(x => x.DeviceAccountId == deviceAccountId)
         );
         this.apiContext.PlayerFortBuilds.RemoveRange(
             this.apiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == deviceAccountId)
@@ -626,7 +626,7 @@ public class SavefileService : ISavefileService
 
     private async Task AddDefaultMaterials(string deviceAccountId, int defaultQuantity = 10000)
     {
-        await this.apiContext.PlayerStorage.AddRangeAsync(
+        await this.apiContext.PlayerMaterials.AddRangeAsync(
             DefaultSavefileData.UpgradeMaterials.Select(
                 x =>
                     new DbPlayerMaterial()

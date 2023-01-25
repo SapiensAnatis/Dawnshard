@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -69,7 +70,7 @@ public class PartyController : DragaliaControllerBase
                 )
             )
             {
-                return this.BadRequest();
+                throw new DragaliaException(ResultCode.PartySwitchSettingCharaShort);
             }
         }
 
@@ -124,6 +125,7 @@ public class PartyController : DragaliaControllerBase
         if (id == Charas.Empty)
             return true;
 
+        // TODO: can make this single query instead of 8 (this method is called in a loop)
         IEnumerable<Charas> ownedCharaIds = await this.unitRepository
             .GetAllCharaData(deviceAccountId)
             .Select(x => x.CharaId)

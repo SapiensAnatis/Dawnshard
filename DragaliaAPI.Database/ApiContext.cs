@@ -99,7 +99,7 @@ public class ApiContext : DbContext
 
     public DbSet<DbPlayerCurrency> PlayerWallet { get; set; }
 
-    public DbSet<DbPlayerMaterial> PlayerStorage { get; set; }
+    public DbSet<DbPlayerMaterial> PlayerMaterials { get; set; }
 
     public DbSet<DbSetUnit> PlayerSetUnits { get; set; }
 
