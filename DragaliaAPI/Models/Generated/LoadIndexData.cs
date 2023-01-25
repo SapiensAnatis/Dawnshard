@@ -10,6 +10,7 @@ public class LoadIndexData
     public UserData? user_data { get; set; }
     public PartyPowerData? party_power_data { get; set; }
 
+    [JsonRequired]
     public IEnumerable<PartyList>? party_list { get; set; }
 
     public IEnumerable<CharaList>? chara_list { get; set; }
