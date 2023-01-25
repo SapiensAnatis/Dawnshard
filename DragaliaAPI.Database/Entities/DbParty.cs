@@ -16,9 +16,10 @@ public class DbParty : IDbHasAccountId
     public required string DeviceAccountId { get; set; }
 
     [Required]
+    [Range(0, 54)]
     public int PartyNo { get; set; }
 
-    [MaxLength(64)]
+    [MaxLength(20)]
     public string PartyName { get; set; } = string.Empty;
 
     public ICollection<DbPartyUnit> Units { get; set; } = null!;
