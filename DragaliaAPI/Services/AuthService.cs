@@ -113,10 +113,7 @@ public class AuthService : IAuthService
         long viewerId = await this.DoLogin(jwt.Subject);
         string sessionId = await this.sessionService.CreateSession(idToken, jwt.Subject, viewerId);
 
-        using IDisposable vIdLog = LogContext.PushProperty(
-            CustomClaimType.ViewerId,
-            viewerId.ToString()
-        );
+        using IDisposable vIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
 
         this.logger.LogInformation(
             "Authenticated user with viewer ID {id} and issued session ID {sid}",
@@ -141,7 +138,7 @@ public class AuthService : IAuthService
 
         if (!validationResult.IsValid)
         {
-            string idTokenTrace = idToken[..^5];
+            string idTokenTrace = idToken[^5..];
             string? accountId = (validationResult.SecurityToken as JwtSecurityToken)?.Subject;
 
             LogContext.PushProperty(CustomClaimType.AccountId, accountId);
