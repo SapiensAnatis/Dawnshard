@@ -1,9 +1,11 @@
 ﻿using DragaliaAPI.Models.Generated;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("version")]
+[AllowAnonymous]
 public class VersionController : DragaliaControllerBase
 {
     private const string AndroidResourceVersion = "y2XM6giU6zz56wCm";

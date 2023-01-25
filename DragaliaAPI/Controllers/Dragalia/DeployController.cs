@@ -1,11 +1,11 @@
 ﻿using DragaliaAPI.Models.Generated;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("deploy")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
+[AllowAnonymous]
 [ApiController]
 public class DeployController : DragaliaControllerBase
 {
