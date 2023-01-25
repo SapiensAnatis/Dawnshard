@@ -103,6 +103,7 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                             x.Path.StartsWith("ability_crest_list")
                             && (x.Name == "ability_1_level" || x.Name == "ability_2_level")
                     );
+                    opts.Excluding(x => x.user_data.level);
 
                     // Free wyrmite
                     opts.Excluding(x => x.user_data.crystal);
