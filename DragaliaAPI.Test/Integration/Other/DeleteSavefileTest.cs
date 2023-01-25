@@ -64,7 +64,7 @@ public class DeleteSavefileTest : IClassFixture<IntegrationTestFixture>
         // This test also provides us a good way to check out the default savefile
         using (new AssertionScope())
         {
-            storedSavefile.chara_list
+            storedSavefile.chara_list!
                 .Select(x => x.chara_id)
                 .Should()
                 .BeEquivalentTo(new List<Charas>() { Charas.ThePrince });
@@ -89,13 +89,13 @@ public class DeleteSavefileTest : IClassFixture<IntegrationTestFixture>
                         );
                 });
 
-            storedSavefile.dragon_list
+            storedSavefile.dragon_list!
                 .Select(x => x.dragon_id)
                 .Should()
                 .BeEquivalentTo(
                     DefaultSavefileData.Dragons.SelectMany(x => Enumerable.Repeat(x, 4))
                 );
-            storedSavefile.dragon_list
+            storedSavefile.dragon_list!
                 .Should()
                 .AllSatisfy(
                     x =>
@@ -121,15 +121,15 @@ public class DeleteSavefileTest : IClassFixture<IntegrationTestFixture>
                             )
                 );
             ;
-            storedSavefile.dragon_reliability_list
+            storedSavefile.dragon_reliability_list!
                 .Select(x => x.dragon_id)
                 .Should()
                 .BeEquivalentTo(DefaultSavefileData.Dragons);
-            storedSavefile.material_list
+            storedSavefile.material_list!
                 .Select(x => x.material_id)
                 .Should()
                 .BeEquivalentTo(DefaultSavefileData.UpgradeMaterials);
-            storedSavefile.material_list.Select(x => x.quantity).Should().AllBeEquivalentTo(10000);
+            storedSavefile.material_list!.Select(x => x.quantity).Should().AllBeEquivalentTo(10000);
 
             storedSavefile.quest_story_list.Should().BeEmpty();
             storedSavefile.castle_story_list.Should().BeEmpty();

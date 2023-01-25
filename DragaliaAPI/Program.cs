@@ -99,10 +99,16 @@ WebApplication app = builder.Build();
 app.UseSerilogRequestLogging(
     options =>
         options.EnrichDiagnosticContext = (diagContext, httpContext) =>
+        {
             diagContext.Set(
                 CustomClaimType.AccountId,
                 httpContext.User.FindFirstValue(CustomClaimType.AccountId)
-            )
+            );
+            diagContext.Set(
+                CustomClaimType.ViewerId,
+                long.Parse(httpContext.User.FindFirstValue(CustomClaimType.ViewerId) ?? "0")
+            );
+        }
 );
 
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
