@@ -69,7 +69,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
     {
         using IServiceScope scope = this.Services.CreateScope();
         ApiContext inventoryRepo = scope.ServiceProvider.GetRequiredService<ApiContext>();
-        inventoryRepo.PlayerStorage.AddRange(
+        inventoryRepo.PlayerMaterials.AddRange(
             Enum.GetValues(typeof(Materials))
                 .OfType<Materials>()
                 .Select(

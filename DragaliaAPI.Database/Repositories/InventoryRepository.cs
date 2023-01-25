@@ -44,7 +44,7 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
 
     public DbPlayerMaterial AddMaterial(string deviceAccountId, Materials type)
     {
-        return apiContext.PlayerStorage
+        return apiContext.PlayerMaterials
             .Add(
                 new DbPlayerMaterial()
                 {
@@ -59,7 +59,7 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
     public async Task AddMaterialQuantity(string deviceAccountId, Materials item, int quantity)
     {
         DbPlayerMaterial material =
-            await this.apiContext.PlayerStorage.FindAsync(deviceAccountId, item)
+            await this.apiContext.PlayerMaterials.FindAsync(deviceAccountId, item)
             ?? (
                 await this.apiContext.AddAsync(
                     new DbPlayerMaterial()
@@ -97,14 +97,12 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
 
     public async Task<DbPlayerMaterial?> GetMaterial(string deviceAccountId, Materials materialId)
     {
-        return await this.apiContext.PlayerStorage.FirstOrDefaultAsync(
-            entry => entry.MaterialId == materialId
-        );
+        return await this.apiContext.PlayerMaterials.FindAsync(deviceAccountId, materialId);
     }
 
     public IQueryable<DbPlayerMaterial> GetMaterials(string deviceAccountId)
     {
-        return this.apiContext.PlayerStorage.Where(
+        return this.apiContext.PlayerMaterials.Where(
             storage => storage.DeviceAccountId == deviceAccountId
         );
     }
