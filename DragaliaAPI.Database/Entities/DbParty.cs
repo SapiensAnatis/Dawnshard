@@ -18,7 +18,7 @@ public class DbParty : IDbHasAccountId
     [Required]
     public int PartyNo { get; set; }
 
-    [MaxLength(64)]
+    [MaxLength(20)]
     public string PartyName { get; set; } = string.Empty;
 
     public ICollection<DbPartyUnit> Units { get; set; } = null!;

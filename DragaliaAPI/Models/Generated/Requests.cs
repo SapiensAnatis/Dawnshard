@@ -1,5 +1,6 @@
 #nullable disable
 
+using System.ComponentModel.DataAnnotations;
 using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
 
@@ -3111,6 +3112,8 @@ public class PartySetPartySettingRequest
 {
     public int party_no { get; set; }
     public IEnumerable<PartySettingList> request_party_setting_list { get; set; }
+
+    [MaxLength(20)]
     public string party_name { get; set; }
     public int is_entrust { get; set; }
     public int entrust_element { get; set; }
@@ -3137,6 +3140,8 @@ public class PartySetPartySettingRequest
 public class PartyUpdatePartyNameRequest
 {
     public int party_no { get; set; }
+
+    [MaxLength(20)]
     public string party_name { get; set; }
 
     public PartyUpdatePartyNameRequest(int party_no, string party_name)
@@ -4049,6 +4054,7 @@ public class TutorialUpdateStepRequest
 [MessagePackObject(true)]
 public class UpdateNamechangeRequest
 {
+    [MaxLength(10)]
     public string name { get; set; }
 
     public UpdateNamechangeRequest(string name)

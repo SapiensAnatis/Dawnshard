@@ -7,7 +7,7 @@ namespace DragaliaAPI.Models.Generated;
 public class LoadIndexData
 {
     [JsonRequired]
-    public UserData user_data { get; set; }
+    public UserData? user_data { get; set; }
     public PartyPowerData? party_power_data { get; set; }
 
     public IEnumerable<PartyList>? party_list { get; set; }
@@ -46,7 +46,9 @@ public class LoadIndexData
     public IEnumerable<QuestWallList>? quest_wall_list { get; set; }
     public IEnumerable<QuestCarryList>? quest_carry_list { get; set; }
     public IEnumerable<QuestEntryConditionList>? quest_entry_condition_list { get; set; }
-    public FortBonusList fort_bonus_list { get; set; }
+
+    [JsonIgnore]
+    public FortBonusList? fort_bonus_list { get; set; }
 
     public IEnumerable<BuildList>? build_list { get; set; } = new List<BuildList>();
     public IEnumerable<CraftList>? craft_list { get; set; }
@@ -94,7 +96,11 @@ public class LoadIndexData
     public DateTimeOffset server_time { get; set; }
     public int quest_bonus_stack_base_time { get; set; }
     public IEnumerable<AtgenQuestBonus>? quest_bonus { get; set; }
+
+    [JsonIgnore]
     public AtgenMultiServer? multi_server { get; set; }
+
+    [JsonIgnore]
     public AtgenWalkerData? walker_data { get; set; }
 
     [JsonConstructor]
