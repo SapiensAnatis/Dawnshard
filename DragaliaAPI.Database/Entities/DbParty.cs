@@ -16,7 +16,6 @@ public class DbParty : IDbHasAccountId
     public required string DeviceAccountId { get; set; }
 
     [Required]
-    [Range(0, 54)]
     public int PartyNo { get; set; }
 
     [MaxLength(20)]
