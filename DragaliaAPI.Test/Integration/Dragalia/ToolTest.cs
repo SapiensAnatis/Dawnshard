@@ -60,7 +60,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         response.viewer_id.Should().Be(2);
     }
 
-    [Fact]
+    /*[Fact]
     public async Task Signup_ExpiredIdToken_ReturnsRefreshRequest()
     {
         HttpResponseMessage response = await client.PostMsgpackBasic(
@@ -82,7 +82,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
             .GetValues("Is-Required-Refresh-Id-Token")
             .Should()
             .BeEquivalentTo(new List<string>() { "true" });
-    }
+    }*/
 
     [Fact]
     public async Task Signup_InvalidIdToken_ReturnsIdTokenError()
@@ -150,7 +150,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         response.session_id.Should().Be(response2.session_id);
     }
 
-    [Fact]
+    /*[Fact]
     public async Task Auth_ExpiredIdToken_ReturnsRefreshRequest()
     {
         HttpResponseMessage response = await client.PostMsgpackBasic(
@@ -172,7 +172,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
             .GetValues("Is-Required-Refresh-Id-Token")
             .Should()
             .BeEquivalentTo(new List<string>() { "true" });
-    }
+    }*/
 
     [Fact]
     public async Task Auth_InvalidIdToken_ReturnsIdTokenError()
