@@ -29,6 +29,7 @@ public class DbPlayerUserData : IDbHasAccountId
     /// <summary>
     /// The player's display name.
     /// </summary>
+    [MaxLength(10)]
     public string Name { get; set; } = "Euden";
 
     public int Level { get; set; } = 1;

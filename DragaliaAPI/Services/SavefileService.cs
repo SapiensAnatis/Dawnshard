@@ -119,6 +119,9 @@ public class SavefileService : ISavefileService
 
         this.logger.LogDebug("Added new Player entry");
 
+        // This has JsonRequired so this should never be triggered
+        ArgumentNullException.ThrowIfNull(savefile.user_data);
+
         apiContext.PlayerUserData.Add(
             this.mapper.Map<DbPlayerUserData>(
                 savefile.user_data,

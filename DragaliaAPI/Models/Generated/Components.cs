@@ -1,5 +1,6 @@
 #nullable disable
 
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -7171,6 +7172,8 @@ public class PartyInfo
 public class PartyList
 {
     public int party_no { get; set; }
+
+    [MaxLength(20)]
     public string party_name { get; set; }
     public IEnumerable<PartySettingList> party_setting_list { get; set; }
 
@@ -9039,6 +9042,8 @@ public class UserAmuletTradeList
 public class UserData
 {
     public ulong viewer_id { get; set; }
+
+    [MaxLength(10)]
     public string name { get; set; }
     public int level { get; set; }
     public int exp { get; set; }
