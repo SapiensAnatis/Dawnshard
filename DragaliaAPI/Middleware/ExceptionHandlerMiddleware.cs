@@ -55,7 +55,7 @@ public class ExceptionHandlerMiddleware
 
                 return;
             }
-            else if (ex is SecurityTokenExpiredException)
+            /*else if (ex is SecurityTokenExpiredException)
             {
                 // Will send back to BaaS to login
                 this.logger.LogInformation(
@@ -65,9 +65,9 @@ public class ExceptionHandlerMiddleware
                 context.Response.Headers.Add(RefreshIdToken, True);
 
                 return;
-            }
+            }*/
 
-            this.logger.LogError("Encountered unhandled exception: {exception}", ex);
+            this.logger.LogError(ex, "Encountered unhandled exception");
 
             context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
             context.Response.StatusCode = 200;
@@ -75,6 +75,8 @@ public class ExceptionHandlerMiddleware
             ResultCode code = ex is DragaliaException dragaliaException
                 ? dragaliaException.Code
                 : ServerErrorCode;
+
+            code = ex is SecurityTokenExpiredException ? ResultCode.IdTokenError : code;
 
             this.logger.LogError("Returning result_code {code}", code);
 
