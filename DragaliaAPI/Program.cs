@@ -133,6 +133,7 @@ app.UsePathBase("/2.19.0_20220714193707");
 // Latest iOS app version
 app.UsePathBase("/2.19.0_20220719103923");
 app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseMiddleware<NotFoundHandlerMiddleware>();
 
 app.UseRouting();
 app.UseAuthentication();
