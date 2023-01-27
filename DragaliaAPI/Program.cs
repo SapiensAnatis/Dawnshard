@@ -91,6 +91,7 @@ builder.Services
     .AddScoped<ISavefileService, SavefileService>()
     .AddScoped<IHelperService, HelperService>()
     .AddScoped<IAuthService, AuthService>()
+    .AddScoped<IBonusService, BonusService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddHttpClient<IBaasRequestHelper, BaasRequestHelper>();
 

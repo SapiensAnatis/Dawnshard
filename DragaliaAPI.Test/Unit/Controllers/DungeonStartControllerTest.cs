@@ -24,6 +24,7 @@ public class DungeonStartControllerTest
     private readonly Mock<IDungeonService> mockDungeonService;
     private readonly Mock<IHelperService> mockHelperService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
+    private readonly Mock<IBonusService> mockBonusService;
     private readonly IMapper mapper;
     private readonly Mock<ILogger<DungeonStartController>> mockLogger;
 
@@ -38,6 +39,7 @@ public class DungeonStartControllerTest
         this.mockDungeonService = new(MockBehavior.Strict);
         this.mockHelperService = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
+        this.mockBonusService = new(MockBehavior.Strict);
         this.mockLogger = new();
 
         this.mapper = new MapperConfiguration(
@@ -52,6 +54,7 @@ public class DungeonStartControllerTest
             mockDungeonService.Object,
             mockHelperService.Object,
             mockUpdateDataService.Object,
+            mockBonusService.Object,
             mapper,
             mockLogger.Object
         );
@@ -66,6 +69,10 @@ public class DungeonStartControllerTest
                     quest_list = new List<QuestList>() { new() { quest_id = questId } }
                 }
             );
+
+        this.mockBonusService
+            .Setup(x => x.GetBonusList(DeviceAccountId))
+            .ReturnsAsync(new FortBonusList());
 
         /* this.mockPartyRepository
              .Setup(x => x.Get(DeviceAccountId))

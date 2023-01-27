@@ -89,34 +89,36 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                 opts =>
                 {
                     // Modified properties
+                    // Inaccurate because primary keys
                     opts.Excluding(x => x.Name.Contains("key_id"));
                     opts.Excluding(x => x.Name.Contains("build_id"));
                     opts.Excluding(x => x.Name.Contains("plant_detail_id"));
-                    opts.Excluding(x => x.Name.Contains("last_income_time"));
                     opts.Excluding(x => x.user_data.viewer_id);
-                    opts.Excluding(x => x.user_data.stamina_single);
-                    opts.Excluding(x => x.user_data.stamina_multi);
+                    // Inaccurate because transient
                     opts.Excluding(x => x.server_time);
                     opts.Excluding(x => x.spec_upgrade_time);
+                    opts.Excluding(x => x.Name.Contains("last_income_time"));
+                    // Inaccurate for other reasons
+                    opts.Excluding(x => x.user_data.stamina_single);
+                    opts.Excluding(x => x.user_data.stamina_multi);
                     opts.Excluding(
                         x =>
                             x.Path.StartsWith("ability_crest_list")
                             && (x.Name == "ability_1_level" || x.Name == "ability_2_level")
                     );
                     opts.Excluding(x => x.user_data.level);
-
-                    // Free wyrmite
                     opts.Excluding(x => x.user_data.crystal);
 
                     // Ignored properties
                     opts.Excluding(x => x.user_data.prologue_end_time);
                     opts.Excluding(x => x.fort_plant_list);
+                    opts.Excluding(x => x.fort_bonus_list);
+                    opts.Excluding(x => x.user_guild_data);
+                    opts.Excluding(x => x.guild_data);
 
                     // Properties with no implementation
                     opts.Excluding(x => x.Name.Contains("album"));
                     opts.Excluding(x => x.Name.Contains("shop"));
-
-                    opts.Excluding(x => x.fort_bonus_list);
 
                     opts.Excluding(x => x.quest_event_list);
                     opts.Excluding(x => x.quest_bonus);
@@ -127,9 +129,6 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                     opts.Excluding(x => x.quest_bonus_stack_base_time);
 
                     opts.Excluding(x => x.dragon_gift_list);
-
-                    opts.Excluding(x => x.user_guild_data);
-                    opts.Excluding(x => x.guild_data);
 
                     opts.Excluding(x => x.user_summon_list);
                     opts.Excluding(x => x.summon_ticket_list);

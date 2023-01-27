@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,11 +11,17 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class FortController : DragaliaControllerBase
 {
     private readonly IFortRepository fortRepository;
+    private readonly IBonusService bonusService;
     private readonly IMapper mapper;
 
-    public FortController(IFortRepository fortRepository, IMapper mapper)
+    public FortController(
+        IFortRepository fortRepository,
+        IBonusService bonusService,
+        IMapper mapper
+    )
     {
         this.fortRepository = fortRepository;
+        this.bonusService = bonusService;
         this.mapper = mapper;
     }
 
@@ -25,11 +32,13 @@ public class FortController : DragaliaControllerBase
             await this.fortRepository.GetBuilds(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<BuildList>);
 
+        FortBonusList bonusList = await this.bonusService.GetBonusList(DeviceAccountId);
+
         FortGetDataData data =
             new()
             {
                 build_list = buildList,
-                fort_bonus_list = StubData.EmptyBonusList,
+                fort_bonus_list = bonusList,
                 dragon_contact_free_gift_count = StubData.DragonFreeGifts,
                 production_df = StubData.ProductionDf,
                 production_rp = StubData.ProductionRp,
@@ -43,72 +52,6 @@ public class FortController : DragaliaControllerBase
 
     private static class StubData
     {
-        private static readonly IEnumerable<AtgenParamBonus> WeaponBonus = Enumerable
-            .Range(1, 9)
-            .Select(
-                x =>
-                    new AtgenParamBonus()
-                    {
-                        weapon_type = x,
-                        hp = 200,
-                        attack = 200
-                    }
-            );
-
-        private static readonly IEnumerable<AtgenElementBonus> EmptyElementBonus = Enumerable
-            .Range(1, 5)
-            .Select(
-                x =>
-                    new AtgenElementBonus()
-                    {
-                        elemental_type = x,
-                        hp = 200,
-                        attack = 200
-                    }
-            )
-            .Append(
-                new AtgenElementBonus()
-                {
-                    elemental_type = 99,
-                    hp = 20,
-                    attack = 20
-                }
-            );
-
-        private static readonly IEnumerable<AtgenDragonBonus> EmptyDragonBonus = Enumerable
-            .Range(1, 5)
-            .Select(
-                x =>
-                    new AtgenDragonBonus()
-                    {
-                        elemental_type = x,
-                        dragon_bonus = 200,
-                        hp = 200,
-                        attack = 200
-                    }
-            )
-            .Append(
-                new AtgenDragonBonus()
-                {
-                    elemental_type = 99,
-                    hp = 200,
-                    attack = 200
-                }
-            );
-
-        public static readonly FortBonusList EmptyBonusList =
-            new()
-            {
-                param_bonus = WeaponBonus,
-                param_bonus_by_weapon = WeaponBonus,
-                element_bonus = EmptyElementBonus,
-                chara_bonus_by_album = EmptyElementBonus,
-                all_bonus = new() { hp = 200, attack = 200 },
-                dragon_bonus = EmptyDragonBonus,
-                dragon_bonus_by_album = EmptyElementBonus,
-                dragon_time_bonus = new() { dragon_time_bonus = 20 }
-            };
-
         public static FortDetail FortDetail =
             new()
             {
