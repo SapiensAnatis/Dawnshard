@@ -298,6 +298,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                 PartyNo = 1,
                 CharaId = Charas.BondforgedPrince,
                 EquipWeaponBodyId = WeaponBodies.Excalibur,
+                EquipWeaponSkinId = 1,
                 EquipDragonKeyId = 400,
                 EquipTalismanKeyId = 44444,
                 EquipCrestSlotType1CrestId1 = AbilityCrests.ADogsDay,
@@ -311,6 +312,8 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                 EditSkill2CharaId = Charas.SummerCleo,
             };
 
+        DbWeaponSkin skin = new() { DeviceAccountId = DeviceAccountId, WeaponSkinId = 1 };
+
         await this.fixture.AddToDatabase(chara);
         await this.fixture.AddToDatabase(chara1);
         await this.fixture.AddToDatabase(chara2);
@@ -319,6 +322,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddToDatabase(weapon);
         await this.fixture.AddRangeToDatabase(crests);
         await this.fixture.AddToDatabase(talisman);
+        await this.fixture.AddToDatabase(skin);
 
         // Set up party
         DbParty party = await this.fixture.ApiContext.PlayerParties
@@ -340,7 +344,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 
         DbDetailedPartyUnit result = await buildQuery.FirstAsync();
 
-        (result)
+        result
             .Should()
             .BeEquivalentTo(
                 new DbDetailedPartyUnit()
@@ -351,6 +355,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
                     DragonData = dragon,
                     WeaponBodyData = weapon,
                     TalismanData = talisman,
+                    WeaponSkinData = skin,
                     CrestSlotType1CrestList = crests.GetRange(0, 3),
                     CrestSlotType2CrestList = crests.GetRange(3, 2),
                     CrestSlotType3CrestList = crests.GetRange(5, 2),

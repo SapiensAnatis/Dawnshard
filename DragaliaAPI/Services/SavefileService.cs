@@ -270,6 +270,12 @@ public class SavefileService : ISavefileService
 
         this.logger.LogDebug("Added builds");
 
+        this.apiContext.PlayerWeaponSkins.AddRange(
+            MapWithDeviceAccount<DbWeaponSkin>(savefile.weapon_skin_list, deviceAccountId)
+        );
+
+        this.logger.LogDebug("Added weapon skins");
+
         // TODO: unit sets
         // TODO much later: halidom, endeavours, kaleido data
 
@@ -363,6 +369,7 @@ public class SavefileService : ISavefileService
             .Include(x => x.TalismanList)
             .Include(x => x.WeaponBodyList)
             .Include(x => x.MaterialList)
+            .Include(x => x.WeaponSkinList)
             .AsSplitQuery();
     }
 

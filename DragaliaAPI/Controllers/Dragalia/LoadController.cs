@@ -80,6 +80,7 @@ public class LoadController : DragaliaControllerBase
                     .Select(mapper.Map<CastleStoryList>),
                 quest_list = savefile.QuestList.Select(mapper.Map<QuestList>),
                 material_list = savefile.MaterialList.Select(mapper.Map<MaterialList>),
+                weapon_skin_list = savefile.WeaponSkinList.Select(mapper.Map<WeaponSkinList>),
                 fort_bonus_list = bonusList,
                 party_power_data = new(999999),
                 friend_notice = new(0, 0),

@@ -19,6 +19,9 @@ public class DungeonRecordController : DragaliaControllerBase
     private readonly IInventoryRepository inventoryRepository;
     private readonly IUpdateDataService updateDataService;
 
+    private const int QuestCoin = 10_000_000;
+    private const int QuestMana = 20_000;
+
     public DungeonRecordController(
         IQuestRepository questRepository,
         IDungeonService dungeonService,
@@ -65,8 +68,8 @@ public class DungeonRecordController : DragaliaControllerBase
             .SingleAsync();
 
         userData.Exp += 1;
-        userData.ManaPoint += 1000;
-        userData.Coin += 1000;
+        userData.ManaPoint += QuestMana;
+        userData.Coin += QuestCoin;
 
         bool[] clearedMissions = new bool[3]
         {
@@ -138,7 +141,7 @@ public class DungeonRecordController : DragaliaControllerBase
                                 }
                             }
                             : new List<AtgenFirstClearSet>(),
-                        take_coin = 1000,
+                        take_coin = QuestCoin,
                         take_astral_item_quantity = 300,
                         missions_clear_set = clearedMissions
                             .Select((x, index) => new { x, index })
@@ -176,7 +179,7 @@ public class DungeonRecordController : DragaliaControllerBase
                     {
                         take_player_exp = 1,
                         take_chara_exp = 4000,
-                        take_mana = 1000,
+                        take_mana = QuestMana,
                         bonus_factor = 1,
                         mana_bonus_factor = 1,
                         chara_grow_record = session.Party.Select(

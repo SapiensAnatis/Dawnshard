@@ -51,4 +51,7 @@ public class DbPlayer
         new List<DbWeaponBody>();
 
     public virtual ICollection<DbTalisman> TalismanList { get; set; } = new List<DbTalisman>();
+
+    public virtual ICollection<DbWeaponSkin> WeaponSkinList { get; set; } =
+        new List<DbWeaponSkin>();
 }

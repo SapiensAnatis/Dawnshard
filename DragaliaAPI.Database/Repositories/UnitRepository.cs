@@ -306,6 +306,13 @@ public class UnitRepository : BaseRepository, IUnitRepository
                     && x.DeviceAccountId == unit.DeviceAccountId
             )
             .DefaultIfEmpty()
+        from skin in this.apiContext.PlayerWeaponSkins
+            .Where(
+                x =>
+                    x.WeaponSkinId == unit.EquipWeaponSkinId
+                    && x.DeviceAccountId == unit.DeviceAccountId
+            )
+            .DefaultIfEmpty()
         select new DbDetailedPartyUnit
         {
             DeviceAccountId = deviceAccountId,
@@ -325,7 +332,8 @@ public class UnitRepository : BaseRepository, IUnitRepository
                 (charaEs2 == null)
                     ? null
                     : GetEditSkill(charaEs2.CharaId, charaEs2.Skill1Level, charaEs2.Skill2Level),
-            TalismanData = talisman
+            TalismanData = talisman,
+            WeaponSkinData = skin
         };
     }
 

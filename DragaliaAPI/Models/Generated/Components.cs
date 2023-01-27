@@ -9492,10 +9492,13 @@ public class WeaponPassiveAbilityList
 public class WeaponSkinList
 {
     public int weapon_skin_id { get; set; }
-    public int is_new { get; set; }
-    public int gettime { get; set; }
 
-    public WeaponSkinList(int weapon_skin_id, int is_new, int gettime)
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_new { get; set; }
+    public DateTimeOffset gettime { get; set; }
+
+    public WeaponSkinList(int weapon_skin_id, bool is_new, DateTimeOffset gettime)
     {
         this.weapon_skin_id = weapon_skin_id;
         this.is_new = is_new;

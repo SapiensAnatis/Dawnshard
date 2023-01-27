@@ -137,7 +137,6 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                     opts.Excluding(x => x.user_treasure_trade_list);
                     opts.Excluding(x => x.treasure_trade_all_list);
 
-                    opts.Excluding(x => x.weapon_skin_list);
                     opts.Excluding(x => x.weapon_passive_ability_list);
 
                     opts.Excluding(x => x.astral_item_list);

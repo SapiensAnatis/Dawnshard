@@ -43,6 +43,8 @@ public class UnitReverseMapProfile : Profile
             .ForMember(x => x.PartyNo, opts => opts.Ignore())
             .ForMember(x => x.Party, opts => opts.Ignore());
 
+        this.CreateMap<WeaponSkinList, DbWeaponSkin>();
+
         this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
         this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;
     }
