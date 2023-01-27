@@ -20,16 +20,19 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class LoadController : DragaliaControllerBase
 {
     private readonly ISavefileService savefileService;
+    private readonly IBonusService bonusService;
     private readonly IMapper mapper;
     private readonly ILogger<LoadController> logger;
 
     public LoadController(
         ISavefileService savefileService,
+        IBonusService bonusService,
         IMapper mapper,
         ILogger<LoadController> logger
     )
     {
         this.savefileService = savefileService;
+        this.bonusService = bonusService;
         this.mapper = mapper;
         this.logger = logger;
     }
@@ -45,6 +48,10 @@ public class LoadController : DragaliaControllerBase
         DbPlayer savefile = await this.savefileService.Load(this.DeviceAccountId).SingleAsync();
 
         this.logger.LogInformation("{time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
+
+        FortBonusList bonusList = await bonusService.GetBonusList(DeviceAccountId);
+
+        this.logger.LogInformation("{time} ms: Bonus list acquired", stopwatch.ElapsedMilliseconds);
 
         LoadIndexData data =
             new()
@@ -73,6 +80,7 @@ public class LoadController : DragaliaControllerBase
                     .Select(mapper.Map<CastleStoryList>),
                 quest_list = savefile.QuestList.Select(mapper.Map<QuestList>),
                 material_list = savefile.MaterialList.Select(mapper.Map<MaterialList>),
+                fort_bonus_list = bonusList,
                 party_power_data = new(999999),
                 friend_notice = new(0, 0),
                 present_notice = new(0, 0),

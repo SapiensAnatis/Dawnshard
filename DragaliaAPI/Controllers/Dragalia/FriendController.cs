@@ -12,10 +12,12 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class FriendController : DragaliaControllerBase
 {
     private readonly IHelperService helperService;
+    private readonly IBonusService bonusService;
 
-    public FriendController(IHelperService helperService)
+    public FriendController(IHelperService helperService, IBonusService bonusService)
     {
         this.helperService = helperService;
+        this.bonusService = bonusService;
     }
 
     [HttpPost]
@@ -52,13 +54,16 @@ public class FriendController : DragaliaControllerBase
                 .Where(helper => helper.viewer_id == request.support_viewer_id)
                 .FirstOrDefault() ?? new() { is_friend = false };
 
+        // TODO: when helpers are converted to use other account ids, get the bonuses of that account id
+        FortBonusList bonusList = await bonusService.GetBonusList(DeviceAccountId);
+
         FriendGetSupportCharaDetailData response =
             new()
             {
                 support_user_data_detail = new()
                 {
                     user_support_data = helperInfo,
-                    fort_bonus_list = StubData.EmptyBonusList,
+                    fort_bonus_list = bonusList,
                     mana_circle_piece_id_list = Enumerable.Range(
                         1,
                         helperInfo.support_chara.additional_max_level == 20 ? 70 : 50
@@ -70,74 +75,5 @@ public class FriendController : DragaliaControllerBase
             };
 
         return Ok(response);
-    }
-
-    private static class StubData
-    {
-        private static readonly IEnumerable<AtgenParamBonus> WeaponBonus = Enumerable
-            .Range(1, 9)
-            .Select(
-                x =>
-                    new AtgenParamBonus()
-                    {
-                        weapon_type = x,
-                        hp = 200,
-                        attack = 200
-                    }
-            );
-
-        private static readonly IEnumerable<AtgenElementBonus> EmptyElementBonus = Enumerable
-            .Range(1, 5)
-            .Select(
-                x =>
-                    new AtgenElementBonus()
-                    {
-                        elemental_type = x,
-                        hp = 200,
-                        attack = 200
-                    }
-            )
-            .Append(
-                new AtgenElementBonus()
-                {
-                    elemental_type = 99,
-                    hp = 20,
-                    attack = 20
-                }
-            );
-
-        private static readonly IEnumerable<AtgenDragonBonus> EmptyDragonBonus = Enumerable
-            .Range(1, 5)
-            .Select(
-                x =>
-                    new AtgenDragonBonus()
-                    {
-                        elemental_type = x,
-                        dragon_bonus = 200,
-                        hp = 200,
-                        attack = 200
-                    }
-            )
-            .Append(
-                new AtgenDragonBonus()
-                {
-                    elemental_type = 99,
-                    hp = 200,
-                    attack = 200
-                }
-            );
-
-        public static readonly FortBonusList EmptyBonusList =
-            new()
-            {
-                param_bonus = WeaponBonus,
-                param_bonus_by_weapon = WeaponBonus,
-                element_bonus = EmptyElementBonus,
-                chara_bonus_by_album = EmptyElementBonus,
-                all_bonus = new() { hp = 200, attack = 200 },
-                dragon_bonus = EmptyDragonBonus,
-                dragon_bonus_by_album = EmptyElementBonus,
-                dragon_time_bonus = new() { dragon_time_bonus = 20 }
-            };
     }
 }

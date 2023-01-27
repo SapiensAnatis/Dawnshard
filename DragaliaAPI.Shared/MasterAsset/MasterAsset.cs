@@ -28,4 +28,8 @@ public static class MasterAsset
 
     public static FortPlantDetail GetFortPlant(FortPlants id, int level) =>
         FortPlant.Get(int.Parse($"{(int)id}{level:00}"));
+
+    private static readonly Lazy<MasterAssetData<WeaponBodies, WeaponBody>> _WeaponBody =
+        new(() => new("WeaponBody.json", x => x.Id));
+    public static MasterAssetData<WeaponBodies, WeaponBody> WeaponBody => _WeaponBody.Value;
 }

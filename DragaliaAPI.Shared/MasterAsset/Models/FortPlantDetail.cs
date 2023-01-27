@@ -25,8 +25,8 @@ namespace DragaliaAPI.Shared.MasterAsset.Models;
 /// <param name="EffectId">The 'target' of the effect, e.g. adventurers, dragons, weapons.</param>
 /// <param name="EffType1">The parameter of the effect target, e.g. weapon type for weapons.</param>
 /// <param name="EffType2">The parameter of the secondary effect target.</param>
-/// <param name="EffArgs1">The magnitude of the first effect in percentage points.</param>
-/// <param name="EffArgs2">The magnitude of the second effect in percentage points.</param>
+/// <param name="EffArgs1">The magnitude of the HP effects in percentage points.</param>
+/// <param name="EffArgs2">The magnitude of the strength effects in percentage points.</param>
 /// <param name="EventEffectType">Event effect type; always 0 or 1.</param>
 /// <param name="EventEffectArgs"></param>
 /// <param name="MaterialMax">Max dragonfruit that can be claimed from the dragontree.</param>
@@ -57,10 +57,10 @@ public record FortPlantDetail(
     FortEffectTypes EffectId,
     int EffType1,
     int EffType2,
-    double EffArgs1,
-    double EffArgs2,
+    float EffArgs1,
+    float EffArgs2,
     EventEffectTypes EventEffectType,
-    double EventEffectArgs,
+    float EventEffectArgs,
     int MaterialMax,
     int MaterialMaxTime,
     int CostMax,

@@ -30,6 +30,7 @@ public class DungeonStartController : DragaliaControllerBase
     private readonly IDungeonService dungeonService;
     private readonly IHelperService helperService;
     private readonly IUpdateDataService updateDataService;
+    private readonly IBonusService bonusService;
     private readonly IMapper mapper;
     private readonly ILogger<DungeonStartController> logger;
 
@@ -41,6 +42,7 @@ public class DungeonStartController : DragaliaControllerBase
         IDungeonService dungeonService,
         IHelperService helperService,
         IUpdateDataService updateDataService,
+        IBonusService bonusService,
         IMapper mapper,
         ILogger<DungeonStartController> logger
     )
@@ -52,6 +54,7 @@ public class DungeonStartController : DragaliaControllerBase
         this.dungeonService = dungeonService;
         this.helperService = helperService;
         this.updateDataService = updateDataService;
+        this.bonusService = bonusService;
         this.mapper = mapper;
         this.logger = logger;
     }
@@ -119,6 +122,10 @@ public class DungeonStartController : DragaliaControllerBase
 
         this.logger.LogInformation("{time} ms: Built party", stopwatch.ElapsedMilliseconds);
 
+        FortBonusList bonusList = await bonusService.GetBonusList(DeviceAccountId);
+
+        this.logger.LogInformation("{time} ms: Acquired bonus list", stopwatch.ElapsedMilliseconds);
+
         QuestData questInfo = MasterAsset.QuestData.Get(request.quest_id);
 
         /*IEnumerable<int> enemyList = this.enemyListDataService
@@ -165,7 +172,7 @@ public class DungeonStartController : DragaliaControllerBase
                         party_unit_list = detailedPartyUnits
                             .OrderBy(x => x.Position)
                             .Select(mapper.Map<PartyUnitList>),
-                        fort_bonus_list = StubData.EmptyBonusList,
+                        fort_bonus_list = bonusList,
                         event_boost = new() { effect_value = 0, event_effect = 0 },
                         event_passive_grow_list = new List<AtgenEventPassiveUpList>(),
                     },
@@ -252,74 +259,5 @@ public class DungeonStartController : DragaliaControllerBase
         int offset = unit.PartyNo == partyList.First() ? 0 : 4;
         unit.UnitNo += offset;
         return unit;
-    }
-
-    private static class StubData
-    {
-        private static readonly IEnumerable<AtgenParamBonus> WeaponBonus = Enumerable
-            .Range(1, 9)
-            .Select(
-                x =>
-                    new AtgenParamBonus()
-                    {
-                        weapon_type = x,
-                        hp = 200,
-                        attack = 200
-                    }
-            );
-
-        private static readonly IEnumerable<AtgenElementBonus> EmptyElementBonus = Enumerable
-            .Range(1, 5)
-            .Select(
-                x =>
-                    new AtgenElementBonus()
-                    {
-                        elemental_type = x,
-                        hp = 200,
-                        attack = 200
-                    }
-            )
-            .Append(
-                new AtgenElementBonus()
-                {
-                    elemental_type = 99,
-                    hp = 20,
-                    attack = 20
-                }
-            );
-
-        private static readonly IEnumerable<AtgenDragonBonus> EmptyDragonBonus = Enumerable
-            .Range(1, 5)
-            .Select(
-                x =>
-                    new AtgenDragonBonus()
-                    {
-                        elemental_type = x,
-                        dragon_bonus = 200,
-                        hp = 200,
-                        attack = 200
-                    }
-            )
-            .Append(
-                new AtgenDragonBonus()
-                {
-                    elemental_type = 99,
-                    hp = 200,
-                    attack = 200
-                }
-            );
-
-        public static readonly FortBonusList EmptyBonusList =
-            new()
-            {
-                param_bonus = WeaponBonus,
-                param_bonus_by_weapon = WeaponBonus,
-                element_bonus = EmptyElementBonus,
-                chara_bonus_by_album = EmptyElementBonus,
-                all_bonus = new() { hp = 200, attack = 200 },
-                dragon_bonus = EmptyDragonBonus,
-                dragon_bonus_by_album = EmptyElementBonus,
-                dragon_time_bonus = new() { dragon_time_bonus = 20 }
-            };
     }
 }

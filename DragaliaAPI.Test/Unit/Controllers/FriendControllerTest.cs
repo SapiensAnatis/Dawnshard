@@ -11,12 +11,23 @@ public class FriendControllerTest
 {
     private readonly FriendController friendController;
     private readonly Mock<IHelperService> mockHelperService;
+    private readonly Mock<IBonusService> mockBonusService;
 
     public FriendControllerTest()
     {
         this.mockHelperService = new(MockBehavior.Strict);
+        this.mockBonusService = new(MockBehavior.Strict);
 
-        this.friendController = new FriendController(mockHelperService.Object);
+        this.mockBonusService
+            .Setup(x => x.GetBonusList(TestUtils.DeviceAccountId))
+            .ReturnsAsync(new FortBonusList());
+
+        this.friendController = new FriendController(
+            mockHelperService.Object,
+            mockBonusService.Object
+        );
+
+        this.friendController.SetupMockContext();
     }
 
     [Fact]
@@ -49,6 +60,7 @@ public class FriendControllerTest
         data!.support_user_data_detail.is_friend.Should().Be(true);
 
         this.mockHelperService.VerifyAll();
+        this.mockBonusService.VerifyAll();
     }
 
     [Fact]
@@ -84,5 +96,6 @@ public class FriendControllerTest
         data!.support_user_data_detail.is_friend.Should().Be(false);
 
         this.mockHelperService.VerifyAll();
+        this.mockBonusService.VerifyAll();
     }
 }

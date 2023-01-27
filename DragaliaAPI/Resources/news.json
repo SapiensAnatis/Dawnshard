@@ -1,5 +1,10 @@
 [
     {
+        "headline": "Halidom bonuses now accurate-ish",
+        "timestamp": 1674854302,
+        "description": "Element and weapon stat boosts should now be calculated from your Halidom buildings and unlocked weapon bonuses, rather than being set at 200%. However, encyclopedia bonuses will always be sent as the maximum until the encyclopedia is implemented."
+    },
+    {
         "headline": "Mana circles bug fixed",
         "timestamp": 1674589107,
         "description": "A nasty bug has been fixed with coability levels causing UI glitches/softlocks when unlocking mana nodes. If you were previously affected by this issue, please re-test and let us know if you encounter any further issues. Please note that unit stories cannot be unlocked at this time."

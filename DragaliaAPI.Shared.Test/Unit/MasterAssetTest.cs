@@ -271,8 +271,8 @@ public class MasterAssetTest
                     EffectId: FortEffectTypes.Element,
                     EffType1: 1,
                     EffType2: 0,
-                    EffArgs1: 7.0,
-                    EffArgs2: 6.5,
+                    EffArgs1: 7.0f,
+                    EffArgs2: 6.5f,
                     CostMaxTime: 0,
                     CostMax: 0,
                     MaterialMaxTime: 0,
@@ -280,7 +280,51 @@ public class MasterAssetTest
                     StaminaMaxTime: 0,
                     StaminaMax: 0,
                     EventEffectType: 0,
-                    EventEffectArgs: 0.0
+                    EventEffectArgs: 0.0f
+                )
+            );
+    }
+
+    [Fact]
+    public void WeaponBody_Get_ReturnsExpectedProperties()
+    {
+        WeaponBody body = MasterAsset.MasterAsset.WeaponBody.Get(WeaponBodies.EndlessAzureCore);
+
+        body.Should()
+            .BeEquivalentTo(
+                new WeaponBody(
+                    Id: WeaponBodies.EndlessAzureCore,
+                    WeaponType: WeaponTypes.Cane,
+                    Rarity: 5,
+                    ElementalType: UnitElement.Water,
+                    MaxLimitOverCount: 1,
+                    MaxEquipableCount: 4,
+                    BaseHp: 45,
+                    MaxHp1: 151,
+                    MaxHp2: 216,
+                    MaxHp3: 0,
+                    BaseAtk: 97,
+                    MaxAtk1: 324,
+                    MaxAtk2: 590,
+                    MaxAtk3: 0,
+                    LimitOverCountPartyPower1: 100,
+                    LimitOverCountPartyPower2: 150,
+                    CrestSlotType1BaseCount: 2,
+                    CrestSlotType1MaxCount: 3,
+                    CrestSlotType2BaseCount: 2,
+                    CrestSlotType2MaxCount: 2,
+                    CrestSlotType3BaseCount: 0,
+                    CrestSlotType3MaxCount: 0,
+                    WeaponPassiveAbilityGroupId: 10802,
+                    WeaponBodyBuildupGroupId: 572,
+                    MaxWeaponPassiveCharaCount: 1,
+                    WeaponPassiveEffHp: 0.5f,
+                    WeaponPassiveEffAtk: 0.5f,
+                    RewardWeaponSkinId1: 0,
+                    RewardWeaponSkinId2: 0,
+                    RewardWeaponSkinId3: 0,
+                    RewardWeaponSkinId4: 0,
+                    RewardWeaponSkinId5: 0
                 )
             );
     }
