@@ -29,15 +29,37 @@ public class UnitMapProfile : Profile
             .ForMember(x => x.ability_1_level, opts => opts.MapFrom(x => 3))
             .ForMember(x => x.ability_2_level, opts => opts.MapFrom(x => 3));
 
-        this.CreateMap<DbAbilityCrest, GameAbilityCrest>()
-            .ForMember(x => x.ability_1_level, opts => opts.MapFrom(x => 3))
-            .ForMember(x => x.ability_2_level, opts => opts.MapFrom(x => 3));
-
         this.CreateMap<DbWeaponBody, WeaponBodyList>()
             .ForMember(x => x.ability_1_level, opts => opts.Ignore())
             .ForMember(x => x.ability_2_levell, opts => opts.Ignore())
             .ForMember(x => x.skill_no, opts => opts.Ignore())
             .ForMember(x => x.skill_level, opts => opts.Ignore());
+
+        this.CreateMap<DbWeaponSkin, WeaponSkinList>();
+
+        this.CreateMap<DbParty, PartyList>()
+            .ForMember(nameof(PartyList.party_setting_list), opts => opts.MapFrom(x => x.Units));
+
+        this.CreateMap<DbTalisman, TalismanList>();
+
+        this.CreateMap<DbPartyUnit, PartySettingList>()
+            // Deprecated
+            .ForMember(nameof(PartySettingList.equip_weapon_key_id), opts => opts.Ignore())
+            .ForMember(nameof(PartySettingList.equip_amulet_key_id), opts => opts.Ignore())
+            .ForMember(nameof(PartySettingList.equip_amulet_2_key_id), opts => opts.Ignore())
+            .ForMember(nameof(PartySettingList.equip_skin_weapon_id), opts => opts.Ignore());
+
+        this.CreateMap<DbDetailedPartyUnit, PartyUnitList>()
+            .ForMember(
+                x => x.game_weapon_passive_ability_list,
+                opts => opts.MapFrom(x => new List<WeaponPassiveAbilityList>())
+            );
+
+        this.CreateMap<DbAbilityCrest, GameAbilityCrest>()
+            .ForMember(x => x.ability_1_level, opts => opts.MapFrom(x => 3))
+            .ForMember(x => x.ability_2_level, opts => opts.MapFrom(x => 3));
+
+        this.CreateMap<DbWeaponSkin, GameWeaponSkin>();
 
         this.CreateMap<DbWeaponBody, GameWeaponBody>()
             // TODO: actual mapping for this
@@ -46,22 +68,9 @@ public class UnitMapProfile : Profile
             .ForMember(x => x.ability_1_level, opts => opts.MapFrom(x => 2))
             .ForMember(x => x.ability_2_level, opts => opts.MapFrom(x => 2));
 
-        this.CreateMap<DbDetailedPartyUnit, PartyUnitList>()
-            .ForMember(x => x.weapon_skin_data, opts => opts.Ignore())
-            .ForMember(x => x.game_weapon_passive_ability_list, opts => opts.Ignore());
-
         this.CreateMap<DbEditSkillData, EditSkillCharaData>();
 
-        this.CreateMap<DbParty, PartyList>()
-            .ForMember(nameof(PartyList.party_setting_list), opts => opts.MapFrom(x => x.Units));
-
-        this.CreateMap<DbTalisman, TalismanList>();
-
-        this.CreateMap<DbPartyUnit, PartySettingList>()
-            .ForMember(nameof(PartySettingList.equip_weapon_key_id), opts => opts.Ignore())
-            .ForMember(nameof(PartySettingList.equip_amulet_key_id), opts => opts.Ignore())
-            .ForMember(nameof(PartySettingList.equip_amulet_2_key_id), opts => opts.Ignore())
-            .ForMember(nameof(PartySettingList.equip_skin_weapon_id), opts => opts.Ignore());
+        this.DisableConstructorMapping();
 
         this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
         this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
