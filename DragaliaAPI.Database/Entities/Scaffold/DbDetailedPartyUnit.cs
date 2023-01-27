@@ -27,7 +27,7 @@ public class DbDetailedPartyUnit
     public IEnumerable<DbAbilityCrest> CrestSlotType3CrestList { get; set; } =
         Enumerable.Empty<DbAbilityCrest>();
 
-    public object? WeaponSkinData { get; set; } = null;
+    public DbWeaponSkin? WeaponSkinData { get; set; } = null;
 
     public DbTalisman? TalismanData { get; set; } = null;
 
