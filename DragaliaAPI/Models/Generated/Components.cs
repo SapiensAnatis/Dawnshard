@@ -1768,12 +1768,12 @@ public class AtgenDmodeUnitInfo
 [MessagePackObject(true)]
 public class AtgenDragonBonus
 {
-    public int elemental_type { get; set; }
+    public UnitElement elemental_type { get; set; }
     public float dragon_bonus { get; set; }
     public float hp { get; set; }
     public float attack { get; set; }
 
-    public AtgenDragonBonus(int elemental_type, float dragon_bonus, float hp, float attack)
+    public AtgenDragonBonus(UnitElement elemental_type, float dragon_bonus, float hp, float attack)
     {
         this.elemental_type = elemental_type;
         this.dragon_bonus = dragon_bonus;
@@ -1935,11 +1935,11 @@ public class AtgenDuplicateEntityList
 [MessagePackObject(true)]
 public class AtgenElementBonus
 {
-    public int elemental_type { get; set; }
+    public UnitElement elemental_type { get; set; }
     public float hp { get; set; }
     public float attack { get; set; }
 
-    public AtgenElementBonus(int elemental_type, float hp, float attack)
+    public AtgenElementBonus(UnitElement elemental_type, float hp, float attack)
     {
         this.elemental_type = elemental_type;
         this.hp = hp;
@@ -2908,11 +2908,11 @@ public class AtgenPaid
 [MessagePackObject(true)]
 public class AtgenParamBonus
 {
-    public int weapon_type { get; set; }
+    public WeaponTypes weapon_type { get; set; }
     public float hp { get; set; }
     public float attack { get; set; }
 
-    public AtgenParamBonus(int weapon_type, float hp, float attack)
+    public AtgenParamBonus(WeaponTypes weapon_type, float hp, float attack)
     {
         this.weapon_type = weapon_type;
         this.hp = hp;
@@ -9367,7 +9367,7 @@ public class WalletBalance
 [MessagePackObject(true)]
 public class WeaponBodyList
 {
-    public int weapon_body_id { get; set; }
+    public WeaponBodies weapon_body_id { get; set; }
     public int buildup_count { get; set; }
     public int limit_break_count { get; set; }
     public int limit_over_count { get; set; }
@@ -9386,7 +9386,7 @@ public class WeaponBodyList
     public int ability_2_levell { get; set; }
 
     public WeaponBodyList(
-        int weapon_body_id,
+        WeaponBodies weapon_body_id,
         int buildup_count,
         int limit_break_count,
         int limit_over_count,

@@ -310,6 +310,21 @@ public class DungeonRecordController : DragaliaControllerBase
             Materials.CoronalHeart,
             Materials.EbonyHeart,
             Materials.LongingHeart,
+            // === Tomes ===
+            Materials.FlameTome,
+            Materials.WaterTome,
+            Materials.WindTome,
+            Materials.LightTome,
+            Materials.ShadowTome,
+            // === Augs ===
+            Materials.AmplifyingCrystal,
+            Materials.AmplifyingDragonscale,
+            Materials.AmplifyingGemstone,
+            Materials.AmplifyingJewel,
+            Materials.FortifyingCrystal,
+            Materials.FortifyingDragonscale,
+            Materials.FortifyingGemstone,
+            Materials.FortifyingJewel,
             // === Misc ===
             Materials.Omnicite,
             Materials.LookingGlass,
