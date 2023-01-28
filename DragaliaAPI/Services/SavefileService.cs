@@ -337,6 +337,9 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerMaterials.RemoveRange(
             this.apiContext.PlayerMaterials.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PlayerTalismans.RemoveRange(
+            this.apiContext.PlayerTalismans.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
         this.apiContext.PlayerFortBuilds.RemoveRange(
             this.apiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == deviceAccountId)
         );
