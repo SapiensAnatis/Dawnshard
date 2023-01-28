@@ -93,6 +93,7 @@ builder.Services
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<IBonusService, BonusService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
+    .AddTransient<ILogEventEnricher, PodNameEnricher>()
     .AddHttpClient<IBaasRequestHelper, BaasRequestHelper>();
 
 WebApplication app = builder.Build();
