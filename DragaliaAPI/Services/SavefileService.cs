@@ -429,6 +429,19 @@ public class SavefileService : ISavefileService
         await this.AddDefaultParties(deviceAccountId);
         await this.AddDefaultCharacters(deviceAccountId);
 
+        // This needs to be in the save or the halidom screen will softlock
+        // TODO: Move this to the tutorial step which gives you access to the Halidom,
+        // so that saves imported without it will also avoid the softlock
+        await apiContext.PlayerFortBuilds.AddAsync(
+            new DbFortBuild()
+            {
+                DeviceAccountId = deviceAccountId,
+                PlantId = FortPlants.TheHalidom,
+                PositionX = 16, // Default Halidom position
+                PositionZ = 17,
+            }
+        );
+
         await this.apiContext.SaveChangesAsync();
     }
 
