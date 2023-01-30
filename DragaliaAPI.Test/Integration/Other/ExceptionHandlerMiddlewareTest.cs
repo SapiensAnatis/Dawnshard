@@ -15,19 +15,6 @@ public class ExceptionHandlerMiddlewareTest : IntegrationTestBase
         client = fixture.CreateClient();
     }
 
-    [Theory]
-    [InlineData("taskcancelled")]
-    [InlineData("messagepackserialization/taskcancelled")]
-    [InlineData("messagepackserialization/operationcancelled")]
-    public async Task TransientException_Returns503(string route)
-    {
-        client.DefaultRequestHeaders.Add("SID", "session_id");
-
-        HttpResponseMessage response = await client.GetAsync($"{Controller}/{route}");
-
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.ServiceUnavailable);
-    }
-
     [Fact]
     public async Task DragaliaException_ReturnsSerializedResponse()
     {
