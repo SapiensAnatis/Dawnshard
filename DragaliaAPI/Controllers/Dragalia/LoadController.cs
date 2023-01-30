@@ -87,7 +87,7 @@ public class LoadController : DragaliaControllerBase
                 present_notice = new(0, 0),
                 guild_notice = new(0, 0, 0, 0, 0),
                 //fort_plant_list = buildSummary,
-                shop_notice = new ShopNotice(0),
+                shop_notice = new(),
                 server_time = DateTimeOffset.UtcNow,
                 stamina_multi_system_max = 99,
                 stamina_multi_user_max = 12,

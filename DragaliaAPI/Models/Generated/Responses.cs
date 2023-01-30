@@ -4550,10 +4550,18 @@ public class MypageInfoData
     public bool friend { get; set; }
     public int achievement_cnt { get; set; }
     public UpdateDataList update_data_list { get; set; }
-    public int is_receive_event_damage_reward { get; set; }
-    public int is_view_start_dash { get; set; }
-    public int is_view_dream_select { get; set; }
-    public int is_shop_notification { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_receive_event_damage_reward { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_view_start_dash { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_view_dream_select { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_shop_notification { get; set; }
     public RepeatData repeat_data { get; set; }
     public IEnumerable<UserSummonList> user_summon_list { get; set; }
     public IEnumerable<QuestEventScheduleList> quest_event_schedule_list { get; set; }
@@ -4565,10 +4573,10 @@ public class MypageInfoData
         bool friend,
         int achievement_cnt,
         UpdateDataList update_data_list,
-        int is_receive_event_damage_reward,
-        int is_view_start_dash,
-        int is_view_dream_select,
-        int is_shop_notification,
+        bool is_receive_event_damage_reward,
+        bool is_view_start_dash,
+        bool is_view_dream_select,
+        bool is_shop_notification,
         RepeatData repeat_data,
         IEnumerable<UserSummonList> user_summon_list,
         IEnumerable<QuestEventScheduleList> quest_event_schedule_list,
