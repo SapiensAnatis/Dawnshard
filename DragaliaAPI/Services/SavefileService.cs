@@ -97,9 +97,6 @@ public class SavefileService : ISavefileService
             RedisOptions
         );
 
-        using IDbContextTransaction transaction =
-            await this.apiContext.Database.BeginTransactionAsync();
-
         // Preserve the existing viewer ID if there is one.
         // Could reassign, but this makes it easier for people to remember their ID.
         long? oldViewerId = await this.apiContext.PlayerUserData
@@ -113,187 +110,200 @@ public class SavefileService : ISavefileService
             deviceAccountId
         );
 
-        this.Delete(deviceAccountId);
+        await this.apiContext.Database.BeginTransactionAsync();
 
-        await this.apiContext.Players.AddAsync(new DbPlayer() { AccountId = deviceAccountId });
-
-        this.logger.LogDebug("Added new Player entry");
-
-        // This has JsonRequired so this should never be triggered
-        ArgumentNullException.ThrowIfNull(savefile.user_data);
-
-        apiContext.PlayerUserData.Add(
-            this.mapper.Map<DbPlayerUserData>(
-                savefile.user_data,
-                opts =>
-                    opts.AfterMap(
-                        (_, dest) =>
-                        {
-                            dest.ViewerId = oldViewerId ?? default;
-                            dest.DeviceAccountId = deviceAccountId;
-                            dest.Crystal += 1_200_000;
-                            dest.LastSaveImportTime = DateTimeOffset.UtcNow;
-                        }
-                    )
-            )
-        );
-
-        this.logger.LogDebug("Added UserData entry");
-
-        this.apiContext.PlayerCharaData.AddRange(
-            this.MapWithDeviceAccount<DbPlayerCharaData>(savefile.chara_list, deviceAccountId)
-        );
-
-        this.logger.LogDebug("Added character entries");
-
-        this.apiContext.PlayerDragonReliability.AddRange(
-            this.MapWithDeviceAccount<DbPlayerDragonReliability>(
-                savefile.dragon_reliability_list,
-                deviceAccountId
-            )
-        );
-
-        // Build key id mappings for dragons and talismans
-        Dictionary<long, DbPlayerDragonData> dragonKeyIds = new();
-
-        foreach (DragonList d in savefile.dragon_list ?? new List<DragonList>())
+        try
         {
-            ulong oldKeyId = d.dragon_key_id;
-            DbPlayerDragonData dbEntry = MapWithDeviceAccount<DbPlayerDragonData>(
-                d,
-                deviceAccountId
+            this.Delete(deviceAccountId);
+
+            await this.apiContext.Players.AddAsync(new DbPlayer() { AccountId = deviceAccountId });
+
+            this.logger.LogDebug("Added new Player entry");
+
+            // This has JsonRequired so this should never be triggered
+            ArgumentNullException.ThrowIfNull(savefile.user_data);
+
+            apiContext.PlayerUserData.Add(
+                this.mapper.Map<DbPlayerUserData>(
+                    savefile.user_data,
+                    opts =>
+                        opts.AfterMap(
+                            (_, dest) =>
+                            {
+                                dest.ViewerId = oldViewerId ?? default;
+                                dest.DeviceAccountId = deviceAccountId;
+                                dest.Crystal += 1_200_000;
+                                dest.LastSaveImportTime = DateTimeOffset.UtcNow;
+                            }
+                        )
+                )
             );
-            DbPlayerDragonData addedEntry = (
-                await this.apiContext.PlayerDragonData.AddAsync(dbEntry)
-            ).Entity;
 
-            dragonKeyIds.Add((long)oldKeyId, addedEntry);
-        }
+            this.logger.LogDebug("Added UserData entry");
 
-        this.logger.LogDebug("Added dragon entries and mapped key ids");
+            this.apiContext.PlayerCharaData.AddRange(
+                this.MapWithDeviceAccount<DbPlayerCharaData>(savefile.chara_list, deviceAccountId)
+            );
 
-        Dictionary<long, DbTalisman> talismanKeyIds = new();
+            this.logger.LogDebug("Added character entries");
 
-        foreach (TalismanList t in savefile.talisman_list ?? new List<TalismanList>())
-        {
-            ulong oldKeyId = t.talisman_key_id;
-            DbTalisman dbEntry = MapWithDeviceAccount<DbTalisman>(t, deviceAccountId);
-            DbTalisman addedEntry = (
-                await this.apiContext.PlayerTalismans.AddAsync(dbEntry)
-            ).Entity;
+            this.apiContext.PlayerDragonReliability.AddRange(
+                this.MapWithDeviceAccount<DbPlayerDragonReliability>(
+                    savefile.dragon_reliability_list,
+                    deviceAccountId
+                )
+            );
 
-            talismanKeyIds.Add((long)oldKeyId, addedEntry);
-        }
+            // Build key id mappings for dragons and talismans
+            Dictionary<long, DbPlayerDragonData> dragonKeyIds = new();
 
-        this.logger.LogDebug("Added portrait prints and mapped key ids");
-
-        // Must save changes for key ids to update
-        await this.apiContext.SaveChangesAsync();
-
-        if (savefile.party_list is not null)
-        {
-            // Update key ids in parties
-            List<DbParty> parties = savefile.party_list
-                .Select(x => MapWithDeviceAccount<DbParty>(x, deviceAccountId))
-                .ToList();
-
-            foreach (DbParty party in parties)
+            foreach (DragonList d in savefile.dragon_list ?? new List<DragonList>())
             {
-                foreach (DbPartyUnit unit in party.Units)
-                {
-                    unit.EquipDragonKeyId = dragonKeyIds.TryGetValue(
-                        unit.EquipDragonKeyId,
-                        out DbPlayerDragonData? dragon
-                    )
-                        ? dragon.DragonKeyId
-                        : 0;
+                ulong oldKeyId = d.dragon_key_id;
+                DbPlayerDragonData dbEntry = MapWithDeviceAccount<DbPlayerDragonData>(
+                    d,
+                    deviceAccountId
+                );
+                DbPlayerDragonData addedEntry = (
+                    await this.apiContext.PlayerDragonData.AddAsync(dbEntry)
+                ).Entity;
 
-                    unit.EquipTalismanKeyId = talismanKeyIds.TryGetValue(
-                        unit.EquipTalismanKeyId,
-                        out DbTalisman? talisman
-                    )
-                        ? talisman.TalismanKeyId
-                        : 0;
-                }
+                dragonKeyIds.Add((long)oldKeyId, addedEntry);
             }
 
-            this.apiContext.PlayerParties.AddRange(parties);
-            this.logger.LogDebug("Added imported parties");
+            this.logger.LogDebug("Added dragon entries and mapped key ids");
+
+            Dictionary<long, DbTalisman> talismanKeyIds = new();
+
+            foreach (TalismanList t in savefile.talisman_list ?? new List<TalismanList>())
+            {
+                ulong oldKeyId = t.talisman_key_id;
+                DbTalisman dbEntry = MapWithDeviceAccount<DbTalisman>(t, deviceAccountId);
+                DbTalisman addedEntry = (
+                    await this.apiContext.PlayerTalismans.AddAsync(dbEntry)
+                ).Entity;
+
+                talismanKeyIds.Add((long)oldKeyId, addedEntry);
+            }
+
+            this.logger.LogDebug("Added portrait prints and mapped key ids");
+
+            // Must save changes for key ids to update
+            await this.apiContext.SaveChangesAsync();
+
+            if (savefile.party_list is not null)
+            {
+                // Update key ids in parties
+                List<DbParty> parties = savefile.party_list
+                    .Select(x => MapWithDeviceAccount<DbParty>(x, deviceAccountId))
+                    .ToList();
+
+                foreach (DbParty party in parties)
+                {
+                    foreach (DbPartyUnit unit in party.Units)
+                    {
+                        unit.EquipDragonKeyId = dragonKeyIds.TryGetValue(
+                            unit.EquipDragonKeyId,
+                            out DbPlayerDragonData? dragon
+                        )
+                            ? dragon.DragonKeyId
+                            : 0;
+
+                        unit.EquipTalismanKeyId = talismanKeyIds.TryGetValue(
+                            unit.EquipTalismanKeyId,
+                            out DbTalisman? talisman
+                        )
+                            ? talisman.TalismanKeyId
+                            : 0;
+                    }
+                }
+
+                this.apiContext.PlayerParties.AddRange(parties);
+                this.logger.LogDebug("Added imported parties");
+            }
+            else
+            {
+                await this.AddDefaultParties(deviceAccountId);
+                this.logger.LogDebug("Added new parties");
+            }
+
+            this.apiContext.PlayerAbilityCrests.AddRange(
+                MapWithDeviceAccount<DbAbilityCrest>(savefile.ability_crest_list, deviceAccountId)
+            );
+
+            this.logger.LogDebug("Added wyrmprints");
+
+            this.apiContext.PlayerWeapons.AddRange(
+                MapWithDeviceAccount<DbWeaponBody>(savefile.weapon_body_list, deviceAccountId)
+            );
+
+            this.logger.LogDebug("Added weapons");
+
+            this.apiContext.PlayerQuests.AddRange(
+                MapWithDeviceAccount<DbQuest>(savefile.quest_list, deviceAccountId)
+            );
+
+            this.logger.LogDebug("Added wyrmprints");
+
+            this.apiContext.PlayerStoryState.AddRange(
+                MapWithDeviceAccount<DbPlayerStoryState>(savefile.quest_story_list, deviceAccountId)
+            );
+
+            this.apiContext.PlayerStoryState.AddRange(
+                MapWithDeviceAccount<DbPlayerStoryState>(savefile.unit_story_list, deviceAccountId)
+            );
+
+            this.apiContext.PlayerStoryState.AddRange(
+                MapWithDeviceAccount<DbPlayerStoryState>(
+                    savefile.castle_story_list,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug("Added stories");
+
+            this.apiContext.PlayerMaterials.AddRange(
+                MapWithDeviceAccount<DbPlayerMaterial>(savefile.material_list, deviceAccountId)
+            );
+
+            this.logger.LogDebug("Added materials");
+
+            this.apiContext.PlayerFortBuilds.AddRange(
+                MapWithDeviceAccount<DbFortBuild>(savefile.build_list, deviceAccountId)
+            );
+
+            this.logger.LogDebug("Added builds");
+
+            this.apiContext.PlayerWeaponSkins.AddRange(
+                MapWithDeviceAccount<DbWeaponSkin>(savefile.weapon_skin_list, deviceAccountId)
+            );
+
+            this.logger.LogDebug("Added weapon skins");
+
+            // TODO: unit sets
+            // TODO much later: halidom, endeavours, kaleido data
+
+            this.logger.LogInformation(
+                "Mapping completed after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
+            await apiContext.SaveChangesAsync();
+            await this.apiContext.Database.CommitTransactionAsync();
+
+            // Remove lock
+            await this.cache.RemoveAsync(RedisSchema.PendingImport(deviceAccountId));
+
+            this.logger.LogInformation(
+                "Saved changes after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
         }
-        else
+        catch
         {
-            await this.AddDefaultParties(deviceAccountId);
-            this.logger.LogDebug("Added new parties");
+            await this.apiContext.Database.RollbackTransactionAsync();
+            throw;
         }
-
-        this.apiContext.PlayerAbilityCrests.AddRange(
-            MapWithDeviceAccount<DbAbilityCrest>(savefile.ability_crest_list, deviceAccountId)
-        );
-
-        this.logger.LogDebug("Added wyrmprints");
-
-        this.apiContext.PlayerWeapons.AddRange(
-            MapWithDeviceAccount<DbWeaponBody>(savefile.weapon_body_list, deviceAccountId)
-        );
-
-        this.logger.LogDebug("Added weapons");
-
-        this.apiContext.PlayerQuests.AddRange(
-            MapWithDeviceAccount<DbQuest>(savefile.quest_list, deviceAccountId)
-        );
-
-        this.logger.LogDebug("Added wyrmprints");
-
-        this.apiContext.PlayerStoryState.AddRange(
-            MapWithDeviceAccount<DbPlayerStoryState>(savefile.quest_story_list, deviceAccountId)
-        );
-
-        this.apiContext.PlayerStoryState.AddRange(
-            MapWithDeviceAccount<DbPlayerStoryState>(savefile.unit_story_list, deviceAccountId)
-        );
-
-        this.apiContext.PlayerStoryState.AddRange(
-            MapWithDeviceAccount<DbPlayerStoryState>(savefile.castle_story_list, deviceAccountId)
-        );
-
-        this.logger.LogDebug("Added stories");
-
-        this.apiContext.PlayerMaterials.AddRange(
-            MapWithDeviceAccount<DbPlayerMaterial>(savefile.material_list, deviceAccountId)
-        );
-
-        this.logger.LogDebug("Added materials");
-
-        this.apiContext.PlayerFortBuilds.AddRange(
-            MapWithDeviceAccount<DbFortBuild>(savefile.build_list, deviceAccountId)
-        );
-
-        this.logger.LogDebug("Added builds");
-
-        this.apiContext.PlayerWeaponSkins.AddRange(
-            MapWithDeviceAccount<DbWeaponSkin>(savefile.weapon_skin_list, deviceAccountId)
-        );
-
-        this.logger.LogDebug("Added weapon skins");
-
-        // TODO: unit sets
-        // TODO much later: halidom, endeavours, kaleido data
-
-        this.logger.LogInformation(
-            "Mapping completed after {t} ms",
-            stopwatch.Elapsed.TotalMilliseconds
-        );
-
-        await apiContext.SaveChangesAsync();
-        await this.apiContext.Database.CommitTransactionAsync();
-
-        // Remove lock
-        await this.cache.RemoveAsync(RedisSchema.PendingImport(deviceAccountId));
-
-        this.logger.LogInformation(
-            "Saved changes after {t} ms",
-            stopwatch.Elapsed.TotalMilliseconds
-        );
     }
 
     private void Delete(string deviceAccountId)
@@ -401,6 +411,9 @@ public class SavefileService : ISavefileService
 
     public async Task CreateBase(string deviceAccountId)
     {
+        this.logger.LogInformation("Creating new savefile for account ID {id}", deviceAccountId);
+
+        this.Delete(deviceAccountId);
         this.apiContext.Players.Add(new() { AccountId = deviceAccountId });
 
         DbPlayerUserData userData =
@@ -421,8 +434,6 @@ public class SavefileService : ISavefileService
 
     public async Task Create(string deviceAccountId)
     {
-        this.logger.LogInformation("Creating new savefile for account ID {id}", deviceAccountId);
-
         await this.CreateBase(deviceAccountId);
 
         await this.AddDefaultWyrmprints(deviceAccountId);

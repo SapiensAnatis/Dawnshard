@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using AutoMapper;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
@@ -99,9 +100,9 @@ public class AuthService : IAuthService
                 this.logger.LogDebug("UserData: {@userData}", pendingSave.user_data);
                 await this.savefileService.ThreadSafeImport(jwt.Subject, pendingSave);
             }
-            catch (JsonException e)
+            catch (Exception e) when (e is JsonException or AutoMapperMappingException)
             {
-                this.logger.LogWarning(e, "Savefile had invalid JSON.");
+                this.logger.LogWarning(e, "Savefile was invalid.");
             }
             catch (Exception e)
             {
@@ -110,7 +111,7 @@ public class AuthService : IAuthService
             }
         }
 
-        long viewerId = await this.DoLogin(jwt.Subject);
+        long viewerId = await this.GetViewerId(jwt.Subject);
         string sessionId = await this.sessionService.CreateSession(idToken, jwt.Subject, viewerId);
 
         using IDisposable vIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
@@ -172,11 +173,17 @@ public class AuthService : IAuthService
         return validationResult;
     }
 
-    private async Task<long> DoLogin(string accountId)
+    private async Task<long> GetViewerId(string accountId)
     {
         IQueryable<DbPlayerUserData> userDataQuery = this.userDataRepository.GetUserData(accountId);
 
         DbPlayerUserData? userData = await userDataQuery.SingleOrDefaultAsync();
+
+        this.logger.LogDebug(
+            "UserData query result for id {accountId}: {userData}",
+            accountId,
+            userData
+        );
 
         if (userData is null)
             await this.savefileService.Create(accountId);
