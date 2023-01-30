@@ -18,7 +18,7 @@ public class FortTest : IntegrationTestBase
         this.fixture = fixture;
         this.client = fixture.CreateClient();
 
-        TestUtils.ApplyDateTimeAssertionOptions();
+        TestUtils.ApplyDateTimeAssertionOptions(thresholdSec: 2);
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public class FortTest : IntegrationTestBase
                 PositionZ = 10,
                 BuildStartDate = start,
                 BuildEndDate = end,
-                IsNew = true,
+                IsNew = false,
                 LastIncomeDate = income, // Axe dojos don't make you money but let's pretend they do
             }
         );
@@ -54,23 +54,35 @@ public class FortTest : IntegrationTestBase
             )
         ).data.build_list
             .Should()
-            .BeEquivalentTo(
-                new List<BuildList>()
+            .ContainEquivalentOf(
+                new BuildList()
                 {
-                    new()
-                    {
-                        plant_id = FortPlants.AxeDojo,
-                        level = 10,
-                        position_x = 10,
-                        position_z = 10,
-                        build_start_date = start,
-                        build_end_date = end,
-                        fort_plant_detail_id = 10050410,
-                        build_status = FortBuildStatus.Construction,
-                        is_new = true,
-                        remain_time = end - DateTimeOffset.UtcNow,
-                        last_income_time = DateTimeOffset.UtcNow - income
-                    }
+                    plant_id = FortPlants.TheHalidom,
+                    level = 1,
+                    fort_plant_detail_id = 10010101,
+                    position_x = 16, // Default Halidom position
+                    position_z = 17,
+                    last_income_time = DateTime.UtcNow - DateTimeOffset.UnixEpoch,
+                    is_new = false,
+                    build_start_date = DateTimeOffset.UnixEpoch,
+                    build_end_date = DateTimeOffset.UnixEpoch,
+                },
+                opts => opts.Excluding(x => x.build_id)
+            )
+            .And.ContainEquivalentOf(
+                new BuildList()
+                {
+                    plant_id = FortPlants.AxeDojo,
+                    level = 10,
+                    position_x = 10,
+                    position_z = 10,
+                    build_start_date = start,
+                    build_end_date = end,
+                    fort_plant_detail_id = 10050410,
+                    build_status = FortBuildStatus.Construction,
+                    is_new = false,
+                    remain_time = end - DateTimeOffset.UtcNow,
+                    last_income_time = DateTimeOffset.UtcNow - income
                 },
                 opts => opts.Excluding(x => x.build_id)
             );

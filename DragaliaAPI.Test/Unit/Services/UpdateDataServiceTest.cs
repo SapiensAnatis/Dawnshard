@@ -121,11 +121,11 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             new()
             {
                 DeviceAccountId = deviceAccountId,
-                BuildId = 1,
+                BuildId = 4000,
                 Level = 2,
                 PositionX = 3,
                 PositionZ = 4,
-                PlantId = FortPlants.AbyssalBell,
+                PlantId = FortPlants.IronWeatherVane,
                 IsNew = true,
                 LastIncomeDate = DateTimeOffset.FromUnixTimeSeconds(5),
                 BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(10),

@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using FluentAssertions.Execution;
@@ -133,7 +134,10 @@ public class DeleteSavefileTest : IClassFixture<IntegrationTestFixture>
 
             storedSavefile.quest_story_list.Should().BeEmpty();
             storedSavefile.castle_story_list.Should().BeEmpty();
-            storedSavefile.build_list.Should().BeEmpty();
+            storedSavefile.build_list
+                .Should()
+                .ContainSingle()
+                .And.AllSatisfy(x => x.plant_id = FortPlants.TheHalidom);
         }
     }
 }
