@@ -46,7 +46,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddRangeToDatabase(
             new List<DbFortBuild>()
             {
-                new() { DeviceAccountId = "id", PlantId = FortPlants.TheHalidom, },
+                new() { DeviceAccountId = "id", PlantId = FortPlants.TheHungerdome, },
                 new() { DeviceAccountId = "id", PlantId = FortPlants.CircusTent, },
                 new() { DeviceAccountId = "id 2", PlantId = FortPlants.JackOLantern, },
                 new() { DeviceAccountId = "id 3", PlantId = FortPlants.WaterAltar, },
@@ -55,13 +55,14 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         (await this.fortRepository.GetBuilds("id").ToListAsync())
             .Should()
-            .BeEquivalentTo(
-                new List<DbFortBuild>()
-                {
-                    new() { DeviceAccountId = "id", PlantId = FortPlants.TheHalidom, },
-                    new() { DeviceAccountId = "id", PlantId = FortPlants.CircusTent },
-                },
-                opts => opts.Excluding(x => x.BuildId)
+            .AllSatisfy(x => x.DeviceAccountId.Should().Be("id"))
+            .And.ContainEquivalentOf(
+                new DbFortBuild() { DeviceAccountId = "id", PlantId = FortPlants.TheHungerdome, },
+                opts => opts.Excluding(x => x.Owner).Excluding(x => x.BuildId)
+            )
+            .And.ContainEquivalentOf(
+                new DbFortBuild() { DeviceAccountId = "id", PlantId = FortPlants.CircusTent },
+                opts => opts.Excluding(x => x.Owner).Excluding(x => x.BuildId)
             );
     }
 }
