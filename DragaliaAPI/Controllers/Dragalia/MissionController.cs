@@ -22,7 +22,7 @@ public class MissionController : DragaliaControllerBase
         private static readonly List<AlbumMissionList> albumMissions =
             new() { new(10010101, 0, 0, 0, 0) };
         private static readonly AtgenNormalMissionNotice emptyMissionNotice =
-            new(false, 0, 0, 0, 0, 0, new List<int>());
+            new(0, 0, 0, 0, 0, 0, new List<int>());
 
         public static readonly MissionNotice EmptyMissionNoticeData =
             new(
