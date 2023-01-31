@@ -2678,8 +2678,7 @@ public class AtgenNeedUnitList
 [MessagePackObject(true)]
 public class AtgenNormalMissionNotice
 {
-    [MessagePackFormatter(typeof(BoolToIntFormatter))]
-    public bool is_update { get; set; }
+    public int is_update { get; set; }
     public int all_mission_count { get; set; }
     public int completed_mission_count { get; set; }
     public int receivable_reward_count { get; set; }
@@ -2688,7 +2687,7 @@ public class AtgenNormalMissionNotice
     public IEnumerable<int> new_complete_mission_id_list { get; set; }
 
     public AtgenNormalMissionNotice(
-        bool is_update,
+        int is_update,
         int all_mission_count,
         int completed_mission_count,
         int receivable_reward_count,
@@ -8264,10 +8263,9 @@ public class SettingSupport
 [MessagePackObject(true)]
 public class ShopNotice
 {
-    [MessagePackFormatter(typeof(BoolToIntFormatter))]
-    public bool is_shop_notification { get; set; }
+    public int is_shop_notification { get; set; }
 
-    public ShopNotice(bool is_shop_notification)
+    public ShopNotice(int is_shop_notification)
     {
         this.is_shop_notification = is_shop_notification;
     }
