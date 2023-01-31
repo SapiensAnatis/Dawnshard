@@ -207,8 +207,8 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.GreatwyrmMercury,
-                                buildup_count = 40,
+                                ability_crest_id = AbilityCrests.DragonsNest,
+                                buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
                                 attack_plus_count = 50,
@@ -739,8 +739,8 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.SaintStarfallsCircus,
-                                buildup_count = 40,
+                                ability_crest_id = AbilityCrests.DragonsNest,
+                                buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
                                 attack_plus_count = 50,
@@ -872,8 +872,8 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.SaintStarfallsCircus,
-                                buildup_count = 40,
+                                ability_crest_id = AbilityCrests.DragonsNest,
+                                buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
                                 attack_plus_count = 50,
@@ -906,7 +906,7 @@ public class HelperService : IHelperService
                     new()
                     {
                         viewer_id = 1007,
-                        name = "jang",
+                        name = "no",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
                         emblem_id = 10250302,
@@ -1005,8 +1005,8 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.AChoiceBlend,
-                                buildup_count = 40,
+                                ability_crest_id = AbilityCrests.DragonsNest,
+                                buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
                                 attack_plus_count = 50,
@@ -1138,8 +1138,8 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WhataHandful,
-                                buildup_count = 40,
+                                ability_crest_id = AbilityCrests.DragonsNest,
+                                buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
                                 attack_plus_count = 50,
@@ -1537,8 +1537,8 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.LordoftheSkies,
-                                buildup_count = 40,
+                                ability_crest_id = AbilityCrests.DragonsNest,
+                                buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
                                 attack_plus_count = 50,
@@ -1670,8 +1670,8 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.LordoftheSkies,
-                                buildup_count = 40,
+                                ability_crest_id = AbilityCrests.DragonsNest,
+                                buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
                                 attack_plus_count = 50,
@@ -1936,8 +1936,8 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WhataHandful,
-                                buildup_count = 40,
+                                ability_crest_id = AbilityCrests.DragonsNest,
+                                buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
                                 attack_plus_count = 50,
@@ -2069,8 +2069,8 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.WhataHandful,
-                                buildup_count = 40,
+                                ability_crest_id = AbilityCrests.DragonsNest,
+                                buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
                                 attack_plus_count = 50,
@@ -2202,8 +2202,8 @@ public class HelperService : IHelperService
                             },
                             new()
                             {
-                                ability_crest_id = AbilityCrests.LordoftheSkies,
-                                buildup_count = 40,
+                                ability_crest_id = AbilityCrests.DragonsNest,
+                                buildup_count = 20,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
                                 attack_plus_count = 50,
@@ -2239,103 +2239,103 @@ public class HelperService : IHelperService
                     new()
                     {
                         viewer_id = 1000,
-                        gettable_mana_point = 25,
-                        is_friend = false
+                        gettable_mana_point = 50,
+                        is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1001,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1002,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1003,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1004,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1005,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1006,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1007,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1008,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1009,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1010,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1011,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1012,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1013,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1014,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1015,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                     new()
                     {
                         viewer_id = 1016,
-                        gettable_mana_point = 25,
+                        gettable_mana_point = 50,
                         is_friend = true
                     },
                 }
