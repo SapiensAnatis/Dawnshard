@@ -1,6 +1,6 @@
 .env
-**/launchSettings.json
-**/appsettings.Development.json
+*/**/launchSettings.json
+*/**/appsettings.Development.json
 .idea/*
 
 ## Ignore Visual Studio temporary files, build results, and
