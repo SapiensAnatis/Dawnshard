@@ -15,9 +15,11 @@ public class CustomMessagePackOutputFormatter : MessagePackOutputFormatter
     public const string ContentType = "application/octet-stream";
     private readonly MessagePackSerializerOptions options;
 
-    public CustomMessagePackOutputFormatter() : this(null) { }
+    public CustomMessagePackOutputFormatter()
+        : this(null) { }
 
-    public CustomMessagePackOutputFormatter(MessagePackSerializerOptions options) : base(options)
+    public CustomMessagePackOutputFormatter(MessagePackSerializerOptions options)
+        : base(options)
     {
         this.options = options;
 
@@ -34,9 +36,11 @@ public class CustomMessagePackInputFormatter : MessagePackInputFormatter
     private const string ContentType = "application/octet-stream";
     private readonly MessagePackSerializerOptions options;
 
-    public CustomMessagePackInputFormatter() : this(null) { }
+    public CustomMessagePackInputFormatter()
+        : this(null) { }
 
-    public CustomMessagePackInputFormatter(MessagePackSerializerOptions options) : base(options)
+    public CustomMessagePackInputFormatter(MessagePackSerializerOptions options)
+        : base(options)
     {
         this.options = options;
 

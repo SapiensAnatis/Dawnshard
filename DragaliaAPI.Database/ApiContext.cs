@@ -10,7 +10,8 @@ namespace DragaliaAPI.Database;
 /// <remarks>Do not use this class directly -- make a repository method instead. This rule is enforced to make queries easy to unit test.</remarks>
 public class ApiContext : DbContext
 {
-    public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
+    public ApiContext(DbContextOptions<ApiContext> options)
+        : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,13 +34,29 @@ public class ApiContext : DbContext
 
         modelBuilder
             .Entity<DbPlayerStoryState>()
-            .HasKey(key => new { key.DeviceAccountId, key.StoryType, key.StoryId });
+            .HasKey(
+                key =>
+                    new
+                    {
+                        key.DeviceAccountId,
+                        key.StoryType,
+                        key.StoryId
+                    }
+            );
 
         modelBuilder.Entity<DbParty>().HasKey(e => new { e.DeviceAccountId, e.PartyNo });
 
         modelBuilder
             .Entity<DbSetUnit>()
-            .HasKey(key => new { key.DeviceAccountId, key.CharaId, key.UnitSetNo });
+            .HasKey(
+                key =>
+                    new
+                    {
+                        key.DeviceAccountId,
+                        key.CharaId,
+                        key.UnitSetNo
+                    }
+            );
 
         modelBuilder
             .Entity<DbPlayerBannerData>()
