@@ -20,7 +20,8 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
         ILoggerFactory logger,
         UrlEncoder encoder,
         ISystemClock clock
-    ) : base(options, logger, encoder, clock)
+    )
+        : base(options, logger, encoder, clock)
     {
         this.configuration = configuration;
     }
