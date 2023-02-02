@@ -429,4 +429,35 @@ public class MasterAssetTest
                 )
             );
     }
+
+    [Fact]
+    public void AbilityCrestTrade_Get_ReturnsExpectedProperties()
+    {
+        AbilityCrestTrade abilityCrestTrade = MasterAsset.MasterAsset.AbilityCrestTrade.Get(
+            AbilityCrests.SweetSurprise
+        );
+
+        abilityCrestTrade
+            .Should()
+            .BeEquivalentTo(
+                new AbilityCrestTrade(
+                    Id: 5101,
+                    AbilityCrestId: AbilityCrests.SweetSurprise,
+                    NeedDewPoint: 4000,
+                    Priority: 5199,
+                    LabelType: 0
+                )
+            );
+    }
+
+    [Fact]
+    public void AbilityCrestTrade_Enumerable_ReturnsListOfAbilityCrestTrades()
+    {
+        IEnumerable<AbilityCrestTrade> abilityCrestTrades = MasterAsset
+            .MasterAsset
+            .AbilityCrestTrade
+            .Enumerable;
+
+        abilityCrestTrades.Should().AllBeOfType<AbilityCrestTrade>();
+    }
 }
