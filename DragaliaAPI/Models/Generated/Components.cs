@@ -4181,9 +4181,9 @@ public class AtgenUserEventTradeList
 public class AtgenUserItemSummon
 {
     public int daily_summon_count { get; set; }
-    public int last_summon_time { get; set; }
+    public DateTimeOffset last_summon_time { get; set; }
 
-    public AtgenUserItemSummon(int daily_summon_count, int last_summon_time)
+    public AtgenUserItemSummon(int daily_summon_count, DateTimeOffset last_summon_time)
     {
         this.daily_summon_count = daily_summon_count;
         this.last_summon_time = last_summon_time;
