@@ -4,7 +4,8 @@ using MessagePack;
 namespace DragaliaAPI.Models;
 
 [MessagePackObject(keyAsPropertyName: true)]
-public class DragaliaResponse<TData> where TData : class
+public class DragaliaResponse<TData>
+    where TData : class
 {
     public DataHeaders data_headers { get; init; }
 

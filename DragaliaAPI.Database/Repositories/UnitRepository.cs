@@ -15,7 +15,8 @@ public class UnitRepository : BaseRepository, IUnitRepository
 {
     private readonly ApiContext apiContext;
 
-    public UnitRepository(ApiContext apiContext) : base(apiContext)
+    public UnitRepository(ApiContext apiContext)
+        : base(apiContext)
     {
         this.apiContext = apiContext;
     }
@@ -193,7 +194,8 @@ public class UnitRepository : BaseRepository, IUnitRepository
     private static IEnumerable<(TEnum id, bool isNew)> MarkNewIds<TEnum>(
         IEnumerable<TEnum> owned,
         IEnumerable<TEnum> idList
-    ) where TEnum : Enum
+    )
+        where TEnum : Enum
     {
         List<(TEnum id, bool isNew)> result = new();
         foreach (TEnum c in idList)

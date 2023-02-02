@@ -389,7 +389,8 @@ public class SavefileService : ISavefileService
     private IEnumerable<TDest> MapWithDeviceAccount<TDest>(
         IEnumerable<object>? source,
         string deviceAccountId
-    ) where TDest : IDbHasAccountId
+    )
+        where TDest : IDbHasAccountId
     {
         return (source ?? new List<object>()).Select(
             x =>

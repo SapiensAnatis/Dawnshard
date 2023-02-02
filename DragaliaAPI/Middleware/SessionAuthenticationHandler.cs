@@ -24,7 +24,8 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         UrlEncoder encoder,
         ISystemClock clock,
         ISessionService sessionService
-    ) : base(options, logger, encoder, clock)
+    )
+        : base(options, logger, encoder, clock)
     {
         this.sessionService = sessionService;
     }

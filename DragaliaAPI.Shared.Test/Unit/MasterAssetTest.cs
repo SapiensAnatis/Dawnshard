@@ -244,7 +244,7 @@ public class MasterAssetTest
     [Fact]
     public void FortPlant_Get_ReturnsExpectedProperties()
     {
-        FortPlantDetail fortPlant = MasterAsset.MasterAsset.GetFortPlant(FortPlants.FlameTree, 6);
+        FortPlantDetail fortPlant = MasterAssetUtils.GetFortPlant(FortPlants.FlameTree, 6);
 
         fortPlant
             .Should()

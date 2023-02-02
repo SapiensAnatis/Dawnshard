@@ -10,7 +10,8 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
 {
     private readonly ApiContext apiContext;
 
-    public UserDataRepository(ApiContext apiContext) : base(apiContext)
+    public UserDataRepository(ApiContext apiContext)
+        : base(apiContext)
     {
         this.apiContext = apiContext;
     }

@@ -7,7 +7,8 @@ public class PartyRepository : BaseRepository, IPartyRepository
 {
     private readonly ApiContext apiContext;
 
-    public PartyRepository(ApiContext apiContext) : base(apiContext)
+    public PartyRepository(ApiContext apiContext)
+        : base(apiContext)
     {
         this.apiContext = apiContext;
     }

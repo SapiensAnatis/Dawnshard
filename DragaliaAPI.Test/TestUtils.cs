@@ -155,7 +155,8 @@ public static class TestUtils
         string endpoint,
         object request,
         bool ensureSuccessHeader = true
-    ) where TResponse : class
+    )
+        where TResponse : class
     {
         HttpContent content = CreateMsgpackContent(request);
 

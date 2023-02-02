@@ -24,12 +24,14 @@ public class BonusService : IBonusService
 
     public async Task<FortBonusList> GetBonusList(string accountId)
     {
-        List<int> buildIds = await this.fortRepository
-            .GetBuilds(accountId)
-            .Select(x => x.FortPlantDetailId)
-            .ToListAsync();
+        IEnumerable<int> buildIds = (
+            await this.fortRepository
+                .GetBuilds(accountId)
+                .Select(x => new { x.PlantId, x.Level })
+                .ToListAsync()
+        ).Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level));
 
-        List<WeaponBodies> weaponIds = await this.weaponBodyRepository
+        IEnumerable<WeaponBodies> weaponIds = await this.weaponBodyRepository
             .GetWeaponBodies(accountId)
             .Where(x => x.FortPassiveCharaWeaponBuildupCount != 0)
             .Select(x => x.WeaponBodyId)
@@ -50,7 +52,7 @@ public class BonusService : IBonusService
         };
     }
 
-    private static IEnumerable<AtgenElementBonus> GetFortElementBonus(List<int> buildIds)
+    private static IEnumerable<AtgenElementBonus> GetFortElementBonus(IEnumerable<int> buildIds)
     {
         IDictionary<UnitElement, AtgenElementBonus> result = Enum.GetValues<UnitElement>()
             .Select(
@@ -84,7 +86,7 @@ public class BonusService : IBonusService
         return result.Select(x => x.Value);
     }
 
-    private static IEnumerable<AtgenParamBonus> GetFortParamBonus(List<int> buildIds)
+    private static IEnumerable<AtgenParamBonus> GetFortParamBonus(IEnumerable<int> buildIds)
     {
         IDictionary<WeaponTypes, AtgenParamBonus> result = Enum.GetValues<WeaponTypes>()
             .Select(
@@ -118,7 +120,7 @@ public class BonusService : IBonusService
         return result.Select(x => x.Value);
     }
 
-    private static IEnumerable<AtgenDragonBonus> GetFortDragonBonus(List<int> buildIds)
+    private static IEnumerable<AtgenDragonBonus> GetFortDragonBonus(IEnumerable<int> buildIds)
     {
         IDictionary<UnitElement, AtgenDragonBonus> result = Enum.GetValues<UnitElement>()
             .Select(
@@ -159,7 +161,7 @@ public class BonusService : IBonusService
     }
 
     private static IEnumerable<AtgenParamBonus> GetWeaponParamBonus(
-        List<WeaponBodies> weaponBodyIds
+        IEnumerable<WeaponBodies> weaponBodyIds
     )
     {
         IDictionary<WeaponTypes, AtgenParamBonus> result = Enum.GetValues<WeaponTypes>()

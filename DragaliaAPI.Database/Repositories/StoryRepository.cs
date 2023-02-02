@@ -8,7 +8,8 @@ public class StoryRepository : BaseRepository, IStoryRepository
 {
     private readonly ApiContext apiContext;
 
-    public StoryRepository(ApiContext apiContext) : base(apiContext)
+    public StoryRepository(ApiContext apiContext)
+        : base(apiContext)
     {
         this.apiContext = apiContext;
     }

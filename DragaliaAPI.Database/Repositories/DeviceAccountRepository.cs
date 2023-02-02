@@ -14,7 +14,8 @@ public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
 {
     private readonly ApiContext apiContext;
 
-    public DeviceAccountRepository(ApiContext apiContext) : base(apiContext)
+    public DeviceAccountRepository(ApiContext apiContext)
+        : base(apiContext)
     {
         this.apiContext = apiContext;
     }

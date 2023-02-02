@@ -8,7 +8,8 @@ public class SummonRepository : BaseRepository, ISummonRepository
 {
     private readonly ApiContext apiContext;
 
-    public SummonRepository(ApiContext apiContext) : base(apiContext)
+    public SummonRepository(ApiContext apiContext)
+        : base(apiContext)
     {
         this.apiContext = apiContext;
     }

@@ -9,7 +9,8 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
 {
     private readonly ApiContext apiContext;
 
-    public InventoryRepository(ApiContext apiContext) : base(apiContext)
+    public InventoryRepository(ApiContext apiContext)
+        : base(apiContext)
     {
         this.apiContext = apiContext;
     }
