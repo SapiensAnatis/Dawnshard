@@ -8,7 +8,8 @@ public class QuestRepository : BaseRepository, IQuestRepository
 {
     private readonly ApiContext apiContext;
 
-    public QuestRepository(ApiContext apiContext) : base(apiContext)
+    public QuestRepository(ApiContext apiContext)
+        : base(apiContext)
     {
         this.apiContext = apiContext;
     }

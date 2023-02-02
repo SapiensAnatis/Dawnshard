@@ -72,7 +72,8 @@ public class UpdateDataService : IUpdateDataService
     private IEnumerable<TNetwork>? ConvertEntities<TNetwork, TDatabase>(
         IEnumerable<IDbHasAccountId> baseEntries,
         Func<TDatabase, bool>? filterPredicate = null
-    ) where TDatabase : IDbHasAccountId
+    )
+        where TDatabase : IDbHasAccountId
     {
         IEnumerable<TDatabase> typedEntries = baseEntries.OfType<TDatabase>();
 

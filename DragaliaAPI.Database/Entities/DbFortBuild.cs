@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
@@ -23,8 +24,12 @@ public class DbFortBuild : IDbHasAccountId
 
     public int Level { get; set; } = 1;
 
+    /// <summary>
+    /// Get a fort_plant_detail_id from the stored entity properties.
+    /// <remarks>Do not use in a .Select in queries; will cause the entire entity to load.</remarks>
+    /// </summary>
     [NotMapped]
-    public int FortPlantDetailId => int.Parse($"{(int)this.PlantId}{this.Level:00}");
+    public int FortPlantDetailId => MasterAssetUtils.GetPlantDetailId(this.PlantId, this.Level);
 
     public int PositionX { get; set; }
 
