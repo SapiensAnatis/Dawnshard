@@ -102,7 +102,18 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         userData.Crystal += quantity;
     }
 
-    private async Task<DbPlayerUserData> LookupUserData(string deviceAccountId)
+    public async Task UpdateRupies(string deviceAccountId, long quantity)
+    {
+        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+
+        long newQuantity = (userData.Coin += quantity);
+        if (newQuantity < 0)
+            throw new ArgumentException("Player cannot have negative rupies");
+
+        userData.Coin = newQuantity;
+    }
+
+    public async Task<DbPlayerUserData> LookupUserData(string deviceAccountId)
     {
         return await apiContext.PlayerUserData.FindAsync(deviceAccountId)
             ?? throw new NullReferenceException("Savefile lookup failed");

@@ -12,12 +12,12 @@ namespace DragaliaAPI.Database.Test.Repositories;
 public class WeaponBodyRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
-    private readonly IWeaponBodyRepository weaponBodyRepository;
+    private readonly IWeaponRepository weaponRepository;
 
     public WeaponBodyRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.weaponBodyRepository = new WeaponBodyRepository(this.fixture.ApiContext);
+        this.weaponRepository = new WeaponRepository(this.fixture.ApiContext);
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public class WeaponBodyRepositoryTest : IClassFixture<DbTestFixture>
             }
         );
 
-        (await this.weaponBodyRepository.GetWeaponBodies("id").ToListAsync())
+        (await this.weaponRepository.GetWeaponBodies("id").ToListAsync())
             .Should()
             .AllSatisfy(x => x.DeviceAccountId.Should().Be("id"));
     }

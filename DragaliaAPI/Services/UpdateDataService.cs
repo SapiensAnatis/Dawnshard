@@ -23,14 +23,15 @@ public class UpdateDataService : IUpdateDataService
     {
         this.apiContext.ChangeTracker.LazyLoadingEnabled = false;
 
-        IEnumerable<IDbHasAccountId> entities = this.apiContext.ChangeTracker
+        List<IDbHasAccountId> entities = this.apiContext.ChangeTracker
             .Entries<IDbHasAccountId>()
             .Where(
                 x =>
                     (x.State is EntityState.Modified or EntityState.Added)
                     && x.Entity.DeviceAccountId == deviceAccountId
             )
-            .Select(x => x.Entity);
+            .Select(x => x.Entity)
+            .ToList();
 
         UpdateDataList result =
             new()
@@ -43,6 +44,7 @@ public class UpdateDataService : IUpdateDataService
                     DbPlayerDragonReliability
                 >(entities),
                 weapon_body_list = this.ConvertEntities<WeaponBodyList, DbWeaponBody>(entities),
+                weapon_skin_list = this.ConvertEntities<WeaponSkinList, DbWeaponSkin>(entities),
                 ability_crest_list = this.ConvertEntities<AbilityCrestList, DbAbilityCrest>(
                     entities
                 ),
@@ -67,6 +69,11 @@ public class UpdateDataService : IUpdateDataService
         this.apiContext.ChangeTracker.LazyLoadingEnabled = true;
 
         return result;
+    }
+
+    public async Task<int> SaveChangesAsync()
+    {
+        return await this.apiContext.SaveChangesAsync();
     }
 
     private IEnumerable<TNetwork>? ConvertEntities<TNetwork, TDatabase>(

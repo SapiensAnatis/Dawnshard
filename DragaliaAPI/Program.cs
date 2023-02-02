@@ -7,6 +7,7 @@ using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Helpers;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
@@ -92,6 +93,7 @@ builder.Services
     .AddScoped<IHelperService, HelperService>()
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<IBonusService, BonusService>()
+    .AddScoped<IWeaponService, WeaponService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>()
     .AddHttpClient<IBaasRequestHelper, BaasRequestHelper>();

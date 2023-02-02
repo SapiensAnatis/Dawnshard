@@ -83,8 +83,7 @@ public class DbWeaponBody : IDbHasAccountId
     }
 
     /// <summary>
-    /// Gets or sets an unknown value.
-    /// <remarks>Seems to always be 0 or 1. Something to do with the Halidom.</remarks>
+    /// Gets or sets a value indicating whether the weapon bonus has been unlocked.
     /// </summary>
     public int FortPassiveCharaWeaponBuildupCount { get; set; } = 0;
 

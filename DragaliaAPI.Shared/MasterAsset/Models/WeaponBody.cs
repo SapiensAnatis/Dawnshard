@@ -32,11 +32,12 @@ namespace DragaliaAPI.Shared.MasterAsset.Models;
 /// <param name="MaxWeaponPassiveCharaCount">Seems to be 0/1 for bonus available/unavailable respectively.</param>
 /// <param name="WeaponPassiveEffHp">Weapon bonus HP magnitude</param>
 /// <param name="WeaponPassiveEffAtk">Weapon bonus Str magnitude</param>
-/// <param name="RewardWeaponSkinId1"></param>
+/// <param name="RewardWeaponSkinId1">First weapon skin available from upgrading</param>
 /// <param name="RewardWeaponSkinId2"></param>
 /// <param name="RewardWeaponSkinId3"></param>
 /// <param name="RewardWeaponSkinId4"></param>
 /// <param name="RewardWeaponSkinId5"></param>
+/// <param name="NeedFortCraftLevel">Required Smithy level to craft this weapon</param>
 public record WeaponBody(
     WeaponBodies Id,
     WeaponTypes WeaponType,
@@ -69,5 +70,32 @@ public record WeaponBody(
     int RewardWeaponSkinId2,
     int RewardWeaponSkinId3,
     int RewardWeaponSkinId4,
-    int RewardWeaponSkinId5
-);
+    int RewardWeaponSkinId5,
+    int NeedFortCraftLevel,
+    WeaponBodies NeedCreateWeaponBodyId1,
+    WeaponBodies NeedCreateWeaponBodyId2,
+    long CreateCoin,
+    Materials CreateEntityId1,
+    int CreateEntityQuantity1,
+    Materials CreateEntityId2,
+    int CreateEntityQuantity2,
+    Materials CreateEntityId3,
+    int CreateEntityQuantity3,
+    Materials CreateEntityId4,
+    int CreateEntityQuantity4,
+    Materials CreateEntityId5,
+    int CreateEntityQuantity5
+)
+{
+    public Dictionary<Materials, int> QuantityMap { get; } =
+        new List<KeyValuePair<Materials, int>>()
+        {
+            new(CreateEntityId1, CreateEntityQuantity1),
+            new(CreateEntityId2, CreateEntityQuantity2),
+            new(CreateEntityId3, CreateEntityQuantity3),
+            new(CreateEntityId4, CreateEntityQuantity4),
+            new(CreateEntityId5, CreateEntityQuantity5),
+        }
+            .Where(x => x.Key != Materials.Empty)
+            .ToDictionary(x => x.Key, x => x.Value);
+};

@@ -19,7 +19,7 @@ namespace DragaliaAPI.Test.Unit.Services;
 public class BonusServiceTest
 {
     private readonly Mock<IFortRepository> mockFortRepository;
-    private readonly Mock<IWeaponBodyRepository> mockWeaponBodyRepository;
+    private readonly Mock<IWeaponRepository> mockWeaponBodyRepository;
     private readonly IBonusService bonusService;
 
     public BonusServiceTest()
