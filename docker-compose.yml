@@ -12,10 +12,9 @@ services:
       context: .
       dockerfile: DragaliaAPI/Dockerfile
     environment:
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=http://+:80
     ports:
-      - "5000:80"
-      - "5001:443"
+      - "80:80"
     links:
       - postgres
     env_file:
