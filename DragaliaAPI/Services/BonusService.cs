@@ -14,25 +14,21 @@ namespace DragaliaAPI.Services;
 public class BonusService : IBonusService
 {
     private readonly IFortRepository fortRepository;
-    private readonly IWeaponBodyRepository weaponBodyRepository;
+    private readonly IWeaponRepository weaponRepository;
 
-    public BonusService(IFortRepository fortRepository, IWeaponBodyRepository weaponBodyRepository)
+    public BonusService(IFortRepository fortRepository, IWeaponRepository weaponRepository)
     {
         this.fortRepository = fortRepository;
-        this.weaponBodyRepository = weaponBodyRepository;
+        this.weaponRepository = weaponRepository;
     }
 
-    public async Task<FortBonusList> GetBonusList(string accountId)
+    public async Task<FortBonusList> GetBonusList()
     {
         IEnumerable<int> buildIds = (
-            await this.fortRepository
-                .GetBuilds(accountId)
-                .Select(x => new { x.PlantId, x.Level })
-                .ToListAsync()
+            await this.fortRepository.Builds.Select(x => new { x.PlantId, x.Level }).ToListAsync()
         ).Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level));
 
-        IEnumerable<WeaponBodies> weaponIds = await this.weaponBodyRepository
-            .GetWeaponBodies(accountId)
+        IEnumerable<WeaponBodies> weaponIds = await this.weaponRepository.WeaponBodies
             .Where(x => x.FortPassiveCharaWeaponBuildupCount != 0)
             .Select(x => x.WeaponBodyId)
             .ToListAsync();

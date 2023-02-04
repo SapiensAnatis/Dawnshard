@@ -7,7 +7,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -29,6 +31,10 @@
 		<None Update="Resources\WeaponBody.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="Microsoft.Extensions.Identity.Core" />
 	</ItemGroup>
 
 </Project>

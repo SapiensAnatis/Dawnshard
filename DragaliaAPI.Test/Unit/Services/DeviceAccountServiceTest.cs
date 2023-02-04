@@ -2,12 +2,13 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
+using DragaliaAPI.Shared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Test.Unit.Services;
 
-[Obsolete("Used for pre-BaaS auth flow")]
+[Obsolete(ObsoleteReasons.BaaS)]
 public class DeviceAccountServiceTest
 {
     private readonly Mock<ILogger<DeviceAccountService>> mockLogger;

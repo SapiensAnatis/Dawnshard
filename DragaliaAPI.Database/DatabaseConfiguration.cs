@@ -25,7 +25,15 @@ public static class DatabaseConfiguration
         logger.Information("Connecting to database using host {host}...", host);
 
         services = services
-            .AddDbContext<ApiContext>(options => options.UseNpgsql(connectionString))
+            .AddDbContext<ApiContext>(
+                options =>
+                    options
+                        .UseNpgsql(connectionString)
+#if DEBUG
+                        .EnableSensitiveDataLogging()
+                        .EnableDetailedErrors()
+#endif
+            )
 #pragma warning disable CS0618 // Type or member is obsolete
             .AddScoped<IDeviceAccountRepository, DeviceAccountRepository>()
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -37,7 +45,7 @@ public static class DatabaseConfiguration
             .AddScoped<IQuestRepository, QuestRepository>()
             .AddScoped<IInventoryRepository, InventoryRepository>()
             .AddScoped<IFortRepository, FortRepository>()
-            .AddScoped<IWeaponBodyRepository, WeaponBodyRepository>()
+            .AddScoped<IWeaponRepository, WeaponRepository>()
             .AddScoped<IStoryRepository, StoryRepository>();
 
         return services;

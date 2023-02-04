@@ -118,6 +118,15 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         savefileService.CreateBase(PreparedDeviceAccountId).Wait();
         savefileService.CreateBase(DeviceAccountId).Wait();
         PopulateAllMaterials();
+        context.PlayerFortBuilds.Add(
+            new DbFortBuild()
+            {
+                DeviceAccountId = this.DeviceAccountId,
+                PlantId = FortPlants.Smithy,
+                Level = 9
+            }
+        );
+        context.PlayerUserData.Find(this.DeviceAccountId)!.Coin = 100_000_000;
         context.SaveChanges();
     }
 }

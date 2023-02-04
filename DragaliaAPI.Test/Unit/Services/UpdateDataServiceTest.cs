@@ -9,7 +9,9 @@ using DragaliaAPI.Shared.MasterAsset;
 using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using DragaliaAPI.Test.Utils;
 using Xunit.Abstractions;
+using static DragaliaAPI.Test.Utils.IdentityTestUtils;
 
 namespace DragaliaAPI.Test.Unit.Services;
 
@@ -29,7 +31,11 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         this.mapper = new MapperConfiguration(
             cfg => cfg.AddMaps(typeof(Program).Assembly)
         ).CreateMapper();
-        this.updateDataService = new UpdateDataService(this.fixture.ApiContext, this.mapper);
+        this.updateDataService = new UpdateDataService(
+            this.fixture.ApiContext,
+            this.mapper,
+            IdentityTestUtils.MockPlayerDetailsService.Object
+        );
 
         TestUtils.ApplyDateTimeAssertionOptions();
     }
@@ -188,13 +194,13 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         this.fixture.ApiContext.AddRange(
             new List<IDbHasAccountId>()
             {
-                DbPlayerDragonDataFactory.Create("id", Dragons.Arsene),
-                DbPlayerDragonDataFactory.Create("id", Dragons.GalaBeastVolk),
-                DbPlayerDragonDataFactory.Create("id", Dragons.HighZodiark)
+                DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.Arsene),
+                DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.GalaBeastVolk),
+                DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.HighZodiark)
             }
         );
 
-        UpdateDataList list = this.updateDataService.GetUpdateDataList("id");
+        UpdateDataList list = this.updateDataService.GetUpdateDataList(DeviceAccountId);
 
         list.dragon_list.Should().NotBeNullOrEmpty();
         list.dragon_list!.Select(x => x.dragon_key_id).Should().OnlyHaveUniqueItems();
@@ -203,7 +209,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public void GetUpdateDataList_NullIfNoUpdates()
     {
-        UpdateDataList list = this.updateDataService.GetUpdateDataList("id");
+        UpdateDataList list = this.updateDataService.GetUpdateDataList(DeviceAccountId);
 
         list.user_data.Should().BeNull();
         list.chara_list.Should().BeNull();
@@ -224,11 +230,11 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public void GetUpdateDataList_NullAfterSave()
     {
-        this.fixture.ApiContext.PlayerCharaData.Add(new("id", Charas.HalloweenLowen));
+        this.fixture.ApiContext.PlayerCharaData.Add(new(DeviceAccountId, Charas.HalloweenLowen));
 
         this.fixture.ApiContext.SaveChanges();
 
-        this.updateDataService.GetUpdateDataList("id").chara_list.Should().BeNull();
+        this.updateDataService.GetUpdateDataList(DeviceAccountId).chara_list.Should().BeNull();
     }
 
     private void AssertOnlyContains<TNetwork>(

@@ -1,4 +1,6 @@
-﻿namespace DragaliaAPI.Models.Nintendo;
+﻿using DragaliaAPI.Shared;
 
-[Obsolete("From pre-BaaS login flow")]
+namespace DragaliaAPI.Models.Nintendo;
+
+[Obsolete(ObsoleteReasons.BaaS)]
 public record DeviceAccount(string id, string password);

@@ -49,7 +49,7 @@ public class LoadController : DragaliaControllerBase
 
         this.logger.LogInformation("{time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
 
-        FortBonusList bonusList = await bonusService.GetBonusList(DeviceAccountId);
+        FortBonusList bonusList = await bonusService.GetBonusList();
 
         this.logger.LogInformation("{time} ms: Bonus list acquired", stopwatch.ElapsedMilliseconds);
 

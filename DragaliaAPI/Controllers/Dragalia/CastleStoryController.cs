@@ -68,7 +68,7 @@ public class CastleStoryController : DragaliaControllerBase
                 );
             }
 
-            await this.inventoryRepository.AddMaterialQuantity(
+            await this.inventoryRepository.UpdateQuantity(
                 DeviceAccountId,
                 Materials.LookingGlass,
                 -1

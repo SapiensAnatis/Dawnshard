@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services;
@@ -12,25 +13,32 @@ public class UpdateDataService : IUpdateDataService
 {
     private readonly ApiContext apiContext;
     private readonly IMapper mapper;
+    private readonly IPlayerDetailsService playerDetailsService;
 
-    public UpdateDataService(ApiContext apiContext, IMapper mapper)
+    public UpdateDataService(
+        ApiContext apiContext,
+        IMapper mapper,
+        IPlayerDetailsService playerDetailsService
+    )
     {
         this.apiContext = apiContext;
         this.mapper = mapper;
+        this.playerDetailsService = playerDetailsService;
     }
 
     public UpdateDataList GetUpdateDataList(string deviceAccountId)
     {
         this.apiContext.ChangeTracker.LazyLoadingEnabled = false;
 
-        IEnumerable<IDbHasAccountId> entities = this.apiContext.ChangeTracker
+        List<IDbHasAccountId> entities = this.apiContext.ChangeTracker
             .Entries<IDbHasAccountId>()
             .Where(
                 x =>
                     (x.State is EntityState.Modified or EntityState.Added)
                     && x.Entity.DeviceAccountId == deviceAccountId
             )
-            .Select(x => x.Entity);
+            .Select(x => x.Entity)
+            .ToList();
 
         UpdateDataList result =
             new()
@@ -43,6 +51,7 @@ public class UpdateDataService : IUpdateDataService
                     DbPlayerDragonReliability
                 >(entities),
                 weapon_body_list = this.ConvertEntities<WeaponBodyList, DbWeaponBody>(entities),
+                weapon_skin_list = this.ConvertEntities<WeaponSkinList, DbWeaponSkin>(entities),
                 ability_crest_list = this.ConvertEntities<AbilityCrestList, DbAbilityCrest>(
                     entities
                 ),
@@ -66,6 +75,13 @@ public class UpdateDataService : IUpdateDataService
 
         this.apiContext.ChangeTracker.LazyLoadingEnabled = true;
 
+        return result;
+    }
+
+    public async Task<UpdateDataList> SaveChangesAsync()
+    {
+        UpdateDataList result = this.GetUpdateDataList(this.playerDetailsService.AccountId);
+        await this.apiContext.SaveChangesAsync();
         return result;
     }
 

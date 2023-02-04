@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
-using FluentAssertions.Extensions;
+using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
@@ -20,7 +15,11 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
     public InventoryRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.inventoryRepository = new InventoryRepository(this.fixture.ApiContext);
+        this.inventoryRepository = new InventoryRepository(
+            this.fixture.ApiContext,
+            IdentityTestUtils.MockPlayerDetailsService.Object,
+            LoggerTestUtils.Create<InventoryRepository>()
+        );
 
         AssertionOptions.AssertEquivalencyUsing(x => x.Excluding(x => x.Name.StartsWith("Owner")));
     }
@@ -28,7 +27,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddMaterialQuantity_NoEntry_AddsQuantity()
     {
-        await this.inventoryRepository.AddMaterialQuantity(
+        await this.inventoryRepository.UpdateQuantity(
             DeviceAccountId,
             Materials.WaterwyrmsGreatsphere,
             10
@@ -58,7 +57,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        await this.inventoryRepository.AddMaterialQuantity(
+        await this.inventoryRepository.UpdateQuantity(
             DeviceAccountId,
             Materials.FirestormPrism,
             10
@@ -77,7 +76,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddMaterialQuantityRange_AddsQuantities()
     {
-        await this.inventoryRepository.AddMaterialQuantity(
+        await this.inventoryRepository.UpdateQuantity(
             DeviceAccountId,
             new List<Materials>() { Materials.SunlightOre, Materials.SunlightStone },
             5
@@ -189,5 +188,180 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
                 opts => opts.Excluding(x => x.Owner)
             )
             .And.AllSatisfy(x => x.DeviceAccountId.Should().Be(DeviceAccountId));
+    }
+
+    [Fact]
+    public async Task UpdateQuantity_UpdatesQuantity()
+    {
+        await this.fixture.AddRangeToDatabase(
+            new List<DbPlayerMaterial>()
+            {
+                new()
+                {
+                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    MaterialId = Materials.Valor,
+                    Quantity = 5
+                },
+                new()
+                {
+                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    MaterialId = Materials.Acclaim,
+                    Quantity = 5
+                }
+            }
+        );
+
+        await this.inventoryRepository.UpdateQuantity(
+            new Dictionary<Materials, int>() { { Materials.Valor, 1 }, { Materials.Acclaim, 3 } }
+        );
+
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        this.fixture.ApiContext.PlayerMaterials
+            .Single(
+                x =>
+                    x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
+                    && x.MaterialId == Materials.Valor
+            )
+            .Quantity.Should()
+            .Be(6);
+
+        this.fixture.ApiContext.PlayerMaterials
+            .Single(
+                x =>
+                    x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
+                    && x.MaterialId == Materials.Acclaim
+            )
+            .Quantity.Should()
+            .Be(8);
+    }
+
+    [Fact]
+    public async Task UpdateQuantity_TooFewQuantity_Throws()
+    {
+        await this.fixture.AddRangeToDatabase(
+            new List<DbPlayerMaterial>()
+            {
+                new()
+                {
+                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    MaterialId = Materials.SummerEstelleSkin,
+                    Quantity = 5
+                },
+            }
+        );
+
+        await this.inventoryRepository
+            .Invoking(
+                x =>
+                    x.UpdateQuantity(
+                        new Dictionary<Materials, int>() { { Materials.SummerEstelleSkin, -6 } }
+                    )
+            )
+            .Should()
+            .ThrowAsync<InvalidOperationException>();
+
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        this.fixture.ApiContext.PlayerMaterials
+            .Single(
+                x =>
+                    x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
+                    && x.MaterialId == Materials.SummerEstelleSkin
+            )
+            .Quantity.Should()
+            .Be(5);
+    }
+
+    [Fact]
+    public async Task CheckQuantity_SingleOverload_Success()
+    {
+        await this.fixture.AddToDatabase(
+            new DbPlayerMaterial()
+            {
+                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                Quantity = 5,
+                MaterialId = Materials.Dragonfruit
+            }
+        );
+
+        (await this.inventoryRepository.CheckQuantity(Materials.Dragonfruit, 5)).Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task CheckQuantity_SingleOverload_Fail()
+    {
+        await this.fixture.AddToDatabase(
+            new DbPlayerMaterial()
+            {
+                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                Quantity = 5,
+                MaterialId = Materials.FafnirMedal
+            }
+        );
+
+        (await this.inventoryRepository.CheckQuantity(Materials.FafnirMedal, 6)).Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task CheckQuantity_MultiOverload_AllValid_ReturnsTrue()
+    {
+        await this.fixture.AddRangeToDatabase(
+            new List<DbPlayerMaterial>()
+            {
+                new()
+                {
+                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    MaterialId = Materials.ValentinesGift,
+                    Quantity = 5
+                },
+                new()
+                {
+                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    MaterialId = Materials.QuantumCog,
+                    Quantity = 5
+                }
+            }
+        );
+
+        (
+            await this.inventoryRepository.CheckQuantity(
+                new Dictionary<Materials, int>()
+                {
+                    { Materials.ValentinesGift, 5 },
+                    { Materials.QuantumCog, 5 }
+                }
+            )
+        )
+            .Should()
+            .BeTrue();
+    }
+
+    [Fact]
+    public async Task CheckQuantity_MultiOverload_SomeMissing_ReturnsFalse()
+    {
+        await this.fixture.AddRangeToDatabase(
+            new List<DbPlayerMaterial>()
+            {
+                new()
+                {
+                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    MaterialId = Materials.ValeriosConviction,
+                    Quantity = 5
+                }
+            }
+        );
+
+        (
+            await this.inventoryRepository.CheckQuantity(
+                new Dictionary<Materials, int>()
+                {
+                    { Materials.ValeriosConviction, 5 },
+                    { Materials.ValeriosDevotion, 5 }
+                }
+            )
+        )
+            .Should()
+            .BeFalse();
     }
 }

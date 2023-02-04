@@ -122,7 +122,7 @@ public class DungeonStartController : DragaliaControllerBase
 
         this.logger.LogInformation("{time} ms: Built party", stopwatch.ElapsedMilliseconds);
 
-        FortBonusList bonusList = await bonusService.GetBonusList(DeviceAccountId);
+        FortBonusList bonusList = await bonusService.GetBonusList();
 
         this.logger.LogInformation("{time} ms: Acquired bonus list", stopwatch.ElapsedMilliseconds);
 

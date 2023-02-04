@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{1A23D4
 		.github\workflows\publish-base.yaml = .github\workflows\publish-base.yaml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragaliaAPI.Test.Utils", "DragaliaAPI.Test.Utils\DragaliaAPI.Test.Utils.csproj", "{41916B7C-6304-4504-99C0-B24D23982F7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF6A04DC-56FE-491F-A73B-F54A3E7BAA4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41916B7C-6304-4504-99C0-B24D23982F7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41916B7C-6304-4504-99C0-B24D23982F7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41916B7C-6304-4504-99C0-B24D23982F7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41916B7C-6304-4504-99C0-B24D23982F7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

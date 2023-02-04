@@ -7,6 +7,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Helpers;
+using DragaliaAPI.Shared;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -53,7 +54,7 @@ public class AuthServiceTest
     }
 
     [Fact]
-    [Obsolete("From pre-BaaS login flow")]
+    [Obsolete(ObsoleteReasons.BaaS)]
     public async Task DoAuth_LegacyAuthEnabled_UsesLegacyAuth()
     {
         this.mockLoginOptions

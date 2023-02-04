@@ -70,9 +70,7 @@ public class DungeonStartControllerTest
                 }
             );
 
-        this.mockBonusService
-            .Setup(x => x.GetBonusList(DeviceAccountId))
-            .ReturnsAsync(new FortBonusList());
+        this.mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(new FortBonusList());
 
         /* this.mockPartyRepository
              .Setup(x => x.Get(DeviceAccountId))

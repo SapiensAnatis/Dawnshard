@@ -4305,9 +4305,9 @@ public class WeaponBodyBuildupPieceRequest
 [MessagePackObject(true)]
 public class WeaponBodyCraftRequest
 {
-    public int weapon_body_id { get; set; }
+    public WeaponBodies weapon_body_id { get; set; }
 
-    public WeaponBodyCraftRequest(int weapon_body_id)
+    public WeaponBodyCraftRequest(WeaponBodies weapon_body_id)
     {
         this.weapon_body_id = weapon_body_id;
     }

@@ -1,18 +1,28 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Collections;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Database.Repositories;
 
-// TODO: add tests
-public class InventoryRepository : BaseRepository, IInventoryRepository
+public class InventoryRepository : IInventoryRepository
 {
     private readonly ApiContext apiContext;
+    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly ILogger<InventoryRepository> logger;
 
-    public InventoryRepository(ApiContext apiContext)
-        : base(apiContext)
+    public InventoryRepository(
+        ApiContext apiContext,
+        IPlayerDetailsService playerDetailsService,
+        ILogger<InventoryRepository> logger
+    )
     {
         this.apiContext = apiContext;
+        this.playerDetailsService = playerDetailsService;
+        this.logger = logger;
     }
 
     public DbPlayerCurrency AddCurrency(string deviceAccountId, CurrencyTypes type)
@@ -57,8 +67,12 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
             .Entity;
     }
 
-    public async Task AddMaterialQuantity(string deviceAccountId, Materials item, int quantity)
+    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
+    public async Task UpdateQuantity(string deviceAccountId, Materials item, int quantity)
     {
+        if (item == Materials.Empty)
+            return;
+
         DbPlayerMaterial material =
             await this.apiContext.PlayerMaterials.FindAsync(deviceAccountId, item)
             ?? (
@@ -83,7 +97,15 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
         material.Quantity += quantity;
     }
 
-    public async Task AddMaterialQuantity(
+    public async Task UpdateQuantity(Materials material, int quantity)
+    {
+#pragma warning disable CS0618
+        await this.UpdateQuantity(this.playerDetailsService.AccountId, material, quantity);
+#pragma warning restore CS0618
+    }
+
+    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
+    public async Task UpdateQuantity(
         string deviceAccountId,
         IEnumerable<Materials> list,
         int quantity
@@ -92,7 +114,15 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
         foreach (Materials m in list)
         {
             // Db query (find) in loop??? Any way to do this better???
-            await this.AddMaterialQuantity(deviceAccountId, m, quantity);
+            await this.UpdateQuantity(deviceAccountId, m, quantity);
+        }
+    }
+
+    public async Task UpdateQuantity(IEnumerable<KeyValuePair<Materials, int>> quantityMap)
+    {
+        foreach ((Materials mat, int quantity) in quantityMap)
+        {
+            await this.UpdateQuantity(mat, quantity);
         }
     }
 
@@ -106,5 +136,40 @@ public class InventoryRepository : BaseRepository, IInventoryRepository
         return this.apiContext.PlayerMaterials.Where(
             storage => storage.DeviceAccountId == deviceAccountId
         );
+    }
+
+    public async Task<bool> CheckQuantity(Materials materialId, int quantity) =>
+        await this.CheckQuantity(new Dictionary<Materials, int>() { { materialId, quantity } });
+
+    public async Task<bool> CheckQuantity(IEnumerable<KeyValuePair<Materials, int>> quantityMap)
+    {
+        IEnumerable<Materials> materials = quantityMap.Select(x => x.Key);
+
+        Dictionary<Materials, DbPlayerMaterial> dbValues = await this.apiContext.PlayerMaterials
+            .Where(x => x.DeviceAccountId == this.playerDetailsService.AccountId)
+            .Where(x => materials.Contains(x.MaterialId))
+            .ToDictionaryAsync(x => x.MaterialId, x => x);
+
+        foreach (KeyValuePair<Materials, int> requested in quantityMap)
+        {
+            if (requested.Key == Materials.Empty)
+                continue;
+
+            dbValues.TryGetValue(requested.Key, out DbPlayerMaterial? mat);
+
+            if (mat?.Quantity >= requested.Value)
+                continue;
+
+            this.logger.LogDebug(
+                "Failed material {material} check: requested quantity {q1}, entity: {@mat}",
+                requested.Key,
+                requested.Value,
+                mat
+            );
+
+            return false;
+        }
+
+        return true;
     }
 }

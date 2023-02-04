@@ -9378,7 +9378,10 @@ public class WeaponBodyList
     public int additional_effect_count { get; set; }
     public IEnumerable<int> unlock_weapon_passive_ability_no_list { get; set; }
     public int fort_passive_chara_weapon_buildup_count { get; set; }
-    public int is_new { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_new { get; set; }
     public DateTimeOffset gettime { get; set; }
     public int skill_no { get; set; }
     public int skill_level { get; set; }
@@ -9397,7 +9400,7 @@ public class WeaponBodyList
         int additional_effect_count,
         IEnumerable<int> unlock_weapon_passive_ability_no_list,
         int fort_passive_chara_weapon_buildup_count,
-        int is_new,
+        bool is_new,
         DateTimeOffset gettime,
         int skill_no,
         int skill_level,
