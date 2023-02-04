@@ -140,8 +140,8 @@ public class FriendTest : IClassFixture<IntegrationTestFixture>
                         },
                         new()
                         {
-                            ability_crest_id = AbilityCrests.GreatwyrmMercury,
-                            buildup_count = 40,
+                            ability_crest_id = AbilityCrests.DragonsNest,
+                            buildup_count = 20,
                             limit_break_count = 4,
                             hp_plus_count = 50,
                             attack_plus_count = 50,
