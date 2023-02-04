@@ -180,12 +180,6 @@ public class AuthService : IAuthService
 
         DbPlayerUserData? userData = await userDataQuery.SingleOrDefaultAsync();
 
-        this.logger.LogDebug(
-            "UserData query result for id {accountId}: {@userData}",
-            accountId,
-            userData
-        );
-
         if (userData is null)
             await this.savefileService.Create(accountId);
 

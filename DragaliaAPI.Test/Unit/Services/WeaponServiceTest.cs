@@ -186,7 +186,7 @@ public class WeaponServiceTest
         WeaponBody data = MasterAsset.WeaponBody.Get(WeaponBodies.WindrulersFang);
 
         this.mockInventoryRepository
-            .Setup(x => x.UpdateQuantity(data.CreateMaterialMap))
+            .Setup(x => x.UpdateQuantity(It.IsAny<Dictionary<Materials, int>>()))
             .Returns(Task.CompletedTask);
 
         this.mockUserDataRepository

@@ -28,7 +28,7 @@ public class DbWeaponBody : IDbHasAccountId
     /// <summary>
     /// Gets or sets a value indicating the weapon's level.
     /// </summary>
-    public int BuildupCount { get; set; } = 1;
+    public int BuildupCount { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating the weapon's unbind status.
@@ -97,7 +97,7 @@ public class DbWeaponBody : IDbHasAccountId
     /// Gets or sets the time at which the weapon was received.
     /// </summary>
     [TypeConverter(typeof(DateTimeOffsetConverter))]
-    public DateTimeOffset GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; } = DateTimeOffset.UtcNow;
 }
 
 internal class DbWeaponBodyConfiguration : IEntityTypeConfiguration<DbWeaponBody>
