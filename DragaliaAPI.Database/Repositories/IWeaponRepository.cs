@@ -5,8 +5,9 @@ namespace DragaliaAPI.Database.Repositories;
 
 public interface IWeaponRepository
 {
-    IQueryable<DbWeaponBody> GetWeaponBodies(string accountId);
-    Task Add(string accountId, WeaponBodies weaponBodyId);
-    Task AddSkin(string accountId, int weaponSkinId);
-    IQueryable<DbWeaponSkin> GetWeaponSkins(string accountId);
+    IQueryable<DbWeaponBody> WeaponBodies { get; }
+    IQueryable<DbWeaponSkin> WeaponSkins { get; }
+    Task Add(WeaponBodies weaponBodyId);
+    Task AddSkin(int weaponSkinId);
+    Task<bool> CheckOwnsWeapons(params WeaponBodies[] weaponIds);
 }

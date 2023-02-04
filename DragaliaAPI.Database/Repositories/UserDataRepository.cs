@@ -1,5 +1,8 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Shared;
+using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Database.Repositories;
 
@@ -9,11 +12,19 @@ namespace DragaliaAPI.Database.Repositories;
 public class UserDataRepository : BaseRepository, IUserDataRepository
 {
     private readonly ApiContext apiContext;
+    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly ILogger<UserDataRepository> logger;
 
-    public UserDataRepository(ApiContext apiContext)
+    public UserDataRepository(
+        ApiContext apiContext,
+        IPlayerDetailsService playerDetailsService,
+        ILogger<UserDataRepository> logger
+    )
         : base(apiContext)
     {
         this.apiContext = apiContext;
+        this.playerDetailsService = playerDetailsService;
+        this.logger = logger;
     }
 
     public IQueryable<DbPlayerUserData> GetUserData(string deviceAccountId)
@@ -102,20 +113,51 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         userData.Crystal += quantity;
     }
 
-    public async Task UpdateRupies(string deviceAccountId, long quantity)
+    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
+    public async Task UpdateRupies(string deviceAccountId, long offset)
     {
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
 
-        long newQuantity = (userData.Coin += quantity);
+        long newQuantity = (userData.Coin += offset);
         if (newQuantity < 0)
             throw new ArgumentException("Player cannot have negative rupies");
 
         userData.Coin = newQuantity;
     }
 
+    public async Task UpdateRupies(long offset)
+    {
+#pragma warning disable CS0618
+        await this.UpdateRupies(this.playerDetailsService.AccountId, offset);
+#pragma warning restore CS0618
+    }
+
+    public async Task<bool> CheckCoin(long quantity)
+    {
+        long coin = (await this.LookupUserData()).Coin;
+        bool result = coin >= quantity;
+
+        if (!result)
+        {
+            this.logger.LogDebug(
+                "Failed rupie check: requested {quantity} rupies, but user had {coin}",
+                quantity,
+                coin
+            );
+        }
+
+        return result;
+    }
+
+    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
     public async Task<DbPlayerUserData> LookupUserData(string deviceAccountId)
     {
         return await apiContext.PlayerUserData.FindAsync(deviceAccountId)
             ?? throw new NullReferenceException("Savefile lookup failed");
     }
+
+    public async Task<DbPlayerUserData> LookupUserData() =>
+#pragma warning disable CS0618
+        await this.LookupUserData(this.playerDetailsService.AccountId);
+#pragma warning restore CS0618
 }

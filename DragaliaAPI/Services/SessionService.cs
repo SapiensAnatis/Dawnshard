@@ -5,6 +5,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using DragaliaAPI.Shared;
 
 namespace DragaliaAPI.Services;
 
@@ -61,7 +62,7 @@ public class SessionService : ISessionService
             $":session:device_account_id:{deviceAccountId}";
     }
 
-    [Obsolete("Used for old pre-BaaS login flow")]
+    [Obsolete(ObsoleteReasons.BaaS)]
     public async Task PrepareSession(DeviceAccount deviceAccount, string idToken)
     {
         // Check if there is an existing session, and if so, remove it
@@ -92,7 +93,7 @@ public class SessionService : ISessionService
         );
     }
 
-    [Obsolete("Used for old pre-BaaS login flow")]
+    [Obsolete(ObsoleteReasons.BaaS)]
     public async Task<string> ActivateSession(string idToken)
     {
         Session session = await LoadSession(Schema.Session_IdToken(idToken));

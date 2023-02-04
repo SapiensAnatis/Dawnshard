@@ -15,6 +15,7 @@ using Serilog;
 using Serilog.Context;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
+using DragaliaAPI.Shared;
 
 namespace DragaliaAPI.Services;
 
@@ -59,7 +60,7 @@ public class AuthService : IAuthService
         return result;
     }
 
-    [Obsolete("From pre-BaaS login flow")]
+    [Obsolete(ObsoleteReasons.BaaS)]
     private async Task<(long viewerId, string sessionId)> DoLegacyAuth(string idToken)
     {
         string sessionId;
@@ -157,7 +158,7 @@ public class AuthService : IAuthService
             }
             else
             {
-                logger.LogWarning(
+                logger.LogDebug(
                     "ID token ..{token} was invalid: {@validationResult}",
                     idTokenTrace,
                     validationResult
@@ -180,7 +181,7 @@ public class AuthService : IAuthService
         DbPlayerUserData? userData = await userDataQuery.SingleOrDefaultAsync();
 
         this.logger.LogDebug(
-            "UserData query result for id {accountId}: {userData}",
+            "UserData query result for id {accountId}: {@userData}",
             accountId,
             userData
         );

@@ -29,22 +29,20 @@ public class WeaponService : IWeaponService
         this.logger = logger;
     }
 
-    public async Task<bool> ValidateCraft(string accountId, WeaponBodies weaponBodyId)
+    public async Task<bool> ValidateCraft(WeaponBodies weaponBodyId)
     {
-        if (await this.CheckOwnsWeapons(accountId, weaponBodyId))
+        if (await this.weaponRepository.CheckOwnsWeapons(weaponBodyId))
         {
-            this.logger.LogWarning("User already owns weapon {weapon}", weaponBodyId);
+            this.logger.LogDebug("Player already owns weapon {weapon}", weaponBodyId);
             return false;
         }
 
         WeaponBody weaponData = MasterAsset.WeaponBody.Get(weaponBodyId);
 
-        int smithyLevel = await this.GetSmithyLevel(accountId);
-        if (smithyLevel < weaponData.NeedFortCraftLevel)
+        if (!await fortRepository.CheckPlantLevel(FortPlants.Smithy, weaponData.NeedFortCraftLevel))
         {
-            this.logger.LogWarning(
-                "Player smithy level {level1} was too low to craft weapon {weapon} (needs level {level2})",
-                smithyLevel,
+            this.logger.LogDebug(
+                "Player smithy level was too low to craft weapon {weapon} (needs level {level2})",
                 weaponBodyId,
                 weaponData.NeedFortCraftLevel
             );
@@ -52,14 +50,13 @@ public class WeaponService : IWeaponService
         }
 
         if (
-            !await this.CheckOwnsWeapons(
-                accountId,
+            !await this.weaponRepository.CheckOwnsWeapons(
                 weaponData.NeedCreateWeaponBodyId1,
                 weaponData.NeedCreateWeaponBodyId2
             )
         )
         {
-            this.logger.LogWarning(
+            this.logger.LogDebug(
                 "Player did not have one or more weapons ({weapon1}, {weapon2}) required to craft {weapon3}",
                 weaponData.NeedCreateWeaponBodyId1,
                 weaponData.NeedCreateWeaponBodyId2,
@@ -70,99 +67,32 @@ public class WeaponService : IWeaponService
 
         // TODO: _NeedAllUnlockWeaponBodyId1
 
-        if (
-            !(
-                await this.inventoryRepository.CheckHasMaterialQuantity(
-                    accountId,
-                    weaponData.QuantityMap
-                )
-            )
-        )
+        if (!await this.inventoryRepository.CheckQuantity(weaponData.CreateMaterialMap))
         {
-            this.logger.LogWarning(
-                "Player lacked materials to craft weapon {weapon}",
-                weaponBodyId
-            );
+            this.logger.LogDebug("Player lacked materials to craft weapon {weapon}", weaponBodyId);
             return false;
         }
 
-        long coin = (await this.userDataRepository.LookupUserData(accountId)).Coin;
-        if (coin < weaponData.CreateCoin)
+        if (!await this.userDataRepository.CheckCoin(weaponData.CreateCoin))
         {
-            this.logger.LogWarning(
-                "Player had too few rupies ({rupies}) to craft weapon {weapon} (needs {neededRupies})",
-                coin,
-                weaponBodyId,
-                weaponData.CreateCoin
-            );
+            this.logger.LogDebug("Player lacked rupies to craft weapon {weapon}", weaponBodyId);
+            return false;
         }
 
         return true;
     }
 
-    public async Task Craft(string accountId, WeaponBodies weaponBodyId)
+    public async Task Craft(WeaponBodies weaponBodyId)
     {
         WeaponBody weaponData = MasterAsset.WeaponBody.Get(weaponBodyId);
 
-        await this.inventoryRepository.AddMaterialQuantity(
-            accountId,
-            weaponData.CreateEntityId1,
-            -weaponData.CreateEntityQuantity1
+        await this.inventoryRepository.UpdateQuantity(
+            weaponData.CreateMaterialMap.ToDictionary(x => x.Key, x => -x.Value)
         );
 
-        await this.inventoryRepository.AddMaterialQuantity(
-            accountId,
-            weaponData.CreateEntityId2,
-            -weaponData.CreateEntityQuantity2
-        );
+        await this.userDataRepository.UpdateRupies(-weaponData.CreateCoin);
 
-        await this.inventoryRepository.AddMaterialQuantity(
-            accountId,
-            weaponData.CreateEntityId3,
-            -weaponData.CreateEntityQuantity3
-        );
-
-        await this.inventoryRepository.AddMaterialQuantity(
-            accountId,
-            weaponData.CreateEntityId4,
-            -weaponData.CreateEntityQuantity4
-        );
-
-        await this.inventoryRepository.AddMaterialQuantity(
-            accountId,
-            weaponData.CreateEntityId5,
-            -weaponData.CreateEntityQuantity5
-        );
-
-        await this.userDataRepository.UpdateRupies(accountId, -weaponData.CreateCoin);
-
-        await this.weaponRepository.Add(accountId, weaponBodyId);
-        await this.weaponRepository.AddSkin(accountId, (int)weaponBodyId);
-    }
-
-    private async Task<int> GetSmithyLevel(string accountId)
-    {
-        return await this.fortRepository
-            .GetBuilds(accountId)
-            .Where(x => x.PlantId == FortPlants.Smithy)
-            .Select(x => x.Level)
-            .FirstOrDefaultAsync();
-    }
-
-    private async Task<bool> CheckOwnsWeapons(string accountId, params WeaponBodies[] weaponIds)
-    {
-        List<WeaponBodies> filtered = weaponIds.Where(x => x != WeaponBodies.Empty).ToList();
-        if (!filtered.Any())
-            return true;
-
-        return (
-                await this.weaponRepository
-                    .GetWeaponBodies(accountId)
-                    .Select(x => x.WeaponBodyId)
-                    .Where(x => weaponIds.Contains(x))
-                    .ToListAsync()
-            )
-                .Intersect(filtered)
-                .Count() == filtered.Count;
+        await this.weaponRepository.Add(weaponBodyId);
+        await this.weaponRepository.AddSkin((int)weaponBodyId);
     }
 }

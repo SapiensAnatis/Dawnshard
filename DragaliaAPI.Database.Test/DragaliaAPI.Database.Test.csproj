@@ -28,6 +28,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
 		<ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
+		<ProjectReference Include="..\DragaliaAPI.Test.Utils\DragaliaAPI.Test.Utils.csproj" />
 		<ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj" />
 	</ItemGroup>
 

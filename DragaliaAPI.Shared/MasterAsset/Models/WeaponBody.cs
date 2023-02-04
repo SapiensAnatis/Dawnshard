@@ -87,7 +87,7 @@ public record WeaponBody(
     int CreateEntityQuantity5
 )
 {
-    public Dictionary<Materials, int> QuantityMap { get; } =
+    public Dictionary<Materials, int> CreateMaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>()
         {
             new(CreateEntityId1, CreateEntityQuantity1),

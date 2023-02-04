@@ -19,7 +19,7 @@ public class FriendControllerTest
         this.mockBonusService = new(MockBehavior.Strict);
 
         this.mockBonusService
-            .Setup(x => x.GetBonusList(TestUtils.DeviceAccountId))
+            .Setup(x => x.GetBonusList())
             .ReturnsAsync(new FortBonusList());
 
         this.friendController = new FriendController(

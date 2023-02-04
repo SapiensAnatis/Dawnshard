@@ -2,6 +2,7 @@
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
+using DragaliaAPI.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -12,7 +13,7 @@ namespace DragaliaAPI.Controllers.Nintendo;
 /// If a Nintendo account were linked, it would return information about the user, but that is not yet implemented.
 /// </summary>
 [ApiController]
-[Obsolete("An external login server is now used, except for in the development environment.")]
+[Obsolete(ObsoleteReasons.BaaS)]
 [Consumes("application/json")]
 [Produces("application/json")]
 [Route("/core/v1/gateway/sdk/login")]

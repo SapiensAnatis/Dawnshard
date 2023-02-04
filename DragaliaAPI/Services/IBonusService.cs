@@ -4,5 +4,5 @@ namespace DragaliaAPI.Services;
 
 public interface IBonusService
 {
-    Task<FortBonusList> GetBonusList(string accountId);
+    Task<FortBonusList> GetBonusList();
 }

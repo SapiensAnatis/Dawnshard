@@ -1,7 +1,9 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 
@@ -13,31 +15,14 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     public FortRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.fortRepository = new FortRepository(this.fixture.ApiContext);
-
-        AssertionOptions.AssertEquivalencyUsing(
-            options =>
-                options
-                    .Using<DateTimeOffset>(
-                        ctx =>
-                            ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))
-                    )
-                    .WhenTypeIs<DateTimeOffset>()
+        this.fortRepository = new FortRepository(
+            this.fixture.ApiContext,
+            IdentityTestUtils.MockPlayerDetailsService.Object,
+            LoggerTestUtils.Create<FortRepository>()
         );
 
-        AssertionOptions.AssertEquivalencyUsing(
-            options =>
-                options
-                    .Using<TimeSpan>(
-                        ctx =>
-                            ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))
-                    )
-                    .WhenTypeIs<TimeSpan>()
-        );
-
-        AssertionOptions.AssertEquivalencyUsing(
-            options => options.Excluding(x => x.Name == "Owner")
-        );
+        CommonAssertionOptions.ApplyTimeOptions();
+        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
     [Fact]
@@ -64,5 +49,37 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
                 new DbFortBuild() { DeviceAccountId = "id", PlantId = FortPlants.CircusTent },
                 opts => opts.Excluding(x => x.Owner).Excluding(x => x.BuildId)
             );
+    }
+
+    [Fact]
+    public async Task CheckPlantLevel_Success_ReturnsTrue()
+    {
+        await this.fixture.AddToDatabase(
+            new DbFortBuild()
+            {
+                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                PlantId = FortPlants.Dragonata,
+                Level = 10
+            }
+        );
+
+        (await this.fortRepository.CheckPlantLevel(FortPlants.Dragonata, 10)).Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task CheckPlantLevel_Fail_ReturnsFalse()
+    {
+        await this.fixture.AddToDatabase(
+            new DbFortBuild()
+            {
+                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                PlantId = FortPlants.BroadleafTree,
+                Level = 3
+            }
+        );
+
+        (await this.fortRepository.CheckPlantLevel(FortPlants.BroadleafTree, 10))
+            .Should()
+            .BeFalse();
     }
 }

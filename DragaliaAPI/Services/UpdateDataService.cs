@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services;
@@ -12,11 +13,17 @@ public class UpdateDataService : IUpdateDataService
 {
     private readonly ApiContext apiContext;
     private readonly IMapper mapper;
+    private readonly IPlayerDetailsService playerDetailsService;
 
-    public UpdateDataService(ApiContext apiContext, IMapper mapper)
+    public UpdateDataService(
+        ApiContext apiContext,
+        IMapper mapper,
+        IPlayerDetailsService playerDetailsService
+    )
     {
         this.apiContext = apiContext;
         this.mapper = mapper;
+        this.playerDetailsService = playerDetailsService;
     }
 
     public UpdateDataList GetUpdateDataList(string deviceAccountId)
@@ -71,9 +78,11 @@ public class UpdateDataService : IUpdateDataService
         return result;
     }
 
-    public async Task<int> SaveChangesAsync()
+    public async Task<UpdateDataList> SaveChangesAsync()
     {
-        return await this.apiContext.SaveChangesAsync();
+        UpdateDataList result = this.GetUpdateDataList(this.playerDetailsService.AccountId);
+        await this.apiContext.SaveChangesAsync();
+        return result;
     }
 
     private IEnumerable<TNetwork>? ConvertEntities<TNetwork, TDatabase>(

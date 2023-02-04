@@ -55,7 +55,7 @@ public class FriendController : DragaliaControllerBase
                 .FirstOrDefault() ?? new() { is_friend = false };
 
         // TODO: when helpers are converted to use other account ids, get the bonuses of that account id
-        FortBonusList bonusList = await bonusService.GetBonusList(DeviceAccountId);
+        FortBonusList bonusList = await bonusService.GetBonusList();
 
         FriendGetSupportCharaDetailData response =
             new()

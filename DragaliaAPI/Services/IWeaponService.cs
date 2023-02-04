@@ -4,6 +4,6 @@ namespace DragaliaAPI.Services;
 
 public interface IWeaponService
 {
-    Task<bool> ValidateCraft(string accountId, WeaponBodies weaponBodyId);
-    Task Craft(string accountId, WeaponBodies weaponBodyId);
+    Task<bool> ValidateCraft(WeaponBodies weaponBodyId);
+    Task Craft(WeaponBodies weaponBodyId);
 }

@@ -3,10 +3,11 @@ using System.Text;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Nintendo;
+using DragaliaAPI.Shared;
 
 namespace DragaliaAPI.Services;
 
-[Obsolete("Used for pre-BaaS auth flow")]
+[Obsolete(ObsoleteReasons.BaaS)]
 public class DeviceAccountService : IDeviceAccountService
 {
     private readonly IDeviceAccountRepository deviceAccountRepository;

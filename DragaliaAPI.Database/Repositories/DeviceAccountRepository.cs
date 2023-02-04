@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Database.Factories;
+using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.MasterAsset;
 
 namespace DragaliaAPI.Database.Repositories;
@@ -9,7 +10,7 @@ namespace DragaliaAPI.Database.Repositories;
 /// <summary>
 /// Repository to
 /// </summary>
-[Obsolete("Used by pre-BaaS login flow")]
+[Obsolete(ObsoleteReasons.BaaS)]
 public class DeviceAccountRepository : BaseRepository, IDeviceAccountRepository
 {
     private readonly ApiContext apiContext;

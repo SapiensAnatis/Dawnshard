@@ -324,7 +324,21 @@ public class MasterAssetTest
                     RewardWeaponSkinId2: 0,
                     RewardWeaponSkinId3: 0,
                     RewardWeaponSkinId4: 0,
-                    RewardWeaponSkinId5: 0
+                    RewardWeaponSkinId5: 0,
+                    NeedFortCraftLevel: 7,
+                    NeedCreateWeaponBodyId1: 0,
+                    NeedCreateWeaponBodyId2: 0,
+                    CreateCoin: 80000,
+                    CreateEntityId1: Materials.BatsWing,
+                    CreateEntityQuantity1: 430,
+                    CreateEntityId2: Materials.SolidFungus,
+                    CreateEntityQuantity2: 35,
+                    CreateEntityId3: Materials.ShinySpore,
+                    CreateEntityQuantity3: 1,
+                    CreateEntityId4: Materials.StreamOrb,
+                    CreateEntityQuantity4: 8,
+                    CreateEntityId5: 0,
+                    CreateEntityQuantity5: 0
                 )
             );
     }
