@@ -25,6 +25,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         );
 
         CommonAssertionOptions.ApplyIgnoreOwnerOptions();
+        CommonAssertionOptions.ApplyTimeOptions();
     }
 
     [Fact]
