@@ -32,7 +32,7 @@ public class FortController : DragaliaControllerBase
             await this.fortRepository.GetBuilds(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<BuildList>);
 
-        FortBonusList bonusList = await this.bonusService.GetBonusList(DeviceAccountId);
+        FortBonusList bonusList = await this.bonusService.GetBonusList();
 
         FortGetDataData data =
             new()
@@ -52,7 +52,7 @@ public class FortController : DragaliaControllerBase
 
     private static class StubData
     {
-        public static FortDetail FortDetail =
+        public static readonly FortDetail FortDetail =
             new()
             {
                 carpenter_num = 5,
@@ -60,11 +60,11 @@ public class FortController : DragaliaControllerBase
                 working_carpenter_num = 0
             };
 
-        public static AtgenProductionRp ProductionRp = new();
+        public static readonly AtgenProductionRp ProductionRp = new();
 
-        public static AtgenProductionRp ProductionDf = new();
+        public static readonly AtgenProductionRp ProductionDf = new();
 
-        public static AtgenProductionRp ProductionSt = new() { speed = 0.03f, max = 144 };
+        public static readonly AtgenProductionRp ProductionSt = new() { speed = 0.03f, max = 144 };
 
         public const int DragonFreeGifts = 1;
     }

@@ -1,5 +1,8 @@
 ﻿using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 
@@ -13,7 +16,11 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     {
         this.fixture = fixture;
 
-        this.userDataRepository = new UserDataRepository(this.fixture.ApiContext);
+        this.userDataRepository = new UserDataRepository(
+            this.fixture.ApiContext,
+            IdentityTestUtils.MockPlayerDetailsService.Object,
+            LoggerTestUtils.Create<UserDataRepository>()
+        );
     }
 
     [Fact]

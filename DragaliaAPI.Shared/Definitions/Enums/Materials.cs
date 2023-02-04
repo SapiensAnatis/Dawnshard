@@ -2,6 +2,7 @@
 
 public enum Materials
 {
+    Empty = 0,
     AbaddonOrb = 104001054,
     AbyssStone = 202004002,
     AbyssalLantern = 204025002,

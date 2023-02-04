@@ -1,12 +1,13 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 
 [Collection("RepositoryTest")]
-[Obsolete("From pre-BaaS login flow")]
+[Obsolete(ObsoleteReasons.BaaS)]
 public class DeviceAccountRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;

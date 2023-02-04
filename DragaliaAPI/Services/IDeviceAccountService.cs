@@ -1,8 +1,9 @@
 ﻿using DragaliaAPI.Models.Nintendo;
+using DragaliaAPI.Shared;
 
 namespace DragaliaAPI.Services;
 
-[Obsolete("Used for pre-BaaS login flow")]
+[Obsolete(ObsoleteReasons.BaaS)]
 public interface IDeviceAccountService
 {
     Task<bool> AuthenticateDeviceAccount(DeviceAccount deviceAccount);

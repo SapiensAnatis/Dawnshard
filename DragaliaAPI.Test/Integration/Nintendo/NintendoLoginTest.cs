@@ -5,11 +5,12 @@ using System.Text.Json.Serialization;
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
+using DragaliaAPI.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Test.Integration.Nintendo;
 
-[Obsolete("From pre-BaaS login flow")]
+[Obsolete(ObsoleteReasons.BaaS)]
 [Collection("DragaliaIntegration")]
 public class NintendoLoginTest : IClassFixture<IntegrationTestFixture>
 {

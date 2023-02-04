@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DragaliaAPI.Shared;
 
 namespace DragaliaAPI.Database.Entities;
 
-[Obsolete("Pre-BaaS login flow")]
+[Obsolete(ObsoleteReasons.BaaS)]
 public class DbDeviceAccount
 {
     [Required]

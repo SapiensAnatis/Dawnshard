@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
+using DragaliaAPI.Shared;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
@@ -18,10 +19,10 @@ public class SessionServiceTest
     private readonly Mock<IOptionsMonitor<RedisOptions>> mockOptions;
     private readonly SessionService sessionService;
 
-    [Obsolete]
+    [Obsolete(ObsoleteReasons.BaaS)]
     private readonly DeviceAccount deviceAccount = new("id", "password");
 
-    [Obsolete]
+    [Obsolete(ObsoleteReasons.BaaS)]
     private readonly DeviceAccount deviceAccountTwo = new("id 2", "password 2");
 
     private readonly IDistributedCache testCache;
@@ -65,7 +66,7 @@ public class SessionServiceTest
         this.testCache.GetString($":session:id_token:token").Should().NotBeNull();
     }
 
-    [Obsolete("From pre-BaaS login flow")]
+    [Obsolete(ObsoleteReasons.BaaS)]
     [Fact]
     public async Task NewSession_CreatesValidSession()
     {
@@ -74,7 +75,7 @@ public class SessionServiceTest
         this.testCache.GetString($":session:session_id:{sessionId}").Should().NotBeNull();
     }
 
-    [Obsolete("From pre-BaaS login flow")]
+    [Obsolete(ObsoleteReasons.BaaS)]
     [Fact]
     public async Task NewSession_ExistingSession_ReplacesOldSession()
     {
@@ -87,7 +88,7 @@ public class SessionServiceTest
         secondSessionId.Should().NotBeEquivalentTo(firstSessionId);
     }
 
-    [Obsolete("From pre-BaaS login flow")]
+    [Obsolete(ObsoleteReasons.BaaS)]
     [Fact]
     public async Task NewSession_TwoCreated_BothValid()
     {
@@ -100,7 +101,7 @@ public class SessionServiceTest
         secondSessionId.Should().NotBeEquivalentTo(firstSessionId);
     }
 
-    [Obsolete("From pre-BaaS login flow")]
+    [Obsolete(ObsoleteReasons.BaaS)]
     private async Task<string> PrepareAndRegisterSession(
         string idToken,
         DeviceAccount deviceAccount

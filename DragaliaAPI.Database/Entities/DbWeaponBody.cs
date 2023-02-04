@@ -28,7 +28,7 @@ public class DbWeaponBody : IDbHasAccountId
     /// <summary>
     /// Gets or sets a value indicating the weapon's level.
     /// </summary>
-    public int BuildupCount { get; set; } = 1;
+    public int BuildupCount { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating the weapon's unbind status.
@@ -83,8 +83,7 @@ public class DbWeaponBody : IDbHasAccountId
     }
 
     /// <summary>
-    /// Gets or sets an unknown value.
-    /// <remarks>Seems to always be 0 or 1. Something to do with the Halidom.</remarks>
+    /// Gets or sets a value indicating whether the weapon bonus has been unlocked.
     /// </summary>
     public int FortPassiveCharaWeaponBuildupCount { get; set; } = 0;
 
@@ -98,7 +97,7 @@ public class DbWeaponBody : IDbHasAccountId
     /// Gets or sets the time at which the weapon was received.
     /// </summary>
     [TypeConverter(typeof(DateTimeOffsetConverter))]
-    public DateTimeOffset GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; } = DateTimeOffset.UtcNow;
 }
 
 internal class DbWeaponBodyConfiguration : IEntityTypeConfiguration<DbWeaponBody>

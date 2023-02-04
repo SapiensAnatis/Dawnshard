@@ -13,13 +13,14 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Json;
 using MockQueryable.Moq;
 using Xunit.Abstractions;
+using static DragaliaAPI.Test.Utils.IdentityTestUtils;
 
 namespace DragaliaAPI.Test.Unit.Services;
 
 public class BonusServiceTest
 {
     private readonly Mock<IFortRepository> mockFortRepository;
-    private readonly Mock<IWeaponBodyRepository> mockWeaponBodyRepository;
+    private readonly Mock<IWeaponRepository> mockWeaponBodyRepository;
     private readonly IBonusService bonusService;
 
     public BonusServiceTest()
@@ -57,14 +58,14 @@ public class BonusServiceTest
             .Deserialize<FortBonusList>(ApiJsonOptions.Instance)!;
 
         this.mockFortRepository
-            .Setup(x => x.GetBuilds("id"))
+            .Setup(x => x.Builds)
             .Returns(
                 inputBuildList
                     .Select(
                         x =>
                             new DbFortBuild()
                             {
-                                DeviceAccountId = "id",
+                                DeviceAccountId = DeviceAccountId,
                                 PlantId = x.plant_id,
                                 Level = x.level
                             }
@@ -74,14 +75,14 @@ public class BonusServiceTest
             );
 
         this.mockWeaponBodyRepository
-            .Setup(x => x.GetWeaponBodies("id"))
+            .SetupGet(x => x.WeaponBodies)
             .Returns(
                 inputWeaponList
                     .Select(
                         x =>
                             new DbWeaponBody()
                             {
-                                DeviceAccountId = "id",
+                                DeviceAccountId = DeviceAccountId,
                                 WeaponBodyId = x.weapon_body_id,
                                 FortPassiveCharaWeaponBuildupCount =
                                     x.fort_passive_chara_weapon_buildup_count
@@ -91,7 +92,7 @@ public class BonusServiceTest
                     .BuildMock()
             );
 
-        FortBonusList bonusList = await this.bonusService.GetBonusList("id");
+        FortBonusList bonusList = await this.bonusService.GetBonusList();
 
         bonusList
             .Should()
