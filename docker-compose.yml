@@ -15,6 +15,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "80:80"
+      - "433:433"
     links:
       - postgres
     env_file:

@@ -2686,17 +2686,5 @@
     "_PickupViewStartDate": "",
     "_PickupViewEndDate": "",
     "_MemoryPickupEventId": 0
-  },
-  {
-    "_Id": 0,
-    "_AbilityCrestId": 0,
-    "_NeedDewPoint": 0,
-    "_Priority": 0,
-    "_LabelType": 0,
-    "_CommenceDate": "",
-    "_CompleteDate": "",
-    "_PickupViewStartDate": "",
-    "_PickupViewEndDate": "",
-    "_MemoryPickupEventId": 0
   }
 ]

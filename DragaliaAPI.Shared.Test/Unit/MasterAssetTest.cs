@@ -444,8 +444,7 @@ public class MasterAssetTest
                     Id: 5101,
                     AbilityCrestId: AbilityCrests.SweetSurprise,
                     NeedDewPoint: 4000,
-                    Priority: 5199,
-                    LabelType: 0
+                    Priority: 5199
                 )
             );
     }

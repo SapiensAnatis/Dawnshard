@@ -6,6 +6,5 @@ public record AbilityCrestTrade(
     int Id,
     AbilityCrests AbilityCrestId,
     int NeedDewPoint,
-    int Priority,
-    int LabelType
+    int Priority
 );

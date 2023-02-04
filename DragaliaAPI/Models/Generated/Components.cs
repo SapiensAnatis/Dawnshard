@@ -100,7 +100,7 @@ public class AbilityCrestSetList
 public class AbilityCrestTradeList
 {
     public int ability_crest_trade_id { get; set; }
-    public int ability_crest_id { get; set; }
+    public AbilityCrests ability_crest_id { get; set; }
     public int need_dew_point { get; set; }
     public int priority { get; set; }
     public int complete_date { get; set; }
@@ -109,7 +109,7 @@ public class AbilityCrestTradeList
 
     public AbilityCrestTradeList(
         int ability_crest_trade_id,
-        int ability_crest_id,
+        AbilityCrests ability_crest_id,
         int need_dew_point,
         int priority,
         int complete_date,
