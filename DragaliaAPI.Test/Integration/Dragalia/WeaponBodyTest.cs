@@ -94,6 +94,15 @@ public class WeaponBodyTest : IntegrationTestBase
             new WeaponBodyCraftRequest() { weapon_body_id = WeaponBodies.PrimalCrimson }
         );
 
+        this.fixture.ApiContext.PlayerWeapons
+            .SingleOrDefault(
+                x =>
+                    x.DeviceAccountId == fixture.DeviceAccountId
+                    && x.WeaponBodyId == WeaponBodies.PrimalCrimson
+            )
+            .Should()
+            .NotBeNull();
+
         GetMaterialCount(Materials.PrimalFlamewyrmsSphere).Should().Be(oldMatCount1 - 20);
         GetMaterialCount(Materials.PrimalFlamewyrmsGreatsphere).Should().Be(oldMatCount2 - 15);
         GetMaterialCount(Materials.TwinklingSand).Should().Be(oldMatCount3 - 1);

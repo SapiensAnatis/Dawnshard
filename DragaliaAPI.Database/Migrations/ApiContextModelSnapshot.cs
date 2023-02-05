@@ -17,7 +17,7 @@ namespace DragaliaAPI.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.1")
+                .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -919,6 +919,21 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerWeapons");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponPassiveAbility", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("WeaponPassiveAbilityId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DeviceAccountId", "WeaponPassiveAbilityId");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("PlayerPassiveAbilities");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponSkin", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -1120,6 +1135,17 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany("WeaponBodyList")
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponPassiveAbility", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -1,5 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
@@ -60,5 +62,28 @@ public class WeaponRepository : IWeaponRepository
                     .Where(x => filtered.Contains(x))
                     .CountAsync()
             ) == filtered.Count;
+    }
+
+    public async Task<DbWeaponBody?> FindAsync(WeaponBodies id) =>
+        await this.apiContext.PlayerWeapons.FindAsync(this.playerDetailsService.AccountId, id);
+
+    public async Task AddPassiveAbility(WeaponBodies id, int abilityNo)
+    {
+        DbWeaponBody? entity = await this.FindAsync(id);
+        ArgumentNullException.ThrowIfNull(entity);
+
+        List<int> passiveList = entity.UnlockWeaponPassiveAbilityNoList.ToList();
+        passiveList[abilityNo + 1] = 1;
+        entity.UnlockWeaponPassiveAbilityNoList = passiveList;
+
+        int abilityId = MasterAsset.WeaponBody.Get(id).GetPassiveAbility(abilityNo).Id;
+
+        await this.apiContext.PlayerPassiveAbilities.AddAsync(
+            new()
+            {
+                DeviceAccountId = this.playerDetailsService.AccountId,
+                WeaponPassiveAbilityId = abilityId
+            }
+        );
     }
 }

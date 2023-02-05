@@ -68,6 +68,8 @@ public class UnitMapProfile : Profile
             .ForMember(x => x.ability_1_level, opts => opts.MapFrom(x => 2))
             .ForMember(x => x.ability_2_level, opts => opts.MapFrom(x => 2));
 
+        this.CreateMap<DbWeaponPassiveAbility, WeaponPassiveAbilityList>();
+
         this.CreateMap<DbEditSkillData, EditSkillCharaData>();
 
         this.DisableConstructorMapping();
