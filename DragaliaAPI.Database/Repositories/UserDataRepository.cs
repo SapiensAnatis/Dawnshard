@@ -116,6 +116,8 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
     [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
     public async Task UpdateRupies(string deviceAccountId, long offset)
     {
+        this.logger.LogDebug("Updating player rupies by {offset}", offset);
+
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
 
         long newQuantity = (userData.Coin += offset);
@@ -139,7 +141,7 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
 
         if (!result)
         {
-            this.logger.LogDebug(
+            this.logger.LogWarning(
                 "Failed rupie check: requested {quantity} rupies, but user had {coin}",
                 quantity,
                 coin

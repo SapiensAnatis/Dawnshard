@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -55,6 +56,11 @@ public class MasterAssetData<TKey, TItem>
     public TItem Get(TKey key)
     {
         return this.internalKeyCollection[key];
+    }
+
+    public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TItem item)
+    {
+        return this.internalKeyCollection.TryGetValue(key, out item);
     }
 
     public IEnumerable<TItem> Enumerable => this.internalKeyCollection.AsEnumerable();

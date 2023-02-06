@@ -117,6 +117,8 @@ app.UseSerilogRequestLogging(
         }
 );
 
+Log.Logger.Information("App environment: {@env}", app.Environment);
+
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.MigrateDatabase();

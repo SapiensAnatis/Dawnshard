@@ -98,4 +98,12 @@ public record WeaponBody(
         }
             .Where(x => x.Key != Materials.Empty)
             .ToDictionary(x => x.Key, x => x.Value);
+
+    public int GetBuildupGroupId(BuildupPieceTypes type, int step) =>
+        int.Parse($"{this.WeaponBodyBuildupGroupId}{(int)type:00}{step:00}");
+
+    public int GetBuildupLevelId(int level) => int.Parse($"{this.Rarity}010{level:00}");
+
+    public int GetPassiveAbilityId(int abilityNo) =>
+        int.Parse($"{this.WeaponPassiveAbilityGroupId}{abilityNo:00}");
 };

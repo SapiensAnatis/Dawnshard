@@ -3,6 +3,8 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
@@ -50,23 +52,44 @@ public class WeaponBodyController : DragaliaControllerBase
     [HttpPost("buildup_piece")]
     public async Task<DragaliaResult> BuildupPiece(WeaponBodyBuildupPieceRequest request)
     {
-        foreach (AtgenBuildupWeaponBodyPieceList buildup in request.buildup_weapon_body_piece_list)
-        {
-            if (!await this.weaponService.ValidateBuildup(request.weapon_body_id, buildup))
-            {
-                this.logger.LogWarning("buildup_piece request {request} was invalid", request);
-                return this.Code(ResultCode.WeaponBodyBuildupPieceUnablePiece);
-            }
+        this.logger.LogDebug("Received request to upgrade weapon {weapon}", request.weapon_body_id);
 
-            await this.weaponService.UnlockBuildup(request.weapon_body_id, buildup);
+        if (!await this.weaponService.CheckOwned(request.weapon_body_id))
+        {
+            this.logger.LogError("User did not own weapon {weapon}", request.weapon_body_id);
+            return this.Code(ResultCode.WeaponBodyCraftShortWeaponBody);
         }
+
+        if (!MasterAsset.WeaponBody.TryGetValue(request.weapon_body_id, out WeaponBody? bodyData))
+        {
+            this.logger.LogError(
+                "Weapon {weapon} had no MasterAsset entry",
+                request.weapon_body_id
+            );
+            return this.Code(ResultCode.WeaponBodyIsNotPlayable);
+        }
+
+        foreach (
+            AtgenBuildupWeaponBodyPieceList buildup in request.buildup_weapon_body_piece_list
+                .OrderBy(x => x.buildup_piece_type)
+                .ThenBy(x => x.step)
+        )
+        {
+            ResultCode buildupResult = await weaponService.TryBuildup(bodyData, buildup);
+
+            if (buildupResult != ResultCode.Success)
+            {
+                this.logger.LogError("buildup_piece request {request} was invalid", request);
+                return this.Code(buildupResult);
+            }
+        }
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         this.logger.LogInformation(
             "Completed request to upgrade weapon {weapon}",
             request.weapon_body_id
         );
-
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(new WeaponBodyBuildupPieceData() { update_data_list = updateDataList });
     }
