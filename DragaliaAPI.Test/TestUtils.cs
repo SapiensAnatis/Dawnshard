@@ -8,6 +8,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
+using DragaliaAPI.Shared.PlayerDetails;
 using FluentAssertions.Equivalency;
 using MessagePack;
 using MessagePack.Resolvers;
