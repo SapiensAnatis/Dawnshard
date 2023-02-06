@@ -1,7 +1,6 @@
 ﻿using System.Formats.Tar;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.AutoMapper;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 

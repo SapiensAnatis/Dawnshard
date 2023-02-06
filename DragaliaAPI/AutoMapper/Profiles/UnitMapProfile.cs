@@ -3,7 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Models.Generated;
 
-namespace DragaliaAPI.Models.AutoMapper;
+namespace DragaliaAPI.AutoMapper.Profiles;
 
 public class UnitMapProfile : Profile
 {
@@ -30,6 +30,7 @@ public class UnitMapProfile : Profile
             .ForMember(x => x.ability_2_level, opts => opts.MapFrom(x => 3));
 
         this.CreateMap<DbWeaponBody, WeaponBodyList>()
+            // These members do not appear in the savefile
             .ForMember(x => x.ability_1_level, opts => opts.Ignore())
             .ForMember(x => x.ability_2_levell, opts => opts.Ignore())
             .ForMember(x => x.skill_no, opts => opts.Ignore())
@@ -62,11 +63,11 @@ public class UnitMapProfile : Profile
         this.CreateMap<DbWeaponSkin, GameWeaponSkin>();
 
         this.CreateMap<DbWeaponBody, GameWeaponBody>()
-            // TODO: actual mapping for this
+            // Unknown what skill_no is or does
             .ForMember(x => x.skill_no, opts => opts.MapFrom(x => 1))
-            .ForMember(x => x.skill_level, opts => opts.MapFrom(x => 2))
-            .ForMember(x => x.ability_1_level, opts => opts.MapFrom(x => 2))
-            .ForMember(x => x.ability_2_level, opts => opts.MapFrom(x => 2));
+            .ForMember(x => x.skill_level, opts => opts.MapFrom<WeaponSkillLevelResolver>())
+            .ForMember(x => x.ability_1_level, opts => opts.MapFrom<WeaponAbilityLevelResolver>())
+            .ForMember(x => x.ability_2_level, opts => opts.MapFrom<WeaponAbilityLevelResolver>());
 
         this.CreateMap<DbWeaponPassiveAbility, WeaponPassiveAbilityList>();
 

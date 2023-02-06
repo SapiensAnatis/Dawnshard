@@ -2,14 +2,14 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 
-namespace DragaliaAPI.Models.AutoMapper;
+namespace DragaliaAPI.AutoMapper.Profiles;
 
-public class SummonMapProfile : Profile
+public class FortMapProfile : Profile
 {
-    public SummonMapProfile()
+    public FortMapProfile()
     {
-        this.CreateMap<DbPlayerSummonHistory, SummonHistoryList>()
-            .ForMember(nameof(SummonHistoryList.summon_point_id), o => o.MapFrom(x => x.SummonId));
+        this.CreateMap<DbFortBuild, FortPlantList>();
+        this.CreateMap<DbFortBuild, BuildList>();
 
         this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
         this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;

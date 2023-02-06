@@ -2,7 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 
-namespace DragaliaAPI.Models.AutoMapper;
+namespace DragaliaAPI.AutoMapper.Profiles;
 
 public class UserDataReverseMapProfile : Profile
 {

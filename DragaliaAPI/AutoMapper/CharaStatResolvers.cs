@@ -5,7 +5,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 
-namespace DragaliaAPI.Models.AutoMapper;
+namespace DragaliaAPI.AutoMapper;
 
 /// <summary>
 /// Resolvers to calculate base and node atk/hp for an input CharaList.

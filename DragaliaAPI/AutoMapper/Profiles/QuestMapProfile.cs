@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions;
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 
-namespace DragaliaAPI.Models.AutoMapper;
+namespace DragaliaAPI.AutoMapper.Profiles;
 
 public class QuestMapProfile : Profile
 {

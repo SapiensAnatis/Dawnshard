@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Middleware;
+﻿namespace DragaliaAPI.Shared.PlayerDetails;
 
 /// <summary>
 /// Custom authentication claim types.
