@@ -3,6 +3,7 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;
 
 namespace DragaliaAPI.Test.Unit.Controllers;
@@ -77,5 +78,65 @@ public class WeaponBodyControllerTest
         ).GetData<ResultCodeData>()!;
 
         data.result_code.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
+    }
+
+    [Fact]
+    public async Task BuildupPiece_InvalidWeapon_ReturnsError()
+    {
+        ResultCodeData data = (
+            await this.weaponBodyController.BuildupPiece(
+                new WeaponBodyBuildupPieceRequest() { weapon_body_id = (WeaponBodies)8 }
+            )
+        ).GetData<ResultCodeData>()!;
+
+        data.result_code.Should().Be(ResultCode.WeaponBodyIsNotPlayable);
+    }
+
+    [Fact]
+    public async Task BuildupPiece_UnownedWeapon_ReturnsError()
+    {
+        this.mockWeaponService.Setup(x => x.CheckOwned(WeaponBodies.Caduceus)).ReturnsAsync(false);
+
+        ResultCodeData data = (
+            await this.weaponBodyController.BuildupPiece(
+                new WeaponBodyBuildupPieceRequest() { weapon_body_id = WeaponBodies.Caduceus }
+            )
+        ).GetData<ResultCodeData>()!;
+
+        data.result_code.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
+    }
+
+    [Fact]
+    public async Task BuildupPiece_SingleBuildupFailure_ReturnsError()
+    {
+        this.mockWeaponService.Setup(x => x.CheckOwned(WeaponBodies.Caduceus)).ReturnsAsync(true);
+        this.mockWeaponService
+            .SetupSequence(
+                x =>
+                    x.TryBuildup(
+                        MasterAsset.WeaponBody.Get(WeaponBodies.Caduceus),
+                        It.IsAny<AtgenBuildupWeaponBodyPieceList>()
+                    )
+            )
+            .ReturnsAsync(ResultCode.Success)
+            .ReturnsAsync(ResultCode.Success)
+            .ReturnsAsync(ResultCode.CommonMaterialShort);
+
+        ResultCodeData data = (
+            await this.weaponBodyController.BuildupPiece(
+                new WeaponBodyBuildupPieceRequest()
+                {
+                    weapon_body_id = WeaponBodies.Caduceus,
+                    buildup_weapon_body_piece_list = new List<AtgenBuildupWeaponBodyPieceList>()
+                    {
+                        new(),
+                        new(),
+                        new(),
+                    }
+                }
+            )
+        ).GetData<ResultCodeData>()!;
+
+        data.result_code.Should().Be(ResultCode.CommonMaterialShort);
     }
 }

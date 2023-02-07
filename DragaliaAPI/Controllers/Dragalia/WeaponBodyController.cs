@@ -54,12 +54,6 @@ public class WeaponBodyController : DragaliaControllerBase
     {
         this.logger.LogDebug("Received request to upgrade weapon {weapon}", request.weapon_body_id);
 
-        if (!await this.weaponService.CheckOwned(request.weapon_body_id))
-        {
-            this.logger.LogError("User did not own weapon {weapon}", request.weapon_body_id);
-            return this.Code(ResultCode.WeaponBodyCraftShortWeaponBody);
-        }
-
         if (!MasterAsset.WeaponBody.TryGetValue(request.weapon_body_id, out WeaponBody? bodyData))
         {
             this.logger.LogError(
@@ -67,6 +61,12 @@ public class WeaponBodyController : DragaliaControllerBase
                 request.weapon_body_id
             );
             return this.Code(ResultCode.WeaponBodyIsNotPlayable);
+        }
+
+        if (!await this.weaponService.CheckOwned(request.weapon_body_id))
+        {
+            this.logger.LogError("User did not own weapon {weapon}", request.weapon_body_id);
+            return this.Code(ResultCode.WeaponBodyCraftShortWeaponBody);
         }
 
         foreach (

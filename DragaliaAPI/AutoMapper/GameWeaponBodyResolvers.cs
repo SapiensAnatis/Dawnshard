@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
@@ -15,7 +14,7 @@ public static class GameWeaponBodyResolvers
     {
         public static int GetAbilityLevel(DbWeaponBody source, List<int> inputAbilityIds)
         {
-            // Match the limit break count to the highest defined ability id
+            // Match the limit break count to the highest defined (!= 0) ability id
             int result = source.LimitOverCount + 1;
 
             // Min return value: 0, so break when result == 0
@@ -27,7 +26,7 @@ public static class GameWeaponBodyResolvers
 
         public static int GetCurrentSkillNo(DbWeaponBody source, List<int> inputSkillIds)
         {
-            // Match the limit break count to the highest defined skill id
+            // Match the limit break count to the highest defined (!= 0) skill id
             // except it must be distinct as Agito weapons have all 3 defined but have a max skill level of 2
             IEnumerable<int> distinctSkillIds = inputSkillIds.Where(x => x != 0).Distinct();
 
@@ -118,7 +117,7 @@ public static class GameWeaponBodyResolvers
 
             // On the second skill it takes 8 unbinds to level up the skill
             // On the first skill it's always 4
-            return source.LimitBreakCount >= (currentSkillNo * 4) ? 2 : 1;
+            return source.LimitBreakCount >= currentSkillNo * 4 ? 2 : 1;
         }
     }
 
