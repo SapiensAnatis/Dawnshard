@@ -3,6 +3,7 @@ using System;
 using DragaliaAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230207152134_develop_7")]
+    partial class develop7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -936,21 +939,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerWeapons");
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponPassiveAbility", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("WeaponPassiveAbilityId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("DeviceAccountId", "WeaponPassiveAbilityId");
-
-                    b.HasIndex("DeviceAccountId");
-
-                    b.ToTable("PlayerPassiveAbilities");
-                });
-
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponSkin", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -1163,17 +1151,6 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany("WeaponBodyList")
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponPassiveAbility", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
