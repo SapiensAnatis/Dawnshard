@@ -63,11 +63,22 @@ public class UnitMapProfile : Profile
         this.CreateMap<DbWeaponSkin, GameWeaponSkin>();
 
         this.CreateMap<DbWeaponBody, GameWeaponBody>()
-            // Unknown what skill_no is or does
-            .ForMember(x => x.skill_no, opts => opts.MapFrom(x => 1))
-            .ForMember(x => x.skill_level, opts => opts.MapFrom<WeaponSkillLevelResolver>())
-            .ForMember(x => x.ability_1_level, opts => opts.MapFrom<WeaponAbilityLevelResolver>())
-            .ForMember(x => x.ability_2_level, opts => opts.MapFrom<WeaponAbilityLevelResolver>());
+            .ForMember(
+                x => x.skill_no,
+                opts => opts.MapFrom<GameWeaponBodyResolvers.SkillNoResolver>()
+            )
+            .ForMember(
+                x => x.skill_level,
+                opts => opts.MapFrom<GameWeaponBodyResolvers.SkillLevelResolver>()
+            )
+            .ForMember(
+                x => x.ability_1_level,
+                opts => opts.MapFrom<GameWeaponBodyResolvers.AbilityOneResolver>()
+            )
+            .ForMember(
+                x => x.ability_2_level,
+                opts => opts.MapFrom<GameWeaponBodyResolvers.AbilityTwoResolver>()
+            );
 
         this.CreateMap<DbWeaponPassiveAbility, WeaponPassiveAbilityList>();
 

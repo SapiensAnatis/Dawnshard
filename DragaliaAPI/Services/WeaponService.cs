@@ -146,6 +146,8 @@ public class WeaponService : IWeaponService
         // a fair bit of logic, e.g. around getting the materials (first to validate them, then to deduct them).
         int buildupKey = body.GetBuildupGroupId(buildup.buildup_piece_type, buildup.step);
 
+        // TODO: Use of WeaponBodyRarity table to validate unbind/stat upgrades against refine count
+
         if (
             !MasterAsset.WeaponBodyBuildupGroup.TryGetValue(
                 buildupKey,
