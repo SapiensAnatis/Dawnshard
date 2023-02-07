@@ -100,7 +100,7 @@ public class WeaponService : IWeaponService
             weaponData.CreateMaterialMap.ToDictionary(x => x.Key, x => -x.Value)
         );
 
-        await this.userDataRepository.UpdateRupies(-weaponData.CreateCoin);
+        await this.userDataRepository.UpdateCoin(-weaponData.CreateCoin);
 
         await this.weaponRepository.Add(weaponBodyId);
         await this.weaponRepository.AddSkin((int)weaponBodyId);
@@ -235,7 +235,7 @@ public class WeaponService : IWeaponService
         }
 
         await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
-        await this.userDataRepository.UpdateRupies(-coin);
+        await this.userDataRepository.UpdateCoin(-coin);
         await this.AddRewardWeaponSkins(buildupGroup, body);
 
         return ResultCode.Success;
@@ -287,7 +287,7 @@ public class WeaponService : IWeaponService
 
         await this.weaponRepository.AddPassiveAbility(entity.WeaponBodyId, passiveAbility);
         await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
-        await this.userDataRepository.UpdateRupies(-coin);
+        await this.userDataRepository.UpdateCoin(-coin);
         await this.AddRewardWeaponSkins(passiveAbility);
 
         return ResultCode.Success;

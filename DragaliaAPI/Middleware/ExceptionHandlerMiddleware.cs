@@ -47,12 +47,12 @@ public class ExceptionHandlerMiddleware
             }
             else if (ex is SessionException)
             {
-                // Will send back to BaaS to login
+                // Will send back to login
                 this.logger.LogInformation(
                     "Returning session refresh request due to SessionException"
                 );
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                context.Response.Headers.Add("Session-Expired", True);
+                context.Response.Headers.Add(RefreshIdToken, True);
 
                 return;
             }

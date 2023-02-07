@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Repositories;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -73,5 +74,40 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
             .Single(x => x.DeviceAccountId == "id")
             .Name.Should()
             .Be("Euden 2");
+    }
+
+    [Theory]
+    [InlineData(100, true)]
+    [InlineData(long.MaxValue, false)]
+    public async Task CheckCoin_ReturnsExpectedResult(long checkValue, bool expectedResult)
+    {
+        DbPlayerUserData userData = (
+            await this.fixture.ApiContext.PlayerUserData.FindAsync(
+                IdentityTestUtils.DeviceAccountId
+            )
+        )!;
+        userData.Coin = 200;
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        (await this.userDataRepository.CheckCoin(checkValue)).Should().Be(expectedResult);
+    }
+
+    [Fact]
+    public async Task UpdateCoin_UpdatesCoin()
+    {
+        long oldCoin = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.Coin)
+            .SingleAsync();
+
+        await this.userDataRepository.UpdateCoin(2000);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        long newCoin = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.Coin)
+            .SingleAsync();
+
+        newCoin.Should().Be(oldCoin + 2000);
     }
 }

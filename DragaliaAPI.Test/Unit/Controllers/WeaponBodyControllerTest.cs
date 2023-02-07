@@ -156,13 +156,14 @@ public class WeaponBodyControllerTest
             )
             .ReturnsAsync(ResultCode.Success);
 
-        UpdateDataList udl = new UpdateDataList()
-        {
-            weapon_body_list = new List<WeaponBodyList>()
+        UpdateDataList udl =
+            new()
             {
-                new() { weapon_body_id = WeaponBodies.Caduceus }
-            }
-        };
+                weapon_body_list = new List<WeaponBodyList>()
+                {
+                    new() { weapon_body_id = WeaponBodies.Caduceus }
+                }
+            };
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(udl);
 
         WeaponBodyBuildupPieceData data = (
@@ -174,7 +175,7 @@ public class WeaponBodyControllerTest
                     {
                         new(),
                         new(),
-                        new(),
+                        new()
                     }
                 }
             )

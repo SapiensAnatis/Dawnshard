@@ -16,8 +16,8 @@ public interface IUserDataRepository : IBaseRepository
     Task UpdateSaveImportTime(string deviceAccountId);
     Task UpdateTutorialStatus(string deviceAccountId, int newStatus);
     Task<DbPlayerUserData> LookupUserData(string deviceAccountId);
-    Task UpdateRupies(string deviceAccountId, long quantity);
+    Task UpdateCoin(string deviceAccountId, long quantity);
     Task<DbPlayerUserData> LookupUserData();
-    Task UpdateRupies(long offset);
+    Task UpdateCoin(long offset);
     Task<bool> CheckCoin(long quantity);
 }

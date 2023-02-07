@@ -190,7 +190,7 @@ public class WeaponServiceTest
             .Returns(Task.CompletedTask);
 
         this.mockUserDataRepository
-            .Setup(x => x.UpdateRupies(-data.CreateCoin))
+            .Setup(x => x.UpdateCoin(-data.CreateCoin))
             .Returns(Task.CompletedTask);
 
         this.mockWeaponRepository
