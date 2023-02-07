@@ -15,10 +15,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
-[Route("dragon")]
-[Consumes("application/octet-stream")]
-[Produces("application/octet-stream")]
-[ApiController]
 public class DragonController : DragaliaControllerBase
 {
     private readonly IDragonService dragonService;
@@ -94,7 +90,7 @@ public class DragonController : DragaliaControllerBase
             .FirstAsync(dragon => (ulong)dragon.DragonKeyId == request.base_dragon_key_id);
 
         Dictionary<int, int> usedMaterials = new();
-        DragonLevelUp(request.grow_material_list, ref playerDragonData, ref usedMaterials);
+        await DragonLevelUp(request.grow_material_list, playerDragonData, usedMaterials);
         foreach (KeyValuePair<int, int> mat in usedMaterials)
         {
             dbMats[(Materials)mat.Key].Quantity -= mat.Value;
@@ -128,10 +124,10 @@ public class DragonController : DragaliaControllerBase
         );
     }
 
-    private void DragonLevelUp(
+    private async Task DragonLevelUp(
         IEnumerable<GrowMaterialList> materials,
-        ref DbPlayerDragonData playerDragonData,
-        ref Dictionary<int, int> usedMaterials
+        DbPlayerDragonData playerDragonData,
+        Dictionary<int, int> usedMaterials
     )
     {
         //TODO: For now we'll trust the client to not allow leveling up/enhancing beyond allowed limits
@@ -194,10 +190,10 @@ public class DragonController : DragaliaControllerBase
                         ],
                     DragonConstants.XpLimits[maxLevel - 1]
                 );
-                DbPlayerDragonData dragonSacrifice = unitRepository
+                DbPlayerDragonData dragonSacrifice = await unitRepository
                     .GetAllDragonData(DeviceAccountId)
                     .Where(x => x.DragonKeyId == materialList.id)
-                    .First();
+                    .FirstAsync();
                 gainedHpAugs += dragonSacrifice.HpPlusCount;
                 gainedAtkAugs += dragonSacrifice.AttackPlusCount;
             }
