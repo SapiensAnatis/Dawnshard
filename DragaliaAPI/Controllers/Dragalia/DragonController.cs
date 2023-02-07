@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
+[Route("dragon")]
 public class DragonController : DragaliaControllerBase
 {
     private readonly IDragonService dragonService;
