@@ -384,6 +384,7 @@ public class SavefileService : ISavefileService
             .Include(x => x.Currencies)
             .Include(x => x.DragonList)
             .Include(x => x.DragonReliabilityList)
+            .Include(x => x.DragonGiftList)
             .Include(x => x.BuildList)
             .Include(x => x.QuestList)
             .Include(x => x.StoryStates)

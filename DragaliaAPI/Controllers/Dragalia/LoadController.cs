@@ -66,6 +66,9 @@ public class LoadController : DragaliaControllerBase
                 ability_crest_list = savefile.AbilityCrestList.Select(
                     this.mapper.Map<AbilityCrestList>
                 ),
+                dragon_gift_list = savefile.DragonGiftList
+                    .Where(x => x.DragonGiftId > DragonGifts.GoldenChalice)
+                    .Select(this.mapper.Map<DragonGiftList>),
                 talisman_list = savefile.TalismanList.Select(this.mapper.Map<TalismanList>),
                 weapon_body_list = savefile.WeaponBodyList.Select(this.mapper.Map<WeaponBodyList>),
                 party_list = savefile.PartyList.Select(this.mapper.Map<PartyList>),
@@ -73,7 +76,7 @@ public class LoadController : DragaliaControllerBase
                     .Where(x => x.StoryType == StoryTypes.Quest)
                     .Select(mapper.Map<QuestStoryList>),
                 unit_story_list = savefile.StoryStates
-                    .Where(x => x.StoryType == StoryTypes.Chara)
+                    .Where(x => x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon)
                     .Select(mapper.Map<UnitStoryList>),
                 castle_story_list = savefile.StoryStates
                     .Where(x => x.StoryType == StoryTypes.Castle)

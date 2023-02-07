@@ -29,7 +29,7 @@ public abstract class DragaliaControllerBase : ControllerBase
         return base.Ok(
             new DragaliaResponse<object>(
                 value ?? throw new ArgumentNullException(nameof(value)),
-                ResultCode.SUCCESS
+                ResultCode.Success
             )
         );
     }

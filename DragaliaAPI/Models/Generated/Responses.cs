@@ -1600,13 +1600,15 @@ public class DragonSellData
 public class DragonSendGiftMultipleData
 {
     public UpdateDataList update_data_list { get; set; }
-    public int is_favorite { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_favorite { get; set; }
     public IEnumerable<DragonRewardEntityList> return_gift_list { get; set; }
     public IEnumerable<RewardReliabilityList> reward_reliability_list { get; set; }
 
     public DragonSendGiftMultipleData(
         UpdateDataList update_data_list,
-        int is_favorite,
+        bool is_favorite,
         IEnumerable<DragonRewardEntityList> return_gift_list,
         IEnumerable<RewardReliabilityList> reward_reliability_list
     )
@@ -1624,13 +1626,15 @@ public class DragonSendGiftMultipleData
 public class DragonSendGiftData
 {
     public UpdateDataList update_data_list { get; set; }
-    public int is_favorite { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_favorite { get; set; }
     public IEnumerable<DragonRewardEntityList> return_gift_list { get; set; }
     public IEnumerable<RewardReliabilityList> reward_reliability_list { get; set; }
 
     public DragonSendGiftData(
         UpdateDataList update_data_list,
-        int is_favorite,
+        bool is_favorite,
         IEnumerable<DragonRewardEntityList> return_gift_list,
         IEnumerable<RewardReliabilityList> reward_reliability_list
     )
@@ -2617,9 +2621,8 @@ public class FortGetDataData
     public AtgenProductionRp production_df { get; set; }
     public AtgenProductionRp production_st { get; set; }
     public int dragon_contact_free_gift_count { get; set; }
-    public DateTimeOffset current_server_time { get; set; }
 
-    [MessagePackFormatter(typeof(DateTimeOffsetToUnixIntFormatter))]
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset current_server_time { get; set; }
 
     public FortGetDataData(

@@ -1,19 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Numerics;
-using System.Security;
+﻿using System.Collections.Immutable;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.Definitions;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Services;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static DragaliaAPI.Database.Utils.DragonConstants;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -23,7 +21,6 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [ApiController]
 public class DragonController : DragaliaControllerBase
 {
-    private readonly IDragonDataService _dragonDataService;
     private readonly IDragonService dragonService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
@@ -39,7 +36,6 @@ public class DragonController : DragaliaControllerBase
         IUpdateDataService updateDataService,
         IStoryRepository storyRepository,
         IMapper mapper,
-        IDragonDataService charaDataService,
         IDragonService dragonService
     )
     {
@@ -49,7 +45,6 @@ public class DragonController : DragaliaControllerBase
         this.storyRepository = storyRepository;
         this.updateDataService = updateDataService;
         this.mapper = mapper;
-        _dragonDataService = charaDataService;
         this.dragonService = dragonService;
     }
 
@@ -75,21 +70,10 @@ public class DragonController : DragaliaControllerBase
         {
             if (mat.quantity < 0)
             {
-                throw new ArgumentException("Invalid quantity for MaterialList");
-            }
-            if (mat.type != EntityTypes.Dragon)
-            {
-                if (
-                    mat.type == EntityTypes.Material
-                    && mat.id != (int)Materials.Dragonfruit
-                    && mat.id != (int)Materials.RipeDragonfruit
-                        & mat.id != (int)Materials.SucculentDragonfruit
-                    && mat.id != (int)Materials.AmplifyingDragonscale
-                    && mat.id != (int)Materials.FortifyingDragonscale
-                )
-                {
-                    throw new ArgumentException("Invalid MaterialList in request");
-                }
+                throw new DragaliaException(
+                    ResultCode.CommonMaterialShort,
+                    "Invalid quantity for MaterialList"
+                );
             }
             if (
                 mat.type == EntityTypes.Material
@@ -99,7 +83,10 @@ public class DragonController : DragaliaControllerBase
                 )
             )
             {
-                throw new ArgumentException("Insufficient materials for buildup");
+                throw new DragaliaException(
+                    ResultCode.CommonMaterialShort,
+                    "Invalid quantity for MaterialList"
+                );
             }
         }
         DbPlayerDragonData playerDragonData = await unitRepository
@@ -149,7 +136,7 @@ public class DragonController : DragaliaControllerBase
     {
         //TODO: For now we'll trust the client to not allow leveling up/enhancing beyond allowed limits
         byte maxLevel = DragonConstants.GetMaxLevelFor(
-            _dragonDataService.GetData((int)playerDragonData.DragonId).Rarity,
+            MasterAsset.DragonData.Get(playerDragonData.DragonId).Rarity,
             playerDragonData.LimitBreakCount
         );
         int gainedHpAugs = 0;
@@ -187,7 +174,10 @@ public class DragonController : DragaliaControllerBase
                             );
                         break;
                     default:
-                        throw new ArgumentException("Invalid MaterialList");
+                        throw new DragaliaException(
+                            ResultCode.DragonGrowNotBoostMaterial,
+                            "Invalid MaterialList"
+                        );
                 }
                 if (!usedMaterials.ContainsKey((int)materialList.id))
                 {
@@ -200,7 +190,7 @@ public class DragonController : DragaliaControllerBase
                 playerDragonData.Exp = Math.Min(
                     playerDragonData.Exp
                         + UpgradeMaterials.dragonBuildupXp[
-                            _dragonDataService.GetData((int)playerDragonData.DragonId).Rarity
+                            MasterAsset.DragonData.Get(playerDragonData.DragonId).Rarity
                         ],
                     DragonConstants.XpLimits[maxLevel - 1]
                 );
@@ -269,7 +259,10 @@ public class DragonController : DragaliaControllerBase
             ?? inventoryRepository.AddMaterial(DeviceAccountId, mat);
         DbPlayerCurrency playerCurrency =
             await inventoryRepository.GetCurrency(DeviceAccountId, CurrencyTypes.Rupies)
-            ?? throw new ArgumentException("Insufficient Rupies for reset");
+            ?? throw new DragaliaException(
+                ResultCode.CommonMaterialShort,
+                "Insufficient Rupies for reset"
+            );
         int cost =
             20000
             * (
@@ -279,7 +272,10 @@ public class DragonController : DragaliaControllerBase
             );
         if (playerCurrency.Quantity < cost)
         {
-            throw new ArgumentException("Insufficient Rupies for reset");
+            throw new DragaliaException(
+                ResultCode.CommonMaterialShort,
+                "Insufficient Rupies for reset"
+            );
         }
         playerCurrency.Quantity -= cost;
         upgradeMat.Quantity +=
@@ -306,9 +302,14 @@ public class DragonController : DragaliaControllerBase
             await this.unitRepository
                 .GetAllDragonData(this.DeviceAccountId)
                 .Where(x => x.DragonKeyId == (long)request.base_dragon_key_id)
-                .FirstAsync() ?? throw new ArgumentException("No such dragon owned");
+                .FirstAsync()
+            ?? throw new DragaliaException(
+                ResultCode.EntityNotFoundError,
+                "No such dragon in inventory"
+            );
+        ;
 
-        DataDragon dragonData = _dragonDataService.GetData(playerDragonData.DragonId);
+        DragonData dragonData = MasterAsset.DragonData.Get(playerDragonData.DragonId);
 
         playerDragonData.LimitBreakCount = (byte)
             request.limit_break_grow_list.Last().limit_break_count;
@@ -338,7 +339,7 @@ public class DragonController : DragaliaControllerBase
                 await inventoryRepository.GetMaterial(
                     DeviceAccountId,
                     dragonData.Rarity == 4 ? Materials.MoonlightStone : Materials.SunlightStone
-                ) ?? throw new ArgumentException($"No Stones to spend")
+                ) ?? throw new DragaliaException(ResultCode.CommonStoneShort, $"No Stones to spend")
             ).Quantity -= stonesToSpend;
         }
 
@@ -370,7 +371,11 @@ public class DragonController : DragaliaControllerBase
                 await inventoryRepository.GetMaterial(
                     DeviceAccountId,
                     dragonData.LimitBreakMaterialId
-                ) ?? throw new ArgumentException("No spheres to spend")
+                )
+                ?? throw new DragaliaException(
+                    ResultCode.CommonMaterialShort,
+                    "No spheres to spend"
+                )
             ).Quantity -= spheresConsumed + lb5SpheresConsumed;
         }
 
@@ -399,7 +404,7 @@ public class DragonController : DragaliaControllerBase
         [FromBody] DragonGetContactDataRequest request
     )
     {
-        return Ok(await DoDragonGetContactData(request));
+        return Ok(await dragonService.DoDragonGetContactData(request, DeviceAccountId));
     }
 
     [Route("buy_gift_to_send_multiple")]
@@ -408,7 +413,7 @@ public class DragonController : DragaliaControllerBase
         [FromBody] DragonBuyGiftToSendMultipleRequest request
     )
     {
-        return Ok(await DoDragonBuyGiftToSendMultiple(request));
+        return Ok(await dragonService.DoDragonBuyGiftToSendMultiple(request, DeviceAccountId));
     }
 
     [Route("buy_gift_to_send")]
@@ -417,13 +422,15 @@ public class DragonController : DragaliaControllerBase
         [FromBody] DragonBuyGiftToSendRequest request
     )
     {
-        DragonBuyGiftToSendMultipleData resultData = await DoDragonBuyGiftToSendMultiple(
-            new DragonBuyGiftToSendMultipleRequest()
-            {
-                dragon_id = request.dragon_id,
-                dragon_gift_id_list = new List<DragonGifts>() { request.dragon_gift_id }
-            }
-        );
+        DragonBuyGiftToSendMultipleData resultData =
+            await dragonService.DoDragonBuyGiftToSendMultiple(
+                new DragonBuyGiftToSendMultipleRequest()
+                {
+                    dragon_id = request.dragon_id,
+                    dragon_gift_id_list = new List<DragonGifts>() { request.dragon_gift_id }
+                },
+                DeviceAccountId
+            );
         return Ok(
             new DragonBuyGiftToSendData()
             {
@@ -446,14 +453,31 @@ public class DragonController : DragaliaControllerBase
         [FromBody] DragonSendGiftMultipleRequest request
     )
     {
-        return Ok(new DragonSendGiftMultipleData());
+        return Ok(await dragonService.DoDragonSendGiftMultiple(request, DeviceAccountId));
     }
 
     [Route("send_gift")]
     [HttpPost]
     public async Task<DragaliaResult> DragonSendGift([FromBody] DragonSendGiftRequest request)
     {
-        return Ok(new DragonSendGiftData());
+        DragonSendGiftMultipleData resultData = await dragonService.DoDragonSendGiftMultiple(
+            new DragonSendGiftMultipleRequest()
+            {
+                dragon_id = request.dragon_id,
+                dragon_gift_id = request.dragon_gift_id,
+                quantity = 1
+            },
+            DeviceAccountId
+        );
+        return Ok(
+            new DragonSendGiftData()
+            {
+                is_favorite = resultData.is_favorite,
+                return_gift_list = resultData.return_gift_list,
+                reward_reliability_list = resultData.reward_reliability_list,
+                update_data_list = resultData.update_data_list
+            }
+        );
     }
 
     [Route("set_lock")]
@@ -482,7 +506,7 @@ public class DragonController : DragaliaControllerBase
             .SingleOrDefaultAsync();
         if (puppy != null && request.dragon_key_id_list.Contains((ulong)puppy.DragonKeyId))
         {
-            return Ok(Models.ResultCode.DRAGON_SELL_LOCKED);
+            return Ok(Models.ResultCode.DragonSellLocked);
         }
         await unitRepository.RemoveDragons(
             DeviceAccountId,

@@ -161,7 +161,7 @@ public static class DragonConstants
 
     public const int maxRelLevel = 30;
 
-    public readonly static DragonGifts[] rotatingGifts = new DragonGifts[]
+    public readonly static ImmutableArray<DragonGifts> rotatingGifts = new DragonGifts[]
     {
         DragonGifts.GoldenChalice,
         DragonGifts.JuicyMeat,
@@ -170,9 +170,9 @@ public static class DragonConstants
         DragonGifts.CompellingBook,
         DragonGifts.ManaEssence,
         DragonGifts.GoldenChalice
-    };
+    }.ToImmutableArray();
 
-    public readonly static Dictionary<DragonGifts, int> favorVals = new Dictionary<
+    public readonly static ImmutableDictionary<DragonGifts, int> favorVals = new Dictionary<
         DragonGifts,
         int
     >()
@@ -191,9 +191,9 @@ public static class DragonConstants
         { DragonGifts.DragonyuleCake, 1000 },
         { DragonGifts.ValentinesCard, 1000 },
         { DragonGifts.PupGrub, 200 }
-    };
+    }.ToImmutableDictionary();
 
-    public readonly static Dictionary<DragonGifts, int> buyGiftPrices = new Dictionary<
+    public readonly static ImmutableDictionary<DragonGifts, int> buyGiftPrices = new Dictionary<
         DragonGifts,
         int
     >()
@@ -208,7 +208,7 @@ public static class DragonConstants
         { DragonGifts.CompellingBook, 12000 },
         { DragonGifts.ManaEssence, 12000 },
         { DragonGifts.GoldenChalice, 15000 }
-    };
+    }.ToImmutableDictionary();
 
     public const float favMulti = 1.5f;
 
