@@ -172,7 +172,7 @@ public class MasterAssetTest
                     FavoriteType: 5,
                     SellCoin: 5000,
                     SellDewPoint: 8500,
-                    LimitBreakTypeId: DragonLimitBreakTypes.Normal,
+                    LimitBreakId: DragonLimitBreakTypes.Normal,
                     LimitBreakMaterialId: 0,
                     DefaultReliabilityLevel: 0,
                     DmodePassiveAbilityId: 0
