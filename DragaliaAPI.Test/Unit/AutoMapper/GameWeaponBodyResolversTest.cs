@@ -93,8 +93,8 @@ public class GameWeaponBodyResolversTest
     [InlineData(WeaponBodies.Camelot, 0, 0, 1)]
     [InlineData(WeaponBodies.AbsoluteCrimson, 0, 1, 1)]
     [InlineData(WeaponBodies.AbsoluteCrimson, 0, 4, 2)]
-    [InlineData(WeaponBodies.AbsoluteCrimson, 1, 1, 1)]
     [InlineData(WeaponBodies.AbsoluteCrimson, 1, 4, 1)]
+    [InlineData(WeaponBodies.AbsoluteCrimson, 1, 6, 1)]
     [InlineData(WeaponBodies.AbsoluteCrimson, 1, 8, 2)]
     public void SkillLevelResolver_ReturnsExpectedLevel(
         WeaponBodies id,

@@ -104,6 +104,7 @@ public class WeaponBodyControllerTest
         ).GetData<ResultCodeData>()!;
 
         data.result_code.Should().Be(ResultCode.WeaponBodyCraftShortWeaponBody);
+        this.mockWeaponService.VerifyAll();
     }
 
     [Fact]
@@ -138,5 +139,50 @@ public class WeaponBodyControllerTest
         ).GetData<ResultCodeData>()!;
 
         data.result_code.Should().Be(ResultCode.CommonMaterialShort);
+        this.mockWeaponService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task BuildupPiece_AllBuildupSuccess_ReturnsSuccess()
+    {
+        this.mockWeaponService.Setup(x => x.CheckOwned(WeaponBodies.Caduceus)).ReturnsAsync(true);
+        this.mockWeaponService
+            .Setup(
+                x =>
+                    x.TryBuildup(
+                        MasterAsset.WeaponBody.Get(WeaponBodies.Caduceus),
+                        It.IsAny<AtgenBuildupWeaponBodyPieceList>()
+                    )
+            )
+            .ReturnsAsync(ResultCode.Success);
+
+        UpdateDataList udl = new UpdateDataList()
+        {
+            weapon_body_list = new List<WeaponBodyList>()
+            {
+                new() { weapon_body_id = WeaponBodies.Caduceus }
+            }
+        };
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(udl);
+
+        WeaponBodyBuildupPieceData data = (
+            await this.weaponBodyController.BuildupPiece(
+                new WeaponBodyBuildupPieceRequest()
+                {
+                    weapon_body_id = WeaponBodies.Caduceus,
+                    buildup_weapon_body_piece_list = new List<AtgenBuildupWeaponBodyPieceList>()
+                    {
+                        new(),
+                        new(),
+                        new(),
+                    }
+                }
+            )
+        ).GetData<WeaponBodyBuildupPieceData>()!;
+
+        data.update_data_list.Should().Be(udl);
+
+        this.mockWeaponService.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
     }
 }
