@@ -21,7 +21,8 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         this.fixture = fixture;
         this.weaponRepository = new WeaponRepository(
             this.fixture.ApiContext,
-            IdentityTestUtils.MockPlayerDetailsService.Object
+            IdentityTestUtils.MockPlayerDetailsService.Object,
+            LoggerTestUtils.Create<WeaponRepository>()
         );
 
         CommonAssertionOptions.ApplyIgnoreOwnerOptions();

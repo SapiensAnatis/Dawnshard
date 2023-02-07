@@ -101,6 +101,9 @@ public static class GameWeaponBodyResolvers
 
             int currentSkillNo = WeaponResolverUtils.GetCurrentSkillNo(source, skillIds);
 
+            if (currentSkillNo == 0)
+                return 0;
+
             return source.LimitBreakCount / (4 * currentSkillNo);
         }
     }
