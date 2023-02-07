@@ -356,12 +356,7 @@ public class DragonController : DragaliaControllerBase
                         (DragonLimitBreakMatTypes)x.limit_break_item_type
                         == DragonLimitBreakMatTypes.SpheresLB5
                 )
-                .Count()
-            * (
-                (DragonLimitBreakTypes)dragonData.LimitBreakTypeId == DragonLimitBreakTypes.Normal
-                    ? 50
-                    : 120
-            );
+                .Count() * (dragonData.LimitBreakId == DragonLimitBreakTypes.Normal ? 50 : 120);
         if (spheresConsumed + lb5SpheresConsumed > 0)
         {
             (
