@@ -469,6 +469,23 @@ public class CharaController : DragaliaControllerBase
             CharaUpgradeMaterialTypes.Omnicite
         );
 
+        int[] charaStories = MasterAsset.CharaStories.Get((int)playerCharaData.CharaId).storyIds;
+        for (
+            int nextStoryunlockIndex = await storyRepository
+                .GetStoryList(DeviceAccountId)
+                .Where(x => charaStories.Contains(x.StoryId))
+                .CountAsync();
+            nextStoryunlockIndex < charaStories.Length;
+            nextStoryunlockIndex++
+        )
+        {
+            await storyRepository.GetOrCreateStory(
+                DeviceAccountId,
+                StoryTypes.Chara,
+                charaStories[nextStoryunlockIndex]
+            );
+        }
+
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
@@ -679,7 +696,7 @@ public class CharaController : DragaliaControllerBase
                     break;
             }
 
-            if (manaNodeInfo.IsReleaseStory)
+            if (manaNodeInfo.IsReleaseStory && !isOmnicite)
             {
                 int[] charaStories = MasterAsset.CharaStories
                     .Get((int)playerCharData.CharaId)
