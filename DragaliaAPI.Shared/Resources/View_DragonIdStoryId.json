@@ -1,0 +1,1582 @@
+[
+    {
+        "StoryId": 200009011,
+        "ReleaseStep": 5,
+        "DragonId": 20050113
+    },
+    {
+        "StoryId": 200009012,
+        "ReleaseStep": 15,
+        "DragonId": 20050113
+    },
+    {
+        "StoryId": 200009011,
+        "ReleaseStep": 5,
+        "DragonId": 29900008
+    },
+    {
+        "StoryId": 200009012,
+        "ReleaseStep": 15,
+        "DragonId": 29900008
+    },
+    {
+        "StoryId": 200010011,
+        "ReleaseStep": 5,
+        "DragonId": 20050510
+    },
+    {
+        "StoryId": 200010012,
+        "ReleaseStep": 15,
+        "DragonId": 20050510
+    },
+    {
+        "StoryId": 200017011,
+        "ReleaseStep": 5,
+        "DragonId": 20050519
+    },
+    {
+        "StoryId": 200017012,
+        "ReleaseStep": 15,
+        "DragonId": 20050519
+    },
+    {
+        "StoryId": 200017011,
+        "ReleaseStep": 5,
+        "DragonId": 29900007
+    },
+    {
+        "StoryId": 200017012,
+        "ReleaseStep": 15,
+        "DragonId": 29900007
+    },
+    {
+        "StoryId": 200017011,
+        "ReleaseStep": 5,
+        "DragonId": 29900009
+    },
+    {
+        "StoryId": 200017012,
+        "ReleaseStep": 15,
+        "DragonId": 29900009
+    },
+    {
+        "StoryId": 200018011,
+        "ReleaseStep": 5,
+        "DragonId": 20050412
+    },
+    {
+        "StoryId": 200018012,
+        "ReleaseStep": 15,
+        "DragonId": 20050412
+    },
+    {
+        "StoryId": 200018011,
+        "ReleaseStep": 5,
+        "DragonId": 29900025
+    },
+    {
+        "StoryId": 200018012,
+        "ReleaseStep": 15,
+        "DragonId": 29900025
+    },
+    {
+        "StoryId": 210001011,
+        "ReleaseStep": 5,
+        "DragonId": 20040301
+    },
+    {
+        "StoryId": 210001012,
+        "ReleaseStep": 15,
+        "DragonId": 20040301
+    },
+    {
+        "StoryId": 210001011,
+        "ReleaseStep": 5,
+        "DragonId": 29900015
+    },
+    {
+        "StoryId": 210001012,
+        "ReleaseStep": 15,
+        "DragonId": 29900015
+    },
+    {
+        "StoryId": 210001011,
+        "ReleaseStep": 5,
+        "DragonId": 29940301
+    },
+    {
+        "StoryId": 210001012,
+        "ReleaseStep": 15,
+        "DragonId": 29940301
+    },
+    {
+        "StoryId": 210002011,
+        "ReleaseStep": 5,
+        "DragonId": 20040101
+    },
+    {
+        "StoryId": 210002012,
+        "ReleaseStep": 15,
+        "DragonId": 20040101
+    },
+    {
+        "StoryId": 210003011,
+        "ReleaseStep": 5,
+        "DragonId": 20040201
+    },
+    {
+        "StoryId": 210003012,
+        "ReleaseStep": 15,
+        "DragonId": 20040201
+    },
+    {
+        "StoryId": 210003011,
+        "ReleaseStep": 5,
+        "DragonId": 29900024
+    },
+    {
+        "StoryId": 210003012,
+        "ReleaseStep": 15,
+        "DragonId": 29900024
+    },
+    {
+        "StoryId": 210004011,
+        "ReleaseStep": 5,
+        "DragonId": 20040401
+    },
+    {
+        "StoryId": 210004012,
+        "ReleaseStep": 15,
+        "DragonId": 20040401
+    },
+    {
+        "StoryId": 210005011,
+        "ReleaseStep": 5,
+        "DragonId": 20040501
+    },
+    {
+        "StoryId": 210005012,
+        "ReleaseStep": 15,
+        "DragonId": 20040501
+    },
+    {
+        "StoryId": 210006011,
+        "ReleaseStep": 5,
+        "DragonId": 20040102
+    },
+    {
+        "StoryId": 210006012,
+        "ReleaseStep": 15,
+        "DragonId": 20040102
+    },
+    {
+        "StoryId": 210007011,
+        "ReleaseStep": 5,
+        "DragonId": 20040103
+    },
+    {
+        "StoryId": 210007012,
+        "ReleaseStep": 15,
+        "DragonId": 20040103
+    },
+    {
+        "StoryId": 210008011,
+        "ReleaseStep": 5,
+        "DragonId": 20040202
+    },
+    {
+        "StoryId": 210008012,
+        "ReleaseStep": 15,
+        "DragonId": 20040202
+    },
+    {
+        "StoryId": 210010011,
+        "ReleaseStep": 5,
+        "DragonId": 20050303
+    },
+    {
+        "StoryId": 210010012,
+        "ReleaseStep": 15,
+        "DragonId": 20050303
+    },
+    {
+        "StoryId": 210011011,
+        "ReleaseStep": 5,
+        "DragonId": 20040303
+    },
+    {
+        "StoryId": 210011012,
+        "ReleaseStep": 15,
+        "DragonId": 20040303
+    },
+    {
+        "StoryId": 210012011,
+        "ReleaseStep": 5,
+        "DragonId": 20040402
+    },
+    {
+        "StoryId": 210012012,
+        "ReleaseStep": 15,
+        "DragonId": 20040402
+    },
+    {
+        "StoryId": 210013011,
+        "ReleaseStep": 5,
+        "DragonId": 20040403
+    },
+    {
+        "StoryId": 210013012,
+        "ReleaseStep": 15,
+        "DragonId": 20040403
+    },
+    {
+        "StoryId": 210014011,
+        "ReleaseStep": 5,
+        "DragonId": 20040502
+    },
+    {
+        "StoryId": 210014012,
+        "ReleaseStep": 15,
+        "DragonId": 20040502
+    },
+    {
+        "StoryId": 210015011,
+        "ReleaseStep": 5,
+        "DragonId": 20040503
+    },
+    {
+        "StoryId": 210015012,
+        "ReleaseStep": 15,
+        "DragonId": 20040503
+    },
+    {
+        "StoryId": 210016011,
+        "ReleaseStep": 5,
+        "DragonId": 20050101
+    },
+    {
+        "StoryId": 210016012,
+        "ReleaseStep": 15,
+        "DragonId": 20050101
+    },
+    {
+        "StoryId": 210017011,
+        "ReleaseStep": 5,
+        "DragonId": 20050203
+    },
+    {
+        "StoryId": 210017012,
+        "ReleaseStep": 15,
+        "DragonId": 20050203
+    },
+    {
+        "StoryId": 210018011,
+        "ReleaseStep": 5,
+        "DragonId": 20050301
+    },
+    {
+        "StoryId": 210018012,
+        "ReleaseStep": 15,
+        "DragonId": 20050301
+    },
+    {
+        "StoryId": 210019011,
+        "ReleaseStep": 5,
+        "DragonId": 20050501
+    },
+    {
+        "StoryId": 210019012,
+        "ReleaseStep": 15,
+        "DragonId": 20050501
+    },
+    {
+        "StoryId": 210020011,
+        "ReleaseStep": 5,
+        "DragonId": 20050401
+    },
+    {
+        "StoryId": 210020012,
+        "ReleaseStep": 15,
+        "DragonId": 20050401
+    },
+    {
+        "StoryId": 210021011,
+        "ReleaseStep": 5,
+        "DragonId": 20030101
+    },
+    {
+        "StoryId": 210021012,
+        "ReleaseStep": 15,
+        "DragonId": 20030101
+    },
+    {
+        "StoryId": 210022011,
+        "ReleaseStep": 5,
+        "DragonId": 20030102
+    },
+    {
+        "StoryId": 210022012,
+        "ReleaseStep": 15,
+        "DragonId": 20030102
+    },
+    {
+        "StoryId": 210023011,
+        "ReleaseStep": 5,
+        "DragonId": 20030103
+    },
+    {
+        "StoryId": 210023012,
+        "ReleaseStep": 15,
+        "DragonId": 20030103
+    },
+    {
+        "StoryId": 210024011,
+        "ReleaseStep": 5,
+        "DragonId": 20050104
+    },
+    {
+        "StoryId": 210024012,
+        "ReleaseStep": 15,
+        "DragonId": 20050104
+    },
+    {
+        "StoryId": 210025011,
+        "ReleaseStep": 5,
+        "DragonId": 20050201
+    },
+    {
+        "StoryId": 210025012,
+        "ReleaseStep": 15,
+        "DragonId": 20050201
+    },
+    {
+        "StoryId": 210026011,
+        "ReleaseStep": 5,
+        "DragonId": 20050306
+    },
+    {
+        "StoryId": 210026012,
+        "ReleaseStep": 15,
+        "DragonId": 20050306
+    },
+    {
+        "StoryId": 210030011,
+        "ReleaseStep": 5,
+        "DragonId": 20050108
+    },
+    {
+        "StoryId": 210030012,
+        "ReleaseStep": 15,
+        "DragonId": 20050108
+    },
+    {
+        "StoryId": 210036011,
+        "ReleaseStep": 5,
+        "DragonId": 20050304
+    },
+    {
+        "StoryId": 210036012,
+        "ReleaseStep": 15,
+        "DragonId": 20050304
+    },
+    {
+        "StoryId": 210038011,
+        "ReleaseStep": 5,
+        "DragonId": 20050302
+    },
+    {
+        "StoryId": 210038012,
+        "ReleaseStep": 15,
+        "DragonId": 20050302
+    },
+    {
+        "StoryId": 210039011,
+        "ReleaseStep": 5,
+        "DragonId": 20050102
+    },
+    {
+        "StoryId": 210039012,
+        "ReleaseStep": 15,
+        "DragonId": 20050102
+    },
+    {
+        "StoryId": 210040011,
+        "ReleaseStep": 5,
+        "DragonId": 20050202
+    },
+    {
+        "StoryId": 210040012,
+        "ReleaseStep": 15,
+        "DragonId": 20050202
+    },
+    {
+        "StoryId": 210041011,
+        "ReleaseStep": 5,
+        "DragonId": 20050402
+    },
+    {
+        "StoryId": 210041012,
+        "ReleaseStep": 15,
+        "DragonId": 20050402
+    },
+    {
+        "StoryId": 210042011,
+        "ReleaseStep": 5,
+        "DragonId": 20050502
+    },
+    {
+        "StoryId": 210042012,
+        "ReleaseStep": 15,
+        "DragonId": 20050502
+    },
+    {
+        "StoryId": 210043011,
+        "ReleaseStep": 5,
+        "DragonId": 20050407
+    },
+    {
+        "StoryId": 210043012,
+        "ReleaseStep": 15,
+        "DragonId": 20050407
+    },
+    {
+        "StoryId": 210045011,
+        "ReleaseStep": 5,
+        "DragonId": 20050504
+    },
+    {
+        "StoryId": 210045012,
+        "ReleaseStep": 15,
+        "DragonId": 20050504
+    },
+    {
+        "StoryId": 210046011,
+        "ReleaseStep": 5,
+        "DragonId": 20050508
+    },
+    {
+        "StoryId": 210046012,
+        "ReleaseStep": 15,
+        "DragonId": 20050508
+    },
+    {
+        "StoryId": 210048011,
+        "ReleaseStep": 5,
+        "DragonId": 20050404
+    },
+    {
+        "StoryId": 210048012,
+        "ReleaseStep": 15,
+        "DragonId": 20050404
+    },
+    {
+        "StoryId": 210049011,
+        "ReleaseStep": 5,
+        "DragonId": 20050405
+    },
+    {
+        "StoryId": 210049012,
+        "ReleaseStep": 15,
+        "DragonId": 20050405
+    },
+    {
+        "StoryId": 210049011,
+        "ReleaseStep": 5,
+        "DragonId": 29950405
+    },
+    {
+        "StoryId": 210049012,
+        "ReleaseStep": 15,
+        "DragonId": 29950405
+    },
+    {
+        "StoryId": 210050011,
+        "ReleaseStep": 5,
+        "DragonId": 20040302
+    },
+    {
+        "StoryId": 210050012,
+        "ReleaseStep": 15,
+        "DragonId": 20040302
+    },
+    {
+        "StoryId": 210051011,
+        "ReleaseStep": 5,
+        "DragonId": 20050408
+    },
+    {
+        "StoryId": 210051012,
+        "ReleaseStep": 15,
+        "DragonId": 20050408
+    },
+    {
+        "StoryId": 210052011,
+        "ReleaseStep": 5,
+        "DragonId": 20050106
+    },
+    {
+        "StoryId": 210052012,
+        "ReleaseStep": 15,
+        "DragonId": 20050106
+    },
+    {
+        "StoryId": 210053011,
+        "ReleaseStep": 5,
+        "DragonId": 20050210
+    },
+    {
+        "StoryId": 210053012,
+        "ReleaseStep": 15,
+        "DragonId": 20050210
+    },
+    {
+        "StoryId": 210054011,
+        "ReleaseStep": 5,
+        "DragonId": 20050204
+    },
+    {
+        "StoryId": 210054012,
+        "ReleaseStep": 15,
+        "DragonId": 20050204
+    },
+    {
+        "StoryId": 210055011,
+        "ReleaseStep": 5,
+        "DragonId": 20050105
+    },
+    {
+        "StoryId": 210055012,
+        "ReleaseStep": 15,
+        "DragonId": 20050105
+    },
+    {
+        "StoryId": 210056011,
+        "ReleaseStep": 5,
+        "DragonId": 20050403
+    },
+    {
+        "StoryId": 210056012,
+        "ReleaseStep": 15,
+        "DragonId": 20050403
+    },
+    {
+        "StoryId": 210057011,
+        "ReleaseStep": 5,
+        "DragonId": 20050103
+    },
+    {
+        "StoryId": 210057012,
+        "ReleaseStep": 15,
+        "DragonId": 20050103
+    },
+    {
+        "StoryId": 210058011,
+        "ReleaseStep": 5,
+        "DragonId": 20040203
+    },
+    {
+        "StoryId": 210058012,
+        "ReleaseStep": 15,
+        "DragonId": 20040203
+    },
+    {
+        "StoryId": 210059011,
+        "ReleaseStep": 5,
+        "DragonId": 20030201
+    },
+    {
+        "StoryId": 210059012,
+        "ReleaseStep": 15,
+        "DragonId": 20030201
+    },
+    {
+        "StoryId": 210060011,
+        "ReleaseStep": 5,
+        "DragonId": 20030301
+    },
+    {
+        "StoryId": 210060012,
+        "ReleaseStep": 15,
+        "DragonId": 20030301
+    },
+    {
+        "StoryId": 210061011,
+        "ReleaseStep": 5,
+        "DragonId": 20030401
+    },
+    {
+        "StoryId": 210061012,
+        "ReleaseStep": 15,
+        "DragonId": 20030401
+    },
+    {
+        "StoryId": 210062011,
+        "ReleaseStep": 5,
+        "DragonId": 20030501
+    },
+    {
+        "StoryId": 210062012,
+        "ReleaseStep": 15,
+        "DragonId": 20030501
+    },
+    {
+        "StoryId": 210063011,
+        "ReleaseStep": 5,
+        "DragonId": 20030202
+    },
+    {
+        "StoryId": 210063012,
+        "ReleaseStep": 15,
+        "DragonId": 20030202
+    },
+    {
+        "StoryId": 210064011,
+        "ReleaseStep": 5,
+        "DragonId": 20030302
+    },
+    {
+        "StoryId": 210064012,
+        "ReleaseStep": 15,
+        "DragonId": 20030302
+    },
+    {
+        "StoryId": 210065011,
+        "ReleaseStep": 5,
+        "DragonId": 20030402
+    },
+    {
+        "StoryId": 210065012,
+        "ReleaseStep": 15,
+        "DragonId": 20030402
+    },
+    {
+        "StoryId": 210066011,
+        "ReleaseStep": 5,
+        "DragonId": 20030502
+    },
+    {
+        "StoryId": 210066012,
+        "ReleaseStep": 15,
+        "DragonId": 20030502
+    },
+    {
+        "StoryId": 210067011,
+        "ReleaseStep": 5,
+        "DragonId": 20030203
+    },
+    {
+        "StoryId": 210067012,
+        "ReleaseStep": 15,
+        "DragonId": 20030203
+    },
+    {
+        "StoryId": 210068011,
+        "ReleaseStep": 5,
+        "DragonId": 20030303
+    },
+    {
+        "StoryId": 210068012,
+        "ReleaseStep": 15,
+        "DragonId": 20030303
+    },
+    {
+        "StoryId": 210069011,
+        "ReleaseStep": 5,
+        "DragonId": 20030403
+    },
+    {
+        "StoryId": 210069012,
+        "ReleaseStep": 15,
+        "DragonId": 20030403
+    },
+    {
+        "StoryId": 210070011,
+        "ReleaseStep": 5,
+        "DragonId": 20030503
+    },
+    {
+        "StoryId": 210070012,
+        "ReleaseStep": 15,
+        "DragonId": 20030503
+    },
+    {
+        "StoryId": 210072011,
+        "ReleaseStep": 5,
+        "DragonId": 20050505
+    },
+    {
+        "StoryId": 210072012,
+        "ReleaseStep": 15,
+        "DragonId": 20050505
+    },
+    {
+        "StoryId": 210074011,
+        "ReleaseStep": 5,
+        "DragonId": 20050307
+    },
+    {
+        "StoryId": 210074012,
+        "ReleaseStep": 15,
+        "DragonId": 20050307
+    },
+    {
+        "StoryId": 210075011,
+        "ReleaseStep": 5,
+        "DragonId": 20040405
+    },
+    {
+        "StoryId": 210075012,
+        "ReleaseStep": 15,
+        "DragonId": 20040405
+    },
+    {
+        "StoryId": 210076011,
+        "ReleaseStep": 5,
+        "DragonId": 20050205
+    },
+    {
+        "StoryId": 210076012,
+        "ReleaseStep": 15,
+        "DragonId": 20050205
+    },
+    {
+        "StoryId": 210077011,
+        "ReleaseStep": 5,
+        "DragonId": 20050506
+    },
+    {
+        "StoryId": 210077012,
+        "ReleaseStep": 15,
+        "DragonId": 20050506
+    },
+    {
+        "StoryId": 210078011,
+        "ReleaseStep": 5,
+        "DragonId": 20050406
+    },
+    {
+        "StoryId": 210078012,
+        "ReleaseStep": 15,
+        "DragonId": 20050406
+    },
+    {
+        "StoryId": 210079011,
+        "ReleaseStep": 5,
+        "DragonId": 20050206
+    },
+    {
+        "StoryId": 210079012,
+        "ReleaseStep": 15,
+        "DragonId": 20050206
+    },
+    {
+        "StoryId": 210080011,
+        "ReleaseStep": 5,
+        "DragonId": 20050305
+    },
+    {
+        "StoryId": 210080012,
+        "ReleaseStep": 15,
+        "DragonId": 20050305
+    },
+    {
+        "StoryId": 210081011,
+        "ReleaseStep": 5,
+        "DragonId": 20050207
+    },
+    {
+        "StoryId": 210081012,
+        "ReleaseStep": 15,
+        "DragonId": 20050207
+    },
+    {
+        "StoryId": 210082011,
+        "ReleaseStep": 5,
+        "DragonId": 20050107
+    },
+    {
+        "StoryId": 210082012,
+        "ReleaseStep": 15,
+        "DragonId": 20050107
+    },
+    {
+        "StoryId": 210083011,
+        "ReleaseStep": 5,
+        "DragonId": 20050517
+    },
+    {
+        "StoryId": 210083012,
+        "ReleaseStep": 15,
+        "DragonId": 20050517
+    },
+    {
+        "StoryId": 210084011,
+        "ReleaseStep": 5,
+        "DragonId": 20050308
+    },
+    {
+        "StoryId": 210084012,
+        "ReleaseStep": 15,
+        "DragonId": 20050308
+    },
+    {
+        "StoryId": 210085011,
+        "ReleaseStep": 5,
+        "DragonId": 20050411
+    },
+    {
+        "StoryId": 210085012,
+        "ReleaseStep": 15,
+        "DragonId": 20050411
+    },
+    {
+        "StoryId": 210087011,
+        "ReleaseStep": 5,
+        "DragonId": 20050509
+    },
+    {
+        "StoryId": 210087012,
+        "ReleaseStep": 15,
+        "DragonId": 20050509
+    },
+    {
+        "StoryId": 210089011,
+        "ReleaseStep": 5,
+        "DragonId": 20040504
+    },
+    {
+        "StoryId": 210089012,
+        "ReleaseStep": 15,
+        "DragonId": 20040504
+    },
+    {
+        "StoryId": 210090011,
+        "ReleaseStep": 5,
+        "DragonId": 20040505
+    },
+    {
+        "StoryId": 210090012,
+        "ReleaseStep": 15,
+        "DragonId": 20040505
+    },
+    {
+        "StoryId": 210091011,
+        "ReleaseStep": 5,
+        "DragonId": 20050507
+    },
+    {
+        "StoryId": 210091012,
+        "ReleaseStep": 15,
+        "DragonId": 20050507
+    },
+    {
+        "StoryId": 210091011,
+        "ReleaseStep": 5,
+        "DragonId": 29800001
+    },
+    {
+        "StoryId": 210091012,
+        "ReleaseStep": 15,
+        "DragonId": 29800001
+    },
+    {
+        "StoryId": 210091011,
+        "ReleaseStep": 5,
+        "DragonId": 29800002
+    },
+    {
+        "StoryId": 210091012,
+        "ReleaseStep": 15,
+        "DragonId": 29800002
+    },
+    {
+        "StoryId": 210091011,
+        "ReleaseStep": 5,
+        "DragonId": 29800003
+    },
+    {
+        "StoryId": 210091012,
+        "ReleaseStep": 15,
+        "DragonId": 29800003
+    },
+    {
+        "StoryId": 210094011,
+        "ReleaseStep": 5,
+        "DragonId": 20050409
+    },
+    {
+        "StoryId": 210094012,
+        "ReleaseStep": 15,
+        "DragonId": 20050409
+    },
+    {
+        "StoryId": 210095011,
+        "ReleaseStep": 5,
+        "DragonId": 20050511
+    },
+    {
+        "StoryId": 210095012,
+        "ReleaseStep": 15,
+        "DragonId": 20050511
+    },
+    {
+        "StoryId": 210097011,
+        "ReleaseStep": 5,
+        "DragonId": 20050208
+    },
+    {
+        "StoryId": 210097012,
+        "ReleaseStep": 15,
+        "DragonId": 20050208
+    },
+    {
+        "StoryId": 210098011,
+        "ReleaseStep": 5,
+        "DragonId": 20050309
+    },
+    {
+        "StoryId": 210098012,
+        "ReleaseStep": 15,
+        "DragonId": 20050309
+    },
+    {
+        "StoryId": 210103011,
+        "ReleaseStep": 5,
+        "DragonId": 20050109
+    },
+    {
+        "StoryId": 210103012,
+        "ReleaseStep": 15,
+        "DragonId": 20050109
+    },
+    {
+        "StoryId": 210105011,
+        "ReleaseStep": 5,
+        "DragonId": 20050311
+    },
+    {
+        "StoryId": 210105012,
+        "ReleaseStep": 15,
+        "DragonId": 20050311
+    },
+    {
+        "StoryId": 210107011,
+        "ReleaseStep": 5,
+        "DragonId": 20050110
+    },
+    {
+        "StoryId": 210107012,
+        "ReleaseStep": 15,
+        "DragonId": 20050110
+    },
+    {
+        "StoryId": 210109011,
+        "ReleaseStep": 5,
+        "DragonId": 20050209
+    },
+    {
+        "StoryId": 210109012,
+        "ReleaseStep": 15,
+        "DragonId": 20050209
+    },
+    {
+        "StoryId": 210110011,
+        "ReleaseStep": 5,
+        "DragonId": 20050410
+    },
+    {
+        "StoryId": 210110012,
+        "ReleaseStep": 15,
+        "DragonId": 20050410
+    },
+    {
+        "StoryId": 210111011,
+        "ReleaseStep": 5,
+        "DragonId": 20050310
+    },
+    {
+        "StoryId": 210111012,
+        "ReleaseStep": 15,
+        "DragonId": 20050310
+    },
+    {
+        "StoryId": 210112011,
+        "ReleaseStep": 5,
+        "DragonId": 20050514
+    },
+    {
+        "StoryId": 210112012,
+        "ReleaseStep": 15,
+        "DragonId": 20050514
+    },
+    {
+        "StoryId": 210114011,
+        "ReleaseStep": 5,
+        "DragonId": 20050512
+    },
+    {
+        "StoryId": 210114012,
+        "ReleaseStep": 15,
+        "DragonId": 20050512
+    },
+    {
+        "StoryId": 210115011,
+        "ReleaseStep": 5,
+        "DragonId": 20050516
+    },
+    {
+        "StoryId": 210115012,
+        "ReleaseStep": 15,
+        "DragonId": 20050516
+    },
+    {
+        "StoryId": 210116011,
+        "ReleaseStep": 5,
+        "DragonId": 20050313
+    },
+    {
+        "StoryId": 210116012,
+        "ReleaseStep": 15,
+        "DragonId": 20050313
+    },
+    {
+        "StoryId": 210117011,
+        "ReleaseStep": 5,
+        "DragonId": 20050312
+    },
+    {
+        "StoryId": 210117012,
+        "ReleaseStep": 15,
+        "DragonId": 20050312
+    },
+    {
+        "StoryId": 210120011,
+        "ReleaseStep": 5,
+        "DragonId": 20050211
+    },
+    {
+        "StoryId": 210120012,
+        "ReleaseStep": 15,
+        "DragonId": 20050211
+    },
+    {
+        "StoryId": 210121011,
+        "ReleaseStep": 5,
+        "DragonId": 20050111
+    },
+    {
+        "StoryId": 210121012,
+        "ReleaseStep": 15,
+        "DragonId": 20050111
+    },
+    {
+        "StoryId": 210122011,
+        "ReleaseStep": 5,
+        "DragonId": 20050112
+    },
+    {
+        "StoryId": 210122012,
+        "ReleaseStep": 15,
+        "DragonId": 20050112
+    },
+    {
+        "StoryId": 210123011,
+        "ReleaseStep": 5,
+        "DragonId": 20050513
+    },
+    {
+        "StoryId": 210123012,
+        "ReleaseStep": 15,
+        "DragonId": 20050513
+    },
+    {
+        "StoryId": 210124011,
+        "ReleaseStep": 5,
+        "DragonId": 20050114
+    },
+    {
+        "StoryId": 210124012,
+        "ReleaseStep": 15,
+        "DragonId": 20050114
+    },
+    {
+        "StoryId": 210125011,
+        "ReleaseStep": 5,
+        "DragonId": 20050314
+    },
+    {
+        "StoryId": 210125012,
+        "ReleaseStep": 15,
+        "DragonId": 20050314
+    },
+    {
+        "StoryId": 210126011,
+        "ReleaseStep": 5,
+        "DragonId": 20050518
+    },
+    {
+        "StoryId": 210126012,
+        "ReleaseStep": 15,
+        "DragonId": 20050518
+    },
+    {
+        "StoryId": 210126011,
+        "ReleaseStep": 5,
+        "DragonId": 29950518
+    },
+    {
+        "StoryId": 210126012,
+        "ReleaseStep": 15,
+        "DragonId": 29950518
+    },
+    {
+        "StoryId": 210127011,
+        "ReleaseStep": 5,
+        "DragonId": 20050515
+    },
+    {
+        "StoryId": 210127012,
+        "ReleaseStep": 15,
+        "DragonId": 20050515
+    },
+    {
+        "StoryId": 210130011,
+        "ReleaseStep": 5,
+        "DragonId": 20050212
+    },
+    {
+        "StoryId": 210130012,
+        "ReleaseStep": 15,
+        "DragonId": 20050212
+    },
+    {
+        "StoryId": 210131011,
+        "ReleaseStep": 5,
+        "DragonId": 20050315
+    },
+    {
+        "StoryId": 210131012,
+        "ReleaseStep": 15,
+        "DragonId": 20050315
+    },
+    {
+        "StoryId": 210132011,
+        "ReleaseStep": 5,
+        "DragonId": 20050520
+    },
+    {
+        "StoryId": 210132012,
+        "ReleaseStep": 15,
+        "DragonId": 20050520
+    },
+    {
+        "StoryId": 210133011,
+        "ReleaseStep": 5,
+        "DragonId": 20050115
+    },
+    {
+        "StoryId": 210133012,
+        "ReleaseStep": 15,
+        "DragonId": 20050115
+    },
+    {
+        "StoryId": 210134011,
+        "ReleaseStep": 5,
+        "DragonId": 20050213
+    },
+    {
+        "StoryId": 210134012,
+        "ReleaseStep": 15,
+        "DragonId": 20050213
+    },
+    {
+        "StoryId": 210135011,
+        "ReleaseStep": 5,
+        "DragonId": 20050521
+    },
+    {
+        "StoryId": 210135012,
+        "ReleaseStep": 15,
+        "DragonId": 20050521
+    },
+    {
+        "StoryId": 210136011,
+        "ReleaseStep": 5,
+        "DragonId": 20050116
+    },
+    {
+        "StoryId": 210136012,
+        "ReleaseStep": 15,
+        "DragonId": 20050116
+    },
+    {
+        "StoryId": 210136011,
+        "ReleaseStep": 5,
+        "DragonId": 29950116
+    },
+    {
+        "StoryId": 210136012,
+        "ReleaseStep": 15,
+        "DragonId": 29950116
+    },
+    {
+        "StoryId": 210137011,
+        "ReleaseStep": 5,
+        "DragonId": 20050317
+    },
+    {
+        "StoryId": 210137012,
+        "ReleaseStep": 15,
+        "DragonId": 20050317
+    },
+    {
+        "StoryId": 210137011,
+        "ReleaseStep": 5,
+        "DragonId": 29950317
+    },
+    {
+        "StoryId": 210137012,
+        "ReleaseStep": 15,
+        "DragonId": 29950317
+    },
+    {
+        "StoryId": 210138011,
+        "ReleaseStep": 5,
+        "DragonId": 20050522
+    },
+    {
+        "StoryId": 210138012,
+        "ReleaseStep": 15,
+        "DragonId": 20050522
+    },
+    {
+        "StoryId": 210138011,
+        "ReleaseStep": 5,
+        "DragonId": 29900010
+    },
+    {
+        "StoryId": 210138012,
+        "ReleaseStep": 15,
+        "DragonId": 29900010
+    },
+    {
+        "StoryId": 210138011,
+        "ReleaseStep": 5,
+        "DragonId": 29950522
+    },
+    {
+        "StoryId": 210138012,
+        "ReleaseStep": 15,
+        "DragonId": 29950522
+    },
+    {
+        "StoryId": 210142011,
+        "ReleaseStep": 5,
+        "DragonId": 20050413
+    },
+    {
+        "StoryId": 210142012,
+        "ReleaseStep": 15,
+        "DragonId": 20050413
+    },
+    {
+        "StoryId": 210143011,
+        "ReleaseStep": 5,
+        "DragonId": 20050316
+    },
+    {
+        "StoryId": 210143012,
+        "ReleaseStep": 15,
+        "DragonId": 20050316
+    },
+    {
+        "StoryId": 210144011,
+        "ReleaseStep": 5,
+        "DragonId": 20050414
+    },
+    {
+        "StoryId": 210144012,
+        "ReleaseStep": 15,
+        "DragonId": 20050414
+    },
+    {
+        "StoryId": 210145011,
+        "ReleaseStep": 5,
+        "DragonId": 20050214
+    },
+    {
+        "StoryId": 210145012,
+        "ReleaseStep": 15,
+        "DragonId": 20050214
+    },
+    {
+        "StoryId": 210146011,
+        "ReleaseStep": 5,
+        "DragonId": 20050215
+    },
+    {
+        "StoryId": 210146012,
+        "ReleaseStep": 15,
+        "DragonId": 20050215
+    },
+    {
+        "StoryId": 210147011,
+        "ReleaseStep": 5,
+        "DragonId": 20050117
+    },
+    {
+        "StoryId": 210147012,
+        "ReleaseStep": 15,
+        "DragonId": 20050117
+    },
+    {
+        "StoryId": 210148011,
+        "ReleaseStep": 5,
+        "DragonId": 20050523
+    },
+    {
+        "StoryId": 210148012,
+        "ReleaseStep": 15,
+        "DragonId": 20050523
+    },
+    {
+        "StoryId": 210148011,
+        "ReleaseStep": 5,
+        "DragonId": 29950523
+    },
+    {
+        "StoryId": 210148012,
+        "ReleaseStep": 15,
+        "DragonId": 29950523
+    },
+    {
+        "StoryId": 210152011,
+        "ReleaseStep": 5,
+        "DragonId": 20050318
+    },
+    {
+        "StoryId": 210152012,
+        "ReleaseStep": 15,
+        "DragonId": 20050318
+    },
+    {
+        "StoryId": 210154011,
+        "ReleaseStep": 5,
+        "DragonId": 20050415
+    },
+    {
+        "StoryId": 210154012,
+        "ReleaseStep": 15,
+        "DragonId": 20050415
+    },
+    {
+        "StoryId": 210154011,
+        "ReleaseStep": 5,
+        "DragonId": 29950415
+    },
+    {
+        "StoryId": 210154012,
+        "ReleaseStep": 15,
+        "DragonId": 29950415
+    },
+    {
+        "StoryId": 210155011,
+        "ReleaseStep": 5,
+        "DragonId": 20050524
+    },
+    {
+        "StoryId": 210155012,
+        "ReleaseStep": 15,
+        "DragonId": 20050524
+    },
+    {
+        "StoryId": 210155011,
+        "ReleaseStep": 5,
+        "DragonId": 29950524
+    },
+    {
+        "StoryId": 210155012,
+        "ReleaseStep": 15,
+        "DragonId": 29950524
+    },
+    {
+        "StoryId": 210156011,
+        "ReleaseStep": 5,
+        "DragonId": 20050216
+    },
+    {
+        "StoryId": 210156012,
+        "ReleaseStep": 15,
+        "DragonId": 20050216
+    },
+    {
+        "StoryId": 210158011,
+        "ReleaseStep": 5,
+        "DragonId": 20050416
+    },
+    {
+        "StoryId": 210158012,
+        "ReleaseStep": 15,
+        "DragonId": 20050416
+    },
+    {
+        "StoryId": 210158011,
+        "ReleaseStep": 5,
+        "DragonId": 29900019
+    },
+    {
+        "StoryId": 210158012,
+        "ReleaseStep": 15,
+        "DragonId": 29900019
+    },
+    {
+        "StoryId": 210158011,
+        "ReleaseStep": 5,
+        "DragonId": 29950416
+    },
+    {
+        "StoryId": 210158012,
+        "ReleaseStep": 15,
+        "DragonId": 29950416
+    },
+    {
+        "StoryId": 210161011,
+        "ReleaseStep": 5,
+        "DragonId": 20050319
+    },
+    {
+        "StoryId": 210161012,
+        "ReleaseStep": 15,
+        "DragonId": 20050319
+    },
+    {
+        "StoryId": 210162011,
+        "ReleaseStep": 5,
+        "DragonId": 20050525
+    },
+    {
+        "StoryId": 210162012,
+        "ReleaseStep": 15,
+        "DragonId": 20050525
+    },
+    {
+        "StoryId": 210162011,
+        "ReleaseStep": 5,
+        "DragonId": 29900026
+    },
+    {
+        "StoryId": 210162012,
+        "ReleaseStep": 15,
+        "DragonId": 29900026
+    },
+    {
+        "StoryId": 210162011,
+        "ReleaseStep": 5,
+        "DragonId": 29950525
+    },
+    {
+        "StoryId": 210162012,
+        "ReleaseStep": 15,
+        "DragonId": 29950525
+    },
+    {
+        "StoryId": 210163011,
+        "ReleaseStep": 5,
+        "DragonId": 20050118
+    },
+    {
+        "StoryId": 210163012,
+        "ReleaseStep": 15,
+        "DragonId": 20050118
+    },
+    {
+        "StoryId": 210163011,
+        "ReleaseStep": 5,
+        "DragonId": 29950121
+    },
+    {
+        "StoryId": 210163012,
+        "ReleaseStep": 15,
+        "DragonId": 29950121
+    },
+    {
+        "StoryId": 210164011,
+        "ReleaseStep": 5,
+        "DragonId": 20050418
+    },
+    {
+        "StoryId": 210164012,
+        "ReleaseStep": 15,
+        "DragonId": 20050418
+    },
+    {
+        "StoryId": 210166011,
+        "ReleaseStep": 5,
+        "DragonId": 20050417
+    },
+    {
+        "StoryId": 210166012,
+        "ReleaseStep": 15,
+        "DragonId": 20050417
+    },
+    {
+        "StoryId": 210167011,
+        "ReleaseStep": 5,
+        "DragonId": 20050217
+    },
+    {
+        "StoryId": 210167012,
+        "ReleaseStep": 15,
+        "DragonId": 20050217
+    },
+    {
+        "StoryId": 210168011,
+        "ReleaseStep": 5,
+        "DragonId": 20050321
+    },
+    {
+        "StoryId": 210168012,
+        "ReleaseStep": 15,
+        "DragonId": 20050321
+    },
+    {
+        "StoryId": 210169011,
+        "ReleaseStep": 5,
+        "DragonId": 20050320
+    },
+    {
+        "StoryId": 210169012,
+        "ReleaseStep": 15,
+        "DragonId": 20050320
+    },
+    {
+        "StoryId": 210169011,
+        "ReleaseStep": 5,
+        "DragonId": 29950320
+    },
+    {
+        "StoryId": 210169012,
+        "ReleaseStep": 15,
+        "DragonId": 29950320
+    },
+    {
+        "StoryId": 210173011,
+        "ReleaseStep": 5,
+        "DragonId": 20050419
+    },
+    {
+        "StoryId": 210173012,
+        "ReleaseStep": 15,
+        "DragonId": 20050419
+    },
+    {
+        "StoryId": 210177011,
+        "ReleaseStep": 5,
+        "DragonId": 20050119
+    },
+    {
+        "StoryId": 210177012,
+        "ReleaseStep": 15,
+        "DragonId": 20050119
+    }
+]

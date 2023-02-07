@@ -1,6 +1,7 @@
 #nullable disable
 
 using System.ComponentModel.DataAnnotations;
+using DragaliaAPI.MessagePack;
 using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
 

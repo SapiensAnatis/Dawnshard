@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using AutoMapper;
-using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
-using static DragaliaAPI.Shared.Definitions.Enums.ManaNodesUtil;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -107,11 +102,10 @@ public class CharaController : DragaliaControllerBase
         {
             if (mat.quantity < 0)
             {
-                this.logger.LogError(
-                    "Request had invalid material with invalid quantity {mat}",
-                    mat
+                throw new DragaliaException(
+                    ResultCode.CommonMaterialShort,
+                    "Invalid quantity for MaterialList in request"
                 );
-                throw new ArgumentException("Invalid quantity for MaterialList");
             }
             if (
                 mat.id != Materials.BronzeCrystal
@@ -121,12 +115,17 @@ public class CharaController : DragaliaControllerBase
                 && mat.id != Materials.FortifyingCrystal
             )
             {
-                this.logger.LogError("Request had invalid material id {mat}", mat);
-                throw new ArgumentException("Invalid MaterialList in request");
+                throw new DragaliaException(
+                    ResultCode.CharaGrowNotBoostMaterial,
+                    "Invalid materials for buildup"
+                );
             }
             if (!dbMats.ContainsKey(mat.id) || dbMats[mat.id].Quantity < mat.quantity)
             {
-                throw new ArgumentException("Insufficient materials for buildup");
+                throw new DragaliaException(
+                    ResultCode.CommonMaterialShort,
+                    "Insufficient materials for buildup"
+                );
             }
         }
         DbPlayerUserData userData = await this.userDataRepository
@@ -145,8 +144,6 @@ public class CharaController : DragaliaControllerBase
             remainingMaterials.Add(this.mapper.Map<MaterialList>(dbMats[(Materials)mat.Key]));
         }
 
-        //TODO Add element/weapontype bonus if applicable
-
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
@@ -162,7 +159,7 @@ public class CharaController : DragaliaControllerBase
         ref Dictionary<int, int> usedMaterials
     )
     {
-        this.logger.LogDebug("Levelling up chara {@chara}", playerCharData);
+        this.logger.LogDebug("Leveling up chara {@chara}", playerCharData);
         //TODO: For now we'll trust the client to not allow leveling up/enhancing beyond allowed limits
         byte maxLevel = (byte)(
             CharaConstants.GetMaxLevelFor(playerCharData.Rarity) + playerCharData.AdditionalMaxLevel
@@ -199,7 +196,10 @@ public class CharaController : DragaliaControllerBase
                         );
                     break;
                 default:
-                    throw new ArgumentException("Invalid MaterialList");
+                    throw new DragaliaException(
+                        ResultCode.CharaGrowNotBoostMaterial,
+                        "Invalid materials for buildup"
+                    );
             }
             if (!usedMaterials.ContainsKey((int)MaterialList.id))
             {
@@ -289,6 +289,12 @@ public class CharaController : DragaliaControllerBase
         DbPlayerMaterial upgradeMat =
             await inventoryRepository.GetMaterial(DeviceAccountId, mat)
             ?? inventoryRepository.AddMaterial(DeviceAccountId, mat);
+        DbPlayerCurrency playerCurrency =
+            await inventoryRepository.GetCurrency(DeviceAccountId, CurrencyTypes.Rupies)
+            ?? throw new DragaliaException(
+                ResultCode.CommonMaterialShort,
+                "Insufficient Rupies for reset"
+            );
         int cost =
             20000
             * (
@@ -298,12 +304,10 @@ public class CharaController : DragaliaControllerBase
             );
         if (userData.Coin < cost)
         {
-            this.logger.LogError(
-                "User rupie count {count} less than augment reset requirement {req}",
-                userData.Coin,
-                cost
+            throw new DragaliaException(
+                ResultCode.CommonMaterialShort,
+                "Insufficient Rupies for reset"
             );
-            throw new ArgumentException("Insufficient Rupies for reset");
         }
         userData.Coin -= cost;
         upgradeMat.Quantity +=
@@ -370,10 +374,6 @@ public class CharaController : DragaliaControllerBase
         Dictionary<CurrencyTypes, int> usedCurrencies = new();
         Dictionary<Materials, int> usedMaterials = new();
         playerCharData.LimitBreakCount = (byte)request.next_limit_break_count;
-        if (request.next_limit_break_count == 5)
-        {
-            playerCharData.AdditionalMaxLevel += 5;
-        }
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -468,11 +468,6 @@ public class CharaController : DragaliaControllerBase
             unlockedStories,
             CharaUpgradeMaterialTypes.Omnicite
         );
-
-        if (charaData.HasManaSpiral)
-        {
-            playerCharaData.AdditionalMaxLevel = 20;
-        }
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -581,7 +576,10 @@ public class CharaController : DragaliaControllerBase
         {
             if (manaNodeInfos.Count < nodeNr)
             {
-                throw new ArgumentException($"No nodeInfo found for node {nodeNr}");
+                throw new DragaliaException(
+                    ResultCode.CharaGrowManaPieceNotMeetCondition,
+                    $"No nodeInfo found for node {nodeNr}"
+                );
             }
 
             ManaNode manaNodeInfo = manaNodeInfos[nodeNr - 1];
@@ -675,34 +673,35 @@ public class CharaController : DragaliaControllerBase
                     mat.Quantity++;
                     break;
                 case ManaNodeTypes.StdAtkUp:
-                    //TODO: Unsure but seems like this is it. Maybe rename it to something more appropriate
                     playerCharData.ComboBuildupCount++;
-                    break;
-                case ManaNodeTypes.MaxLvUp:
-                    playerCharData.AdditionalMaxLevel += 5;
                     break;
                 default:
                     break;
             }
+
             if (manaNodeInfo.IsReleaseStory)
             {
-                //TODO: Get relevant story
-                //unlockedStories.Add((int)manaNodeInfo.StoryId);
-                int[] charaStories = _charaDataService.GetStoryData(playerCharData.CharaId);
-                int nextStoryUnlockIndex = await storyRepository
-                    .GetStoryList(DeviceAccountId)
-                    .Where(x => charaStories.Contains(x.StoryId))
-                    .CountAsync();
-                if (charaStories.Length - 1 > nextStoryUnlockIndex)
+                int[] charaStories = MasterAsset.CharaStories
+                    .Get((int)playerCharData.CharaId)
+                    .storyIds;
+                int nextStoryunlockIndex =
+                    await storyRepository
+                        .GetStoryList(DeviceAccountId)
+                        .Where(x => charaStories.Contains(x.StoryId))
+                        .CountAsync() + unlockedStories.Count;
+                if (charaStories.Length - 1 < nextStoryunlockIndex)
                 {
-                    throw new ArgumentException("Too many story unlocks");
+                    throw new DragaliaException(
+                        ResultCode.StoryCountNotEnough,
+                        "Too many story unlocks"
+                    );
                 }
                 await storyRepository.GetOrCreateStory(
                     DeviceAccountId,
                     StoryTypes.Chara,
-                    charaStories[nextStoryUnlockIndex]
+                    charaStories[nextStoryunlockIndex]
                 );
-                unlockedStories.Add(charaStories[nextStoryUnlockIndex]);
+                unlockedStories.Add(charaStories[nextStoryunlockIndex]);
             }
 
             foreach (KeyValuePair<CurrencyTypes, int> curCost in currencyCosts)
@@ -713,6 +712,7 @@ public class CharaController : DragaliaControllerBase
                 }
                 usedCurrency[curCost.Key] += curCost.Value;
             }
+
             foreach (KeyValuePair<Materials, int> matCost in materialCosts)
             {
                 if (!usedMaterials.ContainsKey(matCost.Key))
@@ -762,11 +762,10 @@ public class CharaController : DragaliaControllerBase
             || (ManaNodes)playerCharData.ManaNodeUnlockCount < (ManaNodes.Circle5 - 1)
         )
         {
-            this.logger.LogError(
-                "Illegal skill share unlock attempt for {@charaData}",
-                playerCharData
+            throw new DragaliaException(
+                ResultCode.CharaEditSkillCannotUnlock,
+                "Adventurer not eligible to share skill"
             );
-            throw new ArgumentException("Adventurer not eligible to share skill");
         }
 
         Materials usedMat = UpgradeMaterials.tomes[charData.ElementalType];
@@ -777,15 +776,8 @@ public class CharaController : DragaliaControllerBase
         );
         if (dbMat == null || dbMat.Quantity < usedMatCount)
         {
-            this.logger.LogError(
-                "Insufficient material quantity in entity {@dbMat} (needs: {q}) to unlock skill for {@chara}",
-                dbMat,
-                usedMatCount,
-                request.chara_id
-            );
-
             throw new DragaliaException(
-                ResultCode.CharaEditSkillCannotUnlock,
+                ResultCode.CommonMaterialShort,
                 "Insufficient materials in storage"
             );
         }

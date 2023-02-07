@@ -191,9 +191,7 @@ public class InventoryRepository : IInventoryRepository
 
     public async Task<DbPlayerDragonGift?> GetDragonGift(string deviceAccountId, DragonGifts giftId)
     {
-        return await this.apiContext.PlayerDragonGifts.FirstOrDefaultAsync(
-            entry => entry.DeviceAccountId == deviceAccountId && entry.DragonGiftId == giftId
-        );
+        return await this.apiContext.PlayerDragonGifts.FindAsync(deviceAccountId, giftId);
     }
 
     public IQueryable<DbPlayerDragonGift> GetDragonGifts(string deviceAccountId)
@@ -201,5 +199,27 @@ public class InventoryRepository : IInventoryRepository
         return this.apiContext.PlayerDragonGifts.Where(
             gifts => gifts.DeviceAccountId == deviceAccountId
         );
+    }
+
+    public async Task<bool> RefreshPurchasableDragonGiftCounts(string deviceAccountId)
+    {
+        Dictionary<DragonGifts, DbPlayerDragonGift> dbGifts = await GetDragonGifts(deviceAccountId)
+            .ToDictionaryAsync(x => x.DragonGiftId);
+        foreach (
+            DragonGifts gift in Enum.GetValues<DragonGifts>()
+                .Where(x => x < DragonGifts.FourLeafClover)
+        )
+        {
+            if (dbGifts.TryGetValue(gift, out DbPlayerDragonGift? dbGift))
+            {
+                dbGift.Quantity = 1;
+            }
+            else
+            {
+                dbGift = AddDragonGift(deviceAccountId, gift);
+                dbGift.Quantity = 1;
+            }
+        }
+        return true;
     }
 }

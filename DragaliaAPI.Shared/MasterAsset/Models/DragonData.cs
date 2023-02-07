@@ -32,7 +32,8 @@ public record DragonData(
     int DefaultReliabilityLevel,
     int DmodePassiveAbilityId,
     int MaxLimitBreakCount,
-    int LimitBreakMaterialId,
+    Materials LimitBreakMaterialId,
+    DragonLimitBreakTypes LimitBreakTypeId,
     int FavoriteType,
     int SellCoin,
     int SellDewPoint

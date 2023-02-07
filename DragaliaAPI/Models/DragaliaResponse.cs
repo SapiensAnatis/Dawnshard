@@ -11,7 +11,7 @@ public class DragaliaResponse<TData>
 
     public TData data { get; init; }
 
-    public DragaliaResponse(TData data, ResultCode result_code = ResultCode.SUCCESS)
+    public DragaliaResponse(TData data, ResultCode result_code = ResultCode.Success)
     {
         this.data = data;
         this.data_headers = new(result_code);

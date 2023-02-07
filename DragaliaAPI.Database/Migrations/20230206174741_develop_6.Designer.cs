@@ -3,6 +3,7 @@ using System;
 using DragaliaAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,13 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230206174741_develop_6")]
+    partial class develop6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -128,8 +131,8 @@ namespace DragaliaAPI.Database.Migrations
 
                     b.Property<string>("PartyName")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.HasKey("DeviceAccountId", "PartyNo");
 
@@ -706,8 +709,7 @@ namespace DragaliaAPI.Database.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
+                        .HasColumnType("text");
 
                     b.Property<int>("QuestSkipPoint")
                         .HasColumnType("integer");
@@ -939,42 +941,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerWeapons");
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponPassiveAbility", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("WeaponPassiveAbilityId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("DeviceAccountId", "WeaponPassiveAbilityId");
-
-                    b.HasIndex("DeviceAccountId");
-
-                    b.ToTable("PlayerPassiveAbilities");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponSkin", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("WeaponSkinId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("GetTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsNew")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("DeviceAccountId", "WeaponSkinId");
-
-                    b.HasIndex("DeviceAccountId");
-
-                    b.ToTable("PlayerWeaponSkins");
-                });
-
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbAbilityCrest", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
@@ -1171,28 +1137,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponPassiveAbility", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponSkin", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany("WeaponSkinList")
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbParty", b =>
                 {
                     b.Navigation("Units");
@@ -1231,8 +1175,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("UserSummonList");
 
                     b.Navigation("WeaponBodyList");
-
-                    b.Navigation("WeaponSkinList");
                 });
 #pragma warning restore 612, 618
         }
