@@ -1,10 +1,6 @@
-﻿using System.Formats.Tar;
-using AutoMapper;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
+﻿using AutoMapper;
 
-namespace DragaliaAPI.Test.Unit;
+namespace DragaliaAPI.Test.Unit.AutoMapper;
 
 public class AutoMapperProfileTest
 {
