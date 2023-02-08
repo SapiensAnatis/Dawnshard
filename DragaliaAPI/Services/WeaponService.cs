@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Security.Cryptography.Pkcs;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
@@ -8,7 +7,6 @@ using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
-using Microsoft.EntityFrameworkCore;
 using Serilog.Context;
 
 namespace DragaliaAPI.Services;
@@ -107,7 +105,7 @@ public class WeaponService : IWeaponService
     }
 
     public async Task<bool> CheckOwned(WeaponBodies weaponBodyId) =>
-        await this.weaponRepository.FindAsync(weaponBodyId) is not null;
+        await this.weaponRepository.CheckOwnsWeapons(weaponBodyId);
 
     /// <summary>
     /// Try to buildup a weapon.
@@ -199,7 +197,7 @@ public class WeaponService : IWeaponService
                 entity.EquipableCount = buildup.step;
                 break;
             case BuildupPieceTypes.Unbind:
-                if (!ValidateStep(entity.EquipableCount, buildup))
+                if (!ValidateStep(entity.LimitBreakCount, buildup))
                     return ResultCode.WeaponBodyBuildupPieceStepError;
                 entity.LimitBreakCount = buildup.step;
                 break;
@@ -304,7 +302,7 @@ public class WeaponService : IWeaponService
         AtgenBuildupWeaponBodyPieceList buildup
     )
     {
-        int passiveKey = body.GetBuildupLevelId(buildup.buildup_piece_no);
+        int passiveKey = body.GetBuildupLevelId(buildup.step);
 
         if (
             !MasterAsset.WeaponBodyBuildupLevel.TryGetValue(
@@ -313,7 +311,7 @@ public class WeaponService : IWeaponService
             )
         )
         {
-            this.logger.LogError("Invalid weapon passive ability key {key}", passiveKey);
+            this.logger.LogError("Invalid weapon stat buildup key {key}", passiveKey);
             return ResultCode.WeaponBodyBuildupPieceUnablePiece;
         }
 
@@ -443,9 +441,11 @@ public class WeaponService : IWeaponService
                 await this.weaponRepository.AddSkin(body.RewardWeaponSkinId3);
                 break;
             case 4:
+                // Never used
                 await this.weaponRepository.AddSkin(body.RewardWeaponSkinId4);
                 break;
             case 5:
+                // Never used
                 await this.weaponRepository.AddSkin(body.RewardWeaponSkinId5);
                 break;
             default:
