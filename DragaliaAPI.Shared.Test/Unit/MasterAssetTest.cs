@@ -334,4 +334,6 @@ public class MasterAssetTest
                 )
             );
     }
+
+    // TODO tests for other buildup records
 }

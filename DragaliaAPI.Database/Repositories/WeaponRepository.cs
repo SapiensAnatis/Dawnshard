@@ -14,8 +14,6 @@ public class WeaponRepository : IWeaponRepository
     private readonly IPlayerDetailsService playerDetailsService;
     private readonly ILogger<WeaponRepository> logger;
 
-    public Guid guid { get; }= new();
-
     public WeaponRepository(
         ApiContext apiContext,
         IPlayerDetailsService playerDetailsService,
@@ -63,7 +61,8 @@ public class WeaponRepository : IWeaponRepository
             new DbWeaponSkin()
             {
                 DeviceAccountId = this.playerDetailsService.AccountId,
-                WeaponSkinId = weaponSkinId
+                WeaponSkinId = weaponSkinId,
+                GetTime = DateTimeOffset.UtcNow
             }
         );
     }

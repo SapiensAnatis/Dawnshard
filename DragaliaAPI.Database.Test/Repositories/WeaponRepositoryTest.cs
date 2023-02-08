@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 
@@ -76,28 +78,6 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
     }
 
     [Fact]
-    public async Task AddSkin_AddsToDatabase()
-    {
-        await this.weaponRepository.AddSkin((int)WeaponBodies.PrimalAqua);
-        await this.fixture.ApiContext.SaveChangesAsync();
-
-        this.fixture.ApiContext.PlayerWeaponSkins
-            .Single(
-                x =>
-                    x.WeaponSkinId == (int)WeaponBodies.PrimalAqua
-                    && x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
-            )
-            .Should()
-            .BeEquivalentTo(
-                new DbWeaponSkin()
-                {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
-                    WeaponSkinId = (int)WeaponBodies.PrimalAqua
-                }
-            );
-    }
-
-    [Fact]
     public async Task CheckOwnsWeapons_AllWeaponsOwned()
     {
         await this.fixture.AddRangeToDatabase(
@@ -147,5 +127,58 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         )
             .Should()
             .Be(false);
+    }
+
+    [Fact]
+    public async Task AddPassiveAbility_AddsPassiveAbility()
+    {
+        await this.fixture.AddToDatabase(
+            new DbWeaponBody()
+            {
+                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                WeaponBodyId = WeaponBodies.InfernoApogee
+            }
+        );
+
+        int passiveId = MasterAsset.WeaponBody
+            .Get(WeaponBodies.InfernoApogee)
+            .GetPassiveAbilityId(1);
+        WeaponPassiveAbility passiveAbility = MasterAsset.WeaponPassiveAbility.Get(passiveId);
+
+        await this.weaponRepository.AddPassiveAbility(WeaponBodies.InfernoApogee, passiveAbility);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        this.fixture.ApiContext.PlayerWeapons
+            .Single(x => x.WeaponBodyId == WeaponBodies.InfernoApogee)
+            .UnlockWeaponPassiveAbilityNoList.Should()
+            .BeEquivalentTo(Enumerable.Repeat(0, 14).Prepend(1));
+        this.fixture.ApiContext.PlayerPassiveAbilities
+            .Should()
+            .ContainEquivalentOf(
+                new DbWeaponPassiveAbility()
+                {
+                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    WeaponPassiveAbilityId = passiveId
+                }
+            );
+    }
+
+    [Fact]
+    public async Task AddSkin_AddsSkin()
+    {
+        await this.weaponRepository.AddSkin(4);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        this.fixture.ApiContext.PlayerWeaponSkins
+            .Should()
+            .ContainEquivalentOf(
+                new DbWeaponSkin()
+                {
+                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    WeaponSkinId = 4,
+                    IsNew = false,
+                    GetTime = DateTimeOffset.UtcNow
+                }
+            );
     }
 }

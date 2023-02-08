@@ -8,7 +8,6 @@ public interface IWeaponRepository
 {
     IQueryable<DbWeaponBody> WeaponBodies { get; }
     IQueryable<DbWeaponSkin> WeaponSkins { get; }
-    Guid guid { get; }
     Task Add(WeaponBodies weaponBodyId);
     Task AddSkin(int weaponSkinId);
     Task<bool> CheckOwnsWeapons(params WeaponBodies[] weaponIds);
