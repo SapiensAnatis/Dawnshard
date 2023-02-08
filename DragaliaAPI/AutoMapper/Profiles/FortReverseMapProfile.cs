@@ -2,16 +2,18 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 
-namespace DragaliaAPI.Models.AutoMapper;
+namespace DragaliaAPI.AutoMapper.Profiles;
 
-public class InventoryReverseMapProfile : Profile
+public class FortReverseMapProfile : Profile
 {
-    public InventoryReverseMapProfile()
+    public FortReverseMapProfile()
     {
         this.AddGlobalIgnore("DeviceAccount");
         this.AddGlobalIgnore("Owner");
 
-        this.CreateMap<MaterialList, DbPlayerMaterial>();
+        this.CreateMap<BuildList, DbFortBuild>()
+            .ForMember(x => x.LastIncomeDate, opts => opts.MapFrom(src => DateTime.UnixEpoch))
+            .ForMember(x => x.BuildId, opts => opts.Ignore());
 
         this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
         this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;

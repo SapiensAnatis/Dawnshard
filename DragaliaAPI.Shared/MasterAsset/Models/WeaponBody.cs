@@ -44,28 +44,20 @@ public record WeaponBody(
     int Rarity,
     UnitElement ElementalType,
     int MaxLimitOverCount,
-    int MaxEquipableCount,
-    int BaseHp,
-    int MaxHp1,
-    int MaxHp2,
-    int MaxHp3,
-    int BaseAtk,
-    int MaxAtk1,
-    int MaxAtk2,
-    int MaxAtk3,
-    int LimitOverCountPartyPower1,
-    int LimitOverCountPartyPower2,
-    int CrestSlotType1BaseCount,
-    int CrestSlotType1MaxCount,
-    int CrestSlotType2BaseCount,
-    int CrestSlotType2MaxCount,
-    int CrestSlotType3BaseCount,
-    int CrestSlotType3MaxCount,
     int WeaponPassiveAbilityGroupId,
     int WeaponBodyBuildupGroupId,
     int MaxWeaponPassiveCharaCount,
     float WeaponPassiveEffHp,
     float WeaponPassiveEffAtk,
+    int Abilities11,
+    int Abilities12,
+    int Abilities13,
+    int Abilities21,
+    int Abilities22,
+    int Abilities23,
+    int ChangeSkillId1,
+    int ChangeSkillId2,
+    int ChangeSkillId3,
     int RewardWeaponSkinId1,
     int RewardWeaponSkinId2,
     int RewardWeaponSkinId3,
@@ -98,4 +90,33 @@ public record WeaponBody(
         }
             .Where(x => x.Key != Materials.Empty)
             .ToDictionary(x => x.Key, x => x.Value);
+
+    /// <summary>
+    /// Get the row id in the WeaponBodyBuildupGroup table corresponding to a particular operation and step
+    /// for upgrading this weapon.
+    /// <remarks>
+    /// Covers unbinding, copies, weapon bonuses, slots, refinement -- all except
+    /// stats and passives which are defined separately in this class.
+    /// </remarks>
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="step"></param>
+    /// <returns></returns>
+    public int GetBuildupGroupId(BuildupPieceTypes type, int step) =>
+        int.Parse($"{this.WeaponBodyBuildupGroupId}{(int)type:00}{step:00}");
+
+    /// <summary>
+    /// Get the row id in the WeaponBodyBuildupLevel table corresponding to a particular level up of this weapon.
+    /// </summary>
+    /// <param name="level">The level.</param>
+    /// <returns>The row id.</returns>
+    public int GetBuildupLevelId(int level) => int.Parse($"{this.Rarity}010{level:00}");
+
+    /// <summary>
+    /// Get the row id in the WeaponPassiveAbility table corresponding to a passive ability of this weapon.
+    /// </summary>
+    /// <param name="abilityNo">The ability number.</param>
+    /// <returns>The row id.</returns>
+    public int GetPassiveAbilityId(int abilityNo) =>
+        int.Parse($"{this.WeaponPassiveAbilityGroupId}{abilityNo:00}");
 };

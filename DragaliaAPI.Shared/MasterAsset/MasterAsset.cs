@@ -29,4 +29,21 @@ public static class MasterAsset
     private static readonly Lazy<MasterAssetData<WeaponBodies, WeaponBody>> _WeaponBody =
         new(() => new("WeaponBody.json", x => x.Id));
     public static MasterAssetData<WeaponBodies, WeaponBody> WeaponBody => _WeaponBody.Value;
+
+    private static readonly Lazy<
+        MasterAssetData<int, WeaponBodyBuildupGroup>
+    > _WeaponBodyBuildupGroup = new(() => new("WeaponBodyBuildupGroup.json", x => x.Id));
+    public static MasterAssetData<int, WeaponBodyBuildupGroup> WeaponBodyBuildupGroup =>
+        _WeaponBodyBuildupGroup.Value;
+
+    private static readonly Lazy<
+        MasterAssetData<int, WeaponBodyBuildupLevel>
+    > _WeaponBodyBuildupLevel = new(() => new("WeaponBodyBuildupLevel.json", x => x.Id));
+    public static MasterAssetData<int, WeaponBodyBuildupLevel> WeaponBodyBuildupLevel =>
+        _WeaponBodyBuildupLevel.Value;
+
+    private static readonly Lazy<MasterAssetData<int, WeaponPassiveAbility>> _WeaponPassiveAbility =
+        new(() => new("WeaponPassiveAbility.json", x => x.Id));
+    public static MasterAssetData<int, WeaponPassiveAbility> WeaponPassiveAbility =>
+        _WeaponPassiveAbility.Value;
 }

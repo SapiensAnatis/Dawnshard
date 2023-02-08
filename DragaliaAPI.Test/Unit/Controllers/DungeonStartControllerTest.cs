@@ -141,7 +141,11 @@ public class DungeonStartControllerTest
                             DragonId = Dragons.Midgardsormr
                         },
                         DragonReliabilityLevel = 30,
-                        WeaponBodyData = new() { DeviceAccountId = DeviceAccountId }
+                        WeaponBodyData = new()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            WeaponBodyId = WeaponBodies.PrimevalThunder
+                        }
                     }
                 }.AsQueryable().BuildMock());
 
@@ -338,7 +342,11 @@ public class DungeonStartControllerTest
                             DragonId = Dragons.Midgardsormr
                         },
                         DragonReliabilityLevel = 30,
-                        WeaponBodyData = new() { DeviceAccountId = DeviceAccountId }
+                        WeaponBodyData = new()
+                        {
+                            DeviceAccountId = DeviceAccountId,
+                            WeaponBodyId = WeaponBodies.Infernoblaze
+                        }
                     },
                     new()
                     {

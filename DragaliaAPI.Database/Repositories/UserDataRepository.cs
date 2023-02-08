@@ -114,8 +114,10 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
     }
 
     [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
-    public async Task UpdateRupies(string deviceAccountId, long offset)
+    public async Task UpdateCoin(string deviceAccountId, long offset)
     {
+        this.logger.LogDebug("Updating player rupies by {offset}", offset);
+
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
 
         long newQuantity = (userData.Coin += offset);
@@ -125,10 +127,10 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         userData.Coin = newQuantity;
     }
 
-    public async Task UpdateRupies(long offset)
+    public async Task UpdateCoin(long offset)
     {
 #pragma warning disable CS0618
-        await this.UpdateRupies(this.playerDetailsService.AccountId, offset);
+        await this.UpdateCoin(this.playerDetailsService.AccountId, offset);
 #pragma warning restore CS0618
     }
 
@@ -139,7 +141,7 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
 
         if (!result)
         {
-            this.logger.LogDebug(
+            this.logger.LogWarning(
                 "Failed rupie check: requested {quantity} rupies, but user had {coin}",
                 quantity,
                 coin

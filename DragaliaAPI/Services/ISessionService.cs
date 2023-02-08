@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Nintendo;
+﻿using DragaliaAPI.Models;
+using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Shared;
 
 namespace DragaliaAPI.Services;

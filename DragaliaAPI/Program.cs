@@ -8,8 +8,8 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Helpers;
 using DragaliaAPI.Shared;
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Core;
@@ -117,6 +117,8 @@ app.UseSerilogRequestLogging(
         }
 );
 
+Log.Logger.Information("App environment: {@env}", app.Environment);
+
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.MigrateDatabase();
@@ -150,4 +152,7 @@ app.MapHealthChecks("/health");
 
 app.Run();
 
-public partial class Program { }
+namespace DragaliaAPI
+{
+    public partial class Program { }
+}

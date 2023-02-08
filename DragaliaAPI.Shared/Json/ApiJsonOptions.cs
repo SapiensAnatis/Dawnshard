@@ -7,7 +7,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Threading.Tasks;
-using DragaliaAPI.MessagePack;
 
 namespace DragaliaAPI.Shared.Json;
 
