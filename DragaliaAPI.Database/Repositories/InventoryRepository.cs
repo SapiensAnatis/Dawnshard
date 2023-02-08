@@ -73,18 +73,9 @@ public class InventoryRepository : IInventoryRepository
         if (item == Materials.Empty)
             return;
 
-        DbPlayerMaterial material =
-            await this.apiContext.PlayerMaterials.FindAsync(deviceAccountId, item)
-            ?? (
-                await this.apiContext.AddAsync(
-                    new DbPlayerMaterial()
-                    {
-                        DeviceAccountId = deviceAccountId,
-                        MaterialId = item,
-                        Quantity = 0
-                    }
-                )
-            ).Entity;
+        this.logger.LogDebug("Updating material id {mat} by quantity {q}", item, quantity);
+
+        DbPlayerMaterial material = await this.FindAsync(item);
 
         if (material.Quantity + quantity < 0)
         {
@@ -95,6 +86,24 @@ public class InventoryRepository : IInventoryRepository
         }
 
         material.Quantity += quantity;
+    }
+
+    private async Task<DbPlayerMaterial> FindAsync(Materials item)
+    {
+        return await this.apiContext.PlayerMaterials.FindAsync(
+                this.playerDetailsService.AccountId,
+                item
+            )
+            ?? (
+                await this.apiContext.AddAsync(
+                    new DbPlayerMaterial()
+                    {
+                        DeviceAccountId = this.playerDetailsService.AccountId,
+                        MaterialId = item,
+                        Quantity = 0
+                    }
+                )
+            ).Entity;
     }
 
     public async Task UpdateQuantity(Materials material, int quantity)
@@ -143,31 +152,24 @@ public class InventoryRepository : IInventoryRepository
 
     public async Task<bool> CheckQuantity(IEnumerable<KeyValuePair<Materials, int>> quantityMap)
     {
-        IEnumerable<Materials> materials = quantityMap.Select(x => x.Key);
-
-        Dictionary<Materials, DbPlayerMaterial> dbValues = await this.apiContext.PlayerMaterials
-            .Where(x => x.DeviceAccountId == this.playerDetailsService.AccountId)
-            .Where(x => materials.Contains(x.MaterialId))
-            .ToDictionaryAsync(x => x.MaterialId, x => x);
-
         foreach (KeyValuePair<Materials, int> requested in quantityMap)
         {
             if (requested.Key == Materials.Empty)
                 continue;
 
-            dbValues.TryGetValue(requested.Key, out DbPlayerMaterial? mat);
+            DbPlayerMaterial mat = await this.FindAsync(requested.Key);
 
-            if (mat?.Quantity >= requested.Value)
-                continue;
+            if (mat?.Quantity < requested.Value)
+            {
+                this.logger.LogWarning(
+                    "Failed material {material} check: requested quantity {q1}, entity: {@mat}",
+                    requested.Key,
+                    requested.Value,
+                    mat
+                );
 
-            this.logger.LogDebug(
-                "Failed material {material} check: requested quantity {q1}, entity: {@mat}",
-                requested.Key,
-                requested.Value,
-                mat
-            );
-
-            return false;
+                return false;
+            }
         }
 
         return true;

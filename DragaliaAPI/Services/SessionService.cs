@@ -5,6 +5,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using DragaliaAPI.Models;
 using DragaliaAPI.Shared;
 
 namespace DragaliaAPI.Services;

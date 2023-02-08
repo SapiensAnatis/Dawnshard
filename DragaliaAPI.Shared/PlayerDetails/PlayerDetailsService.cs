@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using DragaliaAPI.Middleware;
 using Microsoft.AspNetCore.Http;
 
 namespace DragaliaAPI.Shared.PlayerDetails;

@@ -16,6 +16,7 @@ using Serilog.Context;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 using DragaliaAPI.Shared;
+using DragaliaAPI.Shared.PlayerDetails;
 
 namespace DragaliaAPI.Services;
 

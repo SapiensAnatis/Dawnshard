@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Net;
 using DragaliaAPI.Controllers;
 using DragaliaAPI.MessagePack;
@@ -44,30 +45,34 @@ public class ExceptionHandlerMiddleware
 
                 return;
             }
-            /*else if (ex is SecurityTokenExpiredException)
+            else if (ex is SessionException)
             {
-                // Will send back to BaaS to login
+                // Will send back to login
                 this.logger.LogInformation(
-                    "Returning ID token refresh request due to SecurityTokenExpiredException"
+                    "Returning session refresh request due to SessionException"
                 );
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 context.Response.Headers.Add(RefreshIdToken, True);
 
                 return;
-            }*/
-
-            this.logger.LogError(ex, "Encountered unhandled exception");
+            }
 
             context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
             context.Response.StatusCode = 200;
 
-            ResultCode code = ex is DragaliaException dragaliaException
-                ? dragaliaException.Code
-                : ServerErrorCode;
+            ResultCode code = ex switch
+            {
+                DragaliaException d => d.Code,
+                SecurityTokenExpiredException => ResultCode.IdTokenError,
+                NotImplementedException => ResultCode.CommonTimeout,
+                _ => ResultCode.CommonServerError
+            };
 
-            code = ex is SecurityTokenExpiredException ? ResultCode.IdTokenError : code;
-
-            this.logger.LogError("Returning result_code {code}", code);
+            this.logger.LogError(
+                ex,
+                "Encountered unhandled exception. Returning result_code {code}",
+                code
+            );
 
             DragaliaResponse<DataHeaders> gameResponse = new(new DataHeaders(code), code);
 

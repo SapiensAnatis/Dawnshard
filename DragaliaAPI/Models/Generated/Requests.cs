@@ -4287,11 +4287,11 @@ public class WallStartStartRequest
 [MessagePackObject(true)]
 public class WeaponBodyBuildupPieceRequest
 {
-    public int weapon_body_id { get; set; }
+    public WeaponBodies weapon_body_id { get; set; }
     public IEnumerable<AtgenBuildupWeaponBodyPieceList> buildup_weapon_body_piece_list { get; set; }
 
     public WeaponBodyBuildupPieceRequest(
-        int weapon_body_id,
+        WeaponBodies weapon_body_id,
         IEnumerable<AtgenBuildupWeaponBodyPieceList> buildup_weapon_body_piece_list
     )
     {

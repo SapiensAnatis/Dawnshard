@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using DragaliaAPI.Shared.PlayerDetails;
 
 namespace DragaliaAPI.Middleware;
 

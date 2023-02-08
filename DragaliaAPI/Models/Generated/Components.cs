@@ -777,16 +777,19 @@ public class AtgenBuildupAbilityCrestPieceList
 [MessagePackObject(true)]
 public class AtgenBuildupWeaponBodyPieceList
 {
-    public int buildup_piece_type { get; set; }
+    public BuildupPieceTypes buildup_piece_type { get; set; }
     public int buildup_piece_no { get; set; }
     public int step { get; set; }
-    public int is_use_dedicated_material { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_use_dedicated_material { get; set; }
 
     public AtgenBuildupWeaponBodyPieceList(
-        int buildup_piece_type,
+        BuildupPieceTypes buildup_piece_type,
         int buildup_piece_no,
         int step,
-        int is_use_dedicated_material
+        bool is_use_dedicated_material
     )
     {
         this.buildup_piece_type = buildup_piece_type;

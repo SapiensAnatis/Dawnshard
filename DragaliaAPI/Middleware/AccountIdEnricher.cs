@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using DragaliaAPI.Shared.PlayerDetails;
 using Serilog.Context;
 using Serilog.Core;
 using Serilog.Events;

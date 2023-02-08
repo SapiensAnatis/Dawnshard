@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace DragaliaAPI.Models.AutoMapper;
+namespace DragaliaAPI.AutoMapper;
 
 /// <summary>
 /// Works very similarly to PascalCaseNamingConvention, but treats numbers as their own token.

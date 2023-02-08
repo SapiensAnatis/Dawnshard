@@ -31,10 +31,25 @@
 		<None Update="Resources\WeaponBody.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="Resources\WeaponBodyBuildupGroup.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\WeaponBodyBuildupLevel.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\WeaponPassiveAbility.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Reference Include="Microsoft.Extensions.Identity.Core" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="MasterAsset\Models\WeaponPassiveAbility.cs">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

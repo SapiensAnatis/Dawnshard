@@ -71,6 +71,10 @@ public class UpdateDataService : IUpdateDataService
                 material_list = this.ConvertEntities<MaterialList, DbPlayerMaterial>(entities),
                 quest_list = this.ConvertEntities<QuestList, DbQuest>(entities),
                 build_list = this.ConvertEntities<BuildList, DbFortBuild>(entities),
+                weapon_passive_ability_list = this.ConvertEntities<
+                    WeaponPassiveAbilityList,
+                    DbWeaponPassiveAbility
+                >(entities)
             };
 
         this.apiContext.ChangeTracker.LazyLoadingEnabled = true;
