@@ -45,7 +45,9 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
     /// <summary>
     /// The device account ID which links to the seeded savefiles <see cref="SeedDatabase"/>
     /// </summary>
+    // TODO: Change usages of this to const version
     public readonly string DeviceAccountId = "logged_in_id";
+    public const string DeviceAccountIdConst = "logged_in_id";
 
     public readonly string PreparedDeviceAccountId = "prepared_id";
 
@@ -83,6 +85,24 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
                 )
         );
         inventoryRepo.SaveChanges();
+    }
+
+    public async Task AddToDatabase<TEntity>(TEntity data)
+    {
+        if (data is null)
+            return;
+
+        await this.ApiContext.AddAsync(data);
+        await this.ApiContext.SaveChangesAsync();
+    }
+
+    public async Task AddRangeToDatabase<TEntity>(IEnumerable<TEntity> data)
+    {
+        if (data is null)
+            return;
+
+        await this.ApiContext.AddRangeAsync((IEnumerable<object>)data);
+        await this.ApiContext.SaveChangesAsync();
     }
 
     /// <summary>
