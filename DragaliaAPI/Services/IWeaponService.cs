@@ -17,8 +17,5 @@ public interface IWeaponService
     /// <param name="body">MasterAsset weapon body data</param>
     /// <param name="buildup"></param>
     /// <returns></returns>
-    Task<ResultCode> TryBuildup(
-        WeaponBody body,
-        AtgenBuildupWeaponBodyPieceList buildup
-    );
+    Task<ResultCode> TryBuildup(WeaponBody body, AtgenBuildupWeaponBodyPieceList buildup);
 }
