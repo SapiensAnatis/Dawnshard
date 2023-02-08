@@ -91,11 +91,32 @@ public record WeaponBody(
             .Where(x => x.Key != Materials.Empty)
             .ToDictionary(x => x.Key, x => x.Value);
 
+    /// <summary>
+    /// Get the row id in the WeaponBodyBuildupGroup table corresponding to a particular operation and step
+    /// for upgrading this weapon.
+    /// <remarks>
+    /// Covers unbinding, copies, weapon bonuses, slots, refinement -- all except
+    /// stats and passives which are defined separately in this class.
+    /// </remarks>
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="step"></param>
+    /// <returns></returns>
     public int GetBuildupGroupId(BuildupPieceTypes type, int step) =>
         int.Parse($"{this.WeaponBodyBuildupGroupId}{(int)type:00}{step:00}");
 
+    /// <summary>
+    /// Get the row id in the WeaponBodyBuildupLevel table corresponding to a particular level up of this weapon.
+    /// </summary>
+    /// <param name="level">The level.</param>
+    /// <returns>The row id.</returns>
     public int GetBuildupLevelId(int level) => int.Parse($"{this.Rarity}010{level:00}");
 
+    /// <summary>
+    /// Get the row id in the WeaponPassiveAbility table corresponding to a passive ability of this weapon.
+    /// </summary>
+    /// <param name="abilityNo">The ability number.</param>
+    /// <returns>The row id.</returns>
     public int GetPassiveAbilityId(int abilityNo) =>
         int.Parse($"{this.WeaponPassiveAbilityGroupId}{abilityNo:00}");
 };

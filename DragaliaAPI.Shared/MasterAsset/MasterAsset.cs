@@ -46,16 +46,4 @@ public static class MasterAsset
         new(() => new("WeaponPassiveAbility.json", x => x.Id));
     public static MasterAssetData<int, WeaponPassiveAbility> WeaponPassiveAbility =>
         _WeaponPassiveAbility.Value;
-
-    private static readonly Lazy<
-        Dictionary<int, List<WeaponPassiveAbility>>
-    > _WeaponPassiveAbilityGroups =
-        new(
-            () =>
-                WeaponPassiveAbility.Enumerable
-                    .GroupBy(x => x.WeaponPassiveAbilityGroupId)
-                    .ToDictionary(x => x.Key, x => x.ToList())
-        );
-    public static Dictionary<int, List<WeaponPassiveAbility>> WeaponPassiveAbilityGroups =>
-        _WeaponPassiveAbilityGroups.Value;
 }
