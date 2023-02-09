@@ -73,8 +73,6 @@ public class InventoryRepository : IInventoryRepository
         if (item == Materials.Empty)
             return;
 
-        this.logger.LogDebug("Updating material id {mat} by quantity {q}", item, quantity);
-
         DbPlayerMaterial material = await this.FindAsync(item);
 
         if (material.Quantity + quantity < 0)
@@ -122,9 +120,14 @@ public class InventoryRepository : IInventoryRepository
     {
         foreach (Materials m in list)
         {
-            // Db query (find) in loop??? Any way to do this better???
             await this.UpdateQuantity(deviceAccountId, m, quantity);
         }
+
+        this.logger.LogDebug(
+            "Updated list of materials by quantity {quantity}: {list}",
+            quantity,
+            list
+        );
     }
 
     public async Task UpdateQuantity(IEnumerable<KeyValuePair<Materials, int>> quantityMap)
@@ -133,6 +136,8 @@ public class InventoryRepository : IInventoryRepository
         {
             await this.UpdateQuantity(mat, quantity);
         }
+
+        this.logger.LogDebug("Updated player materials by map {@map}", quantityMap);
     }
 
     public async Task<DbPlayerMaterial?> GetMaterial(string deviceAccountId, Materials materialId)

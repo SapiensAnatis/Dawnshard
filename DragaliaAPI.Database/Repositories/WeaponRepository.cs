@@ -57,6 +57,18 @@ public class WeaponRepository : IWeaponRepository
     {
         this.logger.LogDebug("Adding weapon skin {skin}", weaponSkinId);
 
+        if (
+            await this.apiContext.PlayerWeaponSkins.FindAsync(
+                this.playerDetailsService.AccountId,
+                weaponSkinId
+            )
+            is not null
+        )
+        {
+            this.logger.LogDebug("Weapon skin was already owned.");
+            return;
+        }
+
         await this.apiContext.PlayerWeaponSkins.AddAsync(
             new DbWeaponSkin()
             {
