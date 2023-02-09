@@ -182,4 +182,19 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
                 }
             );
     }
+
+    [Fact]
+    public async Task AddSkin_DuplicateSkins_NoPkException()
+    {
+        await this.weaponRepository.AddSkin(6);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        Func<Task> act = async () =>
+        {
+            await this.weaponRepository.AddSkin(6);
+            await this.fixture.ApiContext.SaveChangesAsync();
+        };
+
+        await act.Invoking(x => x.Invoke()).Should().NotThrowAsync();
+    }
 }

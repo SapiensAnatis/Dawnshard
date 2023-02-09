@@ -117,6 +117,8 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
     public async Task UpdateCoin(string deviceAccountId, long offset)
     {
         this.logger.LogDebug("Updating player rupies by {offset}", offset);
+        if (offset == 0)
+            return;
 
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
 

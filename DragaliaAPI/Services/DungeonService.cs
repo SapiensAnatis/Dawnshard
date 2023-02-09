@@ -54,7 +54,8 @@ public class DungeonService : IDungeonService
     {
         DungeonSession session = await this.GetDungeon(dungeonKey);
 
-        await cache.RemoveAsync(Schema.DungeonKey_DungeonData(dungeonKey));
+        // Don't remove in case the client re-calls due to timeout
+        // await cache.RemoveAsync(Schema.DungeonKey_DungeonData(dungeonKey));
 
         return session;
     }

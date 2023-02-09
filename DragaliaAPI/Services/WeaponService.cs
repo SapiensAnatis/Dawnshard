@@ -119,7 +119,7 @@ public class WeaponService : IWeaponService
     )
     {
         LogContext.PushProperty("WeaponBodyId", body.Id);
-        LogContext.PushProperty("BuildupRequest", buildup);
+        LogContext.PushProperty("BuildupRequest", buildup, destructureObjects: true);
 
         return buildup.buildup_piece_type switch
         {

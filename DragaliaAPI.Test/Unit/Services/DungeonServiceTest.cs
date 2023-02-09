@@ -50,27 +50,4 @@ public class DungeonServiceTest
 
         (await this.dungeonService.GetDungeon(key)).Should().BeEquivalentTo(session);
     }
-
-    [Fact]
-    public async Task StartDungeon_Delete_CannotGetAfterwards()
-    {
-        DungeonSession session =
-            new()
-            {
-                QuestData = MasterAsset.QuestData.Get(100230302),
-                Party = new List<PartySettingList>()
-                {
-                    new() { chara_id = Shared.Definitions.Enums.Charas.Botan }
-                }
-            };
-
-        string key = await this.dungeonService.StartDungeon(session);
-
-        (await this.dungeonService.FinishDungeon(key)).Should().BeEquivalentTo(session);
-
-        await this.dungeonService
-            .Invoking(x => x.GetDungeon(key))
-            .Should()
-            .ThrowAsync<DungeonException>();
-    }
 }
