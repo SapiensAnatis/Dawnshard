@@ -35,5 +35,6 @@ public class DbDetailedPartyUnit
 
     public DbEditSkillData? EditSkill2CharaData { get; set; }
 
-    public IEnumerable<object> GameWeaponPassiveAbilityList { get; set; } = new List<object> { };
+    public IEnumerable<DbWeaponPassiveAbility> GameWeaponPassiveAbilityList { get; set; } =
+        Enumerable.Empty<DbWeaponPassiveAbility>();
 }

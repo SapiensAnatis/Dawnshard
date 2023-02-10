@@ -25,6 +25,7 @@ public class DungeonStartControllerTest
     private readonly Mock<IHelperService> mockHelperService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<IBonusService> mockBonusService;
+    private readonly Mock<IWeaponRepository> mockWeaponRepository;
     private readonly IMapper mapper;
     private readonly Mock<ILogger<DungeonStartController>> mockLogger;
 
@@ -41,6 +42,7 @@ public class DungeonStartControllerTest
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockBonusService = new(MockBehavior.Strict);
         this.mockLogger = new();
+        this.mockWeaponRepository = new(MockBehavior.Strict);
 
         this.mapper = new MapperConfiguration(
             cfg => cfg.AddMaps(typeof(Program).Assembly)
@@ -56,6 +58,7 @@ public class DungeonStartControllerTest
             mockUpdateDataService.Object,
             mockBonusService.Object,
             mapper,
+            mockWeaponRepository.Object,
             mockLogger.Object
         );
 
@@ -393,6 +396,17 @@ public class DungeonStartControllerTest
                     }
                 }.AsQueryable().BuildMock());
 
+        this.mockWeaponRepository
+            .Setup(x => x.GetPassiveAbilities(WeaponBodies.Infernoblaze))
+            .Returns(new List<DbWeaponPassiveAbility>()
+                {
+                    new() { DeviceAccountId = DeviceAccountId, WeaponPassiveAbilityId = 1 }
+                }.AsQueryable().BuildMock());
+
+        this.mockWeaponRepository
+            .Setup(x => x.GetPassiveAbilities(WeaponBodies.MegaLance))
+            .Returns(new List<DbWeaponPassiveAbility>() { }.AsQueryable().BuildMock());
+
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
             new DungeonStartStartRequest()
             {
@@ -409,12 +423,22 @@ public class DungeonStartControllerTest
             .chara_data!.chara_id.Should()
             .Be(Charas.ThePrince);
         data!.ingame_data.party_info.party_unit_list.ElementAt(0).position.Should().Be(1);
+        data!.ingame_data.party_info.party_unit_list
+            .ElementAt(0)
+            .game_weapon_passive_ability_list.Should()
+            .BeEquivalentTo(
+                new List<WeaponPassiveAbilityList>() { new() { weapon_passive_ability_id = 1 } }
+            );
 
         data!.ingame_data.party_info.party_unit_list
             .ElementAt(1)
             .chara_data!.chara_id.Should()
             .Be(Charas.Elisanne);
         data!.ingame_data.party_info.party_unit_list.ElementAt(1).position.Should().Be(5);
+        data!.ingame_data.party_info.party_unit_list
+            .ElementAt(1)
+            .game_weapon_passive_ability_list.Should()
+            .BeEquivalentTo(new List<WeaponPassiveAbilityList>() { });
 
         this.mockPartyRepository.VerifyAll();
         this.mockUserDataRepository.VerifyAll();

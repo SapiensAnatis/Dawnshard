@@ -137,8 +137,6 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                     opts.Excluding(x => x.user_treasure_trade_list);
                     opts.Excluding(x => x.treasure_trade_all_list);
 
-                    opts.Excluding(x => x.weapon_passive_ability_list);
-
                     opts.Excluding(x => x.astral_item_list);
                     opts.Excluding(x => x.party_power_data);
                     opts.Excluding(x => x.multi_server);
@@ -156,5 +154,32 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                     return opts;
                 }
             );
+    }
+
+    [Fact]
+    public async Task Import_IsIdempotent()
+    {
+        string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
+        long viewerId = this.fixture.ApiContext.PlayerUserData
+            .Single(x => x.DeviceAccountId == fixture.DeviceAccountId)
+            .ViewerId;
+
+        LoadIndexData savefile = JsonSerializer
+            .Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, ApiJsonOptions.Instance)!
+            .data;
+
+        HttpContent content = new StringContent(savefileJson);
+        content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+        HttpResponseMessage importResponse = await this.client.PostAsync(
+            $"savefile/import/{viewerId}",
+            content
+        );
+        importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        HttpResponseMessage importResponse2 = await this.client.PostAsync(
+            $"savefile/import/{viewerId}",
+            content
+        );
+        importResponse2.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 }
