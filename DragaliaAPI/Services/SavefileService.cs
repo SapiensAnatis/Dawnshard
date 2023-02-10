@@ -280,6 +280,13 @@ public class SavefileService : ISavefileService
 
             this.logger.LogDebug("Added weapon skins");
 
+            this.apiContext.PlayerPassiveAbilities.AddRange(
+                MapWithDeviceAccount<DbWeaponPassiveAbility>(
+                    savefile.weapon_passive_ability_list,
+                    deviceAccountId
+                )
+            );
+
             // TODO: unit sets
             // TODO much later: halidom, endeavours, kaleido data
 
@@ -353,6 +360,9 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerWeaponSkins.RemoveRange(
             this.apiContext.PlayerWeaponSkins.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PlayerPassiveAbilities.RemoveRange(
+            this.apiContext.PlayerPassiveAbilities.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset(string deviceAccountId)
@@ -383,6 +393,7 @@ public class SavefileService : ISavefileService
             .Include(x => x.WeaponBodyList)
             .Include(x => x.MaterialList)
             .Include(x => x.WeaponSkinList)
+            .Include(x => x.WeaponPassiveAbilityList)
             .AsSplitQuery();
     }
 

@@ -54,4 +54,7 @@ public class DbPlayer
 
     public virtual ICollection<DbWeaponSkin> WeaponSkinList { get; set; } =
         new List<DbWeaponSkin>();
+
+    public virtual ICollection<DbWeaponPassiveAbility> WeaponPassiveAbilityList { get; set; } =
+        new List<DbWeaponPassiveAbility>();
 }

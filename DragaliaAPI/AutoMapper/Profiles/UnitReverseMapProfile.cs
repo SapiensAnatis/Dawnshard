@@ -45,6 +45,8 @@ public class UnitReverseMapProfile : Profile
 
         this.CreateMap<WeaponSkinList, DbWeaponSkin>();
 
+        this.CreateMap<WeaponPassiveAbilityList, DbWeaponPassiveAbility>();
+
         this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
         this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;
     }
