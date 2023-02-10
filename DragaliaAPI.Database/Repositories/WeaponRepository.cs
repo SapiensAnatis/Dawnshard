@@ -40,6 +40,21 @@ public class WeaponRepository : IWeaponRepository
             x => x.DeviceAccountId == this.playerDetailsService.AccountId
         );
 
+    public IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(WeaponBodies id)
+    {
+        WeaponBody data = MasterAsset.WeaponBody.Get(id);
+
+        IEnumerable<int> searchIds = MasterAsset.WeaponPassiveAbility.Enumerable
+            .Where(x => x.WeaponType == data.WeaponType && x.ElementalType == data.ElementalType)
+            .Select(x => x.Id);
+
+        return this.apiContext.PlayerPassiveAbilities.Where(
+            x =>
+                x.DeviceAccountId == this.playerDetailsService.AccountId
+                && searchIds.Contains(x.WeaponPassiveAbilityId)
+        );
+    }
+
     public async Task Add(WeaponBodies weaponBodyId)
     {
         this.logger.LogDebug("Adding weapon {weapon}", weaponBodyId);
