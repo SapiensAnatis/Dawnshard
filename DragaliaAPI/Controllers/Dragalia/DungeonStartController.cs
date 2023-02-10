@@ -1,17 +1,12 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using AutoMapper;
-using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Shared.Definitions;
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +27,7 @@ public class DungeonStartController : DragaliaControllerBase
     private readonly IUpdateDataService updateDataService;
     private readonly IBonusService bonusService;
     private readonly IMapper mapper;
+    private readonly IWeaponRepository weaponRepository;
     private readonly ILogger<DungeonStartController> logger;
 
     public DungeonStartController(
@@ -44,6 +40,7 @@ public class DungeonStartController : DragaliaControllerBase
         IUpdateDataService updateDataService,
         IBonusService bonusService,
         IMapper mapper,
+        IWeaponRepository weaponRepository,
         ILogger<DungeonStartController> logger
     )
     {
@@ -56,6 +53,7 @@ public class DungeonStartController : DragaliaControllerBase
         this.updateDataService = updateDataService;
         this.bonusService = bonusService;
         this.mapper = mapper;
+        this.weaponRepository = weaponRepository;
         this.logger = logger;
     }
 
@@ -118,6 +116,13 @@ public class DungeonStartController : DragaliaControllerBase
             detailedUnit.CrestSlotType3CrestList = detailedUnit.CrestSlotType3CrestList.Where(
                 x => x is not null
             );
+
+            if (detailedUnit.WeaponBodyData is not null)
+            {
+                detailedUnit.GameWeaponPassiveAbilityList = await this.weaponRepository
+                    .GetPassiveAbilities(detailedUnit.WeaponBodyData.WeaponBodyId)
+                    .ToListAsync();
+            }
         }
 
         this.logger.LogInformation("{time} ms: Built party", stopwatch.ElapsedMilliseconds);

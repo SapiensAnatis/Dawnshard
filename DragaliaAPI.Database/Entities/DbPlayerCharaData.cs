@@ -170,5 +170,6 @@ public class DbPlayerCharaData : IDbHasAccountId
         this.Ability1Level = (byte)data.DefaultAbility1Level;
         this.Ability2Level = (byte)data.DefaultAbility2Level;
         this.Ability3Level = (byte)data.DefaultAbility3Level;
+        this.IsUnlockEditSkill = data.Availability == CharaAvailabilities.Story;
     }
 }
