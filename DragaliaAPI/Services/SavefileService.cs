@@ -412,13 +412,11 @@ public class SavefileService : ISavefileService
         this.apiContext.Players.Add(new() { AccountId = deviceAccountId });
 
         DbPlayerUserData userData =
-            new(deviceAccountId)
-            {
+            new(deviceAccountId) {
 #if DEBUG
                 TutorialStatus = 10151,
 #endif
-                Crystal = 1_200_000
-            };
+                Crystal = 1_200_000 };
 
         await apiContext.PlayerUserData.AddAsync(userData);
         await this.AddDefaultParties(deviceAccountId);
@@ -531,7 +529,7 @@ public class SavefileService : ISavefileService
                             AttackPlusCount = 50,
                             HpPlusCount = 50,
                             EquipableCount = 4,
-                            GetTime = DateTime.UtcNow,
+                            GetTime = DateTimeOffset.UtcNow,
                             IsFavorite = false,
                             IsNew = false,
                         }
@@ -548,7 +546,7 @@ public class SavefileService : ISavefileService
                                 AttackPlusCount = 50,
                                 HpPlusCount = 50,
                                 EquipableCount = 4,
-                                GetTime = DateTime.UtcNow,
+                                GetTime = DateTimeOffset.UtcNow,
                                 IsFavorite = false,
                                 IsNew = false,
                             }
@@ -566,7 +564,7 @@ public class SavefileService : ISavefileService
                                 AttackPlusCount = 50,
                                 HpPlusCount = 50,
                                 EquipableCount = 4,
-                                GetTime = DateTime.UtcNow,
+                                GetTime = DateTimeOffset.UtcNow,
                                 IsFavorite = false,
                                 IsNew = false,
                             }
@@ -584,7 +582,7 @@ public class SavefileService : ISavefileService
                                 AttackPlusCount = 40,
                                 HpPlusCount = 40,
                                 EquipableCount = 4,
-                                GetTime = DateTime.UtcNow,
+                                GetTime = DateTimeOffset.UtcNow,
                                 IsFavorite = false,
                                 IsNew = false,
                             }
@@ -612,7 +610,7 @@ public class SavefileService : ISavefileService
                                 AttackPlusCount = 50,
                                 HpPlusCount = 50,
                                 Exp = 1_240_020,
-                                GetTime = DateTime.UtcNow,
+                                GetTime = DateTimeOffset.UtcNow,
                                 IsLock = false,
                                 IsNew = false,
                             }
@@ -647,7 +645,7 @@ public class SavefileService : ISavefileService
                         AdditionalCrestSlotType3Count = 2,
                         FortPassiveCharaWeaponBuildupCount = 1,
                         IsNew = true,
-                        GetTime = DateTime.UtcNow,
+                        GetTime = DateTimeOffset.UtcNow,
                     }
             )
         );

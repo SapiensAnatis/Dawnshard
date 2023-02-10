@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 
+[Collection("RepositoryTest")]
 public class FortRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;

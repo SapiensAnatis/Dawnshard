@@ -54,6 +54,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<InternalsVisibleTo Include="DragaliaAPI.Integration.Test" />
+	</ItemGroup>
+	
+	<ItemGroup>
 		<Compile Remove="Pages\Components\**" />
 		<Content Remove="Pages\Components\**" />
 		<EmbeddedResource Remove="Pages\Components\**" />

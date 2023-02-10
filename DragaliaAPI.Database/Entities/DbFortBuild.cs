@@ -67,7 +67,7 @@ public class DbFortBuild : IDbHasAccountId
     {
         get
         {
-            TimeSpan result = this.BuildEndDate - DateTime.UtcNow;
+            TimeSpan result = this.BuildEndDate - DateTimeOffset.UtcNow;
 
             return result > TimeSpan.Zero ? result : TimeSpan.Zero;
         }
@@ -77,5 +77,5 @@ public class DbFortBuild : IDbHasAccountId
     public DateTimeOffset LastIncomeDate { get; set; } = DateTimeOffset.UnixEpoch;
 
     [NotMapped]
-    public TimeSpan LastIncomeTime => DateTime.UtcNow - this.LastIncomeDate;
+    public TimeSpan LastIncomeTime => DateTimeOffset.UtcNow - this.LastIncomeDate;
 }
