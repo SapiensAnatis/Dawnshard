@@ -11,6 +11,14 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class LoginController : DragaliaControllerBase
 {
     [HttpPost]
+    public IActionResult Login()
+    {
+        // These fucking webcrawlers keep calling /login
+        // and ASP.NET throws a 500 because of ambiguous route
+        return this.NotFound();
+    }
+
+    [HttpPost]
     [Route("index")]
     public DragaliaResult Index()
     {
