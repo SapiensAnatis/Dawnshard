@@ -50,11 +50,7 @@ public class UnitMapProfile : Profile
             .ForMember(nameof(PartySettingList.equip_amulet_2_key_id), opts => opts.Ignore())
             .ForMember(nameof(PartySettingList.equip_skin_weapon_id), opts => opts.Ignore());
 
-        this.CreateMap<DbDetailedPartyUnit, PartyUnitList>()
-            .ForMember(
-                x => x.game_weapon_passive_ability_list,
-                opts => opts.MapFrom(x => new List<WeaponPassiveAbilityList>())
-            );
+        this.CreateMap<DbDetailedPartyUnit, PartyUnitList>();
 
         this.CreateMap<DbAbilityCrest, GameAbilityCrest>()
             .ForMember(x => x.ability_1_level, opts => opts.MapFrom(x => 3))
