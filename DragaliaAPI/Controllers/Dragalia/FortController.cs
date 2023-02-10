@@ -41,8 +41,13 @@ public class FortController : DragaliaControllerBase
                 production_df = StubData.ProductionDf,
                 production_rp = StubData.ProductionRp,
                 production_st = StubData.ProductionSt,
+<<<<<<< HEAD
                 fort_detail = fortDetail,
                 current_server_time = DateTime.UtcNow
+=======
+                fort_detail = StubData.FortDetail,
+                current_server_time = DateTimeOffset.UtcNow
+>>>>>>> bb29ecf (Attempt to use containers for tests)
             };
 
         return this.Ok(data);

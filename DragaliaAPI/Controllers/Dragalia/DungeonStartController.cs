@@ -170,7 +170,7 @@ public class DungeonStartController : DragaliaControllerBase
                     is_host = true,
                     continue_limit = 3,
                     reborn_limit = 3,
-                    start_time = DateTime.UtcNow,
+                    start_time = DateTimeOffset.UtcNow,
                     party_info = new()
                     {
                         party_unit_list = detailedPartyUnits

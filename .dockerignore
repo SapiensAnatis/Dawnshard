@@ -23,5 +23,9 @@
 **/values.dev.yaml
 LICENSE
 README.md
+<<<<<<< HEAD
 DragaliaAPI.Photon.Plugin/**
 *.Test/**
+=======
+*.Test/**/*
+>>>>>>> bb29ecf (Attempt to use containers for tests)
