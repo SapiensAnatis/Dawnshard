@@ -49,7 +49,7 @@ public class AbilityCrestTradeControllerTest
                 new List<DbAbilityCrest>()
                 {
                     new(DeviceAccountId, AbilityCrests.ADogsDay),
-                    new(DeviceAccountId, AbilityCrests.ADogsDay)
+                    new(DeviceAccountId, AbilityCrests.WorthyRivals)
                 }
                     .AsQueryable()
                     .BuildMock()
