@@ -31,6 +31,47 @@ public class AbilityCrestTradeController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> GetList(AbilityCrestTradeGetListRequest request)
     {
+        IEnumerable<AbilityCrestTradeList> abilityCrestTradeList =
+            await BuildAbilityCrestTradeList();
+
+        AbilityCrestTradeGetListData response =
+            new()
+            {
+                user_ability_crest_trade_list = new List<UserAbilityCrestTradeList>(),
+                ability_crest_trade_list = abilityCrestTradeList,
+                update_data_list = this.updateDataService.GetUpdateDataList(this.DeviceAccountId)
+            };
+
+        return Ok(response);
+    }
+
+    [Route("trade")]
+    [HttpPost]
+    public async Task<DragaliaResult> Trade(AbilityCrestTradeTradeRequest request)
+    {
+        IEnumerable<AbilityCrestTradeList> abilityCrestTradeList =
+            await BuildAbilityCrestTradeList();
+
+        AbilityCrestTradeTradeData response =
+            new()
+            {
+                user_ability_crest_trade_list = new List<UserAbilityCrestTradeList>()
+                {
+                    new()
+                    {
+                        ability_crest_trade_id = request.ability_crest_trade_id,
+                        trade_count = request.trade_count
+                    }
+                },
+                ability_crest_trade_list = abilityCrestTradeList,
+                update_data_list = this.updateDataService.GetUpdateDataList(this.DeviceAccountId)
+            };
+
+        return Ok(response);
+    }
+
+    private async Task<IEnumerable<AbilityCrestTradeList>> BuildAbilityCrestTradeList()
+    {
         IEnumerable<DbAbilityCrest> ownedAbilityCrests = await unitRepository
             .GetAllAbilityCrestData(this.DeviceAccountId)
             .ToListAsync();
@@ -39,32 +80,24 @@ public class AbilityCrestTradeController : DragaliaControllerBase
             .AbilityCrestTrade
             .Enumerable;
 
-        AbilityCrestTradeGetListData response =
-            new()
-            {
-                user_ability_crest_trade_list = new List<UserAbilityCrestTradeList>(),
-                ability_crest_trade_list = abilityCrestTradeList
-                    .Where(
-                        x =>
-                            x.AbilityCrestId != 0
-                            && !ownedAbilityCrests.Any(y => y.AbilityCrestId == x.AbilityCrestId)
-                    )
-                    .Select(
-                        x =>
-                            new AbilityCrestTradeList()
-                            {
-                                ability_crest_trade_id = x.Id,
-                                ability_crest_id = x.AbilityCrestId,
-                                need_dew_point = x.NeedDewPoint,
-                                priority = x.Priority,
-                                complete_date = 0,
-                                pickup_view_start_date = 0,
-                                pickup_view_end_date = 0,
-                            }
-                    ),
-                update_data_list = this.updateDataService.GetUpdateDataList(this.DeviceAccountId)
-            };
-
-        return Ok(response);
+        return abilityCrestTradeList
+            .Where(
+                x =>
+                    x.AbilityCrestId != 0
+                    && !ownedAbilityCrests.Any(y => y.AbilityCrestId == x.AbilityCrestId)
+            )
+            .Select(
+                x =>
+                    new AbilityCrestTradeList()
+                    {
+                        ability_crest_trade_id = x.Id,
+                        ability_crest_id = x.AbilityCrestId,
+                        need_dew_point = x.NeedDewPoint,
+                        priority = x.Priority,
+                        complete_date = 0,
+                        pickup_view_start_date = 0,
+                        pickup_view_end_date = 0,
+                    }
+            );
     }
 }

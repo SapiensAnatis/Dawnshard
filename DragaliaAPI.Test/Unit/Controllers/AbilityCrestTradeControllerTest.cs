@@ -45,19 +45,15 @@ public class AbilityCrestTradeControllerTest
     {
         this.mockUnitRepository
             .Setup(x => x.GetAllAbilityCrestData(DeviceAccountId))
-            .Returns(new List<DbAbilityCrest>()
+            .Returns(
+                new List<DbAbilityCrest>()
                 {
-                    new()
-                    {
-                        DeviceAccountId = DeviceAccountId,
-                        AbilityCrestId = AbilityCrests.ADogsDay
-                    },
-                    new()
-                    {
-                        DeviceAccountId = DeviceAccountId,
-                        AbilityCrestId = AbilityCrests.WorthyRivals
-                    }
-                }.AsQueryable().BuildMock());
+                    new(DeviceAccountId, AbilityCrests.ADogsDay),
+                    new(DeviceAccountId, AbilityCrests.ADogsDay)
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         IEnumerable<AbilityCrestTrade> tradeableAbilityCrests = MasterAsset
             .AbilityCrestTrade
@@ -105,19 +101,15 @@ public class AbilityCrestTradeControllerTest
     {
         this.mockUnitRepository
             .Setup(x => x.GetAllAbilityCrestData(DeviceAccountId))
-            .Returns(new List<DbAbilityCrest>()
+            .Returns(
+                new List<DbAbilityCrest>()
                 {
-                    new()
-                    {
-                        DeviceAccountId = DeviceAccountId,
-                        AbilityCrestId = AbilityCrests.PlunderPals
-                    },
-                    new()
-                    {
-                        DeviceAccountId = DeviceAccountId,
-                        AbilityCrestId = AbilityCrests.BondsBetweenWorlds
-                    }
-                }.AsQueryable().BuildMock());
+                    new(DeviceAccountId, AbilityCrests.PlunderPals),
+                    new(DeviceAccountId, AbilityCrests.BondsBetweenWorlds)
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         IEnumerable<AbilityCrestTrade> tradeableAbilityCrests = MasterAsset
             .AbilityCrestTrade

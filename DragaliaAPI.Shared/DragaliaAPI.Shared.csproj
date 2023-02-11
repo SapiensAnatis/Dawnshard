@@ -13,6 +13,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Resources\AbilityCrest.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Resources\AbilityCrestTrade.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

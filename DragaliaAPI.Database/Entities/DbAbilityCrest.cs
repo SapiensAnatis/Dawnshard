@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DragaliaAPI.Database.Entities;
 
@@ -66,6 +67,22 @@ public class DbAbilityCrest : IDbHasAccountId
     /// </summary>
     [TypeConverter(typeof(DateTimeOffsetConverter))]
     public DateTimeOffset GetTime { get; set; }
+
+    /// <summary>
+    /// EF Core / test constructor.
+    /// </summary>
+    public DbAbilityCrest() { }
+
+    /// <summary>
+    /// User-facing constructor.
+    /// </summary>
+    /// <param name="deviceAccountId">Primary key.</param>
+    [SetsRequiredMembers]
+    public DbAbilityCrest(string deviceAccountId, AbilityCrests id)
+    {
+        this.DeviceAccountId = deviceAccountId;
+        this.AbilityCrestId = id;
+    }
 }
 
 internal class DbAbilityCrestConfiguration : IEntityTypeConfiguration<DbAbilityCrest>
