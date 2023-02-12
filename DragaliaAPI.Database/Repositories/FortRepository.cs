@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -12,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class FortRepository : IFortRepository
+public class FortRepository : BaseRepository, IFortRepository
 {
     private readonly ApiContext apiContext;
     private readonly IPlayerDetailsService playerDetailsService;
@@ -22,7 +17,7 @@ public class FortRepository : IFortRepository
         ApiContext apiContext,
         IPlayerDetailsService playerDetailsService,
         ILogger<FortRepository> logger
-    )
+    ) : base(apiContext)
     {
         this.apiContext = apiContext;
         this.playerDetailsService = playerDetailsService;
@@ -35,6 +30,11 @@ public class FortRepository : IFortRepository
 
     public IQueryable<DbFortBuild> Builds =>
         this.apiContext.PlayerFortBuilds.Where(
+            x => x.DeviceAccountId == this.playerDetailsService.AccountId
+        );
+
+    public IQueryable<DbFortDetail> Details =>
+        this.apiContext.PlayerFortDetails.Where(
             x => x.DeviceAccountId == this.playerDetailsService.AccountId
         );
 
@@ -57,5 +57,29 @@ public class FortRepository : IFortRepository
         }
 
         return result;
+    }
+
+    public async Task<bool> InitFortDetail(string accountId)
+    {
+        await apiContext.PlayerFortDetails.AddAsync(
+            new DbFortDetail()
+            {
+                DeviceAccountId = accountId,
+                CarpenterNum = 2,
+                MaxCarpenterCount = 5,
+                WorkingCarpenterNum = 0
+            }
+        );
+        await apiContext.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task UpdateFortCarpenterNum(string accountId, int carpenterNum)
+    {
+        DbFortDetail fortDetail = await apiContext.PlayerFortDetails
+            .Where(x => x.DeviceAccountId == accountId)
+            .FirstAsync();
+        fortDetail.CarpenterNum = carpenterNum;
+        apiContext.Entry(fortDetail).State = EntityState.Modified;
     }
 }
