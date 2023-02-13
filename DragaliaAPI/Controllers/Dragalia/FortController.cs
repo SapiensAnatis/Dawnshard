@@ -171,9 +171,9 @@ public class FortController : DragaliaControllerBase
         );
 
         PaymentTypes paymentType = (PaymentTypes)request.payment_type;
-        int paymentHeld = 0;
+        int paymentHeld = GetUpgradePaymentHeld(userData, paymentType);
         int paymentCost = GetUpgradePaymentCost(
-            (PaymentTypes)request.payment_type,
+            paymentType,
             build.BuildStartDate,
             build.BuildEndDate
         );
@@ -379,6 +379,7 @@ public class FortController : DragaliaControllerBase
 
         IQueryable<DbFortBuild> builds = this.fortRepository.Builds;
         DbFortBuild halidom = builds.First(x => x.PlantId == FortPlants.TheHalidom);
+        DbFortBuild smithy = builds.First(x => x.PlantId == FortPlants.Smithy);
 
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(
@@ -386,7 +387,7 @@ public class FortController : DragaliaControllerBase
         );
 
         PaymentTypes paymentType = (PaymentTypes)request.payment_type;
-        int paymentHeld = 0;
+        int paymentHeld = GetUpgradePaymentHeld(userData, paymentType);
         int paymentCost = GetUpgradePaymentCost(
             paymentType, 
             build.BuildStartDate, 
@@ -424,8 +425,8 @@ public class FortController : DragaliaControllerBase
             {
                 result = 1,
                 build_id = request.build_id,
-                current_fort_level = build.Level,
-                current_fort_craft_level = halidom.Level,
+                current_fort_level = halidom.Level,
+                current_fort_craft_level = smithy.Level,
                 fort_bonus_list = bonusList,
                 production_rp = StubData.ProductionRp,
                 production_st = StubData.ProductionSt,
@@ -646,22 +647,6 @@ public class FortController : DragaliaControllerBase
         //return this.Ok(data);
     }
 
-    private int GetUpgradePaymentCost(PaymentTypes paymentType, DateTimeOffset BuildStartDate, DateTimeOffset BuildEndDate)
-    {
-        if (paymentType == PaymentTypes.HalidomHustleHammer)
-        {
-            return 1; // Only 1 Hammer is consumed
-        }
-        else
-        {
-            // Construction can be immediately completed by spending either Wyrmite or Diamantium,
-            // where the amount required depends on the time left until construction is complete.
-            // This amount scales at 1 per 12 minutes, or 5 per hour. 
-            // https://dragalialost.wiki/w/Facilities
-            return (int)Math.Floor((BuildEndDate - BuildStartDate).TotalMinutes / 12);
-        }
-    }
-
     private async Task IncrementCarpenterUsage(FortDetail fortDetail)
     {
         fortDetail.working_carpenter_num++;
@@ -704,6 +689,36 @@ public class FortController : DragaliaControllerBase
 
         DbPlayerMaterial material5 = await userMaterials.FirstAsync(x => x.MaterialId == plantDetail.MaterialsId5);
         await this.inventoryRepository.UpdateQuantity(this.DeviceAccountId, material5.MaterialId, -plantDetail.MaterialsNum5);
+    }
+
+    private int GetUpgradePaymentHeld(DbPlayerUserData userData, PaymentTypes paymentType)
+    {
+        return paymentType switch
+        {
+            PaymentTypes.Wyrmite => userData.Crystal,
+            PaymentTypes.Diamantium => 0,// TODO How do I diamantium?
+            PaymentTypes.HalidomHustleHammer => userData.BuildTimePoint,
+            _ => throw new DragaliaException(
+                                ResultCode.FortBuildNotStart,
+                                $"Invalid payment type for this operation."
+                            ),
+        };
+    }
+
+    private int GetUpgradePaymentCost(PaymentTypes paymentType, DateTimeOffset BuildStartDate, DateTimeOffset BuildEndDate)
+    {
+        if (paymentType == PaymentTypes.HalidomHustleHammer)
+        {
+            return 1; // Only 1 Hammer is consumed
+        }
+        else
+        {
+            // Construction can be immediately completed by spending either Wyrmite or Diamantium,
+            // where the amount required depends on the time left until construction is complete.
+            // This amount scales at 1 per 12 minutes, or 5 per hour. 
+            // https://dragalialost.wiki/w/Facilities
+            return (int)Math.Floor((BuildEndDate - BuildStartDate).TotalMinutes / 12);
+        }
     }
 
     private void ConsumePaymentCost(DbPlayerUserData userData, PaymentTypes paymentType, int paymentCost)
