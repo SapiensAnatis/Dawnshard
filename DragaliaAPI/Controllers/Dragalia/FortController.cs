@@ -565,8 +565,8 @@ public class FortController : DragaliaControllerBase
         await ConsumePlayerMaterials(userMaterials, quantityMap);
 
         // Start level up
-        DateTime startDate = DateTime.UtcNow;
-        DateTime endDate = startDate.AddSeconds(plantDetail.Time);
+        DateTimeOffset startDate = DateTimeOffset.UtcNow;
+        DateTimeOffset endDate = startDate.AddSeconds(plantDetail.Time);
 
         build.Level += plantDetail.NeedLevel;
         build.BuildStartDate = startDate;
@@ -585,16 +585,14 @@ public class FortController : DragaliaControllerBase
 
         await this.updateDataService.SaveChangesAsync();
 
-        int startDateUnix = (int)((DateTimeOffset)startDate).ToUnixTimeSeconds();
-        int endDateUnix = (int)((DateTimeOffset)endDate).ToUnixTimeSeconds();
         FortLevelupStartData data =
             new()
             {
                 result = 1,
                 build_id = request.build_id,
-                levelup_start_date = startDateUnix,
-                levelup_end_date = endDateUnix,
-                remain_time = endDateUnix - startDateUnix,
+                levelup_start_date = startDate,
+                levelup_end_date = endDate,
+                remain_time = endDate - startDate,
                 fort_detail = fortDetail,
                 update_data_list = updateDataList,
                 entity_result = new EntityResult() // What does it do?

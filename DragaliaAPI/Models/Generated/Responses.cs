@@ -2789,9 +2789,9 @@ public class FortLevelupEndData
 public class FortLevelupStartData
 {
     public int result { get; set; }
-    public int levelup_start_date { get; set; }
-    public int levelup_end_date { get; set; }
-    public int remain_time { get; set; }
+    public DateTimeOffset levelup_start_date { get; set; }
+    public DateTimeOffset levelup_end_date { get; set; }
+    public TimeSpan remain_time { get; set; }
     public ulong build_id { get; set; }
     public FortDetail fort_detail { get; set; }
     public UpdateDataList update_data_list { get; set; }
@@ -2799,9 +2799,9 @@ public class FortLevelupStartData
 
     public FortLevelupStartData(
         int result,
-        int levelup_start_date,
-        int levelup_end_date,
-        int remain_time,
+        DateTimeOffset levelup_start_date,
+        DateTimeOffset levelup_end_date,
+        TimeSpan remain_time,
         ulong build_id,
         FortDetail fort_detail,
         UpdateDataList update_data_list,
