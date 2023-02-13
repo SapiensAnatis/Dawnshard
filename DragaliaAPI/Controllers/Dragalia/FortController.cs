@@ -95,7 +95,7 @@ public class FortController : DragaliaControllerBase
 
         PaymentTypes paymentType = (PaymentTypes)request.payment_type;
         int paymentHeld = 0;
-        // https://dragalialost.wiki/w/Facilities 
+        // https://dragalialost.wiki/w/Facilities
         // First 2 are free, 3rd 250, 4th 400, 5th 700
         int paymentCost = 250;
         switch (fortDetail.carpenter_num)

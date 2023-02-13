@@ -128,7 +128,7 @@ public class ApiContext : DbContext
 
     public DbSet<DbFortBuild> PlayerFortBuilds { get; set; }
 
-    public DbSet<DbFortDetail> PlayerFortDetails { get; set; }    
+    public DbSet<DbFortDetail> PlayerFortDetails { get; set; }
 
     public DbSet<DbWeaponSkin> PlayerWeaponSkins { get; set; }
 

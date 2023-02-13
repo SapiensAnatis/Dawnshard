@@ -17,7 +17,8 @@ public class FortRepository : BaseRepository, IFortRepository
         ApiContext apiContext,
         IPlayerDetailsService playerDetailsService,
         ILogger<FortRepository> logger
-    ) : base(apiContext)
+    ) 
+        : base(apiContext)
     {
         this.apiContext = apiContext;
         this.playerDetailsService = playerDetailsService;
