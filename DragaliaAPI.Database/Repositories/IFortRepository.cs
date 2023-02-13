@@ -9,6 +9,11 @@ public interface IFortRepository : IBaseRepository
     IQueryable<DbFortBuild> Builds { get; }
     IQueryable<DbFortDetail> Details { get; }
     Task<bool> CheckPlantLevel(FortPlants plant, int requiredLevel);
+    Task GetFortPlantIdList(IEnumerable<int> fort_plant_id_list);
     Task<bool> InitFortDetail(string deviceAccountId);
     Task UpdateFortCarpenterNum(string accountId, int carpenter_num);
+    Task UpdateFortWorkingCarpenter(string accountId, int working_carpenter_num);
+    Task<DbFortBuild> GetBuilding(string deviceAccountId, long buildId);
+    Task AddBuild(DbFortBuild build);
+    void UpdateBuild(DbFortBuild build);
 }

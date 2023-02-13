@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
@@ -6,8 +7,11 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -45,7 +49,7 @@ public class FortController : DragaliaControllerBase
         FortBonusList bonusList = await this.bonusService.GetBonusList();
 
         FortDetail fortDetails;
-        IQueryable<Database.Entities.DbFortDetail> query = this.fortRepository.Details;
+        IQueryable<DbFortDetail> query = this.fortRepository.Details;
         if (!query.Any())
         {
             await this.fortRepository.InitFortDetail(this.DeviceAccountId);
@@ -119,14 +123,14 @@ public class FortController : DragaliaControllerBase
                 );
         }
 
-        paymentHeld -= paymentCost;
-        if (paymentHeld < 0)
+        if (paymentHeld < paymentCost)
         {
             throw new DragaliaException(
                 ResultCode.FortExtendCarpenterLimit,
                 $"User did not have enough {request.payment_type}."
             );
         }
+        paymentHeld -= paymentCost;
 
         // Add carpenter and write to database
         fortDetail.carpenter_num++;
@@ -142,6 +146,397 @@ public class FortController : DragaliaControllerBase
             new()
             {
                 result = 1,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("set_new_fort_plant")]
+    public async Task<DragaliaResult> SetNewFortPlant(FortSetNewFortPlantRequest request)
+    {
+        await this.fortRepository.GetFortPlantIdList(request.fort_plant_id_list);        
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        FortSetNewFortPlantData data =
+            new()
+            {
+                result = 1,
+                update_data_list = updateDataList
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("build_start")]
+    public async Task<DragaliaResult> BuildStart(FortBuildStartRequest request)
+    {
+        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
+
+        // Check Carpenter available
+        if (fortDetail.working_carpenter_num > fortDetail.carpenter_num)
+        {
+            throw new DragaliaException(
+                ResultCode.FortBuildCarpenterBusy,
+                $"All carpenters are currently busy"
+            );
+        }
+
+        // Get build plans
+        FortPlantDetail plantDetail = MasterAsset.FortPlant.Get(request.fort_plant_id);
+
+        // Remove player resources
+        // TODO
+
+        // Start building
+        DateTime startDate = DateTime.UtcNow;
+        DateTime endDate = startDate.AddSeconds(plantDetail.Time);
+
+        DbFortBuild build = new()
+        {
+            DeviceAccountId = this.DeviceAccountId,
+            PlantId = (FortPlants)request.fort_plant_id,
+            Level = 1,
+            PositionX = request.position_x,
+            PositionZ = request.position_z,
+            BuildStartDate = startDate,
+            BuildEndDate = endDate,
+            IsNew = true,
+            LastIncomeDate = DateTimeOffset.UnixEpoch
+        };
+        await this.fortRepository.AddBuild(build);
+
+        // Increment worker carpenters
+        fortDetail.working_carpenter_num++;
+        await this.fortRepository.UpdateFortWorkingCarpenter(this.DeviceAccountId, fortDetail.working_carpenter_num);
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await this.fortRepository.SaveChangesAsync();
+
+        int startDateUnix = (int)((DateTimeOffset)startDate).ToUnixTimeSeconds();
+        int endDateUnix = (int)((DateTimeOffset)endDate).ToUnixTimeSeconds();
+        FortBuildStartData data =
+            new()
+            {
+                result = 1,
+                build_id = (ulong)build.BuildId,
+                build_start_date = startDateUnix,
+                build_end_date = endDateUnix,
+                remain_time = endDateUnix - startDateUnix,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList,
+                entity_result = new EntityResult() // What does it do?
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("levelup_start")]
+    public async Task<DragaliaResult> LevelUpStart(FortLevelupStartRequest request)
+    {
+        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
+
+        // Check Carpenter available
+        if (fortDetail.working_carpenter_num > fortDetail.carpenter_num)
+        {
+            throw new DragaliaException(
+                ResultCode.FortBuildCarpenterBusy,
+                $"All carpenters are currently busy"
+            );
+        }
+
+        // Get building
+        DbFortBuild build = await this.fortRepository.GetBuilding(
+            this.DeviceAccountId, (long)request.build_id
+        );
+
+        // Get level up plans (current FortPlantDetailId +1 to get plans of the next level)
+        FortPlantDetail plantDetail = MasterAsset.FortPlant.Get(build.FortPlantDetailId + 1);
+
+        // Remove resources from player
+        // TODO
+
+        // Start level up
+        DateTime startDate = DateTime.UtcNow;
+        DateTime endDate = startDate.AddSeconds(plantDetail.Time);
+
+        build.Level += plantDetail.NeedLevel;
+        build.BuildStartDate = startDate;
+        build.BuildEndDate = endDate;
+        this.fortRepository.UpdateBuild(build);
+
+        // Update carpenter usage
+        fortDetail.working_carpenter_num++;
+        await this.fortRepository.UpdateFortWorkingCarpenter(this.DeviceAccountId, fortDetail.working_carpenter_num);
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await this.fortRepository.SaveChangesAsync();
+
+        int startDateUnix = (int)((DateTimeOffset)startDate).ToUnixTimeSeconds();
+        int endDateUnix = (int)((DateTimeOffset)endDate).ToUnixTimeSeconds();
+        FortLevelupStartData data =
+            new()
+            {
+                result = 1,
+                build_id = (ulong)build.BuildId,
+                levelup_start_date = startDateUnix,
+                levelup_end_date = endDateUnix,
+                remain_time = endDateUnix - startDateUnix,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList,
+                entity_result = new EntityResult() // What does it do?
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("levelup_end")]
+    public async Task<DragaliaResult> LevelUpEnd(FortLevelupEndRequest request)
+    {
+        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
+
+        FortBonusList bonusList = await bonusService.GetBonusList();
+        IQueryable<DbFortBuild> builds = this.fortRepository.Builds;
+        DbFortBuild halidom = builds.First(x => x.PlantId == FortPlants.TheHalidom);
+        DbFortBuild smithy = builds.First(x => x.PlantId == FortPlants.Smithy);
+
+        // Get building
+        DbFortBuild build = await this.fortRepository.GetBuilding(
+            this.DeviceAccountId, (long)request.build_id
+        );
+
+        // Update values
+        build.BuildStartDate = DateTimeOffset.UnixEpoch;
+        build.BuildEndDate = DateTimeOffset.UnixEpoch;
+        this.fortRepository.UpdateBuild(build);
+
+        // Update carpenter usage
+        fortDetail.working_carpenter_num--;
+        if (fortDetail.working_carpenter_num < 0) { fortDetail.working_carpenter_num = 0; }
+        await this.fortRepository.UpdateFortWorkingCarpenter(this.DeviceAccountId, fortDetail.working_carpenter_num);
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await this.fortRepository.SaveChangesAsync();
+
+        FortLevelupEndData data =
+            new()
+            {
+                result = 1,
+                build_id = (ulong)build.BuildId,
+                current_fort_level = halidom.Level,
+                current_fort_craft_level = smithy.Level,
+                fort_bonus_list = bonusList,
+                production_rp = StubData.ProductionRp,
+                production_st = StubData.ProductionSt,
+                production_df = StubData.ProductionDf,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList,
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("levelup_at_once")]
+    public async Task<DragaliaResult> LevelUpAtOnce(FortLevelupAtOnceRequest request)
+    {
+        DbPlayerUserData userData = await this.userDataRepository
+            .GetUserData(this.DeviceAccountId)
+            .FirstAsync();
+        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
+        FortBonusList bonusList = await bonusService.GetBonusList();
+
+        IQueryable<DbFortBuild> builds = this.fortRepository.Builds;
+        DbFortBuild halidom = builds.First(x => x.PlantId == FortPlants.TheHalidom);
+
+        // Get building
+        DbFortBuild build = await this.fortRepository.GetBuilding(
+            this.DeviceAccountId, (long)request.build_id
+        );
+
+        PaymentTypes paymentType = (PaymentTypes)request.payment_type;
+        int paymentHeld = 0;
+        // 1 currency per 12 minutes
+        int paymentCost = (int)Math.Floor((build.BuildEndDate - build.BuildStartDate).TotalMinutes / 12); 
+
+        switch (paymentType)
+        {
+            case PaymentTypes.HalidomHustleHammer:
+                paymentCost = 1; // If using Hammers, consume only 1
+                paymentHeld = userData.BuildTimePoint;
+                break;
+            case PaymentTypes.Diamantium:
+                // TODO How do I diamantium
+                break;
+            case PaymentTypes.Wyrmite:
+                paymentHeld = userData.Crystal;
+                break;
+            default:
+                throw new DragaliaException(
+                    ResultCode.FortLevelupIncomplete,
+                    $"Invalid currency used to level up at once."
+                );
+        }
+
+        if (paymentHeld < paymentCost)
+        {
+            throw new DragaliaException(
+                ResultCode.FortLevelupIncomplete,
+                $"User did not have enough {request.payment_type}."
+            );
+        }
+        paymentHeld -= paymentCost;
+
+        // Update build
+        build.BuildStartDate = DateTimeOffset.UnixEpoch;
+        build.BuildEndDate = DateTimeOffset.UnixEpoch;
+        this.fortRepository.UpdateBuild(build);
+
+        // Update carpenter usage
+        fortDetail.working_carpenter_num--;
+        if (fortDetail.working_carpenter_num < 0) { fortDetail.working_carpenter_num = 0; }
+        await this.fortRepository.UpdateFortWorkingCarpenter(this.DeviceAccountId, fortDetail.working_carpenter_num);
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await this.fortRepository.SaveChangesAsync();
+
+        FortLevelupAtOnceData data =
+            new()
+            {
+                result = 1,
+                build_id = (ulong)build.BuildId,
+                current_fort_level = build.Level,
+                current_fort_craft_level = halidom.Level,
+                fort_bonus_list = bonusList,
+                production_rp = StubData.ProductionRp,
+                production_st = StubData.ProductionSt,
+                production_df = StubData.ProductionDf,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList,
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("build_at_once")]
+    public async Task<DragaliaResult> BuildAtOnce(FortBuildAtOnceRequest request)
+    {
+        DbPlayerUserData userData = await this.userDataRepository
+            .GetUserData(this.DeviceAccountId)
+            .FirstAsync();
+        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
+        FortBonusList bonusList = await bonusService.GetBonusList();
+
+        // Get building
+        DbFortBuild build = await this.fortRepository.GetBuilding(
+            this.DeviceAccountId, (long)request.build_id
+        );
+
+        PaymentTypes paymentType = (PaymentTypes)request.payment_type;
+        int paymentHeld = 0;
+        // 1 currency per 12 minutes
+        int paymentCost = (int)Math.Floor((build.BuildEndDate - build.BuildStartDate).TotalMinutes / 12);
+
+        switch (paymentType)
+        {
+            case PaymentTypes.HalidomHustleHammer:
+                paymentCost = 1; // If using Hammers, consume only 1
+                paymentHeld = userData.BuildTimePoint;
+                break;
+            case PaymentTypes.Diamantium:
+                // TODO How do I diamantium
+                break;
+            case PaymentTypes.Wyrmite:
+                paymentHeld = userData.Crystal;
+                break;
+            default:
+                throw new DragaliaException(
+                    ResultCode.FortLevelupIncomplete,
+                    $"Invalid currency used to level up at once."
+                );
+        }
+
+        if (paymentHeld < paymentCost)
+        {
+            throw new DragaliaException(
+                ResultCode.FortLevelupIncomplete,
+                $"User did not have enough {request.payment_type}."
+            );
+        }
+        paymentHeld -= paymentCost;
+
+        // Update build
+        build.BuildStartDate = DateTimeOffset.UnixEpoch;
+        build.BuildEndDate = DateTimeOffset.UnixEpoch;
+        this.fortRepository.UpdateBuild(build);
+
+        // Update carpenter usage
+        fortDetail.working_carpenter_num--;
+        if (fortDetail.working_carpenter_num < 0) { fortDetail.working_carpenter_num = 0; }
+        await this.fortRepository.UpdateFortWorkingCarpenter(this.DeviceAccountId, fortDetail.working_carpenter_num);
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await this.fortRepository.SaveChangesAsync();
+
+        FortBuildAtOnceData data =
+            new()
+            {
+                result = 1,
+                build_id = (ulong)build.BuildId,
+                fort_bonus_list = bonusList,
+                production_rp = StubData.ProductionRp,
+                production_st = StubData.ProductionSt,
+                production_df = StubData.ProductionDf,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList,
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("build_cancel")]
+    public async Task<DragaliaResult> BuildCancel(FortBuildCancelRequest request)
+    {
+        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
+
+        // Get building
+        DbFortBuild build = await this.fortRepository.GetBuilding(
+            this.DeviceAccountId, (long)request.build_id
+        );
+
+        // Cancel build
+        build.Level--;
+        build.BuildStartDate = DateTime.UtcNow;
+        build.BuildEndDate = DateTime.UtcNow;
+        this.fortRepository.UpdateBuild(build);
+
+        // Update carpenter usage
+        fortDetail.working_carpenter_num--;
+        if(fortDetail.working_carpenter_num < 0) { fortDetail.working_carpenter_num = 0; }
+        await this.fortRepository.UpdateFortWorkingCarpenter(this.DeviceAccountId, fortDetail.working_carpenter_num);
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        await this.fortRepository.SaveChangesAsync();
+
+        FortBuildCancelData data =
+            new()
+            {
+                result = 1,
+                build_id = (ulong)build.BuildId,
                 fort_detail = fortDetail,
                 update_data_list = updateDataList
             };

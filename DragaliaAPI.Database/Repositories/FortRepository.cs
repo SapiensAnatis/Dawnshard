@@ -59,6 +59,11 @@ public class FortRepository : BaseRepository, IFortRepository
         return result;
     }
 
+    public async Task GetFortPlantIdList(IEnumerable<int> fort_plant_id_list)
+    {
+        //apiContext.Fort
+    }
+
     public async Task<bool> InitFortDetail(string accountId)
     {
         await apiContext.PlayerFortDetails.AddAsync(
@@ -81,5 +86,31 @@ public class FortRepository : BaseRepository, IFortRepository
             .FirstAsync();
         fortDetail.CarpenterNum = carpenterNum;
         apiContext.Entry(fortDetail).State = EntityState.Modified;
+    }
+
+    public async Task UpdateFortWorkingCarpenter(string accountId, int working_carpenter_num)
+    {
+        DbFortDetail fortDetail = await apiContext.PlayerFortDetails
+            .Where(x => x.DeviceAccountId == accountId)
+            .FirstAsync();
+        fortDetail.WorkingCarpenterNum = working_carpenter_num;
+        apiContext.Entry(fortDetail).State = EntityState.Modified;
+    }
+
+    public async Task<DbFortBuild> GetBuilding(string accountId, long buildId)
+    {
+        return await apiContext.PlayerFortBuilds
+            .Where(x => x.DeviceAccountId == accountId && x.BuildId == buildId)
+            .FirstAsync();
+    }
+
+    public async Task AddBuild(DbFortBuild build)
+    {
+        await apiContext.PlayerFortBuilds.AddAsync(build);
+    }
+
+    public void UpdateBuild(DbFortBuild build)
+    {
+        apiContext.Entry(build).State = EntityState.Modified;
     }
 }
