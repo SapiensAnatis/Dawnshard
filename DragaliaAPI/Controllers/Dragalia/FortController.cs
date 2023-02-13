@@ -229,9 +229,17 @@ public class FortController : DragaliaControllerBase
 
         // Cancel build
         build.Level--;
-        build.BuildStartDate = DateTime.UtcNow;
-        build.BuildEndDate = DateTime.UtcNow;
-        this.fortRepository.UpdateBuild(build);
+        build.BuildStartDate = DateTimeOffset.UnixEpoch;
+        build.BuildEndDate = DateTimeOffset.UnixEpoch;
+
+        if (build.Level > 0)
+        {
+            this.fortRepository.UpdateBuild(build);
+        }
+        else
+        {
+            this.fortRepository.DeleteBuild(build);
+        }
 
         // Update carpenter usage
         await DecrementCarpenterUsage(fortDetail);
@@ -248,7 +256,7 @@ public class FortController : DragaliaControllerBase
             new()
             {
                 result = 1,
-                build_id = request.build_id,
+                build_id = (ulong)build.BuildId,
                 fort_detail = fortDetail,
                 update_data_list = updateDataList
             };
@@ -319,7 +327,9 @@ public class FortController : DragaliaControllerBase
         }
 
         // Get build plans
-        FortPlantDetail plantDetail = MasterAsset.FortPlant.Get(request.fort_plant_id);
+        FortPlants BuildPlantId = (FortPlants)request.fort_plant_id;
+        int buildIdAtLevel1 = MasterAssetUtils.GetPlantDetailId(BuildPlantId, 1);
+        FortPlantDetail plantDetail = MasterAsset.FortPlant.Get(buildIdAtLevel1);
 
         // Remove player resources
         await ConsumePlayerMaterials(userMaterials, userData, plantDetail);
@@ -331,7 +341,7 @@ public class FortController : DragaliaControllerBase
         DbFortBuild build = new()
         {
             DeviceAccountId = this.DeviceAccountId,
-            PlantId = (FortPlants)request.fort_plant_id,
+            PlantId = BuildPlantId,
             Level = 1,
             PositionX = request.position_x,
             PositionZ = request.position_z,
@@ -449,9 +459,17 @@ public class FortController : DragaliaControllerBase
 
         // Cancel build
         build.Level--;
-        build.BuildStartDate = DateTime.UtcNow;
-        build.BuildEndDate = DateTime.UtcNow;
-        this.fortRepository.UpdateBuild(build);
+        build.BuildStartDate = DateTimeOffset.UnixEpoch;
+        build.BuildEndDate = DateTimeOffset.UnixEpoch;
+
+        if (build.Level > 0)
+        {
+            this.fortRepository.UpdateBuild(build);
+        }
+        else
+        {
+            this.fortRepository.DeleteBuild(build);
+        }
 
         // Update carpenter usage
         await DecrementCarpenterUsage(fortDetail);
@@ -550,7 +568,8 @@ public class FortController : DragaliaControllerBase
         );
 
         // Get level up plans (current FortPlantDetailId +1 to get plans of the next level)
-        FortPlantDetail plantDetail = MasterAsset.FortPlant.Get(build.FortPlantDetailId + 1);
+        int targetBuildingId = build.FortPlantDetailId + 1;
+        FortPlantDetail plantDetail = MasterAsset.FortPlant.Get(targetBuildingId);
 
         // Remove resources from player
         await ConsumePlayerMaterials(userMaterials, userData, plantDetail);
@@ -626,25 +645,23 @@ public class FortController : DragaliaControllerBase
         return this.Ok(data);
     }
 
+    // What exactly does it do
     [HttpPost("set_new_fort_plant")]
     public async Task<DragaliaResult> SetNewFortPlant(FortSetNewFortPlantRequest request)
     {
-        // What exactly does it do
-        return this.Ok();
-
-        //await this.fortRepository.GetFortPlantIdList(request.fort_plant_id_list);
-        //
-        //UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-        //    this.DeviceAccountId
-        //);
-        //
-        //FortSetNewFortPlantData data =
-        //    new()
-        //    {
-        //        result = 1,
-        //        update_data_list = updateDataList
-        //    };
-        //return this.Ok(data);
+        await this.fortRepository.GetFortPlantIdList(request.fort_plant_id_list);
+        
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+        
+        FortSetNewFortPlantData data =
+            new()
+            {
+                result = 1,
+                update_data_list = updateDataList
+            };
+        return this.Ok(data);
     }
 
     private async Task IncrementCarpenterUsage(FortDetail fortDetail)
@@ -674,21 +691,21 @@ public class FortController : DragaliaControllerBase
     {
         userData.Coin -= plantDetail.Cost;
 
-        // Is there maybe a more efficient way to do this? Seems ugly, but it works
-        DbPlayerMaterial material1 = await userMaterials.FirstAsync(x => x.MaterialId == plantDetail.MaterialsId1);
-        await this.inventoryRepository.UpdateQuantity(this.DeviceAccountId, material1.MaterialId, -plantDetail.MaterialsNum1);
+        // Is there maybe a more efficient way to do this? Seems ugly, but works
+        await ConsumeMaterial(userMaterials, plantDetail.MaterialsId1, plantDetail.MaterialsNum1);
+        await ConsumeMaterial(userMaterials, plantDetail.MaterialsId2, plantDetail.MaterialsNum2);
+        await ConsumeMaterial(userMaterials, plantDetail.MaterialsId3, plantDetail.MaterialsNum3);
+        await ConsumeMaterial(userMaterials, plantDetail.MaterialsId4, plantDetail.MaterialsNum4);
+        await ConsumeMaterial(userMaterials, plantDetail.MaterialsId5, plantDetail.MaterialsNum5);
+    }
 
-        DbPlayerMaterial material2 = await userMaterials.FirstAsync(x => x.MaterialId == plantDetail.MaterialsId2);
-        await this.inventoryRepository.UpdateQuantity(this.DeviceAccountId, material2.MaterialId, -plantDetail.MaterialsNum2);
-
-        DbPlayerMaterial material3 = await userMaterials.FirstAsync(x => x.MaterialId == plantDetail.MaterialsId3);
-        await this.inventoryRepository.UpdateQuantity(this.DeviceAccountId, material3.MaterialId, -plantDetail.MaterialsNum3);
-
-        DbPlayerMaterial material4 = await userMaterials.FirstAsync(x => x.MaterialId == plantDetail.MaterialsId4);
-        await this.inventoryRepository.UpdateQuantity(this.DeviceAccountId, material4.MaterialId, -plantDetail.MaterialsNum4);
-
-        DbPlayerMaterial material5 = await userMaterials.FirstAsync(x => x.MaterialId == plantDetail.MaterialsId5);
-        await this.inventoryRepository.UpdateQuantity(this.DeviceAccountId, material5.MaterialId, -plantDetail.MaterialsNum5);
+    private async Task ConsumeMaterial(IQueryable<DbPlayerMaterial> userMaterials, Materials material, int cost)
+    {
+        if (material != Materials.Empty)
+        {
+            DbPlayerMaterial dbMaterial = await userMaterials.FirstAsync(x => x.MaterialId == material);
+            await this.inventoryRepository.UpdateQuantity(this.DeviceAccountId, dbMaterial.MaterialId, -cost);
+        }
     }
 
     private int GetUpgradePaymentHeld(DbPlayerUserData userData, PaymentTypes paymentType)

@@ -61,7 +61,7 @@ public class FortRepository : BaseRepository, IFortRepository
 
     public async Task GetFortPlantIdList(IEnumerable<int> fort_plant_id_list)
     {
-        //apiContext.Fort
+        // What do
     }
 
     public async Task<bool> InitFortDetail(string accountId)
@@ -112,5 +112,10 @@ public class FortRepository : BaseRepository, IFortRepository
     public void UpdateBuild(DbFortBuild build)
     {
         apiContext.Entry(build).State = EntityState.Modified;
+    }
+
+    public void DeleteBuild(DbFortBuild build)
+    {
+        apiContext.Remove(build);
     }
 }

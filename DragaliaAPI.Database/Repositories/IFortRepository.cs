@@ -16,4 +16,5 @@ public interface IFortRepository : IBaseRepository
     Task<DbFortBuild> GetBuilding(string deviceAccountId, long buildId);
     Task AddBuild(DbFortBuild build);
     void UpdateBuild(DbFortBuild build);
+    void DeleteBuild(DbFortBuild build);
 }
