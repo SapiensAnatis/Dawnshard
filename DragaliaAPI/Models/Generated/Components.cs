@@ -2,6 +2,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
@@ -5983,6 +5984,11 @@ public class FortDetail
     }
 
     public FortDetail() { }
+
+    public static implicit operator FortDetail(DbFortDetail v)
+    {
+        return new FortDetail(v.MaxCarpenterCount, v.CarpenterNum, v.WorkingCarpenterNum);
+    }
 }
 
 [MessagePackObject(true)]

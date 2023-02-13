@@ -10,6 +10,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -135,7 +136,7 @@ public class FortController : DragaliaControllerBase
 
         // Add carpenter
         fortDetail.carpenter_num++;
-        await this.fortRepository.UpdateFortCarpenterNum(
+        await this.fortRepository.UpdateFortMaximumCarpenter(
             this.DeviceAccountId, 
             fortDetail.carpenter_num
         );
@@ -144,7 +145,7 @@ public class FortController : DragaliaControllerBase
             this.DeviceAccountId
         );
 
-        await this.fortRepository.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync();
 
         FortAddCarpenterData data =
             new()
@@ -194,13 +195,16 @@ public class FortController : DragaliaControllerBase
         this.fortRepository.UpdateBuild(build);
 
         // Update carpenter usage
-        await DecrementCarpenterUsage(fortDetail);
+        fortDetail = await this.fortRepository.DecrementCarpenterUsage(
+            this.DeviceAccountId,
+            fortDetail.working_carpenter_num
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
 
-        await this.fortRepository.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync();
 
         FortBuildAtOnceData data =
             new()
@@ -222,41 +226,29 @@ public class FortController : DragaliaControllerBase
     {
         FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
 
-        // Get building
-        DbFortBuild build = await this.fortRepository.GetBuilding(
-            this.DeviceAccountId, (long)request.build_id
+        DbFortBuild cancelledBuild = await this.fortRepository.CancelUpgrade(
+            this.DeviceAccountId, 
+            (long)request.build_id,
+            fortDetail.working_carpenter_num
         );
 
-        // Cancel build
-        build.Level--;
-        build.BuildStartDate = DateTimeOffset.UnixEpoch;
-        build.BuildEndDate = DateTimeOffset.UnixEpoch;
-
-        if (build.Level > 0)
-        {
-            this.fortRepository.UpdateBuild(build);
-        }
-        else
-        {
-            this.fortRepository.DeleteBuild(build);
-        }
-
         // Update carpenter usage
-        await DecrementCarpenterUsage(fortDetail);
-
-        await this.fortRepository.UpdateFortWorkingCarpenter(this.DeviceAccountId, fortDetail.working_carpenter_num);
+        fortDetail = await this.fortRepository.DecrementCarpenterUsage(
+            this.DeviceAccountId,
+            fortDetail.working_carpenter_num
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
 
-        await this.fortRepository.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync();
 
         FortBuildCancelData data =
             new()
             {
                 result = 1,
-                build_id = (ulong)build.BuildId,
+                build_id = (ulong)cancelledBuild.BuildId,
                 fort_detail = fortDetail,
                 update_data_list = updateDataList
             };
@@ -280,15 +272,16 @@ public class FortController : DragaliaControllerBase
         this.fortRepository.UpdateBuild(build);
 
         // Update carpenter usage
-        await DecrementCarpenterUsage(fortDetail);
-
-        await this.fortRepository.UpdateFortWorkingCarpenter(this.DeviceAccountId, fortDetail.working_carpenter_num);
+        fortDetail = await this.fortRepository.DecrementCarpenterUsage(
+            this.DeviceAccountId,
+            fortDetail.working_carpenter_num
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
 
-        await this.fortRepository.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync();
 
         FortBuildEndData data =
             new()
@@ -332,7 +325,9 @@ public class FortController : DragaliaControllerBase
         FortPlantDetail plantDetail = MasterAsset.FortPlant.Get(buildIdAtLevel1);
 
         // Remove player resources
-        await ConsumePlayerMaterials(userMaterials, userData, plantDetail);
+        userData.Coin -= plantDetail.Cost;
+        IEnumerable<KeyValuePair<Materials, int>> quantityMap = plantDetail.CreateMaterialMap;
+        await ConsumePlayerMaterials(userMaterials, quantityMap);
 
         // Start building
         DateTime startDate = DateTime.UtcNow;
@@ -353,13 +348,16 @@ public class FortController : DragaliaControllerBase
         await this.fortRepository.AddBuild(build);
 
         // Increment worker carpenters
-        await IncrementCarpenterUsage(fortDetail);
+        fortDetail = await this.fortRepository.IncrementCarpenterUsage(
+            this.DeviceAccountId,
+            fortDetail.working_carpenter_num
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
 
-        await this.fortRepository.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync();
 
         int startDateUnix = (int)((DateTimeOffset)startDate).ToUnixTimeSeconds();
         int endDateUnix = (int)((DateTimeOffset)endDate).ToUnixTimeSeconds();
@@ -420,15 +418,16 @@ public class FortController : DragaliaControllerBase
         this.fortRepository.UpdateBuild(build);
 
         // Update carpenter usage
-        await DecrementCarpenterUsage(fortDetail);
-
-        await this.fortRepository.UpdateFortWorkingCarpenter(this.DeviceAccountId, fortDetail.working_carpenter_num);
+        fortDetail = await this.fortRepository.DecrementCarpenterUsage(
+            this.DeviceAccountId,
+            fortDetail.working_carpenter_num
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
 
-        await this.fortRepository.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync();
 
         FortLevelupAtOnceData data =
             new()
@@ -452,41 +451,29 @@ public class FortController : DragaliaControllerBase
     {
         FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
 
-        // Get building
-        DbFortBuild build = await this.fortRepository.GetBuilding(
-            this.DeviceAccountId, (long)request.build_id
+        DbFortBuild cancelledBuild = await this.fortRepository.CancelUpgrade(
+            this.DeviceAccountId,
+            (long)request.build_id,
+            fortDetail.working_carpenter_num
         );
 
-        // Cancel build
-        build.Level--;
-        build.BuildStartDate = DateTimeOffset.UnixEpoch;
-        build.BuildEndDate = DateTimeOffset.UnixEpoch;
-
-        if (build.Level > 0)
-        {
-            this.fortRepository.UpdateBuild(build);
-        }
-        else
-        {
-            this.fortRepository.DeleteBuild(build);
-        }
-
         // Update carpenter usage
-        await DecrementCarpenterUsage(fortDetail);
-
-        await this.fortRepository.UpdateFortWorkingCarpenter(this.DeviceAccountId, fortDetail.working_carpenter_num);
+        fortDetail = await this.fortRepository.DecrementCarpenterUsage(
+            this.DeviceAccountId,
+            fortDetail.working_carpenter_num
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
 
-        await this.fortRepository.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync();
 
         FortLevelupCancelData data =
             new()
             {
                 result = 1,
-                build_id = request.build_id,
+                build_id = (ulong)cancelledBuild.BuildId,
                 fort_detail = fortDetail,
                 update_data_list = updateDataList
             };
@@ -514,15 +501,16 @@ public class FortController : DragaliaControllerBase
         this.fortRepository.UpdateBuild(build);
 
         // Update carpenter usage
-        await DecrementCarpenterUsage(fortDetail);
-
-        await this.fortRepository.UpdateFortWorkingCarpenter(this.DeviceAccountId, fortDetail.working_carpenter_num);
+        fortDetail = await this.fortRepository.DecrementCarpenterUsage(
+            this.DeviceAccountId,
+            fortDetail.working_carpenter_num
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
 
-        await this.fortRepository.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync();
 
         FortLevelupEndData data =
             new()
@@ -572,7 +560,9 @@ public class FortController : DragaliaControllerBase
         FortPlantDetail plantDetail = MasterAsset.FortPlant.Get(targetBuildingId);
 
         // Remove resources from player
-        await ConsumePlayerMaterials(userMaterials, userData, plantDetail);
+        userData.Coin -= plantDetail.Cost;
+        IEnumerable<KeyValuePair<Materials, int>> quantityMap = plantDetail.CreateMaterialMap;
+        await ConsumePlayerMaterials(userMaterials, quantityMap);
 
         // Start level up
         DateTime startDate = DateTime.UtcNow;
@@ -584,13 +574,16 @@ public class FortController : DragaliaControllerBase
         this.fortRepository.UpdateBuild(build);
 
         // Update carpenter usage
-        await IncrementCarpenterUsage(fortDetail);
+        fortDetail = await this.fortRepository.IncrementCarpenterUsage(
+            this.DeviceAccountId, 
+            fortDetail.working_carpenter_num
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
 
-        await this.fortRepository.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync();
 
         int startDateUnix = (int)((DateTimeOffset)startDate).ToUnixTimeSeconds();
         int endDateUnix = (int)((DateTimeOffset)endDate).ToUnixTimeSeconds();
@@ -629,7 +622,7 @@ public class FortController : DragaliaControllerBase
             this.DeviceAccountId
         );
 
-        await this.fortRepository.SaveChangesAsync();
+        await this.updateDataService.SaveChangesAsync();
 
         FortMoveData data =
             new()
@@ -664,48 +657,21 @@ public class FortController : DragaliaControllerBase
         return this.Ok(data);
     }
 
-    private async Task IncrementCarpenterUsage(FortDetail fortDetail)
+    private async Task<bool> ConsumePlayerMaterials(
+        IQueryable<DbPlayerMaterial> userMaterials,
+        IEnumerable<KeyValuePair<Materials, int>> quantityMap
+    )
     {
-        fortDetail.working_carpenter_num++;
-        await this.fortRepository.UpdateFortWorkingCarpenter(
-            this.DeviceAccountId, 
-            fortDetail.working_carpenter_num
-        );
-    }
-
-    private async Task DecrementCarpenterUsage(FortDetail fortDetail)
-    {
-        fortDetail.working_carpenter_num--;
-        if (fortDetail.working_carpenter_num < 0)
+        foreach (KeyValuePair<Materials, int> requested in quantityMap)
         {
-            fortDetail.working_carpenter_num = 0;
+            if (requested.Key == Materials.Empty)
+                continue;
+
+            DbPlayerMaterial dbMaterial = await userMaterials.FirstAsync(x => x.MaterialId == requested.Key);
+            await this.inventoryRepository.UpdateQuantity(this.DeviceAccountId, dbMaterial.MaterialId, -requested.Value);
         }
 
-        await this.fortRepository.UpdateFortWorkingCarpenter(
-            this.DeviceAccountId, 
-            fortDetail.working_carpenter_num
-        );
-    }
-
-    private async Task ConsumePlayerMaterials(IQueryable<DbPlayerMaterial> userMaterials, DbPlayerUserData userData, FortPlantDetail plantDetail)
-    {
-        userData.Coin -= plantDetail.Cost;
-
-        // Is there maybe a more efficient way to do this? Seems ugly, but works
-        await ConsumeMaterial(userMaterials, plantDetail.MaterialsId1, plantDetail.MaterialsNum1);
-        await ConsumeMaterial(userMaterials, plantDetail.MaterialsId2, plantDetail.MaterialsNum2);
-        await ConsumeMaterial(userMaterials, plantDetail.MaterialsId3, plantDetail.MaterialsNum3);
-        await ConsumeMaterial(userMaterials, plantDetail.MaterialsId4, plantDetail.MaterialsNum4);
-        await ConsumeMaterial(userMaterials, plantDetail.MaterialsId5, plantDetail.MaterialsNum5);
-    }
-
-    private async Task ConsumeMaterial(IQueryable<DbPlayerMaterial> userMaterials, Materials material, int cost)
-    {
-        if (material != Materials.Empty)
-        {
-            DbPlayerMaterial dbMaterial = await userMaterials.FirstAsync(x => x.MaterialId == material);
-            await this.inventoryRepository.UpdateQuantity(this.DeviceAccountId, dbMaterial.MaterialId, -cost);
-        }
+        return true;
     }
 
     private int GetUpgradePaymentHeld(DbPlayerUserData userData, PaymentTypes paymentType)

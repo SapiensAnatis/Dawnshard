@@ -8,14 +8,11 @@ namespace DragaliaAPI.Database.Entities;
 [Index(nameof(DeviceAccountId))]
 public class DbFortDetail : IDbHasAccountId
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public long FortId { get; set; }
-
     /// <inheritdoc />
     public virtual DbPlayer? Owner { get; set; }
 
     /// <inheritdoc />
+    [Key]
     [ForeignKey(nameof(Owner))]
     public required string DeviceAccountId { get; set; }
 

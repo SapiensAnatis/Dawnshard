@@ -3,7 +3,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public interface IFortRepository : IBaseRepository
+public interface IFortRepository
 {
     IQueryable<DbFortBuild> GetBuilds(string accountId);
     IQueryable<DbFortBuild> Builds { get; }
@@ -11,10 +11,12 @@ public interface IFortRepository : IBaseRepository
     Task<bool> CheckPlantLevel(FortPlants plant, int requiredLevel);
     Task GetFortPlantIdList(IEnumerable<int> fort_plant_id_list);
     Task<bool> InitFortDetail(string deviceAccountId);
-    Task UpdateFortCarpenterNum(string accountId, int carpenter_num);
-    Task UpdateFortWorkingCarpenter(string accountId, int working_carpenter_num);
+    Task UpdateFortMaximumCarpenter(string accountId, int carpenter_num);
     Task<DbFortBuild> GetBuilding(string deviceAccountId, long buildId);
     Task AddBuild(DbFortBuild build);
     void UpdateBuild(DbFortBuild build);
     void DeleteBuild(DbFortBuild build);
+    Task<DbFortBuild> CancelUpgrade(string accountId, long buildId, int workingCarpenterNum);
+    Task<DbFortDetail> IncrementCarpenterUsage(string accountId, int workingCarpenterNum);
+    Task<DbFortDetail> DecrementCarpenterUsage(string accountId, int workingCarpenterNum);
 }
