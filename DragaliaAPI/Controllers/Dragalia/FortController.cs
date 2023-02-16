@@ -282,7 +282,7 @@ public class FortController : DragaliaControllerBase
         }
 
         // Get build plans
-        FortPlants BuildPlantId = (FortPlants)request.fort_plant_id;
+        FortPlants BuildPlantId = request.fort_plant_id;
         int buildIdAtLevel1 = MasterAssetUtils.GetPlantDetailId(BuildPlantId, 1);
         FortPlantDetail plantDetail = MasterAsset.FortPlant.Get(buildIdAtLevel1);
 

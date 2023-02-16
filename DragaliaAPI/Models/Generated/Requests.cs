@@ -1774,11 +1774,11 @@ public class FortBuildEndRequest
 [MessagePackObject(true)]
 public class FortBuildStartRequest
 {
-    public int fort_plant_id { get; set; }
+    public FortPlants fort_plant_id { get; set; }
     public int position_x { get; set; }
     public int position_z { get; set; }
 
-    public FortBuildStartRequest(int fort_plant_id, int position_x, int position_z)
+    public FortBuildStartRequest(FortPlants fort_plant_id, int position_x, int position_z)
     {
         this.fort_plant_id = fort_plant_id;
         this.position_x = position_x;

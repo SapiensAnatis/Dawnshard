@@ -62,7 +62,7 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
         long viewerId = this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == fixture.DeviceAccountId)
+            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .ViewerId;
 
         LoadIndexData savefile = JsonSerializer
@@ -161,7 +161,7 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
         long viewerId = this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == fixture.DeviceAccountId)
+            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .ViewerId;
 
         LoadIndexData savefile = JsonSerializer

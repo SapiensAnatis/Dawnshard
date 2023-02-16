@@ -53,7 +53,7 @@ public class QuestTest : IClassFixture<IntegrationTestFixture>
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
 
         List<DbPlayerStoryState> storyStates = await apiContext.PlayerStoryState
-            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .ToListAsync();
 
         storyStates.Should().Contain(x => x.StoryId == 700 && x.State == 1);

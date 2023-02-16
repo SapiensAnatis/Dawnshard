@@ -62,7 +62,7 @@ public class StoryTest : IntegrationTestBase
         this.fixture.ApiContext.Add(
             new DbPlayerStoryState()
             {
-                DeviceAccountId = this.fixture.DeviceAccountId,
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 State = 1,
                 StoryId = 2,
                 StoryType = StoryTypes.Chara
@@ -88,7 +88,7 @@ public class StoryTest : IntegrationTestBase
     {
         int oldCrystal = await this.fixture.ApiContext.PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == this.fixture.DeviceAccountId)
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .Select(x => x.Crystal)
             .SingleAsync();
 
@@ -101,14 +101,14 @@ public class StoryTest : IntegrationTestBase
 
         int newCrystal = await this.fixture.ApiContext.PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == this.fixture.DeviceAccountId)
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .Select(x => x.Crystal)
             .SingleAsync();
 
         newCrystal.Should().Be(oldCrystal + 25);
 
         IEnumerable<DbPlayerStoryState> stories = this.fixture.ApiContext.PlayerStoryState.Where(
-            x => x.DeviceAccountId == this.fixture.DeviceAccountId
+            x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
         );
 
         stories
@@ -116,7 +116,7 @@ public class StoryTest : IntegrationTestBase
             .ContainEquivalentOf(
                 new DbPlayerStoryState()
                 {
-                    DeviceAccountId = this.fixture.DeviceAccountId,
+                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                     State = 1,
                     StoryId = 3,
                     StoryType = StoryTypes.Chara
