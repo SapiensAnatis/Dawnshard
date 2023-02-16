@@ -16,7 +16,6 @@ public partial class _201alpha1 : Migration
             {
                 DeviceAccountId = table.Column<string>(type: "text", nullable: false),
                 CarpenterNum = table.Column<int>(type: "integer", nullable: false),
-                MaxCarpenterCount = table.Column<int>(type: "integer", nullable: false),
                 WorkingCarpenterNum = table.Column<int>(type: "integer", nullable: false)
             },
             constraints: table =>

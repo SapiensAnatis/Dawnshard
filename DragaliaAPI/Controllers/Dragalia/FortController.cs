@@ -10,7 +10,6 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -44,23 +43,22 @@ public class FortController : DragaliaControllerBase
     [HttpPost("get_data")]
     public async Task<DragaliaResult> GetData()
     {
+        IQueryable<DbFortDetail> query = this.fortRepository.Details;
+        if (!query.Any())
+        {
+            throw new DragaliaException(
+                ResultCode.MaintenanceFort,
+                $"User fort not found."
+            );
+        }
+
+        FortDetail fortDetails = query.Select(mapper.Map<FortDetail>).First();
+
         IEnumerable<BuildList> buildList = (
             await this.fortRepository.GetBuilds(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<BuildList>);
 
         FortBonusList bonusList = await this.bonusService.GetBonusList();
-
-        FortDetail fortDetails;
-        IQueryable<DbFortDetail> query = this.fortRepository.Details;
-        if (!query.Any())
-        {
-            await this.fortRepository.InitFortDetail(this.DeviceAccountId);
-            fortDetails = StubData.FortDetail;
-        }
-        else
-        {
-            fortDetails = query.Select(mapper.Map<FortDetail>).First();
-        }
 
         FortGetDataData data =
             new()
@@ -86,7 +84,7 @@ public class FortController : DragaliaControllerBase
             .FirstAsync();
         FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
 
-        if (fortDetail.carpenter_num == fortDetail.max_carpenter_count)
+        if (fortDetail.carpenter_num == FortRepository.MaximumCarpenterNum)
         {
             throw new DragaliaException(
                 ResultCode.FortExtendCarpenterLimit,
@@ -132,7 +130,7 @@ public class FortController : DragaliaControllerBase
             );
         }
 
-        ConsumePaymentCost(userData, paymentType, paymentCost);
+        this.fortRepository.ConsumePaymentCost(userData, paymentType, paymentCost);
 
         // Add carpenter
         fortDetail.carpenter_num++;
@@ -166,39 +164,11 @@ public class FortController : DragaliaControllerBase
         FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
         FortBonusList bonusList = await bonusService.GetBonusList();
 
-        // Get building
-        DbFortBuild build = await this.fortRepository.GetBuilding(
-            this.DeviceAccountId, (long)request.build_id
-        );
-
         PaymentTypes paymentType = (PaymentTypes)request.payment_type;
-        int paymentHeld = GetUpgradePaymentHeld(userData, paymentType);
-        int paymentCost = GetUpgradePaymentCost(
-            paymentType,
-            build.BuildStartDate,
-            build.BuildEndDate
-        );
+        await this.fortRepository.UpgradeAtOnce(userData, this.DeviceAccountId,
+            (long)request.build_id, fortDetail.working_carpenter_num, paymentType);
 
-        if (paymentHeld < paymentCost)
-        {
-            throw new DragaliaException(
-                ResultCode.FortLevelupIncomplete,
-                $"User did not have enough {paymentType}."
-            );
-        }
-
-        ConsumePaymentCost(userData, paymentType, paymentCost);
-
-        // Update build
-        build.BuildStartDate = DateTimeOffset.UnixEpoch;
-        build.BuildEndDate = DateTimeOffset.UnixEpoch;
-        this.fortRepository.UpdateBuild(build);
-
-        // Update carpenter usage
-        fortDetail = await this.fortRepository.DecrementCarpenterUsage(
-            this.DeviceAccountId,
-            fortDetail.working_carpenter_num
-        );
+        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -232,11 +202,7 @@ public class FortController : DragaliaControllerBase
             fortDetail.working_carpenter_num
         );
 
-        // Update carpenter usage
-        fortDetail = await this.fortRepository.DecrementCarpenterUsage(
-            this.DeviceAccountId,
-            fortDetail.working_carpenter_num
-        );
+        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -271,11 +237,7 @@ public class FortController : DragaliaControllerBase
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
         this.fortRepository.UpdateBuild(build);
 
-        // Update carpenter usage
-        fortDetail = await this.fortRepository.DecrementCarpenterUsage(
-            this.DeviceAccountId,
-            fortDetail.working_carpenter_num
-        );
+        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -389,39 +351,12 @@ public class FortController : DragaliaControllerBase
         DbFortBuild halidom = builds.First(x => x.PlantId == FortPlants.TheHalidom);
         DbFortBuild smithy = builds.First(x => x.PlantId == FortPlants.Smithy);
 
-        // Get building
-        DbFortBuild build = await this.fortRepository.GetBuilding(
-            this.DeviceAccountId, (long)request.build_id
-        );
-
         PaymentTypes paymentType = (PaymentTypes)request.payment_type;
-        int paymentHeld = GetUpgradePaymentHeld(userData, paymentType);
-        int paymentCost = GetUpgradePaymentCost(
-            paymentType, 
-            build.BuildStartDate, 
-            build.BuildEndDate
-        );
 
-        if (paymentHeld < paymentCost)
-        {
-            throw new DragaliaException(
-                ResultCode.FortLevelupIncomplete,
-                $"User did not have enough {request.payment_type}."
-            );
-        }
+        await this.fortRepository.UpgradeAtOnce(userData, this.DeviceAccountId, 
+            (long)request.build_id, fortDetail.working_carpenter_num, paymentType);
 
-        ConsumePaymentCost(userData, paymentType, paymentCost);
-
-        // Update build
-        build.BuildStartDate = DateTimeOffset.UnixEpoch;
-        build.BuildEndDate = DateTimeOffset.UnixEpoch;
-        this.fortRepository.UpdateBuild(build);
-
-        // Update carpenter usage
-        fortDetail = await this.fortRepository.DecrementCarpenterUsage(
-            this.DeviceAccountId,
-            fortDetail.working_carpenter_num
-        );
+        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -457,11 +392,7 @@ public class FortController : DragaliaControllerBase
             fortDetail.working_carpenter_num
         );
 
-        // Update carpenter usage
-        fortDetail = await this.fortRepository.DecrementCarpenterUsage(
-            this.DeviceAccountId,
-            fortDetail.working_carpenter_num
-        );
+        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -500,11 +431,7 @@ public class FortController : DragaliaControllerBase
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
         this.fortRepository.UpdateBuild(build);
 
-        // Update carpenter usage
-        fortDetail = await this.fortRepository.DecrementCarpenterUsage(
-            this.DeviceAccountId,
-            fortDetail.working_carpenter_num
-        );
+        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -670,57 +597,6 @@ public class FortController : DragaliaControllerBase
         }
 
         return true;
-    }
-
-    private int GetUpgradePaymentHeld(DbPlayerUserData userData, PaymentTypes paymentType)
-    {
-        return paymentType switch
-        {
-            PaymentTypes.Wyrmite => userData.Crystal,
-            PaymentTypes.Diamantium => 0,// TODO How do I diamantium?
-            PaymentTypes.HalidomHustleHammer => userData.BuildTimePoint,
-            _ => throw new DragaliaException(
-                                ResultCode.FortBuildNotStart,
-                                $"Invalid payment type for this operation."
-                            ),
-        };
-    }
-
-    private int GetUpgradePaymentCost(PaymentTypes paymentType, DateTimeOffset BuildStartDate, DateTimeOffset BuildEndDate)
-    {
-        if (paymentType == PaymentTypes.HalidomHustleHammer)
-        {
-            return 1; // Only 1 Hammer is consumed
-        }
-        else
-        {
-            // Construction can be immediately completed by spending either Wyrmite or Diamantium,
-            // where the amount required depends on the time left until construction is complete.
-            // This amount scales at 1 per 12 minutes, or 5 per hour. 
-            // https://dragalialost.wiki/w/Facilities
-            return (int)Math.Floor((BuildEndDate - BuildStartDate).TotalMinutes / 12);
-        }
-    }
-
-    private void ConsumePaymentCost(DbPlayerUserData userData, PaymentTypes paymentType, int paymentCost)
-    {
-        switch (paymentType)
-        {
-            case PaymentTypes.Wyrmite:
-                userData.Crystal -= paymentCost;
-                break;
-            case PaymentTypes.Diamantium:
-                // TODO How do I diamantium?
-                break;
-            case PaymentTypes.HalidomHustleHammer:
-                userData.BuildTimePoint -= paymentCost;
-                break;
-            default:
-                throw new DragaliaException(
-                    ResultCode.FortBuildNotStart,
-                    $"User did not have enough {paymentType}."
-                );
-        }
     }
 
     private static class StubData

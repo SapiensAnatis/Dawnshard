@@ -20,10 +20,6 @@ public class DbFortDetail : IDbHasAccountId
     [Required]
     public int CarpenterNum { get; set; }
 
-    [Column("MaxCarpenterCount")]
-    [Required]
-    public int MaxCarpenterCount { get; set; }
-
     [Column("WorkingCarpenterNum")]
     [Required]
     public int WorkingCarpenterNum { get; set; }

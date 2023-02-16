@@ -10,13 +10,15 @@ public interface IFortRepository
     IQueryable<DbFortDetail> Details { get; }
     Task<bool> CheckPlantLevel(FortPlants plant, int requiredLevel);
     Task GetFortPlantIdList(IEnumerable<int> fort_plant_id_list);
-    Task<bool> InitFortDetail(string deviceAccountId);
     Task UpdateFortMaximumCarpenter(string accountId, int carpenter_num);
     Task<DbFortBuild> GetBuilding(string deviceAccountId, long buildId);
     Task AddBuild(DbFortBuild build);
     void UpdateBuild(DbFortBuild build);
     void DeleteBuild(DbFortBuild build);
+    Task<DbFortBuild> UpgradeAtOnce(DbPlayerUserData userData, string accountId, long buildId,
+        int workingCarpenterNum, PaymentTypes paymentType);
     Task<DbFortBuild> CancelUpgrade(string accountId, long buildId, int workingCarpenterNum);
     Task<DbFortDetail> IncrementCarpenterUsage(string accountId, int workingCarpenterNum);
-    Task<DbFortDetail> DecrementCarpenterUsage(string accountId, int workingCarpenterNum);
+    Task<DbFortDetail> UpdateCarpenterUsage(string accountId);
+    void ConsumePaymentCost(DbPlayerUserData userData, PaymentTypes paymentType, int paymentCost);
 }
