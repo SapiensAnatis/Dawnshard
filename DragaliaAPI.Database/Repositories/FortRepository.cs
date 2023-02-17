@@ -19,7 +19,7 @@ public class FortRepository : IFortRepository
         ApiContext apiContext,
         IPlayerDetailsService playerDetailsService,
         ILogger<FortRepository> logger
-    ) 
+    )
     {
         this.apiContext = apiContext;
         this.playerDetailsService = playerDetailsService;
@@ -106,19 +106,19 @@ public class FortRepository : IFortRepository
         apiContext.Entry(build).State = EntityState.Deleted;
     }
 
-    public async Task<DbFortBuild> UpgradeAtOnce(DbPlayerUserData userData, string accountId, 
-        long buildId, PaymentTypes paymentType)
+    public async Task<DbFortBuild> UpgradeAtOnce(
+        DbPlayerUserData userData,
+        string accountId,
+        long buildId,
+        PaymentTypes paymentType
+    )
     {
         // Get building
-        DbFortBuild build = await GetBuilding(
-            accountId, buildId
-        );
+        DbFortBuild build = await GetBuilding(accountId, buildId);
 
         if (build.BuildEndDate == DateTimeOffset.UnixEpoch)
         {
-            throw new InvalidOperationException(
-                $"This building is not currently being upgraded."
-            );
+            throw new InvalidOperationException($"This building is not currently being upgraded.");
         }
 
         int paymentHeld = GetUpgradePaymentHeld(userData, paymentType);
@@ -130,9 +130,7 @@ public class FortRepository : IFortRepository
 
         if (paymentHeld < paymentCost)
         {
-            throw new InvalidOperationException(
-                $"User did not have enough {paymentType}."
-            );
+            throw new InvalidOperationException($"User did not have enough {paymentType}.");
         }
 
         ConsumePaymentCost(userData, paymentType, paymentCost);
@@ -152,9 +150,7 @@ public class FortRepository : IFortRepository
 
         if (build.BuildEndDate == DateTimeOffset.UnixEpoch)
         {
-            throw new InvalidOperationException(
-                $"This building is not currently being upgraded."
-            );
+            throw new InvalidOperationException($"This building is not currently being upgraded.");
         }
 
         // Cancel build
@@ -177,19 +173,25 @@ public class FortRepository : IFortRepository
     public async Task<DbFortDetail> UpdateCarpenterUsage(string accountId)
     {
         int workingCarpenter = 0;
-        List<DbFortBuild> AccountBuilds = Builds.Where(x => x.DeviceAccountId == accountId).ToList();
-        await Parallel.ForEachAsync(AccountBuilds, async (item, cancellationToken) => {
-            if (item.BuildEndDate != DateTimeOffset.UnixEpoch) 
-                workingCarpenter++;
-        });
-
-        return await this.UpdateFortWorkingCarpenter(
-            accountId,
-            workingCarpenter
+        List<DbFortBuild> AccountBuilds = Builds
+            .Where(x => x.DeviceAccountId == accountId)
+            .ToList();
+        await Parallel.ForEachAsync(
+            AccountBuilds,
+            async (item, cancellationToken) =>
+            {
+                if (item.BuildEndDate != DateTimeOffset.UnixEpoch)
+                    workingCarpenter++;
+            }
         );
+
+        return await this.UpdateFortWorkingCarpenter(accountId, workingCarpenter);
     }
 
-    private async Task<DbFortDetail> UpdateFortWorkingCarpenter(string accountId, int working_carpenter_num)
+    private async Task<DbFortDetail> UpdateFortWorkingCarpenter(
+        string accountId,
+        int working_carpenter_num
+    )
     {
         DbFortDetail fortDetail = await apiContext.PlayerFortDetails
             .Where(x => x.DeviceAccountId == accountId)
@@ -205,15 +207,17 @@ public class FortRepository : IFortRepository
         return paymentType switch
         {
             PaymentTypes.Wyrmite => userData.Crystal,
-            PaymentTypes.Diamantium => 0,// TODO How do I diamantium?
+            PaymentTypes.Diamantium => 0, // TODO How do I diamantium?
             PaymentTypes.HalidomHustleHammer => userData.BuildTimePoint,
-            _ => throw new InvalidOperationException(
-                    $"Invalid payment type for this operation."
-                ),
+            _ => throw new InvalidOperationException($"Invalid payment type for this operation."),
         };
     }
 
-    private int GetUpgradePaymentCost(PaymentTypes paymentType, DateTimeOffset BuildStartDate, DateTimeOffset BuildEndDate)
+    private int GetUpgradePaymentCost(
+        PaymentTypes paymentType,
+        DateTimeOffset BuildStartDate,
+        DateTimeOffset BuildEndDate
+    )
     {
         if (paymentType == PaymentTypes.HalidomHustleHammer)
         {
@@ -223,13 +227,17 @@ public class FortRepository : IFortRepository
         {
             // Construction can be immediately completed by spending either Wyrmite or Diamantium,
             // where the amount required depends on the time left until construction is complete.
-            // This amount scales at 1 per 12 minutes, or 5 per hour. 
+            // This amount scales at 1 per 12 minutes, or 5 per hour.
             // https://dragalialost.wiki/w/Facilities
             return (int)Math.Floor((BuildEndDate - BuildStartDate).TotalMinutes / 12);
         }
     }
 
-    public void ConsumePaymentCost(DbPlayerUserData userData, PaymentTypes paymentType, int paymentCost)
+    public void ConsumePaymentCost(
+        DbPlayerUserData userData,
+        PaymentTypes paymentType,
+        int paymentCost
+    )
     {
         switch (paymentType)
         {
@@ -243,9 +251,7 @@ public class FortRepository : IFortRepository
                 userData.BuildTimePoint -= paymentCost;
                 break;
             default:
-                throw new InvalidOperationException(
-                    $"User did not have enough {paymentType}."
-                );
+                throw new InvalidOperationException($"User did not have enough {paymentType}.");
         }
     }
 }

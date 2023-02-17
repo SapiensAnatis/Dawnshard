@@ -56,8 +56,11 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
         DbParty dbparty = await apiContext.PlayerParties
             .Include(x => x.Units)
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-                && x.PartyNo == 1)
+            .Where(
+                x =>
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+                    && x.PartyNo == 1
+            )
             .SingleAsync();
 
         dbparty
@@ -199,9 +202,10 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
     public async Task UpdatePartyName_UpdatesDatabase()
     {
         DbParty party =
-            await this.fixture.ApiContext.PlayerParties
-            .FindAsync(IntegrationTestFixture.DeviceAccountIdConst, 1)
-            ?? throw new NullReferenceException();
+            await this.fixture.ApiContext.PlayerParties.FindAsync(
+                IntegrationTestFixture.DeviceAccountIdConst,
+                1
+            ) ?? throw new NullReferenceException();
 
         await client.PostMsgpack<PartyUpdatePartyNameData>(
             "/party/update_party_name",

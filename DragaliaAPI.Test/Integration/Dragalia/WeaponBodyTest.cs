@@ -195,8 +195,10 @@ public class WeaponBodyTest : IntegrationTestBase
                 );
 
             DbPlayerMaterial dbEntry = (
-                await apiContext.PlayerMaterials
-                .FindAsync(IntegrationTestFixture.DeviceAccountIdConst, material)
+                await apiContext.PlayerMaterials.FindAsync(
+                    IntegrationTestFixture.DeviceAccountIdConst,
+                    material
+                )
             )!;
 
             dbEntry.Quantity.Should().Be(expQuantity);
@@ -626,8 +628,11 @@ public class WeaponBodyTest : IntegrationTestBase
     private int GetMaterialCount(Materials id)
     {
         return this.fixture.ApiContext.PlayerMaterials
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst 
-                && x.MaterialId == id)
+            .Where(
+                x =>
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+                    && x.MaterialId == id
+            )
             .Select(x => x.Quantity)
             .First();
     }

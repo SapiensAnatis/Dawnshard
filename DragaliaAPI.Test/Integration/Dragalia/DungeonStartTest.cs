@@ -45,8 +45,9 @@ public class DungeonStartTest : IClassFixture<IntegrationTestFixture>
 
         IEnumerable<object> storedPartyData = (
             await this.fixture.ApiContext.PlayerParties.SingleAsync(
-                x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst 
-                && x.PartyNo == 1
+                x =>
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+                    && x.PartyNo == 1
             )
         ).Units
             .Where(x => x.CharaId != 0)

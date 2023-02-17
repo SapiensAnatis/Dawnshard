@@ -15,8 +15,12 @@ public interface IFortRepository
     Task AddBuild(DbFortBuild build);
     void UpdateBuild(DbFortBuild build);
     void DeleteBuild(DbFortBuild build);
-    Task<DbFortBuild> UpgradeAtOnce(DbPlayerUserData userData, string accountId,
-        long buildId, PaymentTypes paymentType);
+    Task<DbFortBuild> UpgradeAtOnce(
+        DbPlayerUserData userData,
+        string accountId,
+        long buildId,
+        PaymentTypes paymentType
+    );
     Task<DbFortBuild> CancelUpgrade(string accountId, long buildId);
     Task<DbFortDetail> UpdateCarpenterUsage(string accountId);
     void ConsumePaymentCost(DbPlayerUserData userData, PaymentTypes paymentType, int paymentCost);

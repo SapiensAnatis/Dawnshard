@@ -95,9 +95,7 @@ public class FortTest : IntegrationTestBase
         FortAddCarpenterData response = (
             await client.PostMsgpack<FortAddCarpenterData>(
                 "/fort/add_carpenter",
-                new FortAddCarpenterRequest(
-                    (int)PaymentTypes.Wyrmite
-                )
+                new FortAddCarpenterRequest((int)PaymentTypes.Wyrmite)
             )
         ).data;
 
@@ -129,10 +127,7 @@ public class FortTest : IntegrationTestBase
         FortBuildAtOnceData response = (
             await client.PostMsgpack<FortBuildAtOnceData>(
                 "/fort/build_at_once",
-                new FortBuildAtOnceRequest(
-                    BuildId,
-                    (int)PaymentTypes.Wyrmite
-                )
+                new FortBuildAtOnceRequest(BuildId, (int)PaymentTypes.Wyrmite)
             )
         ).data;
 
@@ -166,9 +161,7 @@ public class FortTest : IntegrationTestBase
         FortBuildCancelData response = (
             await client.PostMsgpack<FortBuildCancelData>(
                 "/fort/build_cancel",
-                new FortBuildCancelRequest(
-                    BuildId
-                )
+                new FortBuildCancelRequest(BuildId)
             )
         ).data;
 
@@ -202,9 +195,7 @@ public class FortTest : IntegrationTestBase
         FortBuildEndData response = (
             await client.PostMsgpack<FortBuildEndData>(
                 "/fort/build_end",
-                new FortBuildEndRequest(
-                    BuildId
-                )
+                new FortBuildEndRequest(BuildId)
             )
         ).data;
 
@@ -263,10 +254,7 @@ public class FortTest : IntegrationTestBase
         FortLevelupAtOnceData response = (
             await client.PostMsgpack<FortLevelupAtOnceData>(
                 "/fort/levelup_at_once",
-                new FortLevelupAtOnceRequest(
-                    BuildId,
-                    (int)PaymentTypes.Wyrmite
-                )
+                new FortLevelupAtOnceRequest(BuildId, (int)PaymentTypes.Wyrmite)
             )
         ).data;
 
@@ -299,9 +287,7 @@ public class FortTest : IntegrationTestBase
         FortLevelupCancelData response = (
             await client.PostMsgpack<FortLevelupCancelData>(
                 "/fort/levelup_cancel",
-                new FortLevelupCancelRequest(
-                    BuildId
-                )
+                new FortLevelupCancelRequest(BuildId)
             )
         ).data;
 
@@ -335,9 +321,7 @@ public class FortTest : IntegrationTestBase
         FortLevelupEndData response = (
             await client.PostMsgpack<FortLevelupEndData>(
                 "/fort/levelup_end",
-                new FortLevelupEndRequest(
-                    BuildId
-                )
+                new FortLevelupEndRequest(BuildId)
             )
         ).data;
 
@@ -370,9 +354,7 @@ public class FortTest : IntegrationTestBase
         FortLevelupStartData response = (
             await client.PostMsgpack<FortLevelupStartData>(
                 "/fort/levelup_start",
-                new FortLevelupStartRequest(
-                    BuildId
-                )
+                new FortLevelupStartRequest(BuildId)
             )
         ).data;
 
@@ -409,11 +391,7 @@ public class FortTest : IntegrationTestBase
         FortMoveData response = (
             await client.PostMsgpack<FortMoveData>(
                 "/fort/move",
-                new FortMoveRequest(
-                    BuildId,
-                    ExpectedPositionX,
-                    ExpectedPositionZ
-                )
+                new FortMoveRequest(BuildId, ExpectedPositionX, ExpectedPositionZ)
             )
         ).data;
 
@@ -422,11 +400,13 @@ public class FortTest : IntegrationTestBase
         result.position_z.Should().Be(ExpectedPositionZ);
     }
 
-    public static class FortTestData {
+    public static class FortTestData
+    {
         public static readonly List<DbFortBuild> Builds =
             new()
             {
-                new() {
+                new()
+                {
                     // No state
                     DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                     PlantId = FortPlants.StaffDojo,
@@ -438,7 +418,8 @@ public class FortTest : IntegrationTestBase
                     IsNew = true,
                     LastIncomeDate = DateTimeOffset.UnixEpoch
                 },
-                new() {
+                new()
+                {
                     // In Construction
                     DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                     PlantId = FortPlants.StaffDojo,
@@ -450,7 +431,8 @@ public class FortTest : IntegrationTestBase
                     IsNew = true,
                     LastIncomeDate = DateTimeOffset.UnixEpoch
                 },
-                new() {
+                new()
+                {
                     // Finished
                     DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                     PlantId = FortPlants.StaffDojo,

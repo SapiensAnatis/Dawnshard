@@ -46,10 +46,7 @@ public class FortController : DragaliaControllerBase
         IQueryable<DbFortDetail> query = this.fortRepository.Details;
         if (!query.Any())
         {
-            throw new DragaliaException(
-                ResultCode.MaintenanceFort,
-                $"User fort not found."
-            );
+            throw new DragaliaException(ResultCode.MaintenanceFort, $"User fort not found.");
         }
 
         FortDetail fortDetails = query.Select(mapper.Map<FortDetail>).First();
@@ -135,7 +132,7 @@ public class FortController : DragaliaControllerBase
         // Add carpenter
         fortDetail.carpenter_num++;
         await this.fortRepository.UpdateFortMaximumCarpenter(
-            this.DeviceAccountId, 
+            this.DeviceAccountId,
             fortDetail.carpenter_num
         );
 
@@ -165,8 +162,12 @@ public class FortController : DragaliaControllerBase
         FortBonusList bonusList = await bonusService.GetBonusList();
 
         PaymentTypes paymentType = (PaymentTypes)request.payment_type;
-        await this.fortRepository.UpgradeAtOnce(userData, this.DeviceAccountId,
-            (long)request.build_id, paymentType);
+        await this.fortRepository.UpgradeAtOnce(
+            userData,
+            this.DeviceAccountId,
+            (long)request.build_id,
+            paymentType
+        );
 
         fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
 
@@ -197,7 +198,7 @@ public class FortController : DragaliaControllerBase
         FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
 
         DbFortBuild cancelledBuild = await this.fortRepository.CancelUpgrade(
-            this.DeviceAccountId, 
+            this.DeviceAccountId,
             (long)request.build_id
         );
 
@@ -229,7 +230,8 @@ public class FortController : DragaliaControllerBase
 
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(
-            this.DeviceAccountId, (long)request.build_id
+            this.DeviceAccountId,
+            (long)request.build_id
         );
 
         // Update values
@@ -267,8 +269,9 @@ public class FortController : DragaliaControllerBase
             .GetUserData(this.DeviceAccountId)
             .FirstAsync();
 
-        IQueryable<DbPlayerMaterial> userMaterials = this.inventoryRepository
-            .GetMaterials(this.DeviceAccountId);
+        IQueryable<DbPlayerMaterial> userMaterials = this.inventoryRepository.GetMaterials(
+            this.DeviceAccountId
+        );
 
         FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
 
@@ -295,24 +298,23 @@ public class FortController : DragaliaControllerBase
         DateTime startDate = DateTime.UtcNow;
         DateTime endDate = startDate.AddSeconds(plantDetail.Time);
 
-        DbFortBuild build = new()
-        {
-            DeviceAccountId = this.DeviceAccountId,
-            PlantId = BuildPlantId,
-            Level = 1,
-            PositionX = request.position_x,
-            PositionZ = request.position_z,
-            BuildStartDate = startDate,
-            BuildEndDate = endDate,
-            IsNew = true,
-            LastIncomeDate = DateTimeOffset.UnixEpoch
-        };
+        DbFortBuild build =
+            new()
+            {
+                DeviceAccountId = this.DeviceAccountId,
+                PlantId = BuildPlantId,
+                Level = 1,
+                PositionX = request.position_x,
+                PositionZ = request.position_z,
+                BuildStartDate = startDate,
+                BuildEndDate = endDate,
+                IsNew = true,
+                LastIncomeDate = DateTimeOffset.UnixEpoch
+            };
         await this.fortRepository.AddBuild(build);
 
         // Increment worker carpenters
-        fortDetail = await this.fortRepository.UpdateCarpenterUsage(
-            this.DeviceAccountId
-        );
+        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -352,8 +354,12 @@ public class FortController : DragaliaControllerBase
 
         PaymentTypes paymentType = (PaymentTypes)request.payment_type;
 
-        await this.fortRepository.UpgradeAtOnce(userData, this.DeviceAccountId, 
-            (long)request.build_id, paymentType);
+        await this.fortRepository.UpgradeAtOnce(
+            userData,
+            this.DeviceAccountId,
+            (long)request.build_id,
+            paymentType
+        );
 
         fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
 
@@ -421,7 +427,8 @@ public class FortController : DragaliaControllerBase
 
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(
-            this.DeviceAccountId, (long)request.build_id
+            this.DeviceAccountId,
+            (long)request.build_id
         );
 
         // Update values
@@ -461,8 +468,9 @@ public class FortController : DragaliaControllerBase
             .GetUserData(this.DeviceAccountId)
             .FirstAsync();
 
-        IQueryable<DbPlayerMaterial> userMaterials = this.inventoryRepository
-            .GetMaterials(this.DeviceAccountId);
+        IQueryable<DbPlayerMaterial> userMaterials = this.inventoryRepository.GetMaterials(
+            this.DeviceAccountId
+        );
 
         FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
 
@@ -477,7 +485,8 @@ public class FortController : DragaliaControllerBase
 
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(
-            this.DeviceAccountId, (long)request.build_id
+            this.DeviceAccountId,
+            (long)request.build_id
         );
 
         // Get level up plans (current FortPlantDetailId +1 to get plans of the next level)
@@ -499,9 +508,7 @@ public class FortController : DragaliaControllerBase
         this.fortRepository.UpdateBuild(build);
 
         // Increment carpenter usage
-        fortDetail = await this.fortRepository.UpdateCarpenterUsage(
-            this.DeviceAccountId
-        );
+        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -532,7 +539,8 @@ public class FortController : DragaliaControllerBase
 
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(
-            this.DeviceAccountId, (long)request.build_id
+            this.DeviceAccountId,
+            (long)request.build_id
         );
 
         // Move building to requested coordinate
@@ -565,17 +573,12 @@ public class FortController : DragaliaControllerBase
     public async Task<DragaliaResult> SetNewFortPlant(FortSetNewFortPlantRequest request)
     {
         await this.fortRepository.GetFortPlantIdList(request.fort_plant_id_list);
-        
+
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
-        
-        FortSetNewFortPlantData data =
-            new()
-            {
-                result = 1,
-                update_data_list = updateDataList
-            };
+
+        FortSetNewFortPlantData data = new() { result = 1, update_data_list = updateDataList };
         return this.Ok(data);
     }
 
@@ -589,8 +592,14 @@ public class FortController : DragaliaControllerBase
             if (requested.Key == Materials.Empty)
                 continue;
 
-            DbPlayerMaterial dbMaterial = await userMaterials.FirstAsync(x => x.MaterialId == requested.Key);
-            await this.inventoryRepository.UpdateQuantity(this.DeviceAccountId, dbMaterial.MaterialId, -requested.Value);
+            DbPlayerMaterial dbMaterial = await userMaterials.FirstAsync(
+                x => x.MaterialId == requested.Key
+            );
+            await this.inventoryRepository.UpdateQuantity(
+                this.DeviceAccountId,
+                dbMaterial.MaterialId,
+                -requested.Value
+            );
         }
 
         return true;

@@ -5989,7 +5989,11 @@ public class FortDetail
 
     public static implicit operator FortDetail(DbFortDetail v)
     {
-        return new FortDetail(FortRepository.MaximumCarpenterNum, v.CarpenterNum, v.WorkingCarpenterNum);
+        return new FortDetail(
+            FortRepository.MaximumCarpenterNum,
+            v.CarpenterNum,
+            v.WorkingCarpenterNum
+        );
     }
 }
 
