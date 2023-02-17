@@ -111,16 +111,11 @@ public class InventoryRepository : IInventoryRepository
 #pragma warning restore CS0618
     }
 
-    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
-    public async Task UpdateQuantity(
-        string deviceAccountId,
-        IEnumerable<Materials> list,
-        int quantity
-    )
+    public async Task UpdateQuantity(IEnumerable<Materials> list, int quantity)
     {
         foreach (Materials m in list)
         {
-            await this.UpdateQuantity(deviceAccountId, m, quantity);
+            await this.UpdateQuantity(m, quantity);
         }
 
         this.logger.LogDebug(
