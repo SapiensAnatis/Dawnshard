@@ -15,8 +15,6 @@ public class QuestRewardService : IQuestRewardService
         this.logger = logger;
     }
 
-    public IInventoryRepository InventoryRepository { get; }
-
     public IEnumerable<Materials> GetDrops(int questId)
     {
         if (!MasterAsset.QuestDrops.TryGetValue(questId, out QuestDropInfo? questDropInfo))
