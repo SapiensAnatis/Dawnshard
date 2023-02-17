@@ -63,4 +63,10 @@ public static class MasterAsset
     /// </summary>
     public static readonly MasterAssetData<int, WeaponPassiveAbility> WeaponPassiveAbility =
         new("WeaponPassiveAbility.json", x => x.Id);
+
+    /// <summary>
+    /// Contains information about rewards from quests.
+    /// </summary>
+    public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
+        new("QuestDrops.json", x => x.QuestId);
 }
