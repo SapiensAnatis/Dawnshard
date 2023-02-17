@@ -166,7 +166,7 @@ public class FortController : DragaliaControllerBase
 
         PaymentTypes paymentType = (PaymentTypes)request.payment_type;
         await this.fortRepository.UpgradeAtOnce(userData, this.DeviceAccountId,
-            (long)request.build_id, fortDetail.working_carpenter_num, paymentType);
+            (long)request.build_id, paymentType);
 
         fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
 
@@ -198,8 +198,7 @@ public class FortController : DragaliaControllerBase
 
         DbFortBuild cancelledBuild = await this.fortRepository.CancelUpgrade(
             this.DeviceAccountId, 
-            (long)request.build_id,
-            fortDetail.working_carpenter_num
+            (long)request.build_id
         );
 
         fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
@@ -207,6 +206,7 @@ public class FortController : DragaliaControllerBase
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
+        updateDataList.functional_maintenance_list = new List<FunctionalMaintenanceList>();
 
         await this.updateDataService.SaveChangesAsync();
 
@@ -310,9 +310,8 @@ public class FortController : DragaliaControllerBase
         await this.fortRepository.AddBuild(build);
 
         // Increment worker carpenters
-        fortDetail = await this.fortRepository.IncrementCarpenterUsage(
-            this.DeviceAccountId,
-            fortDetail.working_carpenter_num
+        fortDetail = await this.fortRepository.UpdateCarpenterUsage(
+            this.DeviceAccountId
         );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
@@ -354,7 +353,7 @@ public class FortController : DragaliaControllerBase
         PaymentTypes paymentType = (PaymentTypes)request.payment_type;
 
         await this.fortRepository.UpgradeAtOnce(userData, this.DeviceAccountId, 
-            (long)request.build_id, fortDetail.working_carpenter_num, paymentType);
+            (long)request.build_id, paymentType);
 
         fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
 
@@ -388,8 +387,7 @@ public class FortController : DragaliaControllerBase
 
         DbFortBuild cancelledBuild = await this.fortRepository.CancelUpgrade(
             this.DeviceAccountId,
-            (long)request.build_id,
-            fortDetail.working_carpenter_num
+            (long)request.build_id
         );
 
         fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
@@ -500,10 +498,9 @@ public class FortController : DragaliaControllerBase
         build.BuildEndDate = endDate;
         this.fortRepository.UpdateBuild(build);
 
-        // Update carpenter usage
-        fortDetail = await this.fortRepository.IncrementCarpenterUsage(
-            this.DeviceAccountId, 
-            fortDetail.working_carpenter_num
+        // Increment carpenter usage
+        fortDetail = await this.fortRepository.UpdateCarpenterUsage(
+            this.DeviceAccountId
         );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(

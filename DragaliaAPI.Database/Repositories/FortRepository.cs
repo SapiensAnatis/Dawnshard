@@ -107,7 +107,7 @@ public class FortRepository : IFortRepository
     }
 
     public async Task<DbFortBuild> UpgradeAtOnce(DbPlayerUserData userData, string accountId, 
-        long buildId, int workingCarpenterNum, PaymentTypes paymentType)
+        long buildId, PaymentTypes paymentType)
     {
         // Get building
         DbFortBuild build = await GetBuilding(
@@ -145,7 +145,7 @@ public class FortRepository : IFortRepository
         return build;
     }
 
-    public async Task<DbFortBuild> CancelUpgrade(string accountId, long buildId, int workingCarpenterNum)
+    public async Task<DbFortBuild> CancelUpgrade(string accountId, long buildId)
     {
         // Get building
         DbFortBuild build = await this.GetBuilding(accountId, buildId);
@@ -172,14 +172,6 @@ public class FortRepository : IFortRepository
         }
 
         return build;
-    }
-
-    public async Task<DbFortDetail> IncrementCarpenterUsage(string accountId, int workingCarpenterNum)
-    {
-        return await this.UpdateFortWorkingCarpenter(
-            accountId,
-            workingCarpenterNum + 1
-        );
     }
 
     public async Task<DbFortDetail> UpdateCarpenterUsage(string accountId)
