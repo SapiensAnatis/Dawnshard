@@ -15,6 +15,7 @@ public class QuestController : DragaliaControllerBase
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
     private readonly IHelperService helperService;
+    private readonly IQuestRewardService questRewardService;
     private readonly IUpdateDataService updateDataService;
     private readonly ILogger<QuestController> logger;
     private const int ReadStoryState = 1;
@@ -109,6 +110,7 @@ public class QuestController : DragaliaControllerBase
         IUserDataRepository userDataRepository,
         IUnitRepository unitRepository,
         IHelperService helperService,
+        IQuestRewardService questRewardService,
         IUpdateDataService updateDataService,
         ILogger<QuestController> logger
     )
@@ -117,6 +119,7 @@ public class QuestController : DragaliaControllerBase
         this.userDataRepository = userDataRepository;
         this.unitRepository = unitRepository;
         this.helperService = helperService;
+        this.questRewardService = questRewardService;
         this.updateDataService = updateDataService;
         this.logger = logger;
     }
@@ -195,5 +198,28 @@ public class QuestController : DragaliaControllerBase
     {
         // TODO: Store in database
         return Ok(new QuestSetQuestClearPartyData() { result = 1 });
+    }
+
+    [HttpPost("drop_list")]
+    public DragaliaResult DropList(QuestDropListRequest request)
+    {
+        IEnumerable<Materials> drops = this.questRewardService.GetDrops(request.quest_id);
+
+        return Ok(
+            new QuestDropListData()
+            {
+                quest_drop_info = new()
+                {
+                    drop_info_list = drops.Select(
+                        x =>
+                            new AtgenDuplicateEntityList()
+                            {
+                                entity_id = (int)x,
+                                entity_type = EntityTypes.Material
+                            }
+                    )
+                }
+            }
+        );
     }
 }
