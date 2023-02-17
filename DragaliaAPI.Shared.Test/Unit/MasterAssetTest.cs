@@ -335,5 +335,98 @@ public class MasterAssetTest
             );
     }
 
-    // TODO tests for other buildup records
+    [Fact]
+    public void WeaponBodyBuildupGroup_Get_ReturnsExpectedProperties()
+    {
+        int key = MasterAsset.MasterAsset.WeaponBody[WeaponBodies.Marmyadose].GetBuildupGroupId(
+            BuildupPieceTypes.Refine,
+            2
+        );
+
+        WeaponBodyBuildupGroup group = MasterAsset.MasterAsset.WeaponBodyBuildupGroup[key];
+
+        group
+            .Should()
+            .BeEquivalentTo(
+                new WeaponBodyBuildupGroup(
+                    Id: 8030202,
+                    WeaponBodyBuildupGroupId: 803,
+                    BuildupPieceType: BuildupPieceTypes.Refine,
+                    Step: 2,
+                    UnlockConditionLimitBreakCount: 0,
+                    RewardWeaponSkinNo: 1,
+                    BuildupCoin: 2_500_000,
+                    BuildupMaterialId1: Materials.EliminatingOnesMaskFragment,
+                    BuildupMaterialQuantity1: 40,
+                    BuildupMaterialId2: Materials.DespairingOnesMaskFragment,
+                    BuildupMaterialQuantity2: 30,
+                    BuildupMaterialId3: Materials.RebelliousOnesDesperation,
+                    BuildupMaterialQuantity3: 10,
+                    BuildupMaterialId4: Materials.RebelliousBirdsTide,
+                    BuildupMaterialQuantity4: 10,
+                    BuildupMaterialId5: Materials.Orichalcum,
+                    BuildupMaterialQuantity5: 10,
+                    BuildupMaterialId6: Materials.Empty,
+                    BuildupMaterialQuantity6: 0,
+                    BuildupMaterialId7: Materials.Empty,
+                    BuildupMaterialQuantity7: 0
+                )
+            );
+    }
+
+    [Fact]
+    public void WeaponBodyBuildupLevel_Get_ReturnsExpectedProperties()
+    {
+        int key = MasterAsset.MasterAsset.WeaponBody[WeaponBodies.Camelot].GetBuildupLevelId(40);
+
+        MasterAsset.MasterAsset.WeaponBodyBuildupLevel[key]
+            .Should()
+            .BeEquivalentTo(
+                new WeaponBodyBuildupLevel(
+                    Id: 601040,
+                    RarityGroup: 6,
+                    Level: 40,
+                    BuildupMaterialId1: Materials.BronzeWhetstone,
+                    BuildupMaterialQuantity1: 5,
+                    BuildupMaterialId2: Materials.GoldWhetstone,
+                    BuildupMaterialQuantity2: 5,
+                    BuildupMaterialId3: Materials.Empty,
+                    BuildupMaterialQuantity3: 0
+                )
+            );
+    }
+
+    [Fact]
+    public void WeaponPassiveAbility_Get_ReturnsExpectedProperties()
+    {
+        int key = MasterAsset.MasterAsset.WeaponBody[
+            WeaponBodies.InfernoApogee
+        ].GetPassiveAbilityId(1);
+
+        MasterAsset.MasterAsset.WeaponPassiveAbility[key]
+            .Should()
+            .BeEquivalentTo(
+                new WeaponPassiveAbility(
+                    Id: 1010101,
+                    WeaponPassiveAbilityGroupId: 10101,
+                    WeaponPassiveAbilityNo: 1,
+                    WeaponType: WeaponTypes.Sword,
+                    ElementalType: UnitElement.Fire,
+                    UnlockConditionLimitBreakCount: 1,
+                    RewardWeaponSkinId1: 30140105,
+                    RewardWeaponSkinId2: 0,
+                    UnlockCoin: 80_000,
+                    UnlockMaterialId1: Materials.Granite,
+                    UnlockMaterialQuantity1: 80,
+                    UnlockMaterialId2: Materials.OldCloth,
+                    UnlockMaterialQuantity2: 30,
+                    UnlockMaterialId3: Materials.FloatingYellowCloth,
+                    UnlockMaterialQuantity3: 7,
+                    UnlockMaterialId4: Materials.UnearthlyLantern,
+                    UnlockMaterialQuantity4: 1,
+                    UnlockMaterialId5: Materials.BlazeOrb,
+                    UnlockMaterialQuantity5: 8
+                )
+            );
+    }
 }
