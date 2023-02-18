@@ -1720,9 +1720,9 @@ public class ExRushEventGetEventDataRequest
 [MessagePackObject(true)]
 public class FortAddCarpenterRequest
 {
-    public int payment_type { get; set; }
+    public PaymentTypes payment_type { get; set; }
 
-    public FortAddCarpenterRequest(int payment_type)
+    public FortAddCarpenterRequest(PaymentTypes payment_type)
     {
         this.payment_type = payment_type;
     }

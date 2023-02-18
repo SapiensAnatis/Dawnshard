@@ -95,7 +95,7 @@ public class FortTest : IntegrationTestBase
         FortAddCarpenterData response = (
             await client.PostMsgpack<FortAddCarpenterData>(
                 "/fort/add_carpenter",
-                new FortAddCarpenterRequest((int)PaymentTypes.Wyrmite)
+                new FortAddCarpenterRequest(PaymentTypes.Wyrmite)
             )
         ).data;
 

@@ -35,10 +35,12 @@ public class FortRepository : IFortRepository
             x => x.DeviceAccountId == this.playerDetailsService.AccountId
         );
 
-    public IQueryable<DbFortDetail> Details =>
-        this.apiContext.PlayerFortDetails.Where(
-            x => x.DeviceAccountId == this.playerDetailsService.AccountId
-        );
+    public async Task<DbFortDetail> GetFortDetails()
+    {
+        return await this.apiContext.PlayerFortDetails.FindAsync(
+                this.playerDetailsService.AccountId
+            ) ?? throw new InvalidOperationException($"Could not find player Halidom.");
+    }
 
     public async Task<bool> CheckPlantLevel(FortPlants plant, int requiredLevel)
     {
@@ -96,11 +98,6 @@ public class FortRepository : IFortRepository
         await apiContext.PlayerFortBuilds.AddAsync(build);
     }
 
-    public void UpdateBuild(DbFortBuild build)
-    {
-        apiContext.Entry(build).State = EntityState.Modified;
-    }
-
     public void DeleteBuild(DbFortBuild build)
     {
         apiContext.Entry(build).State = EntityState.Deleted;
@@ -138,7 +135,6 @@ public class FortRepository : IFortRepository
         // Update build
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
-        UpdateBuild(build);
 
         return build;
     }
@@ -158,11 +154,7 @@ public class FortRepository : IFortRepository
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
 
-        if (build.Level > 0)
-        {
-            this.UpdateBuild(build);
-        }
-        else
+        if (build.Level == 0)
         {
             this.DeleteBuild(build);
         }

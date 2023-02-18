@@ -43,14 +43,9 @@ public class FortController : DragaliaControllerBase
     [HttpPost("get_data")]
     public async Task<DragaliaResult> GetData()
     {
-        IQueryable<DbFortDetail> query = this.fortRepository.Details;
-        if (!query.Any())
-        {
-            throw new DragaliaException(ResultCode.MaintenanceFort, $"User fort not found.");
-        }
-
-        FortDetail fortDetails = query.Select(mapper.Map<FortDetail>).First();
-
+        FortDetail fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.GetFortDetails()
+        );
         IEnumerable<BuildList> buildList = (
             await this.fortRepository.GetBuilds(this.DeviceAccountId).ToListAsync()
         ).Select(mapper.Map<BuildList>);
@@ -66,7 +61,7 @@ public class FortController : DragaliaControllerBase
                 production_df = StubData.ProductionDf,
                 production_rp = StubData.ProductionRp,
                 production_st = StubData.ProductionSt,
-                fort_detail = fortDetails,
+                fort_detail = fortDetail,
                 current_server_time = DateTime.UtcNow
             };
 
@@ -79,7 +74,9 @@ public class FortController : DragaliaControllerBase
         DbPlayerUserData userData = await this.userDataRepository
             .GetUserData(this.DeviceAccountId)
             .FirstAsync();
-        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
+        FortDetail fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.GetFortDetails()
+        );
 
         if (fortDetail.carpenter_num == FortRepository.MaximumCarpenterNum)
         {
@@ -89,7 +86,7 @@ public class FortController : DragaliaControllerBase
             );
         }
 
-        PaymentTypes paymentType = (PaymentTypes)request.payment_type;
+        PaymentTypes paymentType = request.payment_type;
         int paymentHeld = 0;
         // https://dragalialost.wiki/w/Facilities
         // First 2 are free, 3rd 250, 4th 400, 5th 700
@@ -158,7 +155,9 @@ public class FortController : DragaliaControllerBase
         DbPlayerUserData userData = await this.userDataRepository
             .GetUserData(this.DeviceAccountId)
             .FirstAsync();
-        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
+        FortDetail fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.GetFortDetails()
+        );
         FortBonusList bonusList = await bonusService.GetBonusList();
 
         PaymentTypes paymentType = (PaymentTypes)request.payment_type;
@@ -169,7 +168,9 @@ public class FortController : DragaliaControllerBase
             paymentType
         );
 
-        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
+        fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId)
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -195,14 +196,17 @@ public class FortController : DragaliaControllerBase
     [HttpPost("build_cancel")]
     public async Task<DragaliaResult> BuildCancel(FortBuildCancelRequest request)
     {
-        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
-
+        FortDetail fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.GetFortDetails()
+        );
         DbFortBuild cancelledBuild = await this.fortRepository.CancelUpgrade(
             this.DeviceAccountId,
             (long)request.build_id
         );
 
-        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
+        fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId)
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -225,7 +229,9 @@ public class FortController : DragaliaControllerBase
     [HttpPost("build_end")]
     public async Task<DragaliaResult> BuildEnd(FortBuildEndRequest request)
     {
-        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
+        FortDetail fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.GetFortDetails()
+        );
         FortBonusList bonusList = await bonusService.GetBonusList();
 
         // Get building
@@ -237,9 +243,10 @@ public class FortController : DragaliaControllerBase
         // Update values
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
-        this.fortRepository.UpdateBuild(build);
 
-        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
+        fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId)
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -268,12 +275,13 @@ public class FortController : DragaliaControllerBase
         DbPlayerUserData userData = await this.userDataRepository
             .GetUserData(this.DeviceAccountId)
             .FirstAsync();
+        FortDetail fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.GetFortDetails()
+        );
 
         IQueryable<DbPlayerMaterial> userMaterials = this.inventoryRepository.GetMaterials(
             this.DeviceAccountId
         );
-
-        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
 
         // Check Carpenter available
         if (fortDetail.working_carpenter_num > fortDetail.carpenter_num)
@@ -314,7 +322,9 @@ public class FortController : DragaliaControllerBase
         await this.fortRepository.AddBuild(build);
 
         // Increment worker carpenters
-        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
+        fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId)
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -345,7 +355,10 @@ public class FortController : DragaliaControllerBase
         DbPlayerUserData userData = await this.userDataRepository
             .GetUserData(this.DeviceAccountId)
             .FirstAsync();
-        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
+        FortDetail fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.GetFortDetails()
+        );
+
         FortBonusList bonusList = await bonusService.GetBonusList();
 
         IQueryable<DbFortBuild> builds = this.fortRepository.Builds;
@@ -361,7 +374,9 @@ public class FortController : DragaliaControllerBase
             paymentType
         );
 
-        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
+        fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId)
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -389,14 +404,18 @@ public class FortController : DragaliaControllerBase
     [HttpPost("levelup_cancel")]
     public async Task<DragaliaResult> LevelUpCancel(FortLevelupCancelRequest request)
     {
-        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
+        FortDetail fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.GetFortDetails()
+        );
 
         DbFortBuild cancelledBuild = await this.fortRepository.CancelUpgrade(
             this.DeviceAccountId,
             (long)request.build_id
         );
 
-        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
+        fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId)
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -418,7 +437,9 @@ public class FortController : DragaliaControllerBase
     [HttpPost("levelup_end")]
     public async Task<DragaliaResult> LevelUpEnd(FortLevelupEndRequest request)
     {
-        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
+        FortDetail fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.GetFortDetails()
+        );
 
         FortBonusList bonusList = await bonusService.GetBonusList();
         IQueryable<DbFortBuild> builds = this.fortRepository.Builds;
@@ -434,9 +455,10 @@ public class FortController : DragaliaControllerBase
         // Update values
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
-        this.fortRepository.UpdateBuild(build);
 
-        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
+        fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId)
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -467,12 +489,13 @@ public class FortController : DragaliaControllerBase
         DbPlayerUserData userData = await this.userDataRepository
             .GetUserData(this.DeviceAccountId)
             .FirstAsync();
+        FortDetail fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.GetFortDetails()
+        );
 
         IQueryable<DbPlayerMaterial> userMaterials = this.inventoryRepository.GetMaterials(
             this.DeviceAccountId
         );
-
-        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
 
         // Check Carpenter available
         if (fortDetail.working_carpenter_num > fortDetail.carpenter_num)
@@ -505,10 +528,11 @@ public class FortController : DragaliaControllerBase
         build.Level += plantDetail.NeedLevel;
         build.BuildStartDate = startDate;
         build.BuildEndDate = endDate;
-        this.fortRepository.UpdateBuild(build);
 
         // Increment carpenter usage
-        fortDetail = await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId);
+        fortDetail = this.mapper.Map<FortDetail>(
+            await this.fortRepository.UpdateCarpenterUsage(this.DeviceAccountId)
+        );
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -534,7 +558,6 @@ public class FortController : DragaliaControllerBase
     [HttpPost("move")]
     public async Task<DragaliaResult> Move(FortMoveRequest request)
     {
-        FortDetail fortDetail = this.fortRepository.Details.Select(mapper.Map<FortDetail>).First();
         FortBonusList bonusList = await bonusService.GetBonusList();
 
         // Get building
@@ -546,7 +569,6 @@ public class FortController : DragaliaControllerBase
         // Move building to requested coordinate
         build.PositionX = request.after_position_x;
         build.PositionZ = request.after_position_z;
-        this.fortRepository.UpdateBuild(build);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId

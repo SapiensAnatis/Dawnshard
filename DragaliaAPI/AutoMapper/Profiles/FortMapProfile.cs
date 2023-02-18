@@ -10,7 +10,8 @@ public class FortMapProfile : Profile
     {
         this.CreateMap<DbFortBuild, FortPlantList>();
         this.CreateMap<DbFortBuild, BuildList>();
-        this.CreateMap<DbFortDetail, FortDetail>();
+        this.CreateMap<DbFortDetail, FortDetail>()
+            .ForMember(x => x.working_carpenter_num, opts => opts.MapFrom(src => 5));
 
         this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
         this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;

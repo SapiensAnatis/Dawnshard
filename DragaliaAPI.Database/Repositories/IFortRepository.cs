@@ -7,13 +7,12 @@ public interface IFortRepository
 {
     IQueryable<DbFortBuild> GetBuilds(string accountId);
     IQueryable<DbFortBuild> Builds { get; }
-    IQueryable<DbFortDetail> Details { get; }
+    Task<DbFortDetail> GetFortDetails();
     Task<bool> CheckPlantLevel(FortPlants plant, int requiredLevel);
     Task GetFortPlantIdList(IEnumerable<int> fort_plant_id_list);
     Task UpdateFortMaximumCarpenter(string accountId, int carpenter_num);
     Task<DbFortBuild> GetBuilding(string deviceAccountId, long buildId);
     Task AddBuild(DbFortBuild build);
-    void UpdateBuild(DbFortBuild build);
     void DeleteBuild(DbFortBuild build);
     Task<DbFortBuild> UpgradeAtOnce(
         DbPlayerUserData userData,
