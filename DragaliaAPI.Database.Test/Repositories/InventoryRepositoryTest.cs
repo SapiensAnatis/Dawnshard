@@ -77,7 +77,6 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
     public async Task AddMaterialQuantityRange_AddsQuantities()
     {
         await this.inventoryRepository.UpdateQuantity(
-            DeviceAccountId,
             new List<Materials>() { Materials.SunlightOre, Materials.SunlightStone },
             5
         );
