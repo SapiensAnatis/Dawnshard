@@ -11,7 +11,7 @@ public interface IInventoryRepository
     DbPlayerMaterial AddMaterial(string deviceAccountId, Materials type);
     Task<DbPlayerMaterial?> GetMaterial(string deviceAccountId, Materials materialId);
     IQueryable<DbPlayerMaterial> GetMaterials(string deviceAccountId);
-    Task UpdateQuantity(string deviceAccountId, IEnumerable<Materials> list, int quantity);
+    Task UpdateQuantity(IEnumerable<Materials> list, int quantity);
     Task UpdateQuantity(string deviceAccountId, Materials item, int quantity);
     Task<bool> CheckQuantity(IEnumerable<KeyValuePair<Materials, int>> quantityMap);
     Task<bool> CheckQuantity(Materials materialId, int quantity);

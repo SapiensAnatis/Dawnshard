@@ -1,5 +1,10 @@
 [
     {
+        "headline": "Quest drops improvement",
+        "timestamp": 1676678446,
+        "description": "Thanks to data sourced by the Dragalia Lost Wiki, each quest will now drop the correct set of items. This should help you gather materials for weapon upgrading. However, the quantities are still wrong (100 of everything) and they aren't assigned to enemies."
+    },
+    {
         "headline": "Weapon upgrading added",
         "timestamp": 1675896266,
         "description": "It is now possible to craft and upgrade weapons. This should be fully implemented, with materials being taken and passive abilities/weapon skills being levelled up appropriately. Please test this out and speak up if you notice any bugs!"
