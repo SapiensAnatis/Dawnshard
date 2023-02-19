@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using AutoMapper;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -111,7 +112,7 @@ public class SummonService : ISummonService
             if (isDragon)
             {
                 Dragons id = random.NextEnum<Dragons>();
-                while (id == 0)
+                while (id == 0 || DragonConstants.unsummonableDragons.Contains(id))
                     id = random.NextEnum<Dragons>();
 
                 int rarity = MasterAsset.DragonData.Get(id).Rarity;
