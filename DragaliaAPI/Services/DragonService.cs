@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
@@ -20,15 +19,13 @@ public class DragonService : IDragonService
     private readonly IInventoryRepository inventoryRepository;
     private readonly IStoryRepository storyRepository;
     private readonly IUpdateDataService updateDataService;
-    private readonly IMapper mapper;
 
     public DragonService(
         IUserDataRepository userDataRepository,
         IUnitRepository unitRepository,
         IInventoryRepository inventoryRepository,
         IUpdateDataService updateDataService,
-        IStoryRepository storyRepository,
-        IMapper mapper
+        IStoryRepository storyRepository
     )
     {
         this.userDataRepository = userDataRepository;
@@ -36,7 +33,6 @@ public class DragonService : IDragonService
         this.inventoryRepository = inventoryRepository;
         this.storyRepository = storyRepository;
         this.updateDataService = updateDataService;
-        this.mapper = mapper;
     }
 
     public async Task<DragonGetContactDataData> DoDragonGetContactData(
@@ -57,6 +53,7 @@ public class DragonService : IDragonService
                     || x.DragonGiftId == DragonGifts.HeartyStew
                     || x.DragonGiftId == rotatingGift
             )
+            .OrderBy(x => x.DragonGiftId)
             .ToDictionaryAsync(x => x.DragonGiftId);
         IEnumerable<AtgenShopGiftList> giftList = gifts.Values.Select(
             x =>
@@ -123,7 +120,11 @@ public class DragonService : IDragonService
                     RewardReliabilityList? reward = await GetRewardDataForLevel(
                         dragonReliability.Level,
                         dragonData.Rarity,
-                        MasterAsset.DragonStories.Get((int)dragonReliability.DragonId).storyIds,
+                        dragonReliability.DragonId == Dragons.Puppy
+                            ? Array.Empty<int>()
+                            : MasterAsset.DragonStories
+                                .Get((int)dragonReliability.DragonId)
+                                .storyIds,
                         dragonReliability.DragonId == Dragons.Puppy,
                         deviceAccountId
                     );
@@ -223,7 +224,7 @@ public class DragonService : IDragonService
                 }
                 if (levelIndex == 6)
                 {
-                    //TODO: Add Notte's Notes Bonus
+                    //TODO: Add Notte's Nottes Bonus
                 }
             }
             DragonRewardEntityList rewardItem = new DragonRewardEntityList()
@@ -231,6 +232,7 @@ public class DragonService : IDragonService
                 entity_type = EntityTypes.Material,
                 entity_id = (int)rewardMats[levelIndex - 1],
                 entity_quantity = rewardQuantity[levelIndex - 1],
+                //TODO: check for mat limit
                 is_over = 0
             };
             DbPlayerMaterial mat =
@@ -275,6 +277,7 @@ public class DragonService : IDragonService
                 entity_type = EntityTypes.Material,
                 entity_id = (int)rewards[rIndex],
                 entity_quantity = rewardQuantity,
+                //TODO: check for mat limit
                 is_over = 0
             };
             giftPerGift.Add(new(gift, reward));
@@ -380,6 +383,7 @@ public class DragonService : IDragonService
                             ).Quantity += reward.entity_quantity;
                             break;
                     }
+                    //TODO: check for mat limit
                     reward.is_over = 0;
                     tyGifts.Add(reward);
                 }
@@ -421,7 +425,10 @@ public class DragonService : IDragonService
 
         if (dragonReliability == null)
         {
-            throw new DragaliaException(Models.ResultCode.EntityNotFoundError);
+            throw new DragaliaException(
+                Models.ResultCode.EntityNotFoundError,
+                $"DragonReliability {request.dragon_id} not found for DeviceAccountId {deviceAccountId}"
+            );
         }
 
         DragonData dragonData = MasterAsset.DragonData.Get(dragonReliability.DragonId);
@@ -481,16 +488,12 @@ public class DragonService : IDragonService
 
         await unitRepository.SaveChangesAsync();
 
-        IEnumerable<AtgenShopGiftList> giftList = (
-            await DoDragonGetContactData(new(), deviceAccountId)
-        ).shop_gift_list;
-
         return new DragonBuyGiftToSendMultipleData()
         {
             dragon_contact_free_gift_count = 0,
             dragon_gift_reward_list = rewardObjList,
             entity_result = null,
-            shop_gift_list = giftList,
+            shop_gift_list = (await DoDragonGetContactData(new(), deviceAccountId)).shop_gift_list,
             update_data_list = updateDataList
         };
     }
@@ -574,5 +577,464 @@ public class DragonService : IDragonService
             return_gift_list = rewards.First().Item2,
             update_data_list = updateDataList
         };
+    }
+
+    public async Task<DragonBuildupData> DoBuildup(
+        DragonBuildupRequest request,
+        string deviceAccountId
+    )
+    {
+        IEnumerable<Materials> matIds = request.grow_material_list
+            .Where(x => x.type == EntityTypes.Material)
+            .Select(x => x.id)
+            .Cast<Materials>();
+
+        Dictionary<Materials, DbPlayerMaterial> dbMats = await this.inventoryRepository
+            .GetMaterials(deviceAccountId)
+            .Where(
+                dbMat =>
+                    matIds.Contains(dbMat.MaterialId)
+                    || dbMat.MaterialId == Materials.FortifyingDragonscale
+                    || dbMat.MaterialId == Materials.AmplifyingDragonscale
+            )
+            .ToDictionaryAsync(dbMat => dbMat.MaterialId);
+        foreach (GrowMaterialList mat in request.grow_material_list)
+        {
+            if (mat.quantity < 0)
+            {
+                throw new DragaliaException(
+                    ResultCode.CommonMaterialShort,
+                    "Invalid quantity for MaterialList"
+                );
+            }
+            if (
+                mat.type == EntityTypes.Material
+                && (
+                    !dbMats.ContainsKey((Materials)mat.id)
+                    || dbMats[(Materials)mat.id].Quantity < mat.quantity
+                )
+            )
+            {
+                throw new DragaliaException(
+                    ResultCode.CommonMaterialShort,
+                    "Invalid quantity for MaterialList"
+                );
+            }
+        }
+        DbPlayerDragonData playerDragonData = await unitRepository
+            .GetAllDragonData(deviceAccountId)
+            .FirstAsync(dragon => (ulong)dragon.DragonKeyId == request.base_dragon_key_id);
+
+        Dictionary<int, int> usedMaterials = new();
+        await DragonLevelUp(
+            request.grow_material_list,
+            playerDragonData,
+            usedMaterials,
+            deviceAccountId
+        );
+        foreach (KeyValuePair<int, int> mat in usedMaterials)
+        {
+            dbMats[(Materials)mat.Key].Quantity -= mat.Value;
+        }
+        await unitRepository.RemoveDragons(
+            deviceAccountId,
+            request.grow_material_list
+                .Where(x => x.type == EntityTypes.Dragon)
+                .Select(x => (long)x.id)
+        );
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(deviceAccountId);
+
+        await unitRepository.SaveChangesAsync();
+
+        return new DragonBuildupData(
+            updateDataList,
+            new DeleteDataList(
+                request.grow_material_list
+                    .Where(x => x.type == EntityTypes.Dragon)
+                    .Select(x => new AtgenDeleteDragonList() { dragon_key_id = (ulong)x.id }),
+                new List<AtgenDeleteTalismanList>(),
+                new List<AtgenDeleteWeaponList>(),
+                new List<AtgenDeleteAmuletList>()
+            ),
+            new()
+        );
+    }
+
+    private async Task DragonLevelUp(
+        IEnumerable<GrowMaterialList> materials,
+        DbPlayerDragonData playerDragonData,
+        Dictionary<int, int> usedMaterials,
+        string deviceAccountId
+    )
+    {
+        //TODO: For now we'll trust the client to not allow leveling up/enhancing beyond allowed limits
+        byte maxLevel = DragonConstants.GetMaxLevelFor(
+            MasterAsset.DragonData.Get(playerDragonData.DragonId).Rarity,
+            playerDragonData.LimitBreakCount
+        );
+        int gainedHpAugs = 0;
+        int gainedAtkAugs = 0;
+        foreach (GrowMaterialList materialList in materials)
+        {
+            if (materialList.type == EntityTypes.Material)
+            {
+                switch ((Materials)materialList.id)
+                {
+                    case Materials.Dragonfruit:
+                    case Materials.RipeDragonfruit:
+                    case Materials.SucculentDragonfruit:
+                        playerDragonData.Exp = Math.Min(
+                            playerDragonData.Exp
+                                + (
+                                    UpgradeMaterials.buildupXpValues[(Materials)materialList.id]
+                                    * materialList.quantity
+                                ),
+                            DragonConstants.XpLimits[maxLevel - 1]
+                        );
+                        break;
+                    case Materials.AmplifyingDragonscale:
+                        playerDragonData.AttackPlusCount = (byte)
+                            Math.Min(
+                                playerDragonData.AttackPlusCount + materialList.quantity,
+                                DragonConstants.MaxAtkEnhance
+                            );
+                        break;
+                    case Materials.FortifyingDragonscale:
+                        playerDragonData.HpPlusCount = (byte)
+                            Math.Min(
+                                playerDragonData.HpPlusCount + materialList.quantity,
+                                DragonConstants.MaxHpEnhance
+                            );
+                        break;
+                    default:
+                        throw new DragaliaException(
+                            ResultCode.DragonGrowNotBoostMaterial,
+                            "Invalid MaterialList"
+                        );
+                }
+                if (!usedMaterials.ContainsKey((int)materialList.id))
+                {
+                    usedMaterials.Add((int)materialList.id, 0);
+                }
+                usedMaterials[(int)materialList.id] += materialList.quantity;
+            }
+            else if (materialList.type == EntityTypes.Dragon)
+            {
+                playerDragonData.Exp = Math.Min(
+                    playerDragonData.Exp
+                        + UpgradeMaterials.dragonBuildupXp[
+                            MasterAsset.DragonData.Get(playerDragonData.DragonId).Rarity
+                        ],
+                    DragonConstants.XpLimits[maxLevel - 1]
+                );
+                DbPlayerDragonData dragonSacrifice = await unitRepository
+                    .GetAllDragonData(deviceAccountId)
+                    .Where(x => x.DragonKeyId == materialList.id)
+                    .FirstAsync();
+                gainedHpAugs += dragonSacrifice.HpPlusCount;
+                gainedAtkAugs += dragonSacrifice.AttackPlusCount;
+            }
+        }
+        while (
+            playerDragonData.Level < maxLevel
+            && playerDragonData.Level < DragonConstants.XpLimits.Length
+            && !(playerDragonData.Exp < DragonConstants.XpLimits[playerDragonData.Level])
+        )
+        {
+            playerDragonData.Level++;
+        }
+
+        int gainedDragonHpAugs = Math.Min(
+            DragonConstants.MaxHpEnhance - playerDragonData.HpPlusCount,
+            gainedHpAugs
+        );
+        playerDragonData.HpPlusCount += (byte)gainedDragonHpAugs;
+        gainedHpAugs -= gainedDragonHpAugs;
+        if (gainedHpAugs > 0)
+        {
+            if (!usedMaterials.TryAdd((int)Materials.FortifyingDragonscale, -gainedHpAugs))
+            {
+                usedMaterials[(int)Materials.FortifyingDragonscale] -= gainedHpAugs;
+            }
+        }
+
+        int gainedDragonAtkAugs = Math.Min(
+            DragonConstants.MaxAtkEnhance - playerDragonData.AttackPlusCount,
+            gainedAtkAugs
+        );
+        playerDragonData.AttackPlusCount += (byte)gainedDragonAtkAugs;
+        gainedAtkAugs -= gainedDragonAtkAugs;
+        if (gainedAtkAugs > 0)
+        {
+            if (!usedMaterials.TryAdd((int)Materials.AmplifyingDragonscale, -gainedAtkAugs))
+            {
+                usedMaterials[(int)Materials.AmplifyingDragonscale] -= gainedAtkAugs;
+            }
+        }
+    }
+
+    public async Task<DragonResetPlusCountData> DoDragonResetPlusCount(
+        DragonResetPlusCountRequest request,
+        string deviceAccountId,
+        long viewerId
+    )
+    {
+        DbPlayerDragonData playerDragonData = await this.unitRepository
+            .GetAllDragonData(deviceAccountId)
+            .FirstAsync(dragon => (ulong)dragon.DragonKeyId == request.dragon_key_id);
+        Materials mat =
+            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
+                ? Materials.AmplifyingDragonscale
+                : Materials.FortifyingDragonscale;
+
+        DbPlayerMaterial upgradeMat =
+            await inventoryRepository.GetMaterial(deviceAccountId, mat)
+            ?? inventoryRepository.AddMaterial(deviceAccountId, mat);
+
+        //DbPlayerCurrency playerCurrency =
+        //    await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Rupies)
+        //    ?? throw new DragaliaException(
+        //        ResultCode.CommonMaterialShort,
+        //        "Insufficient Rupies for reset"
+        //    );
+        DbPlayerUserData userData = await userDataRepository.GetUserData(viewerId).FirstAsync();
+        int cost =
+            20000
+            * (
+                (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
+                    ? playerDragonData.AttackPlusCount
+                    : playerDragonData.HpPlusCount
+            );
+        //if (playerCurrency.Quantity < cost)
+        if (userData.Coin < cost)
+        {
+            throw new DragaliaException(
+                ResultCode.CommonMaterialShort,
+                "Insufficient Rupies for reset"
+            );
+        }
+        //playerCurrency.Quantity -= cost;
+        userData.Coin -= cost;
+
+        upgradeMat.Quantity +=
+            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
+                ? playerDragonData.AttackPlusCount
+                : playerDragonData.HpPlusCount;
+        _ =
+            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
+                ? playerDragonData.AttackPlusCount = 0
+                : playerDragonData.HpPlusCount = 0;
+
+        UpdateDataList updateDataList = updateDataService.GetUpdateDataList(deviceAccountId);
+
+        await userDataRepository.SaveChangesAsync();
+
+        return new DragonResetPlusCountData(updateDataList, new());
+    }
+
+    public async Task<DragonLimitBreakData> DoDragonLimitBreak(
+        DragonLimitBreakRequest request,
+        string deviceAccountId
+    )
+    {
+        DbPlayerDragonData playerDragonData =
+            await this.unitRepository
+                .GetAllDragonData(deviceAccountId)
+                .Where(x => x.DragonKeyId == (long)request.base_dragon_key_id)
+                .FirstAsync()
+            ?? throw new DragaliaException(
+                ResultCode.EntityNotFoundError,
+                "No such dragon in inventory"
+            );
+        ;
+
+        DragonData dragonData = MasterAsset.DragonData.Get(playerDragonData.DragonId);
+
+        playerDragonData.LimitBreakCount = (byte)
+            request.limit_break_grow_list.Last().limit_break_count;
+
+        IEnumerable<LimitBreakGrowList> deleteDragons = request.limit_break_grow_list.Where(
+            x => (DragonLimitBreakMatTypes)x.limit_break_item_type == DragonLimitBreakMatTypes.Dupe
+        );
+
+        if (deleteDragons.Any())
+        {
+            await unitRepository.RemoveDragons(
+                deviceAccountId,
+                deleteDragons.Select(x => (long)x.target_id)
+            );
+        }
+
+        int stonesToSpend = request.limit_break_grow_list
+            .Where(
+                x =>
+                    (DragonLimitBreakMatTypes)x.limit_break_item_type
+                    == DragonLimitBreakMatTypes.Stone
+            )
+            .Count();
+        if (stonesToSpend > 0)
+        {
+            DbPlayerMaterial stones =
+                await inventoryRepository.GetMaterial(
+                    deviceAccountId,
+                    dragonData.Rarity == 4 ? Materials.MoonlightStone : Materials.SunlightStone
+                )
+                ?? throw new DragaliaException(
+                    ResultCode.CommonStoneShort,
+                    $"Not enough stones to spend"
+                );
+            if (stones.Quantity < stonesToSpend)
+            {
+                throw new DragaliaException(
+                    ResultCode.CommonStoneShort,
+                    $"Not enough stones to spend"
+                );
+            }
+            stones.Quantity -= stonesToSpend;
+        }
+
+        int spheresConsumed =
+            request.limit_break_grow_list
+                .Where(
+                    x =>
+                        (DragonLimitBreakMatTypes)x.limit_break_item_type
+                        == DragonLimitBreakMatTypes.Spheres
+                )
+                .Count() * 50;
+
+        int lb5SpheresConsumed =
+            request.limit_break_grow_list
+                .Where(
+                    x =>
+                        (DragonLimitBreakMatTypes)x.limit_break_item_type
+                        == DragonLimitBreakMatTypes.SpheresLB5
+                )
+                .Count() * (dragonData.LimitBreakId == DragonLimitBreakTypes.Normal ? 50 : 120);
+        if (spheresConsumed + lb5SpheresConsumed > 0)
+        {
+            DbPlayerMaterial spheres =
+                await inventoryRepository.GetMaterial(
+                    deviceAccountId,
+                    dragonData.LimitBreakMaterialId
+                )
+                ?? throw new DragaliaException(
+                    ResultCode.CommonMaterialShort,
+                    "Not enough spheres to spend"
+                );
+            if (spheres.Quantity < spheresConsumed + lb5SpheresConsumed)
+            {
+                throw new DragaliaException(
+                    ResultCode.CommonMaterialShort,
+                    "Not enough spheres to spend"
+                );
+            }
+            spheres.Quantity -= spheresConsumed + lb5SpheresConsumed;
+        }
+
+        UpdateDataList udl = updateDataService.GetUpdateDataList(deviceAccountId);
+
+        await unitRepository.SaveChangesAsync();
+
+        return new DragonLimitBreakData()
+        {
+            delete_data_list = new DeleteDataList()
+            {
+                delete_dragon_list = deleteDragons.Select(
+                    x => new AtgenDeleteDragonList() { dragon_key_id = x.target_id }
+                )
+            },
+            update_data_list = udl,
+            entity_result = null
+        };
+    }
+
+    public async Task<DragonSetLockData> DoDragonSetLock(
+        DragonSetLockRequest request,
+        string deviceAccountId
+    )
+    {
+        (
+            await this.unitRepository
+                .GetAllDragonData(deviceAccountId)
+                .SingleAsync(dragon => (ulong)dragon.DragonKeyId == request.dragon_key_id)
+            ?? throw new DragaliaException(
+                ResultCode.EntityNotFoundError,
+                $"No dragon with KeyId: {request.dragon_key_id}"
+            )
+        ).IsLock = request.is_lock;
+
+        UpdateDataList updateDataList = updateDataService.GetUpdateDataList(deviceAccountId);
+
+        await userDataRepository.SaveChangesAsync();
+        return new DragonSetLockData(updateDataList, new());
+    }
+
+    public async Task<DragonSellData> DoDragonSell(
+        DragonSellRequest request,
+        string deviceAccountId,
+        long viewerId
+    )
+    {
+        List<Dragons> selectedPlayerDragons = await unitRepository
+            .GetAllDragonData(deviceAccountId)
+            .Where(
+                x =>
+                    x.DeviceAccountId == deviceAccountId
+                    && request.dragon_key_id_list.Select(x => (long)x).Contains(x.DragonKeyId)
+            )
+            .Select(x => x.DragonId)
+            .ToListAsync();
+        if (selectedPlayerDragons.Count < request.dragon_key_id_list.Count())
+        {
+            throw new DragaliaException(
+                Models.ResultCode.DragonSellNotFound,
+                "Could not find all received dragonKeyIds to sell"
+            );
+        }
+        if (selectedPlayerDragons.Contains(Dragons.Puppy))
+        {
+            throw new DragaliaException(
+                Models.ResultCode.DragonSellLocked,
+                "Invalid sale attempt of the puppy"
+            );
+        }
+
+        IEnumerable<DragonData> dragonData = MasterAsset.DragonData.Enumerable.Where(
+            x => selectedPlayerDragons.Contains(x.Id)
+        );
+
+        //DbPlayerCurrency rupies = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Rupies) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Rupies);
+        //DbPlayerCurrency dew = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Dew) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Dew);
+        DbPlayerUserData userData = await userDataRepository.GetUserData(viewerId).FirstAsync();
+
+        foreach (DragonData dd in dragonData)
+        {
+            //rupies.Quantity += dd.SellCoin;
+            //dew.Quantity += dd.SellDewPoint;
+            userData.Coin += dd.SellCoin;
+            userData.DewPoint += dd.SellDewPoint;
+        }
+
+        await unitRepository.RemoveDragons(
+            deviceAccountId,
+            request.dragon_key_id_list.Select(x => (long)x)
+        );
+
+        UpdateDataList updateDataList = updateDataService.GetUpdateDataList(deviceAccountId);
+
+        await userDataRepository.SaveChangesAsync();
+        return new DragonSellData(
+            new DeleteDataList(
+                request.dragon_key_id_list.Select(
+                    x => new AtgenDeleteDragonList() { dragon_key_id = x }
+                ),
+                new List<AtgenDeleteTalismanList>(),
+                new List<AtgenDeleteWeaponList>(),
+                new List<AtgenDeleteAmuletList>()
+            ),
+            updateDataList,
+            new()
+        );
     }
 }
