@@ -96,6 +96,7 @@ builder.Services
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<IBonusService, BonusService>()
     .AddScoped<IWeaponService, WeaponService>()
+    .AddScoped<IFortService, FortService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>()
     .AddHttpClient<IBaasRequestHelper, BaasRequestHelper>();

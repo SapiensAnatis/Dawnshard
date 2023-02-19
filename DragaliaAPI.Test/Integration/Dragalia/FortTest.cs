@@ -1,7 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using FluentAssertions.Equivalency;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
 
@@ -106,11 +105,11 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task BuildAtOnce_ReturnsValidResult()
     {
-        ulong BuildId = 43452432344; // Comically large ID
+        long BuildId = 43452432344; // Comically large ID
         this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
-                BuildId = (long)BuildId,
+                BuildId = BuildId,
                 DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 PlantId = FortPlants.StaffDojo,
                 Level = 1,
@@ -127,11 +126,11 @@ public class FortTest : IntegrationTestBase
         FortBuildAtOnceData response = (
             await client.PostMsgpack<FortBuildAtOnceData>(
                 "/fort/build_at_once",
-                new FortBuildAtOnceRequest(BuildId, (int)PaymentTypes.Wyrmite)
+                new FortBuildAtOnceRequest(BuildId, PaymentTypes.Wyrmite)
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == BuildId);
+        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
         // The level changes when building starts, not when it ends, so no need to check it here
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -140,7 +139,7 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task BuildCancel_ReturnsValidResult()
     {
-        ulong BuildId = 43452432345;
+        long BuildId = 43452432345;
         this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
@@ -165,7 +164,7 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == BuildId);
+        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.level.Should().Be(1); // Level should have decreased
@@ -174,7 +173,7 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task BuildEnd_ReturnsValidResult()
     {
-        ulong BuildId = 43452432346;
+        long BuildId = 43452432346;
         this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
@@ -199,7 +198,7 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == BuildId);
+        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
     }
@@ -233,7 +232,7 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelupAtOnce_ReturnsValidResult()
     {
-        ulong BuildId = 43452432348;
+        long BuildId = 43452432348;
         this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
@@ -254,11 +253,11 @@ public class FortTest : IntegrationTestBase
         FortLevelupAtOnceData response = (
             await client.PostMsgpack<FortLevelupAtOnceData>(
                 "/fort/levelup_at_once",
-                new FortLevelupAtOnceRequest(BuildId, (int)PaymentTypes.Wyrmite)
+                new FortLevelupAtOnceRequest(BuildId, PaymentTypes.Wyrmite)
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == BuildId);
+        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
     }
@@ -266,7 +265,7 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelUpCancel_ReturnsValidResult()
     {
-        ulong BuildId = 43452432349;
+        long BuildId = 43452432349;
         this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
@@ -291,7 +290,7 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == BuildId);
+        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.level.Should().Be(1); // Level should have decreased
@@ -300,7 +299,7 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelUpEnd_ReturnsValidResult()
     {
-        ulong BuildId = 43452432350;
+        long BuildId = 43452432350;
         this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
@@ -325,7 +324,7 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == BuildId);
+        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
     }
@@ -333,7 +332,7 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelUpStart_ReturnsValidResult()
     {
-        ulong BuildId = 43452432351;
+        long BuildId = 43452432351;
         this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
@@ -358,7 +357,7 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == BuildId);
+        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
         result.build_start_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().BeAfter(result.build_start_date);
@@ -368,7 +367,7 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task Move_ReturnsValidResult()
     {
-        ulong BuildId = 43452432362;
+        long BuildId = 43452432362;
         this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
@@ -395,7 +394,7 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == BuildId);
+        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
         result.position_x.Should().Be(ExpectedPositionX);
         result.position_z.Should().Be(ExpectedPositionZ);
     }

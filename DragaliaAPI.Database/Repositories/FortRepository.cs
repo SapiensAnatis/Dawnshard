@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -9,8 +8,6 @@ namespace DragaliaAPI.Database.Repositories;
 
 public class FortRepository : IFortRepository
 {
-    public const int MaximumCarpenterNum = 5;
-
     private readonly ApiContext apiContext;
     private readonly IPlayerDetailsService playerDetailsService;
     private readonly ILogger<FortRepository> logger;
@@ -26,9 +23,11 @@ public class FortRepository : IFortRepository
         this.logger = logger;
     }
 
-    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
-    public IQueryable<DbFortBuild> GetBuilds(string accountId) =>
-        this.apiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == accountId);
+    //[Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
+    //public async Task<IEnumerable<DbFortBuild>> GetBuilds() =>
+    //    await this.apiContext.PlayerFortBuilds
+    //        .Where(x => x.DeviceAccountId == this.playerDetailsService.AccountId)
+    //        .ToListAsync();
 
     public IQueryable<DbFortBuild> Builds =>
         this.apiContext.PlayerFortBuilds.Where(
@@ -68,25 +67,28 @@ public class FortRepository : IFortRepository
         // What do
     }
 
-    public async Task UpdateFortMaximumCarpenter(string accountId, int carpenterNum)
+    public async Task UpdateFortMaximumCarpenter(int carpenterNum)
     {
         DbFortDetail fortDetail = await apiContext.PlayerFortDetails
-            .Where(x => x.DeviceAccountId == accountId)
+            .Where(x => x.DeviceAccountId == this.playerDetailsService.AccountId)
             .FirstAsync();
         fortDetail.CarpenterNum = carpenterNum;
         apiContext.Entry(fortDetail).State = EntityState.Modified;
     }
 
-    public async Task<DbFortBuild> GetBuilding(string accountId, long buildId)
+    public async Task<DbFortBuild> GetBuilding(long buildId)
     {
         DbFortBuild? fort = await apiContext.PlayerFortBuilds
-            .Where(x => x.DeviceAccountId == accountId && x.BuildId == buildId)
+            .Where(
+                x =>
+                    x.DeviceAccountId == this.playerDetailsService.AccountId && x.BuildId == buildId
+            )
             .FirstOrDefaultAsync();
 
         if (fort == null)
         {
             throw new InvalidOperationException(
-                $"Could not get building {buildId} for account {accountId}."
+                $"Could not get building {buildId} for account {this.playerDetailsService.AccountId}."
             );
         }
 
@@ -105,13 +107,12 @@ public class FortRepository : IFortRepository
 
     public async Task<DbFortBuild> UpgradeAtOnce(
         DbPlayerUserData userData,
-        string accountId,
         long buildId,
         PaymentTypes paymentType
     )
     {
         // Get building
-        DbFortBuild build = await GetBuilding(accountId, buildId);
+        DbFortBuild build = await GetBuilding(buildId);
 
         if (build.BuildEndDate == DateTimeOffset.UnixEpoch)
         {
@@ -139,34 +140,11 @@ public class FortRepository : IFortRepository
         return build;
     }
 
-    public async Task<DbFortBuild> CancelUpgrade(string accountId, long buildId)
-    {
-        // Get building
-        DbFortBuild build = await this.GetBuilding(accountId, buildId);
-
-        if (build.BuildEndDate == DateTimeOffset.UnixEpoch)
-        {
-            throw new InvalidOperationException($"This building is not currently being upgraded.");
-        }
-
-        // Cancel build
-        build.Level--;
-        build.BuildStartDate = DateTimeOffset.UnixEpoch;
-        build.BuildEndDate = DateTimeOffset.UnixEpoch;
-
-        if (build.Level == 0)
-        {
-            this.DeleteBuild(build);
-        }
-
-        return build;
-    }
-
-    public async Task<DbFortDetail> UpdateCarpenterUsage(string accountId)
+    public async Task<DbFortDetail> UpdateCarpenterUsage()
     {
         int workingCarpenter = 0;
         List<DbFortBuild> AccountBuilds = Builds
-            .Where(x => x.DeviceAccountId == accountId)
+            .Where(x => x.DeviceAccountId == this.playerDetailsService.AccountId)
             .ToList();
         await Parallel.ForEachAsync(
             AccountBuilds,
@@ -177,16 +155,13 @@ public class FortRepository : IFortRepository
             }
         );
 
-        return await this.UpdateFortWorkingCarpenter(accountId, workingCarpenter);
+        return await this.UpdateFortWorkingCarpenter(workingCarpenter);
     }
 
-    private async Task<DbFortDetail> UpdateFortWorkingCarpenter(
-        string accountId,
-        int working_carpenter_num
-    )
+    private async Task<DbFortDetail> UpdateFortWorkingCarpenter(int working_carpenter_num)
     {
         DbFortDetail fortDetail = await apiContext.PlayerFortDetails
-            .Where(x => x.DeviceAccountId == accountId)
+            .Where(x => x.DeviceAccountId == this.playerDetailsService.AccountId)
             .FirstAsync();
 
         fortDetail.WorkingCarpenterNum = working_carpenter_num;
