@@ -31,4 +31,15 @@ jobs:
       - name: Install dependencies
         run: dotnet restore ${{ matrix.project }}
       - name: Test
-        run: dotnet test ${{ matrix.project }} --no-restore
+        run: >
+          dotnet test ${{ matrix.project }} 
+          --no-restore 
+          -p:CollectCoverage=true 
+          -p:CoverletOutputFormat="json" 
+          -p:CoverletOutput=${{ matrix.project }}_coverage.json
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ${{ matrix.project }}_coverage.json
+          name: codecov ${{ matrix.project }}
+          
