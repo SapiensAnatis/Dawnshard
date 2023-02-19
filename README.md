@@ -1,6 +1,6 @@
 # DragaliaAPI
 
-[![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml/badge.svg?branch=develop)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml) [![codecov](https://codecov.io/gh/SapiensAnatis/DragaliaAPI/branch/master/graph/badge.svg?token=RH67O12E4E)](https://codecov.io/gh/SapiensAnatis/DragaliaAPI)
+[![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml/badge.svg?branch=develop)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml) ![Codecov](https://img.shields.io/codecov/c/github/SapiensAnatis/DragaliaAPI) ![Docker Image Version (latest by date)](https://img.shields.io/docker/v/sapiensanatis/dragalia-api?label=docker%20image&logo=docker)
 
 DragaliaAPI is a server emulator for Dragalia Lost.
 
