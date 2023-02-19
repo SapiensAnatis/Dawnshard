@@ -36,10 +36,11 @@ jobs:
           --no-restore 
           -p:CollectCoverage=true 
           -p:CoverletOutputFormat="json" 
-          -p:CoverletOutput=${{ matrix.project }}_coverage.json
+          -p:CoverletOutput="coverage_report.json"
+          -p:Exclude=\"[*.Test]*,[DragaliaAPI.Test.Utils]*\"
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: ${{ matrix.project }}_coverage.json
+          files: ${{matrix.project}}/coverage_report.json
           name: codecov ${{ matrix.project }}
           
