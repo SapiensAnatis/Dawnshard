@@ -135,5 +135,6 @@ public class ApiContext : DbContext
     public DbSet<DbWeaponSkin> PlayerWeaponSkins { get; set; }
 
     public DbSet<DbWeaponPassiveAbility> PlayerPassiveAbilities { get; set; }
-    public DbSet<DbPlayerDragonGift> PlayerDragonGifts { get; set; } = null!;
+
+    public DbSet<DbPlayerDragonGift> PlayerDragonGifts { get; set; }
 }

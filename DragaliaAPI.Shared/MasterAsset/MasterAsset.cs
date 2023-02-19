@@ -70,11 +70,15 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
         new("QuestDrops.json", x => x.QuestId);
 
-    private static readonly Lazy<MasterAssetData<int, StoryData>> _DragonStories =
-        new(() => new("DragonStories.json", x => x.id));
-    public static MasterAssetData<int, StoryData> DragonStories => _DragonStories.Value;
+    /// <summary>
+    /// Dragon StoryId Arrays indexed by DragonId
+    /// </summary>
+    public static MasterAssetData<int, StoryData> DragonStories =>
+        new("DragonStories.json", x => x.id);
 
-    private static readonly Lazy<MasterAssetData<int, StoryData>> _CharaStories =
-        new(() => new("CharaStories.json", x => x.id));
-    public static MasterAssetData<int, StoryData> CharaStories => _CharaStories.Value;
+    /// <summary>
+    /// Character StoryId Arrays indexed by CharaId
+    /// </summary>
+    public static MasterAssetData<int, StoryData> CharaStories =>
+        new("CharaStories.json", x => x.id);
 }
