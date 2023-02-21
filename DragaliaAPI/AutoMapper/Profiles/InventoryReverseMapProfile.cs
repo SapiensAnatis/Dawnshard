@@ -12,6 +12,7 @@ public class InventoryReverseMapProfile : Profile
         this.AddGlobalIgnore("Owner");
 
         this.CreateMap<MaterialList, DbPlayerMaterial>();
+        this.CreateMap<DragonGiftList, DbPlayerDragonGift>();
 
         this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
         this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;

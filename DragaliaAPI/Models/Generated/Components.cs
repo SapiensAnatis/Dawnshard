@@ -5405,10 +5405,10 @@ public class DmodeStoryList
 [MessagePackObject(true)]
 public class DragonGiftList
 {
-    public int dragon_gift_id { get; set; }
+    public DragonGifts dragon_gift_id { get; set; }
     public int quantity { get; set; }
 
-    public DragonGiftList(int dragon_gift_id, int quantity)
+    public DragonGiftList(DragonGifts dragon_gift_id, int quantity)
     {
         this.dragon_gift_id = dragon_gift_id;
         this.quantity = quantity;
