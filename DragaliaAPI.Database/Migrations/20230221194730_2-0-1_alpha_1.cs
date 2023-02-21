@@ -5,7 +5,7 @@
 namespace DragaliaAPI.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class develop6 : Migration
+    public partial class _201alpha1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,34 +14,29 @@ namespace DragaliaAPI.Database.Migrations
                 name: "AddMaxLevel",
                 table: "PlayerCharaData");
 
-            migrationBuilder.RenameColumn(
-                name: "State",
-                table: "PlayerStoryState",
-                newName: "StoryState");
-
             migrationBuilder.CreateTable(
                 name: "PlayerDragonGift",
                 columns: table => new
                 {
                     DeviceAccountId = table.Column<string>(type: "text", nullable: false),
                     DragonGiftId = table.Column<int>(type: "integer", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false),
-                    OwnerAccountId = table.Column<string>(type: "text", nullable: true)
+                    Quantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PlayerDragonGift", x => new { x.DeviceAccountId, x.DragonGiftId });
                     table.ForeignKey(
-                        name: "FK_PlayerDragonGift_Players_OwnerAccountId",
-                        column: x => x.OwnerAccountId,
+                        name: "FK_PlayerDragonGift_Players_DeviceAccountId",
+                        column: x => x.DeviceAccountId,
                         principalTable: "Players",
-                        principalColumn: "AccountId");
+                        principalColumn: "AccountId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlayerDragonGift_OwnerAccountId",
+                name: "IX_PlayerDragonGift_DeviceAccountId",
                 table: "PlayerDragonGift",
-                column: "OwnerAccountId");
+                column: "DeviceAccountId");
         }
 
         /// <inheritdoc />
@@ -49,11 +44,6 @@ namespace DragaliaAPI.Database.Migrations
         {
             migrationBuilder.DropTable(
                 name: "PlayerDragonGift");
-
-            migrationBuilder.RenameColumn(
-                name: "StoryState",
-                table: "PlayerStoryState",
-                newName: "State");
 
             migrationBuilder.AddColumn<byte>(
                 name: "AddMaxLevel",

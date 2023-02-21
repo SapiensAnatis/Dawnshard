@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230207152134_develop_7")]
-    partial class develop7
+    [Migration("20230221194730_2-0-1_alpha_1")]
+    partial class _201alpha1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -939,6 +939,21 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerWeapons");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponPassiveAbility", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("WeaponPassiveAbilityId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DeviceAccountId", "WeaponPassiveAbilityId");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("PlayerPassiveAbilities");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponSkin", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -1158,6 +1173,17 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponPassiveAbility", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany("WeaponPassiveAbilityList")
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponSkin", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
@@ -1209,6 +1235,8 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("UserSummonList");
 
                     b.Navigation("WeaponBodyList");
+
+                    b.Navigation("WeaponPassiveAbilityList");
 
                     b.Navigation("WeaponSkinList");
                 });

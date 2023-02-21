@@ -34,6 +34,8 @@ public class DbPlayerCharaData : IDbHasAccountId
     [Column("Level")]
     public byte Level { get; set; } = 1;
 
+    // Divides unlocked node count by nodes/limit breaks that increase max Level
+    // Only if the unlockCount is equal or higher than the divisor the quotient will return a 1, adding 5 levels for that step
     [NotMapped]
     public byte AdditionalMaxLevel
     {

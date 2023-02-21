@@ -97,9 +97,8 @@ public class DragonService : IDragonService
                     + (int)(
                         DragonConstants.favorVals[enumerator.Current.Item1]
                         * (
-                            dragonData.FavoriteType != null
-                            && DragonConstants.rotatingGifts[(int)dragonData.FavoriteType]
-                                == enumerator.Current.Item1
+                            DragonConstants.rotatingGifts[(int)dragonData.FavoriteType]
+                            == enumerator.Current.Item1
                                 ? DragonConstants.favMulti
                                 : 1
                         )
@@ -216,10 +215,6 @@ public class DragonService : IDragonService
                         dragonStories[nextStoryUnlockIndex]
                     );
                     reward.is_release_story = 1;
-                    if (levelIndex == 3)
-                    {
-                        //TODO: Add Epithet to account
-                    }
                     return reward;
                 }
                 if (levelIndex == 6)
@@ -399,9 +394,7 @@ public class DragonService : IDragonService
         string deviceAccountId
     )
     {
-        DbPlayerUserData userData = await userDataRepository
-            .GetUserData(deviceAccountId)
-            .FirstAsync();
+        DbPlayerUserData userData = await userDataRepository.LookupUserData();
         //DbPlayerCurrency rupies = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Rupies) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Rupies);
 
         int totalCost = request.dragon_gift_id_list
@@ -776,8 +769,7 @@ public class DragonService : IDragonService
 
     public async Task<DragonResetPlusCountData> DoDragonResetPlusCount(
         DragonResetPlusCountRequest request,
-        string deviceAccountId,
-        long viewerId
+        string deviceAccountId
     )
     {
         DbPlayerDragonData playerDragonData = await this.unitRepository
@@ -798,7 +790,7 @@ public class DragonService : IDragonService
         //        ResultCode.CommonMaterialShort,
         //        "Insufficient Rupies for reset"
         //    );
-        DbPlayerUserData userData = await userDataRepository.GetUserData(viewerId).FirstAsync();
+        DbPlayerUserData userData = await userDataRepository.LookupUserData();
         int cost =
             20000
             * (
@@ -957,7 +949,7 @@ public class DragonService : IDragonService
         (
             await this.unitRepository
                 .GetAllDragonData(deviceAccountId)
-                .SingleAsync(dragon => (ulong)dragon.DragonKeyId == request.dragon_key_id)
+                .SingleOrDefaultAsync(dragon => (ulong)dragon.DragonKeyId == request.dragon_key_id)
             ?? throw new DragaliaException(
                 ResultCode.EntityNotFoundError,
                 $"No dragon with KeyId: {request.dragon_key_id}"
@@ -972,8 +964,7 @@ public class DragonService : IDragonService
 
     public async Task<DragonSellData> DoDragonSell(
         DragonSellRequest request,
-        string deviceAccountId,
-        long viewerId
+        string deviceAccountId
     )
     {
         List<Dragons> selectedPlayerDragons = await unitRepository
@@ -992,6 +983,7 @@ public class DragonService : IDragonService
                 "Could not find all received dragonKeyIds to sell"
             );
         }
+
         if (selectedPlayerDragons.Contains(Dragons.Puppy))
         {
             throw new DragaliaException(
@@ -1006,7 +998,7 @@ public class DragonService : IDragonService
 
         //DbPlayerCurrency rupies = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Rupies) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Rupies);
         //DbPlayerCurrency dew = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Dew) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Dew);
-        DbPlayerUserData userData = await userDataRepository.GetUserData(viewerId).FirstAsync();
+        DbPlayerUserData userData = await userDataRepository.LookupUserData();
 
         foreach (DragonData dd in dragonData)
         {

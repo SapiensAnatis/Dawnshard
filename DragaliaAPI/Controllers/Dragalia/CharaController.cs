@@ -289,12 +289,12 @@ public class CharaController : DragaliaControllerBase
         DbPlayerMaterial upgradeMat =
             await inventoryRepository.GetMaterial(DeviceAccountId, mat)
             ?? inventoryRepository.AddMaterial(DeviceAccountId, mat);
-        DbPlayerCurrency playerCurrency =
-            await inventoryRepository.GetCurrency(DeviceAccountId, CurrencyTypes.Rupies)
-            ?? throw new DragaliaException(
-                ResultCode.CommonMaterialShort,
-                "Insufficient Rupies for reset"
-            );
+        //DbPlayerCurrency playerCurrency =
+        //    await inventoryRepository.GetCurrency(DeviceAccountId, CurrencyTypes.Rupies)
+        //    ?? throw new DragaliaException(
+        //        ResultCode.CommonMaterialShort,
+        //        "Insufficient Rupies for reset"
+        //    );
         int cost =
             20000
             * (
@@ -795,7 +795,7 @@ public class CharaController : DragaliaControllerBase
         {
             throw new DragaliaException(
                 ResultCode.CommonMaterialShort,
-                "Insufficient materials in storage"
+                $"Insufficient material quantity in entity {dbMat} (needs: {usedMatCount}) to unlock skill for {request.chara_id}"
             );
         }
         playerCharData.IsUnlockEditSkill = true;

@@ -34,16 +34,6 @@ public abstract class DragaliaControllerBase : ControllerBase
         );
     }
 
-    public OkObjectResult Ok(ResultCode resultCode, object? value)
-    {
-        return base.Ok(
-            new DragaliaResponse<object>(
-                value ?? throw new ArgumentNullException(nameof(value)),
-                resultCode
-            )
-        );
-    }
-
     public OkObjectResult Code(ResultCode code, string message)
     {
         return base.Ok(

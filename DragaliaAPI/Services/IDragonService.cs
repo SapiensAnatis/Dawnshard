@@ -20,17 +20,12 @@ public interface IDragonService
     Task<DragonBuildupData> DoBuildup(DragonBuildupRequest request, string deviceAccountId);
     Task<DragonResetPlusCountData> DoDragonResetPlusCount(
         DragonResetPlusCountRequest request,
-        string deviceAccountId,
-        long viewerId
+        string deviceAccountId
     );
     Task<DragonLimitBreakData> DoDragonLimitBreak(
         DragonLimitBreakRequest request,
         string deviceAccountId
     );
     Task<DragonSetLockData> DoDragonSetLock(DragonSetLockRequest request, string deviceAccountId);
-    Task<DragonSellData> DoDragonSell(
-        DragonSellRequest request,
-        string deviceAccountId,
-        long viewerId
-    );
+    Task<DragonSellData> DoDragonSell(DragonSellRequest request, string deviceAccountId);
 }
