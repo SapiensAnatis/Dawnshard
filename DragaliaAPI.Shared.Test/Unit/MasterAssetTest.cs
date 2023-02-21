@@ -172,6 +172,7 @@ public class MasterAssetTest
                     FavoriteType: 5,
                     SellCoin: 5000,
                     SellDewPoint: 8500,
+                    LimitBreakId: DragonLimitBreakTypes.Normal,
                     LimitBreakMaterialId: 0,
                     DefaultReliabilityLevel: 0,
                     DmodePassiveAbilityId: 0
@@ -428,5 +429,29 @@ public class MasterAssetTest
                     UnlockMaterialQuantity5: 8
                 )
             );
+    }
+
+    [Theory]
+    [InlineData(Charas.Celliera, 110255011, 110255012, 110255013, 110255014, 110255015)]
+    [InlineData(Charas.SummerCelliera, 110255021, 110255022, 110255023, 110255024, 110255025)]
+    public void CharaStories_ReturnsExpectedStoryIds(Charas chara, params int[] expectedStoryIds)
+    {
+        int key = MasterAsset.MasterAsset.CharaStories[(int)chara].id;
+
+        MasterAsset.MasterAsset.CharaStories[key].storyIds
+            .Should()
+            .ContainInConsecutiveOrder(expectedStoryIds);
+    }
+
+    [Theory]
+    [InlineData(Dragons.Garuda, 210036011, 210036012)]
+    [InlineData(Dragons.Liger, 210043011, 210043012)]
+    public void DragonStories_ReturnsExpectedStoryIds(Dragons dragon, params int[] expectedStoryIds)
+    {
+        int key = MasterAsset.MasterAsset.DragonStories[(int)dragon].id;
+
+        MasterAsset.MasterAsset.DragonStories[key].storyIds
+            .Should()
+            .ContainInConsecutiveOrder(expectedStoryIds);
     }
 }

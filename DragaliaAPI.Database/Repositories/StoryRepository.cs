@@ -25,9 +25,7 @@ public class StoryRepository : BaseRepository, IStoryRepository
         int storyId
     )
     {
-        return await apiContext.PlayerStoryState.SingleOrDefaultAsync(
-                x => x.DeviceAccountId == deviceAccountId && x.StoryId == storyId
-            )
+        return await apiContext.PlayerStoryState.FindAsync(deviceAccountId, storyType, storyId)
             ?? apiContext.PlayerStoryState
                 .Add(
                     new DbPlayerStoryState()

@@ -41,9 +41,7 @@ public class InventoryRepository : IInventoryRepository
 
     public async Task<DbPlayerCurrency?> GetCurrency(string deviceAccountId, CurrencyTypes type)
     {
-        return await this.apiContext.PlayerWallet.FirstOrDefaultAsync(
-            entry => entry.CurrencyType == type
-        );
+        return await this.apiContext.PlayerWallet.FindAsync(deviceAccountId, type);
     }
 
     public IQueryable<DbPlayerCurrency> GetCurrencies(string deviceAccountId)
@@ -173,5 +171,52 @@ public class InventoryRepository : IInventoryRepository
         }
 
         return true;
+    }
+
+    public DbPlayerDragonGift AddDragonGift(string deviceAccountId, DragonGifts giftId)
+    {
+        return apiContext.PlayerDragonGifts
+            .Add(
+                new DbPlayerDragonGift()
+                {
+                    DeviceAccountId = deviceAccountId,
+                    DragonGiftId = giftId,
+                    Quantity = 0
+                }
+            )
+            .Entity;
+    }
+
+    public async Task<DbPlayerDragonGift?> GetDragonGift(string deviceAccountId, DragonGifts giftId)
+    {
+        return await this.apiContext.PlayerDragonGifts.FindAsync(deviceAccountId, giftId);
+    }
+
+    public IQueryable<DbPlayerDragonGift> GetDragonGifts(string deviceAccountId)
+    {
+        return this.apiContext.PlayerDragonGifts.Where(
+            gifts => gifts.DeviceAccountId == deviceAccountId
+        );
+    }
+
+    public async Task RefreshPurchasableDragonGiftCounts(string deviceAccountId)
+    {
+        Dictionary<DragonGifts, DbPlayerDragonGift> dbGifts = await GetDragonGifts(deviceAccountId)
+            .ToDictionaryAsync(x => x.DragonGiftId);
+        foreach (
+            DragonGifts gift in Enum.GetValues<DragonGifts>()
+                .Where(x => x < DragonGifts.FourLeafClover)
+        )
+        {
+            if (dbGifts.TryGetValue(gift, out DbPlayerDragonGift? dbGift))
+            {
+                dbGift.Quantity = 1;
+            }
+            else
+            {
+                dbGift = AddDragonGift(deviceAccountId, gift);
+                dbGift.Quantity = 1;
+            }
+        }
     }
 }
