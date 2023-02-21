@@ -62,7 +62,7 @@ public class DbPlayerUserData : IDbHasAccountId
 
     public int BuildTimePoint { get; set; }
 
-    public DateTimeOffset LastLoginTime { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset LastLoginTime { get; set; } = DateTimeOffset.UnixEpoch;
 
     public int StaminaSingle { get; set; } = 18;
 

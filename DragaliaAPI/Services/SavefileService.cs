@@ -118,8 +118,6 @@ public class SavefileService : ISavefileService
 
             await this.apiContext.Players.AddAsync(new DbPlayer() { AccountId = deviceAccountId });
 
-            this.logger.LogDebug("Added new Player entry");
-
             // This has JsonRequired so this should never be triggered
             ArgumentNullException.ThrowIfNull(savefile.user_data);
 
@@ -134,18 +132,15 @@ public class SavefileService : ISavefileService
                                 dest.DeviceAccountId = deviceAccountId;
                                 dest.Crystal += 1_200_000;
                                 dest.LastSaveImportTime = DateTimeOffset.UtcNow;
+                                dest.LastLoginTime = DateTimeOffset.UnixEpoch;
                             }
                         )
                 )
             );
 
-            this.logger.LogDebug("Added UserData entry");
-
             this.apiContext.PlayerCharaData.AddRange(
                 this.MapWithDeviceAccount<DbPlayerCharaData>(savefile.chara_list, deviceAccountId)
             );
-
-            this.logger.LogDebug("Added character entries");
 
             this.apiContext.PlayerDragonReliability.AddRange(
                 this.MapWithDeviceAccount<DbPlayerDragonReliability>(
@@ -171,8 +166,6 @@ public class SavefileService : ISavefileService
                 dragonKeyIds.Add((long)oldKeyId, addedEntry);
             }
 
-            this.logger.LogDebug("Added dragon entries and mapped key ids");
-
             Dictionary<long, DbTalisman> talismanKeyIds = new();
 
             foreach (TalismanList t in savefile.talisman_list ?? new List<TalismanList>())
@@ -185,8 +178,6 @@ public class SavefileService : ISavefileService
 
                 talismanKeyIds.Add((long)oldKeyId, addedEntry);
             }
-
-            this.logger.LogDebug("Added portrait prints and mapped key ids");
 
             // Must save changes for key ids to update
             await this.apiContext.SaveChangesAsync();
@@ -219,31 +210,23 @@ public class SavefileService : ISavefileService
                 }
 
                 this.apiContext.PlayerParties.AddRange(parties);
-                this.logger.LogDebug("Added imported parties");
             }
             else
             {
                 await this.AddDefaultParties(deviceAccountId);
-                this.logger.LogDebug("Added new parties");
             }
 
             this.apiContext.PlayerAbilityCrests.AddRange(
                 MapWithDeviceAccount<DbAbilityCrest>(savefile.ability_crest_list, deviceAccountId)
             );
 
-            this.logger.LogDebug("Added wyrmprints");
-
             this.apiContext.PlayerWeapons.AddRange(
                 MapWithDeviceAccount<DbWeaponBody>(savefile.weapon_body_list, deviceAccountId)
             );
 
-            this.logger.LogDebug("Added weapons");
-
             this.apiContext.PlayerQuests.AddRange(
                 MapWithDeviceAccount<DbQuest>(savefile.quest_list, deviceAccountId)
             );
-
-            this.logger.LogDebug("Added wyrmprints");
 
             this.apiContext.PlayerStoryState.AddRange(
                 MapWithDeviceAccount<DbPlayerStoryState>(savefile.quest_story_list, deviceAccountId)
@@ -260,31 +243,27 @@ public class SavefileService : ISavefileService
                 )
             );
 
-            this.logger.LogDebug("Added stories");
-
             this.apiContext.PlayerMaterials.AddRange(
                 MapWithDeviceAccount<DbPlayerMaterial>(savefile.material_list, deviceAccountId)
             );
-
-            this.logger.LogDebug("Added materials");
 
             this.apiContext.PlayerFortBuilds.AddRange(
                 MapWithDeviceAccount<DbFortBuild>(savefile.build_list, deviceAccountId)
             );
 
-            this.logger.LogDebug("Added builds");
-
             this.apiContext.PlayerWeaponSkins.AddRange(
                 MapWithDeviceAccount<DbWeaponSkin>(savefile.weapon_skin_list, deviceAccountId)
             );
-
-            this.logger.LogDebug("Added weapon skins");
 
             this.apiContext.PlayerPassiveAbilities.AddRange(
                 MapWithDeviceAccount<DbWeaponPassiveAbility>(
                     savefile.weapon_passive_ability_list,
                     deviceAccountId
                 )
+            );
+
+            this.apiContext.PlayerDragonGifts.AddRange(
+                MapWithDeviceAccount<DbPlayerDragonGift>(savefile.dragon_gift_list, deviceAccountId)
             );
 
             // TODO: unit sets
@@ -362,6 +341,9 @@ public class SavefileService : ISavefileService
         );
         this.apiContext.PlayerPassiveAbilities.RemoveRange(
             this.apiContext.PlayerPassiveAbilities.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerDragonGifts.RemoveRange(
+            this.apiContext.PlayerDragonGifts.Where(x => x.DeviceAccountId == deviceAccountId)
         );
     }
 
