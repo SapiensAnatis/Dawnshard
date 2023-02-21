@@ -35,6 +35,8 @@ public static class DragonConstants
     public const byte MaxAtkEnhance = 50;
     public const byte MaxHpEnhance = 50;
 
+    public const int AugmentResetCost = 20000;
+
     public static readonly ImmutableArray<int> XpLimits = new int[]
     {
         0,

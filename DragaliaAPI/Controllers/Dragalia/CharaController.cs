@@ -296,7 +296,7 @@ public class CharaController : DragaliaControllerBase
         //        "Insufficient Rupies for reset"
         //    );
         int cost =
-            20000
+            CharaConstants.AugmentResetCost
             * (
                 (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
                     ? playerCharData.AttackPlusCount

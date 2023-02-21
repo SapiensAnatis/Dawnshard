@@ -25,13 +25,13 @@ namespace DragaliaAPI.Test.Integration.Dragalia;
 /// Tests <see cref="Controllers.Dragalia.DragonController"/>
 /// </summary>
 [Collection("DragaliaIntegration")]
-public class DragonControllerTest : IClassFixture<IntegrationTestFixture>
+public class DragonTest : IClassFixture<IntegrationTestFixture>
 {
     private readonly HttpClient client;
     private readonly IntegrationTestFixture fixture;
     private readonly ITestOutputHelper outputHelper;
 
-    public DragonControllerTest(IntegrationTestFixture fixture, ITestOutputHelper outputHelper)
+    public DragonTest(IntegrationTestFixture fixture, ITestOutputHelper outputHelper)
     {
         this.fixture = fixture;
         this.outputHelper = outputHelper;
@@ -196,6 +196,8 @@ public class DragonControllerTest : IClassFixture<IntegrationTestFixture>
 
         long startCoin = userData.Coin;
 
+        int augmentCount = (await context.PlayerMaterials.FindAsync(DeviceAccountIdConst, Materials.AmplifyingDragonscale))!.Quantity;
+
         DragonResetPlusCountRequest request = new DragonResetPlusCountRequest()
         {
             dragon_key_id = (ulong)dragon.DragonKeyId,
@@ -215,6 +217,7 @@ public class DragonControllerTest : IClassFixture<IntegrationTestFixture>
         returnDragon.attack_plus_count.Should().Be(0);
         response.update_data_list.user_data.Should().NotBeNull();
         response.update_data_list.user_data.coin.Should().Be(startCoin - (20000 * 50));
+        response.update_data_list.material_list.Where(x => x.material_id == Materials.AmplifyingDragonscale).First().quantity.Should().Be(augmentCount + 50);
     }
 
     [Fact]
@@ -243,6 +246,13 @@ public class DragonControllerTest : IClassFixture<IntegrationTestFixture>
             .Entity;
 
         await context.SaveChangesAsync();
+
+        context.ChangeTracker.Clear();
+        DbPlayerUserData userData = await context.PlayerUserData
+            .Where(x => x.DeviceAccountId == DeviceAccountIdConst)
+            .FirstAsync();
+
+        long startCoin = userData.Coin;
 
         DragonBuyGiftToSendMultipleRequest request = new DragonBuyGiftToSendMultipleRequest()
         {
@@ -274,6 +284,7 @@ public class DragonControllerTest : IClassFixture<IntegrationTestFixture>
             .Be(0);
 
         response.dragon_gift_reward_list.Should().NotBeNullOrEmpty();
+        response.update_data_list.user_data.coin.Should().Be(startCoin - 1500);
         DragonReliabilityList dragonData = response.update_data_list.dragon_reliability_list
             .Where(x => x.dragon_id == Dragons.HighChthonius)
             .First();
@@ -360,7 +371,7 @@ public class DragonControllerTest : IClassFixture<IntegrationTestFixture>
             .Add(
                 DbPlayerDragonReliabilityFactory.Create(
                     DeviceAccountIdConst,
-                    Dragons.HighMidgardsormr
+                    Dragons.Puppy
                 )
             )
             .Entity;
@@ -369,8 +380,8 @@ public class DragonControllerTest : IClassFixture<IntegrationTestFixture>
 
         DragonSendGiftRequest request = new DragonSendGiftRequest()
         {
-            dragon_id = Dragons.HighMidgardsormr,
-            dragon_gift_id = DragonGifts.FourLeafClover
+            dragon_id = Dragons.Puppy,
+            dragon_gift_id = DragonGifts.PupGrub
         };
 
         DragonSendGiftData? response = (
@@ -379,10 +390,10 @@ public class DragonControllerTest : IClassFixture<IntegrationTestFixture>
 
         response.Should().NotBeNull();
         DragonReliabilityList dragonData = response.update_data_list.dragon_reliability_list
-            .Where(x => x.dragon_id == Dragons.HighMidgardsormr)
+            .Where(x => x.dragon_id == Dragons.Puppy)
             .First();
-        dragonData.reliability_total_exp.Should().Be(1000);
-        dragonData.reliability_level.Should().Be(6);
+        dragonData.reliability_total_exp.Should().Be(200);
+        dragonData.reliability_level.Should().Be(3);
     }
 
     public record DragonLimitBreakTestCase(

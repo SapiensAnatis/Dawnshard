@@ -792,7 +792,7 @@ public class DragonService : IDragonService
         //    );
         DbPlayerUserData userData = await userDataRepository.LookupUserData();
         int cost =
-            20000
+            DragonConstants.AugmentResetCost
             * (
                 (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
                     ? playerDragonData.AttackPlusCount
