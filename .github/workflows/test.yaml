@@ -31,4 +31,16 @@ jobs:
       - name: Install dependencies
         run: dotnet restore ${{ matrix.project }}
       - name: Test
-        run: dotnet test ${{ matrix.project }} --no-restore
+        run: >
+          dotnet test ${{ matrix.project }} 
+          --no-restore 
+          -p:CollectCoverage=true 
+          -p:CoverletOutputFormat="cobertura" 
+          -p:CoverletOutput="coverage_report.xml"
+          -p:Exclude=\"[*.Test]*,[DragaliaAPI.Test.Utils]*,[DragaliaAPI.Database]DragaliaAPI.Database.Migrations.*,[DragaliaAPI]DragaliaAPI.Models.Generated.*\"
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ${{matrix.project}}/coverage_report.xml
+          name: codecov ${{ matrix.project }}
+          
