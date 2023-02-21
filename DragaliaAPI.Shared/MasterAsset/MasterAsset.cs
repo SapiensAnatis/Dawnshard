@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Shared.MasterAsset;
@@ -69,4 +69,16 @@ public static class MasterAsset
     /// </summary>
     public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
         new("QuestDrops.json", x => x.QuestId);
+
+    /// <summary>
+    /// Dragon StoryId Arrays indexed by DragonId
+    /// </summary>
+    public static MasterAssetData<int, StoryData> DragonStories =>
+        new("DragonStories.json", x => x.id);
+
+    /// <summary>
+    /// Character StoryId Arrays indexed by CharaId
+    /// </summary>
+    public static MasterAssetData<int, StoryData> CharaStories =>
+        new("CharaStories.json", x => x.id);
 }

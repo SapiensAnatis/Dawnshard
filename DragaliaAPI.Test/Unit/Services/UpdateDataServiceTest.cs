@@ -172,7 +172,10 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
 
         AssertOnlyContains<QuestStoryList>(list.quest_story_list, questStoryState);
 
-        AssertOnlyContains<UnitStoryList>(list.unit_story_list, charaStoryState);
+        list.unit_story_list
+            .Should()
+            .ContainEquivalentOf(mapper.Map<UnitStoryList>(charaStoryState))
+            .And.ContainEquivalentOf(mapper.Map<UnitStoryList>(dragonStoryState));
 
         AssertOnlyContains<CastleStoryList>(list.castle_story_list, castleStoryState);
 

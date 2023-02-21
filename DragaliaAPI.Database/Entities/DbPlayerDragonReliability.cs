@@ -1,7 +1,9 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
@@ -44,14 +46,17 @@ public static class DbPlayerDragonReliabilityFactory
 {
     public static DbPlayerDragonReliability Create(string deviceAccountId, Dragons id)
     {
-        return new()
+        byte defaultRelLevel = (byte)MasterAsset.DragonData.Get(id).DefaultReliabilityLevel;
+        defaultRelLevel = defaultRelLevel == default ? (byte)1 : defaultRelLevel;
+        DbPlayerDragonReliability newReliability = new DbPlayerDragonReliability()
         {
             DeviceAccountId = deviceAccountId,
             DragonId = id,
-            Level = 1,
-            Exp = 0,
+            Level = defaultRelLevel,
+            Exp = DragonConstants.bondXpLimits[defaultRelLevel - 1],
             GetTime = DateTimeOffset.UtcNow,
             LastContactTime = DateTimeOffset.UtcNow
         };
+        return newReliability;
     }
 }

@@ -108,6 +108,7 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                     );
                     opts.Excluding(x => x.user_data!.level);
                     opts.Excluding(x => x.user_data!.crystal);
+                    opts.Excluding(x => x.user_data!.last_login_time);
 
                     // Ignored properties
                     opts.Excluding(x => x.user_data!.prologue_end_time);
@@ -127,8 +128,6 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                     opts.Excluding(x => x.quest_wall_list);
                     opts.Excluding(x => x.quest_entry_condition_list);
                     opts.Excluding(x => x.quest_bonus_stack_base_time);
-
-                    opts.Excluding(x => x.dragon_gift_list);
 
                     opts.Excluding(x => x.user_summon_list);
                     opts.Excluding(x => x.summon_ticket_list);
