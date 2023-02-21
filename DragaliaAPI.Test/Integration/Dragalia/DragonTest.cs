@@ -196,7 +196,12 @@ public class DragonTest : IClassFixture<IntegrationTestFixture>
 
         long startCoin = userData.Coin;
 
-        int augmentCount = (await context.PlayerMaterials.FindAsync(DeviceAccountIdConst, Materials.AmplifyingDragonscale))!.Quantity;
+        int augmentCount = (
+            await context.PlayerMaterials.FindAsync(
+                DeviceAccountIdConst,
+                Materials.AmplifyingDragonscale
+            )
+        )!.Quantity;
 
         DragonResetPlusCountRequest request = new DragonResetPlusCountRequest()
         {
@@ -217,7 +222,11 @@ public class DragonTest : IClassFixture<IntegrationTestFixture>
         returnDragon.attack_plus_count.Should().Be(0);
         response.update_data_list.user_data.Should().NotBeNull();
         response.update_data_list.user_data.coin.Should().Be(startCoin - (20000 * 50));
-        response.update_data_list.material_list.Where(x => x.material_id == Materials.AmplifyingDragonscale).First().quantity.Should().Be(augmentCount + 50);
+        response.update_data_list.material_list
+            .Where(x => x.material_id == Materials.AmplifyingDragonscale)
+            .First()
+            .quantity.Should()
+            .Be(augmentCount + 50);
     }
 
     [Fact]
@@ -368,12 +377,7 @@ public class DragonTest : IClassFixture<IntegrationTestFixture>
         ApiContext context = fixture.Services.GetRequiredService<ApiContext>();
 
         _ = context.PlayerDragonReliability
-            .Add(
-                DbPlayerDragonReliabilityFactory.Create(
-                    DeviceAccountIdConst,
-                    Dragons.Puppy
-                )
-            )
+            .Add(DbPlayerDragonReliabilityFactory.Create(DeviceAccountIdConst, Dragons.Puppy))
             .Entity;
 
         await context.SaveChangesAsync();
