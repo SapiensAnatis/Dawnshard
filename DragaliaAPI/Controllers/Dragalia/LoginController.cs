@@ -45,7 +45,7 @@ public class LoginController : DragaliaControllerBase
             await userDataRepository.GetUserData(DeviceAccountId).FirstAsync()
             ?? throw new DragaliaException(ResultCode.CommonDataNotFoundError);
 
-        if (userData.LastLoginTime.Date < DateTimeOffset.UtcNow.Date)
+        if (userData.LastLoginTime < DateTimeOffset.UtcNow.Date.AddHours(6))
         {
             await inventoryRepository.RefreshPurchasableDragonGiftCounts(DeviceAccountId);
         }

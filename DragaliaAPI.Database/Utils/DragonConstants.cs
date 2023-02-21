@@ -280,11 +280,6 @@ public static class DragonConstants
         2900
     }.ToImmutableArray();
 
-    public static readonly IImmutableSet<Dragons> fullBondDragons = new HashSet<Dragons>()
-    {
-        Dragons.Arsene
-    }.ToImmutableHashSet();
-
     public static readonly IImmutableSet<Dragons> unsummonableDragons = new HashSet<Dragons>()
     {
         Dragons.BronzeFafnir,

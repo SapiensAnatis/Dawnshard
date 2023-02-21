@@ -1173,7 +1173,7 @@ namespace DragaliaAPI.Database.Migrations
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponPassiveAbility", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
+                        .WithMany("WeaponPassiveAbilityList")
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1232,6 +1232,8 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("UserSummonList");
 
                     b.Navigation("WeaponBodyList");
+
+                    b.Navigation("WeaponPassiveAbilityList");
 
                     b.Navigation("WeaponSkinList");
                 });

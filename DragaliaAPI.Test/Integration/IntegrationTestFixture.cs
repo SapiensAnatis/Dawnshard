@@ -138,6 +138,18 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         savefileService.CreateBase(PreparedDeviceAccountId).Wait();
         savefileService.CreateBase(DeviceAccountId).Wait();
         PopulateAllMaterials();
+        context.PlayerDragonGifts.AddRange(
+            Enum.GetValues<DragonGifts>()
+                .Select(
+                    x =>
+                        new DbPlayerDragonGift()
+                        {
+                            DeviceAccountId = DeviceAccountIdConst,
+                            DragonGiftId = x,
+                            Quantity = x < DragonGifts.FourLeafClover ? 1 : 999
+                        }
+                )
+        );
         context.PlayerFortBuilds.Add(
             new DbFortBuild()
             {

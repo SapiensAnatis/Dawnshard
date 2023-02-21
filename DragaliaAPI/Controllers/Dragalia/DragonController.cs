@@ -1,15 +1,8 @@
-﻿using System.Collections.Immutable;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models;
+﻿using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -17,23 +10,9 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class DragonController : DragaliaControllerBase
 {
     private readonly IDragonService dragonService;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IUnitRepository unitRepository;
-    private readonly IInventoryRepository inventoryRepository;
-    private readonly IUpdateDataService updateDataService;
 
-    public DragonController(
-        IUserDataRepository userDataRepository,
-        IUnitRepository unitRepository,
-        IInventoryRepository inventoryRepository,
-        IUpdateDataService updateDataService,
-        IDragonService dragonService
-    )
+    public DragonController(IDragonService dragonService)
     {
-        this.userDataRepository = userDataRepository;
-        this.unitRepository = unitRepository;
-        this.inventoryRepository = inventoryRepository;
-        this.updateDataService = updateDataService;
         this.dragonService = dragonService;
     }
 
@@ -50,7 +29,7 @@ public class DragonController : DragaliaControllerBase
         [FromBody] DragonResetPlusCountRequest request
     )
     {
-        return Ok(await dragonService.DoDragonResetPlusCount(request, DeviceAccountId, ViewerId));
+        return Ok(await dragonService.DoDragonResetPlusCount(request, DeviceAccountId));
     }
 
     [Route("limit_break")]
@@ -153,6 +132,6 @@ public class DragonController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> DragonSell([FromBody] DragonSellRequest request)
     {
-        return Ok(await dragonService.DoDragonSell(request, DeviceAccountId, ViewerId));
+        return Ok(await dragonService.DoDragonSell(request, DeviceAccountId));
     }
 }
