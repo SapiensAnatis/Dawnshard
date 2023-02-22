@@ -590,4 +590,59 @@ public class DragonTest : IClassFixture<IntegrationTestFixture>
             .Should()
             .Be((int)startDew + dragonData.SellDewPoint);
     }
+
+    [Fact]
+    public async Task DragonSell_Multi_SuccessfulSale()
+    {
+        ApiContext context = fixture.Services.GetRequiredService<ApiContext>();
+
+        DbPlayerDragonData dragonSimurgh = context.PlayerDragonData
+            .Add(DbPlayerDragonDataFactory.Create(DeviceAccountIdConst, Dragons.Simurgh))
+            .Entity;
+
+        DbPlayerDragonData dragonStribog = context.PlayerDragonData
+            .Add(DbPlayerDragonDataFactory.Create(DeviceAccountIdConst, Dragons.Stribog))
+            .Entity;
+
+        dragonStribog.LimitBreakCount = 4;
+
+        await context.SaveChangesAsync();
+        DragonData dragonDataSimurgh = MasterAsset.DragonData.Get(Dragons.Simurgh);
+        DragonData dragonDataStribog = MasterAsset.DragonData.Get(Dragons.Stribog);
+
+        context.ChangeTracker.Clear();
+        DbPlayerUserData uData = await context.PlayerUserData
+            .Where(x => x.DeviceAccountId == DeviceAccountIdConst)
+            .FirstAsync();
+
+        long startCoin = uData.Coin;
+        long startDew = uData.DewPoint;
+
+        DragonSellRequest request = new DragonSellRequest()
+        {
+            dragon_key_id_list = new List<ulong>()
+            {
+                (ulong)dragonSimurgh.DragonKeyId,
+                (ulong)dragonStribog.DragonKeyId
+            }
+        };
+
+        DragonSellData? response = (
+            await client.PostMsgpack<DragonSellData>("dragon/sell", request)
+        ).data;
+
+        response.Should().NotBeNull();
+        response.delete_data_list.Should().NotBeNull();
+        response.delete_data_list.delete_dragon_list.Should().NotBeNullOrEmpty();
+        response.update_data_list.user_data.coin
+            .Should()
+            .Be(startCoin + dragonDataSimurgh.SellCoin + (dragonDataStribog.SellCoin * 5));
+        response.update_data_list.user_data.dew_point
+            .Should()
+            .Be(
+                (int)startDew
+                    + dragonDataSimurgh.SellDewPoint
+                    + (dragonDataStribog.SellDewPoint * 5)
+            );
+    }
 }
