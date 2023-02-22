@@ -18,6 +18,7 @@ public class DragonService : IDragonService
     private readonly IUnitRepository unitRepository;
     private readonly IInventoryRepository inventoryRepository;
     private readonly IStoryRepository storyRepository;
+    private readonly ILogger<DragonService> logger;
     private readonly IUpdateDataService updateDataService;
 
     public DragonService(
@@ -25,13 +26,15 @@ public class DragonService : IDragonService
         IUnitRepository unitRepository,
         IInventoryRepository inventoryRepository,
         IUpdateDataService updateDataService,
-        IStoryRepository storyRepository
+        IStoryRepository storyRepository,
+        ILogger<DragonService> logger
     )
     {
         this.userDataRepository = userDataRepository;
         this.unitRepository = unitRepository;
         this.inventoryRepository = inventoryRepository;
         this.storyRepository = storyRepository;
+        this.logger = logger;
         this.updateDataService = updateDataService;
     }
 
@@ -967,14 +970,13 @@ public class DragonService : IDragonService
         string deviceAccountId
     )
     {
-        List<Dragons> selectedPlayerDragons = await unitRepository
+        List<DbPlayerDragonData> selectedPlayerDragons = await unitRepository
             .GetAllDragonData(deviceAccountId)
             .Where(
                 x =>
                     x.DeviceAccountId == deviceAccountId
                     && request.dragon_key_id_list.Select(x => (long)x).Contains(x.DragonKeyId)
             )
-            .Select(x => x.DragonId)
             .ToListAsync();
         if (selectedPlayerDragons.Count < request.dragon_key_id_list.Count())
         {
@@ -984,7 +986,7 @@ public class DragonService : IDragonService
             );
         }
 
-        if (selectedPlayerDragons.Contains(Dragons.Puppy))
+        if (selectedPlayerDragons.Where(x => x.DragonId == Dragons.Puppy).Any())
         {
             throw new DragaliaException(
                 Models.ResultCode.DragonSellLocked,
@@ -992,21 +994,36 @@ public class DragonService : IDragonService
             );
         }
 
-        IEnumerable<DragonData> dragonData = MasterAsset.DragonData.Enumerable.Where(
-            x => selectedPlayerDragons.Contains(x.Id)
+        this.logger.LogInformation(
+            "Requested sale of {count} dragons: {@list}",
+            selectedPlayerDragons.Count,
+            selectedPlayerDragons
         );
 
         //DbPlayerCurrency rupies = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Rupies) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Rupies);
         //DbPlayerCurrency dew = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Dew) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Dew);
         DbPlayerUserData userData = await userDataRepository.LookupUserData();
+        this.logger.LogDebug(
+            "Pre-sale: rupies {rupies}, eldwater {eldwater}",
+            userData.Coin,
+            userData.DewPoint
+        );
 
-        foreach (DragonData dd in dragonData)
+        foreach (DbPlayerDragonData dd in selectedPlayerDragons)
         {
             //rupies.Quantity += dd.SellCoin;
             //dew.Quantity += dd.SellDewPoint;
-            userData.Coin += dd.SellCoin;
-            userData.DewPoint += dd.SellDewPoint;
+            userData.Coin +=
+                MasterAsset.DragonData.Get(dd.DragonId).SellCoin * (dd.LimitBreakCount + 1);
+            userData.DewPoint +=
+                MasterAsset.DragonData.Get(dd.DragonId).SellDewPoint * (dd.LimitBreakCount + 1);
         }
+
+        this.logger.LogDebug(
+            "Post-sale: rupies {rupies}, eldwater {eldwater}",
+            userData.Coin,
+            userData.DewPoint
+        );
 
         await unitRepository.RemoveDragons(
             deviceAccountId,
