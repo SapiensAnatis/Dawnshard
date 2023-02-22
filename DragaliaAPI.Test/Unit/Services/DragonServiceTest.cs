@@ -36,7 +36,8 @@ public class DragonServiceTest
             mockUnitRepository.Object,
             mockInventoryRepository.Object,
             mockUpdateDataService.Object,
-            mockStoryRepository.Object
+            mockStoryRepository.Object,
+            LoggerTestUtils.Create<DragonService>()
         );
     }
 
