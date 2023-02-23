@@ -1,0 +1,30 @@
+[
+    {
+        "$comment": "Avenue To Fortune: Beginner",
+        "_Id": 202060101,
+        "_RupieMultiplier": 2.0,
+        "_ManaMultiplier": 1.0,
+        "_MaterialMultiplier": 1.0
+    },
+    {
+        "$comment": "Avenue To Fortune: Standard",
+        "_Id": 202060102,
+        "_RupieMultiplier": 2.0,
+        "_ManaMultiplier": 1.0,
+        "_MaterialMultiplier": 1.0
+    },
+    {
+        "$comment": "Avenue To Fortune: Expert",
+        "_Id": 202060103,
+        "_RupieMultiplier": 2.0,
+        "_ManaMultiplier": 1.0,
+        "_MaterialMultiplier": 1.0
+    },
+    {
+        "$comment": "Avenue To Fortune: Master",
+        "_Id": 202060104,
+        "_RupieMultiplier": 2.0,
+        "_ManaMultiplier": 1.0,
+        "_MaterialMultiplier": 1.0
+    }
+]

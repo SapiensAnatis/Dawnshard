@@ -13,6 +13,7 @@ public record QuestData(
     int PayStaminaSingle,
     int PayStaminaMulti,
     DungeonTypes DungeonType,
+    VariationTypes VariationType,
     string Scene01,
     string AreaName01,
     string Scene02,

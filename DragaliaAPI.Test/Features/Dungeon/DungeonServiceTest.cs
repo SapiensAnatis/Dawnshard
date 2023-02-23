@@ -6,6 +6,7 @@ using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Test.Features.Dungeon;
@@ -13,11 +14,13 @@ namespace DragaliaAPI.Test.Features.Dungeon;
 public class DungeonServiceTest
 {
     private readonly Mock<IOptionsMonitor<RedisOptions>> mockOptions;
+    private readonly Mock<ILogger<DungeonService>> mockLogger;
     private readonly IDungeonService dungeonService;
 
     public DungeonServiceTest()
     {
-        mockOptions = new(MockBehavior.Strict);
+        this.mockOptions = new(MockBehavior.Strict);
+        this.mockLogger = new(MockBehavior.Strict);
 
         IOptions<MemoryDistributedCacheOptions> opts = Options.Create(
             new MemoryDistributedCacheOptions()
@@ -28,7 +31,11 @@ public class DungeonServiceTest
             .SetupGet(x => x.CurrentValue)
             .Returns(new RedisOptions() { DungeonExpiryTimeMinutes = 1 });
 
-        dungeonService = new DungeonService(testCache, mockOptions.Object);
+        dungeonService = new DungeonService(
+            testCache,
+            this.mockOptions.Object,
+            this.mockLogger.Object
+        );
     }
 
     [Fact]

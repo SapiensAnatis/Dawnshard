@@ -12,10 +12,12 @@ namespace DragaliaAPI.Features.Dungeon;
 public class DungeonController : DragaliaControllerBase
 {
     private readonly IDungeonService dungeonService;
+    private readonly IOddsInfoService oddsInfoService;
 
-    public DungeonController(IDungeonService dungeonService)
+    public DungeonController(IDungeonService dungeonService, IOddsInfoService oddsInfoService)
     {
         this.dungeonService = dungeonService;
+        this.oddsInfoService = oddsInfoService;
     }
 
     [HttpPost("get_area_odds")]
@@ -23,38 +25,14 @@ public class DungeonController : DragaliaControllerBase
     {
         DungeonSession session = await dungeonService.GetDungeon(request.dungeon_key);
 
-        return Ok(
-            new DungeonGetAreaOddsData()
-            {
-                odds_info = new()
-                {
-                    area_index = request.area_idx,
-                    reaction_obj_count = 1,
-                    drop_obj = new List<AtgenDropObj>(),
-                    enemy = /* Enumerable
-                        .Range(0, enemyList.Count())
-                        .Select(
-                            x =>
-                                new AtgenEnemy()
-                                {
-                                    param_id = enemyList.ElementAt(x),
-                                    enemy_idx = x+1,
-                                    enemy_drop_list = new List<EnemyDropList>()
-                                    {
-                                        new()
-                                        {
-                                            coin = 10,
-                                            mana = 10,
-                                            drop_list = new List<AtgenDropList>()
-                                        }
-                                    }
-                                }
-                        ),*/
-                        new List<AtgenEnemy>(),
-                    grade = new List<AtgenGrade>(),
-                },
-            }
+        OddsInfo oddsInfo = this.oddsInfoService.GetOddsInfo(
+            session.QuestData.Id,
+            request.area_idx
         );
+
+        await this.dungeonService.AddEnemies(request.dungeon_key, request.area_idx, oddsInfo.enemy);
+
+        return Ok(new DungeonGetAreaOddsData() { odds_info = oddsInfo });
     }
 
     [HttpPost("fail")]

@@ -21,11 +21,11 @@ public class DungeonRecordController : DragaliaControllerBase
     private readonly IDungeonService dungeonService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IInventoryRepository inventoryRepository;
-    private readonly IQuestRewardService questRewardService;
+    private readonly IQuestDropService questRewardService;
     private readonly IUpdateDataService updateDataService;
     private readonly ITutorialService tutorialService;
     private readonly IMissionProgressionService missionProgressionService;
-
+    private readonly ILogger<DungeonRecordController> logger;
     private const int QuestCoin = 10_000_000;
     private const int QuestMana = 20_000;
     private const int QuestDropQuantity = 100;
@@ -35,10 +35,11 @@ public class DungeonRecordController : DragaliaControllerBase
         IDungeonService dungeonService,
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
-        IQuestRewardService questRewardService,
+        IQuestDropService questRewardService,
         IUpdateDataService updateDataService,
         ITutorialService tutorialService,
-        IMissionProgressionService missionProgressionService
+        IMissionProgressionService missionProgressionService,
+        ILogger<DungeonRecordController> logger
     )
     {
         this.questRepository = questRepository;
@@ -49,6 +50,7 @@ public class DungeonRecordController : DragaliaControllerBase
         this.updateDataService = updateDataService;
         this.tutorialService = tutorialService;
         this.missionProgressionService = missionProgressionService;
+        this.logger = logger;
     }
 
     [HttpPost("record")]
@@ -108,8 +110,58 @@ public class DungeonRecordController : DragaliaControllerBase
             + clearedMissions.Where(x => x).Count() * 5
             + (allMissionsCleared ? 5 : 0);
 
-        IEnumerable<Materials> drops = questRewardService.GetDrops(session.QuestData.Id);
-        await inventoryRepository.UpdateQuantity(drops, QuestDropQuantity);
+        List<AtgenDropAll> drops = new();
+        int manaDrop = 0;
+        int coinDrop = 0;
+
+        foreach (
+            AtgenTreasureRecord record in request.play_record?.treasure_record
+                ?? Enumerable.Empty<AtgenTreasureRecord>()
+        )
+        {
+            if (
+                !session.EnemyList.TryGetValue(
+                    record.area_idx,
+                    out IEnumerable<AtgenEnemy>? enemyList
+                )
+            )
+            {
+                this.logger.LogWarning(
+                    "Could not retrieve enemy list for area_idx {idx}",
+                    record.area_idx
+                );
+                continue;
+            }
+
+            // Sometimes record.enemy is null for boss stages. Give all drops in this case.
+            IEnumerable<int> enemyRecord = record.enemy ?? Enumerable.Repeat(1, enemyList.Count());
+
+            foreach (
+                EnemyDropList dropList in enemyList
+                    .Zip(enemyRecord)
+                    .Where(x => x.Second == 1)
+                    .SelectMany(x => x.First.enemy_drop_list)
+            )
+            {
+                manaDrop += dropList.mana;
+                coinDrop += dropList.coin;
+                drops.AddRange(
+                    dropList.drop_list.Select(
+                        x =>
+                            new AtgenDropAll()
+                            {
+                                type = EntityTypes.Material,
+                                id = x.id,
+                                quantity = x.quantity,
+                            }
+                    )
+                );
+            }
+        }
+
+        await inventoryRepository.UpdateQuantity(
+            drops.Select(x => new KeyValuePair<Materials, int>((Materials)x.id, x.quantity))
+        );
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
@@ -123,15 +175,7 @@ public class DungeonRecordController : DragaliaControllerBase
                     quest_id = session.QuestData.Id,
                     reward_record = new()
                     {
-                        drop_all = drops.Select(
-                            x =>
-                                new AtgenDropAll()
-                                {
-                                    id = (int)x,
-                                    type = EntityTypes.Material,
-                                    quantity = QuestDropQuantity
-                                }
-                        ),
+                        drop_all = drops,
                         first_clear_set = isFirstClear
                             ? new List<AtgenFirstClearSet>()
                             {
@@ -143,7 +187,7 @@ public class DungeonRecordController : DragaliaControllerBase
                                 }
                             }
                             : new List<AtgenFirstClearSet>(),
-                        take_coin = QuestCoin,
+                        take_coin = coinDrop,
                         take_astral_item_quantity = 300,
                         missions_clear_set = clearedMissions
                             .Select((x, index) => new { x, index })
@@ -181,7 +225,7 @@ public class DungeonRecordController : DragaliaControllerBase
                     {
                         take_player_exp = 1,
                         take_chara_exp = 4000,
-                        take_mana = QuestMana,
+                        take_mana = manaDrop,
                         bonus_factor = 1,
                         mana_bonus_factor = 1,
                         chara_grow_record = session.Party.Select(

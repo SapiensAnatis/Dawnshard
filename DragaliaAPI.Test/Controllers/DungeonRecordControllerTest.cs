@@ -8,6 +8,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MockQueryable.Moq;
 using static DragaliaAPI.Test.UnitTestUtils;
 
@@ -20,10 +21,11 @@ public class DungeonRecordControllerTest
     private readonly Mock<IDungeonService> mockDungeonService;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
-    private readonly Mock<IQuestRewardService> mockQuestRewardService;
+    private readonly Mock<IQuestDropService> mockQuestRewardService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<ITutorialService> mockTutorialService;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<ILogger<DungeonRecordController>> mockLogger;
 
     private const string dungeonKey = "key";
     private const int questId = 100010101;
@@ -39,16 +41,18 @@ public class DungeonRecordControllerTest
         this.mockQuestRewardService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockLogger = new(MockBehavior.Strict);
 
         this.dungeonRecordController = new(
-            mockQuestRepository.Object,
-            mockDungeonService.Object,
-            mockUserDataRepository.Object,
-            mockInventoryRepository.Object,
-            mockQuestRewardService.Object,
-            mockUpdateDataService.Object,
-            mockTutorialService.Object,
-            mockMissionProgressionService.Object
+            this.mockQuestRepository.Object,
+            this.mockDungeonService.Object,
+            this.mockUserDataRepository.Object,
+            this.mockInventoryRepository.Object,
+            this.mockQuestRewardService.Object,
+            this.mockUpdateDataService.Object,
+            this.mockTutorialService.Object,
+            this.mockMissionProgressionService.Object,
+            this.mockLogger.Object
         );
 
         this.dungeonRecordController.SetupMockContext();
