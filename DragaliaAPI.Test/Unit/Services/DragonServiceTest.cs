@@ -326,13 +326,16 @@ public class DragonServiceTest
     }
 
     [Theory]
-    [InlineData(1, DragonLimitBreakMatTypes.Dupe)]
-    [InlineData(1, DragonLimitBreakMatTypes.Stone)]
-    [InlineData(1, DragonLimitBreakMatTypes.Spheres)]
-    [InlineData(5, DragonLimitBreakMatTypes.SpheresLB5)]
+    [InlineData(1, DragonLimitBreakMatTypes.Dupe, 2, 2, 1)]
+    [InlineData(4, DragonLimitBreakMatTypes.Stone, 5, 5, 2)]
+    [InlineData(2, DragonLimitBreakMatTypes.Spheres, 3, 3, 1)]
+    [InlineData(5, DragonLimitBreakMatTypes.SpheresLB5, 6, 6, 2)]
     public async Task DoDragonLimitBreak_LimitBreaks(
         byte limitBreakNr,
-        DragonLimitBreakMatTypes lbMatType
+        DragonLimitBreakMatTypes lbMatType,
+        byte expectedA1Level,
+        byte expectedA2Level,
+        byte expectedS1Level
     )
     {
         Materials targetMat =
@@ -396,6 +399,9 @@ public class DragonServiceTest
         );
 
         dragonData.LimitBreakCount.Should().Be(limitBreakNr);
+        dragonData.Ability1Level.Should().Be(expectedA1Level);
+        dragonData.Ability2Level.Should().Be(expectedA2Level);
+        dragonData.Skill1Level.Should().Be(expectedS1Level);
         mockUnitRepository.Verify(x => x.GetAllDragonData(DeviceAccountId));
         if (lbMatType == DragonLimitBreakMatTypes.Dupe)
         {

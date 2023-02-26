@@ -457,6 +457,11 @@ public class DragonService : IDragonService
             );
 
         List<AtgenDragonGiftRewardList> rewardObjList = new List<AtgenDragonGiftRewardList>();
+        logger.LogDebug(
+            "Creating GiftRewardList from rewards {@rewards} and levelGifts: {@levelGifts}",
+            rewards,
+            levelGifts
+        );
         foreach (DragonGifts gift in request.dragon_gift_id_list)
         {
             rewardObjList.Add(
@@ -465,12 +470,14 @@ public class DragonService : IDragonService
                     return_gift_list = rewards.Where(x => x.Item1 == gift).First().Item2,
                     dragon_gift_id = gift,
                     is_favorite =
-                        dragonData.FavoriteType != null
-                        && DragonConstants.rotatingGifts[(int)dragonData.FavoriteType] == gift,
-                    reward_reliability_list = levelGifts.Where(x => x.Item1 == gift).First().Item2
+                        DragonConstants.rotatingGifts[(int)dragonData.FavoriteType] == gift,
+                    reward_reliability_list = levelGifts.Any(x => x.Item1 == gift)
+                        ? levelGifts.Where(x => x.Item1 == gift).First().Item2
+                        : null
                 }
             );
         }
+        logger.LogDebug("GiftRewardList: {@list}", rewardObjList);
 
         foreach (DbPlayerDragonGift gift in gifts.Values)
         {
@@ -566,10 +573,15 @@ public class DragonService : IDragonService
 
         await unitRepository.SaveChangesAsync();
 
+        logger.LogDebug(
+            "Creating response from rewards {@rewards} and levelGifts: {@levelGifts}",
+            rewards,
+            levelGifts
+        );
         return new DragonSendGiftMultipleData()
         {
             is_favorite = true,
-            reward_reliability_list = levelGifts.First().Item2,
+            reward_reliability_list = levelGifts.Any() ? levelGifts.First().Item2 : null,
             return_gift_list = rewards.First().Item2,
             update_data_list = updateDataList
         };
@@ -846,8 +858,15 @@ public class DragonService : IDragonService
 
         DragonData dragonData = MasterAsset.DragonData.Get(playerDragonData.DragonId);
 
+        logger.LogDebug("Pre-LimitBreak Dragon: {@dragon}", playerDragonData);
+
         playerDragonData.LimitBreakCount = (byte)
             request.limit_break_grow_list.Last().limit_break_count;
+        playerDragonData.Skill1Level = (byte)(1 + (playerDragonData.LimitBreakCount / 4));
+        playerDragonData.Ability1Level = (byte)(playerDragonData.LimitBreakCount + 1);
+        playerDragonData.Ability2Level = (byte)(playerDragonData.LimitBreakCount + 1);
+
+        logger.LogDebug("Post-LimitBreak Dragon: {@dragon}", playerDragonData);
 
         IEnumerable<LimitBreakGrowList> deleteDragons = request.limit_break_grow_list.Where(
             x => (DragonLimitBreakMatTypes)x.limit_break_item_type == DragonLimitBreakMatTypes.Dupe
