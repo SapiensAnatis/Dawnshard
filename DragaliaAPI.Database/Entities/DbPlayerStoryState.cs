@@ -26,5 +26,5 @@ public class DbPlayerStoryState : IDbHasAccountId
 
     [Column("State")]
     [Required]
-    public byte State { get; set; }
+    public StoryState State { get; set; }
 }
