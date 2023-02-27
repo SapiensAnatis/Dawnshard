@@ -471,9 +471,9 @@ public class DragonService : IDragonService
                     dragon_gift_id = gift,
                     is_favorite =
                         DragonConstants.rotatingGifts[(int)dragonData.FavoriteType] == gift,
-                    reward_reliability_list = levelGifts.Any(x => x.Item1 == gift)
-                        ? levelGifts.Where(x => x.Item1 == gift).First().Item2
-                        : null
+                    reward_reliability_list =
+                        levelGifts.FirstOrDefault(x => x.Item1 == gift)?.Item2
+                        ?? Enumerable.Empty<RewardReliabilityList>()
                 }
             );
         }
@@ -581,7 +581,8 @@ public class DragonService : IDragonService
         return new DragonSendGiftMultipleData()
         {
             is_favorite = true,
-            reward_reliability_list = levelGifts.Any() ? levelGifts.First().Item2 : null,
+            reward_reliability_list =
+                levelGifts.FirstOrDefault()?.Item2 ?? Enumerable.Empty<RewardReliabilityList>(),
             return_gift_list = rewards.First().Item2,
             update_data_list = updateDataList
         };
