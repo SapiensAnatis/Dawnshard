@@ -454,4 +454,20 @@ public class MasterAssetTest
             .Should()
             .ContainInConsecutiveOrder(expectedStoryIds);
     }
+
+    [Fact]
+    public void StoryData_HasExpectedProperties()
+    {
+        MasterAsset.MasterAsset.StoryData[200010011]
+            .Should()
+            .BeEquivalentTo(new UnitStory(Id: 200010011, ReleaseTriggerId: (int)Dragons.Chthonius));
+    }
+
+    [Theory]
+    [InlineData(100001141, StoryTypes.Chara)]
+    [InlineData(210001011, StoryTypes.Dragon)]
+    public void StoryData_Type_IsCorrect(int storyId, StoryTypes expectedType)
+    {
+        MasterAsset.MasterAsset.StoryData[storyId].Type.Should().Be(expectedType);
+    }
 }

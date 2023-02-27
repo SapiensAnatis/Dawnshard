@@ -37,4 +37,7 @@ public interface IUnitRepository : IBaseRepository
         string deviceAccountId,
         IQueryable<DbPartyUnit> units
     );
+    Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(Dragons id);
+    Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(IEnumerable<Charas> idList);
+    Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(Charas id);
 }

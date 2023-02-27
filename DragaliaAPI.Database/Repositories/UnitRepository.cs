@@ -7,6 +7,7 @@ using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
@@ -14,11 +15,13 @@ namespace DragaliaAPI.Database.Repositories;
 public class UnitRepository : BaseRepository, IUnitRepository
 {
     private readonly ApiContext apiContext;
+    private readonly IPlayerDetailsService playerDetailsService;
 
-    public UnitRepository(ApiContext apiContext)
+    public UnitRepository(ApiContext apiContext, IPlayerDetailsService playerDetailsService)
         : base(apiContext)
     {
         this.apiContext = apiContext;
+        this.playerDetailsService = playerDetailsService;
     }
 
     public IQueryable<DbPlayerCharaData> GetAllCharaData(string deviceAccountId)
@@ -105,6 +108,16 @@ public class UnitRepository : BaseRepository, IUnitRepository
         return newMapping;
     }
 
+    public async Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(IEnumerable<Charas> idList)
+    {
+        return await this.AddCharas(this.playerDetailsService.AccountId, idList);
+    }
+
+    public async Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(Charas id)
+    {
+        return await this.AddCharas(new[] { id });
+    }
+
     public async Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(
         string deviceAccountId,
         IEnumerable<Dragons> idList
@@ -139,6 +152,16 @@ public class UnitRepository : BaseRepository, IUnitRepository
         );
 
         return newMapping;
+    }
+
+    public async Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(IEnumerable<Dragons> idList)
+    {
+        return await this.AddDragons(this.playerDetailsService.AccountId, idList);
+    }
+
+    public async Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(Dragons id)
+    {
+        return await this.AddDragons(new[] { id });
     }
 
     public async Task RemoveDragons(string deviceAccountId, IEnumerable<long> keyIdList)

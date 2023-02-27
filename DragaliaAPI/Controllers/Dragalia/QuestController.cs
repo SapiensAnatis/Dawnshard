@@ -14,6 +14,7 @@ public class QuestController : DragaliaControllerBase
     private readonly IQuestRepository questRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
+    private readonly IStoryService storyService;
     private readonly IHelperService helperService;
     private readonly IQuestRewardService questRewardService;
     private readonly IUpdateDataService updateDataService;
@@ -109,6 +110,7 @@ public class QuestController : DragaliaControllerBase
         IQuestRepository questRepository,
         IUserDataRepository userDataRepository,
         IUnitRepository unitRepository,
+        IStoryService storyService,
         IHelperService helperService,
         IQuestRewardService questRewardService,
         IUpdateDataService updateDataService,
@@ -118,6 +120,7 @@ public class QuestController : DragaliaControllerBase
         this.questRepository = questRepository;
         this.userDataRepository = userDataRepository;
         this.unitRepository = unitRepository;
+        this.storyService = storyService;
         this.helperService = helperService;
         this.questRewardService = questRewardService;
         this.updateDataService = updateDataService;
@@ -128,54 +131,19 @@ public class QuestController : DragaliaControllerBase
     [Route("read_story")]
     public async Task<DragaliaResult> ReadStory(QuestReadStoryRequest request)
     {
-        this.logger.LogDebug("Reading quest story id {storyId}", request.quest_story_id);
+        var rewardList = await this.storyService.ReadQuestStory(request.quest_story_id);
+        var entityResult = StoryService.GetEntityResult(rewardList);
 
-        await this.questRepository.UpdateQuestStory(
-            this.DeviceAccountId,
-            request.quest_story_id,
-            ReadStoryState
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+
+        return this.Ok(
+            new QuestReadStoryData()
+            {
+                quest_story_reward_list = rewardList,
+                entity_result = entityResult,
+                update_data_list = updateDataList
+            }
         );
-
-        List<AtgenDuplicateEntityList> newGetEntityList = new();
-        List<AtgenQuestStoryRewardList> rewardList = new();
-
-        if (request.quest_story_id == MaxStoryId)
-        {
-            await this.userDataRepository.SkipTutorial(this.DeviceAccountId);
-
-            await this.unitRepository.AddCharas(
-                this.DeviceAccountId,
-                new List<Charas>() { Charas.Elisanne }
-            );
-
-            newGetEntityList.Add(
-                new() { entity_id = (int)Charas.Elisanne, entity_type = EntityTypes.Chara }
-            );
-            rewardList.Add(
-                new()
-                {
-                    entity_id = (int)Charas.Elisanne,
-                    entity_level = 1,
-                    entity_limit_break_count = 0,
-                    entity_quantity = 1,
-                    entity_type = EntityTypes.Chara
-                }
-            );
-        }
-
-        UpdateDataList updateData = this.updateDataService.GetUpdateDataList(this.DeviceAccountId);
-
-        await this.questRepository.SaveChangesAsync();
-
-        QuestReadStoryData responseData =
-            new(
-                updateData,
-                new() { new_get_entity_list = newGetEntityList },
-                quest_story_reward_list: rewardList,
-                new List<ConvertedEntityList>()
-            );
-
-        return this.Ok(responseData);
     }
 
     [HttpPost("get_support_user_list")]

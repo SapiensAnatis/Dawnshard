@@ -13,25 +13,17 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Route("castle_story")]
 public class CastleStoryController : DragaliaControllerBase
 {
-    private readonly IStoryRepository storyRepository;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IInventoryRepository inventoryRepository;
+    private readonly IStoryService storyService;
     private readonly IUpdateDataService updateDataService;
     private readonly ILogger<CastleStoryController> logger;
 
-    private const int StoryWyrmiteReward = 50;
-
     public CastleStoryController(
-        IStoryRepository storyRepository,
-        IUserDataRepository userDataRepository,
-        IInventoryRepository inventoryRepository,
+        IStoryService storyService,
         IUpdateDataService updateDataService,
         ILogger<CastleStoryController> logger
     )
     {
-        this.storyRepository = storyRepository;
-        this.userDataRepository = userDataRepository;
-        this.inventoryRepository = inventoryRepository;
+        this.storyService = storyService;
         this.updateDataService = updateDataService;
         this.logger = logger;
     }
@@ -39,71 +31,19 @@ public class CastleStoryController : DragaliaControllerBase
     [HttpPost("read")]
     public async Task<DragaliaResult> Read(CastleStoryReadRequest request)
     {
-        List<AtgenBuildEventRewardEntityList> rewardList = new(); // wtf is this type
-
-        if (
-            (
-                await this.storyRepository
-                    .GetStoryList(this.DeviceAccountId)
-                    .SingleOrDefaultAsync(
-                        x =>
-                            x.StoryType == StoryTypes.Castle && x.StoryId == request.castle_story_id
-                    )
-            )?.State != 1
-        )
+        if (!await this.storyService.CheckCastleStoryEligibility(request.castle_story_id))
         {
-            int lookingGlassCount =
-                (
-                    await this.inventoryRepository.GetMaterial(
-                        this.DeviceAccountId,
-                        Materials.LookingGlass
-                    )
-                )?.Quantity ?? 0;
-
-            if (lookingGlassCount < 1)
-            {
-                throw new DragaliaException(
-                    ResultCode.CastleStoryOutOfPeriod,
-                    "Insufficient looking glasses"
-                );
-            }
-
-            await this.inventoryRepository.UpdateQuantity(
-                DeviceAccountId,
-                Materials.LookingGlass,
-                -1
-            );
-
-            this.logger.LogInformation(
-                "Reading previously unread story id {id}",
+            this.logger.LogWarning(
+                "User was not eligible to read castle story {id}",
                 request.castle_story_id
             );
-
-            await this.storyRepository.UpdateStory(
-                DeviceAccountId,
-                StoryTypes.Castle,
-                request.castle_story_id,
-                1
-            );
-
-            // TODO when giftbox is added: give rewards properly
-            // TODO: give different wyrmite rewards for chara/dragon stories
-            await this.userDataRepository.GiveWyrmite(this.DeviceAccountId, StoryWyrmiteReward);
-            rewardList.Add(
-                new()
-                {
-                    entity_type = EntityTypes.Wyrmite,
-                    entity_id = 0,
-                    entity_quantity = StoryWyrmiteReward
-                }
-            );
+            return this.Code(ResultCode.StoryNotGet);
         }
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
+        IEnumerable<AtgenBuildEventRewardEntityList> rewardList =
+            await this.storyService.ReadCastleStory(request.castle_story_id);
 
-        await this.storyRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(
             new CastleStoryReadData()
