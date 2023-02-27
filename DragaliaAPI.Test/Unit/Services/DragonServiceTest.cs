@@ -122,6 +122,59 @@ public class DragonServiceTest
         mockStoryRepository.VerifyAll();
     }
 
+    [Fact]
+    public async Task DoDragonBuyGiftToSendMultiple_DragonGiftNoLevel_ReturnsCorrectData()
+    {
+        SetupReliabilityMock(
+            out List<DbPlayerDragonGift> gifts,
+            out DbPlayerCurrency rupies,
+            out DbPlayerMaterial garudaEssence,
+            out DbPlayerUserData userData,
+            out List<DbPlayerDragonReliability> dragonRels,
+            out List<DbPlayerStoryState> stories
+        );
+
+        DbPlayerDragonReliability dd = DbPlayerDragonReliabilityFactory.Create(
+            DeviceAccountId,
+            Dragons.Garuda
+        );
+        dd.Level = 30;
+        dd.Exp = 36300;
+
+        dragonRels.Add(dd);
+
+        long startCoin = userData.Coin;
+        DragonBuyGiftToSendMultipleData responseData =
+            await dragonService.DoDragonBuyGiftToSendMultiple(
+                new DragonBuyGiftToSendMultipleRequest()
+                {
+                    dragon_id = Dragons.Garuda,
+                    dragon_gift_id_list = new List<DragonGifts>() { DragonGifts.FreshBread }
+                },
+                DeviceAccountId
+            );
+
+        responseData.Should().NotBeNull();
+        responseData.dragon_gift_reward_list.Should().NotBeNullOrEmpty();
+
+        responseData.shop_gift_list.Count().Should().Be(5);
+
+        gifts.Where(x => x.DragonGiftId == DragonGifts.FreshBread).First().Quantity.Should().Be(0);
+
+        responseData.dragon_gift_reward_list.Count().Should().Be(1);
+        responseData.dragon_gift_reward_list
+            .First(x => x.dragon_gift_id == DragonGifts.FreshBread)
+            .reward_reliability_list.Should()
+            .BeEmpty();
+
+        dragonRels[0].Exp.Should().Be(36300);
+        dragonRels[0].Level.Should().Be(30);
+
+        mockUserDataRepository.Verify(x => x.LookupUserData());
+        mockInventoryRepository.Verify(x => x.GetDragonGifts(DeviceAccountId));
+        mockInventoryRepository.Setup(x => x.GetMaterial(DeviceAccountId, It.IsAny<Materials>()));
+    }
+
     [Theory]
     [InlineData(Dragons.Garuda, DragonGifts.FourLeafClover, 10, 10000, 18)]
     [InlineData(Dragons.Puppy, DragonGifts.PupGrub, 10, 2000, 21)]
