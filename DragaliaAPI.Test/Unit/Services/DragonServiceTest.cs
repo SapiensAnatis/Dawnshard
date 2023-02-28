@@ -122,6 +122,59 @@ public class DragonServiceTest
         mockStoryRepository.VerifyAll();
     }
 
+    [Fact]
+    public async Task DoDragonBuyGiftToSendMultiple_DragonGiftNoLevel_ReturnsCorrectData()
+    {
+        SetupReliabilityMock(
+            out List<DbPlayerDragonGift> gifts,
+            out DbPlayerCurrency rupies,
+            out DbPlayerMaterial garudaEssence,
+            out DbPlayerUserData userData,
+            out List<DbPlayerDragonReliability> dragonRels,
+            out List<DbPlayerStoryState> stories
+        );
+
+        DbPlayerDragonReliability dd = DbPlayerDragonReliabilityFactory.Create(
+            DeviceAccountId,
+            Dragons.Garuda
+        );
+        dd.Level = 30;
+        dd.Exp = 36300;
+
+        dragonRels.Add(dd);
+
+        long startCoin = userData.Coin;
+        DragonBuyGiftToSendMultipleData responseData =
+            await dragonService.DoDragonBuyGiftToSendMultiple(
+                new DragonBuyGiftToSendMultipleRequest()
+                {
+                    dragon_id = Dragons.Garuda,
+                    dragon_gift_id_list = new List<DragonGifts>() { DragonGifts.FreshBread }
+                },
+                DeviceAccountId
+            );
+
+        responseData.Should().NotBeNull();
+        responseData.dragon_gift_reward_list.Should().NotBeNullOrEmpty();
+
+        responseData.shop_gift_list.Count().Should().Be(5);
+
+        gifts.Where(x => x.DragonGiftId == DragonGifts.FreshBread).First().Quantity.Should().Be(0);
+
+        responseData.dragon_gift_reward_list.Count().Should().Be(1);
+        responseData.dragon_gift_reward_list
+            .First(x => x.dragon_gift_id == DragonGifts.FreshBread)
+            .reward_reliability_list.Should()
+            .BeEmpty();
+
+        dragonRels[0].Exp.Should().Be(36300);
+        dragonRels[0].Level.Should().Be(30);
+
+        mockUserDataRepository.Verify(x => x.LookupUserData());
+        mockInventoryRepository.Verify(x => x.GetDragonGifts(DeviceAccountId));
+        mockInventoryRepository.Setup(x => x.GetMaterial(DeviceAccountId, It.IsAny<Materials>()));
+    }
+
     [Theory]
     [InlineData(Dragons.Garuda, DragonGifts.FourLeafClover, 10, 10000, 18)]
     [InlineData(Dragons.Puppy, DragonGifts.PupGrub, 10, 2000, 21)]
@@ -326,13 +379,16 @@ public class DragonServiceTest
     }
 
     [Theory]
-    [InlineData(1, DragonLimitBreakMatTypes.Dupe)]
-    [InlineData(1, DragonLimitBreakMatTypes.Stone)]
-    [InlineData(1, DragonLimitBreakMatTypes.Spheres)]
-    [InlineData(5, DragonLimitBreakMatTypes.SpheresLB5)]
+    [InlineData(1, DragonLimitBreakMatTypes.Dupe, 2, 2, 1)]
+    [InlineData(4, DragonLimitBreakMatTypes.Stone, 5, 5, 2)]
+    [InlineData(2, DragonLimitBreakMatTypes.Spheres, 3, 3, 1)]
+    [InlineData(5, DragonLimitBreakMatTypes.SpheresLB5, 6, 6, 2)]
     public async Task DoDragonLimitBreak_LimitBreaks(
         byte limitBreakNr,
-        DragonLimitBreakMatTypes lbMatType
+        DragonLimitBreakMatTypes lbMatType,
+        byte expectedA1Level,
+        byte expectedA2Level,
+        byte expectedS1Level
     )
     {
         Materials targetMat =
@@ -396,6 +452,9 @@ public class DragonServiceTest
         );
 
         dragonData.LimitBreakCount.Should().Be(limitBreakNr);
+        dragonData.Ability1Level.Should().Be(expectedA1Level);
+        dragonData.Ability2Level.Should().Be(expectedA2Level);
+        dragonData.Skill1Level.Should().Be(expectedS1Level);
         mockUnitRepository.Verify(x => x.GetAllDragonData(DeviceAccountId));
         if (lbMatType == DragonLimitBreakMatTypes.Dupe)
         {
