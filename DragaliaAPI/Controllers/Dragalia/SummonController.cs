@@ -389,11 +389,10 @@ public class SummonController : DragaliaControllerBase
             let rarity = summonResult
                 .First(x => x.entity_type == EntityTypes.Dragon && (Dragons)x.id == dragon.id)
                 .rarity
-            let dewPoint = dragon.isNew ? 0 : DewValueData.DupeSummon[rarity]
             select new AtgenResultUnitList
             {
                 id = (int)dragon.id,
-                dew_point = dewPoint,
+                dew_point = 0,
                 entity_type = EntityTypes.Dragon,
                 is_new = dragon.isNew,
                 rarity = rarity
@@ -491,8 +490,8 @@ public class SummonController : DragaliaControllerBase
                 new EntityResult()
                 {
                     new_get_entity_list = charaRewardList
-                        .Concat(dragonRewardList)
                         .Where(x => x.is_new)
+                        .Concat(dragonRewardList)
                         .Select(
                             x =>
                                 new AtgenDuplicateEntityList()
