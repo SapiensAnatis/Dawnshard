@@ -2,8 +2,10 @@
 .run
 .env
 test_coverage.json
-*/**/launchSettings.json
-*/**/appsettings.Development.json
+launchSettings.json
+appsettings.Development.json
+test_coverage.json
+.run
 
 # CMake
 cmake-build-*/
