@@ -1,5 +1,10 @@
 [
     {
+        "headline": "Dragon updates",
+        "timestamp": 1677018558,
+        "description": "The server has been updated to support upgrading/unbinding dragons and the Dragon's Roost reliability system. Thanks to Nano#9384 for working on this!"
+    },
+    {
         "headline": "Quest drops improvement",
         "timestamp": 1676678446,
         "description": "Thanks to data sourced by the Dragalia Lost Wiki, each quest will now drop the correct set of items. This should help you gather materials for weapon upgrading. However, the quantities are still wrong (100 of everything) and they aren't assigned to enemies."

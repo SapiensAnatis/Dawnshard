@@ -91,6 +91,7 @@ builder.Services
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<IUpdateDataService, UpdateDataService>()
     .AddScoped<IDungeonService, DungeonService>()
+    .AddScoped<IDragonService, DragonService>()
     .AddScoped<ISavefileService, SavefileService>()
     .AddScoped<IHelperService, HelperService>()
     .AddScoped<IAuthService, AuthService>()

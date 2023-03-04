@@ -16,4 +16,8 @@ public interface IInventoryRepository
     Task<bool> CheckQuantity(IEnumerable<KeyValuePair<Materials, int>> quantityMap);
     Task<bool> CheckQuantity(Materials materialId, int quantity);
     Task UpdateQuantity(IEnumerable<KeyValuePair<Materials, int>> quantityMap);
+    DbPlayerDragonGift AddDragonGift(string deviceAccountId, DragonGifts type);
+    Task<DbPlayerDragonGift?> GetDragonGift(string deviceAccountId, DragonGifts materialId);
+    IQueryable<DbPlayerDragonGift> GetDragonGifts(string deviceAccountId);
+    Task RefreshPurchasableDragonGiftCounts(string deviceAccountId);
 }

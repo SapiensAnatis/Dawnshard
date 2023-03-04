@@ -62,13 +62,17 @@ public class UpdateDataService : IUpdateDataService
                 ),
                 unit_story_list = this.ConvertEntities<UnitStoryList, DbPlayerStoryState>(
                     entities,
-                    x => x.StoryType == StoryTypes.Chara
+                    x => x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon
                 ),
                 castle_story_list = this.ConvertEntities<CastleStoryList, DbPlayerStoryState>(
                     entities,
                     x => x.StoryType == StoryTypes.Castle
                 ),
                 material_list = this.ConvertEntities<MaterialList, DbPlayerMaterial>(entities),
+                dragon_gift_list = this.ConvertEntities<DragonGiftList, DbPlayerDragonGift>(
+                    entities,
+                    x => x.DragonGiftId > DragonGifts.GoldenChalice
+                ),
                 quest_list = this.ConvertEntities<QuestList, DbQuest>(entities),
                 build_list = this.ConvertEntities<BuildList, DbFortBuild>(entities),
                 weapon_passive_ability_list = this.ConvertEntities<
