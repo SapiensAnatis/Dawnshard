@@ -4,7 +4,7 @@
 
 Dawnshard (internally named DragaliaAPI) is a server emulator for Dragalia Lost.
 
-You can play using the [Dragalipatch](https://github.com/lukeFZ/dragalipatch) app by LukeFZ to redirect server traffic to https://dragalia.sapiensanatis.com.
+You can play using the [Dragalipatch](https://github.com/lukeFZ/dragalipatch) app by LukeFZ to redirect server traffic to https://dawnshard.co.uk.
 
 If you haven't already, please also consider joining the Dragalia Lost Reverse Engineering [Discord server](https://discord.gg/j9zSttjjWj); this is where development is discussed and where bugs/issues are most easily reported.
 
