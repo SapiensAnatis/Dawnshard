@@ -1,59 +1,36 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class QuestRepository : BaseRepository, IQuestRepository
+public class QuestRepository : IQuestRepository
 {
     private readonly ApiContext apiContext;
+    private readonly IPlayerDetailsService playerDetailsService;
 
-    public QuestRepository(ApiContext apiContext)
-        : base(apiContext)
+    public QuestRepository(ApiContext apiContext, IPlayerDetailsService playerDetailsService)
     {
         this.apiContext = apiContext;
+        this.playerDetailsService = playerDetailsService;
     }
 
-    public IQueryable<DbPlayerStoryState> GetStories(string deviceAccountId, StoryTypes type)
-    {
-        return this.apiContext.PlayerStoryState.Where(
-            x => x.DeviceAccountId == deviceAccountId && x.StoryType == type
-        );
-    }
-
-    public async Task UpdateQuestStory(string deviceAccountId, int storyId, int state)
-    {
-        DbPlayerStoryState? storyData = await apiContext.PlayerStoryState.SingleOrDefaultAsync(
-            x =>
-                x.DeviceAccountId == deviceAccountId
-                && x.StoryId == storyId
-                && x.StoryType == StoryTypes.Quest
-        );
-
-        if (storyData is null)
-        {
-            storyData = new()
-            {
-                DeviceAccountId = deviceAccountId,
-                StoryId = storyId,
-                StoryType = StoryTypes.Quest
-            };
-            apiContext.PlayerStoryState.Add(storyData);
-        }
-
-        storyData.State = (byte)state;
-    }
-
+    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
     public IQueryable<DbQuest> GetQuests(string deviceAccountId)
     {
         return this.apiContext.PlayerQuests.Where(x => x.DeviceAccountId == deviceAccountId);
     }
 
+    public IQueryable<DbQuest> Quests =>
+        this.apiContext.PlayerQuests.Where(
+            x => x.DeviceAccountId == this.playerDetailsService.AccountId
+        );
+
     public async Task UpdateQuestState(string deviceAccountId, int questId, int state)
     {
-        DbQuest? questData = await apiContext.PlayerQuests.SingleOrDefaultAsync(
-            x => x.DeviceAccountId == deviceAccountId && x.QuestId == questId
-        );
+        DbQuest? questData = await apiContext.PlayerQuests.FindAsync(deviceAccountId, questId);
 
         if (questData is null)
         {

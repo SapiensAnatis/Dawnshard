@@ -1,5 +1,10 @@
 [
     {
+        "headline": "Story rewards",
+        "timestamp": 1678131599,
+        "description": "A small update has been made to stories to make the rewards slightly more accurate; along with fixing a few bugs, you should now be able to get the usual story units from the campaign. As a result, they have been removed from the summoning pool."
+    },
+    {
         "headline": "Dragon updates",
         "timestamp": 1677018558,
         "description": "The server has been updated to support upgrading/unbinding dragons and the Dragon's Roost reliability system. Thanks to Nano#9384 for working on this!"

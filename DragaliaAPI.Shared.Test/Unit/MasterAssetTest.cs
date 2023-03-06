@@ -454,4 +454,27 @@ public class MasterAssetTest
             .Should()
             .ContainInConsecutiveOrder(expectedStoryIds);
     }
+
+    [Fact]
+    public void StoryData_HasExpectedProperties()
+    {
+        MasterAsset.MasterAsset.UnitStory[200010011]
+            .Should()
+            .BeEquivalentTo(
+                new UnitStory(
+                    Id: 200010011,
+                    ReleaseTriggerId: (int)Dragons.Chthonius,
+                    UnlockQuestStoryId: 0,
+                    UnlockTriggerStoryId: 0
+                )
+            );
+    }
+
+    [Theory]
+    [InlineData(100001141, StoryTypes.Chara)]
+    [InlineData(210001011, StoryTypes.Dragon)]
+    public void StoryData_Type_IsCorrect(int storyId, StoryTypes expectedType)
+    {
+        MasterAsset.MasterAsset.UnitStory[storyId].Type.Should().Be(expectedType);
+    }
 }
