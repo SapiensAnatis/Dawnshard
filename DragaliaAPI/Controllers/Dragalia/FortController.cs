@@ -78,7 +78,7 @@ public class FortController : DragaliaControllerBase
     {
         FortBonusList bonusList = await bonusService.GetBonusList();
 
-        FortDetail fortDetail = await this.fortService.CompleteAtOnce(
+        await this.fortService.CompleteAtOnce(
             this.DeviceAccountId,
             request.payment_type,
             request.build_id
@@ -89,6 +89,7 @@ public class FortController : DragaliaControllerBase
         );
         await this.updateDataService.SaveChangesAsync();
 
+        FortDetail fortDetail = await this.fortService.UpdateCarpenterUsage();
         FortBuildAtOnceData data =
             new()
             {
@@ -133,12 +134,13 @@ public class FortController : DragaliaControllerBase
     {
         FortBonusList bonusList = await bonusService.GetBonusList();
 
-        FortDetail fortDetail = await this.fortService.EndUpgrade(request.build_id);
+        await this.fortService.EndUpgrade(request.build_id);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
 
+        FortDetail fortDetail = await this.fortService.UpdateCarpenterUsage();
         await this.updateDataService.SaveChangesAsync();
 
         FortBuildEndData data =
@@ -159,12 +161,10 @@ public class FortController : DragaliaControllerBase
     [HttpPost("build_start")]
     public async Task<DragaliaResult> BuildStart(FortBuildStartRequest request)
     {
-        FortDetail fortDetail = await this.fortService.GetFortDetails();
-
         DbFortBuild build = await this.fortService.BuildStart(
             this.DeviceAccountId,
             request.fort_plant_id,
-            1, // Build always start at 1
+            1, // Build always starts at 1
             request.position_x,
             request.position_z
         );
@@ -172,7 +172,9 @@ public class FortController : DragaliaControllerBase
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
+        await this.updateDataService.SaveChangesAsync();
 
+        FortDetail fortDetail = await this.fortService.UpdateCarpenterUsage();
         await this.updateDataService.SaveChangesAsync();
 
         FortBuildStartData data =
@@ -198,7 +200,7 @@ public class FortController : DragaliaControllerBase
         BuildList halidom = builds.First(x => x.plant_id == FortPlants.TheHalidom);
         BuildList smithy = builds.First(x => x.plant_id == FortPlants.Smithy);
 
-        FortDetail fortDetail = await this.fortService.CompleteAtOnce(
+        await this.fortService.CompleteAtOnce(
             this.DeviceAccountId,
             request.payment_type,
             request.build_id
@@ -208,6 +210,7 @@ public class FortController : DragaliaControllerBase
             this.DeviceAccountId
         );
 
+        FortDetail fortDetail = await this.fortService.UpdateCarpenterUsage();
         await this.updateDataService.SaveChangesAsync();
 
         FortLevelupAtOnceData data =
@@ -260,12 +263,13 @@ public class FortController : DragaliaControllerBase
 
         FortBonusList bonusList = await bonusService.GetBonusList();
 
-        FortDetail fortDetail = await this.fortService.EndUpgrade(request.build_id);
+        await this.fortService.EndUpgrade(request.build_id);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
         );
 
+        FortDetail fortDetail = await this.fortService.UpdateCarpenterUsage();
         await this.updateDataService.SaveChangesAsync();
 
         FortLevelupEndData data =
@@ -288,8 +292,6 @@ public class FortController : DragaliaControllerBase
     [HttpPost("levelup_start")]
     public async Task<DragaliaResult> LevelupStart(FortLevelupStartRequest request)
     {
-        FortDetail fortDetail = await this.fortService.GetFortDetails();
-
         DbFortBuild build = await this.fortService.LevelupStart(
             this.DeviceAccountId,
             request.build_id
@@ -299,6 +301,7 @@ public class FortController : DragaliaControllerBase
             this.DeviceAccountId
         );
 
+        FortDetail fortDetail = await this.fortService.UpdateCarpenterUsage();
         await this.updateDataService.SaveChangesAsync();
 
         FortLevelupStartData data =

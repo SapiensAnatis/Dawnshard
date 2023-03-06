@@ -143,30 +143,43 @@ public class FortRepository : IFortRepository
     public async Task<DbFortDetail> UpdateCarpenterUsage()
     {
         int workingCarpenter = 0;
-        List<DbFortBuild> AccountBuilds = Builds
-            .Where(x => x.DeviceAccountId == this.playerDetailsService.AccountId)
-            .ToList();
-        await Parallel.ForEachAsync(
-            AccountBuilds,
-            async (item, cancellationToken) =>
-            {
-                if (item.BuildEndDate != DateTimeOffset.UnixEpoch)
-                    workingCarpenter++;
-            }
-        );
+        List<DbFortBuild> AccountBuilds = Builds.ToList();
 
-        return await this.UpdateFortWorkingCarpenter(workingCarpenter);
-    }
+        foreach (DbFortBuild build in AccountBuilds)
+        {
+            if (build.BuildEndDate != DateTimeOffset.UnixEpoch)
+                workingCarpenter++;
+        }
 
-    private async Task<DbFortDetail> UpdateFortWorkingCarpenter(int working_carpenter_num)
-    {
         DbFortDetail fortDetail = await apiContext.PlayerFortDetails
             .Where(x => x.DeviceAccountId == this.playerDetailsService.AccountId)
             .FirstAsync();
 
-        fortDetail.WorkingCarpenterNum = working_carpenter_num;
+        fortDetail.WorkingCarpenterNum = workingCarpenter;
 
         return fortDetail;
+    }
+
+    public void ConsumePaymentCost(
+        DbPlayerUserData userData,
+        PaymentTypes paymentType,
+        int paymentCost
+    )
+    {
+        switch (paymentType)
+        {
+            case PaymentTypes.Wyrmite:
+                userData.Crystal -= paymentCost;
+                break;
+            case PaymentTypes.Diamantium:
+                // TODO How do I diamantium?
+                break;
+            case PaymentTypes.HalidomHustleHammer:
+                userData.BuildTimePoint -= paymentCost;
+                break;
+            default:
+                throw new InvalidOperationException($"User did not have enough {paymentType}.");
+        }
     }
 
     private int GetUpgradePaymentHeld(DbPlayerUserData userData, PaymentTypes paymentType)
@@ -197,28 +210,6 @@ public class FortRepository : IFortRepository
             // This amount scales at 1 per 12 minutes, or 5 per hour.
             // https://dragalialost.wiki/w/Facilities
             return (int)Math.Floor((BuildEndDate - BuildStartDate).TotalMinutes / 12);
-        }
-    }
-
-    public void ConsumePaymentCost(
-        DbPlayerUserData userData,
-        PaymentTypes paymentType,
-        int paymentCost
-    )
-    {
-        switch (paymentType)
-        {
-            case PaymentTypes.Wyrmite:
-                userData.Crystal -= paymentCost;
-                break;
-            case PaymentTypes.Diamantium:
-                // TODO How do I diamantium?
-                break;
-            case PaymentTypes.HalidomHustleHammer:
-                userData.BuildTimePoint -= paymentCost;
-                break;
-            default:
-                throw new InvalidOperationException($"User did not have enough {paymentType}.");
         }
     }
 }

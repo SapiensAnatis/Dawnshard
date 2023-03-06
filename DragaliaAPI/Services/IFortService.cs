@@ -9,9 +9,10 @@ public interface IFortService
     IEnumerable<BuildList> GetBuildList();
     Task<FortDetail> GetFortDetails();
     Task<FortDetail> AddCarpenter(string accountId, PaymentTypes paymentType);
-    Task<FortDetail> CompleteAtOnce(string accountId, PaymentTypes paymentType, long buildId);
+    Task<FortDetail> UpdateCarpenterUsage();
+    Task CompleteAtOnce(string accountId, PaymentTypes paymentType, long buildId);
     Task<DbFortBuild> CancelUpgrade(long buildId);
-    Task<FortDetail> EndUpgrade(long buildId);
+    Task EndUpgrade(long buildId);
     Task<DbFortBuild> BuildStart(
         string accountId,
         FortPlants fortPlantId,

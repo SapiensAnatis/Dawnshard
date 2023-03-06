@@ -14,8 +14,6 @@ public class FortTest : IntegrationTestBase
         this.fixture = fixture;
         this.client = fixture.CreateClient();
 
-        //this.fixture.AddToDatabase(FortTestData.FortDetail).Wait();
-        //this.fixture.AddRangeToDatabase(FortTestData.Builds).Wait();
         TestUtils.ApplyDateTimeAssertionOptions(thresholdSec: 2);
     }
 

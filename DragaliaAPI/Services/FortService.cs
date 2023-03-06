@@ -108,7 +108,12 @@ public class FortService : IFortService
         return fortDetail;
     }
 
-    public async Task<FortDetail> CompleteAtOnce(
+    public async Task<FortDetail> UpdateCarpenterUsage()
+    {
+        return this.mapper.Map<FortDetail>(await this.fortRepository.UpdateCarpenterUsage());
+    }
+
+    public async Task CompleteAtOnce(
         string accountId,
         PaymentTypes paymentType,
         long buildId
@@ -119,10 +124,6 @@ public class FortService : IFortService
             .FirstAsync();
 
         await this.fortRepository.UpgradeAtOnce(userData, buildId, paymentType);
-
-        await this.fortRepository.UpdateCarpenterUsage();
-
-        return await GetFortDetails();
     }
 
     public async Task<DbFortBuild> CancelUpgrade(long buildId)
@@ -145,12 +146,10 @@ public class FortService : IFortService
             this.fortRepository.DeleteBuild(build);
         }
 
-        await this.fortRepository.UpdateCarpenterUsage();
-
         return build;
     }
 
-    public async Task<FortDetail> EndUpgrade(long buildId)
+    public async Task EndUpgrade(long buildId)
     {
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(buildId);
@@ -158,8 +157,6 @@ public class FortService : IFortService
         // Update values
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
-
-        return this.mapper.Map<FortDetail>(await this.fortRepository.UpdateCarpenterUsage());
     }
 
     public async Task<DbFortBuild> BuildStart(
@@ -176,7 +173,8 @@ public class FortService : IFortService
 
         // Start building
         DateTime startDate = DateTime.UtcNow;
-        DateTime endDate = startDate.AddSeconds(plantDetail.Time);
+        DateTime endDate = startDate.AddSeconds(plantDetail.Time).AddSeconds(10);
+
         DbFortBuild build =
             new()
             {
@@ -193,11 +191,6 @@ public class FortService : IFortService
 
         await Upgrade(accountId, build, plantDetail);
 
-        await this.fortRepository.AddBuild(build);
-
-        // Increment worker carpenters
-        await this.fortRepository.UpdateCarpenterUsage();
-
         return build;
     }
 
@@ -210,8 +203,6 @@ public class FortService : IFortService
         int buildPlantId = MasterAssetUtils.GetPlantDetailId(build.PlantId, build.Level + 1);
         FortPlantDetail plantDetail = MasterAsset.FortPlant.Get(buildPlantId);
 
-        await Upgrade(accountId, build, plantDetail);
-
         // Start level up
         DateTimeOffset startDate = DateTimeOffset.UtcNow;
         DateTimeOffset endDate = startDate.AddSeconds(plantDetail.Time);
@@ -219,6 +210,8 @@ public class FortService : IFortService
         build.Level += 1;
         build.BuildStartDate = startDate;
         build.BuildEndDate = endDate;
+
+        await Upgrade(accountId, build, plantDetail);
 
         return build;
     }
@@ -267,8 +260,11 @@ public class FortService : IFortService
         IEnumerable<KeyValuePair<Materials, int>> quantityMap = plantDetail.CreateMaterialMap;
         await ConsumePlayerMaterials(accountId, userMaterials, quantityMap);
 
-        // Increment carpenter usage
-        await this.fortRepository.UpdateCarpenterUsage();
+        if (build.Level == 1)
+        {
+            // Only has to be added if it is being created for the first time
+            await this.fortRepository.AddBuild(build);
+        }
     }
 
     private async Task<bool> ConsumePlayerMaterials(
