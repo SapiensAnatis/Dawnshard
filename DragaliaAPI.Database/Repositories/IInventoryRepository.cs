@@ -20,4 +20,5 @@ public interface IInventoryRepository
     Task<DbPlayerDragonGift?> GetDragonGift(string deviceAccountId, DragonGifts materialId);
     IQueryable<DbPlayerDragonGift> GetDragonGifts(string deviceAccountId);
     Task RefreshPurchasableDragonGiftCounts(string deviceAccountId);
+    Task UpdateQuantity(Materials item, int quantity);
 }

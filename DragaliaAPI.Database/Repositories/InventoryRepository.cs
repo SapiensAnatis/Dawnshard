@@ -84,6 +84,13 @@ public class InventoryRepository : IInventoryRepository
         material.Quantity += quantity;
     }
 
+    public async Task UpdateQuantity(Materials item, int quantity)
+    {
+#pragma warning disable CS0618 // Type or member is obsolete
+        await this.UpdateQuantity(this.playerDetailsService.AccountId, item, quantity);
+#pragma warning restore CS0618 // Type or member is obsolete
+    }
+
     private async Task<DbPlayerMaterial> FindAsync(Materials item)
     {
         return await this.apiContext.PlayerMaterials.FindAsync(
@@ -100,13 +107,6 @@ public class InventoryRepository : IInventoryRepository
                     }
                 )
             ).Entity;
-    }
-
-    public async Task UpdateQuantity(Materials material, int quantity)
-    {
-#pragma warning disable CS0618
-        await this.UpdateQuantity(this.playerDetailsService.AccountId, material, quantity);
-#pragma warning restore CS0618
     }
 
     public async Task UpdateQuantity(IEnumerable<Materials> list, int quantity)

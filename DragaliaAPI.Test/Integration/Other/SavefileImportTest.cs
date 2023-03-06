@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Test.Integration.Other;
@@ -98,6 +99,7 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                     opts.Excluding(x => x.server_time);
                     opts.Excluding(x => x.spec_upgrade_time);
                     opts.Excluding(x => x.Name.Contains("last_income_time"));
+                    opts.Excluding(x => x.user_data!.last_login_time);
                     // Inaccurate for other reasons
                     opts.Excluding(x => x.user_data!.stamina_single);
                     opts.Excluding(x => x.user_data!.stamina_multi);
@@ -108,7 +110,6 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
                     );
                     opts.Excluding(x => x.user_data!.level);
                     opts.Excluding(x => x.user_data!.crystal);
-                    opts.Excluding(x => x.user_data!.last_login_time);
 
                     // Ignored properties
                     opts.Excluding(x => x.user_data!.prologue_end_time);
@@ -156,19 +157,35 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
-    public async Task Import_IsIdempotent()
+    public async Task Import_PropertiesMappedCorrectly()
     {
-        string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
         long viewerId = this.fixture.ApiContext.PlayerUserData
             .Single(x => x.DeviceAccountId == fixture.DeviceAccountId)
             .ViewerId;
 
-        LoadIndexData savefile = JsonSerializer
-            .Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, ApiJsonOptions.Instance)!
-            .data;
+        HttpContent content = PrepareSavefileRequest();
+        await this.client.PostAsync($"savefile/import/{viewerId}", content);
 
-        HttpContent content = new StringContent(savefileJson);
-        content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+        fixture.ApiContext.PlayerStoryState
+            .Single(x => x.DeviceAccountId == fixture.DeviceAccountId && x.StoryId == 110313011)
+            .StoryType.Should()
+            .Be(StoryTypes.Chara);
+
+        fixture.ApiContext.PlayerStoryState
+            .Single(x => x.DeviceAccountId == fixture.DeviceAccountId && x.StoryId == 210091011)
+            .StoryType.Should()
+            .Be(StoryTypes.Dragon);
+    }
+
+    [Fact]
+    public async Task Import_IsIdempotent()
+    {
+        long viewerId = this.fixture.ApiContext.PlayerUserData
+            .Single(x => x.DeviceAccountId == fixture.DeviceAccountId)
+            .ViewerId;
+
+        HttpContent content = PrepareSavefileRequest();
+
         HttpResponseMessage importResponse = await this.client.PostAsync(
             $"savefile/import/{viewerId}",
             content
@@ -180,5 +197,18 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
             content
         );
         importResponse2.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+
+    private static HttpContent PrepareSavefileRequest()
+    {
+        string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
+
+        LoadIndexData savefile = JsonSerializer
+            .Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, ApiJsonOptions.Instance)!
+            .data;
+
+        HttpContent content = new StringContent(savefileJson);
+        content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+        return content;
     }
 }

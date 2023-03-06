@@ -19,7 +19,7 @@ public class QuestReverseMapProfile : Profile
         this.CreateMap<UnitStoryList, DbPlayerStoryState>()
             .ForMember(x => x.StoryId, o => o.MapFrom(src => src.unit_story_id))
             .ForMember(x => x.State, o => o.MapFrom(src => src.is_read))
-            .ForMember(x => x.StoryType, o => o.MapFrom(src => StoryTypes.Chara));
+            .ForMember(x => x.StoryType, o => o.MapFrom<UnitStoryTypeResolver>());
 
         this.CreateMap<CastleStoryList, DbPlayerStoryState>()
             .ForMember(x => x.StoryId, o => o.MapFrom(src => src.castle_story_id))

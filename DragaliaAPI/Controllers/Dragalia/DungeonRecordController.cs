@@ -98,11 +98,7 @@ public class DungeonRecordController : DragaliaControllerBase
         IEnumerable<Materials> drops = this.questRewardService.GetDrops(session.QuestData.Id);
         await this.inventoryRepository.UpdateQuantity(drops, QuestDropQuantity);
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await this.questRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(
             new DungeonRecordRecordData()

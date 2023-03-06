@@ -19,11 +19,14 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class RedoableSummonController : DragaliaControllerBase
 {
     private readonly ISummonService summonService;
-    private readonly IQuestRepository questRepository;
+    private readonly IStoryRepository storyRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
     private readonly IUpdateDataService updateDataService;
     private readonly IDistributedCache cache;
+
+    private const int PrologueStoryId = 1000100;
+    private const int RerollTutorialStatus = 10152;
 
     private static class Schema
     {
@@ -79,7 +82,7 @@ public class RedoableSummonController : DragaliaControllerBase
 
     public RedoableSummonController(
         ISummonService summonService,
-        IQuestRepository questRepository,
+        IStoryRepository storyRepository,
         IUserDataRepository userDataRepository,
         IUnitRepository unitRepository,
         IUpdateDataService updateDataService,
@@ -87,7 +90,7 @@ public class RedoableSummonController : DragaliaControllerBase
     )
     {
         this.summonService = summonService;
-        this.questRepository = questRepository;
+        this.storyRepository = storyRepository;
         this.userDataRepository = userDataRepository;
         this.unitRepository = unitRepository;
         this.updateDataService = updateDataService;
@@ -152,8 +155,13 @@ public class RedoableSummonController : DragaliaControllerBase
             JsonSerializer.Deserialize<List<AtgenRedoableSummonResultUnitList>>(cachedResultJson)
             ?? throw new JsonException("Null deserialization result!");
 
-        await userDataRepository.UpdateTutorialStatus(this.DeviceAccountId, 10152);
-        await this.questRepository.UpdateQuestStory(this.DeviceAccountId, 1000100, 1); // Complete prologue story
+        await userDataRepository.UpdateTutorialStatus(this.DeviceAccountId, RerollTutorialStatus);
+
+        DbPlayerStoryState prologueStory = await this.storyRepository.GetOrCreateStory(
+            StoryTypes.Quest,
+            PrologueStoryId
+        );
+        prologueStory.State = StoryState.Read;
 
         IEnumerable<(Charas id, bool isNew)> repositoryCharaOuput =
             await this.unitRepository.AddCharas(

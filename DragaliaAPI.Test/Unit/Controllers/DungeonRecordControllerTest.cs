@@ -82,10 +82,8 @@ public class DungeonRecordControllerTest
             .Returns(Task.CompletedTask);
 
         this.mockUpdateDataService
-            .Setup(x => x.GetUpdateDataList(DeviceAccountId))
-            .Returns(new UpdateDataList() { });
-
-        this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList());
 
         this.mockQuestRewardService.Setup(x => x.GetDrops(questId)).Returns(new List<Materials>());
     }

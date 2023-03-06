@@ -96,6 +96,13 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         await this.ApiContext.SaveChangesAsync();
     }
 
+    public async Task AddToDatabase<TEntity>(params TEntity[] data)
+        where TEntity : class
+    {
+        await this.ApiContext.Set<TEntity>().AddRangeAsync(data);
+        await this.ApiContext.SaveChangesAsync();
+    }
+
     public async Task AddRangeToDatabase<TEntity>(IEnumerable<TEntity> data)
     {
         if (data is null)

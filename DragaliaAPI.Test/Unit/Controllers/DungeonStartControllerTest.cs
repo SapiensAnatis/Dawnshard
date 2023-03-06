@@ -64,15 +64,6 @@ public class DungeonStartControllerTest
 
         dungeonStartController.SetupMockContext();
 
-        this.mockUpdateDataService
-            .Setup(x => x.GetUpdateDataList(DeviceAccountId))
-            .Returns(
-                new UpdateDataList()
-                {
-                    quest_list = new List<QuestList>() { new() { quest_id = questId } }
-                }
-            );
-
         this.mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(new FortBonusList());
 
         /* this.mockPartyRepository
@@ -195,7 +186,9 @@ public class DungeonStartControllerTest
                     }
                 }.AsQueryable().BuildMock());
 
-        this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+        this.mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList());
 
         this.mockPartyRepository
             .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1 }))
@@ -241,7 +234,9 @@ public class DungeonStartControllerTest
             .Setup(x => x.UpdateQuestState(DeviceAccountId, questId, 2))
             .Returns(Task.CompletedTask);
 
-        this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+        this.mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList());
 
         this.mockPartyRepository
             .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1 }))
@@ -281,7 +276,10 @@ public class DungeonStartControllerTest
                     }
                 }.AsQueryable().BuildMock());
 
-        this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+        this.mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList());
+
         this.mockPartyRepository
             .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1, 2 }))
             .Returns(new List<DbPartyUnit>()
@@ -463,7 +461,9 @@ public class DungeonStartControllerTest
                     }
                 }.AsQueryable().BuildMock());
 
-        this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+        this.mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList());
 
         this.mockPartyRepository
             .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1 }))
@@ -508,7 +508,10 @@ public class DungeonStartControllerTest
                     }
                 }.AsQueryable().BuildMock());
 
-        this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+        this.mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList());
+
         this.mockPartyRepository
             .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1 }))
             .Returns(new List<DbPartyUnit>() { }.AsQueryable().BuildMock());

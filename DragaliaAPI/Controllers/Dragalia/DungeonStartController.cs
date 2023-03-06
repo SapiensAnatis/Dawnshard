@@ -59,9 +59,9 @@ public class DungeonStartController : DragaliaControllerBase
 
     [HttpPost("start")]
     [HttpPost("start_multi")]
-    [HttpPost("start_assign_unit")]
     public async Task<DragaliaResult> Start(DungeonStartStartRequest request)
     {
+        // TODO: this method is way too long. Needs to be factored out into a service
         this.logger.LogInformation("Starting dungeon for quest id {questId}", request.quest_id);
 
         Stopwatch stopwatch = new();
@@ -74,9 +74,7 @@ public class DungeonStartController : DragaliaControllerBase
         if (quest?.State != 3)
             await this.questRepository.UpdateQuestState(this.DeviceAccountId, request.quest_id, 2);
 
-        UpdateDataList updateData = this.updateDataService.GetUpdateDataList(this.DeviceAccountId);
-
-        await this.questRepository.SaveChangesAsync();
+        UpdateDataList updateData = await this.updateDataService.SaveChangesAsync();
 
         this.logger.LogInformation(
             "{time} ms: Updated QuestRepository",
