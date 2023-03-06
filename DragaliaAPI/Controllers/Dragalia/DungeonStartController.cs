@@ -59,7 +59,6 @@ public class DungeonStartController : DragaliaControllerBase
 
     [HttpPost("start")]
     [HttpPost("start_multi")]
-    [HttpPost("start_assign_unit")]
     public async Task<DragaliaResult> Start(DungeonStartStartRequest request)
     {
         // TODO: this method is way too long. Needs to be factored out into a service

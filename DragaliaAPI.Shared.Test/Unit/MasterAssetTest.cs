@@ -458,9 +458,16 @@ public class MasterAssetTest
     [Fact]
     public void StoryData_HasExpectedProperties()
     {
-        MasterAsset.MasterAsset.StoryData[200010011]
+        MasterAsset.MasterAsset.UnitStory[200010011]
             .Should()
-            .BeEquivalentTo(new UnitStory(Id: 200010011, ReleaseTriggerId: (int)Dragons.Chthonius));
+            .BeEquivalentTo(
+                new UnitStory(
+                    Id: 200010011,
+                    ReleaseTriggerId: (int)Dragons.Chthonius,
+                    UnlockQuestStoryId: 0,
+                    UnlockTriggerStoryId: 0
+                )
+            );
     }
 
     [Theory]
@@ -468,6 +475,6 @@ public class MasterAssetTest
     [InlineData(210001011, StoryTypes.Dragon)]
     public void StoryData_Type_IsCorrect(int storyId, StoryTypes expectedType)
     {
-        MasterAsset.MasterAsset.StoryData[storyId].Type.Should().Be(expectedType);
+        MasterAsset.MasterAsset.UnitStory[storyId].Type.Should().Be(expectedType);
     }
 }

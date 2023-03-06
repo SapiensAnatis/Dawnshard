@@ -82,5 +82,5 @@ public static class MasterAsset
     public static MasterAssetData<int, StoryData> CharaStories =>
         new("CharaStories.json", x => x.id);
 
-    public static MasterAssetData<int, UnitStory> StoryData => new("UnitStory.json", x => x.Id);
+    public static MasterAssetData<int, UnitStory> UnitStory => new("UnitStory.json", x => x.Id);
 }

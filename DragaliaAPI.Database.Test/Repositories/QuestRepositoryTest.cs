@@ -1,7 +1,11 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
+using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
 namespace DragaliaAPI.Database.Test.Repositories;
@@ -12,100 +16,67 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
     private readonly DbTestFixture fixture;
     private readonly IQuestRepository questRepository;
 
+    private readonly Mock<IPlayerDetailsService> mockPlayerDetailsService;
+
     public QuestRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.questRepository = new QuestRepository(fixture.ApiContext);
 
-        AssertionOptions.AssertEquivalencyUsing(
-            options => options.Excluding(x => x.Name == "Owner")
+        this.mockPlayerDetailsService = new(MockBehavior.Strict);
+
+        this.questRepository = new QuestRepository(
+            fixture.ApiContext,
+            this.mockPlayerDetailsService.Object
         );
+
+        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
     [Fact]
-    public async Task GetQuestStoryList_ReturnsOnlyPlayerQuestStoryData()
+    public async Task Quests_FiltersByAccountId()
     {
-        DbPlayerStoryState playerStoryState =
-            new()
-            {
-                DeviceAccountId = DeviceAccountId,
-                State = 1,
-                StoryId = 2,
-                StoryType = StoryTypes.Quest
-            };
+        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("id");
 
         await this.fixture.AddRangeToDatabase(
-            new List<DbPlayerStoryState>()
+            new List<DbQuest>()
             {
-                playerStoryState,
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    State = 2,
-                    StoryId = 10,
-                    StoryType = StoryTypes.Quest
-                },
-                new()
-                {
-                    DeviceAccountId = "id 2",
-                    State = 2,
-                    StoryId = 10,
-                    StoryType = StoryTypes.Quest
-                }
+                new() { DeviceAccountId = "id", QuestId = 1 },
+                new() { DeviceAccountId = "other id", QuestId = 2 }
             }
         );
 
-        (await this.questRepository.GetStories(DeviceAccountId, StoryTypes.Quest).ToListAsync())
-            .Should()
-            .AllSatisfy(x => x.DeviceAccountId.Should().Be(DeviceAccountId));
-    }
-
-    [Fact]
-    public async Task UpdateQuestStory_NewStory_UpdatesDatabase()
-    {
-        await this.questRepository.UpdateQuestStory(DeviceAccountId, 1, 2);
-        await this.questRepository.SaveChangesAsync();
-
-        this.fixture.ApiContext.PlayerStoryState
-            .Single(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 1)
+        this.questRepository.Quests
             .Should()
             .BeEquivalentTo(
-                new DbPlayerStoryState()
+                new List<DbQuest>()
                 {
-                    DeviceAccountId = DeviceAccountId,
-                    StoryId = 1,
-                    State = 2,
-                    StoryType = StoryTypes.Quest
+                    new() { DeviceAccountId = "id", QuestId = 1 },
                 }
-            );
+            )
+            .And.BeEquivalentTo(this.questRepository.GetQuests("id"));
     }
 
     [Fact]
-    public async Task UpdateQuestStory_ExistingStory_UpdatesDatabase()
+    public async Task CompleteQuest_CompletesQuest()
     {
-        await this.fixture.AddToDatabase(
-            new DbPlayerStoryState()
-            {
-                DeviceAccountId = DeviceAccountId,
-                StoryId = 3,
-                State = 0,
-                StoryType = StoryTypes.Quest
-            }
-        );
+        DbQuest quest = await this.questRepository.CompleteQuest("id", 3, 1.0f);
 
-        await this.questRepository.UpdateQuestStory(DeviceAccountId, 3, 2);
-        await this.questRepository.SaveChangesAsync();
-
-        this.fixture.ApiContext.PlayerStoryState
-            .Single(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 3)
+        quest
             .Should()
             .BeEquivalentTo(
-                new DbPlayerStoryState()
+                new DbQuest()
                 {
-                    DeviceAccountId = DeviceAccountId,
-                    StoryId = 3,
-                    State = 2,
-                    StoryType = StoryTypes.Quest
+                    DeviceAccountId = "id",
+                    QuestId = 3,
+                    State = 3,
+                    IsMissionClear1 = true,
+                    IsMissionClear2 = true,
+                    IsMissionClear3 = true,
+                    PlayCount = 1,
+                    DailyPlayCount = 1,
+                    WeeklyPlayCount = 1,
+                    IsAppear = true,
+                    BestClearTime = 1.0f,
                 }
             );
     }

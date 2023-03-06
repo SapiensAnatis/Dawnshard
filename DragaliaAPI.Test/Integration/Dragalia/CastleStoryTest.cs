@@ -60,7 +60,7 @@ public class CastleStoryTest : IntegrationTestBase
             new DbPlayerStoryState()
             {
                 DeviceAccountId = this.fixture.DeviceAccountId,
-                State = 1,
+                State = StoryState.Read,
                 StoryId = 2,
                 StoryType = StoryTypes.Castle
             }
@@ -114,7 +114,7 @@ public class CastleStoryTest : IntegrationTestBase
                 new DbPlayerStoryState()
                 {
                     DeviceAccountId = this.fixture.DeviceAccountId,
-                    State = 1,
+                    State = StoryState.Read,
                     StoryId = 3,
                     StoryType = StoryTypes.Castle
                 }

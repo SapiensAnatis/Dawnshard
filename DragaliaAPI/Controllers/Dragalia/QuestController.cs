@@ -11,16 +11,97 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [ApiController]
 public class QuestController : DragaliaControllerBase
 {
-    private readonly IQuestRepository questRepository;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IUnitRepository unitRepository;
     private readonly IStoryService storyService;
     private readonly IHelperService helperService;
     private readonly IQuestRewardService questRewardService;
     private readonly IUpdateDataService updateDataService;
     private readonly ILogger<QuestController> logger;
-    private const int ReadStoryState = 1;
-    private const int MaxStoryId = 1000103;
+
+    public QuestController(
+        IStoryService storyService,
+        IHelperService helperService,
+        IQuestRewardService questRewardService,
+        IUpdateDataService updateDataService,
+        ILogger<QuestController> logger
+    )
+    {
+        this.storyService = storyService;
+        this.helperService = helperService;
+        this.questRewardService = questRewardService;
+        this.updateDataService = updateDataService;
+        this.logger = logger;
+    }
+
+    [HttpPost]
+    [Route("read_story")]
+    public async Task<DragaliaResult> ReadStory(QuestReadStoryRequest request)
+    {
+        IEnumerable<AtgenBuildEventRewardEntityList> rewardList = await this.storyService.ReadStory(
+            StoryTypes.Quest,
+            request.quest_story_id
+        );
+
+        EntityResult entityResult = StoryService.GetEntityResult(rewardList);
+        IEnumerable<AtgenQuestStoryRewardList> questRewardList = rewardList.Select(
+            StoryService.ToQuestStoryReward
+        );
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+
+        return this.Ok(
+            new QuestReadStoryData()
+            {
+                quest_story_reward_list = questRewardList,
+                entity_result = entityResult,
+                update_data_list = updateDataList
+            }
+        );
+    }
+
+    [HttpPost("get_support_user_list")]
+    public async Task<DragaliaResult> GetUserSupportList()
+    {
+        // TODO: this is actually going to be a pretty complicated system
+        QuestGetSupportUserListData response = await this.helperService.GetHelpers();
+        return Ok(response);
+    }
+
+    [HttpPost("get_quest_clear_party")]
+    public DragaliaResult GetQuestClearParty()
+    {
+        // TODO: Retrieve from database
+        return Ok(StubData.ClearPartyData);
+    }
+
+    [HttpPost("set_quest_clear_party")]
+    public DragaliaResult SetQuestClearParty()
+    {
+        // TODO: Store in database
+        return Ok(new QuestSetQuestClearPartyData() { result = 1 });
+    }
+
+    [HttpPost("drop_list")]
+    public DragaliaResult DropList(QuestDropListRequest request)
+    {
+        IEnumerable<Materials> drops = this.questRewardService.GetDrops(request.quest_id);
+
+        return Ok(
+            new QuestDropListData()
+            {
+                quest_drop_info = new()
+                {
+                    drop_info_list = drops.Select(
+                        x =>
+                            new AtgenDuplicateEntityList()
+                            {
+                                entity_id = (int)x,
+                                entity_type = EntityTypes.Material
+                            }
+                    )
+                }
+            }
+        );
+    }
 
     private static class StubData
     {
@@ -104,90 +185,5 @@ public class QuestController : DragaliaControllerBase
                 },
                 lost_unit_list = new List<AtgenLostUnitList>(),
             };
-    }
-
-    public QuestController(
-        IQuestRepository questRepository,
-        IUserDataRepository userDataRepository,
-        IUnitRepository unitRepository,
-        IStoryService storyService,
-        IHelperService helperService,
-        IQuestRewardService questRewardService,
-        IUpdateDataService updateDataService,
-        ILogger<QuestController> logger
-    )
-    {
-        this.questRepository = questRepository;
-        this.userDataRepository = userDataRepository;
-        this.unitRepository = unitRepository;
-        this.storyService = storyService;
-        this.helperService = helperService;
-        this.questRewardService = questRewardService;
-        this.updateDataService = updateDataService;
-        this.logger = logger;
-    }
-
-    [HttpPost]
-    [Route("read_story")]
-    public async Task<DragaliaResult> ReadStory(QuestReadStoryRequest request)
-    {
-        var rewardList = await this.storyService.ReadQuestStory(request.quest_story_id);
-        var entityResult = StoryService.GetEntityResult(rewardList);
-
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-
-        return this.Ok(
-            new QuestReadStoryData()
-            {
-                quest_story_reward_list = rewardList,
-                entity_result = entityResult,
-                update_data_list = updateDataList
-            }
-        );
-    }
-
-    [HttpPost("get_support_user_list")]
-    public async Task<DragaliaResult> GetUserSupportList()
-    {
-        // TODO: this is actually going to be a pretty complicated system
-        QuestGetSupportUserListData response = await this.helperService.GetHelpers();
-        return Ok(response);
-    }
-
-    [HttpPost("get_quest_clear_party")]
-    public DragaliaResult GetQuestClearParty()
-    {
-        // TODO: Retrieve from database
-        return Ok(StubData.ClearPartyData);
-    }
-
-    [HttpPost("set_quest_clear_party")]
-    public DragaliaResult SetQuestClearParty()
-    {
-        // TODO: Store in database
-        return Ok(new QuestSetQuestClearPartyData() { result = 1 });
-    }
-
-    [HttpPost("drop_list")]
-    public DragaliaResult DropList(QuestDropListRequest request)
-    {
-        IEnumerable<Materials> drops = this.questRewardService.GetDrops(request.quest_id);
-
-        return Ok(
-            new QuestDropListData()
-            {
-                quest_drop_info = new()
-                {
-                    drop_info_list = drops.Select(
-                        x =>
-                            new AtgenDuplicateEntityList()
-                            {
-                                entity_id = (int)x,
-                                entity_type = EntityTypes.Material
-                            }
-                    )
-                }
-            }
-        );
     }
 }

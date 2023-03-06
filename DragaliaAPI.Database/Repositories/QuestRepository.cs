@@ -30,9 +30,7 @@ public class QuestRepository : IQuestRepository
 
     public async Task UpdateQuestState(string deviceAccountId, int questId, int state)
     {
-        DbQuest? questData = await apiContext.PlayerQuests.SingleOrDefaultAsync(
-            x => x.DeviceAccountId == deviceAccountId && x.QuestId == questId
-        );
+        DbQuest? questData = await apiContext.PlayerQuests.FindAsync(deviceAccountId, questId);
 
         if (questData is null)
         {

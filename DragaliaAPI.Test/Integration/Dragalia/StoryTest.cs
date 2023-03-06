@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Test.Integration.Dragalia;
@@ -19,6 +20,8 @@ public class StoryTest : IntegrationTestBase
     {
         this.fixture = fixture;
         this.client = fixture.CreateClient();
+
+        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
     [Fact]
@@ -27,7 +30,7 @@ public class StoryTest : IntegrationTestBase
         StoryReadData data = (
             await this.client.PostMsgpack<StoryReadData>(
                 "/story/read",
-                new StoryReadRequest() { unit_story_id = 1 }
+                new StoryReadRequest() { unit_story_id = 100001141 }
             )
         ).data;
 
@@ -51,7 +54,7 @@ public class StoryTest : IntegrationTestBase
             .BeEquivalentTo(
                 new List<UnitStoryList>()
                 {
-                    new() { unit_story_id = 1, is_read = 1, }
+                    new() { unit_story_id = 100001141, is_read = 1, }
                 }
             );
     }
@@ -59,12 +62,19 @@ public class StoryTest : IntegrationTestBase
     [Fact]
     public async Task ReadStory_StoryRead_ResponseHasNoRewards()
     {
-        this.fixture.ApiContext.Add(
+        await this.fixture.AddToDatabase(
             new DbPlayerStoryState()
             {
                 DeviceAccountId = this.fixture.DeviceAccountId,
-                State = 1,
-                StoryId = 2,
+                State = StoryState.Read,
+                StoryId = 100001121,
+                StoryType = StoryTypes.Chara
+            },
+            new DbPlayerStoryState()
+            {
+                DeviceAccountId = this.fixture.DeviceAccountId,
+                State = StoryState.Read,
+                StoryId = 100001122,
                 StoryType = StoryTypes.Chara
             }
         );
@@ -73,7 +83,7 @@ public class StoryTest : IntegrationTestBase
         StoryReadData data = (
             await this.client.PostMsgpack<StoryReadData>(
                 "/story/read",
-                new StoryReadRequest() { unit_story_id = 2 }
+                new StoryReadRequest() { unit_story_id = 100001122 }
             )
         ).data;
 
@@ -95,7 +105,7 @@ public class StoryTest : IntegrationTestBase
         StoryReadData data = (
             await this.client.PostMsgpack<StoryReadData>(
                 "/story/read",
-                new StoryReadRequest() { unit_story_id = 3 }
+                new StoryReadRequest() { unit_story_id = 100002011 }
             )
         ).data;
 
@@ -117,8 +127,8 @@ public class StoryTest : IntegrationTestBase
                 new DbPlayerStoryState()
                 {
                     DeviceAccountId = this.fixture.DeviceAccountId,
-                    State = 1,
-                    StoryId = 3,
+                    State = StoryState.Read,
+                    StoryId = 100002011,
                     StoryType = StoryTypes.Chara
                 }
             );
