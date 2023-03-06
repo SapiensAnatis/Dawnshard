@@ -10,12 +10,12 @@ namespace DragaliaAPI.Database.Repositories;
 public class StoryRepository : IStoryRepository
 {
     private readonly ApiContext apiContext;
-    private readonly PlayerDetailsService playerDetailsService;
+    private readonly IPlayerDetailsService playerDetailsService;
     private readonly ILogger<StoryRepository> logger;
 
     public StoryRepository(
         ApiContext apiContext,
-        PlayerDetailsService playerDetailsService,
+        IPlayerDetailsService playerDetailsService,
         ILogger<StoryRepository> logger
     )
     {

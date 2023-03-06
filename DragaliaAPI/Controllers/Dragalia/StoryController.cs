@@ -3,6 +3,8 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,14 +32,26 @@ public class StoryController : DragaliaControllerBase
     [HttpPost("read")]
     public async Task<DragaliaResult> Read(StoryReadRequest request)
     {
-        if (!await this.storyService.CheckUnitStoryEligibility(request.unit_story_id))
+        if (!MasterAsset.UnitStory.TryGetValue(request.unit_story_id, out UnitStory? data))
+        {
+            this.logger.LogWarning(
+                "Requested to read non-existent unit story {id}",
+                request.unit_story_id
+            );
+
+            return this.Code(ResultCode.StoryNotGet);
+        }
+
+        if (!await this.storyService.CheckStoryEligibility(data.Type, request.unit_story_id))
         {
             this.logger.LogWarning("User did not have access to story {id}", request.unit_story_id);
             return this.Code(ResultCode.StoryNotReadThePrevious);
         }
 
-        IEnumerable<AtgenBuildEventRewardEntityList> rewards =
-            await this.storyService.ReadUnitStory(request.unit_story_id);
+        IEnumerable<AtgenBuildEventRewardEntityList> rewards = await this.storyService.ReadStory(
+            data.Type,
+            request.unit_story_id
+        );
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 

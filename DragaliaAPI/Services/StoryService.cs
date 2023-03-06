@@ -25,13 +25,28 @@ public class StoryService : IStoryService
     private const int QuestStoryWyrmite = 25;
     private const int MaxStoryId = 1000103;
 
-    public static readonly ImmutableDictionary<
-        int,
-        AtgenDuplicateEntityList
-    > QuestStoryEntityRewards = new Dictionary<int, AtgenDuplicateEntityList>()
-    {
-        { 1000103, new(EntityTypes.Chara, (int)Charas.Elisanne) }
-    }.ToImmutableDictionary();
+    private static readonly ImmutableDictionary<int, Charas> QuestStoryCharaRewards =
+        new Dictionary<int, Charas>()
+        {
+            { 1000103, Charas.Elisanne },
+            { 1000106, Charas.Ranzal },
+            { 1000111, Charas.Cleo },
+            { 1000202, Charas.Luca },
+            { 1000808, Charas.Alex },
+            { 1001108, Charas.Laxi },
+            { 1001410, Charas.Zena },
+            { 1001610, Charas.Chelle },
+        }.ToImmutableDictionary();
+
+    private static readonly ImmutableDictionary<int, Dragons> QuestStoryDragonRewards =
+        new Dictionary<int, Dragons>()
+        {
+            { 1000109, Dragons.Midgardsormr },
+            { 1000210, Dragons.Mercury },
+            { 1000311, Dragons.Brunhilda },
+            { 1000412, Dragons.Jupiter },
+            { 1000509, Dragons.Zodiark },
+        }.ToImmutableDictionary();
 
     public StoryService(
         IStoryRepository storyRepository,
@@ -48,9 +63,30 @@ public class StoryService : IStoryService
         this.unitRepository = unitRepository;
     }
 
-    public async Task<bool> CheckUnitStoryEligibility(int storyId)
+    #region Eligibility check methods
+    public async Task<bool> CheckStoryEligibility(StoryTypes type, int storyId)
     {
-        if (!MasterAsset.StoryData.TryGetValue(storyId, out UnitStory? storyData))
+        this.logger.LogInformation("Reading story {id} (type: {type})", storyId, type);
+        DbPlayerStoryState story = await this.storyRepository.GetOrCreateStory(type, storyId);
+
+        if (story.State == StoryState.Read)
+        {
+            this.logger.LogDebug("Story was already read");
+            return true;
+        }
+
+        return type switch
+        {
+            StoryTypes.Chara or StoryTypes.Dragon => await this.CheckUnitStoryEligibility(storyId),
+            StoryTypes.Castle => await this.CheckCastleStoryEligibility(storyId),
+            StoryTypes.Quest => true,
+            _ => throw new NotImplementedException($"Stories of type {type} are not implemented")
+        };
+    }
+
+    private async Task<bool> CheckUnitStoryEligibility(int storyId)
+    {
+        if (!MasterAsset.UnitStory.TryGetValue(storyId, out UnitStory? storyData))
         {
             this.logger.LogWarning("Non-existent unit story id {id}", storyId);
             return false;
@@ -62,14 +98,10 @@ public class StoryService : IStoryService
                 await this.storyRepository.QuestStories.FirstOrDefaultAsync(
                     x => x.StoryId == storyData.UnlockQuestStoryId
                 )
-            )?.State == StoryState.Read
+            )?.State != StoryState.Read
         )
         {
-            this.logger.LogWarning(
-                "User did not meet quest story prerequisite for story {id}",
-                storyId
-            );
-
+            this.logger.LogWarning("Player was missing required quest story id");
             return false;
         }
 
@@ -82,28 +114,56 @@ public class StoryService : IStoryService
             )?.State != StoryState.Read
         )
         {
-            this.logger.LogWarning(
-                "User did not meet unit story prerequisite for story {id}",
-                storyId
-            );
-
+            this.logger.LogWarning("Player was missing required unit story id");
             return false;
         }
 
         return true;
     }
 
-    public async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadUnitStory(int storyId)
+    private async Task<bool> CheckCastleStoryEligibility(int storyId)
     {
-        UnitStory data = MasterAsset.StoryData[storyId];
-        this.logger.LogInformation("Reading story {id} (type: {type})", storyId, data.Type);
+        return await this.inventoryRepository.CheckQuantity(Materials.LookingGlass, 1);
+    }
 
-        List<AtgenBuildEventRewardEntityList> rewards = new();
+    #endregion
 
-        DbPlayerStoryState story = await this.storyRepository.GetOrCreateStory(data.Type, storyId);
+    #region Reading methods
+
+    public async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadStory(
+        StoryTypes type,
+        int storyId
+    )
+    {
+        this.logger.LogInformation("Reading story {id} of type {type}", storyId, type);
+
+        DbPlayerStoryState story = await this.storyRepository.GetOrCreateStory(type, storyId);
 
         if (story.State == StoryState.Read)
-            return rewards;
+        {
+            this.logger.LogDebug("Story was already read");
+            return Enumerable.Empty<AtgenBuildEventRewardEntityList>();
+        }
+
+        story.State = StoryState.Read;
+
+        IEnumerable<AtgenBuildEventRewardEntityList> rewards = type switch
+        {
+            StoryTypes.Chara or StoryTypes.Dragon => await ReadUnitStory(storyId),
+            StoryTypes.Castle => await ReadCastleStory(storyId),
+            StoryTypes.Quest => await ReadQuestStory(storyId),
+            _ => throw new NotImplementedException($"Stories of type {type} are not implemented")
+        };
+
+        this.logger.LogDebug("Player earned story rewards: {rewards}", rewards);
+        return rewards;
+    }
+
+    private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadUnitStory(int storyId)
+    {
+        UnitStory data = MasterAsset.UnitStory[storyId];
+
+        DbPlayerStoryState story = await this.storyRepository.GetOrCreateStory(data.Type, storyId);
 
         int wyrmiteReward;
 
@@ -115,124 +175,83 @@ public class StoryService : IStoryService
         await this.userDataRepository.GiveWyrmite(wyrmiteReward);
         story.State = StoryState.Read;
 
-        rewards.Add(new() { entity_type = EntityTypes.Wyrmite, entity_quantity = wyrmiteReward });
-
         // TODO: Add epithets
 
-        this.logger.LogInformation("Granted rewards for reading new story: {rewards}", rewards);
-
-        return rewards;
+        return new List<AtgenBuildEventRewardEntityList>()
+        {
+            new() { entity_type = EntityTypes.Wyrmite, entity_quantity = wyrmiteReward }
+        };
     }
 
-    public async Task<bool> CheckCastleStoryEligibility(int storyId)
+    private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadCastleStory(int storyId)
     {
-        DbPlayerStoryState story = await this.storyRepository.GetOrCreateStory(
-            StoryTypes.Castle,
-            storyId
-        );
-
-        if (story.State == StoryState.Read)
-            return true;
-
-        return await this.inventoryRepository.CheckQuantity(Materials.LookingGlass, 1);
-    }
-
-    public async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadCastleStory(int storyId)
-    {
-        this.logger.LogInformation("Reading story {id} (type: {type})", storyId, StoryTypes.Castle);
-
-        List<AtgenBuildEventRewardEntityList> rewardList = new(); // wtf is this type
-
-        DbPlayerStoryState story = await this.storyRepository.GetOrCreateStory(
-            StoryTypes.Castle,
-            storyId
-        );
-
-        if (story.State == StoryState.Read)
-            return rewardList;
-
         await this.inventoryRepository.UpdateQuantity(Materials.LookingGlass, -1);
         await this.userDataRepository.GiveWyrmite(CastleStoryWyrmite);
-        story.State = StoryState.Read;
 
-        rewardList.Add(
+        List<AtgenBuildEventRewardEntityList> rewardList =
             new()
             {
-                entity_type = EntityTypes.Wyrmite,
-                entity_id = 0,
-                entity_quantity = CastleStoryWyrmite
-            }
-        );
-
-        this.logger.LogInformation("Granted rewards for reading new story: {rewards}", rewardList);
+                new()
+                {
+                    entity_type = EntityTypes.Wyrmite,
+                    entity_id = 0,
+                    entity_quantity = CastleStoryWyrmite
+                }
+            };
 
         return rewardList;
     }
 
-    public async Task<IEnumerable<AtgenQuestStoryRewardList>> ReadQuestStory(int storyId)
+    private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadQuestStory(int storyId)
     {
-        this.logger.LogInformation("Reading story {id} (type: {type})", storyId, StoryTypes.Quest);
-
-        List<AtgenQuestStoryRewardList> rewardList = new();
-
-        DbPlayerStoryState story = await this.storyRepository.GetOrCreateStory(
-            StoryTypes.Quest,
-            storyId
-        );
-
-        if (story.State == StoryState.Read)
-            return rewardList;
-
         if (storyId == MaxStoryId)
         {
-            this.logger.LogInformation("Skipping tutorial at storyId {id}", storyId);
+            this.logger.LogInformation("Skipping tutorial at story {id}", storyId);
             await this.userDataRepository.SkipTutorial();
         }
 
         await this.userDataRepository.GiveWyrmite(QuestStoryWyrmite);
-        rewardList.Add(
-            new() { entity_type = EntityTypes.Wyrmite, entity_quantity = QuestStoryWyrmite }
-        );
-
-        if (!QuestStoryEntityRewards.TryGetValue(storyId, out AtgenDuplicateEntityList? entity))
-        {
-            this.logger.LogInformation(
-                "Granted rewards for reading new story: {rewards}",
-                rewardList
-            );
-            return rewardList;
-        }
-
-        rewardList.Add(
+        List<AtgenBuildEventRewardEntityList> rewardList =
             new()
             {
-                entity_id = entity.entity_id,
-                entity_type = entity.entity_type,
-                entity_quantity = 1,
-                entity_level = 1,
-                entity_limit_break_count = 0,
-            }
-        );
+                new() { entity_type = EntityTypes.Wyrmite, entity_quantity = QuestStoryWyrmite }
+            };
 
-        switch (entity.entity_type)
+        if (QuestStoryCharaRewards.TryGetValue(storyId, out Charas chara))
         {
-            case EntityTypes.Dragon:
-                await this.unitRepository.AddDragons((Dragons)entity.entity_id);
-                break;
-            case EntityTypes.Chara:
-                await this.unitRepository.AddCharas((Charas)entity.entity_id);
-                break;
-            default:
-                throw new NotImplementedException(
-                    $"Unsupported quest story reward entity type: {entity.entity_type}"
-                );
+            await this.unitRepository.AddCharas(chara);
+            rewardList.Add(
+                new()
+                {
+                    entity_id = (int)chara,
+                    entity_type = EntityTypes.Chara,
+                    entity_quantity = 1,
+                }
+            );
+        }
+
+        if (QuestStoryDragonRewards.TryGetValue(storyId, out Dragons dragon))
+        {
+            await this.unitRepository.AddDragons(dragon);
+            rewardList.Add(
+                new()
+                {
+                    entity_id = (int)dragon,
+                    entity_type = EntityTypes.Dragon,
+                    entity_quantity = 1,
+                }
+            );
         }
 
         this.logger.LogInformation("Granted rewards for reading new story: {rewards}", rewardList);
         return rewardList;
     }
 
-    public static EntityResult GetEntityResult(IEnumerable<AtgenQuestStoryRewardList> rewardList)
+    #endregion
+
+    public static EntityResult GetEntityResult(
+        IEnumerable<AtgenBuildEventRewardEntityList> rewardList
+    )
     {
         IEnumerable<AtgenDuplicateEntityList> newGetEntityList = rewardList
             .Where(x => x.entity_type is EntityTypes.Dragon or EntityTypes.Chara)
@@ -246,5 +265,23 @@ public class StoryService : IStoryService
             );
 
         return new() { new_get_entity_list = newGetEntityList, };
+    }
+
+    public static AtgenQuestStoryRewardList ToQuestStoryReward(
+        AtgenBuildEventRewardEntityList reward
+    )
+    {
+        AtgenQuestStoryRewardList questReward =
+            new()
+            {
+                entity_id = reward.entity_id,
+                entity_type = reward.entity_type,
+                entity_quantity = reward.entity_quantity
+            };
+
+        if (reward.entity_type is EntityTypes.Chara or EntityTypes.Dragon)
+            questReward.entity_level = 1;
+
+        return questReward;
     }
 }

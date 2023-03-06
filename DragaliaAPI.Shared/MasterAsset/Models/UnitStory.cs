@@ -14,5 +14,5 @@ public record UnitStory(
             ? StoryTypes.Chara
             : StoryTypes.Dragon;
 
-    public bool IsFirstEpisode => this.ReleaseTriggerId == default;
+    public bool IsFirstEpisode => this.UnlockTriggerStoryId == default;
 }
