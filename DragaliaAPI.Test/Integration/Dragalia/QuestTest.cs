@@ -42,7 +42,7 @@ public class QuestTest : IClassFixture<IntegrationTestFixture>
             .And.Subject.Any(x => x.chara_id == Charas.Ranzal)
             .Should()
             .BeTrue();
-        
+
         response.update_data_list.quest_story_list
             .Should()
             .ContainEquivalentOf(new QuestStoryList() { quest_story_id = 1000106, state = 1 });
