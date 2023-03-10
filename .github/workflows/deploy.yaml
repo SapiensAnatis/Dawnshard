@@ -16,5 +16,5 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
           script: | 
-            kubectl rollout restart deployment/dragalia-api
-            kubectl rollout status deployment/dragalia-api
+            kubectl rollout restart deployment/dragalia-api-dawnshard -n dragalia-api
+            kubectl rollout status deployment/dragalia-api-dawnshard -n dragalia-api
