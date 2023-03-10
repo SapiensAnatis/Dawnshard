@@ -66,7 +66,7 @@ public class StoryService : IStoryService
     #region Eligibility check methods
     public async Task<bool> CheckStoryEligibility(StoryTypes type, int storyId)
     {
-        this.logger.LogInformation("Reading story {id} (type: {type})", storyId, type);
+        this.logger.LogDebug("Checking eligibility for story {id} of type: {type}", storyId, type);
         DbPlayerStoryState story = await this.storyRepository.GetOrCreateStory(type, storyId);
 
         if (story.State == StoryState.Read)
@@ -155,7 +155,7 @@ public class StoryService : IStoryService
             _ => throw new NotImplementedException($"Stories of type {type} are not implemented")
         };
 
-        this.logger.LogDebug("Player earned story rewards: {rewards}", rewards);
+        this.logger.LogDebug("Player earned story rewards: {@rewards}", rewards);
         return rewards;
     }
 
