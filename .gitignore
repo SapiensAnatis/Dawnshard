@@ -6,6 +6,7 @@ launchSettings.json
 appsettings.Development.json
 test_coverage.json
 .run
+PhotonServer
 
 # CMake
 cmake-build-*/
