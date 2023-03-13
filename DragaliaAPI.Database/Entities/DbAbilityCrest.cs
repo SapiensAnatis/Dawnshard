@@ -68,6 +68,9 @@ public class DbAbilityCrest : IDbHasAccountId
     [TypeConverter(typeof(DateTimeOffsetConverter))]
     public DateTimeOffset GetTime { get; set; }
 
+    [NotMapped]
+    public int AbilityLevel => (LimitBreakCount / 2) + 1;
+
     /// <summary>
     /// EF Core / test constructor.
     /// </summary>

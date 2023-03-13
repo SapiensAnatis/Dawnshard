@@ -18,18 +18,18 @@ public class AbilityCrestTradeControllerTest
 {
     private readonly AbilityCrestTradeController abilityCrestTradeController;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
-    private readonly Mock<IUnitRepository> mockUnitRepository;
+    private readonly Mock<IAbilityCrestRepository> mockAbilityCrestRepository;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
 
     public AbilityCrestTradeControllerTest()
     {
         this.mockUserDataRepository = new(MockBehavior.Strict);
-        this.mockUnitRepository = new(MockBehavior.Strict);
+        this.mockAbilityCrestRepository = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
 
         this.abilityCrestTradeController = new AbilityCrestTradeController(
             mockUserDataRepository.Object,
-            mockUnitRepository.Object,
+            mockAbilityCrestRepository.Object,
             mockUpdateDataService.Object
         );
 
@@ -43,8 +43,8 @@ public class AbilityCrestTradeControllerTest
     [Fact]
     public async Task GetList_ReturnsOnlyMissingWyrmprintsInResponse()
     {
-        this.mockUnitRepository
-            .Setup(x => x.GetAllAbilityCrestData(DeviceAccountId))
+        this.mockAbilityCrestRepository
+            .Setup(x => x.AbilityCrests)
             .Returns(
                 new List<DbAbilityCrest>()
                 {
@@ -99,8 +99,8 @@ public class AbilityCrestTradeControllerTest
     [Fact]
     public async Task GetList_IsntAffectedByUntradeableWyrmprints()
     {
-        this.mockUnitRepository
-            .Setup(x => x.GetAllAbilityCrestData(DeviceAccountId))
+        this.mockAbilityCrestRepository
+            .Setup(x => x.AbilityCrests)
             .Returns(
                 new List<DbAbilityCrest>()
                 {

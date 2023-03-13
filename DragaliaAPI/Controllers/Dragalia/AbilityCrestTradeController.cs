@@ -4,6 +4,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,17 +14,17 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class AbilityCrestTradeController : DragaliaControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
-    private readonly IUnitRepository unitRepository;
+    private readonly IAbilityCrestRepository abilityCrestRepository;
     private readonly IUpdateDataService updateDataService;
 
     public AbilityCrestTradeController(
         IUserDataRepository userDataRepository,
-        IUnitRepository unitRepository,
+        IAbilityCrestRepository abilityCrestRepository,
         IUpdateDataService updateDataService
     )
     {
         this.userDataRepository = userDataRepository;
-        this.unitRepository = unitRepository;
+        this.abilityCrestRepository = abilityCrestRepository;
         this.updateDataService = updateDataService;
     }
 
@@ -52,6 +53,14 @@ public class AbilityCrestTradeController : DragaliaControllerBase
         IEnumerable<AbilityCrestTradeList> abilityCrestTradeList =
             await BuildAbilityCrestTradeList();
 
+        AbilityCrests abilityCrestId = MasterAsset.AbilityCrestTrade.Enumerable
+            .Where(x => x.Id == request.ability_crest_trade_id)
+            .Select(x => x.AbilityCrestId)
+            .FirstOrDefault();
+
+        await abilityCrestRepository.Add(abilityCrestId);
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+
         AbilityCrestTradeTradeData response =
             new()
             {
@@ -64,7 +73,7 @@ public class AbilityCrestTradeController : DragaliaControllerBase
                     }
                 },
                 ability_crest_trade_list = abilityCrestTradeList,
-                update_data_list = this.updateDataService.GetUpdateDataList(this.DeviceAccountId)
+                update_data_list = updateDataList
             };
 
         return Ok(response);
@@ -72,9 +81,8 @@ public class AbilityCrestTradeController : DragaliaControllerBase
 
     private async Task<IEnumerable<AbilityCrestTradeList>> BuildAbilityCrestTradeList()
     {
-        IEnumerable<DbAbilityCrest> ownedAbilityCrests = await unitRepository
-            .GetAllAbilityCrestData(this.DeviceAccountId)
-            .ToListAsync();
+        IEnumerable<DbAbilityCrest> ownedAbilityCrests =
+            await abilityCrestRepository.AbilityCrests.ToListAsync();
 
         IEnumerable<AbilityCrestTrade> abilityCrestTradeList = MasterAsset
             .AbilityCrestTrade
