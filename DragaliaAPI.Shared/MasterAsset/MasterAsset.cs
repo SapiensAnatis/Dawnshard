@@ -87,6 +87,6 @@ public static class MasterAsset
     /// <summary>
     /// Contains information about ability crests in the shop.
     /// </summary>
-    public static readonly MasterAssetData<AbilityCrests, AbilityCrestTrade> AbilityCrestTrade =
-        new("AbilityCrestTrade.json", x => x.AbilityCrestId);
+    public static readonly MasterAssetData<int, AbilityCrestTrade> AbilityCrestTrade =
+        new("AbilityCrestTrade.json", x => x.Id);
 }

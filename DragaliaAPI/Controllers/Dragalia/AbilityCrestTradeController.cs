@@ -53,12 +53,11 @@ public class AbilityCrestTradeController : DragaliaControllerBase
         IEnumerable<AbilityCrestTradeList> abilityCrestTradeList =
             await BuildAbilityCrestTradeList();
 
-        AbilityCrests abilityCrestId = MasterAsset.AbilityCrestTrade.Enumerable
-            .Where(x => x.Id == request.ability_crest_trade_id)
-            .Select(x => x.AbilityCrestId)
-            .FirstOrDefault();
+        AbilityCrestTrade abilityCrestTrade = MasterAsset.AbilityCrestTrade.Get(
+            request.ability_crest_trade_id
+        );
 
-        await abilityCrestRepository.Add(abilityCrestId);
+        await abilityCrestRepository.Add(abilityCrestTrade.AbilityCrestId);
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         AbilityCrestTradeTradeData response =

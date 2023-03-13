@@ -481,9 +481,7 @@ public class MasterAssetTest
     [Fact]
     public void AbilityCrestTrade_Get_ReturnsExpectedProperties()
     {
-        AbilityCrestTrade abilityCrestTrade = MasterAsset.MasterAsset.AbilityCrestTrade.Get(
-            AbilityCrests.SweetSurprise
-        );
+        AbilityCrestTrade abilityCrestTrade = MasterAsset.MasterAsset.AbilityCrestTrade.Get(5101);
 
         abilityCrestTrade
             .Should()
