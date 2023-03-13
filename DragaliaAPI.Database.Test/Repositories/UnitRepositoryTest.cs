@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.Moq;
 using static DragaliaAPI.Database.Test.DbTestFixture;
@@ -15,11 +16,16 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
     private readonly IUnitRepository unitRepository;
+    private readonly Mock<IPlayerDetailsService> mockPlayerDetailsService;
 
     public UnitRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.unitRepository = new UnitRepository(fixture.ApiContext);
+        this.mockPlayerDetailsService = new(MockBehavior.Strict);
+        this.unitRepository = new UnitRepository(
+            fixture.ApiContext,
+            this.mockPlayerDetailsService.Object
+        );
     }
 
     [Fact]

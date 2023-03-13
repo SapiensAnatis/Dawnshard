@@ -82,6 +82,8 @@ public static class MasterAsset
     public static MasterAssetData<int, StoryData> CharaStories =>
         new("CharaStories.json", x => x.id);
 
+    public static MasterAssetData<int, UnitStory> UnitStory => new("UnitStory.json", x => x.Id);
+
     /// <summary>
     /// Contains information about ability crests in the shop.
     /// </summary>

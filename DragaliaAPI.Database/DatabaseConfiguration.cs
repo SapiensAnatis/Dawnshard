@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Repositories;
+﻿using System.Diagnostics.CodeAnalysis;
+using DragaliaAPI.Database.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,7 +53,7 @@ public static class DatabaseConfiguration
         return services;
     }
 
-    public static string GetConnectionString(string? host)
+    private static string GetConnectionString(string? host)
     {
         NpgsqlConnectionStringBuilder connectionStringBuilder =
             new()
@@ -67,6 +68,7 @@ public static class DatabaseConfiguration
         return connectionStringBuilder.ConnectionString;
     }
 
+    [ExcludeFromCodeCoverage]
     public static void MigrateDatabase(this WebApplication app)
     {
         using IServiceScope scope = app.Services

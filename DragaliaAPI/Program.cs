@@ -98,6 +98,7 @@ builder.Services
     .AddScoped<IBonusService, BonusService>()
     .AddScoped<IWeaponService, WeaponService>()
     .AddScoped<IQuestRewardService, QuestRewardService>()
+    .AddScoped<IStoryService, StoryService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>()
     .AddHttpClient<IBaasRequestHelper, BaasRequestHelper>();

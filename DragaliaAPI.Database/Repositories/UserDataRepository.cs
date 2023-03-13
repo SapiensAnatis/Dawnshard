@@ -91,9 +91,9 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         userData.MainPartyNo = partyNo;
     }
 
-    public async Task SkipTutorial(string deviceAccountId)
+    public async Task SkipTutorial()
     {
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+        DbPlayerUserData userData = await this.LookupUserData();
 
         userData.TutorialStatus = 60999;
         userData.TutorialFlagList = Enumerable.Range(1, 30).Select(x => x + 1000).ToHashSet();
@@ -106,9 +106,17 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         userData.LastSaveImportTime = DateTimeOffset.UtcNow;
     }
 
+    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
     public async Task GiveWyrmite(string deviceAccountId, int quantity)
     {
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+
+        userData.Crystal += quantity;
+    }
+
+    public async Task GiveWyrmite(int quantity)
+    {
+        DbPlayerUserData userData = await this.LookupUserData();
 
         userData.Crystal += quantity;
     }
