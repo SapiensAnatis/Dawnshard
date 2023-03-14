@@ -7,7 +7,6 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
-using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc;
 using MockQueryable.Moq;
 using static DragaliaAPI.Test.TestUtils;
@@ -34,10 +33,6 @@ public class AbilityCrestTradeControllerTest
         );
 
         this.abilityCrestTradeController.SetupMockContext();
-
-        this.mockUpdateDataService
-            .Setup(x => x.GetUpdateDataList(DeviceAccountId))
-            .Returns(new UpdateDataList() { });
     }
 
     [Fact]
@@ -54,6 +49,10 @@ public class AbilityCrestTradeControllerTest
                     .AsQueryable()
                     .BuildMock()
             );
+
+        this.mockUpdateDataService
+            .Setup(x => x.GetUpdateDataList(DeviceAccountId))
+            .Returns(new UpdateDataList() { });
 
         IEnumerable<AbilityCrestTrade> tradeableAbilityCrests = MasterAsset
             .AbilityCrestTrade
@@ -94,6 +93,10 @@ public class AbilityCrestTradeControllerTest
                     pickup_view_end_date = 0
                 }
             );
+
+        this.mockUserDataRepository.VerifyAll();
+        this.mockAbilityCrestRepository.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
     }
 
     [Fact]
@@ -111,6 +114,10 @@ public class AbilityCrestTradeControllerTest
                     .BuildMock()
             );
 
+        this.mockUpdateDataService
+            .Setup(x => x.GetUpdateDataList(DeviceAccountId))
+            .Returns(new UpdateDataList() { });
+
         IEnumerable<AbilityCrestTrade> tradeableAbilityCrests = MasterAsset
             .AbilityCrestTrade
             .Enumerable;
@@ -122,5 +129,45 @@ public class AbilityCrestTradeControllerTest
         data.Should().NotBeNull();
 
         data!.ability_crest_trade_list.Count().Should().Be(tradeableAbilityCrests.Count());
+
+        this.mockUserDataRepository.VerifyAll();
+        this.mockAbilityCrestRepository.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task Trade_ReturnsExpectedWyrmprint()
+    {
+        this.mockAbilityCrestRepository
+            .Setup(x => x.AbilityCrests)
+            .Returns(new List<DbAbilityCrest>().AsQueryable().BuildMock());
+
+        this.mockAbilityCrestRepository
+            .Setup(x => x.Add(AbilityCrests.WorthyRivals))
+            .Returns(Task.CompletedTask);
+
+        this.mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList() { });
+
+        this.mockUserDataRepository.Setup(x => x.UpdateDewpoint(-4000)).Returns(Task.CompletedTask);
+
+        ActionResult<DragaliaResponse<object>> response =
+            await this.abilityCrestTradeController.Trade(
+                new AbilityCrestTradeTradeRequest()
+                {
+                    ability_crest_trade_id = 104,
+                    trade_count = 1
+                }
+            );
+
+        AbilityCrestTradeTradeData? data = response.GetData<AbilityCrestTradeTradeData>();
+        data.Should().NotBeNull();
+
+        data!.user_ability_crest_trade_list.First().ability_crest_trade_id.Should().Be(104);
+
+        this.mockUserDataRepository.VerifyAll();
+        this.mockAbilityCrestRepository.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
     }
 }

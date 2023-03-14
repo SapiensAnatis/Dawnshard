@@ -58,6 +58,7 @@ public class AbilityCrestTradeController : DragaliaControllerBase
         );
 
         await abilityCrestRepository.Add(abilityCrestTrade.AbilityCrestId);
+        await userDataRepository.UpdateDewpoint(-abilityCrestTrade.NeedDewPoint);
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         AbilityCrestTradeTradeData response =

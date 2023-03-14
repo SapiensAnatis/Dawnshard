@@ -12,7 +12,7 @@ namespace DragaliaAPI.Models.Generated;
 [MessagePackObject(true)]
 public class AbilityCrestList
 {
-    public int ability_crest_id { get; set; }
+    public AbilityCrests ability_crest_id { get; set; }
     public int buildup_count { get; set; }
     public int limit_break_count { get; set; }
     public int equipable_count { get; set; }
@@ -25,7 +25,7 @@ public class AbilityCrestList
     public int ability_2_level { get; set; }
 
     public AbilityCrestList(
-        int ability_crest_id,
+        AbilityCrests ability_crest_id,
         int buildup_count,
         int limit_break_count,
         int equipable_count,

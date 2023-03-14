@@ -166,6 +166,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
             }
         );
         context.PlayerUserData.Find(this.DeviceAccountId)!.Coin = 100_000_000;
+        context.PlayerUserData.Find(this.DeviceAccountId)!.DewPoint = 1_000_000;
         context.SaveChanges();
     }
 }
