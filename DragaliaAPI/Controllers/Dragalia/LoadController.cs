@@ -100,7 +100,7 @@ public class LoadController : DragaliaControllerBase
                 quest_skip_point_system_max = 400,
                 quest_skip_point_use_limit_max = 30,
                 functional_maintenance_list = new List<FunctionalMaintenanceList>(),
-                multi_server = new() { host = "192.168.1.109:5055", app_id = string.Empty }
+                multi_server = new() { host = "photon.dawnshard.co.uk:5055", app_id = string.Empty }
             };
 
         this.logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);
