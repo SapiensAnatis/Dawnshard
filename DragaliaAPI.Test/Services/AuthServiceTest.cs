@@ -20,7 +20,7 @@ public class AuthServiceTest
 {
     private readonly AuthService authService;
 
-    private readonly Mock<IBaasRequestHelper> mockBaasRequestHelper;
+    private readonly Mock<IBaasApi> mockBaasRequestHelper;
     private readonly Mock<ISessionService> mockSessionService;
     private readonly Mock<ISavefileService> mockSavefileService;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;

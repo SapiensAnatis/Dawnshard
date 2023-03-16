@@ -100,7 +100,46 @@ public class LoadController : DragaliaControllerBase
                 quest_skip_point_system_max = 400,
                 quest_skip_point_use_limit_max = 30,
                 functional_maintenance_list = new List<FunctionalMaintenanceList>(),
-                multi_server = new() { host = "photon.dawnshard.co.uk:5055", app_id = string.Empty }
+                multi_server = new()
+                {
+                    host = "photon.dawnshard.co.uk:5055",
+                    app_id = string.Empty
+                },
+                equip_stamp_list = new[]
+                {
+                    10001,
+                    10002,
+                    10003,
+                    10004,
+                    10005,
+                    10006,
+                    10007,
+                    10008,
+                    10009,
+                    10010,
+                    10011,
+                    10012,
+                    10013,
+                    10014,
+                    10015,
+                    10016,
+                    10017,
+                    10018,
+                    10019,
+                    10020,
+                    10021,
+                    10022,
+                    10023,
+                    10024,
+                    10025,
+                    10026,
+                    10027,
+                    10028,
+                    10029,
+                    10030,
+                    10031,
+                    10101
+                }.Select((x, index) => new EquipStampList() { slot = index, stamp_id = x })
             };
 
         this.logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);

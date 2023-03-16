@@ -5,22 +5,17 @@ using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Api;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Helpers;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
-
-Log.Logger = new LoggerConfiguration().MinimumLevel
-    .Debug()
-    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateBootstrapLogger();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +24,8 @@ builder.Services
     .Configure<BaasOptions>(configuration.GetRequiredSection("Baas"))
     .Configure<LoginOptions>(configuration.GetRequiredSection("Login"))
     .Configure<DragalipatchOptions>(configuration.GetRequiredSection("Dragalipatch"))
-    .Configure<RedisOptions>(configuration.GetRequiredSection("Redis"));
+    .Configure<RedisOptions>(configuration.GetRequiredSection("Redis"))
+    .AddOptions<PhotonOptions>(nameof(PhotonOptions));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
@@ -51,10 +47,7 @@ builder.Services
         option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
     })
-    .AddJsonOptions(options =>
-    {
-        ApiJsonOptions.Action.Invoke(options.JsonSerializerOptions);
-    });
+    .AddJsonOptions(options => ApiJsonOptions.Action.Invoke(options.JsonSerializerOptions));
 
 builder.Services.AddRazorPages(
     options =>
@@ -100,10 +93,21 @@ builder.Services
     .AddScoped<IFortService, FortService>()
     .AddScoped<IQuestRewardService, QuestRewardService>()
     .AddScoped<IStoryService, StoryService>()
+    .AddScoped<IMatchingService, MatchingService>()
     .AddScoped<IAbilityCrestService, AbilityCrestService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
-    .AddTransient<ILogEventEnricher, PodNameEnricher>()
-    .AddHttpClient<IBaasRequestHelper, BaasRequestHelper>();
+    .AddTransient<ILogEventEnricher, PodNameEnricher>();
+
+builder.Services.AddHttpClient<IBaasApi, BaasApi>();
+builder.Services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>
+{
+    PhotonOptions? options = builder.Configuration
+        .GetRequiredSection(nameof(PhotonOptions))
+        .Get<PhotonOptions>();
+    ArgumentNullException.ThrowIfNull(options);
+
+    client.BaseAddress = new(options.StateManagerUrl);
+});
 
 WebApplication app = builder.Build();
 

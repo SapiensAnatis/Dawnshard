@@ -22,7 +22,7 @@ namespace DragaliaAPI.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly IBaasRequestHelper baasRequestHelper;
+    private readonly IBaasApi baasRequestHelper;
     private readonly ISessionService sessionService;
     private readonly ISavefileService savefileService;
     private readonly IUserDataRepository userDataRepository;
@@ -32,7 +32,7 @@ public class AuthService : IAuthService
     private readonly JwtSecurityTokenHandler TokenHandler = new();
 
     public AuthService(
-        IBaasRequestHelper baasRequestHelper,
+        IBaasApi baasRequestHelper,
         ISessionService sessionService,
         ISavefileService savefileService,
         IUserDataRepository userDataRepository,

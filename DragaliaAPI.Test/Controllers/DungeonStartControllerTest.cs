@@ -199,7 +199,7 @@ public class DungeonStartControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         this.mockPartyRepository
-            .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1 }))
+            .Setup(x => x.GetPartyUnits(DeviceAccountId, TODO, TODO))
             .Returns(new List<DbPartyUnit>().AsQueryable().BuildMock());
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
@@ -247,7 +247,7 @@ public class DungeonStartControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         this.mockPartyRepository
-            .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1 }))
+            .Setup(x => x.GetPartyUnits(DeviceAccountId, TODO, TODO))
             .Returns(new List<DbPartyUnit>().AsQueryable().BuildMock());
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(

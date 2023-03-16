@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Services.Helpers;
 
-public interface IBaasRequestHelper
+public interface IBaasApi
 {
     Task<IList<SecurityKey>> GetKeys();
     Task<LoadIndexData> GetSavefile(string idToken);

@@ -15,10 +15,10 @@ namespace DragaliaAPI.Test.Helpers;
 
 public class BaasRequestHelperTest
 {
-    private readonly IBaasRequestHelper baasRequestHelper;
+    private readonly IBaasApi baasRequestHelper;
     private readonly Mock<IOptionsMonitor<BaasOptions>> mockOptions;
     private readonly Mock<HttpMessageHandler> mockHttpMessageHandler;
-    private readonly Mock<ILogger<BaasRequestHelper>> mockLogger;
+    private readonly Mock<ILogger<BaasApi>> mockLogger;
     private IDistributedCache cache;
 
     public BaasRequestHelperTest()
@@ -36,7 +36,7 @@ public class BaasRequestHelperTest
         );
         this.cache = new MemoryDistributedCache(opts);
 
-        this.baasRequestHelper = new BaasRequestHelper(
+        this.baasRequestHelper = new BaasApi(
             mockOptions.Object,
             new HttpClient(mockHttpMessageHandler.Object),
             this.cache,

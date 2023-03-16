@@ -8132,19 +8132,19 @@ public class RoomList
     public string region { get; set; }
     public string cluster_name { get; set; }
     public string language { get; set; }
-    public int status { get; set; }
+    public RoomStatuses status { get; set; }
     public int entry_type { get; set; }
     public int entry_guild_id { get; set; }
     public ulong host_viewer_id { get; set; }
     public string host_name { get; set; }
     public int host_level { get; set; }
-    public int leader_chara_id { get; set; }
+    public Charas leader_chara_id { get; set; }
     public int leader_chara_level { get; set; }
     public int leader_chara_rarity { get; set; }
     public int quest_id { get; set; }
-    public int quest_type { get; set; }
+    public QuestTypes quest_type { get; set; }
     public IEnumerable<AtgenRoomMemberList> room_member_list { get; set; }
-    public int start_entry_time { get; set; }
+    public DateTimeOffset start_entry_time { get; set; }
     public int member_num { get; set; }
     public AtgenEntryConditions entry_conditions { get; set; }
     public int compatible_id { get; set; }
@@ -8155,19 +8155,19 @@ public class RoomList
         string region,
         string cluster_name,
         string language,
-        int status,
+        RoomStatuses status,
         int entry_type,
         int entry_guild_id,
         ulong host_viewer_id,
         string host_name,
         int host_level,
-        int leader_chara_id,
+        Charas leader_chara_id,
         int leader_chara_level,
         int leader_chara_rarity,
         int quest_id,
-        int quest_type,
+        QuestTypes quest_type,
         IEnumerable<AtgenRoomMemberList> room_member_list,
-        int start_entry_time,
+        DateTimeOffset start_entry_time,
         int member_num,
         AtgenEntryConditions entry_conditions,
         int compatible_id

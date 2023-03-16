@@ -16,11 +16,21 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "80:80"
+      - "5000:80"
     links:
       - postgres
     env_file:
       - .env
-    
+
+  photonstatemanager:
+    hostname: photonstatemanager
+    image: ${DOCKER_REGISTRY-}photonstatemanager
+    build:
+        context: .
+        dockerfile: DragaliaAPI.Photon.StateManager/Dockerfile
+    ports:
+      - "5001:80"
+
   postgres:
     hostname: postgres
     image: postgres:latest

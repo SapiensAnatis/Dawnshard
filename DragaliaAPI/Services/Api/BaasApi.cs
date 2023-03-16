@@ -9,22 +9,22 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Services.Helpers;
 
-public class BaasRequestHelper : IBaasRequestHelper
+public class BaasApi : IBaasApi
 {
     private readonly IOptionsMonitor<BaasOptions> options;
     private readonly HttpClient client;
     private readonly IDistributedCache cache;
-    private readonly ILogger<BaasRequestHelper> logger;
+    private readonly ILogger<BaasApi> logger;
 
     private const string KeySetEndpoint = "/.well-known/jwks.json";
     private const string SavefileEndpoint = "/gameplay/v1/savefile";
     private const string RedisKey = ":jwks:baas";
 
-    public BaasRequestHelper(
+    public BaasApi(
         IOptionsMonitor<BaasOptions> options,
         HttpClient client,
         IDistributedCache cache,
-        ILogger<BaasRequestHelper> logger
+        ILogger<BaasApi> logger
     )
     {
         this.options = options;
