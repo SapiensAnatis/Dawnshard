@@ -18,8 +18,14 @@ public class AbilityCrestList
     public int equipable_count { get; set; }
     public int hp_plus_count { get; set; }
     public int attack_plus_count { get; set; }
-    public int is_favorite { get; set; }
-    public int is_new { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_favorite { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_new { get; set; }
     public DateTimeOffset gettime { get; set; }
     public int ability_1_level { get; set; }
     public int ability_2_level { get; set; }
@@ -31,8 +37,8 @@ public class AbilityCrestList
         int equipable_count,
         int hp_plus_count,
         int attack_plus_count,
-        int is_favorite,
-        int is_new,
+        bool is_favorite,
+        bool is_new,
         DateTimeOffset gettime,
         int ability_1_level,
         int ability_2_level

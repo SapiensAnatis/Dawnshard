@@ -88,10 +88,12 @@ public class AbilityCrestSetAbilityCrestSetRequest
 [MessagePackObject(true)]
 public class AbilityCrestSetFavoriteRequest
 {
-    public int ability_crest_id { get; set; }
-    public int is_favorite { get; set; }
+    public AbilityCrests ability_crest_id { get; set; }
 
-    public AbilityCrestSetFavoriteRequest(int ability_crest_id, int is_favorite)
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_favorite { get; set; }
+
+    public AbilityCrestSetFavoriteRequest(AbilityCrests ability_crest_id, bool is_favorite)
     {
         this.ability_crest_id = ability_crest_id;
         this.is_favorite = is_favorite;

@@ -32,8 +32,20 @@ internal class AbilityCrestRepository : IAbilityCrestRepository
     {
         this.logger.LogDebug("Adding ability crest {print}", abilityCrestId);
 
+        if (await this.FindAsync(abilityCrestId) is not null)
+        {
+            this.logger.LogDebug("Ability crest was already owned.");
+            return;
+        }
+
         await this.apiContext.PlayerAbilityCrests.AddAsync(
             new DbAbilityCrest(this.playerDetailsService.AccountId, abilityCrestId)
         );
     }
+
+    public async Task<DbAbilityCrest?> FindAsync(AbilityCrests abilityCrestId) =>
+        await this.apiContext.PlayerAbilityCrests.FindAsync(
+            this.playerDetailsService.AccountId,
+            abilityCrestId
+        );
 }

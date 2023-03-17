@@ -50,4 +50,25 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
                 }
             );
     }
+
+    [Fact]
+    public async Task FindAsync_FindsAbilityCrestAsExpected()
+    {
+        await this.abilityCrestRepository.Add(AbilityCrests.FlashofGenius);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        (await this.abilityCrestRepository.FindAsync(AbilityCrests.FlashofGenius))
+            .Should()
+            .BeEquivalentTo(
+                new DbAbilityCrest()
+                {
+                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    AbilityCrestId = AbilityCrests.FlashofGenius
+                }
+            );
+
+        (await this.abilityCrestRepository.FindAsync(AbilityCrests.TheBridalDragon))
+            .Should()
+            .BeNull();
+    }
 }

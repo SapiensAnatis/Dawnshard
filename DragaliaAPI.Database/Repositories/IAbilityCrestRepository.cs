@@ -8,4 +8,5 @@ public interface IAbilityCrestRepository
 {
     IQueryable<DbAbilityCrest> AbilityCrests { get; }
     Task Add(AbilityCrests abilityCrestId);
+    Task<DbAbilityCrest?> FindAsync(AbilityCrests abilityCrestId);
 }
