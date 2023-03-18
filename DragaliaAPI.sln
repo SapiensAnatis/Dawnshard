@@ -11,11 +11,11 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BC72B633-A158-4169-9B47-3CB9C689A57E}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.env = .env
-		README.md = README.md
 		.env.default = .env.default
 		.gitignore = .gitignore
-		.editorconfig = .editorconfig
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database", "DragaliaAPI.Database\DragaliaAPI.Database.csproj", "{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}"
@@ -29,15 +29,17 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{1A23D473-87C4-40FB-8DF0-43F4B0FE7414}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\deploy.yaml = .github\workflows\deploy.yaml
-		.github\workflows\publish-tag.yaml = .github\workflows\publish-tag.yaml
-		.github\workflows\publish-push.yaml = .github\workflows\publish-push.yaml
 		.github\workflows\lint.yaml = .github\workflows\lint.yaml
-		.github\workflows\publish-manual.yaml = .github\workflows\publish-manual.yaml
-		.github\workflows\test.yaml = .github\workflows\test.yaml
 		.github\workflows\publish-base.yaml = .github\workflows\publish-base.yaml
+		.github\workflows\publish-manual.yaml = .github\workflows\publish-manual.yaml
+		.github\workflows\publish-push.yaml = .github\workflows\publish-push.yaml
+		.github\workflows\publish-tag.yaml = .github\workflows\publish-tag.yaml
+		.github\workflows\test.yaml = .github\workflows\test.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragaliaAPI.Test.Utils", "DragaliaAPI.Test.Utils\DragaliaAPI.Test.Utils.csproj", "{41916B7C-6304-4504-99C0-B24D23982F7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Test.Utils", "DragaliaAPI.Test.Utils\DragaliaAPI.Test.Utils.csproj", "{41916B7C-6304-4504-99C0-B24D23982F7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragaliaAPI.Photon.Plugin", "DragaliaAPI.Photon.Plugin\DragaliaAPI.Photon.Plugin.csproj", "{16E2696F-9C24-4621-BBF3-D801CEBA9204}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,14 +79,18 @@ Global
 		{41916B7C-6304-4504-99C0-B24D23982F7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41916B7C-6304-4504-99C0-B24D23982F7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41916B7C-6304-4504-99C0-B24D23982F7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16E2696F-9C24-4621-BBF3-D801CEBA9204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16E2696F-9C24-4621-BBF3-D801CEBA9204}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16E2696F-9C24-4621-BBF3-D801CEBA9204}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16E2696F-9C24-4621-BBF3-D801CEBA9204}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D86831A9-C572-4B8D-BD12-EF0768BC9E4F}
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1A23D473-87C4-40FB-8DF0-43F4B0FE7414} = {BC72B633-A158-4169-9B47-3CB9C689A57E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D86831A9-C572-4B8D-BD12-EF0768BC9E4F}
 	EndGlobalSection
 EndGlobal
