@@ -89,4 +89,28 @@ public static class MasterAsset
     /// </summary>
     public static readonly MasterAssetData<int, AbilityCrestTrade> AbilityCrestTrade =
         new("AbilityCrestTrade.json", x => x.Id);
+
+    /// <summary>
+    /// Contains information about the materials required to unbind ability crests.
+    /// </summary>
+    public static readonly MasterAssetData<int, AbilityCrestBuildupGroup> AbilityCrestBuildupGroup =
+        new("AbilityCrestBuildupGroup.json", x => x.Id);
+
+    /// <summary>
+    /// Contains information about the materials required to level up ability crests.
+    /// </summary>
+    public static readonly MasterAssetData<int, AbilityCrestBuildupLevel> AbilityCrestBuildupLevel =
+        new("AbilityCrestBuildupLevel.json", x => x.Id);
+
+    /// <summary>
+    /// Contains information about the level limits of different ability crest rarities.
+    /// </summary>
+    public static readonly MasterAssetData<int, AbilityCrestRarity> AbilityCrestRarity =
+        new("AbilityCrestRarity.json", x => x.Id);
+
+    /// <summary>
+    /// Contains information about ability crests.
+    /// </summary>
+    public static readonly MasterAssetData<AbilityCrests, AbilityCrest> AbilityCrest =
+        new("AbilityCrest.json", x => x.Id);
 }

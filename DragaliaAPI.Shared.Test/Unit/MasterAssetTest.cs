@@ -505,4 +505,117 @@ public class MasterAssetTest
 
         abilityCrestTrades.Should().AllBeOfType<AbilityCrestTrade>();
     }
+
+    [Fact]
+    public void AbilityCrestBuildupGroup_Get_ReturnsExpectedProperties()
+    {
+        AbilityCrestBuildupGroup buildupGroup =
+            MasterAsset.MasterAsset.AbilityCrestBuildupGroup.Get(6020603);
+
+        buildupGroup
+            .Should()
+            .BeEquivalentTo(
+                new AbilityCrestBuildupGroup(
+                    Id: 6020603,
+                    AbilityCrestBuildupGroupId: 602,
+                    BuildupPieceType: BuildupPieceTypes.Copies,
+                    Step: 3,
+                    BuildupDewPoint: 0,
+                    BuildupMaterialId1: 201010021,
+                    BuildupMaterialQuantity1: 200,
+                    BuildupMaterialId2: 201009003,
+                    BuildupMaterialQuantity2: 25,
+                    BuildupMaterialId3: 0,
+                    BuildupMaterialQuantity3: 0,
+                    UniqueBuildupMaterialCount: 0
+                )
+            );
+    }
+
+    [Fact]
+    public void AbilityCrestBuildupLevel_Get_ReturnsExpectedProperties()
+    {
+        AbilityCrestBuildupLevel buildupLevel =
+            MasterAsset.MasterAsset.AbilityCrestBuildupLevel.Get(901010);
+
+        buildupLevel
+            .Should()
+            .BeEquivalentTo(
+                new AbilityCrestBuildupLevel(
+                    Id: 901010,
+                    RarityGroup: 901,
+                    Level: 10,
+                    BuildupMaterialId1: 113001001,
+                    BuildupMaterialQuantity1: 2,
+                    BuildupMaterialId2: 113001003,
+                    BuildupMaterialQuantity2: 14,
+                    BuildupMaterialId3: 0,
+                    BuildupMaterialQuantity3: 0,
+                    UniqueBuildupMaterialCount: 2
+                )
+            );
+    }
+
+    [Fact]
+    public void AbilityCrestRarity_Get_ReturnsExpectedProperties()
+    {
+        AbilityCrestRarity rarity = MasterAsset.MasterAsset.AbilityCrestRarity.Get(9);
+
+        rarity
+            .Should()
+            .BeEquivalentTo(
+                new AbilityCrestRarity(
+                    Id: 9,
+                    MaxLimitLevelByLimitBreak0: 10,
+                    MaxLimitLevelByLimitBreak1: 15,
+                    MaxLimitLevelByLimitBreak2: 20,
+                    MaxLimitLevelByLimitBreak3: 25,
+                    MaxLimitLevelByLimitBreak4: 30,
+                    MaxHpPlusCount: 40,
+                    MaxAtkPlusCount: 40
+                )
+            );
+    }
+
+    [Fact]
+    public void AbilityCrest_Get_ReturnsExpectedProperties()
+    {
+        AbilityCrest abilityCrest = MasterAsset.MasterAsset.AbilityCrest.Get(
+            AbilityCrests.TheGeniusTacticianBowsBoon
+        );
+
+        abilityCrest
+            .Should()
+            .BeEquivalentTo(
+                new AbilityCrest(
+                    Id: AbilityCrests.TheGeniusTacticianBowsBoon,
+                    AbilityCrestBuildupGroupId: 1101,
+                    AbilityCrestLevelRarityGroupId: 901,
+                    Rarity: 9,
+                    UniqueBuildupMaterialId: 207001028
+                )
+            );
+    }
+
+    [Fact]
+    public void AbilityCrest_GetBuildupGroupId_ReturnsExpectedId()
+    {
+        AbilityCrest abilityCrest = MasterAsset.MasterAsset.AbilityCrest.Get(
+            AbilityCrests.TheGeniusTacticianBowsBoon
+        );
+
+        int buildupGroupId = abilityCrest.GetBuildupGroupId(BuildupPieceTypes.Copies, 4);
+        buildupGroupId.Should().Be(11010604);
+    }
+
+    [Fact]
+    public void AbilityCrest_GetBuildupLevelId_ReturnsExpectedId()
+    {
+        AbilityCrest abilityCrest = MasterAsset.MasterAsset.AbilityCrest.Get(
+            AbilityCrests.TheGeniusTacticianBowsBoon
+        );
+
+        int buildupLevelId = abilityCrest.GetBuildupLevelId(9);
+        buildupLevelId.Should().Be(901009);
+    }
 }

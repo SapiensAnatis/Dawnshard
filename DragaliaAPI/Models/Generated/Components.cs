@@ -2980,7 +2980,7 @@ public class AtgenPlayWallDetail
 [MessagePackObject(true)]
 public class AtgenPlusCountParamsList
 {
-    public int plus_count_type { get; set; }
+    public int plus_count_type { get; set; } // 1 = hp, 2 = atk
     public int plus_count { get; set; }
 
     public AtgenPlusCountParamsList(int plus_count_type, int plus_count)
