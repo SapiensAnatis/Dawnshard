@@ -5,6 +5,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
+using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.Moq;
 using static DragaliaAPI.Database.Test.DbTestFixture;
@@ -24,7 +25,8 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         this.mockPlayerDetailsService = new(MockBehavior.Strict);
         this.unitRepository = new UnitRepository(
             fixture.ApiContext,
-            this.mockPlayerDetailsService.Object
+            this.mockPlayerDetailsService.Object,
+            LoggerTestUtils.Create<UnitRepository>()
         );
     }
 
@@ -157,6 +159,15 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         )
             .Should()
             .Contain(new List<Charas>() { Charas.Addis, Charas.Aeleen });
+        (await fixture.ApiContext.PlayerStoryState.Select(x => x.StoryId).ToListAsync())
+            .Should()
+            .Contain(
+                new List<int>()
+                {
+                    MasterAsset.CharaStories[(int)Charas.Addis].storyIds[0],
+                    MasterAsset.CharaStories[(int)Charas.Aeleen].storyIds[0]
+                }
+            );
     }
 
     [Fact]
