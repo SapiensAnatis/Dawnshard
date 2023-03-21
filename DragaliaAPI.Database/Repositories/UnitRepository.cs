@@ -137,7 +137,7 @@ public class UnitRepository : BaseRepository, IUnitRepository
                 }
                 else
                 {
-                    logger.LogWarning(
+                    logger.LogInformation(
                         "Unable to find any storyIds for Character: {Chara}",
                         newCharas.ElementAt(i)
                     );
