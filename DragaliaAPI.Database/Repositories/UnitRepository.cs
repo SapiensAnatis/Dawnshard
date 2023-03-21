@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Factories;
@@ -9,6 +10,8 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Serilog.Core;
 
 namespace DragaliaAPI.Database.Repositories;
 
@@ -16,12 +19,18 @@ public class UnitRepository : BaseRepository, IUnitRepository
 {
     private readonly ApiContext apiContext;
     private readonly IPlayerDetailsService playerDetailsService;
+    private readonly ILogger<UnitRepository> logger;
 
-    public UnitRepository(ApiContext apiContext, IPlayerDetailsService playerDetailsService)
+    public UnitRepository(
+        ApiContext apiContext,
+        IPlayerDetailsService playerDetailsService,
+        ILogger<UnitRepository> logger
+    )
         : base(apiContext)
     {
         this.apiContext = apiContext;
         this.playerDetailsService = playerDetailsService;
+        this.logger = logger;
     }
 
     public IQueryable<DbPlayerCharaData> GetAllCharaData(string deviceAccountId)
@@ -103,6 +112,38 @@ public class UnitRepository : BaseRepository, IUnitRepository
             );
 
             await apiContext.PlayerCharaData.AddRangeAsync(dbEntries);
+
+            List<DbPlayerStoryState> newCharaStories = new List<DbPlayerStoryState>(
+                newCharas.Count()
+            );
+            for (int i = 0; i < newCharas.Count(); i++)
+            {
+                if (
+                    MasterAsset.CharaStories.TryGetValue(
+                        (int)newCharas.ElementAt(i),
+                        out StoryData? story
+                    )
+                )
+                {
+                    newCharaStories.Add(
+                        new DbPlayerStoryState()
+                        {
+                            DeviceAccountId = deviceAccountId,
+                            StoryType = StoryTypes.Chara,
+                            StoryId = story.storyIds[0],
+                            State = 0
+                        }
+                    );
+                }
+                else
+                {
+                    logger.LogInformation(
+                        "Unable to find any storyIds for Character: {Chara}",
+                        newCharas.ElementAt(i)
+                    );
+                }
+            }
+            apiContext.PlayerStoryState.AddRange(newCharaStories);
         }
 
         return newMapping;
