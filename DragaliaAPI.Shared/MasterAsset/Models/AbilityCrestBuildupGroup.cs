@@ -8,11 +8,11 @@ public record AbilityCrestBuildupGroup(
     BuildupPieceTypes BuildupPieceType,
     int Step,
     int BuildupDewPoint,
-    int BuildupMaterialId1,
+    Materials BuildupMaterialId1,
     int BuildupMaterialQuantity1,
-    int BuildupMaterialId2,
+    Materials BuildupMaterialId2,
     int BuildupMaterialQuantity2,
-    int BuildupMaterialId3,
+    Materials BuildupMaterialId3,
     int BuildupMaterialQuantity3,
     int UniqueBuildupMaterialCount
 );

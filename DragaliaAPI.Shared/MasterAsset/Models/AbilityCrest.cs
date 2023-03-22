@@ -7,7 +7,7 @@ public record AbilityCrest(
     int AbilityCrestBuildupGroupId,
     int AbilityCrestLevelRarityGroupId,
     int Rarity,
-    int UniqueBuildupMaterialId
+    Materials UniqueBuildupMaterialId
 )
 {
     public int GetBuildupGroupId(BuildupPieceTypes type, int step) =>

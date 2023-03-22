@@ -521,9 +521,9 @@ public class MasterAssetTest
                     BuildupPieceType: BuildupPieceTypes.Copies,
                     Step: 3,
                     BuildupDewPoint: 0,
-                    BuildupMaterialId1: 201010021,
+                    BuildupMaterialId1: Materials.AzureInsignia,
                     BuildupMaterialQuantity1: 200,
-                    BuildupMaterialId2: 201009003,
+                    BuildupMaterialId2: Materials.DyrenellAureus,
                     BuildupMaterialQuantity2: 25,
                     BuildupMaterialId3: 0,
                     BuildupMaterialQuantity3: 0,
@@ -545,9 +545,9 @@ public class MasterAssetTest
                     Id: 901010,
                     RarityGroup: 901,
                     Level: 10,
-                    BuildupMaterialId1: 113001001,
+                    BuildupMaterialId1: Materials.HolyWater,
                     BuildupMaterialQuantity1: 2,
-                    BuildupMaterialId2: 113001003,
+                    BuildupMaterialId2: Materials.ConsecratedWater,
                     BuildupMaterialQuantity2: 14,
                     BuildupMaterialId3: 0,
                     BuildupMaterialQuantity3: 0,
@@ -592,7 +592,7 @@ public class MasterAssetTest
                     AbilityCrestBuildupGroupId: 1101,
                     AbilityCrestLevelRarityGroupId: 901,
                     Rarity: 9,
-                    UniqueBuildupMaterialId: 207001028
+                    UniqueBuildupMaterialId: Materials.GeniusoftheCenturysMemory
                 )
             );
     }
