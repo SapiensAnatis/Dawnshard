@@ -533,6 +533,33 @@ public class MasterAssetTest
     }
 
     [Fact]
+    public void AbilityCrestBuildupGroup_MaterialMap_ReturnsExpectedDictionary()
+    {
+        Dictionary<Materials, int> map = MasterAsset.MasterAsset.AbilityCrestBuildupGroup
+            .Get(6020603)
+            .MaterialMap;
+
+        map.Should()
+            .BeEquivalentTo(
+                new Dictionary<Materials, int>()
+                {
+                    { Materials.AzureInsignia, 200 },
+                    { Materials.DyrenellAureus, 25 }
+                }
+            );
+    }
+
+    [Theory]
+    [InlineData(6020603, false)]
+    [InlineData(5010101, true)]
+    public void AbilityCrestBuildupGroup_IsUseDewpoint_ReturnsExpectedBool(int id, bool expected)
+    {
+        bool actual = MasterAsset.MasterAsset.AbilityCrestBuildupGroup.Get(id).IsUseDewpoint;
+
+        actual.Should().Be(expected);
+    }
+
+    [Fact]
     public void AbilityCrestBuildupLevel_Get_ReturnsExpectedProperties()
     {
         AbilityCrestBuildupLevel buildupLevel =
@@ -554,6 +581,36 @@ public class MasterAssetTest
                     UniqueBuildupMaterialCount: 2
                 )
             );
+    }
+
+    [Fact]
+    public void AbilityCrestBuildupLevel_MaterialMap_ReturnsExpectedDictionary()
+    {
+        Dictionary<Materials, int> map = MasterAsset.MasterAsset.AbilityCrestBuildupLevel
+            .Get(901010)
+            .MaterialMap;
+
+        map.Should()
+            .BeEquivalentTo(
+                new Dictionary<Materials, int>()
+                {
+                    { Materials.HolyWater, 2 },
+                    { Materials.ConsecratedWater, 14 }
+                }
+            );
+    }
+
+    [Theory]
+    [InlineData(901010, true)]
+    [InlineData(301013, false)]
+    public void AbilityCrestBuildupLevel_IsUseUniqueMaterial_ReturnsExpectedBool(
+        int id,
+        bool expected
+    )
+    {
+        bool actual = MasterAsset.MasterAsset.AbilityCrestBuildupLevel.Get(id).IsUseUniqueMaterial;
+
+        actual.Should().Be(expected);
     }
 
     [Fact]

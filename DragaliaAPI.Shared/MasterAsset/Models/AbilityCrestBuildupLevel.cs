@@ -13,4 +13,17 @@ public record AbilityCrestBuildupLevel(
     Materials BuildupMaterialId3,
     int BuildupMaterialQuantity3,
     int UniqueBuildupMaterialCount
-);
+)
+{
+    public Dictionary<Materials, int> MaterialMap { get; } =
+        new List<KeyValuePair<Materials, int>>()
+        {
+            new(BuildupMaterialId1, BuildupMaterialQuantity1),
+            new(BuildupMaterialId2, BuildupMaterialQuantity2),
+            new(BuildupMaterialId3, BuildupMaterialQuantity3),
+        }
+            .Where(x => x.Key != Materials.Empty)
+            .ToDictionary(x => x.Key, x => x.Value);
+
+    public bool IsUseUniqueMaterial => UniqueBuildupMaterialCount != 0;
+};
