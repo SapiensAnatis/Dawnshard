@@ -649,7 +649,10 @@ public class MasterAssetTest
                     AbilityCrestBuildupGroupId: 1101,
                     AbilityCrestLevelRarityGroupId: 901,
                     Rarity: 9,
-                    UniqueBuildupMaterialId: Materials.GeniusoftheCenturysMemory
+                    UniqueBuildupMaterialId: Materials.GeniusoftheCenturysMemory,
+                    DuplicateEntityId: Materials.GeniusoftheCenturysMemory,
+                    DuplicateEntityQuantity: 6,
+                    DuplicateEntityType: EntityTypes.Material
                 )
             );
     }
@@ -674,5 +677,18 @@ public class MasterAssetTest
 
         int buildupLevelId = abilityCrest.GetBuildupLevelId(9);
         buildupLevelId.Should().Be(901009);
+    }
+
+    [Fact]
+    public void AbilityCrest_DuplicateMaterialMap_ReturnsExpectedDictionary()
+    {
+        Dictionary<Materials, int> map = MasterAsset.MasterAsset.AbilityCrest
+            .Get(AbilityCrests.TheGeniusTacticianBowsBoon)
+            .DuplicateMaterialMap;
+
+        map.Should()
+            .BeEquivalentTo(
+                new Dictionary<Materials, int>() { { Materials.GeniusoftheCenturysMemory, 6 } }
+            );
     }
 }
