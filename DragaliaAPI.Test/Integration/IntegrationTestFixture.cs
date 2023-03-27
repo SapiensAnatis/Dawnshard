@@ -180,13 +180,13 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         context.PlayerFortBuilds.Add(
             new DbFortBuild()
             {
-                DeviceAccountId = this.DeviceAccountId,
+                DeviceAccountId = DeviceAccountIdConst,
                 PlantId = FortPlants.Smithy,
                 Level = 9
             }
         );
         CreateFort();
-        context.PlayerUserData.Find(this.DeviceAccountId)!.Coin = 100_000_000;
+        context.PlayerUserData.Find(DeviceAccountIdConst)!.Coin = 100_000_000;
         context.SaveChanges();
     }
 }

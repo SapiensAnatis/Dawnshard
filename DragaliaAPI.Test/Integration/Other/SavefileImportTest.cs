@@ -167,12 +167,12 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
         await this.client.PostAsync($"savefile/import/{viewerId}", content);
 
         fixture.ApiContext.PlayerStoryState
-            .Single(x => x.DeviceAccountId == fixture.DeviceAccountId && x.StoryId == 110313011)
+            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst && x.StoryId == 110313011)
             .StoryType.Should()
             .Be(StoryTypes.Chara);
 
         fixture.ApiContext.PlayerStoryState
-            .Single(x => x.DeviceAccountId == fixture.DeviceAccountId && x.StoryId == 210091011)
+            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst && x.StoryId == 210091011)
             .StoryType.Should()
             .Be(StoryTypes.Dragon);
     }
@@ -181,7 +181,7 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
     public async Task Import_IsIdempotent()
     {
         long viewerId = this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == fixture.DeviceAccountId)
+            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .ViewerId;
 
         HttpContent content = PrepareSavefileRequest();

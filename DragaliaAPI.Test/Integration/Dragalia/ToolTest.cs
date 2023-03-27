@@ -70,7 +70,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
                 id_token = TestUtils.TokenToString(
                     TestUtils.GetToken(
                         DateTime.UtcNow - TimeSpan.FromMinutes(5),
-                        fixture.DeviceAccountId
+                        IntegrationTestFixture.DeviceAccountId
                     )
                 )
             }
@@ -160,7 +160,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
                 id_token = TestUtils.TokenToString(
                     TestUtils.GetToken(
                         DateTime.UtcNow - TimeSpan.FromMinutes(5),
-                        fixture.DeviceAccountId
+                        IntegrationTestFixture.DeviceAccountId
                     )
                 )
             }
@@ -258,7 +258,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
          string deviceAccountId = "save import id";
 
          this.fixture.ApiContext.PlayerUserData
-             .Find(this.fixture.DeviceAccountId)!
+             .Find(this.IntegrationTestFixture.DeviceAccountId)!
              .LastSaveImportTime = DateTime.MinValue;
          await this.fixture.ApiContext.SaveChangesAsync();
 
