@@ -1793,14 +1793,16 @@ public class AtgenDragonBonus
 [MessagePackObject(true)]
 public class AtgenDragonGiftRewardList
 {
-    public int dragon_gift_id { get; set; }
-    public int is_favorite { get; set; }
+    public DragonGifts dragon_gift_id { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_favorite { get; set; }
     public IEnumerable<DragonRewardEntityList> return_gift_list { get; set; }
     public IEnumerable<RewardReliabilityList> reward_reliability_list { get; set; }
 
     public AtgenDragonGiftRewardList(
-        int dragon_gift_id,
-        int is_favorite,
+        DragonGifts dragon_gift_id,
+        bool is_favorite,
         IEnumerable<DragonRewardEntityList> return_gift_list,
         IEnumerable<RewardReliabilityList> reward_reliability_list
     )
@@ -3443,6 +3445,7 @@ public class AtgenShopGiftList
 {
     public int dragon_gift_id { get; set; }
     public int price { get; set; }
+
     public int is_buy { get; set; }
 
     public AtgenShopGiftList(int dragon_gift_id, int price, int is_buy)
@@ -5405,10 +5408,10 @@ public class DmodeStoryList
 [MessagePackObject(true)]
 public class DragonGiftList
 {
-    public int dragon_gift_id { get; set; }
+    public DragonGifts dragon_gift_id { get; set; }
     public int quantity { get; set; }
 
-    public DragonGiftList(int dragon_gift_id, int quantity)
+    public DragonGiftList(DragonGifts dragon_gift_id, int quantity)
     {
         this.dragon_gift_id = dragon_gift_id;
         this.quantity = quantity;
@@ -6158,11 +6161,11 @@ public class GatherItemList
 [MessagePackObject(true)]
 public class GrowMaterialList
 {
-    public int type { get; set; }
-    public ulong id { get; set; }
+    public EntityTypes type { get; set; }
+    public int id { get; set; }
     public int quantity { get; set; }
 
-    public GrowMaterialList(int type, ulong id, int quantity)
+    public GrowMaterialList(EntityTypes type, int id, int quantity)
     {
         this.type = type;
         this.id = id;
@@ -7338,6 +7341,12 @@ public class PartyUnitList
 
 #nullable disable
 
+/// <summary>
+/// Contains the cost of the summon and the amount held of the relevant currency
+/// Mostly likely only relevant for Diamantium
+/// </summary>
+/// <param name="target_hold_quantity">Total relevant currency held</param>
+/// <param name="target_cost">Relevant currency cost</param>
 [MessagePackObject(true)]
 public class PaymentTarget
 {
@@ -8385,6 +8394,19 @@ public class StampList
     public StampList() { }
 }
 
+/// UNKNOWN: params: summon_point_id(why?)
+/// <summary>
+/// A summon history entry
+/// </summary>
+/// <param name="key_id">Unique Id of the summon</param>
+/// <param name="summon_id">Banner Id</param>
+/// <param name="summon_exec_type">Distinguishing 1x from 10x</param>
+/// <param name="exec_date">Summon date</param>
+/// <param name="payment_type">Summon currency type</param>
+/// <param name="summon_prize_rank">Summon prize rank obtained for this summon</param>
+/// <param name="summon_point_id">Summon point entry id (unknown why needed since <see cref="summon_point"/> exists)</param>
+/// <param name="summon_point">Amount of summon points received</param>
+/// <param name="get_dew_point_quantity">Amount of Dew points received</param>
 [MessagePackObject(true)]
 public class SummonHistoryList
 {
@@ -8448,6 +8470,35 @@ public class SummonHistoryList
     public SummonHistoryList() { }
 }
 
+/// UNKNOWN: params: priority, summon_type, status, daily(unsure), campaign_type, [x]_rest
+/// <summary>
+/// Banner Data<br/>
+/// This is composed from static banner data and DB saved player-banner data
+/// </summary>
+/// <param name="summon_id">Banner Id</param>
+/// <param name="priority">Unknown</param>
+/// <param name="summon_type">Unknown, maybe for special banners like platinum only banners</param>
+/// <param name="single_crystal">1x summon Wyrmite cost (Negative numbers won't allow summons, 0 for default)</param>
+/// <param name="single_diamond">Client uses <see cref="single_crystal"/> for displaying both wyrmite and diamantium cost<br/>Most likely 1x summon Diamantium cost (Negative numbers won't allow summons, 0 for default)</param>
+/// <param name="multi_crystal">10x summon Wyrmite cost (Negative numbers won't allow summons, 0 for default)</param>
+/// <param name="multi_diamond">Client uses <see cref="multi_crystal"/> for displaying both wyrmite and diamantium cost<br/>Most likely 10x summon Diamantium cost (Negative numbers won't allow summons, 0 for default)</param>
+/// <param name="limited_crystal">Unknown: Presumably Wyrmite cost of the limited 1x summon button but it never existed</param>
+/// <param name="limited_diamond">Diamantium cost of the limited 1x summon button</param>
+/// <param name="add_summon_point">Summon points for a 1x Wyrmite summon</param>
+/// <param name="add_summon_point_stone">Summon points for a 1x Diamantium summon</param>
+/// <param name="exchange_summon_point">Summon point cost for sparking, the client doesn't seem to care though</param>
+/// <param name="status">Unknown function, maybe just active = 1, inactive = 0 but no change in normal banner</param>
+/// <param name="commence_date">Banner start date</param>
+/// <param name="complete_date">Banner end date</param>
+/// <param name="daily_count">Currently used summons for the daily discounted diamantium summon</param>
+/// <param name="daily_limit">Total limit for the daily discounted diamantium summon</param>
+/// <param name="total_limit">Total amount of summons limit(seems ignored for normal banners)</param>
+/// <param name="total_count">Current total amount of summons(seems ignored for normal banners)</param>
+/// <param name="campaign_type">Unknown, maybe used for </param>
+/// <param name="free_count_rest">Most likely free summons for certain banner/campaign types</param>
+/// <param name="is_beginner_campaign">If this banner is part of the beginner campaign</param>
+/// <param name="beginner_campaign_count_rest">Begginer banner has a free tenfold available(only if <see cref="is_beginner_campaign"/> is set)</param>
+/// <param name="consecution_campaign_count_rest">Unknown</param>
 [MessagePackObject(true)]
 public class SummonList
 {
@@ -9239,6 +9290,19 @@ public class UserRedoableSummonData
     public UserRedoableSummonData() { }
 }
 
+/// <summary>
+/// Updated Summon Banner Data
+/// </summary>
+/// <param name="summon_id">Id of the summon banner</param>
+/// <param name="summon_count">Total Amount of times a player pressed summon on a banner<br/>
+/// <b>Not the same as amount of this summon</b></param>
+/// <param name="campaign_type">Type of banner.<br/> 0 for default, other values unknown</param>
+/// UNKNOWN param: free_count_rest
+/// <param name="free_count_rest">Unknown</param>
+/// <param name="is_beginner_campaign">Flag for if this banner is part of the beginner campaign</param>
+/// <param name="beginner_campaign_count_rest">Free 10x availabe if is beginner campaign</param>
+/// UNKNOWN param: consecution_campaign_count_rest
+/// <param name="consecution_campaign_count_rest">Unknown</param>
 [MessagePackObject(true)]
 public class UserSummonList
 {

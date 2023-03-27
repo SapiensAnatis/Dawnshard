@@ -322,10 +322,6 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("Abil3Lvl");
 
-                    b.Property<byte>("AdditionalMaxLevel")
-                        .HasColumnType("smallint")
-                        .HasColumnName("AddMaxLevel");
-
                     b.Property<int>("AttackBase")
                         .HasColumnType("integer")
                         .HasColumnName("AtkBase");
@@ -505,6 +501,27 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerDragonData");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerDragonGift", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text")
+                        .HasColumnName("DeviceAccountId");
+
+                    b.Property<int>("DragonGiftId")
+                        .HasColumnType("integer")
+                        .HasColumnName("DragonGiftId");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("Quantity");
+
+                    b.HasKey("DeviceAccountId", "DragonGiftId");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("PlayerDragonGift");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerDragonReliability", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -569,8 +586,8 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("StoryId");
 
-                    b.Property<byte>("State")
-                        .HasColumnType("smallint")
+                    b.Property<int>("State")
+                        .HasColumnType("integer")
                         .HasColumnName("State");
 
                     b.HasKey("DeviceAccountId", "StoryType", "StoryId");
@@ -1085,6 +1102,17 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerDragonGift", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany("DragonGiftList")
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerDragonReliability", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
@@ -1220,6 +1248,8 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("CharaList");
 
                     b.Navigation("Currencies");
+
+                    b.Navigation("DragonGiftList");
 
                     b.Navigation("DragonList");
 

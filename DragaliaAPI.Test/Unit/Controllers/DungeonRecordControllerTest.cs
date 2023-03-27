@@ -21,6 +21,7 @@ public class DungeonRecordControllerTest
     private readonly Mock<IDungeonService> mockDungeonService;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
+    private readonly Mock<IQuestRewardService> mockQuestRewardService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
 
     private const string dungeonKey = "key";
@@ -34,12 +35,14 @@ public class DungeonRecordControllerTest
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
+        this.mockQuestRewardService = new(MockBehavior.Strict);
 
         this.dungeonRecordController = new(
             mockQuestRepository.Object,
             mockDungeonService.Object,
             mockUserDataRepository.Object,
             mockInventoryRepository.Object,
+            mockQuestRewardService.Object,
             mockUpdateDataService.Object
         );
 
@@ -75,16 +78,14 @@ public class DungeonRecordControllerTest
                 }.AsQueryable().BuildMock());
 
         this.mockInventoryRepository
-            .Setup(
-                x => x.UpdateQuantity(DeviceAccountId, It.IsAny<List<Materials>>(), It.IsAny<int>())
-            )
+            .Setup(x => x.UpdateQuantity(It.IsAny<List<Materials>>(), It.IsAny<int>()))
             .Returns(Task.CompletedTask);
 
         this.mockUpdateDataService
-            .Setup(x => x.GetUpdateDataList(DeviceAccountId))
-            .Returns(new UpdateDataList() { });
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList());
 
-        this.mockQuestRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
+        this.mockQuestRewardService.Setup(x => x.GetDrops(questId)).Returns(new List<Materials>());
     }
 
     // Tests that QuestId and party data show up in response
@@ -120,6 +121,14 @@ public class DungeonRecordControllerTest
                     new() { unit_no = 1, chara_id = Charas.ThePrince }
                 }
             );
+
+        this.mockQuestRewardService.VerifyAll();
+        this.mockQuestRewardService.VerifyAll();
+        this.mockQuestRepository.VerifyAll();
+        this.mockDungeonService.VerifyAll();
+        this.mockUserDataRepository.VerifyAll();
+        this.mockInventoryRepository.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
     }
 
     // Tests that CompleteQuest returning the same clear time as GetQuests marks time as best clear time
@@ -166,6 +175,8 @@ public class DungeonRecordControllerTest
         data!.ingame_result_data.clear_time.Should().Be(clearTime);
         data!.ingame_result_data.is_best_clear_time.Should().BeTrue();
 
+        this.mockQuestRewardService.VerifyAll();
+        this.mockQuestRewardService.VerifyAll();
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
@@ -285,7 +296,9 @@ public class DungeonRecordControllerTest
             .Should()
             .BeEquivalentTo(new List<AtgenFirstClearSet>() { this.CreateClearReward() });
 
+        this.mockQuestRewardService.VerifyAll();
         this.mockQuestRepository.VerifyAll();
+        this.mockQuestRewardService.VerifyAll();
         this.mockDungeonService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
@@ -353,6 +366,7 @@ public class DungeonRecordControllerTest
             .Should()
             .BeEquivalentTo(new List<AtgenFirstClearSet>() { this.CreateClearReward() });
 
+        this.mockQuestRewardService.VerifyAll();
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
@@ -426,6 +440,7 @@ public class DungeonRecordControllerTest
             .BeEquivalentTo(new List<AtgenFirstClearSet>() { this.CreateClearReward() });
 
         this.mockQuestRepository.VerifyAll();
+        this.mockQuestRewardService.VerifyAll();
         this.mockDungeonService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
@@ -486,6 +501,7 @@ public class DungeonRecordControllerTest
             .BeEquivalentTo(new List<AtgenFirstClearSet>() { });
 
         this.mockQuestRepository.VerifyAll();
+        this.mockQuestRewardService.VerifyAll();
         this.mockDungeonService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();

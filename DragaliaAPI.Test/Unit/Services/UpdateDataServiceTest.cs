@@ -74,7 +74,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             new()
             {
                 DeviceAccountId = deviceAccountId,
-                State = 1,
+                State = StoryState.Read,
                 StoryId = 2,
                 StoryType = StoryTypes.Quest
             };
@@ -82,7 +82,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             new()
             {
                 DeviceAccountId = deviceAccountId,
-                State = 3,
+                State = StoryState.Read,
                 StoryId = 4,
                 StoryType = StoryTypes.Chara,
             };
@@ -90,7 +90,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             new()
             {
                 DeviceAccountId = deviceAccountId,
-                State = 5,
+                State = StoryState.Unlocked,
                 StoryId = 6,
                 StoryType = StoryTypes.Castle,
             };
@@ -99,7 +99,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             new()
             {
                 DeviceAccountId = deviceAccountId,
-                State = 7,
+                State = StoryState.Unlocked,
                 StoryId = 8,
                 StoryType = StoryTypes.Dragon,
             };
@@ -172,7 +172,10 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
 
         AssertOnlyContains<QuestStoryList>(list.quest_story_list, questStoryState);
 
-        AssertOnlyContains<UnitStoryList>(list.unit_story_list, charaStoryState);
+        list.unit_story_list
+            .Should()
+            .ContainEquivalentOf(mapper.Map<UnitStoryList>(charaStoryState))
+            .And.ContainEquivalentOf(mapper.Map<UnitStoryList>(dragonStoryState));
 
         AssertOnlyContains<CastleStoryList>(list.castle_story_list, castleStoryState);
 

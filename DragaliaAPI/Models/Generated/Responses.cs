@@ -1497,7 +1497,9 @@ public class DragonBuyGiftToSendData
     public IEnumerable<AtgenShopGiftList> shop_gift_list { get; set; }
     public UpdateDataList update_data_list { get; set; }
     public EntityResult entity_result { get; set; }
-    public int is_favorite { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_favorite { get; set; }
     public IEnumerable<DragonRewardEntityList> return_gift_list { get; set; }
     public IEnumerable<RewardReliabilityList> reward_reliability_list { get; set; }
     public int dragon_contact_free_gift_count { get; set; }
@@ -1506,7 +1508,7 @@ public class DragonBuyGiftToSendData
         IEnumerable<AtgenShopGiftList> shop_gift_list,
         UpdateDataList update_data_list,
         EntityResult entity_result,
-        int is_favorite,
+        bool is_favorite,
         IEnumerable<DragonRewardEntityList> return_gift_list,
         IEnumerable<RewardReliabilityList> reward_reliability_list,
         int dragon_contact_free_gift_count
@@ -1598,13 +1600,15 @@ public class DragonSellData
 public class DragonSendGiftMultipleData
 {
     public UpdateDataList update_data_list { get; set; }
-    public int is_favorite { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_favorite { get; set; }
     public IEnumerable<DragonRewardEntityList> return_gift_list { get; set; }
     public IEnumerable<RewardReliabilityList> reward_reliability_list { get; set; }
 
     public DragonSendGiftMultipleData(
         UpdateDataList update_data_list,
-        int is_favorite,
+        bool is_favorite,
         IEnumerable<DragonRewardEntityList> return_gift_list,
         IEnumerable<RewardReliabilityList> reward_reliability_list
     )
@@ -1622,13 +1626,15 @@ public class DragonSendGiftMultipleData
 public class DragonSendGiftData
 {
     public UpdateDataList update_data_list { get; set; }
-    public int is_favorite { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_favorite { get; set; }
     public IEnumerable<DragonRewardEntityList> return_gift_list { get; set; }
     public IEnumerable<RewardReliabilityList> reward_reliability_list { get; set; }
 
     public DragonSendGiftData(
         UpdateDataList update_data_list,
-        int is_favorite,
+        bool is_favorite,
         IEnumerable<DragonRewardEntityList> return_gift_list,
         IEnumerable<RewardReliabilityList> reward_reliability_list
     )
@@ -2615,6 +2621,8 @@ public class FortGetDataData
     public AtgenProductionRp production_df { get; set; }
     public AtgenProductionRp production_st { get; set; }
     public int dragon_contact_free_gift_count { get; set; }
+
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
     public DateTimeOffset current_server_time { get; set; }
 
     public FortGetDataData(
@@ -5802,6 +5810,18 @@ public class SummonGetSummonPointTradeData
     public SummonGetSummonPointTradeData() { }
 }
 
+/// <summary>
+/// Data for a SummonRequest response
+/// </summary>
+/// <param name="reversal_effect_index">Index in <see cref="result_prize_list"/> to do a fakeout on (rarity 4 orb in sky turns to rarity 5 upon landing)</param>
+/// <param name="presage_effect_list">Probably the summon effect (doves, rainbow, fafnirs, etc)</param>
+/// <param name="result_unit_list">List of rolled units</param>
+/// <param name="result_prize_list">List of rolled prizes from prize summons</param>
+/// <param name="summon_ticket_list">Probably list of used summon tickets<br/>List because of summons with multiple singles?</param>
+/// <param name="result_summon_point">Summon points for sparking</param>
+/// <param name="user_summon_list">Updated summon banner data</param>
+/// <param name="update_data_list">Updated user data</param>
+/// <param name="entity_result">List of converted and new entities</param>
 [MessagePackObject(true)]
 public class SummonRequestData
 {

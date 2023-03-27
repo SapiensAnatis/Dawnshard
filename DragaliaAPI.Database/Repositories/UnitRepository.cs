@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Factories;
@@ -7,18 +8,29 @@ using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Serilog.Core;
 
 namespace DragaliaAPI.Database.Repositories;
 
 public class UnitRepository : BaseRepository, IUnitRepository
 {
     private readonly ApiContext apiContext;
+    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly ILogger<UnitRepository> logger;
 
-    public UnitRepository(ApiContext apiContext)
+    public UnitRepository(
+        ApiContext apiContext,
+        IPlayerDetailsService playerDetailsService,
+        ILogger<UnitRepository> logger
+    )
         : base(apiContext)
     {
         this.apiContext = apiContext;
+        this.playerDetailsService = playerDetailsService;
+        this.logger = logger;
     }
 
     public IQueryable<DbPlayerCharaData> GetAllCharaData(string deviceAccountId)
@@ -100,9 +112,51 @@ public class UnitRepository : BaseRepository, IUnitRepository
             );
 
             await apiContext.PlayerCharaData.AddRangeAsync(dbEntries);
+
+            List<DbPlayerStoryState> newCharaStories = new List<DbPlayerStoryState>(
+                newCharas.Count()
+            );
+            for (int i = 0; i < newCharas.Count(); i++)
+            {
+                if (
+                    MasterAsset.CharaStories.TryGetValue(
+                        (int)newCharas.ElementAt(i),
+                        out StoryData? story
+                    )
+                )
+                {
+                    newCharaStories.Add(
+                        new DbPlayerStoryState()
+                        {
+                            DeviceAccountId = deviceAccountId,
+                            StoryType = StoryTypes.Chara,
+                            StoryId = story.storyIds[0],
+                            State = 0
+                        }
+                    );
+                }
+                else
+                {
+                    logger.LogInformation(
+                        "Unable to find any storyIds for Character: {Chara}",
+                        newCharas.ElementAt(i)
+                    );
+                }
+            }
+            apiContext.PlayerStoryState.AddRange(newCharaStories);
         }
 
         return newMapping;
+    }
+
+    public async Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(IEnumerable<Charas> idList)
+    {
+        return await this.AddCharas(this.playerDetailsService.AccountId, idList);
+    }
+
+    public async Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(Charas id)
+    {
+        return await this.AddCharas(new[] { id });
     }
 
     public async Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(
@@ -139,6 +193,16 @@ public class UnitRepository : BaseRepository, IUnitRepository
         );
 
         return newMapping;
+    }
+
+    public async Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(IEnumerable<Dragons> idList)
+    {
+        return await this.AddDragons(this.playerDetailsService.AccountId, idList);
+    }
+
+    public async Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(Dragons id)
+    {
+        return await this.AddDragons(new[] { id });
     }
 
     public async Task RemoveDragons(string deviceAccountId, IEnumerable<long> keyIdList)

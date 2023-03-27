@@ -116,6 +116,13 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         await this.ApiContext.SaveChangesAsync();
     }
 
+    public async Task AddToDatabase<TEntity>(params TEntity[] data)
+        where TEntity : class
+    {
+        await this.ApiContext.Set<TEntity>().AddRangeAsync(data);
+        await this.ApiContext.SaveChangesAsync();
+    }
+
     public async Task AddRangeToDatabase<TEntity>(IEnumerable<TEntity> data)
     {
         if (data is null)
@@ -158,9 +165,28 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         savefileService.CreateBase(PreparedDeviceAccountId).Wait();
         savefileService.CreateBase(DeviceAccountIdConst).Wait();
         PopulateAllMaterials();
+        context.PlayerDragonGifts.AddRange(
+            Enum.GetValues<DragonGifts>()
+                .Select(
+                    x =>
+                        new DbPlayerDragonGift()
+                        {
+                            DeviceAccountId = DeviceAccountIdConst,
+                            DragonGiftId = x,
+                            Quantity = x < DragonGifts.FourLeafClover ? 1 : 999
+                        }
+                )
+        );
+        context.PlayerFortBuilds.Add(
+            new DbFortBuild()
+            {
+                DeviceAccountId = this.DeviceAccountId,
+                PlantId = FortPlants.Smithy,
+                Level = 9
+            }
+        );
         CreateFort();
-        context.PlayerUserData.Find(PreparedDeviceAccountId)!.Coin = 100_000_000;
-        context.PlayerUserData.Find(DeviceAccountIdConst)!.Coin = 100_000_000;
+        context.PlayerUserData.Find(this.DeviceAccountId)!.Coin = 100_000_000;
         context.SaveChanges();
     }
 }

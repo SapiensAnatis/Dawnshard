@@ -1,10 +1,10 @@
-# DragaliaAPI
+# Dawnshard
 
-[![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml/badge.svg?branch=develop)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml)
+[![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml/badge.svg?branch=develop)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml) [![Codecov](https://img.shields.io/codecov/c/github/sapiensanatis/dawnshard?logo=codecov)](https://app.codecov.io/gh/SapiensAnatis/Dawnshard) [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/sapiensanatis/dragalia-api?label=docker%20image&logo=docker)](https://hub.docker.com/r/sapiensanatis/dragalia-api)
 
-DragaliaAPI is a server emulator for Dragalia Lost.
+Dawnshard (internally named DragaliaAPI) is a server emulator for Dragalia Lost.
 
-You can play using the [Dragalipatch](https://github.com/lukeFZ/dragalipatch) app by LukeFZ to redirect server traffic to https://dragalia.sapiensanatis.com.
+You can play using the [Dragalipatch](https://github.com/lukeFZ/dragalipatch) app by LukeFZ to redirect server traffic to https://dawnshard.co.uk.
 
 If you haven't already, please also consider joining the Dragalia Lost Reverse Engineering [Discord server](https://discord.gg/j9zSttjjWj); this is where development is discussed and where bugs/issues are most easily reported.
 
@@ -12,7 +12,7 @@ If you haven't already, please also consider joining the Dragalia Lost Reverse E
 
 Contributions are more than welcome! Feel free to fork the repository and open a pull request with these changes. 
 
-For guidance on contributing, including the process for setting up a development environment, please see the [GitHub Wiki](https://github.com/SapiensAnatis/DragaliaAPI/wiki).
+For guidance on contributing, including the process for setting up a development environment, please see the [GitHub Wiki](https://github.com/SapiensAnatis/Dawnshard/wiki).
 
 See also the [API documentation](https://dragalia-api-docs.readthedocs.io/en/latest/) for reference on what existing endpoints do and how to implement new ones.
 

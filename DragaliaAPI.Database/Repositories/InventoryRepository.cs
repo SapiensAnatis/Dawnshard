@@ -41,9 +41,7 @@ public class InventoryRepository : IInventoryRepository
 
     public async Task<DbPlayerCurrency?> GetCurrency(string deviceAccountId, CurrencyTypes type)
     {
-        return await this.apiContext.PlayerWallet.FirstOrDefaultAsync(
-            entry => entry.CurrencyType == type
-        );
+        return await this.apiContext.PlayerWallet.FindAsync(deviceAccountId, type);
     }
 
     public IQueryable<DbPlayerCurrency> GetCurrencies(string deviceAccountId)
@@ -86,6 +84,13 @@ public class InventoryRepository : IInventoryRepository
         material.Quantity += quantity;
     }
 
+    public async Task UpdateQuantity(Materials item, int quantity)
+    {
+#pragma warning disable CS0618 // Type or member is obsolete
+        await this.UpdateQuantity(this.playerDetailsService.AccountId, item, quantity);
+#pragma warning restore CS0618 // Type or member is obsolete
+    }
+
     private async Task<DbPlayerMaterial> FindAsync(Materials item)
     {
         return await this.apiContext.PlayerMaterials.FindAsync(
@@ -104,23 +109,11 @@ public class InventoryRepository : IInventoryRepository
             ).Entity;
     }
 
-    public async Task UpdateQuantity(Materials material, int quantity)
-    {
-#pragma warning disable CS0618
-        await this.UpdateQuantity(this.playerDetailsService.AccountId, material, quantity);
-#pragma warning restore CS0618
-    }
-
-    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
-    public async Task UpdateQuantity(
-        string deviceAccountId,
-        IEnumerable<Materials> list,
-        int quantity
-    )
+    public async Task UpdateQuantity(IEnumerable<Materials> list, int quantity)
     {
         foreach (Materials m in list)
         {
-            await this.UpdateQuantity(deviceAccountId, m, quantity);
+            await this.UpdateQuantity(m, quantity);
         }
 
         this.logger.LogDebug(
@@ -178,5 +171,52 @@ public class InventoryRepository : IInventoryRepository
         }
 
         return true;
+    }
+
+    public DbPlayerDragonGift AddDragonGift(string deviceAccountId, DragonGifts giftId)
+    {
+        return apiContext.PlayerDragonGifts
+            .Add(
+                new DbPlayerDragonGift()
+                {
+                    DeviceAccountId = deviceAccountId,
+                    DragonGiftId = giftId,
+                    Quantity = 0
+                }
+            )
+            .Entity;
+    }
+
+    public async Task<DbPlayerDragonGift?> GetDragonGift(string deviceAccountId, DragonGifts giftId)
+    {
+        return await this.apiContext.PlayerDragonGifts.FindAsync(deviceAccountId, giftId);
+    }
+
+    public IQueryable<DbPlayerDragonGift> GetDragonGifts(string deviceAccountId)
+    {
+        return this.apiContext.PlayerDragonGifts.Where(
+            gifts => gifts.DeviceAccountId == deviceAccountId
+        );
+    }
+
+    public async Task RefreshPurchasableDragonGiftCounts(string deviceAccountId)
+    {
+        Dictionary<DragonGifts, DbPlayerDragonGift> dbGifts = await GetDragonGifts(deviceAccountId)
+            .ToDictionaryAsync(x => x.DragonGiftId);
+        foreach (
+            DragonGifts gift in Enum.GetValues<DragonGifts>()
+                .Where(x => x < DragonGifts.FourLeafClover)
+        )
+        {
+            if (dbGifts.TryGetValue(gift, out DbPlayerDragonGift? dbGift))
+            {
+                dbGift.Quantity = 1;
+            }
+            else
+            {
+                dbGift = AddDragonGift(deviceAccountId, gift);
+                dbGift.Quantity = 1;
+            }
+        }
     }
 }
