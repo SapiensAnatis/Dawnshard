@@ -550,6 +550,19 @@ public class MasterAssetTest
     }
 
     [Theory]
+    [InlineData(6040104, false)]
+    [InlineData(11030602, true)]
+    public void AbilityCrestBuildupGroup_IsUseUniqueMaterial_ReturnsExpectedBool(
+        int id,
+        bool expected
+    )
+    {
+        bool actual = MasterAsset.MasterAsset.AbilityCrestBuildupGroup.Get(id).IsUseUniqueMaterial;
+
+        actual.Should().Be(expected);
+    }
+
+    [Theory]
     [InlineData(6020603, false)]
     [InlineData(5010101, true)]
     public void AbilityCrestBuildupGroup_IsUseDewpoint_ReturnsExpectedBool(int id, bool expected)

@@ -27,5 +27,7 @@ public record AbilityCrestBuildupGroup(
             .Where(x => x.Key != Materials.Empty)
             .ToDictionary(x => x.Key, x => x.Value);
 
+    public bool IsUseUniqueMaterial => UniqueBuildupMaterialCount != 0;
+
     public bool IsUseDewpoint => BuildupDewPoint != 0;
 };
