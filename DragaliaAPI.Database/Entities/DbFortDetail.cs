@@ -19,8 +19,4 @@ public class DbFortDetail : IDbHasAccountId
     [Column("CarpenterNum")]
     [Required]
     public int CarpenterNum { get; set; }
-
-    [Column("WorkingCarpenterNum")]
-    [Required]
-    public int WorkingCarpenterNum { get; set; }
 }

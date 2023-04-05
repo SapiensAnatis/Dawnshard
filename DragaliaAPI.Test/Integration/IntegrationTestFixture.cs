@@ -93,7 +93,6 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
             {
                 DeviceAccountId = DeviceAccountIdConst,
                 CarpenterNum = 2,
-                WorkingCarpenterNum = 0
             }
         );
         this.ApiContext.PlayerFortBuilds.Add(

@@ -36,14 +36,9 @@ public class FortService : IFortService
         this.mapper = mapper;
     }
 
-    public IEnumerable<BuildList> GetBuildList()
+    public async Task<IEnumerable<BuildList>> GetBuildList()
     {
-        return this.fortRepository.Builds.Select(mapper.Map<BuildList>);
-    }
-
-    public async Task<FortDetail> GetFortDetails()
-    {
-        return this.mapper.Map<FortDetail>(await this.fortRepository.GetFortDetails());
+        return (await this.fortRepository.Builds.ToListAsync()).Select(mapper.Map<BuildList>);
     }
 
     public async Task<FortDetail> AddCarpenter(string accountId, PaymentTypes paymentType)
@@ -52,7 +47,7 @@ public class FortService : IFortService
             .GetUserData(accountId)
             .FirstAsync();
 
-        FortDetail fortDetail = await GetFortDetails();
+        FortDetail fortDetail = await this.GetFortDetail();
 
         if (fortDetail.carpenter_num == MaximumCarpenterNum)
         {
@@ -108,16 +103,28 @@ public class FortService : IFortService
         return fortDetail;
     }
 
-    public async Task<FortDetail> UpdateCarpenterUsage()
+    /// <summary>
+    /// Get the fort details object.
+    /// </summary>
+    /// <remarks>
+    /// Where this is used after changing fort state, it MUST be used after calling SaveChangesAsync to ensure
+    /// the active carpenter count is accurate.
+    /// </remarks>
+    /// <returns></returns>
+    public async Task<FortDetail> GetFortDetail()
     {
-        return this.mapper.Map<FortDetail>(await this.fortRepository.UpdateCarpenterUsage());
+        DbFortDetail dbDetail = await this.fortRepository.GetFortDetails();
+        int activeCarpenters = await this.fortRepository.GetActiveCarpenters();
+
+        return new()
+        {
+            max_carpenter_count = MaximumCarpenterNum,
+            working_carpenter_num = activeCarpenters,
+            carpenter_num = dbDetail.CarpenterNum
+        };
     }
 
-    public async Task CompleteAtOnce(
-        string accountId,
-        PaymentTypes paymentType,
-        long buildId
-    )
+    public async Task CompleteAtOnce(string accountId, PaymentTypes paymentType, long buildId)
     {
         DbPlayerUserData userData = await this.userDataRepository
             .GetUserData(accountId)
@@ -239,7 +246,7 @@ public class FortService : IFortService
             .GetUserData(accountId)
             .FirstAsync();
 
-        FortDetail fortDetail = await this.GetFortDetails();
+        FortDetail fortDetail = await this.GetFortDetail();
 
         // Get Materials
         IQueryable<DbPlayerMaterial> userMaterials = this.inventoryRepository.GetMaterials(

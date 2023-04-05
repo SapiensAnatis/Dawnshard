@@ -114,7 +114,7 @@ public class FortRepository : IFortRepository
         // Get building
         DbFortBuild build = await GetBuilding(buildId);
 
-        if (build.BuildEndDate == DateTimeOffset.UnixEpoch)
+        if (build.BuildStatus is not FortBuildStatus.Construction)
         {
             throw new InvalidOperationException($"This building is not currently being upgraded.");
         }
@@ -140,24 +140,9 @@ public class FortRepository : IFortRepository
         return build;
     }
 
-    public async Task<DbFortDetail> UpdateCarpenterUsage()
+    public async Task<int> GetActiveCarpenters()
     {
-        int workingCarpenter = 0;
-        List<DbFortBuild> AccountBuilds = Builds.ToList();
-
-        foreach (DbFortBuild build in AccountBuilds)
-        {
-            if (build.BuildEndDate != DateTimeOffset.UnixEpoch)
-                workingCarpenter++;
-        }
-
-        DbFortDetail fortDetail = await apiContext.PlayerFortDetails
-            .Where(x => x.DeviceAccountId == this.playerDetailsService.AccountId)
-            .FirstAsync();
-
-        fortDetail.WorkingCarpenterNum = workingCarpenter;
-
-        return fortDetail;
+        return await this.Builds.CountAsync(x => x.BuildEndDate > DateTimeOffset.UtcNow);
     }
 
     public void ConsumePaymentCost(
@@ -209,7 +194,7 @@ public class FortRepository : IFortRepository
             // where the amount required depends on the time left until construction is complete.
             // This amount scales at 1 per 12 minutes, or 5 per hour.
             // https://dragalialost.wiki/w/Facilities
-            return (int)Math.Floor((BuildEndDate - BuildStartDate).TotalMinutes / 12);
+            return (int)Math.Ceiling((BuildEndDate - BuildStartDate).TotalMinutes / 12);
         }
     }
 }

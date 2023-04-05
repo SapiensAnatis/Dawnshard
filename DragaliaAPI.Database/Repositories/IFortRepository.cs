@@ -19,6 +19,6 @@ public interface IFortRepository
         long buildId,
         PaymentTypes paymentType
     );
-    Task<DbFortDetail> UpdateCarpenterUsage();
     void ConsumePaymentCost(DbPlayerUserData userData, PaymentTypes paymentType, int paymentCost);
+    Task<int> GetActiveCarpenters();
 }
