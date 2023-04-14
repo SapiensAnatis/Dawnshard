@@ -10,11 +10,11 @@ namespace DragaliaAPI.Models.Generated;
 [MessagePackObject(true)]
 public class AbilityCrestBuildupPieceRequest
 {
-    public int ability_crest_id { get; set; }
+    public AbilityCrests ability_crest_id { get; set; }
     public IEnumerable<AtgenBuildupAbilityCrestPieceList> buildup_ability_crest_piece_list { get; set; }
 
     public AbilityCrestBuildupPieceRequest(
-        int ability_crest_id,
+        AbilityCrests ability_crest_id,
         IEnumerable<AtgenBuildupAbilityCrestPieceList> buildup_ability_crest_piece_list
     )
     {
