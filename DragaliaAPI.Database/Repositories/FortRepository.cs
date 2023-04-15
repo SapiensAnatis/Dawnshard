@@ -12,6 +12,8 @@ public class FortRepository : IFortRepository
     private readonly IPlayerDetailsService playerDetailsService;
     private readonly ILogger<FortRepository> logger;
 
+    private const int DefaultCarpenters = 2;
+
     public FortRepository(
         ApiContext apiContext,
         IPlayerDetailsService playerDetailsService,
@@ -36,9 +38,28 @@ public class FortRepository : IFortRepository
 
     public async Task<DbFortDetail> GetFortDetails()
     {
-        return await this.apiContext.PlayerFortDetails.FindAsync(
-                this.playerDetailsService.AccountId
-            ) ?? throw new InvalidOperationException($"Could not find player Halidom.");
+        DbFortDetail? details = await this.apiContext.PlayerFortDetails.FindAsync(
+            this.playerDetailsService.AccountId
+        );
+
+        if (details is null)
+        {
+            this.logger.LogInformation("Could not find details for player, creating anew...");
+
+            details = (
+                await this.apiContext.PlayerFortDetails.AddAsync(
+                    new()
+                    {
+                        DeviceAccountId = this.playerDetailsService.AccountId,
+                        CarpenterNum = DefaultCarpenters
+                    }
+                )
+            ).Entity;
+
+            await this.apiContext.SaveChangesAsync();
+        }
+
+        return details;
     }
 
     public async Task<bool> CheckPlantLevel(FortPlants plant, int requiredLevel)
@@ -69,11 +90,11 @@ public class FortRepository : IFortRepository
 
     public async Task UpdateFortMaximumCarpenter(int carpenterNum)
     {
-        DbFortDetail fortDetail = await apiContext.PlayerFortDetails
-            .Where(x => x.DeviceAccountId == this.playerDetailsService.AccountId)
-            .FirstAsync();
+        DbFortDetail fortDetail =
+            await apiContext.PlayerFortDetails.FindAsync(this.playerDetailsService.AccountId)
+            ?? throw new InvalidOperationException("Missing FortDetails!");
+
         fortDetail.CarpenterNum = carpenterNum;
-        apiContext.Entry(fortDetail).State = EntityState.Modified;
     }
 
     public async Task<DbFortBuild> GetBuilding(long buildId)
@@ -85,7 +106,7 @@ public class FortRepository : IFortRepository
             )
             .FirstOrDefaultAsync();
 
-        if (fort == null)
+        if (fort is null)
         {
             throw new InvalidOperationException(
                 $"Could not get building {buildId} for account {this.playerDetailsService.AccountId}."

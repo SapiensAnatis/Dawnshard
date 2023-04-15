@@ -60,4 +60,6 @@ public class DbPlayer
 
     public virtual ICollection<DbWeaponPassiveAbility> WeaponPassiveAbilityList { get; set; } =
         new List<DbWeaponPassiveAbility>();
+    
+    public virtual DbFortDetail? FortDetail { get; set; }
 }

@@ -265,36 +265,12 @@ public class FortService : IFortService
         // Remove resources from player
         userData.Coin -= plantDetail.Cost;
         IEnumerable<KeyValuePair<Materials, int>> quantityMap = plantDetail.CreateMaterialMap;
-        await ConsumePlayerMaterials(accountId, userMaterials, quantityMap);
+        await this.inventoryRepository.UpdateQuantity(quantityMap);
 
         if (build.Level == 1)
         {
             // Only has to be added if it is being created for the first time
             await this.fortRepository.AddBuild(build);
         }
-    }
-
-    private async Task<bool> ConsumePlayerMaterials(
-        string accountId,
-        IQueryable<DbPlayerMaterial> userMaterials,
-        IEnumerable<KeyValuePair<Materials, int>> quantityMap
-    )
-    {
-        foreach (KeyValuePair<Materials, int> requested in quantityMap)
-        {
-            if (requested.Key == Materials.Empty)
-                continue;
-
-            DbPlayerMaterial dbMaterial = await userMaterials.FirstAsync(
-                x => x.MaterialId == requested.Key
-            );
-            await this.inventoryRepository.UpdateQuantity(
-                accountId,
-                dbMaterial.MaterialId,
-                -requested.Value
-            );
-        }
-
-        return true;
     }
 }
