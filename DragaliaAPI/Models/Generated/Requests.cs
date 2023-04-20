@@ -28,11 +28,11 @@ public class AbilityCrestBuildupPieceRequest
 [MessagePackObject(true)]
 public class AbilityCrestBuildupPlusCountRequest
 {
-    public int ability_crest_id { get; set; }
+    public AbilityCrests ability_crest_id { get; set; }
     public IEnumerable<AtgenPlusCountParamsList> plus_count_params_list { get; set; }
 
     public AbilityCrestBuildupPlusCountRequest(
-        int ability_crest_id,
+        AbilityCrests ability_crest_id,
         IEnumerable<AtgenPlusCountParamsList> plus_count_params_list
     )
     {
@@ -49,11 +49,11 @@ public class AbilityCrestGetAbilityCrestSetListRequest { }
 [MessagePackObject(true)]
 public class AbilityCrestResetPlusCountRequest
 {
-    public int ability_crest_id { get; set; }
+    public AbilityCrests ability_crest_id { get; set; }
     public IEnumerable<int> plus_count_type_list { get; set; }
 
     public AbilityCrestResetPlusCountRequest(
-        int ability_crest_id,
+        AbilityCrests ability_crest_id,
         IEnumerable<int> plus_count_type_list
     )
     {

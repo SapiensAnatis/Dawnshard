@@ -12,4 +12,11 @@ public interface IAbilityCrestService
         AbilityCrest abilityCrest,
         AtgenBuildupAbilityCrestPieceList buildup
     );
+
+    Task<ResultCode> TryBuildupAugments(
+        AbilityCrest abilityCrest,
+        AtgenPlusCountParamsList buildup
+    );
+
+    Task<ResultCode> TryResetAugments(AbilityCrests abilityCrestId, int augmentType);
 }

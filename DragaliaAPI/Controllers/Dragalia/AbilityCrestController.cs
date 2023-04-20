@@ -94,4 +94,62 @@ public class AbilityCrestController : DragaliaControllerBase
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
         return this.Ok(new AbilityCrestBuildupPieceData() { update_data_list = updateDataList });
     }
+
+    [Route("buildup_plus_count")]
+    [HttpPost]
+    public async Task<DragaliaResult> BuildupPlusCount(AbilityCrestBuildupPlusCountRequest request)
+    {
+        if (
+            !MasterAsset.AbilityCrest.TryGetValue(
+                request.ability_crest_id,
+                out AbilityCrest? abilityCrest
+            )
+        )
+        {
+            this.logger.LogError(
+                "Ability crest {id} had no MasterAsset entry",
+                request.ability_crest_id
+            );
+            return this.Code(ResultCode.AbilityCrestIsNotPlayable);
+        }
+
+        foreach (AtgenPlusCountParamsList buildup in request.plus_count_params_list)
+        {
+            ResultCode resultCode = await this.abilityCrestService.TryBuildupAugments(
+                abilityCrest,
+                buildup
+            );
+
+            if (resultCode != ResultCode.Success)
+            {
+                this.logger.LogError("Buildup plus count param {piece} invalid", buildup);
+                return this.Code(resultCode);
+            }
+        }
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        return Ok(new AbilityCrestBuildupPlusCountData() { update_data_list = updateDataList });
+    }
+
+    [Route("reset_plus_count")]
+    [HttpPost]
+    public async Task<DragaliaResult> ResetPlusCount(AbilityCrestResetPlusCountRequest request)
+    {
+        foreach (int augmentType in request.plus_count_type_list)
+        {
+            ResultCode resultCode = await this.abilityCrestService.TryResetAugments(
+                request.ability_crest_id,
+                augmentType
+            );
+
+            if (resultCode != ResultCode.Success)
+            {
+                this.logger.LogError("Resetting augment type {type} invalid", augmentType);
+                return this.Code(resultCode);
+            }
+        }
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        return Ok(new AbilityCrestBuildupPlusCountData() { update_data_list = updateDataList });
+    }
 }

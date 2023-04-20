@@ -208,6 +208,84 @@ public class AbilityCrestService : IAbilityCrestService
         return ResultCode.Success;
     }
 
+    public async Task<ResultCode> TryBuildupAugments(
+        AbilityCrest abilityCrest,
+        AtgenPlusCountParamsList buildup
+    )
+    {
+        AbilityCrestRarity rarityInfo = MasterAsset.AbilityCrestRarity.Get(abilityCrest.Rarity);
+
+        if (!ValidateAugments(rarityInfo, buildup.plus_count_type, buildup.plus_count))
+        {
+            return ResultCode.AbilityCrestBuildupPlusCountCountError;
+        }
+
+        DbAbilityCrest dbAbilityCrest = await TryFindAsync(abilityCrest.Id);
+        int usedAugments;
+        Dictionary<Materials, int> materialMap;
+
+        if (buildup.plus_count_type == 1)
+        {
+            usedAugments = buildup.plus_count - dbAbilityCrest.HpPlusCount;
+            materialMap = new() { { Materials.FortifyingGemstone, usedAugments } };
+        }
+        else
+        {
+            usedAugments = buildup.plus_count - dbAbilityCrest.AttackPlusCount;
+            materialMap = new() { { Materials.AmplifyingGemstone, usedAugments } };
+        }
+
+        if (usedAugments < 0 || !await ValidateCost(materialMap))
+        {
+            return ResultCode.AbilityCrestBuildupPlusCountCountError;
+        }
+
+        if (buildup.plus_count_type == 1)
+        {
+            dbAbilityCrest.HpPlusCount = buildup.plus_count;
+        }
+        else
+        {
+            dbAbilityCrest.AttackPlusCount = buildup.plus_count;
+        }
+
+        await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
+        return ResultCode.Success;
+    }
+
+    public async Task<ResultCode> TryResetAugments(AbilityCrests abilityCrestId, int augmentType)
+    {
+        DbAbilityCrest dbAbilityCrest = await TryFindAsync(abilityCrestId);
+
+        int augmentTotal = augmentType switch
+        {
+            1 => dbAbilityCrest.HpPlusCount,
+            2 => dbAbilityCrest.AttackPlusCount,
+            _
+                => throw new DragaliaException(
+                    ResultCode.CommonInvalidArgument,
+                    "Invalid augment type"
+                )
+        };
+
+        if (!await ValidateCoinCost(augmentTotal * 20_000))
+        {
+            return ResultCode.CommonMaterialShort;
+        }
+
+        if (augmentType == 1)
+        {
+            dbAbilityCrest.HpPlusCount = 0;
+        }
+        else
+        {
+            dbAbilityCrest.AttackPlusCount = 0;
+        }
+
+        await this.userDataRepository.UpdateCoin(-augmentTotal * 20_000);
+        return ResultCode.Success;
+    }
+
     private void SetMaterialMapSpecial(
         int rarity,
         AtgenBuildupAbilityCrestPieceList buildup,
@@ -303,6 +381,17 @@ public class AbilityCrestService : IAbilityCrestService
         return true;
     }
 
+    private async Task<bool> ValidateCoinCost(int coin)
+    {
+        if (!await this.userDataRepository.CheckCoin(coin))
+        {
+            this.logger.LogWarning("Player doesn't have enough coin to perform action");
+            return false;
+        }
+
+        return true;
+    }
+
     private bool ValidateStep(int currLevel, int step)
     {
         if (step != currLevel + 1)
@@ -330,11 +419,22 @@ public class AbilityCrestService : IAbilityCrestService
                 )
         };
 
-        if (step > levelLimit)
-        {
-            return false;
-        }
+        return step <= levelLimit;
+    }
 
-        return true;
+    private bool ValidateAugments(AbilityCrestRarity rarityInfo, int augmentType, int amount)
+    {
+        int augmentLimit = augmentType switch
+        {
+            1 => rarityInfo.MaxHpPlusCount,
+            2 => rarityInfo.MaxAtkPlusCount,
+            _
+                => throw new DragaliaException(
+                    ResultCode.AbilityCrestBuildupPieceStepError,
+                    "Invalid augment type"
+                )
+        };
+
+        return amount <= augmentLimit;
     }
 }
