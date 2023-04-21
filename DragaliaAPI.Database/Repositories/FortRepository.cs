@@ -55,8 +55,6 @@ public class FortRepository : IFortRepository
                     }
                 )
             ).Entity;
-
-            await this.apiContext.SaveChangesAsync();
         }
 
         return details;
@@ -120,7 +118,7 @@ public class FortRepository : IFortRepository
 
     public void DeleteBuild(DbFortBuild build)
     {
-        apiContext.Entry(build).State = EntityState.Deleted;
+        apiContext.PlayerFortBuilds.Remove(build);
     }
 
     public async Task<DbFortBuild> UpgradeAtOnce(
@@ -184,7 +182,7 @@ public class FortRepository : IFortRepository
                 userData.BuildTimePoint -= paymentCost;
                 break;
             default:
-                throw new InvalidOperationException($"User did not have enough {paymentType}.");
+                throw new InvalidOperationException($"Invalid payment type {paymentType}.");
         }
     }
 
