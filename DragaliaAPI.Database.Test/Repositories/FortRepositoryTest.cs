@@ -7,6 +7,7 @@ using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 
@@ -292,7 +293,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddToDatabase(
             new DbFortBuild()
             {
-                DeviceAccountId = "hustler",
+                DeviceAccountId = "broke",
                 BuildId = buildId,
                 PlantId = FortPlants.Smithy,
                 BuildStartDate = DateTimeOffset.UtcNow,
@@ -304,6 +305,57 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             .Invoking(x => x.UpgradeAtOnce(userData, buildId, type))
             .Should()
             .ThrowAsync<InvalidOperationException>();
+
+        this.mockPlayerDetailsService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task GetActiveCarpenters_ReturnsActiveCarpenters()
+    {
+        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("carpenter");
+
+        await this.fixture.AddRangeToDatabase(
+            new List<DbFortBuild>()
+            {
+                new()
+                {
+                    DeviceAccountId = "carpenter",
+                    PlantId = FortPlants.PalmTree,
+                    BuildStartDate = DateTimeOffset.MinValue,
+                    BuildEndDate = DateTimeOffset.MaxValue
+                },
+                new()
+                {
+                    DeviceAccountId = "carpenter",
+                    PlantId = FortPlants.Lectern,
+                    BuildStartDate = DateTimeOffset.MinValue,
+                    BuildEndDate = DateTimeOffset.MaxValue
+                },
+                new()
+                {
+                    DeviceAccountId = "carpenter",
+                    PlantId = FortPlants.Snowdrake,
+                    BuildStartDate = DateTimeOffset.MinValue,
+                    BuildEndDate = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(22)
+                },
+                new()
+                {
+                    DeviceAccountId = "carpenter",
+                    PlantId = FortPlants.Wishmill,
+                    BuildStartDate = DateTimeOffset.UnixEpoch,
+                    BuildEndDate = DateTimeOffset.UnixEpoch
+                },
+                new()
+                {
+                    DeviceAccountId = "some other id",
+                    PlantId = FortPlants.FafnirStatueFlame,
+                    BuildStartDate = DateTimeOffset.UnixEpoch,
+                    BuildEndDate = DateTimeOffset.MaxValue
+                }
+            }
+        );
+
+        (await this.fortRepository.GetActiveCarpenters()).Should().Be(3);
 
         this.mockPlayerDetailsService.VerifyAll();
     }

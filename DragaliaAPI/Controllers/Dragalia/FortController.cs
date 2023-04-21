@@ -53,10 +53,7 @@ public class FortController : DragaliaControllerBase
     {
         await this.fortService.AddCarpenter(request.payment_type);
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-        await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         FortAddCarpenterData data =
             new()
@@ -75,10 +72,7 @@ public class FortController : DragaliaControllerBase
 
         await this.fortService.CompleteAtOnce(request.payment_type, request.build_id);
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-        await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         FortDetail fortDetail = await this.fortService.GetFortDetail();
         FortBuildAtOnceData data =
@@ -160,7 +154,7 @@ public class FortController : DragaliaControllerBase
                 build_id = (ulong)build.BuildId,
                 build_start_date = build.BuildStartDate,
                 build_end_date = build.BuildEndDate,
-                remain_time = build.BuildEndDate - build.BuildStartDate,
+                remain_time = build.RemainTime,
                 fort_detail = fortDetail,
                 update_data_list = updateDataList,
                 entity_result = new EntityResult() // What does it do?
@@ -251,8 +245,7 @@ public class FortController : DragaliaControllerBase
     [HttpPost("levelup_start")]
     public async Task<DragaliaResult> LevelupStart(FortLevelupStartRequest request)
     {
-        DbFortBuild build = await this.fortService.LevelupStart(request.build_id
-        );
+        DbFortBuild build = await this.fortService.LevelupStart(request.build_id);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
         FortDetail fortDetail = await this.fortService.GetFortDetail();

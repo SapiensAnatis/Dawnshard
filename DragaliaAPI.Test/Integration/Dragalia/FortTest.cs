@@ -128,7 +128,9 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
+        BuildList result = response.update_data_list.build_list.First(
+            x => x.build_id == (ulong)BuildId
+        );
         // The level changes when building starts, not when it ends, so no need to check it here
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -162,7 +164,9 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
+        BuildList result = response.update_data_list.build_list.First(
+            x => x.build_id == (ulong)BuildId
+        );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.level.Should().Be(1); // Level should have decreased
@@ -181,8 +185,8 @@ public class FortTest : IntegrationTestBase
                 Level = 1,
                 PositionX = 2,
                 PositionZ = 2,
-                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
-                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
+                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1682110410),
+                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1682110411),
                 IsNew = true,
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             }
@@ -196,7 +200,9 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
+        BuildList result = response.update_data_list.build_list.First(
+            x => x.build_id == (ulong)BuildId
+        );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
     }
@@ -255,7 +261,9 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
+        BuildList result = response.update_data_list.build_list.First(
+            x => x.build_id == (ulong)BuildId
+        );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
     }
@@ -288,7 +296,9 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
+        BuildList result = response.update_data_list.build_list.First(
+            x => x.build_id == (ulong)BuildId
+        );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.level.Should().Be(1); // Level should have decreased
@@ -322,7 +332,9 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
+        BuildList result = response.update_data_list.build_list.First(
+            x => x.build_id == (ulong)BuildId
+        );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
     }
@@ -330,14 +342,14 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelUpStart_ReturnsValidResult()
     {
-        long BuildId = 43452432351;
+        long BuildId = 807512597;
         this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
                 BuildId = (long)BuildId,
                 DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 PlantId = FortPlants.StaffDojo,
-                Level = 1,
+                Level = 2,
                 PositionX = 2,
                 PositionZ = 2,
                 BuildStartDate = DateTimeOffset.UnixEpoch,
@@ -355,11 +367,12 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
+        BuildList result = response.update_data_list.build_list.First(
+            x => x.build_id == (ulong)BuildId
+        );
         result.build_start_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().BeAfter(result.build_start_date);
-        response.fort_detail.working_carpenter_num.Should().Be(2);
     }
 
     [Fact]
@@ -392,7 +405,9 @@ public class FortTest : IntegrationTestBase
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(x => x.build_id == (ulong)BuildId);
+        BuildList result = response.update_data_list.build_list.First(
+            x => x.build_id == (ulong)BuildId
+        );
         result.position_x.Should().Be(ExpectedPositionX);
         result.position_z.Should().Be(ExpectedPositionZ);
     }

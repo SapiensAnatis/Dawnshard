@@ -150,6 +150,7 @@ public class FortRepository : IFortRepository
         ConsumePaymentCost(userData, paymentType, paymentCost);
 
         // Update build
+        build.Level += 1;
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
 
@@ -160,8 +161,10 @@ public class FortRepository : IFortRepository
     {
         // TODO: remove this when testcontainers gets merged in
         return this.apiContext.Database.IsSqlite()
-            ? (await this.Builds.ToListAsync()).Count(x => x.BuildEndDate > DateTimeOffset.UtcNow)
-            : await this.Builds.CountAsync(x => x.BuildEndDate > DateTimeOffset.UtcNow);
+            ? (await this.Builds.ToListAsync()).Count(
+                x => x.BuildEndDate != DateTimeOffset.UnixEpoch
+            )
+            : await this.Builds.CountAsync(x => x.BuildEndDate != DateTimeOffset.UnixEpoch);
     }
 
     public void ConsumePaymentCost(

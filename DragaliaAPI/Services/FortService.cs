@@ -130,7 +130,7 @@ public class FortService : IFortService
         this.logger.LogDebug("CompleteAtOnce called for build {buildId}", buildId);
 
         DbPlayerUserData userData = await this.userDataRepository.LookupUserData();
-
+    
         await this.fortRepository.UpgradeAtOnce(userData, buildId, paymentType);
     }
 
@@ -172,6 +172,7 @@ public class FortService : IFortService
         }
 
         // Update values
+        build.Level += 1;
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
     }
@@ -227,7 +228,6 @@ public class FortService : IFortService
 
         await Upgrade(build, plantDetail);
 
-        build.Level += 1;
         build.BuildStartDate = startDate;
         build.BuildEndDate = endDate;
 
