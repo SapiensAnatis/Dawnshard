@@ -36,7 +36,7 @@ public class FortRepository : IFortRepository
             x => x.DeviceAccountId == this.playerDetailsService.AccountId
         );
 
-    public async Task<DbFortDetail> GetFortDetails()
+    public async Task<DbFortDetail> GetFortDetail()
     {
         DbFortDetail? details = await this.apiContext.PlayerFortDetails.FindAsync(
             this.playerDetailsService.AccountId
@@ -99,11 +99,8 @@ public class FortRepository : IFortRepository
 
     public async Task<DbFortBuild> GetBuilding(long buildId)
     {
-        DbFortBuild? fort = await apiContext.PlayerFortBuilds
-            .Where(
-                x =>
-                    x.DeviceAccountId == this.playerDetailsService.AccountId && x.BuildId == buildId
-            )
+        DbFortBuild? fort = await this.Builds
+            .Where(x => x.BuildId == buildId)
             .FirstOrDefaultAsync();
 
         if (fort is null)
@@ -163,7 +160,10 @@ public class FortRepository : IFortRepository
 
     public async Task<int> GetActiveCarpenters()
     {
-        return await this.Builds.CountAsync(x => x.BuildEndDate > DateTimeOffset.UtcNow);
+        // TODO: remove this when testcontainers gets merged in
+        return this.apiContext.Database.IsSqlite()
+            ? (await this.Builds.ToListAsync()).Count(x => x.BuildEndDate > DateTimeOffset.UtcNow)
+            : await this.Builds.CountAsync(x => x.BuildEndDate > DateTimeOffset.UtcNow);
     }
 
     public void ConsumePaymentCost(

@@ -7,6 +7,7 @@ using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services;
@@ -19,6 +20,7 @@ public class FortService : IFortService
     private readonly IInventoryRepository inventoryRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly ILogger<FortService> logger;
+    private readonly IPlayerDetailsService playerDetailsService;
     private readonly IMapper mapper;
 
     public FortService(
@@ -26,6 +28,7 @@ public class FortService : IFortService
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
         ILogger<FortService> logger,
+        IPlayerDetailsService playerDetailsService,
         IMapper mapper
     )
     {
@@ -33,6 +36,7 @@ public class FortService : IFortService
         this.userDataRepository = userDataRepository;
         this.inventoryRepository = inventoryRepository;
         this.logger = logger;
+        this.playerDetailsService = playerDetailsService;
         this.mapper = mapper;
     }
 
@@ -41,35 +45,27 @@ public class FortService : IFortService
         return (await this.fortRepository.Builds.ToListAsync()).Select(mapper.Map<BuildList>);
     }
 
-    public async Task<FortDetail> AddCarpenter(string accountId, PaymentTypes paymentType)
+    public async Task<FortDetail> AddCarpenter(PaymentTypes paymentType)
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(accountId)
-            .FirstAsync();
+        DbPlayerUserData userData = await this.userDataRepository.LookupUserData();
 
         FortDetail fortDetail = await this.GetFortDetail();
-
-        if (fortDetail.carpenter_num == MaximumCarpenterNum)
-        {
-            throw new DragaliaException(
-                ResultCode.FortExtendCarpenterLimit,
-                $"User has reached maximum carpenter."
-            );
-        }
 
         int paymentHeld = 0;
         // https://dragalialost.wiki/w/Facilities
         // First 2 are free, 3rd 250, 4th 400, 5th 700
-        int paymentCost = 250;
-        switch (fortDetail.carpenter_num)
+        int paymentCost = fortDetail.carpenter_num switch
         {
-            case 3:
-                paymentCost = 400;
-                break;
-            case 4:
-                paymentCost = 700;
-                break;
-        }
+            < 2 => 0,
+            2 => 250,
+            3 => 400,
+            4 => 750,
+            > 4
+                => throw new DragaliaException(
+                    ResultCode.FortExtendCarpenterLimit,
+                    $"User has reached maximum carpenter."
+                )
+        };
 
         switch (paymentType)
         {
@@ -97,8 +93,13 @@ public class FortService : IFortService
         this.fortRepository.ConsumePaymentCost(userData, paymentType, paymentCost);
 
         // Add carpenter
-        fortDetail.carpenter_num++;
-        await this.fortRepository.UpdateFortMaximumCarpenter(fortDetail.carpenter_num);
+        await this.fortRepository.UpdateFortMaximumCarpenter(fortDetail.carpenter_num + 1);
+
+        this.logger.LogDebug(
+            "Added carpenter using payment type {type}. New count: {count}",
+            paymentType,
+            fortDetail.carpenter_num
+        );
 
         return fortDetail;
     }
@@ -113,7 +114,7 @@ public class FortService : IFortService
     /// <returns></returns>
     public async Task<FortDetail> GetFortDetail()
     {
-        DbFortDetail dbDetail = await this.fortRepository.GetFortDetails();
+        DbFortDetail dbDetail = await this.fortRepository.GetFortDetail();
         int activeCarpenters = await this.fortRepository.GetActiveCarpenters();
 
         return new()
@@ -124,21 +125,23 @@ public class FortService : IFortService
         };
     }
 
-    public async Task CompleteAtOnce(string accountId, PaymentTypes paymentType, long buildId)
+    public async Task CompleteAtOnce(PaymentTypes paymentType, long buildId)
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(accountId)
-            .FirstAsync();
+        this.logger.LogDebug("CompleteAtOnce called for build {buildId}", buildId);
+
+        DbPlayerUserData userData = await this.userDataRepository.LookupUserData();
 
         await this.fortRepository.UpgradeAtOnce(userData, buildId, paymentType);
     }
 
     public async Task<DbFortBuild> CancelUpgrade(long buildId)
     {
+        this.logger.LogDebug("Build cancelled for build {buildId}", buildId);
+
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(buildId);
 
-        if (build.BuildEndDate == DateTimeOffset.UnixEpoch)
+        if (build.BuildStatus is not FortBuildStatus.Construction)
         {
             throw new InvalidOperationException($"This building is not currently being upgraded.");
         }
@@ -158,8 +161,15 @@ public class FortService : IFortService
 
     public async Task EndUpgrade(long buildId)
     {
+        this.logger.LogDebug("Build ended for build {buildId}", buildId);
+
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(buildId);
+
+        if (build.BuildStatus is not FortBuildStatus.ConstructionComplete)
+        {
+            throw new InvalidOperationException($"This building has not completed construction.");
+        }
 
         // Update values
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
@@ -167,7 +177,6 @@ public class FortService : IFortService
     }
 
     public async Task<DbFortBuild> BuildStart(
-        string accountId,
         FortPlants fortPlantId,
         int level,
         int positionX,
@@ -180,12 +189,12 @@ public class FortService : IFortService
 
         // Start building
         DateTime startDate = DateTime.UtcNow;
-        DateTime endDate = startDate.AddSeconds(plantDetail.Time).AddSeconds(10);
+        DateTime endDate = startDate.AddSeconds(plantDetail.Time);
 
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = accountId,
+                DeviceAccountId = this.playerDetailsService.AccountId,
                 PlantId = fortPlantId,
                 Level = 1,
                 PositionX = positionX,
@@ -196,13 +205,15 @@ public class FortService : IFortService
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             };
 
-        await Upgrade(accountId, build, plantDetail);
+        await Upgrade(build, plantDetail);
 
         return build;
     }
 
-    public async Task<DbFortBuild> LevelupStart(string accountId, long buildId)
+    public async Task<DbFortBuild> LevelupStart(long buildId)
     {
+        this.logger.LogDebug("Levelup started for build {buildId}", buildId);
+
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(buildId);
 
@@ -214,17 +225,19 @@ public class FortService : IFortService
         DateTimeOffset startDate = DateTimeOffset.UtcNow;
         DateTimeOffset endDate = startDate.AddSeconds(plantDetail.Time);
 
+        await Upgrade(build, plantDetail);
+
         build.Level += 1;
         build.BuildStartDate = startDate;
         build.BuildEndDate = endDate;
-
-        await Upgrade(accountId, build, plantDetail);
 
         return build;
     }
 
     public async Task<DbFortBuild> Move(long buildId, int afterPositionX, int afterPositionZ)
     {
+        this.logger.LogDebug("Move performed for build {buildId}", buildId);
+
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(buildId);
 
@@ -240,21 +253,13 @@ public class FortService : IFortService
         await this.fortRepository.GetFortPlantIdList(fortPlantIdList);
     }
 
-    private async Task Upgrade(string accountId, DbFortBuild build, FortPlantDetail plantDetail)
+    private async Task Upgrade(DbFortBuild build, FortPlantDetail plantDetail)
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(accountId)
-            .FirstAsync();
-
+        DbPlayerUserData userData = await this.userDataRepository.LookupUserData();
         FortDetail fortDetail = await this.GetFortDetail();
 
-        // Get Materials
-        IQueryable<DbPlayerMaterial> userMaterials = this.inventoryRepository.GetMaterials(
-            accountId
-        );
-
         // Check Carpenter available
-        if (fortDetail.working_carpenter_num > fortDetail.carpenter_num)
+        if (fortDetail.working_carpenter_num >= fortDetail.carpenter_num)
         {
             throw new DragaliaException(
                 ResultCode.FortBuildCarpenterBusy,
@@ -263,9 +268,8 @@ public class FortService : IFortService
         }
 
         // Remove resources from player
-        userData.Coin -= plantDetail.Cost;
-        IEnumerable<KeyValuePair<Materials, int>> quantityMap = plantDetail.CreateMaterialMap;
-        await this.inventoryRepository.UpdateQuantity(quantityMap);
+        await this.userDataRepository.UpdateCoin(-plantDetail.Cost);
+        await this.inventoryRepository.UpdateQuantity(plantDetail.CreateMaterialMap);
 
         if (build.Level == 1)
         {

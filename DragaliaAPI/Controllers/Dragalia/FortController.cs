@@ -51,10 +51,7 @@ public class FortController : DragaliaControllerBase
     [HttpPost("add_carpenter")]
     public async Task<DragaliaResult> AddCarpenter(FortAddCarpenterRequest request)
     {
-        FortDetail fortDetail = await this.fortService.AddCarpenter(
-            this.DeviceAccountId,
-            request.payment_type
-        );
+        await this.fortService.AddCarpenter(request.payment_type);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -65,7 +62,7 @@ public class FortController : DragaliaControllerBase
             new()
             {
                 result = 1,
-                fort_detail = fortDetail,
+                fort_detail = await this.fortService.GetFortDetail(),
                 update_data_list = updateDataList
             };
         return this.Ok(data);
@@ -76,11 +73,7 @@ public class FortController : DragaliaControllerBase
     {
         FortBonusList bonusList = await bonusService.GetBonusList();
 
-        await this.fortService.CompleteAtOnce(
-            this.DeviceAccountId,
-            request.payment_type,
-            request.build_id
-        );
+        await this.fortService.CompleteAtOnce(request.payment_type, request.build_id);
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
             this.DeviceAccountId
@@ -151,7 +144,6 @@ public class FortController : DragaliaControllerBase
     public async Task<DragaliaResult> BuildStart(FortBuildStartRequest request)
     {
         DbFortBuild build = await this.fortService.BuildStart(
-            this.DeviceAccountId,
             request.fort_plant_id,
             1, // Build always starts at 1
             request.position_x,
@@ -184,11 +176,7 @@ public class FortController : DragaliaControllerBase
         BuildList halidom = builds.First(x => x.plant_id == FortPlants.TheHalidom);
         BuildList smithy = builds.First(x => x.plant_id == FortPlants.Smithy);
 
-        await this.fortService.CompleteAtOnce(
-            this.DeviceAccountId,
-            request.payment_type,
-            request.build_id
-        );
+        await this.fortService.CompleteAtOnce(request.payment_type, request.build_id);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
         FortDetail fortDetail = await this.fortService.GetFortDetail();
@@ -263,9 +251,7 @@ public class FortController : DragaliaControllerBase
     [HttpPost("levelup_start")]
     public async Task<DragaliaResult> LevelupStart(FortLevelupStartRequest request)
     {
-        DbFortBuild build = await this.fortService.LevelupStart(
-            this.DeviceAccountId,
-            request.build_id
+        DbFortBuild build = await this.fortService.LevelupStart(request.build_id
         );
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
