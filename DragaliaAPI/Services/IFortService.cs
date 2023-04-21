@@ -10,16 +10,12 @@ public interface IFortService
     Task<FortDetail> AddCarpenter(PaymentTypes paymentType);
     Task<FortDetail> GetFortDetail();
 
-    Task CompleteAtOnce(PaymentTypes paymentType,
-        long buildId);
+    Task CompleteAtOnce(PaymentTypes paymentType, long buildId);
 
     Task<DbFortBuild> CancelUpgrade(long buildId);
     Task EndUpgrade(long buildId);
 
-    Task<DbFortBuild> BuildStart(FortPlants fortPlantId,
-        int level,
-        int positionX,
-        int positionZ);
+    Task<DbFortBuild> BuildStart(FortPlants fortPlantId, int level, int positionX, int positionZ);
 
     Task<DbFortBuild> LevelupStart(long buildId);
     Task<DbFortBuild> Move(long buildId, int afterPositionX, int afterPositionZ);

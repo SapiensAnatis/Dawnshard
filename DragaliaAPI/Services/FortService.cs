@@ -130,7 +130,7 @@ public class FortService : IFortService
         this.logger.LogDebug("CompleteAtOnce called for build {buildId}", buildId);
 
         DbPlayerUserData userData = await this.userDataRepository.LookupUserData();
-    
+
         await this.fortRepository.UpgradeAtOnce(userData, buildId, paymentType);
     }
 
