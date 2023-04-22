@@ -74,7 +74,7 @@ public class FortController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
         FortDetail fortDetail = await this.fortService.GetFortDetail();
-        
+
         FortBuildAtOnceData data =
             new()
             {

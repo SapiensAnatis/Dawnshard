@@ -225,7 +225,7 @@ public class FortService : IFortService
         {
             // KNOWN ISSUE: Sometimes when upgrading the client thinks the building is level e.g. 39 but it's actually
             // 40. Then it throws an exception here trying to look up data beyond the max level.
-            
+
             this.logger.LogError(
                 "Failed to lookup build information for upgrade of build {@build} to level {level}!",
                 build,
