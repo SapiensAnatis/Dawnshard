@@ -26,7 +26,7 @@ public class UserTest : IClassFixture<IntegrationTestFixture>
     public async Task LinkedNAccount_ReturnsExpectedResponse()
     {
         DbPlayerUserData dbUserData = this.fixture.ApiContext.PlayerUserData.Single(
-            x => x.DeviceAccountId == fixture.DeviceAccountId
+            x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
         );
 
         UserData expectedUserData = this.fixture.Mapper.Map<UserData>(dbUserData);

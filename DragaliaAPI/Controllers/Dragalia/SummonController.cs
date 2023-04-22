@@ -96,7 +96,7 @@ public class SummonController : DragaliaControllerBase
                         exchange_summon_point: 300,
                         add_summon_point_stone: 1,
                         complete_date: (int)DateTimeOffset.UtcNow.AddDays(7).ToUnixTimeSeconds(),
-                        commence_date: (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                        commence_date: (int)DateTimeOffset.UtcNow.AddDays(-1).ToUnixTimeSeconds(),
                         daily_count: 0,
                         daily_limit: 1,
                         total_count: 0,

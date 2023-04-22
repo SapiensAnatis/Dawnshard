@@ -1,36 +1,34 @@
-﻿using AutoMapper;
-using DragaliaAPI.Database.Repositories;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("fort")]
 public class FortController : DragaliaControllerBase
 {
-    private readonly IFortRepository fortRepository;
+    private readonly IFortService fortService;
     private readonly IBonusService bonusService;
-    private readonly IMapper mapper;
+    private readonly IUpdateDataService updateDataService;
 
     public FortController(
-        IFortRepository fortRepository,
+        IFortService fortService,
         IBonusService bonusService,
-        IMapper mapper
+        IUpdateDataService updateDataService
     )
     {
-        this.fortRepository = fortRepository;
+        this.fortService = fortService;
         this.bonusService = bonusService;
-        this.mapper = mapper;
+        this.updateDataService = updateDataService;
     }
 
     [HttpPost("get_data")]
-    public async Task<DragaliaResult> GetData(FortGetDataRequest request)
+    public async Task<DragaliaResult> GetData()
     {
-        IEnumerable<BuildList> buildList = (
-            await this.fortRepository.GetBuilds(this.DeviceAccountId).ToListAsync()
-        ).Select(mapper.Map<BuildList>);
+        FortDetail fortDetail = await this.fortService.GetFortDetail();
+        IEnumerable<BuildList> buildList = await this.fortService.GetBuildList();
 
         FortBonusList bonusList = await this.bonusService.GetBonusList();
 
@@ -43,23 +41,272 @@ public class FortController : DragaliaControllerBase
                 production_df = StubData.ProductionDf,
                 production_rp = StubData.ProductionRp,
                 production_st = StubData.ProductionSt,
-                fort_detail = StubData.FortDetail,
+                fort_detail = fortDetail,
                 current_server_time = DateTime.UtcNow
             };
 
         return this.Ok(data);
     }
 
-    private static class StubData
+    [HttpPost("add_carpenter")]
+    public async Task<DragaliaResult> AddCarpenter(FortAddCarpenterRequest request)
     {
-        public static readonly FortDetail FortDetail =
+        await this.fortService.AddCarpenter(request.payment_type);
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+
+        FortAddCarpenterData data =
             new()
             {
-                carpenter_num = 5,
-                max_carpenter_count = 5,
-                working_carpenter_num = 0
+                result = 1,
+                fort_detail = await this.fortService.GetFortDetail(),
+                update_data_list = updateDataList
             };
+        return this.Ok(data);
+    }
 
+    [HttpPost("build_at_once")]
+    public async Task<DragaliaResult> BuildAtOnce(FortBuildAtOnceRequest request)
+    {
+        FortBonusList bonusList = await bonusService.GetBonusList();
+
+        await this.fortService.CompleteAtOnce(request.payment_type, request.build_id);
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        FortDetail fortDetail = await this.fortService.GetFortDetail();
+
+        FortBuildAtOnceData data =
+            new()
+            {
+                result = 1,
+                build_id = request.build_id,
+                fort_bonus_list = bonusList,
+                production_rp = StubData.ProductionRp,
+                production_st = StubData.ProductionSt,
+                production_df = StubData.ProductionDf,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList,
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("build_cancel")]
+    public async Task<DragaliaResult> BuildCancel(FortBuildCancelRequest request)
+    {
+        DbFortBuild cancelledBuild = await this.fortService.CancelUpgrade(request.build_id);
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        FortDetail fortDetail = await this.fortService.GetFortDetail();
+
+        FortBuildCancelData data =
+            new()
+            {
+                result = 1,
+                build_id = cancelledBuild.BuildId,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("build_end")]
+    public async Task<DragaliaResult> BuildEnd(FortBuildEndRequest request)
+    {
+        FortBonusList bonusList = await bonusService.GetBonusList();
+
+        await this.fortService.EndUpgrade(request.build_id);
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        FortDetail fortDetail = await this.fortService.GetFortDetail();
+
+        FortBuildEndData data =
+            new()
+            {
+                result = 1,
+                build_id = request.build_id,
+                fort_bonus_list = bonusList,
+                production_rp = StubData.ProductionRp,
+                production_st = StubData.ProductionSt,
+                production_df = StubData.ProductionDf,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList,
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("build_start")]
+    public async Task<DragaliaResult> BuildStart(FortBuildStartRequest request)
+    {
+        DbFortBuild build = await this.fortService.BuildStart(
+            request.fort_plant_id,
+            1, // Build always starts at 1
+            request.position_x,
+            request.position_z
+        );
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        FortDetail fortDetail = await this.fortService.GetFortDetail();
+
+        FortBuildStartData data =
+            new()
+            {
+                result = 1,
+                build_id = (ulong)build.BuildId,
+                build_start_date = build.BuildStartDate,
+                build_end_date = build.BuildEndDate,
+                remain_time = build.RemainTime,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList,
+                entity_result = new EntityResult() // What does it do?
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("levelup_at_once")]
+    public async Task<DragaliaResult> LevelupAtOnce(FortLevelupAtOnceRequest request)
+    {
+        FortBonusList bonusList = await bonusService.GetBonusList();
+        IEnumerable<BuildList> builds = await this.fortService.GetBuildList();
+        BuildList halidom = builds.First(x => x.plant_id == FortPlants.TheHalidom);
+        BuildList smithy = builds.First(x => x.plant_id == FortPlants.Smithy);
+
+        await this.fortService.CompleteAtOnce(request.payment_type, request.build_id);
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        FortDetail fortDetail = await this.fortService.GetFortDetail();
+
+        FortLevelupAtOnceData data =
+            new()
+            {
+                result = 1,
+                build_id = request.build_id,
+                current_fort_level = halidom.level,
+                current_fort_craft_level = smithy.level,
+                fort_bonus_list = bonusList,
+                production_rp = StubData.ProductionRp,
+                production_st = StubData.ProductionSt,
+                production_df = StubData.ProductionDf,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList,
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("levelup_cancel")]
+    public async Task<DragaliaResult> LevelupCancel(FortLevelupCancelRequest request)
+    {
+        DbFortBuild cancelledBuild = await this.fortService.CancelUpgrade(request.build_id);
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        FortDetail fortDetail = await this.fortService.GetFortDetail();
+
+        FortLevelupCancelData data =
+            new()
+            {
+                result = 1,
+                build_id = cancelledBuild.BuildId,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("levelup_end")]
+    public async Task<DragaliaResult> LevelupEnd(FortLevelupEndRequest request)
+    {
+        IEnumerable<BuildList> builds = await this.fortService.GetBuildList();
+        BuildList halidom = builds.First(x => x.plant_id == FortPlants.TheHalidom);
+        BuildList smithy = builds.First(x => x.plant_id == FortPlants.Smithy);
+
+        FortBonusList bonusList = await bonusService.GetBonusList();
+
+        await this.fortService.EndUpgrade(request.build_id);
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        FortDetail fortDetail = await this.fortService.GetFortDetail();
+
+        FortLevelupEndData data =
+            new()
+            {
+                result = 1,
+                build_id = request.build_id,
+                current_fort_level = halidom.level,
+                current_fort_craft_level = smithy.level,
+                fort_bonus_list = bonusList,
+                production_rp = StubData.ProductionRp,
+                production_st = StubData.ProductionSt,
+                production_df = StubData.ProductionDf,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList,
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("levelup_start")]
+    public async Task<DragaliaResult> LevelupStart(FortLevelupStartRequest request)
+    {
+        DbFortBuild build = await this.fortService.LevelupStart(request.build_id);
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        FortDetail fortDetail = await this.fortService.GetFortDetail();
+
+        FortLevelupStartData data =
+            new()
+            {
+                result = 1,
+                build_id = build.BuildId,
+                levelup_start_date = build.BuildStartDate,
+                levelup_end_date = build.BuildEndDate,
+                remain_time = build.BuildEndDate - build.BuildStartDate,
+                fort_detail = fortDetail,
+                update_data_list = updateDataList,
+                entity_result = new EntityResult() // What does it do?
+            };
+        return this.Ok(data);
+    }
+
+    [HttpPost("move")]
+    public async Task<DragaliaResult> Move(FortMoveRequest request)
+    {
+        DbFortBuild build = await this.fortService.Move(
+            request.build_id,
+            request.after_position_x,
+            request.after_position_z
+        );
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        FortBonusList bonusList = await bonusService.GetBonusList();
+
+        FortMoveData data =
+            new()
+            {
+                result = 1,
+                build_id = build.BuildId,
+                fort_bonus_list = bonusList,
+                production_rp = StubData.ProductionRp,
+                production_df = StubData.ProductionDf,
+                production_st = StubData.ProductionSt,
+                update_data_list = updateDataList
+            };
+        return this.Ok(data);
+    }
+
+    // What exactly does it do
+    [HttpPost("set_new_fort_plant")]
+    public async Task<DragaliaResult> SetNewFortPlant(FortSetNewFortPlantRequest request)
+    {
+        await this.fortService.GetFortPlantIdList(request.fort_plant_id_list);
+
+        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
+            this.DeviceAccountId
+        );
+
+        FortSetNewFortPlantData data = new() { result = 1, update_data_list = updateDataList };
+        return this.Ok(data);
+    }
+
+    private static class StubData
+    {
         public static readonly AtgenProductionRp ProductionRp = new();
 
         public static readonly AtgenProductionRp ProductionDf = new();

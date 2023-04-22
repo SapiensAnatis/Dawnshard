@@ -243,7 +243,11 @@ public class DragonServiceTest
         };
         mockInventoryRepository
             .Setup(x => x.GetMaterials(DeviceAccountId))
-            .Returns(new List<DbPlayerMaterial>() { mat }.AsQueryable().BuildMock());
+            .Returns(
+                new List<DbPlayerMaterial>() { mat }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         await dragonService.DoBuildup(
             new DragonBuildupRequest()
@@ -297,7 +301,11 @@ public class DragonServiceTest
         };
         mockInventoryRepository
             .Setup(x => x.GetMaterials(DeviceAccountId))
-            .Returns(new List<DbPlayerMaterial>() { mat }.AsQueryable().BuildMock());
+            .Returns(
+                new List<DbPlayerMaterial>() { mat }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         await dragonService.DoBuildup(
             new DragonBuildupRequest()

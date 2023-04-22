@@ -47,7 +47,7 @@ public class DeleteSavefileTest : IClassFixture<IntegrationTestFixture>
     public async Task Delete_LoadIndexResponseHasNewSavefile()
     {
         long viewerId = fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == fixture.DeviceAccountId)
+            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .ViewerId;
 
         await this.fixture.AddCharacter(Charas.Ilia);

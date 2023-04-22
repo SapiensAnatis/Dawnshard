@@ -97,6 +97,7 @@ builder.Services
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<IBonusService, BonusService>()
     .AddScoped<IWeaponService, WeaponService>()
+    .AddScoped<IFortService, FortService>()
     .AddScoped<IQuestRewardService, QuestRewardService>()
     .AddScoped<IStoryService, StoryService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
