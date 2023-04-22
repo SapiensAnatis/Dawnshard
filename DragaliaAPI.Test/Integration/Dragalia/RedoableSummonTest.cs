@@ -75,11 +75,11 @@ public class RedoableSummonTest : IClassFixture<IntegrationTestFixture>
         ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
 
         IEnumerable<int> dbCharaIds = apiContext.PlayerCharaData
-            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .Select(x => (int)x.CharaId)
             .OrderBy(x => x);
         IEnumerable<int> dbDragonIds = apiContext.PlayerDragonData
-            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .Select(x => (int)x.DragonId)
             .OrderBy(x => x);
 

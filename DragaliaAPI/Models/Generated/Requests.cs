@@ -1732,9 +1732,9 @@ public class ExRushEventGetEventDataRequest
 [MessagePackObject(true)]
 public class FortAddCarpenterRequest
 {
-    public int payment_type { get; set; }
+    public PaymentTypes payment_type { get; set; }
 
-    public FortAddCarpenterRequest(int payment_type)
+    public FortAddCarpenterRequest(PaymentTypes payment_type)
     {
         this.payment_type = payment_type;
     }
@@ -1745,10 +1745,10 @@ public class FortAddCarpenterRequest
 [MessagePackObject(true)]
 public class FortBuildAtOnceRequest
 {
-    public ulong build_id { get; set; }
-    public int payment_type { get; set; }
+    public long build_id { get; set; }
+    public PaymentTypes payment_type { get; set; }
 
-    public FortBuildAtOnceRequest(ulong build_id, int payment_type)
+    public FortBuildAtOnceRequest(long build_id, PaymentTypes payment_type)
     {
         this.build_id = build_id;
         this.payment_type = payment_type;
@@ -1760,9 +1760,9 @@ public class FortBuildAtOnceRequest
 [MessagePackObject(true)]
 public class FortBuildCancelRequest
 {
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
 
-    public FortBuildCancelRequest(ulong build_id)
+    public FortBuildCancelRequest(long build_id)
     {
         this.build_id = build_id;
     }
@@ -1773,9 +1773,9 @@ public class FortBuildCancelRequest
 [MessagePackObject(true)]
 public class FortBuildEndRequest
 {
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
 
-    public FortBuildEndRequest(ulong build_id)
+    public FortBuildEndRequest(long build_id)
     {
         this.build_id = build_id;
     }
@@ -1786,11 +1786,11 @@ public class FortBuildEndRequest
 [MessagePackObject(true)]
 public class FortBuildStartRequest
 {
-    public int fort_plant_id { get; set; }
+    public FortPlants fort_plant_id { get; set; }
     public int position_x { get; set; }
     public int position_z { get; set; }
 
-    public FortBuildStartRequest(int fort_plant_id, int position_x, int position_z)
+    public FortBuildStartRequest(FortPlants fort_plant_id, int position_x, int position_z)
     {
         this.fort_plant_id = fort_plant_id;
         this.position_x = position_x;
@@ -1819,10 +1819,10 @@ public class FortGetMultiIncomeRequest
 [MessagePackObject(true)]
 public class FortLevelupAtOnceRequest
 {
-    public ulong build_id { get; set; }
-    public int payment_type { get; set; }
+    public long build_id { get; set; }
+    public PaymentTypes payment_type { get; set; }
 
-    public FortLevelupAtOnceRequest(ulong build_id, int payment_type)
+    public FortLevelupAtOnceRequest(long build_id, PaymentTypes payment_type)
     {
         this.build_id = build_id;
         this.payment_type = payment_type;
@@ -1834,9 +1834,9 @@ public class FortLevelupAtOnceRequest
 [MessagePackObject(true)]
 public class FortLevelupCancelRequest
 {
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
 
-    public FortLevelupCancelRequest(ulong build_id)
+    public FortLevelupCancelRequest(long build_id)
     {
         this.build_id = build_id;
     }
@@ -1847,9 +1847,9 @@ public class FortLevelupCancelRequest
 [MessagePackObject(true)]
 public class FortLevelupEndRequest
 {
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
 
-    public FortLevelupEndRequest(ulong build_id)
+    public FortLevelupEndRequest(long build_id)
     {
         this.build_id = build_id;
     }
@@ -1860,9 +1860,9 @@ public class FortLevelupEndRequest
 [MessagePackObject(true)]
 public class FortLevelupStartRequest
 {
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
 
-    public FortLevelupStartRequest(ulong build_id)
+    public FortLevelupStartRequest(long build_id)
     {
         this.build_id = build_id;
     }
@@ -1873,11 +1873,11 @@ public class FortLevelupStartRequest
 [MessagePackObject(true)]
 public class FortMoveRequest
 {
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
     public int after_position_x { get; set; }
     public int after_position_z { get; set; }
 
-    public FortMoveRequest(ulong build_id, int after_position_x, int after_position_z)
+    public FortMoveRequest(long build_id, int after_position_x, int after_position_z)
     {
         this.build_id = build_id;
         this.after_position_x = after_position_x;

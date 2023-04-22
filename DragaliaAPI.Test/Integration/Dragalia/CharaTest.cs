@@ -66,14 +66,14 @@ public class CharaTest : IClassFixture<IntegrationTestFixture>
     {
         DbPlayerCharaData charaData = await fixture.Services
             .GetRequiredService<IUnitRepository>()
-            .GetAllCharaData(fixture.DeviceAccountId)
+            .GetAllCharaData(IntegrationTestFixture.DeviceAccountIdConst)
             .Where(x => x.CharaId == Charas.Celliera)
             .FirstAsync();
 
         int matQuantity = (
             await fixture.Services
                 .GetRequiredService<IInventoryRepository>()
-                .GetMaterial(fixture.DeviceAccountId, Materials.GoldCrystal)
+                .GetMaterial(IntegrationTestFixture.DeviceAccountIdConst, Materials.GoldCrystal)
         )!.Quantity;
 
         CharaBuildupData response = (

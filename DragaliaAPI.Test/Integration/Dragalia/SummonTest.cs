@@ -61,7 +61,7 @@ public class SummonTest : IClassFixture<IntegrationTestFixture>
         DbPlayerSummonHistory historyEntry =
             new()
             {
-                DeviceAccountId = fixture.DeviceAccountId,
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 SummonId = 1,
                 SummonExecType = SummonExecTypes.DailyDeal,
                 ExecDate = DateTimeOffset.UtcNow,
@@ -182,7 +182,7 @@ public class SummonTest : IClassFixture<IntegrationTestFixture>
         if (reward.entity_type == EntityTypes.Dragon)
         {
             List<DbPlayerDragonData> dragonData = await apiContext.PlayerDragonData
-                .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
+                .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
                 .ToListAsync();
 
             dragonData.Where(x => (int)x.DragonId == reward.id).Should().NotBeEmpty();
@@ -190,7 +190,7 @@ public class SummonTest : IClassFixture<IntegrationTestFixture>
         else
         {
             List<DbPlayerCharaData> charaData = await apiContext.PlayerCharaData
-                .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
+                .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
                 .ToListAsync();
 
             charaData.Where(x => (int)x.CharaId == reward.id).Should().NotBeEmpty();

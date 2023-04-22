@@ -11,6 +11,7 @@ using DragaliaAPI.Models.Generated;
 using System.Text.Json;
 using DragaliaAPI.Models;
 using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Test.Integration.Dragalia;
 
 namespace DragaliaAPI.Test.Integration;
 
@@ -45,8 +46,6 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
     /// <summary>
     /// The device account ID which links to the seeded savefiles <see cref="SeedDatabase"/>
     /// </summary>
-    // TODO: Change usages of this to const version
-    public readonly string DeviceAccountId = "logged_in_id";
     public const string DeviceAccountIdConst = "logged_in_id";
 
     public readonly string PreparedDeviceAccountId = "prepared_id";
@@ -63,7 +62,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         using IServiceScope scope = this.Services.CreateScope();
         IUnitRepository unitRepository =
             scope.ServiceProvider.GetRequiredService<IUnitRepository>();
-        await unitRepository.AddCharas(DeviceAccountId, new List<Charas>() { id });
+        await unitRepository.AddCharas(DeviceAccountIdConst, new List<Charas>() { id });
         await unitRepository.SaveChangesAsync();
     }
 
@@ -78,13 +77,29 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
                     x =>
                         new DbPlayerMaterial()
                         {
-                            DeviceAccountId = DeviceAccountId,
+                            DeviceAccountId = DeviceAccountIdConst,
                             MaterialId = x,
                             Quantity = 99999999
                         }
                 )
         );
         inventoryRepo.SaveChanges();
+    }
+
+    private void CreateFort()
+    {
+        this.ApiContext.PlayerFortDetails.Add(
+            new() { DeviceAccountId = DeviceAccountIdConst, CarpenterNum = 2, }
+        );
+        this.ApiContext.PlayerFortBuilds.Add(
+            new DbFortBuild()
+            {
+                DeviceAccountId = DeviceAccountIdConst,
+                PlantId = FortPlants.Smithy,
+                Level = 9
+            }
+        );
+        this.ApiContext.SaveChanges();
     }
 
     public async Task AddToDatabase<TEntity>(TEntity data)
@@ -96,8 +111,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         await this.ApiContext.SaveChangesAsync();
     }
 
-    public async Task AddToDatabase<TEntity>(params TEntity[] data)
-        where TEntity : class
+    public async Task AddToDatabase<TEntity>(params TEntity[] data) where TEntity : class
     {
         await this.ApiContext.Set<TEntity>().AddRangeAsync(data);
         await this.ApiContext.SaveChangesAsync();
@@ -143,7 +157,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
 
         savefileService.CreateBase(PreparedDeviceAccountId).Wait();
-        savefileService.CreateBase(DeviceAccountId).Wait();
+        savefileService.CreateBase(DeviceAccountIdConst).Wait();
         PopulateAllMaterials();
         context.PlayerDragonGifts.AddRange(
             Enum.GetValues<DragonGifts>()
@@ -160,11 +174,13 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         context.PlayerFortBuilds.Add(
             new DbFortBuild()
             {
-                DeviceAccountId = this.DeviceAccountId,
+                DeviceAccountId = DeviceAccountIdConst,
                 PlantId = FortPlants.Smithy,
                 Level = 9
             }
         );
+        CreateFort();
+        context.PlayerUserData.Find(DeviceAccountIdConst)!.Coin = 100_000_000;
         context.PlayerUserData.Find(this.DeviceAccountId)!.Coin = 100_000_000;
         context.PlayerUserData.Find(this.DeviceAccountId)!.DewPoint = 1_000_000;
         context.SaveChanges();

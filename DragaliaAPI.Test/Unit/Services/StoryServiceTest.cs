@@ -109,7 +109,8 @@ public class StoryServiceTest
 
         this.mockStoryRepository
             .SetupGet(x => x.UnitStories)
-            .Returns(new List<DbPlayerStoryState>()
+            .Returns(
+                new List<DbPlayerStoryState>()
                 {
                     new()
                     {
@@ -118,7 +119,10 @@ public class StoryServiceTest
                         State = StoryState.Read,
                         StoryType = StoryTypes.Chara
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         (await this.storyService.CheckStoryEligibility(StoryTypes.Chara, 110013013))
             .Should()

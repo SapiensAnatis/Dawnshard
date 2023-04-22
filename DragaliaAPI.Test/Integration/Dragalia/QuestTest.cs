@@ -59,10 +59,19 @@ public class QuestTest : IClassFixture<IntegrationTestFixture>
         ).data;
 
         fixture.ApiContext.PlayerStoryState
-            .First(x => x.DeviceAccountId == fixture.DeviceAccountId && x.StoryId == 1001410)
+            .First(
+                x =>
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+                    && x.StoryId == 1001410
+            )
             .State.Should()
             .Be(StoryState.Read);
 
+        List<DbPlayerStoryState> storyStates = await fixture.ApiContext.PlayerStoryState
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
+            .ToListAsync();
+
+        storyStates.Should().Contain(x => x.StoryId == 1001410 && x.State == StoryState.Read);
         fixture.ApiContext.PlayerCharaData.Any(x => x.CharaId == Charas.Zena).Should().BeTrue();
     }
 }
