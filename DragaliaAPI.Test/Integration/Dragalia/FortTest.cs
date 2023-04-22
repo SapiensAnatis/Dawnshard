@@ -103,11 +103,9 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task BuildAtOnce_ReturnsValidResult()
     {
-        long BuildId = 43452432344; // Comically large ID
-        this.fixture.ApiContext.PlayerFortBuilds.Add(
+        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
-                BuildId = BuildId,
                 DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 PlantId = FortPlants.StaffDojo,
                 Level = 1,
@@ -118,18 +116,18 @@ public class FortTest : IntegrationTestBase
                 IsNew = true,
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             }
-        );
+        ).Entity;
         await this.fixture.ApiContext.SaveChangesAsync();
 
         FortBuildAtOnceData response = (
             await client.PostMsgpack<FortBuildAtOnceData>(
                 "/fort/build_at_once",
-                new FortBuildAtOnceRequest(BuildId, PaymentTypes.Wyrmite)
+                new FortBuildAtOnceRequest(build.BuildId, PaymentTypes.Wyrmite)
             )
         ).data;
 
         BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)BuildId
+            x => x.build_id == (ulong)build.BuildId
         );
         // The level changes when building starts, not when it ends, so no need to check it here
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -139,11 +137,9 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task BuildCancel_ReturnsValidResult()
     {
-        long BuildId = 43452432345;
-        this.fixture.ApiContext.PlayerFortBuilds.Add(
+        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
-                BuildId = (long)BuildId,
                 DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 PlantId = FortPlants.StaffDojo,
                 Level = 2,
@@ -154,18 +150,18 @@ public class FortTest : IntegrationTestBase
                 IsNew = true,
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             }
-        );
+        ).Entity;
         await this.fixture.ApiContext.SaveChangesAsync();
 
         FortBuildCancelData response = (
             await client.PostMsgpack<FortBuildCancelData>(
                 "/fort/build_cancel",
-                new FortBuildCancelRequest(BuildId)
+                new FortBuildCancelRequest(build.BuildId)
             )
         ).data;
 
         BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)BuildId
+            x => x.build_id == (ulong)build.BuildId
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -175,11 +171,9 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task BuildEnd_ReturnsValidResult()
     {
-        long BuildId = 43452432346;
-        this.fixture.ApiContext.PlayerFortBuilds.Add(
+        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
-                BuildId = (long)BuildId,
                 DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 PlantId = FortPlants.StaffDojo,
                 Level = 1,
@@ -190,18 +184,18 @@ public class FortTest : IntegrationTestBase
                 IsNew = true,
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             }
-        );
+        ).Entity;
         await this.fixture.ApiContext.SaveChangesAsync();
 
         FortBuildEndData response = (
             await client.PostMsgpack<FortBuildEndData>(
                 "/fort/build_end",
-                new FortBuildEndRequest(BuildId)
+                new FortBuildEndRequest(build.BuildId)
             )
         ).data;
 
         BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)BuildId
+            x => x.build_id == (ulong)build.BuildId
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -236,11 +230,9 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelupAtOnce_ReturnsValidResult()
     {
-        long BuildId = 43452432348;
-        this.fixture.ApiContext.PlayerFortBuilds.Add(
+        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
-                BuildId = (long)BuildId,
                 DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 PlantId = FortPlants.StaffDojo,
                 Level = 1,
@@ -251,18 +243,18 @@ public class FortTest : IntegrationTestBase
                 IsNew = true,
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             }
-        );
+        ).Entity;
         await this.fixture.ApiContext.SaveChangesAsync();
 
         FortLevelupAtOnceData response = (
             await client.PostMsgpack<FortLevelupAtOnceData>(
                 "/fort/levelup_at_once",
-                new FortLevelupAtOnceRequest(BuildId, PaymentTypes.Wyrmite)
+                new FortLevelupAtOnceRequest(build.BuildId, PaymentTypes.Wyrmite)
             )
         ).data;
 
         BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)BuildId
+            x => x.build_id == (ulong)build.BuildId
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -271,11 +263,10 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelUpCancel_ReturnsValidResult()
     {
-        long BuildId = 43452432349;
-        this.fixture.ApiContext.PlayerFortBuilds.Add(
+        
+        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
-                BuildId = (long)BuildId,
                 DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 PlantId = FortPlants.StaffDojo,
                 Level = 2,
@@ -286,18 +277,18 @@ public class FortTest : IntegrationTestBase
                 IsNew = true,
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             }
-        );
+        ).Entity;
         await this.fixture.ApiContext.SaveChangesAsync();
 
         FortLevelupCancelData response = (
             await client.PostMsgpack<FortLevelupCancelData>(
                 "/fort/levelup_cancel",
-                new FortLevelupCancelRequest(BuildId)
+                new FortLevelupCancelRequest(build.BuildId)
             )
         ).data;
 
         BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)BuildId
+            x => x.build_id == (ulong)build.BuildId
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -307,11 +298,10 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelUpEnd_ReturnsValidResult()
     {
-        long BuildId = 43452432350;
-        this.fixture.ApiContext.PlayerFortBuilds.Add(
+        
+        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
-                BuildId = (long)BuildId,
                 DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 PlantId = FortPlants.StaffDojo,
                 Level = 1,
@@ -322,18 +312,19 @@ public class FortTest : IntegrationTestBase
                 IsNew = true,
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             }
-        );
+        ).Entity;
+        
         await this.fixture.ApiContext.SaveChangesAsync();
 
         FortLevelupEndData response = (
             await client.PostMsgpack<FortLevelupEndData>(
                 "/fort/levelup_end",
-                new FortLevelupEndRequest(BuildId)
+                new FortLevelupEndRequest(build.BuildId)
             )
         ).data;
 
         BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)BuildId
+            x => x.build_id == (ulong)build.BuildId
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
@@ -342,11 +333,9 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelUpStart_ReturnsValidResult()
     {
-        long BuildId = 807512597;
-        this.fixture.ApiContext.PlayerFortBuilds.Add(
+        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
-                BuildId = (long)BuildId,
                 DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 PlantId = FortPlants.StaffDojo,
                 Level = 2,
@@ -357,18 +346,18 @@ public class FortTest : IntegrationTestBase
                 IsNew = true,
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             }
-        );
+        ).Entity;
         await this.fixture.ApiContext.SaveChangesAsync();
 
         FortLevelupStartData response = (
             await client.PostMsgpack<FortLevelupStartData>(
                 "/fort/levelup_start",
-                new FortLevelupStartRequest(BuildId)
+                new FortLevelupStartRequest(build.BuildId)
             )
         ).data;
 
         BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)BuildId
+            x => x.build_id == (ulong)build.BuildId
         );
         result.build_start_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().NotBe(DateTimeOffset.UnixEpoch);
@@ -378,11 +367,9 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task Move_ReturnsValidResult()
     {
-        long BuildId = 43452432362;
-        this.fixture.ApiContext.PlayerFortBuilds.Add(
+        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds.Add(
             new()
             {
-                BuildId = (long)BuildId,
                 DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 PlantId = FortPlants.StaffDojo,
                 Level = 1,
@@ -393,7 +380,7 @@ public class FortTest : IntegrationTestBase
                 IsNew = true,
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             }
-        );
+        ).Entity;
         await this.fixture.ApiContext.SaveChangesAsync();
 
         int ExpectedPositionX = 4;
@@ -401,61 +388,14 @@ public class FortTest : IntegrationTestBase
         FortMoveData response = (
             await client.PostMsgpack<FortMoveData>(
                 "/fort/move",
-                new FortMoveRequest(BuildId, ExpectedPositionX, ExpectedPositionZ)
+                new FortMoveRequest(build.BuildId, ExpectedPositionX, ExpectedPositionZ)
             )
         ).data;
 
         BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)BuildId
+            x => x.build_id == (ulong)build.BuildId
         );
         result.position_x.Should().Be(ExpectedPositionX);
         result.position_z.Should().Be(ExpectedPositionZ);
-    }
-
-    public static class FortTestData
-    {
-        public static readonly List<DbFortBuild> Builds =
-            new()
-            {
-                new()
-                {
-                    // No state
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-                    PlantId = FortPlants.StaffDojo,
-                    Level = 1,
-                    PositionX = 1,
-                    PositionZ = 1,
-                    BuildStartDate = DateTimeOffset.UnixEpoch,
-                    BuildEndDate = DateTimeOffset.UnixEpoch,
-                    IsNew = true,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
-                },
-                new()
-                {
-                    // In Construction
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-                    PlantId = FortPlants.StaffDojo,
-                    Level = 1,
-                    PositionX = 2,
-                    PositionZ = 2,
-                    BuildStartDate = DateTimeOffset.UnixEpoch,
-                    BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1888924543),
-                    IsNew = true,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
-                },
-                new()
-                {
-                    // Finished
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-                    PlantId = FortPlants.StaffDojo,
-                    Level = 1,
-                    PositionX = 3,
-                    PositionZ = 3,
-                    BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1339848779),
-                    BuildEndDate = DateTimeOffset.UtcNow,
-                    IsNew = true,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
-                }
-            };
     }
 }
