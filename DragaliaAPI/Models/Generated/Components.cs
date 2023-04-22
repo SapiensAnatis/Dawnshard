@@ -2,6 +2,9 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using DragaliaAPI.Controllers.Dragalia;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;

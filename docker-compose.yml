@@ -2,12 +2,13 @@ version: '3.4'
 
 volumes:
   pgdata:
-  logs:
+  #logs:
 
 services:
   dragaliaapi:
+    image: dragaliaapi
+    container_name: dragaliaapi
     hostname: dragaliaapi
-    image: ${DOCKER_REGISTRY-}dragaliaapi
     build:
       context: .
       dockerfile: DragaliaAPI/Dockerfile

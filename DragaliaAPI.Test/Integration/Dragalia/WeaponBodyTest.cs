@@ -35,12 +35,12 @@ public class WeaponBodyTest : IntegrationTestBase
             {
                 new()
                 {
-                    DeviceAccountId = fixture.DeviceAccountId,
+                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                     WeaponBodyId = WeaponBodies.WandoftheTorrent
                 },
                 new()
                 {
-                    DeviceAccountId = fixture.DeviceAccountId,
+                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                     WeaponBodyId = WeaponBodies.SpiritBreaker
                 },
             }
@@ -88,7 +88,7 @@ public class WeaponBodyTest : IntegrationTestBase
         this.fixture.ApiContext.PlayerWeapons.Add(
             new DbWeaponBody()
             {
-                DeviceAccountId = fixture.DeviceAccountId,
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 WeaponBodyId = WeaponBodies.AbsoluteCrimson
             }
         );
@@ -108,7 +108,7 @@ public class WeaponBodyTest : IntegrationTestBase
         this.fixture.ApiContext.PlayerWeapons
             .SingleOrDefault(
                 x =>
-                    x.DeviceAccountId == fixture.DeviceAccountId
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
                     && x.WeaponBodyId == WeaponBodies.PrimalCrimson
             )
             .Should()
@@ -153,7 +153,7 @@ public class WeaponBodyTest : IntegrationTestBase
 
         // Check coin
         DbPlayerUserData userData = (
-            await apiContext.PlayerUserData.FindAsync(fixture.DeviceAccountId)
+            await apiContext.PlayerUserData.FindAsync(IntegrationTestFixture.DeviceAccountIdConst)
         )!;
         await apiContext.Entry(userData).ReloadAsync();
 
@@ -167,7 +167,7 @@ public class WeaponBodyTest : IntegrationTestBase
         // Check weapon
         DbWeaponBody weaponBody = (
             await apiContext.PlayerWeapons.FindAsync(
-                fixture.DeviceAccountId,
+                IntegrationTestFixture.DeviceAccountIdConst,
                 testCase.InitialState.WeaponBodyId
             )
         )!;
@@ -195,7 +195,10 @@ public class WeaponBodyTest : IntegrationTestBase
                 );
 
             DbPlayerMaterial dbEntry = (
-                await apiContext.PlayerMaterials.FindAsync(fixture.DeviceAccountId, material)
+                await apiContext.PlayerMaterials.FindAsync(
+                    IntegrationTestFixture.DeviceAccountIdConst,
+                    material
+                )
             )!;
 
             dbEntry.Quantity.Should().Be(expQuantity);
@@ -250,7 +253,7 @@ public class WeaponBodyTest : IntegrationTestBase
         await this.fixture.AddToDatabase(
             new DbWeaponBody()
             {
-                DeviceAccountId = fixture.DeviceAccountId,
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 WeaponBodyId = WeaponBodies.ChanzelianCaster,
                 BuildupCount = 4
             }
@@ -625,7 +628,11 @@ public class WeaponBodyTest : IntegrationTestBase
     private int GetMaterialCount(Materials id)
     {
         return this.fixture.ApiContext.PlayerMaterials
-            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId && x.MaterialId == id)
+            .Where(
+                x =>
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+                    && x.MaterialId == id
+            )
             .Select(x => x.Quantity)
             .First();
     }
@@ -634,7 +641,7 @@ public class WeaponBodyTest : IntegrationTestBase
     {
         return this.fixture.ApiContext.PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .Select(x => x.Coin)
             .First();
     }

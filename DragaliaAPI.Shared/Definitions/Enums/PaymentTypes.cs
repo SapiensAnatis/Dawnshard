@@ -13,5 +13,6 @@ public enum PaymentTypes
     Ticket = 8,
 
     FreeDailyExecDependant = 9,
-    FreeDailyTenfold = 10
+    FreeDailyTenfold = 10,
+    HalidomHustleHammer = 11,
 }

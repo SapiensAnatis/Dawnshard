@@ -67,7 +67,8 @@ public class DungeonRecordControllerTest
 
         this.mockUserDataRepository
             .Setup(x => x.GetUserData(DeviceAccountId))
-            .Returns(new List<DbPlayerUserData>()
+            .Returns(
+                new List<DbPlayerUserData>()
                 {
                     new()
                     {
@@ -75,7 +76,10 @@ public class DungeonRecordControllerTest
                         Name = "Euden",
                         ViewerId = 1
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockInventoryRepository
             .Setup(x => x.UpdateQuantity(It.IsAny<List<Materials>>(), It.IsAny<int>()))
@@ -94,10 +98,14 @@ public class DungeonRecordControllerTest
     {
         this.mockQuestRepository
             .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
+            .Returns(
+                new List<DbQuest>()
                 {
                     new() { DeviceAccountId = DeviceAccountId, QuestId = questId }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockQuestRepository
             .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
@@ -137,7 +145,8 @@ public class DungeonRecordControllerTest
     {
         this.mockQuestRepository
             .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
+            .Returns(
+                new List<DbQuest>()
                 {
                     new()
                     {
@@ -145,7 +154,10 @@ public class DungeonRecordControllerTest
                         QuestId = questId,
                         BestClearTime = clearTime
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockQuestRepository
             .Setup(x => x.CompleteQuest(DeviceAccountId, questId, clearTime))
@@ -191,7 +203,8 @@ public class DungeonRecordControllerTest
     {
         this.mockQuestRepository
             .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
+            .Returns(
+                new List<DbQuest>()
                 {
                     new()
                     {
@@ -199,7 +212,10 @@ public class DungeonRecordControllerTest
                         QuestId = questId,
                         BestClearTime = clearTime
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockQuestRepository
             .Setup(x => x.CompleteQuest(DeviceAccountId, questId, clearTime))
@@ -242,7 +258,8 @@ public class DungeonRecordControllerTest
     {
         this.mockQuestRepository
             .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
+            .Returns(
+                new List<DbQuest>()
                 {
                     new()
                     {
@@ -253,7 +270,10 @@ public class DungeonRecordControllerTest
                         IsMissionClear2 = false,
                         IsMissionClear3 = false
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockQuestRepository
             .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
@@ -312,7 +332,8 @@ public class DungeonRecordControllerTest
     {
         this.mockQuestRepository
             .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
+            .Returns(
+                new List<DbQuest>()
                 {
                     new()
                     {
@@ -323,7 +344,10 @@ public class DungeonRecordControllerTest
                         IsMissionClear2 = false,
                         IsMissionClear3 = false
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockQuestRepository
             .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
@@ -382,7 +406,8 @@ public class DungeonRecordControllerTest
     {
         this.mockQuestRepository
             .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
+            .Returns(
+                new List<DbQuest>()
                 {
                     new()
                     {
@@ -393,7 +418,10 @@ public class DungeonRecordControllerTest
                         IsMissionClear2 = missions[1],
                         IsMissionClear3 = missions[2]
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockQuestRepository
             .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
@@ -453,7 +481,8 @@ public class DungeonRecordControllerTest
     {
         this.mockQuestRepository
             .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
+            .Returns(
+                new List<DbQuest>()
                 {
                     new()
                     {
@@ -464,7 +493,10 @@ public class DungeonRecordControllerTest
                         IsMissionClear2 = true,
                         IsMissionClear3 = true
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockQuestRepository
             .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))

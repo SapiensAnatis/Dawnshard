@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text.Json;
+using AutoMapper;
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.MessagePack;
@@ -263,5 +264,10 @@ public static class TestUtils
         AssertionOptions.AssertEquivalencyUsing(
             options => options.Excluding(x => x.Name == "Owner")
         );
+    }
+
+    public static IMapper CreateMapper()
+    {
+        return new MapperConfiguration(cfg => cfg.AddMaps(typeof(Program).Assembly)).CreateMapper();
     }
 }

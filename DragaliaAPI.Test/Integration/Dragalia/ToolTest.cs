@@ -50,7 +50,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
                     id_token = TestUtils.TokenToString(
                         TestUtils.GetToken(
                             DateTime.UtcNow + TimeSpan.FromMinutes(5),
-                            fixture.DeviceAccountId
+                            IntegrationTestFixture.DeviceAccountIdConst
                         )
                     )
                 }
@@ -70,7 +70,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
                 id_token = TestUtils.TokenToString(
                     TestUtils.GetToken(
                         DateTime.UtcNow - TimeSpan.FromMinutes(5),
-                        fixture.DeviceAccountId
+                        IntegrationTestFixture.DeviceAccountId
                     )
                 )
             }
@@ -114,7 +114,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
                     id_token = TestUtils.TokenToString(
                         TestUtils.GetToken(
                             DateTime.UtcNow + TimeSpan.FromMinutes(5),
-                            fixture.DeviceAccountId
+                            IntegrationTestFixture.DeviceAccountIdConst
                         )
                     )
                 }
@@ -135,7 +135,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
                 id_token = TestUtils.TokenToString(
                     TestUtils.GetToken(
                         DateTime.UtcNow + TimeSpan.FromMinutes(5),
-                        fixture.DeviceAccountId
+                        IntegrationTestFixture.DeviceAccountIdConst
                     )
                 )
             };
@@ -160,7 +160,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
                 id_token = TestUtils.TokenToString(
                     TestUtils.GetToken(
                         DateTime.UtcNow - TimeSpan.FromMinutes(5),
-                        fixture.DeviceAccountId
+                        IntegrationTestFixture.DeviceAccountId
                     )
                 )
             }
@@ -199,7 +199,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         string deviceAccountId = "save import id";
 
         this.fixture.ApiContext.PlayerUserData
-            .Find(this.fixture.DeviceAccountId)!
+            .Find(IntegrationTestFixture.DeviceAccountIdConst)!
             .LastSaveImportTime = DateTime.MinValue;
         await this.fixture.ApiContext.SaveChangesAsync();
 
@@ -224,14 +224,14 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     public async Task Auth_ValidIdToken_OldSavefile_DoesNotImportSavefile()
     {
         this.fixture.ApiContext.PlayerUserData
-            .Find(this.fixture.DeviceAccountId)!
+            .Find(IntegrationTestFixture.DeviceAccountIdConst)!
             .LastSaveImportTime = DateTime.UtcNow;
         await this.fixture.ApiContext.SaveChangesAsync();
 
         string token = TestUtils.TokenToString(
             TestUtils.GetToken(
                 DateTime.UtcNow + TimeSpan.FromMinutes(5),
-                fixture.DeviceAccountId,
+                IntegrationTestFixture.DeviceAccountIdConst,
                 savefileAvailable: true,
                 savefileTime: DateTime.UtcNow - TimeSpan.FromDays(1)
             )
@@ -243,7 +243,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
         this.fixture.mockBaasRequestHelper.Verify(x => x.GetSavefile(token), Times.Never);
 
         DbPlayerUserData userData = fixture.ApiContext.PlayerUserData.Find(
-            fixture.DeviceAccountId
+            IntegrationTestFixture.DeviceAccountIdConst
         )!;
         this.fixture.ApiContext.Entry(userData).Reload();
         userData.Name.Should().Be("Euden");
@@ -258,7 +258,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
          string deviceAccountId = "save import id";
 
          this.fixture.ApiContext.PlayerUserData
-             .Find(this.fixture.DeviceAccountId)!
+             .Find(this.IntegrationTestFixture.DeviceAccountId)!
              .LastSaveImportTime = DateTime.MinValue;
          await this.fixture.ApiContext.SaveChangesAsync();
 
