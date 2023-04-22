@@ -49,7 +49,8 @@ public class FortServiceTest
     {
         this.mockFortRepository
             .Setup(x => x.Builds)
-            .Returns(new List<DbFortBuild>()
+            .Returns(
+                new List<DbFortBuild>()
                 {
                     new()
                     {
@@ -60,7 +61,10 @@ public class FortServiceTest
                         Level = 5,
                         PlantId = FortPlants.Dragontree,
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         (await this.fortService.GetBuildList())
             .Should()

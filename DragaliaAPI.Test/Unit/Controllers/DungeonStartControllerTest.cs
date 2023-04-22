@@ -96,7 +96,8 @@ public class DungeonStartControllerTest
             .Setup(
                 x => x.BuildDetailedPartyUnit(DeviceAccountId, It.IsAny<IQueryable<DbPartyUnit>>())
             )
-            .Returns(new List<DbDetailedPartyUnit>()
+            .Returns(
+                new List<DbDetailedPartyUnit>()
                 {
                     new()
                     {
@@ -141,7 +142,10 @@ public class DungeonStartControllerTest
                             WeaponBodyId = WeaponBodies.PrimevalThunder
                         }
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockHelperService
             .Setup(x => x.GetHelpers())
@@ -176,7 +180,8 @@ public class DungeonStartControllerTest
     {
         this.mockQuestRepository
             .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
+            .Returns(
+                new List<DbQuest>()
                 {
                     new()
                     {
@@ -184,7 +189,10 @@ public class DungeonStartControllerTest
                         QuestId = questId,
                         State = 3
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockUpdateDataService
             .Setup(x => x.SaveChangesAsync())
@@ -266,7 +274,8 @@ public class DungeonStartControllerTest
     {
         this.mockQuestRepository
             .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
+            .Returns(
+                new List<DbQuest>()
                 {
                     new()
                     {
@@ -274,7 +283,10 @@ public class DungeonStartControllerTest
                         QuestId = questId,
                         State = 3
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockUpdateDataService
             .Setup(x => x.SaveChangesAsync())
@@ -282,7 +294,8 @@ public class DungeonStartControllerTest
 
         this.mockPartyRepository
             .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1, 2 }))
-            .Returns(new List<DbPartyUnit>()
+            .Returns(
+                new List<DbPartyUnit>()
                 {
                     new()
                     {
@@ -298,13 +311,17 @@ public class DungeonStartControllerTest
                         UnitNo = 1,
                         PartyNo = 2
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockUnitRepository
             .Setup(
                 x => x.BuildDetailedPartyUnit(DeviceAccountId, It.IsAny<IQueryable<DbPartyUnit>>())
             )
-            .Returns(new List<DbDetailedPartyUnit>()
+            .Returns(
+                new List<DbDetailedPartyUnit>()
                 {
                     new()
                     {
@@ -392,18 +409,29 @@ public class DungeonStartControllerTest
                             WeaponBodyId = WeaponBodies.MegaLance
                         }
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockWeaponRepository
             .Setup(x => x.GetPassiveAbilities(WeaponBodies.Infernoblaze))
-            .Returns(new List<DbWeaponPassiveAbility>()
+            .Returns(
+                new List<DbWeaponPassiveAbility>()
                 {
                     new() { DeviceAccountId = DeviceAccountId, WeaponPassiveAbilityId = 1 }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockWeaponRepository
             .Setup(x => x.GetPassiveAbilities(WeaponBodies.MegaLance))
-            .Returns(new List<DbWeaponPassiveAbility>() { }.AsQueryable().BuildMock());
+            .Returns(
+                new List<DbWeaponPassiveAbility>() { }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
             new DungeonStartStartRequest()
@@ -451,7 +479,8 @@ public class DungeonStartControllerTest
     {
         this.mockQuestRepository
             .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
+            .Returns(
+                new List<DbQuest>()
                 {
                     new()
                     {
@@ -459,7 +488,10 @@ public class DungeonStartControllerTest
                         QuestId = questId,
                         State = 3
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockUpdateDataService
             .Setup(x => x.SaveChangesAsync())
@@ -467,7 +499,11 @@ public class DungeonStartControllerTest
 
         this.mockPartyRepository
             .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1 }))
-            .Returns(new List<DbPartyUnit>() { }.AsQueryable().BuildMock());
+            .Returns(
+                new List<DbPartyUnit>() { }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
             new DungeonStartStartRequest()
@@ -498,7 +534,8 @@ public class DungeonStartControllerTest
     {
         this.mockQuestRepository
             .Setup(x => x.GetQuests(DeviceAccountId))
-            .Returns(new List<DbQuest>()
+            .Returns(
+                new List<DbQuest>()
                 {
                     new()
                     {
@@ -506,7 +543,10 @@ public class DungeonStartControllerTest
                         QuestId = questId,
                         State = 3
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockUpdateDataService
             .Setup(x => x.SaveChangesAsync())
@@ -514,7 +554,11 @@ public class DungeonStartControllerTest
 
         this.mockPartyRepository
             .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1 }))
-            .Returns(new List<DbPartyUnit>() { }.AsQueryable().BuildMock());
+            .Returns(
+                new List<DbPartyUnit>() { }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
             new DungeonStartStartRequest()

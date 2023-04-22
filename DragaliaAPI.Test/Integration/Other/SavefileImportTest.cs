@@ -167,12 +167,20 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
         await this.client.PostAsync($"savefile/import/{viewerId}", content);
 
         fixture.ApiContext.PlayerStoryState
-            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst && x.StoryId == 110313011)
+            .Single(
+                x =>
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+                    && x.StoryId == 110313011
+            )
             .StoryType.Should()
             .Be(StoryTypes.Chara);
 
         fixture.ApiContext.PlayerStoryState
-            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst && x.StoryId == 210091011)
+            .Single(
+                x =>
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+                    && x.StoryId == 210091011
+            )
             .StoryType.Should()
             .Be(StoryTypes.Dragon);
     }

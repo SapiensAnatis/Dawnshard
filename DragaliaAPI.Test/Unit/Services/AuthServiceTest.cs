@@ -71,10 +71,14 @@ public class AuthServiceTest
             .ReturnsAsync(new Session("session id", "token", "device account id", 1));
         this.mockUserDataRepository
             .Setup(x => x.GetUserData("device account id"))
-            .Returns(new List<DbPlayerUserData>()
+            .Returns(
+                new List<DbPlayerUserData>()
                 {
                     new() { DeviceAccountId = "id", ViewerId = 1 }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         (await this.authService.DoAuth("id token")).Should().BeEquivalentTo((1, "session id"));
 
@@ -106,10 +110,14 @@ public class AuthServiceTest
 
         this.mockUserDataRepository
             .Setup(x => x.GetUserData(AccountId))
-            .Returns(new List<DbPlayerUserData>()
+            .Returns(
+                new List<DbPlayerUserData>()
                 {
                     new() { DeviceAccountId = "id", ViewerId = 1 }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
         this.mockSessionService
             .Setup(x => x.CreateSession(token, AccountId, 1))
             .ReturnsAsync("session id");
@@ -207,7 +215,8 @@ public class AuthServiceTest
 
         this.mockUserDataRepository
             .Setup(x => x.GetUserData(AccountId))
-            .Returns(new List<DbPlayerUserData>()
+            .Returns(
+                new List<DbPlayerUserData>()
                 {
                     new()
                     {
@@ -216,7 +225,10 @@ public class AuthServiceTest
                         ViewerId = 1,
                         LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(1)
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockSessionService
             .Setup(x => x.CreateSession(token, AccountId, 1))
@@ -266,7 +278,8 @@ public class AuthServiceTest
 
         this.mockUserDataRepository
             .Setup(x => x.GetUserData(AccountId))
-            .Returns(new List<DbPlayerUserData>()
+            .Returns(
+                new List<DbPlayerUserData>()
                 {
                     new()
                     {
@@ -275,7 +288,10 @@ public class AuthServiceTest
                         ViewerId = 1,
                         LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(1)
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockSessionService
             .Setup(x => x.CreateSession(token, AccountId, 1))
@@ -316,7 +332,8 @@ public class AuthServiceTest
 
         this.mockUserDataRepository
             .Setup(x => x.GetUserData(AccountId))
-            .Returns(new List<DbPlayerUserData>()
+            .Returns(
+                new List<DbPlayerUserData>()
                 {
                     new()
                     {
@@ -325,7 +342,10 @@ public class AuthServiceTest
                         ViewerId = 1,
                         LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(2),
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockSessionService
             .Setup(x => x.CreateSession(token, AccountId, 1))
@@ -370,7 +390,8 @@ public class AuthServiceTest
 
         this.mockUserDataRepository
             .Setup(x => x.GetUserData(AccountId))
-            .Returns(new List<DbPlayerUserData>()
+            .Returns(
+                new List<DbPlayerUserData>()
                 {
                     new()
                     {
@@ -379,7 +400,10 @@ public class AuthServiceTest
                         ViewerId = 1,
                         LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(2),
                     }
-                }.AsQueryable().BuildMock());
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockSessionService
             .Setup(x => x.CreateSession(token, AccountId, 1))

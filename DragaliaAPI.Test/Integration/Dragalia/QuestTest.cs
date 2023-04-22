@@ -59,7 +59,11 @@ public class QuestTest : IClassFixture<IntegrationTestFixture>
         ).data;
 
         fixture.ApiContext.PlayerStoryState
-            .First(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst && x.StoryId == 1001410)
+            .First(
+                x =>
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+                    && x.StoryId == 1001410
+            )
             .State.Should()
             .Be(StoryState.Read);
 

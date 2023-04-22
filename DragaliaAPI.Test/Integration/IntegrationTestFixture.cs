@@ -89,11 +89,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
     private void CreateFort()
     {
         this.ApiContext.PlayerFortDetails.Add(
-            new()
-            {
-                DeviceAccountId = DeviceAccountIdConst,
-                CarpenterNum = 2,
-            }
+            new() { DeviceAccountId = DeviceAccountIdConst, CarpenterNum = 2, }
         );
         this.ApiContext.PlayerFortBuilds.Add(
             new DbFortBuild()
