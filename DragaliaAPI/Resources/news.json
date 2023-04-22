@@ -1,5 +1,10 @@
 [
     {
+        "headline": "Halidom upgrades",
+        "timestamp": 1682193563,
+        "description": "You should now be able to move and upgrade buildings in the Halidom. You won't be able to claim income but this should be coming soon. Thanks to Skazord#6728 for developing this feature."
+    },
+    {
         "headline": "Story rewards",
         "timestamp": 1678131599,
         "description": "A small update has been made to stories to make the rewards slightly more accurate; along with fixing a few bugs, you should now be able to get the usual story units from the campaign. As a result, they have been removed from the summoning pool."
