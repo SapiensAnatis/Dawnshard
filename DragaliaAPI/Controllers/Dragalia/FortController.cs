@@ -73,8 +73,8 @@ public class FortController : DragaliaControllerBase
         await this.fortService.CompleteAtOnce(request.payment_type, request.build_id);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-
         FortDetail fortDetail = await this.fortService.GetFortDetail();
+        
         FortBuildAtOnceData data =
             new()
             {
@@ -274,8 +274,8 @@ public class FortController : DragaliaControllerBase
             request.after_position_z
         );
 
-        FortBonusList bonusList = await bonusService.GetBonusList();
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        FortBonusList bonusList = await bonusService.GetBonusList();
 
         FortMoveData data =
             new()
