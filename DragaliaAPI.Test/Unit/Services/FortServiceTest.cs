@@ -330,9 +330,6 @@ public class FortServiceTest
     {
         this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("id");
 
-        this.mockUserDataRepository
-            .Setup(x => x.LookupUserData())
-            .ReturnsAsync(new DbPlayerUserData() { DeviceAccountId = "id", Coin = 400 });
         this.mockUserDataRepository.Setup(x => x.UpdateCoin(-300)).Returns(Task.CompletedTask);
 
         this.mockFortRepository
@@ -378,9 +375,6 @@ public class FortServiceTest
     public async Task BuildStart_InsufficientCarpenters_Throws()
     {
         this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("id");
-        this.mockUserDataRepository
-            .Setup(x => x.LookupUserData())
-            .ReturnsAsync(new DbPlayerUserData() { DeviceAccountId = "id", Coin = 400 });
 
         this.mockFortRepository
             .Setup(x => x.GetFortDetail())
@@ -409,9 +403,6 @@ public class FortServiceTest
                 PlantId = FortPlants.Dragonata
             };
 
-        this.mockUserDataRepository
-            .Setup(x => x.LookupUserData())
-            .ReturnsAsync(new DbPlayerUserData() { DeviceAccountId = "id" });
         this.mockUserDataRepository.Setup(x => x.UpdateCoin(-3200)).Returns(Task.CompletedTask);
 
         this.mockFortRepository
@@ -458,10 +449,6 @@ public class FortServiceTest
                 Level = 20,
                 PlantId = FortPlants.Dragonata
             };
-
-        this.mockUserDataRepository
-            .Setup(x => x.LookupUserData())
-            .ReturnsAsync(new DbPlayerUserData() { DeviceAccountId = "id" });
 
         this.mockFortRepository
             .Setup(x => x.GetFortDetail())
