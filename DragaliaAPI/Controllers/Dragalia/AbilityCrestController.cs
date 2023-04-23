@@ -150,6 +150,6 @@ public class AbilityCrestController : DragaliaControllerBase
         }
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-        return Ok(new AbilityCrestBuildupPlusCountData() { update_data_list = updateDataList });
+        return Ok(new AbilityCrestResetPlusCountData() { update_data_list = updateDataList });
     }
 }

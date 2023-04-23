@@ -111,7 +111,8 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         await this.ApiContext.SaveChangesAsync();
     }
 
-    public async Task AddToDatabase<TEntity>(params TEntity[] data) where TEntity : class
+    public async Task AddToDatabase<TEntity>(params TEntity[] data)
+        where TEntity : class
     {
         await this.ApiContext.Set<TEntity>().AddRangeAsync(data);
         await this.ApiContext.SaveChangesAsync();
@@ -181,8 +182,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         );
         CreateFort();
         context.PlayerUserData.Find(DeviceAccountIdConst)!.Coin = 100_000_000;
-        context.PlayerUserData.Find(this.DeviceAccountId)!.Coin = 100_000_000;
-        context.PlayerUserData.Find(this.DeviceAccountId)!.DewPoint = 1_000_000;
+        context.PlayerUserData.Find(DeviceAccountIdConst)!.DewPoint = 1_000_000;
         context.SaveChanges();
     }
 }

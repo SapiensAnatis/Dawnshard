@@ -34,7 +34,7 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
         this.fixture.ApiContext.PlayerAbilityCrests.Add(
             new DbAbilityCrest()
             {
-                DeviceAccountId = fixture.DeviceAccountId,
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 AbilityCrestId = AbilityCrests.FromWhenceHeComes
             }
         );
@@ -56,7 +56,7 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
 
         DbAbilityCrest ability_crest = (
             await this.fixture.ApiContext.PlayerAbilityCrests.FindAsync(
-                fixture.DeviceAccountId,
+                IntegrationTestFixture.DeviceAccountIdConst,
                 AbilityCrests.FromWhenceHeComes
             )
         )!;
@@ -112,10 +112,12 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task BuildupPiece_InvalidStepsReturnsErrorAndDoesntAffectDatabase()
     {
+        int oldGoldenKey = this.GetMaterial(Materials.GoldenKey);
+
         this.fixture.ApiContext.PlayerAbilityCrests.Add(
             new DbAbilityCrest()
             {
-                DeviceAccountId = fixture.DeviceAccountId,
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 AbilityCrestId = AbilityCrests.HappyNewYear
             }
         );
@@ -150,7 +152,7 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
 
         DbAbilityCrest ability_crest = (
             await this.fixture.ApiContext.PlayerAbilityCrests.FindAsync(
-                fixture.DeviceAccountId,
+                IntegrationTestFixture.DeviceAccountIdConst,
                 AbilityCrests.HappyNewYear
             )
         )!;
@@ -158,6 +160,7 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
 
         data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPieceStepError);
         ability_crest.LimitBreakCount.Should().Be(0);
+        this.GetMaterial(Materials.GoldenKey).Should().Be(oldGoldenKey);
     }
 
     [Fact]
@@ -166,7 +169,7 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
         this.fixture.ApiContext.PlayerAbilityCrests.Add(
             new DbAbilityCrest()
             {
-                DeviceAccountId = fixture.DeviceAccountId,
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 AbilityCrestId = AbilityCrests.WorthyRivals
             }
         );
@@ -226,7 +229,7 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
 
         DbAbilityCrest ability_crest = (
             await this.fixture.ApiContext.PlayerAbilityCrests.FindAsync(
-                fixture.DeviceAccountId,
+                IntegrationTestFixture.DeviceAccountIdConst,
                 AbilityCrests.WorthyRivals
             )
         )!;
@@ -238,12 +241,233 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
         ability_crest.EquipableCount.Should().Be(2);
     }
 
+    [Fact]
+    public async Task BuildupPlusCount_ReturnsErrorWhenAbilityCrestNotFound()
+    {
+        ResultCodeData data = (
+            await client.PostMsgpack<ResultCodeData>(
+                "ability_crest/buildup_plus_count",
+                new AbilityCrestBuildupPlusCountRequest()
+                {
+                    ability_crest_id = AbilityCrests.InanUnendingWorld,
+                    plus_count_params_list = new List<AtgenPlusCountParamsList>()
+                    {
+                        new() { plus_count = 50, plus_count_type = 1, }
+                    }
+                },
+                ensureSuccessHeader: false
+            )
+        ).data;
+
+        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
+    }
+
+    [Fact]
+    public async Task BuildupPlusCount_InvalidStepsReturnsErrorAndDoesntAffectDatabase()
+    {
+        int oldFortifyingGem = this.GetMaterial(Materials.FortifyingGemstone);
+        int oldAmplifyingGem = this.GetMaterial(Materials.AmplifyingGemstone);
+
+        this.fixture.ApiContext.PlayerAbilityCrests.Add(
+            new DbAbilityCrest()
+            {
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                AbilityCrestId = AbilityCrests.TwinfoldBonds,
+                AttackPlusCount = 26
+            }
+        );
+
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        ResultCodeData data = (
+            await client.PostMsgpack<ResultCodeData>(
+                "ability_crest/buildup_plus_count",
+                new AbilityCrestBuildupPlusCountRequest()
+                {
+                    ability_crest_id = AbilityCrests.TwinfoldBonds,
+                    plus_count_params_list = new List<AtgenPlusCountParamsList>()
+                    {
+                        new() { plus_count = 50, plus_count_type = 1 },
+                        new() { plus_count = 25, plus_count_type = 2, }
+                    }
+                },
+                ensureSuccessHeader: false
+            )
+        ).data;
+
+        DbAbilityCrest ability_crest = (
+            await this.fixture.ApiContext.PlayerAbilityCrests.FindAsync(
+                IntegrationTestFixture.DeviceAccountIdConst,
+                AbilityCrests.TwinfoldBonds
+            )
+        )!;
+        await this.fixture.ApiContext.Entry(ability_crest).ReloadAsync();
+
+        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPlusCountCountError);
+        ability_crest.HpPlusCount.Should().Be(0);
+        ability_crest.AttackPlusCount.Should().Be(26);
+        this.GetMaterial(Materials.FortifyingGemstone).Should().Be(oldFortifyingGem);
+        this.GetMaterial(Materials.AmplifyingGemstone).Should().Be(oldAmplifyingGem);
+    }
+
+    [Fact]
+    public async Task BuildupPlusCount_SuccessDecreasesMaterialsAndUpdatesDatabase()
+    {
+        int oldFortifyingGem = this.GetMaterial(Materials.FortifyingGemstone);
+        int oldAmplifyingGem = this.GetMaterial(Materials.AmplifyingGemstone);
+
+        this.fixture.ApiContext.PlayerAbilityCrests.Add(
+            new DbAbilityCrest()
+            {
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                AbilityCrestId = AbilityCrests.EndlessWaltz,
+                AttackPlusCount = 26
+            }
+        );
+
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        await client.PostMsgpack<ResultCodeData>(
+            "ability_crest/buildup_plus_count",
+            new AbilityCrestBuildupPlusCountRequest()
+            {
+                ability_crest_id = AbilityCrests.EndlessWaltz,
+                plus_count_params_list = new List<AtgenPlusCountParamsList>()
+                {
+                    new() { plus_count = 1, plus_count_type = 1 },
+                    new() { plus_count = 50, plus_count_type = 2, }
+                }
+            }
+        );
+
+        DbAbilityCrest ability_crest = (
+            await this.fixture.ApiContext.PlayerAbilityCrests.FindAsync(
+                IntegrationTestFixture.DeviceAccountIdConst,
+                AbilityCrests.EndlessWaltz
+            )
+        )!;
+        await this.fixture.ApiContext.Entry(ability_crest).ReloadAsync();
+
+        ability_crest.HpPlusCount.Should().Be(1);
+        ability_crest.AttackPlusCount.Should().Be(50);
+        this.GetMaterial(Materials.FortifyingGemstone).Should().Be(oldFortifyingGem - 1);
+        this.GetMaterial(Materials.AmplifyingGemstone).Should().Be(oldAmplifyingGem - 24);
+    }
+
+    [Fact]
+    public async Task ResetPlusCount_ReturnsErrorWhenAbilityCrestNotFound()
+    {
+        ResultCodeData data = (
+            await client.PostMsgpack<ResultCodeData>(
+                "ability_crest/reset_plus_count",
+                new AbilityCrestResetPlusCountRequest()
+                {
+                    ability_crest_id = AbilityCrests.InanUnendingWorld,
+                    plus_count_type_list = new List<int>() { 1, 2 }
+                },
+                ensureSuccessHeader: false
+            )
+        ).data;
+
+        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
+    }
+
+    [Fact]
+    public async Task ResetPlusCount_InvalidStepsReturnsErrorAndDoesntAffectDatabase()
+    {
+        long oldCoin = this.GetCoin();
+
+        this.fixture.ApiContext.PlayerAbilityCrests.Add(
+            new DbAbilityCrest()
+            {
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                HpPlusCount = 40
+            }
+        );
+
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        ResultCodeData data = (
+            await client.PostMsgpack<ResultCodeData>(
+                "ability_crest/reset_plus_count",
+                new AbilityCrestResetPlusCountRequest()
+                {
+                    ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
+                    plus_count_type_list = new List<int>() { 1, 0 }
+                },
+                ensureSuccessHeader: false
+            )
+        ).data;
+
+        DbAbilityCrest ability_crest = (
+            await this.fixture.ApiContext.PlayerAbilityCrests.FindAsync(
+                IntegrationTestFixture.DeviceAccountIdConst,
+                AbilityCrests.TutelarysDestinyWolfsBoon
+            )
+        )!;
+        await this.fixture.ApiContext.Entry(ability_crest).ReloadAsync();
+
+        data.result_code.Should().Be(ResultCode.CommonInvalidArgument);
+        ability_crest.HpPlusCount.Should().Be(40);
+        ability_crest.AttackPlusCount.Should().Be(0);
+        this.GetCoin().Should().Be(oldCoin);
+    }
+
+    [Fact]
+    public async Task ResetPlusCount_SuccessDecreasesMaterialsAndUpdatesDatabase()
+    {
+        long oldCoin = this.GetCoin();
+
+        this.fixture.ApiContext.PlayerAbilityCrests.Add(
+            new DbAbilityCrest()
+            {
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                AbilityCrestId = AbilityCrests.TheGeniusTacticianBowsBoon,
+                HpPlusCount = 40,
+                AttackPlusCount = 1
+            }
+        );
+
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        await client.PostMsgpack<ResultCodeData>(
+            "ability_crest/reset_plus_count",
+            new AbilityCrestResetPlusCountRequest()
+            {
+                ability_crest_id = AbilityCrests.TheGeniusTacticianBowsBoon,
+                plus_count_type_list = new List<int>() { 1, 2 }
+            }
+        );
+
+        DbAbilityCrest ability_crest = (
+            await this.fixture.ApiContext.PlayerAbilityCrests.FindAsync(
+                IntegrationTestFixture.DeviceAccountIdConst,
+                AbilityCrests.TheGeniusTacticianBowsBoon
+            )
+        )!;
+        await this.fixture.ApiContext.Entry(ability_crest).ReloadAsync();
+
+        ability_crest.HpPlusCount.Should().Be(0);
+        ability_crest.AttackPlusCount.Should().Be(0);
+        this.GetCoin().Should().Be(oldCoin - 820_000);
+    }
+
     private int GetDewpoint()
     {
         return this.fixture.ApiContext.PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .Select(x => x.DewPoint)
+            .First();
+    }
+
+    private long GetCoin()
+    {
+        return this.fixture.ApiContext.PlayerUserData
+            .AsNoTracking()
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
+            .Select(x => x.Coin)
             .First();
     }
 
@@ -251,7 +475,11 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
     {
         return this.fixture.ApiContext.PlayerMaterials
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId && x.MaterialId == materialId)
+            .Where(
+                x =>
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+                    && x.MaterialId == materialId
+            )
             .Select(x => x.Quantity)
             .First();
     }

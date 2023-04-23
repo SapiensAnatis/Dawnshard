@@ -57,7 +57,7 @@ public class AbilityCrestTradeTest : IClassFixture<IntegrationTestFixture>
     {
         return this.fixture.ApiContext.PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == fixture.DeviceAccountId)
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .Select(x => x.DewPoint)
             .First();
     }

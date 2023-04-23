@@ -268,7 +268,7 @@ public class AbilityCrestService : IAbilityCrestService
                 )
         };
 
-        if (!await ValidateCoinCost(augmentTotal * 20_000))
+        if (!await this.userDataRepository.CheckCoin(augmentTotal * 20_000))
         {
             return ResultCode.CommonMaterialShort;
         }
@@ -381,17 +381,6 @@ public class AbilityCrestService : IAbilityCrestService
         return true;
     }
 
-    private async Task<bool> ValidateCoinCost(int coin)
-    {
-        if (!await this.userDataRepository.CheckCoin(coin))
-        {
-            this.logger.LogWarning("Player doesn't have enough coin to perform action");
-            return false;
-        }
-
-        return true;
-    }
-
     private bool ValidateStep(int currLevel, int step)
     {
         if (step != currLevel + 1)
@@ -430,7 +419,7 @@ public class AbilityCrestService : IAbilityCrestService
             2 => rarityInfo.MaxAtkPlusCount,
             _
                 => throw new DragaliaException(
-                    ResultCode.AbilityCrestBuildupPieceStepError,
+                    ResultCode.CommonInvalidArgument,
                     "Invalid augment type"
                 )
         };

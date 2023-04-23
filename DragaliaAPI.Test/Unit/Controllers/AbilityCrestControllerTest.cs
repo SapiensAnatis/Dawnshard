@@ -134,4 +134,124 @@ public class AbilityCrestControllerTest
         this.mockAbilityCrestService.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
+
+    [Fact]
+    public async Task BuildupPlusCount_AbilityCrestNotInMasterAssetReturnsError()
+    {
+        ResultCodeData data = (
+            await this.abilityCrestController.BuildupPlusCount(new() { ability_crest_id = 0 })
+        ).GetData<ResultCodeData>()!;
+
+        data.result_code.Should().Be(ResultCode.AbilityCrestIsNotPlayable);
+    }
+
+    [Fact]
+    public async Task BuildupPlusCount_OnePieceUnsuccessfulReturnsError()
+    {
+        this.mockAbilityCrestService
+            .SetupSequence(
+                x =>
+                    x.TryBuildupAugments(
+                        MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
+                        It.IsAny<AtgenPlusCountParamsList>()
+                    )
+            )
+            .ReturnsAsync(ResultCode.Success)
+            .ReturnsAsync(ResultCode.AbilityCrestBuildupPlusCountCountError);
+
+        ResultCodeData data = (
+            await this.abilityCrestController.BuildupPlusCount(
+                new AbilityCrestBuildupPlusCountRequest()
+                {
+                    ability_crest_id = AbilityCrests.ManaFount,
+                    plus_count_params_list = new List<AtgenPlusCountParamsList>() { new(), new() }
+                }
+            )
+        ).GetData<ResultCodeData>()!;
+
+        data.result_code.Should().Be(ResultCode.AbilityCrestBuildupPlusCountCountError);
+        this.mockAbilityCrestService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task BuildupPlusCount_AllPiecesSuccessfulReturnsSuccess()
+    {
+        this.mockAbilityCrestService
+            .SetupSequence(
+                x =>
+                    x.TryBuildupAugments(
+                        MasterAsset.AbilityCrest.Get(AbilityCrests.ManaFount),
+                        It.IsAny<AtgenPlusCountParamsList>()
+                    )
+            )
+            .ReturnsAsync(ResultCode.Success)
+            .ReturnsAsync(ResultCode.Success);
+
+        this.mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList() { });
+
+        AbilityCrestBuildupPlusCountData data = (
+            await this.abilityCrestController.BuildupPlusCount(
+                new AbilityCrestBuildupPlusCountRequest()
+                {
+                    ability_crest_id = AbilityCrests.ManaFount,
+                    plus_count_params_list = new List<AtgenPlusCountParamsList>() { new(), new() }
+                }
+            )
+        ).GetData<AbilityCrestBuildupPlusCountData>()!;
+
+        data.update_data_list.Should().BeEquivalentTo(new UpdateDataList() { });
+        this.mockAbilityCrestService.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task ResetPlusCount_OnePieceUnsuccessfulReturnsError()
+    {
+        this.mockAbilityCrestService
+            .SetupSequence(x => x.TryResetAugments(AbilityCrests.ManaFount, It.IsAny<int>()))
+            .ReturnsAsync(ResultCode.Success)
+            .ReturnsAsync(ResultCode.CommonInvalidArgument);
+
+        ResultCodeData data = (
+            await this.abilityCrestController.ResetPlusCount(
+                new AbilityCrestResetPlusCountRequest()
+                {
+                    ability_crest_id = AbilityCrests.ManaFount,
+                    plus_count_type_list = new List<int>() { 1, 0 }
+                }
+            )
+        ).GetData<ResultCodeData>()!;
+
+        data.result_code.Should().Be(ResultCode.CommonInvalidArgument);
+        this.mockAbilityCrestService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task ResetPlusCount_AllPiecesSuccessfulReturnsSuccess()
+    {
+        this.mockAbilityCrestService
+            .SetupSequence(x => x.TryResetAugments(AbilityCrests.ManaFount, It.IsAny<int>()))
+            .ReturnsAsync(ResultCode.Success)
+            .ReturnsAsync(ResultCode.Success);
+
+        this.mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList() { });
+
+        AbilityCrestResetPlusCountData data = (
+            await this.abilityCrestController.ResetPlusCount(
+                new AbilityCrestResetPlusCountRequest()
+                {
+                    ability_crest_id = AbilityCrests.ManaFount,
+                    plus_count_type_list = new List<int>() { 1, 2 }
+                }
+            )
+        ).GetData<AbilityCrestResetPlusCountData>()!;
+
+        data.update_data_list.Should().BeEquivalentTo(new UpdateDataList() { });
+        this.mockAbilityCrestService.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
+    }
 }

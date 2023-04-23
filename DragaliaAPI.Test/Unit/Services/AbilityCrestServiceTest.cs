@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
@@ -949,5 +950,312 @@ public class AbilityCrestServiceTest
 
         this.mockInventoryRepository.VerifyAll();
         this.mockAbilityCrestRepository.VerifyAll();
+    }
+
+    [Fact]
+    public async Task TryBuildupAugments_InvalidAugmentNumberReturnsInvalidResultCode()
+    {
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
+            AbilityCrests.TutelarysDestinyWolfsBoon
+        );
+        AtgenPlusCountParamsList augmentParams = new() { plus_count = 41, plus_count_type = 1 };
+
+        (await this.abilityCrestService.TryBuildupAugments(abilityCrest, augmentParams))
+            .Should()
+            .Be(ResultCode.AbilityCrestBuildupPlusCountCountError);
+    }
+
+    [Fact]
+    public async Task TryBuildupAugments_InvalidAugmentTypeThrowsError()
+    {
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
+            AbilityCrests.TutelarysDestinyWolfsBoon
+        );
+        AtgenPlusCountParamsList augmentParams = new() { plus_count = 40, plus_count_type = 0 };
+
+        try
+        {
+            await this.abilityCrestService.TryBuildupAugments(abilityCrest, augmentParams);
+            Assert.Fail("Should have thrown error when augment type invalid");
+        }
+        catch (DragaliaException e)
+        {
+            e.Code.Should().Be(ResultCode.CommonInvalidArgument);
+        }
+    }
+
+    [Fact]
+    public async Task TryBuildupAugments_AbilityCrestNotFoundInDbThrowsError()
+    {
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
+            AbilityCrests.TutelarysDestinyWolfsBoon
+        );
+        AtgenPlusCountParamsList augmentParams = new() { plus_count = 40, plus_count_type = 2 };
+
+        this.mockAbilityCrestRepository
+            .Setup(x => x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon))
+            .ReturnsAsync(() => null);
+
+        try
+        {
+            await this.abilityCrestService.TryBuildupAugments(abilityCrest, augmentParams);
+            Assert.Fail("Should have been unable to find ability crest in db and thrown error");
+        }
+        catch (DragaliaException e)
+        {
+            e.Code.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
+        }
+
+        this.mockAbilityCrestRepository.VerifyAll();
+    }
+
+    [Fact]
+    public async Task TryBuildupAugments_DecreaseInAugmentsReturnsInvalidResultCode()
+    {
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
+            AbilityCrests.TutelarysDestinyWolfsBoon
+        );
+        AtgenPlusCountParamsList augmentParams = new() { plus_count = 39, plus_count_type = 1 };
+
+        this.mockAbilityCrestRepository
+            .Setup(x => x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon))
+            .ReturnsAsync(
+                new DbAbilityCrest()
+                {
+                    AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                    DeviceAccountId = "id",
+                    HpPlusCount = 40,
+                    AttackPlusCount = 38
+                }
+            );
+
+        (await this.abilityCrestService.TryBuildupAugments(abilityCrest, augmentParams))
+            .Should()
+            .Be(ResultCode.AbilityCrestBuildupPlusCountCountError);
+
+        this.mockAbilityCrestRepository.VerifyAll();
+    }
+
+    [Fact]
+    public async Task TryBuildupAugments_NotEnoughMaterialsReturnsInvalidResultCode()
+    {
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
+            AbilityCrests.TutelarysDestinyWolfsBoon
+        );
+        AtgenPlusCountParamsList augmentParams = new() { plus_count = 38, plus_count_type = 2 };
+
+        this.mockAbilityCrestRepository
+            .Setup(x => x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon))
+            .ReturnsAsync(
+                new DbAbilityCrest()
+                {
+                    AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                    DeviceAccountId = "id",
+                    HpPlusCount = 40,
+                    AttackPlusCount = 31
+                }
+            );
+
+        this.mockInventoryRepository
+            .Setup(
+                x =>
+                    x.CheckQuantity(
+                        new Dictionary<Materials, int>() { { Materials.AmplifyingGemstone, 7 } }
+                    )
+            )
+            .ReturnsAsync(false);
+
+        (await this.abilityCrestService.TryBuildupAugments(abilityCrest, augmentParams))
+            .Should()
+            .Be(ResultCode.AbilityCrestBuildupPlusCountCountError);
+
+        this.mockAbilityCrestRepository.VerifyAll();
+        this.mockInventoryRepository.VerifyAll();
+    }
+
+    [Theory]
+    [InlineData(AbilityCrests.WorthyRivals, 1, 50)]
+    [InlineData(AbilityCrests.WorthyRivals, 2, 1)]
+    [InlineData(AbilityCrests.ManaFount, 1, 1)]
+    [InlineData(AbilityCrests.ManaFount, 2, 50)]
+    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, 1, 40)]
+    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, 2, 1)]
+    [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, 1, 1)]
+    [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, 2, 40)]
+    public async Task TryBuildupAugments_SuccessfulReturnsSuccessfulResultCode(
+        AbilityCrests abilityCrestId,
+        int augmentType,
+        int amount
+    )
+    {
+        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);
+        AtgenPlusCountParamsList augmentParams =
+            new() { plus_count = amount, plus_count_type = augmentType };
+        Materials material =
+            augmentType == 1 ? Materials.FortifyingGemstone : Materials.AmplifyingGemstone;
+
+        this.mockAbilityCrestRepository
+            .Setup(x => x.FindAsync(abilityCrestId))
+            .ReturnsAsync(
+                new DbAbilityCrest() { AbilityCrestId = abilityCrestId, DeviceAccountId = "id" }
+            );
+
+        this.mockInventoryRepository
+            .Setup(x => x.CheckQuantity(new Dictionary<Materials, int>() { { material, amount } }))
+            .ReturnsAsync(true);
+
+        this.mockInventoryRepository
+            .Setup(
+                x => x.UpdateQuantity(new Dictionary<Materials, int>() { { material, -amount } })
+            )
+            .Returns(Task.CompletedTask);
+
+        (await this.abilityCrestService.TryBuildupAugments(abilityCrest, augmentParams))
+            .Should()
+            .Be(ResultCode.Success);
+
+        this.mockAbilityCrestRepository.VerifyAll();
+        this.mockInventoryRepository.VerifyAll();
+    }
+
+    [Fact]
+    public async Task TryResetAugments_AbilityCrestNotFoundInDbThrowsError()
+    {
+        this.mockAbilityCrestRepository
+            .Setup(x => x.FindAsync(AbilityCrests.WorthyRivals))
+            .ReturnsAsync(() => null);
+
+        try
+        {
+            await this.abilityCrestService.TryResetAugments(AbilityCrests.WorthyRivals, 1);
+            Assert.Fail("Should have been unable to find ability crest in db and thrown error");
+        }
+        catch (DragaliaException e)
+        {
+            e.Code.Should().Be(ResultCode.AbilityCrestBuildupPieceUnablePiece);
+        }
+
+        this.mockAbilityCrestRepository.VerifyAll();
+    }
+
+    [Fact]
+    public async Task TryResetAugments_InvalidAugmentTypeReturnsInvalidResultCode()
+    {
+        this.mockAbilityCrestRepository
+            .Setup(x => x.FindAsync(AbilityCrests.WorthyRivals))
+            .ReturnsAsync(
+                new DbAbilityCrest()
+                {
+                    AbilityCrestId = AbilityCrests.WorthyRivals,
+                    DeviceAccountId = "id"
+                }
+            );
+
+        try
+        {
+            await this.abilityCrestService.TryResetAugments(AbilityCrests.WorthyRivals, 0);
+            Assert.Fail("Should have thrown error when augment type invalid");
+        }
+        catch (DragaliaException e)
+        {
+            e.Code.Should().Be(ResultCode.CommonInvalidArgument);
+        }
+
+        this.mockAbilityCrestRepository.VerifyAll();
+    }
+
+    [Fact]
+    public async Task TryResetAugments_NotEnoughCoinReturnsInvalidResultCode()
+    {
+        this.mockAbilityCrestRepository
+            .Setup(x => x.FindAsync(AbilityCrests.WorthyRivals))
+            .ReturnsAsync(
+                new DbAbilityCrest()
+                {
+                    AbilityCrestId = AbilityCrests.WorthyRivals,
+                    DeviceAccountId = "id",
+                    HpPlusCount = 35,
+                    AttackPlusCount = 50
+                }
+            );
+
+        this.mockUserDataRepository.Setup(x => x.CheckCoin(700_000)).ReturnsAsync(false);
+
+        (await this.abilityCrestService.TryResetAugments(AbilityCrests.WorthyRivals, 1))
+            .Should()
+            .Be(ResultCode.CommonMaterialShort);
+
+        this.mockAbilityCrestRepository.VerifyAll();
+        this.mockUserDataRepository.VerifyAll();
+    }
+
+    [Theory]
+    [InlineData(AbilityCrests.WorthyRivals, 1)]
+    [InlineData(AbilityCrests.HisCleverBrother, 50)]
+    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, 1)]
+    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, 40)]
+    public async Task TryResetAugments_SuccessfulReturnsSuccessfulResultCodeForHpAugments(
+        AbilityCrests abilityCrestId,
+        int amount
+    )
+    {
+        this.mockAbilityCrestRepository
+            .Setup(x => x.FindAsync(abilityCrestId))
+            .ReturnsAsync(
+                new DbAbilityCrest()
+                {
+                    AbilityCrestId = abilityCrestId,
+                    DeviceAccountId = "id",
+                    HpPlusCount = amount,
+                    AttackPlusCount = 30
+                }
+            );
+
+        this.mockUserDataRepository.Setup(x => x.CheckCoin(amount * 20_000)).ReturnsAsync(true);
+        this.mockUserDataRepository
+            .Setup(x => x.UpdateCoin(-amount * 20_000))
+            .Returns(Task.CompletedTask);
+
+        (await this.abilityCrestService.TryResetAugments(abilityCrestId, 1))
+            .Should()
+            .Be(ResultCode.Success);
+
+        this.mockAbilityCrestRepository.VerifyAll();
+        this.mockUserDataRepository.VerifyAll();
+    }
+
+    [Theory]
+    [InlineData(AbilityCrests.DragonsNest, 1)]
+    [InlineData(AbilityCrests.ManaFount, 50)]
+    [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, 1)]
+    [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, 40)]
+    public async Task TryResetAugments_SuccessfulReturnsSuccessfulResultCodeForAttackAugments(
+        AbilityCrests abilityCrestId,
+        int amount
+    )
+    {
+        this.mockAbilityCrestRepository
+            .Setup(x => x.FindAsync(abilityCrestId))
+            .ReturnsAsync(
+                new DbAbilityCrest()
+                {
+                    AbilityCrestId = abilityCrestId,
+                    DeviceAccountId = "id",
+                    HpPlusCount = 25,
+                    AttackPlusCount = amount
+                }
+            );
+
+        this.mockUserDataRepository.Setup(x => x.CheckCoin(amount * 20_000)).ReturnsAsync(true);
+        this.mockUserDataRepository
+            .Setup(x => x.UpdateCoin(-amount * 20_000))
+            .Returns(Task.CompletedTask);
+
+        (await this.abilityCrestService.TryResetAugments(abilityCrestId, 2))
+            .Should()
+            .Be(ResultCode.Success);
+
+        this.mockAbilityCrestRepository.VerifyAll();
+        this.mockUserDataRepository.VerifyAll();
     }
 }
