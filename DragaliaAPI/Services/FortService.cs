@@ -223,13 +223,13 @@ public class FortService : IFortService
         if (!MasterAsset.FortPlant.TryGetValue(buildPlantId, out FortPlantDetail? plantDetail))
         {
             // This is unlikely to happen, but best to keep the check just in case
-        
+
             this.logger.LogError(
                 "Failed to lookup build information for upgrade of build {@build} to level {level}!",
                 build,
                 build.Level + 1
             );
-        
+
             throw new DragaliaException(
                 ResultCode.FortLevelupAlreadyWorking,
                 "Illegal level up attempt"
