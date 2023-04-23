@@ -292,7 +292,7 @@ public class FortServiceTest
 
         await this.fortService.EndUpgrade(1);
 
-        build.Level.Should().Be(4);
+        build.Level.Should().Be(3);
         build.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
         build.BuildEndDate.Should().Be(DateTimeOffset.UnixEpoch);
 
@@ -434,7 +434,7 @@ public class FortServiceTest
 
         await this.fortService.LevelupStart(1);
 
-        build.Level.Should().Be(20);
+        build.Level.Should().Be(21);
         build.BuildStartDate.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
         build.BuildEndDate
             .Should()

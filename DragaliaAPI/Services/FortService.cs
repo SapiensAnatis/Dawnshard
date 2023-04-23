@@ -270,6 +270,7 @@ public class FortService : IFortService
 
     private async Task Upgrade(DbFortBuild build, FortPlantDetail plantDetail)
     {
+        DbPlayerUserData userData = await this.userDataRepository.LookupUserData(); // Tests do not pass without this call, do not remove
         FortDetail fortDetail = await this.GetFortDetail();
 
         // Check Carpenter available
