@@ -9,15 +9,27 @@ updates:
     directory: "/DragaliaAPI"
     schedule:
       interval: "weekly"
-  - package-ecosystem: "NuGet"
+  - package-ecosystem: "nuget"
     directory: "/DragaliaAPI"
     schedule:
       interval: "daily"
-  - package-ecosystem: "NuGet"
+  - package-ecosystem: "nuget"
+    directory: "/DragaliaAPI.Test"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "nuget"
     directory: "/DragaliaAPI.Database"
     schedule:
       interval: "daily"
-  - package-ecosystem: "NuGet"
+  - package-ecosystem: "nuget"
+    directory: "/DragaliaAPI.Database.Test"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "nuget"
     directory: "/DragaliaAPI.Shared"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "nuget"
+    directory: "/DragaliaAPI.Shared.Test"
     schedule:
       interval: "daily"
