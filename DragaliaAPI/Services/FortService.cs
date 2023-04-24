@@ -147,7 +147,7 @@ public class FortService : IFortService
         }
 
         // Cancel build
-        build.Level--;
+        build.Level -= 1;
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
 
@@ -172,7 +172,6 @@ public class FortService : IFortService
         }
 
         // Update values
-        build.Level += 1;
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
     }
@@ -223,8 +222,7 @@ public class FortService : IFortService
 
         if (!MasterAsset.FortPlant.TryGetValue(buildPlantId, out FortPlantDetail? plantDetail))
         {
-            // KNOWN ISSUE: Sometimes when upgrading the client thinks the building is level e.g. 39 but it's actually
-            // 40. Then it throws an exception here trying to look up data beyond the max level.
+            // This is unlikely to happen, but best to keep the check just in case
 
             this.logger.LogError(
                 "Failed to lookup build information for upgrade of build {@build} to level {level}!",
@@ -244,6 +242,7 @@ public class FortService : IFortService
 
         await Upgrade(build, plantDetail);
 
+        build.Level += 1;
         build.BuildStartDate = startDate;
         build.BuildEndDate = endDate;
 
@@ -271,7 +270,6 @@ public class FortService : IFortService
 
     private async Task Upgrade(DbFortBuild build, FortPlantDetail plantDetail)
     {
-        DbPlayerUserData userData = await this.userDataRepository.LookupUserData();
         FortDetail fortDetail = await this.GetFortDetail();
 
         // Check Carpenter available

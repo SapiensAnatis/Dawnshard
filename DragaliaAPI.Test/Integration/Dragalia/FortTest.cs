@@ -181,7 +181,7 @@ public class FortTest : IntegrationTestBase
                 {
                     DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                     PlantId = FortPlants.StaffDojo,
-                    Level = 1,
+                    Level = 2,
                     PositionX = 2,
                     PositionZ = 2,
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1682110410),
@@ -243,7 +243,7 @@ public class FortTest : IntegrationTestBase
                 {
                     DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                     PlantId = FortPlants.StaffDojo,
-                    Level = 1,
+                    Level = 2,
                     PositionX = 2,
                     PositionZ = 2,
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
@@ -376,7 +376,7 @@ public class FortTest : IntegrationTestBase
         result.build_start_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().BeAfter(result.build_start_date);
-        result.level.Should().Be(2);
+        result.level.Should().Be(3);
     }
 
     [Fact]
