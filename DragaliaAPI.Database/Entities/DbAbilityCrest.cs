@@ -66,7 +66,7 @@ public class DbAbilityCrest : IDbHasAccountId
     /// Gets or sets the time at which the wyrmprint was received.
     /// </summary>
     [TypeConverter(typeof(DateTimeOffsetConverter))]
-    public DateTimeOffset GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; } = DateTimeOffset.UtcNow;
 
     [NotMapped]
     public int AbilityLevel => (LimitBreakCount / 2) + 1;

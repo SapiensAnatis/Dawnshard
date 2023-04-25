@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Database.Repositories;
 
-internal class AbilityCrestRepository : IAbilityCrestRepository
+public class AbilityCrestRepository : IAbilityCrestRepository
 {
     private readonly ApiContext apiContext;
     private readonly IPlayerDetailsService playerDetailsService;
@@ -34,7 +34,7 @@ internal class AbilityCrestRepository : IAbilityCrestRepository
 
         if (await this.FindAsync(abilityCrestId) is not null)
         {
-            this.logger.LogDebug("Ability crest was already owned.");
+            this.logger.LogWarning("Ability crest was already owned.");
             return;
         }
 

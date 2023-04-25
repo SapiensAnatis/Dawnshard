@@ -958,7 +958,8 @@ public class AbilityCrestServiceTest
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
             AbilityCrests.TutelarysDestinyWolfsBoon
         );
-        AtgenPlusCountParamsList augmentParams = new() { plus_count = 41, plus_count_type = 1 };
+        AtgenPlusCountParamsList augmentParams =
+            new() { plus_count = 41, plus_count_type = PlusCountType.Hp };
 
         (await this.abilityCrestService.TryBuildupAugments(abilityCrest, augmentParams))
             .Should()
@@ -990,7 +991,8 @@ public class AbilityCrestServiceTest
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
             AbilityCrests.TutelarysDestinyWolfsBoon
         );
-        AtgenPlusCountParamsList augmentParams = new() { plus_count = 40, plus_count_type = 2 };
+        AtgenPlusCountParamsList augmentParams =
+            new() { plus_count = 40, plus_count_type = PlusCountType.Atk };
 
         this.mockAbilityCrestRepository
             .Setup(x => x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon))
@@ -1015,7 +1017,8 @@ public class AbilityCrestServiceTest
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
             AbilityCrests.TutelarysDestinyWolfsBoon
         );
-        AtgenPlusCountParamsList augmentParams = new() { plus_count = 39, plus_count_type = 1 };
+        AtgenPlusCountParamsList augmentParams =
+            new() { plus_count = 39, plus_count_type = PlusCountType.Hp };
 
         this.mockAbilityCrestRepository
             .Setup(x => x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon))
@@ -1042,7 +1045,8 @@ public class AbilityCrestServiceTest
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
             AbilityCrests.TutelarysDestinyWolfsBoon
         );
-        AtgenPlusCountParamsList augmentParams = new() { plus_count = 38, plus_count_type = 2 };
+        AtgenPlusCountParamsList augmentParams =
+            new() { plus_count = 38, plus_count_type = PlusCountType.Atk };
 
         this.mockAbilityCrestRepository
             .Setup(x => x.FindAsync(AbilityCrests.TutelarysDestinyWolfsBoon))
@@ -1074,17 +1078,17 @@ public class AbilityCrestServiceTest
     }
 
     [Theory]
-    [InlineData(AbilityCrests.WorthyRivals, 1, 50)]
-    [InlineData(AbilityCrests.WorthyRivals, 2, 1)]
-    [InlineData(AbilityCrests.ManaFount, 1, 1)]
-    [InlineData(AbilityCrests.ManaFount, 2, 50)]
-    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, 1, 40)]
-    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, 2, 1)]
-    [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, 1, 1)]
-    [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, 2, 40)]
+    [InlineData(AbilityCrests.WorthyRivals, PlusCountType.Hp, 50)]
+    [InlineData(AbilityCrests.WorthyRivals, PlusCountType.Atk, 1)]
+    [InlineData(AbilityCrests.ManaFount, PlusCountType.Hp, 1)]
+    [InlineData(AbilityCrests.ManaFount, PlusCountType.Atk, 50)]
+    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, PlusCountType.Hp, 40)]
+    [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, PlusCountType.Atk, 1)]
+    [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, PlusCountType.Hp, 1)]
+    [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, PlusCountType.Atk, 40)]
     public async Task TryBuildupAugments_SuccessfulReturnsSuccessfulResultCode(
         AbilityCrests abilityCrestId,
-        int augmentType,
+        PlusCountType augmentType,
         int amount
     )
     {
@@ -1092,7 +1096,9 @@ public class AbilityCrestServiceTest
         AtgenPlusCountParamsList augmentParams =
             new() { plus_count = amount, plus_count_type = augmentType };
         Materials material =
-            augmentType == 1 ? Materials.FortifyingGemstone : Materials.AmplifyingGemstone;
+            augmentType == PlusCountType.Hp
+                ? Materials.FortifyingGemstone
+                : Materials.AmplifyingGemstone;
 
         this.mockAbilityCrestRepository
             .Setup(x => x.FindAsync(abilityCrestId))
@@ -1127,7 +1133,10 @@ public class AbilityCrestServiceTest
 
         try
         {
-            await this.abilityCrestService.TryResetAugments(AbilityCrests.WorthyRivals, 1);
+            await this.abilityCrestService.TryResetAugments(
+                AbilityCrests.WorthyRivals,
+                PlusCountType.Hp
+            );
             Assert.Fail("Should have been unable to find ability crest in db and thrown error");
         }
         catch (DragaliaException e)
@@ -1181,7 +1190,12 @@ public class AbilityCrestServiceTest
 
         this.mockUserDataRepository.Setup(x => x.CheckCoin(700_000)).ReturnsAsync(false);
 
-        (await this.abilityCrestService.TryResetAugments(AbilityCrests.WorthyRivals, 1))
+        (
+            await this.abilityCrestService.TryResetAugments(
+                AbilityCrests.WorthyRivals,
+                PlusCountType.Hp
+            )
+        )
             .Should()
             .Be(ResultCode.CommonMaterialShort);
 
@@ -1216,7 +1230,7 @@ public class AbilityCrestServiceTest
             .Setup(x => x.UpdateCoin(-amount * 20_000))
             .Returns(Task.CompletedTask);
 
-        (await this.abilityCrestService.TryResetAugments(abilityCrestId, 1))
+        (await this.abilityCrestService.TryResetAugments(abilityCrestId, PlusCountType.Hp))
             .Should()
             .Be(ResultCode.Success);
 
@@ -1251,7 +1265,7 @@ public class AbilityCrestServiceTest
             .Setup(x => x.UpdateCoin(-amount * 20_000))
             .Returns(Task.CompletedTask);
 
-        (await this.abilityCrestService.TryResetAugments(abilityCrestId, 2))
+        (await this.abilityCrestService.TryResetAugments(abilityCrestId, PlusCountType.Atk))
             .Should()
             .Be(ResultCode.Success);
 

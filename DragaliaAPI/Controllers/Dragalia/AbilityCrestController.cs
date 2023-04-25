@@ -135,7 +135,7 @@ public class AbilityCrestController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> ResetPlusCount(AbilityCrestResetPlusCountRequest request)
     {
-        foreach (int augmentType in request.plus_count_type_list)
+        foreach (PlusCountType augmentType in request.plus_count_type_list)
         {
             ResultCode resultCode = await this.abilityCrestService.TryResetAugments(
                 request.ability_crest_id,

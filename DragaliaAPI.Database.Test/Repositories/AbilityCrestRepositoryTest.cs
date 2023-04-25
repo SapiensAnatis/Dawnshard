@@ -15,17 +15,20 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
     private readonly IAbilityCrestRepository abilityCrestRepository;
+    private readonly Mock<ILogger<AbilityCrestRepository>> logger;
 
     public AbilityCrestRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
+        this.logger = new Mock<ILogger<AbilityCrestRepository>>();
 
         this.abilityCrestRepository = new AbilityCrestRepository(
             this.fixture.ApiContext,
             IdentityTestUtils.MockPlayerDetailsService.Object,
-            LoggerTestUtils.Create<AbilityCrestRepository>()
+            this.logger.Object
         );
 
+        CommonAssertionOptions.ApplyTimeOptions();
         CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
@@ -49,6 +52,33 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
                     AbilityCrestId = AbilityCrests.ADogsDay
                 }
             );
+    }
+
+    [Fact]
+    public async Task Add_AbilityCrestAlreadyExistsWarnsLogger()
+    {
+        await this.abilityCrestRepository.Add(AbilityCrests.ADragonyuleforIlia);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        await this.abilityCrestRepository.Add(AbilityCrests.ADragonyuleforIlia);
+        this.logger.Verify(
+            x =>
+                x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>(
+                        (o, t) =>
+                            string.Equals(
+                                "Ability crest was already owned.",
+                                o.ToString(),
+                                StringComparison.InvariantCultureIgnoreCase
+                            )
+                    ),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+                ),
+            Times.Once
+        );
     }
 
     [Fact]

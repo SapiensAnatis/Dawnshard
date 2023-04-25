@@ -210,7 +210,9 @@ public class AbilityCrestControllerTest
     public async Task ResetPlusCount_OnePieceUnsuccessfulReturnsError()
     {
         this.mockAbilityCrestService
-            .SetupSequence(x => x.TryResetAugments(AbilityCrests.ManaFount, It.IsAny<int>()))
+            .SetupSequence(
+                x => x.TryResetAugments(AbilityCrests.ManaFount, It.IsAny<PlusCountType>())
+            )
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.CommonInvalidArgument);
 
@@ -219,7 +221,7 @@ public class AbilityCrestControllerTest
                 new AbilityCrestResetPlusCountRequest()
                 {
                     ability_crest_id = AbilityCrests.ManaFount,
-                    plus_count_type_list = new List<int>() { 1, 0 }
+                    plus_count_type_list = new List<PlusCountType>() { PlusCountType.Hp, 0 }
                 }
             )
         ).GetData<ResultCodeData>()!;
@@ -232,7 +234,9 @@ public class AbilityCrestControllerTest
     public async Task ResetPlusCount_AllPiecesSuccessfulReturnsSuccess()
     {
         this.mockAbilityCrestService
-            .SetupSequence(x => x.TryResetAugments(AbilityCrests.ManaFount, It.IsAny<int>()))
+            .SetupSequence(
+                x => x.TryResetAugments(AbilityCrests.ManaFount, It.IsAny<PlusCountType>())
+            )
             .ReturnsAsync(ResultCode.Success)
             .ReturnsAsync(ResultCode.Success);
 
@@ -245,7 +249,11 @@ public class AbilityCrestControllerTest
                 new AbilityCrestResetPlusCountRequest()
                 {
                     ability_crest_id = AbilityCrests.ManaFount,
-                    plus_count_type_list = new List<int>() { 1, 2 }
+                    plus_count_type_list = new List<PlusCountType>()
+                    {
+                        PlusCountType.Hp,
+                        PlusCountType.Atk
+                    }
                 }
             )
         ).GetData<AbilityCrestResetPlusCountData>()!;

@@ -50,11 +50,11 @@ public class AbilityCrestGetAbilityCrestSetListRequest { }
 public class AbilityCrestResetPlusCountRequest
 {
     public AbilityCrests ability_crest_id { get; set; }
-    public IEnumerable<int> plus_count_type_list { get; set; }
+    public IEnumerable<PlusCountType> plus_count_type_list { get; set; }
 
     public AbilityCrestResetPlusCountRequest(
         AbilityCrests ability_crest_id,
-        IEnumerable<int> plus_count_type_list
+        IEnumerable<PlusCountType> plus_count_type_list
     )
     {
         this.ability_crest_id = ability_crest_id;

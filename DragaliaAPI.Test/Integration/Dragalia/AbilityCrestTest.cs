@@ -252,7 +252,7 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
                     ability_crest_id = AbilityCrests.InanUnendingWorld,
                     plus_count_params_list = new List<AtgenPlusCountParamsList>()
                     {
-                        new() { plus_count = 50, plus_count_type = 1, }
+                        new() { plus_count = 50, plus_count_type = PlusCountType.Hp, }
                     }
                 },
                 ensureSuccessHeader: false
@@ -287,8 +287,8 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
                     ability_crest_id = AbilityCrests.TwinfoldBonds,
                     plus_count_params_list = new List<AtgenPlusCountParamsList>()
                     {
-                        new() { plus_count = 50, plus_count_type = 1 },
-                        new() { plus_count = 25, plus_count_type = 2, }
+                        new() { plus_count = 50, plus_count_type = PlusCountType.Hp },
+                        new() { plus_count = 25, plus_count_type = PlusCountType.Atk }
                     }
                 },
                 ensureSuccessHeader: false
@@ -334,8 +334,8 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
                 ability_crest_id = AbilityCrests.EndlessWaltz,
                 plus_count_params_list = new List<AtgenPlusCountParamsList>()
                 {
-                    new() { plus_count = 1, plus_count_type = 1 },
-                    new() { plus_count = 50, plus_count_type = 2, }
+                    new() { plus_count = 1, plus_count_type = PlusCountType.Hp },
+                    new() { plus_count = 50, plus_count_type = PlusCountType.Atk, }
                 }
             }
         );
@@ -363,7 +363,11 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
                 new AbilityCrestResetPlusCountRequest()
                 {
                     ability_crest_id = AbilityCrests.InanUnendingWorld,
-                    plus_count_type_list = new List<int>() { 1, 2 }
+                    plus_count_type_list = new List<PlusCountType>()
+                    {
+                        PlusCountType.Hp,
+                        PlusCountType.Atk
+                    }
                 },
                 ensureSuccessHeader: false
             )
@@ -394,7 +398,7 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
                 new AbilityCrestResetPlusCountRequest()
                 {
                     ability_crest_id = AbilityCrests.TutelarysDestinyWolfsBoon,
-                    plus_count_type_list = new List<int>() { 1, 0 }
+                    plus_count_type_list = new List<PlusCountType>() { PlusCountType.Hp, 0 }
                 },
                 ensureSuccessHeader: false
             )
@@ -436,7 +440,11 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
             new AbilityCrestResetPlusCountRequest()
             {
                 ability_crest_id = AbilityCrests.TheGeniusTacticianBowsBoon,
-                plus_count_type_list = new List<int>() { 1, 2 }
+                plus_count_type_list = new List<PlusCountType>()
+                {
+                    PlusCountType.Hp,
+                    PlusCountType.Atk
+                }
             }
         );
 

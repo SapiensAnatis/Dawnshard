@@ -224,7 +224,7 @@ public class AbilityCrestService : IAbilityCrestService
         int usedAugments;
         Dictionary<Materials, int> materialMap;
 
-        if (buildup.plus_count_type == 1)
+        if (buildup.plus_count_type == PlusCountType.Hp)
         {
             usedAugments = buildup.plus_count - dbAbilityCrest.HpPlusCount;
             materialMap = new() { { Materials.FortifyingGemstone, usedAugments } };
@@ -240,7 +240,7 @@ public class AbilityCrestService : IAbilityCrestService
             return ResultCode.AbilityCrestBuildupPlusCountCountError;
         }
 
-        if (buildup.plus_count_type == 1)
+        if (buildup.plus_count_type == PlusCountType.Hp)
         {
             dbAbilityCrest.HpPlusCount = buildup.plus_count;
         }
@@ -253,14 +253,17 @@ public class AbilityCrestService : IAbilityCrestService
         return ResultCode.Success;
     }
 
-    public async Task<ResultCode> TryResetAugments(AbilityCrests abilityCrestId, int augmentType)
+    public async Task<ResultCode> TryResetAugments(
+        AbilityCrests abilityCrestId,
+        PlusCountType augmentType
+    )
     {
         DbAbilityCrest dbAbilityCrest = await TryFindAsync(abilityCrestId);
 
         int augmentTotal = augmentType switch
         {
-            1 => dbAbilityCrest.HpPlusCount,
-            2 => dbAbilityCrest.AttackPlusCount,
+            PlusCountType.Hp => dbAbilityCrest.HpPlusCount,
+            PlusCountType.Atk => dbAbilityCrest.AttackPlusCount,
             _
                 => throw new DragaliaException(
                     ResultCode.CommonInvalidArgument,
@@ -273,7 +276,7 @@ public class AbilityCrestService : IAbilityCrestService
             return ResultCode.CommonMaterialShort;
         }
 
-        if (augmentType == 1)
+        if (augmentType == PlusCountType.Hp)
         {
             dbAbilityCrest.HpPlusCount = 0;
         }
@@ -411,12 +414,16 @@ public class AbilityCrestService : IAbilityCrestService
         return step <= levelLimit;
     }
 
-    private bool ValidateAugments(AbilityCrestRarity rarityInfo, int augmentType, int amount)
+    private bool ValidateAugments(
+        AbilityCrestRarity rarityInfo,
+        PlusCountType augmentType,
+        int amount
+    )
     {
         int augmentLimit = augmentType switch
         {
-            1 => rarityInfo.MaxHpPlusCount,
-            2 => rarityInfo.MaxAtkPlusCount,
+            PlusCountType.Hp => rarityInfo.MaxHpPlusCount,
+            PlusCountType.Atk => rarityInfo.MaxAtkPlusCount,
             _
                 => throw new DragaliaException(
                     ResultCode.CommonInvalidArgument,

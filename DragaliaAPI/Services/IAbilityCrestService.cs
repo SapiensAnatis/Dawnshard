@@ -18,5 +18,5 @@ public interface IAbilityCrestService
         AtgenPlusCountParamsList buildup
     );
 
-    Task<ResultCode> TryResetAugments(AbilityCrests abilityCrestId, int augmentType);
+    Task<ResultCode> TryResetAugments(AbilityCrests abilityCrestId, PlusCountType augmentType);
 }

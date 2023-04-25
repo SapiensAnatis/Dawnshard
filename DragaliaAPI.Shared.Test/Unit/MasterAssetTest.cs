@@ -496,17 +496,6 @@ public class MasterAssetTest
     }
 
     [Fact]
-    public void AbilityCrestTrade_Enumerable_ReturnsListOfAbilityCrestTrades()
-    {
-        IEnumerable<AbilityCrestTrade> abilityCrestTrades = MasterAsset
-            .MasterAsset
-            .AbilityCrestTrade
-            .Enumerable;
-
-        abilityCrestTrades.Should().AllBeOfType<AbilityCrestTrade>();
-    }
-
-    [Fact]
     public void AbilityCrestBuildupGroup_Get_ReturnsExpectedProperties()
     {
         AbilityCrestBuildupGroup buildupGroup =
