@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -12,36 +12,36 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-		<PackageReference Include="MessagePack" Version="2.5.64-alpha" />
-		<PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="2.5.64-alpha" />
-		<PackageReference Include="MessagePackAnalyzer" Version="2.5.64-alpha">
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="MessagePack" Version="2.5.108" />
+		<PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="2.5.108" />
+		<PackageReference Include="MessagePackAnalyzer" Version="2.5.108">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.5" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="7.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="7.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
-		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.26.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.3" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.29.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" />
 		<PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
 		<PackageReference Include="Serilog.Expressions" Version="3.4.2-dev-00119" />
-		<PackageReference Include="Serilog.Settings.Configuration" Version="3.5.0-dev-00367" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="3.5.0-dev-00383" />
 		<PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
 		<PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.0" />
-		<PackageReference Include="System.Text.Json" Version="7.0.1" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.29.0" />
+		<PackageReference Include="System.Text.Json" Version="7.0.2" />
 		<PackageReference Include="Serilog" Version="2.12.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
