@@ -1,6 +1,8 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Security.Cryptography;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Test.Utils;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -109,5 +111,95 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
             .SingleAsync();
 
         newCoin.Should().Be(oldCoin + 2000);
+    }
+
+    [Fact]
+    public async Task UpdateDewpoint_UpdatesDewpoint()
+    {
+        int oldDewpoint = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.DewPoint)
+            .SingleAsync();
+
+        await this.userDataRepository.UpdateDewpoint(4000);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        int newDewpoint = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.DewPoint)
+            .SingleAsync();
+
+        newDewpoint.Should().Be(oldDewpoint + 4000);
+    }
+
+    [Fact]
+    public async Task UpdateDewpoint_ThrowsExceptionWhenNegativeDewpoint()
+    {
+        await this.userDataRepository.SetDewpoint(1000);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
+            () => this.userDataRepository.UpdateDewpoint(-1500)
+        );
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        exception.Message.Should().Be("Player cannot have negative eldwater");
+
+        int dewpoint = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.DewPoint)
+            .SingleAsync();
+
+        dewpoint.Should().Be(1000);
+    }
+
+    [Theory]
+    [InlineData(500, true)]
+    [InlineData(1000, true)]
+    [InlineData(1500, false)]
+    public async Task CheckDewpoint_ReturnsExpectedBool(int quantity, bool expectedValue)
+    {
+        await this.userDataRepository.SetDewpoint(1000);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        bool output = await this.userDataRepository.CheckDewpoint(quantity);
+        output.Should().Be(expectedValue);
+    }
+
+    [Fact]
+    public async Task SetDewpoint_SetsDewpointValue()
+    {
+        await this.userDataRepository.SetDewpoint(10001);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        int dewpoint = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.DewPoint)
+            .SingleAsync();
+
+        dewpoint.Should().Be(10001);
+    }
+
+    [Fact]
+    public async Task SetDewpoint_ThrowsExceptionWhenNegative()
+    {
+        int oldDewpoint = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.DewPoint)
+            .SingleAsync();
+
+        ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
+            () => this.userDataRepository.SetDewpoint(-1)
+        );
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        exception.Message.Should().Be("Player cannot have negative eldwater");
+
+        int newDewpoint = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.DewPoint)
+            .SingleAsync();
+
+        newDewpoint.Should().Be(oldDewpoint);
     }
 }

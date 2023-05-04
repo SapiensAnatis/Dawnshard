@@ -21,4 +21,7 @@ public interface IUserDataRepository : IBaseRepository
     Task UpdateCoin(long offset);
     Task<bool> CheckCoin(long quantity);
     Task GiveWyrmite(int quantity);
+    Task UpdateDewpoint(int quantity);
+    Task<bool> CheckDewpoint(int quantity);
+    Task SetDewpoint(int quantity);
 }

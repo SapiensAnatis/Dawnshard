@@ -1,5 +1,10 @@
 [
     {
+        "headline": "Wyrmprints",
+        "timestamp": 1683227627,
+        "description": "You can now buy and upgrade wyrmprints using eldwater. Credit to Nightmerp#0124 who worked on this feature!"
+    },
+    {
         "headline": "Halidom upgrades",
         "timestamp": 1682193563,
         "description": "You should now be able to move and upgrade buildings in the Halidom. You won't be able to claim income but this should be coming soon. Thanks to Skazord#6728 for developing this feature."

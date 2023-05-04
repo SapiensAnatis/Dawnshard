@@ -54,9 +54,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Remove="bin\**" />
 		<Compile Remove="Pages\Components\**" />
+		<Content Remove="bin\**" />
 		<Content Remove="Pages\Components\**" />
+		<EmbeddedResource Remove="bin\**" />
 		<EmbeddedResource Remove="Pages\Components\**" />
+		<None Remove="bin\**" />
 		<None Remove="Pages\Components\**" />
 	</ItemGroup>
 

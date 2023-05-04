@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DragaliaAPI.Database.Entities;
 
@@ -65,7 +66,26 @@ public class DbAbilityCrest : IDbHasAccountId
     /// Gets or sets the time at which the wyrmprint was received.
     /// </summary>
     [TypeConverter(typeof(DateTimeOffsetConverter))]
-    public DateTimeOffset GetTime { get; set; }
+    public DateTimeOffset GetTime { get; set; } = DateTimeOffset.UtcNow;
+
+    [NotMapped]
+    public int AbilityLevel => (LimitBreakCount / 2) + 1;
+
+    /// <summary>
+    /// EF Core / test constructor.
+    /// </summary>
+    public DbAbilityCrest() { }
+
+    /// <summary>
+    /// User-facing constructor.
+    /// </summary>
+    /// <param name="deviceAccountId">Primary key.</param>
+    [SetsRequiredMembers]
+    public DbAbilityCrest(string deviceAccountId, AbilityCrests id)
+    {
+        this.DeviceAccountId = deviceAccountId;
+        this.AbilityCrestId = id;
+    }
 }
 
 internal class DbAbilityCrestConfiguration : IEntityTypeConfiguration<DbAbilityCrest>

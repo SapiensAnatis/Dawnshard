@@ -477,4 +477,220 @@ public class MasterAssetTest
     {
         MasterAsset.MasterAsset.UnitStory[storyId].Type.Should().Be(expectedType);
     }
+
+    [Fact]
+    public void AbilityCrestTrade_Get_ReturnsExpectedProperties()
+    {
+        AbilityCrestTrade abilityCrestTrade = MasterAsset.MasterAsset.AbilityCrestTrade.Get(5101);
+
+        abilityCrestTrade
+            .Should()
+            .BeEquivalentTo(
+                new AbilityCrestTrade(
+                    Id: 5101,
+                    AbilityCrestId: AbilityCrests.SweetSurprise,
+                    NeedDewPoint: 4000,
+                    Priority: 5199
+                )
+            );
+    }
+
+    [Fact]
+    public void AbilityCrestBuildupGroup_Get_ReturnsExpectedProperties()
+    {
+        AbilityCrestBuildupGroup buildupGroup =
+            MasterAsset.MasterAsset.AbilityCrestBuildupGroup.Get(6020603);
+
+        buildupGroup
+            .Should()
+            .BeEquivalentTo(
+                new AbilityCrestBuildupGroup(
+                    Id: 6020603,
+                    AbilityCrestBuildupGroupId: 602,
+                    BuildupPieceType: BuildupPieceTypes.Copies,
+                    Step: 3,
+                    BuildupDewPoint: 0,
+                    BuildupMaterialId1: Materials.AzureInsignia,
+                    BuildupMaterialQuantity1: 200,
+                    BuildupMaterialId2: Materials.DyrenellAureus,
+                    BuildupMaterialQuantity2: 25,
+                    BuildupMaterialId3: 0,
+                    BuildupMaterialQuantity3: 0,
+                    UniqueBuildupMaterialCount: 0
+                )
+            );
+    }
+
+    [Fact]
+    public void AbilityCrestBuildupGroup_MaterialMap_ReturnsExpectedDictionary()
+    {
+        Dictionary<Materials, int> map = MasterAsset.MasterAsset.AbilityCrestBuildupGroup
+            .Get(6020603)
+            .MaterialMap;
+
+        map.Should()
+            .BeEquivalentTo(
+                new Dictionary<Materials, int>()
+                {
+                    { Materials.AzureInsignia, 200 },
+                    { Materials.DyrenellAureus, 25 }
+                }
+            );
+    }
+
+    [Theory]
+    [InlineData(6040104, false)]
+    [InlineData(11030602, true)]
+    public void AbilityCrestBuildupGroup_IsUseUniqueMaterial_ReturnsExpectedBool(
+        int id,
+        bool expected
+    )
+    {
+        bool actual = MasterAsset.MasterAsset.AbilityCrestBuildupGroup.Get(id).IsUseUniqueMaterial;
+
+        actual.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData(6020603, false)]
+    [InlineData(5010101, true)]
+    public void AbilityCrestBuildupGroup_IsUseDewpoint_ReturnsExpectedBool(int id, bool expected)
+    {
+        bool actual = MasterAsset.MasterAsset.AbilityCrestBuildupGroup.Get(id).IsUseDewpoint;
+
+        actual.Should().Be(expected);
+    }
+
+    [Fact]
+    public void AbilityCrestBuildupLevel_Get_ReturnsExpectedProperties()
+    {
+        AbilityCrestBuildupLevel buildupLevel =
+            MasterAsset.MasterAsset.AbilityCrestBuildupLevel.Get(901010);
+
+        buildupLevel
+            .Should()
+            .BeEquivalentTo(
+                new AbilityCrestBuildupLevel(
+                    Id: 901010,
+                    RarityGroup: 901,
+                    Level: 10,
+                    BuildupMaterialId1: Materials.HolyWater,
+                    BuildupMaterialQuantity1: 2,
+                    BuildupMaterialId2: Materials.ConsecratedWater,
+                    BuildupMaterialQuantity2: 14,
+                    BuildupMaterialId3: 0,
+                    BuildupMaterialQuantity3: 0,
+                    UniqueBuildupMaterialCount: 2
+                )
+            );
+    }
+
+    [Fact]
+    public void AbilityCrestBuildupLevel_MaterialMap_ReturnsExpectedDictionary()
+    {
+        Dictionary<Materials, int> map = MasterAsset.MasterAsset.AbilityCrestBuildupLevel
+            .Get(901010)
+            .MaterialMap;
+
+        map.Should()
+            .BeEquivalentTo(
+                new Dictionary<Materials, int>()
+                {
+                    { Materials.HolyWater, 2 },
+                    { Materials.ConsecratedWater, 14 }
+                }
+            );
+    }
+
+    [Theory]
+    [InlineData(901010, true)]
+    [InlineData(301013, false)]
+    public void AbilityCrestBuildupLevel_IsUseUniqueMaterial_ReturnsExpectedBool(
+        int id,
+        bool expected
+    )
+    {
+        bool actual = MasterAsset.MasterAsset.AbilityCrestBuildupLevel.Get(id).IsUseUniqueMaterial;
+
+        actual.Should().Be(expected);
+    }
+
+    [Fact]
+    public void AbilityCrestRarity_Get_ReturnsExpectedProperties()
+    {
+        AbilityCrestRarity rarity = MasterAsset.MasterAsset.AbilityCrestRarity.Get(9);
+
+        rarity
+            .Should()
+            .BeEquivalentTo(
+                new AbilityCrestRarity(
+                    Id: 9,
+                    MaxLimitLevelByLimitBreak0: 10,
+                    MaxLimitLevelByLimitBreak1: 15,
+                    MaxLimitLevelByLimitBreak2: 20,
+                    MaxLimitLevelByLimitBreak3: 25,
+                    MaxLimitLevelByLimitBreak4: 30,
+                    MaxHpPlusCount: 40,
+                    MaxAtkPlusCount: 40
+                )
+            );
+    }
+
+    [Fact]
+    public void AbilityCrest_Get_ReturnsExpectedProperties()
+    {
+        AbilityCrest abilityCrest = MasterAsset.MasterAsset.AbilityCrest.Get(
+            AbilityCrests.TheGeniusTacticianBowsBoon
+        );
+
+        abilityCrest
+            .Should()
+            .BeEquivalentTo(
+                new AbilityCrest(
+                    Id: AbilityCrests.TheGeniusTacticianBowsBoon,
+                    AbilityCrestBuildupGroupId: 1101,
+                    AbilityCrestLevelRarityGroupId: 901,
+                    Rarity: 9,
+                    UniqueBuildupMaterialId: Materials.GeniusoftheCenturysMemory,
+                    DuplicateEntityId: Materials.GeniusoftheCenturysMemory,
+                    DuplicateEntityQuantity: 6,
+                    DuplicateEntityType: EntityTypes.Material
+                )
+            );
+    }
+
+    [Fact]
+    public void AbilityCrest_GetBuildupGroupId_ReturnsExpectedId()
+    {
+        AbilityCrest abilityCrest = MasterAsset.MasterAsset.AbilityCrest.Get(
+            AbilityCrests.TheGeniusTacticianBowsBoon
+        );
+
+        int buildupGroupId = abilityCrest.GetBuildupGroupId(BuildupPieceTypes.Copies, 4);
+        buildupGroupId.Should().Be(11010604);
+    }
+
+    [Fact]
+    public void AbilityCrest_GetBuildupLevelId_ReturnsExpectedId()
+    {
+        AbilityCrest abilityCrest = MasterAsset.MasterAsset.AbilityCrest.Get(
+            AbilityCrests.TheGeniusTacticianBowsBoon
+        );
+
+        int buildupLevelId = abilityCrest.GetBuildupLevelId(9);
+        buildupLevelId.Should().Be(901009);
+    }
+
+    [Fact]
+    public void AbilityCrest_DuplicateMaterialMap_ReturnsExpectedDictionary()
+    {
+        Dictionary<Materials, int> map = MasterAsset.MasterAsset.AbilityCrest
+            .Get(AbilityCrests.TheGeniusTacticianBowsBoon)
+            .DuplicateMaterialMap;
+
+        map.Should()
+            .BeEquivalentTo(
+                new Dictionary<Materials, int>() { { Materials.GeniusoftheCenturysMemory, 6 } }
+            );
+    }
 }
