@@ -1,43 +1,55 @@
-﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Database.Utils;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using MessagePack.Resolvers;
+using MessagePack;
 using Xunit.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database;
+using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Test.Integration.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.CharaController"/>
 /// </summary>
-public class CharaTest : TestFixture
+[Collection("DragaliaIntegration")]
+public class CharaTest : IClassFixture<IntegrationTestFixture>
 {
-    public CharaTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
+    private readonly ITestOutputHelper outputHelper;
+
+    public CharaTest(IntegrationTestFixture fixture, ITestOutputHelper outputHelper)
     {
-        this.AddCharacter(Charas.Celliera);
-        this.AddCharacter(Charas.SummerCelliera);
-        this.AddCharacter(Charas.Harle);
-        this.AddCharacter(Charas.Ezelith);
-        this.AddCharacter(Charas.Xander);
-        this.AddCharacter(Charas.Vixel);
-        this.AddCharacter(Charas.Nefaria);
-        this.AddCharacter(Charas.Mitsuba);
-        this.AddCharacter(Charas.Pipple);
-        this.AddCharacter(Charas.GalaZethia);
-        this.AddCharacter(Charas.Vida);
-        this.AddCharacter(Charas.Delphi);
+        this.fixture = fixture;
+        this.outputHelper = outputHelper;
+        client = fixture.CreateClient(
+            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
+        );
+        fixture.AddCharacter(Charas.Celliera).Wait();
+        fixture.AddCharacter(Charas.SummerCelliera).Wait();
+        fixture.AddCharacter(Charas.Harle).Wait();
+        fixture.AddCharacter(Charas.Ezelith).Wait();
+        fixture.AddCharacter(Charas.Xander).Wait();
+        fixture.AddCharacter(Charas.Vixel).Wait();
+        fixture.AddCharacter(Charas.Nefaria).Wait();
+        fixture.AddCharacter(Charas.Mitsuba).Wait();
+        fixture.AddCharacter(Charas.Pipple).Wait();
+        fixture.AddCharacter(Charas.GalaZethia).Wait();
+        fixture.AddCharacter(Charas.Vida).Wait();
+        fixture.AddCharacter(Charas.Delphi).Wait();
     }
 
     [Fact]
     public async Task CharaAwake_IncreasedRarity()
     {
         CharaAwakeData response = (
-            await this.Client.PostMsgpack<CharaAwakeData>(
+            await client.PostMsgpack<CharaAwakeData>(
                 "chara/awake",
                 new CharaAwakeRequest(Charas.Celliera, 5)
             )
@@ -52,20 +64,20 @@ public class CharaTest : TestFixture
     [Fact]
     public async Task CharaBuildup_HasIncreasedXpAndLevel()
     {
-        DbPlayerCharaData charaData = await this.Services
+        DbPlayerCharaData charaData = await fixture.Services
             .GetRequiredService<IUnitRepository>()
-            .GetAllCharaData(DeviceAccountId)
+            .GetAllCharaData(IntegrationTestFixture.DeviceAccountIdConst)
             .Where(x => x.CharaId == Charas.Celliera)
             .FirstAsync();
 
         int matQuantity = (
-            await this.Services
+            await fixture.Services
                 .GetRequiredService<IInventoryRepository>()
-                .GetMaterial(DeviceAccountId, Materials.GoldCrystal)
+                .GetMaterial(IntegrationTestFixture.DeviceAccountIdConst, Materials.GoldCrystal)
         )!.Quantity;
 
         CharaBuildupData response = (
-            await this.Client.PostMsgpack<CharaBuildupData>(
+            await client.PostMsgpack<CharaBuildupData>(
                 "chara/buildup",
                 new CharaBuildupRequest(
                     Charas.Celliera,
@@ -105,7 +117,7 @@ public class CharaTest : TestFixture
     public async Task CharaBuildupMana_HasManaNodes()
     {
         CharaBuildupManaData response = (
-            await this.Client.PostMsgpack<CharaBuildupManaData>(
+            await client.PostMsgpack<CharaBuildupManaData>(
                 "chara/buildup_mana",
                 new CharaBuildupManaRequest(
                     Charas.Celliera,
@@ -128,7 +140,7 @@ public class CharaTest : TestFixture
     public async Task CharaLimitBreak_HasNextFloor()
     {
         CharaLimitBreakData response = (
-            await this.Client.PostMsgpack<CharaLimitBreakData>(
+            await client.PostMsgpack<CharaLimitBreakData>(
                 "chara/limit_break",
                 new CharaLimitBreakRequest(
                     Charas.Celliera,
@@ -149,7 +161,7 @@ public class CharaTest : TestFixture
     public async Task CharaLimitBreakAndBuildupMana_ReturnCorrectData()
     {
         CharaLimitBreakAndBuildupManaData response = (
-            await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaData>(
+            await client.PostMsgpack<CharaLimitBreakAndBuildupManaData>(
                 "chara/limit_break_and_buildup_mana",
                 new CharaLimitBreakAndBuildupManaRequest(
                     Charas.Celliera,
@@ -200,7 +212,7 @@ public class CharaTest : TestFixture
     public async Task CharaManaNodeBuildupHasCorrectInfoOnBothSidesOfSpiral()
     {
         CharaLimitBreakAndBuildupManaData preSpiralResponse = (
-            await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaData>(
+            await client.PostMsgpack<CharaLimitBreakAndBuildupManaData>(
                 "chara/limit_break_and_buildup_mana",
                 new CharaLimitBreakAndBuildupManaRequest(
                     Charas.Delphi,
@@ -243,13 +255,13 @@ public class CharaTest : TestFixture
                     + 40
             );
 
-        await this.Client.PostMsgpack<CharaLimitBreakData>(
+        await client.PostMsgpack<CharaLimitBreakData>(
             "chara/limit_break",
             new CharaLimitBreakRequest(Charas.Delphi, 5, 0)
         );
 
         CharaBuildupManaData postSpiralResponse = (
-            await this.Client.PostMsgpack<CharaBuildupManaData>(
+            await client.PostMsgpack<CharaBuildupManaData>(
                 "chara/buildup_mana",
                 new CharaBuildupManaRequest(
                     Charas.Delphi,
@@ -296,7 +308,7 @@ public class CharaTest : TestFixture
     public async Task CharaBuildupPlatinum_ReturnsFullyBuiltWithSpiralledCharacter()
     {
         CharaBuildupPlatinumData response = (
-            await this.Client.PostMsgpack<CharaBuildupPlatinumData>(
+            await client.PostMsgpack<CharaBuildupPlatinumData>(
                 "chara/buildup_platinum",
                 new CharaBuildupPlatinumRequest(Charas.SummerCelliera)
             )
@@ -330,7 +342,7 @@ public class CharaTest : TestFixture
     public async Task CharaBuildupPlatinum_ReturnsFullyBuiltWithNonSpiralledCharacter()
     {
         CharaBuildupPlatinumData response = (
-            await this.Client.PostMsgpack<CharaBuildupPlatinumData>(
+            await client.PostMsgpack<CharaBuildupPlatinumData>(
                 "chara/buildup_platinum",
                 new CharaBuildupPlatinumRequest(Charas.Harle)
             )
@@ -369,7 +381,7 @@ public class CharaTest : TestFixture
         Charas id
     )
     {
-        await this.Client.PostMsgpack<CharaBuildupManaData>(
+        await client.PostMsgpack<CharaBuildupManaData>(
             "chara/buildup_mana",
             new CharaBuildupManaRequest(
                 id,
@@ -379,7 +391,7 @@ public class CharaTest : TestFixture
         );
 
         CharaBuildupPlatinumData response = (
-            await this.Client.PostMsgpack<CharaBuildupPlatinumData>(
+            await client.PostMsgpack<CharaBuildupPlatinumData>(
                 "chara/buildup_platinum",
                 new CharaBuildupPlatinumRequest(id)
             )
@@ -442,7 +454,7 @@ public class CharaTest : TestFixture
         Charas id
     )
     {
-        await this.Client.PostMsgpack<CharaBuildupManaData>(
+        await client.PostMsgpack<CharaBuildupManaData>(
             "chara/buildup_mana",
             new CharaBuildupManaRequest(
                 id,
@@ -451,7 +463,7 @@ public class CharaTest : TestFixture
             )
         );
         CharaBuildupPlatinumData response = (
-            await this.Client.PostMsgpack<CharaBuildupPlatinumData>(
+            await client.PostMsgpack<CharaBuildupPlatinumData>(
                 "chara/buildup_platinum",
                 new CharaBuildupPlatinumRequest(id)
             )
@@ -506,7 +518,7 @@ public class CharaTest : TestFixture
     public async Task CharaGetCharaUnitSet_ReturnsData()
     {
         CharaGetCharaUnitSetData response = (
-            await this.Client.PostMsgpack<CharaGetCharaUnitSetData>(
+            await client.PostMsgpack<CharaGetCharaUnitSetData>(
                 "chara/get_chara_unit_set",
                 new CharaGetCharaUnitSetRequest(new List<int>() { (int)Charas.Celliera })
             )
@@ -519,7 +531,7 @@ public class CharaTest : TestFixture
     public async Task CharaSetCharaUnitSet_ReturnsCorrectSetData()
     {
         CharaSetCharaUnitSetData response = (
-            await this.Client.PostMsgpack<CharaSetCharaUnitSetData>(
+            await client.PostMsgpack<CharaSetCharaUnitSetData>(
                 "chara/set_chara_unit_set",
                 new CharaSetCharaUnitSetRequest(
                     1,

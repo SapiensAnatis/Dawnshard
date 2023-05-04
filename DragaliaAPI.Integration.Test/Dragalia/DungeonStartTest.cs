@@ -1,26 +1,36 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using System.Text.Json;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Xunit.Abstractions;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Test.Integration.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.DungeonStartController"/>.
 /// </summary>
-public class DungeonStartTest : TestFixture
+[Collection("DragaliaIntegration")]
+public class DungeonStartTest : IClassFixture<IntegrationTestFixture>
 {
-    public DungeonStartTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
-        : base(factory, outputHelper) { }
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
+    private readonly ITestOutputHelper output;
+
+    public DungeonStartTest(IntegrationTestFixture fixture, ITestOutputHelper output)
+    {
+        this.fixture = fixture;
+        this.output = output;
+        client = fixture.CreateClient(
+            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
+        );
+    }
 
     [Fact]
     public async Task EnterNewQuest_UsesExpectedParty()
     {
         DungeonStartStartData response = (
-            await this.Client.PostMsgpack<DungeonStartStartData>(
+            await this.client.PostMsgpack<DungeonStartStartData>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
@@ -34,8 +44,10 @@ public class DungeonStartTest : TestFixture
         // Maybe once we do savefile import we can set the test fixture to have an endgame savefile
 
         IEnumerable<object> storedPartyData = (
-            await this.ApiContext.PlayerParties.SingleAsync(
-                x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == 1
+            await this.fixture.ApiContext.PlayerParties.SingleAsync(
+                x =>
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+                    && x.PartyNo == 1
             )
         ).Units
             .Where(x => x.CharaId != 0)

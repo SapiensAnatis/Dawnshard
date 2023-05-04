@@ -1,22 +1,34 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
-using Xunit.Abstractions;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class StoryTest : TestFixture
+public class StoryTest : IntegrationTestBase
 {
-    public StoryTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+    private readonly IntegrationTestFixture fixture;
+    private readonly HttpClient client;
+
+    public StoryTest(IntegrationTestFixture fixture)
+    {
+        this.fixture = fixture;
+        this.client = fixture.CreateClient();
+
+        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
+    }
 
     [Fact]
     public async Task ReadStory_StoryNotRead_ResponseHasRewards()
     {
         StoryReadData data = (
-            await this.Client.PostMsgpack<StoryReadData>(
+            await this.client.PostMsgpack<StoryReadData>(
                 "/story/read",
                 new StoryReadRequest() { unit_story_id = 100001141 }
             )
@@ -50,26 +62,26 @@ public class StoryTest : TestFixture
     [Fact]
     public async Task ReadStory_StoryRead_ResponseHasNoRewards()
     {
-        await this.AddToDatabase(
+        await this.fixture.AddToDatabase(
             new DbPlayerStoryState()
             {
-                DeviceAccountId = DeviceAccountId,
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 State = StoryState.Read,
                 StoryId = 100001121,
                 StoryType = StoryTypes.Chara
             },
             new DbPlayerStoryState()
             {
-                DeviceAccountId = DeviceAccountId,
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 State = StoryState.Read,
                 StoryId = 100001122,
                 StoryType = StoryTypes.Chara
             }
         );
-        await this.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync();
 
         StoryReadData data = (
-            await this.Client.PostMsgpack<StoryReadData>(
+            await this.client.PostMsgpack<StoryReadData>(
                 "/story/read",
                 new StoryReadRequest() { unit_story_id = 100001122 }
             )
@@ -84,29 +96,29 @@ public class StoryTest : TestFixture
     [Fact]
     public async Task ReadStory_StoryNotRead_UpdatesDatabase()
     {
-        int oldCrystal = await this.ApiContext.PlayerUserData
+        int oldCrystal = await this.fixture.ApiContext.PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .Select(x => x.Crystal)
             .SingleAsync();
 
         StoryReadData data = (
-            await this.Client.PostMsgpack<StoryReadData>(
+            await this.client.PostMsgpack<StoryReadData>(
                 "/story/read",
                 new StoryReadRequest() { unit_story_id = 100002011 }
             )
         ).data;
 
-        int newCrystal = await this.ApiContext.PlayerUserData
+        int newCrystal = await this.fixture.ApiContext.PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .Select(x => x.Crystal)
             .SingleAsync();
 
         newCrystal.Should().Be(oldCrystal + 25);
 
-        IEnumerable<DbPlayerStoryState> stories = this.ApiContext.PlayerStoryState.Where(
-            x => x.DeviceAccountId == DeviceAccountId
+        IEnumerable<DbPlayerStoryState> stories = this.fixture.ApiContext.PlayerStoryState.Where(
+            x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
         );
 
         stories
@@ -114,7 +126,7 @@ public class StoryTest : TestFixture
             .ContainEquivalentOf(
                 new DbPlayerStoryState()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                     State = StoryState.Read,
                     StoryId = 100002011,
                     StoryType = StoryTypes.Chara

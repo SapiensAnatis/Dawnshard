@@ -1,26 +1,34 @@
-﻿using DragaliaAPI.Database;
-using DragaliaAPI.Models.Generated;
+﻿using MessagePack.Resolvers;
+using MessagePack;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit.Abstractions;
+using DragaliaAPI.Database;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Test.Integration.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.RedoableSummonController"/>
 /// </summary>
-public class RedoableSummonTest : TestFixture
+[Collection("DragaliaIntegration")]
+public class RedoableSummonTest : IClassFixture<IntegrationTestFixture>
 {
-    public RedoableSummonTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
-        : base(factory, outputHelper) { }
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
+
+    public RedoableSummonTest(IntegrationTestFixture fixture)
+    {
+        this.fixture = fixture;
+        client = fixture.CreateClient(
+            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
+        );
+    }
 
     [Fact]
     public async Task RedoableSummonGetData_ReturnsData()
     {
         RedoableSummonGetDataData response = (
-            await this.Client.PostMsgpack<RedoableSummonGetDataData>(
+            await client.PostMsgpack<RedoableSummonGetDataData>(
                 "redoable_summon/get_data",
                 new RedoableSummonGetDataRequest()
             )
@@ -33,7 +41,7 @@ public class RedoableSummonTest : TestFixture
     public async Task RedoableSummonPreExec_ReturnsValidResult()
     {
         RedoableSummonPreExecData response = (
-            await this.Client.PostMsgpack<RedoableSummonPreExecData>(
+            await client.PostMsgpack<RedoableSummonPreExecData>(
                 "redoable_summon/pre_exec",
                 new RedoableSummonPreExecRequest(0)
             )
@@ -46,13 +54,10 @@ public class RedoableSummonTest : TestFixture
     public async Task RedoableSummonFixExec_UpdatesDatabase()
     {
         // Set up cached summon result
-        await this.Client.PostMsgpack<RedoableSummonPreExecData>(
-            "redoable_summon/pre_exec",
-            new RedoableSummonPreExecData()
-        );
+        await client.PostAsync("redoable_summon/pre_exec", TestUtils.CreateMsgpackContent(new { }));
 
         RedoableSummonFixExecData response = (
-            await this.Client.PostMsgpack<RedoableSummonFixExecData>(
+            await client.PostMsgpack<RedoableSummonFixExecData>(
                 "redoable_summon/fix_exec",
                 new RedoableSummonFixExecRequest()
             )
@@ -66,12 +71,15 @@ public class RedoableSummonTest : TestFixture
             .Select(x => (int)x.dragon_id)
             .OrderBy(x => x);
 
-        IEnumerable<int> dbCharaIds = this.ApiContext.PlayerCharaData
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+        using IServiceScope scope = fixture.Services.CreateScope();
+        ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
+
+        IEnumerable<int> dbCharaIds = apiContext.PlayerCharaData
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .Select(x => (int)x.CharaId)
             .OrderBy(x => x);
-        IEnumerable<int> dbDragonIds = this.ApiContext.PlayerDragonData
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+        IEnumerable<int> dbDragonIds = apiContext.PlayerDragonData
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .Select(x => (int)x.DragonId)
             .OrderBy(x => x);
 

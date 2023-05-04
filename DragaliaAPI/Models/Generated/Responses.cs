@@ -2484,7 +2484,7 @@ public class FortBuildAtOnceData
 {
     public int result { get; set; }
     public UpdateDataList update_data_list { get; set; }
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
     public FortDetail fort_detail { get; set; }
     public FortBonusList fort_bonus_list { get; set; }
     public AtgenProductionRp production_rp { get; set; }
@@ -2494,7 +2494,7 @@ public class FortBuildAtOnceData
     public FortBuildAtOnceData(
         int result,
         UpdateDataList update_data_list,
-        ulong build_id,
+        long build_id,
         FortDetail fort_detail,
         FortBonusList fort_bonus_list,
         AtgenProductionRp production_rp,
@@ -2519,13 +2519,13 @@ public class FortBuildAtOnceData
 public class FortBuildCancelData
 {
     public int result { get; set; }
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
     public FortDetail fort_detail { get; set; }
     public UpdateDataList update_data_list { get; set; }
 
     public FortBuildCancelData(
         int result,
-        ulong build_id,
+        long build_id,
         FortDetail fort_detail,
         UpdateDataList update_data_list
     )
@@ -2543,7 +2543,7 @@ public class FortBuildCancelData
 public class FortBuildEndData
 {
     public int result { get; set; }
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
     public FortBonusList fort_bonus_list { get; set; }
     public FortDetail fort_detail { get; set; }
     public AtgenProductionRp production_rp { get; set; }
@@ -2553,7 +2553,7 @@ public class FortBuildEndData
 
     public FortBuildEndData(
         int result,
-        ulong build_id,
+        long build_id,
         FortBonusList fort_bonus_list,
         FortDetail fort_detail,
         AtgenProductionRp production_rp,
@@ -2580,9 +2580,9 @@ public class FortBuildStartData
 {
     public int result { get; set; }
     public ulong build_id { get; set; }
-    public int build_start_date { get; set; }
-    public int build_end_date { get; set; }
-    public int remain_time { get; set; }
+    public DateTimeOffset build_start_date { get; set; }
+    public DateTimeOffset build_end_date { get; set; }
+    public TimeSpan remain_time { get; set; }
     public FortDetail fort_detail { get; set; }
     public UpdateDataList update_data_list { get; set; }
     public EntityResult entity_result { get; set; }
@@ -2590,9 +2590,9 @@ public class FortBuildStartData
     public FortBuildStartData(
         int result,
         ulong build_id,
-        int build_start_date,
-        int build_end_date,
-        int remain_time,
+        DateTimeOffset build_start_date,
+        DateTimeOffset build_end_date,
+        TimeSpan remain_time,
         FortDetail fort_detail,
         UpdateDataList update_data_list,
         EntityResult entity_result
@@ -2689,7 +2689,7 @@ public class FortGetMultiIncomeData
 public class FortLevelupAtOnceData
 {
     public int result { get; set; }
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
     public FortDetail fort_detail { get; set; }
     public FortBonusList fort_bonus_list { get; set; }
     public int current_fort_level { get; set; }
@@ -2701,7 +2701,7 @@ public class FortLevelupAtOnceData
 
     public FortLevelupAtOnceData(
         int result,
-        ulong build_id,
+        long build_id,
         FortDetail fort_detail,
         FortBonusList fort_bonus_list,
         int current_fort_level,
@@ -2731,13 +2731,13 @@ public class FortLevelupAtOnceData
 public class FortLevelupCancelData
 {
     public int result { get; set; }
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
     public FortDetail fort_detail { get; set; }
     public UpdateDataList update_data_list { get; set; }
 
     public FortLevelupCancelData(
         int result,
-        ulong build_id,
+        long build_id,
         FortDetail fort_detail,
         UpdateDataList update_data_list
     )
@@ -2755,7 +2755,7 @@ public class FortLevelupCancelData
 public class FortLevelupEndData
 {
     public int result { get; set; }
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
     public FortDetail fort_detail { get; set; }
     public FortBonusList fort_bonus_list { get; set; }
     public int current_fort_level { get; set; }
@@ -2767,7 +2767,7 @@ public class FortLevelupEndData
 
     public FortLevelupEndData(
         int result,
-        ulong build_id,
+        long build_id,
         FortDetail fort_detail,
         FortBonusList fort_bonus_list,
         int current_fort_level,
@@ -2797,20 +2797,20 @@ public class FortLevelupEndData
 public class FortLevelupStartData
 {
     public int result { get; set; }
-    public int levelup_start_date { get; set; }
-    public int levelup_end_date { get; set; }
-    public int remain_time { get; set; }
-    public ulong build_id { get; set; }
+    public DateTimeOffset levelup_start_date { get; set; }
+    public DateTimeOffset levelup_end_date { get; set; }
+    public TimeSpan remain_time { get; set; }
+    public long build_id { get; set; }
     public FortDetail fort_detail { get; set; }
     public UpdateDataList update_data_list { get; set; }
     public EntityResult entity_result { get; set; }
 
     public FortLevelupStartData(
         int result,
-        int levelup_start_date,
-        int levelup_end_date,
-        int remain_time,
-        ulong build_id,
+        DateTimeOffset levelup_start_date,
+        DateTimeOffset levelup_end_date,
+        TimeSpan remain_time,
+        long build_id,
         FortDetail fort_detail,
         UpdateDataList update_data_list,
         EntityResult entity_result
@@ -2833,7 +2833,7 @@ public class FortLevelupStartData
 public class FortMoveData
 {
     public int result { get; set; }
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
     public FortBonusList fort_bonus_list { get; set; }
     public AtgenProductionRp production_rp { get; set; }
     public AtgenProductionRp production_df { get; set; }
@@ -2842,7 +2842,7 @@ public class FortMoveData
 
     public FortMoveData(
         int result,
-        ulong build_id,
+        long build_id,
         FortBonusList fort_bonus_list,
         AtgenProductionRp production_rp,
         AtgenProductionRp production_df,

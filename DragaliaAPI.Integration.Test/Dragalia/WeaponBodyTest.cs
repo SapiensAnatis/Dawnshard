@@ -1,46 +1,53 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit.Abstractions;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Test.Integration.Dragalia;
 
-public class WeaponBodyTest : TestFixture
+public class WeaponBodyTest : IntegrationTestBase
 {
+    private readonly IntegrationTestFixture fixture;
+    private readonly HttpClient client;
+
     private const string EndpointGroup = "/weapon_body";
 
-    public WeaponBodyTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
-        : base(factory, outputHelper) { }
+    public WeaponBodyTest(IntegrationTestFixture fixture)
+    {
+        this.fixture = fixture;
+        this.client = this.fixture.CreateClient();
+
+        CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 5);
+        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
+    }
 
     [Fact]
     public async Task Craft_Success_ReturnsExpectedResponse()
     {
-        await this.AddRangeToDatabase(
+        await this.fixture.AddRangeToDatabase(
             new List<DbWeaponBody>()
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                     WeaponBodyId = WeaponBodies.WandoftheTorrent
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                     WeaponBodyId = WeaponBodies.SpiritBreaker
                 },
             }
         );
 
         UpdateDataList list = (
-            await this.Client.PostMsgpack<WeaponBodyCraftData>(
+            await this.client.PostMsgpack<WeaponBodyCraftData>(
                 $"{EndpointGroup}/craft",
                 new WeaponBodyCraftRequest() { weapon_body_id = WeaponBodies.AquaticSpiral }
             )
@@ -78,30 +85,30 @@ public class WeaponBodyTest : TestFixture
     [Fact]
     public async Task Craft_Success_UpdatesDatabase()
     {
-        this.ApiContext.PlayerWeapons.Add(
+        this.fixture.ApiContext.PlayerWeapons.Add(
             new DbWeaponBody()
             {
-                DeviceAccountId = DeviceAccountId,
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 WeaponBodyId = WeaponBodies.AbsoluteCrimson
             }
         );
 
-        await this.ApiContext.SaveChangesAsync();
+        await this.fixture.ApiContext.SaveChangesAsync();
 
         int oldMatCount1 = GetMaterialCount(Materials.PrimalFlamewyrmsSphere);
         int oldMatCount2 = GetMaterialCount(Materials.PrimalFlamewyrmsGreatsphere);
         int oldMatCount3 = GetMaterialCount(Materials.TwinklingSand);
         long oldRupies = GetRupies();
 
-        await this.Client.PostMsgpack<WeaponBodyCraftData>(
+        await this.client.PostMsgpack<WeaponBodyCraftData>(
             $"{EndpointGroup}/craft",
             new WeaponBodyCraftRequest() { weapon_body_id = WeaponBodies.PrimalCrimson }
         );
 
-        this.ApiContext.PlayerWeapons
+        this.fixture.ApiContext.PlayerWeapons
             .SingleOrDefault(
                 x =>
-                    x.DeviceAccountId == DeviceAccountId
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
                     && x.WeaponBodyId == WeaponBodies.PrimalCrimson
             )
             .Should()
@@ -119,9 +126,9 @@ public class WeaponBodyTest : TestFixture
         WeaponUpgradeTestCase testCase
     )
     {
-        await this.AddToDatabase(testCase.InitialState);
+        await this.fixture.AddToDatabase(testCase.InitialState);
 
-        ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
+        ApiContext apiContext = this.fixture.Services.GetRequiredService<ApiContext>();
         apiContext.ChangeTracker.Clear();
 
         long oldCoin = this.GetRupies();
@@ -138,14 +145,16 @@ public class WeaponBodyTest : TestFixture
             };
 
         WeaponBodyBuildupPieceData response = (
-            await this.Client.PostMsgpack<WeaponBodyBuildupPieceData>(
+            await this.client.PostMsgpack<WeaponBodyBuildupPieceData>(
                 $"{EndpointGroup}/buildup_piece",
                 request
             )
         ).data;
 
         // Check coin
-        DbPlayerUserData userData = (await apiContext.PlayerUserData.FindAsync(DeviceAccountId))!;
+        DbPlayerUserData userData = (
+            await apiContext.PlayerUserData.FindAsync(IntegrationTestFixture.DeviceAccountIdConst)
+        )!;
         await apiContext.Entry(userData).ReloadAsync();
 
         if (testCase.ExpCoinLoss != 0)
@@ -158,7 +167,7 @@ public class WeaponBodyTest : TestFixture
         // Check weapon
         DbWeaponBody weaponBody = (
             await apiContext.PlayerWeapons.FindAsync(
-                DeviceAccountId,
+                IntegrationTestFixture.DeviceAccountIdConst,
                 testCase.InitialState.WeaponBodyId
             )
         )!;
@@ -170,7 +179,7 @@ public class WeaponBodyTest : TestFixture
             .BeEquivalentTo(
                 new List<WeaponBodyList>()
                 {
-                    this.Mapper.Map<WeaponBodyList>(testCase.ExpFinalState)
+                    this.fixture.Mapper.Map<WeaponBodyList>(testCase.ExpFinalState)
                 }
             );
 
@@ -186,7 +195,10 @@ public class WeaponBodyTest : TestFixture
                 );
 
             DbPlayerMaterial dbEntry = (
-                await apiContext.PlayerMaterials.FindAsync(DeviceAccountId, material)
+                await apiContext.PlayerMaterials.FindAsync(
+                    IntegrationTestFixture.DeviceAccountIdConst,
+                    material
+                )
             )!;
 
             dbEntry.Quantity.Should().Be(expQuantity);
@@ -200,7 +212,7 @@ public class WeaponBodyTest : TestFixture
         {
             response.update_data_list.weapon_passive_ability_list
                 .Should()
-                .ContainEquivalentOf(this.Mapper.Map<WeaponPassiveAbilityList>(expPassive));
+                .ContainEquivalentOf(this.fixture.Mapper.Map<WeaponPassiveAbilityList>(expPassive));
 
             apiContext.PlayerPassiveAbilities.Should().ContainEquivalentOf(expPassive);
         }
@@ -211,7 +223,7 @@ public class WeaponBodyTest : TestFixture
             response.update_data_list.weapon_skin_list
                 .Should()
                 .ContainEquivalentOf(
-                    this.Mapper.Map<WeaponSkinList>(expPassive),
+                    this.fixture.Mapper.Map<WeaponSkinList>(expPassive),
                     opts => opts.Excluding(x => x.gettime)
                 );
 
@@ -225,7 +237,7 @@ public class WeaponBodyTest : TestFixture
     public async Task Buildup_UnownedWeapon_ReturnsBadResultCode()
     {
         ResultCodeData codeData = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+            await this.client.PostMsgpack<ResultCodeData>(
                 $"{EndpointGroup}/buildup_piece",
                 new WeaponBodyBuildupPieceRequest() { weapon_body_id = WeaponBodies.Carnwennan },
                 ensureSuccessHeader: false
@@ -238,17 +250,17 @@ public class WeaponBodyTest : TestFixture
     [Fact]
     public async Task Buildup_InvalidRequest_ReturnsBadResultCode()
     {
-        await this.AddToDatabase(
+        await this.fixture.AddToDatabase(
             new DbWeaponBody()
             {
-                DeviceAccountId = DeviceAccountId,
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 WeaponBodyId = WeaponBodies.ChanzelianCaster,
                 BuildupCount = 4
             }
         );
 
         ResultCodeData codeData = (
-            await this.Client.PostMsgpack<ResultCodeData>(
+            await this.client.PostMsgpack<ResultCodeData>(
                 $"{EndpointGroup}/buildup_piece",
                 new WeaponBodyBuildupPieceRequest()
                 {
@@ -284,7 +296,7 @@ public class WeaponBodyTest : TestFixture
                 new(
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.PrimalAqua,
                         LimitBreakCount = 0,
                     },
@@ -302,7 +314,7 @@ public class WeaponBodyTest : TestFixture
                     4_000_000,
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.PrimalAqua,
                         LimitBreakCount = 2,
                     }
@@ -315,7 +327,7 @@ public class WeaponBodyTest : TestFixture
                 new(
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.PrimalLightning,
                         LimitBreakCount = 0,
                     },
@@ -338,7 +350,7 @@ public class WeaponBodyTest : TestFixture
                     0,
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.PrimalLightning,
                         LimitBreakCount = 2,
                     }
@@ -351,7 +363,7 @@ public class WeaponBodyTest : TestFixture
                 new(
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.ChimeratechAnomalocaris,
                         BuildupCount = 0
                     },
@@ -370,7 +382,7 @@ public class WeaponBodyTest : TestFixture
                     0,
                     new DbWeaponBody()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.ChimeratechAnomalocaris,
                         BuildupCount = 55,
                     }
@@ -383,7 +395,7 @@ public class WeaponBodyTest : TestFixture
                 new(
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.EverfrostBow,
                         LimitBreakCount = 8,
                     },
@@ -416,7 +428,7 @@ public class WeaponBodyTest : TestFixture
                     160_000,
                     new DbWeaponBody()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.EverfrostBow,
                         LimitBreakCount = 8,
                         UnlockWeaponPassiveAbilityNoList = new[]
@@ -442,18 +454,22 @@ public class WeaponBodyTest : TestFixture
                     {
                         new()
                         {
-                            DeviceAccountId = DeviceAccountId,
+                            DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                             WeaponPassiveAbilityId = 1060203
                         },
                         new()
                         {
-                            DeviceAccountId = DeviceAccountId,
+                            DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                             WeaponPassiveAbilityId = 1060204
                         }
                     },
                     ExpNewSkins: new List<DbWeaponSkin>()
                     {
-                        new() { DeviceAccountId = DeviceAccountId, WeaponSkinId = 30640203 }
+                        new()
+                        {
+                            DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                            WeaponSkinId = 30640203
+                        }
                     }
                 )
             );
@@ -464,7 +480,7 @@ public class WeaponBodyTest : TestFixture
                 new(
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.Ýdalir,
                         LimitOverCount = 1
                     },
@@ -483,13 +499,17 @@ public class WeaponBodyTest : TestFixture
                     2_500_000,
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.Ýdalir,
                         LimitOverCount = 2,
                     },
                     ExpNewSkins: new()
                     {
-                        new() { DeviceAccountId = DeviceAccountId, WeaponSkinId = 30660103 }
+                        new()
+                        {
+                            DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                            WeaponSkinId = 30660103
+                        }
                     }
                 )
             );
@@ -500,7 +520,7 @@ public class WeaponBodyTest : TestFixture
                 new(
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.ChimeratechProcyon,
                         EquipableCount = 1,
                         LimitBreakCount = 8,
@@ -523,7 +543,7 @@ public class WeaponBodyTest : TestFixture
                     10_000_000,
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.ChimeratechProcyon,
                         EquipableCount = 3,
                         LimitBreakCount = 8,
@@ -538,7 +558,7 @@ public class WeaponBodyTest : TestFixture
                 new(
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.QinghongJian,
                         LimitBreakCount = 8,
                     },
@@ -559,7 +579,7 @@ public class WeaponBodyTest : TestFixture
                     4_500_000,
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.QinghongJian,
                         LimitBreakCount = 8,
                         AdditionalCrestSlotType1Count = 1,
@@ -574,7 +594,7 @@ public class WeaponBodyTest : TestFixture
                 new(
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.WindrulersFang,
                         LimitBreakCount = 8,
                         LimitOverCount = 1,
@@ -593,7 +613,7 @@ public class WeaponBodyTest : TestFixture
                     5_000_000,
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                         WeaponBodyId = WeaponBodies.WindrulersFang,
                         LimitBreakCount = 8,
                         LimitOverCount = 1,
@@ -607,17 +627,21 @@ public class WeaponBodyTest : TestFixture
 
     private int GetMaterialCount(Materials id)
     {
-        return this.ApiContext.PlayerMaterials
-            .Where(x => x.DeviceAccountId == DeviceAccountId && x.MaterialId == id)
+        return this.fixture.ApiContext.PlayerMaterials
+            .Where(
+                x =>
+                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+                    && x.MaterialId == id
+            )
             .Select(x => x.Quantity)
             .First();
     }
 
     private long GetRupies()
     {
-        return this.ApiContext.PlayerUserData
+        return this.fixture.ApiContext.PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .Select(x => x.Coin)
             .First();
     }

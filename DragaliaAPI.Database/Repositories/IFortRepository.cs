@@ -5,7 +5,20 @@ namespace DragaliaAPI.Database.Repositories;
 
 public interface IFortRepository
 {
-    IQueryable<DbFortBuild> GetBuilds(string accountId);
+    //Task<IEnumerable<DbFortBuild>> GetBuilds();
     IQueryable<DbFortBuild> Builds { get; }
+    Task<DbFortDetail> GetFortDetail();
     Task<bool> CheckPlantLevel(FortPlants plant, int requiredLevel);
+    Task GetFortPlantIdList(IEnumerable<int> fort_plant_id_list);
+    Task UpdateFortMaximumCarpenter(int carpenter_num);
+    Task<DbFortBuild> GetBuilding(long buildId);
+    Task AddBuild(DbFortBuild build);
+    void DeleteBuild(DbFortBuild build);
+    Task<DbFortBuild> UpgradeAtOnce(
+        DbPlayerUserData userData,
+        long buildId,
+        PaymentTypes paymentType
+    );
+    void ConsumePaymentCost(DbPlayerUserData userData, PaymentTypes paymentType, int paymentCost);
+    Task<int> GetActiveCarpenters();
 }

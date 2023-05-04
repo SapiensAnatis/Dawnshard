@@ -34,6 +34,14 @@ public class QuestRewardServiceTest
             );
     }
 
+    [Theory]
+    [InlineData(211040102)] // Battle in the Dornith Mountains Standard
+    [InlineData(211050102)] // Battle at the Wartarch Ruins Standard
+    public void QuestRewardService_GivesManacasterTablets(int questId)
+    {
+        this.questRewardService.GetDrops(questId).Should().Contain(Materials.ManacasterTablet);
+    }
+
     [Fact]
     public void QuestRewardService_GetDrops_Undefined_ReturnsEmpty()
     {

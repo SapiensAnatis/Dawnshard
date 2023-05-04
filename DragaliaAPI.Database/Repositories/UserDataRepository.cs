@@ -130,8 +130,8 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
 
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
 
-        long newQuantity = (userData.Coin += offset);
-        if (newQuantity < 0)
+        long newQuantity = userData.Coin + offset; // changed from += to + bc otherwise it adds to quantity anyways which i don't
+        if (newQuantity < 0) // think was what was intended since it renders last line useless
             throw new ArgumentException("Player cannot have negative rupies");
 
         userData.Coin = newQuantity;
@@ -172,4 +172,33 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
 #pragma warning disable CS0618
         await this.LookupUserData(this.playerDetailsService.AccountId);
 #pragma warning restore CS0618
+
+    public async Task UpdateDewpoint(int quantity)
+    {
+        if (quantity == 0)
+            return;
+
+        DbPlayerUserData userData = await this.LookupUserData();
+
+        int newQuantity = userData.DewPoint + quantity;
+        if (newQuantity < 0)
+            throw new ArgumentException("Player cannot have negative eldwater");
+
+        userData.DewPoint = newQuantity;
+    }
+
+    public async Task<bool> CheckDewpoint(int quantity)
+    {
+        int dewpoint = (await this.LookupUserData()).DewPoint;
+        return dewpoint >= quantity;
+    }
+
+    public async Task SetDewpoint(int quantity)
+    {
+        if (quantity < 0)
+            throw new ArgumentException("Player cannot have negative eldwater");
+
+        DbPlayerUserData userData = await this.LookupUserData();
+        userData.DewPoint = quantity;
+    }
 }

@@ -1,23 +1,38 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
-using Xunit.Abstractions;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Test.Integration.Dragalia;
 
 [Collection("DragaliaIntegration")]
-public class UserTest : TestFixture
+public class UserTest : IClassFixture<IntegrationTestFixture>
 {
+    private readonly IntegrationTestFixture fixture;
+    private readonly HttpClient client;
+
+    public UserTest(IntegrationTestFixture fixture)
+    {
+        this.fixture = fixture;
+        this.client = fixture.CreateClient();
+
+        TestUtils.ApplyDateTimeAssertionOptions();
+    }
+
     [Fact]
     public async Task LinkedNAccount_ReturnsExpectedResponse()
     {
-        DbPlayerUserData dbUserData = this.ApiContext.PlayerUserData.Single(
-            x => x.DeviceAccountId == DeviceAccountId
+        DbPlayerUserData dbUserData = this.fixture.ApiContext.PlayerUserData.Single(
+            x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
         );
 
-        UserData expectedUserData = this.Mapper.Map<UserData>(dbUserData);
+        UserData expectedUserData = this.fixture.Mapper.Map<UserData>(dbUserData);
 
         (
-            await this.Client.PostMsgpack<UserLinkedNAccountData>(
+            await this.client.PostMsgpack<UserLinkedNAccountData>(
                 "/user/linked_n_account",
                 new UserLinkedNAccountRequest()
             )
@@ -36,7 +51,7 @@ public class UserTest : TestFixture
     public async Task GetNAccountInfo_ReturnsExpectedResponse()
     {
         (
-            await this.Client.PostMsgpack<UserGetNAccountInfoData>(
+            await this.client.PostMsgpack<UserGetNAccountInfoData>(
                 "/user/get_n_account_info",
                 new UserGetNAccountInfoRequest()
             )
@@ -55,7 +70,4 @@ public class UserTest : TestFixture
                 opts => opts.Excluding(x => x.update_data_list.user_data.crystal)
             );
     }
-
-    public UserTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
 }

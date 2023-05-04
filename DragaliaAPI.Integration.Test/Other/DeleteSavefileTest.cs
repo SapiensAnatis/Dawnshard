@@ -1,30 +1,33 @@
 ﻿using System.Net;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using FluentAssertions.Execution;
-using Xunit.Abstractions;
 using static DragaliaAPI.Services.SavefileService;
 
-namespace DragaliaAPI.Integration.Test.Other;
+namespace DragaliaAPI.Test.Integration.Other;
 
-public class DeleteSavefileTest : TestFixture
+[Collection("DragaliaIntegration")]
+public class DeleteSavefileTest : IClassFixture<IntegrationTestFixture>
 {
-    public DeleteSavefileTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
-        : base(factory, outputHelper)
+    private readonly IntegrationTestFixture fixture;
+    private readonly HttpClient client;
+
+    public DeleteSavefileTest(IntegrationTestFixture fixture)
     {
+        this.fixture = fixture;
+        this.client = fixture.CreateClient();
+
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
-        this.Client.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
+        this.client.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
     }
 
     [Fact]
     public async Task Delete_NoDeveloperToken_Returns401()
     {
-        this.Client.DefaultRequestHeaders.Remove("Authorization");
+        this.client.DefaultRequestHeaders.Remove("Authorization");
 
-        HttpResponseMessage importResponse = await this.Client.DeleteAsync($"savefile/delete/4");
+        HttpResponseMessage importResponse = await this.client.DeleteAsync($"savefile/delete/4");
 
         importResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -32,10 +35,10 @@ public class DeleteSavefileTest : TestFixture
     [Fact]
     public async Task Delete_WrongDeveloperToken_Returns401()
     {
-        this.Client.DefaultRequestHeaders.Remove("Authorization");
-        this.Client.DefaultRequestHeaders.Add("Authorization", $"Bearer imfeeling22");
+        this.client.DefaultRequestHeaders.Remove("Authorization");
+        this.client.DefaultRequestHeaders.Add("Authorization", $"Bearer imfeeling22");
 
-        HttpResponseMessage importResponse = await this.Client.DeleteAsync($"savefile/delete/4");
+        HttpResponseMessage importResponse = await this.client.DeleteAsync($"savefile/delete/4");
 
         importResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -43,20 +46,20 @@ public class DeleteSavefileTest : TestFixture
     [Fact]
     public async Task Delete_LoadIndexResponseHasNewSavefile()
     {
-        long viewerId = this.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == DeviceAccountId)
+        long viewerId = fixture.ApiContext.PlayerUserData
+            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
             .ViewerId;
 
-        this.AddCharacter(Charas.Ilia);
-        this.AddCharacter(Charas.DragonyuleIlia);
+        await this.fixture.AddCharacter(Charas.Ilia);
+        await this.fixture.AddCharacter(Charas.DragonyuleIlia);
 
-        HttpResponseMessage importResponse = await this.Client.DeleteAsync(
+        HttpResponseMessage importResponse = await this.client.DeleteAsync(
             $"savefile/delete/{viewerId}"
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         LoadIndexData storedSavefile = (
-            await this.Client.PostMsgpack<LoadIndexData>("load/index", new LoadIndexRequest())
+            await this.client.PostMsgpack<LoadIndexData>("load/index", new LoadIndexRequest())
         ).data;
 
         // This test also provides us a good way to check out the default savefile
@@ -74,7 +77,7 @@ public class DeleteSavefileTest : TestFixture
                 {
                     x.party_name.Should().Be("Default");
                     x.party_setting_list
-                        .Select(y => y.chara_id)
+                        .Select(x => x.chara_id)
                         .Should()
                         .BeEquivalentTo(
                             new List<Charas>()
@@ -113,9 +116,9 @@ public class DeleteSavefileTest : TestFixture
                                     is_new = false
                                 },
                                 opts =>
-                                    opts.Excluding(y => y.dragon_id)
-                                        .Excluding(y => y.dragon_key_id)
-                                        .Excluding(y => y.get_time)
+                                    opts.Excluding(x => x.dragon_id)
+                                        .Excluding(x => x.dragon_key_id)
+                                        .Excluding(x => x.get_time)
                             )
                 );
             ;

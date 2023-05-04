@@ -1,26 +1,39 @@
-﻿using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using MessagePack.Resolvers;
+using MessagePack;
 using Xunit.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database;
+using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Models.Generated;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Test.Integration.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.SummonController"/>
 /// </summary>
-public class SummonTest : TestFixture
+[Collection("DragaliaIntegration")]
+public class SummonTest : IClassFixture<IntegrationTestFixture>
 {
-    public SummonTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+    private readonly HttpClient client;
+    private readonly IntegrationTestFixture fixture;
+    private readonly ITestOutputHelper outputHelper;
+
+    public SummonTest(IntegrationTestFixture fixture, ITestOutputHelper outputHelper)
+    {
+        this.fixture = fixture;
+        this.outputHelper = outputHelper;
+        client = fixture.CreateClient(
+            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
+        );
+    }
 
     [Fact]
     public async Task SummonExcludeGetList_ReturnsAnyData()
     {
         SummonExcludeGetListData response = (
-            await this.Client.PostMsgpack<SummonExcludeGetListData>(
+            await client.PostMsgpack<SummonExcludeGetListData>(
                 "summon_exclude/get_list",
                 new SummonExcludeGetListRequest(1020203)
             )
@@ -33,7 +46,7 @@ public class SummonTest : TestFixture
     public async Task SummonGetOddsData_ReturnsAnyData()
     {
         SummonGetOddsDataData response = (
-            await this.Client.PostMsgpack<SummonGetOddsDataData>(
+            await client.PostMsgpack<SummonGetOddsDataData>(
                 "summon/get_odds_data",
                 new SummonGetOddsDataRequest(1020203)
             )
@@ -48,7 +61,7 @@ public class SummonTest : TestFixture
         DbPlayerSummonHistory historyEntry =
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
                 SummonId = 1,
                 SummonExecType = SummonExecTypes.DailyDeal,
                 ExecDate = DateTimeOffset.UtcNow,
@@ -66,11 +79,16 @@ public class SummonTest : TestFixture
                 GetDewPointQuantity = 0,
             };
 
-        await this.ApiContext.PlayerSummonHistory.AddAsync(historyEntry);
-        await this.ApiContext.SaveChangesAsync();
+        using (IServiceScope scope = fixture.Services.CreateScope())
+        {
+            ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
+
+            await context.PlayerSummonHistory.AddAsync(historyEntry);
+            await context.SaveChangesAsync();
+        }
 
         SummonGetSummonHistoryData response = (
-            await this.Client.PostMsgpack<SummonGetSummonHistoryData>(
+            await client.PostMsgpack<SummonGetSummonHistoryData>(
                 "summon/get_summon_history",
                 new SummonGetSummonHistoryRequest()
             )
@@ -84,7 +102,7 @@ public class SummonTest : TestFixture
     public async Task SummonGetSummonList_ReturnsAnyData()
     {
         SummonGetSummonListData response = (
-            await this.Client.PostMsgpack<SummonGetSummonListData>(
+            await client.PostMsgpack<SummonGetSummonListData>(
                 "summon/get_summon_list",
                 new SummonGetSummonListRequest()
             )
@@ -97,7 +115,7 @@ public class SummonTest : TestFixture
     public async Task SummonRequest_GetSummonPointData_ReturnsAnyData()
     {
         SummonGetSummonPointTradeData response = (
-            await this.Client.PostMsgpack<SummonGetSummonPointTradeData>(
+            await client.PostMsgpack<SummonGetSummonPointTradeData>(
                 "summon/get_summon_point_trade",
                 new SummonGetSummonPointTradeRequest(1020203)
             )
@@ -113,7 +131,7 @@ public class SummonTest : TestFixture
     public async Task SummonRequest_SingleSummonWyrmite_ReturnsValidResult()
     {
         SummonRequestData response = (
-            await this.Client.PostMsgpack<SummonRequestData>(
+            await client.PostMsgpack<SummonRequestData>(
                 "summon/request",
                 new SummonRequestRequest(
                     1,
@@ -136,7 +154,7 @@ public class SummonTest : TestFixture
     public async Task SummonRequest_TenSummonWyrmite_ReturnsValidResult()
     {
         SummonRequestData response = (
-            await this.Client.PostMsgpack<SummonRequestData>(
+            await client.PostMsgpack<SummonRequestData>(
                 "summon/request",
                 new SummonRequestRequest(
                     1020203,
@@ -158,18 +176,21 @@ public class SummonTest : TestFixture
 
     private async Task CheckRewardInDb(AtgenResultUnitList reward)
     {
+        using IServiceScope scope = fixture.Services.CreateScope();
+        ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
+
         if (reward.entity_type == EntityTypes.Dragon)
         {
-            List<DbPlayerDragonData> dragonData = await this.ApiContext.PlayerDragonData
-                .Where(x => x.DeviceAccountId == DeviceAccountId)
+            List<DbPlayerDragonData> dragonData = await apiContext.PlayerDragonData
+                .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
                 .ToListAsync();
 
             dragonData.Where(x => (int)x.DragonId == reward.id).Should().NotBeEmpty();
         }
         else
         {
-            List<DbPlayerCharaData> charaData = await this.ApiContext.PlayerCharaData
-                .Where(x => x.DeviceAccountId == DeviceAccountId)
+            List<DbPlayerCharaData> charaData = await apiContext.PlayerCharaData
+                .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
                 .ToListAsync();
 
             charaData.Where(x => (int)x.CharaId == reward.id).Should().NotBeEmpty();

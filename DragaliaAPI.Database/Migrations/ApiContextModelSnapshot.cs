@@ -118,6 +118,23 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerFortBuilds");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbFortDetail", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("CarpenterNum")
+                        .HasColumnType("integer")
+                        .HasColumnName("CarpenterNum");
+
+                    b.HasKey("DeviceAccountId");
+
+                    b.HasIndex("DeviceAccountId")
+                        .IsUnique();
+
+                    b.ToTable("PlayerFortDetail");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbParty", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -994,6 +1011,17 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbFortDetail", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithOne("FortDetail")
+                        .HasForeignKey("DragaliaAPI.Database.Entities.DbFortDetail", "DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbParty", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
@@ -1212,6 +1240,8 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("DragonList");
 
                     b.Navigation("DragonReliabilityList");
+
+                    b.Navigation("FortDetail");
 
                     b.Navigation("MaterialList");
 

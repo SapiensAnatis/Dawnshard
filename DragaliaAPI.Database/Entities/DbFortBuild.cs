@@ -36,23 +36,22 @@ public class DbFortBuild : IDbHasAccountId
     public int PositionZ { get; set; }
 
     [NotMapped]
-    public FortBuildStatus BuildStatus
+    public FortBuildStatus BuildStatus => this.GetBuildStatus();
+
+    public FortBuildStatus GetBuildStatus()
     {
-        get
+        if (
+            this.BuildStartDate == DateTimeOffset.UnixEpoch
+            && this.BuildEndDate == DateTimeOffset.UnixEpoch
+        )
         {
-            if (
-                this.BuildStartDate == DateTimeOffset.UnixEpoch
-                && this.BuildEndDate == DateTimeOffset.UnixEpoch
-            )
-            {
-                return FortBuildStatus.None;
-            }
-
-            if (DateTimeOffset.UtcNow < this.BuildEndDate)
-                return FortBuildStatus.Construction;
-
-            return FortBuildStatus.ConstructionComplete;
+            return FortBuildStatus.None;
         }
+
+        if (DateTimeOffset.UtcNow < this.BuildEndDate)
+            return FortBuildStatus.Construction;
+
+        return FortBuildStatus.ConstructionComplete;
     }
 
     public DateTimeOffset BuildStartDate { get; set; } = DateTimeOffset.UnixEpoch;
