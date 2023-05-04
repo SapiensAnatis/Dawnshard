@@ -182,6 +182,7 @@ public class IntegrationTestFixture : CustomWebApplicationFactory<Program>
         );
         CreateFort();
         context.PlayerUserData.Find(DeviceAccountIdConst)!.Coin = 100_000_000;
+        context.PlayerUserData.Find(DeviceAccountIdConst)!.DewPoint = 1_000_000;
         context.SaveChanges();
     }
 }

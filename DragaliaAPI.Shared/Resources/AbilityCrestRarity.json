@@ -1,0 +1,72 @@
+[
+  {
+    "_Id": 0,
+    "_MaxLimitLevelByLimitBreak0": 0,
+    "_MaxLimitLevelByLimitBreak1": 0,
+    "_MaxLimitLevelByLimitBreak2": 0,
+    "_MaxLimitLevelByLimitBreak3": 0,
+    "_MaxLimitLevelByLimitBreak4": 0,
+    "_MaxHpPlusCount": 0,
+    "_MaxAtkPlusCount": 0
+  },
+  {
+    "_Id": 1,
+    "_MaxLimitLevelByLimitBreak0": 1,
+    "_MaxLimitLevelByLimitBreak1": 1,
+    "_MaxLimitLevelByLimitBreak2": 1,
+    "_MaxLimitLevelByLimitBreak3": 1,
+    "_MaxLimitLevelByLimitBreak4": 1,
+    "_MaxHpPlusCount": 50,
+    "_MaxAtkPlusCount": 50
+  },
+  {
+    "_Id": 2,
+    "_MaxLimitLevelByLimitBreak0": 6,
+    "_MaxLimitLevelByLimitBreak1": 7,
+    "_MaxLimitLevelByLimitBreak2": 8,
+    "_MaxLimitLevelByLimitBreak3": 9,
+    "_MaxLimitLevelByLimitBreak4": 10,
+    "_MaxHpPlusCount": 50,
+    "_MaxAtkPlusCount": 50
+  },
+  {
+    "_Id": 3,
+    "_MaxLimitLevelByLimitBreak0": 12,
+    "_MaxLimitLevelByLimitBreak1": 14,
+    "_MaxLimitLevelByLimitBreak2": 16,
+    "_MaxLimitLevelByLimitBreak3": 18,
+    "_MaxLimitLevelByLimitBreak4": 20,
+    "_MaxHpPlusCount": 50,
+    "_MaxAtkPlusCount": 50
+  },
+  {
+    "_Id": 4,
+    "_MaxLimitLevelByLimitBreak0": 20,
+    "_MaxLimitLevelByLimitBreak1": 25,
+    "_MaxLimitLevelByLimitBreak2": 30,
+    "_MaxLimitLevelByLimitBreak3": 35,
+    "_MaxLimitLevelByLimitBreak4": 40,
+    "_MaxHpPlusCount": 50,
+    "_MaxAtkPlusCount": 50
+  },
+  {
+    "_Id": 5,
+    "_MaxLimitLevelByLimitBreak0": 30,
+    "_MaxLimitLevelByLimitBreak1": 35,
+    "_MaxLimitLevelByLimitBreak2": 40,
+    "_MaxLimitLevelByLimitBreak3": 45,
+    "_MaxLimitLevelByLimitBreak4": 50,
+    "_MaxHpPlusCount": 50,
+    "_MaxAtkPlusCount": 50
+  },
+  {
+    "_Id": 9,
+    "_MaxLimitLevelByLimitBreak0": 10,
+    "_MaxLimitLevelByLimitBreak1": 15,
+    "_MaxLimitLevelByLimitBreak2": 20,
+    "_MaxLimitLevelByLimitBreak3": 25,
+    "_MaxLimitLevelByLimitBreak4": 30,
+    "_MaxHpPlusCount": 40,
+    "_MaxAtkPlusCount": 40
+  }
+]

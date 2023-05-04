@@ -15,27 +15,33 @@ namespace DragaliaAPI.Models.Generated;
 [MessagePackObject(true)]
 public class AbilityCrestList
 {
-    public int ability_crest_id { get; set; }
+    public AbilityCrests ability_crest_id { get; set; }
     public int buildup_count { get; set; }
     public int limit_break_count { get; set; }
     public int equipable_count { get; set; }
     public int hp_plus_count { get; set; }
     public int attack_plus_count { get; set; }
-    public int is_favorite { get; set; }
-    public int is_new { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_favorite { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_new { get; set; }
     public DateTimeOffset gettime { get; set; }
     public int ability_1_level { get; set; }
     public int ability_2_level { get; set; }
 
     public AbilityCrestList(
-        int ability_crest_id,
+        AbilityCrests ability_crest_id,
         int buildup_count,
         int limit_break_count,
         int equipable_count,
         int hp_plus_count,
         int attack_plus_count,
-        int is_favorite,
-        int is_new,
+        bool is_favorite,
+        bool is_new,
         DateTimeOffset gettime,
         int ability_1_level,
         int ability_2_level
@@ -103,7 +109,7 @@ public class AbilityCrestSetList
 public class AbilityCrestTradeList
 {
     public int ability_crest_trade_id { get; set; }
-    public int ability_crest_id { get; set; }
+    public AbilityCrests ability_crest_id { get; set; }
     public int need_dew_point { get; set; }
     public int priority { get; set; }
     public int complete_date { get; set; }
@@ -112,7 +118,7 @@ public class AbilityCrestTradeList
 
     public AbilityCrestTradeList(
         int ability_crest_trade_id,
-        int ability_crest_id,
+        AbilityCrests ability_crest_id,
         int need_dew_point,
         int priority,
         int complete_date,
@@ -759,14 +765,17 @@ public class AtgenBuildEventRewardEntityList
 [MessagePackObject(true)]
 public class AtgenBuildupAbilityCrestPieceList
 {
-    public int buildup_piece_type { get; set; }
+    public BuildupPieceTypes buildup_piece_type { get; set; }
     public int step { get; set; }
-    public int is_use_dedicated_material { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    [JsonConverter(typeof(BoolIntJsonConverter))]
+    public bool is_use_dedicated_material { get; set; }
 
     public AtgenBuildupAbilityCrestPieceList(
-        int buildup_piece_type,
+        BuildupPieceTypes buildup_piece_type,
         int step,
-        int is_use_dedicated_material
+        bool is_use_dedicated_material
     )
     {
         this.buildup_piece_type = buildup_piece_type;
@@ -2977,10 +2986,10 @@ public class AtgenPlayWallDetail
 [MessagePackObject(true)]
 public class AtgenPlusCountParamsList
 {
-    public int plus_count_type { get; set; }
+    public PlusCountType plus_count_type { get; set; }
     public int plus_count { get; set; }
 
-    public AtgenPlusCountParamsList(int plus_count_type, int plus_count)
+    public AtgenPlusCountParamsList(PlusCountType plus_count_type, int plus_count)
     {
         this.plus_count_type = plus_count_type;
         this.plus_count = plus_count;
@@ -4187,9 +4196,9 @@ public class AtgenUserEventTradeList
 public class AtgenUserItemSummon
 {
     public int daily_summon_count { get; set; }
-    public int last_summon_time { get; set; }
+    public DateTimeOffset last_summon_time { get; set; }
 
-    public AtgenUserItemSummon(int daily_summon_count, int last_summon_time)
+    public AtgenUserItemSummon(int daily_summon_count, DateTimeOffset last_summon_time)
     {
         this.daily_summon_count = daily_summon_count;
         this.last_summon_time = last_summon_time;
