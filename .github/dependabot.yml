@@ -3,33 +3,33 @@
 # Please see the documentation for all configuration options:
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
-version: 2
-updates:
-  - package-ecosystem: "docker"
-    directory: "/DragaliaAPI"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "nuget"
-    directory: "/DragaliaAPI"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "nuget"
-    directory: "/DragaliaAPI.Test"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "nuget"
-    directory: "/DragaliaAPI.Database"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "nuget"
-    directory: "/DragaliaAPI.Database.Test"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "nuget"
-    directory: "/DragaliaAPI.Shared"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "nuget"
-    directory: "/DragaliaAPI.Shared.Test"
-    schedule:
-      interval: "weekly"
+# version: 2
+# updates:
+#   - package-ecosystem: "docker"
+#     directory: "/DragaliaAPI"
+#     schedule:
+#       interval: "weekly"
+#   - package-ecosystem: "nuget"
+#     directory: "/DragaliaAPI"
+#     schedule:
+#       interval: "weekly"
+#   - package-ecosystem: "nuget"
+#     directory: "/DragaliaAPI.Test"
+#     schedule:
+#       interval: "weekly"
+#   - package-ecosystem: "nuget"
+#     directory: "/DragaliaAPI.Database"
+#     schedule:
+#       interval: "weekly"
+#   - package-ecosystem: "nuget"
+#     directory: "/DragaliaAPI.Database.Test"
+#     schedule:
+#       interval: "weekly"
+#   - package-ecosystem: "nuget"
+#     directory: "/DragaliaAPI.Shared"
+#     schedule:
+#       interval: "weekly"
+#   - package-ecosystem: "nuget"
+#     directory: "/DragaliaAPI.Shared.Test"
+#     schedule:
+#       interval: "weekly"
