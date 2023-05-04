@@ -419,9 +419,11 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
     }
 
     [Fact]
-    public async Task ResetPlusCount_SuccessDecreasesMaterialsAndUpdatesDatabase()
+    public async Task ResetPlusCount_SuccessRefundsMaterialsAndUpdatesDatabase()
     {
         long oldCoin = this.GetCoin();
+        int oldFortifyingGemstone = this.GetMaterial(Materials.FortifyingGemstone);
+        int oldAmplifyingGemstone = this.GetMaterial(Materials.AmplifyingGemstone);
 
         this.fixture.ApiContext.PlayerAbilityCrests.Add(
             new DbAbilityCrest()
@@ -459,6 +461,8 @@ public class AbilityCrestTest : IClassFixture<IntegrationTestFixture>
         ability_crest.HpPlusCount.Should().Be(0);
         ability_crest.AttackPlusCount.Should().Be(0);
         this.GetCoin().Should().Be(oldCoin - 820_000);
+        this.GetMaterial(Materials.FortifyingGemstone).Should().Be(oldFortifyingGemstone + 40);
+        this.GetMaterial(Materials.AmplifyingGemstone).Should().Be(oldAmplifyingGemstone + 1);
     }
 
     private int GetDewpoint()
