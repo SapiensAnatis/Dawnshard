@@ -25,12 +25,6 @@ public class FortRepository : IFortRepository
         this.logger = logger;
     }
 
-    //[Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
-    //public async Task<IEnumerable<DbFortBuild>> GetBuilds() =>
-    //    await this.apiContext.PlayerFortBuilds
-    //        .Where(x => x.DeviceAccountId == this.playerDetailsService.AccountId)
-    //        .ToListAsync();
-
     public IQueryable<DbFortBuild> Builds =>
         this.apiContext.PlayerFortBuilds.Where(
             x => x.DeviceAccountId == this.playerDetailsService.AccountId
@@ -150,7 +144,6 @@ public class FortRepository : IFortRepository
         ConsumePaymentCost(userData, paymentType, paymentCost);
 
         // Update build
-        build.Level += 1;
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
 
