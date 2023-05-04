@@ -1208,7 +1208,7 @@ public class AbilityCrestServiceTest
     [InlineData(AbilityCrests.HisCleverBrother, 50)]
     [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, 1)]
     [InlineData(AbilityCrests.TutelarysDestinyWolfsBoon, 40)]
-    public async Task TryResetAugments_SuccessfulReturnsSuccessfulResultCodeForHpAugments(
+    public async Task TryResetAugments_SuccessfulReturnsSuccessfulResultCodeForHpAugmentsAndRefundsMaterials(
         AbilityCrests abilityCrestId,
         int amount
     )
@@ -1229,6 +1229,14 @@ public class AbilityCrestServiceTest
         this.mockUserDataRepository
             .Setup(x => x.UpdateCoin(-amount * 20_000))
             .Returns(Task.CompletedTask);
+        this.mockInventoryRepository
+            .Setup(
+                x =>
+                    x.UpdateQuantity(
+                        new Dictionary<Materials, int> { { Materials.FortifyingGemstone, amount } }
+                    )
+            )
+            .Returns(Task.CompletedTask);
 
         (await this.abilityCrestService.TryResetAugments(abilityCrestId, PlusCountType.Hp))
             .Should()
@@ -1243,7 +1251,7 @@ public class AbilityCrestServiceTest
     [InlineData(AbilityCrests.ManaFount, 50)]
     [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, 1)]
     [InlineData(AbilityCrests.TheGeniusTacticianBowsBoon, 40)]
-    public async Task TryResetAugments_SuccessfulReturnsSuccessfulResultCodeForAttackAugments(
+    public async Task TryResetAugments_SuccessfulReturnsSuccessfulResultCodeForAttackAugmentsAndRefundsMaterials(
         AbilityCrests abilityCrestId,
         int amount
     )
@@ -1263,6 +1271,14 @@ public class AbilityCrestServiceTest
         this.mockUserDataRepository.Setup(x => x.CheckCoin(amount * 20_000)).ReturnsAsync(true);
         this.mockUserDataRepository
             .Setup(x => x.UpdateCoin(-amount * 20_000))
+            .Returns(Task.CompletedTask);
+        this.mockInventoryRepository
+            .Setup(
+                x =>
+                    x.UpdateQuantity(
+                        new Dictionary<Materials, int> { { Materials.AmplifyingGemstone, amount } }
+                    )
+            )
             .Returns(Task.CompletedTask);
 
         (await this.abilityCrestService.TryResetAugments(abilityCrestId, PlusCountType.Atk))

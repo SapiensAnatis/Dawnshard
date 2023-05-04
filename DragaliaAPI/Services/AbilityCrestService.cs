@@ -276,16 +276,26 @@ public class AbilityCrestService : IAbilityCrestService
             return ResultCode.CommonMaterialShort;
         }
 
+        Dictionary<Materials, int> returnedAugments;
         if (augmentType == PlusCountType.Hp)
         {
+            returnedAugments = new()
+            {
+                { Materials.FortifyingGemstone, dbAbilityCrest.HpPlusCount }
+            };
             dbAbilityCrest.HpPlusCount = 0;
         }
         else
         {
+            returnedAugments = new()
+            {
+                { Materials.AmplifyingGemstone, dbAbilityCrest.AttackPlusCount }
+            };
             dbAbilityCrest.AttackPlusCount = 0;
         }
 
         await this.userDataRepository.UpdateCoin(-augmentTotal * 20_000);
+        await this.inventoryRepository.UpdateQuantity(returnedAugments);
         return ResultCode.Success;
     }
 
