@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +48,7 @@ public static class DatabaseConfiguration
             .AddScoped<IFortRepository, FortRepository>()
             .AddScoped<IWeaponRepository, WeaponRepository>()
             .AddScoped<IStoryRepository, StoryRepository>()
+            .AddScoped<IPresentRepository, PresentRepository>()
             .AddScoped<IAbilityCrestRepository, AbilityCrestRepository>();
 
         return services;

@@ -3168,6 +3168,12 @@ public class PartyUpdatePartyNameRequest
 [MessagePackObject(true)]
 public class PlatformAchievementGetPlatformAchievementListRequest { }
 
+/// <summary>
+/// Request object for fetching presents
+/// Notte's Note:
+/// present_history_id is 0 for the first request, but the client will send another request when reaching the end of the previously received list.
+/// On subsequent fetch requests present_history_id will contain the id of the first present of the previously fetched list.
+/// </summary>
 [MessagePackObject(true)]
 public class PresentGetHistoryListRequest
 {
@@ -3181,13 +3187,20 @@ public class PresentGetHistoryListRequest
     public PresentGetHistoryListRequest() { }
 }
 
+/// <summary>
+/// Request object for fetching presents
+/// Notte's Note:
+/// present_id is 0 for the first request, but the client will send another request when reaching the end of the previously received list.
+/// On subsequent fetch requests present_id will contain the id of the first present of the previously fetched list.
+/// </summary>
 [MessagePackObject(true)]
 public class PresentGetPresentListRequest
 {
-    public int is_limit { get; set; }
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_limit { get; set; }
     public ulong present_id { get; set; }
 
-    public PresentGetPresentListRequest(int is_limit, ulong present_id)
+    public PresentGetPresentListRequest(bool is_limit, ulong present_id)
     {
         this.is_limit = is_limit;
         this.present_id = present_id;
@@ -3200,9 +3213,11 @@ public class PresentGetPresentListRequest
 public class PresentReceiveRequest
 {
     public IEnumerable<ulong> present_id_list { get; set; }
-    public int is_limit { get; set; }
 
-    public PresentReceiveRequest(IEnumerable<ulong> present_id_list, int is_limit)
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_limit { get; set; }
+
+    public PresentReceiveRequest(IEnumerable<ulong> present_id_list, bool is_limit)
     {
         this.present_id_list = present_id_list;
         this.is_limit = is_limit;

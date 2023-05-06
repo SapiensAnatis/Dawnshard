@@ -7523,9 +7523,39 @@ public class PresentDetailList
     public int message_param_value_2 { get; set; }
     public int message_param_value_3 { get; set; }
     public int message_param_value_4 { get; set; }
+    public int extra_parameter_1 { get; set; }
+    public int extra_parameter_2 { get; set; }
+    public int extra_parameter_3 { get; set; }
+    public int extra_parameter_4 { get; set; }
+    public int extra_parameter_5 { get; set; }
     public DateTimeOffset receive_limit_time { get; set; }
     public DateTimeOffset create_time { get; set; }
 
+    // UNKNOWN
+    /// <summary>
+    /// Response type for present data re0presentation
+    /// </summary>
+    /// <param name="present_id">duh</param>
+    /// <param name="master_id">Literally no idea</param>
+    /// <param name="state">Literally no idea</param>
+    /// <param name="entity_type">Entity type as found in <seealso cref="EntityTypes"/></param>
+    /// <param name="entity_id">duh</param>
+    /// <param name="entity_quantity">Amount if entity is quantifiable</param>
+    /// <param name="entity_level">Level if entity is chara or dragon</param>
+    /// <param name="entity_limit_break_count">LB count if entity is chara or dragon</param>
+    /// <param name="entity_status_plus_count">Probably augments for chara or dragon entities</param>
+    /// <param name="message_id">Something about message?</param>
+    /// <param name="message_param_value_1">params about displayed message</param>
+    /// <param name="message_param_value_2">params about displayed message</param>
+    /// <param name="message_param_value_3">params about displayed message</param>
+    /// <param name="message_param_value_4">params about displayed message</param>
+    /// <param name="extra_parameter_1">literally no idea</param>
+    /// <param name="extra_parameter_2"></param>
+    /// <param name="extra_parameter_3"></param>
+    /// <param name="extra_parameter_4"></param>
+    /// <param name="extra_parameter_5"></param>
+    /// <param name="receive_limit_time">Receivable until (probably just for the client to show)</param>
+    /// <param name="create_time">Creation time of the present</param>
     public PresentDetailList(
         ulong present_id,
         int master_id,
@@ -7541,6 +7571,11 @@ public class PresentDetailList
         int message_param_value_2,
         int message_param_value_3,
         int message_param_value_4,
+        int extra_parameter_1,
+        int extra_parameter_2,
+        int extra_parameter_3,
+        int extra_parameter_4,
+        int extra_parameter_5,
         DateTimeOffset receive_limit_time,
         DateTimeOffset create_time
     )
@@ -7559,6 +7594,11 @@ public class PresentDetailList
         this.message_param_value_2 = message_param_value_2;
         this.message_param_value_3 = message_param_value_3;
         this.message_param_value_4 = message_param_value_4;
+        this.extra_parameter_1 = extra_parameter_1;
+        this.extra_parameter_2 = extra_parameter_2;
+        this.extra_parameter_3 = extra_parameter_3;
+        this.extra_parameter_4 = extra_parameter_4;
+        this.extra_parameter_1 = extra_parameter_5;
         this.receive_limit_time = receive_limit_time;
         this.create_time = create_time;
     }

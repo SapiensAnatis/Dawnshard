@@ -100,6 +100,7 @@ builder.Services
     .AddScoped<IFortService, FortService>()
     .AddScoped<IQuestRewardService, QuestRewardService>()
     .AddScoped<IStoryService, StoryService>()
+    .AddScoped<IPresentService, PresentService>()
     .AddScoped<IAbilityCrestService, AbilityCrestService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>()
