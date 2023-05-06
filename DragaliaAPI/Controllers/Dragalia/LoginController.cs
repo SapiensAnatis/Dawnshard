@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
+using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,18 +22,21 @@ public class LoginController : DragaliaControllerBase
     private readonly IUserDataRepository userDataRepository;
     private readonly IInventoryRepository inventoryRepository;
     private readonly IUpdateDataService updateDataService;
+    private readonly IPresentService presentService;
     private readonly ILogger<LoginController> logger;
 
     public LoginController(
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
         IUpdateDataService updateDataService,
+        IPresentService presentService,
         ILogger<LoginController> logger
     )
     {
         this.userDataRepository = userDataRepository;
         this.inventoryRepository = inventoryRepository;
         this.updateDataService = updateDataService;
+        this.presentService = presentService;
         this.logger = logger;
     }
 
@@ -58,6 +63,69 @@ public class LoginController : DragaliaControllerBase
         }
 
         userData.LastLoginTime = DateTimeOffset.UtcNow;
+
+#if DEBUG
+        this.presentService.AddPresent(
+            new Present(PresentMessage.Maintenance, EntityTypes.Chara, (int)Charas.Addis)
+            {
+                ExpiryTime = TimeSpan.FromHours(1),
+                MessageParamValues = new[] { 100000101 }
+            }
+        );
+
+        this.presentService.AddPresent(
+            new Present(PresentMessage.DragonBond, EntityTypes.Dragon, (int)Dragons.Agni)
+            {
+                ExpiryTime = TimeSpan.FromHours(1),
+                MessageParamValues = new[] { 100000101 }
+            }
+        );
+
+
+        this.presentService.AddPresent(
+            new Present(PresentMessage.AdventurerStoryRead, EntityTypes.Dew, 0)
+            {
+                ExpiryTime = TimeSpan.FromHours(1),
+                MessageParamValues = new[] { 100000101 }
+            }
+        );
+
+        this.presentService.AddPresent(
+            new Present(PresentMessage.DragonBond, EntityTypes.HustleHammer, 0, 8_000)
+            {
+                ExpiryTime = TimeSpan.FromHours(1),
+                MessageParamValues = new[] { 100000101 }
+            }
+        );
+
+        this.presentService.AddPresent(
+            new Present(PresentMessage.FirstClear, EntityTypes.Rupies, 0, 100_000)
+            {
+                ExpiryTime = TimeSpan.FromHours(1),
+                MessageParamValues = new[] { 100000101 }
+            }
+        );
+
+        this.presentService.AddPresent(
+            new Present(PresentMessage.QuestGrandBounty, EntityTypes.Wyrmite, 1_200)
+            {
+                ExpiryTime = TimeSpan.FromHours(1),
+                MessageParamValues = new[] { 100000101 }
+            }
+        );
+
+        this.presentService.AddPresent(
+            new Present(
+                PresentMessage.TeamFormationTutorial,
+                EntityTypes.Material,
+                (int)Materials.Squishums
+            )
+            {
+                ExpiryTime = TimeSpan.FromHours(1),
+                MessageParamValues = new[] { 100000101 }
+            }
+        );
+#endif
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 

@@ -1,0 +1,138 @@
+﻿using AutoMapper;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore;
+
+namespace DragaliaAPI.Features.Present;
+
+/// <summary>
+/// Present service to back <see cref="PresentController"/>.
+/// </summary>
+public class PresentControllerService : IPresentControllerService
+{
+    private const int PresentPageSize = 7;
+
+    private readonly IPresentRepository presentRepository;
+    private readonly IRewardService rewardService;
+    private readonly IPlayerIdentityService playerIdentityService;
+    private readonly IMapper mapper;
+    private readonly ILogger<PresentControllerService> logger;
+
+    public PresentControllerService(
+        ILogger<PresentControllerService> logger,
+        IPresentRepository presentRepository,
+        IRewardService rewardService,
+        IPlayerIdentityService playerIdentityService,
+        IMapper mapper
+    )
+    {
+        this.presentRepository = presentRepository;
+        this.rewardService = rewardService;
+        this.playerIdentityService = playerIdentityService;
+        this.logger = logger;
+        this.mapper = mapper;
+    }
+
+    public async Task<IEnumerable<PresentHistoryList>> GetPresentHistoryList(
+        PresentGetHistoryListRequest request
+    )
+    {
+        //TODO: Currently sending full list. Maybe include fetch limit and continue from request present_id
+        return (
+            await presentRepository.PresentHistory
+                .OrderByDescending(x => x.CreateTime)
+                .ToListAsync()
+        ).Select(mapper.Map<DbPlayerPresentHistory, PresentHistoryList>);
+    }
+
+    public async Task<IEnumerable<PresentDetailList>> GetPresentList(ulong presentId) =>
+        await this.GetPresentList(presentId, false);
+
+    public async Task<IEnumerable<PresentDetailList>> GetLimitPresentList(ulong presentId) =>
+        await this.GetPresentList(presentId, true);
+
+    private async Task<IEnumerable<PresentDetailList>> GetPresentList(ulong presentId, bool isLimit)
+    {
+        IQueryable<DbPlayerPresent> presentsQuery = presentRepository.Presents;
+
+        presentsQuery = isLimit
+            ? presentsQuery.Where(x => x.ReceiveLimitTime != null)
+            : presentsQuery.Where(x => x.ReceiveLimitTime == null);
+
+        if (presentId > 0)
+        {
+            presentsQuery = presentsQuery.Where(
+                x => x.PresentId >= (long)presentId + PresentPageSize
+            );
+        }
+
+        List<DbPlayerPresent> list = await presentsQuery
+            .OrderBy(x => x.PresentId)
+            .Take(PresentPageSize)
+            .ToListAsync();
+
+        return (list)
+            .Select(this.mapper.Map<DbPlayerPresent, PresentDetailList>)
+            .OrderBy(x => x.present_id);
+    }
+
+    public async Task<ClaimPresentResult> ReceivePresent(IEnumerable<ulong> ids, bool isLimit)
+    {
+        IQueryable<DbPlayerPresent> presentsQuery = presentRepository.Presents.Where(
+            x => ids.Contains((ulong)x.PresentId)
+        );
+
+        presentsQuery = isLimit
+            ? presentsQuery.Where(x => x.ReceiveLimitTime != null)
+            : presentsQuery.Where(x => x.ReceiveLimitTime == null);
+
+        List<DbPlayerPresent> presents = await presentsQuery.ToListAsync();
+
+        List<long> receivedIds = new();
+        List<long> notReceivedIds = new();
+        List<long> removedIds = new();
+
+        foreach (DbPlayerPresent present in presents)
+        {
+            RewardService.GrantResult result = await this.rewardService.GrantReward(
+                new(
+                    present.EntityType,
+                    present.EntityId,
+                    present.EntityQuantity,
+                    present.EntityLimitBreakCount,
+                    1,
+                    1
+                )
+            );
+
+            switch (result)
+            {
+                case RewardService.GrantResult.Added:
+                    receivedIds.Add(present.PresentId);
+                    break;
+                case RewardService.GrantResult.Converted:
+                    receivedIds.Add(present.PresentId);
+                    break;
+                case RewardService.GrantResult.Limit:
+                    notReceivedIds.Add(present.PresentId);
+                    break;
+                case RewardService.GrantResult.Discarded:
+                    removedIds.Add(present.PresentId);
+                    break;
+            }
+
+            this.logger.LogDebug("Claimed present {@present}", present);
+            this.presentRepository.AddPlayerPresentHistory(
+                this.mapper.Map<DbPlayerPresent, DbPlayerPresentHistory>(present)
+            );
+        }
+
+        await this.presentRepository.DeletePlayerPresents(receivedIds.Concat(removedIds));
+
+        return new(receivedIds, notReceivedIds, removedIds);
+    }
+
+    public record ClaimPresentResult(List<long> Received, List<long> Converted, List<long> Removed);
+}
