@@ -1,9 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
@@ -13,10 +11,7 @@ public class CastleStoryTest : TestFixture
         CustomWebApplicationFactory<Program> factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper)
-    {
-        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task ReadStory_StoryNotRead_ResponseHasRewards()
@@ -59,11 +54,7 @@ public class CastleStoryTest : TestFixture
         this.ApiContext.Add(
             new DbPlayerStoryState()
             {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/CastleStoryTest.cs
-                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-=======
                 DeviceAccountId = DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/CastleStoryTest.cs
                 State = StoryState.Read,
                 StoryId = 2,
                 StoryType = StoryTypes.Castle
@@ -89,11 +80,7 @@ public class CastleStoryTest : TestFixture
     {
         int oldCrystal = await this.ApiContext.PlayerUserData
             .AsNoTracking()
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/CastleStoryTest.cs
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
-=======
             .Where(x => x.DeviceAccountId == DeviceAccountId)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/CastleStoryTest.cs
             .Select(x => x.Crystal)
             .SingleAsync();
 
@@ -106,23 +93,14 @@ public class CastleStoryTest : TestFixture
 
         int newCrystal = await this.ApiContext.PlayerUserData
             .AsNoTracking()
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/CastleStoryTest.cs
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
-=======
             .Where(x => x.DeviceAccountId == DeviceAccountId)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/CastleStoryTest.cs
             .Select(x => x.Crystal)
             .SingleAsync();
 
         newCrystal.Should().Be(oldCrystal + 50);
 
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/CastleStoryTest.cs
-        IEnumerable<DbPlayerStoryState> stories = this.fixture.ApiContext.PlayerStoryState.Where(
-            x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-=======
         IEnumerable<DbPlayerStoryState> stories = this.ApiContext.PlayerStoryState.Where(
             x => x.DeviceAccountId == DeviceAccountId
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/CastleStoryTest.cs
         );
 
         stories
@@ -130,11 +108,7 @@ public class CastleStoryTest : TestFixture
             .ContainEquivalentOf(
                 new DbPlayerStoryState()
                 {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/CastleStoryTest.cs
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-=======
                     DeviceAccountId = DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/CastleStoryTest.cs
                     State = StoryState.Read,
                     StoryId = 3,
                     StoryType = StoryTypes.Castle

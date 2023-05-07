@@ -3,23 +3,19 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.PartyController"/>
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class PartyTest : TestFixture
 {
     public PartyTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task SetPartySetting_ValidRequest_UpdatesDatabase()
@@ -46,18 +42,10 @@ public class PartyTest : TestFixture
             )
         );
 
-        DbParty dbparty = await this.ApiContext.PlayerParties
-            .AsNoTracking()
+        ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
+        DbParty dbparty = await apiContext.PlayerParties
             .Include(x => x.Units)
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/PartyTest.cs
-            .Where(
-                x =>
-                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-                    && x.PartyNo == 1
-            )
-=======
             .Where(x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == 1)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/PartyTest.cs
             .SingleAsync();
 
         dbparty
@@ -65,11 +53,7 @@ public class PartyTest : TestFixture
             .BeEquivalentTo(
                 new DbParty()
                 {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/PartyTest.cs
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-=======
                     DeviceAccountId = DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/PartyTest.cs
                     PartyNo = 1,
                     PartyName = "My New Party",
                 },
@@ -85,11 +69,7 @@ public class PartyTest : TestFixture
                     {
                         UnitNo = 1,
                         PartyNo = 1,
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/PartyTest.cs
-                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-=======
                         DeviceAccountId = DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/PartyTest.cs
                         CharaId = Charas.Ilia,
                         EquipCrestSlotType1CrestId1 = AbilityCrests.ADragonyuleforIlia,
                         EquipWeaponBodyId = WeaponBodies.DivineTrigger,
@@ -99,11 +79,7 @@ public class PartyTest : TestFixture
                     {
                         UnitNo = 2,
                         PartyNo = 1,
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/PartyTest.cs
-                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-=======
                         DeviceAccountId = DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/PartyTest.cs
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
@@ -111,11 +87,7 @@ public class PartyTest : TestFixture
                     {
                         UnitNo = 3,
                         PartyNo = 1,
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/PartyTest.cs
-                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-=======
                         DeviceAccountId = DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/PartyTest.cs
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
@@ -123,11 +95,7 @@ public class PartyTest : TestFixture
                     {
                         UnitNo = 4,
                         PartyNo = 1,
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/PartyTest.cs
-                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-=======
                         DeviceAccountId = DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/PartyTest.cs
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
@@ -206,19 +174,10 @@ public class PartyTest : TestFixture
             new PartySetMainPartyNoRequest(2)
         );
 
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/PartyTest.cs
-        using IServiceScope scope = fixture.Services.CreateScope();
-        ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
+        ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
         DbPlayerUserData userData = await apiContext.PlayerUserData
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
+            .Where(x => x.DeviceAccountId == DeviceAccountId)
             .SingleAsync();
-=======
-        DbPlayerUserData userData = (
-            await this.ApiContext.PlayerUserData.FindAsync(DeviceAccountId)
-        )!;
-
-        await this.ApiContext.Entry(userData).ReloadAsync();
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/PartyTest.cs
 
         userData.MainPartyNo.Should().Be(2);
     }
@@ -227,15 +186,8 @@ public class PartyTest : TestFixture
     public async Task UpdatePartyName_UpdatesDatabase()
     {
         DbParty party =
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/PartyTest.cs
-            await this.fixture.ApiContext.PlayerParties.FindAsync(
-                IntegrationTestFixture.DeviceAccountIdConst,
-                1
-            ) ?? throw new NullReferenceException();
-=======
             await this.ApiContext.PlayerParties.FindAsync(DeviceAccountId, 1)
             ?? throw new NullReferenceException();
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/PartyTest.cs
 
         await this.Client.PostMsgpack<PartyUpdatePartyNameData>(
             "/party/update_party_name",
@@ -253,7 +205,7 @@ public class PartyTest : TestFixture
         PartyUpdatePartyNameData response = (
             await this.Client.PostMsgpack<PartyUpdatePartyNameData>(
                 "/party/update_party_name",
-                new PartyUpdatePartyNameRequest() { party_no = 4, party_name = "LIblis Full Auto" }
+                new PartyUpdatePartyNameRequest() { party_no = 1, party_name = "LIblis Full Auto" }
             )
         ).data;
 
@@ -261,7 +213,7 @@ public class PartyTest : TestFixture
 
         PartyList updateParty = response.update_data_list.party_list.ElementAt(0);
         updateParty.party_name.Should().Be("LIblis Full Auto");
-        updateParty.party_no.Should().Be(4);
+        updateParty.party_no.Should().Be(1);
         updateParty.party_setting_list.Should().NotBeEmpty();
         updateParty.party_setting_list.Should().BeInAscendingOrder(x => x.unit_no);
     }

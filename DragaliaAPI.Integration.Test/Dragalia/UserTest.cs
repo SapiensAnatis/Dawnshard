@@ -1,22 +1,19 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 [Collection("DragaliaIntegration")]
 public class UserTest : TestFixture
 {
+    public UserTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+        : base(factory, outputHelper) { }
+
     [Fact]
     public async Task LinkedNAccount_ReturnsExpectedResponse()
     {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/UserTest.cs
-        DbPlayerUserData dbUserData = this.fixture.ApiContext.PlayerUserData.Single(
-            x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-=======
         DbPlayerUserData dbUserData = this.ApiContext.PlayerUserData.Single(
             x => x.DeviceAccountId == DeviceAccountId
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/UserTest.cs
         );
 
         UserData expectedUserData = this.Mapper.Map<UserData>(dbUserData);
@@ -60,7 +57,4 @@ public class UserTest : TestFixture
                 opts => opts.Excluding(x => x.update_data_list.user_data.crystal)
             );
     }
-
-    public UserTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
 }

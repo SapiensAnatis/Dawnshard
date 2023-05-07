@@ -4,13 +4,13 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.SummonController"/>
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class SummonTest : TestFixture
 {
     public SummonTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
@@ -48,11 +48,7 @@ public class SummonTest : TestFixture
         DbPlayerSummonHistory historyEntry =
             new()
             {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/SummonTest.cs
-                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-=======
                 DeviceAccountId = DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/SummonTest.cs
                 SummonId = 1,
                 SummonExecType = SummonExecTypes.DailyDeal,
                 ExecDate = DateTimeOffset.UtcNow,
@@ -164,26 +160,16 @@ public class SummonTest : TestFixture
     {
         if (reward.entity_type == EntityTypes.Dragon)
         {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/SummonTest.cs
-            List<DbPlayerDragonData> dragonData = await apiContext.PlayerDragonData
-                .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
-=======
             List<DbPlayerDragonData> dragonData = await this.ApiContext.PlayerDragonData
                 .Where(x => x.DeviceAccountId == DeviceAccountId)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/SummonTest.cs
                 .ToListAsync();
 
             dragonData.Where(x => (int)x.DragonId == reward.id).Should().NotBeEmpty();
         }
         else
         {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/SummonTest.cs
-            List<DbPlayerCharaData> charaData = await apiContext.PlayerCharaData
-                .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
-=======
             List<DbPlayerCharaData> charaData = await this.ApiContext.PlayerCharaData
                 .Where(x => x.DeviceAccountId == DeviceAccountId)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/SummonTest.cs
                 .ToListAsync();
 
             charaData.Where(x => (int)x.CharaId == reward.id).Should().NotBeEmpty();

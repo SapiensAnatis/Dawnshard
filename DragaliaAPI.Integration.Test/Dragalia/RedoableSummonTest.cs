@@ -1,13 +1,11 @@
-﻿using DragaliaAPI.Database;
-using DragaliaAPI.Models.Generated;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit.Abstractions;
+﻿using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.RedoableSummonController"/>
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class RedoableSummonTest : TestFixture
 {
     public RedoableSummonTest(
@@ -48,7 +46,7 @@ public class RedoableSummonTest : TestFixture
         // Set up cached summon result
         await this.Client.PostMsgpack<RedoableSummonPreExecData>(
             "redoable_summon/pre_exec",
-            new RedoableSummonPreExecData()
+            new RedoableSummonPreExecRequest()
         );
 
         RedoableSummonFixExecData response = (
@@ -66,24 +64,12 @@ public class RedoableSummonTest : TestFixture
             .Select(x => (int)x.dragon_id)
             .OrderBy(x => x);
 
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/RedoableSummonTest.cs
-        using IServiceScope scope = fixture.Services.CreateScope();
-        ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
-
-        IEnumerable<int> dbCharaIds = apiContext.PlayerCharaData
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
-            .Select(x => (int)x.CharaId)
-            .OrderBy(x => x);
-        IEnumerable<int> dbDragonIds = apiContext.PlayerDragonData
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
-=======
         IEnumerable<int> dbCharaIds = this.ApiContext.PlayerCharaData
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .Select(x => (int)x.CharaId)
             .OrderBy(x => x);
         IEnumerable<int> dbDragonIds = this.ApiContext.PlayerDragonData
             .Where(x => x.DeviceAccountId == DeviceAccountId)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/RedoableSummonTest.cs
             .Select(x => (int)x.DragonId)
             .OrderBy(x => x);
 

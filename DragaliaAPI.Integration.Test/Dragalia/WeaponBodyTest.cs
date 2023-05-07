@@ -3,10 +3,8 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
@@ -18,7 +16,11 @@ public class WeaponBodyTest : TestFixture
         CustomWebApplicationFactory<Program> factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 5);
+        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
+    }
 
     [Fact]
     public async Task Craft_Success_ReturnsExpectedResponse()
@@ -28,20 +30,12 @@ public class WeaponBodyTest : TestFixture
             {
                 new()
                 {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/WeaponBodyTest.cs
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-=======
                     DeviceAccountId = DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/WeaponBodyTest.cs
                     WeaponBodyId = WeaponBodies.WandoftheTorrent
                 },
                 new()
                 {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/WeaponBodyTest.cs
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-=======
                     DeviceAccountId = DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/WeaponBodyTest.cs
                     WeaponBodyId = WeaponBodies.SpiritBreaker
                 },
             }
@@ -89,11 +83,7 @@ public class WeaponBodyTest : TestFixture
         this.ApiContext.PlayerWeapons.Add(
             new DbWeaponBody()
             {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/WeaponBodyTest.cs
-                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-=======
                 DeviceAccountId = DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/WeaponBodyTest.cs
                 WeaponBodyId = WeaponBodies.AbsoluteCrimson
             }
         );
@@ -113,11 +103,7 @@ public class WeaponBodyTest : TestFixture
         this.ApiContext.PlayerWeapons
             .SingleOrDefault(
                 x =>
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/WeaponBodyTest.cs
-                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-=======
                     x.DeviceAccountId == DeviceAccountId
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/WeaponBodyTest.cs
                     && x.WeaponBodyId == WeaponBodies.PrimalCrimson
             )
             .Should()
@@ -161,13 +147,7 @@ public class WeaponBodyTest : TestFixture
         ).data;
 
         // Check coin
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/WeaponBodyTest.cs
-        DbPlayerUserData userData = (
-            await apiContext.PlayerUserData.FindAsync(IntegrationTestFixture.DeviceAccountIdConst)
-        )!;
-=======
         DbPlayerUserData userData = (await apiContext.PlayerUserData.FindAsync(DeviceAccountId))!;
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/WeaponBodyTest.cs
         await apiContext.Entry(userData).ReloadAsync();
 
         if (testCase.ExpCoinLoss != 0)
@@ -180,11 +160,7 @@ public class WeaponBodyTest : TestFixture
         // Check weapon
         DbWeaponBody weaponBody = (
             await apiContext.PlayerWeapons.FindAsync(
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/WeaponBodyTest.cs
-                IntegrationTestFixture.DeviceAccountIdConst,
-=======
                 DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/WeaponBodyTest.cs
                 testCase.InitialState.WeaponBodyId
             )
         )!;
@@ -212,14 +188,7 @@ public class WeaponBodyTest : TestFixture
                 );
 
             DbPlayerMaterial dbEntry = (
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/WeaponBodyTest.cs
-                await apiContext.PlayerMaterials.FindAsync(
-                    IntegrationTestFixture.DeviceAccountIdConst,
-                    material
-                )
-=======
                 await apiContext.PlayerMaterials.FindAsync(DeviceAccountId, material)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/WeaponBodyTest.cs
             )!;
 
             dbEntry.Quantity.Should().Be(expQuantity);
@@ -274,11 +243,7 @@ public class WeaponBodyTest : TestFixture
         await this.AddToDatabase(
             new DbWeaponBody()
             {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/WeaponBodyTest.cs
-                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
-=======
                 DeviceAccountId = DeviceAccountId,
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/WeaponBodyTest.cs
                 WeaponBodyId = WeaponBodies.ChanzelianCaster,
                 BuildupCount = 4
             }
@@ -644,17 +609,8 @@ public class WeaponBodyTest : TestFixture
 
     private int GetMaterialCount(Materials id)
     {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/WeaponBodyTest.cs
-        return this.fixture.ApiContext.PlayerMaterials
-            .Where(
-                x =>
-                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-                    && x.MaterialId == id
-            )
-=======
         return this.ApiContext.PlayerMaterials
             .Where(x => x.DeviceAccountId == DeviceAccountId && x.MaterialId == id)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/WeaponBodyTest.cs
             .Select(x => x.Quantity)
             .First();
     }
@@ -663,11 +619,7 @@ public class WeaponBodyTest : TestFixture
     {
         return this.ApiContext.PlayerUserData
             .AsNoTracking()
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/WeaponBodyTest.cs
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
-=======
             .Where(x => x.DeviceAccountId == DeviceAccountId)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/WeaponBodyTest.cs
             .Select(x => x.Coin)
             .First();
     }

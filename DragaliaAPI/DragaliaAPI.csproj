@@ -47,6 +47,7 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<InternalsVisibleTo Include="DragaliaAPI.Test" />
+		<InternalsVisibleTo Include="DragaliaAPI.Integration.Test" />
 	</ItemGroup>
 
 	<ItemGroup>

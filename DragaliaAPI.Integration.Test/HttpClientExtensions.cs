@@ -46,7 +46,7 @@ public static class HttpClientExtensions
     /// Post a msgpack request, but do not attempt to deserialize it.
     /// Used for checking cases that should return non-200 codes.
     /// </summary>
-    /// <param name="client">HTTP client.</param>
+    /// <param name="client">HTTP this.Client.</param>
     /// <param name="endpoint">The endpoint to POST to.</param>
     /// <param name="request">The request to send.</param>
     /// <returns></returns>

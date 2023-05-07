@@ -7,13 +7,13 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.CharaController"/>
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class CharaTest : TestFixture
 {
     public CharaTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
@@ -54,22 +54,14 @@ public class CharaTest : TestFixture
     {
         DbPlayerCharaData charaData = await this.Services
             .GetRequiredService<IUnitRepository>()
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/CharaTest.cs
-            .GetAllCharaData(IntegrationTestFixture.DeviceAccountIdConst)
-=======
             .GetAllCharaData(DeviceAccountId)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/CharaTest.cs
             .Where(x => x.CharaId == Charas.Celliera)
             .FirstAsync();
 
         int matQuantity = (
             await this.Services
                 .GetRequiredService<IInventoryRepository>()
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/CharaTest.cs
-                .GetMaterial(IntegrationTestFixture.DeviceAccountIdConst, Materials.GoldCrystal)
-=======
                 .GetMaterial(DeviceAccountId, Materials.GoldCrystal)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/CharaTest.cs
         )!.Quantity;
 
         CharaBuildupData response = (

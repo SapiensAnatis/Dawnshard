@@ -2,11 +2,11 @@
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using FluentAssertions.Execution;
-using Xunit.Abstractions;
 using static DragaliaAPI.Services.SavefileService;
 
 namespace DragaliaAPI.Integration.Test.Other;
 
+[Collection("DragaliaIntegration")]
 public class DeleteSavefileTest : TestFixture
 {
     public DeleteSavefileTest(
@@ -43,13 +43,8 @@ public class DeleteSavefileTest : TestFixture
     [Fact]
     public async Task Delete_LoadIndexResponseHasNewSavefile()
     {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Other/DeleteSavefileTest.cs
-        long viewerId = fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
-=======
         long viewerId = this.ApiContext.PlayerUserData
             .Single(x => x.DeviceAccountId == DeviceAccountId)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Other/DeleteSavefileTest.cs
             .ViewerId;
 
         this.AddCharacter(Charas.Ilia);
@@ -79,7 +74,7 @@ public class DeleteSavefileTest : TestFixture
                 {
                     x.party_name.Should().Be("Default");
                     x.party_setting_list
-                        .Select(y => y.chara_id)
+                        .Select(x => x.chara_id)
                         .Should()
                         .BeEquivalentTo(
                             new List<Charas>()
@@ -118,9 +113,9 @@ public class DeleteSavefileTest : TestFixture
                                     is_new = false
                                 },
                                 opts =>
-                                    opts.Excluding(y => y.dragon_id)
-                                        .Excluding(y => y.dragon_key_id)
-                                        .Excluding(y => y.get_time)
+                                    opts.Excluding(x => x.dragon_id)
+                                        .Excluding(x => x.dragon_key_id)
+                                        .Excluding(x => x.get_time)
                             )
                 );
             ;

@@ -1,13 +1,13 @@
 ﻿using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.DungeonStartController"/>.
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class DungeonStartTest : TestFixture
 {
     public DungeonStartTest(
@@ -34,15 +34,8 @@ public class DungeonStartTest : TestFixture
         // Maybe once we do savefile import we can set the test fixture to have an endgame savefile
 
         IEnumerable<object> storedPartyData = (
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/DungeonStartTest.cs
-            await this.fixture.ApiContext.PlayerParties.SingleAsync(
-                x =>
-                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-                    && x.PartyNo == 1
-=======
             await this.ApiContext.PlayerParties.SingleAsync(
                 x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == 1
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/DungeonStartTest.cs
             )
         ).Units
             .Where(x => x.CharaId != 0)

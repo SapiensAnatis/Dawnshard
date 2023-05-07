@@ -1,12 +1,14 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using Xunit.Abstractions;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.QuestController"/>
 /// </summary>
+[Collection("DragaliaIntegration")]
 public class QuestTest : TestFixture
 {
     public QuestTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
@@ -45,29 +47,16 @@ public class QuestTest : TestFixture
             )
         ).data;
 
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Dragalia/QuestTest.cs
-        fixture.ApiContext.PlayerStoryState
-            .First(
-                x =>
-                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-                    && x.StoryId == 1001410
-            )
-            .State.Should()
-            .Be(StoryState.Read);
-
-        List<DbPlayerStoryState> storyStates = await fixture.ApiContext.PlayerStoryState
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
-            .ToListAsync();
-
-        storyStates.Should().Contain(x => x.StoryId == 1001410 && x.State == StoryState.Read);
-        fixture.ApiContext.PlayerCharaData.Any(x => x.CharaId == Charas.Zena).Should().BeTrue();
-=======
         this.ApiContext.PlayerStoryState
             .First(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 1001410)
             .State.Should()
             .Be(StoryState.Read);
 
+        List<DbPlayerStoryState> storyStates = await this.ApiContext.PlayerStoryState
+            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .ToListAsync();
+
+        storyStates.Should().Contain(x => x.StoryId == 1001410 && x.State == StoryState.Read);
         this.ApiContext.PlayerCharaData.Any(x => x.CharaId == Charas.Zena).Should().BeTrue();
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Dragalia/QuestTest.cs
     }
 }

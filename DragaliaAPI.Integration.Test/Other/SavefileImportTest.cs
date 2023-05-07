@@ -1,13 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
-using DragaliaAPI.Test.Utils;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Other;
 
@@ -60,13 +57,8 @@ public class SavefileImportTest : TestFixture
     public async Task Import_LoadIndexReturnsImportedSavefile()
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Other/SavefileImportTest.cs
-        long viewerId = this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
-=======
         long viewerId = this.ApiContext.PlayerUserData
             .Single(x => x.DeviceAccountId == DeviceAccountId)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Other/SavefileImportTest.cs
             .ViewerId;
 
         LoadIndexData savefile = JsonSerializer
@@ -162,35 +154,13 @@ public class SavefileImportTest : TestFixture
     [Fact]
     public async Task Import_PropertiesMappedCorrectly()
     {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Other/SavefileImportTest.cs
-        long viewerId = this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
-=======
         long viewerId = this.ApiContext.PlayerUserData
             .Single(x => x.DeviceAccountId == DeviceAccountId)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Other/SavefileImportTest.cs
             .ViewerId;
 
         HttpContent content = PrepareSavefileRequest();
         await this.Client.PostAsync($"savefile/import/{viewerId}", content);
 
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Other/SavefileImportTest.cs
-        fixture.ApiContext.PlayerStoryState
-            .Single(
-                x =>
-                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-                    && x.StoryId == 110313011
-            )
-            .StoryType.Should()
-            .Be(StoryTypes.Chara);
-
-        fixture.ApiContext.PlayerStoryState
-            .Single(
-                x =>
-                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-                    && x.StoryId == 210091011
-            )
-=======
         this.ApiContext.PlayerStoryState
             .Single(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 110313011)
             .StoryType.Should()
@@ -198,7 +168,6 @@ public class SavefileImportTest : TestFixture
 
         this.ApiContext.PlayerStoryState
             .Single(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 210091011)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Other/SavefileImportTest.cs
             .StoryType.Should()
             .Be(StoryTypes.Dragon);
     }
@@ -206,13 +175,8 @@ public class SavefileImportTest : TestFixture
     [Fact]
     public async Task Import_IsIdempotent()
     {
-<<<<<<< HEAD:DragaliaAPI.Test/Integration/Other/SavefileImportTest.cs
-        long viewerId = this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
-=======
         long viewerId = this.ApiContext.PlayerUserData
             .Single(x => x.DeviceAccountId == DeviceAccountId)
->>>>>>> bb29ecf (Attempt to use containers for tests):DragaliaAPI.Integration.Test/Other/SavefileImportTest.cs
             .ViewerId;
 
         HttpContent content = PrepareSavefileRequest();
