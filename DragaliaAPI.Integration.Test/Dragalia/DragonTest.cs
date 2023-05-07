@@ -437,7 +437,7 @@ public class DragonTest : TestFixture
     {
         DbPlayerDragonData dbDragon = await this.AddToDatabase(testCase.SetupDragons[0]);
 
-        DbPlayerDragonData dbDragonSacrifice = null;
+        DbPlayerDragonData dbDragonSacrifice = null!;
         if (testCase.LbMatType == DragonLimitBreakMatTypes.Dupe)
         {
             dbDragonSacrifice = await this.AddToDatabase(testCase.SetupDragons[1]);

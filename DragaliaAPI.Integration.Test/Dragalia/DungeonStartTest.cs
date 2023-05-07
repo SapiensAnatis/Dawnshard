@@ -1,36 +1,26 @@
-﻿using System.Text.Json;
-using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Xunit.Abstractions;
 
-namespace DragaliaAPI.Test.Integration.Dragalia;
+namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.DungeonStartController"/>.
 /// </summary>
 [Collection("DragaliaIntegration")]
-public class DungeonStartTest : IClassFixture<IntegrationTestFixture>
+public class DungeonStartTest : TestFixture
 {
-    private readonly HttpClient client;
-    private readonly IntegrationTestFixture fixture;
-    private readonly ITestOutputHelper output;
-
-    public DungeonStartTest(IntegrationTestFixture fixture, ITestOutputHelper output)
-    {
-        this.fixture = fixture;
-        this.output = output;
-        client = fixture.CreateClient(
-            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
-        );
-    }
+    public DungeonStartTest(
+        CustomWebApplicationFactory<Program> factory,
+        ITestOutputHelper outputHelper
+    )
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task EnterNewQuest_UsesExpectedParty()
     {
         DungeonStartStartData response = (
-            await this.client.PostMsgpack<DungeonStartStartData>(
+            await this.Client.PostMsgpack<DungeonStartStartData>(
                 "/dungeon_start/start",
                 new DungeonStartStartRequest()
                 {
@@ -44,10 +34,8 @@ public class DungeonStartTest : IClassFixture<IntegrationTestFixture>
         // Maybe once we do savefile import we can set the test fixture to have an endgame savefile
 
         IEnumerable<object> storedPartyData = (
-            await this.fixture.ApiContext.PlayerParties.SingleAsync(
-                x =>
-                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-                    && x.PartyNo == 1
+            await this.ApiContext.PlayerParties.SingleAsync(
+                x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == 1
             )
         ).Units
             .Where(x => x.CharaId != 0)

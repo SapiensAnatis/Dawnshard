@@ -18,11 +18,21 @@
       <Reference Include="Moq">
         <HintPath>..\..\..\.nuget\packages\moq\4.18.4\lib\net6.0\Moq.dll</HintPath>
       </Reference>
+      <Reference Include="System.IdentityModel.Tokens.Jwt">
+        <HintPath>..\..\.nuget\packages\system.identitymodel.tokens.jwt\6.29.0\lib\net6.0\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="FluentAssertions" Version="6.11.0" />
+      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.30.0" />
       <PackageReference Include="Moq" Version="4.18.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="RSA_key.pem">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

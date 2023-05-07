@@ -1,25 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Models.Generated;
+using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Test.Integration.Dragalia;
+namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.AbilityCrestTradeController"/>
 /// </summary>
 [Collection("DragaliaIntegration")]
-public class AbilityCrestTradeTest : IClassFixture<IntegrationTestFixture>
+public class AbilityCrestTradeTest : TestFixture
 {
-    private readonly HttpClient client;
-    private readonly IntegrationTestFixture fixture;
-
-    public AbilityCrestTradeTest(IntegrationTestFixture fixture)
-    {
-        this.fixture = fixture;
-        client = fixture.CreateClient(
-            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
-        );
-    }
+    public AbilityCrestTradeTest(
+        CustomWebApplicationFactory<Program> factory,
+        ITestOutputHelper output
+    )
+        : base(factory, output) { }
 
     [Theory]
     [InlineData(104, AbilityCrests.WorthyRivals, 4000)]
@@ -34,7 +29,7 @@ public class AbilityCrestTradeTest : IClassFixture<IntegrationTestFixture>
         int old_dewpoint = GetDewpoint();
 
         AbilityCrestTradeTradeData data = (
-            await client.PostMsgpack<AbilityCrestTradeTradeData>(
+            await this.Client.PostMsgpack<AbilityCrestTradeTradeData>(
                 "ability_crest_trade/trade",
                 new AbilityCrestTradeTradeRequest()
                 {
@@ -55,9 +50,9 @@ public class AbilityCrestTradeTest : IClassFixture<IntegrationTestFixture>
 
     private int GetDewpoint()
     {
-        return this.fixture.ApiContext.PlayerUserData
+        return this.ApiContext.PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
+            .Where(x => x.DeviceAccountId == DeviceAccountId)
             .Select(x => x.DewPoint)
             .First();
     }

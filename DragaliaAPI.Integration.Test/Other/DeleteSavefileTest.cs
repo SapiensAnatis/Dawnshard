@@ -1,33 +1,30 @@
 ﻿using System.Net;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using FluentAssertions.Execution;
 using static DragaliaAPI.Services.SavefileService;
 
-namespace DragaliaAPI.Test.Integration.Other;
+namespace DragaliaAPI.Integration.Test.Other;
 
 [Collection("DragaliaIntegration")]
-public class DeleteSavefileTest : IClassFixture<IntegrationTestFixture>
+public class DeleteSavefileTest : TestFixture
 {
-    private readonly IntegrationTestFixture fixture;
-    private readonly HttpClient client;
-
-    public DeleteSavefileTest(IntegrationTestFixture fixture)
+    public DeleteSavefileTest(
+        CustomWebApplicationFactory<Program> factory,
+        ITestOutputHelper outputHelper
+    )
+        : base(factory, outputHelper)
     {
-        this.fixture = fixture;
-        this.client = fixture.CreateClient();
-
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
-        this.client.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
+        this.Client.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
     }
 
     [Fact]
     public async Task Delete_NoDeveloperToken_Returns401()
     {
-        this.client.DefaultRequestHeaders.Remove("Authorization");
+        this.Client.DefaultRequestHeaders.Remove("Authorization");
 
-        HttpResponseMessage importResponse = await this.client.DeleteAsync($"savefile/delete/4");
+        HttpResponseMessage importResponse = await this.Client.DeleteAsync($"savefile/delete/4");
 
         importResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -35,10 +32,10 @@ public class DeleteSavefileTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task Delete_WrongDeveloperToken_Returns401()
     {
-        this.client.DefaultRequestHeaders.Remove("Authorization");
-        this.client.DefaultRequestHeaders.Add("Authorization", $"Bearer imfeeling22");
+        this.Client.DefaultRequestHeaders.Remove("Authorization");
+        this.Client.DefaultRequestHeaders.Add("Authorization", $"Bearer imfeeling22");
 
-        HttpResponseMessage importResponse = await this.client.DeleteAsync($"savefile/delete/4");
+        HttpResponseMessage importResponse = await this.Client.DeleteAsync($"savefile/delete/4");
 
         importResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -46,20 +43,20 @@ public class DeleteSavefileTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task Delete_LoadIndexResponseHasNewSavefile()
     {
-        long viewerId = fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
+        long viewerId = this.ApiContext.PlayerUserData
+            .Single(x => x.DeviceAccountId == DeviceAccountId)
             .ViewerId;
 
-        await this.fixture.AddCharacter(Charas.Ilia);
-        await this.fixture.AddCharacter(Charas.DragonyuleIlia);
+        this.AddCharacter(Charas.Ilia);
+        this.AddCharacter(Charas.DragonyuleIlia);
 
-        HttpResponseMessage importResponse = await this.client.DeleteAsync(
+        HttpResponseMessage importResponse = await this.Client.DeleteAsync(
             $"savefile/delete/{viewerId}"
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         LoadIndexData storedSavefile = (
-            await this.client.PostMsgpack<LoadIndexData>("load/index", new LoadIndexRequest())
+            await this.Client.PostMsgpack<LoadIndexData>("load/index", new LoadIndexRequest())
         ).data;
 
         // This test also provides us a good way to check out the default savefile

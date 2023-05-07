@@ -28,7 +28,7 @@ public static class TestUtils
     static TestUtils()
     {
         RSA rsa = RSA.Create();
-        rsa.ImportFromPem(File.ReadAllText("RSA_key.pem").AsSpan());
+        rsa.ImportFromPem(File.ReadAllText(Path.Join("Data", "RSA_key.pem")).AsSpan());
         SecurityKeys.Add(new RsaSecurityKey(rsa) { KeyId = "key" });
     }
 

@@ -1,42 +1,37 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json;
-using System.Text.RegularExpressions;
-using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 
-namespace DragaliaAPI.Test.Integration.Other;
+namespace DragaliaAPI.Integration.Test.Other;
 
 /// <summary>
 /// Tests <see cref="Controllers.Other.SavefileController"/>
 /// </summary>
 [Collection("DragaliaIntegration")]
-public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
+public class SavefileImportTest : TestFixture
 {
-    private readonly IntegrationTestFixture fixture;
-    private readonly HttpClient client;
-
-    public SavefileImportTest(IntegrationTestFixture fixture)
+    public SavefileImportTest(
+        CustomWebApplicationFactory<Program> factory,
+        ITestOutputHelper outputHelper
+    )
+        : base(factory, outputHelper)
     {
-        this.fixture = fixture;
-        this.client = fixture.CreateClient();
-
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
-        this.client.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
+        this.Client.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
 
-        TestUtils.ApplyDateTimeAssertionOptions();
+        CommonAssertionOptions.ApplyTimeOptions();
     }
 
     [Fact]
     public async Task Import_NoDeveloperToken_Returns401()
     {
-        this.client.DefaultRequestHeaders.Remove("Authorization");
+        this.Client.DefaultRequestHeaders.Remove("Authorization");
 
-        HttpResponseMessage importResponse = await this.client.PostAsync(
+        HttpResponseMessage importResponse = await this.Client.PostAsync(
             $"savefile/import/1",
             JsonContent.Create(new { })
         );
@@ -47,10 +42,10 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task Import_WrongDeveloperToken_Returns401()
     {
-        this.client.DefaultRequestHeaders.Remove("Authorization");
-        this.client.DefaultRequestHeaders.Add("Authorization", "blub blub blub");
+        this.Client.DefaultRequestHeaders.Remove("Authorization");
+        this.Client.DefaultRequestHeaders.Add("Authorization", "blub blub blub");
 
-        HttpResponseMessage importResponse = await this.client.PostAsync(
+        HttpResponseMessage importResponse = await this.Client.PostAsync(
             $"savefile/import/1",
             JsonContent.Create(new { })
         );
@@ -62,8 +57,8 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
     public async Task Import_LoadIndexReturnsImportedSavefile()
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
-        long viewerId = this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
+        long viewerId = this.ApiContext.PlayerUserData
+            .Single(x => x.DeviceAccountId == DeviceAccountId)
             .ViewerId;
 
         LoadIndexData savefile = JsonSerializer
@@ -73,14 +68,14 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
         HttpContent content = new StringContent(savefileJson);
         content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-        HttpResponseMessage importResponse = await this.client.PostAsync(
+        HttpResponseMessage importResponse = await this.Client.PostAsync(
             $"savefile/import/{viewerId}",
             content
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         LoadIndexData storedSavefile = (
-            await this.client.PostMsgpack<LoadIndexData>("load/index", new LoadIndexRequest())
+            await this.Client.PostMsgpack<LoadIndexData>("load/index", new LoadIndexRequest())
         ).data;
 
         storedSavefile
@@ -159,28 +154,20 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task Import_PropertiesMappedCorrectly()
     {
-        long viewerId = this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
+        long viewerId = this.ApiContext.PlayerUserData
+            .Single(x => x.DeviceAccountId == DeviceAccountId)
             .ViewerId;
 
         HttpContent content = PrepareSavefileRequest();
-        await this.client.PostAsync($"savefile/import/{viewerId}", content);
+        await this.Client.PostAsync($"savefile/import/{viewerId}", content);
 
-        fixture.ApiContext.PlayerStoryState
-            .Single(
-                x =>
-                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-                    && x.StoryId == 110313011
-            )
+        this.ApiContext.PlayerStoryState
+            .Single(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 110313011)
             .StoryType.Should()
             .Be(StoryTypes.Chara);
 
-        fixture.ApiContext.PlayerStoryState
-            .Single(
-                x =>
-                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-                    && x.StoryId == 210091011
-            )
+        this.ApiContext.PlayerStoryState
+            .Single(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 210091011)
             .StoryType.Should()
             .Be(StoryTypes.Dragon);
     }
@@ -188,19 +175,19 @@ public class SavefileImportTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task Import_IsIdempotent()
     {
-        long viewerId = this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
+        long viewerId = this.ApiContext.PlayerUserData
+            .Single(x => x.DeviceAccountId == DeviceAccountId)
             .ViewerId;
 
         HttpContent content = PrepareSavefileRequest();
 
-        HttpResponseMessage importResponse = await this.client.PostAsync(
+        HttpResponseMessage importResponse = await this.Client.PostAsync(
             $"savefile/import/{viewerId}",
             content
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        HttpResponseMessage importResponse2 = await this.client.PostAsync(
+        HttpResponseMessage importResponse2 = await this.Client.PostAsync(
             $"savefile/import/{viewerId}",
             content
         );

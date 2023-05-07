@@ -2,19 +2,14 @@
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.Test.Integration.Dragalia;
+namespace DragaliaAPI.Integration.Test.Dragalia;
 
-public class FortTest : IntegrationTestBase
+public class FortTest : TestFixture
 {
-    private readonly IntegrationTestFixture fixture;
-    private readonly HttpClient client;
-
-    public FortTest(IntegrationTestFixture fixture)
+    public FortTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+        : base(factory, outputHelper)
     {
-        this.fixture = fixture;
-        this.client = fixture.CreateClient();
-
-        TestUtils.ApplyDateTimeAssertionOptions(thresholdSec: 2);
+        CommonAssertionOptions.ApplyTimeOptions();
     }
 
     [Fact]
@@ -27,10 +22,10 @@ public class FortTest : IntegrationTestBase
         // 2013-01-14 07:47:23
         DateTimeOffset income = DateTimeOffset.FromUnixTimeSeconds(1358149643);
 
-        this.fixture.ApiContext.PlayerFortBuilds.Add(
+        this.ApiContext.PlayerFortBuilds.Add(
             new DbFortBuild()
             {
-                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                DeviceAccountId = DeviceAccountId,
                 PlantId = FortPlants.AxeDojo,
                 Level = 10,
                 PositionX = 10,
@@ -41,10 +36,10 @@ public class FortTest : IntegrationTestBase
                 LastIncomeDate = income, // Axe dojos don't make you money but let's pretend they do
             }
         );
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         (
-            await this.client.PostMsgpack<FortGetDataData>(
+            await this.Client.PostMsgpack<FortGetDataData>(
                 "/fort/get_data",
                 new FortGetDataRequest()
             )
@@ -90,7 +85,7 @@ public class FortTest : IntegrationTestBase
     public async Task AddCarpenter_ReturnsValidResult()
     {
         FortAddCarpenterData response = (
-            await client.PostMsgpack<FortAddCarpenterData>(
+            await this.Client.PostMsgpack<FortAddCarpenterData>(
                 "/fort/add_carpenter",
                 new FortAddCarpenterRequest(PaymentTypes.Wyrmite)
             )
@@ -103,11 +98,11 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task BuildAtOnce_ReturnsValidResult()
     {
-        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds
+        DbFortBuild build = this.ApiContext.PlayerFortBuilds
             .Add(
                 new()
                 {
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                    DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 1,
                     PositionX = 2,
@@ -119,10 +114,10 @@ public class FortTest : IntegrationTestBase
                 }
             )
             .Entity;
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         FortBuildAtOnceData response = (
-            await client.PostMsgpack<FortBuildAtOnceData>(
+            await this.Client.PostMsgpack<FortBuildAtOnceData>(
                 "/fort/build_at_once",
                 new FortBuildAtOnceRequest(build.BuildId, PaymentTypes.Wyrmite)
             )
@@ -139,11 +134,11 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task BuildCancel_ReturnsValidResult()
     {
-        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds
+        DbFortBuild build = this.ApiContext.PlayerFortBuilds
             .Add(
                 new()
                 {
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                    DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 2,
                     PositionX = 2,
@@ -155,10 +150,10 @@ public class FortTest : IntegrationTestBase
                 }
             )
             .Entity;
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         FortBuildCancelData response = (
-            await client.PostMsgpack<FortBuildCancelData>(
+            await this.Client.PostMsgpack<FortBuildCancelData>(
                 "/fort/build_cancel",
                 new FortBuildCancelRequest(build.BuildId)
             )
@@ -175,11 +170,11 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task BuildEnd_ReturnsValidResult()
     {
-        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds
+        DbFortBuild build = this.ApiContext.PlayerFortBuilds
             .Add(
                 new()
                 {
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                    DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 2,
                     PositionX = 2,
@@ -191,10 +186,10 @@ public class FortTest : IntegrationTestBase
                 }
             )
             .Entity;
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         FortBuildEndData response = (
-            await client.PostMsgpack<FortBuildEndData>(
+            await this.Client.PostMsgpack<FortBuildEndData>(
                 "/fort/build_end",
                 new FortBuildEndRequest(build.BuildId)
             )
@@ -215,7 +210,7 @@ public class FortTest : IntegrationTestBase
         int ExpectedPositionZ = 2;
 
         FortBuildStartData response = (
-            await client.PostMsgpack<FortBuildStartData>(
+            await this.Client.PostMsgpack<FortBuildStartData>(
                 "/fort/build_start",
                 new FortBuildStartRequest(
                     FortPlants.FlameAltar,
@@ -237,11 +232,11 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelupAtOnce_ReturnsValidResult()
     {
-        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds
+        DbFortBuild build = this.ApiContext.PlayerFortBuilds
             .Add(
                 new()
                 {
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                    DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 2,
                     PositionX = 2,
@@ -253,10 +248,10 @@ public class FortTest : IntegrationTestBase
                 }
             )
             .Entity;
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         FortLevelupAtOnceData response = (
-            await client.PostMsgpack<FortLevelupAtOnceData>(
+            await this.Client.PostMsgpack<FortLevelupAtOnceData>(
                 "/fort/levelup_at_once",
                 new FortLevelupAtOnceRequest(build.BuildId, PaymentTypes.Wyrmite)
             )
@@ -273,11 +268,11 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelUpCancel_ReturnsValidResult()
     {
-        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds
+        DbFortBuild build = this.ApiContext.PlayerFortBuilds
             .Add(
                 new()
                 {
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                    DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 2,
                     PositionX = 2,
@@ -289,10 +284,10 @@ public class FortTest : IntegrationTestBase
                 }
             )
             .Entity;
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         FortLevelupCancelData response = (
-            await client.PostMsgpack<FortLevelupCancelData>(
+            await this.Client.PostMsgpack<FortLevelupCancelData>(
                 "/fort/levelup_cancel",
                 new FortLevelupCancelRequest(build.BuildId)
             )
@@ -309,11 +304,11 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelUpEnd_ReturnsValidResult()
     {
-        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds
+        DbFortBuild build = this.ApiContext.PlayerFortBuilds
             .Add(
                 new()
                 {
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                    DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 1,
                     PositionX = 2,
@@ -326,10 +321,10 @@ public class FortTest : IntegrationTestBase
             )
             .Entity;
 
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         FortLevelupEndData response = (
-            await client.PostMsgpack<FortLevelupEndData>(
+            await this.Client.PostMsgpack<FortLevelupEndData>(
                 "/fort/levelup_end",
                 new FortLevelupEndRequest(build.BuildId)
             )
@@ -345,11 +340,11 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task LevelUpStart_ReturnsValidResult()
     {
-        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds
+        DbFortBuild build = this.ApiContext.PlayerFortBuilds
             .Add(
                 new()
                 {
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                    DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 2,
                     PositionX = 2,
@@ -361,10 +356,10 @@ public class FortTest : IntegrationTestBase
                 }
             )
             .Entity;
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         FortLevelupStartData response = (
-            await client.PostMsgpack<FortLevelupStartData>(
+            await this.Client.PostMsgpack<FortLevelupStartData>(
                 "/fort/levelup_start",
                 new FortLevelupStartRequest(build.BuildId)
             )
@@ -382,11 +377,11 @@ public class FortTest : IntegrationTestBase
     [Fact]
     public async Task Move_ReturnsValidResult()
     {
-        DbFortBuild build = this.fixture.ApiContext.PlayerFortBuilds
+        DbFortBuild build = this.ApiContext.PlayerFortBuilds
             .Add(
                 new()
                 {
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                    DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 1,
                     PositionX = 2,
@@ -398,12 +393,12 @@ public class FortTest : IntegrationTestBase
                 }
             )
             .Entity;
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         int ExpectedPositionX = 4;
         int ExpectedPositionZ = 4;
         FortMoveData response = (
-            await client.PostMsgpack<FortMoveData>(
+            await this.Client.PostMsgpack<FortMoveData>(
                 "/fort/move",
                 new FortMoveRequest(build.BuildId, ExpectedPositionX, ExpectedPositionZ)
             )

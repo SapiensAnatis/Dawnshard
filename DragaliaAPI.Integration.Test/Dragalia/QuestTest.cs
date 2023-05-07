@@ -1,35 +1,24 @@
-﻿using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using MessagePack;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace DragaliaAPI.Test.Integration.Dragalia;
+namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.QuestController"/>
 /// </summary>
 [Collection("DragaliaIntegration")]
-public class QuestTest : IClassFixture<IntegrationTestFixture>
+public class QuestTest : TestFixture
 {
-    private readonly HttpClient client;
-    private readonly IntegrationTestFixture fixture;
-
-    public QuestTest(IntegrationTestFixture fixture)
-    {
-        this.fixture = fixture;
-        client = fixture.CreateClient(
-            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
-        );
-    }
+    public QuestTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task ReadStory_ReturnCorrectResponse()
     {
         QuestReadStoryData response = (
-            await client.PostMsgpack<QuestReadStoryData>(
+            await this.Client.PostMsgpack<QuestReadStoryData>(
                 "/quest/read_story",
                 new QuestReadStoryRequest() { quest_story_id = 1000106 }
             )
@@ -52,26 +41,22 @@ public class QuestTest : IClassFixture<IntegrationTestFixture>
     public async Task ReadStory_UpdatesDatabase()
     {
         QuestReadStoryData response = (
-            await client.PostMsgpack<QuestReadStoryData>(
+            await this.Client.PostMsgpack<QuestReadStoryData>(
                 "/quest/read_story",
                 new QuestReadStoryRequest() { quest_story_id = 1001410 }
             )
         ).data;
 
-        fixture.ApiContext.PlayerStoryState
-            .First(
-                x =>
-                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-                    && x.StoryId == 1001410
-            )
+        this.ApiContext.PlayerStoryState
+            .First(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 1001410)
             .State.Should()
             .Be(StoryState.Read);
 
-        List<DbPlayerStoryState> storyStates = await fixture.ApiContext.PlayerStoryState
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
+        List<DbPlayerStoryState> storyStates = await this.ApiContext.PlayerStoryState
+            .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ToListAsync();
 
         storyStates.Should().Contain(x => x.StoryId == 1001410 && x.State == StoryState.Read);
-        fixture.ApiContext.PlayerCharaData.Any(x => x.CharaId == Charas.Zena).Should().BeTrue();
+        this.ApiContext.PlayerCharaData.Any(x => x.CharaId == Charas.Zena).Should().BeTrue();
     }
 }

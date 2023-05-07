@@ -3,26 +3,21 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Test.Integration.Dragalia;
+namespace DragaliaAPI.Integration.Test.Dragalia;
 
-public class CastleStoryTest : IntegrationTestBase
+public class CastleStoryTest : TestFixture
 {
-    private readonly IntegrationTestFixture fixture;
-    private readonly HttpClient client;
-
-    public CastleStoryTest(IntegrationTestFixture fixture)
-    {
-        this.fixture = fixture;
-        this.client = fixture.CreateClient();
-
-        TestUtils.IgnoreNavigationAssertions();
-    }
+    public CastleStoryTest(
+        CustomWebApplicationFactory<Program> factory,
+        ITestOutputHelper outputHelper
+    )
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task ReadStory_StoryNotRead_ResponseHasRewards()
     {
         CastleStoryReadData data = (
-            await this.client.PostMsgpack<CastleStoryReadData>(
+            await this.Client.PostMsgpack<CastleStoryReadData>(
                 "/castle_story/read",
                 new CastleStoryReadRequest() { castle_story_id = 1 }
             )
@@ -56,19 +51,19 @@ public class CastleStoryTest : IntegrationTestBase
     [Fact]
     public async Task ReadStory_StoryRead_ResponseHasNoRewards()
     {
-        this.fixture.ApiContext.Add(
+        this.ApiContext.Add(
             new DbPlayerStoryState()
             {
-                DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                DeviceAccountId = DeviceAccountId,
                 State = StoryState.Read,
                 StoryId = 2,
                 StoryType = StoryTypes.Castle
             }
         );
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         CastleStoryReadData data = (
-            await this.client.PostMsgpack<CastleStoryReadData>(
+            await this.Client.PostMsgpack<CastleStoryReadData>(
                 "/castle_story/read",
                 new CastleStoryReadRequest() { castle_story_id = 2 }
             )
@@ -83,29 +78,29 @@ public class CastleStoryTest : IntegrationTestBase
     [Fact]
     public async Task ReadStory_StoryNotRead_UpdatesDatabase()
     {
-        int oldCrystal = await this.fixture.ApiContext.PlayerUserData
+        int oldCrystal = await this.ApiContext.PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
+            .Where(x => x.DeviceAccountId == DeviceAccountId)
             .Select(x => x.Crystal)
             .SingleAsync();
 
         CastleStoryReadData data = (
-            await this.client.PostMsgpack<CastleStoryReadData>(
+            await this.Client.PostMsgpack<CastleStoryReadData>(
                 "/castle_story/read",
                 new CastleStoryReadRequest() { castle_story_id = 3 }
             )
         ).data;
 
-        int newCrystal = await this.fixture.ApiContext.PlayerUserData
+        int newCrystal = await this.ApiContext.PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
+            .Where(x => x.DeviceAccountId == DeviceAccountId)
             .Select(x => x.Crystal)
             .SingleAsync();
 
         newCrystal.Should().Be(oldCrystal + 50);
 
-        IEnumerable<DbPlayerStoryState> stories = this.fixture.ApiContext.PlayerStoryState.Where(
-            x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+        IEnumerable<DbPlayerStoryState> stories = this.ApiContext.PlayerStoryState.Where(
+            x => x.DeviceAccountId == DeviceAccountId
         );
 
         stories
@@ -113,7 +108,7 @@ public class CastleStoryTest : IntegrationTestBase
             .ContainEquivalentOf(
                 new DbPlayerStoryState()
                 {
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                    DeviceAccountId = DeviceAccountId,
                     State = StoryState.Read,
                     StoryId = 3,
                     StoryType = StoryTypes.Castle

@@ -1,38 +1,28 @@
-﻿using System.Net;
-using DragaliaAPI.Database;
+﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using MessagePack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DragaliaAPI.Test.Integration.Dragalia;
+namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.PartyController"/>
 /// </summary>
 [Collection("DragaliaIntegration")]
-public class PartyTest : IClassFixture<IntegrationTestFixture>
+public class PartyTest : TestFixture
 {
-    private readonly HttpClient client;
-    private readonly IntegrationTestFixture fixture;
-
-    public PartyTest(IntegrationTestFixture fixture)
-    {
-        this.fixture = fixture;
-        client = fixture.CreateClient(
-            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
-        );
-    }
+    public PartyTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task SetPartySetting_ValidRequest_UpdatesDatabase()
     {
-        await fixture.AddCharacter(Charas.Ilia);
+        this.AddCharacter(Charas.Ilia);
 
-        await client.PostMsgpack<PartySetPartySettingData>(
+        await this.Client.PostMsgpack<PartySetPartySettingData>(
             "/party/set_party_setting",
             new PartySetPartySettingRequest(
                 1,
@@ -52,15 +42,10 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
             )
         );
 
-        using IServiceScope scope = fixture.Services.CreateScope();
-        ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
+        ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
         DbParty dbparty = await apiContext.PlayerParties
             .Include(x => x.Units)
-            .Where(
-                x =>
-                    x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
-                    && x.PartyNo == 1
-            )
+            .Where(x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == 1)
             .SingleAsync();
 
         dbparty
@@ -68,7 +53,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
             .BeEquivalentTo(
                 new DbParty()
                 {
-                    DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                    DeviceAccountId = DeviceAccountId,
                     PartyNo = 1,
                     PartyName = "My New Party",
                 },
@@ -84,7 +69,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
                     {
                         UnitNo = 1,
                         PartyNo = 1,
-                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                        DeviceAccountId = DeviceAccountId,
                         CharaId = Charas.Ilia,
                         EquipCrestSlotType1CrestId1 = AbilityCrests.ADragonyuleforIlia,
                         EquipWeaponBodyId = WeaponBodies.DivineTrigger,
@@ -94,7 +79,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
                     {
                         UnitNo = 2,
                         PartyNo = 1,
-                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                        DeviceAccountId = DeviceAccountId,
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
@@ -102,7 +87,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
                     {
                         UnitNo = 3,
                         PartyNo = 1,
-                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                        DeviceAccountId = DeviceAccountId,
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
@@ -110,7 +95,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
                     {
                         UnitNo = 4,
                         PartyNo = 1,
-                        DeviceAccountId = IntegrationTestFixture.DeviceAccountIdConst,
+                        DeviceAccountId = DeviceAccountId,
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
@@ -135,7 +120,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
             );
 
         (
-            await this.client.PostMsgpack<ResultCodeData>(
+            await this.Client.PostMsgpack<ResultCodeData>(
                 "/party/set_party_setting",
                 request,
                 ensureSuccessHeader: false
@@ -166,7 +151,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
             );
 
         (
-            await this.client.PostMsgpack<ResultCodeData>(
+            await this.Client.PostMsgpack<ResultCodeData>(
                 "/party/set_party_setting",
                 request,
                 ensureSuccessHeader: false
@@ -184,15 +169,14 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task SetMainPartyNo_UpdatesDatabase()
     {
-        await client.PostMsgpack<PartySetMainPartyNoData>(
+        await this.Client.PostMsgpack<PartySetMainPartyNoData>(
             "/party/set_main_party_no",
             new PartySetMainPartyNoRequest(2)
         );
 
-        using IServiceScope scope = fixture.Services.CreateScope();
-        ApiContext apiContext = scope.ServiceProvider.GetRequiredService<ApiContext>();
+        ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
         DbPlayerUserData userData = await apiContext.PlayerUserData
-            .Where(x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst)
+            .Where(x => x.DeviceAccountId == DeviceAccountId)
             .SingleAsync();
 
         userData.MainPartyNo.Should().Be(2);
@@ -202,17 +186,15 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
     public async Task UpdatePartyName_UpdatesDatabase()
     {
         DbParty party =
-            await this.fixture.ApiContext.PlayerParties.FindAsync(
-                IntegrationTestFixture.DeviceAccountIdConst,
-                1
-            ) ?? throw new NullReferenceException();
+            await this.ApiContext.PlayerParties.FindAsync(DeviceAccountId, 1)
+            ?? throw new NullReferenceException();
 
-        await client.PostMsgpack<PartyUpdatePartyNameData>(
+        await this.Client.PostMsgpack<PartyUpdatePartyNameData>(
             "/party/update_party_name",
             new PartyUpdatePartyNameRequest() { party_no = 1, party_name = "LIblis Full Auto" }
         );
 
-        await this.fixture.ApiContext.Entry(party).ReloadAsync();
+        await this.ApiContext.Entry(party).ReloadAsync();
 
         party.PartyName.Should().Be("LIblis Full Auto");
     }
@@ -221,7 +203,7 @@ public class PartyTest : IClassFixture<IntegrationTestFixture>
     public async Task UpdatePartyName_ReturnsCorrectResponse()
     {
         PartyUpdatePartyNameData response = (
-            await client.PostMsgpack<PartyUpdatePartyNameData>(
+            await this.Client.PostMsgpack<PartyUpdatePartyNameData>(
                 "/party/update_party_name",
                 new PartyUpdatePartyNameRequest() { party_no = 1, party_name = "LIblis Full Auto" }
             )

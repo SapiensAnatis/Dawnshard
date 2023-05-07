@@ -1,38 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 
-namespace DragaliaAPI.Test.Integration.Dragalia;
+namespace DragaliaAPI.Integration.Test.Dragalia;
 
 [Collection("DragaliaIntegration")]
-public class UserTest : IClassFixture<IntegrationTestFixture>
+public class UserTest : TestFixture
 {
-    private readonly IntegrationTestFixture fixture;
-    private readonly HttpClient client;
-
-    public UserTest(IntegrationTestFixture fixture)
-    {
-        this.fixture = fixture;
-        this.client = fixture.CreateClient();
-
-        TestUtils.ApplyDateTimeAssertionOptions();
-    }
+    public UserTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task LinkedNAccount_ReturnsExpectedResponse()
     {
-        DbPlayerUserData dbUserData = this.fixture.ApiContext.PlayerUserData.Single(
-            x => x.DeviceAccountId == IntegrationTestFixture.DeviceAccountIdConst
+        DbPlayerUserData dbUserData = this.ApiContext.PlayerUserData.Single(
+            x => x.DeviceAccountId == DeviceAccountId
         );
 
-        UserData expectedUserData = this.fixture.Mapper.Map<UserData>(dbUserData);
+        UserData expectedUserData = this.Mapper.Map<UserData>(dbUserData);
 
         (
-            await this.client.PostMsgpack<UserLinkedNAccountData>(
+            await this.Client.PostMsgpack<UserLinkedNAccountData>(
                 "/user/linked_n_account",
                 new UserLinkedNAccountRequest()
             )
@@ -51,7 +38,7 @@ public class UserTest : IClassFixture<IntegrationTestFixture>
     public async Task GetNAccountInfo_ReturnsExpectedResponse()
     {
         (
-            await this.client.PostMsgpack<UserGetNAccountInfoData>(
+            await this.Client.PostMsgpack<UserGetNAccountInfoData>(
                 "/user/get_n_account_info",
                 new UserGetNAccountInfoRequest()
             )

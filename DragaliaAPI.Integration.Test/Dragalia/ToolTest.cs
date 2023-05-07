@@ -1,36 +1,24 @@
-﻿using System.Net.Http.Headers;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
-using MessagePack;
 using NuGet.Common;
 
-namespace DragaliaAPI.Test.Integration.Dragalia;
+namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.ToolController"/>
 /// </summary>
 [Collection("DragaliaIntegration")]
-public class ToolTest : IClassFixture<IntegrationTestFixture>
+public class ToolTest : TestFixture
 {
-    private readonly HttpClient client;
-    private readonly IntegrationTestFixture fixture;
-
-    public ToolTest(IntegrationTestFixture fixture)
-    {
-        this.fixture = fixture;
-        this.fixture.SetupSaveImport();
-
-        client = fixture.CreateClient(
-            new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
-        );
-    }
+    public ToolTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task ServiceStatus_ReturnsCorrectResponse()
     {
         ToolGetServiceStatusData response = (
-            await client.PostMsgpack<ToolGetServiceStatusData>(
+            await this.Client.PostMsgpack<ToolGetServiceStatusData>(
                 "tool/get_service_status",
                 new ToolGetServiceStatusRequest()
             )
@@ -43,16 +31,13 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     public async Task Signup_CorrectIdToken_ReturnsOKResponse()
     {
         ToolSignupData response = (
-            await client.PostMsgpack<ToolSignupData>(
+            await this.Client.PostMsgpack<ToolSignupData>(
                 "/tool/signup",
                 new ToolSignupRequest()
                 {
-                    id_token = TestUtils.TokenToString(
-                        TestUtils.GetToken(
-                            DateTime.UtcNow + TimeSpan.FromMinutes(5),
-                            IntegrationTestFixture.DeviceAccountIdConst
-                        )
-                    )
+                    id_token = TokenHelper
+                        .GetToken(DateTime.UtcNow + TimeSpan.FromMinutes(5), DeviceAccountId)
+                        .AsString()
                 }
             )
         ).data;
@@ -63,7 +48,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     /*[Fact]
     public async Task Signup_ExpiredIdToken_ReturnsRefreshRequest()
     {
-        HttpResponseMessage response = await client.PostMsgpackBasic(
+        HttpResponseMessage response = await this.Client.PostMsgpackBasic(
             "/tool/signup",
             new ToolAuthRequest()
             {
@@ -87,7 +72,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task Signup_InvalidIdToken_ReturnsIdTokenError()
     {
-        DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
+        DragaliaResponse<ResultCodeData> response = await this.Client.PostMsgpack<ResultCodeData>(
             "/tool/signup",
             new ToolAuthRequest() { id_token = "im blue dabba dee dabba doo" },
             ensureSuccessHeader: false
@@ -107,16 +92,13 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     public async Task Auth_CorrectIdToken_ReturnsOKResponse()
     {
         ToolAuthData response = (
-            await client.PostMsgpack<ToolAuthData>(
+            await this.Client.PostMsgpack<ToolAuthData>(
                 "/tool/auth",
                 new ToolAuthRequest()
                 {
-                    id_token = TestUtils.TokenToString(
-                        TestUtils.GetToken(
-                            DateTime.UtcNow + TimeSpan.FromMinutes(5),
-                            IntegrationTestFixture.DeviceAccountIdConst
-                        )
-                    )
+                    id_token = TokenHelper
+                        .GetToken(DateTime.UtcNow + TimeSpan.FromMinutes(5), DeviceAccountId)
+                        .AsString()
                 }
             )
         ).data;
@@ -132,16 +114,17 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
             new()
             {
                 uuid = "unused",
-                id_token = TestUtils.TokenToString(
-                    TestUtils.GetToken(
-                        DateTime.UtcNow + TimeSpan.FromMinutes(5),
-                        IntegrationTestFixture.DeviceAccountIdConst
-                    )
-                )
+                id_token = TokenHelper
+                    .GetToken(DateTime.UtcNow + TimeSpan.FromMinutes(5), DeviceAccountId)
+                    .AsString()
             };
 
-        ToolAuthData response = (await client.PostMsgpack<ToolAuthData>("/tool/auth", data)).data;
-        ToolAuthData response2 = (await client.PostMsgpack<ToolAuthData>("/tool/auth", data)).data;
+        ToolAuthData response = (
+            await this.Client.PostMsgpack<ToolAuthData>("/tool/auth", data)
+        ).data;
+        ToolAuthData response2 = (
+            await this.Client.PostMsgpack<ToolAuthData>("/tool/auth", data)
+        ).data;
 
         response.viewer_id.Should().Be(2);
         Guid.TryParse(response.session_id, out _).Should().BeTrue();
@@ -153,7 +136,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     /*[Fact]
     public async Task Auth_ExpiredIdToken_ReturnsRefreshRequest()
     {
-        HttpResponseMessage response = await client.PostMsgpackBasic(
+        HttpResponseMessage response = await this.Client.PostMsgpackBasic(
             "/tool/auth",
             new ToolAuthRequest()
             {
@@ -177,7 +160,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     [Fact]
     public async Task Auth_InvalidIdToken_ReturnsIdTokenError()
     {
-        DragaliaResponse<ResultCodeData> response = await client.PostMsgpack<ResultCodeData>(
+        DragaliaResponse<ResultCodeData> response = await this.Client.PostMsgpack<ResultCodeData>(
             "/tool/auth",
             new ToolAuthRequest() { id_token = "im blue dabba dee dabba doo" },
             ensureSuccessHeader: false
@@ -198,54 +181,50 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
     {
         string deviceAccountId = "save import id";
 
-        this.fixture.ApiContext.PlayerUserData
-            .Find(IntegrationTestFixture.DeviceAccountIdConst)!
-            .LastSaveImportTime = DateTime.MinValue;
-        await this.fixture.ApiContext.SaveChangesAsync();
+        this.ApiContext.PlayerUserData.Find(DeviceAccountId)!.LastSaveImportTime =
+            DateTime.MinValue;
+        await this.ApiContext.SaveChangesAsync();
 
-        string token = TestUtils.TokenToString(
-            TestUtils.GetToken(
+        string token = TokenHelper
+            .GetToken(
                 DateTime.UtcNow + TimeSpan.FromMinutes(5),
                 deviceAccountId,
                 savefileAvailable: true,
                 savefileTime: DateTime.UtcNow - TimeSpan.FromDays(1)
             )
-        );
+            .AsString();
+
         ToolAuthRequest data = new() { uuid = "unused", id_token = token };
 
-        await client.PostMsgpack<ToolAuthData>("/tool/auth", data);
+        await this.Client.PostMsgpack<ToolAuthData>("/tool/auth", data);
 
-        DbPlayerUserData userData = fixture.ApiContext.PlayerUserData.Find(deviceAccountId)!;
-        await this.fixture.ApiContext.Entry(userData).ReloadAsync();
+        DbPlayerUserData userData = this.ApiContext.PlayerUserData.Find(deviceAccountId)!;
+        await this.ApiContext.Entry(userData).ReloadAsync();
         userData.Name.Should().Be("Jay");
     }
 
     [Fact]
     public async Task Auth_ValidIdToken_OldSavefile_DoesNotImportSavefile()
     {
-        this.fixture.ApiContext.PlayerUserData
-            .Find(IntegrationTestFixture.DeviceAccountIdConst)!
-            .LastSaveImportTime = DateTime.UtcNow;
-        await this.fixture.ApiContext.SaveChangesAsync();
+        this.ApiContext.PlayerUserData.Find(DeviceAccountId)!.LastSaveImportTime = DateTime.UtcNow;
+        await this.ApiContext.SaveChangesAsync();
 
-        string token = TestUtils.TokenToString(
-            TestUtils.GetToken(
+        string token = TokenHelper
+            .GetToken(
                 DateTime.UtcNow + TimeSpan.FromMinutes(5),
-                IntegrationTestFixture.DeviceAccountIdConst,
+                DeviceAccountId,
                 savefileAvailable: true,
                 savefileTime: DateTime.UtcNow - TimeSpan.FromDays(1)
             )
-        );
+            .AsString();
         ToolAuthRequest data = new() { uuid = "unused", id_token = token };
 
-        await client.PostMsgpack<ToolAuthData>("/tool/auth", data);
+        await this.Client.PostMsgpack<ToolAuthData>("/tool/auth", data);
 
-        this.fixture.mockBaasRequestHelper.Verify(x => x.GetSavefile(token), Times.Never);
+        this.MockBaasRequestHelper.Verify(x => x.GetSavefile(token), Times.Never);
 
-        DbPlayerUserData userData = fixture.ApiContext.PlayerUserData.Find(
-            IntegrationTestFixture.DeviceAccountIdConst
-        )!;
-        this.fixture.ApiContext.Entry(userData).Reload();
+        DbPlayerUserData userData = this.ApiContext.PlayerUserData.Find(DeviceAccountId)!;
+        this.ApiContext.Entry(userData).Reload();
         userData.Name.Should().Be("Euden");
     }
 
@@ -257,10 +236,10 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
          // Perhaps this should be revisited with proper end-to-end tests.
          string deviceAccountId = "save import id";
 
-         this.fixture.ApiContext.PlayerUserData
+         this.ApiContext.PlayerUserData
              .Find(this.IntegrationTestFixture.DeviceAccountId)!
              .LastSaveImportTime = DateTime.MinValue;
-         await this.fixture.ApiContext.SaveChangesAsync();
+         await this.ApiContext.SaveChangesAsync();
 
          string token = TestUtils.TokenToString(
              TestUtils.GetToken(
@@ -271,7 +250,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
              )
          );
 
-         Task<DragaliaResponse<ToolAuthData>> response1 = client.PostMsgpack<ToolAuthData>(
+         Task<DragaliaResponse<ToolAuthData>> response1 = this.Client.PostMsgpack<ToolAuthData>(
              "/tool/auth",
              new ToolAuthRequest() { uuid = "unused", id_token = token },
              ensureSuccessHeader: false
@@ -279,7 +258,7 @@ public class ToolTest : IClassFixture<IntegrationTestFixture>
 
          await Task.Delay(100);
 
-         Task<DragaliaResponse<ToolAuthData>> response2 = client.PostMsgpack<ToolAuthData>(
+         Task<DragaliaResponse<ToolAuthData>> response2 = this.Client.PostMsgpack<ToolAuthData>(
              "/tool/auth",
              new ToolAuthRequest() { uuid = "unused", id_token = token },
              ensureSuccessHeader: false
