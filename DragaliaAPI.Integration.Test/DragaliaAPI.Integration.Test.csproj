@@ -42,11 +42,6 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="DragaliaAPI">
-        <HintPath>bin\Debug\net7.0\DragaliaAPI.dll</HintPath>
-      </Reference>
-    </ItemGroup>
+    
 
 </Project>

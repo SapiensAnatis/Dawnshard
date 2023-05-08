@@ -54,15 +54,8 @@
 		<None Include="$(SolutionDir)Resources\**" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
-	<ItemGroup>
-<<<<<<< HEAD
-		<Compile Remove="bin\**" />
-=======
-		<InternalsVisibleTo Include="DragaliaAPI.Integration.Test" />
-	</ItemGroup>
 	
 	<ItemGroup>
->>>>>>> bb29ecf (Attempt to use containers for tests)
 		<Compile Remove="Pages\Components\**" />
 		<Content Remove="bin\**" />
 		<Content Remove="Pages\Components\**" />
