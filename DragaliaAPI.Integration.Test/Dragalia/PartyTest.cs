@@ -205,7 +205,7 @@ public class PartyTest : TestFixture
         PartyUpdatePartyNameData response = (
             await this.Client.PostMsgpack<PartyUpdatePartyNameData>(
                 "/party/update_party_name",
-                new PartyUpdatePartyNameRequest() { party_no = 1, party_name = "LIblis Full Auto" }
+                new PartyUpdatePartyNameRequest() { party_no = 2, party_name = "LIblis Full Auto" }
             )
         ).data;
 
@@ -213,7 +213,7 @@ public class PartyTest : TestFixture
 
         PartyList updateParty = response.update_data_list.party_list.ElementAt(0);
         updateParty.party_name.Should().Be("LIblis Full Auto");
-        updateParty.party_no.Should().Be(1);
+        updateParty.party_no.Should().Be(2);
         updateParty.party_setting_list.Should().NotBeEmpty();
         updateParty.party_setting_list.Should().BeInAscendingOrder(x => x.unit_no);
     }

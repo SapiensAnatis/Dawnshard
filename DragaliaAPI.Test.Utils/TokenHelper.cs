@@ -34,7 +34,7 @@ public static class TokenHelper
         return new(
             issuer: issuer,
             audience: audience,
-            expires: expiryTime.DateTime,
+            expires: expiryTime.UtcDateTime,
             signingCredentials: new SigningCredentials(
                 SecurityKeys.First(),
                 SecurityAlgorithms.RsaSha256

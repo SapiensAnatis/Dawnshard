@@ -9,9 +9,9 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using MockQueryable.Moq;
-using static DragaliaAPI.Test.TestUtils;
+using static DragaliaAPI.Test.UnitTestUtils;
 
-namespace DragaliaAPI.Test.Unit.Controllers;
+namespace DragaliaAPI.Test.Controllers;
 
 public class AbilityCrestTradeControllerTest
 {

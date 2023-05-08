@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -10,9 +8,8 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Test.Utils;
-using Microsoft.Extensions.Logging;
 
-namespace DragaliaAPI.Test.Unit.Services;
+namespace DragaliaAPI.Test.Services;
 
 public class AbilityCrestServiceTest
 {

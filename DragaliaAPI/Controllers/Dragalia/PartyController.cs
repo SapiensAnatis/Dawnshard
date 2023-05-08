@@ -111,11 +111,7 @@ public class PartyController : DragaliaControllerBase
             request.party_name
         );
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await this.partyRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(new PartyUpdatePartyNameData() { update_data_list = updateDataList });
     }

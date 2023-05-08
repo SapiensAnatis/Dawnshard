@@ -10,7 +10,7 @@ using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Logging;
 using MockQueryable.Moq;
 
-namespace DragaliaAPI.Test.Unit.Services;
+namespace DragaliaAPI.Test.Services;
 
 public class FortServiceTest
 {
@@ -30,7 +30,7 @@ public class FortServiceTest
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
         this.mockPlayerDetailsService = new(MockBehavior.Strict);
-        this.mapper = TestUtils.CreateMapper();
+        this.mapper = UnitTestUtils.CreateMapper();
 
         this.fortService = new FortService(
             this.mockFortRepository.Object,
@@ -41,7 +41,7 @@ public class FortServiceTest
             this.mapper
         );
 
-        TestUtils.ApplyDateTimeAssertionOptions();
+        UnitTestUtils.ApplyDateTimeAssertionOptions();
     }
 
     [Fact]
