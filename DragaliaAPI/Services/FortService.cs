@@ -205,8 +205,8 @@ public class FortService : IFortService
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             };
 
-        await this.fortRepository.AddBuild(build);
         await Upgrade(plantDetail);
+        await this.fortRepository.AddBuild(build);
 
         return build;
     }
