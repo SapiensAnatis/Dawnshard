@@ -122,29 +122,16 @@ app.UseSerilogRequestLogging(
         }
 );
 
-Log.Logger.Information("App environment: {@env}", app.Environment);
+Log.Logger.Debug("App environment: {@env}", app.Environment);
 
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
-{
     app.MigrateDatabase();
-}
-else if (app.Environment.EnvironmentName == "Testing")
-{
-    using IServiceScope scope = app.Services
-        .GetRequiredService<IServiceScopeFactory>()
-        .CreateScope();
-
-    ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
-    context.Database.EnsureCreated();
-}
 
 app.MapRazorPages();
 
-// Latest Android app version
-app.UsePathBase("/2.19.0_20220714193707");
+app.UsePathBase("/2.19.0_20220714193707"); // Latest Android app version
+app.UsePathBase("/2.19.0_20220719103923"); // Latest iOS app version
 
-// Latest iOS app version
-app.UsePathBase("/2.19.0_20220719103923");
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseMiddleware<NotFoundHandlerMiddleware>();
 

@@ -47,14 +47,15 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<InternalsVisibleTo Include="DragaliaAPI.Test" />
+		<InternalsVisibleTo Include="DragaliaAPI.Integration.Test" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="$(SolutionDir)Resources\**" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
+	
 	<ItemGroup>
-		<Compile Remove="bin\**" />
 		<Compile Remove="Pages\Components\**" />
 		<Content Remove="bin\**" />
 		<Content Remove="Pages\Components\**" />

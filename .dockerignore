@@ -24,4 +24,4 @@
 LICENSE
 README.md
 DragaliaAPI.Photon.Plugin/**
-*.Test/**
+*.Test/**/*

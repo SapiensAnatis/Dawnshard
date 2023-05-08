@@ -529,7 +529,7 @@ public class SavefileService : ISavefileService
                             AttackPlusCount = 50,
                             HpPlusCount = 50,
                             EquipableCount = 4,
-                            GetTime = DateTime.UtcNow,
+                            GetTime = DateTimeOffset.UtcNow,
                             IsFavorite = false,
                             IsNew = false,
                         }
@@ -546,7 +546,7 @@ public class SavefileService : ISavefileService
                                 AttackPlusCount = 50,
                                 HpPlusCount = 50,
                                 EquipableCount = 4,
-                                GetTime = DateTime.UtcNow,
+                                GetTime = DateTimeOffset.UtcNow,
                                 IsFavorite = false,
                                 IsNew = false,
                             }
@@ -564,7 +564,7 @@ public class SavefileService : ISavefileService
                                 AttackPlusCount = 50,
                                 HpPlusCount = 50,
                                 EquipableCount = 4,
-                                GetTime = DateTime.UtcNow,
+                                GetTime = DateTimeOffset.UtcNow,
                                 IsFavorite = false,
                                 IsNew = false,
                             }
@@ -582,7 +582,7 @@ public class SavefileService : ISavefileService
                                 AttackPlusCount = 40,
                                 HpPlusCount = 40,
                                 EquipableCount = 4,
-                                GetTime = DateTime.UtcNow,
+                                GetTime = DateTimeOffset.UtcNow,
                                 IsFavorite = false,
                                 IsNew = false,
                             }
@@ -610,7 +610,7 @@ public class SavefileService : ISavefileService
                                 AttackPlusCount = 50,
                                 HpPlusCount = 50,
                                 Exp = 1_240_020,
-                                GetTime = DateTime.UtcNow,
+                                GetTime = DateTimeOffset.UtcNow,
                                 IsLock = false,
                                 IsNew = false,
                             }
@@ -645,7 +645,7 @@ public class SavefileService : ISavefileService
                         AdditionalCrestSlotType3Count = 2,
                         FortPassiveCharaWeaponBuildupCount = 1,
                         IsNew = true,
-                        GetTime = DateTime.UtcNow,
+                        GetTime = DateTimeOffset.UtcNow,
                     }
             )
         );

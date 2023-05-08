@@ -42,7 +42,7 @@ public class FortController : DragaliaControllerBase
                 production_rp = StubData.ProductionRp,
                 production_st = StubData.ProductionSt,
                 fort_detail = fortDetail,
-                current_server_time = DateTime.UtcNow
+                current_server_time = DateTimeOffset.UtcNow
             };
 
         return this.Ok(data);
