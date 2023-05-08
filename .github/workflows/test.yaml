@@ -55,6 +55,7 @@ jobs:
         run: >
           dotnet test ${{ matrix.project }} 
           --no-restore 
+          --logger "console;verbosity=detailed"
           -p:CollectCoverage=true 
           -p:CoverletOutputFormat="cobertura" 
           -p:CoverletOutput="coverage_report.xml"
