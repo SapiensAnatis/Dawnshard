@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 
@@ -346,7 +347,7 @@ public class FortTest : TestFixture
                 {
                     DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
-                    Level = 2,
+                    Level = 1,
                     PositionX = 2,
                     PositionZ = 2,
                     BuildStartDate = DateTimeOffset.UnixEpoch,
@@ -371,7 +372,7 @@ public class FortTest : TestFixture
         result.build_start_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().BeAfter(result.build_start_date);
-        result.level.Should().Be(3);
+        result.level.Should().Be(2);
     }
 
     [Fact]
