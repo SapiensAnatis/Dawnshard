@@ -205,7 +205,8 @@ public class FortService : IFortService
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             };
 
-        await Upgrade(build, plantDetail);
+        await Upgrade(plantDetail);
+        await this.fortRepository.AddBuild(build);
 
         return build;
     }
@@ -236,11 +237,11 @@ public class FortService : IFortService
             );
         }
 
+        await Upgrade(plantDetail);
+
         // Start level up
         DateTimeOffset startDate = DateTimeOffset.UtcNow;
         DateTimeOffset endDate = startDate.AddSeconds(plantDetail.Time);
-
-        await Upgrade(build, plantDetail);
 
         build.Level += 1;
         build.BuildStartDate = startDate;
@@ -268,7 +269,7 @@ public class FortService : IFortService
         await this.fortRepository.GetFortPlantIdList(fortPlantIdList);
     }
 
-    private async Task Upgrade(DbFortBuild build, FortPlantDetail plantDetail)
+    private async Task Upgrade(FortPlantDetail plantDetail)
     {
         FortDetail fortDetail = await this.GetFortDetail();
 
@@ -284,11 +285,5 @@ public class FortService : IFortService
         // Remove resources from player
         await this.userDataRepository.UpdateCoin(-plantDetail.Cost);
         await this.inventoryRepository.UpdateQuantity(plantDetail.CreateMaterialMap);
-
-        if (build.Level == 1)
-        {
-            // Only has to be added if it is being created for the first time
-            await this.fortRepository.AddBuild(build);
-        }
     }
 }
