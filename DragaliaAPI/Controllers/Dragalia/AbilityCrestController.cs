@@ -86,7 +86,7 @@ public class AbilityCrestController : DragaliaControllerBase
 
             if (resultCode != ResultCode.Success)
             {
-                this.logger.LogError("Buildup piece {piece} invalid", buildupPiece);
+                this.logger.LogError("Buildup piece {@piece} invalid", buildupPiece);
                 return this.Code(resultCode);
             }
         }

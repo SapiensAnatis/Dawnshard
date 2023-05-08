@@ -181,20 +181,14 @@ public class AbilityCrestTest : TestFixture
                     new()
                     {
                         buildup_piece_type = BuildupPieceTypes.Unbind,
-                        is_use_dedicated_material = false,
-                        step = 1
-                    },
-                    new()
-                    {
-                        buildup_piece_type = BuildupPieceTypes.Unbind,
                         is_use_dedicated_material = true,
                         step = 2
                     },
                     new()
                     {
-                        buildup_piece_type = BuildupPieceTypes.Stats,
+                        buildup_piece_type = BuildupPieceTypes.Unbind,
                         is_use_dedicated_material = false,
-                        step = 2
+                        step = 1
                     },
                     new()
                     {
@@ -204,9 +198,15 @@ public class AbilityCrestTest : TestFixture
                     },
                     new()
                     {
+                        buildup_piece_type = BuildupPieceTypes.Stats,
+                        is_use_dedicated_material = false,
+                        step = 2
+                    },
+                    new()
+                    {
                         buildup_piece_type = BuildupPieceTypes.Copies,
                         is_use_dedicated_material = false,
-                        step = 1
+                        step = 2
                     }
                 }
             }
