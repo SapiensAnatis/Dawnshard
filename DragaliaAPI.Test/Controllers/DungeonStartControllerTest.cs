@@ -10,7 +10,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MockQueryable.Moq;
-using static DragaliaAPI.Test.TestUtils;
+using static DragaliaAPI.Test.UnitTestUtils;
 
 namespace DragaliaAPI.Test.Controllers;
 

@@ -11,7 +11,10 @@ public class CastleStoryTest : TestFixture
         CustomWebApplicationFactory<Program> factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
+    }
 
     [Fact]
     public async Task ReadStory_StoryNotRead_ResponseHasRewards()

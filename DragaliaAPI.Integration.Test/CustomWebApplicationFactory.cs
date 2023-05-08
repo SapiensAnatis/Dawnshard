@@ -64,17 +64,6 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
     private void SetupMocks()
     {
-        this.MockBaasRequestHelper
-            .Setup(x => x.GetSavefile(It.IsAny<string>()))
-            .ReturnsAsync(
-                JsonSerializer
-                    .Deserialize<DragaliaResponse<LoadIndexData>>(
-                        File.ReadAllText(Path.Join("Data", "endgame_savefile.json")),
-                        ApiJsonOptions.Instance
-                    )!
-                    .data
-            );
-
         this.MockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
     }
 
@@ -135,6 +124,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         );
 
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Coin = 100_000_000;
+        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.DewPoint = 100_000_000;
         apiContext.SaveChanges();
     }
 }

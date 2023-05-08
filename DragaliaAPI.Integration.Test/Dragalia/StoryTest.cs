@@ -11,6 +11,7 @@ public class StoryTest : TestFixture
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();
+        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
     [Fact]

@@ -8,7 +8,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.AspNetCore.Mvc;
 using MockQueryable.Moq;
-using static DragaliaAPI.Test.TestUtils;
+using static DragaliaAPI.Test.UnitTestUtils;
 
 namespace DragaliaAPI.Test.Controllers;
 

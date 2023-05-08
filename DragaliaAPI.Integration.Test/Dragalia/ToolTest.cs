@@ -12,7 +12,10 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 public class ToolTest : TestFixture
 {
     public ToolTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        this.SetupSaveImport();
+    }
 
     [Fact]
     public async Task ServiceStatus_ReturnsCorrectResponse()
@@ -42,7 +45,7 @@ public class ToolTest : TestFixture
             )
         ).data;
 
-        response.viewer_id.Should().Be(2);
+        response.viewer_id.Should().Be(1);
     }
 
     /*[Fact]
@@ -97,13 +100,13 @@ public class ToolTest : TestFixture
                 new ToolAuthRequest()
                 {
                     id_token = TokenHelper
-                        .GetToken(DateTime.UtcNow + TimeSpan.FromMinutes(5), DeviceAccountId)
+                        .GetToken(DateTimeOffset.UtcNow + TimeSpan.FromMinutes(5), DeviceAccountId)
                         .AsString()
                 }
             )
         ).data;
 
-        response.viewer_id.Should().Be(2);
+        response.viewer_id.Should().Be(1);
         Guid.TryParse(response.session_id, out _).Should().BeTrue();
     }
 
@@ -182,7 +185,7 @@ public class ToolTest : TestFixture
         string deviceAccountId = "save import id";
 
         this.ApiContext.PlayerUserData.Find(DeviceAccountId)!.LastSaveImportTime =
-            DateTime.MinValue;
+            DateTimeOffset.MinValue;
         await this.ApiContext.SaveChangesAsync();
 
         string token = TokenHelper

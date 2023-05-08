@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Helpers;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
@@ -89,5 +92,19 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         await this.ApiContext.AddRangeAsync((IEnumerable<object>)data);
         await this.ApiContext.SaveChangesAsync();
+    }
+
+    protected void SetupSaveImport()
+    {
+        this.MockBaasRequestHelper
+            .Setup(x => x.GetSavefile(It.IsAny<string>()))
+            .ReturnsAsync(
+                JsonSerializer
+                    .Deserialize<DragaliaResponse<LoadIndexData>>(
+                        File.ReadAllText(Path.Join("Data", "endgame_savefile.json")),
+                        ApiJsonOptions.Instance
+                    )!
+                    .data
+            );
     }
 }

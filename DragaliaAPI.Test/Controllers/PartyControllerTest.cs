@@ -4,7 +4,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.Logging;
-using static DragaliaAPI.Test.TestUtils;
+using static DragaliaAPI.Test.UnitTestUtils;
 
 namespace DragaliaAPI.Test.Controllers;
 
@@ -47,7 +47,6 @@ public class PartyControllerTest
         this.mockPartyRepository
             .Setup(x => x.UpdatePartyName(DeviceAccountId, 1, "Z Team"))
             .Returns(Task.CompletedTask);
-        this.mockPartyRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(0);
 
         UpdateDataList updateDataList =
             new()
@@ -57,9 +56,7 @@ public class PartyControllerTest
                     new() { party_name = "Z Team", party_no = 1, }
                 }
             };
-        this.mockUpdateDataService
-            .Setup(x => x.GetUpdateDataList(DeviceAccountId))
-            .Returns(updateDataList);
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         PartyUpdatePartyNameData? response = (
             await this.partyController.UpdatePartyName(

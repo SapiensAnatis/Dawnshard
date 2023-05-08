@@ -1,11 +1,10 @@
-using System.Collections;
 using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.Test.Unit.Controllers;
+namespace DragaliaAPI.Test.Controllers;
 
 public class FortControllerTest
 {
