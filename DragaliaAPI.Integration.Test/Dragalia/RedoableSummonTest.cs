@@ -5,7 +5,6 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.RedoableSummonController"/>
 /// </summary>
-[Collection("DragaliaIntegration")]
 public class RedoableSummonTest : TestFixture
 {
     public RedoableSummonTest(

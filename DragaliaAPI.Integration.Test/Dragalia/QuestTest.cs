@@ -8,7 +8,6 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.QuestController"/>
 /// </summary>
-[Collection("DragaliaIntegration")]
 public class QuestTest : TestFixture
 {
     public QuestTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)

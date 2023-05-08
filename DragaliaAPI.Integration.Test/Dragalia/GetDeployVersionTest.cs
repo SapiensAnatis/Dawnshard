@@ -3,7 +3,6 @@ using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
-[Collection("DragaliaIntegration")]
 public class GetDeployVersionTest : TestFixture
 {
     public GetDeployVersionTest(

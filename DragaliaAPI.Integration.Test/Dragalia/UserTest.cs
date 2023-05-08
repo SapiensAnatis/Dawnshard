@@ -3,7 +3,6 @@ using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
-[Collection("DragaliaIntegration")]
 public class UserTest : TestFixture
 {
     public UserTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)

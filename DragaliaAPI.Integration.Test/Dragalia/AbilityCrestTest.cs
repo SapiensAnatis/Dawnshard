@@ -10,7 +10,6 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.AbilityCrestController"/>
 /// </summary>
-[Collection("DragaliaIntegration")]
 public class AbilityCrestTest : TestFixture
 {
     public AbilityCrestTest(

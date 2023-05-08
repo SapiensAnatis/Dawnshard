@@ -10,7 +10,6 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.SummonController"/>
 /// </summary>
-[Collection("DragaliaIntegration")]
 public class SummonTest : TestFixture
 {
     public SummonTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
