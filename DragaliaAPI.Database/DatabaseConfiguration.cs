@@ -23,7 +23,7 @@ public static class DatabaseConfiguration
     )
     {
         string connectionString = GetConnectionString(host);
-        logger.Information("Connecting to database using host {host}...", host);
+        logger.Debug("Connecting to database using host {host}...", host);
 
         services = services
             .AddDbContext<ApiContext>(

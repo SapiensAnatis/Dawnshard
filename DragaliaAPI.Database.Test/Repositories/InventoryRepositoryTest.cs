@@ -7,6 +7,7 @@ using static DragaliaAPI.Database.Test.DbTestFixture;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 
+[Collection("RepositoryTest")]
 public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;

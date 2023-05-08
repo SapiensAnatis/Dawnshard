@@ -13,6 +13,8 @@ on:
 
 env:
   HUSKY: 0
+  POSTGRES_USER: testing
+  POSTGRES_PASSWORD: verystrongpassword
 
 jobs:
   test:
@@ -20,7 +22,26 @@ jobs:
     strategy:
       matrix:
         dotnet-version: [ '7.0.x' ]
-        project: ['DragaliaAPI.Test', 'DragaliaAPI.Database.Test', 'DragaliaAPI.Shared.Test']
+        project: ['DragaliaAPI.Test', 'DragaliaAPI.Integration.Test', 'DragaliaAPI.Database.Test', 'DragaliaAPI.Shared.Test']
+    
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis
+        ports:
+          - "6379:6379"
+        
 
     steps:
       - uses: actions/checkout@v3
@@ -34,6 +55,7 @@ jobs:
         run: >
           dotnet test ${{ matrix.project }} 
           --no-restore 
+          --logger "console;verbosity=detailed"
           -p:CollectCoverage=true 
           -p:CoverletOutputFormat="cobertura" 
           -p:CoverletOutput="coverage_report.xml"

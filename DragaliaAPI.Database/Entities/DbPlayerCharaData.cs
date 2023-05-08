@@ -153,7 +153,7 @@ public class DbPlayerCharaData : IDbHasAccountId
     public bool ListViewFlag { get; set; }
 
     [Column("GetTime")]
-    public DateTimeOffset GetTime { get; set; } = DateTime.UtcNow;
+    public DateTimeOffset GetTime { get; set; } = DateTimeOffset.UtcNow;
 
     [NotMapped]
     public SortedSet<int> ManaCirclePieceIdList

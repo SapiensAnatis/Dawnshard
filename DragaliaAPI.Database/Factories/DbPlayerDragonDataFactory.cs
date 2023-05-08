@@ -3,9 +3,9 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Factories;
 
-internal static class DbPlayerDragonDataFactory
+public static class DbPlayerDragonDataFactory
 {
-    internal static DbPlayerDragonData Create(string deviceAccountId, Dragons id)
+    public static DbPlayerDragonData Create(string deviceAccountId, Dragons id)
     {
         return new()
         {
