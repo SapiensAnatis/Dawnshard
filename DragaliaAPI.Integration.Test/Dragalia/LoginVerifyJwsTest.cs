@@ -7,7 +7,6 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.LoginController"/>
 /// </summary>
-[Collection("DragaliaIntegration")]
 public class LoginVerifyJwsTest : TestFixture
 {
     public LoginVerifyJwsTest(

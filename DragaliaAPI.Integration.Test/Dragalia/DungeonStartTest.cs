@@ -7,7 +7,6 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.DungeonStartController"/>.
 /// </summary>
-[Collection("DragaliaIntegration")]
 public class DungeonStartTest : TestFixture
 {
     public DungeonStartTest(

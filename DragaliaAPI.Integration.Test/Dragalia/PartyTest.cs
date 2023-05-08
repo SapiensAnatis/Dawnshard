@@ -11,7 +11,6 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.PartyController"/>
 /// </summary>
-[Collection("DragaliaIntegration")]
 public class PartyTest : TestFixture
 {
     public PartyTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)

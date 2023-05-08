@@ -4,7 +4,6 @@ using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Other;
 
-[Collection("DragaliaIntegration")]
 public class DragalipatchTest : TestFixture
 {
     public DragalipatchTest(

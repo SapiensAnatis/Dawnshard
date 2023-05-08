@@ -6,7 +6,6 @@ using static DragaliaAPI.Services.SavefileService;
 
 namespace DragaliaAPI.Integration.Test.Other;
 
-[Collection("DragaliaIntegration")]
 public class DeleteSavefileTest : TestFixture
 {
     public DeleteSavefileTest(

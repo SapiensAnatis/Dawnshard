@@ -11,7 +11,6 @@ namespace DragaliaAPI.Integration.Test.Other;
 /// <summary>
 /// Tests <see cref="Controllers.Other.SavefileController"/>
 /// </summary>
-[Collection("DragaliaIntegration")]
 public class SavefileImportTest : TestFixture
 {
     public SavefileImportTest(

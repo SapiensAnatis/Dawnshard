@@ -13,7 +13,6 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.CharaController"/>
 /// </summary>
-[Collection("DragaliaIntegration")]
 public class CharaTest : TestFixture
 {
     public CharaTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
