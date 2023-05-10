@@ -124,39 +124,4 @@ public class UpdateDataService : IUpdateDataService
             ? typedEntries.Select(x => this.mapper.Map<TNetwork>(x)).ToList()
             : null;
     }
-
-    public class UnmappedUpdateDataList
-    {
-        public DbPlayerUserData? UserData { get; set; }
-
-        public IEnumerable<DbPlayerCharaData>? CharaList { get; set; }
-
-        public IEnumerable<DbPlayerDragonData>? DragonList { get; set; }
-
-        public IEnumerable<DbPlayerDragonReliability>? DragonReliabilityList { get; set; }
-
-        public IEnumerable<DbWeaponBody>? WeaponBodyList { get; set; }
-
-        public IEnumerable<DbAbilityCrest>? AbilityCrestList { get; set; }
-
-        public IEnumerable<DbParty>? PartyList { get; set; }
-
-        public IEnumerable<DbPlayerStoryState>? QuestStoryList { get; set; }
-
-        public IEnumerable<DbPlayerStoryState>? UnitStoryList { get; set; }
-
-        public IEnumerable<DbPlayerStoryState>? CastleStoryList { get; set; }
-
-        public IEnumerable<DbPlayerMaterial>? MaterialList { get; set; }
-
-        public IEnumerable<DbPlayerDragonGift>? DragonGiftList { get; set; }
-
-        public IEnumerable<DbQuest>? QuestList { get; set; }
-
-        public IEnumerable<DbFortBuild>? BuildList { get; set; }
-
-        public IEnumerable<DbWeaponPassiveAbility>? WeaponPassiveAbilityList { get; set; }
-
-        public IEnumerable<DbWeaponSkin>? WeaponSkinList { get; set; }
-    }
 }
