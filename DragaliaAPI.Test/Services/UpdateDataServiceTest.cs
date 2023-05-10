@@ -6,8 +6,10 @@ using DragaliaAPI.Database.Test;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
 using FluentAssertions.Execution;
+using Microsoft.EntityFrameworkCore;
 using Xunit.Abstractions;
 using static DragaliaAPI.Test.Utils.IdentityTestUtils;
 
@@ -17,14 +19,16 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
     private readonly ITestOutputHelper output;
-
     private readonly IMapper mapper;
     private readonly IUpdateDataService updateDataService;
+
+    private readonly Mock<IPlayerDetailsService> mockPlayerDetailsService;
 
     public UpdateDataServiceTest(DbTestFixture fixture, ITestOutputHelper output)
     {
         this.fixture = fixture;
         this.output = output;
+        this.mockPlayerDetailsService = new(MockBehavior.Strict);
 
         this.mapper = new MapperConfiguration(
             cfg => cfg.AddMaps(typeof(Program).Assembly)
@@ -32,16 +36,17 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         this.updateDataService = new UpdateDataService(
             this.fixture.ApiContext,
             this.mapper,
-            IdentityTestUtils.MockPlayerDetailsService.Object
+            this.mockPlayerDetailsService.Object
         );
 
         CommonAssertionOptions.ApplyTimeOptions();
     }
 
     [Fact]
-    public void GetUpdateDataList_PopulatesAll()
+    public async Task GetUpdateDataList_PopulatesAll()
     {
-        string deviceAccountId = "new id";
+        string deviceAccountId = "some_id";
+        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns(deviceAccountId);
 
         DbPlayerUserData userData = new(deviceAccountId);
 
@@ -155,8 +160,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         );
 
         UpdateDataList list = this.updateDataService.GetUpdateDataList(deviceAccountId);
+        UpdateDataList list2 = await this.updateDataService.SaveChangesAsync();
 
-        using AssertionScope scope = new();
+        list.Should().BeEquivalentTo(list2);
 
         list.user_data.Should().BeEquivalentTo(this.mapper.Map<UserData>(userData));
 
@@ -183,6 +189,8 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
 
         AssertOnlyContains<BuildList>(list.build_list, buildData);
 
+        list.dragon_gift_list.Should().BeNull();
+
         this.output.WriteLine(
             "{0}",
             JsonSerializer.Serialize(list, new JsonSerializerOptions() { WriteIndented = true })
@@ -192,6 +200,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public void GetUpdateDataList_RetrievesIdentityColumns()
     {
+        // This test is bullshit because in-mem works differently to an actual database in this regard
         this.fixture.ApiContext.AddRange(
             new List<IDbHasAccountId>()
             {
@@ -236,6 +245,123 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         this.fixture.ApiContext.SaveChanges();
 
         this.updateDataService.GetUpdateDataList(DeviceAccountId).chara_list.Should().BeNull();
+    }
+
+    private void Setup()
+    {
+        string deviceAccountId = "some_id";
+        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns(deviceAccountId);
+
+        DbPlayerUserData userData = new(deviceAccountId);
+
+        DbPlayerCharaData charaData = new(deviceAccountId, Charas.GalaLeonidas);
+
+        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
+            deviceAccountId,
+            Dragons.DreadkingRathalos
+        );
+        DbPlayerDragonReliability reliabilityData = DbPlayerDragonReliabilityFactory.Create(
+            deviceAccountId,
+            Dragons.DreadkingRathalos
+        );
+
+        DbParty partyData =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                PartyName = "name",
+                PartyNo = 1,
+                Units = new List<DbPartyUnit>()
+                {
+                    new() { CharaId = Charas.GalaAlex, UnitNo = 1 }
+                }
+            };
+
+        DbPlayerStoryState questStoryState =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                State = StoryState.Read,
+                StoryId = 2,
+                StoryType = StoryTypes.Quest
+            };
+        DbPlayerStoryState charaStoryState =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                State = StoryState.Read,
+                StoryId = 4,
+                StoryType = StoryTypes.Chara,
+            };
+        DbPlayerStoryState castleStoryState =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                State = StoryState.Unlocked,
+                StoryId = 6,
+                StoryType = StoryTypes.Castle,
+            };
+
+        DbPlayerStoryState dragonStoryState =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                State = StoryState.Unlocked,
+                StoryId = 8,
+                StoryType = StoryTypes.Dragon,
+            };
+
+        DbPlayerMaterial materialData =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                MaterialId = Materials.AlmightyOnesMaskFragment,
+                Quantity = 10
+            };
+
+        DbQuest questData =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                QuestId = 100010104,
+                IsMissionClear1 = true,
+                IsMissionClear2 = true,
+                IsMissionClear3 = true,
+                State = 3
+            };
+
+        DbFortBuild buildData =
+            new()
+            {
+                DeviceAccountId = deviceAccountId,
+                BuildId = 4000,
+                Level = 2,
+                PositionX = 3,
+                PositionZ = 4,
+                PlantId = FortPlants.IronWeatherVane,
+                IsNew = true,
+                LastIncomeDate = DateTimeOffset.FromUnixTimeSeconds(5),
+                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(10),
+                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(15)
+            };
+
+        this.fixture.ApiContext.AddRange(
+            new List<IDbHasAccountId>()
+            {
+                userData,
+                charaData,
+                dragonData,
+                reliabilityData,
+                partyData,
+                questStoryState,
+                charaStoryState,
+                castleStoryState,
+                dragonStoryState,
+                materialData,
+                questData,
+                buildData
+            }
+        );
     }
 
     private void AssertOnlyContains<TNetwork>(
