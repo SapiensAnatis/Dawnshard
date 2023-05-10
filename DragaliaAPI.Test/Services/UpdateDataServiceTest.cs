@@ -6,8 +6,10 @@ using DragaliaAPI.Database.Test;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
 using FluentAssertions.Execution;
+using Microsoft.EntityFrameworkCore;
 using Xunit.Abstractions;
 using static DragaliaAPI.Test.Utils.IdentityTestUtils;
 
@@ -17,14 +19,16 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
     private readonly ITestOutputHelper output;
-
     private readonly IMapper mapper;
     private readonly IUpdateDataService updateDataService;
+
+    private readonly Mock<IPlayerDetailsService> mockPlayerDetailsService;
 
     public UpdateDataServiceTest(DbTestFixture fixture, ITestOutputHelper output)
     {
         this.fixture = fixture;
         this.output = output;
+        this.mockPlayerDetailsService = new(MockBehavior.Strict);
 
         this.mapper = new MapperConfiguration(
             cfg => cfg.AddMaps(typeof(Program).Assembly)
@@ -32,16 +36,17 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         this.updateDataService = new UpdateDataService(
             this.fixture.ApiContext,
             this.mapper,
-            IdentityTestUtils.MockPlayerDetailsService.Object
+            this.mockPlayerDetailsService.Object
         );
 
         CommonAssertionOptions.ApplyTimeOptions();
     }
 
     [Fact]
-    public void GetUpdateDataList_PopulatesAll()
+    public async Task GetUpdateDataList_PopulatesAll()
     {
-        string deviceAccountId = "new id";
+        string deviceAccountId = "some_id";
+        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns(deviceAccountId);
 
         DbPlayerUserData userData = new(deviceAccountId);
 
@@ -155,8 +160,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         );
 
         UpdateDataList list = this.updateDataService.GetUpdateDataList(deviceAccountId);
+        UpdateDataList list2 = await this.updateDataService.SaveChangesAsync();
 
-        using AssertionScope scope = new();
+        list.Should().BeEquivalentTo(list2);
 
         list.user_data.Should().BeEquivalentTo(this.mapper.Map<UserData>(userData));
 
@@ -183,6 +189,8 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
 
         AssertOnlyContains<BuildList>(list.build_list, buildData);
 
+        list.dragon_gift_list.Should().BeNull();
+
         this.output.WriteLine(
             "{0}",
             JsonSerializer.Serialize(list, new JsonSerializerOptions() { WriteIndented = true })
@@ -192,6 +200,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public void GetUpdateDataList_RetrievesIdentityColumns()
     {
+        // This test is bullshit because in-mem works differently to an actual database in this regard
         this.fixture.ApiContext.AddRange(
             new List<IDbHasAccountId>()
             {

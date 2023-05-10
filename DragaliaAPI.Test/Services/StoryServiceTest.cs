@@ -209,9 +209,7 @@ public class StoryServiceTest
 
         this.mockUserDataRepository.Setup(x => x.GiveWyrmite(25)).Returns(Task.CompletedTask);
 
-        this.mockUnitRepository
-            .Setup(x => x.AddDragons(Dragons.Brunhilda))
-            .ReturnsAsync(new List<(Dragons id, bool isNew)>() { (Dragons.Brunhilda, true) });
+        this.mockUnitRepository.Setup(x => x.AddDragons(Dragons.Brunhilda)).ReturnsAsync(true);
 
         (await this.storyService.ReadStory(StoryTypes.Quest, 1000311))
             .Should()
@@ -248,9 +246,7 @@ public class StoryServiceTest
         this.mockUserDataRepository.Setup(x => x.GiveWyrmite(25)).Returns(Task.CompletedTask);
         this.mockUserDataRepository.Setup(x => x.SkipTutorial()).Returns(Task.CompletedTask);
 
-        this.mockUnitRepository
-            .Setup(x => x.AddCharas(Charas.Elisanne))
-            .ReturnsAsync(new List<(Charas id, bool isNew)>() { (Charas.Elisanne, true) });
+        this.mockUnitRepository.Setup(x => x.AddCharas(Charas.Elisanne)).ReturnsAsync(true);
 
         (await this.storyService.ReadStory(StoryTypes.Quest, 1000103))
             .Should()

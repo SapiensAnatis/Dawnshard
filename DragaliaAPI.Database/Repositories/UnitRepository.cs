@@ -154,9 +154,9 @@ public class UnitRepository : BaseRepository, IUnitRepository
         return await this.AddCharas(this.playerDetailsService.AccountId, idList);
     }
 
-    public async Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(Charas id)
+    public async Task<bool> AddCharas(Charas id)
     {
-        return await this.AddCharas(new[] { id });
+        return (await this.AddCharas(new[] { id })).First().isNew;
     }
 
     public async Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(
@@ -200,9 +200,9 @@ public class UnitRepository : BaseRepository, IUnitRepository
         return await this.AddDragons(this.playerDetailsService.AccountId, idList);
     }
 
-    public async Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(Dragons id)
+    public async Task<bool> AddDragons(Dragons id)
     {
-        return await this.AddDragons(new[] { id });
+        return (await this.AddDragons(new[] { id })).First().isNew;
     }
 
     public async Task RemoveDragons(string deviceAccountId, IEnumerable<long> keyIdList)
