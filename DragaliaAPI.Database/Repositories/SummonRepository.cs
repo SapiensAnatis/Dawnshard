@@ -38,7 +38,7 @@ public class SummonRepository : BaseRepository, ISummonRepository
         return bannerData;
     }
 
-    public async Task AddSummonHistory(IEnumerable<DbPlayerSummonHistory> summonHistory)
+    public async Task AddSummonHistory(DbPlayerSummonHistory summonHistory)
     {
         await apiContext.PlayerSummonHistory.AddRangeAsync(summonHistory);
     }
