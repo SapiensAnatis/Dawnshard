@@ -506,8 +506,6 @@ public class SummonController : DragaliaControllerBase
             }
         );
 
-        string respJson = JsonSerializer.Serialize(response);
-
         return this.Ok(response);
     }
 
