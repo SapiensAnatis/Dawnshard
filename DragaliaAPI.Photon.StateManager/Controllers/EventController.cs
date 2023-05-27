@@ -150,8 +150,18 @@ public class EventController : ControllerBase
         RedisKey gameInfo = RedisSchema.GameInfo(request.Game.Name);
         RedisKey gamePlayers = RedisSchema.GamePlayers(request.Game.Name);
 
-        await database.KeyDeleteAsync(new[] { gameInfo, gamePlayers });
-        await database.SetRemoveAsync(gameList, request.Game.Name);
+        long keysRemoved = await database.KeyDeleteAsync(new[] { gameInfo, gamePlayers });
+        bool nameRemoved = await database.SetRemoveAsync(gameList, request.Game.Name);
+
+        if (keysRemoved < 2 || !nameRemoved)
+        {
+            this.logger.LogWarning(
+                "Failed to fully clean up room {room}. keysRemoved: {keysRemoved}, nameRemoved: {nameRemoved}",
+                request.Game.Name,
+                keysRemoved,
+                nameRemoved
+            );
+        }
 
         this.logger.LogInformation("Removed game {game}", request.Game.Name);
 

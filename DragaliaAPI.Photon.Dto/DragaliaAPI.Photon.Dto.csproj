@@ -5,4 +5,8 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="MessagePack" Version="1.9.11" />
+	</ItemGroup>
+
 </Project>

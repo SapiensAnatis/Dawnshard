@@ -8,7 +8,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Services.Photon;
 
 public class MatchingService : IMatchingService
 {
@@ -33,20 +33,20 @@ public class MatchingService : IMatchingService
 
     public async Task<IEnumerable<RoomList>> GetRoomList()
     {
-        IEnumerable<StoredGame> storedGames = await this.photonStateApi.GetAllGames();
+        IEnumerable<StoredGame> storedGames = await photonStateApi.GetAllGames();
         List<RoomList> mapped = new();
 
         foreach (StoredGame storedGame in storedGames)
         {
-            DbPlayerUserData hostUserData = await this.userDataRepository
+            DbPlayerUserData hostUserData = await userDataRepository
                 .GetUserData(storedGame.HostViewerId)
                 .FirstAsync();
 
-            DbPlayerCharaData leadCharaData = await this.partyRepository
+            DbPlayerCharaData leadCharaData = await partyRepository
                 .GetPartyUnits(hostUserData.DeviceAccountId, hostUserData.MainPartyNo)
                 .Where(x => x.UnitNo == 1)
                 .Join(
-                    this.unitRepository.GetAllCharaData(hostUserData.DeviceAccountId),
+                    unitRepository.GetAllCharaData(hostUserData.DeviceAccountId),
                     partyUnit => partyUnit.CharaId,
                     charaData => charaData.CharaId,
                     (partyUnit, charaData) => charaData

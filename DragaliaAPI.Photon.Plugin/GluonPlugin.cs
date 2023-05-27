@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DragaliaAPI.Photon.Dto;
 using DragaliaAPI.Photon.Plugin.Models;
+using DragaliaAPI.Photon.Plugin.Models.Events;
 using K4os.Compression.LZ4;
 using MessagePack;
 using Newtonsoft.Json;
@@ -237,6 +238,9 @@ namespace DragaliaAPI.Photon.Plugin
                     case 1:
                         this.SetGoToIngameInfo(info);
                         break;
+                    case 2:
+                        this.RaiseCharacterDataEvent(info);
+                        break;
                     case 3:
                         this.RaisePartyEvent(info);
                         break;
@@ -244,6 +248,14 @@ namespace DragaliaAPI.Photon.Plugin
                         this.logger.InfoFormat("Unhandled GoToIngameState: {0}", value);
                         break;
                 }
+
+                this.RaiseEvent(
+                    0x45,
+                    new DebugInspectionRequest()
+                    {
+                        requestType = DebugInspectionRequest.RequestTypes.IngameState
+                    }
+                );
             }
 
             base.OnSetProperties(info);
@@ -275,28 +287,78 @@ namespace DragaliaAPI.Photon.Plugin
 
             byte[] msgpack = LZ4MessagePackSerializer.Serialize(data);
 
-            string content = JsonConvert.SerializeObject(data, Formatting.Indented);
-            string msgpackString = Convert.ToBase64String(msgpack);
-
             this.PluginHost.SetProperties(
                 0,
                 new Hashtable() { { "GoToIngameInfo", msgpack } },
                 null,
                 true
             );
+
+            //this.PostJsonRequest(
+            //    this.config.GameCloseEndpoint,
+            //    new WebhookRequest
+            //    {
+            //        Game = DtoHelpers.CreateGame(
+            //            this.PluginHost.GameId,
+            //            this.PluginHost.GameProperties
+            //        ),
+            //    },
+            //    this.LogIfFailedCallback,
+            //    info,
+            //    true
+            //);
+        }
+
+        private void RaiseCharacterDataEvent(ISetPropertiesCallInfo info)
+        {
+            foreach (IActor actor in this.PluginHost.GameActorsActive)
+            {
+                CharacterData evt = new CharacterData()
+                {
+                    playerId = actor.ActorNr,
+                    heroParamExs = new HeroParamExData[2]
+                    {
+                        new HeroParamExData() { sequenceNumber = 0 },
+                        new HeroParamExData() { sequenceNumber = 1 }
+                    },
+                    unusedHeroParams = new HeroParam[1]
+                    {
+                        new HeroParam(10150202, 100, 30160204, 100, 20050113, 100)
+                        {
+                            isFriend = true
+                        },
+                    },
+                    heroParams = new HeroParam[1]
+                    {
+                        new HeroParam(10150202, 100, 30160204, 100, 20050113, 100)
+                        {
+                            isFriend = true,
+                            position = 1,
+                        },
+                    }
+                };
+
+                this.RaiseEvent(0x14, evt, info.ActorNr);
+            }
         }
 
         private void RaisePartyEvent(ISetPropertiesCallInfo info)
         {
             PartyEvent evt = new PartyEvent()
             {
-                memberCountTable = new Dictionary<int, int>() { { 1, 1 } }
+                memberCountTable = new Dictionary<int, int>()
+                {
+                    { 1, 1 },
+                    { 2, 1 },
+                    { 3, 1 },
+                    { 4, 1 }
+                }
             };
 
             this.RaiseEvent(0x3e, evt);
         }
 
-        public void RaiseEvent(byte eventCode, object eventData)
+        public void RaiseEvent(byte eventCode, object eventData, int? target = null)
         {
             byte[] serializedEvent = LZ4MessagePackSerializer.Serialize(eventData);
             Dictionary<byte, object> props = new Dictionary<byte, object>()
@@ -306,12 +368,26 @@ namespace DragaliaAPI.Photon.Plugin
             };
 
             this.logger.DebugFormat(
-                "!!!!!!!!!!!!!! Raising event {0} with data {1}",
-                eventCode,
+                "!!!!!!!!!!!!!! Raising event 0x{0} with data {1}",
+                eventCode.ToString("X"),
                 JsonConvert.SerializeObject(eventData)
             );
 
-            this.BroadcastEvent(eventCode, props);
+            if (target is null)
+            {
+                this.BroadcastEvent(eventCode, props);
+            }
+            else
+            {
+                this.logger.DebugFormat("!!!!!!!!!!!!!! Targeting actor {0}", target);
+                this.PluginHost.BroadcastEvent(
+                    new List<int>() { target.Value },
+                    0,
+                    eventCode,
+                    props,
+                    CacheOperations.DoNotCache
+                );
+            }
         }
 
         private void LogHashtable(IDictionary table)

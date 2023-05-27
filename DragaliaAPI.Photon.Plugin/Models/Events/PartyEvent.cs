@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MessagePack;
 
-namespace DragaliaAPI.Photon.Plugin.Models
+namespace DragaliaAPI.Photon.Plugin.Models.Events
 {
     public class PartyEvent : EventBase<PartyEvent>
     {

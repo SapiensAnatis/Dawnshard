@@ -1,5 +1,5 @@
 ﻿using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
+using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
