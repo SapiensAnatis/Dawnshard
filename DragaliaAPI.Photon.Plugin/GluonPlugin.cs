@@ -285,7 +285,12 @@ namespace DragaliaAPI.Photon.Plugin
                 brInitData = null
             };
 
-            byte[] msgpack = LZ4MessagePackSerializer.Serialize(data);
+            byte[] msgpack = MessagePackSerializer.Serialize(
+                data,
+                MessagePackSerializerOptions.Standard.WithCompression(
+                    MessagePackCompression.Lz4Block
+                )
+            );
 
             this.PluginHost.SetProperties(
                 0,
@@ -360,7 +365,12 @@ namespace DragaliaAPI.Photon.Plugin
 
         public void RaiseEvent(byte eventCode, object eventData, int? target = null)
         {
-            byte[] serializedEvent = LZ4MessagePackSerializer.Serialize(eventData);
+            byte[] serializedEvent = MessagePackSerializer.Serialize(
+                eventData,
+                MessagePackSerializerOptions.Standard.WithCompression(
+                    MessagePackCompression.Lz4Block
+                )
+            );
             Dictionary<byte, object> props = new Dictionary<byte, object>()
             {
                 { 245, serializedEvent },

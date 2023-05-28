@@ -26,9 +26,10 @@ public class WeaponRepository : IWeaponRepository
     }
 
     public IQueryable<DbWeaponBody> WeaponBodies =>
-        this.apiContext.PlayerWeapons.Where(
-            x => x.DeviceAccountId == this.playerDetailsService.AccountId
-        );
+        this.GetWeaponBodies(this.playerDetailsService.AccountId);
+
+    public IQueryable<DbWeaponBody> GetWeaponBodies(string deviceAccountId) =>
+        this.apiContext.PlayerWeapons.Where(x => x.DeviceAccountId == deviceAccountId);
 
     public IQueryable<DbWeaponSkin> WeaponSkins =>
         this.apiContext.PlayerWeaponSkins.Where(

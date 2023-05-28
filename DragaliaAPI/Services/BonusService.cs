@@ -4,6 +4,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services;
@@ -15,20 +16,33 @@ public class BonusService : IBonusService
 {
     private readonly IFortRepository fortRepository;
     private readonly IWeaponRepository weaponRepository;
+    private readonly IPlayerDetailsService playerDetailsService;
 
-    public BonusService(IFortRepository fortRepository, IWeaponRepository weaponRepository)
+    public BonusService(
+        IFortRepository fortRepository,
+        IWeaponRepository weaponRepository,
+        IPlayerDetailsService playerDetailsService
+    )
     {
         this.fortRepository = fortRepository;
         this.weaponRepository = weaponRepository;
+        this.playerDetailsService = playerDetailsService;
     }
 
-    public async Task<FortBonusList> GetBonusList()
+    public async Task<FortBonusList> GetBonusList() =>
+        await this.GetBonusList(this.playerDetailsService.AccountId);
+
+    public async Task<FortBonusList> GetBonusList(string deviceAccountId)
     {
         IEnumerable<int> buildIds = (
-            await this.fortRepository.Builds.Select(x => new { x.PlantId, x.Level }).ToListAsync()
+            await this.fortRepository
+                .GetBuilds(deviceAccountId)
+                .Select(x => new { x.PlantId, x.Level })
+                .ToListAsync()
         ).Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level));
 
-        IEnumerable<WeaponBodies> weaponIds = await this.weaponRepository.WeaponBodies
+        IEnumerable<WeaponBodies> weaponIds = await this.weaponRepository
+            .GetWeaponBodies(deviceAccountId)
             .Where(x => x.FortPassiveCharaWeaponBuildupCount != 0)
             .Select(x => x.WeaponBodyId)
             .ToListAsync();

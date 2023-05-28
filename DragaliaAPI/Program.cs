@@ -96,6 +96,7 @@ builder.Services
     .AddScoped<IStoryService, StoryService>()
     .AddScoped<IMatchingService, MatchingService>()
     .AddScoped<IAbilityCrestService, AbilityCrestService>()
+    .AddScoped<IHeroParamService, HeroParamService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>();
 
