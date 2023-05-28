@@ -195,11 +195,23 @@ namespace DragaliaAPI.Photon.Plugin
                 case 3:
                     this.OnActorReady(info);
                     break;
+                case 0x53: // SuccessiveGameTimer:
+                    this.OnSuccessiveGameTimer(info);
+                    break;
                 default:
                     break;
             }
 
             base.OnRaiseEvent(info);
+        }
+
+        private void OnSuccessiveGameTimer(IRaiseEventCallInfo info)
+        {
+            this.logger.DebugFormat(
+                "OnSuccessiveGameTimer: {0}",
+                JsonConvert.SerializeObject(info.Request.Parameters)
+            );
+            this.RaiseEvent(0x2, new object { }); // GameEnd
         }
 
         public void OnActorReady(IRaiseEventCallInfo info)
@@ -317,7 +329,11 @@ namespace DragaliaAPI.Photon.Plugin
                     Callback = OnHeroParamResponse,
                     Async = true,
                     Accept = "application/json",
-                    UserState = new HttpRequestUserState() { ActorNr = actor.ActorNr },
+                    UserState = new HttpRequestUserState()
+                    {
+                        OwnerActorNr = actor.ActorNr,
+                        RequestActorNr = info.ActorNr
+                    },
                 };
 
                 this.PluginHost.HttpRequest(req, info);
@@ -333,24 +349,30 @@ namespace DragaliaAPI.Photon.Plugin
                 response.ResponseText
             );
 
-            int actorNr = ((HttpRequestUserState)userState).ActorNr;
+            // ActorNr the heroparam belongs to
+            HttpRequestUserState typedUserState = (HttpRequestUserState)userState;
 
             CharacterData evt = new CharacterData()
             {
-                playerId = actorNr,
-                heroParamExs = new HeroParamExData[2]
-                {
-                    new HeroParamExData() { sequenceNumber = 0 },
-                    new HeroParamExData() { sequenceNumber = 1 }
-                },
+                playerId = typedUserState.OwnerActorNr,
+                heroParamExs = heroParams
+                    .Select(
+                        x =>
+                            new HeroParamExData()
+                            {
+                                limitOverCount = x.exAbilityLv,
+                                sequenceNumber = x.position
+                            }
+                    )
+                    .ToArray(),
                 unusedHeroParams = new HeroParam[1]
                 {
                     new HeroParam(10150202, 100, 30160204, 100, 20050113, 100) { isFriend = true },
                 },
-                heroParams = new HeroParam[1] { heroParams[0] }
+                heroParams = heroParams.ToArray(),
             };
 
-            this.RaiseEvent(0x14, evt);
+            this.RaiseEvent(0x14, evt, typedUserState.RequestActorNr);
         }
 
         private void RaisePartyEvent(ISetPropertiesCallInfo info)
@@ -365,6 +387,16 @@ namespace DragaliaAPI.Photon.Plugin
                     { 4, 1 }
                 }
             };
+
+            /* if (this.PluginHost.GameActors.Count() < 4)
+             {
+                 evt.memberCountTable[1] += 1;
+             }
+ 
+             if (this.PluginHost.GameActors.Count() < 2)
+             {
+                 evt.memberCountTable[2] += 1;
+             }*/
 
             this.RaiseEvent(0x3e, evt);
 

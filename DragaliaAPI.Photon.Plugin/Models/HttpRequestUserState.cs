@@ -8,6 +8,8 @@ namespace DragaliaAPI.Photon.Plugin.Models
 {
     internal class HttpRequestUserState
     {
-        public int ActorNr { get; set; }
+        public int OwnerActorNr { get; set; }
+
+        public int RequestActorNr { get; set; }
     }
 }
