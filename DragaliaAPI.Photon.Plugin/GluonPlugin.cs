@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using DragaliaAPI.Photon.Dto;
@@ -298,53 +299,58 @@ namespace DragaliaAPI.Photon.Plugin
                 null,
                 true
             );
-
-            //this.PostJsonRequest(
-            //    this.config.GameCloseEndpoint,
-            //    new WebhookRequest
-            //    {
-            //        Game = DtoHelpers.CreateGame(
-            //            this.PluginHost.GameId,
-            //            this.PluginHost.GameProperties
-            //        ),
-            //    },
-            //    this.LogIfFailedCallback,
-            //    info,
-            //    true
-            //);
         }
 
         private void RaiseCharacterDataEvent(ISetPropertiesCallInfo info)
         {
             foreach (IActor actor in this.PluginHost.GameActorsActive)
             {
-                CharacterData evt = new CharacterData()
+                if (!actor.Properties.TryGetInt("PlayerId", out int viewerId))
                 {
-                    playerId = actor.ActorNr,
-                    heroParamExs = new HeroParamExData[2]
-                    {
-                        new HeroParamExData() { sequenceNumber = 0 },
-                        new HeroParamExData() { sequenceNumber = 1 }
-                    },
-                    unusedHeroParams = new HeroParam[1]
-                    {
-                        new HeroParam(10150202, 100, 30160204, 100, 20050113, 100)
-                        {
-                            isFriend = true
-                        },
-                    },
-                    heroParams = new HeroParam[1]
-                    {
-                        new HeroParam(10150202, 100, 30160204, 100, 20050113, 100)
-                        {
-                            isFriend = true,
-                            position = 1,
-                        },
-                    }
+                    this.ReportError($"Failed to get viewer id for actor {actor.ActorNr}");
+                }
+
+                HttpRequest req = new HttpRequest()
+                {
+                    Url = $"http://localhost:5000/heroparam/{viewerId}",
+                    ContentType = "application/json",
+                    Callback = OnHeroParamResponse,
+                    Async = true,
+                    Accept = "application/json",
+                    UserState = new HttpRequestUserState() { ActorNr = actor.ActorNr },
                 };
 
-                this.RaiseEvent(0x14, evt, info.ActorNr);
+                this.PluginHost.HttpRequest(req, info);
             }
+        }
+
+        private void OnHeroParamResponse(IHttpResponse response, object userState)
+        {
+            if (response.Status != 0)
+                this.ReportError($"HeroParam request failed with code {response.Status}");
+
+            List<HeroParam> heroParams = JsonConvert.DeserializeObject<List<HeroParam>>(
+                response.ResponseText
+            );
+
+            int actorNr = ((HttpRequestUserState)userState).ActorNr;
+
+            CharacterData evt = new CharacterData()
+            {
+                playerId = actorNr,
+                heroParamExs = new HeroParamExData[2]
+                {
+                    new HeroParamExData() { sequenceNumber = 0 },
+                    new HeroParamExData() { sequenceNumber = 1 }
+                },
+                unusedHeroParams = new HeroParam[1]
+                {
+                    new HeroParam(10150202, 100, 30160204, 100, 20050113, 100) { isFriend = true },
+                },
+                heroParams = new HeroParam[1] { heroParams[0] }
+            };
+
+            this.RaiseEvent(0x14, evt);
         }
 
         private void RaisePartyEvent(ISetPropertiesCallInfo info)
@@ -361,6 +367,20 @@ namespace DragaliaAPI.Photon.Plugin
             };
 
             this.RaiseEvent(0x3e, evt);
+
+            this.PostJsonRequest(
+                this.config.GameCloseEndpoint,
+                new WebhookRequest
+                {
+                    Game = DtoHelpers.CreateGame(
+                        this.PluginHost.GameId,
+                        this.PluginHost.GameProperties
+                    ),
+                },
+                this.LogIfFailedCallback,
+                info,
+                true
+            );
         }
 
         public void RaiseEvent(byte eventCode, object eventData, int? target = null)
