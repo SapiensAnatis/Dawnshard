@@ -365,11 +365,8 @@ namespace DragaliaAPI.Photon.Plugin
                             }
                     )
                     .ToArray(),
-                unusedHeroParams = new HeroParam[1]
-                {
-                    new HeroParam(10150202, 100, 30160204, 100, 20050113, 100) { isFriend = true },
-                },
-                heroParams = heroParams.ToArray(),
+                unusedHeroParams = Array.Empty<HeroParam>(),
+                heroParams = heroParams.Take(GetMemberCount(typedUserState.OwnerActorNr)).ToArray(),
             };
 
             this.RaiseEvent(0x14, evt, typedUserState.RequestActorNr);
@@ -379,13 +376,10 @@ namespace DragaliaAPI.Photon.Plugin
         {
             PartyEvent evt = new PartyEvent()
             {
-                memberCountTable = new Dictionary<int, int>()
-                {
-                    { 1, 1 },
-                    { 2, 1 },
-                    { 3, 1 },
-                    { 4, 1 }
-                }
+                memberCountTable = this.PluginHost.GameActors.ToDictionary(
+                    x => x.ActorNr,
+                    x => GetMemberCount(x.ActorNr)
+                )
             };
 
             /* if (this.PluginHost.GameActors.Count() < 4)
@@ -413,6 +407,23 @@ namespace DragaliaAPI.Photon.Plugin
                 info,
                 true
             );
+        }
+
+        public int GetMemberCount(int actorNr)
+        {
+            int count = this.PluginHost.GameActors.Count;
+
+            if (count < 4 && actorNr == 1)
+            {
+                return 2;
+            }
+
+            if (count < 3 && actorNr == 2)
+            {
+                return 2;
+            }
+
+            return 1;
         }
 
         public void RaiseEvent(byte eventCode, object eventData, int? target = null)

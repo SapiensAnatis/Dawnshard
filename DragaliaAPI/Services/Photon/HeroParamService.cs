@@ -72,6 +72,7 @@ public class HeroParamService : IHeroParamService
                 exAbility2Lv = unit.CharaData.ExAbility2Level,
                 comboBuildupCount = unit.CharaData.ComboBuildupCount,
                 position = unit.Position,
+                isEnemyTarget = true
             };
 
         if (unit.DragonData is not null)
