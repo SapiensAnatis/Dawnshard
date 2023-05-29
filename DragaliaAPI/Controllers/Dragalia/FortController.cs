@@ -1,8 +1,14 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.AspNetCore.Mvc;
+using DragaliaAPI.Database.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -12,16 +18,25 @@ public class FortController : DragaliaControllerBase
     private readonly IFortService fortService;
     private readonly IBonusService bonusService;
     private readonly IUpdateDataService updateDataService;
+    private readonly IUserDataRepository userDataRepository;
+    private readonly IInventoryRepository inventoryRepository;
+    private readonly IFortRepository fortRepository;
 
     public FortController(
         IFortService fortService,
         IBonusService bonusService,
-        IUpdateDataService updateDataService
+        IUpdateDataService updateDataService,
+        IUserDataRepository userDataRepository,
+        IInventoryRepository inventoryRepository,
+        IFortRepository fortRepository
     )
     {
         this.fortService = fortService;
         this.bonusService = bonusService;
         this.updateDataService = updateDataService;
+        this.userDataRepository = userDataRepository;
+        this.inventoryRepository = inventoryRepository;
+        this.fortRepository = fortRepository;
     }
 
     [HttpPost("get_data")]
@@ -43,6 +58,117 @@ public class FortController : DragaliaControllerBase
                 production_st = StubData.ProductionSt,
                 fort_detail = fortDetail,
                 current_server_time = DateTimeOffset.UtcNow
+            };
+
+        return this.Ok(data);
+    }
+
+    [HttpPost("get_multi_income")]
+    public async Task<DragaliaResult> GetMultiIncome(FortGetMultiIncomeRequest request)
+    {
+        Random rng = new(); // for dragonfruit drops
+
+        // AtgenHarvestBuildList: buildId, AddHarvestList
+        // AddHarvestList: materialId, fruit quantity
+        List<AtgenHarvestBuildList> harvest = new();
+
+        // AtgenAddCoinList: buildId, rupie quantity
+        List<AtgenAddCoinList> addCoin = new();
+
+        // AtgenAddStaminaList: buildId, stamina count
+        List<AtgenAddStaminaList> addStamina = new();
+
+        IEnumerable<DbFortBuild> fortList = await this.fortRepository.Builds.ToListAsync();
+        IEnumerable<DbFortBuild> resourceFortList = fortList.Where(build => 
+            request.build_id_list.Contains((ulong)build.BuildId));
+
+        // materials to add to player inventory
+        int rupiesAdded = 0;
+        List<KeyValuePair<Materials, int>> addDragonfruitList = new();
+
+        foreach (DbFortBuild build in resourceFortList)
+        {
+            FortPlantDetail fortPlantDetail = MasterAsset.FortPlant.Get(build.FortPlantDetailId);
+            int elapsedSecs = (int) build.LastIncomeTime.TotalSeconds;
+            switch (build.PlantId)
+            {
+                case FortPlants.RupieMine:
+                    elapsedSecs = Math.Min(fortPlantDetail.CostMaxTime, elapsedSecs);
+                    double rupiesPerSec = fortPlantDetail.CostMax / (fortPlantDetail.CostMaxTime * 1.0);
+                    int rupiesCount = (int)(rupiesPerSec * elapsedSecs);
+                    addCoin.Add(new AtgenAddCoinList((ulong) build.BuildId, rupiesCount));
+                    rupiesAdded += rupiesCount;
+                    break;
+                case FortPlants.Dragontree:
+                    elapsedSecs = Math.Min(fortPlantDetail.MaterialMaxTime, elapsedSecs);
+                    double fruitsPerSec = fortPlantDetail.MaterialMax / (fortPlantDetail.MaterialMaxTime * 1.0);
+                    int fruitsCount = (int)(fruitsPerSec * elapsedSecs);
+                    int dragonfruitCount = 0;
+                    int ripeDragonfruitCount = 0;
+                    int succulentDragonfruitCount = 0;
+                    // randomly assign dragonfruit drops 
+                    // these arent supposed to be equally distrubuted...
+                    // but I don't think anyone really cares
+                    for (int i = 0; i < fruitsCount; i++)
+                    {
+                        switch (rng.Next(3))
+                        {
+                            case 0:
+                                dragonfruitCount++;
+                                break;
+                            case 1:
+                                ripeDragonfruitCount++;
+                                break;
+                            case 2:
+                                succulentDragonfruitCount++;
+                                break;
+                        }
+                    }
+                    
+                    List<AtgenAddHarvestList> addHarvest = new()
+                    {
+                        new AtgenAddHarvestList((int) Materials.Dragonfruit, dragonfruitCount),
+                        new AtgenAddHarvestList((int) Materials.RipeDragonfruit, ripeDragonfruitCount),
+                        new AtgenAddHarvestList((int) Materials.SucculentDragonfruit, succulentDragonfruitCount)
+                    };
+                    harvest.Add(new AtgenHarvestBuildList((ulong)build.BuildId, addHarvest));
+
+                    addDragonfruitList.Add(new KeyValuePair<Materials, int>(Materials.Dragonfruit, dragonfruitCount));
+                    addDragonfruitList.Add(new KeyValuePair<Materials, int>(Materials.RipeDragonfruit, ripeDragonfruitCount));
+                    addDragonfruitList.Add(new KeyValuePair<Materials, int>(Materials.SucculentDragonfruit, succulentDragonfruitCount));
+                    break;
+                case FortPlants.TheHalidom:
+                    elapsedSecs = Math.Min(fortPlantDetail.StaminaMaxTime, elapsedSecs);
+                    double staminaPerSec = fortPlantDetail.StaminaMax / (fortPlantDetail.StaminaMaxTime * 1.0);
+                    int stamina = (int)(staminaPerSec * elapsedSecs);
+                    addStamina.Add(new AtgenAddStaminaList((ulong) build.BuildId, stamina));
+                    //verify that collecting stamina works properly after stamina is implemented
+                    break;
+                default:
+                    throw new DragaliaException(
+                        ResultCode.FortIncomeError,
+                        $"Attempted to collect resources from non-resource facility"
+                    );
+            }
+            build.LastIncomeDate = DateTimeOffset.UtcNow;
+        }
+
+        await this.userDataRepository.UpdateCoin(rupiesAdded);
+        await this.inventoryRepository.UpdateQuantity(addDragonfruitList);
+
+        UpdateDataList updateDataList = updateDataService.GetUpdateDataList(DeviceAccountId);
+        await this.userDataRepository.SaveChangesAsync();
+        FortGetMultiIncomeData data =
+            new()
+            {
+                result = 1,
+                harvest_build_list = harvest,
+                add_coin_list = addCoin,
+                add_stamina_list = addStamina,
+                is_over_coin = 0,
+                is_over_material = 0,
+                update_data_list = updateDataList,
+                entity_result = new()
             };
 
         return this.Ok(data);
