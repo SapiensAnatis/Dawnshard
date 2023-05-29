@@ -79,8 +79,9 @@ public class FortController : DragaliaControllerBase
         List<AtgenAddStaminaList> addStamina = new();
 
         IEnumerable<DbFortBuild> fortList = await this.fortRepository.Builds.ToListAsync();
-        IEnumerable<DbFortBuild> resourceFortList = fortList.Where(build => 
-            request.build_id_list.Contains((ulong)build.BuildId));
+        IEnumerable<DbFortBuild> resourceFortList = fortList.Where(
+            build => request.build_id_list.Contains((ulong)build.BuildId)
+        );
 
         // materials to add to player inventory
         int rupiesAdded = 0;
@@ -89,24 +90,26 @@ public class FortController : DragaliaControllerBase
         foreach (DbFortBuild build in resourceFortList)
         {
             FortPlantDetail fortPlantDetail = MasterAsset.FortPlant.Get(build.FortPlantDetailId);
-            int elapsedSecs = (int) build.LastIncomeTime.TotalSeconds;
+            int elapsedSecs = (int)build.LastIncomeTime.TotalSeconds;
             switch (build.PlantId)
             {
                 case FortPlants.RupieMine:
                     elapsedSecs = Math.Min(fortPlantDetail.CostMaxTime, elapsedSecs);
-                    double rupiesPerSec = fortPlantDetail.CostMax / (fortPlantDetail.CostMaxTime * 1.0);
+                    double rupiesPerSec =
+                        fortPlantDetail.CostMax / (fortPlantDetail.CostMaxTime * 1.0);
                     int rupiesCount = (int)(rupiesPerSec * elapsedSecs);
-                    addCoin.Add(new AtgenAddCoinList((ulong) build.BuildId, rupiesCount));
+                    addCoin.Add(new AtgenAddCoinList((ulong)build.BuildId, rupiesCount));
                     rupiesAdded += rupiesCount;
                     break;
                 case FortPlants.Dragontree:
                     elapsedSecs = Math.Min(fortPlantDetail.MaterialMaxTime, elapsedSecs);
-                    double fruitsPerSec = fortPlantDetail.MaterialMax / (fortPlantDetail.MaterialMaxTime * 1.0);
+                    double fruitsPerSec =
+                        fortPlantDetail.MaterialMax / (fortPlantDetail.MaterialMaxTime * 1.0);
                     int fruitsCount = (int)(fruitsPerSec * elapsedSecs);
                     int dragonfruitCount = 0;
                     int ripeDragonfruitCount = 0;
                     int succulentDragonfruitCount = 0;
-                    // randomly assign dragonfruit drops 
+                    // randomly assign dragonfruit drops
                     // these arent supposed to be equally distrubuted...
                     // but I don't think anyone really cares
                     for (int i = 0; i < fruitsCount; i++)
@@ -124,24 +127,44 @@ public class FortController : DragaliaControllerBase
                                 break;
                         }
                     }
-                    
-                    List<AtgenAddHarvestList> addHarvest = new()
-                    {
-                        new AtgenAddHarvestList((int) Materials.Dragonfruit, dragonfruitCount),
-                        new AtgenAddHarvestList((int) Materials.RipeDragonfruit, ripeDragonfruitCount),
-                        new AtgenAddHarvestList((int) Materials.SucculentDragonfruit, succulentDragonfruitCount)
-                    };
+
+                    List<AtgenAddHarvestList> addHarvest =
+                        new()
+                        {
+                            new AtgenAddHarvestList((int)Materials.Dragonfruit, dragonfruitCount),
+                            new AtgenAddHarvestList(
+                                (int)Materials.RipeDragonfruit,
+                                ripeDragonfruitCount
+                            ),
+                            new AtgenAddHarvestList(
+                                (int)Materials.SucculentDragonfruit,
+                                succulentDragonfruitCount
+                            )
+                        };
                     harvest.Add(new AtgenHarvestBuildList((ulong)build.BuildId, addHarvest));
 
-                    addDragonfruitList.Add(new KeyValuePair<Materials, int>(Materials.Dragonfruit, dragonfruitCount));
-                    addDragonfruitList.Add(new KeyValuePair<Materials, int>(Materials.RipeDragonfruit, ripeDragonfruitCount));
-                    addDragonfruitList.Add(new KeyValuePair<Materials, int>(Materials.SucculentDragonfruit, succulentDragonfruitCount));
+                    addDragonfruitList.Add(
+                        new KeyValuePair<Materials, int>(Materials.Dragonfruit, dragonfruitCount)
+                    );
+                    addDragonfruitList.Add(
+                        new KeyValuePair<Materials, int>(
+                            Materials.RipeDragonfruit,
+                            ripeDragonfruitCount
+                        )
+                    );
+                    addDragonfruitList.Add(
+                        new KeyValuePair<Materials, int>(
+                            Materials.SucculentDragonfruit,
+                            succulentDragonfruitCount
+                        )
+                    );
                     break;
                 case FortPlants.TheHalidom:
                     elapsedSecs = Math.Min(fortPlantDetail.StaminaMaxTime, elapsedSecs);
-                    double staminaPerSec = fortPlantDetail.StaminaMax / (fortPlantDetail.StaminaMaxTime * 1.0);
+                    double staminaPerSec =
+                        fortPlantDetail.StaminaMax / (fortPlantDetail.StaminaMaxTime * 1.0);
                     int stamina = (int)(staminaPerSec * elapsedSecs);
-                    addStamina.Add(new AtgenAddStaminaList((ulong) build.BuildId, stamina));
+                    addStamina.Add(new AtgenAddStaminaList((ulong)build.BuildId, stamina));
                     //verify that collecting stamina works properly after stamina is implemented
                     break;
                 default:
