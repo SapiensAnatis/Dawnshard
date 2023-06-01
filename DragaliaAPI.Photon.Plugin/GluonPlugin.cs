@@ -322,9 +322,11 @@ namespace DragaliaAPI.Photon.Plugin
                     this.ReportError($"Failed to get viewer id for actor {actor.ActorNr}");
                 }
 
+                int[] partySlots = (int[])actor.Properties.GetProperty("UsePartySlot").Value;
+
                 HttpRequest req = new HttpRequest()
                 {
-                    Url = $"http://localhost:5000/heroparam/{viewerId}",
+                    Url = $"http://localhost:5000/heroparam/{viewerId}?partySlot1={partySlots[0]}",
                     ContentType = "application/json",
                     Callback = OnHeroParamResponse,
                     Async = true,
@@ -337,6 +339,27 @@ namespace DragaliaAPI.Photon.Plugin
                 };
 
                 this.PluginHost.HttpRequest(req, info);
+
+                if (partySlots.Length > 1)
+                {
+                    HttpRequest req2 = new HttpRequest()
+                    {
+                        Url =
+                            $"http://localhost:5000/heroparam/{viewerId}?partySlot1={partySlots[1]}",
+                        ContentType = "application/json",
+                        Callback = OnHeroParamResponse,
+                        Async = true,
+                        Accept = "application/json",
+                        UserState = new HttpRequestUserState()
+                        {
+                            OwnerActorNr = actor.ActorNr,
+                            RequestActorNr = info.ActorNr,
+                            UnusedHeroParam = true
+                        },
+                    };
+
+                    this.PluginHost.HttpRequest(req, info);
+                }
             }
         }
 
@@ -365,9 +388,16 @@ namespace DragaliaAPI.Photon.Plugin
                             }
                     )
                     .ToArray(),
-                unusedHeroParams = Array.Empty<HeroParam>(),
-                heroParams = heroParams.Take(GetMemberCount(typedUserState.OwnerActorNr)).ToArray(),
             };
+
+            HeroParam[] selectedHeroParams = heroParams
+                .Take(GetMemberCount(typedUserState.OwnerActorNr))
+                .ToArray();
+
+            if (typedUserState.UnusedHeroParam)
+                evt.unusedHeroParams = selectedHeroParams;
+            else
+                evt.heroParams = selectedHeroParams;
 
             this.RaiseEvent(0x14, evt, typedUserState.RequestActorNr);
         }
@@ -386,7 +416,7 @@ namespace DragaliaAPI.Photon.Plugin
              {
                  evt.memberCountTable[1] += 1;
              }
- 
+
              if (this.PluginHost.GameActors.Count() < 2)
              {
                  evt.memberCountTable[2] += 1;

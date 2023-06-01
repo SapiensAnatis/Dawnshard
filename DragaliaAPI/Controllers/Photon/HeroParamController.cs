@@ -14,8 +14,16 @@ public class HeroParamController : ControllerBase
     }
 
     [HttpGet("{viewerId}")]
-    public async Task<IActionResult> GetHeroParam(long viewerId)
+    public async Task<IActionResult> GetHeroParam(
+        long viewerId,
+        [FromQuery] int partySlot1,
+        [FromQuery] int? partySlot2
+    )
     {
-        return this.Ok(await this.heroParamService.GetHeroParam(viewerId));
+        List<int> partySlots = new() { partySlot1 };
+        if (partySlot2 is not null)
+            partySlots.Add(partySlot2.Value);
+
+        return this.Ok(await this.heroParamService.GetHeroParam(viewerId, partySlots));
     }
 }

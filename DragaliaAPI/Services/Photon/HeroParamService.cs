@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Extensions;
@@ -16,22 +17,31 @@ public class HeroParamService : IHeroParamService
     private readonly IBonusService bonusService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IPartyRepository partyRepository;
+    private readonly ILogger<HeroParamService> logger;
+    const bool cheatAttack = true;
 
     public HeroParamService(
         IUnitRepository unitRepository,
         IBonusService bonusService,
         IUserDataRepository userDataRepository,
-        IPartyRepository partyRepository
+        IPartyRepository partyRepository,
+        ILogger<HeroParamService> logger
     )
     {
         this.unitRepository = unitRepository;
         this.bonusService = bonusService;
         this.userDataRepository = userDataRepository;
         this.partyRepository = partyRepository;
+        this.logger = logger;
     }
 
-    public async Task<IEnumerable<HeroParam>> GetHeroParam(long viewerId)
+    public async Task<IEnumerable<HeroParam>> GetHeroParam(
+        long viewerId,
+        IEnumerable<int> partySlots
+    )
     {
+        this.logger.LogDebug("Fetching HeroParam for slots {partySlots}");
+
         List<HeroParam> result = new();
 
         DbPlayerUserData userData = await this.userDataRepository
@@ -41,16 +51,20 @@ public class HeroParamService : IHeroParamService
         List<DbDetailedPartyUnit> detailedPartyUnits = await this.unitRepository
             .BuildDetailedPartyUnit(
                 userData.DeviceAccountId,
-                partyRepository.GetPartyUnits(userData.DeviceAccountId, userData.MainPartyNo)
+                partyRepository.GetPartyUnits(userData.DeviceAccountId, partySlots)
             )
             .ToListAsync();
 
         FortBonusList bonusList = await this.bonusService.GetBonusList(userData.DeviceAccountId);
 
-        return detailedPartyUnits.Select(x => MapHeroParam(x, bonusList));
+        return detailedPartyUnits.Select((x, index) => MapHeroParam(x, bonusList, index + 1));
     }
 
-    private static HeroParam MapHeroParam(DbDetailedPartyUnit unit, FortBonusList fortBonusList)
+    private static HeroParam MapHeroParam(
+        DbDetailedPartyUnit unit,
+        FortBonusList fortBonusList,
+        int position
+    )
     {
         HeroParam result =
             new()
@@ -71,8 +85,8 @@ public class HeroParamService : IHeroParamService
                 exAbilityLv = unit.CharaData.ExAbilityLevel,
                 exAbility2Lv = unit.CharaData.ExAbility2Level,
                 comboBuildupCount = unit.CharaData.ComboBuildupCount,
-                position = unit.Position,
-                isEnemyTarget = true
+                position = position,
+                isEnemyTarget = true,
             };
 
         if (unit.DragonData is not null)
@@ -178,9 +192,13 @@ public class HeroParamService : IHeroParamService
             result.dragonRelativeAtkFort += dragonBonus.attack;
             result.dragonRelativeHpFort += dragonBonus.hp;
             result.dragonTime += dragonBonus.dragon_bonus;
+            result.dragonTime += fortBonusList.dragon_time_bonus.dragon_time_bonus;
             result.dragonRelativeAtkAlbum += dragonAlbumBonus.attack;
             result.dragonRelativeHpAlbum += dragonAlbumBonus.hp;
         }
+
+        result.relativeAtk += fortBonusList.all_bonus.attack;
+        result.relativeHp += fortBonusList.all_bonus.hp;
     }
 
     private static void MapCrests(DbDetailedPartyUnit unit, HeroParam result)

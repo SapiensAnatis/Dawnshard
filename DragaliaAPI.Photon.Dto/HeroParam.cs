@@ -353,37 +353,5 @@ namespace DragaliaAPI.Photon.Dto
 
         [Key(160)]
         public int talismanAdditionalAttack { get; set; }
-
-        public HeroParam(
-            int characterId,
-            int level,
-            int weaponBodyId,
-            int weaponBodyBuildupCount,
-            int dragonId,
-            int dragonLevel
-        )
-        {
-            long num = 1L;
-            this.level = (int)num;
-            this.hp = 100;
-            this.dragonLevel = (int)num;
-            int[] array = new int[10];
-            this.weaponPassiveAbilityIds = array;
-            this.isEnemyTarget = num != 0L;
-            int[] array2 = new int[15];
-            this.eventPassiveGrowList = array2;
-            this.level = level;
-            this.characterId = characterId;
-            this.dragonId = dragonId;
-            this.dragonAbility1Lv = dragonLevel;
-            this.weaponBodyId = weaponBodyId;
-            this.weaponBodySkillNo = weaponBodyBuildupCount;
-        }
-
-        public HeroParam()
-        {
-            this.weaponPassiveAbilityIds = new int[0];
-            this.eventPassiveGrowList = new int[0];
-        }
     }
 }

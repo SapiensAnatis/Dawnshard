@@ -11,5 +11,7 @@ namespace DragaliaAPI.Photon.Plugin.Models
         public int OwnerActorNr { get; set; }
 
         public int RequestActorNr { get; set; }
+
+        public bool UnusedHeroParam { get; set; }
     }
 }

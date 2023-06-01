@@ -23,25 +23,27 @@ public class PartyRepository : BaseRepository, IPartyRepository
 
     public IQueryable<DbPartyUnit> GetPartyUnits(
         string deviceAccountId,
+        IEnumerable<int> partySlots
+    )
+    {
+        return apiContext.PlayerPartyUnits
+            .Where(x => x.DeviceAccountId == deviceAccountId && partySlots.Contains(x.PartyNo))
+            .OrderBy(x => x.PartyNo == partySlots.First())
+            .ThenBy(x => x.UnitNo);
+    }
+
+    public IQueryable<DbPartyUnit> GetPartyUnits(
+        string deviceAccountId,
         int firstParty,
         int secondParty
     )
     {
-        return apiContext.PlayerPartyUnits
-            .Where(
-                x =>
-                    x.DeviceAccountId == deviceAccountId
-                    && (x.PartyNo == firstParty || x.PartyNo == secondParty)
-            )
-            .OrderBy(x => x.PartyNo == firstParty)
-            .ThenBy(x => x.UnitNo);
+        return this.GetPartyUnits(deviceAccountId, new[] { firstParty, secondParty });
     }
 
     public IQueryable<DbPartyUnit> GetPartyUnits(string deviceAccountId, int party)
     {
-        return apiContext.PlayerPartyUnits
-            .Where(x => x.DeviceAccountId == deviceAccountId && x.PartyNo == party)
-            .OrderBy(x => x.UnitNo);
+        return this.GetPartyUnits(deviceAccountId, new[] { party });
     }
 
     public async Task SetParty(string deviceAccountId, DbParty newParty)
