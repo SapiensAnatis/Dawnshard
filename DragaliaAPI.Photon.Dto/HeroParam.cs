@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using MessagePack;
 
 namespace DragaliaAPI.Photon.Dto
@@ -97,7 +98,7 @@ namespace DragaliaAPI.Photon.Dto
         public int weaponBodyAbility2Lv { get; set; }
 
         [Key(38)]
-        public int[] weaponPassiveAbilityIds { get; set; }
+        public int[] weaponPassiveAbilityIds { get; set; } = Array.Empty<int>();
 
         [Key(45)]
         public int weaponSkinId { get; set; }
@@ -244,7 +245,7 @@ namespace DragaliaAPI.Photon.Dto
         public int battleGroup { get; set; } // !
 
         [Key(107)]
-        public int[] eventPassiveGrowList { get; set; }
+        public int[] eventPassiveGrowList { get; set; } = Array.Empty<int>();
 
         [Key(108)]
         public float eventBoostDmg { get; set; }

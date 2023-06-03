@@ -1,24 +1,40 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Photon.Dto;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services.Photon;
 
 public class HeroParamService : IHeroParamService
 {
+    private static readonly ImmutableDictionary<WeaponTypes, WeaponBodies> DefaultWeapons =
+        new Dictionary<WeaponTypes, WeaponBodies>()
+        {
+            { WeaponTypes.Sword, WeaponBodies.BattlewornSword },
+            { WeaponTypes.Katana, WeaponBodies.BattlewornBlade },
+            { WeaponTypes.Dagger, WeaponBodies.BattlewornDagger },
+            { WeaponTypes.Axe, WeaponBodies.BattlewornAxe },
+            { WeaponTypes.Lance, WeaponBodies.BattlewornLance },
+            { WeaponTypes.Bow, WeaponBodies.BattlewornBow },
+            { WeaponTypes.Rod, WeaponBodies.BattlewornWand },
+            { WeaponTypes.Cane, WeaponBodies.BattlewornStaff },
+            { WeaponTypes.Gun, WeaponBodies.BattlewornManacaster }
+        }.ToImmutableDictionary();
+
     private readonly IUnitRepository unitRepository;
     private readonly IBonusService bonusService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IPartyRepository partyRepository;
     private readonly ILogger<HeroParamService> logger;
-    const bool cheatAttack = true;
 
     public HeroParamService(
         IUnitRepository unitRepository,
@@ -40,7 +56,7 @@ public class HeroParamService : IHeroParamService
         IEnumerable<int> partySlots
     )
     {
-        this.logger.LogDebug("Fetching HeroParam for slots {partySlots}");
+        this.logger.LogDebug("Fetching HeroParam for slots {partySlots}", partySlots);
 
         List<HeroParam> result = new();
 
@@ -57,15 +73,13 @@ public class HeroParamService : IHeroParamService
 
         FortBonusList bonusList = await this.bonusService.GetBonusList(userData.DeviceAccountId);
 
-        return detailedPartyUnits.Select((x, index) => MapHeroParam(x, bonusList, index + 1));
+        return detailedPartyUnits.Select(x => MapHeroParam(x, bonusList));
     }
 
-    private static HeroParam MapHeroParam(
-        DbDetailedPartyUnit unit,
-        FortBonusList fortBonusList,
-        int position
-    )
+    private static HeroParam MapHeroParam(DbDetailedPartyUnit unit, FortBonusList fortBonusList)
     {
+        CharaData charaData = MasterAsset.CharaData[unit.CharaData.CharaId];
+
         HeroParam result =
             new()
             {
@@ -85,7 +99,7 @@ public class HeroParamService : IHeroParamService
                 exAbilityLv = unit.CharaData.ExAbilityLevel,
                 exAbility2Lv = unit.CharaData.ExAbility2Level,
                 comboBuildupCount = unit.CharaData.ComboBuildupCount,
-                position = position,
+                position = unit.Position,
                 isEnemyTarget = true,
             };
 
@@ -112,6 +126,10 @@ public class HeroParamService : IHeroParamService
             result.weaponPassiveAbilityIds = unit.GameWeaponPassiveAbilityList
                 .Select(x => x.WeaponPassiveAbilityId)
                 .ToArray();
+        }
+        else
+        {
+            result.weaponBodyId = (int)DefaultWeapons[charaData.WeaponType];
         }
 
         if (unit.TalismanData is not null)
