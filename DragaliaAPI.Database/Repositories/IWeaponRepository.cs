@@ -15,4 +15,5 @@ public interface IWeaponRepository
     Task<DbWeaponBody?> FindAsync(WeaponBodies id);
     Task AddPassiveAbility(WeaponBodies id, WeaponPassiveAbility passiveAbility);
     IQueryable<DbWeaponBody> GetWeaponBodies(string deviceAccountId);
+    IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(WeaponBodies id, string deviceAccountId);
 }

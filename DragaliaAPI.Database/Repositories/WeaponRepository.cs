@@ -41,7 +41,13 @@ public class WeaponRepository : IWeaponRepository
             x => x.DeviceAccountId == this.playerDetailsService.AccountId
         );
 
-    public IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(WeaponBodies id)
+    public IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(WeaponBodies id) =>
+        this.GetPassiveAbilities(id, this.playerDetailsService.AccountId);
+
+    public IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(
+        WeaponBodies id,
+        string deviceAccountId
+    )
     {
         WeaponBody data = MasterAsset.WeaponBody.Get(id);
 
@@ -51,8 +57,7 @@ public class WeaponRepository : IWeaponRepository
 
         return this.apiContext.PlayerPassiveAbilities.Where(
             x =>
-                x.DeviceAccountId == this.playerDetailsService.AccountId
-                && searchIds.Contains(x.WeaponPassiveAbilityId)
+                x.DeviceAccountId == deviceAccountId && searchIds.Contains(x.WeaponPassiveAbilityId)
         );
     }
 

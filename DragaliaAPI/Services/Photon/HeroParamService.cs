@@ -31,6 +31,7 @@ public class HeroParamService : IHeroParamService
         }.ToImmutableDictionary();
 
     private readonly IUnitRepository unitRepository;
+    private readonly IWeaponRepository weaponRepository;
     private readonly IBonusService bonusService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IPartyRepository partyRepository;
@@ -38,6 +39,7 @@ public class HeroParamService : IHeroParamService
 
     public HeroParamService(
         IUnitRepository unitRepository,
+        IWeaponRepository weaponRepository,
         IBonusService bonusService,
         IUserDataRepository userDataRepository,
         IPartyRepository partyRepository,
@@ -45,6 +47,7 @@ public class HeroParamService : IHeroParamService
     )
     {
         this.unitRepository = unitRepository;
+        this.weaponRepository = weaponRepository;
         this.bonusService = bonusService;
         this.userDataRepository = userDataRepository;
         this.partyRepository = partyRepository;
@@ -70,6 +73,16 @@ public class HeroParamService : IHeroParamService
                 partyRepository.GetPartyUnits(userData.DeviceAccountId, partySlots)
             )
             .ToListAsync();
+
+        foreach (DbDetailedPartyUnit unit in detailedPartyUnits)
+        {
+            if (unit.WeaponBodyData is not null)
+            {
+                unit.GameWeaponPassiveAbilityList = await this.weaponRepository
+                    .GetPassiveAbilities(unit.WeaponBodyData.WeaponBodyId, userData.DeviceAccountId)
+                    .ToListAsync();
+            }
+        }
 
         FortBonusList bonusList = await this.bonusService.GetBonusList(userData.DeviceAccountId);
 
