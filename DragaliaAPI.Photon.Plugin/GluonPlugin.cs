@@ -356,29 +356,13 @@ namespace DragaliaAPI.Photon.Plugin
                 }
 
                 int[] partySlots = (int[])actor.Properties.GetProperty("UsePartySlot").Value;
+                this.logger.DebugFormat("PartySlots: {0}", JsonConvert.SerializeObject(partySlots));
 
-                HttpRequest req = new HttpRequest()
+                foreach (int slot in partySlots)
                 {
-                    Url = $"http://localhost:5000/heroparam/{viewerId}?partySlot1={partySlots[0]}",
-                    ContentType = "application/json",
-                    Callback = OnHeroParamResponse,
-                    Async = true,
-                    Accept = "application/json",
-                    UserState = new HttpRequestUserState()
+                    HttpRequest req = new HttpRequest()
                     {
-                        OwnerActorNr = actor.ActorNr,
-                        RequestActorNr = info.ActorNr
-                    },
-                };
-
-                this.PluginHost.HttpRequest(req, info);
-
-                if (partySlots.Length > 1)
-                {
-                    HttpRequest req2 = new HttpRequest()
-                    {
-                        Url =
-                            $"http://localhost:5000/heroparam/{viewerId}?partySlot1={partySlots[1]}",
+                        Url = $"http://localhost:5000/heroparam/{viewerId}?partySlot1={slot}",
                         ContentType = "application/json",
                         Callback = OnHeroParamResponse,
                         Async = true,
@@ -386,8 +370,7 @@ namespace DragaliaAPI.Photon.Plugin
                         UserState = new HttpRequestUserState()
                         {
                             OwnerActorNr = actor.ActorNr,
-                            RequestActorNr = info.ActorNr,
-                            UnusedHeroParam = true
+                            RequestActorNr = info.ActorNr
                         },
                     };
 
