@@ -131,27 +131,37 @@ namespace DragaliaAPI.Photon.Plugin
             LogHashtable(info.Request.Parameters);
             this.logger.DebugFormat("------------------------------------ parameters end");
 
-            object viewerIdObj = PluginHost.GameActors
-                .First(x => x.ActorNr == info.ActorNr)
-                .Properties.GetProperty("PlayerId")
-                .Value;
+            IActor actor = this.PluginHost.GameActors.FirstOrDefault(
+                x => x.ActorNr == info.ActorNr
+            );
+
+            if (info.ActorNr == 1)
+            {
+                this.RaiseEvent(
+                    0x17,
+                    new RoomBroken() { Reason = RoomBroken.RoomBrokenType.HostDisconnected }
+                );
+            }
 
             info.Continue();
 
-            this.PostJsonRequest(
-                this.config.GameLeaveEndpoint,
-                new WebhookRequest
-                {
-                    Game = DtoHelpers.CreateGame(
-                        this.PluginHost.GameId,
-                        this.PluginHost.GameProperties
-                    ),
-                    Player = new PlayerDto() { ViewerId = int.Parse((string)viewerIdObj) }
-                },
-                this.LogIfFailedCallback,
-                info,
-                true
-            );
+            if (!(actor is null) && actor.Properties.TryGetInt("PlayerId", out int viewerId))
+            {
+                this.PostJsonRequest(
+                    this.config.GameLeaveEndpoint,
+                    new WebhookRequest
+                    {
+                        Game = DtoHelpers.CreateGame(
+                            this.PluginHost.GameId,
+                            this.PluginHost.GameProperties
+                        ),
+                        Player = new PlayerDto() { ViewerId = viewerId }
+                    },
+                    this.LogIfFailedCallback,
+                    info,
+                    true
+                );
+            }
         }
 
         public override void OnCloseGame(ICloseGameCallInfo info)
