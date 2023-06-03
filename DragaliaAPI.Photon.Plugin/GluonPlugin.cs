@@ -181,9 +181,10 @@ namespace DragaliaAPI.Photon.Plugin
         public override void OnRaiseEvent(IRaiseEventCallInfo info)
         {
             this.logger.DebugFormat(
-                "***************** Actor {0} raised event: 0x{1}",
+                "***************** Actor {0} raised event: 0x{1} ({2})",
                 info.ActorNr,
-                info.Request.EvCode.ToString("X")
+                info.Request.EvCode.ToString("X"),
+                (EventCode)info.Request.EvCode
             );
             this.logger.DebugFormat(
                 "***************** Event properties: {0}",
@@ -195,8 +196,12 @@ namespace DragaliaAPI.Photon.Plugin
                 case 3:
                     this.OnActorReady(info);
                     break;
-                case 0x53: // SuccessiveGameTimer:
-                    this.OnSuccessiveGameTimer(info);
+                case 0x41: // ClearTimer
+                    // Causes desync
+                    this.OnClearTimer(info);
+                    break;
+                case 0x60:
+                    this.OnGameStepEvent(info);
                     break;
                 default:
                     break;
@@ -205,13 +210,41 @@ namespace DragaliaAPI.Photon.Plugin
             base.OnRaiseEvent(info);
         }
 
-        private void OnSuccessiveGameTimer(IRaiseEventCallInfo info)
+        private void OnGameStepEvent(IRaiseEventCallInfo info)
+        {
+            if (
+                !info.Request.Parameters.TryGetValue(245, out object value)
+                || !(value is byte[] serializedEvent)
+            )
+            {
+                return;
+            }
+
+            GameStepEvent evt = MessagePackSerializer.Deserialize<GameStepEvent>(
+                serializedEvent,
+                MessagePackSerializerOptions.Standard.WithCompression(
+                    MessagePackCompression.Lz4Block
+                )
+            );
+
+            this.logger.DebugFormat(";;;;;;;;;;;;;;; GameStepEvent StepType: {0}", evt.step);
+
+            if (evt.step == GameStepEvent.StepTypes.JoinBeginPartySwitch)
+            {
+                this.RaiseEvent(
+                    0x60,
+                    new GameStepEvent() { step = GameStepEvent.StepTypes.JoinBeginPartySwitch }
+                );
+            }
+        }
+
+        private void OnClearTimer(IRaiseEventCallInfo info)
         {
             this.logger.DebugFormat(
-                "OnSuccessiveGameTimer: {0}",
+                "OnClearTimer: {0}",
                 JsonConvert.SerializeObject(info.Request.Parameters)
             );
-            this.RaiseEvent(0x2, new object { }); // GameEnd
+            this.RaiseEvent(0x2, new GameEndEvent()); // GameEnd
         }
 
         public void OnActorReady(IRaiseEventCallInfo info)
@@ -506,14 +539,16 @@ namespace DragaliaAPI.Photon.Plugin
                 if (table[key] is byte[] roomData)
                 {
                     this.logger.DebugFormat(
-                        "---------------------------------- yoyoyo room data just dropped {0}",
+                        "---------------------------------- Name: {0}, byte blob: {1}",
+                        key,
                         Convert.ToBase64String(roomData)
                     );
                 }
                 else if (table[key] is string[] unk250)
                 {
                     this.logger.DebugFormat(
-                        "---------------------------------- yoyoyo game data just dropped {0}",
+                        "---------------------------------- Name: {0}, string array: {1}",
+                        key,
                         string.Join(",", unk250)
                     );
                 }
