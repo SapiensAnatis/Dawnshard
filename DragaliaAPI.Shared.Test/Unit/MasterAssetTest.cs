@@ -227,7 +227,9 @@ public class MasterAssetTest
                     Scene05: "",
                     AreaName05: "",
                     Scene06: "",
-                    AreaName06: ""
+                    AreaName06: "",
+                    ContinueLimit: 3,
+                    RebornLimit: 3
                 )
             );
 

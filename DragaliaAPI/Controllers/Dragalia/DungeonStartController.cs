@@ -167,9 +167,9 @@ public class DungeonStartController : DragaliaControllerBase
                     dungeon_type = questInfo.DungeonType,
                     play_type = questInfo.QuestPlayModeType,
                     quest_id = request.quest_id,
-                    is_host = true,
-                    continue_limit = 3,
-                    reborn_limit = 3,
+                    is_host = false,
+                    continue_limit = questInfo.ContinueLimit,
+                    reborn_limit = questInfo.RebornLimit,
                     start_time = DateTimeOffset.UtcNow,
                     party_info = new()
                     {
