@@ -160,13 +160,14 @@ public class HeroParamService : IHeroParamService
             result.weaponSkinId = unit.WeaponSkinData.WeaponSkinId;
         }
 
-        if (unit.EditSkill1CharaData is not null)
+        // If AI units are given skill share data, it can cause softlocks for other players
+        if (unit is { EditSkill1CharaData: not null, Position: 1 })
         {
             result.editSkillcharacterId1 = (int)unit.EditSkill1CharaData.CharaId;
             result.editSkillLv1 = unit.EditSkill1CharaData.EditSkillLevel;
         }
 
-        if (unit.EditSkill2CharaData is not null)
+        if (unit is { EditSkill2CharaData: not null, Position: 1 })
         {
             result.editSkillcharacterId2 = (int)unit.EditSkill2CharaData.CharaId;
             result.editSkillLv2 = unit.EditSkill2CharaData.EditSkillLevel;
