@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Photon.Dto;
+﻿using DragaliaAPI.Photon.Dto.Game;
 
 namespace DragaliaAPI.Services.Api;
 
@@ -12,13 +12,13 @@ public class PhotonStateApi : IPhotonStateApi
         this.client = client;
     }
 
-    public async Task<IEnumerable<StoredGame>> GetAllGames()
+    public async Task<IEnumerable<Game>> GetAllGames()
     {
         HttpResponseMessage response = await this.client.GetAsync(GameListEndpoint);
 
         response.EnsureSuccessStatusCode();
 
-        return await response.Content.ReadFromJsonAsync<IEnumerable<StoredGame>>()
-            ?? Enumerable.Empty<StoredGame>();
+        return await response.Content.ReadFromJsonAsync<IEnumerable<Game>>()
+            ?? Enumerable.Empty<Game>();
     }
 }

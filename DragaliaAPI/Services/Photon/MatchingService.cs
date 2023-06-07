@@ -2,7 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Photon.Dto;
+using DragaliaAPI.Photon.Dto.Game;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -33,10 +33,10 @@ public class MatchingService : IMatchingService
 
     public async Task<IEnumerable<RoomList>> GetRoomList()
     {
-        IEnumerable<StoredGame> storedGames = await photonStateApi.GetAllGames();
+        IEnumerable<Game> storedGames = await photonStateApi.GetAllGames();
         List<RoomList> mapped = new();
 
-        foreach (StoredGame storedGame in storedGames)
+        foreach (Game storedGame in storedGames)
         {
             DbPlayerUserData hostUserData = await userDataRepository
                 .GetUserData(storedGame.HostViewerId)

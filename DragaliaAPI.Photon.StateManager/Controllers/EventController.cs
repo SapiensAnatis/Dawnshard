@@ -1,8 +1,11 @@
 using DragaliaAPI.Photon.Dto;
+using DragaliaAPI.Photon.Dto.Game;
+using DragaliaAPI.Photon.Dto.Requests;
+using DragaliaAPI.Photon.StateManager.Extensions;
 using DragaliaAPI.Photon.StateManager.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Serilog.Parsing;
+using NReJSON;
 using StackExchange.Redis;
 
 namespace DragaliaAPI.Photon.StateManager.Controllers;
@@ -43,46 +46,16 @@ public class EventController : ControllerBase
     /// <param name="request">The webhook data.</param>
     /// <returns>A webhook response.</returns>
     [HttpPost("[action]")]
-    public async Task<IActionResult> GameCreate(WebhookRequest request)
+    public async Task<IActionResult> GameCreate(GameCreateRequest request)
     {
-        this.logger.LogDebug("Received GameCreate request: {@request}", request);
-
         IDatabase database = connectionMultiplexer.GetDatabase();
-        RedisKey gameInfo = RedisSchema.GameInfo(request.Game.Name);
-        RedisKey gamePlayers = RedisSchema.GamePlayers(request.Game.Name);
-        RedisKey gameList = RedisSchema.GameList();
 
-        List<HashEntry> entries =
-            new() { new(nameof(StoredGame.HostViewerId), request.Player.ViewerId), };
+        RedisKey gameKey = RedisSchema.Game(request.Game.Name);
 
-        foreach (System.Reflection.PropertyInfo property in typeof(GameDto).GetProperties())
-        {
-            RedisValue value = property.GetValue(request.Game) switch
-            {
-                string s => s,
-                int i => i,
-                _
-                    => throw new NotSupportedException(
-                        $"Values of type {property.GetType()} cannot be stored in Redis hashes"
-                    )
-            };
+        (await database.JsonSetAsync(gameKey, request.Game)).EnsureSuccess();
+        (await database.KeyExpireAsync(gameKey, KeyExpiry)).EnsureSuccess();
 
-            entries.Add(new(property.Name, value));
-        }
-
-        await database.HashSetAsync(gameInfo, entries.ToArray());
-
-        await database.SetAddAsync(gamePlayers, request.Player.ViewerId);
-        await database.SetAddAsync(gameList, request.Game.Name);
-
-        await database.KeyExpireAsync(gameInfo, KeyExpiry);
-        await database.KeyExpireAsync(gamePlayers, KeyExpiry);
-
-        this.logger.LogInformation(
-            "Created new game {name} for player {player}",
-            request.Game.Name,
-            request.Player.ViewerId
-        );
+        this.logger.LogInformation("Created new game: {@game}", request.Game);
 
         return this.Ok(new WebhookResponse() { ResultCode = 0 });
     }
@@ -93,19 +66,33 @@ public class EventController : ControllerBase
     /// <param name="request">The webhook data.</param>
     /// <returns>A webhook response.</returns>
     [HttpPost("[action]")]
-    public async Task<IActionResult> GameJoin(WebhookRequest request)
+    public async Task<IActionResult> GameJoin(GameModifyRequest request)
     {
-        this.logger.LogDebug("Received GameCreate request: {@request}", request);
-
         IDatabase database = connectionMultiplexer.GetDatabase();
-        RedisKey gamePlayers = RedisSchema.GamePlayers(request.Game.Name);
+        RedisKey gameKey = RedisSchema.Game(request.GameName);
 
-        await database.SetAddAsync(gamePlayers, request.Player.ViewerId);
+        List<Player> players = (
+            await database.JsonGetAsync<List<Player>>(gameKey, JsonPaths.Game.Players)
+        ).First();
+
+        if (players.Count >= 4)
+        {
+            this.logger.LogError(
+                "Player {@player} attempted to join full game {gameName}",
+                request.Player,
+                request.GameName
+            );
+
+            return this.Conflict();
+        }
+
+        players.Add(request.Player);
+        (await database.JsonSetAsync(gameKey, players, JsonPaths.Game.Players)).EnsureSuccess();
 
         this.logger.LogInformation(
-            "Added player {player} to game {game}",
+            "Added player {player} to game {@game}",
             request.Player.ViewerId,
-            request.Game.Name
+            request.GameName
         );
 
         return this.Ok(new WebhookResponse() { ResultCode = 0 });
@@ -117,20 +104,39 @@ public class EventController : ControllerBase
     /// <param name="request">The webhook data.</param>
     /// <returns>A webhook response.</returns>
     [HttpPost("[action]")]
-    public async Task<IActionResult> GameLeave(WebhookRequest request)
+    public async Task<IActionResult> GameLeave(GameModifyRequest request)
     {
-        this.logger.LogDebug("Received GameLeave request: {@request}", request);
-
         IDatabase database = connectionMultiplexer.GetDatabase();
-        RedisKey gamePlayers = RedisSchema.GamePlayers(request.Game.Name);
+        RedisKey gameKey = RedisSchema.Game(request.GameName);
 
-        await database.SetRemoveAsync(gamePlayers, request.Player.ViewerId);
+        List<Player> players = (
+            await database.JsonGetAsync<List<Player>>(gameKey, JsonPaths.Game.Players)
+        ).First();
+
+        Player? toRemove = players.FirstOrDefault(x => x.ViewerId == request.Player.ViewerId);
+        if (toRemove is null)
+        {
+            this.logger.LogError(
+                "Cannot remove player {@player} from game {gameName} with players {players} as they are not in it.",
+                request.Player,
+                players,
+                request.GameName
+            );
+
+            return this.BadRequest();
+        }
+
+        players.Remove(toRemove);
+        (await database.JsonSetAsync(gameKey, players, JsonPaths.Game.Players)).EnsureSuccess();
 
         this.logger.LogInformation(
-            "Removed player {player} from game {game}",
-            request.Player.ViewerId,
-            request.Game.Name
+            "Removed player {@player} from game {game}",
+            request.Player,
+            request.GameName
         );
+
+        if (players.Count == 0)
+            (await database.JsonSetAsync(gameKey, false, JsonPaths.Game.Visible)).EnsureSuccess();
 
         return this.Ok(new WebhookResponse() { ResultCode = 0 });
     }
@@ -141,30 +147,24 @@ public class EventController : ControllerBase
     /// <param name="request">The webhook data.</param>
     /// <returns>A webhook response.</returns>
     [HttpPost("[action]")]
-    public async Task<IActionResult> GameClose(WebhookRequest request)
+    public async Task<IActionResult> GameClose(GameModifyRequest request)
     {
-        this.logger.LogDebug("Received GameClose request: {@request}", request);
-
-        IDatabase database = connectionMultiplexer.GetDatabase();
-        RedisKey gameList = RedisSchema.GameList();
-        RedisKey gameInfo = RedisSchema.GameInfo(request.Game.Name);
-        RedisKey gamePlayers = RedisSchema.GamePlayers(request.Game.Name);
-
-        long keysRemoved = await database.KeyDeleteAsync(new[] { gameInfo, gamePlayers });
-        bool nameRemoved = await database.SetRemoveAsync(gameList, request.Game.Name);
-
-        if (keysRemoved < 2 || !nameRemoved)
-        {
-            this.logger.LogWarning(
-                "Failed to fully clean up room {room}. keysRemoved: {keysRemoved}, nameRemoved: {nameRemoved}",
-                request.Game.Name,
-                keysRemoved,
-                nameRemoved
-            );
-        }
-
-        this.logger.LogInformation("Removed game {game}", request.Game.Name);
+        await this.RemoveGame(RedisSchema.Game(request.GameName));
 
         return this.Ok(new WebhookResponse() { ResultCode = 0 });
+    }
+
+    private async Task RemoveGame(RedisKey gameKey)
+    {
+        IDatabase database = connectionMultiplexer.GetDatabase();
+
+        if (await database.JsonDeleteAsync(gameKey) < 1)
+        {
+            this.logger.LogError("Failed to remove game {gameName}", gameKey.ToString());
+        }
+        else
+        {
+            this.logger.LogInformation("Removed game {gameName}", gameKey.ToString());
+        }
     }
 }

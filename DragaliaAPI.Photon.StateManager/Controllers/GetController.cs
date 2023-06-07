@@ -25,7 +25,7 @@ public class GetController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("[action]")]
-    [ProducesResponseType(typeof(IEnumerable<StoredGame>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<Game>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GameList()
     {
         IDatabase db = this.connectionMultiplexer.GetDatabase();
@@ -38,22 +38,22 @@ public class GetController : ControllerBase
         return this.Ok(this.GetGameList(gameNames));
     }
 
-    private async IAsyncEnumerable<StoredGame> GetGameList(IEnumerable<string> gameNames)
+    private async IAsyncEnumerable<Game> GetGameList(IEnumerable<string> gameNames)
     {
         IDatabase db = this.connectionMultiplexer.GetDatabase();
 
         foreach (string name in gameNames)
         {
-            StoredGame? game = await GetGame(db, name);
+            Game? game = await GetGame(db, name);
 
             if (game is not null)
                 yield return game;
         }
     }
 
-    private static async Task<StoredGame?> GetGame(IDatabase db, string gameName)
+    private static async Task<Game?> GetGame(IDatabase db, string gameName)
     {
-        RedisKey gameInfo = RedisSchema.GameInfo(gameName);
+        RedisKey gameInfo = RedisSchema.Game(gameName);
         RedisKey gamePlayers = RedisSchema.GamePlayers(gameName);
 
         HashEntry[] gameInfoEntries = await db.HashGetAllAsync(gameInfo);
@@ -66,9 +66,9 @@ public class GetController : ControllerBase
             x => x.Value
         );
 
-        StoredGame result = new();
+        Game result = new();
 
-        foreach (PropertyInfo property in typeof(StoredGame).GetProperties())
+        foreach (PropertyInfo property in typeof(Game).GetProperties())
         {
             if (!property.PropertyType.IsPrimitive && property.PropertyType != typeof(string))
                 continue;

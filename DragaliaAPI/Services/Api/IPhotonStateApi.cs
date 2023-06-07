@@ -1,8 +1,8 @@
-﻿using DragaliaAPI.Photon.Dto;
+﻿using DragaliaAPI.Photon.Dto.Game;
 
 namespace DragaliaAPI.Services.Api;
 
 public interface IPhotonStateApi
 {
-    Task<IEnumerable<StoredGame>> GetAllGames();
+    Task<IEnumerable<Game>> GetAllGames();
 }

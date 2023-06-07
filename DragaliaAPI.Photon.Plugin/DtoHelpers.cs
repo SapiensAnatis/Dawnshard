@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Xml.Linq;
-using DragaliaAPI.Photon.Dto;
+using DragaliaAPI.Photon.Dto.Game;
 
 namespace DragaliaAPI.Photon.Plugin
 {
@@ -9,14 +9,14 @@ namespace DragaliaAPI.Photon.Plugin
     /// </summary>
     internal static class DtoHelpers
     {
-        public static PlayerDto CreatePlayer(Hashtable actorProperties)
+        public static Player CreatePlayer(Hashtable actorProperties)
         {
-            return new PlayerDto() { ViewerId = actorProperties.GetInt("PlayerId") };
+            return new Player() { ViewerId = actorProperties.GetInt("PlayerId") };
         }
 
-        public static GameDto CreateGame(string name, Hashtable gameProperties)
+        public static GameBase CreateGame(string name, Hashtable gameProperties)
         {
-            GameDto result = new GameDto { Name = name };
+            GameBase result = new GameBase { Name = name };
 
             // These props may not exist during a GameClose event
             if (
