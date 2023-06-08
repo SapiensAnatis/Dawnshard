@@ -15,9 +15,9 @@ namespace DragaliaAPI.Photon.Plugin
             return new Player() { ViewerId = actorProperties.GetInt("PlayerId") };
         }
 
-        public static GameBase CreateGame(string name, Hashtable gameProperties)
+        public static RedisGame CreateGame(string name, Hashtable gameProperties)
         {
-            GameBase result = new GameBase { Name = name };
+            RedisGame result = new RedisGame { Name = name };
 
             // These props may not exist during a GameClose event
             if (

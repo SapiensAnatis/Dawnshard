@@ -8,7 +8,7 @@ namespace DragaliaAPI.Photon.Dto.Game
     /// An object representing an open game with additional derived properties,
     /// to be sent to a server client requesting game information.
     /// </summary>
-    public class Game : GameBase
+    public class ApiGame : GameBase
     {
         private const string Japan = "jp";
         private const string EnglishUs = "en_us";
@@ -39,10 +39,10 @@ namespace DragaliaAPI.Photon.Dto.Game
         public string Language { get; } = EnglishUs;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Game"/> class.
+        /// Creates a new instance of the <see cref="ApiGame"/> class.
         /// </summary>
-        /// <param name="gameBase">Base <see cref="GameBase"/> instance.</param>
-        public Game(GameBase gameBase)
+        /// <param name="gameBase">Base <see cref="IGame"/> instance.</param>
+        public ApiGame(IGame gameBase)
         {
             RoomId = gameBase.RoomId;
             Name = gameBase.Name;
@@ -51,10 +51,9 @@ namespace DragaliaAPI.Photon.Dto.Game
             StartEntryTime = gameBase.StartEntryTime;
             EntryConditions = gameBase.EntryConditions;
             Players = gameBase.Players;
-            Visible = gameBase.Visible;
         }
 
         [JsonConstructor]
-        public Game() { }
+        public ApiGame() { }
     }
 }

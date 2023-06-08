@@ -1,9 +1,10 @@
 ﻿using System.Reflection;
-using DragaliaAPI.Photon.Dto.Game;
+using DragaliaAPI.Photon.StateManager.Models;
 using DragaliaAPI.Photon.StateManager.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using NRediSearch;
+using Redis.OM.Contracts;
 using StackExchange.Redis;
 
 namespace DragaliaAPI.Photon.StateManager.Controllers;
@@ -15,11 +16,11 @@ namespace DragaliaAPI.Photon.StateManager.Controllers;
 [ApiController]
 public class GetController : ControllerBase
 {
-    private readonly IRedisService redisService;
+    private readonly IRedisConnectionProvider connectionProvider;
 
-    public GetController(IRedisService redisService)
+    public GetController(IRedisConnectionProvider connectionProvider)
     {
-        this.redisService = redisService;
+        this.connectionProvider = connectionProvider;
     }
 
     /// <summary>
@@ -27,12 +28,10 @@ public class GetController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("[action]")]
-    [ProducesResponseType(typeof(IEnumerable<Game>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<RedisGame>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GameList()
     {
-        string searchString = "*";
-
-        return this.Ok(this.redisService.SearchGames(searchString));
+        return this.Ok(await this.connectionProvider.RedisCollection<RedisGame>().ToListAsync());
     }
 
     private void CreateIndex() { }

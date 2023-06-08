@@ -33,10 +33,10 @@ public class MatchingService : IMatchingService
 
     public async Task<IEnumerable<RoomList>> GetRoomList()
     {
-        IEnumerable<Game> storedGames = await photonStateApi.GetAllGames();
+        IEnumerable<ApiGame> storedGames = await photonStateApi.GetAllGames();
         List<RoomList> mapped = new();
 
-        foreach (Game storedGame in storedGames)
+        foreach (ApiGame storedGame in storedGames)
         {
             DbPlayerUserData hostUserData = await userDataRepository
                 .GetUserData(storedGame.HostViewerId)

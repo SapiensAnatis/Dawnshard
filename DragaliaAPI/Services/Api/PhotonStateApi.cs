@@ -12,13 +12,13 @@ public class PhotonStateApi : IPhotonStateApi
         this.client = client;
     }
 
-    public async Task<IEnumerable<Game>> GetAllGames()
+    public async Task<IEnumerable<ApiGame>> GetAllGames()
     {
         HttpResponseMessage response = await this.client.GetAsync(GameListEndpoint);
 
         response.EnsureSuccessStatusCode();
 
-        return await response.Content.ReadFromJsonAsync<IEnumerable<Game>>()
-            ?? Enumerable.Empty<Game>();
+        return await response.Content.ReadFromJsonAsync<IEnumerable<ApiGame>>()
+            ?? Enumerable.Empty<ApiGame>();
     }
 }
