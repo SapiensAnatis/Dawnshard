@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Xml.Linq;
+using DragaliaAPI.Photon.Dto;
 using DragaliaAPI.Photon.Dto.Game;
 
 namespace DragaliaAPI.Photon.Plugin

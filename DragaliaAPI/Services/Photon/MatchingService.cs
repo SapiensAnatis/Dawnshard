@@ -72,7 +72,7 @@ public class MatchingService : IMatchingService
                     room_id = storedGame.RoomId,
                     status = RoomStatuses.Available,
                     room_member_list = storedGame.Players.Select(
-                        x => new AtgenRoomMemberList() { viewer_id = (ulong)x }
+                        x => new AtgenRoomMemberList() { viewer_id = 1 }
                     ),
                     entry_type = 1,
                     start_entry_time = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(1),

@@ -155,7 +155,7 @@ namespace DragaliaAPI.Photon.Plugin
                             this.PluginHost.GameId,
                             this.PluginHost.GameProperties
                         ),
-                        Player = new PlayerDto() { ViewerId = viewerId }
+                        Player = new Player() { ViewerId = viewerId }
                     },
                     this.LogIfFailedCallback,
                     info,

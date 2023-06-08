@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Photon.StateManager;
+﻿namespace DragaliaAPI.Photon.StateManager.Redis;
 
 public static class JsonPaths
 {

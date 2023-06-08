@@ -1,6 +1,6 @@
 ﻿using NReJSON;
 
-namespace DragaliaAPI.Photon.StateManager.Extensions;
+namespace DragaliaAPI.Photon.StateManager.Redis;
 
 public static class RedisCommandExtensions
 {

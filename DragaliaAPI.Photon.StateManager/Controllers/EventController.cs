@@ -1,8 +1,7 @@
 using DragaliaAPI.Photon.Dto;
-using DragaliaAPI.Photon.Dto.Game;
 using DragaliaAPI.Photon.Dto.Requests;
-using DragaliaAPI.Photon.StateManager.Extensions;
 using DragaliaAPI.Photon.StateManager.Models;
+using DragaliaAPI.Photon.StateManager.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NReJSON;
@@ -136,7 +135,10 @@ public class EventController : ControllerBase
         );
 
         if (players.Count == 0)
+        {
+            // Don't remove it just yet, as Photon will request that shortly
             (await database.JsonSetAsync(gameKey, false, JsonPaths.Game.Visible)).EnsureSuccess();
+        }
 
         return this.Ok(new WebhookResponse() { ResultCode = 0 });
     }
@@ -149,22 +151,18 @@ public class EventController : ControllerBase
     [HttpPost("[action]")]
     public async Task<IActionResult> GameClose(GameModifyRequest request)
     {
-        await this.RemoveGame(RedisSchema.Game(request.GameName));
-
-        return this.Ok(new WebhookResponse() { ResultCode = 0 });
-    }
-
-    private async Task RemoveGame(RedisKey gameKey)
-    {
         IDatabase database = connectionMultiplexer.GetDatabase();
+        RedisKey gameKey = RedisSchema.Game(request.GameName);
 
         if (await database.JsonDeleteAsync(gameKey) < 1)
         {
-            this.logger.LogError("Failed to remove game {gameName}", gameKey.ToString());
+            this.logger.LogError("Failed to remove game {gameName}", request.GameName);
         }
         else
         {
-            this.logger.LogInformation("Removed game {gameName}", gameKey.ToString());
+            this.logger.LogInformation("Removed game {gameName}", request.GameName);
         }
+
+        return this.Ok(new WebhookResponse() { ResultCode = 0 });
     }
 }

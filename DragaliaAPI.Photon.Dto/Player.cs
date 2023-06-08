@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DragaliaAPI.Photon.Dto.Game
+namespace DragaliaAPI.Photon.Dto
 {
     /// <summary>
     /// Player data transfer object.

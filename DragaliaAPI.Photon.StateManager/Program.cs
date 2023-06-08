@@ -1,5 +1,6 @@
 using System.Reflection;
 using DragaliaAPI.Photon.StateManager.Models;
+using DragaliaAPI.Photon.StateManager.Redis;
 using Serilog;
 using Serilog.Events;
 using StackExchange.Redis;
@@ -12,6 +13,14 @@ builder.Host.UseSerilog(
     (context, config) =>
     {
         config.WriteTo.Console();
+
+        SeqOptions seqOptions =
+            builder.Configuration.GetSection(nameof(SeqOptions)).Get<SeqOptions>()
+            ?? throw new NullReferenceException("Failed to get seq config!");
+
+        if (seqOptions.Enabled)
+            config.WriteTo.Seq(seqOptions.Url, apiKey: seqOptions.Key);
+
         config.MinimumLevel.Debug();
         config.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning);
     }
@@ -49,7 +58,11 @@ ConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
         ?? throw new InvalidOperationException("Missing required Redis connection string!")
 );
 
-builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+builder.Services
+    .AddSingleton<IConnectionMultiplexer>(multiplexer)
+    .AddScoped<IRedisService, RedisService>();
+
+NReJSON.NReJSONSerializer.SerializerProxy = new SerializerProxy();
 
 WebApplication app = builder.Build();
 

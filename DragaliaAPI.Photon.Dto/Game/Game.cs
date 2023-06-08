@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace DragaliaAPI.Photon.Dto.Game
 {
@@ -52,5 +53,8 @@ namespace DragaliaAPI.Photon.Dto.Game
             Players = gameBase.Players;
             Visible = gameBase.Visible;
         }
+
+        [JsonConstructor]
+        public Game() { }
     }
 }

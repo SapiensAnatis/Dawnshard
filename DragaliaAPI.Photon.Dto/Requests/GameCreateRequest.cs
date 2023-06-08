@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DragaliaAPI.Photon.Dto.Game;
 
 namespace DragaliaAPI.Photon.Dto.Requests
 {
