@@ -1,10 +1,12 @@
 ﻿using DragaliaAPI.Photon.Dto.Game;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace DragaliaAPI.Services.Api;
 
 public class PhotonStateApi : IPhotonStateApi
 {
-    private static readonly Uri GameListEndpoint = new("/get/gamelist", UriKind.Relative);
+    private const string GameListEndpoint = "/get/gamelist";
     private const string ByIdEndpoint = "/get/byid";
 
     private readonly HttpClient client;
@@ -16,7 +18,23 @@ public class PhotonStateApi : IPhotonStateApi
 
     public async Task<IEnumerable<ApiGame>> GetAllGames()
     {
-        HttpResponseMessage response = await this.client.GetAsync(GameListEndpoint);
+        HttpResponseMessage response = await this.client.GetAsync(
+            new Uri(GameListEndpoint, UriKind.Relative)
+        );
+
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<IEnumerable<ApiGame>>()
+            ?? Enumerable.Empty<ApiGame>();
+    }
+
+    public async Task<IEnumerable<ApiGame>> GetByQuestId(int questId)
+    {
+        Dictionary<string, string?> queryParams = new() { { nameof(questId), questId.ToString() } };
+        Uri requestUri =
+            new(QueryHelpers.AddQueryString(GameListEndpoint, queryParams), UriKind.Relative);
+
+        HttpResponseMessage response = await this.client.GetAsync(requestUri);
 
         response.EnsureSuccessStatusCode();
 

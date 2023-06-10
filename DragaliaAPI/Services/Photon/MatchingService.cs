@@ -43,6 +43,19 @@ public class MatchingService : IMatchingService
         return mapped;
     }
 
+    public async Task<IEnumerable<RoomList>> GetRoomList(int questId)
+    {
+        IEnumerable<ApiGame> games = await photonStateApi.GetByQuestId(questId);
+        List<RoomList> mapped = new();
+
+        foreach (ApiGame game in games)
+        {
+            mapped.Add(await MapRoomList(game));
+        }
+
+        return mapped;
+    }
+
     public async Task<MatchingGetRoomNameData?> GetRoomById(int id)
     {
         ApiGame? game = await this.photonStateApi.GetGameById(id);
