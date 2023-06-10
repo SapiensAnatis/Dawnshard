@@ -9,7 +9,7 @@ namespace DragaliaAPI.Photon.Plugin.Models
     public struct GoToIngameState
     {
         [Key(0)]
-        public List<ActorData> elements { get; set; }
+        public IEnumerable<ActorData> elements { get; set; }
 
         [Key(1)]
         public BRInitData? brInitData { get; set; }

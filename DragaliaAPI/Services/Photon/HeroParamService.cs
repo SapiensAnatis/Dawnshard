@@ -54,12 +54,9 @@ public class HeroParamService : IHeroParamService
         this.logger = logger;
     }
 
-    public async Task<IEnumerable<HeroParam>> GetHeroParam(
-        long viewerId,
-        IEnumerable<int> partySlots
-    )
+    public async Task<IEnumerable<HeroParam>> GetHeroParam(long viewerId, int partySlot)
     {
-        this.logger.LogDebug("Fetching HeroParam for slots {partySlots}", partySlots);
+        this.logger.LogDebug("Fetching HeroParam for slot {partySlots}", partySlot);
 
         List<HeroParam> result = new();
 
@@ -70,7 +67,7 @@ public class HeroParamService : IHeroParamService
         List<DbDetailedPartyUnit> detailedPartyUnits = await this.unitRepository
             .BuildDetailedPartyUnit(
                 userData.DeviceAccountId,
-                partyRepository.GetPartyUnits(userData.DeviceAccountId, partySlots)
+                partyRepository.GetPartyUnits(userData.DeviceAccountId, partySlot)
             )
             .ToListAsync();
 

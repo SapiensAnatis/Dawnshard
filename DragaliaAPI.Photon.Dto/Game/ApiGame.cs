@@ -19,6 +19,11 @@ namespace DragaliaAPI.Photon.Dto.Game
         public long HostViewerId => Players.First().ViewerId;
 
         /// <summary>
+        /// The main party slot of the host of this game.
+        /// </summary>
+        public int HostPartyNo => Players.First().PartyNoList.First();
+
+        /// <summary>
         /// The number of players in this game.
         /// </summary>
         public int MemberNum => Players.Count;

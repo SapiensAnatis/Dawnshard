@@ -5,7 +5,7 @@ using DragaliaAPI.Photon.Plugin.Constants;
 using DragaliaAPI.Photon.Plugin.Models;
 using MessagePack;
 
-namespace DragaliaAPI.Photon.Plugin
+namespace DragaliaAPI.Photon.Plugin.Extensions
 {
     /// <summary>
     /// Alternative ctors for DTO classes which create them from Photon types.
@@ -52,9 +52,7 @@ namespace DragaliaAPI.Photon.Plugin
             }
 
             if (!(entryConditionObj is byte[] entryConditionBlob))
-            {
                 return null;
-            }
 
             RoomEntryCondition deserialized = MessagePackSerializer.Deserialize<RoomEntryCondition>(
                 entryConditionBlob,

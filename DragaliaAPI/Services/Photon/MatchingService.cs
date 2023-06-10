@@ -80,7 +80,7 @@ public class MatchingService : IMatchingService
             .FirstAsync();
 
         DbPlayerCharaData hostCharaData = await partyRepository
-            .GetPartyUnits(hostUserData.DeviceAccountId, hostUserData.MainPartyNo)
+            .GetPartyUnits(hostUserData.DeviceAccountId, game.HostPartyNo)
             .Where(x => x.UnitNo == 1)
             .Join(
                 unitRepository.GetAllCharaData(hostUserData.DeviceAccountId),

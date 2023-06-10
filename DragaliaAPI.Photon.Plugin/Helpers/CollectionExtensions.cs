@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DragaliaAPI.Photon.Plugin.Constants;
 using Photon.Hive.Plugin;
 
-namespace DragaliaAPI.Photon.Plugin
+namespace DragaliaAPI.Photon.Plugin.Extensions
 {
     internal static class CollectionExtensions
     {
@@ -29,7 +30,7 @@ namespace DragaliaAPI.Photon.Plugin
             if (!dictionary.TryGetValue(key, out string value))
             {
                 throw new ArgumentException(
-                    $"Dictionary did not contain required key {key}",
+                    $"Configuration did not contain required key {key}",
                     nameof(dictionary)
                 );
             }
@@ -39,7 +40,7 @@ namespace DragaliaAPI.Photon.Plugin
 
         public static int GetInt(this Hashtable hashtable, string key)
         {
-            if (!TryGetInt(hashtable, key, out int value))
+            if (!hashtable.TryGetInt(key, out int value))
             {
                 throw new ArgumentException(
                     $"Hashtable did not contain required integer value for key {key}",
@@ -55,9 +56,7 @@ namespace DragaliaAPI.Photon.Plugin
             value = default;
 
             if (hashtable is null || !hashtable.ContainsKey(key))
-            {
                 return false;
-            }
 
             value = hashtable[key];
             return true;
@@ -89,9 +88,7 @@ namespace DragaliaAPI.Photon.Plugin
             value = default;
 
             if (properties is null || !properties.TryGetValue(key, out object objValue))
-            {
                 return false;
-            }
 
             if (objValue is int intValue)
             {
@@ -106,6 +103,37 @@ namespace DragaliaAPI.Photon.Plugin
             else
             {
                 return false;
+            }
+        }
+
+        public static bool TryGetBool(
+            this PropertyBag<object> properties,
+            string key,
+            out bool value
+        )
+        {
+            value = default;
+
+            if (properties is null || !properties.TryGetValue(key, out object objValue))
+                return false;
+
+            if (objValue is bool boolValue)
+            {
+                value = boolValue;
+                return true;
+            }
+
+            return false;
+        }
+
+        public static void InitializeViewerId(this Hashtable actorProperties)
+        {
+            if (!actorProperties.ContainsKey(ActorPropertyKeys.ViewerId))
+            {
+                actorProperties.Add(
+                    ActorPropertyKeys.ViewerId,
+                    actorProperties[ActorPropertyKeys.PlayerId]
+                );
             }
         }
     }

@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace DragaliaAPI.Photon.Plugin.Models
 {
-    internal class HttpRequestUserState
+    internal class HeroParamRequestState
     {
         public int OwnerActorNr { get; set; }
 
         public int RequestActorNr { get; set; }
-
-        public bool UnusedHeroParam { get; set; }
     }
 }

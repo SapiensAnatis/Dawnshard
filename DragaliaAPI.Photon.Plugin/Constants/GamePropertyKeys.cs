@@ -17,5 +17,7 @@ namespace DragaliaAPI.Photon.Plugin.Constants
         public const string EntryConditions = "RoomEntryCondition";
 
         public const string MatchingType = "MatchingType";
+
+        public const string GoToIngameInfo = "GoToIngameInfo";
     }
 }
