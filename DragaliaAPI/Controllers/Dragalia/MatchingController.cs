@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("matching")]
-[AllowAnonymous]
 public class MatchingController : DragaliaControllerBase
 {
     private readonly IMatchingService matchingService;
@@ -52,5 +51,11 @@ public class MatchingController : DragaliaControllerBase
                 room_list = await this.matchingService.GetRoomList(request.quest_id)
             }
         );
+    }
+
+    [HttpPost("check_penalty_user")]
+    public async Task<DragaliaResult> CheckPenaltyUser(MatchingCheckPenaltyUserRequest request)
+    {
+        return this.Ok(new MatchingCheckPenaltyUserData() { result = 1 });
     }
 }
