@@ -16,6 +16,8 @@ namespace DragaliaAPI.Photon.Plugin.Models
 
         public Uri GameLeaveEndpoint { get; set; }
 
+        public Uri EntryConditionsEndpoint { get; set; }
+
         public string BasicAuthUsername { get; set; }
 
         public string BasicAuthPassword { get; set; }
@@ -36,6 +38,10 @@ namespace DragaliaAPI.Photon.Plugin.Models
             );
             this.GameLeaveEndpoint = config.GetUri(
                 nameof(this.GameLeaveEndpoint),
+                UriKind.Relative
+            );
+            this.EntryConditionsEndpoint = config.GetUri(
+                nameof(this.EntryConditionsEndpoint),
                 UriKind.Relative
             );
 

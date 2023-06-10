@@ -39,33 +39,18 @@ namespace DragaliaAPI.Photon.Plugin
 
         public static int GetInt(this Hashtable hashtable, string key)
         {
-            if (!hashtable.ContainsKey(key))
+            if (!TryGetInt(hashtable, key, out int value))
             {
                 throw new ArgumentException(
-                    $"Hashtable did not contain required key {key}",
-                    nameof(hashtable)
+                    $"Hashtable did not contain required integer value for key {key}",
+                    nameof(key)
                 );
             }
 
-            object value = hashtable[key];
-
-            if (value is int intValue)
-            {
-                return intValue;
-            }
-            else if (value is string stringValue)
-            {
-                return int.Parse(stringValue);
-            }
-            else
-            {
-                throw new ArgumentException(
-                    $"Could not convert hashtable value {value} under key {key} to int"
-                );
-            }
+            return value;
         }
 
-        public static bool TryGetInt(this Hashtable hashtable, string key, out int value)
+        public static bool TryGetValue(this Hashtable hashtable, string key, out object value)
         {
             value = default;
 
@@ -74,7 +59,16 @@ namespace DragaliaAPI.Photon.Plugin
                 return false;
             }
 
-            object objValue = hashtable[key];
+            value = hashtable[key];
+            return true;
+        }
+
+        public static bool TryGetInt(this Hashtable hashtable, string key, out int value)
+        {
+            value = default;
+
+            if (!hashtable.TryGetValue(key, out object objValue))
+                return false;
 
             if (objValue is int intValue)
             {
@@ -86,10 +80,8 @@ namespace DragaliaAPI.Photon.Plugin
                 value = int.Parse(stringValue);
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
 
         public static bool TryGetInt(this PropertyBag<object> properties, string key, out int value)

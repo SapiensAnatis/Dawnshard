@@ -1,13 +1,10 @@
 using DragaliaAPI.Photon.Dto;
 using DragaliaAPI.Photon.Dto.Requests;
 using DragaliaAPI.Photon.StateManager.Models;
-using DragaliaAPI.Photon.StateManager.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using NReJSON;
 using Redis.OM.Contracts;
 using Redis.OM.Searching;
-using StackExchange.Redis;
 
 namespace DragaliaAPI.Photon.StateManager.Controllers;
 
@@ -29,7 +26,7 @@ public class EventController : ControllerBase
     /// <summary>
     /// Creates a new instance of the <see cref="EventController"/> class.
     /// </summary>
-    /// <param name="connectionMultiplexer"></param>
+    /// <param name="connectionProvider"></param>
     /// <param name="options"></param>
     /// <param name="logger"></param>
     public EventController(
@@ -52,6 +49,7 @@ public class EventController : ControllerBase
     public async Task<IActionResult> GameCreate(GameCreateRequest request)
     {
         RedisGame newGame = new(request.Game);
+        newGame.Players.Add(request.Player);
 
         await this.Games.InsertAsync(newGame, this.KeyExpiry);
         this.logger.LogInformation("Created new game: {@game}", newGame);
@@ -78,9 +76,9 @@ public class EventController : ControllerBase
         if (game.Players.Count >= 4)
         {
             this.logger.LogError(
-                "Player {@player} attempted to join full game {gameName}",
+                "Player {@player} attempted to join full game {@game}",
                 request.Player,
-                request.GameName
+                game
             );
 
             return this.Conflict();
@@ -114,10 +112,9 @@ public class EventController : ControllerBase
         if (toRemove is null)
         {
             this.logger.LogError(
-                "Cannot remove player {@player} from game {gameName} with players {players} as they are not in it.",
+                "Cannot remove player {@player} from game {@game} as they are not in it.",
                 request.Player,
-                game.Players,
-                request.GameName
+                game
             );
 
             return this.BadRequest();
@@ -127,6 +124,7 @@ public class EventController : ControllerBase
         if (game.Players.Count == 0)
         {
             // Don't remove it just yet, as Photon will request that shortly
+            this.logger.LogDebug("Hiding game {@game}", game);
             game.Visible = false;
         }
 
@@ -161,5 +159,28 @@ public class EventController : ControllerBase
         this.logger.LogInformation("Removed game {@game}", game);
 
         return this.Ok(new WebhookResponse() { ResultCode = 0 });
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> EntryConditions(GameModifyConditionsRequest request)
+    {
+        RedisGame? game = await this.Games.FindByIdAsync(request.GameName);
+
+        if (game is null)
+        {
+            this.logger.LogError("Could not find game {name}", request.GameName);
+            return this.NotFound();
+        }
+
+        game.EntryConditions = request.NewEntryConditions;
+        await this.Games.UpdateAsync(game);
+
+        this.logger.LogInformation(
+            "Updated game {game} entry conditions to {@conditions}",
+            game.Name,
+            game.EntryConditions
+        );
+
+        return this.Ok();
     }
 }

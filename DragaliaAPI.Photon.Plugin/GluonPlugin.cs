@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using System.Text;
-using System.Threading.Tasks;
 using DragaliaAPI.Photon.Dto;
+using DragaliaAPI.Photon.Dto.Game;
+using DragaliaAPI.Photon.Dto.Requests;
+using DragaliaAPI.Photon.Plugin.Constants;
 using DragaliaAPI.Photon.Plugin.Models;
 using DragaliaAPI.Photon.Plugin.Models.Events;
-using K4os.Compression.LZ4;
 using MessagePack;
 using Newtonsoft.Json;
 using Photon.Hive.Plugin;
@@ -31,7 +31,6 @@ namespace DragaliaAPI.Photon.Plugin
         )
         {
             this.logger = host.CreateLogger(this.Name);
-
             this.config = new PluginConfiguration(config);
 
             return base.SetupInstance(host, config, out errorMsg);
@@ -39,7 +38,6 @@ namespace DragaliaAPI.Photon.Plugin
 
         public override void OnCreateGame(ICreateGameCallInfo info)
         {
-            /*
             this.logger.DebugFormat(
                 "---------------------------------- OnCreateGame {0} by user {1}",
                 info.Request.GameId,
@@ -55,9 +53,6 @@ namespace DragaliaAPI.Photon.Plugin
             this.logger.DebugFormat("------------------------------------ unk properties start");
             LogHashtable(info.CreateOptions["CustomProperties"] as IDictionary);
             this.logger.DebugFormat("------------------------------------ unk properties end");
-            */
-
-            Random rng = new Random();
 
             if (!info.Request.ActorProperties.ContainsKey("ViewerId"))
             {
@@ -67,18 +62,21 @@ namespace DragaliaAPI.Photon.Plugin
                 );
             }
 
+            Random rng = new Random();
             info.Request.GameProperties.Add("RoomId", rng.Next(100_0000, 999_9999));
 
-            info.Continue();
+            base.OnCreateGame(info);
 
             this.PostJsonRequest(
                 this.config.GameCreateEndpoint,
-                new WebhookRequest()
+                new GameCreateRequest()
                 {
-                    Player = DtoHelpers.CreatePlayer(info.Request.ActorProperties),
-                    Game = DtoHelpers.CreateGame(info.Request.GameId, info.Request.GameProperties)
+                    Game = DtoHelpers.CreateGame(
+                        this.PluginHost.GameId,
+                        info.Request.GameProperties
+                    ),
+                    Player = DtoHelpers.CreatePlayer(info.Request.ActorProperties)
                 },
-                this.LogIfFailedCallback,
                 info,
                 callAsync: true
             );
@@ -106,19 +104,13 @@ namespace DragaliaAPI.Photon.Plugin
 
             info.Continue();
 
-            int viewerId = info.Request.ActorProperties.GetInt("ViewerId");
-
             this.PostJsonRequest(
                 this.config.GameJoinEndpoint,
-                new WebhookRequest
+                new GameModifyRequest
                 {
-                    Game = DtoHelpers.CreateGame(
-                        this.PluginHost.GameId,
-                        info.Request.GameProperties
-                    ),
+                    GameName = this.PluginHost.GameId,
                     Player = DtoHelpers.CreatePlayer(info.Request.ActorProperties)
                 },
-                this.LogIfFailedCallback,
                 info,
                 callAsync: true
             );
@@ -131,10 +123,6 @@ namespace DragaliaAPI.Photon.Plugin
             LogHashtable(info.Request.Parameters);
             this.logger.DebugFormat("------------------------------------ parameters end");
 
-            IActor actor = this.PluginHost.GameActors.FirstOrDefault(
-                x => x.ActorNr == info.ActorNr
-            );
-
             if (info.ActorNr == 1)
             {
                 this.RaiseEvent(
@@ -143,21 +131,21 @@ namespace DragaliaAPI.Photon.Plugin
                 );
             }
 
+            IActor actor = this.PluginHost.GameActors.FirstOrDefault(
+                x => x.ActorNr == info.ActorNr
+            );
+
             info.Continue();
 
             if (!(actor is null) && actor.Properties.TryGetInt("PlayerId", out int viewerId))
             {
                 this.PostJsonRequest(
                     this.config.GameLeaveEndpoint,
-                    new WebhookRequest
+                    new GameModifyRequest
                     {
-                        Game = DtoHelpers.CreateGame(
-                            this.PluginHost.GameId,
-                            this.PluginHost.GameProperties
-                        ),
+                        GameName = this.PluginHost.GameId,
                         Player = new Player() { ViewerId = viewerId }
                     },
-                    this.LogIfFailedCallback,
                     info,
                     true
                 );
@@ -175,16 +163,9 @@ namespace DragaliaAPI.Photon.Plugin
 
             this.PostJsonRequest(
                 this.config.GameCloseEndpoint,
-                new WebhookRequest
-                {
-                    Game = DtoHelpers.CreateGame(
-                        this.PluginHost.GameId,
-                        this.PluginHost.GameProperties
-                    ),
-                },
-                this.LogIfFailedCallback,
+                new GameModifyRequest { GameName = this.PluginHost.GameId, Player = null },
                 info,
-                true
+                false
             );
         }
 
@@ -206,13 +187,13 @@ namespace DragaliaAPI.Photon.Plugin
                 case 3:
                     this.OnActorReady(info);
                     break;
-                case 0x41: // ClearTimer
-                    // Causes desync
-                    this.OnClearTimer(info);
-                    break;
-                case 0x60:
-                    this.OnGameStepEvent(info);
-                    break;
+                /* case 0x41: // ClearTimer
+                     // Causes desync
+                     this.OnClearTimer(info);
+                     break;
+                 case 0x60:
+                     this.OnGameStepEvent(info);
+                     break;*/
                 default:
                     break;
             }
@@ -287,34 +268,56 @@ namespace DragaliaAPI.Photon.Plugin
             this.logger.DebugFormat("Actor {0} set properties", info.ActorNr);
             this.LogHashtable(info.Request.Parameters);
 
-            if (info.Request.Properties.TryGetInt("GoToIngameState", out int value))
-            {
-                switch (value)
-                {
-                    case 1:
-                        this.SetGoToIngameInfo(info);
-                        break;
-                    case 2:
-                        this.RaiseCharacterDataEvent(info);
-                        break;
-                    case 3:
-                        this.RaisePartyEvent(info);
-                        break;
-                    default:
-                        this.logger.InfoFormat("Unhandled GoToIngameState: {0}", value);
-                        break;
-                }
+            if (info.Request.Properties.ContainsKey(ActorPropertyKeys.GoToIngameState))
+                this.OnSetGoToIngameState(info);
 
-                this.RaiseEvent(
-                    0x45,
-                    new DebugInspectionRequest()
-                    {
-                        requestType = DebugInspectionRequest.RequestTypes.IngameState
-                    }
-                );
-            }
+            if (info.Request.Properties.ContainsKey(GamePropertyKeys.EntryConditions))
+                this.OnSetEntryConditions(info);
 
             base.OnSetProperties(info);
+        }
+
+        private void OnSetEntryConditions(ISetPropertiesCallInfo info)
+        {
+            EntryConditions newEntryConditions = DtoHelpers.CreateEntryConditions(
+                info.Request.Properties
+            );
+
+            if (newEntryConditions is null)
+                return;
+
+            this.PostJsonRequest(
+                this.config.EntryConditionsEndpoint,
+                new GameModifyConditionsRequest()
+                {
+                    GameName = this.PluginHost.GameId,
+                    NewEntryConditions = newEntryConditions,
+                    Player = null
+                },
+                info,
+                callAsync: false
+            );
+        }
+
+        private void OnSetGoToIngameState(ISetPropertiesCallInfo info)
+        {
+            int value = info.Request.Properties.GetInt(ActorPropertyKeys.GoToIngameState);
+
+            switch (value)
+            {
+                case 1:
+                    this.SetGoToIngameInfo(info);
+                    break;
+                case 2:
+                    this.RaiseCharacterDataEvent(info);
+                    break;
+                case 3:
+                    this.RaisePartyEvent(info);
+                    break;
+                default:
+                    this.logger.InfoFormat("Unhandled GoToIngameState: {0}", value);
+                    break;
+            }
         }
 
         private void SetGoToIngameInfo(ISetPropertiesCallInfo info)
@@ -398,7 +401,6 @@ namespace DragaliaAPI.Photon.Plugin
                 response.ResponseText
             );
 
-            // ActorNr the heroparam belongs to
             HttpRequestUserState typedUserState = (HttpRequestUserState)userState;
 
             CharacterData evt = new CharacterData()
@@ -438,28 +440,12 @@ namespace DragaliaAPI.Photon.Plugin
                 )
             };
 
-            /* if (this.PluginHost.GameActors.Count() < 4)
-             {
-                 evt.memberCountTable[1] += 1;
-             }
-
-             if (this.PluginHost.GameActors.Count() < 2)
-             {
-                 evt.memberCountTable[2] += 1;
-             }*/
-
             this.RaiseEvent(0x3e, evt);
 
+            // Close the game now that it has started
             this.PostJsonRequest(
                 this.config.GameCloseEndpoint,
-                new WebhookRequest
-                {
-                    Game = DtoHelpers.CreateGame(
-                        this.PluginHost.GameId,
-                        this.PluginHost.GameProperties
-                    ),
-                },
-                this.LogIfFailedCallback,
+                new GameModifyRequest { GameName = this.PluginHost.GameId, Player = null },
                 info,
                 true
             );
@@ -560,34 +546,31 @@ namespace DragaliaAPI.Photon.Plugin
             }
         }
 
-        private void LogIfFailedCallback(IHttpResponse httpResponse, object userState)
+        private void EnsureSuccessCallback(IHttpResponse httpResponse, object userState)
         {
-            if (
-                !this.TryGetForwardResponse(
-                    httpResponse,
-                    out WebhookResponse _,
-                    out string errorMsg
-                )
-            )
+            if (httpResponse.Status != HttpRequestQueueResult.Success)
             {
                 this.ReportError(
-                    string.Format(
-                        "Failed to forward request to {0} : {1}",
-                        httpResponse.Request.Url,
-                        errorMsg
-                    )
+                    $"Request to {httpResponse.Request.Url} failed with status {httpResponse.HttpCode} ({httpResponse.Reason})"
                 );
             }
+        }
+
+        private void EnsureSuccessCallbackSync(IHttpResponse response, object userState)
+        {
+            this.EnsureSuccessCallback(response, userState);
+            response.CallInfo.Continue();
         }
 
         private void PostJsonRequest(
             Uri endpoint,
             object forwardRequest,
-            HttpRequestCallback callback,
             ICallInfo info,
-            bool callAsync = false
+            bool callAsync = true
         )
         {
+            HttpRequestCallback callback = this.EnsureSuccessCallback;
+
             MemoryStream stream = new MemoryStream();
             string json = JsonConvert.SerializeObject(
                 forwardRequest,
@@ -626,117 +609,6 @@ namespace DragaliaAPI.Photon.Plugin
         {
             this.PluginHost.LogError(msg);
             this.PluginHost.BroadcastErrorInfoEvent(msg);
-        }
-
-        private void SaveCallback(IHttpResponse request, object userState)
-        {
-            ICloseGameCallInfo info = (ICloseGameCallInfo)request.CallInfo;
-
-            if (request.Status == HttpRequestQueueResult.Success)
-            {
-                this.PluginHost.LogDebug(
-                    string.Format(
-                        "Http request to {0} - done.",
-                        info.ActorCount > 0 ? "save" : "close"
-                    )
-                );
-                info.Continue();
-                return;
-            }
-
-            string msg = string.Format(
-                "Failed save game request on {0} : {1}",
-                this.config.GameCloseEndpoint,
-                request.Reason
-            );
-            this.ReportError(msg);
-            info.Continue();
-        }
-
-        private void CloseGameCallback(IHttpResponse response, object userState)
-        {
-            this.LogIfFailedCallback(response, userState);
-            response.CallInfo.Continue();
-        }
-
-        private static readonly char[] trimBomAndZeroWidth = { '\uFEFF', '\u200B' };
-
-        private bool TryGetForwardResponse(
-            IHttpResponse httpResponse,
-            out WebhookResponse response,
-            out string errorMsg
-        )
-        {
-            response = null;
-
-            try
-            {
-                if (httpResponse.Status == HttpRequestQueueResult.Success)
-                {
-                    if (string.IsNullOrEmpty(httpResponse.ResponseText))
-                    {
-                        errorMsg = string.Format("Missing Response.");
-                        return false;
-                    }
-
-                    string responseData = Encoding.UTF8
-                        .GetString(httpResponse.ResponseData)
-                        .Trim(trimBomAndZeroWidth);
-                    this.PluginHost.LogDebug("TryGetForwardResponse:" + responseData);
-
-                    if (!responseData.StartsWith("{") && !responseData.EndsWith("}"))
-                    {
-                        errorMsg = string.Format("Response is not valid json '{0}'.", responseData);
-                        return false;
-                    }
-
-                    response = JsonConvert.DeserializeObject<WebhookResponse>(responseData);
-                    if (response != null)
-                    {
-                        if (response.ResultCode == 0)
-                        {
-                            errorMsg = string.Empty;
-                            return true;
-                        }
-
-                        if (response.ResultCode == 255 && string.IsNullOrEmpty(response.Message))
-                        {
-                            errorMsg = string.Format("Unexpected Response '{0}'.", responseData);
-                            return false;
-                        }
-
-                        errorMsg = string.Format(
-                            "Error response ResultCode='{0}' Message='{1}'.",
-                            response.ResultCode,
-                            response.Message
-                        );
-                    }
-                    else
-                    {
-                        // since we prevalidate, we don't seam to get here
-                        errorMsg = string.Format("Unexpected Response '{0}'.", responseData);
-                    }
-                }
-                else
-                {
-                    errorMsg = string.Format(
-                        "'{0}' httpcode={1} webstatus={2} response='{3}', HttpQueueResult={4}.",
-                        httpResponse.Reason,
-                        httpResponse.HttpCode,
-                        httpResponse.WebStatus,
-                        httpResponse.ResponseText,
-                        httpResponse.Status
-                    );
-                }
-            }
-            catch (Exception ex)
-            {
-                // since we prevalidate, we don't seam to get here
-                errorMsg =
-                    $"{ex.Message}, data:{BitConverter.ToString(httpResponse.ResponseData, 0, Math.Min(1024, httpResponse.ResponseData.Length))}";
-            }
-
-            return false;
         }
 
         private static string GetConfigValue(IDictionary<string, string> config, string key)

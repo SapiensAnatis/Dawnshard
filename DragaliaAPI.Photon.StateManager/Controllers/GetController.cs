@@ -1,11 +1,8 @@
-﻿using System.Reflection;
-using DragaliaAPI.Photon.StateManager.Models;
-using DragaliaAPI.Photon.StateManager.Redis;
+﻿using DragaliaAPI.Photon.StateManager.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using NRediSearch;
+using Redis.OM.Searching;
 using Redis.OM.Contracts;
-using StackExchange.Redis;
+using Redis.OM;
 
 namespace DragaliaAPI.Photon.StateManager.Controllers;
 
@@ -29,10 +26,15 @@ public class GetController : ControllerBase
     /// <returns></returns>
     [HttpGet("[action]")]
     [ProducesResponseType(typeof(IEnumerable<RedisGame>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GameList()
+    public async Task<IActionResult> GameList([FromQuery] int? questId)
     {
-        return this.Ok(await this.connectionProvider.RedisCollection<RedisGame>().ToListAsync());
-    }
+        IRedisCollection<RedisGame> query = this.connectionProvider
+            .RedisCollection<RedisGame>()
+            .Where(x => x.Visible);
 
-    private void CreateIndex() { }
+        if (questId is not null)
+            query = query.Where(x => x.QuestId == questId);
+
+        return this.Ok(await query.ToListAsync());
+    }
 }

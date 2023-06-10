@@ -1,7 +1,9 @@
 ﻿using System.Collections;
-using System.Xml.Linq;
 using DragaliaAPI.Photon.Dto;
 using DragaliaAPI.Photon.Dto.Game;
+using DragaliaAPI.Photon.Plugin.Constants;
+using DragaliaAPI.Photon.Plugin.Models;
+using MessagePack;
 
 namespace DragaliaAPI.Photon.Plugin
 {
@@ -12,35 +14,61 @@ namespace DragaliaAPI.Photon.Plugin
     {
         public static Player CreatePlayer(Hashtable actorProperties)
         {
-            return new Player() { ViewerId = actorProperties.GetInt("PlayerId") };
+            return new Player()
+            {
+                ViewerId = actorProperties.GetInt(ActorPropertyKeys.PlayerId),
+                PartyNoList = (int[])actorProperties[ActorPropertyKeys.UsePartySlot]
+            };
         }
 
-        public static RedisGame CreateGame(string name, Hashtable gameProperties)
+        public static GameBase CreateGame(string name, Hashtable gameProperties)
         {
-            RedisGame result = new RedisGame { Name = name };
+            GameBase result = new GameBase
+            {
+                Name = name,
+                MatchingCompatibleId = gameProperties.GetInt(GamePropertyKeys.MatchingCompatibleId),
+                RoomId = gameProperties.GetInt(GamePropertyKeys.RoomId),
+                QuestId = gameProperties.GetInt(GamePropertyKeys.QuestId)
+            };
 
-            // These props may not exist during a GameClose event
+            EntryConditions conditions = CreateEntryConditions(gameProperties);
+            if (conditions != null)
+                result.EntryConditions = conditions;
+
+            return result;
+        }
+
+        public static EntryConditions CreateEntryConditions(Hashtable gameProperties)
+        {
             if (
-                gameProperties.TryGetInt(
-                    nameof(result.MatchingCompatibleId),
-                    out int matchingCompatibleId
+                !gameProperties.TryGetValue(
+                    GamePropertyKeys.EntryConditions,
+                    out object entryConditionObj
                 )
             )
             {
-                result.MatchingCompatibleId = matchingCompatibleId;
+                return null;
             }
 
-            if (gameProperties.TryGetInt(nameof(result.RoomId), out int roomId))
+            if (!(entryConditionObj is byte[] entryConditionBlob))
             {
-                result.RoomId = roomId;
+                return null;
             }
 
-            if (gameProperties.TryGetInt("C0", out int questId))
+            RoomEntryCondition deserialized = MessagePackSerializer.Deserialize<RoomEntryCondition>(
+                entryConditionBlob,
+                MessagePackSerializerOptions.Standard.WithCompression(
+                    MessagePackCompression.Lz4Block
+                )
+            );
+
+            return new EntryConditions()
             {
-                result.QuestId = questId;
-            }
-
-            return result;
+                UnacceptedElementTypeList = deserialized.UnacceptedElementals,
+                UnacceptedWeaponTypeList = deserialized.UnacceptedWeapons,
+                ObjectiveTextId = deserialized.Objective.TextId,
+                RequiredPartyPower = deserialized.RequiredPower
+            };
         }
     }
 }

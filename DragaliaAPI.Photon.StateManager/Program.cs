@@ -1,6 +1,4 @@
-using System.Reflection;
 using DragaliaAPI.Photon.StateManager.Models;
-using DragaliaAPI.Photon.StateManager.Redis;
 using Redis.OM;
 using Redis.OM.Contracts;
 using Serilog;
@@ -64,8 +62,6 @@ IRedisConnectionProvider provider = new RedisConnectionProvider(multiplexer);
 await provider.Connection.CreateIndexAsync(typeof(RedisGame));
 
 builder.Services.AddSingleton(provider);
-
-NReJSON.NReJSONSerializer.SerializerProxy = new SerializerProxy();
 
 WebApplication app = builder.Build();
 

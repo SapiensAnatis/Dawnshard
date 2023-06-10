@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DragaliaAPI.Photon.Dto.Requests
+namespace DragaliaAPI.Photon.Dto.Game
 {
     /// <summary>
     /// Object representing room entry conditions.
@@ -12,12 +12,12 @@ namespace DragaliaAPI.Photon.Dto.Requests
         /// <summary>
         /// The list of disallowed elements for this room.
         /// </summary>
-        public int[] UnacceptedElementTypeList { get; set; } = Array.Empty<int>();
+        public IEnumerable<int> UnacceptedElementTypeList { get; set; } = Array.Empty<int>();
 
         /// <summary>
         /// The list of disallowed weapons for this room.
         /// </summary>
-        public int[] DisallowedWeaponTypeList { get; set; } = Array.Empty<int>();
+        public IEnumerable<int> UnacceptedWeaponTypeList { get; set; } = Array.Empty<int>();
 
         /// <summary>
         /// The minimum required party might to join this room.

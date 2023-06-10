@@ -33,16 +33,16 @@ public class MatchingService : IMatchingService
 
     public async Task<IEnumerable<RoomList>> GetRoomList()
     {
-        IEnumerable<ApiGame> storedGames = await photonStateApi.GetAllGames();
+        IEnumerable<ApiGame> games = await photonStateApi.GetAllGames();
         List<RoomList> mapped = new();
 
-        foreach (ApiGame storedGame in storedGames)
+        foreach (ApiGame game in games)
         {
             DbPlayerUserData hostUserData = await userDataRepository
-                .GetUserData(storedGame.HostViewerId)
+                .GetUserData(game.HostViewerId)
                 .FirstAsync();
 
-            DbPlayerCharaData leadCharaData = await partyRepository
+            DbPlayerCharaData hostCharaData = await partyRepository
                 .GetPartyUnits(hostUserData.DeviceAccountId, hostUserData.MainPartyNo)
                 .Where(x => x.UnitNo == 1)
                 .Join(
@@ -56,38 +56,40 @@ public class MatchingService : IMatchingService
             mapped.Add(
                 new RoomList()
                 {
-                    room_name = storedGame.Name,
-                    cluster_name = Japan,
-                    region = Japan,
-                    language = "en_us",
+                    room_name = game.Name,
+                    cluster_name = game.ClusterName,
+                    region = game.Region,
+                    language = game.Language,
                     host_name = hostUserData.Name,
-                    leader_chara_id = leadCharaData.CharaId,
-                    leader_chara_level = leadCharaData.Level,
-                    leader_chara_rarity = leadCharaData.Rarity,
+                    leader_chara_id = hostCharaData.CharaId,
+                    leader_chara_level = hostCharaData.Level,
+                    leader_chara_rarity = hostCharaData.Rarity,
                     host_level = hostUserData.Level,
-                    host_viewer_id = (ulong)storedGame.HostViewerId,
-                    member_num = storedGame.Players.Count(),
-                    quest_id = storedGame.QuestId,
+                    host_viewer_id = (ulong)game.HostViewerId,
+                    member_num = game.MemberNum,
+                    quest_id = game.QuestId,
                     quest_type = QuestTypes.Dungeon,
-                    room_id = storedGame.RoomId,
+                    room_id = game.RoomId,
                     status = RoomStatuses.Available,
-                    room_member_list = storedGame.Players.Select(
-                        x => new AtgenRoomMemberList() { viewer_id = 1 }
+                    room_member_list = game.Players.Select(
+                        x => new AtgenRoomMemberList() { viewer_id = (ulong)x.ViewerId }
                     ),
                     entry_type = 1,
-                    start_entry_time = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(1),
+                    start_entry_time = game.StartEntryTime,
                     entry_guild_id = default,
-                    compatible_id = storedGame.MatchingCompatibleId,
+                    compatible_id = game.MatchingCompatibleId,
                     entry_conditions = new()
                     {
-                        objective_text_id = 0,
-                        required_party_power = 0,
-                        unaccepted_element_type_list = new List<int>(),
-                        unaccepted_weapon_type_list = new List<int>(),
+                        objective_text_id = game.EntryConditions.ObjectiveTextId,
+                        required_party_power = game.EntryConditions.RequiredPartyPower,
+                        unaccepted_element_type_list =
+                            game.EntryConditions.UnacceptedElementTypeList,
+                        unaccepted_weapon_type_list = game.EntryConditions.UnacceptedWeaponTypeList,
                     },
                 }
             );
         }
+
         return mapped;
     }
 }

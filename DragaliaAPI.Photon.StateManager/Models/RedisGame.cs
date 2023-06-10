@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Photon.Dto;
 using DragaliaAPI.Photon.Dto.Game;
-using DragaliaAPI.Photon.Dto.Requests;
 using Newtonsoft.Json;
 using Redis.OM.Modeling;
 
