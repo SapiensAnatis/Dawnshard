@@ -1,6 +1,8 @@
 using DragaliaAPI.Photon.Dto;
 using DragaliaAPI.Photon.Dto.Requests;
+using DragaliaAPI.Photon.StateManager.Authentication;
 using DragaliaAPI.Photon.StateManager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Redis.OM.Contracts;
@@ -13,6 +15,7 @@ namespace DragaliaAPI.Photon.StateManager.Controllers;
 /// </summary>
 [ApiController]
 [Route("[controller]")]
+[Authorize(AuthenticationSchemes = nameof(PhotonAuthenticationHandler))]
 public class EventController : ControllerBase
 {
     private readonly IOptionsMonitor<RedisOptions> options;

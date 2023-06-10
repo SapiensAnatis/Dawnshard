@@ -30,6 +30,8 @@ services:
         dockerfile: DragaliaAPI.Photon.StateManager/Dockerfile
     ports:
       - "5001:80"
+    env_file:
+      - .env
 
   postgres:
     hostname: postgres

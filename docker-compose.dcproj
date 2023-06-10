@@ -10,7 +10,7 @@
 		<DockerComposeProjectName>dragaliaapi</DockerComposeProjectName>
 	</PropertyGroup>
 	<ItemGroup>
-		<Content Include="docker-compose.yml" />
+		<None Include="docker-compose.yml" />
 		<None Include="docker-compose.override.yml">
 			<DependentUpon>docker-compose.yml</DependentUpon>
 		</None>

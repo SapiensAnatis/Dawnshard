@@ -1,4 +1,6 @@
+using DragaliaAPI.Photon.StateManager.Authentication;
 using DragaliaAPI.Photon.StateManager.Models;
+using Microsoft.AspNetCore.Authentication;
 using Redis.OM;
 using Redis.OM.Contracts;
 using Serilog;
@@ -31,6 +33,13 @@ builder.Services
     .BindConfiguration(nameof(RedisOptions))
     .Validate(x => x.KeyExpiryTimeMins > 0)
     .ValidateOnStart();
+
+builder.Services
+    .AddAuthentication()
+    .AddScheme<AuthenticationSchemeOptions, PhotonAuthenticationHandler>(
+        nameof(PhotonAuthenticationHandler),
+        null
+    );
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(config =>
@@ -74,6 +83,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 
