@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.Json.Serialization;
 
-namespace DragaliaAPI.Photon.Dto.Game
+namespace DragaliaAPI.Photon.Shared.Models
 {
     /// <summary>
     /// An object representing an open game with additional derived properties,

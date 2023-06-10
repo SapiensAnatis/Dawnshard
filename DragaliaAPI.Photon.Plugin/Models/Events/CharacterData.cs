@@ -7,8 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
-using DragaliaAPI.Photon.Dto;
 using MessagePack;
+using DragaliaAPI.Photon.Shared.Models;
 
 namespace DragaliaAPI.Photon.Plugin.Models.Events
 {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Xml.Linq;
 using MessagePack;
 
-namespace DragaliaAPI.Photon.Dto
+namespace DragaliaAPI.Photon.Plugin.Models
 {
     [MessagePackObject]
     public class HeroParamExData

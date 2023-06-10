@@ -1,4 +1,6 @@
-﻿namespace DragaliaAPI.Photon.Dto.Requests
+﻿using DragaliaAPI.Photon.Shared.Models;
+
+namespace DragaliaAPI.Photon.Shared.Requests
 {
     /// <summary>
     /// Base request object for Photon webhooks.

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DragaliaAPI.Photon.Dto.Requests
+namespace DragaliaAPI.Photon.Shared.Requests
 {
     public class GameModifyMatchingTypeRequest : GameModifyRequest
     {

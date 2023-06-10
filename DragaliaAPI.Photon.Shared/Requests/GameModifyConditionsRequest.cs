@@ -1,6 +1,6 @@
-﻿using DragaliaAPI.Photon.Dto.Game;
+﻿using DragaliaAPI.Photon.Shared.Models;
 
-namespace DragaliaAPI.Photon.Dto.Requests
+namespace DragaliaAPI.Photon.Shared.Requests
 {
     public class GameModifyConditionsRequest : GameModifyRequest
     {

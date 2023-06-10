@@ -6,7 +6,6 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Services.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -17,6 +16,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.PlayerDetails;
+using DragaliaAPI.Services.Api;
 
 namespace DragaliaAPI.Services;
 

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DragaliaAPI.Services.Helpers;
+namespace DragaliaAPI.Services.Api;
 
 public class BaasApi : IBaasApi
 {
@@ -37,14 +37,14 @@ public class BaasApi : IBaasApi
 
     public async Task<IList<SecurityKey>> GetKeys()
     {
-        string? cachedKeys = await this.cache.GetStringAsync(RedisKey);
+        string? cachedKeys = await cache.GetStringAsync(RedisKey);
         if (!string.IsNullOrEmpty(cachedKeys))
         {
             JsonWebKeySet cachedJwks = new(cachedKeys);
             return cachedJwks.GetSigningKeys();
         }
 
-        HttpResponseMessage keySetResponse = await this.client.GetAsync(KeySetEndpoint);
+        HttpResponseMessage keySetResponse = await client.GetAsync(KeySetEndpoint);
 
         if (!keySetResponse.IsSuccessStatusCode)
         {
@@ -57,7 +57,7 @@ public class BaasApi : IBaasApi
         }
 
         string response = await keySetResponse.Content.ReadAsStringAsync();
-        await this.cache.SetStringAsync(RedisKey, response);
+        await cache.SetStringAsync(RedisKey, response);
 
         JsonWebKeySet jwks = new(response);
         return jwks.GetSigningKeys();
@@ -65,7 +65,7 @@ public class BaasApi : IBaasApi
 
     public async Task<LoadIndexData> GetSavefile(string idToken)
     {
-        HttpResponseMessage savefileResponse = await this.client.PostAsJsonAsync<object>(
+        HttpResponseMessage savefileResponse = await client.PostAsJsonAsync<object>(
             SavefileEndpoint,
             new { idToken }
         );

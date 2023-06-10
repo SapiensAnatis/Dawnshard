@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\DragaliaAPI.Photon.Dto\DragaliaAPI.Photon.Dto.csproj" />
+	  <ProjectReference Include="..\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
 	</ItemGroup>
 
 </Project>

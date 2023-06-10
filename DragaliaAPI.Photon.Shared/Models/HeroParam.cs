@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using MessagePack;
 
-namespace DragaliaAPI.Photon.Dto
+namespace DragaliaAPI.Photon.Shared.Models
 {
     [MessagePackObject(false)]
     public class HeroParam

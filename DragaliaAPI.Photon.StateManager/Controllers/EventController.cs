@@ -1,5 +1,5 @@
-using DragaliaAPI.Photon.Dto;
-using DragaliaAPI.Photon.Dto.Requests;
+using DragaliaAPI.Photon.Shared.Models;
+using DragaliaAPI.Photon.Shared.Requests;
 using DragaliaAPI.Photon.StateManager.Authentication;
 using DragaliaAPI.Photon.StateManager.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -57,7 +57,7 @@ public class EventController : ControllerBase
         await this.Games.InsertAsync(newGame, this.KeyExpiry);
         this.logger.LogInformation("Created new game: {@game}", newGame);
 
-        return this.Ok(new WebhookResponse() { ResultCode = 0 });
+        return this.Ok();
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public class EventController : ControllerBase
 
         this.logger.LogInformation("Added player {@player} to game {@game}", request.Player, game);
 
-        return this.Ok(new WebhookResponse() { ResultCode = 0 });
+        return this.Ok();
     }
 
     /// <summary>
@@ -139,7 +139,7 @@ public class EventController : ControllerBase
             game
         );
 
-        return this.Ok(new WebhookResponse() { ResultCode = 0 });
+        return this.Ok();
     }
 
     /// <summary>
@@ -161,7 +161,7 @@ public class EventController : ControllerBase
         await this.Games.DeleteAsync(game);
         this.logger.LogInformation("Removed game {@game}", game);
 
-        return this.Ok(new WebhookResponse() { ResultCode = 0 });
+        return this.Ok();
     }
 
     [HttpPost("[action]")]

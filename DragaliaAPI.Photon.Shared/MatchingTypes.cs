@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DragaliaAPI.Photon.Dto
+namespace DragaliaAPI.Photon.Shared
 {
     public enum MatchingTypes
     {

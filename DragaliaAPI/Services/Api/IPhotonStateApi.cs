@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Photon.Dto.Game;
+﻿using DragaliaAPI.Photon.Shared.Models;
 
 namespace DragaliaAPI.Services.Api;
 

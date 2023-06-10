@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using DragaliaAPI.Photon.Plugin.Constants;
-using DragaliaAPI.Photon.Plugin.Extensions;
 using Photon.Hive.Plugin;
 
 namespace DragaliaAPI.Photon.Plugin.Helpers

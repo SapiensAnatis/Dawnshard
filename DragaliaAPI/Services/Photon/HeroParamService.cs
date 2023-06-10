@@ -5,7 +5,7 @@ using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Photon.Dto;
+using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;

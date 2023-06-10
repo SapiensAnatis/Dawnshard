@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DragaliaAPI.Photon.Dto.Game
+namespace DragaliaAPI.Photon.Shared.Models
 {
     /// <summary>
     /// Object representing room entry conditions.

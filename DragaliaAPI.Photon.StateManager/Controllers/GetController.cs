@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Redis.OM.Searching;
 using Redis.OM.Contracts;
 using Redis.OM;
-using DragaliaAPI.Photon.Dto.Game;
-using DragaliaAPI.Photon.Dto;
+using DragaliaAPI.Photon.Shared.Models;
+using DragaliaAPI.Photon.Shared;
 
 namespace DragaliaAPI.Photon.StateManager.Controllers;
 

@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Photon.Dto;
+﻿using DragaliaAPI.Photon.Shared.Models;
 
 namespace DragaliaAPI.Services.Photon;
 

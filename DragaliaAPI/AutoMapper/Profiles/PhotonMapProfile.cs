@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Photon.Dto;
-using DragaliaAPI.Photon.Dto.Game;
+using DragaliaAPI.Photon.Shared.Models;
 
 namespace DragaliaAPI.AutoMapper.Profiles;
 

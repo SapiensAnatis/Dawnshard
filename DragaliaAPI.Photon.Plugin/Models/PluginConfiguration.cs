@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using DragaliaAPI.Photon.Plugin.Extensions;
+using DragaliaAPI.Photon.Plugin.Helpers;
 
 namespace DragaliaAPI.Photon.Plugin.Models
 {

@@ -15,8 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.env = .env
 		.env.default = .env.default
 		.gitignore = .gitignore
-		README.md = README.md
 		.config\dotnet-tools.json = .config\dotnet-tools.json
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Database", "DragaliaAPI.Database\DragaliaAPI.Database.csproj", "{3B1A86CE-A656-453B-BC3F-EA42DF9E3FC6}"
@@ -46,9 +46,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Plugin",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Photon", "Photon", "{8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Dto", "DragaliaAPI.Photon.Dto\DragaliaAPI.Photon.Dto.csproj", "{7705FDE5-0C05-4E4E-BBEA-DCB1BE23530B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Integration.Test", "DragaliaAPI.Integration.Test\DragaliaAPI.Integration.Test.csproj", "{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragaliaAPI.Integration.Test", "DragaliaAPI.Integration.Test\DragaliaAPI.Integration.Test.csproj", "{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Shared", "DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj", "{7394DCE5-7E1B-44C7-B3CA-735885D97695}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,18 +96,14 @@ Global
 		{D9AC51A5-38F6-4DD1-8839-9FE881396A6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9AC51A5-38F6-4DD1-8839-9FE881396A6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9AC51A5-38F6-4DD1-8839-9FE881396A6B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7705FDE5-0C05-4E4E-BBEA-DCB1BE23530B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7705FDE5-0C05-4E4E-BBEA-DCB1BE23530B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7705FDE5-0C05-4E4E-BBEA-DCB1BE23530B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7705FDE5-0C05-4E4E-BBEA-DCB1BE23530B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{16E2696F-9C24-4621-BBF3-D801CEBA9204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{16E2696F-9C24-4621-BBF3-D801CEBA9204}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{16E2696F-9C24-4621-BBF3-D801CEBA9204}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{16E2696F-9C24-4621-BBF3-D801CEBA9204}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA0AE7C5-2742-4FC9-B668-BC7459E4BCE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7394DCE5-7E1B-44C7-B3CA-735885D97695}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7394DCE5-7E1B-44C7-B3CA-735885D97695}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7394DCE5-7E1B-44C7-B3CA-735885D97695}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7394DCE5-7E1B-44C7-B3CA-735885D97695}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,7 +112,7 @@ Global
 		{1A23D473-87C4-40FB-8DF0-43F4B0FE7414} = {BC72B633-A158-4169-9B47-3CB9C689A57E}
 		{8E4D9C20-3914-4A8A-ACC0-22997F2947AB} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
 		{D9AC51A5-38F6-4DD1-8839-9FE881396A6B} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
-		{7705FDE5-0C05-4E4E-BBEA-DCB1BE23530B} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
+		{7394DCE5-7E1B-44C7-B3CA-735885D97695} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D86831A9-C572-4B8D-BD12-EF0768BC9E4F}

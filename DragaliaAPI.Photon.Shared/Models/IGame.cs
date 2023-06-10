@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DragaliaAPI.Photon.Dto.Game
+namespace DragaliaAPI.Photon.Shared.Models
 {
     public interface IGame
     {

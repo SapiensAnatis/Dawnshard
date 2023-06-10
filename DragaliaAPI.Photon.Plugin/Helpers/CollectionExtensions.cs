@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using DragaliaAPI.Photon.Plugin.Constants;
 using Photon.Hive.Plugin;
 
-namespace DragaliaAPI.Photon.Plugin.Extensions
+namespace DragaliaAPI.Photon.Plugin.Helpers
 {
     internal static class CollectionExtensions
     {

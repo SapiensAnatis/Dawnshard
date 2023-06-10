@@ -1,11 +1,11 @@
 ﻿using System.Collections;
-using DragaliaAPI.Photon.Dto;
-using DragaliaAPI.Photon.Dto.Game;
 using DragaliaAPI.Photon.Plugin.Constants;
 using DragaliaAPI.Photon.Plugin.Models;
+using DragaliaAPI.Photon.Shared;
+using DragaliaAPI.Photon.Shared.Models;
 using MessagePack;
 
-namespace DragaliaAPI.Photon.Plugin.Extensions
+namespace DragaliaAPI.Photon.Plugin.Helpers
 {
     /// <summary>
     /// Alternative ctors for DTO classes which create them from Photon types.

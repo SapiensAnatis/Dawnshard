@@ -1,5 +1,5 @@
-﻿using DragaliaAPI.Photon.Dto;
-using DragaliaAPI.Photon.Dto.Game;
+﻿using DragaliaAPI.Photon.Shared;
+using DragaliaAPI.Photon.Shared.Models;
 using Newtonsoft.Json;
 using Redis.OM.Modeling;
 

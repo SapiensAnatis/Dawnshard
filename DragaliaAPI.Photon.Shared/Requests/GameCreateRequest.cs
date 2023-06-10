@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using DragaliaAPI.Photon.Dto.Game;
+using DragaliaAPI.Photon.Shared.Models;
 
-namespace DragaliaAPI.Photon.Dto.Requests
+namespace DragaliaAPI.Photon.Shared.Requests
 {
     /// <summary>
     /// Request sent by Photon to store a new game in Redis.
