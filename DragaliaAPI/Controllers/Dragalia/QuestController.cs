@@ -67,6 +67,7 @@ public class QuestController : DragaliaControllerBase
     }
 
     [HttpPost("get_quest_clear_party")]
+    [HttpPost("get_quest_clear_party_multi")]
     public DragaliaResult GetQuestClearParty()
     {
         // TODO: Retrieve from database
