@@ -93,17 +93,21 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Event information.</param>
         public override void OnLeave(ILeaveGameCallInfo info)
         {
-            info.Continue();
-
+            // Get actor before continuing
             IActor actor = this.PluginHost.GameActors.FirstOrDefault(
                 x => x.ActorNr == info.ActorNr
             );
+
+            info.Continue();
 
             // It is not critical to update the Redis state, so don't crash the room if we can't find
             // the actor or certain properties attached to them.
             if (actor is null)
             {
-                this.logger.InfoFormat("OnLeave: could not find actor {0}", info.ActorNr);
+                this.logger.InfoFormat(
+                    "OnLeave: could not find actor {0} -- GameLeave request aborted",
+                    info.ActorNr
+                );
                 return;
             }
 
@@ -126,6 +130,13 @@ namespace DragaliaAPI.Photon.Plugin
                     },
                     info,
                     true
+                );
+            }
+            else
+            {
+                this.logger.InfoFormat(
+                    "OnLeave: Could not find viewer ID for actor {0} -- GameLeave request aborted",
+                    info.ActorNr
                 );
             }
         }
