@@ -11,6 +11,8 @@ namespace DragaliaAPI.Photon.Dto.Game
 
         public int MatchingCompatibleId { get; set; }
 
+        public MatchingTypes MatchingType { get; set; }
+
         public int QuestId { get; set; }
 
         public EntryConditions EntryConditions { get; set; } = new EntryConditions();

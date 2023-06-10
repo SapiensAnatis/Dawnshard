@@ -29,6 +29,9 @@ public class RedisGame : IGame
     [Indexed]
     public int MatchingCompatibleId { get; set; }
 
+    [Indexed(Sortable = true)]
+    public MatchingTypes MatchingType { get; set; }
+
     /// <summary>
     /// The quest ID for this game.
     /// </summary>
@@ -53,7 +56,7 @@ public class RedisGame : IGame
     /// <summary>
     /// Whether the room should be shown to players.
     /// </summary>
-    [Indexed]
+    [Indexed(Sortable = true)]
     public bool Visible { get; set; } = true;
 
     public RedisGame(IGame game)
@@ -65,6 +68,7 @@ public class RedisGame : IGame
         StartEntryTime = game.StartEntryTime;
         EntryConditions = game.EntryConditions;
         Players = game.Players;
+        MatchingType = game.MatchingType;
     }
 
     [JsonConstructor]

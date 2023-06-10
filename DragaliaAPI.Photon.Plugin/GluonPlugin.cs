@@ -274,7 +274,28 @@ namespace DragaliaAPI.Photon.Plugin
             if (info.Request.Properties.ContainsKey(GamePropertyKeys.EntryConditions))
                 this.OnSetEntryConditions(info);
 
+            if (info.Request.Properties.ContainsKey(GamePropertyKeys.MatchingType))
+                this.OnSetMatchingType(info);
+
             base.OnSetProperties(info);
+        }
+
+        private void OnSetMatchingType(ISetPropertiesCallInfo info)
+        {
+            MatchingTypes newType = (MatchingTypes)
+                info.Request.Properties.GetInt(GamePropertyKeys.MatchingType);
+
+            this.PostJsonRequest(
+                this.config.MatchingTypeEndpoint,
+                new GameModifyMatchingTypeRequest()
+                {
+                    GameName = this.PluginHost.GameId,
+                    NewMatchingType = newType,
+                    Player = null
+                },
+                info,
+                callAsync: false
+            );
         }
 
         private void OnSetEntryConditions(ISetPropertiesCallInfo info)

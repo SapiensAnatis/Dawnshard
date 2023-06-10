@@ -28,7 +28,8 @@ namespace DragaliaAPI.Photon.Plugin
                 Name = name,
                 MatchingCompatibleId = gameProperties.GetInt(GamePropertyKeys.MatchingCompatibleId),
                 RoomId = gameProperties.GetInt(GamePropertyKeys.RoomId),
-                QuestId = gameProperties.GetInt(GamePropertyKeys.QuestId)
+                QuestId = gameProperties.GetInt(GamePropertyKeys.QuestId),
+                MatchingType = (MatchingTypes)gameProperties.GetInt(GamePropertyKeys.MatchingType)
             };
 
             EntryConditions conditions = CreateEntryConditions(gameProperties);

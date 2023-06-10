@@ -51,6 +51,7 @@ namespace DragaliaAPI.Photon.Dto.Game
             StartEntryTime = gameBase.StartEntryTime;
             EntryConditions = gameBase.EntryConditions;
             Players = gameBase.Players;
+            MatchingType = gameBase.MatchingType;
         }
 
         [JsonConstructor]

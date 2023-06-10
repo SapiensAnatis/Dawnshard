@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Redis.OM.Searching;
 using Redis.OM.Contracts;
 using Redis.OM;
+using DragaliaAPI.Photon.Dto.Game;
+using DragaliaAPI.Photon.Dto;
 
 namespace DragaliaAPI.Photon.StateManager.Controllers;
 
@@ -25,16 +27,33 @@ public class GetController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("[action]")]
-    [ProducesResponseType(typeof(IEnumerable<RedisGame>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GameList([FromQuery] int? questId)
+    [ProducesResponseType(typeof(IEnumerable<ApiGame>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<ApiGame>>> GameList([FromQuery] int? questId)
     {
         IRedisCollection<RedisGame> query = this.connectionProvider
             .RedisCollection<RedisGame>()
-            .Where(x => x.Visible);
+            .Where(x => x.Visible == true)
+            .Where(x => x.MatchingType == MatchingTypes.Anyone);
 
         if (questId is not null)
             query = query.Where(x => x.QuestId == questId);
 
-        return this.Ok(await query.ToListAsync());
+        IEnumerable<ApiGame> games = (await query.ToListAsync()).Select(x => new ApiGame(x));
+
+        return this.Ok(games);
+    }
+
+    [HttpGet("[action]/{roomId}")]
+    public async Task<ActionResult<ApiGame>> ById(int roomId)
+    {
+        IRedisCollection<RedisGame> query = this.connectionProvider
+            .RedisCollection<RedisGame>()
+            .Where(x => x.Visible == true && x.RoomId == roomId);
+
+        RedisGame? game = await query.FirstOrDefaultAsync();
+        if (game is null)
+            return this.NotFound();
+
+        return this.Ok(new ApiGame(game));
     }
 }

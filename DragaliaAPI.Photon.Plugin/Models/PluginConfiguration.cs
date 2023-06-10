@@ -18,6 +18,8 @@ namespace DragaliaAPI.Photon.Plugin.Models
 
         public Uri EntryConditionsEndpoint { get; set; }
 
+        public Uri MatchingTypeEndpoint { get; set; }
+
         public string BasicAuthUsername { get; set; }
 
         public string BasicAuthPassword { get; set; }
@@ -42,6 +44,10 @@ namespace DragaliaAPI.Photon.Plugin.Models
             );
             this.EntryConditionsEndpoint = config.GetUri(
                 nameof(this.EntryConditionsEndpoint),
+                UriKind.Relative
+            );
+            this.MatchingTypeEndpoint = config.GetUri(
+                nameof(this.MatchingTypeEndpoint),
                 UriKind.Relative
             );
 

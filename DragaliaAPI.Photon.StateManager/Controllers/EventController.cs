@@ -183,4 +183,27 @@ public class EventController : ControllerBase
 
         return this.Ok();
     }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> MatchingType(GameModifyMatchingTypeRequest request)
+    {
+        RedisGame? game = await this.Games.FindByIdAsync(request.GameName);
+
+        if (game is null)
+        {
+            this.logger.LogError("Could not find game {name}", request.GameName);
+            return this.NotFound();
+        }
+
+        game.MatchingType = request.NewMatchingType;
+        await this.Games.UpdateAsync(game);
+
+        this.logger.LogInformation(
+            "Updated game {game} matching type to {type}",
+            game.Name,
+            game.MatchingType
+        );
+
+        return this.Ok();
+    }
 }
