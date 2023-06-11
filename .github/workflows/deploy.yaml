@@ -2,9 +2,18 @@ name: deploy
 
 on:
   workflow_call:
+    inputs:
+      deployment:
+        type: string
+        required: true
+        description: "Kubernetes deployment name"
+      namespace:
+        type: string
+        required: true
+        description: "Kubernetes namespace"
 
 jobs:
-  deploy-api:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,20 +25,5 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
           script: |
-            kubectl rollout restart deployment/dragalia-api-dawnshard -n dragalia-api
-            kubectl rollout status deployment/dragalia-api-dawnshard -n dragalia-api
-
-  deploy-statemanager:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: ssh and restart pods
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          script_stop: true
-          script: |
-            kubectl rollout restart deployment/dragalia-api-statemanager -n statemanager
-            kubectl rollout status deployment/dragalia-api-statemanager -n statemanager
+            kubectl rollout restart deployment/${{ inputs.deployment }} -n ${{ inputs.namespace }}
+            kubectl rollout status deployment/${{ inputs.deployment }} -n ${{ inputs.namespace }}
