@@ -10,7 +10,7 @@ env:
 
 jobs:
   publish:
-    uses: ./.github/workflows/templates/publish.yaml
+    uses: ./.github/workflows/publish.yaml
     with:
       ref: ${{ github.ref_name }}
       image-tag: ${{ github.ref_name }}
