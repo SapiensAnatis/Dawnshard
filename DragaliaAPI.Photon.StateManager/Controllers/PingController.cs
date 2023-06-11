@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Photon.StateManager.Controllers;
 
 /// <summary>
 /// Ping controller for Kubernetes liveness checks.
 /// </summary>
+[AllowAnonymous]
 public class PingController : ControllerBase
 {
     /// <summary>
