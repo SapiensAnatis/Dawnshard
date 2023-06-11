@@ -223,7 +223,7 @@ public class ToolTest : TestFixture
 
         await this.Client.PostMsgpack<ToolAuthData>("/tool/auth", data);
 
-        this.MockBaasRequestHelper.Verify(x => x.GetSavefile(token), Times.Never);
+        this.MockBaasApi.Verify(x => x.GetSavefile(token), Times.Never);
 
         DbPlayerUserData userData = this.ApiContext.PlayerUserData.Find(DeviceAccountId)!;
         this.ApiContext.Entry(userData).Reload();

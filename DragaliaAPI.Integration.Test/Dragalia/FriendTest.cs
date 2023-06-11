@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Xunit.Abstractions;
 
@@ -10,7 +11,10 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 public class FriendTest : TestFixture
 {
     public FriendTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        CommonAssertionOptions.ApplyTimeOptions();
+    }
 
     [Fact]
     public async Task GetSupportCharaDetail_GetsCorrectCharacter()
@@ -175,10 +179,7 @@ public class FriendTest : TestFixture
 
         response.support_user_data_detail.user_support_data
             .Should()
-            .BeEquivalentTo(
-                new UserSupportList() { support_chara = new() { chara_id = Charas.ThePrince } },
-                o => o.Excluding(x => x.last_login_date)
-            );
+            .BeEquivalentTo(HelperService.StubData.SupportListData.support_user_list.First());
 
         response.support_user_data_detail.is_friend.Should().BeFalse();
     }

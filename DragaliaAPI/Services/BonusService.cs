@@ -1,9 +1,12 @@
-﻿using System.Collections.Immutable;
+﻿//#define CHEATING
+
+using System.Collections.Immutable;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services;
@@ -15,20 +18,33 @@ public class BonusService : IBonusService
 {
     private readonly IFortRepository fortRepository;
     private readonly IWeaponRepository weaponRepository;
+    private readonly IPlayerDetailsService playerDetailsService;
 
-    public BonusService(IFortRepository fortRepository, IWeaponRepository weaponRepository)
+    public BonusService(
+        IFortRepository fortRepository,
+        IWeaponRepository weaponRepository,
+        IPlayerDetailsService playerDetailsService
+    )
     {
         this.fortRepository = fortRepository;
         this.weaponRepository = weaponRepository;
+        this.playerDetailsService = playerDetailsService;
     }
 
-    public async Task<FortBonusList> GetBonusList()
+    public async Task<FortBonusList> GetBonusList() =>
+        await this.GetBonusList(this.playerDetailsService.AccountId);
+
+    public async Task<FortBonusList> GetBonusList(string deviceAccountId)
     {
         IEnumerable<int> buildIds = (
-            await this.fortRepository.Builds.Select(x => new { x.PlantId, x.Level }).ToListAsync()
+            await this.fortRepository
+                .GetBuilds(deviceAccountId)
+                .Select(x => new { x.PlantId, x.Level })
+                .ToListAsync()
         ).Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level));
 
-        IEnumerable<WeaponBodies> weaponIds = await this.weaponRepository.WeaponBodies
+        IEnumerable<WeaponBodies> weaponIds = await this.weaponRepository
+            .GetWeaponBodies(deviceAccountId)
             .Where(x => x.FortPassiveCharaWeaponBuildupCount != 0)
             .Select(x => x.WeaponBodyId)
             .ToListAsync();
@@ -43,8 +59,19 @@ public class BonusService : IBonusService
             chara_bonus_by_album = StubData.MaxAlbumCharaBonus,
             dragon_bonus_by_album = StubData.MaxAlbumDragonBonus,
             // These are all 0 on my endgame save. Unsure of what, if anything, may increase them
-            dragon_time_bonus = new() { dragon_time_bonus = 0 },
-            all_bonus = new() { attack = 0, hp = 0 },
+            dragon_time_bonus = new()
+            {
+#if CHEATING
+                dragon_time_bonus = 20
+#endif
+            },
+            all_bonus = new()
+            {
+#if CHEATING
+                attack = 100,
+                hp = 100
+#endif
+            },
         };
     }
 
@@ -71,11 +98,18 @@ public class BonusService : IBonusService
 
             result[(UnitElement)d.EffType1].hp += d.EffArgs1;
             result[(UnitElement)d.EffType1].attack += d.EffArgs2;
+#if CHEATING
+            result[(UnitElement)d.EffType1].attack += 100;
+#endif
 
             if (d.EffType2 != 0)
             {
                 result[(UnitElement)d.EffType2].hp += d.EffArgs1;
                 result[(UnitElement)d.EffType2].attack += d.EffArgs2;
+
+#if CHEATING
+                result[(UnitElement)d.EffType2].attack += 100;
+#endif
             }
         }
 
@@ -105,11 +139,17 @@ public class BonusService : IBonusService
 
             result[(WeaponTypes)d.EffType1].hp += d.EffArgs1;
             result[(WeaponTypes)d.EffType1].attack += d.EffArgs2;
+#if CHEATING
+            result[(WeaponTypes)d.EffType1].attack += 100;
+#endif
 
             if (d.EffType2 != 0)
             {
                 result[(WeaponTypes)d.EffType2].hp += d.EffArgs1;
                 result[(WeaponTypes)d.EffType2].attack += d.EffArgs2;
+#if CHEATING
+                result[(WeaponTypes)d.EffType2].attack += 100;
+#endif
             }
         }
 
@@ -139,16 +179,25 @@ public class BonusService : IBonusService
             {
                 result[(UnitElement)d.EffType1].hp += d.EffArgs1;
                 result[(UnitElement)d.EffType1].attack += d.EffArgs2;
+#if CHEATING
+                result[(UnitElement)d.EffType1].attack += 100;
+#endif
 
                 if (d.EffType2 != 0)
                 {
                     result[(UnitElement)d.EffType2].hp += d.EffArgs1;
                     result[(UnitElement)d.EffType2].attack += d.EffArgs2;
+#if CHEATING
+                    result[(UnitElement)d.EffType2].attack += 100;
+#endif
                 }
             }
             else if (d.EffectId == FortEffectTypes.DragonDamage)
             {
                 result[(UnitElement)d.EffType1].dragon_bonus += d.EffArgs1;
+#if CHEATING
+                result[(UnitElement)d.EffType1].dragon_bonus += 100;
+#endif
                 // No facility gives dragon bonus to two elemental types
             }
         }
@@ -178,6 +227,9 @@ public class BonusService : IBonusService
 
             result[w.WeaponType].hp += w.WeaponPassiveEffHp;
             result[w.WeaponType].attack += w.WeaponPassiveEffAtk;
+#if CHEATING
+            result[w.WeaponType].attack += 100;
+#endif
         }
 
         return result.Select(x => x.Value);
@@ -193,8 +245,16 @@ public class BonusService : IBonusService
                     new()
                     {
                         elemental_type = UnitElement.Fire,
-                        hp = 14.1f,
+                        hp = 14.1f
+#if CHEATING
+                            * 100
+#endif
+                        ,
                         attack = 14.1f
+#if CHEATING
+                            * 100
+#endif
+                        ,
                     },
                     new()
                     {
@@ -231,8 +291,16 @@ public class BonusService : IBonusService
                     new()
                     {
                         elemental_type = UnitElement.Fire,
-                        hp = 5.8f,
+                        hp = 5.8f
+#if CHEATING
+                            * 100
+#endif
+                        ,
                         attack = 5f
+#if CHEATING
+                            * 100
+#endif
+                        ,
                     },
                     new()
                     {

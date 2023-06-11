@@ -175,6 +175,8 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetBuilding_NotFound_Throws()
     {
+        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("id");
+
         DbFortBuild build =
             new()
             {

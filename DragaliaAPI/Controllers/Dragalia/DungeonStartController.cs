@@ -81,10 +81,17 @@ public class DungeonStartController : DragaliaControllerBase
             stopwatch.ElapsedMilliseconds
         );
 
-        IQueryable<DbPartyUnit> partyQuery = this.partyRepository.GetPartyUnits(
-            this.DeviceAccountId,
-            request.party_no_list
-        );
+        IQueryable<DbPartyUnit> partyQuery = request.party_no_list.Count switch
+        {
+            1 => this.partyRepository.GetPartyUnits(this.DeviceAccountId, request.party_no_list[0]),
+            2
+                => this.partyRepository.GetPartyUnits(
+                    this.DeviceAccountId,
+                    request.party_no_list[0],
+                    request.party_no_list[1]
+                ),
+            _ => throw new InvalidOperationException("Unsupported party list count")
+        };
 
         List<DbPartyUnit> party = await partyQuery.ToListAsync();
 
@@ -256,12 +263,5 @@ public class DungeonStartController : DragaliaControllerBase
         }
 
         return this.Ok(response);
-    }
-
-    private static DbPartyUnit FixUnitNo(DbPartyUnit unit, IEnumerable<int> partyList)
-    {
-        int offset = unit.PartyNo == partyList.First() ? 0 : 4;
-        unit.UnitNo += offset;
-        return unit;
     }
 }

@@ -50,7 +50,7 @@ public class HelperService : IHelperService
         };
     }
 
-    private static class StubData
+    internal static class StubData
     {
         public static readonly QuestGetSupportUserListData SupportListData =
             new()

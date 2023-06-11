@@ -87,9 +87,7 @@ public class FriendControllerTest
 
         data!.support_user_data_detail.user_support_data
             .Should()
-            .BeEquivalentTo(
-                new UserSupportList() { support_chara = new() { chara_id = Charas.ThePrince } }
-            );
+            .BeEquivalentTo(HelperService.StubData.SupportListData.support_user_list.First());
 
         data!.support_user_data_detail.is_friend.Should().Be(false);
 
