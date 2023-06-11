@@ -59,18 +59,22 @@ builder.Services.AddSwaggerGen(config =>
         includeControllerXmlComments: true
     );
 
-    config.IncludeXmlComments(Path.Join(AppContext.BaseDirectory, "DragaliaAPI.Photon.Dto.xml"));
+    config.IncludeXmlComments(Path.Join(AppContext.BaseDirectory, "DragaliaAPI.Photon.Shared.xml"));
 });
 
-IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
-    builder.Configuration.GetConnectionString("Redis")
-        ?? throw new InvalidOperationException("Missing required Redis connection string!")
-);
-IRedisConnectionProvider provider = new RedisConnectionProvider(multiplexer);
+// Don't attempt to connect to Redis when running tests
+if (builder.Environment.EnvironmentName != "Testing")
+{
+    IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(
+        builder.Configuration.GetConnectionString("Redis")
+            ?? throw new InvalidOperationException("Missing required Redis connection string!")
+    );
 
-await provider.Connection.CreateIndexAsync(typeof(RedisGame));
+    IRedisConnectionProvider provider = new RedisConnectionProvider(multiplexer);
+    builder.Services.AddSingleton(provider);
 
-builder.Services.AddSingleton(provider);
+    await provider.Connection.CreateIndexAsync(typeof(RedisGame));
+}
 
 WebApplication app = builder.Build();
 
@@ -88,3 +92,9 @@ app.UseAuthentication();
 app.MapControllers();
 
 app.Run();
+
+namespace DragaliaAPI
+{
+    // Needed for creating test fixture
+    public partial class Program { }
+}

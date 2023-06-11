@@ -55,6 +55,8 @@ public class EventController : ControllerBase
         newGame.Players.Add(request.Player);
 
         await this.Games.InsertAsync(newGame, this.KeyExpiry);
+        await this.Games.SaveAsync();
+
         this.logger.LogInformation("Created new game: {@game}", newGame);
 
         return this.Ok();
@@ -164,6 +166,11 @@ public class EventController : ControllerBase
         return this.Ok();
     }
 
+    /// <summary>
+    /// Register a game's entry conditions being changed.
+    /// </summary>
+    /// <param name="request">The webhook data.</param>
+    /// <returns>A HTTP response.</returns>
     [HttpPost("[action]")]
     public async Task<IActionResult> EntryConditions(GameModifyConditionsRequest request)
     {
@@ -187,6 +194,11 @@ public class EventController : ControllerBase
         return this.Ok();
     }
 
+    /// <summary>
+    /// Register a game's matching type (i.e. accessibility) being changed.
+    /// </summary>
+    /// <param name="request">The webhook data.</param>
+    /// <returns>A HTTP response.</returns>
     [HttpPost("[action]")]
     public async Task<IActionResult> MatchingType(GameModifyMatchingTypeRequest request)
     {
