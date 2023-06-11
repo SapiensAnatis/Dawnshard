@@ -56,6 +56,6 @@ public class MatchingController : DragaliaControllerBase
     [HttpPost("check_penalty_user")]
     public async Task<DragaliaResult> CheckPenaltyUser(MatchingCheckPenaltyUserRequest request)
     {
-        return this.Ok(new MatchingCheckPenaltyUserData() { result = 0 });
+        return this.Ok(new MatchingCheckPenaltyUserData() { result = 1 });
     }
 }

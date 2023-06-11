@@ -34,8 +34,8 @@ jobs:
         args:
           [
             {
-              deployment: "dragalia-api-statemanager",
-              namespace: "statemanager",
+              deployment: "photonstatemanager",
+              namespace: "photonstatemanager",
             },
             { deployment: "dragalia-api-dawnshard", namespace: "dragalia-api" },
           ]
