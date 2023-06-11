@@ -13,9 +13,8 @@ env:
 
 jobs:
   publish:
-    uses: ./.github/workflows/publish-base.yaml
+    uses: ./.github/workflows/publish.yaml
     with:
       ref: ${{ inputs.tag }}
       image-tag: ${{ inputs.tag }}
     secrets: inherit
-    
