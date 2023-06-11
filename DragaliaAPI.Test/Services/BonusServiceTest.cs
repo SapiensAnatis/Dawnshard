@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.PlayerDetails;
 using MockQueryable.Moq;
 using static DragaliaAPI.Test.Utils.IdentityTestUtils;
 
@@ -13,16 +14,19 @@ public class BonusServiceTest
 {
     private readonly Mock<IFortRepository> mockFortRepository;
     private readonly Mock<IWeaponRepository> mockWeaponBodyRepository;
+    private readonly Mock<IPlayerDetailsService> mockPlayerDetailsService;
     private readonly IBonusService bonusService;
 
     public BonusServiceTest()
     {
         this.mockFortRepository = new(MockBehavior.Strict);
+        this.mockPlayerDetailsService = new(MockBehavior.Strict);
         this.mockWeaponBodyRepository = new(MockBehavior.Strict);
 
         this.bonusService = new BonusService(
             this.mockFortRepository.Object,
-            this.mockWeaponBodyRepository.Object
+            this.mockWeaponBodyRepository.Object,
+            this.mockPlayerDetailsService.Object
         );
     }
 

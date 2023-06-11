@@ -4,7 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Services.Helpers;
+using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 using Microsoft.AspNetCore.Hosting;
@@ -41,10 +41,10 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
         this.Services = factory.Services.CreateScope().ServiceProvider;
         this.Mapper = factory.Services.GetRequiredService<IMapper>();
         this.ApiContext = factory.Services.GetRequiredService<ApiContext>();
-        this.MockBaasRequestHelper = factory.MockBaasRequestHelper;
+        this.MockBaasApi = factory.MockBaasApi;
     }
 
-    protected Mock<IBaasRequestHelper> MockBaasRequestHelper { get; }
+    protected Mock<IBaasApi> MockBaasApi { get; }
 
     protected IServiceProvider Services { get; }
 
@@ -96,7 +96,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
 
     protected void SetupSaveImport()
     {
-        this.MockBaasRequestHelper
+        this.MockBaasApi
             .Setup(x => x.GetSavefile(It.IsAny<string>()))
             .ReturnsAsync(
                 JsonSerializer

@@ -50,6 +50,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Integration.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Shared", "DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj", "{7394DCE5-7E1B-44C7-B3CA-735885D97695}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragaliaAPI.Photon.StateManager.Test", "DragaliaAPI.Photon.StateManager.Test\DragaliaAPI.Photon.StateManager.Test.csproj", "{D940A00F-39CC-48C5-996E-DF0EC55FD140}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +106,10 @@ Global
 		{7394DCE5-7E1B-44C7-B3CA-735885D97695}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7394DCE5-7E1B-44C7-B3CA-735885D97695}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7394DCE5-7E1B-44C7-B3CA-735885D97695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D940A00F-39CC-48C5-996E-DF0EC55FD140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D940A00F-39CC-48C5-996E-DF0EC55FD140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D940A00F-39CC-48C5-996E-DF0EC55FD140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D940A00F-39CC-48C5-996E-DF0EC55FD140}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +119,7 @@ Global
 		{8E4D9C20-3914-4A8A-ACC0-22997F2947AB} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
 		{D9AC51A5-38F6-4DD1-8839-9FE881396A6B} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
 		{7394DCE5-7E1B-44C7-B3CA-735885D97695} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
+		{D940A00F-39CC-48C5-996E-DF0EC55FD140} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D86831A9-C572-4B8D-BD12-EF0768BC9E4F}

@@ -537,7 +537,7 @@ namespace DragaliaAPI.Photon.Plugin
                 Callback = callback,
                 CustomHeaders = new Dictionary<string, string>()
                 {
-                    { "Authorization", $"Basic {this.config.BasicAuthCredentials}" }
+                    { "Authorization", $"Bearer {this.config.BearerToken}" }
                 },
                 DataStream = stream,
                 Async = callAsync

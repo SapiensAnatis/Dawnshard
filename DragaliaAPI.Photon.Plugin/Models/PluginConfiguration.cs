@@ -21,11 +21,7 @@ namespace DragaliaAPI.Photon.Plugin.Models
 
         public Uri MatchingTypeEndpoint { get; set; }
 
-        public string BasicAuthUsername { get; set; }
-
-        public string BasicAuthPassword { get; set; }
-
-        public string BasicAuthCredentials { get; set; }
+        public string BearerToken { get; set; }
 
         public PluginConfiguration(IDictionary<string, string> config)
         {
@@ -52,11 +48,7 @@ namespace DragaliaAPI.Photon.Plugin.Models
                 UriKind.Relative
             );
 
-            this.BasicAuthUsername = config[nameof(this.BasicAuthUsername)];
-            this.BasicAuthPassword = config[nameof(this.BasicAuthPassword)];
-            this.BasicAuthCredentials = Convert.ToBase64String(
-                Encoding.UTF8.GetBytes($"{this.BasicAuthUsername}:{this.BasicAuthPassword}")
-            );
+            this.BearerToken = config[nameof(BearerToken)];
         }
     }
 }
