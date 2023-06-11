@@ -40,7 +40,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       redis:
-        image: redis
+        image: redis/redis-stack
         ports:
           - "6379:6379"
         options: >-
