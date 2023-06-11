@@ -1,0 +1,32 @@
+name: test-photon
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - develop
+    paths:
+      - "DragaliaAPI.Photon.Shared/**/*"
+      - "DragaliaAPI.Photon.StateManager/**/*"
+      - "DragaliaAPI.Photon.StateManager.Test/**/*"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis/redis-stack
+        ports:
+          - "6379:6379"
+        options: >-
+          --health-cmd redis-cli PING
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: ./.github/workflows/templates/test.yaml
+        with:
+          project: "DragaliaAPI.Photon.StateManager.Test"
