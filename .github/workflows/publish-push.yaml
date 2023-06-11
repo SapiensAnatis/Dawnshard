@@ -14,7 +14,7 @@ env:
 
 jobs:
   publish:
-    uses: ./.github/workflows/publish-base.yaml
+    uses: ./.github/workflows/templates/publish.yaml
     with:
       ref: develop
       image-tag: latest

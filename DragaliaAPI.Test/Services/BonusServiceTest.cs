@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.PlayerDetails;
 using MockQueryable.Moq;
 using static DragaliaAPI.Test.Utils.IdentityTestUtils;
 
@@ -13,22 +14,27 @@ public class BonusServiceTest
 {
     private readonly Mock<IFortRepository> mockFortRepository;
     private readonly Mock<IWeaponRepository> mockWeaponBodyRepository;
+    private readonly Mock<IPlayerDetailsService> mockPlayerDetailsService;
     private readonly IBonusService bonusService;
 
     public BonusServiceTest()
     {
         this.mockFortRepository = new(MockBehavior.Strict);
+        this.mockPlayerDetailsService = new(MockBehavior.Strict);
         this.mockWeaponBodyRepository = new(MockBehavior.Strict);
 
         this.bonusService = new BonusService(
             this.mockFortRepository.Object,
-            this.mockWeaponBodyRepository.Object
+            this.mockWeaponBodyRepository.Object,
+            this.mockPlayerDetailsService.Object
         );
     }
 
     [Fact]
     public async Task GetBonusList_ReturnsCorrectBonuses()
     {
+        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+
         string json = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
         // Not deserializing to LoadIndexData directly as fort_bonus_list is [JsonIgnore]'d
@@ -50,7 +56,7 @@ public class BonusServiceTest
             .Deserialize<FortBonusList>(ApiJsonOptions.Instance)!;
 
         this.mockFortRepository
-            .Setup(x => x.Builds)
+            .Setup(x => x.GetBuilds(DeviceAccountId))
             .Returns(
                 inputBuildList
                     .Select(
@@ -67,7 +73,7 @@ public class BonusServiceTest
             );
 
         this.mockWeaponBodyRepository
-            .SetupGet(x => x.WeaponBodies)
+            .Setup(x => x.GetWeaponBodies(DeviceAccountId))
             .Returns(
                 inputWeaponList
                     .Select(

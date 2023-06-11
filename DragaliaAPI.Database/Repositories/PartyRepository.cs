@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Security.Cryptography;
+using DragaliaAPI.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
@@ -20,19 +21,29 @@ public class PartyRepository : BaseRepository, IPartyRepository
             .Where(x => x.DeviceAccountId == deviceAccountId);
     }
 
-    public IQueryable<DbPartyUnit> GetPartyUnits(string deviceAccountId, IEnumerable<int> partyNos)
+    public IQueryable<DbPartyUnit> GetPartyUnits(
+        string deviceAccountId,
+        IEnumerable<int> partySlots
+    )
     {
         return apiContext.PlayerPartyUnits
-            .Where(
-                x =>
-                    x.DeviceAccountId == deviceAccountId
-                    && (
-                        x.PartyNo == partyNos.ElementAt(0)
-                        || x.PartyNo == partyNos.ElementAtOrDefault(1)
-                    )
-            )
-            .OrderBy(x => x.PartyNo == partyNos.First())
+            .Where(x => x.DeviceAccountId == deviceAccountId && partySlots.Contains(x.PartyNo))
+            .OrderBy(x => x.PartyNo == partySlots.First())
             .ThenBy(x => x.UnitNo);
+    }
+
+    public IQueryable<DbPartyUnit> GetPartyUnits(
+        string deviceAccountId,
+        int firstParty,
+        int secondParty
+    )
+    {
+        return this.GetPartyUnits(deviceAccountId, new[] { firstParty, secondParty });
+    }
+
+    public IQueryable<DbPartyUnit> GetPartyUnits(string deviceAccountId, int party)
+    {
+        return this.GetPartyUnits(deviceAccountId, new[] { party });
     }
 
     public async Task SetParty(string deviceAccountId, DbParty newParty)

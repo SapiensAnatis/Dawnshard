@@ -4,8 +4,8 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Api;
 using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Services.Helpers;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Test.Utils;
 using Microsoft.Extensions.Logging;
@@ -20,7 +20,7 @@ public class AuthServiceTest
 {
     private readonly AuthService authService;
 
-    private readonly Mock<IBaasRequestHelper> mockBaasRequestHelper;
+    private readonly Mock<IBaasApi> mockBaasRequestHelper;
     private readonly Mock<ISessionService> mockSessionService;
     private readonly Mock<ISavefileService> mockSavefileService;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;

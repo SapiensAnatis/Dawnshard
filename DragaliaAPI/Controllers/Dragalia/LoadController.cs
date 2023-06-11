@@ -100,7 +100,46 @@ public class LoadController : DragaliaControllerBase
                 quest_skip_point_system_max = 400,
                 quest_skip_point_use_limit_max = 30,
                 functional_maintenance_list = new List<FunctionalMaintenanceList>(),
-                multi_server = new() { host = "photon.dawnshard.co.uk:5055", app_id = string.Empty }
+                multi_server = new()
+                {
+                    host = "photon.dawnshard.co.uk:5055",
+                    app_id = string.Empty
+                },
+                equip_stamp_list = new List<EquipStampList>
+                {
+                    new() { slot = 1, stamp_id = 12201 },
+                    new() { slot = 2, stamp_id = 10018 },
+                    new() { slot = 3, stamp_id = 12202 },
+                    new() { slot = 4, stamp_id = 11306 },
+                    new() { slot = 5, stamp_id = 13101 },
+                    new() { slot = 6, stamp_id = 10008 },
+                    new() { slot = 7, stamp_id = 13103 },
+                    new() { slot = 8, stamp_id = 10004 },
+                    new() { slot = 9, stamp_id = 10031 },
+                    new() { slot = 10, stamp_id = 10013 },
+                    new() { slot = 11, stamp_id = 10009 },
+                    new() { slot = 12, stamp_id = 10030 },
+                    new() { slot = 13, stamp_id = 10027 },
+                    new() { slot = 14, stamp_id = 12603 },
+                    new() { slot = 15, stamp_id = 12901 },
+                    new() { slot = 16, stamp_id = 10102 },
+                    new() { slot = 17, stamp_id = 11102 },
+                    new() { slot = 18, stamp_id = 11108 },
+                    new() { slot = 19, stamp_id = 11104 },
+                    new() { slot = 20, stamp_id = 11106 },
+                    new() { slot = 21, stamp_id = 10012 },
+                    new() { slot = 22, stamp_id = 10017 },
+                    new() { slot = 23, stamp_id = 10006 },
+                    new() { slot = 24, stamp_id = 11303 },
+                    new() { slot = 25, stamp_id = 10022 },
+                    new() { slot = 26, stamp_id = 10028 },
+                    new() { slot = 27, stamp_id = 10203 },
+                    new() { slot = 28, stamp_id = 12102 },
+                    new() { slot = 29, stamp_id = 10025 },
+                    new() { slot = 30, stamp_id = 10024 },
+                    new() { slot = 31, stamp_id = 10202 },
+                    new() { slot = 32, stamp_id = 10010 }
+                }
             };
 
         this.logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);

@@ -21,4 +21,5 @@ public interface IFortRepository
     );
     void ConsumePaymentCost(DbPlayerUserData userData, PaymentTypes paymentType, int paymentCost);
     Task<int> GetActiveCarpenters();
+    IQueryable<DbFortBuild> GetBuilds(string deviceAccountId);
 }

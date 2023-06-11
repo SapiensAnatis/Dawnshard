@@ -6,10 +6,6 @@ on:
     branches:
       - master
       - develop
-    paths-ignore:
-      - "**/*.yaml"
-      - "**/*.yml"
-      - "**/*.md"
 
 env:
   HUSKY: 0
@@ -21,9 +17,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: [ '7.0.x' ]
-        project: ['DragaliaAPI.Test', 'DragaliaAPI.Integration.Test', 'DragaliaAPI.Database.Test', 'DragaliaAPI.Shared.Test']
-    
+        project:
+          [
+            "DragaliaAPI.Test",
+            "DragaliaAPI.Integration.Test",
+            "DragaliaAPI.Database.Test",
+            "DragaliaAPI.Shared.Test",
+            "DragaliaAPI.Photon.StateManager.Test",
+          ]
+
     services:
       postgres:
         image: postgres
@@ -38,17 +40,21 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       redis:
-        image: redis
+        image: redis/redis-stack
         ports:
           - "6379:6379"
-        
+        options: >-
+          --health-cmd "redis-cli PING"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v3
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+      - name: Setup .NET Core SDK 7
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+          dotnet-version: "7.0.x"
       - name: Install dependencies
         run: dotnet restore ${{ matrix.project }}
       - name: Test
@@ -59,10 +65,9 @@ jobs:
           -p:CollectCoverage=true 
           -p:CoverletOutputFormat="cobertura" 
           -p:CoverletOutput="coverage_report.xml"
-          -p:Exclude=\"[*.Test]*,[DragaliaAPI.Test.Utils]*,[DragaliaAPI.Database]DragaliaAPI.Database.Migrations.*,[DragaliaAPI]DragaliaAPI.Models.Generated.*\"
+          -p:Exclude=\"[*.Test]*,[DragaliaAPI.Test.Utils]*,[DragaliaAPI.Photon.Plugin]*,[DragaliaAPI.Database]DragaliaAPI.Database.Migrations.*,[DragaliaAPI]DragaliaAPI.Models.Generated.*\"
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
           files: ${{matrix.project}}/coverage_report.xml
           name: codecov ${{ matrix.project }}
-          

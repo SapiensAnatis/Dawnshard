@@ -25,10 +25,10 @@ public class FortRepository : IFortRepository
         this.logger = logger;
     }
 
-    public IQueryable<DbFortBuild> Builds =>
-        this.apiContext.PlayerFortBuilds.Where(
-            x => x.DeviceAccountId == this.playerDetailsService.AccountId
-        );
+    public IQueryable<DbFortBuild> Builds => this.GetBuilds(this.playerDetailsService.AccountId);
+
+    public IQueryable<DbFortBuild> GetBuilds(string deviceAccountId) =>
+        this.apiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == deviceAccountId);
 
     public async Task<DbFortDetail> GetFortDetail()
     {

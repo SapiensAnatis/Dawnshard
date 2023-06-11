@@ -4,7 +4,7 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
-using DragaliaAPI.Services.Helpers;
+using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Test.Utils;
@@ -27,13 +27,16 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         this.SeedCache(this.Services);
     }
 
-    public Mock<IBaasRequestHelper> MockBaasRequestHelper { get; } = new();
+    public Mock<IBaasApi> MockBaasApi { get; } = new();
+
+    public Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>
         {
-            services.AddScoped(x => this.MockBaasRequestHelper.Object);
+            services.AddScoped(x => this.MockBaasApi.Object);
+            services.AddScoped(x => this.MockPhotonStateApi.Object);
             services.Configure<LoginOptions>(x => x.UseBaasLogin = true);
 
             NpgsqlConnectionStringBuilder connectionStringBuilder =
@@ -64,7 +67,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
     private void SetupMocks()
     {
-        this.MockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
+        this.MockBaasApi.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
     }
 
     /// <summary>
