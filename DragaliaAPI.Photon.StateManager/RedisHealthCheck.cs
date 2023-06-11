@@ -1,15 +1,17 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Redis.OM;
+using Redis.OM.Contracts;
 
 namespace DragaliaAPI.Services.Health;
 
 public class RedisHealthCheck : IHealthCheck
 {
-    private readonly IDistributedCache cache;
+    private readonly IRedisConnectionProvider connectionprovider;
 
-    public RedisHealthCheck(IDistributedCache cache)
+    public RedisHealthCheck(IRedisConnectionProvider connectionProvider)
     {
-        this.cache = cache;
+        this.connectionprovider = connectionProvider;
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(
@@ -19,8 +21,16 @@ public class RedisHealthCheck : IHealthCheck
     {
         try
         {
-            await this.cache.SetStringAsync("health", "healthy", cancellationToken);
-            await this.cache.RemoveAsync("health", cancellationToken);
+            RedisReply reply = await this.connectionprovider.Connection.ExecuteAsync("PING");
+            if (reply.Error)
+            {
+                return new HealthCheckResult(
+                    status: context.Registration.FailureStatus,
+                    exception: null,
+                    description: "Ping command returned error"
+                );
+            }
+
             return HealthCheckResult.Healthy();
         }
         catch (Exception ex)
