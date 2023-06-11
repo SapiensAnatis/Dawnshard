@@ -26,6 +26,12 @@ builder.Host.UseSerilog(
 
         config.MinimumLevel.Debug();
         config.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning);
+        config.Filter.ByExcluding(
+            "EndsWith(RequestPath, '/health') and Coalesce(StatusCode, 200) = 200"
+        );
+        config.Filter.ByExcluding(
+            "EndsWith(RequestPath, '/ping') and Coalesce(StatusCode, 200) = 200"
+        );
     }
 );
 
