@@ -29,11 +29,14 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
     public Mock<IBaasApi> MockBaasApi { get; } = new();
 
+    public Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>
         {
             services.AddScoped(x => this.MockBaasApi.Object);
+            services.AddScoped(x => this.MockPhotonStateApi.Object);
             services.Configure<LoginOptions>(x => x.UseBaasLogin = true);
 
             NpgsqlConnectionStringBuilder connectionStringBuilder =
