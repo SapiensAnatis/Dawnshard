@@ -178,6 +178,7 @@ public class BonusService : IBonusService
             if (d.EffectId == FortEffectTypes.DragonStats)
             {
                 result[(UnitElement)d.EffType1].hp += d.EffArgs1;
+                result[(UnitElement)d.EffType1].attack += d.EffArgs2;
 #if CHEATING
                 result[(UnitElement)d.EffType1].attack += 100;
 #endif

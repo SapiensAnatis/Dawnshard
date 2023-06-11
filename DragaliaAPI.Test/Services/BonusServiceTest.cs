@@ -33,6 +33,8 @@ public class BonusServiceTest
     [Fact]
     public async Task GetBonusList_ReturnsCorrectBonuses()
     {
+        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+
         string json = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
         // Not deserializing to LoadIndexData directly as fort_bonus_list is [JsonIgnore]'d
@@ -54,7 +56,7 @@ public class BonusServiceTest
             .Deserialize<FortBonusList>(ApiJsonOptions.Instance)!;
 
         this.mockFortRepository
-            .Setup(x => x.Builds)
+            .Setup(x => x.GetBuilds(DeviceAccountId))
             .Returns(
                 inputBuildList
                     .Select(
@@ -71,7 +73,7 @@ public class BonusServiceTest
             );
 
         this.mockWeaponBodyRepository
-            .SetupGet(x => x.WeaponBodies)
+            .Setup(x => x.GetWeaponBodies(DeviceAccountId))
             .Returns(
                 inputWeaponList
                     .Select(

@@ -293,7 +293,7 @@ public class DungeonStartControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         this.mockPartyRepository
-            .Setup(x => x.GetPartyUnits(DeviceAccountId, new List<int>() { 1, 2 }))
+            .Setup(x => x.GetPartyUnits(DeviceAccountId, 1, 2))
             .Returns(
                 new List<DbPartyUnit>()
                 {
