@@ -24,7 +24,7 @@ env:
   HUSKY: 0
 
 jobs:
-  publish-api:
+  publish:
     runs-on: ubuntu-latest
     strategy:
       matrix:

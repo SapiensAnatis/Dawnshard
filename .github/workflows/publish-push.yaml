@@ -22,7 +22,7 @@ jobs:
     with:
       ref: develop
       dockerfile: ${{ matrix.args.dockerfile }}
-      image-name: $${{ matrix.args.image }}
+      image-name: ${{ matrix.args.image }}
       image-tag: latest
     secrets: inherit
 
