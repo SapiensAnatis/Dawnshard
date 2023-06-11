@@ -7,6 +7,14 @@ on:
         required: true
         type: string
         description: ref to checkout
+      dockerfile:
+        required: true
+        type: string
+        description: path to Dockerfile
+      image-name:
+        required: true
+        type: string
+        description: Docker image name
       image-tag:
         required: true
         type: string
@@ -16,7 +24,7 @@ env:
   HUSKY: 0
 
 jobs:
-  publish-api:
+  publish:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -39,33 +47,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: DragaliaAPI/Dockerfile
+          file: ${{ inputs.dockerfile }}
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dragalia-api:${{ inputs.image-tag }}
-
-  publish-statemanager:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dotnet-version: ["7.0.x"]
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ inputs.ref }}
-      - uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: ${{ matrix.dotnet-version }}
-      - uses: docker/setup-buildx-action@v2
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: DragaliaAPI.Photon.StateManager/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dragalia-api-statemanager:${{ inputs.image-tag }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ inputs.image-name }}:${{ inputs.image-tag }}
