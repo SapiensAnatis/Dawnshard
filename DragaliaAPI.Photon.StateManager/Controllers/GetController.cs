@@ -5,6 +5,7 @@ using Redis.OM.Contracts;
 using Redis.OM;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.Shared;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DragaliaAPI.Photon.StateManager.Controllers;
 
@@ -13,6 +14,7 @@ namespace DragaliaAPI.Photon.StateManager.Controllers;
 /// </summary>
 [Route("[controller]")]
 [ApiController]
+[AllowAnonymous]
 public class GetController : ControllerBase
 {
     private readonly IRedisConnectionProvider connectionProvider;

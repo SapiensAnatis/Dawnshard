@@ -349,9 +349,14 @@ namespace DragaliaAPI.Photon.Plugin
 
                 foreach (int slot in partySlots)
                 {
+                    Uri requestUri = new Uri(
+                        this.config.ApiServerUrl,
+                        $"heroparam/{viewerId}/{slot}"
+                    );
+
                     HttpRequest req = new HttpRequest()
                     {
-                        Url = $"http://localhost:5000/heroparam/{viewerId}/{slot}",
+                        Url = requestUri.AbsoluteUri,
                         ContentType = "application/json",
                         Callback = OnHeroParamResponse,
                         Async = true,
@@ -526,7 +531,7 @@ namespace DragaliaAPI.Photon.Plugin
             byte[] data = Encoding.UTF8.GetBytes(json);
             stream.Write(data, 0, data.Length);
 
-            string url = new Uri(this.config.BaseUrl, endpoint).AbsoluteUri;
+            string url = new Uri(this.config.StateManagerUrl, endpoint).AbsoluteUri;
 
             HttpRequest request = new HttpRequest
             {

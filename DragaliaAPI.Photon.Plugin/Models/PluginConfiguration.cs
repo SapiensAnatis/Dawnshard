@@ -7,7 +7,9 @@ namespace DragaliaAPI.Photon.Plugin.Models
 {
     internal class PluginConfiguration
     {
-        public Uri BaseUrl { get; set; }
+        public Uri ApiServerUrl { get; set; }
+
+        public Uri StateManagerUrl { get; set; }
 
         public Uri GameCreateEndpoint { get; set; }
 
@@ -25,7 +27,8 @@ namespace DragaliaAPI.Photon.Plugin.Models
 
         public PluginConfiguration(IDictionary<string, string> config)
         {
-            this.BaseUrl = config.GetUri(nameof(this.BaseUrl), UriKind.Absolute);
+            this.ApiServerUrl = config.GetUri(nameof(this.ApiServerUrl), UriKind.Absolute);
+            this.StateManagerUrl = config.GetUri(nameof(this.StateManagerUrl), UriKind.Absolute);
             this.GameCreateEndpoint = config.GetUri(
                 nameof(this.GameCreateEndpoint),
                 UriKind.Relative
