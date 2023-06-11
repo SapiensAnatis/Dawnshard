@@ -16,12 +16,12 @@ namespace DragaliaAPI.Photon.Shared.Models
         /// <summary>
         /// The viewer ID of the host of this game.
         /// </summary>
-        public long HostViewerId => Players.First().ViewerId;
+        public long HostViewerId => Players.FirstOrDefault()?.ViewerId ?? 0;
 
         /// <summary>
         /// The main party slot of the host of this game.
         /// </summary>
-        public int HostPartyNo => Players.First().PartyNoList.First();
+        public int HostPartyNo => Players.FirstOrDefault()?.PartyNoList.FirstOrDefault() ?? 0;
 
         /// <summary>
         /// The number of players in this game.
