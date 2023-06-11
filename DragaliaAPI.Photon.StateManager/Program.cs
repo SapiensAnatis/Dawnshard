@@ -1,5 +1,6 @@
 using DragaliaAPI.Photon.StateManager.Authentication;
 using DragaliaAPI.Photon.StateManager.Models;
+using DragaliaAPI.Services.Health;
 using Microsoft.AspNetCore.Authentication;
 using Redis.OM;
 using Redis.OM.Contracts;
@@ -40,6 +41,8 @@ builder.Services
         nameof(PhotonAuthenticationHandler),
         null
     );
+
+builder.Services.AddHealthChecks().AddCheck<RedisHealthCheck>("Redis");
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(config =>
@@ -90,6 +93,7 @@ app.UseAuthorization();
 app.UseAuthentication();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();
 

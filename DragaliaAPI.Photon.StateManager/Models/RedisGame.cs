@@ -1,64 +1,63 @@
 ﻿using DragaliaAPI.Photon.Shared;
 using DragaliaAPI.Photon.Shared.Models;
+using DragaliaAPI.Photon.StateManager.Controllers;
 using Newtonsoft.Json;
 using Redis.OM.Modeling;
 
 namespace DragaliaAPI.Photon.StateManager.Models;
 
 /// <summary>
-/// Data transfer object for a game to be sent by Photon and stored in Redis.
+/// Implementation of <see cref="IGame"/> with Redis metadata.
 /// </summary>
 [Document(StorageType = StorageType.Json)]
 public class RedisGame : IGame
 {
-    /// <summary>
-    /// The room id / passcode.
-    /// </summary>
+    /// <inheritdoc/>
     [Indexed]
     public int RoomId { get; set; }
 
-    /// <summary>
-    /// The unique name of the game.
-    /// </summary>
+    /// <inheritdoc/>
+
     [RedisIdField]
     public string Name { get; set; } = string.Empty;
 
-    /// <summary>
-    /// The compatibility ID of this game.
-    /// </summary>
+    /// <inheritdoc/>
+
     [Indexed]
     public int MatchingCompatibleId { get; set; }
+
+    /// <inheritdoc/>
 
     [Indexed(Sortable = true)]
     public MatchingTypes MatchingType { get; set; }
 
-    /// <summary>
-    /// The quest ID for this game.
-    /// </summary>
+    /// <inheritdoc/>
+
     [Indexed]
     public int QuestId { get; set; }
 
-    /// <summary>
-    /// The time the room was opened.
-    /// </summary>
+    /// <inheritdoc/>
+
     public DateTimeOffset StartEntryTime { get; set; } = DateTimeOffset.UtcNow;
 
-    /// <summary>
-    /// The entry conditions attached to this room.
-    /// </summary>
+    /// <inheritdoc/>
+
     public EntryConditions EntryConditions { get; set; } = new EntryConditions();
 
-    /// <summary>
-    /// The list of players in this game.
-    /// </summary>
+    /// <inheritdoc/>
+
     public List<Player> Players { get; set; } = new List<Player>();
 
     /// <summary>
-    /// Whether the room should be shown to players.
+    /// Whether or not to return the game from methods in <see cref="GetController"/>.
     /// </summary>
     [Indexed(Sortable = true)]
     public bool Visible { get; set; } = true;
 
+    /// <summary>
+    /// Create a new instance of the <see cref="RedisGame"/> class.
+    /// </summary>
+    /// <param name="game">Base game, e.g. <see cref="GameBase"/>.</param>
     public RedisGame(IGame game)
     {
         RoomId = game.RoomId;
@@ -71,6 +70,9 @@ public class RedisGame : IGame
         MatchingType = game.MatchingType;
     }
 
+    /// <summary>
+    /// Serialization constructor.
+    /// </summary>
     [JsonConstructor]
     public RedisGame() { }
 }
