@@ -21,7 +21,7 @@ jobs:
         ports:
           - "6379:6379"
         options: >-
-          --health-cmd redis-cli PING
+          --health-cmd "redis-cli PING"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
