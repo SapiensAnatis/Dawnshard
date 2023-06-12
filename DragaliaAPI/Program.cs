@@ -21,11 +21,15 @@ using Serilog.Events;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 ConfigurationManager configuration = builder.Configuration;
+
+configuration.AddJsonFile("itemSummonOdds.json", false, true);
+
 builder.Services
     .Configure<BaasOptions>(configuration.GetRequiredSection("Baas"))
     .Configure<LoginOptions>(configuration.GetRequiredSection("Login"))
     .Configure<DragalipatchOptions>(configuration.GetRequiredSection("Dragalipatch"))
     .Configure<RedisOptions>(configuration.GetRequiredSection("Redis"))
+    .Configure<ItemSummonOdds>(configuration)
     .AddOptions<PhotonOptions>(nameof(PhotonOptions));
 
 builder.Logging.ClearProviders();
@@ -99,6 +103,7 @@ builder.Services
     .AddScoped<IHeroParamService, HeroParamService>()
     .AddScoped<ITutorialService, TutorialService>()
     .AddScoped<ILoadService, LoadService>()
+    .AddScoped<IItemSummonService, ItemSummonService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>();
 
