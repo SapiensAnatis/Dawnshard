@@ -7,7 +7,7 @@ public class ItemSummonOdds
     public List<ItemSummonOddsEntry> Odds { get; set; } = new();
 }
 
-public class ItemSummonOddsEntry 
+public class ItemSummonOddsEntry
 {
     public EntityTypes Type { get; set; }
     public int Id { get; set; }

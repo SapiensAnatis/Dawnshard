@@ -51,8 +51,6 @@ public partial class TutorialController : DragaliaControllerBase
 
         await this.updateDataService.SaveChangesAsync();
 
-        return this.Ok(
-            new TutorialUpdateFlagsData(currentFlags, updateDataList, new())
-        );
+        return this.Ok(new TutorialUpdateFlagsData(currentFlags, updateDataList, new()));
     }
 }

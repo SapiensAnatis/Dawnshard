@@ -17,11 +17,14 @@ public class ItemSummonService : IItemSummonService
 
     public IEnumerable<AtgenItemSummonRateList> GetOdds()
     {
-        return odds.Odds
-            .Select(x => new AtgenItemSummonRateList(x.Type, x.Id, x.Quantity, $"{x.Rate:P}"));
+        return odds.Odds.Select(
+            x => new AtgenItemSummonRateList(x.Type, x.Id, x.Quantity, $"{x.Rate:P}")
+        );
     }
 
-    public async Task<List<AtgenBuildEventRewardEntityList>> DoSummon(ShopItemSummonExecRequest request)
+    public async Task<List<AtgenBuildEventRewardEntityList>> DoSummon(
+        ShopItemSummonExecRequest request
+    )
     {
         logger.LogDebug("Tried to start item summon - this is not yet implemented.");
         throw new NotImplementedException();

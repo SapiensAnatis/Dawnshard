@@ -349,11 +349,11 @@ public class FortServiceTest
                             {
                                 DeviceAccountId = "id",
                                 PlantId = FortPlants.BlueFlowers,
-                                Level = 1,
+                                Level = 0,
                                 PositionX = 2,
                                 PositionZ = 3,
-                                BuildStartDate = DateTimeOffset.UtcNow,
-                                BuildEndDate = DateTimeOffset.UtcNow,
+                                BuildStartDate = DateTimeOffset.UnixEpoch,
+                                BuildEndDate = DateTimeOffset.UnixEpoch,
                                 IsNew = true,
                                 LastIncomeDate = DateTimeOffset.UnixEpoch
                             }

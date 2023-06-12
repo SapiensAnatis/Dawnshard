@@ -469,7 +469,12 @@ public class CharaController : DragaliaControllerBase
             CharaUpgradeMaterialTypes.Omnicite
         );
 
-        if (MasterAsset.CharaStories.TryGetValue((int)playerCharaData.CharaId, out StoryData? stories))
+        if (
+            MasterAsset.CharaStories.TryGetValue(
+                (int)playerCharaData.CharaId,
+                out StoryData? stories
+            )
+        )
         {
             int[] charaStories = stories.storyIds;
 

@@ -176,11 +176,7 @@ public class FortService : IFortService
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
     }
 
-    public async Task<DbFortBuild> BuildStart(
-        FortPlants fortPlantId,
-        int positionX,
-        int positionZ
-    )
+    public async Task<DbFortBuild> BuildStart(FortPlants fortPlantId, int positionX, int positionZ)
     {
         // Get build plans
         FortPlantDetail plantDetail = MasterAsset.FortPlant.Enumerable
@@ -188,7 +184,8 @@ public class FortService : IFortService
             .OrderBy(x => x.Level)
             .First();
 
-        DateTimeOffset startDate, endDate;
+        DateTimeOffset startDate,
+            endDate;
 
         if (plantDetail.Time == 0)
         {
@@ -231,8 +228,14 @@ public class FortService : IFortService
         FortPlantDetail currentBuilding = MasterAsset.FortPlant[build.FortPlantDetailId];
         if (currentBuilding.NextAssetGroup == 0)
         {
-            this.logger.LogError("Tried to level up build {@build} but it has no next level", build);
-            throw new DragaliaException(ResultCode.FortPlantDetailNotFound, "No next level available for building");
+            this.logger.LogError(
+                "Tried to level up build {@build} but it has no next level",
+                build
+            );
+            throw new DragaliaException(
+                ResultCode.FortPlantDetailNotFound,
+                "No next level available for building"
+            );
         }
 
         // Get level up plans (current level+1 to get plans of the next level)
@@ -269,7 +272,12 @@ public class FortService : IFortService
 
     public async Task<DbFortBuild> Move(long buildId, int afterPositionX, int afterPositionZ)
     {
-        this.logger.LogDebug("Move performed for build {buildId} - New Position {x}/{z}", buildId, afterPositionX, afterPositionZ);
+        this.logger.LogDebug(
+            "Move performed for build {buildId} - New Position {x}/{z}",
+            buildId,
+            afterPositionX,
+            afterPositionZ
+        );
 
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(buildId);

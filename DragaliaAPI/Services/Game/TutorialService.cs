@@ -13,11 +13,13 @@ public class TutorialService : ITutorialService
     private readonly IUserDataRepository userDataRepository;
     private readonly IFortRepository fortRepository;
 
-    public TutorialService(ILogger<TutorialService> logger,
+    public TutorialService(
+        ILogger<TutorialService> logger,
         IInventoryRepository inventoryRepository,
         IAbilityCrestRepository abilityCrestRepository,
         IUserDataRepository userDataRepository,
-        IFortRepository fortRepository)
+        IFortRepository fortRepository
+    )
     {
         this.logger = logger;
         this.inventoryRepository = inventoryRepository;

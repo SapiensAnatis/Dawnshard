@@ -64,7 +64,7 @@ public class DungeonRecordControllerTest
 
         this.mockTutorialService
             .Setup(x => x.AddTutorialFlag(1022))
-            .ReturnsAsync(new List<int> {1022});
+            .ReturnsAsync(new List<int> { 1022 });
 
         this.mockUserDataRepository
             .Setup(x => x.GetUserData(DeviceAccountId))

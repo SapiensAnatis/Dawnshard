@@ -18,7 +18,12 @@ public class UpdateController : DragaliaControllerBase
     private readonly IUpdateDataService updateDataService;
     private readonly IFortService fortService;
 
-    public UpdateController(ILogger<UpdateController> logger, IUserDataRepository userDataRepository, IUpdateDataService updateDataService, IFortService fortService)
+    public UpdateController(
+        ILogger<UpdateController> logger,
+        IUserDataRepository userDataRepository,
+        IUpdateDataService updateDataService,
+        IFortService fortService
+    )
     {
         this.logger = logger;
         this.userDataRepository = userDataRepository;
@@ -50,10 +55,16 @@ public class UpdateController : DragaliaControllerBase
                 case "emblem":
                 case "fort":
                     // TODO
-                    logger.LogInformation("Unhandled type {resetType} in update/reset_new", target.target_name);
+                    logger.LogInformation(
+                        "Unhandled type {resetType} in update/reset_new",
+                        target.target_name
+                    );
                     break;
                 default:
-                    throw new DragaliaException(ResultCode.ModelUpdateTargetNotFound, "Invalid target_name");
+                    throw new DragaliaException(
+                        ResultCode.ModelUpdateTargetNotFound,
+                        "Invalid target_name"
+                    );
                 //case "fort" :
                 //    fortService.RemoveNew(target.target_id_list);
                 //    break;
