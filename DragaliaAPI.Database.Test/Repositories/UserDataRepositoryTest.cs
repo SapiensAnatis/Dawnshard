@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Services;
 using DragaliaAPI.Test.Utils;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
     private readonly IUserDataRepository userDataRepository;
+    private readonly ITutorialService tutorialService;
 
     public UserDataRepositoryTest(DbTestFixture fixture)
     {
@@ -41,7 +43,7 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task UpdateTutorialStatus_UpdatesTutorialStatus()
     {
-        await this.userDataRepository.UpdateTutorialStatus("id", 80000);
+        await this.tutorialService.UpdateTutorialStatus(80000);
         await this.userDataRepository.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerUserData
@@ -57,7 +59,7 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
             .Single(x => x.DeviceAccountId == "id")
             .TutorialStatus;
 
-        await this.userDataRepository.UpdateTutorialStatus("id", 0);
+        await this.tutorialService.UpdateTutorialStatus(0);
         await this.userDataRepository.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerUserData

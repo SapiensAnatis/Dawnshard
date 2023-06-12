@@ -363,7 +363,7 @@ public class FortServiceTest
             .Setup(x => x.UpdateQuantity(new Dictionary<Materials, int>()))
             .Returns(Task.CompletedTask);
 
-        await this.fortService.BuildStart(FortPlants.BlueFlowers, 0, 2, 3);
+        await this.fortService.BuildStart(FortPlants.BlueFlowers, 2, 3);
 
         this.mockFortRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
@@ -382,7 +382,7 @@ public class FortServiceTest
         this.mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
 
         await this.fortService
-            .Invoking(x => x.BuildStart(FortPlants.BlueFlowers, 0, 2, 3))
+            .Invoking(x => x.BuildStart(FortPlants.BlueFlowers, 2, 3))
             .Should()
             .ThrowAsync<DragaliaException>()
             .Where(e => e.Code == ResultCode.FortBuildCarpenterBusy);

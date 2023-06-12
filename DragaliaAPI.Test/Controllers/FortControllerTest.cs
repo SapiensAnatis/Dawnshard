@@ -190,7 +190,7 @@ public class FortControllerTest
 
         this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         this.mockFortService
-            .Setup(x => x.BuildStart(FortPlants.BroadleafTree, 1, 2, 3))
+            .Setup(x => x.BuildStart(FortPlants.BroadleafTree, 2, 3))
             .ReturnsAsync(build);
 
         this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
