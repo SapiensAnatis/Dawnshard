@@ -2,8 +2,10 @@
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Services.Game;
 
@@ -13,18 +15,21 @@ public class LoadService : ILoadService
     private readonly IBonusService bonusService;
     private readonly IMapper mapper;
     private readonly ILogger<LoadService> logger;
+    private readonly IOptionsMonitor<PhotonOptions> photonOptions;
 
     public LoadService(
         ISavefileService savefileService,
         IBonusService bonusService,
         IMapper mapper,
-        ILogger<LoadService> logger
+        ILogger<LoadService> logger,
+        IOptionsMonitor<PhotonOptions> photonOptions
     )
     {
         this.savefileService = savefileService;
         this.bonusService = bonusService;
         this.mapper = mapper;
         this.logger = logger;
+        this.photonOptions = photonOptions;
     }
 
     public async Task<LoadIndexData> BuildIndexData(string deviceAccountId)
@@ -89,7 +94,7 @@ public class LoadService : ILoadService
                 functional_maintenance_list = new List<FunctionalMaintenanceList>(),
                 multi_server = new()
                 {
-                    host = "photon.dawnshard.co.uk:5055",
+                    host = photonOptions.CurrentValue.ServerUrl,
                     app_id = string.Empty
                 },
                 equip_stamp_list = new List<EquipStampList>
