@@ -121,11 +121,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
         // TODO: When everything uses IPlayerDetailsService refactor this to use InitializeFort()
         apiContext.PlayerFortDetails.Add(
-            new DbFortDetail()
-            {
-                DeviceAccountId = TestFixture.DeviceAccountId,
-                CarpenterNum = 2
-            }
+            new DbFortDetail() { DeviceAccountId = TestFixture.DeviceAccountId, CarpenterNum = 2 }
         );
 
         apiContext.PlayerFortBuilds.Add(
