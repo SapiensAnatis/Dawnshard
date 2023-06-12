@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
@@ -117,6 +118,27 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                         }
                 )
         );
+
+        // TODO: When everything uses IPlayerDetailsService refactor this to use InitializeFort()
+        apiContext.PlayerFortDetails.Add(
+            new DbFortDetail()
+            {
+                DeviceAccountId = TestFixture.DeviceAccountId,
+                CarpenterNum = 2
+            }
+        );
+
+        apiContext.PlayerFortBuilds.Add(
+            new DbFortBuild()
+            {
+                DeviceAccountId = TestFixture.DeviceAccountId,
+                PlantId = FortPlants.TheHalidom,
+                PositionX = 16, // Default Halidom position
+                PositionZ = 17,
+                LastIncomeDate = DateTimeOffset.UtcNow
+            }
+        );
+
         apiContext.PlayerFortBuilds.Add(
             new DbFortBuild()
             {
