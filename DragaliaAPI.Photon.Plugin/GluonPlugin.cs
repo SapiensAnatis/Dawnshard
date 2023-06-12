@@ -303,7 +303,7 @@ namespace DragaliaAPI.Photon.Plugin
                     break;
                 case 3:
                     this.RaisePartyEvent(info);
-                    this.CloseGameAfterStart(info);
+                    this.HideGameAfterStart(info);
                     break;
                 default:
                     break;
@@ -425,14 +425,19 @@ namespace DragaliaAPI.Photon.Plugin
         }
 
         /// <summary>
-        /// Send a request to the Redis API to close a game as it is now started.
+        /// Send a request to the Redis API to hide a game as it is now started.
         /// </summary>
         /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
-        private void CloseGameAfterStart(ISetPropertiesCallInfo info)
+        private void HideGameAfterStart(ISetPropertiesCallInfo info)
         {
             this.PostJsonRequest(
-                this.config.GameCloseEndpoint,
-                new GameModifyRequest { GameName = this.PluginHost.GameId, Player = null },
+                this.config.MatchingTypeEndpoint,
+                new GameModifyMatchingTypeRequest
+                {
+                    NewMatchingType = MatchingTypes.NoDisplay,
+                    GameName = this.PluginHost.GameId,
+                    Player = null
+                },
                 info,
                 true
             );

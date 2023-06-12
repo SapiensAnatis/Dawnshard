@@ -49,12 +49,6 @@ public class RedisGame : IGame
     public List<Player> Players { get; set; } = new List<Player>();
 
     /// <summary>
-    /// Whether or not to return the game from methods in <see cref="GetController"/>.
-    /// </summary>
-    [Indexed(Sortable = true)]
-    public bool Visible { get; set; } = true;
-
-    /// <summary>
     /// Create a new instance of the <see cref="RedisGame"/> class.
     /// </summary>
     /// <param name="game">Base game, e.g. <see cref="GameBase"/>.</param>
