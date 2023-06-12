@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Test.Utils;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,6 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
     private readonly IUserDataRepository userDataRepository;
-    private readonly ITutorialService tutorialService;
 
     public UserDataRepositoryTest(DbTestFixture fixture)
     {
@@ -38,34 +38,6 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     public async Task GetPlayerInfo_InvalidId_ReturnsEmptyQueryable()
     {
         (await this.userDataRepository.GetUserData("wrong id").ToListAsync()).Should().BeEmpty();
-    }
-
-    [Fact]
-    public async Task UpdateTutorialStatus_UpdatesTutorialStatus()
-    {
-        await this.tutorialService.UpdateTutorialStatus(80000);
-        await this.userDataRepository.SaveChangesAsync();
-
-        this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == "id")
-            .TutorialStatus.Should()
-            .Be(80000);
-    }
-
-    [Fact]
-    public async Task UpdateTutorialStatus_LowerStatus_DoesNotUpdateTutorialStatus()
-    {
-        int existingStatus = this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == "id")
-            .TutorialStatus;
-
-        await this.tutorialService.UpdateTutorialStatus(0);
-        await this.userDataRepository.SaveChangesAsync();
-
-        this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == "id")
-            .TutorialStatus.Should()
-            .Be(existingStatus);
     }
 
     [Fact]
