@@ -2,6 +2,7 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 

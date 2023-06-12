@@ -2,6 +2,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Logging;
 using MockQueryable.Moq;

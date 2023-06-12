@@ -6,6 +6,7 @@ using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared;
@@ -96,6 +97,8 @@ builder.Services
     .AddScoped<IMatchingService, MatchingService>()
     .AddScoped<IAbilityCrestService, AbilityCrestService>()
     .AddScoped<IHeroParamService, HeroParamService>()
+    .AddScoped<ITutorialService, TutorialService>()
+    .AddScoped<ILoadService, LoadService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>();
 

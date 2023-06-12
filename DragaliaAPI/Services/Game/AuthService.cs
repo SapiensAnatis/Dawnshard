@@ -1,24 +1,19 @@
-﻿using AutoMapper;
+﻿using System.IdentityModel.Tokens.Jwt;
+using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Middleware;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
+using DragaliaAPI.Services.Api;
 using DragaliaAPI.Services.Exceptions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.IdentityModel.Tokens;
-using Serilog;
-using Serilog.Context;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text.Json;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.PlayerDetails;
-using DragaliaAPI.Services.Api;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Serilog.Context;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Services.Game;
 
 public class AuthService : IAuthService
 {
