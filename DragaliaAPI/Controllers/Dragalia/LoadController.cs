@@ -53,6 +53,11 @@ public class LoadController : DragaliaControllerBase
 
         this.logger.LogInformation("{time} ms: Bonus list acquired", stopwatch.ElapsedMilliseconds);
 
+        this.logger.LogDebug(
+            "Using Photon server url: {url}",
+            this.photonOptions.CurrentValue.ServerUrl
+        );
+
         LoadIndexData data =
             new()
             {

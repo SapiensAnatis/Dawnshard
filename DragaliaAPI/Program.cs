@@ -25,7 +25,7 @@ builder.Services
     .Configure<LoginOptions>(configuration.GetRequiredSection("Login"))
     .Configure<DragalipatchOptions>(configuration.GetRequiredSection("Dragalipatch"))
     .Configure<RedisOptions>(configuration.GetRequiredSection("Redis"))
-    .AddOptions<PhotonOptions>(nameof(PhotonOptions));
+    .Configure<PhotonOptions>(configuration.GetRequiredSection(nameof(PhotonOptions)));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
