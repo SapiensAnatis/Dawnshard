@@ -16,18 +16,21 @@ public class MatchingService : IMatchingService
     private readonly IUnitRepository unitRepository;
     private readonly IPartyRepository partyRepository;
     private readonly IUserDataRepository userDataRepository;
+    private readonly ILogger<MatchingService> logger;
 
     public MatchingService(
         IPhotonStateApi photonStateApi,
         IUnitRepository unitRepository,
         IPartyRepository partyRepository,
-        IUserDataRepository userDataRepository
+        IUserDataRepository userDataRepository,
+        ILogger<MatchingService> logger
     )
     {
         this.photonStateApi = photonStateApi;
         this.unitRepository = unitRepository;
         this.partyRepository = partyRepository;
         this.userDataRepository = userDataRepository;
+        this.logger = logger;
     }
 
     public async Task<IEnumerable<RoomList>> GetRoomList()
@@ -39,6 +42,8 @@ public class MatchingService : IMatchingService
         {
             mapped.Add(await MapRoomList(game));
         }
+
+        this.logger.LogDebug("Got room list: {@list}", mapped);
 
         return mapped;
     }
@@ -53,17 +58,26 @@ public class MatchingService : IMatchingService
             mapped.Add(await MapRoomList(game));
         }
 
+        this.logger.LogDebug("Got room list for quest {quest}: {@list}", questId, mapped);
+
         return mapped;
     }
 
     public async Task<MatchingGetRoomNameData?> GetRoomById(int id)
     {
+        this.logger.LogDebug("Getting room for ID {id}", id);
+
         ApiGame? game = await this.photonStateApi.GetGameById(id);
 
         if (game is null)
+        {
+            this.logger.LogDebug("Game was null");
             return null;
+        }
 
         RoomList roomList = await this.MapRoomList(game);
+        this.logger.LogDebug("Got room: {@room}", roomList);
+
         return new()
         {
             room_name = game.Name,
