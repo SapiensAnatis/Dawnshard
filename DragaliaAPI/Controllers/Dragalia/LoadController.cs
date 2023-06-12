@@ -4,15 +4,12 @@ using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models;
-using MessagePack;
-using MessagePack.Resolvers;
 using DragaliaAPI.Shared.Definitions.Enums;
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
-using System;
+using Microsoft.Extensions.Options;
+using DragaliaAPI.Models.Options;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -22,18 +19,21 @@ public class LoadController : DragaliaControllerBase
     private readonly ISavefileService savefileService;
     private readonly IBonusService bonusService;
     private readonly IMapper mapper;
+    private readonly IOptionsMonitor<PhotonOptions> photonOptions;
     private readonly ILogger<LoadController> logger;
 
     public LoadController(
         ISavefileService savefileService,
         IBonusService bonusService,
         IMapper mapper,
+        IOptionsMonitor<PhotonOptions> photonOptions,
         ILogger<LoadController> logger
     )
     {
         this.savefileService = savefileService;
         this.bonusService = bonusService;
         this.mapper = mapper;
+        this.photonOptions = photonOptions;
         this.logger = logger;
     }
 
@@ -102,7 +102,7 @@ public class LoadController : DragaliaControllerBase
                 functional_maintenance_list = new List<FunctionalMaintenanceList>(),
                 multi_server = new()
                 {
-                    host = "photon.dawnshard.co.uk:5055",
+                    host = photonOptions.CurrentValue.ServerUrl,
                     app_id = string.Empty
                 },
                 equip_stamp_list = new List<EquipStampList>
