@@ -18,7 +18,7 @@ public class TutorialServiceTest
 
     public TutorialServiceTest()
     {
-        mockLogger = new(MockBehavior.Strict);
+        mockLogger = new(MockBehavior.Loose);
         mockInventoryRepository = new(MockBehavior.Strict);
         mockAbilityCrestRepository = new(MockBehavior.Strict);
         mockUserDataRepository = new(MockBehavior.Strict);
