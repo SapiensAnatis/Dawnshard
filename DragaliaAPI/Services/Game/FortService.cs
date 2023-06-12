@@ -269,7 +269,7 @@ public class FortService : IFortService
 
     public async Task<DbFortBuild> Move(long buildId, int afterPositionX, int afterPositionZ)
     {
-        this.logger.LogDebug("Move performed for build {buildId}", buildId);
+        this.logger.LogDebug("Move performed for build {buildId} - New Position {x}/{z}", buildId, afterPositionX, afterPositionZ);
 
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(buildId);
