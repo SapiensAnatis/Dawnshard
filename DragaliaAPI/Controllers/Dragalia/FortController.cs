@@ -139,7 +139,6 @@ public class FortController : DragaliaControllerBase
     {
         DbFortBuild build = await this.fortService.BuildStart(
             request.fort_plant_id,
-            1, // Build always starts at 1
             request.position_x,
             request.position_z
         );

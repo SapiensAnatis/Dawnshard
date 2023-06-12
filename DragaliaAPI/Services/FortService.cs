@@ -178,25 +178,35 @@ public class FortService : IFortService
 
     public async Task<DbFortBuild> BuildStart(
         FortPlants fortPlantId,
-        int level,
         int positionX,
         int positionZ
     )
     {
         // Get build plans
-        int buildPlantId = MasterAssetUtils.GetPlantDetailId(fortPlantId, level);
-        FortPlantDetail plantDetail = MasterAsset.FortPlant.Get(buildPlantId);
+        FortPlantDetail plantDetail = MasterAsset.FortPlant.Enumerable
+            .Where(x => x.AssetGroup == fortPlantId)
+            .OrderBy(x => x.Level)
+            .First();
 
-        // Start building
-        DateTime startDate = DateTime.UtcNow;
-        DateTime endDate = startDate.AddSeconds(plantDetail.Time);
+        DateTimeOffset startDate, endDate;
+
+        if (plantDetail.Time == 0)
+        {
+            startDate = DateTimeOffset.UnixEpoch;
+            endDate = DateTimeOffset.UnixEpoch;
+        }
+        else
+        {
+            startDate = DateTimeOffset.UtcNow;
+            endDate = startDate.AddSeconds(plantDetail.Time); // TODO: Add 1/2 time reduction for first 30 days
+        }
 
         DbFortBuild build =
             new()
             {
                 DeviceAccountId = this.playerDetailsService.AccountId,
                 PlantId = fortPlantId,
-                Level = 1,
+                Level = plantDetail.Level,
                 PositionX = positionX,
                 PositionZ = positionZ,
                 BuildStartDate = startDate,
@@ -218,8 +228,15 @@ public class FortService : IFortService
         // Get building
         DbFortBuild build = await this.fortRepository.GetBuilding(buildId);
 
+        FortPlantDetail currentBuilding = MasterAsset.FortPlant[build.FortPlantDetailId];
+        if (currentBuilding.NextAssetGroup == 0)
+        {
+            this.logger.LogError("Tried to level up build {@build} but it has no next level", build);
+            throw new DragaliaException(ResultCode.FortPlantDetailNotFound, "No next level available for building");
+        }
+
         // Get level up plans (current level+1 to get plans of the next level)
-        int buildPlantId = MasterAssetUtils.GetPlantDetailId(build.PlantId, build.Level + 1);
+        int buildPlantId = currentBuilding.NextAssetGroup;
 
         if (!MasterAsset.FortPlant.TryGetValue(buildPlantId, out FortPlantDetail? plantDetail))
         {
@@ -232,8 +249,8 @@ public class FortService : IFortService
             );
 
             throw new DragaliaException(
-                ResultCode.FortLevelupAlreadyWorking,
-                "Illegal level up attempt"
+                ResultCode.FortPlantDetailNotFound,
+                "Could not find next building level in data"
             );
         }
 
