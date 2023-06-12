@@ -61,7 +61,11 @@ public class FortRepository : IFortRepository
             this.playerDetailsService.AccountId
         );
 
-        Debug.Assert(details != null, "details != null");
+        details ??= new DbFortDetail()
+        {
+            DeviceAccountId = this.playerDetailsService.AccountId,
+            CarpenterNum = DefaultCarpenters
+        };
 
         return details;
     }
