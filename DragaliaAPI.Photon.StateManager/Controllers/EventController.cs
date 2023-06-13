@@ -1,3 +1,4 @@
+using DragaliaAPI.Photon.Shared;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.Shared.Requests;
 using DragaliaAPI.Photon.StateManager.Authentication;
@@ -130,7 +131,7 @@ public class EventController : ControllerBase
         {
             // Don't remove it just yet, as Photon will request that shortly
             this.logger.LogDebug("Hiding game {@game}", game);
-            game.Visible = false;
+            game.MatchingType = MatchingTypes.NoDisplay;
         }
 
         await this.Games.UpdateAsync(game);

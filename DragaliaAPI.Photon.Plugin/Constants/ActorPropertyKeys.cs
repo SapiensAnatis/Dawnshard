@@ -17,5 +17,7 @@ namespace DragaliaAPI.Photon.Plugin.Constants
         public const string GoToIngameState = "GoToIngameState";
 
         public const string StartQuest = "StartQuest";
+
+        public const string RemovedFromRedis = "RemovedFromRedis";
     }
 }

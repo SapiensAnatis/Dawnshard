@@ -98,7 +98,7 @@ namespace DragaliaAPI.Photon.Plugin
                 x => x.ActorNr == info.ActorNr
             );
 
-            info.Continue();
+            base.OnLeave(info);
 
             // It is not critical to update the Redis state, so don't crash the room if we can't find
             // the actor or certain properties attached to them.
@@ -119,7 +119,12 @@ namespace DragaliaAPI.Photon.Plugin
                 );
             }
 
-            if (actor.TryGetViewerId(out int viewerId))
+            if (
+                actor.TryGetViewerId(out int viewerId)
+                && !(
+                    actor.Properties.GetProperty(ActorPropertyKeys.RemovedFromRedis)?.Value is true
+                )
+            )
             {
                 this.PostJsonRequest(
                     this.config.GameLeaveEndpoint,
@@ -131,13 +136,10 @@ namespace DragaliaAPI.Photon.Plugin
                     info,
                     true
                 );
-            }
-            else
-            {
-                this.logger.InfoFormat(
-                    "OnLeave: Could not find viewer ID for actor {0} -- GameLeave request aborted",
-                    info.ActorNr
-                );
+
+                // For some strange reason on completing a quest this appears to be raised twice for each actor.
+                // Prevent duplicate requests by setting a flag.
+                actor.Properties.SetProperty(ActorPropertyKeys.RemovedFromRedis, true);
             }
         }
 
@@ -303,7 +305,9 @@ namespace DragaliaAPI.Photon.Plugin
                     break;
                 case 3:
                     this.RaisePartyEvent(info);
-                    this.CloseGameAfterStart(info);
+                    if (info.ActorNr == 1)
+                        this.HideGameAfterStart(info);
+
                     break;
                 default:
                     break;
@@ -425,14 +429,19 @@ namespace DragaliaAPI.Photon.Plugin
         }
 
         /// <summary>
-        /// Send a request to the Redis API to close a game as it is now started.
+        /// Send a request to the Redis API to hide a game as it is now started.
         /// </summary>
         /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
-        private void CloseGameAfterStart(ISetPropertiesCallInfo info)
+        private void HideGameAfterStart(ISetPropertiesCallInfo info)
         {
             this.PostJsonRequest(
-                this.config.GameCloseEndpoint,
-                new GameModifyRequest { GameName = this.PluginHost.GameId, Player = null },
+                this.config.MatchingTypeEndpoint,
+                new GameModifyMatchingTypeRequest
+                {
+                    NewMatchingType = MatchingTypes.NoDisplay,
+                    GameName = this.PluginHost.GameId,
+                    Player = null
+                },
                 info,
                 true
             );

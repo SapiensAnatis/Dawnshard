@@ -44,8 +44,7 @@ public class ByIdTest : TestFixture
                         ViewerId = 2,
                         PartyNoList = new List<int>() { 40 }
                     }
-                },
-                Visible = true
+                }
             };
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);

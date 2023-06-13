@@ -47,34 +47,7 @@ public class GameListTest : TestFixture
                             ViewerId = 2,
                             PartyNoList = new List<int>() { 40 }
                         }
-                    },
-                    Visible = true
-                },
-                // Visible = false
-                new()
-                {
-                    RoomId = 12345,
-                    Name = "d492fde0-2110-44b9-8b35-03dd0b193e5f",
-                    MatchingCompatibleId = 36,
-                    MatchingType = Shared.MatchingTypes.Anyone,
-                    QuestId = 301010103,
-                    StartEntryTime = DateTimeOffset.UtcNow,
-                    EntryConditions = new()
-                    {
-                        UnacceptedElementTypeList = new List<int>() { 2, 3, 4, 5 },
-                        UnacceptedWeaponTypeList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 },
-                        RequiredPartyPower = 11700,
-                        ObjectiveTextId = 1,
-                    },
-                    Players = new List<Player>()
-                    {
-                        new()
-                        {
-                            ViewerId = 3,
-                            PartyNoList = new List<int>() { 40 }
-                        }
-                    },
-                    Visible = false
+                    }
                 },
                 // Non-public matching
                 new()
@@ -99,8 +72,7 @@ public class GameListTest : TestFixture
                             ViewerId = 3,
                             PartyNoList = new List<int>() { 40 }
                         }
-                    },
-                    Visible = false
+                    }
                 },
             };
 
@@ -143,8 +115,7 @@ public class GameListTest : TestFixture
                             ViewerId = 2,
                             PartyNoList = new List<int>() { 40 }
                         }
-                    },
-                    Visible = true
+                    }
                 },
                 new()
                 {
@@ -168,8 +139,7 @@ public class GameListTest : TestFixture
                             ViewerId = 3,
                             PartyNoList = new List<int>() { 40 }
                         }
-                    },
-                    Visible = true
+                    }
                 },
             };
 
