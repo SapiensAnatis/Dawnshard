@@ -84,7 +84,7 @@ public class GameLeaveTest : TestFixture
                     }
                 }
             );
-        storedGame!.Visible.Should().BeTrue();
+        storedGame!.MatchingType.Should().Be(Shared.MatchingTypes.Anyone);
     }
 
     [Fact]
@@ -130,6 +130,6 @@ public class GameLeaveTest : TestFixture
         RedisGame? storedGame = await this.RedisConnectionProvider.GetGame(game.Name);
         storedGame.Should().NotBeNull();
         storedGame!.Players.Should().BeEmpty();
-        storedGame!.Visible.Should().BeFalse();
+        storedGame!.MatchingType.Should().Be(Shared.MatchingTypes.NoDisplay);
     }
 }

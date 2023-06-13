@@ -34,7 +34,6 @@ public class GetController : ControllerBase
     {
         IRedisCollection<RedisGame> query = this.connectionProvider
             .RedisCollection<RedisGame>()
-            .Where(x => x.Visible == true)
             .Where(x => x.MatchingType == MatchingTypes.Anyone);
 
         if (questId is not null)
@@ -48,9 +47,10 @@ public class GetController : ControllerBase
     [HttpGet("[action]/{roomId}")]
     public async Task<ActionResult<ApiGame>> ById(int roomId)
     {
+        // Maybe this should filter by MatchingType.ById. Probably no harm letting it join any room for now though.
         IRedisCollection<RedisGame> query = this.connectionProvider
             .RedisCollection<RedisGame>()
-            .Where(x => x.Visible == true && x.RoomId == roomId);
+            .Where(x => x.RoomId == roomId);
 
         RedisGame? game = await query.FirstOrDefaultAsync();
         if (game is null)
