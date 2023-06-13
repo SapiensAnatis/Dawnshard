@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DragaliaAPI.Photon.Shared.Enums;
 
 namespace DragaliaAPI.Photon.Shared.Models
 {

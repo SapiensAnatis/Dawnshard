@@ -10,6 +10,7 @@ using Xunit.Abstractions;
 using DragaliaAPI.Photon.StateManager.Models;
 using DragaliaAPI.Photon.Shared.Requests;
 using DragaliaAPI.Photon.StateManager.Test.Helpers;
+using DragaliaAPI.Photon.Shared.Enums;
 
 namespace DragaliaAPI.Photon.StateManager.Test.Event;
 
@@ -42,7 +43,7 @@ public class EntryConditionsTest : TestFixture
                 RoomId = 12345,
                 Name = "f162d896-f59e-416c-8df2-46a7649e1074",
                 MatchingCompatibleId = 36,
-                MatchingType = Shared.MatchingTypes.Anyone,
+                MatchingType = MatchingTypes.Anyone,
                 QuestId = 301010103,
                 StartEntryTime = DateTimeOffset.UtcNow,
                 EntryConditions = new()

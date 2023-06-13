@@ -8,7 +8,7 @@ using DragaliaAPI.Photon.Plugin.Constants;
 using DragaliaAPI.Photon.Plugin.Helpers;
 using DragaliaAPI.Photon.Plugin.Models;
 using DragaliaAPI.Photon.Plugin.Models.Events;
-using DragaliaAPI.Photon.Shared;
+using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.Shared.Requests;
 using MessagePack;
@@ -49,6 +49,13 @@ namespace DragaliaAPI.Photon.Plugin
 
             Random rng = new Random();
             info.Request.GameProperties.Add(GamePropertyKeys.RoomId, rng.Next(100_0000, 999_9999));
+
+#if DEBUG
+            this.logger.DebugFormat(
+                "Room properties: {0}",
+                JsonConvert.SerializeObject(info.Request.GameProperties)
+            );
+#endif
 
             base.OnCreateGame(info);
 
@@ -299,15 +306,15 @@ namespace DragaliaAPI.Photon.Plugin
             {
                 case 1:
                     this.SetGoToIngameInfo(info);
+                    if (info.ActorNr == 1)
+                        this.HideGameAfterStart(info);
+
                     break;
                 case 2:
                     this.RaiseCharacterDataEvent(info);
                     break;
                 case 3:
                     this.RaisePartyEvent(info);
-                    if (info.ActorNr == 1)
-                        this.HideGameAfterStart(info);
-
                     break;
                 default:
                     break;
@@ -454,6 +461,14 @@ namespace DragaliaAPI.Photon.Plugin
         /// <returns>The number of units they own.</returns>
         public int GetMemberCount(int actorNr)
         {
+            if (
+                this.PluginHost.GameProperties.TryGetInt(GamePropertyKeys.QuestId, out int questId)
+                && QuestHelper.GetDungeonType(questId) == DungeonTypes.Raid
+            )
+            {
+                return 4;
+            }
+
             int count = this.PluginHost.GameActors.Count;
 
             if (count < 4 && actorNr == 1)
