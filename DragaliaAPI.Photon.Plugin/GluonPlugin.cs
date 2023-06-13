@@ -299,15 +299,15 @@ namespace DragaliaAPI.Photon.Plugin
             {
                 case 1:
                     this.SetGoToIngameInfo(info);
+                    if (info.ActorNr == 1)
+                        this.HideGameAfterStart(info);
+
                     break;
                 case 2:
                     this.RaiseCharacterDataEvent(info);
                     break;
                 case 3:
                     this.RaisePartyEvent(info);
-                    if (info.ActorNr == 1)
-                        this.HideGameAfterStart(info);
-
                     break;
                 default:
                     break;
