@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using DragaliaAPI.Photon.Plugin.Constants;
 using DragaliaAPI.Photon.Plugin.Models;
-using DragaliaAPI.Photon.Shared;
+using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using MessagePack;
 

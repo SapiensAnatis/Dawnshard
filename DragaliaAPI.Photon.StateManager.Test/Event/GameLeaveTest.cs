@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.Shared.Requests;
 using DragaliaAPI.Photon.StateManager.Models;
@@ -34,7 +35,7 @@ public class GameLeaveTest : TestFixture
                 RoomId = 12345,
                 Name = "affa751f-b3ce-4dd7-9b07-bbeaa1783acc",
                 MatchingCompatibleId = 36,
-                MatchingType = Shared.MatchingTypes.Anyone,
+                MatchingType = MatchingTypes.Anyone,
                 QuestId = 301010103,
                 StartEntryTime = DateTimeOffset.UtcNow,
                 EntryConditions = new()
@@ -84,7 +85,7 @@ public class GameLeaveTest : TestFixture
                     }
                 }
             );
-        storedGame!.MatchingType.Should().Be(Shared.MatchingTypes.Anyone);
+        storedGame!.MatchingType.Should().Be(MatchingTypes.Anyone);
     }
 
     [Fact]
@@ -96,7 +97,7 @@ public class GameLeaveTest : TestFixture
                 RoomId = 12345,
                 Name = "5ff0c20c-b1b6-4377-81d4-a201038faf01",
                 MatchingCompatibleId = 36,
-                MatchingType = Shared.MatchingTypes.Anyone,
+                MatchingType = MatchingTypes.Anyone,
                 QuestId = 301010103,
                 StartEntryTime = DateTimeOffset.UtcNow,
                 EntryConditions = new()
@@ -130,6 +131,6 @@ public class GameLeaveTest : TestFixture
         RedisGame? storedGame = await this.RedisConnectionProvider.GetGame(game.Name);
         storedGame.Should().NotBeNull();
         storedGame!.Players.Should().BeEmpty();
-        storedGame!.MatchingType.Should().Be(Shared.MatchingTypes.NoDisplay);
+        storedGame!.MatchingType.Should().Be(MatchingTypes.NoDisplay);
     }
 }

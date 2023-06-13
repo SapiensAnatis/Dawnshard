@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.Shared.Requests;
 using DragaliaAPI.Photon.StateManager.Models;
@@ -37,7 +38,7 @@ public class GameCreateTest : TestFixture
                 RoomId = 12345,
                 Name = "639d263a-e05a-4432-952f-fa941e7f7f40",
                 MatchingCompatibleId = 36,
-                MatchingType = Shared.MatchingTypes.Anyone,
+                MatchingType = MatchingTypes.Anyone,
                 QuestId = 301010103,
                 StartEntryTime = DateTimeOffset.UtcNow,
                 EntryConditions = new()
@@ -56,7 +57,7 @@ public class GameCreateTest : TestFixture
                 RoomId = 12345,
                 Name = "639d263a-e05a-4432-952f-fa941e7f7f40",
                 MatchingCompatibleId = 36,
-                MatchingType = Shared.MatchingTypes.Anyone,
+                MatchingType = MatchingTypes.Anyone,
                 QuestId = 301010103,
                 StartEntryTime = game.StartEntryTime,
                 EntryConditions = new()

@@ -29,7 +29,7 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
         }
         catch (Exception ex)
         {
-            this.Logger.LogDebug(ex, "Failed to parse Authorization header.");
+            this.Logger.LogDebug("Failed to parse Authorization header: {reason}", ex.Message);
             return Task.FromResult(AuthenticateResult.NoResult());
         }
 

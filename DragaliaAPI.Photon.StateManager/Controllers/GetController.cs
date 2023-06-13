@@ -4,8 +4,8 @@ using Redis.OM.Searching;
 using Redis.OM.Contracts;
 using Redis.OM;
 using DragaliaAPI.Photon.Shared.Models;
-using DragaliaAPI.Photon.Shared;
 using Microsoft.AspNetCore.Authorization;
+using DragaliaAPI.Photon.Shared.Enums;
 
 namespace DragaliaAPI.Photon.StateManager.Controllers;
 
