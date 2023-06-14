@@ -45,6 +45,8 @@ public class FortController : DragaliaControllerBase
                 current_server_time = DateTimeOffset.UtcNow
             };
 
+        await this.updateDataService.SaveChangesAsync();
+
         return this.Ok(data);
     }
 
@@ -139,7 +141,6 @@ public class FortController : DragaliaControllerBase
     {
         DbFortBuild build = await this.fortService.BuildStart(
             request.fort_plant_id,
-            1, // Build always starts at 1
             request.position_x,
             request.position_z
         );

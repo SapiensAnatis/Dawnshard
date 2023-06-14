@@ -1,10 +1,8 @@
-﻿using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
+﻿using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Services.Game;
 
 public class QuestRewardService : IQuestRewardService
 {

@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Diagnostics;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -30,13 +31,37 @@ public class FortRepository : IFortRepository
     public IQueryable<DbFortBuild> GetBuilds(string deviceAccountId) =>
         this.apiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == deviceAccountId);
 
+    public async Task InitializeFort()
+    {
+        this.logger.LogInformation("Initializing Halidom.");
+
+        await this.apiContext.PlayerFortDetails.AddAsync(
+            new DbFortDetail()
+            {
+                DeviceAccountId = this.playerDetailsService.AccountId,
+                CarpenterNum = DefaultCarpenters
+            }
+        );
+
+        await apiContext.PlayerFortBuilds.AddAsync(
+            new DbFortBuild()
+            {
+                DeviceAccountId = this.playerDetailsService.AccountId,
+                PlantId = FortPlants.TheHalidom,
+                PositionX = 16, // Default Halidom position
+                PositionZ = 17,
+                LastIncomeDate = DateTimeOffset.UtcNow
+            }
+        );
+    }
+
     public async Task<DbFortDetail> GetFortDetail()
     {
         DbFortDetail? details = await this.apiContext.PlayerFortDetails.FindAsync(
             this.playerDetailsService.AccountId
         );
 
-        if (details is null)
+        if (details == null)
         {
             this.logger.LogInformation("Could not find details for player, creating anew...");
 

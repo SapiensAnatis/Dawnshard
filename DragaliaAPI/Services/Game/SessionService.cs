@@ -1,14 +1,12 @@
-﻿using DragaliaAPI.Models.Nintendo;
+﻿using DragaliaAPI.Models;
+using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
+using DragaliaAPI.Shared;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
-using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
-using DragaliaAPI.Models;
-using DragaliaAPI.Shared;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Services.Game;
 
 /// <summary>
 /// SessionService interfaces with Redis to store the information about current sessions in-memory.

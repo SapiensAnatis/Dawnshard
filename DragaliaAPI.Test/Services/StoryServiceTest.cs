@@ -2,6 +2,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Logging;
 using MockQueryable.Moq;
@@ -15,6 +16,7 @@ public class StoryServiceTest
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IUnitRepository> mockUnitRepository;
     private readonly Mock<ILogger<StoryService>> mockLogger;
+    private readonly Mock<ITutorialService> mockTutorialService;
 
     private readonly IStoryService storyService;
 
@@ -25,13 +27,15 @@ public class StoryServiceTest
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockUnitRepository = new(MockBehavior.Strict);
         this.mockLogger = new();
+        this.mockTutorialService = new(MockBehavior.Strict);
 
         this.storyService = new StoryService(
             mockStoryRepository.Object,
             mockLogger.Object,
             mockUserDataRepository.Object,
             mockInventoryRepository.Object,
-            mockUnitRepository.Object
+            mockUnitRepository.Object,
+            mockTutorialService.Object
         );
     }
 
@@ -208,6 +212,9 @@ public class StoryServiceTest
             );
 
         this.mockUserDataRepository.Setup(x => x.GiveWyrmite(25)).Returns(Task.CompletedTask);
+        this.mockTutorialService
+            .Setup(x => x.OnStoryQuestRead(1000311))
+            .Returns(Task.CompletedTask);
 
         this.mockUnitRepository.Setup(x => x.AddDragons(Dragons.Brunhilda)).ReturnsAsync(true);
 
@@ -221,43 +228,6 @@ public class StoryServiceTest
                     {
                         entity_type = EntityTypes.Dragon,
                         entity_id = (int)Dragons.Brunhilda,
-                        entity_quantity = 1,
-                    }
-                }
-            );
-
-        this.mockUserDataRepository.VerifyAll();
-        this.mockStoryRepository.VerifyAll();
-    }
-
-    [Fact]
-    public async Task ReadQuestStory_MaxStoryId_CallsSkipTutorial()
-    {
-        this.mockStoryRepository
-            .Setup(x => x.GetOrCreateStory(StoryTypes.Quest, 1000103))
-            .ReturnsAsync(
-                new DbPlayerStoryState()
-                {
-                    DeviceAccountId = string.Empty,
-                    State = StoryState.Unlocked
-                }
-            );
-
-        this.mockUserDataRepository.Setup(x => x.GiveWyrmite(25)).Returns(Task.CompletedTask);
-        this.mockUserDataRepository.Setup(x => x.SkipTutorial()).Returns(Task.CompletedTask);
-
-        this.mockUnitRepository.Setup(x => x.AddCharas(Charas.Elisanne)).ReturnsAsync(true);
-
-        (await this.storyService.ReadStory(StoryTypes.Quest, 1000103))
-            .Should()
-            .BeEquivalentTo(
-                new List<AtgenBuildEventRewardEntityList>()
-                {
-                    new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 25 },
-                    new()
-                    {
-                        entity_type = EntityTypes.Chara,
-                        entity_id = (int)Charas.Elisanne,
                         entity_quantity = 1,
                     }
                 }

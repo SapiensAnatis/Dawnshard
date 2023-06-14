@@ -12,16 +12,19 @@ public class ShopController : DragaliaControllerBase
     private readonly IUserDataRepository userDataRepository;
     private readonly IInventoryRepository inventoryRepository;
     private readonly IUpdateDataService updateDataService;
+    private readonly IItemSummonService itemSummonService;
 
     public ShopController(
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
-        IUpdateDataService updateDataService
+        IUpdateDataService updateDataService,
+        IItemSummonService itemSummonService
     )
     {
         this.userDataRepository = userDataRepository;
         this.inventoryRepository = inventoryRepository;
         this.updateDataService = updateDataService;
+        this.itemSummonService = itemSummonService;
     }
 
     [Route("get_list")]
@@ -56,5 +59,11 @@ public class ShopController : DragaliaControllerBase
             };
 
         return Ok(response);
+    }
+
+    [Route("item_summon_odd")]
+    public DragaliaResult GetOdds()
+    {
+        return this.Ok(new ShopItemSummonOddData(itemSummonService.GetOdds()));
     }
 }

@@ -2,6 +2,7 @@
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;

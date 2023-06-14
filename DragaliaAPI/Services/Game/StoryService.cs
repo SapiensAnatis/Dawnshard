@@ -5,10 +5,9 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
-using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Services.Game;
 
 public class StoryService : IStoryService
 {
@@ -17,13 +16,13 @@ public class StoryService : IStoryService
     private readonly IInventoryRepository inventoryRepository;
     private readonly IUnitRepository unitRepository;
     private readonly ILogger<StoryService> logger;
+    private readonly ITutorialService tutorialService;
 
     private const int DragonStoryWyrmite = 25;
     private const int CastleStoryWyrmite = 50;
     private const int CharaStoryWyrmite1 = 25;
     private const int CharaStoryWyrmite2 = 10;
     private const int QuestStoryWyrmite = 25;
-    private const int MaxStoryId = 1000103;
 
     private static readonly ImmutableDictionary<int, Charas> QuestStoryCharaRewards =
         new Dictionary<int, Charas>()
@@ -53,7 +52,8 @@ public class StoryService : IStoryService
         ILogger<StoryService> logger,
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
-        IUnitRepository unitRepository
+        IUnitRepository unitRepository,
+        ITutorialService tutorialService
     )
     {
         this.storyRepository = storyRepository;
@@ -61,6 +61,7 @@ public class StoryService : IStoryService
         this.userDataRepository = userDataRepository;
         this.inventoryRepository = inventoryRepository;
         this.unitRepository = unitRepository;
+        this.tutorialService = tutorialService;
     }
 
     #region Eligibility check methods
@@ -204,11 +205,7 @@ public class StoryService : IStoryService
 
     private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadQuestStory(int storyId)
     {
-        if (storyId == MaxStoryId)
-        {
-            this.logger.LogInformation("Skipping tutorial at story {id}", storyId);
-            await this.userDataRepository.SkipTutorial();
-        }
+        await this.tutorialService.OnStoryQuestRead(storyId);
 
         await this.userDataRepository.GiveWyrmite(QuestStoryWyrmite);
         List<AtgenBuildEventRewardEntityList> rewardList =

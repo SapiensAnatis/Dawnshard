@@ -3,9 +3,7 @@ using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +27,7 @@ public class SavefileController : ControllerBase
         this.userDataRepository = userDataRepository;
     }
 
-    [HttpPost("import/{viewerId}")]
+    [HttpPost("import/{viewerId:long}")]
     public async Task<IActionResult> Import(
         long viewerId,
         [FromBody] DragaliaResponse<LoadIndexData> loadIndexResponse
@@ -43,7 +41,15 @@ public class SavefileController : ControllerBase
         return this.NoContent();
     }
 
-    [HttpDelete("delete/{viewerId}")]
+    [HttpGet("export/{viewerId:long}")]
+    public async Task<IActionResult> Export(long viewerId, [FromServices] ILoadService loadService)
+    {
+        string accountId = await LookupAccountId(viewerId);
+        DragaliaResponse<LoadIndexData> result = new(await loadService.BuildIndexData(accountId));
+        return Ok(result);
+    }
+
+    [HttpDelete("delete/{viewerId:long}")]
     public async Task<IActionResult> Delete(long viewerId)
     {
         await this.savefileService.Reset(await this.LookupAccountId(viewerId));

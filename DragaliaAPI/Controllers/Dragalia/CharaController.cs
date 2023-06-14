@@ -436,7 +436,7 @@ public class CharaController : DragaliaControllerBase
             .FirstAsync();
         DbPlayerCharaData playerCharaData = await this.unitRepository
             .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+            .FirstAsync(chara => chara.CharaId == request.chara_id);
 
         CharaData charaData = MasterAsset.CharaData.Get(playerCharaData.CharaId);
 
@@ -469,21 +469,29 @@ public class CharaController : DragaliaControllerBase
             CharaUpgradeMaterialTypes.Omnicite
         );
 
-        int[] charaStories = MasterAsset.CharaStories.Get((int)playerCharaData.CharaId).storyIds;
-        for (
-            int nextStoryunlockIndex = await storyRepository
-                .GetStoryList(DeviceAccountId)
-                .Where(x => charaStories.Contains(x.StoryId))
-                .CountAsync();
-            nextStoryunlockIndex < charaStories.Length;
-            nextStoryunlockIndex++
+        if (
+            MasterAsset.CharaStories.TryGetValue(
+                (int)playerCharaData.CharaId,
+                out StoryData? stories
+            )
         )
         {
-            await storyRepository.GetOrCreateStory(
-                DeviceAccountId,
-                StoryTypes.Chara,
-                charaStories[nextStoryunlockIndex]
-            );
+            int[] charaStories = stories.storyIds;
+
+            for (
+                int nextStoryunlockIndex = await storyRepository
+                    .GetStoryList(DeviceAccountId)
+                    .Where(x => charaStories.Contains(x.StoryId))
+                    .CountAsync();
+                nextStoryunlockIndex < charaStories.Length;
+                nextStoryunlockIndex++
+            )
+            {
+                await storyRepository.GetOrCreateStory(
+                    StoryTypes.Chara,
+                    charaStories[nextStoryunlockIndex]
+                );
+            }
         }
 
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(

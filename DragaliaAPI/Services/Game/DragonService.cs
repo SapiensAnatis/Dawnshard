@@ -10,7 +10,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Services.Game;
 
 public class DragonService : IDragonService
 {

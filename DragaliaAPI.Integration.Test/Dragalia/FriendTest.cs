@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Xunit.Abstractions;
 

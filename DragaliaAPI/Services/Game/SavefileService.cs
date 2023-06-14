@@ -3,12 +3,11 @@ using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Services.Game;
 
 public class SavefileService : ISavefileService
 {
@@ -421,20 +420,6 @@ public class SavefileService : ISavefileService
         await apiContext.PlayerUserData.AddAsync(userData);
         await this.AddDefaultParties(deviceAccountId);
         await this.AddDefaultCharacters(deviceAccountId);
-
-        // This needs to be in the save or the halidom screen will softlock
-        // TODO: Move this to the tutorial step which gives you access to the Halidom,
-        // so that saves imported without it will also avoid the softlock
-        await apiContext.PlayerFortBuilds.AddAsync(
-            new DbFortBuild()
-            {
-                DeviceAccountId = deviceAccountId,
-                PlantId = FortPlants.TheHalidom,
-                PositionX = 16, // Default Halidom position
-                PositionZ = 17,
-            }
-        );
-
         await this.apiContext.SaveChangesAsync();
     }
 
@@ -508,14 +493,6 @@ public class SavefileService : ISavefileService
 
     private async Task AddDefaultWyrmprints(string deviceAccountId)
     {
-        await this.apiContext.PlayerAbilityCrests.AddAsync(
-            new DbAbilityCrest()
-            {
-                DeviceAccountId = deviceAccountId,
-                AbilityCrestId = AbilityCrests.ManaFount
-            }
-        );
-
         await this.apiContext.PlayerAbilityCrests.AddRangeAsync(
             DefaultSavefileData.FiveStarCrests
                 .Select(

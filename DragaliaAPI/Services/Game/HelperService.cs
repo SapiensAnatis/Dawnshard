@@ -1,11 +1,8 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using AutoMapper;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Database.Utils;
-using AutoMapper;
-using DragaliaAPI.Database.Entities;
-using System;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Services.Game;
 
 public class HelperService : IHelperService
 {
