@@ -77,11 +77,7 @@ public class CharaController : DragaliaControllerBase
         //TODO Get and update missions relating to promoting characters
         //MissionNoticeData missionNoticeData = null;
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await unitRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -139,11 +135,7 @@ public class CharaController : DragaliaControllerBase
             remainingMaterials.Add(this.mapper.Map<MaterialList>(dbMats[(Materials)mat.Key]));
         }
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await unitRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -311,9 +303,7 @@ public class CharaController : DragaliaControllerBase
                 ? playerCharData.AttackPlusCount = 0
                 : playerCharData.HpPlusCount = 0;
 
-        UpdateDataList updateDataList = updateDataService.GetUpdateDataList(DeviceAccountId);
-
-        await userDataRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaResetPlusCountData(updateDataList, new()));
     }
@@ -342,11 +332,7 @@ public class CharaController : DragaliaControllerBase
         );
         //TODO: Party power calculation call
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await userDataRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -363,11 +349,7 @@ public class CharaController : DragaliaControllerBase
         Dictionary<Materials, int> usedMaterials = new();
         playerCharData.LimitBreakCount = (byte)request.next_limit_break_count;
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await unitRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -402,11 +384,7 @@ public class CharaController : DragaliaControllerBase
             );
         }
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await unitRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -477,11 +455,7 @@ public class CharaController : DragaliaControllerBase
             }
         }
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await unitRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -778,11 +752,7 @@ public class CharaController : DragaliaControllerBase
         }
         playerCharData.IsUnlockEditSkill = true;
         dbMat.Quantity -= usedMatCount;
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await unitRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -897,7 +867,7 @@ public class CharaController : DragaliaControllerBase
                         }
                 )
         };
-        UpdateDataList ul = updateDataService.GetUpdateDataList(DeviceAccountId);
+        UpdateDataList ul = await this.updateDataService.SaveChangesAsync();
         ul.chara_unit_set_list = new List<CharaUnitSetList> { setList };
         return Ok(new CharaSetCharaUnitSetData() { update_data_list = ul, entity_result = null });
     }

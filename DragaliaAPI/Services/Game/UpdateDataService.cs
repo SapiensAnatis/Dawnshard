@@ -25,26 +25,6 @@ public class UpdateDataService : IUpdateDataService
         this.playerIdentityService = playerIdentityService;
     }
 
-    [Obsolete(
-        "Prefer UpdateDataService.SaveChangesAsync instead due to key id bugs with this method"
-    )]
-    public UpdateDataList GetUpdateDataList(string deviceAccountId)
-    {
-        this.apiContext.ChangeTracker.LazyLoadingEnabled = false;
-
-        List<IDbHasAccountId> entities = this.apiContext.ChangeTracker
-            .Entries<IDbHasAccountId>()
-            .Where(
-                x =>
-                    (x.State is EntityState.Modified or EntityState.Added)
-                    && x.Entity.DeviceAccountId == deviceAccountId
-            )
-            .Select(x => x.Entity)
-            .ToList();
-
-        return this.MapUpdateDataList(entities);
-    }
-
     public async Task<UpdateDataList> SaveChangesAsync()
     {
         List<IDbHasAccountId> entities = this.apiContext.ChangeTracker

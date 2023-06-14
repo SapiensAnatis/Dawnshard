@@ -177,9 +177,7 @@ public class RedoableSummonController : DragaliaControllerBase
                     .Select(x => (Dragons)x.id)
             );
 
-        UpdateDataList updateData = this.updateDataService.GetUpdateDataList(this.DeviceAccountId);
-
-        await this.unitRepository.SaveChangesAsync();
+        UpdateDataList updateData = await this.updateDataService.SaveChangesAsync();
 
         IEnumerable<AtgenDuplicateEntityList> newCharas = repositoryCharaOuput
             .Where(x => x.isNew)

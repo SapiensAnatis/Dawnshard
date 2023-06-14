@@ -44,7 +44,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     }
 
     [Fact]
-    public async Task GetUpdateDataList_PopulatesAll()
+    public async Task SaveChangesAsync_PopulatesAll()
     {
         string deviceAccountId = "some_id";
         this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns(deviceAccountId);
@@ -160,10 +160,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             }
         );
 
-        UpdateDataList list = this.updateDataService.GetUpdateDataList(deviceAccountId);
-        UpdateDataList list2 = await this.updateDataService.SaveChangesAsync();
-
-        list.Should().BeEquivalentTo(list2);
+        UpdateDataList list = await this.updateDataService.SaveChangesAsync();
 
         list.user_data.Should().BeEquivalentTo(this.mapper.Map<UserData>(userData));
 
@@ -199,7 +196,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     }
 
     [Fact]
-    public void GetUpdateDataList_RetrievesIdentityColumns()
+    public async Task SaveChangesAsync_RetrievesIdentityColumns()
     {
         // This test is bullshit because in-mem works differently to an actual database in this regard
         this.fixture.ApiContext.AddRange(
@@ -211,16 +208,16 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             }
         );
 
-        UpdateDataList list = this.updateDataService.GetUpdateDataList(DeviceAccountId);
+        UpdateDataList list = await this.updateDataService.SaveChangesAsync();
 
         list.dragon_list.Should().NotBeNullOrEmpty();
         list.dragon_list!.Select(x => x.dragon_key_id).Should().OnlyHaveUniqueItems();
     }
 
     [Fact]
-    public void GetUpdateDataList_NullIfNoUpdates()
+    public async Task SaveChangesAsync_NullIfNoUpdates()
     {
-        UpdateDataList list = this.updateDataService.GetUpdateDataList(DeviceAccountId);
+        UpdateDataList list = await this.updateDataService.SaveChangesAsync();
 
         list.user_data.Should().BeNull();
         list.chara_list.Should().BeNull();
@@ -231,21 +228,23 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     }
 
     [Fact]
-    public void GetUpdateDataList_NoDataFromOtherAccounts()
+    public async Task SaveChangesAsync_NoDataFromOtherAccounts()
     {
         this.fixture.ApiContext.PlayerCharaData.Add(new("id 1", Charas.GalaZethia));
 
-        this.updateDataService.GetUpdateDataList("id 2").chara_list.Should().BeNull();
+        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("id 2");
+
+        (await this.updateDataService.SaveChangesAsync()).chara_list.Should().BeNull();
     }
 
     [Fact]
-    public void GetUpdateDataList_NullAfterSave()
+    public async Task SaveChangesAsync_NullAfterSave()
     {
         this.fixture.ApiContext.PlayerCharaData.Add(new(DeviceAccountId, Charas.HalloweenLowen));
 
-        this.fixture.ApiContext.SaveChanges();
+        await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.updateDataService.GetUpdateDataList(DeviceAccountId).chara_list.Should().BeNull();
+        (await this.updateDataService.SaveChangesAsync()).chara_list.Should().BeNull();
     }
 
     private void AssertOnlyContains<TNetwork>(

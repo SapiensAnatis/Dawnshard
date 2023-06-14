@@ -33,11 +33,7 @@ public class UserController : DragaliaControllerBase
         DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
 
         userData.Crystal += 12_000;
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await this.userDataRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(new UserLinkedNAccountData() { update_data_list = updateDataList });
     }
