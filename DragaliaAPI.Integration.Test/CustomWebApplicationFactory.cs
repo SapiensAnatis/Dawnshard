@@ -125,6 +125,15 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         IFortRepository fortRepository = provider.GetRequiredService<IFortRepository>();
         fortRepository.InitializeFort().Wait();
 
+        apiContext.PlayerFortBuilds.Add(
+            new DbFortBuild()
+            {
+                DeviceAccountId = TestFixture.DeviceAccountId,
+                PlantId = FortPlants.Smithy,
+                Level = 9
+            }
+        );
+
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Coin = 100_000_000;
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.DewPoint = 100_000_000;
         apiContext.SaveChanges();
