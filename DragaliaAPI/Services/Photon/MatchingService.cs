@@ -93,14 +93,15 @@ public class MatchingService : IMatchingService
 
     private async Task<RoomList> MapRoomList(ApiGame game)
     {
-        DbPlayerUserData hostUserData = await userDataRepository
-            .GetViewerData(game.HostViewerId)
-            .FirstAsync();
-
+        DbPlayerUserData hostUserData;
         DbPlayerCharaData hostCharaData;
 
         try
         {
+            hostUserData = await userDataRepository
+                .GetViewerData(game.HostViewerId)
+                .FirstAsync();
+
             using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
                 hostUserData.DeviceAccountId
             );
