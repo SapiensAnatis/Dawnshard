@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Shared;
+using DragaliaAPI.Shared.PlayerDetails;
 
 namespace DragaliaAPI.Services.Game;
 
@@ -13,18 +14,21 @@ public class DeviceAccountService : IDeviceAccountService
     private readonly IDeviceAccountRepository deviceAccountRepository;
     private readonly ISavefileService savefileService;
     private readonly IConfiguration configuration;
+    private readonly IPlayerIdentityService playerIdentityService;
     private readonly ILogger<DeviceAccountService> logger;
 
     public DeviceAccountService(
         IDeviceAccountRepository repository,
         ISavefileService savefileService,
         IConfiguration configuration,
+        IPlayerIdentityService playerIdentityService,
         ILogger<DeviceAccountService> logger
     )
     {
         this.deviceAccountRepository = repository;
         this.savefileService = savefileService;
         this.configuration = configuration;
+        this.playerIdentityService = playerIdentityService;
         this.logger = logger;
     }
 
@@ -72,7 +76,11 @@ public class DeviceAccountService : IDeviceAccountService
         string hashedPassword = this.GetHashedPassword(password);
 
         await this.deviceAccountRepository.AddNewDeviceAccount(id, hashedPassword);
-        await this.savefileService.Create(id);
+        using (IDisposable ctx = this.playerIdentityService.StartUserImpersonation(id))
+        {
+            await this.savefileService.Create();
+        }
+
         await this.deviceAccountRepository.SaveChangesAsync();
 
         this.logger.LogInformation("Registered new account: DeviceAccount ID '{id}'", id);

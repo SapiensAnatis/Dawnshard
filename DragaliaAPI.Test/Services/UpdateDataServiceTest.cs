@@ -23,13 +23,13 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     private readonly IMapper mapper;
     private readonly IUpdateDataService updateDataService;
 
-    private readonly Mock<IPlayerIdentityService> mockPlayerDetailsService;
+    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
 
     public UpdateDataServiceTest(DbTestFixture fixture, ITestOutputHelper output)
     {
         this.fixture = fixture;
         this.output = output;
-        this.mockPlayerDetailsService = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
 
         this.mapper = new MapperConfiguration(
             cfg => cfg.AddMaps(typeof(Program).Assembly)
@@ -37,7 +37,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         this.updateDataService = new UpdateDataService(
             this.fixture.ApiContext,
             this.mapper,
-            this.mockPlayerDetailsService.Object
+            this.mockPlayerIdentityService.Object
         );
 
         CommonAssertionOptions.ApplyTimeOptions();
@@ -47,7 +47,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     public async Task SaveChangesAsync_PopulatesAll()
     {
         string deviceAccountId = "some_id";
-        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns(deviceAccountId);
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(deviceAccountId);
 
         DbPlayerUserData userData = new(deviceAccountId);
 
@@ -198,6 +198,8 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task SaveChangesAsync_RetrievesIdentityColumns()
     {
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+
         // This test is bullshit because in-mem works differently to an actual database in this regard
         this.fixture.ApiContext.AddRange(
             new List<IDbHasAccountId>()
@@ -217,6 +219,8 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task SaveChangesAsync_NullIfNoUpdates()
     {
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+
         UpdateDataList list = await this.updateDataService.SaveChangesAsync();
 
         list.user_data.Should().BeNull();
@@ -232,7 +236,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     {
         this.fixture.ApiContext.PlayerCharaData.Add(new("id 1", Charas.GalaZethia));
 
-        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("id 2");
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id 2");
 
         (await this.updateDataService.SaveChangesAsync()).chara_list.Should().BeNull();
     }

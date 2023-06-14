@@ -39,7 +39,7 @@ public class DbTestFixture : IDisposable
                 mockLogger.Object,
                 IdentityTestUtils.MockPlayerDetailsService.Object
             );
-        savefileService.Create("id").Wait();
+        savefileService.Create().Wait();
     }
 
     public async Task AddToDatabase<TEntity>(TEntity data)

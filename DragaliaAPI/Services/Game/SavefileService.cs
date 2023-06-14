@@ -3,6 +3,7 @@ using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -55,9 +56,9 @@ public class SavefileService : ISavefileService
     /// <param name="deviceAccountId">The primary key to import for.</param>
     /// <param name="savefile">The savefile to import/</param>
     /// <returns>The task.</returns>
-    public async Task ThreadSafeImport(string deviceAccountId, LoadIndexData savefile)
+    public async Task ThreadSafeImport(LoadIndexData savefile)
     {
-        string key = RedisSchema.PendingImport(deviceAccountId);
+        string key = RedisSchema.PendingImport(this.playerIdentityService.AccountId);
 
         if (!string.IsNullOrEmpty(await this.cache.GetStringAsync(key)))
         {
@@ -73,11 +74,13 @@ public class SavefileService : ISavefileService
 
         try
         {
-            await this.Import(deviceAccountId, savefile);
+            await this.Import(savefile);
         }
         catch (Exception)
         {
-            await this.cache.RemoveAsync(RedisSchema.PendingImport(deviceAccountId));
+            await this.cache.RemoveAsync(
+                RedisSchema.PendingImport(this.playerIdentityService.AccountId)
+            );
             throw;
         }
     }
@@ -89,8 +92,9 @@ public class SavefileService : ISavefileService
     /// <param name="deviceAccountId">Primary key to import for.</param>
     /// <param name="savefile">Savefile data.</param>
     /// <returns>The task.</returns>
-    public async Task Import(string deviceAccountId, LoadIndexData savefile)
+    public async Task Import(LoadIndexData savefile)
     {
+        string deviceAccountId = this.playerIdentityService.AccountId;
         Stopwatch stopwatch = Stopwatch.StartNew();
 
         // Place a lock preventing any concurrent save imports
@@ -110,14 +114,14 @@ public class SavefileService : ISavefileService
 
         this.logger.LogInformation(
             "Beginning savefile import for account {accountId}",
-            deviceAccountId
+            this.playerIdentityService.AccountId
         );
 
         await this.apiContext.Database.BeginTransactionAsync();
 
         try
         {
-            this.Delete(deviceAccountId);
+            this.Delete();
 
             await this.apiContext.Players.AddAsync(new DbPlayer() { AccountId = deviceAccountId });
 
@@ -295,8 +299,10 @@ public class SavefileService : ISavefileService
         }
     }
 
-    private void Delete(string deviceAccountId)
+    private void Delete()
     {
+        string deviceAccountId = this.playerIdentityService.AccountId;
+
         this.apiContext.Players.RemoveRange(
             this.apiContext.Players.Where(x => x.AccountId == deviceAccountId)
         );
@@ -350,12 +356,12 @@ public class SavefileService : ISavefileService
         );
     }
 
-    public async Task Reset(string deviceAccountId)
+    public async Task Reset()
     {
-        this.Delete(deviceAccountId);
+        this.Delete();
 
         // Unlike importing, this will not preserve the viewer id
-        await this.Create(deviceAccountId);
+        await this.Create();
         await this.apiContext.SaveChangesAsync();
     }
 
@@ -407,11 +413,13 @@ public class SavefileService : ISavefileService
         );
     }
 
-    public async Task CreateBase(string deviceAccountId)
+    public async Task CreateBase()
     {
+        string deviceAccountId = this.playerIdentityService.AccountId;
+
         this.logger.LogInformation("Creating new savefile for account ID {id}", deviceAccountId);
 
-        this.Delete(deviceAccountId);
+        this.Delete();
         this.apiContext.Players.Add(new() { AccountId = deviceAccountId });
 
         DbPlayerUserData userData =
@@ -427,9 +435,11 @@ public class SavefileService : ISavefileService
         await this.apiContext.SaveChangesAsync();
     }
 
-    public async Task Create(string deviceAccountId)
+    public async Task Create()
     {
-        await this.CreateBase(deviceAccountId);
+        await this.CreateBase();
+
+        string deviceAccountId = this.playerIdentityService.AccountId;
 
         await this.AddDefaultWyrmprints(deviceAccountId);
         await this.AddDefaultDragons(deviceAccountId);

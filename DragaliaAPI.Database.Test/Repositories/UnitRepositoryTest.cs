@@ -17,17 +17,17 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
     private readonly IUnitRepository unitRepository;
-    private readonly Mock<IPlayerIdentityService> mockPlayerDetailsService;
+    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
 
     public UnitRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.mockPlayerDetailsService = new(MockBehavior.Strict);
-        this.mockPlayerDetailsService.Setup(x => x.AccountId).Returns(DeviceAccountId);
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService.Setup(x => x.AccountId).Returns(DeviceAccountId);
 
         this.unitRepository = new UnitRepository(
             fixture.ApiContext,
-            this.mockPlayerDetailsService.Object,
+            this.mockPlayerIdentityService.Object,
             LoggerTestUtils.Create<UnitRepository>()
         );
     }
@@ -41,7 +41,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetAllCharaData_InvalidId_ReturnsEmpty()
     {
-        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("wrong id");
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("wrong id");
 
         (await this.unitRepository.Charas.ToListAsync()).Should().BeEmpty();
     }
@@ -68,7 +68,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetAllDragonData_InvalidId_ReturnsEmpty()
     {
-        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("wrong id");
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("wrong id");
 
         (await this.unitRepository.Dragons.ToListAsync()).Should().BeEmpty();
     }

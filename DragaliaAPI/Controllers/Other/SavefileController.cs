@@ -37,10 +37,10 @@ public class SavefileController : ControllerBase
         [FromBody] DragaliaResponse<LoadIndexData> loadIndexResponse
     )
     {
-        await this.savefileService.ThreadSafeImport(
-            await this.LookupAccountId(viewerId),
-            loadIndexResponse.data
-        );
+        string accountId = await LookupAccountId(viewerId);
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(accountId);
+
+        await this.savefileService.ThreadSafeImport(loadIndexResponse.data);
 
         return this.NoContent();
     }
@@ -50,6 +50,7 @@ public class SavefileController : ControllerBase
     {
         string accountId = await LookupAccountId(viewerId);
         using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(accountId);
+
         DragaliaResponse<LoadIndexData> result = new(await loadService.BuildIndexData());
         return Ok(result);
     }
@@ -57,7 +58,10 @@ public class SavefileController : ControllerBase
     [HttpDelete("delete/{viewerId:long}")]
     public async Task<IActionResult> Delete(long viewerId)
     {
-        await this.savefileService.Reset(await this.LookupAccountId(viewerId));
+        string accountId = await LookupAccountId(viewerId);
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(accountId);
+
+        await this.savefileService.Reset();
 
         return this.NoContent();
     }

@@ -103,7 +103,10 @@ public class AuthService : IAuthService
             {
                 LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
                 this.logger.LogDebug("UserData: {@userData}", pendingSave.user_data);
-                await this.savefileService.ThreadSafeImport(jwt.Subject, pendingSave);
+                using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+                    jwt.Subject
+                );
+                await this.savefileService.ThreadSafeImport(pendingSave);
             }
             catch (Exception e) when (e is JsonException or AutoMapperMappingException)
             {
@@ -185,12 +188,11 @@ public class AuthService : IAuthService
         using (IDisposable ctx = this.playerIdentityService.StartUserImpersonation(accountId))
         {
             userDataQuery = this.userDataRepository.UserData;
+            DbPlayerUserData? userData = await userDataQuery.SingleOrDefaultAsync();
+
+            if (userData is null)
+                await this.savefileService.Create();
         }
-
-        DbPlayerUserData? userData = await userDataQuery.SingleOrDefaultAsync();
-
-        if (userData is null)
-            await this.savefileService.Create(accountId);
 
         return await userDataQuery.Select(x => x.ViewerId).SingleAsync();
     }

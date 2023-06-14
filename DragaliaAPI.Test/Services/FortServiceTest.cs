@@ -19,7 +19,7 @@ public class FortServiceTest
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<ILogger<FortService>> mockLogger;
-    private readonly Mock<IPlayerIdentityService> mockPlayerDetailsService;
+    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly IMapper mapper;
 
     private readonly IFortService fortService;
@@ -30,7 +30,7 @@ public class FortServiceTest
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
-        this.mockPlayerDetailsService = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mapper = UnitTestUtils.CreateMapper();
 
         this.fortService = new FortService(
@@ -38,7 +38,7 @@ public class FortServiceTest
             this.mockUserDataRepository.Object,
             this.mockInventoryRepository.Object,
             this.mockLogger.Object,
-            this.mockPlayerDetailsService.Object,
+            this.mockPlayerIdentityService.Object,
             this.mapper
         );
 
@@ -364,7 +364,7 @@ public class FortServiceTest
     [Fact]
     public async Task BuildStart_StartsBuilding()
     {
-        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("id");
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
 
         this.mockUserDataRepository.Setup(x => x.UpdateCoin(-300)).Returns(Task.CompletedTask);
 
@@ -403,14 +403,14 @@ public class FortServiceTest
 
         this.mockFortRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
-        this.mockPlayerDetailsService.VerifyAll();
+        this.mockPlayerIdentityService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
     }
 
     [Fact]
     public async Task BuildStart_InsufficientCarpenters_Throws()
     {
-        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("id");
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
 
         this.mockFortRepository
             .Setup(x => x.GetFortDetail())
@@ -424,7 +424,7 @@ public class FortServiceTest
             .Where(e => e.Code == ResultCode.FortBuildCarpenterBusy);
 
         this.mockFortRepository.VerifyAll();
-        this.mockPlayerDetailsService.VerifyAll();
+        this.mockPlayerIdentityService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
     }
 

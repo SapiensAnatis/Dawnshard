@@ -84,6 +84,12 @@ public class AuthServiceTest
                     .BuildMock()
             );
 
+        this.mockPlayerIdentityService
+            .Setup(x => x.StartUserImpersonation("device account id", null))
+            .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
+
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("device account id");
+
         (await this.authService.DoAuth("id token")).Should().BeEquivalentTo((1, "session id"));
 
         this.mockSessionService.VerifyAll();
@@ -125,6 +131,12 @@ public class AuthServiceTest
         this.mockSessionService
             .Setup(x => x.CreateSession(token, AccountId, 1))
             .ReturnsAsync("session id");
+
+        this.mockPlayerIdentityService
+            .Setup(x => x.StartUserImpersonation(AccountId, null))
+            .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
+
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
 
         (await this.authService.DoAuth(token)).Should().BeEquivalentTo((1, "session id"));
 
@@ -234,12 +246,18 @@ public class AuthServiceTest
                     .BuildMock()
             );
 
+        this.mockPlayerIdentityService
+            .Setup(x => x.StartUserImpersonation(AccountId, null))
+            .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
+
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
+
         this.mockSessionService
             .Setup(x => x.CreateSession(token, AccountId, 1))
             .ReturnsAsync("session id");
 
         this.mockSavefileService
-            .Setup(x => x.ThreadSafeImport(AccountId, importSavefile))
+            .Setup(x => x.ThreadSafeImport(importSavefile))
             .Returns(Task.CompletedTask);
 
         await this.authService.DoAuth(token);
@@ -296,6 +314,12 @@ public class AuthServiceTest
                     .AsQueryable()
                     .BuildMock()
             );
+
+        this.mockPlayerIdentityService
+            .Setup(x => x.StartUserImpersonation(AccountId, null))
+            .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
+
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
 
         this.mockSessionService
             .Setup(x => x.CreateSession(token, AccountId, 1))
@@ -355,6 +379,12 @@ public class AuthServiceTest
             .Setup(x => x.CreateSession(token, AccountId, 1))
             .ReturnsAsync("session id");
 
+        this.mockPlayerIdentityService
+            .Setup(x => x.StartUserImpersonation("account id", null))
+            .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
+
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
+
         await this.authService.DoAuth(token);
 
         this.mockBaasOptions.VerifyAll();
@@ -362,10 +392,7 @@ public class AuthServiceTest
         this.mockUserDataRepository.VerifyAll();
         this.mockUserDataRepository.Verify(x => x.UpdateSaveImportTime(), Times.Never);
         this.mockSessionService.VerifyAll();
-        this.mockSavefileService.Verify(
-            x => x.Import(AccountId, It.IsAny<LoadIndexData>()),
-            Times.Never
-        );
+        this.mockSavefileService.Verify(x => x.Import(It.IsAny<LoadIndexData>()), Times.Never);
     }
 
     [Fact]
@@ -409,6 +436,14 @@ public class AuthServiceTest
                     .BuildMock()
             );
 
+        this.mockPlayerIdentityService
+            .Setup(x => x.StartUserImpersonation(AccountId, null))
+            .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
+
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
+
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
+
         this.mockSessionService
             .Setup(x => x.CreateSession(token, AccountId, 1))
             .ReturnsAsync("session id");
@@ -420,9 +455,6 @@ public class AuthServiceTest
         this.mockUserDataRepository.VerifyAll();
         this.mockUserDataRepository.Verify(x => x.UpdateSaveImportTime(), Times.Never);
         this.mockSessionService.VerifyAll();
-        this.mockSavefileService.Verify(
-            x => x.Import(AccountId, It.IsAny<LoadIndexData>()),
-            Times.Never
-        );
+        this.mockSavefileService.Verify(x => x.Import(It.IsAny<LoadIndexData>()), Times.Never);
     }
 }
