@@ -40,6 +40,8 @@ public class FortControllerTest
         List<BuildList> buildList = new() { new() { fort_plant_detail_id = 4 } };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
 
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(new UpdateDataList());
+
         this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         this.mockFortService.Setup(x => x.GetBuildList()).ReturnsAsync(buildList);
 
