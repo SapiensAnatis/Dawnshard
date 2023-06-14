@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Photon.Shared;
+﻿using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.StateManager.Controllers;
 using Newtonsoft.Json;
@@ -47,12 +47,6 @@ public class RedisGame : IGame
     /// <inheritdoc/>
 
     public List<Player> Players { get; set; } = new List<Player>();
-
-    /// <summary>
-    /// Whether or not to return the game from methods in <see cref="GetController"/>.
-    /// </summary>
-    [Indexed(Sortable = true)]
-    public bool Visible { get; set; } = true;
 
     /// <summary>
     /// Create a new instance of the <see cref="RedisGame"/> class.

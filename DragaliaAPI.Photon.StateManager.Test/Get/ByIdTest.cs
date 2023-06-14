@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.StateManager.Models;
 using Xunit.Abstractions;
@@ -27,7 +28,7 @@ public class ByIdTest : TestFixture
                 RoomId = 12345,
                 Name = "151de85a-200a-4952-8757-e0f868bbf28b",
                 MatchingCompatibleId = 36,
-                MatchingType = Shared.MatchingTypes.Anyone,
+                MatchingType = MatchingTypes.Anyone,
                 QuestId = 301010103,
                 StartEntryTime = DateTimeOffset.UtcNow,
                 EntryConditions = new()
@@ -44,8 +45,7 @@ public class ByIdTest : TestFixture
                         ViewerId = 2,
                         PartyNoList = new List<int>() { 40 }
                     }
-                },
-                Visible = true
+                }
             };
 
         this.RedisConnectionProvider.RedisCollection<RedisGame>().Insert(game);
