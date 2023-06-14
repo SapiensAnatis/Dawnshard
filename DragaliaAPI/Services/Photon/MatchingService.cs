@@ -89,20 +89,42 @@ public class MatchingService : IMatchingService
 
     private async Task<RoomList> MapRoomList(ApiGame game)
     {
-        DbPlayerUserData hostUserData = await userDataRepository
-            .GetUserData(game.HostViewerId)
-            .FirstAsync();
+        DbPlayerUserData hostUserData;
+        DbPlayerCharaData hostCharaData;
 
-        DbPlayerCharaData hostCharaData = await partyRepository
-            .GetPartyUnits(hostUserData.DeviceAccountId, game.HostPartyNo)
-            .Where(x => x.UnitNo == 1)
-            .Join(
-                unitRepository.GetAllCharaData(hostUserData.DeviceAccountId),
-                partyUnit => partyUnit.CharaId,
-                charaData => charaData.CharaId,
-                (partyUnit, charaData) => charaData
-            )
-            .FirstAsync();
+        try
+        {
+            hostUserData = await userDataRepository.GetUserData(game.HostViewerId).FirstAsync();
+
+            hostCharaData = await partyRepository
+                .GetPartyUnits(hostUserData.DeviceAccountId, game.HostPartyNo)
+                .Where(x => x.UnitNo == 1)
+                .Join(
+                    unitRepository.GetAllCharaData(hostUserData.DeviceAccountId),
+                    partyUnit => partyUnit.CharaId,
+                    charaData => charaData.CharaId,
+                    (partyUnit, charaData) => charaData
+                )
+                .FirstAsync();
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogWarning(
+                ex,
+                "Failed to lookup host data for host ID {hostId} party #{partyNo}. Using fallback.",
+                game.HostViewerId,
+                game.HostPartyNo
+            );
+
+            hostUserData = new()
+            {
+                DeviceAccountId = string.Empty,
+                Name = "Euden",
+                Level = 1,
+            };
+
+            hostCharaData = new(string.Empty, Charas.ThePrince);
+        }
 
         return new RoomList()
         {
