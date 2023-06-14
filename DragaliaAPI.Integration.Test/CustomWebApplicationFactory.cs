@@ -91,7 +91,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         apiContext.Database.EnsureDeleted();
         apiContext.Database.EnsureCreated();
 
-        savefileService.CreateBase(TestFixture.DeviceAccountId).Wait();
+        savefileService.CreateBase().Wait();
 
         apiContext.PlayerMaterials.AddRange(
             Enum.GetValues<Materials>()
