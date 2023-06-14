@@ -98,9 +98,7 @@ public class MatchingService : IMatchingService
 
         try
         {
-            hostUserData = await userDataRepository
-                .GetViewerData(game.HostViewerId)
-                .FirstAsync();
+            hostUserData = await userDataRepository.GetViewerData(game.HostViewerId).FirstAsync();
 
             using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
                 hostUserData.DeviceAccountId
