@@ -86,10 +86,16 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
     private void SeedDatabase(IServiceProvider provider)
     {
         ISavefileService savefileService = provider.GetRequiredService<ISavefileService>();
+        IPlayerIdentityService playerIdentityService =
+            provider.GetRequiredService<IPlayerIdentityService>();
         ApiContext apiContext = provider.GetRequiredService<ApiContext>();
 
         apiContext.Database.EnsureDeleted();
         apiContext.Database.EnsureCreated();
+
+        using IDisposable ctx = playerIdentityService.StartUserImpersonation(
+            TestFixture.DeviceAccountId
+        );
 
         savefileService.CreateBase().Wait();
 
@@ -119,30 +125,8 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 )
         );
 
-        // TODO: When everything uses IPlayerDetailsService refactor this to use InitializeFort()
-        apiContext.PlayerFortDetails.Add(
-            new DbFortDetail() { DeviceAccountId = TestFixture.DeviceAccountId, CarpenterNum = 2 }
-        );
-
-        apiContext.PlayerFortBuilds.Add(
-            new DbFortBuild()
-            {
-                DeviceAccountId = TestFixture.DeviceAccountId,
-                PlantId = FortPlants.TheHalidom,
-                PositionX = 16, // Default Halidom position
-                PositionZ = 17,
-                LastIncomeDate = DateTimeOffset.UtcNow
-            }
-        );
-
-        apiContext.PlayerFortBuilds.Add(
-            new DbFortBuild()
-            {
-                DeviceAccountId = TestFixture.DeviceAccountId,
-                PlantId = FortPlants.Smithy,
-                Level = 9
-            }
-        );
+        IFortRepository fortRepository = provider.GetRequiredService<IFortRepository>();
+        fortRepository.InitializeFort().Wait();
 
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Coin = 100_000_000;
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.DewPoint = 100_000_000;
