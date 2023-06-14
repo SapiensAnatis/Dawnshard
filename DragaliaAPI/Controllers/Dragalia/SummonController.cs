@@ -367,20 +367,26 @@ public class SummonController : DragaliaControllerBase
         int countOfRare5Dragon = 0;
         int countOfRare4 = 0;
 
-        List<Dragons> newDragons =
-            (await this.unitRepository
-                .AddDragons(DeviceAccountId, summonResult
+        List<Dragons> newDragons = (
+            await this.unitRepository.AddDragons(
+                DeviceAccountId,
+                summonResult
                     .Where(x => x.entity_type == EntityTypes.Dragon)
-                    .Select(x => (Dragons)x.id)))
+                    .Select(x => (Dragons)x.id)
+            )
+        )
             .Where(x => x.isNew)
             .Select(x => x.id)
             .ToList();
 
-        List<Charas> newCharas =
-            (await this.unitRepository
-                .AddCharas(DeviceAccountId, summonResult
+        List<Charas> newCharas = (
+            await this.unitRepository.AddCharas(
+                DeviceAccountId,
+                summonResult
                     .Where(x => x.entity_type == EntityTypes.Chara)
-                    .Select(x => (Charas)x.id)))
+                    .Select(x => (Charas)x.id)
+            )
+        )
             .Where(x => x.isNew)
             .Select(x => x.id)
             .ToList();
