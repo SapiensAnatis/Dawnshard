@@ -6,6 +6,7 @@ using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared;
@@ -20,12 +21,16 @@ using Serilog.Events;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 ConfigurationManager configuration = builder.Configuration;
+
+configuration.AddJsonFile("itemSummonOdds.json", false, true);
+
 builder.Services
     .Configure<BaasOptions>(configuration.GetRequiredSection("Baas"))
     .Configure<LoginOptions>(configuration.GetRequiredSection("Login"))
     .Configure<DragalipatchOptions>(configuration.GetRequiredSection("Dragalipatch"))
     .Configure<RedisOptions>(configuration.GetRequiredSection("Redis"))
-    .Configure<PhotonOptions>(configuration.GetRequiredSection(nameof(PhotonOptions)));
+    .Configure<PhotonOptions>(configuration.GetRequiredSection(nameof(PhotonOptions)))
+    .Configure<ItemSummonOdds>(configuration);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
@@ -96,6 +101,9 @@ builder.Services
     .AddScoped<IMatchingService, MatchingService>()
     .AddScoped<IAbilityCrestService, AbilityCrestService>()
     .AddScoped<IHeroParamService, HeroParamService>()
+    .AddScoped<ITutorialService, TutorialService>()
+    .AddScoped<ILoadService, LoadService>()
+    .AddScoped<IItemSummonService, ItemSummonService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>();
 

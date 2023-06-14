@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.PlayerDetails;
 using MockQueryable.Moq;

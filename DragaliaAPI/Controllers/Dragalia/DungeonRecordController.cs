@@ -19,6 +19,7 @@ public class DungeonRecordController : DragaliaControllerBase
     private readonly IInventoryRepository inventoryRepository;
     private readonly IQuestRewardService questRewardService;
     private readonly IUpdateDataService updateDataService;
+    private readonly ITutorialService tutorialService;
 
     private const int QuestCoin = 10_000_000;
     private const int QuestMana = 20_000;
@@ -30,7 +31,8 @@ public class DungeonRecordController : DragaliaControllerBase
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
         IQuestRewardService questRewardService,
-        IUpdateDataService updateDataService
+        IUpdateDataService updateDataService,
+        ITutorialService tutorialService
     )
     {
         this.questRepository = questRepository;
@@ -39,6 +41,7 @@ public class DungeonRecordController : DragaliaControllerBase
         this.inventoryRepository = inventoryRepository;
         this.questRewardService = questRewardService;
         this.updateDataService = updateDataService;
+        this.tutorialService = tutorialService;
     }
 
     [HttpPost("record")]
@@ -59,7 +62,7 @@ public class DungeonRecordController : DragaliaControllerBase
 
         float clear_time = request.play_record?.time ?? -1.0f;
 
-        await this.userDataRepository.AddTutorialFlag(this.DeviceAccountId, 1022);
+        await this.tutorialService.AddTutorialFlag(1022);
 
         // oldQuestData and newQuestData actually reference the same object so this is somewhat redundant
         // keeping it for clarity and because oldQuestData is null in some tests

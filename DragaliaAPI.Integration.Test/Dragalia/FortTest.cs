@@ -54,7 +54,7 @@ public class FortTest : TestFixture
                     fort_plant_detail_id = 10010101,
                     position_x = 16, // Default Halidom position
                     position_z = 17,
-                    last_income_time = DateTime.UtcNow - DateTimeOffset.UnixEpoch,
+                    // last_income_time is not checked here, as it changes based on the amount of time used to run the tests
                     is_new = false,
                     build_start_date = DateTimeOffset.UnixEpoch,
                     build_end_date = DateTimeOffset.UnixEpoch,

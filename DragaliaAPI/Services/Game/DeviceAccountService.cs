@@ -5,7 +5,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Shared;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Services.Game;
 
 [Obsolete(ObsoleteReasons.BaaS)]
 public class DeviceAccountService : IDeviceAccountService

@@ -41,30 +41,12 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         return apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId);
     }
 
-    public async Task UpdateTutorialStatus(string deviceAccountId, int newStatus)
-    {
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
-
-        if (newStatus > userData.TutorialStatus)
-            userData.TutorialStatus = newStatus;
-    }
-
     public async Task<ISet<int>> GetTutorialFlags(string deviceAccountId)
     {
         DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
 
         int flags = userData.TutorialFlag;
         return TutorialFlagUtil.ConvertIntToFlagIntList(flags);
-    }
-
-    public async Task<DbPlayerUserData> AddTutorialFlag(string deviceAccountId, int flag)
-    {
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
-
-        ISet<int> flags = TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag);
-        flags.Add(flag);
-        userData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(flags);
-        return userData;
     }
 
     public async Task UpdateName(string deviceAccountId, string newName)

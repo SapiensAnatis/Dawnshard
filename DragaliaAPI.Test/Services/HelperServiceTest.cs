@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 
 namespace DragaliaAPI.Test.Services;
 

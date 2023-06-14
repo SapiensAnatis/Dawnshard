@@ -53,9 +53,9 @@ public class MasterAssetData<TKey, TItem>
     /// Attempts to get a <typeparam name="TItem"> instance corresponding to the given <typeparam name="TKey"/> key.</typeparam>
     /// </summary>
     /// <param name="key">The key to index with.</param>
-    /// <returns>The returned value.</returns>
+    /// <param name="item">The returned value, if the master data contained it.</param>
     /// <returns>A bool indicating whether the value was successfully retrieved.</returns>
-    public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TItem item) =>
+    public bool TryGetValue(TKey key, [NotNullWhen(true)] out TItem? item) =>
         this.internalKeyCollection.Value.TryGetValue(key, out item);
 
     /// <summary>

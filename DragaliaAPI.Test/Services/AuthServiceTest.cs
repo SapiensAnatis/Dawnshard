@@ -6,6 +6,7 @@ using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Services.Exceptions;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Test.Utils;
 using Microsoft.Extensions.Logging;

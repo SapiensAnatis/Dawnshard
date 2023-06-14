@@ -9,7 +9,7 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Services.Game;
 
 /// <summary>
 /// Service for fort, weapon, and album bonuses

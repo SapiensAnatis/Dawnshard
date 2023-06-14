@@ -9,7 +9,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Serilog.Context;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Services.Game;
 
 public class WeaponService : IWeaponService
 {

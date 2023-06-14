@@ -7,7 +7,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Services.Game;
 
 public class SummonService : ISummonService
 {

@@ -21,6 +21,7 @@ public class DungeonRecordControllerTest
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IQuestRewardService> mockQuestRewardService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
+    private readonly Mock<ITutorialService> mockTutorialService;
 
     private const string dungeonKey = "key";
     private const int questId = 100010101;
@@ -34,6 +35,7 @@ public class DungeonRecordControllerTest
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockQuestRewardService = new(MockBehavior.Strict);
+        this.mockTutorialService = new(MockBehavior.Strict);
 
         this.dungeonRecordController = new(
             mockQuestRepository.Object,
@@ -41,7 +43,8 @@ public class DungeonRecordControllerTest
             mockUserDataRepository.Object,
             mockInventoryRepository.Object,
             mockQuestRewardService.Object,
-            mockUpdateDataService.Object
+            mockUpdateDataService.Object,
+            mockTutorialService.Object
         );
 
         this.dungeonRecordController.SetupMockContext();
@@ -59,9 +62,9 @@ public class DungeonRecordControllerTest
                 }
             );
 
-        this.mockUserDataRepository
-            .Setup(x => x.AddTutorialFlag(DeviceAccountId, 1022))
-            .ReturnsAsync(new DbPlayerUserData { DeviceAccountId = DeviceAccountId });
+        this.mockTutorialService
+            .Setup(x => x.AddTutorialFlag(1022))
+            .ReturnsAsync(new List<int> { 1022 });
 
         this.mockUserDataRepository
             .Setup(x => x.GetUserData(DeviceAccountId))

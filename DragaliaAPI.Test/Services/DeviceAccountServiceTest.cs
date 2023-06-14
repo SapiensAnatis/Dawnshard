@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
