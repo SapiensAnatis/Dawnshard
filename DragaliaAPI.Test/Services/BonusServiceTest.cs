@@ -15,7 +15,7 @@ public class BonusServiceTest
 {
     private readonly Mock<IFortRepository> mockFortRepository;
     private readonly Mock<IWeaponRepository> mockWeaponBodyRepository;
-    private readonly Mock<IPlayerDetailsService> mockPlayerDetailsService;
+    private readonly Mock<IPlayerIdentityService> mockPlayerDetailsService;
     private readonly IBonusService bonusService;
 
     public BonusServiceTest()
@@ -57,7 +57,7 @@ public class BonusServiceTest
             .Deserialize<FortBonusList>(ApiJsonOptions.Instance)!;
 
         this.mockFortRepository
-            .Setup(x => x.GetBuilds(DeviceAccountId))
+            .SetupGet(x => x.Builds)
             .Returns(
                 inputBuildList
                     .Select(
@@ -74,7 +74,7 @@ public class BonusServiceTest
             );
 
         this.mockWeaponBodyRepository
-            .Setup(x => x.GetWeaponBodies(DeviceAccountId))
+            .SetupGet(x => x.WeaponBodies)
             .Returns(
                 inputWeaponList
                     .Select(

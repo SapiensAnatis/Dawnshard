@@ -8,7 +8,7 @@ public static class IdentityTestUtils
     public const string DeviceAccountId = "id";
     public const long ViewerId = 2;
 
-    public static readonly Mock<IPlayerDetailsService> MockPlayerDetailsService;
+    public static readonly Mock<IPlayerIdentityService> MockPlayerDetailsService;
 
     static IdentityTestUtils()
     {

@@ -9,34 +9,31 @@ namespace DragaliaAPI.Database.Repositories;
 public class QuestRepository : IQuestRepository
 {
     private readonly ApiContext apiContext;
-    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly IPlayerIdentityService playerIdentityService;
 
-    public QuestRepository(ApiContext apiContext, IPlayerDetailsService playerDetailsService)
+    public QuestRepository(ApiContext apiContext, IPlayerIdentityService playerIdentityService)
     {
         this.apiContext = apiContext;
-        this.playerDetailsService = playerDetailsService;
-    }
-
-    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
-    public IQueryable<DbQuest> GetQuests(string deviceAccountId)
-    {
-        return this.apiContext.PlayerQuests.Where(x => x.DeviceAccountId == deviceAccountId);
+        this.playerIdentityService = playerIdentityService;
     }
 
     public IQueryable<DbQuest> Quests =>
         this.apiContext.PlayerQuests.Where(
-            x => x.DeviceAccountId == this.playerDetailsService.AccountId
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
-    public async Task UpdateQuestState(string deviceAccountId, int questId, int state)
+    public async Task UpdateQuestState(int questId, int state)
     {
-        DbQuest? questData = await apiContext.PlayerQuests.FindAsync(deviceAccountId, questId);
+        DbQuest? questData = await apiContext.PlayerQuests.FindAsync(
+            this.playerIdentityService.AccountId,
+            questId
+        );
 
         if (questData is null)
         {
             questData = new()
             {
-                DeviceAccountId = deviceAccountId,
+                DeviceAccountId = this.playerIdentityService.AccountId,
                 QuestId = questId,
                 State = (byte)state
             };
@@ -46,15 +43,19 @@ public class QuestRepository : IQuestRepository
         questData.State = (byte)state;
     }
 
-    public async Task<DbQuest> CompleteQuest(string deviceAccountId, int questId, float clearTime)
+    public async Task<DbQuest> CompleteQuest(int questId, float clearTime)
     {
         DbQuest? questData = await apiContext.PlayerQuests.SingleOrDefaultAsync(
-            x => x.DeviceAccountId == deviceAccountId && x.QuestId == questId
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId && x.QuestId == questId
         );
 
         if (questData is null)
         {
-            questData = new() { DeviceAccountId = deviceAccountId, QuestId = questId, };
+            questData = new()
+            {
+                DeviceAccountId = this.playerIdentityService.AccountId,
+                QuestId = questId,
+            };
             apiContext.PlayerQuests.Add(questData);
         }
 

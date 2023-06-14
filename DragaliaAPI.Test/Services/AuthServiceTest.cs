@@ -8,6 +8,7 @@ using DragaliaAPI.Services.Api;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared;
+using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -24,6 +25,7 @@ public class AuthServiceTest
     private readonly Mock<IBaasApi> mockBaasRequestHelper;
     private readonly Mock<ISessionService> mockSessionService;
     private readonly Mock<ISavefileService> mockSavefileService;
+    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IOptionsMonitor<LoginOptions>> mockLoginOptions;
     private readonly Mock<IOptionsMonitor<BaasOptions>> mockBaasOptions;
@@ -36,6 +38,7 @@ public class AuthServiceTest
         this.mockBaasRequestHelper = new(MockBehavior.Strict);
         this.mockSessionService = new(MockBehavior.Strict);
         this.mockSavefileService = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockBaasOptions = new(MockBehavior.Strict);
         this.mockLoginOptions = new(MockBehavior.Strict);
@@ -45,6 +48,7 @@ public class AuthServiceTest
             this.mockBaasRequestHelper.Object,
             this.mockSessionService.Object,
             this.mockSavefileService.Object,
+            this.mockPlayerIdentityService.Object,
             this.mockUserDataRepository.Object,
             this.mockLoginOptions.Object,
             this.mockBaasOptions.Object,
@@ -70,7 +74,7 @@ public class AuthServiceTest
             .Setup(x => x.LoadSessionSessionId("session id"))
             .ReturnsAsync(new Session("session id", "token", "device account id", 1));
         this.mockUserDataRepository
-            .Setup(x => x.GetUserData("device account id"))
+            .SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>()
                 {
@@ -109,7 +113,7 @@ public class AuthServiceTest
             .AsString();
 
         this.mockUserDataRepository
-            .Setup(x => x.GetUserData(AccountId))
+            .SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>()
                 {
@@ -214,7 +218,7 @@ public class AuthServiceTest
         this.mockBaasRequestHelper.Setup(x => x.GetSavefile(token)).ReturnsAsync(importSavefile);
 
         this.mockUserDataRepository
-            .Setup(x => x.GetUserData(AccountId))
+            .SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>()
                 {
@@ -277,7 +281,7 @@ public class AuthServiceTest
             .ThrowsAsync(new JsonException());
 
         this.mockUserDataRepository
-            .Setup(x => x.GetUserData(AccountId))
+            .SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>()
                 {
@@ -331,7 +335,7 @@ public class AuthServiceTest
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
 
         this.mockUserDataRepository
-            .Setup(x => x.GetUserData(AccountId))
+            .SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>()
                 {
@@ -356,7 +360,7 @@ public class AuthServiceTest
         this.mockBaasOptions.VerifyAll();
         this.mockLoginOptions.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
-        this.mockUserDataRepository.Verify(x => x.UpdateSaveImportTime(AccountId), Times.Never);
+        this.mockUserDataRepository.Verify(x => x.UpdateSaveImportTime(), Times.Never);
         this.mockSessionService.VerifyAll();
         this.mockSavefileService.Verify(
             x => x.Import(AccountId, It.IsAny<LoadIndexData>()),
@@ -389,7 +393,7 @@ public class AuthServiceTest
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
 
         this.mockUserDataRepository
-            .Setup(x => x.GetUserData(AccountId))
+            .SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>()
                 {
@@ -414,7 +418,7 @@ public class AuthServiceTest
         this.mockBaasOptions.VerifyAll();
         this.mockLoginOptions.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
-        this.mockUserDataRepository.Verify(x => x.UpdateSaveImportTime(AccountId), Times.Never);
+        this.mockUserDataRepository.Verify(x => x.UpdateSaveImportTime(), Times.Never);
         this.mockSessionService.VerifyAll();
         this.mockSavefileService.Verify(
             x => x.Import(AccountId, It.IsAny<LoadIndexData>()),

@@ -12,17 +12,17 @@ public class UpdateDataService : IUpdateDataService
 {
     private readonly ApiContext apiContext;
     private readonly IMapper mapper;
-    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly IPlayerIdentityService playerIdentityService;
 
     public UpdateDataService(
         ApiContext apiContext,
         IMapper mapper,
-        IPlayerDetailsService playerDetailsService
+        IPlayerIdentityService playerIdentityService
     )
     {
         this.apiContext = apiContext;
         this.mapper = mapper;
-        this.playerDetailsService = playerDetailsService;
+        this.playerIdentityService = playerIdentityService;
     }
 
     [Obsolete(
@@ -52,7 +52,7 @@ public class UpdateDataService : IUpdateDataService
             .Where(
                 x =>
                     (x.State is EntityState.Modified or EntityState.Added)
-                    && x.Entity.DeviceAccountId == this.playerDetailsService.AccountId
+                    && x.Entity.DeviceAccountId == this.playerIdentityService.AccountId
             )
             .Select(x => x.Entity)
             .ToList();

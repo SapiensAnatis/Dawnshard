@@ -20,6 +20,7 @@ public class AuthService : IAuthService
     private readonly IBaasApi baasRequestHelper;
     private readonly ISessionService sessionService;
     private readonly ISavefileService savefileService;
+    private readonly IPlayerIdentityService playerIdentityService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IOptionsMonitor<LoginOptions> loginOptions;
     private readonly IOptionsMonitor<BaasOptions> baasOptions;
@@ -30,6 +31,7 @@ public class AuthService : IAuthService
         IBaasApi baasRequestHelper,
         ISessionService sessionService,
         ISavefileService savefileService,
+        IPlayerIdentityService playerIdentityService,
         IUserDataRepository userDataRepository,
         IOptionsMonitor<LoginOptions> loginOptions,
         IOptionsMonitor<BaasOptions> baasOptions,
@@ -39,6 +41,7 @@ public class AuthService : IAuthService
         this.baasRequestHelper = baasRequestHelper;
         this.sessionService = sessionService;
         this.savefileService = savefileService;
+        this.playerIdentityService = playerIdentityService;
         this.userDataRepository = userDataRepository;
         this.loginOptions = loginOptions;
         this.baasOptions = baasOptions;
@@ -67,9 +70,12 @@ public class AuthService : IAuthService
             await this.sessionService.LoadSessionSessionId(sessionId)
         ).DeviceAccountId;
 
-        IQueryable<DbPlayerUserData> playerInfo = this.userDataRepository.GetUserData(
-            deviceAccountId
-        );
+        IQueryable<DbPlayerUserData> playerInfo;
+
+        using (IDisposable ctx = this.playerIdentityService.StartUserImpersonation(deviceAccountId))
+        {
+            playerInfo = this.userDataRepository.UserData;
+        }
 
         return (await playerInfo.Select(x => x.ViewerId).SingleAsync(), sessionId);
     }
@@ -84,12 +90,14 @@ public class AuthService : IAuthService
             jwt.Subject
         );
 
-        if (
-            GetPendingSaveImport(
-                jwt,
-                await this.userDataRepository.GetUserData(jwt.Subject).SingleOrDefaultAsync()
-            )
-        )
+        DbPlayerUserData? userData = await this.userDataRepository.UserData.SingleOrDefaultAsync();
+
+        using (IDisposable ctx = this.playerIdentityService.StartUserImpersonation(jwt.Subject))
+        {
+            userData = await this.userDataRepository.UserData.SingleOrDefaultAsync();
+        }
+
+        if (GetPendingSaveImport(jwt, userData))
         {
             try
             {
@@ -172,7 +180,12 @@ public class AuthService : IAuthService
 
     private async Task<long> GetViewerId(string accountId)
     {
-        IQueryable<DbPlayerUserData> userDataQuery = this.userDataRepository.GetUserData(accountId);
+        IQueryable<DbPlayerUserData> userDataQuery;
+
+        using (IDisposable ctx = this.playerIdentityService.StartUserImpersonation(accountId))
+        {
+            userDataQuery = this.userDataRepository.UserData;
+        }
 
         DbPlayerUserData? userData = await userDataQuery.SingleOrDefaultAsync();
 

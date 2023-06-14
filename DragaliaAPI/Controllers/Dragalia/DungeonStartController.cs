@@ -67,12 +67,12 @@ public class DungeonStartController : DragaliaControllerBase
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        DbQuest? quest = await this.questRepository
-            .GetQuests(this.DeviceAccountId)
-            .SingleOrDefaultAsync(x => x.QuestId == request.quest_id);
+        DbQuest? quest = await this.questRepository.Quests.SingleOrDefaultAsync(
+            x => x.QuestId == request.quest_id
+        );
 
         if (quest?.State != 3)
-            await this.questRepository.UpdateQuestState(this.DeviceAccountId, request.quest_id, 2);
+            await this.questRepository.UpdateQuestState(request.quest_id, 2);
 
         UpdateDataList updateData = await this.updateDataService.SaveChangesAsync();
 
@@ -83,10 +83,9 @@ public class DungeonStartController : DragaliaControllerBase
 
         IQueryable<DbPartyUnit> partyQuery = request.party_no_list.Count switch
         {
-            1 => this.partyRepository.GetPartyUnits(this.DeviceAccountId, request.party_no_list[0]),
+            1 => this.partyRepository.GetPartyUnits(request.party_no_list[0]),
             2
                 => this.partyRepository.GetPartyUnits(
-                    this.DeviceAccountId,
                     request.party_no_list[0],
                     request.party_no_list[1]
                 ),
@@ -96,7 +95,7 @@ public class DungeonStartController : DragaliaControllerBase
         List<DbPartyUnit> party = await partyQuery.ToListAsync();
 
         List<DbDetailedPartyUnit> detailedPartyUnits = await this.unitRepository
-            .BuildDetailedPartyUnit(this.DeviceAccountId, partyQuery)
+            .BuildDetailedPartyUnit(partyQuery)
             .ToListAsync();
 
         // Post-processing: fix unit numbers for sindom and filter out null crests

@@ -165,7 +165,6 @@ public class RedoableSummonController : DragaliaControllerBase
 
         IEnumerable<(Charas id, bool isNew)> repositoryCharaOuput =
             await this.unitRepository.AddCharas(
-                this.DeviceAccountId,
                 cachedResult
                     .Where(x => x.entity_type == EntityTypes.Chara)
                     .Select(x => (Charas)x.id)
@@ -173,7 +172,6 @@ public class RedoableSummonController : DragaliaControllerBase
 
         IEnumerable<(Dragons id, bool isNew)> repositoryDragonOutput =
             await this.unitRepository.AddDragons(
-                this.DeviceAccountId,
                 cachedResult
                     .Where(x => x.entity_type == EntityTypes.Dragon)
                     .Select(x => (Dragons)x.id)

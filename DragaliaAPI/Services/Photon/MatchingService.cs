@@ -5,6 +5,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -17,13 +18,15 @@ public class MatchingService : IMatchingService
     private readonly IPartyRepository partyRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly ILogger<MatchingService> logger;
+    private readonly IPlayerIdentityService playerIdentityService;
 
     public MatchingService(
         IPhotonStateApi photonStateApi,
         IUnitRepository unitRepository,
         IPartyRepository partyRepository,
         IUserDataRepository userDataRepository,
-        ILogger<MatchingService> logger
+        ILogger<MatchingService> logger,
+        IPlayerIdentityService playerIdentityService
     )
     {
         this.photonStateApi = photonStateApi;
@@ -31,6 +34,7 @@ public class MatchingService : IMatchingService
         this.partyRepository = partyRepository;
         this.userDataRepository = userDataRepository;
         this.logger = logger;
+        this.playerIdentityService = playerIdentityService;
     }
 
     public async Task<IEnumerable<RoomList>> GetRoomList()
@@ -90,19 +94,28 @@ public class MatchingService : IMatchingService
     private async Task<RoomList> MapRoomList(ApiGame game)
     {
         DbPlayerUserData hostUserData = await userDataRepository
-            .GetUserData(game.HostViewerId)
+            .GetViewerData(game.HostViewerId)
             .FirstAsync();
 
-        DbPlayerCharaData hostCharaData = await partyRepository
-            .GetPartyUnits(hostUserData.DeviceAccountId, game.HostPartyNo)
-            .Where(x => x.UnitNo == 1)
-            .Join(
-                unitRepository.GetAllCharaData(hostUserData.DeviceAccountId),
-                partyUnit => partyUnit.CharaId,
-                charaData => charaData.CharaId,
-                (partyUnit, charaData) => charaData
+        DbPlayerCharaData hostCharaData;
+
+        using (
+            IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+                hostUserData.DeviceAccountId
             )
-            .FirstAsync();
+        )
+        {
+            hostCharaData = await partyRepository
+                .GetPartyUnits(game.HostPartyNo)
+                .Where(x => x.UnitNo == 1)
+                .Join(
+                    unitRepository.Charas,
+                    partyUnit => partyUnit.CharaId,
+                    charaData => charaData.CharaId,
+                    (partyUnit, charaData) => charaData
+                )
+                .SingleAsync();
+        }
 
         return new RoomList()
         {

@@ -67,7 +67,7 @@ public class DungeonRecordControllerTest
             .ReturnsAsync(new List<int> { 1022 });
 
         this.mockUserDataRepository
-            .Setup(x => x.GetUserData(DeviceAccountId))
+            .SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>()
                 {
@@ -98,7 +98,7 @@ public class DungeonRecordControllerTest
     public async Task QuestIdAndPartyDataAppearInResponse()
     {
         this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
+            .SetupGet(x => x.Quests)
             .Returns(
                 new List<DbQuest>()
                 {
@@ -109,7 +109,7 @@ public class DungeonRecordControllerTest
             );
 
         this.mockQuestRepository
-            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
+            .Setup(x => x.CompleteQuest(questId, It.IsAny<float>()))
             .ReturnsAsync(new DbQuest() { DeviceAccountId = DeviceAccountId, QuestId = questId });
 
         DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
@@ -145,7 +145,7 @@ public class DungeonRecordControllerTest
     public async Task BestClearDisplaysTimeAsBestTime()
     {
         this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
+            .SetupGet(x => x.Quests)
             .Returns(
                 new List<DbQuest>()
                 {
@@ -161,7 +161,7 @@ public class DungeonRecordControllerTest
             );
 
         this.mockQuestRepository
-            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, clearTime))
+            .Setup(x => x.CompleteQuest(questId, clearTime))
             .ReturnsAsync(
                 new DbQuest()
                 {
@@ -203,7 +203,7 @@ public class DungeonRecordControllerTest
     public async Task SlowerClearDoesNotDisplayTimeAsBestTime()
     {
         this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
+            .SetupGet(x => x.Quests)
             .Returns(
                 new List<DbQuest>()
                 {
@@ -219,7 +219,7 @@ public class DungeonRecordControllerTest
             );
 
         this.mockQuestRepository
-            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, clearTime))
+            .Setup(x => x.CompleteQuest(questId, clearTime))
             .ReturnsAsync(
                 new DbQuest()
                 {
@@ -258,7 +258,7 @@ public class DungeonRecordControllerTest
     public async Task FirstClearFullClearGivesAllMissions()
     {
         this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
+            .SetupGet(x => x.Quests)
             .Returns(
                 new List<DbQuest>()
                 {
@@ -277,7 +277,7 @@ public class DungeonRecordControllerTest
             );
 
         this.mockQuestRepository
-            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
+            .Setup(x => x.CompleteQuest(questId, It.IsAny<float>()))
             .ReturnsAsync(
                 new DbQuest()
                 {
@@ -332,7 +332,7 @@ public class DungeonRecordControllerTest
     public async Task NotFirstClearFullClearGivesAllMissionsButNotFirstClear()
     {
         this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
+            .SetupGet(x => x.Quests)
             .Returns(
                 new List<DbQuest>()
                 {
@@ -351,7 +351,7 @@ public class DungeonRecordControllerTest
             );
 
         this.mockQuestRepository
-            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
+            .Setup(x => x.CompleteQuest(questId, It.IsAny<float>()))
             .ReturnsAsync(
                 new DbQuest()
                 {
@@ -406,7 +406,7 @@ public class DungeonRecordControllerTest
     public async Task VariousPreviousMissionClearStatusesGiveCorrectMissions(bool[] missions)
     {
         this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
+            .SetupGet(x => x.Quests)
             .Returns(
                 new List<DbQuest>()
                 {
@@ -425,7 +425,7 @@ public class DungeonRecordControllerTest
             );
 
         this.mockQuestRepository
-            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
+            .Setup(x => x.CompleteQuest(questId, It.IsAny<float>()))
             .ReturnsAsync(
                 new DbQuest()
                 {
@@ -481,7 +481,7 @@ public class DungeonRecordControllerTest
     public async Task AllMissionsPreviouslyClearedDoesntGiveRewards()
     {
         this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
+            .SetupGet(x => x.Quests)
             .Returns(
                 new List<DbQuest>()
                 {
@@ -500,7 +500,7 @@ public class DungeonRecordControllerTest
             );
 
         this.mockQuestRepository
-            .Setup(x => x.CompleteQuest(DeviceAccountId, questId, It.IsAny<float>()))
+            .Setup(x => x.CompleteQuest(questId, It.IsAny<float>()))
             .ReturnsAsync(
                 new DbQuest()
                 {

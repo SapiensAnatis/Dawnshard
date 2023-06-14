@@ -9,6 +9,6 @@ public interface ISavefileService
     Task CreateBase(string deviceAccountId);
     Task ThreadSafeImport(string deviceAccountId, LoadIndexData savefile);
     Task Import(string deviceAccountId, LoadIndexData savefile);
-    IQueryable<DbPlayer> Load(string deviceAccountId);
+    IQueryable<DbPlayer> Load();
     Task Reset(string deviceAccountId);
 }

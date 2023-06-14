@@ -10,26 +10,26 @@ namespace DragaliaAPI.Database.Repositories;
 public class FortRepository : IFortRepository
 {
     private readonly ApiContext apiContext;
-    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly IPlayerIdentityService playerIdentityService;
     private readonly ILogger<FortRepository> logger;
 
     private const int DefaultCarpenters = 2;
 
     public FortRepository(
         ApiContext apiContext,
-        IPlayerDetailsService playerDetailsService,
+        IPlayerIdentityService playerIdentityService,
         ILogger<FortRepository> logger
     )
     {
         this.apiContext = apiContext;
-        this.playerDetailsService = playerDetailsService;
+        this.playerIdentityService = playerIdentityService;
         this.logger = logger;
     }
 
-    public IQueryable<DbFortBuild> Builds => this.GetBuilds(this.playerDetailsService.AccountId);
-
-    public IQueryable<DbFortBuild> GetBuilds(string deviceAccountId) =>
-        this.apiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == deviceAccountId);
+    public IQueryable<DbFortBuild> Builds =>
+        this.apiContext.PlayerFortBuilds.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
+        );
 
     public async Task InitializeFort()
     {
@@ -38,7 +38,7 @@ public class FortRepository : IFortRepository
         await this.apiContext.PlayerFortDetails.AddAsync(
             new DbFortDetail()
             {
-                DeviceAccountId = this.playerDetailsService.AccountId,
+                DeviceAccountId = this.playerIdentityService.AccountId,
                 CarpenterNum = DefaultCarpenters
             }
         );
@@ -46,7 +46,7 @@ public class FortRepository : IFortRepository
         await apiContext.PlayerFortBuilds.AddAsync(
             new DbFortBuild()
             {
-                DeviceAccountId = this.playerDetailsService.AccountId,
+                DeviceAccountId = this.playerIdentityService.AccountId,
                 PlantId = FortPlants.TheHalidom,
                 PositionX = 16, // Default Halidom position
                 PositionZ = 17,
@@ -58,7 +58,7 @@ public class FortRepository : IFortRepository
     public async Task<DbFortDetail> GetFortDetail()
     {
         DbFortDetail? details = await this.apiContext.PlayerFortDetails.FindAsync(
-            this.playerDetailsService.AccountId
+            this.playerIdentityService.AccountId
         );
 
         if (details == null)
@@ -69,7 +69,7 @@ public class FortRepository : IFortRepository
                 await this.apiContext.PlayerFortDetails.AddAsync(
                     new()
                     {
-                        DeviceAccountId = this.playerDetailsService.AccountId,
+                        DeviceAccountId = this.playerIdentityService.AccountId,
                         CarpenterNum = DefaultCarpenters
                     }
                 )
@@ -108,7 +108,7 @@ public class FortRepository : IFortRepository
     public async Task UpdateFortMaximumCarpenter(int carpenterNum)
     {
         DbFortDetail fortDetail =
-            await apiContext.PlayerFortDetails.FindAsync(this.playerDetailsService.AccountId)
+            await apiContext.PlayerFortDetails.FindAsync(this.playerIdentityService.AccountId)
             ?? throw new InvalidOperationException("Missing FortDetails!");
 
         fortDetail.CarpenterNum = carpenterNum;
@@ -123,7 +123,7 @@ public class FortRepository : IFortRepository
         if (fort is null)
         {
             throw new InvalidOperationException(
-                $"Could not get building {buildId} for account {this.playerDetailsService.AccountId}."
+                $"Could not get building {buildId} for account {this.playerIdentityService.AccountId}."
             );
         }
 

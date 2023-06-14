@@ -51,9 +51,9 @@ public class DungeonRecordController : DragaliaControllerBase
         // TODO: Turn this method into a service call
         DungeonSession session = await this.dungeonService.FinishDungeon(request.dungeon_key);
 
-        DbQuest? oldQuestData = await this.questRepository
-            .GetQuests(this.DeviceAccountId)
-            .SingleOrDefaultAsync(x => x.QuestId == session.QuestData.Id);
+        DbQuest? oldQuestData = await this.questRepository.Quests.SingleOrDefaultAsync(
+            x => x.QuestId == session.QuestData.Id
+        );
 
         bool isFirstClear = oldQuestData is null || oldQuestData?.PlayCount == 0;
         bool oldMissionClear1 = oldQuestData?.IsMissionClear1 ?? false;
@@ -67,14 +67,11 @@ public class DungeonRecordController : DragaliaControllerBase
         // oldQuestData and newQuestData actually reference the same object so this is somewhat redundant
         // keeping it for clarity and because oldQuestData is null in some tests
         DbQuest newQuestData = await this.questRepository.CompleteQuest(
-            this.DeviceAccountId,
             session.QuestData.Id,
             clear_time
         );
 
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .SingleAsync();
+        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
 
         userData.Exp += 1;
         userData.ManaPoint += QuestMana;

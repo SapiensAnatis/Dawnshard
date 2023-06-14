@@ -53,8 +53,7 @@ public class DragonServiceTest
             out List<DbPlayerStoryState> stories
         );
         DragonGetContactDataData responseData = await dragonService.DoDragonGetContactData(
-            new DragonGetContactDataRequest(),
-            DeviceAccountId
+            new DragonGetContactDataRequest()
         );
 
         responseData.Should().NotBeNull();
@@ -91,8 +90,7 @@ public class DragonServiceTest
                         DragonGifts.StrawberryTart,
                         DragonGifts.CompellingBook
                     }
-                },
-                DeviceAccountId
+                }
             );
 
         responseData.Should().NotBeNull();
@@ -116,9 +114,9 @@ public class DragonServiceTest
         dragonRels[0].Exp.Should().Be(2400);
         dragonRels[0].Level.Should().Be(10);
 
-        mockUserDataRepository.Verify(x => x.LookupUserData());
-        mockInventoryRepository.Verify(x => x.GetDragonGifts(DeviceAccountId));
-        mockInventoryRepository.Setup(x => x.GetMaterial(DeviceAccountId, It.IsAny<Materials>()));
+        mockUserDataRepository.Verify(x => x.UserData);
+        mockInventoryRepository.Verify(x => x.DragonGifts);
+        mockInventoryRepository.Setup(x => x.GetMaterial(It.IsAny<Materials>()));
         mockStoryRepository.VerifyAll();
     }
 
@@ -150,8 +148,7 @@ public class DragonServiceTest
                 {
                     dragon_id = Dragons.Garuda,
                     dragon_gift_id_list = new List<DragonGifts>() { DragonGifts.FreshBread }
-                },
-                DeviceAccountId
+                }
             );
 
         responseData.Should().NotBeNull();
@@ -170,9 +167,9 @@ public class DragonServiceTest
         dragonRels[0].Exp.Should().Be(36300);
         dragonRels[0].Level.Should().Be(30);
 
-        mockUserDataRepository.Verify(x => x.LookupUserData());
-        mockInventoryRepository.Verify(x => x.GetDragonGifts(DeviceAccountId));
-        mockInventoryRepository.Setup(x => x.GetMaterial(DeviceAccountId, It.IsAny<Materials>()));
+        mockUserDataRepository.Verify(x => x.UserData);
+        mockInventoryRepository.Verify(x => x.DragonGifts);
+        mockInventoryRepository.Setup(x => x.GetMaterial(It.IsAny<Materials>()));
     }
 
     [Theory]
@@ -203,8 +200,7 @@ public class DragonServiceTest
                 dragon_id = dragon,
                 dragon_gift_id = gift,
                 quantity = usedQuantity
-            },
-            DeviceAccountId
+            }
         );
 
         responseData.Should().NotBeNull();
@@ -214,8 +210,8 @@ public class DragonServiceTest
         dragonRels[0].Exp.Should().Be(expectedXp);
         dragonRels[0].Level.Should().Be(expectedLvl);
         mockUnitRepository.VerifyAll();
-        mockInventoryRepository.Verify(x => x.GetDragonGifts(DeviceAccountId));
-        mockInventoryRepository.Setup(x => x.GetMaterial(DeviceAccountId, It.IsAny<Materials>()));
+        mockInventoryRepository.Verify(x => x.DragonGifts);
+        mockInventoryRepository.Setup(x => x.GetMaterial(It.IsAny<Materials>()));
         if (dragon != Dragons.Puppy && dragonRels[0].Level > 4)
             mockStoryRepository.VerifyAll();
     }
@@ -232,7 +228,7 @@ public class DragonServiceTest
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
 
         mockUnitRepository
-            .Setup(x => x.GetAllDragonData(DeviceAccountId))
+            .SetupGet(x => x.Dragons)
             .Returns(dragonDataList.AsQueryable().BuildMock());
 
         DbPlayerMaterial mat = new DbPlayerMaterial()
@@ -242,7 +238,7 @@ public class DragonServiceTest
             Quantity = 100
         };
         mockInventoryRepository
-            .Setup(x => x.GetMaterials(DeviceAccountId))
+            .SetupGet(x => x.Materials)
             .Returns(
                 new List<DbPlayerMaterial>() { mat }
                     .AsQueryable()
@@ -262,8 +258,7 @@ public class DragonServiceTest
                         quantity = 50
                     }
                 }
-            },
-            DeviceAccountId
+            }
         );
 
         dragonData.AttackPlusCount.Should().Be(50);
@@ -290,7 +285,7 @@ public class DragonServiceTest
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
 
         mockUnitRepository
-            .Setup(x => x.GetAllDragonData(DeviceAccountId))
+            .SetupGet(x => x.Dragons)
             .Returns(dragonDataList.AsQueryable().BuildMock());
 
         DbPlayerMaterial mat = new DbPlayerMaterial()
@@ -300,7 +295,7 @@ public class DragonServiceTest
             Quantity = usedQuantity
         };
         mockInventoryRepository
-            .Setup(x => x.GetMaterials(DeviceAccountId))
+            .SetupGet(x => x.Materials)
             .Returns(
                 new List<DbPlayerMaterial>() { mat }
                     .AsQueryable()
@@ -320,8 +315,7 @@ public class DragonServiceTest
                         quantity = usedQuantity
                     }
                 }
-            },
-            DeviceAccountId
+            }
         );
         dragonData.Exp.Should().Be(expectedXp);
         dragonData.Level.Should().Be(expectedLvl);
@@ -344,7 +338,7 @@ public class DragonServiceTest
             .AsQueryable()
             .BuildMock();
 
-        mockUserDataRepository.Setup(x => x.LookupUserData()).ReturnsAsync(userData);
+        mockUserDataRepository.SetupGet(x => x.UserData).Returns(userDataList);
 
         DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
             DeviceAccountId,
@@ -356,7 +350,7 @@ public class DragonServiceTest
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
 
         mockUnitRepository
-            .Setup(x => x.GetAllDragonData(DeviceAccountId))
+            .SetupGet(x => x.Dragons)
             .Returns(dragonDataList.AsQueryable().BuildMock());
 
         DbPlayerMaterial mat = new DbPlayerMaterial()
@@ -367,7 +361,7 @@ public class DragonServiceTest
         };
 
         mockInventoryRepository
-            .Setup(x => x.GetMaterial(DeviceAccountId, Materials.AmplifyingDragonscale))
+            .Setup(x => x.GetMaterial(Materials.AmplifyingDragonscale))
             .ReturnsAsync(mat);
 
         await dragonService.DoDragonResetPlusCount(
@@ -375,8 +369,7 @@ public class DragonServiceTest
             {
                 dragon_key_id = 1,
                 plus_count_type = (int)UpgradeEnhanceTypes.AtkPlus
-            },
-            DeviceAccountId
+            }
         );
 
         userData.Coin.Should().Be(0);
@@ -425,10 +418,10 @@ public class DragonServiceTest
         };
 
         mockUnitRepository
-            .Setup(x => x.GetAllDragonData(DeviceAccountId))
+            .SetupGet(x => x.Dragons)
             .Returns(dragonDataList.AsQueryable().BuildMock());
         mockUnitRepository
-            .Setup(x => x.RemoveDragons(DeviceAccountId, It.IsAny<IEnumerable<long>>()))
+            .Setup(x => x.RemoveDragons(It.IsAny<IEnumerable<long>>()))
             .Callback(() => dragonDataList.RemoveAll(x => x.DragonKeyId == 2));
 
         DbPlayerMaterial mat = new DbPlayerMaterial()
@@ -438,9 +431,7 @@ public class DragonServiceTest
             Quantity = 500
         };
 
-        mockInventoryRepository
-            .Setup(x => x.GetMaterial(DeviceAccountId, targetMat))
-            .ReturnsAsync(mat);
+        mockInventoryRepository.Setup(x => x.GetMaterial(targetMat)).ReturnsAsync(mat);
 
         await dragonService.DoDragonLimitBreak(
             new DragonLimitBreakRequest()
@@ -455,28 +446,25 @@ public class DragonServiceTest
                         target_id = (ulong)(lbMatType == DragonLimitBreakMatTypes.Dupe ? 2 : 0)
                     }
                 }
-            },
-            DeviceAccountId
+            }
         );
 
         dragonData.LimitBreakCount.Should().Be(limitBreakNr);
         dragonData.Ability1Level.Should().Be(expectedA1Level);
         dragonData.Ability2Level.Should().Be(expectedA2Level);
         dragonData.Skill1Level.Should().Be(expectedS1Level);
-        mockUnitRepository.Verify(x => x.GetAllDragonData(DeviceAccountId));
+        mockUnitRepository.Verify(x => x.Dragons);
         if (lbMatType == DragonLimitBreakMatTypes.Dupe)
         {
             dragonDataList.Should().NotContain(dragonDataSacrifice);
 
-            mockUnitRepository.Verify(
-                x => x.RemoveDragons(DeviceAccountId, It.IsAny<IEnumerable<long>>())
-            );
+            mockUnitRepository.Verify(x => x.RemoveDragons(It.IsAny<IEnumerable<long>>()));
         }
         else
         {
             mat.Quantity.Should().BeLessThan(500);
 
-            mockInventoryRepository.Verify(x => x.GetMaterial(DeviceAccountId, targetMat));
+            mockInventoryRepository.Verify(x => x.GetMaterial(targetMat));
         }
     }
 
@@ -492,12 +480,11 @@ public class DragonServiceTest
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
 
         mockUnitRepository
-            .Setup(x => x.GetAllDragonData(DeviceAccountId))
+            .SetupGet(x => x.Dragons)
             .Returns(dragonDataList.AsQueryable().BuildMock());
 
         await dragonService.DoDragonSetLock(
-            new DragonSetLockRequest() { dragon_key_id = 1, is_lock = true },
-            DeviceAccountId
+            new DragonSetLockRequest() { dragon_key_id = 1, is_lock = true }
         );
 
         dragonData.IsLock.Should().BeTrue();
@@ -519,7 +506,7 @@ public class DragonServiceTest
             .AsQueryable()
             .BuildMock();
 
-        mockUserDataRepository.Setup(x => x.LookupUserData()).ReturnsAsync(userData);
+        mockUserDataRepository.SetupGet(x => x.UserData).Returns(userDataList);
 
         DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
             DeviceAccountId,
@@ -530,15 +517,14 @@ public class DragonServiceTest
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
 
         mockUnitRepository
-            .Setup(x => x.GetAllDragonData(DeviceAccountId))
+            .SetupGet(x => x.Dragons)
             .Returns(dragonDataList.AsQueryable().BuildMock());
         mockUnitRepository
-            .Setup(x => x.RemoveDragons(DeviceAccountId, new List<long>() { 1 }))
+            .Setup(x => x.RemoveDragons(new List<long>() { 1 }))
             .Callback(() => dragonDataList.RemoveAll(x => x.DragonKeyId == 1));
 
         DragonSellData response = await dragonService.DoDragonSell(
-            new DragonSellRequest() { dragon_key_id_list = new List<ulong>() { 1 } },
-            DeviceAccountId
+            new DragonSellRequest() { dragon_key_id_list = new List<ulong>() { 1 } }
         );
 
         dragonDataList.Count().Should().Be(0);
@@ -573,7 +559,7 @@ public class DragonServiceTest
         }
 
         mockInventoryRepository
-            .Setup(x => x.GetDragonGifts(DeviceAccountId))
+            .SetupGet(x => x.DragonGifts)
             .Returns(dbPlayerDragonGifts.AsQueryable().BuildMock());
 
         userRupies = new DbPlayerCurrency()
@@ -584,7 +570,7 @@ public class DragonServiceTest
         };
 
         mockInventoryRepository
-            .Setup(x => x.GetCurrency(DeviceAccountId, CurrencyTypes.Rupies))
+            .Setup(x => x.GetCurrency(CurrencyTypes.Rupies))
             .ReturnsAsync(userRupies);
 
         garudaEssence = new DbPlayerMaterial()
@@ -595,7 +581,7 @@ public class DragonServiceTest
         };
 
         mockInventoryRepository
-            .Setup(x => x.GetMaterial(DeviceAccountId, It.IsAny<Materials>()))
+            .Setup(x => x.GetMaterial(It.IsAny<Materials>()))
             .ReturnsAsync(garudaEssence);
 
         userData = new DbPlayerUserData() { DeviceAccountId = DeviceAccountId, Coin = 100000 };
@@ -604,25 +590,21 @@ public class DragonServiceTest
             .AsQueryable()
             .BuildMock();
 
-        mockUserDataRepository.Setup(x => x.GetUserData(DeviceAccountId)).Returns(userDataList);
-        mockUserDataRepository.Setup(x => x.LookupUserData()).ReturnsAsync(userData);
+        mockUserDataRepository.SetupGet(x => x.UserData).Returns(userDataList);
 
         userDragonRels = new List<DbPlayerDragonReliability>();
 
         mockUnitRepository
-            .Setup(x => x.GetAllDragonReliabilityData(DeviceAccountId))
+            .SetupGet(x => x.DragonReliabilities)
             .Returns(userDragonRels.AsQueryable().BuildMock());
 
         stories = new List<DbPlayerStoryState>();
 
-        mockStoryRepository
-            .Setup(x => x.GetStoryList(DeviceAccountId))
-            .Returns(stories.AsQueryable().BuildMock());
+        mockStoryRepository.SetupGet(x => x.Stories).Returns(stories.AsQueryable().BuildMock());
         mockStoryRepository
             .Setup(
                 x =>
                     x.GetOrCreateStory(
-                        DeviceAccountId,
                         StoryTypes.Dragon,
                         MasterAsset.DragonStories.Get((int)Dragons.Garuda).storyIds[0]
                     )

@@ -58,12 +58,10 @@ public class CharaController : DragaliaControllerBase
             );
         }
 
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
+        DbPlayerCharaData playerCharData = await unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == (Charas)request.chara_id
+        );
         CharaData charData = MasterAsset.CharaData.Get(request.chara_id);
         playerCharData.HpBase += (ushort)(
             request.next_rarity == 4
@@ -94,8 +92,7 @@ public class CharaController : DragaliaControllerBase
     {
         IEnumerable<Materials> matIds = request.material_list.Select(x => x.id).Cast<Materials>();
 
-        Dictionary<Materials, DbPlayerMaterial> dbMats = await this.inventoryRepository
-            .GetMaterials(this.DeviceAccountId)
+        Dictionary<Materials, DbPlayerMaterial> dbMats = await this.inventoryRepository.Materials
             .Where(dbMat => matIds.Contains(dbMat.MaterialId))
             .ToDictionaryAsync(dbMat => dbMat.MaterialId);
         foreach (AtgenEnemyPiece mat in request.material_list)
@@ -128,12 +125,10 @@ public class CharaController : DragaliaControllerBase
                 );
             }
         }
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == (Charas)request.chara_id
+        );
 
         Dictionary<int, int> usedMaterials = new();
         CharaLevelUp(request.material_list, ref playerCharData, ref usedMaterials);
@@ -275,20 +270,17 @@ public class CharaController : DragaliaControllerBase
         [FromBody] CharaResetPlusCountRequest request
     )
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == (Charas)request.chara_id
+        );
         Materials mat =
             (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
                 ? Materials.AmplifyingCrystal
                 : Materials.FortifyingCrystal;
 
         DbPlayerMaterial upgradeMat =
-            await inventoryRepository.GetMaterial(DeviceAccountId, mat)
-            ?? inventoryRepository.AddMaterial(DeviceAccountId, mat);
+            await inventoryRepository.GetMaterial(mat) ?? inventoryRepository.AddMaterial(mat);
         //DbPlayerCurrency playerCurrency =
         //    await inventoryRepository.GetCurrency(DeviceAccountId, CurrencyTypes.Rupies)
         //    ?? throw new DragaliaException(
@@ -331,12 +323,10 @@ public class CharaController : DragaliaControllerBase
     public async Task<DragaliaResult> CharaBuildupMana([FromBody] CharaBuildupManaRequest request)
     {
         this.logger.LogDebug("Received mana node request {@request}", request);
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == (Charas)request.chara_id
+        );
         Dictionary<CurrencyTypes, int> usedCurrencies = new();
         Dictionary<Materials, int> usedMaterials = new();
         HashSet<int> unlockedStories = new();
@@ -365,12 +355,10 @@ public class CharaController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> CharaLimitBreak([FromBody] CharaLimitBreakRequest request)
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == (Charas)request.chara_id
+        );
         Dictionary<CurrencyTypes, int> usedCurrencies = new();
         Dictionary<Materials, int> usedMaterials = new();
         playerCharData.LimitBreakCount = (byte)request.next_limit_break_count;
@@ -390,12 +378,10 @@ public class CharaController : DragaliaControllerBase
         [FromBody] CharaLimitBreakAndBuildupManaRequest request
     )
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == request.chara_id
+        );
         Dictionary<CurrencyTypes, int> usedCurrencies = new();
         Dictionary<Materials, int> usedMaterials = new();
         HashSet<int> unlockedStories = new();
@@ -431,12 +417,10 @@ public class CharaController : DragaliaControllerBase
         [FromBody] CharaBuildupPlatinumRequest request
     )
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharaData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharaData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == request.chara_id
+        );
 
         CharaData charaData = MasterAsset.CharaData.Get(playerCharaData.CharaId);
 
@@ -479,8 +463,7 @@ public class CharaController : DragaliaControllerBase
             int[] charaStories = stories.storyIds;
 
             for (
-                int nextStoryunlockIndex = await storyRepository
-                    .GetStoryList(DeviceAccountId)
+                int nextStoryunlockIndex = await storyRepository.Stories
                     .Where(x => charaStories.Contains(x.StoryId))
                     .CountAsync();
                 nextStoryunlockIndex < charaStories.Length;
@@ -687,14 +670,8 @@ public class CharaController : DragaliaControllerBase
                     break;
                 case ManaNodeTypes.Mat:
                     DbPlayerMaterial mat =
-                        await this.inventoryRepository.GetMaterial(
-                            playerCharData.DeviceAccountId,
-                            Materials.DamascusCrystal
-                        )
-                        ?? inventoryRepository.AddMaterial(
-                            DeviceAccountId,
-                            Materials.DamascusCrystal
-                        );
+                        await this.inventoryRepository.GetMaterial(Materials.DamascusCrystal)
+                        ?? inventoryRepository.AddMaterial(Materials.DamascusCrystal);
                     mat.Quantity++;
                     break;
                 case ManaNodeTypes.StdAtkUp:
@@ -710,8 +687,7 @@ public class CharaController : DragaliaControllerBase
                     .Get((int)playerCharData.CharaId)
                     .storyIds;
                 int nextStoryunlockIndex =
-                    await storyRepository
-                        .GetStoryList(DeviceAccountId)
+                    await storyRepository.Stories
                         .Where(x => charaStories.Contains(x.StoryId))
                         .CountAsync() + unlockedStories.Count;
                 if (charaStories.Length - 1 < nextStoryunlockIndex)
@@ -722,7 +698,6 @@ public class CharaController : DragaliaControllerBase
                     );
                 }
                 await storyRepository.GetOrCreateStory(
-                    DeviceAccountId,
                     StoryTypes.Chara,
                     charaStories[nextStoryunlockIndex]
                 );
@@ -774,12 +749,10 @@ public class CharaController : DragaliaControllerBase
         [FromBody] CharaUnlockEditSkillRequest request
     )
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == request.chara_id
+        );
         CharaData charData = MasterAsset.CharaData.Get(playerCharData.CharaId);
         //TODO: For now trust the client won't send the id of a chara who isn't allowed to share
         if (
@@ -795,10 +768,7 @@ public class CharaController : DragaliaControllerBase
 
         Materials usedMat = UpgradeMaterials.tomes[charData.ElementalType];
         int usedMatCount = charData.EditSkillCost;
-        DbPlayerMaterial? dbMat = await this.inventoryRepository.GetMaterial(
-            this.DeviceAccountId,
-            usedMat
-        );
+        DbPlayerMaterial? dbMat = await this.inventoryRepository.GetMaterial(usedMat);
         if (dbMat == null || dbMat.Quantity < usedMatCount)
         {
             throw new DragaliaException(
@@ -824,7 +794,6 @@ public class CharaController : DragaliaControllerBase
     )
     {
         IDictionary<Charas, IEnumerable<DbSetUnit>> setUnitData = await unitRepository.GetCharaSets(
-            DeviceAccountId,
             request.chara_id_list.Select(x => (Charas)x)
         );
         return Ok(
@@ -873,16 +842,8 @@ public class CharaController : DragaliaControllerBase
     )
     {
         DbSetUnit setUnitData =
-            await unitRepository.GetCharaSetData(
-                DeviceAccountId,
-                request.chara_id,
-                request.unit_set_no
-            )
-            ?? unitRepository.AddCharaSetData(
-                DeviceAccountId,
-                request.chara_id,
-                request.unit_set_no
-            );
+            await unitRepository.GetCharaSetData(request.chara_id, request.unit_set_no)
+            ?? unitRepository.AddCharaSetData(request.chara_id, request.unit_set_no);
         ;
 
         setUnitData.UnitSetName = request.unit_set_name;
@@ -916,7 +877,7 @@ public class CharaController : DragaliaControllerBase
         {
             chara_id = (int)request.chara_id,
             chara_unit_set_detail_list = unitRepository
-                .GetCharaSets(DeviceAccountId, request.chara_id)
+                .GetCharaSets(request.chara_id)
                 .Select(
                     x =>
                         new AtgenCharaUnitSetDetailList()

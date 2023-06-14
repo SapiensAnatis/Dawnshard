@@ -4,5 +4,5 @@ namespace DragaliaAPI.Services;
 
 public interface ILoadService
 {
-    public Task<LoadIndexData> BuildIndexData(string deviceAccountId);
+    public Task<LoadIndexData> BuildIndexData();
 }

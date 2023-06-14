@@ -32,16 +32,16 @@ public class LoadService : ILoadService
         this.photonOptions = photonOptions;
     }
 
-    public async Task<LoadIndexData> BuildIndexData(string deviceAccountId)
+    public async Task<LoadIndexData> BuildIndexData()
     {
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        DbPlayer savefile = await this.savefileService.Load(deviceAccountId).SingleAsync();
+        DbPlayer savefile = await this.savefileService.Load().SingleAsync();
 
         this.logger.LogInformation("{time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
 
-        FortBonusList bonusList = await bonusService.GetBonusList(deviceAccountId);
+        FortBonusList bonusList = await bonusService.GetBonusList();
 
         this.logger.LogInformation("{time} ms: Bonus list acquired", stopwatch.ElapsedMilliseconds);
 

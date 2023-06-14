@@ -30,9 +30,7 @@ public class UserController : DragaliaControllerBase
     public async Task<DragaliaResult> LinkedNAccount(UserLinkedNAccountRequest request)
     {
         // This controller is meant to be used to set the 'Link a Nintendo Account' mission as complete
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .SingleAsync();
+        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
 
         userData.Crystal += 12_000;
         UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(

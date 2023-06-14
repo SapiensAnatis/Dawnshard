@@ -23,7 +23,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     private readonly IMapper mapper;
     private readonly IUpdateDataService updateDataService;
 
-    private readonly Mock<IPlayerDetailsService> mockPlayerDetailsService;
+    private readonly Mock<IPlayerIdentityService> mockPlayerDetailsService;
 
     public UpdateDataServiceTest(DbTestFixture fixture, ITestOutputHelper output)
     {

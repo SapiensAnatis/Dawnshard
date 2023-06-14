@@ -16,7 +16,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
     private readonly IFortRepository fortRepository;
-    private readonly Mock<IPlayerDetailsService> mockPlayerDetailsService;
+    private readonly Mock<IPlayerIdentityService> mockPlayerDetailsService;
 
     public FortRepositoryTest(DbTestFixture fixture)
     {

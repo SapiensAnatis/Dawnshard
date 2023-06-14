@@ -1,82 +1,74 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Factories;
-using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Serilog.Core;
+using CharasEnum = DragaliaAPI.Shared.Definitions.Enums.Charas;
 
 namespace DragaliaAPI.Database.Repositories;
 
 public class UnitRepository : BaseRepository, IUnitRepository
 {
     private readonly ApiContext apiContext;
-    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly IPlayerIdentityService playerIdentityService;
     private readonly ILogger<UnitRepository> logger;
 
     public UnitRepository(
         ApiContext apiContext,
-        IPlayerDetailsService playerDetailsService,
+        IPlayerIdentityService playerIdentityService,
         ILogger<UnitRepository> logger
     )
         : base(apiContext)
     {
         this.apiContext = apiContext;
-        this.playerDetailsService = playerDetailsService;
+        this.playerIdentityService = playerIdentityService;
         this.logger = logger;
     }
 
-    public IQueryable<DbPlayerCharaData> GetAllCharaData(string deviceAccountId)
-    {
-        return apiContext.PlayerCharaData.Where(x => x.DeviceAccountId == deviceAccountId);
-    }
+    public IQueryable<DbPlayerCharaData> Charas =>
+        this.apiContext.PlayerCharaData.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
+        );
 
-    public IQueryable<DbPlayerDragonData> GetAllDragonData(string deviceAccountId)
-    {
-        return apiContext.PlayerDragonData.Where(x => x.DeviceAccountId == deviceAccountId);
-    }
+    public IQueryable<DbPlayerDragonData> Dragons =>
+        this.apiContext.PlayerDragonData.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
+        );
 
-    public IQueryable<DbAbilityCrest> GetAllAbilityCrestData(string deviceAccountId)
-    {
-        return apiContext.PlayerAbilityCrests.Where(x => x.DeviceAccountId == deviceAccountId);
-    }
+    public IQueryable<DbAbilityCrest> AbilityCrests =>
+        this.apiContext.PlayerAbilityCrests.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
+        );
 
-    public IQueryable<DbWeaponBody> GetAllWeaponBodyData(string deviceAccountId)
-    {
-        return apiContext.PlayerWeapons.Where(x => x.DeviceAccountId == deviceAccountId);
-    }
+    public IQueryable<DbWeaponBody> WeaponBodies =>
+        this.apiContext.PlayerWeapons.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
+        );
 
-    public IQueryable<DbPlayerDragonReliability> GetAllDragonReliabilityData(string deviceAccountId)
-    {
-        return apiContext.PlayerDragonReliability.Where(x => x.DeviceAccountId == deviceAccountId);
-    }
+    public IQueryable<DbPlayerDragonReliability> DragonReliabilities =>
+        this.apiContext.PlayerDragonReliability.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
+        );
 
-    public IQueryable<DbTalisman> GetAllTalismanData(string deviceAccountId)
-    {
-        return this.apiContext.PlayerTalismans.Where(x => x.DeviceAccountId == deviceAccountId);
-    }
+    public IQueryable<DbTalisman> Talismans =>
+        this.apiContext.PlayerTalismans.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
+        );
 
-    public async Task<bool> CheckHasCharas(string deviceAccountId, IEnumerable<Charas> idList)
+    public async Task<bool> CheckHasCharas(IEnumerable<Charas> idList)
     {
-        IEnumerable<Charas> owned = await this.GetAllCharaData(deviceAccountId)
-            .Select(x => x.CharaId)
-            .ToListAsync();
+        IEnumerable<Charas> owned = await Charas.Select(x => x.CharaId).ToListAsync();
 
         return owned.Intersect(idList).Count() == idList.Count();
     }
 
-    public async Task<bool> CheckHasDragons(string deviceAccountId, IEnumerable<Dragons> idList)
+    public async Task<bool> CheckHasDragons(IEnumerable<Dragons> idList)
     {
-        IEnumerable<Dragons> owned = await this.GetAllDragonData(deviceAccountId)
-            .Select(x => x.DragonId)
-            .ToListAsync();
+        IEnumerable<Dragons> owned = await Dragons.Select(x => x.DragonId).ToListAsync();
 
         return owned.Intersect(idList).Count() == idList.Count();
     }
@@ -84,31 +76,28 @@ public class UnitRepository : BaseRepository, IUnitRepository
     /// <summary>
     /// Add a list of characters to the database. Will only add the first instance of any new character.
     /// </summary>
-    /// <param name="deviceAccountId"></param>
+    /// <param name="this.playerIdentityService.AccountId"></param>
     /// <param name="idList"></param>
     /// <returns>A list of tuples which adds an additional dimension onto the input list,
     /// where the second item shows whether the given character id was a duplicate.</returns>
-    public async Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(
-        string deviceAccountId,
-        IEnumerable<Charas> idList
-    )
+    public async Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(IEnumerable<Charas> idList)
     {
+        List<Charas> addedChars = idList.ToList();
+
         // Generate result. The first occurrence of a character in the list should be new (if not in the DB)
         // but subsequent results should then not be labelled as new. No way to do that logic with LINQ afaik
 
-        IEnumerable<Charas> ownedCharas = await this.GetAllCharaData(deviceAccountId)
-            .Select(x => x.CharaId)
-            .ToListAsync();
+        ICollection<Charas> ownedCharas = await Charas.Select(x => x.CharaId).ToListAsync();
 
-        IEnumerable<(Charas id, bool isNew)> newMapping = MarkNewIds(ownedCharas, idList);
+        List<(Charas id, bool isNew)> newMapping = MarkNewIds(ownedCharas, addedChars);
 
         // Use result to inform additions to the DB
-        IEnumerable<Charas> newCharas = newMapping.Where(x => x.isNew).Select(x => x.id);
+        IEnumerable<Charas> newCharas = newMapping.Where(x => x.isNew).Select(x => x.id).ToList();
 
         if (newCharas.Any())
         {
             IEnumerable<DbPlayerCharaData> dbEntries = newCharas.Select(
-                id => new DbPlayerCharaData(deviceAccountId, id)
+                id => new DbPlayerCharaData(this.playerIdentityService.AccountId, id)
             );
 
             await apiContext.PlayerCharaData.AddRangeAsync(dbEntries);
@@ -128,7 +117,7 @@ public class UnitRepository : BaseRepository, IUnitRepository
                     newCharaStories.Add(
                         new DbPlayerStoryState()
                         {
-                            DeviceAccountId = deviceAccountId,
+                            DeviceAccountId = this.playerIdentityService.AccountId,
                             StoryType = StoryTypes.Chara,
                             StoryId = story.storyIds[0],
                             State = 0
@@ -149,29 +138,19 @@ public class UnitRepository : BaseRepository, IUnitRepository
         return newMapping;
     }
 
-    public async Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(IEnumerable<Charas> idList)
-    {
-        return await this.AddCharas(this.playerDetailsService.AccountId, idList);
-    }
-
     public async Task<bool> AddCharas(Charas id)
     {
         return (await this.AddCharas(new[] { id })).First().isNew;
     }
 
-    public async Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(
-        string deviceAccountId,
-        IEnumerable<Dragons> idList
-    )
+    public async Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(IEnumerable<Dragons> idList)
     {
-        IEnumerable<Dragons> ownedDragons = await this.GetAllDragonData(deviceAccountId)
-            .Select(x => x.DragonId)
-            .ToListAsync();
+        IEnumerable<Dragons> ownedDragons = await Dragons.Select(x => x.DragonId).ToListAsync();
 
         IEnumerable<(Dragons id, bool isNew)> newMapping = MarkNewIds(ownedDragons, idList);
 
         IEnumerable<DbPlayerDragonReliability> newReliabilities = newMapping.Select(
-            x => DbPlayerDragonReliabilityFactory.Create(deviceAccountId, x.id)
+            x => DbPlayerDragonReliabilityFactory.Create(this.playerIdentityService.AccountId, x.id)
         );
 
         foreach ((Dragons id, _) in newMapping.Where(x => x.isNew))
@@ -179,25 +158,29 @@ public class UnitRepository : BaseRepository, IUnitRepository
             // Not being in the dragon table doesn't mean a reliability doesn't exist
             // as the dragon could've been sold
             if (
-                await this.apiContext.PlayerDragonReliability.FindAsync(deviceAccountId, id) is null
+                await this.apiContext.PlayerDragonReliability.FindAsync(
+                    this.playerIdentityService.AccountId,
+                    id
+                )
+                is null
             )
             {
                 await apiContext.AddAsync(
-                    DbPlayerDragonReliabilityFactory.Create(deviceAccountId, id)
+                    DbPlayerDragonReliabilityFactory.Create(
+                        this.playerIdentityService.AccountId,
+                        id
+                    )
                 );
             }
         }
 
         await apiContext.AddRangeAsync(
-            idList.Select(id => DbPlayerDragonDataFactory.Create(deviceAccountId, id))
+            idList.Select(
+                id => DbPlayerDragonDataFactory.Create(this.playerIdentityService.AccountId, id)
+            )
         );
 
         return newMapping;
-    }
-
-    public async Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(IEnumerable<Dragons> idList)
-    {
-        return await this.AddDragons(this.playerDetailsService.AccountId, idList);
     }
 
     public async Task<bool> AddDragons(Dragons id)
@@ -205,30 +188,36 @@ public class UnitRepository : BaseRepository, IUnitRepository
         return (await this.AddDragons(new[] { id })).First().isNew;
     }
 
-    public async Task RemoveDragons(string deviceAccountId, IEnumerable<long> keyIdList)
+    public async Task RemoveDragons(IEnumerable<long> keyIdList)
     {
-        IEnumerable<DbPlayerDragonData> ownedDragons = await this.GetAllDragonData(deviceAccountId)
-            .Where(x => x.DeviceAccountId == deviceAccountId && keyIdList.Contains(x.DragonKeyId))
+        IEnumerable<DbPlayerDragonData> ownedDragons = await Dragons
+            .Where(
+                x =>
+                    x.DeviceAccountId == this.playerIdentityService.AccountId
+                    && keyIdList.Contains(x.DragonKeyId)
+            )
             .ToListAsync();
 
         apiContext.PlayerDragonData.RemoveRange(ownedDragons);
     }
 
-    public async Task<DbSetUnit?> GetCharaSetData(string deviceAccountId, Charas charaId, int setNo)
+    public async Task<DbSetUnit?> GetCharaSetData(Charas charaId, int setNo)
     {
         return await apiContext.PlayerSetUnits.FirstOrDefaultAsync(
             x =>
-                x.DeviceAccountId == deviceAccountId && x.CharaId == charaId && x.UnitSetNo == setNo
+                x.DeviceAccountId == this.playerIdentityService.AccountId
+                && x.CharaId == charaId
+                && x.UnitSetNo == setNo
         );
     }
 
-    public DbSetUnit AddCharaSetData(string deviceAccountId, Charas charaId, int setNo)
+    public DbSetUnit AddCharaSetData(Charas charaId, int setNo)
     {
         return apiContext.PlayerSetUnits
             .Add(
                 new DbSetUnit()
                 {
-                    DeviceAccountId = deviceAccountId,
+                    DeviceAccountId = this.playerIdentityService.AccountId,
                     CharaId = charaId,
                     UnitSetNo = setNo,
                     UnitSetName = $"Set {setNo}"
@@ -237,25 +226,28 @@ public class UnitRepository : BaseRepository, IUnitRepository
             .Entity;
     }
 
-    public IEnumerable<DbSetUnit> GetCharaSets(string deviceAccountId, Charas charaId)
+    public IEnumerable<DbSetUnit> GetCharaSets(Charas charaId)
     {
         return apiContext.PlayerSetUnits.Where(
-            x => x.DeviceAccountId == deviceAccountId && x.CharaId == charaId
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId && x.CharaId == charaId
         );
     }
 
     public async Task<IDictionary<Charas, IEnumerable<DbSetUnit>>> GetCharaSets(
-        string deviceAccountId,
         IEnumerable<Charas> charaIds
     )
     {
         return await apiContext.PlayerSetUnits
-            .Where(x => charaIds.Contains(x.CharaId) && x.DeviceAccountId == deviceAccountId)
+            .Where(
+                x =>
+                    charaIds.Contains(x.CharaId)
+                    && x.DeviceAccountId == this.playerIdentityService.AccountId
+            )
             .GroupBy(x => x.CharaId)
             .ToDictionaryAsync(x => x.Key, x => x.AsEnumerable());
     }
 
-    private static IEnumerable<(TEnum id, bool isNew)> MarkNewIds<TEnum>(
+    private static List<(TEnum id, bool isNew)> MarkNewIds<TEnum>(
         IEnumerable<TEnum> owned,
         IEnumerable<TEnum> idList
     )
@@ -265,16 +257,13 @@ public class UnitRepository : BaseRepository, IUnitRepository
         foreach (TEnum c in idList)
         {
             bool isNew = !(result.Any(x => x.id.Equals(c)) || owned.Contains(c));
-            result.Add(new(c, isNew));
+            result.Add((c, isNew));
         }
 
         return result;
     }
 
-    public IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(
-        string deviceAccountId,
-        IQueryable<DbPartyUnit> input
-    )
+    public IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(IQueryable<DbPartyUnit> input)
     {
         return from unit in input
             join chara in this.apiContext.PlayerCharaData
@@ -383,7 +372,7 @@ public class UnitRepository : BaseRepository, IUnitRepository
                 .DefaultIfEmpty()
             select new DbDetailedPartyUnit
             {
-                DeviceAccountId = deviceAccountId,
+                DeviceAccountId = this.playerIdentityService.AccountId,
                 Position = unit.UnitNo,
                 CharaData = chara,
                 DragonData = dragon,
@@ -421,7 +410,7 @@ public class UnitRepository : BaseRepository, IUnitRepository
     private static DbEditSkillData? GetEditSkill(Charas charaId, int skill1Level, int skill2Level)
     {
         // The method signature does not take a DbPlayerCharaData to limit the SELECT statement generated by ef
-        if (charaId is Charas.Empty)
+        if (charaId is CharasEnum.Empty)
             return null;
 
         CharaData data = MasterAsset.CharaData.Get(charaId);

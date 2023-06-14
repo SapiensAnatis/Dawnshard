@@ -4,6 +4,7 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 
@@ -15,6 +16,7 @@ public class SavefileService : ISavefileService
     private readonly IDistributedCache cache;
     private readonly IMapper mapper;
     private readonly ILogger<SavefileService> logger;
+    private readonly IPlayerIdentityService playerIdentityService;
 
     private const int RecheckLockMs = 1000;
     private const int LockFailsafeExpiryMin = 5;
@@ -23,13 +25,15 @@ public class SavefileService : ISavefileService
         ApiContext apiContext,
         IDistributedCache cache,
         IMapper mapper,
-        ILogger<SavefileService> logger
+        ILogger<SavefileService> logger,
+        IPlayerIdentityService playerIdentityService
     )
     {
         this.apiContext = apiContext;
         this.cache = cache;
         this.mapper = mapper;
         this.logger = logger;
+        this.playerIdentityService = playerIdentityService;
     }
 
     private static class RedisSchema
@@ -355,10 +359,10 @@ public class SavefileService : ISavefileService
         await this.apiContext.SaveChangesAsync();
     }
 
-    public IQueryable<DbPlayer> Load(string deviceAccountId)
+    public IQueryable<DbPlayer> Load()
     {
         return this.apiContext.Players
-            .Where(x => x.AccountId == deviceAccountId)
+            .Where(x => x.AccountId == this.playerIdentityService.AccountId)
             .Include(x => x.UserData)
             .Include(x => x.AbilityCrestList)
             .Include(x => x.CharaList)
