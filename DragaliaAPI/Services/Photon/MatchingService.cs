@@ -99,12 +99,12 @@ public class MatchingService : IMatchingService
 
         DbPlayerCharaData hostCharaData;
 
-        using (
-            IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-                hostUserData.DeviceAccountId
-            )
-        )
+        try
         {
+            using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+                hostUserData.DeviceAccountId
+            );
+
             hostCharaData = await partyRepository
                 .GetPartyUnits(game.HostPartyNo)
                 .Where(x => x.UnitNo == 1)
@@ -114,7 +114,25 @@ public class MatchingService : IMatchingService
                     charaData => charaData.CharaId,
                     (partyUnit, charaData) => charaData
                 )
-                .SingleAsync();
+                .FirstAsync();
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogWarning(
+                ex,
+                "Failed to lookup host data for host ID {hostId} party #{partyNo}. Using fallback.",
+                game.HostViewerId,
+                game.HostPartyNo
+            );
+
+            hostUserData = new()
+            {
+                DeviceAccountId = string.Empty,
+                Name = "Euden",
+                Level = 1,
+            };
+
+            hostCharaData = new(string.Empty, Charas.ThePrince);
         }
 
         return new RoomList()
