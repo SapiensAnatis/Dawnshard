@@ -66,8 +66,9 @@ jobs:
           -p:CoverletOutputFormat="cobertura" 
           -p:CoverletOutput="coverage_report.xml"
           -p:Exclude=\"[*.Test]*,[DragaliaAPI.Test.Utils]*,[DragaliaAPI.Photon.Plugin]*,[DragaliaAPI.Database]DragaliaAPI.Database.Migrations.*,[DragaliaAPI]DragaliaAPI.Models.Generated.*\"
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v3
         with:
-          files: ${{matrix.project}}/coverage_report.xml
-          name: codecov ${{ matrix.project }}
+          name: ${{ matrix.project }} coverage report
+          path: ${{ matrix.project }}/coverage_report.xml
+          retention-days: 2
