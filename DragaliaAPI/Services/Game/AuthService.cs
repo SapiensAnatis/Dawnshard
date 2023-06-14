@@ -90,12 +90,9 @@ public class AuthService : IAuthService
             jwt.Subject
         );
 
-        DbPlayerUserData? userData = await this.userDataRepository.UserData.SingleOrDefaultAsync();
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(jwt.Subject);
 
-        using (IDisposable ctx = this.playerIdentityService.StartUserImpersonation(jwt.Subject))
-        {
-            userData = await this.userDataRepository.UserData.SingleOrDefaultAsync();
-        }
+        DbPlayerUserData? userData = await this.userDataRepository.UserData.SingleOrDefaultAsync();
 
         if (GetPendingSaveImport(jwt, userData))
         {
@@ -103,9 +100,6 @@ public class AuthService : IAuthService
             {
                 LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
                 this.logger.LogDebug("UserData: {@userData}", pendingSave.user_data);
-                using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-                    jwt.Subject
-                );
                 await this.savefileService.ThreadSafeImport(pendingSave);
             }
             catch (Exception e) when (e is JsonException or AutoMapperMappingException)
@@ -119,7 +113,7 @@ public class AuthService : IAuthService
             }
         }
 
-        long viewerId = await this.GetViewerId(jwt.Subject);
+        long viewerId = await this.GetViewerId();
         string sessionId = await this.sessionService.CreateSession(idToken, jwt.Subject, viewerId);
 
         using IDisposable vIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
@@ -181,18 +175,13 @@ public class AuthService : IAuthService
         return validationResult;
     }
 
-    private async Task<long> GetViewerId(string accountId)
+    private async Task<long> GetViewerId()
     {
-        IQueryable<DbPlayerUserData> userDataQuery;
+        IQueryable<DbPlayerUserData> userDataQuery = this.userDataRepository.UserData;
+        DbPlayerUserData? userData = await userDataQuery.SingleOrDefaultAsync();
 
-        using (IDisposable ctx = this.playerIdentityService.StartUserImpersonation(accountId))
-        {
-            userDataQuery = this.userDataRepository.UserData;
-            DbPlayerUserData? userData = await userDataQuery.SingleOrDefaultAsync();
-
-            if (userData is null)
-                await this.savefileService.Create();
-        }
+        if (userData is null)
+            await this.savefileService.Create();
 
         return await userDataQuery.Select(x => x.ViewerId).SingleAsync();
     }
