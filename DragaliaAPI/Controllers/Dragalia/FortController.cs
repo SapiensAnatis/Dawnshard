@@ -45,6 +45,8 @@ public class FortController : DragaliaControllerBase
                 current_server_time = DateTimeOffset.UtcNow
             };
 
+        await this.updateDataService.SaveChangesAsync();
+
         return this.Ok(data);
     }
 

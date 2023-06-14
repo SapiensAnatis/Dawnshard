@@ -61,11 +61,20 @@ public class FortRepository : IFortRepository
             this.playerDetailsService.AccountId
         );
 
-        details ??= new DbFortDetail()
+        if (details == null)
         {
-            DeviceAccountId = this.playerDetailsService.AccountId,
-            CarpenterNum = DefaultCarpenters
-        };
+            this.logger.LogInformation("Could not find details for player, creating anew...");
+
+            details = (
+                await this.apiContext.PlayerFortDetails.AddAsync(
+                    new()
+                    {
+                        DeviceAccountId = this.playerDetailsService.AccountId,
+                        CarpenterNum = DefaultCarpenters
+                    }
+                )
+            ).Entity;
+        }
 
         return details;
     }

@@ -55,18 +55,29 @@ public class TutorialService : ITutorialService
     {
         switch (storyId)
         {
-            case 1000106:
-                await this.userDataRepository.UpdateDewpoint(100);
-                await this.inventoryRepository.UpdateQuantity(Materials.HolyWater, 10);
-                if (await this.abilityCrestRepository.FindAsync(AbilityCrests.ManaFount) == null)
-                    await this.abilityCrestRepository.Add(AbilityCrests.ManaFount);
-                logger.LogDebug("Added materials for the wyrmprint tutorial");
+            case TutorialStoryIds.Wyrmprints:
+                await SetupWyrmprintTutorial();
                 break;
-            case 1000111:
+            case TutorialStoryIds.Halidom:
                 await this.fortRepository.InitializeFort();
                 logger.LogDebug("Initialized halidom for tutorial");
                 break;
             // TODO: Smithy unlock after ch.2
         }
     }
+
+    private async Task SetupWyrmprintTutorial()
+    {
+        await this.userDataRepository.UpdateDewpoint(100);
+        await this.inventoryRepository.UpdateQuantity(Materials.HolyWater, 10);
+        if (await this.abilityCrestRepository.FindAsync(AbilityCrests.ManaFount) == null)
+            await this.abilityCrestRepository.Add(AbilityCrests.ManaFount);
+        logger.LogDebug("Added materials for the wyrmprint tutorial");
+    }
+}
+
+static file class TutorialStoryIds
+{
+    public const int Wyrmprints = 1000106;
+    public const int Halidom = 1000111;
 }
