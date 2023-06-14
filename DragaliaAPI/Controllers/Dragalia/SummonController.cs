@@ -367,6 +367,30 @@ public class SummonController : DragaliaControllerBase
         int countOfRare5Dragon = 0;
         int countOfRare4 = 0;
 
+        List<Dragons> newDragons = (
+            await this.unitRepository.AddDragons(
+                DeviceAccountId,
+                summonResult
+                    .Where(x => x.entity_type == EntityTypes.Dragon)
+                    .Select(x => (Dragons)x.id)
+            )
+        )
+            .Where(x => x.isNew)
+            .Select(x => x.id)
+            .ToList();
+
+        List<Charas> newCharas = (
+            await this.unitRepository.AddCharas(
+                DeviceAccountId,
+                summonResult
+                    .Where(x => x.entity_type == EntityTypes.Chara)
+                    .Select(x => (Charas)x.id)
+            )
+        )
+            .Where(x => x.isNew)
+            .Select(x => x.id)
+            .ToList();
+
         foreach (
             (AtgenRedoableSummonResultUnitList result, int index) in summonResult.Select(
                 (x, i) => (x, i)
@@ -375,8 +399,8 @@ public class SummonController : DragaliaControllerBase
         {
             bool isNew = result.entity_type switch
             {
-                EntityTypes.Dragon => await this.unitRepository.AddDragons((Dragons)result.id),
-                EntityTypes.Chara => await this.unitRepository.AddCharas((Charas)result.id),
+                EntityTypes.Dragon => newDragons.Remove((Dragons)result.id),
+                EntityTypes.Chara => newCharas.Remove((Charas)result.id),
                 _ => throw new UnreachableException("Invalid entity type"),
             };
 
