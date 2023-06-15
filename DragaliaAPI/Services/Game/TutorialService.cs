@@ -63,6 +63,9 @@ public class TutorialService : ITutorialService
                 await this.fortRepository.InitializeFort();
                 logger.LogDebug("Initialized halidom for tutorial");
                 break;
+            case TutorialStoryIds.Smithy:
+                await this.fortRepository.InitializeSmithy();
+                logger.LogDebug("Added smithy for tutorial");
             // TODO: Smithy unlock after ch.2
         }
     }
@@ -81,4 +84,5 @@ static file class TutorialStoryIds
 {
     public const int Wyrmprints = 1000106;
     public const int Halidom = 1000111;
+    public const int Smithy = 1000210;
 }
