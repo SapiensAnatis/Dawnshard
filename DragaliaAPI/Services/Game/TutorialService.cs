@@ -66,7 +66,8 @@ public class TutorialService : ITutorialService
             case TutorialStoryIds.Smithy:
                 await this.fortRepository.InitializeSmithy();
                 logger.LogDebug("Added smithy for tutorial");
-            // TODO: Smithy unlock after ch.2
+                break;
+            // TODO: Maybe more that I've missed
         }
     }
 
