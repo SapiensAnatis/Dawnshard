@@ -46,9 +46,12 @@ public class TutorialService : ITutorialService
         DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
 
         ISet<int> flags = TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag);
-        flags.Add(flag);
-        userData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(flags);
-        logger.LogDebug("Added tutorial flag: {flag} ({@flags})", flag, flags);
+        if (flags.Add(flag))
+        {
+            userData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(flags);
+            logger.LogDebug("Added tutorial flag: {flag} ({@flags})", flag, flags);
+        }
+
         return flags.ToList();
     }
 
@@ -61,11 +64,9 @@ public class TutorialService : ITutorialService
                 break;
             case TutorialStoryIds.Halidom:
                 await this.fortRepository.InitializeFort();
-                logger.LogDebug("Initialized halidom for tutorial");
                 break;
             case TutorialStoryIds.Smithy:
                 await this.fortRepository.InitializeSmithy();
-                logger.LogDebug("Added smithy for tutorial");
                 break;
             // TODO: Maybe more that I've missed
         }
