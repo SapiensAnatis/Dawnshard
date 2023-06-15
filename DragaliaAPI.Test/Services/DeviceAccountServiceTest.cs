@@ -4,6 +4,7 @@ using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -15,6 +16,7 @@ public class DeviceAccountServiceTest
     private readonly Mock<ILogger<DeviceAccountService>> mockLogger;
     private readonly Mock<IDeviceAccountRepository> mockRepository;
     private readonly Mock<ISavefileService> mockSavefileService;
+    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
 
     private readonly DeviceAccountService deviceAccountService;
 
@@ -23,6 +25,7 @@ public class DeviceAccountServiceTest
         this.mockLogger = new(MockBehavior.Loose);
         this.mockRepository = new(MockBehavior.Strict);
         this.mockSavefileService = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
 
         Dictionary<string, string?> inMemoryConfiguration = new() { { "HashSalt", "dragalia" }, };
 
@@ -34,6 +37,7 @@ public class DeviceAccountServiceTest
             mockRepository.Object,
             mockSavefileService.Object,
             configuration,
+            mockPlayerIdentityService.Object,
             mockLogger.Object
         );
     }
@@ -78,7 +82,13 @@ public class DeviceAccountServiceTest
             .Setup(x => x.GetDeviceAccountById("foreign id"))
             .ReturnsAsync((DbDeviceAccount?)null);
         this.mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
-        this.mockSavefileService.Setup(x => x.Create("foreign id")).Returns(Task.CompletedTask);
+        this.mockSavefileService.Setup(x => x.Create()).Returns(Task.CompletedTask);
+
+        this.mockPlayerIdentityService
+            .Setup(x => x.StartUserImpersonation("foreign id", null))
+            .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
+
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("foreign id");
 
         bool result = await deviceAccountService.AuthenticateDeviceAccount(
             new DeviceAccount("foreign id", "password")
@@ -98,9 +108,10 @@ public class DeviceAccountServiceTest
             .Setup(x => x.GetDeviceAccountById(It.IsAny<string>()))
             .ReturnsAsync((DbDeviceAccount?)null);
         this.mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
-        this.mockSavefileService
-            .Setup(x => x.Create(It.IsAny<string>()))
-            .Returns(Task.CompletedTask);
+        this.mockPlayerIdentityService
+            .Setup(x => x.StartUserImpersonation(It.IsAny<string>(), null))
+            .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
+        this.mockSavefileService.Setup(x => x.Create()).Returns(Task.CompletedTask);
 
         await deviceAccountService.RegisterDeviceAccount();
 

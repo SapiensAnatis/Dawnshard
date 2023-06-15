@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using Microsoft.Extensions.Logging;
+using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Services;
 
@@ -37,8 +38,15 @@ public class TutorialServiceTest
     public async Task UpdateTutorialStatus_UpdatesTutorialStatus()
     {
         this.mockUserDataRepository
-            .Setup(x => x.LookupUserData())
-            .ReturnsAsync(new DbPlayerUserData { DeviceAccountId = "aa", TutorialStatus = 1 });
+            .SetupGet(x => x.UserData)
+            .Returns(
+                new List<DbPlayerUserData>
+                {
+                    new() { DeviceAccountId = "aa", TutorialStatus = 1 }
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         int currentStatus = await this.tutorialService.UpdateTutorialStatus(80000);
 
@@ -49,8 +57,15 @@ public class TutorialServiceTest
     public async Task UpdateTutorialStatus_LowerStatus_DoesNotUpdateTutorialStatus()
     {
         this.mockUserDataRepository
-            .Setup(x => x.LookupUserData())
-            .ReturnsAsync(new DbPlayerUserData { DeviceAccountId = "aa", TutorialStatus = 99999 });
+            .SetupGet(x => x.UserData)
+            .Returns(
+                new List<DbPlayerUserData>
+                {
+                    new() { DeviceAccountId = "aa", TutorialStatus = 99999 }
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         int currentStatus = await this.tutorialService.UpdateTutorialStatus(80000);
 

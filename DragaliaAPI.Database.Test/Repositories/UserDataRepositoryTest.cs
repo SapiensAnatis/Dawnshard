@@ -1,13 +1,9 @@
-﻿using System.Security.Cryptography;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Game;
+using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
-using Microsoft.Build.Framework;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Serilog;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 
@@ -16,14 +12,19 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
     private readonly IUserDataRepository userDataRepository;
+    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
 
     public UserDataRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService
+            .SetupGet(x => x.AccountId)
+            .Returns(IdentityTestUtils.DeviceAccountId);
 
         this.userDataRepository = new UserDataRepository(
             this.fixture.ApiContext,
-            IdentityTestUtils.MockPlayerDetailsService.Object,
+            this.mockPlayerIdentityService.Object,
             LoggerTestUtils.Create<UserDataRepository>()
         );
     }
@@ -31,23 +32,24 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetPlayerInfo_ValidId_ReturnsInfo()
     {
-        (await this.userDataRepository.GetUserData("id").ToListAsync()).Should().NotBeEmpty();
+        (await this.userDataRepository.UserData.ToListAsync()).Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task GetPlayerInfo_InvalidId_ReturnsEmptyQueryable()
     {
-        (await this.userDataRepository.GetUserData("wrong id").ToListAsync()).Should().BeEmpty();
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("wrong id");
+        (await this.userDataRepository.UserData.ToListAsync()).Should().BeEmpty();
     }
 
     [Fact]
     public async Task UpdateName_UpdatesName()
     {
-        await this.userDataRepository.UpdateName("id", "Euden 2");
+        await this.userDataRepository.UpdateName("Euden 2");
         await this.userDataRepository.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == "id")
+            .Single(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
             .Name.Should()
             .Be("Euden 2");
     }

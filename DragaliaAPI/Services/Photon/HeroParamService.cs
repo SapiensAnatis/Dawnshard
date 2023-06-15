@@ -9,6 +9,7 @@ using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,6 +37,7 @@ public class HeroParamService : IHeroParamService
     private readonly IUserDataRepository userDataRepository;
     private readonly IPartyRepository partyRepository;
     private readonly ILogger<HeroParamService> logger;
+    private readonly IPlayerIdentityService playerIdentityService;
 
     public HeroParamService(
         IUnitRepository unitRepository,
@@ -43,7 +45,8 @@ public class HeroParamService : IHeroParamService
         IBonusService bonusService,
         IUserDataRepository userDataRepository,
         IPartyRepository partyRepository,
-        ILogger<HeroParamService> logger
+        ILogger<HeroParamService> logger,
+        IPlayerIdentityService playerIdentityService
     )
     {
         this.unitRepository = unitRepository;
@@ -52,6 +55,7 @@ public class HeroParamService : IHeroParamService
         this.userDataRepository = userDataRepository;
         this.partyRepository = partyRepository;
         this.logger = logger;
+        this.playerIdentityService = playerIdentityService;
     }
 
     public async Task<IEnumerable<HeroParam>> GetHeroParam(long viewerId, int partySlot)
@@ -61,14 +65,16 @@ public class HeroParamService : IHeroParamService
         List<HeroParam> result = new();
 
         DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(viewerId)
-            .FirstAsync();
+            .GetViewerData(viewerId)
+            .SingleAsync();
+
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+            userData.DeviceAccountId,
+            viewerId
+        );
 
         List<DbDetailedPartyUnit> detailedPartyUnits = await this.unitRepository
-            .BuildDetailedPartyUnit(
-                userData.DeviceAccountId,
-                partyRepository.GetPartyUnits(userData.DeviceAccountId, partySlot)
-            )
+            .BuildDetailedPartyUnit(partyRepository.GetPartyUnits(partySlot))
             .ToListAsync();
 
         foreach (DbDetailedPartyUnit unit in detailedPartyUnits)
@@ -76,12 +82,12 @@ public class HeroParamService : IHeroParamService
             if (unit.WeaponBodyData is not null)
             {
                 unit.GameWeaponPassiveAbilityList = await this.weaponRepository
-                    .GetPassiveAbilities(unit.WeaponBodyData.WeaponBodyId, userData.DeviceAccountId)
+                    .GetPassiveAbilities(unit.WeaponBodyData.WeaponBodyId)
                     .ToListAsync();
             }
         }
 
-        FortBonusList bonusList = await this.bonusService.GetBonusList(userData.DeviceAccountId);
+        FortBonusList bonusList = await this.bonusService.GetBonusList();
 
         return detailedPartyUnits.Select(x => MapHeroParam(x, bonusList));
     }

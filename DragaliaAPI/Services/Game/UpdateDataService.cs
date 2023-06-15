@@ -12,37 +12,17 @@ public class UpdateDataService : IUpdateDataService
 {
     private readonly ApiContext apiContext;
     private readonly IMapper mapper;
-    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly IPlayerIdentityService playerIdentityService;
 
     public UpdateDataService(
         ApiContext apiContext,
         IMapper mapper,
-        IPlayerDetailsService playerDetailsService
+        IPlayerIdentityService playerIdentityService
     )
     {
         this.apiContext = apiContext;
         this.mapper = mapper;
-        this.playerDetailsService = playerDetailsService;
-    }
-
-    [Obsolete(
-        "Prefer UpdateDataService.SaveChangesAsync instead due to key id bugs with this method"
-    )]
-    public UpdateDataList GetUpdateDataList(string deviceAccountId)
-    {
-        this.apiContext.ChangeTracker.LazyLoadingEnabled = false;
-
-        List<IDbHasAccountId> entities = this.apiContext.ChangeTracker
-            .Entries<IDbHasAccountId>()
-            .Where(
-                x =>
-                    (x.State is EntityState.Modified or EntityState.Added)
-                    && x.Entity.DeviceAccountId == deviceAccountId
-            )
-            .Select(x => x.Entity)
-            .ToList();
-
-        return this.MapUpdateDataList(entities);
+        this.playerIdentityService = playerIdentityService;
     }
 
     public async Task<UpdateDataList> SaveChangesAsync()
@@ -52,7 +32,7 @@ public class UpdateDataService : IUpdateDataService
             .Where(
                 x =>
                     (x.State is EntityState.Modified or EntityState.Added)
-                    && x.Entity.DeviceAccountId == this.playerDetailsService.AccountId
+                    && x.Entity.DeviceAccountId == this.playerIdentityService.AccountId
             )
             .Select(x => x.Entity)
             .ToList();

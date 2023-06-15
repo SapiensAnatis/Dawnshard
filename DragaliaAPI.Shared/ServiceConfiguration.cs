@@ -9,6 +9,6 @@ public static class ServiceConfiguration
         this IServiceCollection serviceCollection
     )
     {
-        return serviceCollection.AddScoped<IPlayerDetailsService, PlayerDetailsService>();
+        return serviceCollection.AddScoped<IPlayerIdentityService, PlayerIdentityService>();
     }
 }

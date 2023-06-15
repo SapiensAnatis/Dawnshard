@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
+using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
@@ -35,9 +36,10 @@ public class DbTestFixture : IDisposable
                 new MapperConfiguration(
                     opts => opts.AddMaps(typeof(Program).Assembly)
                 ).CreateMapper(),
-                mockLogger.Object
+                mockLogger.Object,
+                IdentityTestUtils.MockPlayerDetailsService.Object
             );
-        savefileService.Create("id").Wait();
+        savefileService.Create().Wait();
     }
 
     public async Task AddToDatabase<TEntity>(TEntity data)

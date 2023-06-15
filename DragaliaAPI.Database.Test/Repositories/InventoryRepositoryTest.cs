@@ -28,11 +28,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddMaterialQuantity_NoEntry_AddsQuantity()
     {
-        await this.inventoryRepository.UpdateQuantity(
-            DeviceAccountId,
-            Materials.WaterwyrmsGreatsphere,
-            10
-        );
+        await this.inventoryRepository.UpdateQuantity(Materials.WaterwyrmsGreatsphere, 10);
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
@@ -58,11 +54,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        await this.inventoryRepository.UpdateQuantity(
-            DeviceAccountId,
-            Materials.FirestormPrism,
-            10
-        );
+        await this.inventoryRepository.UpdateQuantity(Materials.FirestormPrism, 10);
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
@@ -124,7 +116,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        (await this.inventoryRepository.GetMaterial(DeviceAccountId, Materials.AbaddonOrb))
+        (await this.inventoryRepository.GetMaterial(Materials.AbaddonOrb))
             .Should()
             .NotBeNull()
             .And.BeEquivalentTo(
@@ -167,7 +159,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        (await this.inventoryRepository.GetMaterials(DeviceAccountId).ToListAsync())
+        (await this.inventoryRepository.Materials.ToListAsync())
             .Should()
             .ContainEquivalentOf( // Savefile creation adds materials
                 new DbPlayerMaterial()

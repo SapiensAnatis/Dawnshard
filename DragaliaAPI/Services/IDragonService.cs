@@ -6,26 +6,15 @@ namespace DragaliaAPI.Services;
 public interface IDragonService
 {
     Task<DragonBuyGiftToSendMultipleData> DoDragonBuyGiftToSendMultiple(
-        DragonBuyGiftToSendMultipleRequest request,
-        string deviceAccountId
+        DragonBuyGiftToSendMultipleRequest request
     );
     Task<DragonSendGiftMultipleData> DoDragonSendGiftMultiple(
-        DragonSendGiftMultipleRequest request,
-        string deviceAccountId
+        DragonSendGiftMultipleRequest request
     );
-    Task<DragonGetContactDataData> DoDragonGetContactData(
-        DragonGetContactDataRequest request,
-        string deviceAccountId
-    );
-    Task<DragonBuildupData> DoBuildup(DragonBuildupRequest request, string deviceAccountId);
-    Task<DragonResetPlusCountData> DoDragonResetPlusCount(
-        DragonResetPlusCountRequest request,
-        string deviceAccountId
-    );
-    Task<DragonLimitBreakData> DoDragonLimitBreak(
-        DragonLimitBreakRequest request,
-        string deviceAccountId
-    );
-    Task<DragonSetLockData> DoDragonSetLock(DragonSetLockRequest request, string deviceAccountId);
-    Task<DragonSellData> DoDragonSell(DragonSellRequest request, string deviceAccountId);
+    Task<DragonGetContactDataData> DoDragonGetContactData(DragonGetContactDataRequest request);
+    Task<DragonBuildupData> DoBuildup(DragonBuildupRequest request);
+    Task<DragonResetPlusCountData> DoDragonResetPlusCount(DragonResetPlusCountRequest request);
+    Task<DragonLimitBreakData> DoDragonLimitBreak(DragonLimitBreakRequest request);
+    Task<DragonSetLockData> DoDragonSetLock(DragonSetLockRequest request);
+    Task<DragonSellData> DoDragonSell(DragonSellRequest request);
 }

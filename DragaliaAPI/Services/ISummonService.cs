@@ -7,7 +7,6 @@ namespace DragaliaAPI.Services;
 public interface ISummonService
 {
     List<AtgenResultUnitList> GenerateRewardList(
-        string deviceAccountId,
         IEnumerable<AtgenRedoableSummonResultUnitList> baseRewardList
     );
 

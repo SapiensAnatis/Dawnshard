@@ -2,6 +2,7 @@
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Api;
@@ -20,6 +21,7 @@ public class AuthService : IAuthService
     private readonly IBaasApi baasRequestHelper;
     private readonly ISessionService sessionService;
     private readonly ISavefileService savefileService;
+    private readonly IPlayerIdentityService playerIdentityService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IOptionsMonitor<LoginOptions> loginOptions;
     private readonly IOptionsMonitor<BaasOptions> baasOptions;
@@ -30,6 +32,7 @@ public class AuthService : IAuthService
         IBaasApi baasRequestHelper,
         ISessionService sessionService,
         ISavefileService savefileService,
+        IPlayerIdentityService playerIdentityService,
         IUserDataRepository userDataRepository,
         IOptionsMonitor<LoginOptions> loginOptions,
         IOptionsMonitor<BaasOptions> baasOptions,
@@ -39,6 +42,7 @@ public class AuthService : IAuthService
         this.baasRequestHelper = baasRequestHelper;
         this.sessionService = sessionService;
         this.savefileService = savefileService;
+        this.playerIdentityService = playerIdentityService;
         this.userDataRepository = userDataRepository;
         this.loginOptions = loginOptions;
         this.baasOptions = baasOptions;
@@ -59,17 +63,22 @@ public class AuthService : IAuthService
     [Obsolete(ObsoleteReasons.BaaS)]
     private async Task<(long viewerId, string sessionId)> DoLegacyAuth(string idToken)
     {
-        string sessionId;
-        string deviceAccountId;
+        string sessionId = await this.sessionService.ActivateSession(idToken);
+        Session session = await this.sessionService.LoadSessionSessionId(sessionId);
+        string deviceAccountId = session.DeviceAccountId;
+        long viewerId = session.ViewerId;
 
-        sessionId = await this.sessionService.ActivateSession(idToken);
-        deviceAccountId = (
-            await this.sessionService.LoadSessionSessionId(sessionId)
-        ).DeviceAccountId;
+        IQueryable<DbPlayerUserData> playerInfo;
 
-        IQueryable<DbPlayerUserData> playerInfo = this.userDataRepository.GetUserData(
-            deviceAccountId
-        );
+        using (
+            IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+                deviceAccountId,
+                viewerId
+            )
+        )
+        {
+            playerInfo = this.userDataRepository.UserData;
+        }
 
         return (await playerInfo.Select(x => x.ViewerId).SingleAsync(), sessionId);
     }
@@ -84,18 +93,17 @@ public class AuthService : IAuthService
             jwt.Subject
         );
 
-        if (
-            GetPendingSaveImport(
-                jwt,
-                await this.userDataRepository.GetUserData(jwt.Subject).SingleOrDefaultAsync()
-            )
-        )
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(jwt.Subject);
+
+        DbPlayerUserData? userData = await this.userDataRepository.UserData.SingleOrDefaultAsync();
+
+        if (GetPendingSaveImport(jwt, userData))
         {
             try
             {
                 LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
                 this.logger.LogDebug("UserData: {@userData}", pendingSave.user_data);
-                await this.savefileService.ThreadSafeImport(jwt.Subject, pendingSave);
+                await this.savefileService.ThreadSafeImport(pendingSave);
             }
             catch (Exception e) when (e is JsonException or AutoMapperMappingException)
             {
@@ -108,10 +116,11 @@ public class AuthService : IAuthService
             }
         }
 
-        long viewerId = await this.GetViewerId(jwt.Subject);
-        string sessionId = await this.sessionService.CreateSession(idToken, jwt.Subject, viewerId);
+        long viewerId = await this.GetViewerId();
 
-        using IDisposable vIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
+        using IDisposable viewerIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
+
+        string sessionId = await this.sessionService.CreateSession(idToken, jwt.Subject, viewerId);
 
         this.logger.LogInformation(
             "Authenticated user with viewer ID {id} and issued session ID {sid}",
@@ -170,14 +179,13 @@ public class AuthService : IAuthService
         return validationResult;
     }
 
-    private async Task<long> GetViewerId(string accountId)
+    private async Task<long> GetViewerId()
     {
-        IQueryable<DbPlayerUserData> userDataQuery = this.userDataRepository.GetUserData(accountId);
-
+        IQueryable<DbPlayerUserData> userDataQuery = this.userDataRepository.UserData;
         DbPlayerUserData? userData = await userDataQuery.SingleOrDefaultAsync();
 
         if (userData is null)
-            await this.savefileService.Create(accountId);
+            await this.savefileService.Create();
 
         return await userDataQuery.Select(x => x.ViewerId).SingleAsync();
     }

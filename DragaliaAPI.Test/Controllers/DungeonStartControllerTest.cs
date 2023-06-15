@@ -93,9 +93,7 @@ public class DungeonStartControllerTest
                  }.AsQueryable().BuildMock());*/
 
         this.mockUnitRepository
-            .Setup(
-                x => x.BuildDetailedPartyUnit(DeviceAccountId, It.IsAny<IQueryable<DbPartyUnit>>())
-            )
+            .Setup(x => x.BuildDetailedPartyUnit(It.IsAny<IQueryable<DbPartyUnit>>()))
             .Returns(
                 new List<DbDetailedPartyUnit>()
                 {
@@ -179,7 +177,7 @@ public class DungeonStartControllerTest
     public async Task Start_QuestAlreadyCompleted_DoesNotUpdateQuestInDb()
     {
         this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
+            .SetupGet(x => x.Quests)
             .Returns(
                 new List<DbQuest>()
                 {
@@ -199,7 +197,7 @@ public class DungeonStartControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         this.mockPartyRepository
-            .Setup(x => x.GetPartyUnits(DeviceAccountId, 1))
+            .Setup(x => x.GetPartyUnits(1))
             .Returns(new List<DbPartyUnit>().AsQueryable().BuildMock());
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
@@ -235,11 +233,11 @@ public class DungeonStartControllerTest
     public async Task Start_QuestNotCompleted_UpdatesQuestInDb()
     {
         this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
+            .SetupGet(x => x.Quests)
             .Returns(new List<DbQuest>().AsQueryable().BuildMock());
 
         this.mockQuestRepository
-            .Setup(x => x.UpdateQuestState(DeviceAccountId, questId, 2))
+            .Setup(x => x.UpdateQuestState(questId, 2))
             .Returns(Task.CompletedTask);
 
         this.mockUpdateDataService
@@ -247,7 +245,7 @@ public class DungeonStartControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         this.mockPartyRepository
-            .Setup(x => x.GetPartyUnits(DeviceAccountId, 1))
+            .Setup(x => x.GetPartyUnits(1))
             .Returns(new List<DbPartyUnit>().AsQueryable().BuildMock());
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonStartController.Start(
@@ -273,7 +271,7 @@ public class DungeonStartControllerTest
     public async Task Start_MultipleParties_BuildsCorrectPartyList()
     {
         this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
+            .SetupGet(x => x.Quests)
             .Returns(
                 new List<DbQuest>()
                 {
@@ -293,7 +291,7 @@ public class DungeonStartControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         this.mockPartyRepository
-            .Setup(x => x.GetPartyUnits(DeviceAccountId, 1, 2))
+            .Setup(x => x.GetPartyUnits(1, 2))
             .Returns(
                 new List<DbPartyUnit>()
                 {
@@ -317,9 +315,7 @@ public class DungeonStartControllerTest
             );
 
         this.mockUnitRepository
-            .Setup(
-                x => x.BuildDetailedPartyUnit(DeviceAccountId, It.IsAny<IQueryable<DbPartyUnit>>())
-            )
+            .Setup(x => x.BuildDetailedPartyUnit(It.IsAny<IQueryable<DbPartyUnit>>()))
             .Returns(
                 new List<DbDetailedPartyUnit>()
                 {
@@ -478,7 +474,7 @@ public class DungeonStartControllerTest
     public async Task StartDungeonWithSupportIncludesSupportData()
     {
         this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
+            .SetupGet(x => x.Quests)
             .Returns(
                 new List<DbQuest>()
                 {
@@ -498,7 +494,7 @@ public class DungeonStartControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         this.mockPartyRepository
-            .Setup(x => x.GetPartyUnits(DeviceAccountId, 1))
+            .Setup(x => x.GetPartyUnits(1))
             .Returns(
                 new List<DbPartyUnit>() { }
                     .AsQueryable()
@@ -533,7 +529,7 @@ public class DungeonStartControllerTest
     public async Task StartDungeonWithoutSupportDoesntIncludeSupportData()
     {
         this.mockQuestRepository
-            .Setup(x => x.GetQuests(DeviceAccountId))
+            .SetupGet(x => x.Quests)
             .Returns(
                 new List<DbQuest>()
                 {
@@ -553,7 +549,7 @@ public class DungeonStartControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         this.mockPartyRepository
-            .Setup(x => x.GetPartyUnits(DeviceAccountId, 1))
+            .Setup(x => x.GetPartyUnits(1))
             .Returns(
                 new List<DbPartyUnit>() { }
                     .AsQueryable()
