@@ -507,19 +507,6 @@ public class SavefileService : ISavefileService
     {
         string deviceAccountId = this.playerIdentityService.AccountId;
 
-    private TDest MapWithDeviceAccount<TDest>(object source, string deviceAccountId)
-        where TDest : IDbHasAccountId
-    {
-        return mapper.Map<TDest>(
-            source,
-            opts => opts.AfterMap((src, dest) => dest.DeviceAccountId = deviceAccountId)
-        );
-    }
-
-    public async Task CreateBase()
-    {
-        string deviceAccountId = this.playerIdentityService.AccountId;
-
         this.logger.LogInformation("Creating new savefile for account ID {id}", deviceAccountId);
 
         this.Delete();
