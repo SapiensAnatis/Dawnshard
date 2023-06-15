@@ -15,26 +15,26 @@ public class BonusServiceTest
 {
     private readonly Mock<IFortRepository> mockFortRepository;
     private readonly Mock<IWeaponRepository> mockWeaponBodyRepository;
-    private readonly Mock<IPlayerDetailsService> mockPlayerDetailsService;
+    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly IBonusService bonusService;
 
     public BonusServiceTest()
     {
         this.mockFortRepository = new(MockBehavior.Strict);
-        this.mockPlayerDetailsService = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mockWeaponBodyRepository = new(MockBehavior.Strict);
 
         this.bonusService = new BonusService(
             this.mockFortRepository.Object,
             this.mockWeaponBodyRepository.Object,
-            this.mockPlayerDetailsService.Object
+            this.mockPlayerIdentityService.Object
         );
     }
 
     [Fact]
     public async Task GetBonusList_ReturnsCorrectBonuses()
     {
-        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
 
         string json = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
@@ -57,7 +57,7 @@ public class BonusServiceTest
             .Deserialize<FortBonusList>(ApiJsonOptions.Instance)!;
 
         this.mockFortRepository
-            .Setup(x => x.GetBuilds(DeviceAccountId))
+            .SetupGet(x => x.Builds)
             .Returns(
                 inputBuildList
                     .Select(
@@ -74,7 +74,7 @@ public class BonusServiceTest
             );
 
         this.mockWeaponBodyRepository
-            .Setup(x => x.GetWeaponBodies(DeviceAccountId))
+            .SetupGet(x => x.WeaponBodies)
             .Returns(
                 inputWeaponList
                     .Select(

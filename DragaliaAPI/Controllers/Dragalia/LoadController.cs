@@ -28,7 +28,7 @@ public class LoadController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> Index()
     {
-        LoadIndexData data = await loadService.BuildIndexData(this.DeviceAccountId);
+        LoadIndexData data = await loadService.BuildIndexData();
         return this.Ok(data);
     }
 #endif

@@ -5,6 +5,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -51,17 +52,26 @@ public class CharaTest : TestFixture
     [Fact]
     public async Task CharaBuildup_HasIncreasedXpAndLevel()
     {
-        DbPlayerCharaData charaData = await this.Services
-            .GetRequiredService<IUnitRepository>()
-            .GetAllCharaData(DeviceAccountId)
-            .Where(x => x.CharaId == Charas.Celliera)
-            .FirstAsync();
+        DbPlayerCharaData charaData;
+        int matQuantity;
 
-        int matQuantity = (
-            await this.Services
-                .GetRequiredService<IInventoryRepository>()
-                .GetMaterial(DeviceAccountId, Materials.GoldCrystal)
-        )!.Quantity;
+        using (
+            IDisposable ctx = this.Services
+                .GetRequiredService<IPlayerIdentityService>()
+                .StartUserImpersonation(DeviceAccountId)
+        )
+        {
+            charaData = await this.Services
+                .GetRequiredService<IUnitRepository>()
+                .Charas.Where(x => x.CharaId == Charas.Celliera)
+                .FirstAsync();
+
+            matQuantity = (
+                await this.Services
+                    .GetRequiredService<IInventoryRepository>()
+                    .GetMaterial(Materials.GoldCrystal)
+            )!.Quantity;
+        }
 
         CharaBuildupData response = (
             await this.Client.PostMsgpack<CharaBuildupData>(

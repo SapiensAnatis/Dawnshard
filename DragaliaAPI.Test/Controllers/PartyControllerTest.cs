@@ -45,7 +45,7 @@ public class PartyControllerTest
     public async Task UpdatePartyName_CallsPartyRepository()
     {
         this.mockPartyRepository
-            .Setup(x => x.UpdatePartyName(DeviceAccountId, 1, "Z Team"))
+            .Setup(x => x.UpdatePartyName(1, "Z Team"))
             .Returns(Task.CompletedTask);
 
         UpdateDataList updateDataList =

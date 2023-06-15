@@ -20,7 +20,7 @@ public class DragonController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> Buildup([FromBody] DragonBuildupRequest request)
     {
-        return Ok(await dragonService.DoBuildup(request, DeviceAccountId));
+        return Ok(await dragonService.DoBuildup(request));
     }
 
     [Route("reset_plus_count")]
@@ -29,14 +29,14 @@ public class DragonController : DragaliaControllerBase
         [FromBody] DragonResetPlusCountRequest request
     )
     {
-        return Ok(await dragonService.DoDragonResetPlusCount(request, DeviceAccountId));
+        return Ok(await dragonService.DoDragonResetPlusCount(request));
     }
 
     [Route("limit_break")]
     [HttpPost]
     public async Task<DragaliaResult> DragonLimitBreak([FromBody] DragonLimitBreakRequest request)
     {
-        return Ok(await dragonService.DoDragonLimitBreak(request, DeviceAccountId));
+        return Ok(await dragonService.DoDragonLimitBreak(request));
     }
 
     [Route("get_contact_data")]
@@ -45,7 +45,7 @@ public class DragonController : DragaliaControllerBase
         [FromBody] DragonGetContactDataRequest request
     )
     {
-        return Ok(await dragonService.DoDragonGetContactData(request, DeviceAccountId));
+        return Ok(await dragonService.DoDragonGetContactData(request));
     }
 
     [Route("buy_gift_to_send_multiple")]
@@ -54,7 +54,7 @@ public class DragonController : DragaliaControllerBase
         [FromBody] DragonBuyGiftToSendMultipleRequest request
     )
     {
-        return Ok(await dragonService.DoDragonBuyGiftToSendMultiple(request, DeviceAccountId));
+        return Ok(await dragonService.DoDragonBuyGiftToSendMultiple(request));
     }
 
     [Route("buy_gift_to_send")]
@@ -69,8 +69,7 @@ public class DragonController : DragaliaControllerBase
                 {
                     dragon_id = request.dragon_id,
                     dragon_gift_id_list = new List<DragonGifts>() { request.dragon_gift_id }
-                },
-                DeviceAccountId
+                }
             );
         return Ok(
             new DragonBuyGiftToSendData()
@@ -94,7 +93,7 @@ public class DragonController : DragaliaControllerBase
         [FromBody] DragonSendGiftMultipleRequest request
     )
     {
-        return Ok(await dragonService.DoDragonSendGiftMultiple(request, DeviceAccountId));
+        return Ok(await dragonService.DoDragonSendGiftMultiple(request));
     }
 
     [Route("send_gift")]
@@ -107,8 +106,7 @@ public class DragonController : DragaliaControllerBase
                 dragon_id = request.dragon_id,
                 dragon_gift_id = request.dragon_gift_id,
                 quantity = 1
-            },
-            DeviceAccountId
+            }
         );
         return Ok(
             new DragonSendGiftData()
@@ -125,13 +123,13 @@ public class DragonController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> DragonSetLock([FromBody] DragonSetLockRequest request)
     {
-        return Ok(await dragonService.DoDragonSetLock(request, DeviceAccountId));
+        return Ok(await dragonService.DoDragonSetLock(request));
     }
 
     [Route("sell")]
     [HttpPost]
     public async Task<DragaliaResult> DragonSell([FromBody] DragonSellRequest request)
     {
-        return Ok(await dragonService.DoDragonSell(request, DeviceAccountId));
+        return Ok(await dragonService.DoDragonSell(request));
     }
 }

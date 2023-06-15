@@ -1,14 +1,11 @@
-﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models;
-using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Json;
-using DragaliaAPI.Test.Utils;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
@@ -86,12 +83,18 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
     private void SeedDatabase(IServiceProvider provider)
     {
         ISavefileService savefileService = provider.GetRequiredService<ISavefileService>();
+        IPlayerIdentityService playerIdentityService =
+            provider.GetRequiredService<IPlayerIdentityService>();
         ApiContext apiContext = provider.GetRequiredService<ApiContext>();
 
         apiContext.Database.EnsureDeleted();
         apiContext.Database.EnsureCreated();
 
-        savefileService.CreateBase(TestFixture.DeviceAccountId).Wait();
+        using IDisposable ctx = playerIdentityService.StartUserImpersonation(
+            TestFixture.DeviceAccountId
+        );
+
+        savefileService.CreateBase().Wait();
 
         apiContext.PlayerMaterials.AddRange(
             Enum.GetValues<Materials>()
@@ -119,21 +122,8 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 )
         );
 
-        // TODO: When everything uses IPlayerDetailsService refactor this to use InitializeFort()
-        apiContext.PlayerFortDetails.Add(
-            new DbFortDetail() { DeviceAccountId = TestFixture.DeviceAccountId, CarpenterNum = 2 }
-        );
-
-        apiContext.PlayerFortBuilds.Add(
-            new DbFortBuild()
-            {
-                DeviceAccountId = TestFixture.DeviceAccountId,
-                PlantId = FortPlants.TheHalidom,
-                PositionX = 16, // Default Halidom position
-                PositionZ = 17,
-                LastIncomeDate = DateTimeOffset.UtcNow
-            }
-        );
+        IFortRepository fortRepository = provider.GetRequiredService<IFortRepository>();
+        fortRepository.InitializeFort().Wait();
 
         apiContext.PlayerFortBuilds.Add(
             new DbFortBuild()

@@ -298,9 +298,7 @@ public class FortController : DragaliaControllerBase
     {
         await this.fortService.GetFortPlantIdList(request.fort_plant_id_list);
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         FortSetNewFortPlantData data = new() { result = 1, update_data_list = updateDataList };
         return this.Ok(data);

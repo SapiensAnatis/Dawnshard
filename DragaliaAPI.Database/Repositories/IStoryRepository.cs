@@ -17,15 +17,5 @@ public interface IStoryRepository
     IQueryable<DbPlayerStoryState> QuestStories { get; }
     IQueryable<DbPlayerStoryState> UnitStories { get; }
 
-    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
-    public IQueryable<DbPlayerStoryState> GetStoryList(string deviceAccountId);
-
-    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
-    public Task<DbPlayerStoryState> GetOrCreateStory(
-        string deviceAccountId,
-        StoryTypes storyType,
-        int storyId
-    );
-
     Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId);
 }

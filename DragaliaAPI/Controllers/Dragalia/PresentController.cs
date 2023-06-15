@@ -57,7 +57,7 @@ public class PresentController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> Receive([FromBody] PresentReceiveRequest request)
     {
-        UpdateDataList ul = _updateDataService.GetUpdateDataList(this.DeviceAccountId);
+        UpdateDataList ul = await _updateDataService.SaveChangesAsync();
         return Ok(
             new PresentReceiveData()
             {

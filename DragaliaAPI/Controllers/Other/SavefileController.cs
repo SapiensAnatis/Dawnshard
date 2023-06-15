@@ -3,6 +3,7 @@ using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,14 +18,17 @@ public class SavefileController : ControllerBase
 {
     private readonly ISavefileService savefileService;
     private readonly IUserDataRepository userDataRepository;
+    private readonly IPlayerIdentityService playerIdentityService;
 
     public SavefileController(
         ISavefileService savefileImportService,
-        IUserDataRepository userDataRepository
+        IUserDataRepository userDataRepository,
+        IPlayerIdentityService playerIdentityService
     )
     {
         this.savefileService = savefileImportService;
         this.userDataRepository = userDataRepository;
+        this.playerIdentityService = playerIdentityService;
     }
 
     [HttpPost("import/{viewerId:long}")]
@@ -33,10 +37,13 @@ public class SavefileController : ControllerBase
         [FromBody] DragaliaResponse<LoadIndexData> loadIndexResponse
     )
     {
-        await this.savefileService.ThreadSafeImport(
-            await this.LookupAccountId(viewerId),
-            loadIndexResponse.data
+        string accountId = await LookupAccountId(viewerId);
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+            accountId,
+            viewerId
         );
+
+        await this.savefileService.ThreadSafeImport(loadIndexResponse.data);
 
         return this.NoContent();
     }
@@ -45,14 +52,25 @@ public class SavefileController : ControllerBase
     public async Task<IActionResult> Export(long viewerId, [FromServices] ILoadService loadService)
     {
         string accountId = await LookupAccountId(viewerId);
-        DragaliaResponse<LoadIndexData> result = new(await loadService.BuildIndexData(accountId));
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+            accountId,
+            viewerId
+        );
+
+        DragaliaResponse<LoadIndexData> result = new(await loadService.BuildIndexData());
         return Ok(result);
     }
 
     [HttpDelete("delete/{viewerId:long}")]
     public async Task<IActionResult> Delete(long viewerId)
     {
-        await this.savefileService.Reset(await this.LookupAccountId(viewerId));
+        string accountId = await LookupAccountId(viewerId);
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+            accountId,
+            viewerId
+        );
+
+        await this.savefileService.Reset();
 
         return this.NoContent();
     }
@@ -61,7 +79,7 @@ public class SavefileController : ControllerBase
     {
         // Note that unlike in AuthService, a savefile must already exist here, hence no OrDefault
         return await this.userDataRepository
-            .GetUserData(viewerId)
+            .GetViewerData(viewerId)
             .Select(x => x.DeviceAccountId)
             .SingleAsync();
     }

@@ -20,7 +20,7 @@ public class FortService : IFortService
     private readonly IInventoryRepository inventoryRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly ILogger<FortService> logger;
-    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly IPlayerIdentityService playerIdentityService;
     private readonly IMapper mapper;
 
     public FortService(
@@ -28,7 +28,7 @@ public class FortService : IFortService
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
         ILogger<FortService> logger,
-        IPlayerDetailsService playerDetailsService,
+        IPlayerIdentityService playerIdentityService,
         IMapper mapper
     )
     {
@@ -36,7 +36,7 @@ public class FortService : IFortService
         this.userDataRepository = userDataRepository;
         this.inventoryRepository = inventoryRepository;
         this.logger = logger;
-        this.playerDetailsService = playerDetailsService;
+        this.playerIdentityService = playerIdentityService;
         this.mapper = mapper;
     }
 
@@ -47,7 +47,7 @@ public class FortService : IFortService
 
     public async Task<FortDetail> AddCarpenter(PaymentTypes paymentType)
     {
-        DbPlayerUserData userData = await this.userDataRepository.LookupUserData();
+        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
 
         FortDetail fortDetail = await this.GetFortDetail();
 
@@ -129,7 +129,7 @@ public class FortService : IFortService
     {
         this.logger.LogDebug("CompleteAtOnce called for build {buildId}", buildId);
 
-        DbPlayerUserData userData = await this.userDataRepository.LookupUserData();
+        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
 
         await this.fortRepository.UpgradeAtOnce(userData, buildId, paymentType);
     }
@@ -201,7 +201,7 @@ public class FortService : IFortService
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = this.playerDetailsService.AccountId,
+                DeviceAccountId = this.playerIdentityService.AccountId,
                 PlantId = fortPlantId,
                 Level = plantDetail.Level,
                 PositionX = positionX,

@@ -13,6 +13,7 @@ public class SummonService : ISummonService
 {
     private readonly IUnitRepository unitRepository;
     private readonly IMapper mapper;
+    private readonly ILogger<SummonService> logger;
 
     private readonly Random random;
 
@@ -23,11 +24,16 @@ public class SummonService : ISummonService
     private const float SRSummonRateTotal = SRSummonRateTotalNormal + SRSummonRateTotalFeatured;
     private const float RSummonRateChara = 4.0f;
 
-    public SummonService(IUnitRepository unitRepository, IMapper mapper)
+    public SummonService(
+        IUnitRepository unitRepository,
+        IMapper mapper,
+        ILogger<SummonService> logger
+    )
     {
         this.unitRepository = unitRepository;
         this.mapper = mapper;
         this.random = Random.Shared;
+        this.logger = logger;
     }
 
     /* public record BannerSummonInfo(
@@ -133,6 +139,8 @@ public class SummonService : ISummonService
             }
         }
 
+        logger.LogDebug("Generated summon result: {@summonResult}", resultList);
+
         return resultList;
     }
 
@@ -140,19 +148,14 @@ public class SummonService : ISummonService
     /// Populate a summon result with is_new and eldwater values.
     /// </summary>
     public List<AtgenResultUnitList> GenerateRewardList(
-        string deviceAccountId,
         IEnumerable<AtgenRedoableSummonResultUnitList> baseRewardList
     )
     {
         List<AtgenResultUnitList> newUnits = new();
 
-        IEnumerable<Charas> ownedCharas = this.unitRepository
-            .GetAllCharaData(deviceAccountId)
-            .Select(x => x.CharaId);
+        IEnumerable<Charas> ownedCharas = this.unitRepository.Charas.Select(x => x.CharaId);
 
-        IEnumerable<Dragons> ownedDragons = this.unitRepository
-            .GetAllDragonData(deviceAccountId)
-            .Select(x => x.DragonId);
+        IEnumerable<Dragons> ownedDragons = this.unitRepository.Dragons.Select(x => x.DragonId);
 
         foreach (AtgenRedoableSummonResultUnitList reward in baseRewardList)
         {

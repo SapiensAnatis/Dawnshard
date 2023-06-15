@@ -30,11 +30,7 @@ public partial class TutorialController : DragaliaControllerBase
     {
         int currentStep = await tutorialService.UpdateTutorialStatus(request.step);
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(new TutorialUpdateStepData(currentStep, updateDataList, new()));
     }
@@ -45,11 +41,7 @@ public partial class TutorialController : DragaliaControllerBase
     {
         List<int> currentFlags = await this.tutorialService.AddTutorialFlag(flagRequest.flag_id);
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(new TutorialUpdateFlagsData(currentFlags, updateDataList, new()));
     }

@@ -9,23 +9,23 @@ namespace DragaliaAPI.Database.Repositories;
 public class AbilityCrestRepository : IAbilityCrestRepository
 {
     private readonly ApiContext apiContext;
-    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly IPlayerIdentityService playerIdentityService;
     private readonly ILogger<AbilityCrestRepository> logger;
 
     public AbilityCrestRepository(
         ApiContext apiContext,
-        IPlayerDetailsService playerDetailsService,
+        IPlayerIdentityService playerIdentityService,
         ILogger<AbilityCrestRepository> logger
     )
     {
         this.apiContext = apiContext;
-        this.playerDetailsService = playerDetailsService;
+        this.playerIdentityService = playerIdentityService;
         this.logger = logger;
     }
 
     public IQueryable<DbAbilityCrest> AbilityCrests =>
         this.apiContext.PlayerAbilityCrests.Where(
-            x => x.DeviceAccountId == this.playerDetailsService.AccountId
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
     public async Task Add(AbilityCrests abilityCrestId)
@@ -39,13 +39,13 @@ public class AbilityCrestRepository : IAbilityCrestRepository
         }
 
         await this.apiContext.PlayerAbilityCrests.AddAsync(
-            new DbAbilityCrest(this.playerDetailsService.AccountId, abilityCrestId)
+            new DbAbilityCrest(this.playerIdentityService.AccountId, abilityCrestId)
         );
     }
 
     public async Task<DbAbilityCrest?> FindAsync(AbilityCrests abilityCrestId) =>
         await this.apiContext.PlayerAbilityCrests.FindAsync(
-            this.playerDetailsService.AccountId,
+            this.playerIdentityService.AccountId,
             abilityCrestId
         );
 }

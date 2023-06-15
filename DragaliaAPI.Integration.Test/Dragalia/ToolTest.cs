@@ -13,6 +13,7 @@ public class ToolTest : TestFixture
     public ToolTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
+        this.Client.DefaultRequestHeaders.Remove("SID");
         this.SetupSaveImport();
     }
 

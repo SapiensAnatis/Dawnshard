@@ -40,7 +40,7 @@ public class AbilityCrestTradeController : DragaliaControllerBase
             {
                 user_ability_crest_trade_list = new List<UserAbilityCrestTradeList>(),
                 ability_crest_trade_list = abilityCrestTradeList,
-                update_data_list = this.updateDataService.GetUpdateDataList(this.DeviceAccountId)
+                update_data_list = await this.updateDataService.SaveChangesAsync()
             };
 
         return Ok(response);

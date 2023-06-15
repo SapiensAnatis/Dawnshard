@@ -19,7 +19,7 @@ public class FortServiceTest
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<ILogger<FortService>> mockLogger;
-    private readonly Mock<IPlayerDetailsService> mockPlayerDetailsService;
+    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly IMapper mapper;
 
     private readonly IFortService fortService;
@@ -30,7 +30,7 @@ public class FortServiceTest
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
-        this.mockPlayerDetailsService = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mapper = UnitTestUtils.CreateMapper();
 
         this.fortService = new FortService(
@@ -38,7 +38,7 @@ public class FortServiceTest
             this.mockUserDataRepository.Object,
             this.mockInventoryRepository.Object,
             this.mockLogger.Object,
-            this.mockPlayerDetailsService.Object,
+            this.mockPlayerIdentityService.Object,
             this.mapper
         );
 
@@ -99,8 +99,15 @@ public class FortServiceTest
     )
     {
         this.mockUserDataRepository
-            .Setup(x => x.LookupUserData())
-            .ReturnsAsync(new DbPlayerUserData() { DeviceAccountId = "id", Crystal = 10000 });
+            .SetupGet(x => x.UserData)
+            .Returns(
+                new List<DbPlayerUserData>
+                {
+                    new() { DeviceAccountId = "id", Crystal = 10000 }
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockFortRepository
             .Setup(x => x.GetFortDetail())
@@ -130,8 +137,15 @@ public class FortServiceTest
     public async Task AddCarpenter_OverMaxCarpenters_Throws()
     {
         this.mockUserDataRepository
-            .Setup(x => x.LookupUserData())
-            .ReturnsAsync(new DbPlayerUserData() { DeviceAccountId = "id", Crystal = 10000 });
+            .SetupGet(x => x.UserData)
+            .Returns(
+                new List<DbPlayerUserData>
+                {
+                    new() { DeviceAccountId = "id", Crystal = 10000 }
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockFortRepository
             .Setup(x => x.GetFortDetail())
@@ -152,8 +166,15 @@ public class FortServiceTest
     public async Task AddCarpenter_InvalidPaymentType_Throws()
     {
         this.mockUserDataRepository
-            .Setup(x => x.LookupUserData())
-            .ReturnsAsync(new DbPlayerUserData() { DeviceAccountId = "id", Crystal = 10000 });
+            .SetupGet(x => x.UserData)
+            .Returns(
+                new List<DbPlayerUserData>
+                {
+                    new() { DeviceAccountId = "id", Crystal = 10000 }
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockFortRepository
             .Setup(x => x.GetFortDetail())
@@ -174,8 +195,15 @@ public class FortServiceTest
     public async Task AddCarpenter_InsufficientCurrency_Throws()
     {
         this.mockUserDataRepository
-            .Setup(x => x.LookupUserData())
-            .ReturnsAsync(new DbPlayerUserData() { DeviceAccountId = "id", Crystal = 1 });
+            .SetupGet(x => x.UserData)
+            .Returns(
+                new List<DbPlayerUserData>
+                {
+                    new() { DeviceAccountId = "id", Crystal = 1 }
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         this.mockFortRepository
             .Setup(x => x.GetFortDetail())
@@ -197,7 +225,14 @@ public class FortServiceTest
     {
         DbPlayerUserData userData = new() { DeviceAccountId = "id", BuildTimePoint = 1 };
 
-        this.mockUserDataRepository.Setup(x => x.LookupUserData()).ReturnsAsync(userData);
+        this.mockUserDataRepository
+            .SetupGet(x => x.UserData)
+            .Returns(
+                new List<DbPlayerUserData> { userData }
+                    .AsQueryable()
+                    .BuildMock()
+            );
+
         this.mockFortRepository
             .Setup(x => x.UpgradeAtOnce(userData, 1, PaymentTypes.HalidomHustleHammer))
             .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id" });
@@ -329,7 +364,7 @@ public class FortServiceTest
     [Fact]
     public async Task BuildStart_StartsBuilding()
     {
-        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("id");
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
 
         this.mockUserDataRepository.Setup(x => x.UpdateCoin(-300)).Returns(Task.CompletedTask);
 
@@ -368,14 +403,14 @@ public class FortServiceTest
 
         this.mockFortRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
-        this.mockPlayerDetailsService.VerifyAll();
+        this.mockPlayerIdentityService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
     }
 
     [Fact]
     public async Task BuildStart_InsufficientCarpenters_Throws()
     {
-        this.mockPlayerDetailsService.SetupGet(x => x.AccountId).Returns("id");
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
 
         this.mockFortRepository
             .Setup(x => x.GetFortDetail())
@@ -389,7 +424,7 @@ public class FortServiceTest
             .Where(e => e.Code == ResultCode.FortBuildCarpenterBusy);
 
         this.mockFortRepository.VerifyAll();
-        this.mockPlayerDetailsService.VerifyAll();
+        this.mockPlayerIdentityService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
     }
 

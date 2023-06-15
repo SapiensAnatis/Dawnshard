@@ -10,35 +10,37 @@ namespace DragaliaAPI.Database.Repositories;
 public class StoryRepository : IStoryRepository
 {
     private readonly ApiContext apiContext;
-    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly IPlayerIdentityService playerIdentityService;
     private readonly ILogger<StoryRepository> logger;
 
     public StoryRepository(
         ApiContext apiContext,
-        IPlayerDetailsService playerDetailsService,
+        IPlayerIdentityService playerIdentityService,
         ILogger<StoryRepository> logger
     )
     {
         this.apiContext = apiContext;
-        this.playerDetailsService = playerDetailsService;
+        this.playerIdentityService = playerIdentityService;
         this.logger = logger;
     }
 
-    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
-    public IQueryable<DbPlayerStoryState> GetStoryList(string deviceAccountId)
-    {
-        return this.apiContext.PlayerStoryState.Where(x => x.DeviceAccountId == deviceAccountId);
-    }
+    public IQueryable<DbPlayerStoryState> Stories =>
+        this.apiContext.PlayerStoryState.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
+        );
 
-    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
-    public async Task<DbPlayerStoryState> GetOrCreateStory(
-        string deviceAccountId,
-        StoryTypes storyType,
-        int storyId
-    )
+    public IQueryable<DbPlayerStoryState> UnitStories =>
+        this.Stories.Where(
+            x => x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon
+        );
+
+    public IQueryable<DbPlayerStoryState> QuestStories =>
+        this.Stories.Where(x => x.StoryType == StoryTypes.Quest);
+
+    public async Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId)
     {
         DbPlayerStoryState? state = await apiContext.PlayerStoryState.FindAsync(
-            deviceAccountId,
+            this.playerIdentityService.AccountId,
             storyType,
             storyId
         );
@@ -55,7 +57,7 @@ public class StoryRepository : IStoryRepository
                 .Add(
                     new DbPlayerStoryState()
                     {
-                        DeviceAccountId = deviceAccountId,
+                        DeviceAccountId = this.playerIdentityService.AccountId,
                         StoryId = storyId,
                         StoryType = storyType,
                         State = 0
@@ -66,24 +68,4 @@ public class StoryRepository : IStoryRepository
 
         return state;
     }
-
-    public async Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId)
-    {
-#pragma warning disable CS0618 // Type or member is obsolete
-        return await this.GetOrCreateStory(this.playerDetailsService.AccountId, storyType, storyId);
-#pragma warning restore CS0618 // Type or member is obsolete
-    }
-
-    public IQueryable<DbPlayerStoryState> Stories =>
-        this.apiContext.PlayerStoryState.Where(
-            x => x.DeviceAccountId == this.playerDetailsService.AccountId
-        );
-
-    public IQueryable<DbPlayerStoryState> UnitStories =>
-        this.Stories.Where(
-            x => x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon
-        );
-
-    public IQueryable<DbPlayerStoryState> QuestStories =>
-        this.Stories.Where(x => x.StoryType == StoryTypes.Quest);
 }

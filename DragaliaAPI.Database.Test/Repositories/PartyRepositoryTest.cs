@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
@@ -15,7 +16,10 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
     public PartyRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.partyRepository = new PartyRepository(this.fixture.ApiContext);
+        this.partyRepository = new PartyRepository(
+            this.fixture.ApiContext,
+            IdentityTestUtils.MockPlayerDetailsService.Object
+        );
 
         AssertionOptions.AssertEquivalencyUsing(
             options => options.Excluding(x => x.Name == "Owner")
@@ -25,9 +29,7 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetParties_Returns54Entries_AndPartyUnitsAreOrdered()
     {
-        IEnumerable<DbParty> result = await this.partyRepository
-            .GetParties(DeviceAccountId)
-            .ToListAsync();
+        IEnumerable<DbParty> result = await this.partyRepository.Parties.ToListAsync();
 
         result.Should().HaveCount(54);
 
@@ -50,7 +52,7 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
                 }
             };
 
-        await this.partyRepository.SetParty(DeviceAccountId, toAdd);
+        await this.partyRepository.SetParty(toAdd);
         await this.partyRepository.SaveChangesAsync();
 
         DbParty dbEntry = await this.fixture.ApiContext.PlayerParties
@@ -85,7 +87,7 @@ public class PartyRepositoryTest : IClassFixture<DbTestFixture>
                 }
             };
 
-        await this.partyRepository.SetParty(DeviceAccountId, toAdd);
+        await this.partyRepository.SetParty(toAdd);
         await this.partyRepository.SaveChangesAsync();
 
         DbParty dbEntry = await this.fixture.ApiContext.PlayerParties

@@ -161,9 +161,7 @@ public class SummonController : DragaliaControllerBase
     public async Task<DragaliaResult> SummonExcludeGetList(SummonExcludeGetListRequest request)
     {
         int bannerId = request.summon_id;
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
         //TODO Replace DummyData with real exludes from BannerInfo
         List<AtgenDuplicateEntityList> excludableList = new();
         foreach (Charas c in Enum.GetValues<Charas>())
@@ -183,9 +181,7 @@ public class SummonController : DragaliaControllerBase
     public async Task<DragaliaResult> GetOddsData(SummonGetOddsDataRequest request)
     {
         int bannerId = request.summon_id;
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
         //TODO Replace Dummy data with oddscalculation
 
         return this.Ok(
@@ -200,12 +196,10 @@ public class SummonController : DragaliaControllerBase
     [Route("get_summon_history")]
     public async Task<DragaliaResult> GetSummonHistory()
     {
-        DbPlayerUserData userData = await userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
+        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync();
 
         IEnumerable<SummonHistoryList> dbList = (
-            await summonRepository.GetSummonHistory(this.DeviceAccountId)
+            await summonRepository.SummonHistory.ToListAsync()
         ).Select(mapper.Map<SummonHistoryList>);
 
         return Ok(new SummonGetSummonHistoryData(dbList));
@@ -223,12 +217,9 @@ public class SummonController : DragaliaControllerBase
     public async Task<DragaliaResult> GetSummonPointTrade(SummonGetSummonPointTradeRequest request)
     {
         int bannerId = request.summon_id;
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(DeviceAccountId)
-            .FirstAsync();
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
         //TODO maybe throw BadRequest on bad banner id, for now generate empty data if not exists
         DbPlayerBannerData playerBannerData = await this.summonRepository.GetPlayerBannerData(
-            DeviceAccountId,
             bannerId
         );
         //TODO get real list from persisted BannerInfo or dynamic List from Db, dunno yet
@@ -287,13 +278,10 @@ public class SummonController : DragaliaControllerBase
         DateTimeOffset summonDate = DateTimeOffset.UtcNow;
 
         DbPlayerBannerData playerBannerData = await this.summonRepository.GetPlayerBannerData(
-            this.DeviceAccountId,
             bannerData.summon_id
         );
 
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
 
         int numSummons =
             summonRequest.exec_type == SummonExecTypes.Tenfold
@@ -369,7 +357,6 @@ public class SummonController : DragaliaControllerBase
 
         List<Dragons> newDragons = (
             await this.unitRepository.AddDragons(
-                DeviceAccountId,
                 summonResult
                     .Where(x => x.entity_type == EntityTypes.Dragon)
                     .Select(x => (Dragons)x.id)
@@ -381,7 +368,6 @@ public class SummonController : DragaliaControllerBase
 
         List<Charas> newCharas = (
             await this.unitRepository.AddCharas(
-                DeviceAccountId,
                 summonResult
                     .Where(x => x.entity_type == EntityTypes.Chara)
                     .Select(x => (Charas)x.id)

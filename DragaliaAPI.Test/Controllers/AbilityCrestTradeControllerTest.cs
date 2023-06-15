@@ -51,8 +51,8 @@ public class AbilityCrestTradeControllerTest
             );
 
         this.mockUpdateDataService
-            .Setup(x => x.GetUpdateDataList(DeviceAccountId))
-            .Returns(new UpdateDataList() { });
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList() { });
 
         IEnumerable<AbilityCrestTrade> tradeableAbilityCrests = MasterAsset
             .AbilityCrestTrade
@@ -115,8 +115,8 @@ public class AbilityCrestTradeControllerTest
             );
 
         this.mockUpdateDataService
-            .Setup(x => x.GetUpdateDataList(DeviceAccountId))
-            .Returns(new UpdateDataList() { });
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList() { });
 
         IEnumerable<AbilityCrestTrade> tradeableAbilityCrests = MasterAsset
             .AbilityCrestTrade

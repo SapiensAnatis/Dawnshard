@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services.Game;
 
@@ -30,7 +31,7 @@ public class TutorialService : ITutorialService
 
     public async Task<int> UpdateTutorialStatus(int newStatus)
     {
-        DbPlayerUserData userData = await userDataRepository.LookupUserData();
+        DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
 
         if (newStatus > userData.TutorialStatus)
         {
@@ -42,7 +43,7 @@ public class TutorialService : ITutorialService
 
     public async Task<List<int>> AddTutorialFlag(int flag)
     {
-        DbPlayerUserData userData = await userDataRepository.LookupUserData();
+        DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
 
         ISet<int> flags = TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag);
         flags.Add(flag);
