@@ -85,7 +85,7 @@ public class AuthServiceTest
             );
 
         this.mockPlayerIdentityService
-            .Setup(x => x.StartUserImpersonation("device account id", null))
+            .Setup(x => x.StartUserImpersonation("device account id", 1))
             .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("device account id");

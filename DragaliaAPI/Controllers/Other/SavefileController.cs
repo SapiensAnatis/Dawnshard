@@ -38,7 +38,10 @@ public class SavefileController : ControllerBase
     )
     {
         string accountId = await LookupAccountId(viewerId);
-        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(accountId);
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+            accountId,
+            viewerId
+        );
 
         await this.savefileService.ThreadSafeImport(loadIndexResponse.data);
 
@@ -49,7 +52,10 @@ public class SavefileController : ControllerBase
     public async Task<IActionResult> Export(long viewerId, [FromServices] ILoadService loadService)
     {
         string accountId = await LookupAccountId(viewerId);
-        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(accountId);
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+            accountId,
+            viewerId
+        );
 
         DragaliaResponse<LoadIndexData> result = new(await loadService.BuildIndexData());
         return Ok(result);
@@ -59,7 +65,10 @@ public class SavefileController : ControllerBase
     public async Task<IActionResult> Delete(long viewerId)
     {
         string accountId = await LookupAccountId(viewerId);
-        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(accountId);
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+            accountId,
+            viewerId
+        );
 
         await this.savefileService.Reset();
 

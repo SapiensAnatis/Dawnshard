@@ -37,7 +37,6 @@ public class StoryRepository : IStoryRepository
     public IQueryable<DbPlayerStoryState> QuestStories =>
         this.Stories.Where(x => x.StoryType == StoryTypes.Quest);
 
-    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
     public async Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId)
     {
         DbPlayerStoryState? state = await apiContext.PlayerStoryState.FindAsync(
