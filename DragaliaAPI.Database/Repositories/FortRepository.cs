@@ -55,6 +55,22 @@ public class FortRepository : IFortRepository
         );
     }
 
+    public async Task InitializeSmithy()
+    {
+        this.logger.LogInformation("Adding smithy to halidom.");
+
+        await this.apiContext.PlayerFortBuilds.AddAsync(
+            new DbFortBuild
+            {
+                DeviceAccountId = this.playerIdentityService.AccountId,
+                PlantId = FortPlants.Smithy,
+                PositionX = 21,
+                PositionZ = 3,
+                Level = 1
+            }
+        );
+    }
+
     public async Task<DbFortDetail> GetFortDetail()
     {
         DbFortDetail? details = await this.apiContext.PlayerFortDetails.FindAsync(
