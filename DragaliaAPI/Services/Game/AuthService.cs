@@ -122,8 +122,6 @@ public class AuthService : IAuthService
 
         string sessionId = await this.sessionService.CreateSession(idToken, jwt.Subject, viewerId);
 
-        using IDisposable vIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
-
         this.logger.LogInformation(
             "Authenticated user with viewer ID {id} and issued session ID {sid}",
             viewerId,
