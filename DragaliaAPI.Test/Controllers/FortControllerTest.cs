@@ -337,6 +337,60 @@ public class FortControllerTest
     }
 
     [Fact]
+    public async Task LevelupEnd_NoSmithy_UsesDefaultValues()
+    {
+        UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
+        FortBonusList bonusList = new() { all_bonus = new(2, 3) };
+        FortDetail detail = new() { working_carpenter_num = 4 };
+
+        this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
+        this.mockFortService.Setup(x => x.EndUpgrade(8)).Returns(Task.CompletedTask);
+        this.mockFortService
+            .Setup(x => x.GetBuildList())
+            .ReturnsAsync(
+                new List<BuildList>()
+                {
+                    new() { plant_id = FortPlants.TheHalidom, level = 3, }
+                }
+            );
+
+        this.mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+
+        FortLevelupEndData data = (
+            await this.fortController.LevelupEnd(new FortLevelupEndRequest() { build_id = 8 })
+        ).GetData<FortLevelupEndData>()!;
+
+        data.result.Should().Be(1);
+        data.build_id.Should().Be(8);
+        data.current_fort_level.Should().Be(3);
+        data.current_fort_craft_level.Should().Be(0);
+        data.fort_bonus_list.Should().BeEquivalentTo(bonusList);
+        data.fort_detail.Should().BeEquivalentTo(detail);
+        data.update_data_list.Should().BeEquivalentTo(updateDataList);
+
+        this.mockFortService.VerifyAll();
+        this.mockBonusService.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task LevelupEnd_NoHalidom_ThrowsInvalidOperationException()
+    {
+        this.mockFortService.Setup(x => x.GetBuildList()).ReturnsAsync(new List<BuildList>() { });
+
+        await this.fortController
+            .Invoking(x => x.LevelupEnd(new FortLevelupEndRequest() { build_id = 8 }))
+            .Should()
+            .ThrowExactlyAsync<InvalidOperationException>();
+
+        this.mockFortService.VerifyAll();
+        this.mockBonusService.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
+    }
+
+    [Fact]
     public async Task LevelupStart_CallsBuildStart()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
