@@ -69,7 +69,8 @@ public class HeroParamService : IHeroParamService
             .SingleAsync();
 
         using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-            userData.DeviceAccountId
+            userData.DeviceAccountId,
+            viewerId
         );
 
         List<DbDetailedPartyUnit> detailedPartyUnits = await this.unitRepository

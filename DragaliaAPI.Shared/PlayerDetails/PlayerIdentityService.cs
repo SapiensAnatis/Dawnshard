@@ -1,18 +1,25 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
 
 namespace DragaliaAPI.Shared.PlayerDetails;
 
 public class PlayerIdentityService : IPlayerIdentityService
 {
     private readonly IHttpContextAccessor httpContextAccessor;
+    private readonly ILogger<PlayerIdentityService> logger;
 
-    public PlayerIdentityService(IHttpContextAccessor httpContextAccessor)
+    public PlayerIdentityService(
+        IHttpContextAccessor httpContextAccessor,
+        ILogger<PlayerIdentityService> logger
+    )
     {
         this.httpContextAccessor = httpContextAccessor;
+        this.logger = logger;
     }
 
-    private HttpContext Context => this.httpContextAccessor.HttpContext;
+    private HttpContext Context => this.httpContextAccessor.HttpContext!;
 
     private string? accountId;
 
@@ -37,31 +44,32 @@ public class PlayerIdentityService : IPlayerIdentityService
 
     private long? viewerId;
 
-    public long ViewerId
+    public long? ViewerId
     {
         get
         {
             if (impersonationContext != null)
             {
-                return impersonationContext.ViewerId
-                    ?? throw new InvalidOperationException(
-                        "No ViewerId in current impersonation session"
-                    );
+                return impersonationContext.ViewerId;
             }
 
-            this.viewerId ??= long.Parse(
-                this.Context.User.FindFirstValue(CustomClaimType.ViewerId)
-                    ?? throw new InvalidOperationException("No ViewerId claim value found")
-            );
+            if (this.viewerId == null)
+            {
+                string? viewerIdString = this.Context.User.FindFirstValue(CustomClaimType.ViewerId);
 
-            return this.viewerId
-                ?? throw new InvalidOperationException("No ViewerId claim value found");
+                if (viewerIdString != null)
+                {
+                    this.viewerId = long.Parse(viewerIdString);
+                }
+            }
+
+            return this.viewerId;
         }
     }
 
     private ImpersonationContext? impersonationContext;
 
-    public IDisposable StartUserImpersonation(string? account = null, long? viewer = null)
+    public IDisposable StartUserImpersonation(string account, long? viewer = null)
     {
         if (impersonationContext != null)
         {
@@ -71,11 +79,16 @@ public class PlayerIdentityService : IPlayerIdentityService
         }
 
         impersonationContext = new ImpersonationContext(this, account, viewer);
+
+        logger.LogDebug("Starting user impersonation: {@context}", impersonationContext);
+
         return impersonationContext;
     }
 
     internal void StopUserImpersonation()
     {
+        logger.LogDebug("Stopping user impersonation: {@context}", impersonationContext);
+
         this.impersonationContext = null;
     }
 }
@@ -86,6 +99,9 @@ internal class ImpersonationContext : IDisposable
     public readonly string? AccountId;
     public readonly long? ViewerId;
 
+    private readonly IDisposable? accountIdPropertyScope;
+    private readonly IDisposable? viewerIdPropertyScope;
+
     public ImpersonationContext(
         PlayerIdentityService playerIdentityService,
         string? accountId,
@@ -95,10 +111,19 @@ internal class ImpersonationContext : IDisposable
         this.playerIdentityService = playerIdentityService;
         this.AccountId = accountId;
         this.ViewerId = viewerId;
+
+        this.accountIdPropertyScope = LogContext.PushProperty(
+            "ImpersonatedAccountId",
+            this.AccountId
+        );
+        this.viewerIdPropertyScope = LogContext.PushProperty("ImpersonatedViewerId", this.ViewerId);
     }
 
     public void Dispose()
     {
+        this.viewerIdPropertyScope?.Dispose();
+        this.accountIdPropertyScope?.Dispose();
+
         playerIdentityService.StopUserImpersonation();
     }
 }

@@ -125,13 +125,6 @@ public class SavefileService : ISavefileService
             this.Delete();
 
             this.logger.LogDebug(
-                "Deleting savedata step done after {t} ms",
-                stopwatch.Elapsed.TotalMilliseconds
-            );
-
-            this.apiContext.Players.Add(new DbPlayer() { AccountId = deviceAccountId });
-
-            this.logger.LogDebug(
                 "Mapping DbPlayer step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
@@ -508,6 +501,19 @@ public class SavefileService : ISavefileService
             .Include(x => x.WeaponSkinList)
             .Include(x => x.WeaponPassiveAbilityList)
             .AsSplitQuery();
+    }
+
+    public async Task CreateBase()
+    {
+        string deviceAccountId = this.playerIdentityService.AccountId;
+
+    private TDest MapWithDeviceAccount<TDest>(object source, string deviceAccountId)
+        where TDest : IDbHasAccountId
+    {
+        return mapper.Map<TDest>(
+            source,
+            opts => opts.AfterMap((src, dest) => dest.DeviceAccountId = deviceAccountId)
+        );
     }
 
     public async Task CreateBase()
