@@ -10,9 +10,7 @@ public record UnitStory(
 )
 {
     public StoryTypes Type =>
-        Enum.IsDefined(typeof(Charas), this.ReleaseTriggerId)
-            ? StoryTypes.Chara
-            : StoryTypes.Dragon;
+        this.ReleaseTriggerId > 20000000 ? StoryTypes.Dragon : StoryTypes.Chara;
 
     public bool IsFirstEpisode => this.UnlockTriggerStoryId == default;
 }
