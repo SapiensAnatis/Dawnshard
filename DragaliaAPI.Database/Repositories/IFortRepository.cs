@@ -8,6 +8,7 @@ public interface IFortRepository
     IQueryable<DbFortBuild> Builds { get; }
 
     Task InitializeFort();
+    Task InitializeSmithy();
     Task<DbFortDetail> GetFortDetail();
     Task<bool> CheckPlantLevel(FortPlants plant, int requiredLevel);
     Task GetFortPlantIdList(IEnumerable<int> fortPlantIdList);

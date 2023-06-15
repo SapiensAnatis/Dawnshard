@@ -46,9 +46,12 @@ public class TutorialService : ITutorialService
         DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
 
         ISet<int> flags = TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag);
-        flags.Add(flag);
-        userData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(flags);
-        logger.LogDebug("Added tutorial flag: {flag} ({@flags})", flag, flags);
+        if (flags.Add(flag))
+        {
+            userData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(flags);
+            logger.LogDebug("Added tutorial flag: {flag} ({@flags})", flag, flags);
+        }
+
         return flags.ToList();
     }
 
@@ -61,9 +64,11 @@ public class TutorialService : ITutorialService
                 break;
             case TutorialStoryIds.Halidom:
                 await this.fortRepository.InitializeFort();
-                logger.LogDebug("Initialized halidom for tutorial");
                 break;
-            // TODO: Smithy unlock after ch.2
+            case TutorialStoryIds.Smithy:
+                await this.fortRepository.InitializeSmithy();
+                break;
+            // TODO: Maybe more that I've missed
         }
     }
 
@@ -81,4 +86,5 @@ static file class TutorialStoryIds
 {
     public const int Wyrmprints = 1000106;
     public const int Halidom = 1000111;
+    public const int Smithy = 1000210;
 }
