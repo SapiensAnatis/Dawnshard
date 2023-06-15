@@ -2,6 +2,7 @@
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Api;
@@ -62,17 +63,19 @@ public class AuthService : IAuthService
     [Obsolete(ObsoleteReasons.BaaS)]
     private async Task<(long viewerId, string sessionId)> DoLegacyAuth(string idToken)
     {
-        string sessionId;
-        string deviceAccountId;
-
-        sessionId = await this.sessionService.ActivateSession(idToken);
-        deviceAccountId = (
-            await this.sessionService.LoadSessionSessionId(sessionId)
-        ).DeviceAccountId;
+        string sessionId = await this.sessionService.ActivateSession(idToken);
+        Session session = await this.sessionService.LoadSessionSessionId(sessionId);
+        string deviceAccountId = session.DeviceAccountId;
+        long viewerId = session.ViewerId;
 
         IQueryable<DbPlayerUserData> playerInfo;
 
-        using (IDisposable ctx = this.playerIdentityService.StartUserImpersonation(deviceAccountId))
+        using (
+            IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+                deviceAccountId,
+                viewerId
+            )
+        )
         {
             playerInfo = this.userDataRepository.UserData;
         }
@@ -114,6 +117,9 @@ public class AuthService : IAuthService
         }
 
         long viewerId = await this.GetViewerId();
+
+        using IDisposable viewerIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
+
         string sessionId = await this.sessionService.CreateSession(idToken, jwt.Subject, viewerId);
 
         using IDisposable vIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
