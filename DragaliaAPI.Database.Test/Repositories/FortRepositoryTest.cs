@@ -362,4 +362,38 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         this.mockPlayerIdentityService.VerifyAll();
     }
+
+    [Fact]
+    public async Task InitializeFort_InitializesFort()
+    {
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
+
+        await this.fortRepository.InitializeFort();
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        this.fixture.ApiContext.PlayerFortDetails
+            .Should()
+            .ContainEquivalentOf(
+                new DbFortDetail() { DeviceAccountId = "account id", CarpenterNum = 2 }
+            );
+
+        this.fixture.ApiContext.PlayerFortBuilds
+            .Should()
+            .Contain(x => x.PlantId == FortPlants.TheHalidom && x.DeviceAccountId == "account id");
+
+        this.mockPlayerIdentityService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task InitializeFort_DataExists_DoesNotThrow()
+    {
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
+
+        await this.fortRepository.InitializeFort();
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        await this.fortRepository.Invoking(x => x.InitializeFort()).Should().NotThrowAsync();
+
+        this.mockPlayerIdentityService.VerifyAll();
+    }
 }

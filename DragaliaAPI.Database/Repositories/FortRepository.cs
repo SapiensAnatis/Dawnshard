@@ -33,26 +33,38 @@ public class FortRepository : IFortRepository
 
     public async Task InitializeFort()
     {
-        this.logger.LogInformation("Initializing Halidom.");
+        this.logger.LogInformation("Initializing fort.");
 
-        await this.apiContext.PlayerFortDetails.AddAsync(
-            new DbFortDetail()
-            {
-                DeviceAccountId = this.playerIdentityService.AccountId,
-                CarpenterNum = DefaultCarpenters
-            }
-        );
+        if (
+            !await this.apiContext.PlayerFortDetails.AnyAsync(
+                x => x.DeviceAccountId == this.playerIdentityService.AccountId
+            )
+        )
+        {
+            this.logger.LogDebug("Initializing PlayerFortDetail.");
+            await this.apiContext.PlayerFortDetails.AddAsync(
+                new DbFortDetail()
+                {
+                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    CarpenterNum = DefaultCarpenters
+                }
+            );
+        }
 
-        await apiContext.PlayerFortBuilds.AddAsync(
-            new DbFortBuild()
-            {
-                DeviceAccountId = this.playerIdentityService.AccountId,
-                PlantId = FortPlants.TheHalidom,
-                PositionX = 16, // Default Halidom position
-                PositionZ = 17,
-                LastIncomeDate = DateTimeOffset.UtcNow
-            }
-        );
+        if (!await this.Builds.AnyAsync(x => x.PlantId == FortPlants.TheHalidom))
+        {
+            this.logger.LogDebug("Initializing Halidom.");
+            await apiContext.PlayerFortBuilds.AddAsync(
+                new DbFortBuild()
+                {
+                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    PlantId = FortPlants.TheHalidom,
+                    PositionX = 16, // Default Halidom position
+                    PositionZ = 17,
+                    LastIncomeDate = DateTimeOffset.UtcNow
+                }
+            );
+        }
     }
 
     public async Task InitializeSmithy()
