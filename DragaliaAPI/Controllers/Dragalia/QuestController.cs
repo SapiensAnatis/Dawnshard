@@ -68,11 +68,28 @@ public class QuestController : DragaliaControllerBase
     }
 
     [HttpPost("get_quest_clear_party")]
-    [HttpPost("get_quest_clear_party_multi")]
     public DragaliaResult GetQuestClearParty()
     {
         // TODO: Retrieve from database
-        return Ok(StubData.ClearPartyData);
+        return Ok(
+            new QuestGetQuestClearPartyData()
+            {
+                quest_clear_party_setting_list = StubData.ClearParty,
+                lost_unit_list = new List<AtgenLostUnitList>()
+            }
+        );
+    }
+
+    [HttpPost("get_quest_clear_party_multi")]
+    public DragaliaResult GetQuestClearPartyMulti()
+    {
+        return Ok(
+            new QuestGetQuestClearPartyMultiData()
+            {
+                quest_multi_clear_party_setting_list = StubData.ClearParty,
+                lost_unit_list = new List<AtgenLostUnitList>()
+            }
+        );
     }
 
     [HttpPost("set_quest_clear_party")]
@@ -107,85 +124,81 @@ public class QuestController : DragaliaControllerBase
 
     private static class StubData
     {
-        public static QuestGetQuestClearPartyData ClearPartyData =
+        public static List<PartySettingList> ClearParty =
             new()
             {
-                quest_clear_party_setting_list = new List<PartySettingList>()
+                new()
                 {
-                    new()
-                    {
-                        unit_no = 1,
-                        chara_id = Charas.ThePrince,
-                        equip_dragon_key_id = 0,
-                        equip_weapon_body_id = 0,
-                        equip_weapon_skin_id = 0,
-                        equip_crest_slot_type_1_crest_id_1 = 0,
-                        equip_crest_slot_type_1_crest_id_2 = 0,
-                        equip_crest_slot_type_1_crest_id_3 = 0,
-                        equip_crest_slot_type_2_crest_id_1 = 0,
-                        equip_crest_slot_type_2_crest_id_2 = 0,
-                        equip_crest_slot_type_3_crest_id_1 = 0,
-                        equip_crest_slot_type_3_crest_id_2 = 0,
-                        equip_talisman_key_id = 0,
-                        edit_skill_1_chara_id = 0,
-                        edit_skill_2_chara_id = 0,
-                    },
-                    new()
-                    {
-                        unit_no = 2,
-                        chara_id = Charas.Empty,
-                        equip_dragon_key_id = 0,
-                        equip_weapon_body_id = 0,
-                        equip_weapon_skin_id = 0,
-                        equip_crest_slot_type_1_crest_id_1 = 0,
-                        equip_crest_slot_type_1_crest_id_2 = 0,
-                        equip_crest_slot_type_1_crest_id_3 = 0,
-                        equip_crest_slot_type_2_crest_id_1 = 0,
-                        equip_crest_slot_type_2_crest_id_2 = 0,
-                        equip_crest_slot_type_3_crest_id_1 = 0,
-                        equip_crest_slot_type_3_crest_id_2 = 0,
-                        equip_talisman_key_id = 0,
-                        edit_skill_1_chara_id = 0,
-                        edit_skill_2_chara_id = 0,
-                    },
-                    new()
-                    {
-                        unit_no = 3,
-                        chara_id = Charas.Empty,
-                        equip_dragon_key_id = 0,
-                        equip_weapon_body_id = 0,
-                        equip_weapon_skin_id = 0,
-                        equip_crest_slot_type_1_crest_id_1 = 0,
-                        equip_crest_slot_type_1_crest_id_2 = 0,
-                        equip_crest_slot_type_1_crest_id_3 = 0,
-                        equip_crest_slot_type_2_crest_id_1 = 0,
-                        equip_crest_slot_type_2_crest_id_2 = 0,
-                        equip_crest_slot_type_3_crest_id_1 = 0,
-                        equip_crest_slot_type_3_crest_id_2 = 0,
-                        equip_talisman_key_id = 0,
-                        edit_skill_1_chara_id = 0,
-                        edit_skill_2_chara_id = 0,
-                    },
-                    new()
-                    {
-                        unit_no = 4,
-                        chara_id = Charas.Empty,
-                        equip_dragon_key_id = 0,
-                        equip_weapon_body_id = 0,
-                        equip_weapon_skin_id = 0,
-                        equip_crest_slot_type_1_crest_id_1 = 0,
-                        equip_crest_slot_type_1_crest_id_2 = 0,
-                        equip_crest_slot_type_1_crest_id_3 = 0,
-                        equip_crest_slot_type_2_crest_id_1 = 0,
-                        equip_crest_slot_type_2_crest_id_2 = 0,
-                        equip_crest_slot_type_3_crest_id_1 = 0,
-                        equip_crest_slot_type_3_crest_id_2 = 0,
-                        equip_talisman_key_id = 0,
-                        edit_skill_1_chara_id = 0,
-                        edit_skill_2_chara_id = 0,
-                    },
+                    unit_no = 1,
+                    chara_id = Charas.ThePrince,
+                    equip_dragon_key_id = 0,
+                    equip_weapon_body_id = 0,
+                    equip_weapon_skin_id = 0,
+                    equip_crest_slot_type_1_crest_id_1 = 0,
+                    equip_crest_slot_type_1_crest_id_2 = 0,
+                    equip_crest_slot_type_1_crest_id_3 = 0,
+                    equip_crest_slot_type_2_crest_id_1 = 0,
+                    equip_crest_slot_type_2_crest_id_2 = 0,
+                    equip_crest_slot_type_3_crest_id_1 = 0,
+                    equip_crest_slot_type_3_crest_id_2 = 0,
+                    equip_talisman_key_id = 0,
+                    edit_skill_1_chara_id = 0,
+                    edit_skill_2_chara_id = 0,
                 },
-                lost_unit_list = new List<AtgenLostUnitList>(),
+                new()
+                {
+                    unit_no = 2,
+                    chara_id = Charas.Empty,
+                    equip_dragon_key_id = 0,
+                    equip_weapon_body_id = 0,
+                    equip_weapon_skin_id = 0,
+                    equip_crest_slot_type_1_crest_id_1 = 0,
+                    equip_crest_slot_type_1_crest_id_2 = 0,
+                    equip_crest_slot_type_1_crest_id_3 = 0,
+                    equip_crest_slot_type_2_crest_id_1 = 0,
+                    equip_crest_slot_type_2_crest_id_2 = 0,
+                    equip_crest_slot_type_3_crest_id_1 = 0,
+                    equip_crest_slot_type_3_crest_id_2 = 0,
+                    equip_talisman_key_id = 0,
+                    edit_skill_1_chara_id = 0,
+                    edit_skill_2_chara_id = 0,
+                },
+                new()
+                {
+                    unit_no = 3,
+                    chara_id = Charas.Empty,
+                    equip_dragon_key_id = 0,
+                    equip_weapon_body_id = 0,
+                    equip_weapon_skin_id = 0,
+                    equip_crest_slot_type_1_crest_id_1 = 0,
+                    equip_crest_slot_type_1_crest_id_2 = 0,
+                    equip_crest_slot_type_1_crest_id_3 = 0,
+                    equip_crest_slot_type_2_crest_id_1 = 0,
+                    equip_crest_slot_type_2_crest_id_2 = 0,
+                    equip_crest_slot_type_3_crest_id_1 = 0,
+                    equip_crest_slot_type_3_crest_id_2 = 0,
+                    equip_talisman_key_id = 0,
+                    edit_skill_1_chara_id = 0,
+                    edit_skill_2_chara_id = 0,
+                },
+                new()
+                {
+                    unit_no = 4,
+                    chara_id = Charas.Empty,
+                    equip_dragon_key_id = 0,
+                    equip_weapon_body_id = 0,
+                    equip_weapon_skin_id = 0,
+                    equip_crest_slot_type_1_crest_id_1 = 0,
+                    equip_crest_slot_type_1_crest_id_2 = 0,
+                    equip_crest_slot_type_1_crest_id_3 = 0,
+                    equip_crest_slot_type_2_crest_id_1 = 0,
+                    equip_crest_slot_type_2_crest_id_2 = 0,
+                    equip_crest_slot_type_3_crest_id_1 = 0,
+                    equip_crest_slot_type_3_crest_id_2 = 0,
+                    equip_talisman_key_id = 0,
+                    edit_skill_1_chara_id = 0,
+                    edit_skill_2_chara_id = 0,
+                },
             };
     }
 }

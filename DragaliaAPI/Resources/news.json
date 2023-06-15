@@ -1,5 +1,10 @@
 [
     {
+        "headline": "Co-op",
+        "timestamp": 1686861026,
+        "description": "After many months of hard work, it is now possible to play co-op! This is still experimental but should mostly work."
+    },
+    {
         "headline": "Wyrmprints",
         "timestamp": 1683227627,
         "description": "You can now buy and upgrade wyrmprints using eldwater. Credit to Nightmerp#0124 who worked on this feature!"
