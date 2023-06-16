@@ -125,6 +125,15 @@ public class SavefileService : ISavefileService
             this.Delete();
 
             this.logger.LogDebug(
+                "Deleting savedata step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
+            this.apiContext.Players.Add(
+                new DbPlayer { AccountId = this.playerIdentityService.AccountId }
+            );
+
+            this.logger.LogDebug(
                 "Mapping DbPlayer step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
