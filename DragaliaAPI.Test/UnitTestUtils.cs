@@ -6,6 +6,7 @@ using System.Text.Json;
 using AutoMapper;
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
@@ -19,6 +20,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
+using MockQueryable.Moq;
+using Moq.Language.Flow;
 using Xunit.Abstractions;
 
 namespace DragaliaAPI.Test;
@@ -114,4 +117,15 @@ public static class UnitTestUtils
     {
         return new MapperConfiguration(cfg => cfg.AddMaps(typeof(Program).Assembly)).CreateMapper();
     }
+
+    public static IReturnsResult<IUserDataRepository> SetupUserData(
+        this Mock<IUserDataRepository> mock,
+        DbPlayerUserData returnValue
+    ) =>
+        mock.SetupGet(x => x.UserData)
+            .Returns(
+                new List<DbPlayerUserData>() { returnValue }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 }

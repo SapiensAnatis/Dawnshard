@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.SavefilePorter;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -18,14 +19,23 @@ public class LoginController : DragaliaControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
     private readonly IInventoryRepository inventoryRepository;
+    private readonly IEnumerable<ISavefilePorter> savefilePorters;
+    private readonly IUpdateDataService updateDataService;
+    private readonly ILogger<LoginController> logger;
 
     public LoginController(
         IUserDataRepository userDataRepository,
-        IInventoryRepository inventoryRepository
+        IInventoryRepository inventoryRepository,
+        IEnumerable<ISavefilePorter> savefilePorters,
+        IUpdateDataService updateDataService,
+        ILogger<LoginController> logger
     )
     {
         this.userDataRepository = userDataRepository;
         this.inventoryRepository = inventoryRepository;
+        this.savefilePorters = savefilePorters;
+        this.updateDataService = updateDataService;
+        this.logger = logger;
     }
 
     [HttpPost]
@@ -50,10 +60,20 @@ public class LoginController : DragaliaControllerBase
             await inventoryRepository.RefreshPurchasableDragonGiftCounts();
         }
 
+        foreach (ISavefilePorter porter in savefilePorters)
+        {
+            if (porter.ModificationDate <= userData.LastLoginTime)
+                continue;
+
+            this.logger.LogInformation("Applying savefile porter {$porter}", porter);
+            await porter.Port();
+        }
+
         userData.LastLoginTime = DateTimeOffset.UtcNow;
 
-        await userDataRepository.SaveChangesAsync();
-        return Code(ResultCode.Success);
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+
+        return this.Ok(new LoginIndexData() { update_data_list = updateDataList });
     }
 
     [HttpPost]

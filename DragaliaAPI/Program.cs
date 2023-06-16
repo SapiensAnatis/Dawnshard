@@ -2,6 +2,8 @@ using System.Reflection;
 using System.Security.Claims;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.Stamp;
+using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.SavefilePorter;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
@@ -82,7 +84,9 @@ builder.Services
         options.Configuration = builder.Configuration.GetConnectionString("RedisHost");
         options.InstanceName = "RedisInstance";
     })
-    .AddHttpContextAccessor()
+    .AddHttpContextAccessor();
+
+builder.Services
     .AddScoped<ISessionService, SessionService>()
 #pragma warning disable CS0618 // Type or member is obsolete
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
@@ -104,11 +108,15 @@ builder.Services
     .AddScoped<IHeroParamService, HeroParamService>()
     .AddScoped<ITutorialService, TutorialService>()
     .AddScoped<ILoadService, LoadService>()
-    .AddScoped<IItemSummonService, ItemSummonService>()
     .AddScoped<IStampService, StampService>()
     .AddScoped<IStampRepository, StampRepository>()
+    .AddScoped<IItemSummonService, ItemSummonService>();
+
+builder.Services
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>();
+
+builder.Services.AddAllOfType<ISavefilePorter>();
 
 builder.Services.AddHttpClient<IBaasApi, BaasApi>();
 builder.Services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>
@@ -123,20 +131,7 @@ builder.Services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>
 
 WebApplication app = builder.Build();
 
-app.UseSerilogRequestLogging(
-    options =>
-        options.EnrichDiagnosticContext = (diagContext, httpContext) =>
-        {
-            diagContext.Set(
-                CustomClaimType.AccountId,
-                httpContext.User.FindFirstValue(CustomClaimType.AccountId)
-            );
-            diagContext.Set(
-                CustomClaimType.ViewerId,
-                long.Parse(httpContext.User.FindFirstValue(CustomClaimType.ViewerId) ?? "0")
-            );
-        }
-);
+app.UseSerilogRequestLogging();
 
 Log.Logger.Debug("App environment: {@env}", app.Environment);
 
