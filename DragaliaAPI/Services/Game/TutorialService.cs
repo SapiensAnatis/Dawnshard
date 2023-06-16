@@ -37,6 +37,7 @@ public class TutorialService : ITutorialService
         {
             logger.LogDebug("New tutorial status: {status}", newStatus);
             userData.TutorialStatus = newStatus;
+            await OnTutorialStatusChange(newStatus);
         }
         return userData.TutorialStatus;
     }
@@ -72,6 +73,16 @@ public class TutorialService : ITutorialService
         }
     }
 
+    private async Task OnTutorialStatusChange(int status)
+    {
+        switch (status)
+        {
+            case TutorialStatusIds.Dojos:
+                await this.fortRepository.AddDojos();
+                break;
+        }
+    }
+
     private async Task SetupWyrmprintTutorial()
     {
         await this.userDataRepository.UpdateDewpoint(100);
@@ -87,4 +98,9 @@ static file class TutorialStoryIds
     public const int Wyrmprints = 1000106;
     public const int Halidom = 1000111;
     public const int Smithy = 1000210;
+}
+
+static file class TutorialStatusIds
+{
+    public const int Dojos = 60120;
 }

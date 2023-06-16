@@ -83,6 +83,28 @@ public class FortRepository : IFortRepository
         );
     }
 
+    public async Task AddDojos()
+    {
+        FortPlants[] plants =
+        {
+            FortPlants.SwordDojo, FortPlants.AxeDojo, FortPlants.BladeDojo, FortPlants.BowDojo,
+            FortPlants.DaggerDojo, FortPlants.LanceDojo, FortPlants.SwordDojo, FortPlants.ManacasterDojo,
+            FortPlants.SwordDojo, FortPlants.StaffDojo, FortPlants.WandDojo
+        };
+
+        foreach (FortPlants plant in plants)
+        {
+            await AddBuild(new DbFortBuild()
+            {
+                DeviceAccountId = this.playerIdentityService.AccountId,
+                PlantId = plant,
+                Level = 1,
+                PositionX = -1,
+                PositionZ = -1
+            });
+        }
+    }
+
     public async Task<DbFortDetail> GetFortDetail()
     {
         DbFortDetail? details = await this.apiContext.PlayerFortDetails.FindAsync(
