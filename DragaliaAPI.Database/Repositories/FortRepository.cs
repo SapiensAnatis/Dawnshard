@@ -87,21 +87,31 @@ public class FortRepository : IFortRepository
     {
         FortPlants[] plants =
         {
-            FortPlants.SwordDojo, FortPlants.AxeDojo, FortPlants.BladeDojo, FortPlants.BowDojo,
-            FortPlants.DaggerDojo, FortPlants.LanceDojo, FortPlants.SwordDojo, FortPlants.ManacasterDojo,
-            FortPlants.SwordDojo, FortPlants.StaffDojo, FortPlants.WandDojo
+            FortPlants.SwordDojo,
+            FortPlants.AxeDojo,
+            FortPlants.BladeDojo,
+            FortPlants.BowDojo,
+            FortPlants.DaggerDojo,
+            FortPlants.LanceDojo,
+            FortPlants.SwordDojo,
+            FortPlants.ManacasterDojo,
+            FortPlants.SwordDojo,
+            FortPlants.StaffDojo,
+            FortPlants.WandDojo
         };
 
         foreach (FortPlants plant in plants)
         {
-            await AddBuild(new DbFortBuild()
-            {
-                DeviceAccountId = this.playerIdentityService.AccountId,
-                PlantId = plant,
-                Level = 1,
-                PositionX = -1,
-                PositionZ = -1
-            });
+            await AddBuild(
+                new DbFortBuild()
+                {
+                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    PlantId = plant,
+                    Level = 1,
+                    PositionX = -1,
+                    PositionZ = -1
+                }
+            );
         }
     }
 
