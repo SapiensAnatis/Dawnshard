@@ -17,6 +17,7 @@ public class StoryServiceTest
     private readonly Mock<IUnitRepository> mockUnitRepository;
     private readonly Mock<ILogger<StoryService>> mockLogger;
     private readonly Mock<ITutorialService> mockTutorialService;
+    private readonly Mock<IFortService> mockFortService;
 
     private readonly IStoryService storyService;
 
@@ -28,6 +29,7 @@ public class StoryServiceTest
         this.mockUnitRepository = new(MockBehavior.Strict);
         this.mockLogger = new();
         this.mockTutorialService = new(MockBehavior.Strict);
+        this.mockFortService = new(MockBehavior.Strict);
 
         this.storyService = new StoryService(
             mockStoryRepository.Object,
@@ -35,7 +37,8 @@ public class StoryServiceTest
             mockUserDataRepository.Object,
             mockInventoryRepository.Object,
             mockUnitRepository.Object,
-            mockTutorialService.Object
+            mockTutorialService.Object,
+            mockFortService.Object
         );
     }
 
