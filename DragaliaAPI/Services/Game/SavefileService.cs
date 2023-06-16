@@ -117,13 +117,26 @@ public class SavefileService : ISavefileService
             this.playerIdentityService.AccountId
         );
 
+        this.apiContext.ChangeTracker.AutoDetectChangesEnabled = false;
         await this.apiContext.Database.BeginTransactionAsync();
 
         try
         {
             this.Delete();
 
-            await this.apiContext.Players.AddAsync(new DbPlayer() { AccountId = deviceAccountId });
+            this.logger.LogDebug(
+                "Deleting savedata step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
+            this.apiContext.Players.Add(
+                new DbPlayer { AccountId = this.playerIdentityService.AccountId }
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbPlayer step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
 
             // This has JsonRequired so this should never be triggered
             ArgumentNullException.ThrowIfNull(savefile.user_data);
@@ -145,15 +158,30 @@ public class SavefileService : ISavefileService
                 )
             );
 
+            this.logger.LogDebug(
+                "Mapping DbPlayerUserData step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             this.apiContext.PlayerCharaData.AddRange(
-                this.MapWithDeviceAccount<DbPlayerCharaData>(savefile.chara_list, deviceAccountId)
+                savefile.chara_list.MapWithDeviceAccount<DbPlayerCharaData>(mapper, deviceAccountId)
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbPlayerCharaData step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
             );
 
             this.apiContext.PlayerDragonReliability.AddRange(
-                this.MapWithDeviceAccount<DbPlayerDragonReliability>(
-                    savefile.dragon_reliability_list,
+                savefile.dragon_reliability_list.MapWithDeviceAccount<DbPlayerDragonReliability>(
+                    mapper,
                     deviceAccountId
                 )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbPlayerDragonReliability step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
             );
 
             // Build key id mappings for dragons and talismans
@@ -162,38 +190,51 @@ public class SavefileService : ISavefileService
             foreach (DragonList d in savefile.dragon_list ?? new List<DragonList>())
             {
                 ulong oldKeyId = d.dragon_key_id;
-                DbPlayerDragonData dbEntry = MapWithDeviceAccount<DbPlayerDragonData>(
-                    d,
+                DbPlayerDragonData dbEntry = d.MapWithDeviceAccount<DbPlayerDragonData>(
+                    mapper,
                     deviceAccountId
                 );
                 DbPlayerDragonData addedEntry = (
-                    await this.apiContext.PlayerDragonData.AddAsync(dbEntry)
+                    this.apiContext.PlayerDragonData.Add(dbEntry)
                 ).Entity;
 
                 dragonKeyIds.Add((long)oldKeyId, addedEntry);
             }
+
+            this.logger.LogDebug(
+                "Mapping DbPlayerDragonData step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
 
             Dictionary<long, DbTalisman> talismanKeyIds = new();
 
             foreach (TalismanList t in savefile.talisman_list ?? new List<TalismanList>())
             {
                 ulong oldKeyId = t.talisman_key_id;
-                DbTalisman dbEntry = MapWithDeviceAccount<DbTalisman>(t, deviceAccountId);
-                DbTalisman addedEntry = (
-                    await this.apiContext.PlayerTalismans.AddAsync(dbEntry)
-                ).Entity;
+                DbTalisman dbEntry = t.MapWithDeviceAccount<DbTalisman>(mapper, deviceAccountId);
+                DbTalisman addedEntry = this.apiContext.PlayerTalismans.Add(dbEntry).Entity;
 
                 talismanKeyIds.Add((long)oldKeyId, addedEntry);
             }
 
+            this.logger.LogDebug(
+                "Mapping DbTalisman step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             // Must save changes for key ids to update
             await this.apiContext.SaveChangesAsync();
+
+            this.logger.LogDebug(
+                "SaveChangesAsync() #1 step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
 
             if (savefile.party_list is not null)
             {
                 // Update key ids in parties
                 List<DbParty> parties = savefile.party_list
-                    .Select(x => MapWithDeviceAccount<DbParty>(x, deviceAccountId))
+                    .MapWithDeviceAccount<DbParty>(mapper, deviceAccountId)
                     .ToList();
 
                 foreach (DbParty party in parties)
@@ -223,54 +264,135 @@ public class SavefileService : ISavefileService
                 await this.AddDefaultParties(deviceAccountId);
             }
 
+            this.logger.LogDebug(
+                "Mapping DbParty step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             this.apiContext.PlayerAbilityCrests.AddRange(
-                MapWithDeviceAccount<DbAbilityCrest>(savefile.ability_crest_list, deviceAccountId)
+                savefile.ability_crest_list.MapWithDeviceAccount<DbAbilityCrest>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbAbilityCrest step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
             );
 
             this.apiContext.PlayerWeapons.AddRange(
-                MapWithDeviceAccount<DbWeaponBody>(savefile.weapon_body_list, deviceAccountId)
+                savefile.weapon_body_list.MapWithDeviceAccount<DbWeaponBody>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbWeaponBody step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
             );
 
             this.apiContext.PlayerQuests.AddRange(
-                MapWithDeviceAccount<DbQuest>(savefile.quest_list, deviceAccountId)
+                savefile.quest_list.MapWithDeviceAccount<DbQuest>(mapper, deviceAccountId)
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbQuest step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
             );
 
             this.apiContext.PlayerStoryState.AddRange(
-                MapWithDeviceAccount<DbPlayerStoryState>(savefile.quest_story_list, deviceAccountId)
-            );
-
-            this.apiContext.PlayerStoryState.AddRange(
-                MapWithDeviceAccount<DbPlayerStoryState>(savefile.unit_story_list, deviceAccountId)
-            );
-
-            this.apiContext.PlayerStoryState.AddRange(
-                MapWithDeviceAccount<DbPlayerStoryState>(
-                    savefile.castle_story_list,
+                savefile.quest_story_list.MapWithDeviceAccount<DbPlayerStoryState>(
+                    mapper,
                     deviceAccountId
                 )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbPlayerStoryState (QuestStoryList) step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
+            this.apiContext.PlayerStoryState.AddRange(
+                savefile.unit_story_list.MapWithDeviceAccount<DbPlayerStoryState>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbPlayerStoryState (UnitStoryList) step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
+            this.apiContext.PlayerStoryState.AddRange(
+                savefile.castle_story_list.MapWithDeviceAccount<DbPlayerStoryState>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbPlayerStoryState (CastleStoryList) step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
             );
 
             this.apiContext.PlayerMaterials.AddRange(
-                MapWithDeviceAccount<DbPlayerMaterial>(savefile.material_list, deviceAccountId)
-            );
-
-            this.apiContext.PlayerFortBuilds.AddRange(
-                MapWithDeviceAccount<DbFortBuild>(savefile.build_list, deviceAccountId)
-            );
-
-            this.apiContext.PlayerWeaponSkins.AddRange(
-                MapWithDeviceAccount<DbWeaponSkin>(savefile.weapon_skin_list, deviceAccountId)
-            );
-
-            this.apiContext.PlayerPassiveAbilities.AddRange(
-                MapWithDeviceAccount<DbWeaponPassiveAbility>(
-                    savefile.weapon_passive_ability_list,
+                savefile.material_list.MapWithDeviceAccount<DbPlayerMaterial>(
+                    mapper,
                     deviceAccountId
                 )
             );
 
+            this.logger.LogDebug(
+                "Mapping DbPlayerMaterial step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
+            this.apiContext.PlayerFortBuilds.AddRange(
+                savefile.build_list.MapWithDeviceAccount<DbFortBuild>(mapper, deviceAccountId)
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbFortBuild step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
+            this.apiContext.PlayerWeaponSkins.AddRange(
+                savefile.weapon_skin_list.MapWithDeviceAccount<DbWeaponSkin>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbWeaponSkin step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
+            this.apiContext.PlayerPassiveAbilities.AddRange(
+                savefile.weapon_passive_ability_list.MapWithDeviceAccount<DbWeaponPassiveAbility>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbWeaponPassibeAbility step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             this.apiContext.PlayerDragonGifts.AddRange(
-                MapWithDeviceAccount<DbPlayerDragonGift>(savefile.dragon_gift_list, deviceAccountId)
+                savefile.dragon_gift_list.MapWithDeviceAccount<DbPlayerDragonGift>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbPlayerDragonGift step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
             );
 
             // TODO: unit sets
@@ -295,6 +417,7 @@ public class SavefileService : ISavefileService
         catch
         {
             await this.apiContext.Database.RollbackTransactionAsync();
+            this.apiContext.ChangeTracker.AutoDetectChangesEnabled = true;
             throw;
         }
     }
@@ -389,30 +512,6 @@ public class SavefileService : ISavefileService
             .AsSplitQuery();
     }
 
-    private IEnumerable<TDest> MapWithDeviceAccount<TDest>(
-        IEnumerable<object>? source,
-        string deviceAccountId
-    )
-        where TDest : IDbHasAccountId
-    {
-        return (source ?? new List<object>()).Select(
-            x =>
-                mapper.Map<TDest>(
-                    x,
-                    opts => opts.AfterMap((src, dest) => dest.DeviceAccountId = deviceAccountId)
-                )
-        );
-    }
-
-    private TDest MapWithDeviceAccount<TDest>(object source, string deviceAccountId)
-        where TDest : IDbHasAccountId
-    {
-        return mapper.Map<TDest>(
-            source,
-            opts => opts.AfterMap((src, dest) => dest.DeviceAccountId = deviceAccountId)
-        );
-    }
-
     public async Task CreateBase()
     {
         string deviceAccountId = this.playerIdentityService.AccountId;
@@ -429,7 +528,7 @@ public class SavefileService : ISavefileService
 #endif
                 Crystal = 1_200_000 };
 
-        await apiContext.PlayerUserData.AddAsync(userData);
+        apiContext.PlayerUserData.Add(userData);
         await this.AddDefaultParties(deviceAccountId);
         await this.AddDefaultCharacters(deviceAccountId);
         await this.apiContext.SaveChangesAsync();
@@ -817,4 +916,40 @@ public class SavefileService : ISavefileService
         };
     }
     #endregion
+}
+
+static file class Extensions
+{
+    public static IEnumerable<TDest> MapWithDeviceAccount<TDest>(
+        this IEnumerable<object>? source,
+        IMapper mapper,
+        string deviceAccountId
+    )
+        where TDest : IDbHasAccountId
+    {
+        return (source ?? new List<object>())
+            .AsParallel()
+            .WithMergeOptions(ParallelMergeOptions.NotBuffered)
+            .Select(
+                x =>
+                    mapper.Map<TDest>(
+                        x,
+                        opts => opts.AfterMap((src, dest) => dest.DeviceAccountId = deviceAccountId)
+                    )
+            )
+            .AsEnumerable();
+    }
+
+    public static TDest MapWithDeviceAccount<TDest>(
+        this object? source,
+        IMapper mapper,
+        string deviceAccountId
+    )
+        where TDest : IDbHasAccountId
+    {
+        return mapper.Map<TDest>(
+            source,
+            opts => opts.AfterMap((_, dest) => dest.DeviceAccountId = deviceAccountId)
+        );
+    }
 }
