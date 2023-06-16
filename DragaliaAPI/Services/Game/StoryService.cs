@@ -17,6 +17,7 @@ public class StoryService : IStoryService
     private readonly IUnitRepository unitRepository;
     private readonly ILogger<StoryService> logger;
     private readonly ITutorialService tutorialService;
+    private readonly IFortService fortService;
 
     private const int DragonStoryWyrmite = 25;
     private const int CastleStoryWyrmite = 50;
@@ -47,13 +48,24 @@ public class StoryService : IStoryService
             { 1000509, Dragons.Zodiark },
         }.ToImmutableDictionary();
 
+    private static readonly ImmutableDictionary<int, FortPlants> QuestStoryFortPlantRewards =
+        new Dictionary<int, FortPlants>()
+        {
+            { 1000607, FortPlants.WindDracolith },
+            { 1000709, FortPlants.WaterDracolith },
+            { 1000808, FortPlants.FlameDracolith },
+            { 1000909, FortPlants.LightDracolith },
+            { 1001009, FortPlants.ShadowDracolith },
+        }.ToImmutableDictionary();
+
     public StoryService(
         IStoryRepository storyRepository,
         ILogger<StoryService> logger,
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
         IUnitRepository unitRepository,
-        ITutorialService tutorialService
+        ITutorialService tutorialService,
+        IFortService fortService
     )
     {
         this.storyRepository = storyRepository;
@@ -62,6 +74,7 @@ public class StoryService : IStoryService
         this.inventoryRepository = inventoryRepository;
         this.unitRepository = unitRepository;
         this.tutorialService = tutorialService;
+        this.fortService = fortService;
     }
 
     #region Eligibility check methods
@@ -235,6 +248,19 @@ public class StoryService : IStoryService
                 {
                     entity_id = (int)dragon,
                     entity_type = EntityTypes.Dragon,
+                    entity_quantity = 1,
+                }
+            );
+        }
+
+        if (QuestStoryFortPlantRewards.TryGetValue(storyId, out FortPlants fortPlant))
+        {
+            await this.fortService.BuildStart(fortPlant, -1, -1);
+            rewardList.Add(
+                new()
+                {
+                    entity_id = (int)fortPlant,
+                    entity_type = EntityTypes.FortPlant,
                     entity_quantity = 1,
                 }
             );

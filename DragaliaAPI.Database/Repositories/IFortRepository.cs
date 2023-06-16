@@ -9,6 +9,7 @@ public interface IFortRepository
 
     Task InitializeFort();
     Task InitializeSmithy();
+    Task AddDojos();
     Task<DbFortDetail> GetFortDetail();
     Task<bool> CheckPlantLevel(FortPlants plant, int requiredLevel);
     Task GetFortPlantIdList(IEnumerable<int> fortPlantIdList);
