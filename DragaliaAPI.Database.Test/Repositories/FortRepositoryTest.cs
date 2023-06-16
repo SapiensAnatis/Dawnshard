@@ -396,4 +396,44 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         this.mockPlayerIdentityService.VerifyAll();
     }
+
+    [Fact]
+    public async Task AddDojos_AddsDojos()
+    {
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
+
+        await this.fortRepository.AddDojos();
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        FortPlants[] plants =
+        {
+            FortPlants.SwordDojo,
+            FortPlants.AxeDojo,
+            FortPlants.BladeDojo,
+            FortPlants.BowDojo,
+            FortPlants.DaggerDojo,
+            FortPlants.LanceDojo,
+            FortPlants.SwordDojo,
+            FortPlants.ManacasterDojo,
+            FortPlants.SwordDojo,
+            FortPlants.StaffDojo,
+            FortPlants.WandDojo
+        };
+
+        foreach (FortPlants plant in plants)
+        {
+            this.fixture.ApiContext.PlayerFortBuilds
+                .Should()
+                .Contain(
+                    x =>
+                        x.PlantId == plant
+                        && x.DeviceAccountId == "account id"
+                        && x.PositionX == -1
+                        && x.PositionZ == -1
+                        && x.Level == 1
+                );
+        }
+
+        this.mockPlayerIdentityService.VerifyAll();
+    }
 }

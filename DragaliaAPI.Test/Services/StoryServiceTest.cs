@@ -17,6 +17,7 @@ public class StoryServiceTest
     private readonly Mock<IUnitRepository> mockUnitRepository;
     private readonly Mock<ILogger<StoryService>> mockLogger;
     private readonly Mock<ITutorialService> mockTutorialService;
+    private readonly Mock<IFortService> mockFortService;
 
     private readonly IStoryService storyService;
 
@@ -28,6 +29,7 @@ public class StoryServiceTest
         this.mockUnitRepository = new(MockBehavior.Strict);
         this.mockLogger = new();
         this.mockTutorialService = new(MockBehavior.Strict);
+        this.mockFortService = new(MockBehavior.Strict);
 
         this.storyService = new StoryService(
             mockStoryRepository.Object,
@@ -35,7 +37,8 @@ public class StoryServiceTest
             mockUserDataRepository.Object,
             mockInventoryRepository.Object,
             mockUnitRepository.Object,
-            mockTutorialService.Object
+            mockTutorialService.Object,
+            mockFortService.Object
         );
     }
 
@@ -317,6 +320,48 @@ public class StoryServiceTest
         this.mockStoryRepository.VerifyAll();
         this.mockUnitRepository.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
+    }
+
+    [Fact]
+    public async Task ReadQuestStory_FortBuildReward_ReceivesReward()
+    {
+        this.mockStoryRepository
+            .Setup(x => x.GetOrCreateStory(StoryTypes.Quest, 1000607))
+            .ReturnsAsync(
+                new DbPlayerStoryState()
+                {
+                    DeviceAccountId = string.Empty,
+                    State = StoryState.Unlocked
+                }
+            );
+
+        this.mockUserDataRepository.Setup(x => x.GiveWyrmite(25)).Returns(Task.CompletedTask);
+        this.mockTutorialService
+            .Setup(x => x.OnStoryQuestRead(1000607))
+            .Returns(Task.CompletedTask);
+
+        this.mockFortService
+            .Setup(x => x.BuildStart(FortPlants.WindDracolith, -1, -1))
+            .ReturnsAsync(new DbFortBuild() { DeviceAccountId = string.Empty });
+
+        (await this.storyService.ReadStory(StoryTypes.Quest, 1000607))
+            .Should()
+            .BeEquivalentTo(
+                new List<AtgenBuildEventRewardEntityList>()
+                {
+                    new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 25 },
+                    new()
+                    {
+                        entity_type = EntityTypes.FortPlant,
+                        entity_id = (int)FortPlants.WindDracolith,
+                        entity_quantity = 1,
+                    }
+                }
+            );
+
+        this.mockFortService.VerifyAll();
+        this.mockUserDataRepository.VerifyAll();
+        this.mockStoryRepository.VerifyAll();
     }
 
     private class UnitStoryTheoryData : TheoryData<DbPlayerStoryState, int>

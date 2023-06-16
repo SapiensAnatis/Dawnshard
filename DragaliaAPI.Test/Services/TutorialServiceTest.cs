@@ -71,4 +71,26 @@ public class TutorialServiceTest
 
         currentStatus.Should().Be(99999);
     }
+
+    [Fact]
+    public async Task UpdateTutorialStatus_DojoStatus_AddsDojos()
+    {
+        this.mockUserDataRepository
+            .SetupGet(x => x.UserData)
+            .Returns(
+                new List<DbPlayerUserData>
+                {
+                    new() { DeviceAccountId = "aa", TutorialStatus = 1 }
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
+
+        this.mockFortRepository.Setup(x => x.AddDojos()).Returns(Task.CompletedTask);
+
+        int currentStatus = await this.tutorialService.UpdateTutorialStatus(60120);
+
+        currentStatus.Should().Be(60120);
+        this.mockFortRepository.VerifyAll();
+    }
 }
