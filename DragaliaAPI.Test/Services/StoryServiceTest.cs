@@ -340,10 +340,11 @@ public class StoryServiceTest
             .Setup(x => x.OnStoryQuestRead(1000607))
             .Returns(Task.CompletedTask);
 
-        this.mockFortService.Setup(x => x.BuildStart(FortPlants.WindDracolith, -1, -1))
-            .ReturnsAsync(new DbFortBuild() {DeviceAccountId = string.Empty});
+        this.mockFortService
+            .Setup(x => x.BuildStart(FortPlants.WindDracolith, -1, -1))
+            .ReturnsAsync(new DbFortBuild() { DeviceAccountId = string.Empty });
 
-        (await this.storyService.ReadStory(StoryTypes.Quest, 1000311))
+        (await this.storyService.ReadStory(StoryTypes.Quest, 1000607))
             .Should()
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
