@@ -26,6 +26,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
 
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly Mock<IMissionService> mockMissionService;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
 
     public UpdateDataServiceTest(DbTestFixture fixture, ITestOutputHelper output)
     {
@@ -33,6 +34,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         this.output = output;
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mockMissionService = new(MockBehavior.Loose);
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
 
         this.mapper = new MapperConfiguration(
             cfg => cfg.AddMaps(typeof(Program).Assembly)
@@ -41,7 +43,8 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             this.fixture.ApiContext,
             this.mapper,
             this.mockPlayerIdentityService.Object,
-            this.mockMissionService.Object
+            this.mockMissionService.Object,
+            this.mockMissionProgressionService.Object
         );
 
         CommonAssertionOptions.ApplyTimeOptions();

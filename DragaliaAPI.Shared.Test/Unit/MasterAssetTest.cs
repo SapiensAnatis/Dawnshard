@@ -210,6 +210,7 @@ public class MasterAssetTest
             .BeEquivalentTo(
                 new QuestData(
                     Id: 100010101,
+                    Gid: 10001,
                     QuestPlayModeType: QuestPlayModeTypes.Normal,
                     LimitedElementalType: 0,
                     LimitedElementalType2: 0,

@@ -1,6 +1,7 @@
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -21,6 +22,7 @@ public class FortServiceTest
     private readonly Mock<ILogger<FortService>> mockLogger;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly IMapper mapper;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
 
     private readonly IFortService fortService;
 
@@ -32,6 +34,7 @@ public class FortServiceTest
         this.mockLogger = new(MockBehavior.Loose);
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mapper = UnitTestUtils.CreateMapper();
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
 
         this.fortService = new FortService(
             this.mockFortRepository.Object,
@@ -39,7 +42,8 @@ public class FortServiceTest
             this.mockInventoryRepository.Object,
             this.mockLogger.Object,
             this.mockPlayerIdentityService.Object,
-            this.mapper
+            this.mapper,
+            this.mockMissionProgressionService.Object
         );
 
         UnitTestUtils.ApplyDateTimeAssertionOptions();
@@ -234,8 +238,17 @@ public class FortServiceTest
             );
 
         this.mockFortRepository
-            .Setup(x => x.UpgradeAtOnce(userData, 1, PaymentTypes.HalidomHustleHammer))
+            .Setup(x => x.GetBuilding(1))
             .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id" });
+
+        this.mockFortRepository.Setup(
+            x =>
+                x.ConsumeUpgradeAtOnceCost(
+                    userData,
+                    new DbFortBuild() { DeviceAccountId = "id" },
+                    PaymentTypes.HalidomHustleHammer
+                )
+        );
 
         await this.fortService.CompleteAtOnce(PaymentTypes.HalidomHustleHammer, 1);
 

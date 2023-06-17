@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
@@ -255,6 +255,7 @@ public class StoryService : IStoryService
 
         if (QuestStoryFortPlantRewards.TryGetValue(storyId, out FortPlants fortPlant))
         {
+            // TODO: Maybe move AddToStorage to FortService and make it no longer take a level?
             await this.fortRepository.AddToStorage(fortPlant, 1);
             rewardList.Add(
                 new()

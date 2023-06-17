@@ -1,6 +1,7 @@
 using System.Reflection;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -18,6 +19,7 @@ public class WeaponServiceTest
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IFortRepository> mockFortRepository;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
 
     private static Dictionary<Materials, int> InfernoApogeePassive1Map =
         new()
@@ -71,13 +73,15 @@ public class WeaponServiceTest
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockFortRepository = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
 
         this.weaponService = new WeaponService(
             this.mockWeaponRepository.Object,
             this.mockInventoryRepository.Object,
             this.mockFortRepository.Object,
             this.mockUserDataRepository.Object,
-            LoggerTestUtils.Create<WeaponService>()
+            LoggerTestUtils.Create<WeaponService>(),
+            this.mockMissionProgressionService.Object
         );
     }
 

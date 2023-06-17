@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -22,6 +23,7 @@ public class DungeonRecordControllerTest
     private readonly Mock<IQuestRewardService> mockQuestRewardService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<ITutorialService> mockTutorialService;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
 
     private const string dungeonKey = "key";
     private const int questId = 100010101;
@@ -36,6 +38,7 @@ public class DungeonRecordControllerTest
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockQuestRewardService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Strict);
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
 
         this.dungeonRecordController = new(
             mockQuestRepository.Object,
@@ -44,7 +47,8 @@ public class DungeonRecordControllerTest
             mockInventoryRepository.Object,
             mockQuestRewardService.Object,
             mockUpdateDataService.Object,
-            mockTutorialService.Object
+            mockTutorialService.Object,
+            mockMissionProgressionService.Object
         );
 
         this.dungeonRecordController.SetupMockContext();
