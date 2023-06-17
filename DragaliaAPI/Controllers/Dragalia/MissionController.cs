@@ -90,11 +90,15 @@ public class MissionController : DragaliaControllerBase
     {
         MissionUnlockMainStoryGroupData response = new();
 
-        IEnumerable<DbPlayerMission> missions = await this.missionService.UnlockMainMissionGroup(
-            request.main_story_mission_group_id
-        );
+        (IEnumerable<MainStoryMissionGroupReward> rewards, IEnumerable<DbPlayerMission> missions) =
+            await this.missionService.UnlockMainMissionGroup(request.main_story_mission_group_id);
+
         response.main_story_mission_list = missions.Select(
             x => new MainStoryMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+        );
+
+        response.main_story_mission_unlock_bonus_list = rewards.Select(
+            x => new AtgenBuildEventRewardEntityList(x.Type, x.Id, x.Quantity)
         );
 
         response.update_data_list = await this.updateDataService.SaveChangesAsync();

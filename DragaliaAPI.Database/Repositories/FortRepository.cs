@@ -102,16 +102,8 @@ public class FortRepository : IFortRepository
 
         foreach (FortPlants plant in plants)
         {
-            await AddBuild(
-                new DbFortBuild()
-                {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
-                    PlantId = plant,
-                    Level = 1,
-                    PositionX = -1,
-                    PositionZ = -1
-                }
-            );
+            await AddToStorage(plant, 1);
+            await AddToStorage(plant, 1);
         }
     }
 
@@ -193,6 +185,20 @@ public class FortRepository : IFortRepository
     public async Task AddBuild(DbFortBuild build)
     {
         await apiContext.PlayerFortBuilds.AddAsync(build);
+    }
+
+    public async Task AddToStorage(FortPlants plant, int level)
+    {
+        await this.apiContext.PlayerFortBuilds.AddAsync(
+            new DbFortBuild()
+            {
+                DeviceAccountId = this.playerIdentityService.AccountId,
+                PlantId = plant,
+                Level = level,
+                PositionX = -1,
+                PositionZ = -1
+            }
+        );
     }
 
     public void DeleteBuild(DbFortBuild build)

@@ -1,0 +1,439 @@
+[
+  {
+    "_Type": "FortLevelup",
+    "_Requirements": [
+      {
+        "_Parameter": 85,
+        "_Missions": [
+          {
+            "_Type": "Drill",
+            "_Id": 200700
+          }
+        ]
+      },
+      {
+        "_Parameter": 200,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10010101
+          }
+        ]
+      },
+      {
+        "_Parameter": 300,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10020101
+          }
+        ]
+      },
+      {
+        "_Parameter": 400,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10020102
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_Type": "VoidBattleCleared",
+    "_Requirements": [
+      {
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10030101
+          },
+          {
+            "_Type": "MainStory",
+            "_Id": 10030201
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_Type": "FortPlantUpgraded",
+    "_Requirements": [
+      {
+        "_Parameter": 100101,
+        "_Parameter2": 5,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10010201
+          }
+        ]
+      },
+      {
+        "_Parameter": 101401,
+        "_Parameter2": 6,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10010301
+          }
+        ]
+      },
+      {
+        "_Parameter": 100101,
+        "_Parameter2": 6,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10020201
+          }
+        ]
+      },
+      {
+        "_Parameter": 100101,
+        "_Parameter2": 7,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10020202
+          }
+        ]
+      },
+      {
+        "_Parameter": 101401,
+        "_Parameter2": 9,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10020301
+          }
+        ]
+      },
+      {
+        "_Parameter": 101904,
+        "_Parameter2": 3,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10030501
+          }
+        ]
+      },
+      {
+        "_Parameter": 101904,
+        "_Parameter2": 5,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10030601
+          }
+        ]
+      },
+      {
+        "_Parameter": 100401,
+        "_Parameter2": 15,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10080101
+          }
+        ]
+      },
+      {
+        "_Parameter": 100401,
+        "_Parameter2": 20,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10080201
+          }
+        ]
+      },
+      {
+        "_Parameter": 101901,
+        "_Parameter2": 6,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10080301
+          }
+        ]
+      },
+      {
+        "_Parameter": 101901,
+        "_Parameter2": 10,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10080401
+          }
+        ]
+      },
+      {
+        "_Parameter": 100405,
+        "_Parameter2": 15,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10100101
+          }
+        ]
+      },
+      {
+        "_Parameter": 100405,
+        "_Parameter2": 20,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10100201
+          }
+        ]
+      },
+      {
+        "_Parameter": 101901,
+        "_Parameter2": 6,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10100301
+          }
+        ]
+      },
+      {
+        "_Parameter": 101901,
+        "_Parameter2": 10,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10100401
+          }
+        ]
+      },
+      {
+        "_Parameter": 100507,
+        "_Parameter2": 5,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10100501
+          }
+        ]
+      },
+      {
+        "_Parameter": 100507,
+        "_Parameter2": 10,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10100601
+          }
+        ]
+      },
+      {
+        "_Parameter": 100507,
+        "_Parameter2": 15,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10100701
+          }
+        ]
+      },
+      {
+        "_Parameter": 100403,
+        "_Parameter2": 15,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10110101
+          }
+        ]
+      },
+      {
+        "_Parameter": 100403,
+        "_Parameter2": 20,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10110201
+          }
+        ]
+      },
+      {
+        "_Parameter": 101903,
+        "_Parameter2": 6,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10110301
+          }
+        ]
+      },
+      {
+        "_Parameter": 101903,
+        "_Parameter2": 10,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10110401
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_Type": "FortPlantBuilt",
+    "_Requirements": [
+      {
+        "_Parameter": 101904,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10030401
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_Type": "QuestCleared",
+    "_Requirements": [
+      {
+        "_Parameter": 211020104,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10010401
+          },
+          {
+            "_Type": "MainStory",
+            "_Id": 10020401
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_Type": "WyrmprintAugmentBuildup",
+    "_Requirements": [
+      {
+        "_Parameter": 0,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10090301
+          }
+        ]
+      },
+      {
+        "_Parameter": 1,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10090401
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_Type": "CharacterBuildup",
+    "_Requirements": [
+      {
+        "_Parameter": 0,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10090101
+          }
+        ]
+      },
+      {
+        "_Parameter": 1,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10090201
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_Type": "WeaponEarned",
+    "_Requirements": [
+      {
+        "_Parameter": 99,
+        "_Parameter2": 5,
+        "_Parameter3": 1,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10010501
+          }
+        ]
+      },
+      {
+        "_Parameter": 2,
+        "_Parameter2": 5,
+        "_Parameter3": 1,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10020501
+          }
+        ]
+      },
+      {
+        "_Parameter": 4,
+        "_Parameter2": 5,
+        "_Parameter3": 1,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10030301
+          }
+        ]
+      },
+      {
+        "_Parameter": 1,
+        "_Parameter2": 5,
+        "_Parameter3": 5,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10080501
+          }
+        ]
+      },
+      {
+        "_Parameter": 3,
+        "_Parameter2": 5,
+        "_Parameter3": 5,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10110501
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_Type": "WeaponRefined",
+    "_Requirements": [
+      {
+        "_Parameter": 3,
+        "_Parameter2": 5,
+        "_Parameter3": 5,
+        "_Missions": [
+          {
+            "_Type": "MainStory",
+            "_Id": 10090501
+          }
+        ]
+      }
+    ]
+  }
+]

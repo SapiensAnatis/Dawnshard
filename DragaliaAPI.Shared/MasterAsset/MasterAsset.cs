@@ -154,5 +154,10 @@ public static class MasterAsset
     public static readonly MasterAssetData<
         MissionProgressType,
         MissionProgressionInfo
-    > MissionProgressionInfo = new("Missions/Custom_MissionProgressionInfo.json", x => x.Type);
+    > MissionProgressionInfo = new("Missions/MissionProgressionInfo.json", x => x.Type);
+
+    public static readonly MasterAssetData<
+        int,
+        MainStoryMissionGroupRewards
+    > MainStoryMissionGroupRewards = new("Missions/MainStoryMissionGroupRewards.json", x => x.Id);
 }

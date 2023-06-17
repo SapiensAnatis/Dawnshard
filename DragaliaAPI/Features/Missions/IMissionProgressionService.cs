@@ -9,8 +9,10 @@ public interface IMissionProgressionService
     void OnFortLevelup(int level);
     void OnQuestCleared(int questId);
     void OnVoidBattleCleared();
-    void OnWeaponEarned(int id, int abilityId);
-    void OnWyrmprintUpgraded(int id, int augmentId, int count);
+    void OnWeaponEarned(UnitElement element, int stars, WeaponSeries series);
+    void OnWeaponRefined(UnitElement element, int stars, WeaponSeries series);
+    void OnWyrmprintAugmentBuildup(PlusCountType type, int count);
+    void OnCharacterBuildup(PlusCountType type, int count);
 
     Task ProcessMissionEvents();
 }

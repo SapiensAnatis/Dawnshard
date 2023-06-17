@@ -9,7 +9,10 @@ public interface IMissionService
 {
     Task<DbPlayerMission> StartMission(MissionType type, int id);
 
-    Task<IEnumerable<DbPlayerMission>> UnlockMainMissionGroup(int groupId);
+    Task<(
+        IEnumerable<MainStoryMissionGroupReward>,
+        IEnumerable<DbPlayerMission>
+    )> UnlockMainMissionGroup(int groupId);
     Task<IEnumerable<DbPlayerMission>> UnlockDrillMissionGroup(int groupId);
 
     Task RedeemMission(int id);

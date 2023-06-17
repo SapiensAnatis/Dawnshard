@@ -51,6 +51,9 @@
 		<None Update="Resources\MC.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="Resources\Missions\MainStoryMissionGroupRewards.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Resources\Missions\MissionAlbumData.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -79,6 +82,9 @@
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\Missions\MissionPeriodData.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\Missions\MissionProgressionInfo.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\Missions\MissionSpecialData.json">
@@ -119,5 +125,7 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Compile>
 	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties resources_4missions_4mainstorymissiongrouprewards_1json__JsonSchema="MainStoryMissionGroupRewards.schema.json" resources_4missions_4missionprogressioninfo_1json__JsonSchema="MissionProgressionInfo.schema.json" /></VisualStudio></ProjectExtensions>
 
 </Project>
