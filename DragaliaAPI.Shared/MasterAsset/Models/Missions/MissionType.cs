@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Database.Utils;
+﻿namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 public enum MissionType
 {
