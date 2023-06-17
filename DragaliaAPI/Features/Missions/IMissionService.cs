@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 namespace DragaliaAPI.Features.Missions;
 
