@@ -20,7 +20,9 @@ public class MissionRepository : IMissionRepository
     }
 
     public IQueryable<DbPlayerMission> Missions =>
-        this.apiContext.PlayerMissions.Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+        this.apiContext.PlayerMissions.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
+        );
 
     public IQueryable<DbPlayerMission> GetMissionsByType(MissionType type)
     {
@@ -29,8 +31,10 @@ public class MissionRepository : IMissionRepository
 
     public async Task<DbPlayerMission> GetMissionByIdAsync(int id)
     {
-        return await this.apiContext.PlayerMissions.FindAsync(this.playerIdentityService.AccountId, id) ??
-               throw new DragaliaException(ResultCode.MissionIdNotFound, "Mission not found");
+        return await this.apiContext.PlayerMissions.FindAsync(
+                this.playerIdentityService.AccountId,
+                id
+            ) ?? throw new DragaliaException(ResultCode.MissionIdNotFound, "Mission not found");
     }
 
     public async Task<ILookup<MissionType, DbPlayerMission>> GetAllMissionsPerTypeAsync()
@@ -38,22 +42,34 @@ public class MissionRepository : IMissionRepository
         return (await Missions.ToListAsync()).ToLookup(x => x.Type);
     }
 
-    public async Task<DbPlayerMission> AddMission(int id, MissionType type, DateTimeOffset startTime = default,
-        DateTimeOffset endTime = default, int groupId = -1)
+    public async Task<DbPlayerMission> AddMission(
+        int id,
+        MissionType type,
+        DateTimeOffset startTime = default,
+        DateTimeOffset endTime = default,
+        int groupId = -1
+    )
     {
-        if (await this.apiContext.PlayerMissions.FindAsync(this.playerIdentityService.AccountId, id) != null)
+        if (
+            await this.apiContext.PlayerMissions.FindAsync(this.playerIdentityService.AccountId, id)
+            != null
+        )
             throw new DragaliaException(ResultCode.CommonDbError, "Mission already exists");
 
-        return this.apiContext.PlayerMissions.Add(new DbPlayerMission
-        {
-            DeviceAccountId = this.playerIdentityService.AccountId,
-            Id = id,
-            Type = type,
-            Start = startTime,
-            End = endTime,
-            State = MissionState.InProgress,
-            GroupId = groupId
-        }).Entity;
+        return this.apiContext.PlayerMissions
+            .Add(
+                new DbPlayerMission
+                {
+                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    Id = id,
+                    Type = type,
+                    Start = startTime,
+                    End = endTime,
+                    State = MissionState.InProgress,
+                    GroupId = groupId
+                }
+            )
+            .Entity;
     }
 
     public async Task SetProgress(int id, int progress)
