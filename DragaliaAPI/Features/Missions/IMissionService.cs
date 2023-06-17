@@ -14,7 +14,9 @@ public interface IMissionService
     Task RedeemMission(int id);
     Task RedeemMissions(IEnumerable<int> ids);
 
-    Task<IEnumerable<AtgenBuildEventRewardEntityList>> TryRedeemDrillMissionGroups(IEnumerable<int> groupIds);
+    Task<IEnumerable<AtgenBuildEventRewardEntityList>> TryRedeemDrillMissionGroups(
+        IEnumerable<int> groupIds
+    );
 
     Task<CurrentMainStoryMission> GetCurrentMainStoryMission();
     Task<MissionNotice> GetMissionNotice(ILookup<MissionType, DbPlayerMission>? updatedLookup);

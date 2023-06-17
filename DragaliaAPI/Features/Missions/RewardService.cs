@@ -12,7 +12,13 @@ public class RewardService : IRewardService
     private readonly IAbilityCrestRepository abilityCrestRepository;
     private readonly IUnitRepository unitRepository;
 
-    public RewardService(ILogger<RewardService> logger, IInventoryRepository inventoryRepository, IUserDataRepository userDataRepository, IAbilityCrestRepository abilityCrestRepository, IUnitRepository unitRepository)
+    public RewardService(
+        ILogger<RewardService> logger,
+        IInventoryRepository inventoryRepository,
+        IUserDataRepository userDataRepository,
+        IAbilityCrestRepository abilityCrestRepository,
+        IUnitRepository unitRepository
+    )
     {
         this.logger = logger;
         this.inventoryRepository = inventoryRepository;
@@ -21,8 +27,14 @@ public class RewardService : IRewardService
         this.unitRepository = unitRepository;
     }
 
-    public async Task GrantReward(EntityTypes type, int id, int quantity = 1, int limitBreakCount = -1,
-        int buildupCount = -1, int equippableCount = -1)
+    public async Task GrantReward(
+        EntityTypes type,
+        int id,
+        int quantity = 1,
+        int limitBreakCount = -1,
+        int buildupCount = -1,
+        int equippableCount = -1
+    )
     {
         switch (type)
         {
@@ -47,19 +59,24 @@ public class RewardService : IRewardService
             case EntityTypes.Wyrmprint:
                 if (limitBreakCount == -1 || buildupCount == -1 || equippableCount == -1)
                 {
-                    throw new InvalidOperationException("Invalid parameters for granting wyrmprint.");
+                    throw new InvalidOperationException(
+                        "Invalid parameters for granting wyrmprint."
+                    );
                 }
 
                 // TODO?
                 throw new NotImplementedException();
                 break;
             case EntityTypes.Material:
-                (await this.inventoryRepository.GetMaterial((Materials)id) ??
-                 this.inventoryRepository.AddMaterial((Materials)id)).Quantity += quantity;
+                (
+                    await this.inventoryRepository.GetMaterial((Materials)id)
+                    ?? this.inventoryRepository.AddMaterial((Materials)id)
+                ).Quantity += quantity;
                 break;
             default:
                 logger.LogWarning(
-                    "Tried to reward unsupported entity type {rewardEntityType}. Parameters: {@parameters}", type,
+                    "Tried to reward unsupported entity type {rewardEntityType}. Parameters: {@parameters}",
+                    type,
                     new
                     {
                         type,
@@ -68,7 +85,8 @@ public class RewardService : IRewardService
                         limitBreakCount,
                         buildupCount,
                         equippableCount
-                    });
+                    }
+                );
                 break;
         }
     }

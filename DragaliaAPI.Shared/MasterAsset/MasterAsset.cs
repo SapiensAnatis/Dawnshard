@@ -115,7 +115,6 @@ public static class MasterAsset
     public static readonly MasterAssetData<AbilityCrests, AbilityCrest> AbilityCrest =
         new("AbilityCrest.json", x => x.Id);
 
-
     public static readonly MasterAssetData<int, AlbumMission> AlbumMission =
         new("Missions/MissionAlbumData.json", x => x.Id);
 

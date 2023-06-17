@@ -12,8 +12,13 @@ public interface IMissionRepository
     Task<DbPlayerMission> GetMissionByIdAsync(int id);
     Task<ILookup<MissionType, DbPlayerMission>> GetAllMissionsPerTypeAsync();
 
-    Task<DbPlayerMission> AddMission(int id, MissionType type, DateTimeOffset startTime = default,
-        DateTimeOffset endTime = default, int groupId = -1);
+    Task<DbPlayerMission> AddMission(
+        int id,
+        MissionType type,
+        DateTimeOffset startTime = default,
+        DateTimeOffset endTime = default,
+        int groupId = -1
+    );
 
     Task SetProgress(int id, int progress);
     Task SetState(int id, MissionState state);

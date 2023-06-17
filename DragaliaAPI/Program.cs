@@ -107,10 +107,9 @@ builder.Services
     .AddScoped<IItemSummonService, ItemSummonService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>()
-    
-    
     .AddScoped<IMissionRepository, MissionRepository>()
-    .AddScoped<IMissionService, MissionService>();
+    .AddScoped<IMissionService, MissionService>()
+    .AddScoped<IRewardService, RewardService>();
 
 builder.Services.AddHttpClient<IBaasApi, BaasApi>();
 builder.Services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>

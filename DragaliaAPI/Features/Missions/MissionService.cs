@@ -19,8 +19,11 @@ public class MissionService : IMissionService
 
     private readonly IRewardService rewardService;
 
-    public MissionService(ILogger<MissionService> logger, IMissionRepository missionRepository,
-        IRewardService rewardService)
+    public MissionService(
+        ILogger<MissionService> logger,
+        IMissionRepository missionRepository,
+        IRewardService rewardService
+    )
     {
         this.logger = logger;
         this.missionRepository = missionRepository;
@@ -35,14 +38,26 @@ public class MissionService : IMissionService
 
     public async Task<IEnumerable<DbPlayerMission>> UnlockMainMissionGroup(int groupId)
     {
-        IEnumerable<MainStoryMission> missions = MasterAsset.MainStoryMission.Enumerable.Where(x => x.MissionMainStoryGroupId == groupId).ToList();
+        IEnumerable<MainStoryMission> missions = MasterAsset.MainStoryMission.Enumerable
+            .Where(x => x.MissionMainStoryGroupId == groupId)
+            .ToList();
 
-        logger.LogInformation("Unlocking main story mission group {groupId} ({groupMissionIds})", groupId, missions.Select(x => x.Id));
+        logger.LogInformation(
+            "Unlocking main story mission group {groupId} ({groupMissionIds})",
+            groupId,
+            missions.Select(x => x.Id)
+        );
 
         List<DbPlayerMission> dbMissions = new();
         foreach (MainStoryMission mission in missions)
         {
-            dbMissions.Add(await missionRepository.AddMission(mission.Id, MissionType.MainStory, groupId: groupId));
+            dbMissions.Add(
+                await missionRepository.AddMission(
+                    mission.Id,
+                    MissionType.MainStory,
+                    groupId: groupId
+                )
+            );
         }
 
         return dbMissions;
@@ -50,14 +65,22 @@ public class MissionService : IMissionService
 
     public async Task<IEnumerable<DbPlayerMission>> UnlockDrillMissionGroup(int groupId)
     {
-        IEnumerable<DrillMission> missions = MasterAsset.DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == groupId).ToList();
+        IEnumerable<DrillMission> missions = MasterAsset.DrillMission.Enumerable
+            .Where(x => x.MissionDrillGroupId == groupId)
+            .ToList();
 
-        logger.LogInformation("Unlocking drill story mission group {groupId} ({groupMissionIds})", groupId, missions.Select(x => x.Id));
+        logger.LogInformation(
+            "Unlocking drill story mission group {groupId} ({groupMissionIds})",
+            groupId,
+            missions.Select(x => x.Id)
+        );
 
         List<DbPlayerMission> dbMissions = new();
         foreach (DrillMission mission in missions)
         {
-            dbMissions.Add(await missionRepository.AddMission(mission.Id, MissionType.Drill, groupId: groupId));
+            dbMissions.Add(
+                await missionRepository.AddMission(mission.Id, MissionType.Drill, groupId: groupId)
+            );
         }
 
         return dbMissions;
@@ -70,7 +93,10 @@ public class MissionService : IMissionService
         DbPlayerMission dbMission = await missionRepository.GetMissionByIdAsync(id);
         if (dbMission.State != MissionState.Completed)
         {
-            throw new DragaliaException(ResultCode.CommonUserStatusError, "Invalid mission state for redemption");
+            throw new DragaliaException(
+                ResultCode.CommonUserStatusError,
+                "Invalid mission state for redemption"
+            );
         }
 
         Mission missionInfo = Mission.From(dbMission.Type, id);
@@ -80,14 +106,23 @@ public class MissionService : IMissionService
             case MissionType.Daily:
             case MissionType.MemoryEvent:
             case MissionType.Period:
-                IExtendedRewardMission extendedRewardMission = (IExtendedRewardMission)missionInfo.MasterAssetMission;
-                await this.rewardService.GrantReward(extendedRewardMission.EntityType, extendedRewardMission.Id,
-                    extendedRewardMission.EntityQuantity, extendedRewardMission.EntityLimitBreakCount,
-                    extendedRewardMission.EntityBuildupCount, extendedRewardMission.EntityEquipableCount);
+                IExtendedRewardMission extendedRewardMission = (IExtendedRewardMission)
+                    missionInfo.MasterAssetMission;
+                await this.rewardService.GrantReward(
+                    extendedRewardMission.EntityType,
+                    extendedRewardMission.Id,
+                    extendedRewardMission.EntityQuantity,
+                    extendedRewardMission.EntityLimitBreakCount,
+                    extendedRewardMission.EntityBuildupCount,
+                    extendedRewardMission.EntityEquipableCount
+                );
                 break;
             default:
-                await this.rewardService.GrantReward(missionInfo.EntityType, missionInfo.EntityId,
-                    missionInfo.EntityQuantity);
+                await this.rewardService.GrantReward(
+                    missionInfo.EntityType,
+                    missionInfo.EntityId,
+                    missionInfo.EntityQuantity
+                );
                 break;
         }
 
@@ -102,19 +137,34 @@ public class MissionService : IMissionService
         }
     }
 
-    public async Task<IEnumerable<AtgenBuildEventRewardEntityList>> TryRedeemDrillMissionGroups(IEnumerable<int> groupIds)
+    public async Task<IEnumerable<AtgenBuildEventRewardEntityList>> TryRedeemDrillMissionGroups(
+        IEnumerable<int> groupIds
+    )
     {
         List<AtgenBuildEventRewardEntityList> rewards = new();
 
         foreach (int groupId in groupIds)
         {
-            if (await this.missionRepository
+            if (
+                await this.missionRepository
                     .GetMissionsByType(MissionType.Drill)
-                    .CountAsync(x => x.GroupId == groupId && x.State == MissionState.InProgress) == 0)
+                    .CountAsync(x => x.GroupId == groupId && x.State == MissionState.InProgress)
+                == 0
+            )
             {
                 DrillMissionGroup group = MasterAsset.DrillMissionGroup.Get(groupId);
-                rewards.Add(new AtgenBuildEventRewardEntityList(group.UnlockEntityType1, group.UnlockEntityId1, group.UnlockEntityQuantity1));
-                await this.rewardService.GrantReward(group.UnlockEntityType1, group.UnlockEntityId1, group.UnlockEntityQuantity1);
+                rewards.Add(
+                    new AtgenBuildEventRewardEntityList(
+                        group.UnlockEntityType1,
+                        group.UnlockEntityId1,
+                        group.UnlockEntityQuantity1
+                    )
+                );
+                await this.rewardService.GrantReward(
+                    group.UnlockEntityType1,
+                    group.UnlockEntityId1,
+                    group.UnlockEntityQuantity1
+                );
             }
         }
 
@@ -123,7 +173,9 @@ public class MissionService : IMissionService
 
     public async Task<CurrentMainStoryMission> GetCurrentMainStoryMission()
     {
-        DbPlayerMission? firstMainStoryMission = await this.missionRepository.GetMissionsByType(MissionType.MainStory).FirstOrDefaultAsync();
+        DbPlayerMission? firstMainStoryMission = await this.missionRepository
+            .GetMissionsByType(MissionType.MainStory)
+            .FirstOrDefaultAsync();
         if (firstMainStoryMission == null)
             return new CurrentMainStoryMission();
 
@@ -132,19 +184,27 @@ public class MissionService : IMissionService
         return new CurrentMainStoryMission()
         {
             main_story_mission_group_id = mission.MissionMainStoryGroupId,
-            main_story_mission_state_list = (await this.missionRepository
-                    .GetMissionsByType(MissionType.MainStory)
-                    .ToListAsync())
-                .Where(x => MasterAsset.MainStoryMission.Get(x.Id).MissionMainStoryGroupId == mission.Id)
-                .Select(x => new AtgenMainStoryMissionStateList()
-                {
-                    main_story_mission_id = x.Id,
-                    state = (int)x.State,
-                })
+            main_story_mission_state_list = (
+                await this.missionRepository.GetMissionsByType(MissionType.MainStory).ToListAsync()
+            )
+                .Where(
+                    x =>
+                        MasterAsset.MainStoryMission.Get(x.Id).MissionMainStoryGroupId == mission.Id
+                )
+                .Select(
+                    x =>
+                        new AtgenMainStoryMissionStateList()
+                        {
+                            main_story_mission_id = x.Id,
+                            state = (int)x.State,
+                        }
+                )
         };
     }
 
-    public async Task<MissionNotice> GetMissionNotice(ILookup<MissionType, DbPlayerMission>? updatedLookup)
+    public async Task<MissionNotice> GetMissionNotice(
+        ILookup<MissionType, DbPlayerMission>? updatedLookup
+    )
     {
         MissionNotice notice = new();
 
@@ -160,8 +220,10 @@ public class MissionService : IMissionService
             if (!missions.Any())
                 return new AtgenNormalMissionNotice();
 
-            return await BuildMissionNotice(type,
-                missions.Where(x => x.State == MissionState.Completed).Select(x => x.Id));
+            return await BuildMissionNotice(
+                type,
+                missions.Where(x => x.State == MissionState.Completed).Select(x => x.Id)
+            );
         }
 
         notice.main_story_mission_notice = await BuildNotice(MissionType.MainStory);
@@ -177,9 +239,14 @@ public class MissionService : IMissionService
         return notice;
     }
 
-    private async Task<AtgenNormalMissionNotice> BuildMissionNotice(MissionType type, IEnumerable<int> newCompletedMissionList)
+    private async Task<AtgenNormalMissionNotice> BuildMissionNotice(
+        MissionType type,
+        IEnumerable<int> newCompletedMissionList
+    )
     {
-        List<DbPlayerMission> allMissions = await this.missionRepository.GetMissionsByType(type).ToListAsync();
+        List<DbPlayerMission> allMissions = await this.missionRepository
+            .GetMissionsByType(type)
+            .ToListAsync();
 
         int totalCount = allMissions.Count;
         int completedCount = allMissions.Count(x => x.State == MissionState.Completed);
@@ -193,8 +260,11 @@ public class MissionService : IMissionService
             receivable_reward_count = receivableRewardCount,
             new_complete_mission_id_list = newCompletedMissionList,
             pickup_mission_count = type == MissionType.Daily ? allMissions.Count(x => x.Pickup) : 0,
-            current_mission_id = type == MissionType.Drill ? allMissions.FirstOrDefault(x => x.State == MissionState.InProgress)?.Id ?? 100100 : 0
+            current_mission_id =
+                type == MissionType.Drill
+                    ? allMissions.FirstOrDefault(x => x.State == MissionState.InProgress)?.Id
+                        ?? 100100
+                    : 0
         };
-
     }
 }

@@ -31,15 +31,17 @@ public class MypageController : DragaliaControllerBase
 
         return preset_mypage;*/
 
-        return Ok(new MypageInfoData()
-        {
-            user_summon_list = new List<UserSummonList>(),
-            quest_event_schedule_list = new List<QuestEventScheduleList>(),
-            quest_schedule_detail_list = new List<QuestScheduleDetailList>(),
-            update_data_list = new UpdateDataList()
+        return Ok(
+            new MypageInfoData()
             {
-                mission_notice = await this.missionService.GetMissionNotice(null)
+                user_summon_list = new List<UserSummonList>(),
+                quest_event_schedule_list = new List<QuestEventScheduleList>(),
+                quest_schedule_detail_list = new List<QuestScheduleDetailList>(),
+                update_data_list = new UpdateDataList()
+                {
+                    mission_notice = await this.missionService.GetMissionNotice(null)
+                }
             }
-        });
+        );
     }
 }
