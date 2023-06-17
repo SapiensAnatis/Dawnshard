@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Security.Claims;
 using DragaliaAPI.Database;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
@@ -105,7 +106,11 @@ builder.Services
     .AddScoped<ILoadService, LoadService>()
     .AddScoped<IItemSummonService, ItemSummonService>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
-    .AddTransient<ILogEventEnricher, PodNameEnricher>();
+    .AddTransient<ILogEventEnricher, PodNameEnricher>()
+    
+    
+    .AddScoped<IMissionRepository, MissionRepository>()
+    .AddScoped<IMissionService, MissionService>();
 
 builder.Services.AddHttpClient<IBaasApi, BaasApi>();
 builder.Services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>

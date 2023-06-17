@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,16 +17,19 @@ public class UpdateDataService : IUpdateDataService
     private readonly ApiContext apiContext;
     private readonly IMapper mapper;
     private readonly IPlayerIdentityService playerIdentityService;
+    private readonly IMissionService missionService;
 
     public UpdateDataService(
         ApiContext apiContext,
         IMapper mapper,
-        IPlayerIdentityService playerIdentityService
+        IPlayerIdentityService playerIdentityService,
+        IMissionService missionService
     )
     {
         this.apiContext = apiContext;
         this.mapper = mapper;
         this.playerIdentityService = playerIdentityService;
+        this.missionService = missionService;
     }
 
     public async Task<UpdateDataList> SaveChangesAsync()
@@ -39,11 +46,12 @@ public class UpdateDataService : IUpdateDataService
 
         await this.apiContext.SaveChangesAsync();
 
-        return this.MapUpdateDataList(entities);
+        return await this.MapUpdateDataList(entities);
     }
 
-    private UpdateDataList MapUpdateDataList(List<IDbHasAccountId> entities) =>
-        new()
+    private async Task<UpdateDataList> MapUpdateDataList(List<IDbHasAccountId> entities)
+    {
+        UpdateDataList list =  new()
         {
             user_data = this.ConvertEntities<UserData, DbPlayerUserData>(entities)?.Single(), // Can't use SingleOrDefault if the list itself is null
             chara_list = this.ConvertEntities<CharaList, DbPlayerCharaData>(entities),
@@ -80,6 +88,22 @@ public class UpdateDataService : IUpdateDataService
                 DbWeaponPassiveAbility
             >(entities)
         };
+
+        IEnumerable<DbPlayerMission> updatedMissions = entities.OfType<DbPlayerMission>();
+
+        if (updatedMissions.Any())
+        {
+            ILookup<MissionType, DbPlayerMission> missionsLookup = entities.OfType<DbPlayerMission>().ToLookup(x => x.Type);
+            if (missionsLookup.Contains(MissionType.MainStory))
+            {
+                list.current_main_story_mission = await this.missionService.GetCurrentMainStoryMission();
+            }
+
+            list.mission_notice = await this.missionService.GetMissionNotice(missionsLookup);
+        }
+
+        return list;
+    }
 
     private List<TNetwork>? ConvertEntities<TNetwork, TDatabase>(
         IEnumerable<IDbHasAccountId> baseEntries,
