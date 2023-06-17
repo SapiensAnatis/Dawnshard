@@ -18,9 +18,9 @@ public interface IFortRepository
     Task AddBuild(DbFortBuild build);
     Task AddToStorage(FortPlants plant, int level);
     void DeleteBuild(DbFortBuild build);
-    Task<DbFortBuild> UpgradeAtOnce(
+    void ConsumeUpgradeAtOnceCost(
         DbPlayerUserData userData,
-        long buildId,
+        DbFortBuild build,
         PaymentTypes paymentType
     );
     void ConsumePaymentCost(DbPlayerUserData userData, PaymentTypes paymentType, int paymentCost);

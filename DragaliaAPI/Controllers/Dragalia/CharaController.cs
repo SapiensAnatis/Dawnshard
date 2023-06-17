@@ -3,6 +3,7 @@ using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -26,6 +27,7 @@ public class CharaController : DragaliaControllerBase
     private readonly IUpdateDataService updateDataService;
     private readonly ILogger<CharaController> logger;
     private readonly IMapper mapper;
+    private readonly IMissionProgressionService missionProgressionService;
 
     public CharaController(
         IUserDataRepository userDataRepository,
@@ -34,7 +36,8 @@ public class CharaController : DragaliaControllerBase
         IStoryRepository storyRepository,
         IUpdateDataService updateDataService,
         ILogger<CharaController> logger,
-        IMapper mapper
+        IMapper mapper,
+        IMissionProgressionService missionProgressionService
     )
     {
         this.userDataRepository = userDataRepository;
@@ -44,6 +47,7 @@ public class CharaController : DragaliaControllerBase
         this.updateDataService = updateDataService;
         this.logger = logger;
         this.mapper = mapper;
+        this.missionProgressionService = missionProgressionService;
     }
 
     [Route("awake")]
@@ -151,10 +155,11 @@ public class CharaController : DragaliaControllerBase
         byte maxLevel = (byte)(
             CharaConstants.GetMaxLevelFor(playerCharData.Rarity) + playerCharData.AdditionalMaxLevel
         );
+
         //TODO: Maybe make this generic for IHasXp
-        foreach (AtgenEnemyPiece MaterialList in materials)
+        foreach (AtgenEnemyPiece materialList in materials)
         {
-            switch (MaterialList.id)
+            switch (materialList.id)
             {
                 case Materials.BronzeCrystal:
                 case Materials.SilverCrystal:
@@ -162,8 +167,8 @@ public class CharaController : DragaliaControllerBase
                     playerCharData.Exp = Math.Min(
                         playerCharData.Exp
                             + (
-                                UpgradeMaterials.buildupXpValues[MaterialList.id]
-                                * MaterialList.quantity
+                                UpgradeMaterials.buildupXpValues[materialList.id]
+                                * materialList.quantity
                             ),
                         CharaConstants.XpLimits[maxLevel - 1]
                     );
@@ -171,16 +176,18 @@ public class CharaController : DragaliaControllerBase
                 case Materials.AmplifyingCrystal:
                     playerCharData.AttackPlusCount = (byte)
                         Math.Min(
-                            playerCharData.AttackPlusCount + MaterialList.quantity,
+                            playerCharData.AttackPlusCount + materialList.quantity,
                             CharaConstants.MaxAtkEnhance
                         );
+                    this.missionProgressionService.OnCharacterBuildup(PlusCountType.Atk, 1);
                     break;
                 case Materials.FortifyingCrystal:
                     playerCharData.HpPlusCount = (byte)
                         Math.Min(
-                            playerCharData.HpPlusCount + MaterialList.quantity,
+                            playerCharData.HpPlusCount + materialList.quantity,
                             CharaConstants.MaxHpEnhance
                         );
+                    this.missionProgressionService.OnCharacterBuildup(PlusCountType.Hp, 1);
                     break;
                 default:
                     throw new DragaliaException(
@@ -188,11 +195,11 @@ public class CharaController : DragaliaControllerBase
                         "Invalid materials for buildup"
                     );
             }
-            if (!usedMaterials.ContainsKey((int)MaterialList.id))
+            if (!usedMaterials.ContainsKey((int)materialList.id))
             {
-                usedMaterials.Add((int)MaterialList.id, 0);
+                usedMaterials.Add((int)materialList.id, 0);
             }
-            usedMaterials[(int)MaterialList.id] += MaterialList.quantity;
+            usedMaterials[(int)materialList.id] += materialList.quantity;
         }
         if (
             playerCharData.Level < maxLevel

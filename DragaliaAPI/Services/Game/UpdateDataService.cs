@@ -18,22 +18,27 @@ public class UpdateDataService : IUpdateDataService
     private readonly IMapper mapper;
     private readonly IPlayerIdentityService playerIdentityService;
     private readonly IMissionService missionService;
+    private readonly IMissionProgressionService missionProgressionService;
 
     public UpdateDataService(
         ApiContext apiContext,
         IMapper mapper,
         IPlayerIdentityService playerIdentityService,
-        IMissionService missionService
+        IMissionService missionService,
+        IMissionProgressionService missionProgressionService
     )
     {
         this.apiContext = apiContext;
         this.mapper = mapper;
         this.playerIdentityService = playerIdentityService;
         this.missionService = missionService;
+        this.missionProgressionService = missionProgressionService;
     }
 
     public async Task<UpdateDataList> SaveChangesAsync()
     {
+        await this.missionProgressionService.ProcessMissionEvents();
+
         List<IDbHasAccountId> entities = this.apiContext.ChangeTracker
             .Entries<IDbHasAccountId>()
             .Where(

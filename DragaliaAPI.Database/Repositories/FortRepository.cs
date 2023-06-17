@@ -206,15 +206,12 @@ public class FortRepository : IFortRepository
         apiContext.PlayerFortBuilds.Remove(build);
     }
 
-    public async Task<DbFortBuild> UpgradeAtOnce(
+    public void ConsumeUpgradeAtOnceCost(
         DbPlayerUserData userData,
-        long buildId,
+        DbFortBuild build,
         PaymentTypes paymentType
     )
     {
-        // Get building
-        DbFortBuild build = await GetBuilding(buildId);
-
         if (build.BuildStatus is not FortBuildStatus.Construction)
         {
             throw new InvalidOperationException($"This building is not currently being upgraded.");
@@ -233,12 +230,6 @@ public class FortRepository : IFortRepository
         }
 
         ConsumePaymentCost(userData, paymentType, paymentCost);
-
-        // Update build
-        build.BuildStartDate = DateTimeOffset.UnixEpoch;
-        build.BuildEndDate = DateTimeOffset.UnixEpoch;
-
-        return build;
     }
 
     public async Task<int> GetActiveCarpenters()
