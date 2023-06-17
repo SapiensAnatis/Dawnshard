@@ -187,10 +187,7 @@ public class MissionService : IMissionService
             main_story_mission_state_list = (
                 await this.missionRepository.GetMissionsByType(MissionType.MainStory).ToListAsync()
             )
-                .Where(
-                    x =>
-                        MasterAsset.MainStoryMission.Get(x.Id).MissionMainStoryGroupId == mission.Id
-                )
+                .Where(x => x.GroupId == mission.MissionMainStoryGroupId)
                 .Select(
                     x =>
                         new AtgenMainStoryMissionStateList()
