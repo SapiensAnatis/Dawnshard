@@ -131,6 +131,14 @@ public class LoadService : ILoadService
                     new() { slot = 30, stamp_id = 10024 },
                     new() { slot = 31, stamp_id = 10202 },
                     new() { slot = 32, stamp_id = 10010 }
+                },
+                mission_notice = new MissionNotice()
+                {
+                    drill_mission_notice = new AtgenNormalMissionNotice
+                    {
+                        is_update = 1,
+                        current_mission_id = 100100
+                    }
                 }
             };
 

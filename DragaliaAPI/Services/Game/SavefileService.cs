@@ -477,6 +477,9 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerDragonGifts.RemoveRange(
             this.apiContext.PlayerDragonGifts.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PlayerMissions.RemoveRange(
+            this.apiContext.PlayerMissions.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset()

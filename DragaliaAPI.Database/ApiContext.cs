@@ -67,6 +67,8 @@ public class ApiContext : DbContext
 
         modelBuilder.Entity<DbQuest>().HasKey(e => new { e.DeviceAccountId, e.QuestId });
 
+        modelBuilder.Entity<DbPlayerMission>().HasKey(e => new { e.DeviceAccountId, e.Id });
+
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         if (this.Database.IsSqlite())
@@ -138,4 +140,6 @@ public class ApiContext : DbContext
     public DbSet<DbWeaponPassiveAbility> PlayerPassiveAbilities { get; set; }
 
     public DbSet<DbPlayerDragonGift> PlayerDragonGifts { get; set; }
+
+    public DbSet<DbPlayerMission> PlayerMissions { get; set; }
 }

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
@@ -80,14 +81,20 @@ public class PlayerIdentityService : IPlayerIdentityService
 
         impersonationContext = new ImpersonationContext(this, account, viewer);
 
-        logger.LogDebug("Starting user impersonation: {@context}", impersonationContext);
+        logger.LogDebug(
+            "Starting user impersonation: {@context}",
+            new { impersonationContext.AccountId, impersonationContext.ViewerId }
+        );
 
         return impersonationContext;
     }
 
     internal void StopUserImpersonation()
     {
-        logger.LogDebug("Stopping user impersonation: {@context}", impersonationContext);
+        logger.LogDebug(
+            "Stopping user impersonation: {@context}",
+            new { impersonationContext!.AccountId, impersonationContext.ViewerId }
+        );
 
         this.impersonationContext = null;
     }
