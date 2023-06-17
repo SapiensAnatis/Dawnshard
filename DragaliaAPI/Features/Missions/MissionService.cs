@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
@@ -36,11 +37,18 @@ public class MissionService : IMissionService
         return await missionRepository.AddMission(id, type);
     }
 
-    public async Task<IEnumerable<DbPlayerMission>> UnlockMainMissionGroup(int groupId)
+    public async Task<(
+        IEnumerable<MainStoryMissionGroupReward>,
+        IEnumerable<DbPlayerMission>
+    )> UnlockMainMissionGroup(int groupId)
     {
         IEnumerable<MainStoryMission> missions = MasterAsset.MainStoryMission.Enumerable
             .Where(x => x.MissionMainStoryGroupId == groupId)
             .ToList();
+
+        List<MainStoryMissionGroupReward> rewards = MasterAsset.MainStoryMissionGroupRewards
+            .Get(groupId)
+            .Rewards.ToList();
 
         logger.LogInformation(
             "Unlocking main story mission group {groupId} ({groupMissionIds})",
@@ -60,7 +68,15 @@ public class MissionService : IMissionService
             );
         }
 
-        return dbMissions;
+        if (rewards.Count > 0)
+        {
+            foreach (MainStoryMissionGroupReward reward in rewards)
+            {
+                await this.rewardService.GrantReward(reward.Type, reward.Id, reward.Quantity);
+            }
+        }
+
+        return (rewards, dbMissions);
     }
 
     public async Task<IEnumerable<DbPlayerMission>> UnlockDrillMissionGroup(int groupId)

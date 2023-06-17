@@ -8,10 +8,11 @@ public record MissionInfo(
 );
 
 public record MissionProgressionRequirement(
+    IEnumerable<MissionInfo> Missions,
     int Parameter,
-    int Parameter2,
-    int Parameter3,
-    IEnumerable<MissionInfo> Missions
+    int Parameter2 = -1,
+    int Parameter3 = -1,
+    int Parameter4 = -1
 );
 
 public record MissionProgressionInfo(

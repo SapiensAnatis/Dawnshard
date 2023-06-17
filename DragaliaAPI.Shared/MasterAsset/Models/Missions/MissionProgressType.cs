@@ -8,5 +8,7 @@ public enum MissionProgressType
     QuestCleared,
     VoidBattleCleared,
     WeaponEarned,
-    WyrmprintUpgraded
+    WeaponRefined,
+    WyrmprintAugmentBuildup,
+    CharacterBuildup
 }

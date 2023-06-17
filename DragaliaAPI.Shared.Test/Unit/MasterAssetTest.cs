@@ -298,6 +298,7 @@ public class MasterAssetTest
             .BeEquivalentTo(
                 new WeaponBody(
                     Id: WeaponBodies.EndlessAzureCore,
+                    WeaponSeriesId: WeaponSeries.Void,
                     WeaponType: WeaponTypes.Cane,
                     Rarity: 5,
                     ElementalType: UnitElement.Water,

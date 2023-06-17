@@ -1,5 +1,4 @@
-﻿using System.Reflection.Emit;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -11,11 +10,18 @@ namespace DragaliaAPI.Features.Missions;
 public class MissionProgressionService : IMissionProgressionService
 {
     private readonly IMissionRepository missionRepository;
+    private readonly ILogger<MissionProgressionService> logger;
+
     private readonly Queue<Event> eventQueue;
 
-    public MissionProgressionService(IMissionRepository missionRepository)
+    public MissionProgressionService(
+        IMissionRepository missionRepository,
+        ILogger<MissionProgressionService> logger
+    )
     {
         this.missionRepository = missionRepository;
+        this.logger = logger;
+
         this.eventQueue = new Queue<Event>();
     }
 
@@ -46,16 +52,30 @@ public class MissionProgressionService : IMissionProgressionService
         this.eventQueue.Enqueue(new Event(MissionProgressType.VoidBattleCleared));
     }
 
-    public void OnWeaponEarned(int id, int abilityId)
-    {
-        this.eventQueue.Enqueue(new Event(MissionProgressType.WeaponEarned, id, abilityId));
-    }
-
-    public void OnWyrmprintUpgraded(int id, int augmentId, int count)
+    public void OnWeaponEarned(UnitElement element, int stars, WeaponSeries series)
     {
         this.eventQueue.Enqueue(
-            new Event(MissionProgressType.WyrmprintUpgraded, id, augmentId, count)
+            new Event(MissionProgressType.WeaponEarned, (int)element, stars, (int)series)
         );
+    }
+
+    public void OnWeaponRefined(UnitElement element, int stars, WeaponSeries series)
+    {
+        this.eventQueue.Enqueue(
+            new Event(MissionProgressType.WeaponRefined, (int)element, stars, (int)series)
+        );
+    }
+
+    public void OnWyrmprintAugmentBuildup(PlusCountType type, int count)
+    {
+        this.eventQueue.Enqueue(
+            new Event(MissionProgressType.WyrmprintAugmentBuildup, (int)type, count)
+        );
+    }
+
+    public void OnCharacterBuildup(PlusCountType type, int count)
+    {
+        this.eventQueue.Enqueue(new Event(MissionProgressType.CharacterBuildup, (int)type, count));
     }
 
     public async Task ProcessMissionEvents()
@@ -73,14 +93,17 @@ public class MissionProgressionService : IMissionProgressionService
                     out MissionProgressionInfo? info
                 )
             )
+            {
                 continue;
+            }
 
             IEnumerable<int> affectedMissions = info.Requirements
                 .Where(
                     x =>
-                        x.Parameter == evt.Parameter
-                        && x.Parameter2 == evt.Parameter2
-                        && x.Parameter3 == evt.Parameter3
+                        (x.Parameter == -1 || x.Parameter == evt.Parameter)
+                        && (x.Parameter2 == -1 || x.Parameter2 == evt.Parameter2)
+                        && (x.Parameter3 == -1 || x.Parameter3 == evt.Parameter3)
+                        && (x.Parameter4 == -1 || x.Parameter4 == evt.Parameter4)
                 )
                 .SelectMany(x => x.Missions)
                 .Select(x => x.Id)
@@ -94,7 +117,7 @@ public class MissionProgressionService : IMissionProgressionService
 
                 foreach (
                     DbPlayerMission progressingMission in missionList.Where(
-                        x => affectedMissions.Contains(x.Id)
+                        x => affectedMissions.Contains(x.Id) && x.State == MissionState.InProgress
                     )
                 )
                 {
@@ -102,7 +125,17 @@ public class MissionProgressionService : IMissionProgressionService
                     progressingMission.Progress++;
                     if (progressingMission.Progress == mission.CompleteValue)
                     {
+                        this.logger.LogDebug("Completed quest {questId}", progressingMission.Id);
                         progressingMission.State = MissionState.Receivable;
+                    }
+                    else
+                    {
+                        this.logger.LogDebug(
+                            "Progressed quest {questId} ({currentCount}/{totalCount}",
+                            progressingMission.Id,
+                            progressingMission.Progress,
+                            mission.CompleteValue
+                        );
                     }
                 }
             }
@@ -115,18 +148,21 @@ public class MissionProgressionService : IMissionProgressionService
         public readonly int Parameter;
         public readonly int Parameter2;
         public readonly int Parameter3;
+        public readonly int Parameter4;
 
         public Event(
             MissionProgressType type,
             int parameter = -1,
             int parameter2 = -1,
-            int parameter3 = -1
+            int parameter3 = -1,
+            int parameter4 = -1
         )
         {
             Type = type;
             Parameter = parameter;
             Parameter2 = parameter2;
             Parameter3 = parameter3;
+            Parameter4 = parameter4;
         }
     }
 }
