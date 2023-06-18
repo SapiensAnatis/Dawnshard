@@ -62,4 +62,7 @@ public class DbPlayer
         new List<DbWeaponPassiveAbility>();
 
     public virtual DbFortDetail? FortDetail { get; set; }
+
+    public virtual ICollection<DbEquippedStamp> EquippedStampList { get; set; } =
+        new List<DbEquippedStamp>();
 }

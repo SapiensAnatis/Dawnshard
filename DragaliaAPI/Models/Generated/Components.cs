@@ -8393,9 +8393,11 @@ public class SpecialMissionList
 public class StampList
 {
     public int stamp_id { get; set; }
-    public int is_new { get; set; }
 
-    public StampList(int stamp_id, int is_new)
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_new { get; set; }
+
+    public StampList(int stamp_id, bool is_new)
     {
         this.stamp_id = stamp_id;
         this.is_new = is_new;

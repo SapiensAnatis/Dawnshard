@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Security.Claims;
 using DragaliaAPI.Database;
+using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
@@ -104,6 +105,8 @@ builder.Services
     .AddScoped<ITutorialService, TutorialService>()
     .AddScoped<ILoadService, LoadService>()
     .AddScoped<IItemSummonService, ItemSummonService>()
+    .AddScoped<IStampService, StampService>()
+    .AddScoped<IStampRepository, StampRepository>()
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>();
 

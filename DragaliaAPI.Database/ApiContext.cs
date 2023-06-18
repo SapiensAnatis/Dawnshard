@@ -138,4 +138,6 @@ public class ApiContext : DbContext
     public DbSet<DbWeaponPassiveAbility> PlayerPassiveAbilities { get; set; }
 
     public DbSet<DbPlayerDragonGift> PlayerDragonGifts { get; set; }
+
+    public DbSet<DbEquippedStamp> EquippedStamps { get; set; }
 }
