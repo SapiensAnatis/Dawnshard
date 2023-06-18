@@ -9,7 +9,7 @@ namespace DragaliaAPI.Features.Stamp;
 
 public class StampService : IStampService
 {
-    private const int EquipListSize = 32;
+    public const int EquipListSize = 32;
 
     private readonly IStampRepository repository;
     private readonly IMapper mapper;
@@ -36,32 +36,6 @@ public class StampService : IStampService
                 x => new StampList() { stamp_id = x.Id, is_new = false }
             )
         );
-    }
-
-    public async Task<IEnumerable<EquipStampList>> GetEquipStampList()
-    {
-        IEnumerable<EquipStampList> equipList = (
-            await this.repository.EquippedStamps.ToListAsync()
-        ).Select(this.mapper.Map<DbEquippedStamp, EquipStampList>);
-
-        return PadEquipStampList(equipList);
-    }
-
-    public static IEnumerable<EquipStampList> PadEquipStampList(
-        IEnumerable<EquipStampList> equipEnumerable
-    )
-    {
-        List<EquipStampList> equipList = equipEnumerable.ToList();
-
-        int start = equipList.Any() ? equipList[^1].slot : 1;
-
-        // Pad unequipped stamp slots with ID 0
-        for (int i = start; i < EquipListSize; i++)
-        {
-            equipList.Add(new EquipStampList() { stamp_id = 0, slot = i });
-        }
-
-        return equipList;
     }
 
     /// <inheritdoc />

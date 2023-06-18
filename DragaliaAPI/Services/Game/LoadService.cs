@@ -101,11 +101,13 @@ public class LoadService : ILoadService
                     host = photonOptions.CurrentValue.ServerUrl,
                     app_id = string.Empty
                 },
-                equip_stamp_list = StampService.PadEquipStampList(
-                    savefile.EquippedStampList.Select(
+                equip_stamp_list = savefile.EquippedStampList.Any()
+                    ? savefile.EquippedStampList.Select(
                         this.mapper.Map<DbEquippedStamp, EquipStampList>
                     )
-                )
+                    : Enumerable
+                        .Range(1, StampService.EquipListSize)
+                        .Select(x => new EquipStampList() { stamp_id = 0, slot = x })
             };
 
         this.logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);

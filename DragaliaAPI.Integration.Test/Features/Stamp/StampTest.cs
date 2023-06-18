@@ -120,7 +120,7 @@ public class StampTest : TestFixture
                 new() { slot = 32, stamp_id = 10201 }
             };
 
-        var data = (
+        StampSetEquipStampData data = (
             await this.Client.PostMsgpack<StampSetEquipStampData>(
                 $"{Controller}/set_equip_stamp",
                 new StampSetEquipStampRequest() { stamp_list = requestList }

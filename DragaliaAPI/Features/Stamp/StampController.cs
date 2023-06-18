@@ -10,11 +10,17 @@ public class StampController : DragaliaControllerBase
 {
     private readonly IStampService stampService;
     private readonly IUpdateDataService updateDataService;
+    private readonly ILogger<StampController> logger;
 
-    public StampController(IStampService stampService, IUpdateDataService updateDataService)
+    public StampController(
+        IStampService stampService,
+        IUpdateDataService updateDataService,
+        ILogger<StampController> logger
+    )
     {
         this.stampService = stampService;
         this.updateDataService = updateDataService;
+        this.logger = logger;
     }
 
     [HttpPost("get_stamp")]
@@ -28,6 +34,8 @@ public class StampController : DragaliaControllerBase
     [HttpPost("set_equip_stamp")]
     public async Task<DragaliaResult> SetEquipStamp(StampSetEquipStampRequest request)
     {
+        this.logger.LogDebug("Updating stamp list to: {@stampList}", request.stamp_list);
+
         IEnumerable<EquipStampList> newStampList = await this.stampService.SetEquipStampList(
             request.stamp_list
         );

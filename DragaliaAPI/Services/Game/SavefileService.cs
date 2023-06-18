@@ -2,6 +2,7 @@
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -547,6 +548,7 @@ public class SavefileService : ISavefileService
         apiContext.PlayerUserData.Add(userData);
         await this.AddDefaultParties(deviceAccountId);
         await this.AddDefaultCharacters(deviceAccountId);
+        this.AddDefaultEquippedStamps();
         await this.apiContext.SaveChangesAsync();
     }
 
@@ -617,6 +619,23 @@ public class SavefileService : ISavefileService
     {
         await this.apiContext.PlayerCharaData.AddRangeAsync(
             DefaultSavefileData.Characters.Select(x => new DbPlayerCharaData(deviceAccountId, x))
+        );
+    }
+
+    private void AddDefaultEquippedStamps()
+    {
+        this.apiContext.EquippedStamps.AddRange(
+            Enumerable
+                .Range(1, StampService.EquipListSize)
+                .Select(
+                    x =>
+                        new DbEquippedStamp()
+                        {
+                            DeviceAccountId = this.playerIdentityService.AccountId,
+                            StampId = 0,
+                            Slot = x
+                        }
+                )
         );
     }
 
