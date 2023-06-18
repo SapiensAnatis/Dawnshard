@@ -108,8 +108,14 @@ public class FortRepository : IFortRepository
 
         foreach (FortPlants plant in plants)
         {
-            await AddToStorage(plant, 1);
-            await AddToStorage(plant, 1);
+            int currentAmount = await this.Builds.CountAsync(x => x.PlantId == plant);
+            if (currentAmount >= 2)
+                continue;
+
+            for (int i = currentAmount; i != 2; i++)
+            {
+                await AddToStorage(plant, 1);
+            }
         }
     }
 
