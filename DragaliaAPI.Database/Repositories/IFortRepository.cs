@@ -16,6 +16,7 @@ public interface IFortRepository
     Task UpdateFortMaximumCarpenter(int carpenterNum);
     Task<DbFortBuild> GetBuilding(long buildId);
     Task AddBuild(DbFortBuild build);
+    Task AddToStorage(FortPlants plant, int level);
     void DeleteBuild(DbFortBuild build);
     Task<DbFortBuild> UpgradeAtOnce(
         DbPlayerUserData userData,

@@ -17,7 +17,7 @@ public class StoryService : IStoryService
     private readonly IUnitRepository unitRepository;
     private readonly ILogger<StoryService> logger;
     private readonly ITutorialService tutorialService;
-    private readonly IFortService fortService;
+    private readonly IFortRepository fortRepository;
 
     private const int DragonStoryWyrmite = 25;
     private const int CastleStoryWyrmite = 50;
@@ -65,7 +65,7 @@ public class StoryService : IStoryService
         IInventoryRepository inventoryRepository,
         IUnitRepository unitRepository,
         ITutorialService tutorialService,
-        IFortService fortService
+        IFortRepository fortRepository
     )
     {
         this.storyRepository = storyRepository;
@@ -74,7 +74,7 @@ public class StoryService : IStoryService
         this.inventoryRepository = inventoryRepository;
         this.unitRepository = unitRepository;
         this.tutorialService = tutorialService;
-        this.fortService = fortService;
+        this.fortRepository = fortRepository;
     }
 
     #region Eligibility check methods
@@ -255,7 +255,7 @@ public class StoryService : IStoryService
 
         if (QuestStoryFortPlantRewards.TryGetValue(storyId, out FortPlants fortPlant))
         {
-            await this.fortService.BuildStart(fortPlant, -1, -1);
+            await this.fortRepository.AddToStorage(fortPlant, 1);
             rewardList.Add(
                 new()
                 {
