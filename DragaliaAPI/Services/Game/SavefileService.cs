@@ -395,6 +395,18 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
+            this.apiContext.EquippedStamps.AddRange(
+                savefile.equip_stamp_list.MapWithDeviceAccount<DbEquippedStamp>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbEquippedStamp step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             // TODO: unit sets
             // TODO much later: halidom, endeavours, kaleido data
 
@@ -477,6 +489,9 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerDragonGifts.RemoveRange(
             this.apiContext.PlayerDragonGifts.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.EquippedStamps.RemoveRange(
+            this.apiContext.EquippedStamps.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset()
@@ -509,6 +524,7 @@ public class SavefileService : ISavefileService
             .Include(x => x.MaterialList)
             .Include(x => x.WeaponSkinList)
             .Include(x => x.WeaponPassiveAbilityList)
+            .Include(x => x.EquippedStampList)
             .AsSplitQuery();
     }
 
