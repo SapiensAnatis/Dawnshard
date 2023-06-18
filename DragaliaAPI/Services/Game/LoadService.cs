@@ -102,9 +102,9 @@ public class LoadService : ILoadService
                     host = photonOptions.CurrentValue.ServerUrl,
                     app_id = string.Empty
                 },
-                equip_stamp_list = savefile.EquippedStampList.Select(
-                    this.mapper.Map<DbEquippedStamp, EquipStampList>
-                )
+                equip_stamp_list = savefile.EquippedStampList
+                    .Select(this.mapper.Map<DbEquippedStamp, EquipStampList>)
+                    .OrderBy(x => x.slot)
             };
 
         this.logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);
