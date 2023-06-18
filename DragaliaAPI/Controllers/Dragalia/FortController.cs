@@ -168,8 +168,12 @@ public class FortController : DragaliaControllerBase
     {
         FortBonusList bonusList = await bonusService.GetBonusList();
         IEnumerable<BuildList> builds = await this.fortService.GetBuildList();
-        BuildList halidom = builds.First(x => x.plant_id == FortPlants.TheHalidom);
-        BuildList smithy = builds.First(x => x.plant_id == FortPlants.Smithy);
+
+        BuildList halidom =
+            builds.FirstOrDefault(x => x.plant_id == FortPlants.TheHalidom)
+            ?? throw new InvalidOperationException("Missing Halidom building!");
+
+        BuildList? smithy = builds.FirstOrDefault(x => x.plant_id == FortPlants.Smithy);
 
         await this.fortService.CompleteAtOnce(request.payment_type, request.build_id);
 
@@ -182,7 +186,7 @@ public class FortController : DragaliaControllerBase
                 result = 1,
                 build_id = request.build_id,
                 current_fort_level = halidom.level,
-                current_fort_craft_level = smithy.level,
+                current_fort_craft_level = smithy?.level ?? 0,
                 fort_bonus_list = bonusList,
                 production_rp = StubData.ProductionRp,
                 production_st = StubData.ProductionSt,
