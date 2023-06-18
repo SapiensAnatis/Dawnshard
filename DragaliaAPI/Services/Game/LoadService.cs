@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
@@ -17,7 +18,7 @@ public class LoadService : ILoadService
     private readonly IMapper mapper;
     private readonly ILogger<LoadService> logger;
     private readonly IOptionsMonitor<PhotonOptions> photonOptions;
-    private readonly IStampService stampService;
+    private readonly IEnumerable<ISavefileUpdate> savefileUpdates;
 
     public LoadService(
         ISavefileService savefileService,
@@ -25,7 +26,7 @@ public class LoadService : ILoadService
         IMapper mapper,
         ILogger<LoadService> logger,
         IOptionsMonitor<PhotonOptions> photonOptions,
-        IStampService stampService
+        IEnumerable<ISavefileUpdate> savefileUpdates
     )
     {
         this.savefileService = savefileService;
@@ -33,7 +34,7 @@ public class LoadService : ILoadService
         this.mapper = mapper;
         this.logger = logger;
         this.photonOptions = photonOptions;
-        this.stampService = stampService;
+        this.savefileUpdates = savefileUpdates;
     }
 
     public async Task<LoadIndexData> BuildIndexData()
@@ -101,13 +102,9 @@ public class LoadService : ILoadService
                     host = photonOptions.CurrentValue.ServerUrl,
                     app_id = string.Empty
                 },
-                equip_stamp_list = savefile.EquippedStampList.Any()
-                    ? savefile.EquippedStampList.Select(
-                        this.mapper.Map<DbEquippedStamp, EquipStampList>
-                    )
-                    : Enumerable
-                        .Range(1, StampService.EquipListSize)
-                        .Select(x => new EquipStampList() { stamp_id = 0, slot = x })
+                equip_stamp_list = savefile.EquippedStampList.Select(
+                    this.mapper.Map<DbEquippedStamp, EquipStampList>
+                )
             };
 
         this.logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);

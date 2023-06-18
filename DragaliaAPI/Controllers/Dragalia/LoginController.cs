@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -18,14 +19,20 @@ public class LoginController : DragaliaControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
     private readonly IInventoryRepository inventoryRepository;
+    private readonly IUpdateDataService updateDataService;
+    private readonly ILogger<LoginController> logger;
 
     public LoginController(
         IUserDataRepository userDataRepository,
-        IInventoryRepository inventoryRepository
+        IInventoryRepository inventoryRepository,
+        IUpdateDataService updateDataService,
+        ILogger<LoginController> logger
     )
     {
         this.userDataRepository = userDataRepository;
         this.inventoryRepository = inventoryRepository;
+        this.updateDataService = updateDataService;
+        this.logger = logger;
     }
 
     [HttpPost]
@@ -42,7 +49,7 @@ public class LoginController : DragaliaControllerBase
     {
         // TODO: Implement daily login bonuses/notifications/resets
         DbPlayerUserData userData =
-            await userDataRepository.UserData.FirstAsync()
+            await userDataRepository.UserData.FirstOrDefaultAsync()
             ?? throw new DragaliaException(ResultCode.CommonDataNotFoundError);
 
         if (userData.LastLoginTime < DateTimeOffset.UtcNow.Date.AddHours(6))
@@ -52,8 +59,9 @@ public class LoginController : DragaliaControllerBase
 
         userData.LastLoginTime = DateTimeOffset.UtcNow;
 
-        await userDataRepository.SaveChangesAsync();
-        return Code(ResultCode.Success);
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+
+        return this.Ok(new LoginIndexData() { update_data_list = updateDataList });
     }
 
     [HttpPost]

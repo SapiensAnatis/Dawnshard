@@ -8,6 +8,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.SavefileUpdate;
 using Microsoft.Extensions.Options;
 using DragaliaAPI.Models.Options;
 
@@ -17,10 +18,12 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class LoadController : DragaliaControllerBase
 {
     private readonly ILoadService loadService;
+    private readonly ISavefileUpdateService savefileUpdateService;
 
-    public LoadController(ILoadService loadService)
+    public LoadController(ILoadService loadService, ISavefileUpdateService savefileUpdateService)
     {
         this.loadService = loadService;
+        this.savefileUpdateService = savefileUpdateService;
     }
 
 #if !TEST
@@ -28,6 +31,8 @@ public class LoadController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> Index()
     {
+        await this.savefileUpdateService.UpdateSavefile();
+
         LoadIndexData data = await loadService.BuildIndexData();
         return this.Ok(data);
     }

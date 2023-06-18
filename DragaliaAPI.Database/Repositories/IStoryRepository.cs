@@ -18,4 +18,6 @@ public interface IStoryRepository
     IQueryable<DbPlayerStoryState> UnitStories { get; }
 
     Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId);
+
+    Task<bool> HasReadQuestStory(int storyId);
 }
