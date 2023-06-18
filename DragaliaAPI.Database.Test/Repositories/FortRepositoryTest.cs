@@ -234,8 +234,6 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     {
         DbPlayerUserData userData = new() { DeviceAccountId = "wyrmite", Crystal = 1000 };
 
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("wyrmite");
-
         DbFortBuild build =
             new()
             {
@@ -256,8 +254,6 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     public async Task UpgradeAtOnce_HustleHammers_ConsumesPayment()
     {
         DbPlayerUserData userData = new() { DeviceAccountId = "hustler", BuildTimePoint = 4 };
-
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("hustler");
 
         DbFortBuild build =
             new()
@@ -291,8 +287,6 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
                 Crystal = 0,
                 BuildTimePoint = 0
             };
-
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("broke");
 
         int buildId = Random.Shared.Next(500, 600);
         DbFortBuild build =
