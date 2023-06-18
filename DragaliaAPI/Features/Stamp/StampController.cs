@@ -42,6 +42,8 @@ public class StampController : DragaliaControllerBase
 
         await this.updateDataService.SaveChangesAsync();
 
-        return this.Ok(new StampSetEquipStampData() { equip_stamp_list = newStampList });
+        return this.Ok(
+            new StampSetEquipStampData() { equip_stamp_list = newStampList.OrderBy(x => x.slot) }
+        );
     }
 }
