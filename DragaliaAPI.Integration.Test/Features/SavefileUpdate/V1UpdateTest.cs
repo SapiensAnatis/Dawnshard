@@ -129,4 +129,15 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             u => u.SetProperty(e => e.TutorialStatus, 0)
         );
     }
+
+    [Fact]
+    public async Task V1Update_StoryAndTutorialIncomplete_DoesNothing()
+    {
+        LoadIndexData data = (
+            await this.Client.PostMsgpack<LoadIndexData>("/load/index", new LoadIndexRequest())
+        ).data;
+
+        data.build_list.Should().BeEmpty();
+        this.ApiContext.PlayerFortBuilds.Should().BeEmpty();
+    }
 }
