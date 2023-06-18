@@ -71,16 +71,20 @@ public class FortRepository : IFortRepository
     {
         this.logger.LogInformation("Adding smithy to halidom.");
 
-        await this.apiContext.PlayerFortBuilds.AddAsync(
-            new DbFortBuild
-            {
-                DeviceAccountId = this.playerIdentityService.AccountId,
-                PlantId = FortPlants.Smithy,
-                PositionX = 21,
-                PositionZ = 3,
-                Level = 1
-            }
-        );
+        if (!await this.Builds.AnyAsync(x => x.PlantId == FortPlants.Smithy))
+        {
+            this.logger.LogDebug("Initializing Smithy.");
+            await this.apiContext.PlayerFortBuilds.AddAsync(
+                new DbFortBuild
+                {
+                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    PlantId = FortPlants.Smithy,
+                    PositionX = 21,
+                    PositionZ = 3,
+                    Level = 1
+                }
+            );
+        }
     }
 
     public async Task AddDojos()
@@ -100,18 +104,18 @@ public class FortRepository : IFortRepository
             FortPlants.WandDojo
         };
 
+        this.logger.LogDebug("Granting dojos.");
+
         foreach (FortPlants plant in plants)
         {
-            await AddBuild(
-                new DbFortBuild()
-                {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
-                    PlantId = plant,
-                    Level = 1,
-                    PositionX = -1,
-                    PositionZ = -1
-                }
-            );
+            int currentAmount = await this.Builds.CountAsync(x => x.PlantId == plant);
+            if (currentAmount >= 2)
+                continue;
+
+            for (int i = currentAmount; i != 2; i++)
+            {
+                await AddToStorage(plant, 1);
+            }
         }
     }
 
@@ -193,6 +197,23 @@ public class FortRepository : IFortRepository
     public async Task AddBuild(DbFortBuild build)
     {
         await apiContext.PlayerFortBuilds.AddAsync(build);
+    }
+
+    public async Task AddToStorage(FortPlants plant, int level)
+    {
+        await this.apiContext.PlayerFortBuilds.AddAsync(
+            new DbFortBuild
+            {
+                DeviceAccountId = this.playerIdentityService.AccountId,
+                PlantId = plant,
+                Level = level,
+                PositionX = -1,
+                PositionZ = -1,
+                BuildStartDate = DateTimeOffset.UnixEpoch,
+                BuildEndDate = DateTimeOffset.UnixEpoch,
+                LastIncomeDate = DateTimeOffset.UnixEpoch
+            }
+        );
     }
 
     public void DeleteBuild(DbFortBuild build)

@@ -17,7 +17,7 @@ public class StoryServiceTest
     private readonly Mock<IUnitRepository> mockUnitRepository;
     private readonly Mock<ILogger<StoryService>> mockLogger;
     private readonly Mock<ITutorialService> mockTutorialService;
-    private readonly Mock<IFortService> mockFortService;
+    private readonly Mock<IFortRepository> mockFortRepository;
 
     private readonly IStoryService storyService;
 
@@ -29,7 +29,7 @@ public class StoryServiceTest
         this.mockUnitRepository = new(MockBehavior.Strict);
         this.mockLogger = new();
         this.mockTutorialService = new(MockBehavior.Strict);
-        this.mockFortService = new(MockBehavior.Strict);
+        this.mockFortRepository = new(MockBehavior.Strict);
 
         this.storyService = new StoryService(
             mockStoryRepository.Object,
@@ -38,7 +38,7 @@ public class StoryServiceTest
             mockInventoryRepository.Object,
             mockUnitRepository.Object,
             mockTutorialService.Object,
-            mockFortService.Object
+            mockFortRepository.Object
         );
     }
 
@@ -340,9 +340,9 @@ public class StoryServiceTest
             .Setup(x => x.OnStoryQuestRead(1000607))
             .Returns(Task.CompletedTask);
 
-        this.mockFortService
-            .Setup(x => x.BuildStart(FortPlants.WindDracolith, -1, -1))
-            .ReturnsAsync(new DbFortBuild() { DeviceAccountId = string.Empty });
+        this.mockFortRepository
+            .Setup(x => x.AddToStorage(FortPlants.WindDracolith, 1))
+            .Returns(Task.CompletedTask);
 
         (await this.storyService.ReadStory(StoryTypes.Quest, 1000607))
             .Should()
@@ -359,7 +359,7 @@ public class StoryServiceTest
                 }
             );
 
-        this.mockFortService.VerifyAll();
+        this.mockFortRepository.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockStoryRepository.VerifyAll();
     }
