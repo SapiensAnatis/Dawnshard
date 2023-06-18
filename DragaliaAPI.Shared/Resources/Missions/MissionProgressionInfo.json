@@ -311,6 +311,24 @@
             "_Id": 10020401
           }
         ]
+      },
+      {
+        "_Parameter": 1000101,
+        "_Missions": [
+          {
+            "_Type": "Drill",
+            "_Id": 100100
+          }
+        ]
+      },
+      {
+        "_Parameter": 1000106,
+        "_Missions": [
+          {
+            "_Type": "Drill",
+            "_Id": 100200
+          }
+        ]
       }
     ]
   },
