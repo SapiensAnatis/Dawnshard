@@ -62,13 +62,6 @@ builder.Services.AddSwaggerGen(config =>
             Description = "API for storing room state received from Photon webhooks."
         }
     );
-
-    config.IncludeXmlComments(
-        Path.Join(AppContext.BaseDirectory, "DragaliaAPI.Photon.StateManager.xml"),
-        includeControllerXmlComments: true
-    );
-
-    config.IncludeXmlComments(Path.Join(AppContext.BaseDirectory, "DragaliaAPI.Photon.Shared.xml"));
 });
 
 // Don't attempt to connect to Redis when running tests

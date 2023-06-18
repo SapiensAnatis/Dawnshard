@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Models.Generated;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 

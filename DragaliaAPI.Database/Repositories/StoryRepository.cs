@@ -68,4 +68,7 @@ public class StoryRepository : IStoryRepository
 
         return state;
     }
+
+    public async Task<bool> HasReadQuestStory(int storyId) =>
+        await this.QuestStories.AnyAsync(x => x.StoryId == storyId && x.State == StoryState.Read);
 }

@@ -2,6 +2,7 @@
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Nintendo;
@@ -23,12 +24,15 @@ public class SavefileService : ISavefileService
     private const int RecheckLockMs = 1000;
     private const int LockFailsafeExpiryMin = 5;
 
+    private readonly int maxSavefileVersion;
+
     public SavefileService(
         ApiContext apiContext,
         IDistributedCache cache,
         IMapper mapper,
         ILogger<SavefileService> logger,
-        IPlayerIdentityService playerIdentityService
+        IPlayerIdentityService playerIdentityService,
+        IEnumerable<ISavefileUpdate> savefileUpdates
     )
     {
         this.apiContext = apiContext;
@@ -36,6 +40,9 @@ public class SavefileService : ISavefileService
         this.mapper = mapper;
         this.logger = logger;
         this.playerIdentityService = playerIdentityService;
+
+        this.maxSavefileVersion =
+            savefileUpdates.MaxBy(x => x.SavefileVersion)?.SavefileVersion ?? 0;
     }
 
     private static class RedisSchema
@@ -52,9 +59,8 @@ public class SavefileService : ISavefileService
         };
 
     /// <summary>
-    /// Thread safe version of <see cref="Import(string, LoadIndexData)"/>.
+    /// Thread safe version of <see cref="Import(LoadIndexData)"/>.
     /// </summary>
-    /// <param name="deviceAccountId">The primary key to import for.</param>
     /// <param name="savefile">The savefile to import/</param>
     /// <returns>The task.</returns>
     public async Task ThreadSafeImport(LoadIndexData savefile)
@@ -88,11 +94,10 @@ public class SavefileService : ISavefileService
 
     /// <summary>
     /// Import a savefile.
-    /// <remarks>Not thread safe if called for the same account id from two different threads.</remarks>
     /// </summary>
-    /// <param name="deviceAccountId">Primary key to import for.</param>
     /// <param name="savefile">Savefile data.</param>
     /// <returns>The task.</returns>
+    /// <remarks>Not thread safe if called for the same account id from two different threads.</remarks>
     public async Task Import(LoadIndexData savefile)
     {
         string deviceAccountId = this.playerIdentityService.AccountId;
@@ -536,7 +541,9 @@ public class SavefileService : ISavefileService
         this.logger.LogInformation("Creating new savefile for account ID {id}", deviceAccountId);
 
         this.Delete();
-        this.apiContext.Players.Add(new() { AccountId = deviceAccountId });
+        this.apiContext.Players.Add(
+            new() { AccountId = deviceAccountId, SavefileVersion = this.maxSavefileVersion }
+        );
 
         DbPlayerUserData userData =
             new(deviceAccountId) {
