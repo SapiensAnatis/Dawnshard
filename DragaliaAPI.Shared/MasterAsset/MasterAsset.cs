@@ -113,4 +113,9 @@ public static class MasterAsset
     /// </summary>
     public static readonly MasterAssetData<AbilityCrests, AbilityCrest> AbilityCrest =
         new("AbilityCrest.json", x => x.Id);
+
+    /// <summary>
+    /// Contains information about stickers.
+    /// </summary>
+    public static readonly MasterAssetData<int, Stamp> StampData = new("StampData.json", x => x.Id);
 }
