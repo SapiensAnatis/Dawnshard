@@ -202,7 +202,10 @@ public class FortRepository : IFortRepository
                 PlantId = plant,
                 Level = level,
                 PositionX = -1,
-                PositionZ = -1
+                PositionZ = -1,
+                BuildStartDate = DateTimeOffset.UnixEpoch,
+                BuildEndDate = DateTimeOffset.UnixEpoch,
+                LastIncomeDate = DateTimeOffset.UnixEpoch
             }
         );
     }
