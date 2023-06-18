@@ -126,7 +126,7 @@ public class MissionProgressionService : IMissionProgressionService
                     if (progressingMission.Progress == mission.CompleteValue)
                     {
                         this.logger.LogDebug("Completed quest {questId}", progressingMission.Id);
-                        progressingMission.State = MissionState.Receivable;
+                        progressingMission.State = MissionState.Completed;
                     }
                     else
                     {

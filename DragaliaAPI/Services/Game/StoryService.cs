@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -18,6 +19,7 @@ public class StoryService : IStoryService
     private readonly ILogger<StoryService> logger;
     private readonly ITutorialService tutorialService;
     private readonly IFortRepository fortRepository;
+    private readonly IMissionProgressionService missionProgressionService;
 
     private const int DragonStoryWyrmite = 25;
     private const int CastleStoryWyrmite = 50;
@@ -65,7 +67,8 @@ public class StoryService : IStoryService
         IInventoryRepository inventoryRepository,
         IUnitRepository unitRepository,
         ITutorialService tutorialService,
-        IFortRepository fortRepository
+        IFortRepository fortRepository,
+        IMissionProgressionService missionProgressionService
     )
     {
         this.storyRepository = storyRepository;
@@ -75,6 +78,7 @@ public class StoryService : IStoryService
         this.unitRepository = unitRepository;
         this.tutorialService = tutorialService;
         this.fortRepository = fortRepository;
+        this.missionProgressionService = missionProgressionService;
     }
 
     #region Eligibility check methods
@@ -219,6 +223,7 @@ public class StoryService : IStoryService
     private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadQuestStory(int storyId)
     {
         await this.tutorialService.OnStoryQuestRead(storyId);
+        this.missionProgressionService.OnQuestCleared(storyId);
 
         await this.userDataRepository.GiveWyrmite(QuestStoryWyrmite);
         List<AtgenBuildEventRewardEntityList> rewardList =

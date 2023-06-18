@@ -4,6 +4,6 @@ public enum MissionState
 {
     Invalid = -1,
     InProgress,
-    Receivable,
-    Completed
+    Completed,
+    Claimed
 }

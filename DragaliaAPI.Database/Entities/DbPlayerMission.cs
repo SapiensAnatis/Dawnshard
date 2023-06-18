@@ -28,10 +28,10 @@ public class DbPlayerMission : IDbHasAccountId
     public MissionState State { get; set; } = MissionState.Invalid;
 
     [Column("StartDate")]
-    public DateTimeOffset Start { get; set; }
+    public DateTimeOffset Start { get; set; } = DateTimeOffset.UnixEpoch;
 
     [Column("EndDate")]
-    public DateTimeOffset End { get; set; }
+    public DateTimeOffset End { get; set; } = DateTimeOffset.UnixEpoch;
 
     [Column("Type")]
     [TypeConverter(typeof(EnumConverter))]

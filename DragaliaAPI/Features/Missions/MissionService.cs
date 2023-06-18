@@ -142,7 +142,7 @@ public class MissionService : IMissionService
                 break;
         }
 
-        dbMission.State = MissionState.Completed;
+        dbMission.State = MissionState.Claimed;
     }
 
     public async Task RedeemMissions(IEnumerable<int> ids)
@@ -262,8 +262,8 @@ public class MissionService : IMissionService
             .ToListAsync();
 
         int totalCount = allMissions.Count;
-        int completedCount = allMissions.Count(x => x.State == MissionState.Completed);
-        int receivableRewardCount = allMissions.Count(x => x.State == MissionState.Receivable);
+        int completedCount = allMissions.Count(x => x.State >= MissionState.Completed);
+        int receivableRewardCount = allMissions.Count(x => x.State == MissionState.Completed);
 
         return new AtgenNormalMissionNotice
         {

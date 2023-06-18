@@ -56,11 +56,11 @@ public class MissionController : DragaliaControllerBase
         response.drill_mission_list = drillMissions.Select(
             x => new DrillMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
         );
-        response.drill_mission_group_list = drillMissions
-            .Where(x => x.State == MissionState.InProgress)
+
+        /*response.drill_mission_group_list = drillMissions
             .Select(x => x.GroupId)
             .Distinct()
-            .Select(x => new DrillMissionGroupList(x));
+            .Select(x => new DrillMissionGroupList(x));*/
 
         return Ok(response);
     }
@@ -115,24 +115,26 @@ public class MissionController : DragaliaControllerBase
 
         await this.missionService.RedeemMissions(request.drill_mission_id_list);
 
-        IEnumerable<DbPlayerMission> missions = await this.missionRepository
-            .GetMissionsByType(MissionType.Drill)
-            .ToListAsync();
-
         response.drill_mission_group_complete_reward_list =
             await this.missionService.TryRedeemDrillMissionGroups(
                 request.drill_mission_group_id_list
             );
+
+        response.update_data_list = await this.updateDataService.SaveChangesAsync();
+
+        IEnumerable<DbPlayerMission> missions = await this.missionRepository
+            .GetMissionsByType(MissionType.Drill)
+            .ToListAsync();
+
         response.drill_mission_list = missions.Select(
             x => new DrillMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
         );
-        response.drill_mission_group_list = missions
-            .Where(x => x.State == MissionState.InProgress)
-            .Select(x => x.GroupId)
-            .Distinct()
-            .Select(x => new DrillMissionGroupList(x));
 
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.converted_entity_list = Array.Empty<ConvertedEntityList>();
+        response.entity_result = new EntityResult()
+        {
+            converted_entity_list = Array.Empty<ConvertedEntityList>(),
+        };
 
         return Ok(response);
     }
