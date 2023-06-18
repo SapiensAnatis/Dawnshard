@@ -68,6 +68,8 @@ public class StampTest : TestFixture
             new StampSetEquipStampRequest() { stamp_list = requestList }
         );
 
+        this.ApiContext.ChangeTracker.Clear();
+
         this.ApiContext.EquippedStamps
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .Should()
