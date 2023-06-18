@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+﻿using System.Text.Json.Serialization;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
@@ -7,4 +8,8 @@ public record MainStoryMissionGroupRewards(
     IEnumerable<MainStoryMissionGroupReward> Rewards
 );
 
-public record MainStoryMissionGroupReward(EntityTypes Type, int Id, int Quantity);
+public record MainStoryMissionGroupReward(
+    [property: JsonConverter(typeof(JsonStringEnumConverter))] EntityTypes Type,
+    int Id,
+    int Quantity
+);

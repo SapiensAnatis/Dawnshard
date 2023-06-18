@@ -7,7 +7,7 @@ namespace DragaliaAPI.Features.Missions;
 
 public interface IMissionService
 {
-    Task<DbPlayerMission> StartMission(MissionType type, int id);
+    Task<DbPlayerMission> StartMission(MissionType type, int id, int groupId = 0);
 
     Task<(
         IEnumerable<MainStoryMissionGroupReward>,
@@ -15,8 +15,8 @@ public interface IMissionService
     )> UnlockMainMissionGroup(int groupId);
     Task<IEnumerable<DbPlayerMission>> UnlockDrillMissionGroup(int groupId);
 
-    Task RedeemMission(int id);
-    Task RedeemMissions(IEnumerable<int> ids);
+    Task RedeemMission(MissionType type, int id);
+    Task RedeemMissions(MissionType type, IEnumerable<int> ids);
 
     Task<IEnumerable<AtgenBuildEventRewardEntityList>> TryRedeemDrillMissionGroups(
         IEnumerable<int> groupIds

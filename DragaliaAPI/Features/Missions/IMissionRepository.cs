@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 namespace DragaliaAPI.Features.Missions;
@@ -10,17 +9,14 @@ public interface IMissionRepository
 
     IQueryable<DbPlayerMission> GetMissionsByType(MissionType type);
 
-    Task<DbPlayerMission> GetMissionByIdAsync(int id);
+    Task<DbPlayerMission> GetMissionByIdAsync(MissionType type, int id);
     Task<ILookup<MissionType, DbPlayerMission>> GetAllMissionsPerTypeAsync();
 
-    Task<DbPlayerMission> AddMission(
-        int id,
+    Task<DbPlayerMission> AddMissionAsync(
         MissionType type,
+        int id,
         DateTimeOffset startTime = default,
         DateTimeOffset endTime = default,
         int groupId = -1
     );
-
-    Task SetProgress(int id, int progress);
-    Task SetState(int id, MissionState state);
 }

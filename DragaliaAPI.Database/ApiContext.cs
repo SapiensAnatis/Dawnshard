@@ -67,7 +67,17 @@ public class ApiContext : DbContext
 
         modelBuilder.Entity<DbQuest>().HasKey(e => new { e.DeviceAccountId, e.QuestId });
 
-        modelBuilder.Entity<DbPlayerMission>().HasKey(e => new { e.DeviceAccountId, e.Id });
+        modelBuilder
+            .Entity<DbPlayerMission>()
+            .HasKey(
+                e =>
+                    new
+                    {
+                        e.DeviceAccountId,
+                        e.Type,
+                        e.Id
+                    }
+            );
 
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 

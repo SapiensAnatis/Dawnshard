@@ -30,10 +30,11 @@ public class MissionRepository : IMissionRepository
         return this.Missions.Where(x => x.Type == type);
     }
 
-    public async Task<DbPlayerMission> GetMissionByIdAsync(int id)
+    public async Task<DbPlayerMission> GetMissionByIdAsync(MissionType type, int id)
     {
         return await this.apiContext.PlayerMissions.FindAsync(
                 this.playerIdentityService.AccountId,
+                type,
                 id
             ) ?? throw new DragaliaException(ResultCode.MissionIdNotFound, "Mission not found");
     }
@@ -43,17 +44,20 @@ public class MissionRepository : IMissionRepository
         return (await Missions.ToListAsync()).ToLookup(x => x.Type);
     }
 
-    public async Task<DbPlayerMission> AddMission(
-        int id,
+    public async Task<DbPlayerMission> AddMissionAsync(
         MissionType type,
+        int id,
         DateTimeOffset startTime = default,
         DateTimeOffset endTime = default,
         int groupId = -1
     )
     {
         if (
-            await this.apiContext.PlayerMissions.FindAsync(this.playerIdentityService.AccountId, id)
-            != null
+            await this.apiContext.PlayerMissions.FindAsync(
+                this.playerIdentityService.AccountId,
+                type,
+                id
+            ) != null
         )
             throw new DragaliaException(ResultCode.CommonDbError, "Mission already exists");
 
@@ -64,24 +68,12 @@ public class MissionRepository : IMissionRepository
                     DeviceAccountId = this.playerIdentityService.AccountId,
                     Id = id,
                     Type = type,
-                    Start = startTime,
-                    End = endTime,
+                    Start = startTime == default ? DateTimeOffset.UnixEpoch : startTime,
+                    End = endTime == default ? DateTimeOffset.MinValue : endTime,
                     State = MissionState.InProgress,
                     GroupId = groupId
                 }
             )
             .Entity;
-    }
-
-    public async Task SetProgress(int id, int progress)
-    {
-        DbPlayerMission mission = await GetMissionByIdAsync(id);
-        mission.Progress = progress;
-    }
-
-    public async Task SetState(int id, MissionState state)
-    {
-        DbPlayerMission mission = await GetMissionByIdAsync(id);
-        mission.State = state;
     }
 }

@@ -17,24 +17,33 @@ public class MissionService : IMissionService
 {
     private readonly ILogger<MissionService> logger;
     private readonly IMissionRepository missionRepository;
+    private readonly IMissionInitialProgressionService missionInitialProgressionService;
 
     private readonly IRewardService rewardService;
 
     public MissionService(
         ILogger<MissionService> logger,
         IMissionRepository missionRepository,
-        IRewardService rewardService
+        IRewardService rewardService,
+        IMissionInitialProgressionService missionInitialProgressionService
     )
     {
         this.logger = logger;
         this.missionRepository = missionRepository;
         this.rewardService = rewardService;
+        this.missionInitialProgressionService = missionInitialProgressionService;
     }
 
-    public async Task<DbPlayerMission> StartMission(MissionType type, int id)
+    public async Task<DbPlayerMission> StartMission(MissionType type, int id, int groupId = 0)
     {
         logger.LogInformation("Starting mission {missionId} ({missionType})", id, type);
-        return await missionRepository.AddMission(id, type);
+        DbPlayerMission mission = await missionRepository.AddMissionAsync(
+            type,
+            id,
+            groupId: groupId
+        );
+        await this.missionInitialProgressionService.GetInitialMissionProgress(mission);
+        return mission;
     }
 
     public async Task<(
@@ -59,13 +68,7 @@ public class MissionService : IMissionService
         List<DbPlayerMission> dbMissions = new();
         foreach (MainStoryMission mission in missions)
         {
-            dbMissions.Add(
-                await missionRepository.AddMission(
-                    mission.Id,
-                    MissionType.MainStory,
-                    groupId: groupId
-                )
-            );
+            dbMissions.Add(await StartMission(MissionType.MainStory, mission.Id, groupId: groupId));
         }
 
         if (rewards.Count > 0)
@@ -94,19 +97,17 @@ public class MissionService : IMissionService
         List<DbPlayerMission> dbMissions = new();
         foreach (DrillMission mission in missions)
         {
-            dbMissions.Add(
-                await missionRepository.AddMission(mission.Id, MissionType.Drill, groupId: groupId)
-            );
+            dbMissions.Add(await StartMission(MissionType.Drill, mission.Id, groupId: groupId));
         }
 
         return dbMissions;
     }
 
-    public async Task RedeemMission(int id)
+    public async Task RedeemMission(MissionType type, int id)
     {
         logger.LogInformation("Redeeming mission {missionId}", id);
 
-        DbPlayerMission dbMission = await missionRepository.GetMissionByIdAsync(id);
+        DbPlayerMission dbMission = await missionRepository.GetMissionByIdAsync(type, id);
         if (dbMission.State != MissionState.Completed)
         {
             throw new DragaliaException(
@@ -145,11 +146,11 @@ public class MissionService : IMissionService
         dbMission.State = MissionState.Claimed;
     }
 
-    public async Task RedeemMissions(IEnumerable<int> ids)
+    public async Task RedeemMissions(MissionType type, IEnumerable<int> ids)
     {
         foreach (int id in ids)
         {
-            await RedeemMission(id);
+            await RedeemMission(type, id);
         }
     }
 
@@ -192,6 +193,7 @@ public class MissionService : IMissionService
         DbPlayerMission? firstMainStoryMission = await this.missionRepository
             .GetMissionsByType(MissionType.MainStory)
             .FirstOrDefaultAsync();
+
         if (firstMainStoryMission == null)
             return new CurrentMainStoryMission();
 

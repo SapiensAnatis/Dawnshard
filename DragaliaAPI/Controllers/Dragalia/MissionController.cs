@@ -57,11 +57,6 @@ public class MissionController : DragaliaControllerBase
             x => new DrillMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
         );
 
-        /*response.drill_mission_group_list = drillMissions
-            .Select(x => x.GroupId)
-            .Distinct()
-            .Select(x => new DrillMissionGroupList(x));*/
-
         return Ok(response);
     }
 
@@ -74,6 +69,7 @@ public class MissionController : DragaliaControllerBase
 
         IEnumerable<DbPlayerMission> drillMissions =
             await this.missionService.UnlockDrillMissionGroup(request.drill_mission_group_id);
+
         response.drill_mission_list = drillMissions.Select(
             x => new DrillMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
         );
@@ -83,7 +79,7 @@ public class MissionController : DragaliaControllerBase
         return Ok(response);
     }
 
-    [HttpPost("unlock_main_story_mission_group")]
+    [HttpPost("unlock_main_story_group")]
     public async Task<DragaliaResult> UnlockMainStoryMissionGroup(
         MissionUnlockMainStoryGroupRequest request
     )
@@ -113,7 +109,7 @@ public class MissionController : DragaliaControllerBase
     {
         MissionReceiveDrillRewardData response = new();
 
-        await this.missionService.RedeemMissions(request.drill_mission_id_list);
+        await this.missionService.RedeemMissions(MissionType.Drill, request.drill_mission_id_list);
 
         response.drill_mission_group_complete_reward_list =
             await this.missionService.TryRedeemDrillMissionGroups(
@@ -130,10 +126,10 @@ public class MissionController : DragaliaControllerBase
             x => new DrillMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
         );
 
-        response.converted_entity_list = Array.Empty<ConvertedEntityList>();
-        response.entity_result = new EntityResult()
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.entity_result = new()
         {
-            converted_entity_list = Array.Empty<ConvertedEntityList>(),
+            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
         };
 
         return Ok(response);
@@ -146,10 +142,18 @@ public class MissionController : DragaliaControllerBase
     {
         MissionReceiveMainStoryRewardData response = new();
 
-        await this.missionService.RedeemMissions(request.main_story_mission_id_list);
+        await this.missionService.RedeemMissions(
+            MissionType.MainStory,
+            request.main_story_mission_id_list
+        );
 
         await BuildNormalResponse(response);
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.entity_result = new()
+        {
+            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
+        };
 
         return Ok(response);
     }
@@ -159,10 +163,18 @@ public class MissionController : DragaliaControllerBase
     {
         MissionReceivePeriodRewardData response = new();
 
-        await this.missionService.RedeemMissions(request.period_mission_id_list);
+        await this.missionService.RedeemMissions(
+            MissionType.Period,
+            request.period_mission_id_list
+        );
 
         await BuildNormalResponse(response);
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.entity_result = new()
+        {
+            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
+        };
 
         return Ok(response);
     }
@@ -172,10 +184,18 @@ public class MissionController : DragaliaControllerBase
     {
         MissionReceiveNormalRewardData response = new();
 
-        await this.missionService.RedeemMissions(request.normal_mission_id_list);
+        await this.missionService.RedeemMissions(
+            MissionType.Normal,
+            request.normal_mission_id_list
+        );
 
         await BuildNormalResponse(response);
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.entity_result = new()
+        {
+            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
+        };
 
         return Ok(response);
     }
@@ -185,10 +205,15 @@ public class MissionController : DragaliaControllerBase
     {
         MissionReceiveAlbumRewardData response = new();
 
-        await this.missionService.RedeemMissions(request.album_mission_id_list);
+        await this.missionService.RedeemMissions(MissionType.Album, request.album_mission_id_list);
 
         await BuildNormalResponse(response);
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.entity_result = new()
+        {
+            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
+        };
 
         return Ok(response);
     }
@@ -200,10 +225,18 @@ public class MissionController : DragaliaControllerBase
     {
         MissionReceiveMemoryEventRewardData response = new();
 
-        await this.missionService.RedeemMissions(request.memory_event_mission_id_list);
+        await this.missionService.RedeemMissions(
+            MissionType.MemoryEvent,
+            request.memory_event_mission_id_list
+        );
 
         await BuildNormalResponse(response);
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.entity_result = new()
+        {
+            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
+        };
 
         return Ok(response);
     }
@@ -215,10 +248,18 @@ public class MissionController : DragaliaControllerBase
     {
         MissionReceiveBeginnerRewardData response = new();
 
-        await this.missionService.RedeemMissions(request.beginner_mission_id_list);
+        await this.missionService.RedeemMissions(
+            MissionType.Beginner,
+            request.beginner_mission_id_list
+        );
 
         await BuildNormalResponse(response);
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.entity_result = new()
+        {
+            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
+        };
 
         return Ok(response);
     }
@@ -230,10 +271,18 @@ public class MissionController : DragaliaControllerBase
     {
         MissionReceiveSpecialRewardData response = new();
 
-        await this.missionService.RedeemMissions(request.special_mission_id_list);
+        await this.missionService.RedeemMissions(
+            MissionType.Special,
+            request.special_mission_id_list
+        );
 
         await BuildNormalResponse(response);
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.entity_result = new()
+        {
+            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
+        };
 
         return Ok(response);
     }

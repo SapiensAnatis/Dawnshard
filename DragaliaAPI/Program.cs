@@ -111,7 +111,8 @@ builder.Services
     .AddScoped<IMissionRepository, MissionRepository>()
     .AddScoped<IMissionService, MissionService>()
     .AddScoped<IRewardService, RewardService>()
-    .AddScoped<IMissionProgressionService, MissionProgressionService>();
+    .AddScoped<IMissionProgressionService, MissionProgressionService>()
+    .AddScoped<IMissionInitialProgressionService, MissionInitialProgressionService>();
 
 builder.Services.AddHttpClient<IBaasApi, BaasApi>();
 builder.Services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>
