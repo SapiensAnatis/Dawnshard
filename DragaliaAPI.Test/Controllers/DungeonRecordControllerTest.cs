@@ -101,6 +101,8 @@ public class DungeonRecordControllerTest
     [Fact]
     public async Task QuestIdAndPartyDataAppearInResponse()
     {
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(100010101));
+
         this.mockQuestRepository
             .SetupGet(x => x.Quests)
             .Returns(
@@ -148,6 +150,8 @@ public class DungeonRecordControllerTest
     [Fact]
     public async Task BestClearDisplaysTimeAsBestTime()
     {
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(100010101));
+
         this.mockQuestRepository
             .SetupGet(x => x.Quests)
             .Returns(
@@ -206,6 +210,8 @@ public class DungeonRecordControllerTest
     [Fact]
     public async Task SlowerClearDoesNotDisplayTimeAsBestTime()
     {
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(100010101));
+
         this.mockQuestRepository
             .SetupGet(x => x.Quests)
             .Returns(
@@ -261,6 +267,8 @@ public class DungeonRecordControllerTest
     [Fact]
     public async Task FirstClearFullClearGivesAllMissions()
     {
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(100010101));
+
         this.mockQuestRepository
             .SetupGet(x => x.Quests)
             .Returns(
@@ -335,6 +343,8 @@ public class DungeonRecordControllerTest
     [Fact]
     public async Task NotFirstClearFullClearGivesAllMissionsButNotFirstClear()
     {
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(100010101));
+
         this.mockQuestRepository
             .SetupGet(x => x.Quests)
             .Returns(
@@ -409,6 +419,8 @@ public class DungeonRecordControllerTest
     [ClassData(typeof(MissionCompletionGenerator))]
     public async Task VariousPreviousMissionClearStatusesGiveCorrectMissions(bool[] missions)
     {
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(100010101));
+
         this.mockQuestRepository
             .SetupGet(x => x.Quests)
             .Returns(
@@ -484,6 +496,8 @@ public class DungeonRecordControllerTest
     [Fact]
     public async Task AllMissionsPreviouslyClearedDoesntGiveRewards()
     {
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(100010101));
+
         this.mockQuestRepository
             .SetupGet(x => x.Quests)
             .Returns(

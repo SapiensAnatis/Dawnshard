@@ -55,6 +55,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     {
         string deviceAccountId = "some_id";
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(deviceAccountId);
+        this.mockMissionProgressionService
+            .Setup(x => x.ProcessMissionEvents())
+            .Returns(Task.CompletedTask);
 
         DbPlayerUserData userData = new(deviceAccountId);
 
@@ -206,6 +209,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     public async Task SaveChangesAsync_RetrievesIdentityColumns()
     {
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+        this.mockMissionProgressionService
+            .Setup(x => x.ProcessMissionEvents())
+            .Returns(Task.CompletedTask);
 
         // This test is bullshit because in-mem works differently to an actual database in this regard
         this.fixture.ApiContext.AddRange(
@@ -227,6 +233,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     public async Task SaveChangesAsync_NullIfNoUpdates()
     {
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+        this.mockMissionProgressionService
+            .Setup(x => x.ProcessMissionEvents())
+            .Returns(Task.CompletedTask);
 
         UpdateDataList list = await this.updateDataService.SaveChangesAsync();
 
@@ -242,6 +251,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     public async Task SaveChangesAsync_NoDataFromOtherAccounts()
     {
         this.fixture.ApiContext.PlayerCharaData.Add(new("id 1", Charas.GalaZethia));
+        this.mockMissionProgressionService
+            .Setup(x => x.ProcessMissionEvents())
+            .Returns(Task.CompletedTask);
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id 2");
 
@@ -252,6 +264,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     public async Task SaveChangesAsync_NullAfterSave()
     {
         this.fixture.ApiContext.PlayerCharaData.Add(new(DeviceAccountId, Charas.HalloweenLowen));
+        this.mockMissionProgressionService
+            .Setup(x => x.ProcessMissionEvents())
+            .Returns(Task.CompletedTask);
 
         await this.fixture.ApiContext.SaveChangesAsync();
 

@@ -1094,6 +1094,8 @@ public class AbilityCrestServiceTest
         int amount
     )
     {
+        this.mockMissionProgressionService.Setup(x => x.OnWyrmprintAugmentBuildup(augmentType));
+
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);
         AtgenPlusCountParamsList augmentParams =
             new() { plus_count = amount, plus_count_type = augmentType };

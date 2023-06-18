@@ -19,7 +19,7 @@ public class StoryServiceTest
     private readonly Mock<ILogger<StoryService>> mockLogger;
     private readonly Mock<ITutorialService> mockTutorialService;
     private readonly Mock<IFortRepository> mockFortRepository;
-    private readonly Mock<IMissionProgressionService> missionProgressionService;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
 
     private readonly IStoryService storyService;
 
@@ -32,7 +32,7 @@ public class StoryServiceTest
         this.mockLogger = new();
         this.mockTutorialService = new(MockBehavior.Strict);
         this.mockFortRepository = new(MockBehavior.Strict);
-        this.missionProgressionService = new(MockBehavior.Strict);
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
 
         this.storyService = new StoryService(
             mockStoryRepository.Object,
@@ -42,7 +42,7 @@ public class StoryServiceTest
             mockUnitRepository.Object,
             mockTutorialService.Object,
             mockFortRepository.Object,
-            missionProgressionService.Object
+            mockMissionProgressionService.Object
         );
     }
 
@@ -222,6 +222,7 @@ public class StoryServiceTest
         this.mockTutorialService
             .Setup(x => x.OnStoryQuestRead(1000311))
             .Returns(Task.CompletedTask);
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(1000311));
 
         this.mockUnitRepository.Setup(x => x.AddDragons(Dragons.Brunhilda)).ReturnsAsync(true);
 
@@ -338,6 +339,8 @@ public class StoryServiceTest
                     State = StoryState.Unlocked
                 }
             );
+
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(1000607));
 
         this.mockUserDataRepository.Setup(x => x.GiveWyrmite(25)).Returns(Task.CompletedTask);
         this.mockTutorialService
