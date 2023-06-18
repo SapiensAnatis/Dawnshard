@@ -168,11 +168,11 @@ public class FortController : DragaliaControllerBase
     {
         FortBonusList bonusList = await bonusService.GetBonusList();
         IEnumerable<BuildList> builds = await this.fortService.GetBuildList();
-        
+
         BuildList halidom =
             builds.FirstOrDefault(x => x.plant_id == FortPlants.TheHalidom)
             ?? throw new InvalidOperationException("Missing Halidom building!");
-        
+
         BuildList? smithy = builds.FirstOrDefault(x => x.plant_id == FortPlants.Smithy);
 
         await this.fortService.CompleteAtOnce(request.payment_type, request.build_id);
