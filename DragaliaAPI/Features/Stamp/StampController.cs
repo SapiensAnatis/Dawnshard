@@ -1,5 +1,6 @@
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Stamp;
@@ -8,10 +9,12 @@ namespace DragaliaAPI.Features.Stamp;
 public class StampController : DragaliaControllerBase
 {
     private readonly IStampService stampService;
+    private readonly IUpdateDataService updateDataService;
 
-    public StampController(IStampService stampService)
+    public StampController(IStampService stampService, IUpdateDataService updateDataService)
     {
         this.stampService = stampService;
+        this.updateDataService = updateDataService;
     }
 
     [HttpPost("get_stamp")]
@@ -28,6 +31,8 @@ public class StampController : DragaliaControllerBase
         IEnumerable<EquipStampList> newStampList = await this.stampService.SetEquipStampList(
             request.stamp_list
         );
+
+        await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(new StampSetEquipStampData() { equip_stamp_list = newStampList });
     }
