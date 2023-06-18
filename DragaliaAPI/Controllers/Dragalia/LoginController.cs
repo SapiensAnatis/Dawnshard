@@ -49,7 +49,7 @@ public class LoginController : DragaliaControllerBase
     {
         // TODO: Implement daily login bonuses/notifications/resets
         DbPlayerUserData userData =
-            await userDataRepository.UserData.Include(x => x.Owner).FirstAsync()
+            await userDataRepository.UserData.FirstOrDefaultAsync()
             ?? throw new DragaliaException(ResultCode.CommonDataNotFoundError);
 
         if (userData.LastLoginTime < DateTimeOffset.UtcNow.Date.AddHours(6))

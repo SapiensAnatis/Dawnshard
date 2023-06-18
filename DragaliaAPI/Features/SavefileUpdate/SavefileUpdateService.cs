@@ -27,14 +27,6 @@ public class SavefileUpdateService : ISavefileUpdateService
         this.logger = logger;
     }
 
-    /// <summary>
-    /// The latest savefile version.
-    /// </summary>
-    /// <remarks>
-    /// Update this when adding a new savefile update.
-    /// </remarks>
-    public static int MaxSavefileVersion => 2;
-
     public async Task UpdateSavefile()
     {
         DbPlayer? player = await this.context.Players.FindAsync(

@@ -20,4 +20,9 @@ public abstract class SavefileUpdateTestFixture : TestFixture
             .MaxBy(x => x.SavefileVersion)!
             .SavefileVersion;
     }
+
+    public int GetSavefileVersion()
+    {
+        return this.ApiContext.Players.Find(DeviceAccountId)!.SavefileVersion;
+    }
 }

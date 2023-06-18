@@ -15,7 +15,6 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         : base(factory, outputHelper)
     {
         this.ApiContext.PlayerFortBuilds.ExecuteDelete();
-        this.ApiContext.Players.ExecuteUpdate(u => u.SetProperty(e => e.SavefileVersion, 0));
     }
 
     [Fact]
@@ -42,9 +41,8 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             .Contain(
                 x => x.PlantId == FortPlants.TheHalidom && x.DeviceAccountId == DeviceAccountId
             );
-        (await this.ApiContext.Players.FindAsync(DeviceAccountId))!.SavefileVersion
-            .Should()
-            .Be(MaxVersion);
+
+        this.GetSavefileVersion().Should().Be(this.MaxVersion);
 
         await this.ApiContext.PlayerStoryState.ExecuteDeleteAsync();
     }
@@ -71,9 +69,8 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         this.ApiContext.PlayerFortBuilds
             .Should()
             .Contain(x => x.PlantId == FortPlants.Smithy && x.DeviceAccountId == DeviceAccountId);
-        (await this.ApiContext.Players.FindAsync(DeviceAccountId))!.SavefileVersion
-            .Should()
-            .Be(MaxVersion);
+
+        this.GetSavefileVersion().Should().Be(this.MaxVersion);
 
         await this.ApiContext.PlayerStoryState.ExecuteDeleteAsync();
     }
@@ -100,9 +97,8 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         this.ApiContext.PlayerFortBuilds
             .Should()
             .Contain(x => x.PlantId == FortPlants.FlameDracolith);
-        (await this.ApiContext.Players.FindAsync(DeviceAccountId))!.SavefileVersion
-            .Should()
-            .Be(MaxVersion);
+
+        this.GetSavefileVersion().Should().Be(this.MaxVersion);
 
         await this.ApiContext.PlayerStoryState.ExecuteDeleteAsync();
     }
@@ -121,9 +117,8 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         data.build_list.Should().Contain(x => x.plant_id == FortPlants.SwordDojo);
 
         this.ApiContext.PlayerFortBuilds.Should().Contain(x => x.PlantId == FortPlants.SwordDojo);
-        (await this.ApiContext.Players.FindAsync(DeviceAccountId))!.SavefileVersion
-            .Should()
-            .Be(MaxVersion);
+
+        this.GetSavefileVersion().Should().Be(this.MaxVersion);
 
         await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
             u => u.SetProperty(e => e.TutorialStatus, 0)
@@ -139,5 +134,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         data.build_list.Should().BeEmpty();
         this.ApiContext.PlayerFortBuilds.Should().BeEmpty();
+
+        this.GetSavefileVersion().Should().Be(this.MaxVersion);
     }
 }
