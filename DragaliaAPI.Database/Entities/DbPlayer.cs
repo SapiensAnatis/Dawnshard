@@ -10,6 +10,8 @@ public class DbPlayer
     [Key]
     public required string AccountId { get; set; }
 
+    public int SavefileVersion { get; set; }
+
     public virtual DbPlayerUserData? UserData { get; set; }
 
     public virtual ICollection<DbAbilityCrest> AbilityCrestList { get; set; } =
@@ -62,4 +64,7 @@ public class DbPlayer
         new List<DbWeaponPassiveAbility>();
 
     public virtual DbFortDetail? FortDetail { get; set; }
+
+    public virtual ICollection<DbEquippedStamp> EquippedStampList { get; set; } =
+        new List<DbEquippedStamp>();
 }

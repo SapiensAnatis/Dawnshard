@@ -3,6 +3,7 @@ using System;
 using DragaliaAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230618201426_2-0-1_alpha_5")]
+    partial class _201_alpha_5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -578,48 +581,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PlayerMaterial");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerMission", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer")
-                        .HasColumnName("Type");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("MissionId");
-
-                    b.Property<DateTimeOffset>("End")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("EndDate");
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("integer")
-                        .HasColumnName("GroupId");
-
-                    b.Property<bool>("Pickup")
-                        .HasColumnType("boolean")
-                        .HasColumnName("Pickup");
-
-                    b.Property<int>("Progress")
-                        .HasColumnType("integer")
-                        .HasColumnName("Progress");
-
-                    b.Property<DateTimeOffset>("Start")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("StartDate");
-
-                    b.Property<int>("State")
-                        .HasColumnType("integer")
-                        .HasColumnName("State");
-
-                    b.HasKey("DeviceAccountId", "Type", "Id");
-
-                    b.ToTable("PlayerMissions");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerStoryState", b =>
@@ -1188,17 +1149,6 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany("MaterialList")
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerMission", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

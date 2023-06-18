@@ -166,4 +166,9 @@ public static class MasterAsset
         int,
         MainStoryMissionGroupRewards
     > MainStoryMissionGroupRewards = new("Missions/MainStoryMissionGroupRewards.json", x => x.Id);
+
+    /// <summary>
+    /// Contains information about stickers.
+    /// </summary>
+    public static readonly MasterAssetData<int, Stamp> StampData = new("StampData.json", x => x.Id);
 }

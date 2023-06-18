@@ -50,7 +50,7 @@ public class StoryService : IStoryService
             { 1000509, Dragons.Zodiark },
         }.ToImmutableDictionary();
 
-    private static readonly ImmutableDictionary<int, FortPlants> QuestStoryFortPlantRewards =
+    internal static readonly ImmutableDictionary<int, FortPlants> QuestStoryFortPlantRewards =
         new Dictionary<int, FortPlants>()
         {
             { 1000607, FortPlants.WindDracolith },

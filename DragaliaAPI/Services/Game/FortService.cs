@@ -121,6 +121,12 @@ public class FortService : IFortService
         DbFortDetail dbDetail = await this.fortRepository.GetFortDetail();
         int activeCarpenters = await this.fortRepository.GetActiveCarpenters();
 
+        this.logger.LogDebug(
+            "Active carpenters: {n1}, max carpenters: {n2}",
+            activeCarpenters,
+            dbDetail.CarpenterNum
+        );
+
         return new()
         {
             max_carpenter_count = MaximumCarpenterNum,

@@ -91,16 +91,16 @@ public class TutorialService : ITutorialService
             await this.abilityCrestRepository.Add(AbilityCrests.ManaFount);
         logger.LogDebug("Added materials for the wyrmprint tutorial");
     }
-}
 
-static file class TutorialStoryIds
-{
-    public const int Wyrmprints = 1000106;
-    public const int Halidom = 1000111;
-    public const int Smithy = 1000210;
-}
+    public static class TutorialStoryIds
+    {
+        public const int Wyrmprints = 1000106;
+        public const int Halidom = 1000111;
+        public const int Smithy = 1000210;
+    }
 
-static file class TutorialStatusIds
-{
-    public const int Dojos = 60120;
+    internal static class TutorialStatusIds
+    {
+        public const int Dojos = 60120;
+    }
 }
