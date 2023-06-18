@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.SavefilePorter;
+using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -19,21 +19,18 @@ public class LoginController : DragaliaControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
     private readonly IInventoryRepository inventoryRepository;
-    private readonly IEnumerable<ISavefilePorter> savefilePorters;
     private readonly IUpdateDataService updateDataService;
     private readonly ILogger<LoginController> logger;
 
     public LoginController(
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
-        IEnumerable<ISavefilePorter> savefilePorters,
         IUpdateDataService updateDataService,
         ILogger<LoginController> logger
     )
     {
         this.userDataRepository = userDataRepository;
         this.inventoryRepository = inventoryRepository;
-        this.savefilePorters = savefilePorters;
         this.updateDataService = updateDataService;
         this.logger = logger;
     }
@@ -52,21 +49,12 @@ public class LoginController : DragaliaControllerBase
     {
         // TODO: Implement daily login bonuses/notifications/resets
         DbPlayerUserData userData =
-            await userDataRepository.UserData.FirstAsync()
+            await userDataRepository.UserData.Include(x => x.Owner).FirstAsync()
             ?? throw new DragaliaException(ResultCode.CommonDataNotFoundError);
 
         if (userData.LastLoginTime < DateTimeOffset.UtcNow.Date.AddHours(6))
         {
             await inventoryRepository.RefreshPurchasableDragonGiftCounts();
-        }
-
-        foreach (ISavefilePorter porter in savefilePorters)
-        {
-            if (porter.ModificationDate <= userData.LastLoginTime)
-                continue;
-
-            this.logger.LogInformation("Applying savefile porter {$porter}", porter);
-            await porter.Port();
         }
 
         userData.LastLoginTime = DateTimeOffset.UtcNow;

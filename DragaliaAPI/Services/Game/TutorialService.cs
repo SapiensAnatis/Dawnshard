@@ -98,9 +98,9 @@ public class TutorialService : ITutorialService
         public const int Halidom = 1000111;
         public const int Smithy = 1000210;
     }
-}
 
-static file class TutorialStatusIds
-{
-    public const int Dojos = 60120;
+    internal static class TutorialStatusIds
+    {
+        public const int Dojos = 60120;
+    }
 }

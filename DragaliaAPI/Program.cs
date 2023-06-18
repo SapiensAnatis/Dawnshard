@@ -3,7 +3,7 @@ using System.Security.Claims;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
-using DragaliaAPI.Features.SavefilePorter;
+using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
@@ -110,13 +110,14 @@ builder.Services
     .AddScoped<ILoadService, LoadService>()
     .AddScoped<IStampService, StampService>()
     .AddScoped<IStampRepository, StampRepository>()
-    .AddScoped<IItemSummonService, ItemSummonService>();
+    .AddScoped<IItemSummonService, ItemSummonService>()
+    .AddScoped<ISavefileUpdateService, SavefileUpdateService>();
 
 builder.Services
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>();
 
-builder.Services.AddAllOfType<ISavefilePorter>();
+builder.Services.AddAllOfType<ISavefileUpdate>();
 
 builder.Services.AddHttpClient<IBaasApi, BaasApi>();
 builder.Services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>

@@ -10,6 +10,8 @@ public class DbPlayer
     [Key]
     public required string AccountId { get; set; }
 
+    public int SavefileVersion { get; set; }
+
     public virtual DbPlayerUserData? UserData { get; set; }
 
     public virtual ICollection<DbAbilityCrest> AbilityCrestList { get; set; } =

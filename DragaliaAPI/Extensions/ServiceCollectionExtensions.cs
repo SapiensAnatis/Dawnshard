@@ -1,5 +1,5 @@
 using System.Reflection;
-using DragaliaAPI.Features.SavefilePorter;
+using DragaliaAPI.Features.SavefileUpdate;
 
 namespace DragaliaAPI.Extensions;
 
@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
     {
         foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
         {
-            if (type.GetInterfaces().Contains(typeof(ISavefilePorter)))
+            if (type.GetInterfaces().Contains(typeof(ISavefileUpdate)))
                 serviceCollection.Add(new ServiceDescriptor(typeof(TInterface), type, lifetime));
         }
 
