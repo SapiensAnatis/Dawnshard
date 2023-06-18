@@ -25,11 +25,9 @@ public class MissionProgressionService : IMissionProgressionService
         this.eventQueue = new Queue<Event>();
     }
 
-    public void OnFortPlantUpgraded(FortPlants plant, int level)
+    public void OnFortPlantUpgraded(FortPlants plant)
     {
-        this.eventQueue.Enqueue(
-            new Event(MissionProgressType.FortPlantUpgraded, (int)plant, level)
-        );
+        this.eventQueue.Enqueue(new Event(MissionProgressType.FortPlantUpgraded, (int)plant));
     }
 
     public void OnFortPlantBuilt(FortPlants plant)
@@ -37,9 +35,9 @@ public class MissionProgressionService : IMissionProgressionService
         this.eventQueue.Enqueue(new Event(MissionProgressType.FortPlantBuilt, (int)plant));
     }
 
-    public void OnFortLevelup(int level)
+    public void OnFortLevelup()
     {
-        this.eventQueue.Enqueue(new Event(MissionProgressType.FortLevelup, level));
+        this.eventQueue.Enqueue(new Event(MissionProgressType.FortLevelup));
     }
 
     public void OnQuestCleared(int questId)
@@ -66,16 +64,14 @@ public class MissionProgressionService : IMissionProgressionService
         );
     }
 
-    public void OnWyrmprintAugmentBuildup(PlusCountType type, int count)
+    public void OnWyrmprintAugmentBuildup(PlusCountType type)
     {
-        this.eventQueue.Enqueue(
-            new Event(MissionProgressType.WyrmprintAugmentBuildup, (int)type, count)
-        );
+        this.eventQueue.Enqueue(new Event(MissionProgressType.WyrmprintAugmentBuildup, (int)type));
     }
 
-    public void OnCharacterBuildup(PlusCountType type, int count)
+    public void OnCharacterBuildup(PlusCountType type)
     {
-        this.eventQueue.Enqueue(new Event(MissionProgressType.CharacterBuildup, (int)type, count));
+        this.eventQueue.Enqueue(new Event(MissionProgressType.CharacterBuildup, (int)type));
     }
 
     public async Task ProcessMissionEvents()

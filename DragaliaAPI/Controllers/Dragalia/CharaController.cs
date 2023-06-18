@@ -179,7 +179,7 @@ public class CharaController : DragaliaControllerBase
                             playerCharData.AttackPlusCount + materialList.quantity,
                             CharaConstants.MaxAtkEnhance
                         );
-                    this.missionProgressionService.OnCharacterBuildup(PlusCountType.Atk, 1);
+                    this.missionProgressionService.OnCharacterBuildup(PlusCountType.Atk);
                     break;
                 case Materials.FortifyingCrystal:
                     playerCharData.HpPlusCount = (byte)
@@ -187,7 +187,7 @@ public class CharaController : DragaliaControllerBase
                             playerCharData.HpPlusCount + materialList.quantity,
                             CharaConstants.MaxHpEnhance
                         );
-                    this.missionProgressionService.OnCharacterBuildup(PlusCountType.Hp, 1);
+                    this.missionProgressionService.OnCharacterBuildup(PlusCountType.Hp);
                     break;
                 default:
                     throw new DragaliaException(

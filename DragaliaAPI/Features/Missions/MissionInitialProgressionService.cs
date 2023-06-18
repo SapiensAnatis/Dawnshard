@@ -14,8 +14,6 @@ namespace DragaliaAPI.Features.Missions;
 public class MissionInitialProgressionService : IMissionInitialProgressionService
 {
     private readonly ILogger<MissionInitialProgressionService> logger;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IInventoryRepository inventoryRepository;
     private readonly IAbilityCrestRepository abilityCrestRepository;
     private readonly IFortRepository fortRepository;
     private readonly IQuestRepository questRepository;
@@ -25,8 +23,6 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
 
     public MissionInitialProgressionService(
         ILogger<MissionInitialProgressionService> logger,
-        IUserDataRepository userDataRepository,
-        IInventoryRepository inventoryRepository,
         IAbilityCrestRepository abilityCrestRepository,
         IFortRepository fortRepository,
         IQuestRepository questRepository,
@@ -36,8 +32,6 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
     )
     {
         this.logger = logger;
-        this.userDataRepository = userDataRepository;
-        this.inventoryRepository = inventoryRepository;
         this.abilityCrestRepository = abilityCrestRepository;
         this.fortRepository = fortRepository;
         this.questRepository = questRepository;
@@ -130,10 +124,12 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
             // Okay, this might be a quest story.
             if (
                 await this.storyRepository.QuestStories
-                    .Where(x => x.StoryId == requirement.Parameter)
+                    .Where(x => x.StoryId == requirement.Parameter && x.State == StoryState.Read)
                     .AnyAsync()
             )
+            {
                 return 1;
+            }
         }
 
         return 0;

@@ -200,12 +200,10 @@ public class FortService : IFortService
             }
             else
             {
-                this.missionProgressionService.OnFortPlantUpgraded(build.PlantId, build.Level);
+                this.missionProgressionService.OnFortPlantUpgraded(build.PlantId);
             }
 
-            this.missionProgressionService.OnFortLevelup(
-                await this.fortRepository.Builds.SumAsync(x => x.Level)
-            );
+            this.missionProgressionService.OnFortLevelup();
         }
     }
 

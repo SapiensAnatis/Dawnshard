@@ -69,7 +69,7 @@ public class MissionRepository : IMissionRepository
                     Id = id,
                     Type = type,
                     Start = startTime == default ? DateTimeOffset.UnixEpoch : startTime,
-                    End = endTime == default ? DateTimeOffset.MinValue : endTime,
+                    End = endTime == default ? DateTimeOffset.UnixEpoch : endTime,
                     State = MissionState.InProgress,
                     GroupId = groupId
                 }

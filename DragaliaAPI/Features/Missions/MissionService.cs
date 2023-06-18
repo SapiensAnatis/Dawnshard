@@ -88,6 +88,15 @@ public class MissionService : IMissionService
             .Where(x => x.MissionDrillGroupId == groupId)
             .ToList();
 
+        if (
+            await this.missionRepository.Missions.AnyAsync(
+                x => x.GroupId == groupId && x.Type == MissionType.Drill
+            )
+        )
+            return await this.missionRepository.Missions
+                .Where(x => x.GroupId == groupId && x.Type == MissionType.Drill)
+                .ToListAsync();
+
         logger.LogInformation(
             "Unlocking drill story mission group {groupId} ({groupMissionIds})",
             groupId,

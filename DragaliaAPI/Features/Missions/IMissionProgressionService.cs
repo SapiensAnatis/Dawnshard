@@ -4,15 +4,15 @@ namespace DragaliaAPI.Features.Missions;
 
 public interface IMissionProgressionService
 {
-    void OnFortPlantUpgraded(FortPlants plant, int level);
+    void OnFortPlantUpgraded(FortPlants plant);
     void OnFortPlantBuilt(FortPlants plant);
-    void OnFortLevelup(int level);
+    void OnFortLevelup();
     void OnQuestCleared(int questId);
     void OnVoidBattleCleared();
     void OnWeaponEarned(UnitElement element, int stars, WeaponSeries series);
     void OnWeaponRefined(UnitElement element, int stars, WeaponSeries series);
-    void OnWyrmprintAugmentBuildup(PlusCountType type, int count);
-    void OnCharacterBuildup(PlusCountType type, int count);
+    void OnWyrmprintAugmentBuildup(PlusCountType type);
+    void OnCharacterBuildup(PlusCountType type);
 
     Task ProcessMissionEvents();
 }
