@@ -179,15 +179,15 @@ public class AlbumMissionList
     public int album_mission_id { get; set; }
     public int progress { get; set; }
     public int state { get; set; }
-    public int end_date { get; set; }
-    public int start_date { get; set; }
+    public DateTimeOffset end_date { get; set; }
+    public DateTimeOffset start_date { get; set; }
 
     public AlbumMissionList(
         int album_mission_id,
         int progress,
         int state,
-        int end_date,
-        int start_date
+        DateTimeOffset end_date,
+        DateTimeOffset start_date
     )
     {
         this.album_mission_id = album_mission_id;
@@ -4569,15 +4569,15 @@ public class BeginnerMissionList
     public int beginner_mission_id { get; set; }
     public int progress { get; set; }
     public int state { get; set; }
-    public int end_date { get; set; }
-    public int start_date { get; set; }
+    public DateTimeOffset end_date { get; set; }
+    public DateTimeOffset start_date { get; set; }
 
     public BeginnerMissionList(
         int beginner_mission_id,
         int progress,
         int state,
-        int end_date,
-        int start_date
+        DateTimeOffset end_date,
+        DateTimeOffset start_date
     )
     {
         this.beginner_mission_id = beginner_mission_id;
@@ -4957,8 +4957,8 @@ public class DailyMissionList
     public int day_no { get; set; }
     public int weekly_mission_id { get; set; }
     public int week_no { get; set; }
-    public int end_date { get; set; }
-    public int start_date { get; set; }
+    public DateTimeOffset end_date { get; set; }
+    public DateTimeOffset start_date { get; set; }
     public int is_lock_receive_reward { get; set; }
     public int is_pickup { get; set; }
 
@@ -4969,8 +4969,8 @@ public class DailyMissionList
         int day_no,
         int weekly_mission_id,
         int week_no,
-        int end_date,
-        int start_date,
+        DateTimeOffset end_date,
+        DateTimeOffset start_date,
         int is_lock_receive_reward,
         int is_pickup
     )
@@ -5562,15 +5562,15 @@ public class DrillMissionList
     public int drill_mission_id { get; set; }
     public int progress { get; set; }
     public int state { get; set; }
-    public int end_date { get; set; }
-    public int start_date { get; set; }
+    public DateTimeOffset end_date { get; set; }
+    public DateTimeOffset start_date { get; set; }
 
     public DrillMissionList(
         int drill_mission_id,
         int progress,
         int state,
-        int end_date,
-        int start_date
+        DateTimeOffset end_date,
+        DateTimeOffset start_date
     )
     {
         this.drill_mission_id = drill_mission_id;
@@ -6850,15 +6850,15 @@ public class MainStoryMissionList
     public int main_story_mission_id { get; set; }
     public int progress { get; set; }
     public int state { get; set; }
-    public int end_date { get; set; }
-    public int start_date { get; set; }
+    public DateTimeOffset end_date { get; set; }
+    public DateTimeOffset start_date { get; set; }
 
     public MainStoryMissionList(
         int main_story_mission_id,
         int progress,
         int state,
-        int end_date,
-        int start_date
+        DateTimeOffset end_date,
+        DateTimeOffset start_date
     )
     {
         this.main_story_mission_id = main_story_mission_id;
@@ -6910,15 +6910,15 @@ public class MemoryEventMissionList
     public int memory_event_mission_id { get; set; }
     public int progress { get; set; }
     public int state { get; set; }
-    public int end_date { get; set; }
-    public int start_date { get; set; }
+    public DateTimeOffset end_date { get; set; }
+    public DateTimeOffset start_date { get; set; }
 
     public MemoryEventMissionList(
         int memory_event_mission_id,
         int progress,
         int state,
-        int end_date,
-        int start_date
+        DateTimeOffset end_date,
+        DateTimeOffset start_date
     )
     {
         this.memory_event_mission_id = memory_event_mission_id;
@@ -7006,15 +7006,15 @@ public class NormalMissionList
     public int normal_mission_id { get; set; }
     public int progress { get; set; }
     public int state { get; set; }
-    public int end_date { get; set; }
-    public int start_date { get; set; }
+    public DateTimeOffset end_date { get; set; }
+    public DateTimeOffset start_date { get; set; }
 
     public NormalMissionList(
         int normal_mission_id,
         int progress,
         int state,
-        int end_date,
-        int start_date
+        DateTimeOffset end_date,
+        DateTimeOffset start_date
     )
     {
         this.normal_mission_id = normal_mission_id;
@@ -7378,15 +7378,15 @@ public class PeriodMissionList
     public int period_mission_id { get; set; }
     public int progress { get; set; }
     public int state { get; set; }
-    public int end_date { get; set; }
-    public int start_date { get; set; }
+    public DateTimeOffset end_date { get; set; }
+    public DateTimeOffset start_date { get; set; }
 
     public PeriodMissionList(
         int period_mission_id,
         int progress,
         int state,
-        int end_date,
-        int start_date
+        DateTimeOffset end_date,
+        DateTimeOffset start_date
     )
     {
         this.period_mission_id = period_mission_id;
@@ -7738,8 +7738,8 @@ public class QuestEventScheduleList
 {
     public int quest_group_id { get; set; }
     public int event_schedule_type { get; set; }
-    public int start_date { get; set; }
-    public int end_date { get; set; }
+    public DateTimeOffset start_date { get; set; }
+    public DateTimeOffset end_date { get; set; }
     public int interval_type { get; set; }
     public string fever_time_start_1 { get; set; }
     public string fever_time_end_1 { get; set; }
@@ -7751,8 +7751,8 @@ public class QuestEventScheduleList
     public QuestEventScheduleList(
         int quest_group_id,
         int event_schedule_type,
-        int start_date,
-        int end_date,
+        DateTimeOffset start_date,
+        DateTimeOffset end_date,
         int interval_type,
         string fever_time_start_1,
         string fever_time_end_1,
@@ -7834,8 +7834,12 @@ public class QuestScheduleDetailList
     public int drop_bonus_percent { get; set; }
     public int limit_shop_goods_type { get; set; }
     public int interval_type { get; set; }
-    public int start_date { get; set; }
-    public int end_date { get; set; }
+
+    [JsonConverter(typeof(DateTimeUnixJsonConverter))]
+    public DateTimeOffset start_date { get; set; }
+
+    [JsonConverter(typeof(DateTimeUnixJsonConverter))]
+    public DateTimeOffset end_date { get; set; }
 
     public QuestScheduleDetailList(
         int schedule_detail_id,
@@ -7843,8 +7847,8 @@ public class QuestScheduleDetailList
         int drop_bonus_percent,
         int limit_shop_goods_type,
         int interval_type,
-        int start_date,
-        int end_date
+        DateTimeOffset start_date,
+        DateTimeOffset end_date
     )
     {
         this.schedule_detail_id = schedule_detail_id;
@@ -8368,15 +8372,15 @@ public class SpecialMissionList
     public int special_mission_id { get; set; }
     public int progress { get; set; }
     public int state { get; set; }
-    public int end_date { get; set; }
-    public int start_date { get; set; }
+    public DateTimeOffset end_date { get; set; }
+    public DateTimeOffset start_date { get; set; }
 
     public SpecialMissionList(
         int special_mission_id,
         int progress,
         int state,
-        int end_date,
-        int start_date
+        DateTimeOffset end_date,
+        DateTimeOffset start_date
     )
     {
         this.special_mission_id = special_mission_id;

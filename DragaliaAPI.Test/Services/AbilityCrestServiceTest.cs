@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -17,6 +18,7 @@ public class AbilityCrestServiceTest
     private readonly Mock<IAbilityCrestRepository> mockAbilityCrestRepository;
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
     private readonly AbilityCrestService abilityCrestService;
 
     private static readonly Dictionary<Materials, int> EmptyMap = new();
@@ -170,12 +172,14 @@ public class AbilityCrestServiceTest
         this.mockAbilityCrestRepository = new(MockBehavior.Strict);
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
 
         this.abilityCrestService = new AbilityCrestService(
             this.mockAbilityCrestRepository.Object,
             this.mockInventoryRepository.Object,
             this.mockUserDataRepository.Object,
-            LoggerTestUtils.Create<AbilityCrestService>()
+            LoggerTestUtils.Create<AbilityCrestService>(),
+            this.mockMissionProgressionService.Object
         );
     }
 
@@ -1090,6 +1094,8 @@ public class AbilityCrestServiceTest
         int amount
     )
     {
+        this.mockMissionProgressionService.Setup(x => x.OnWyrmprintAugmentBuildup(augmentType));
+
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);
         AtgenPlusCountParamsList augmentParams =
             new() { plus_count = amount, plus_count_type = augmentType };

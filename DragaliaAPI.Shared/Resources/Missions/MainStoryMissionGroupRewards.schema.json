@@ -1,0 +1,35 @@
+{
+  "description": "Schema for the main story mission group rewards.",
+  "type": "array",
+  "additionalItems": false,
+  "items": {
+    "type": "object",
+    "required": [ "_Id", "_Rewards" ],
+    "additionalProperties": false,
+    "properties": {
+      "_Id": {
+        "type": "integer"
+      },
+      "_Rewards": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [ "_Type", "_Id", "_Quantity" ],
+          "additionalProperties": false,
+          "properties": {
+            "_Type": {
+              "type": "string",
+              "enum": [ "Rupies", "HustleHammer", "Material" ]
+            },
+            "_Id": {
+              "type": "integer"
+            },
+            "_Quantity": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 namespace DragaliaAPI.Shared.MasterAsset;
 
@@ -113,6 +114,58 @@ public static class MasterAsset
     /// </summary>
     public static readonly MasterAssetData<AbilityCrests, AbilityCrest> AbilityCrest =
         new("AbilityCrest.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, QuestEventGroup> QuestEventGroup =
+        new("QuestEventGroup.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, QuestEvent> QuestEvent =
+        new("QuestEvent.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, AlbumMission> AlbumMission =
+        new("Missions/MissionAlbumData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, NormalMission> BeginnerMission =
+        new("Missions/MissionBeginnerData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DailyMission> DailyMission =
+        new("Missions/MissionDailyData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DrillMission> DrillMission =
+        new("Missions/MissionDrillData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DrillMissionGroup> DrillMissionGroup =
+        new("Missions/MissionDrillGroup.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, MainStoryMission> MainStoryMission =
+        new("Missions/MissionMainStoryData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, MainStoryMissionGroup> MainStoryMissionGroup =
+        new("Missions/MissionMainStoryGroup.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, MemoryEventMission> MemoryEventMission =
+        new("Missions/MissionMemoryEventData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, NormalMission> NormalMission =
+        new("Missions/MissionNormalData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, PeriodMission> PeriodMission =
+        new("Missions/MissionPeriodData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, SpecialMission> SpecialMission =
+        new("Missions/MissionSpecialData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, SpecialMissionGroup> SpecialMissionGroup =
+        new("Missions/MissionSpecialGroup.json", x => x.Id);
+
+    public static readonly MasterAssetData<
+        MissionProgressType,
+        MissionProgressionInfo
+    > MissionProgressionInfo = new("Missions/MissionProgressionInfo.json", x => x.Type);
+
+    public static readonly MasterAssetData<
+        int,
+        MainStoryMissionGroupRewards
+    > MainStoryMissionGroupRewards = new("Missions/MainStoryMissionGroupRewards.json", x => x.Id);
 
     /// <summary>
     /// Contains information about stickers.

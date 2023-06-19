@@ -580,6 +580,48 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerMaterial");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerMission", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("integer")
+                        .HasColumnName("MissionId");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("Type");
+
+                    b.Property<DateTimeOffset>("End")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("EndDate");
+
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("integer")
+                        .HasColumnName("GroupId");
+
+                    b.Property<bool>("Pickup")
+                        .HasColumnType("boolean")
+                        .HasColumnName("Pickup");
+
+                    b.Property<int>("Progress")
+                        .HasColumnType("integer")
+                        .HasColumnName("Progress");
+
+                    b.Property<DateTimeOffset>("Start")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("StartDate");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer")
+                        .HasColumnName("State");
+
+                    b.HasKey("DeviceAccountId", "Id", "Type");
+
+                    b.ToTable("PlayerMissions");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerStoryState", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -1146,6 +1188,17 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany("MaterialList")
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerMission", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

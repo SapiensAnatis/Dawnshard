@@ -234,20 +234,17 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     {
         DbPlayerUserData userData = new() { DeviceAccountId = "wyrmite", Crystal = 1000 };
 
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("wyrmite");
-
-        await this.fixture.AddToDatabase(
-            new DbFortBuild()
+        DbFortBuild build =
+            new()
             {
                 DeviceAccountId = "wyrmite",
                 BuildId = 444,
                 PlantId = FortPlants.Smithy,
                 BuildStartDate = DateTimeOffset.UtcNow,
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(7)
-            }
-        );
+            };
 
-        await this.fortRepository.UpgradeAtOnce(userData, 444, PaymentTypes.Wyrmite);
+        this.fortRepository.ConsumeUpgradeAtOnceCost(userData, build, PaymentTypes.Wyrmite);
 
         userData.Crystal.Should().BeCloseTo(1000 - 840, 1);
         this.mockPlayerIdentityService.VerifyAll();
@@ -258,20 +255,21 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     {
         DbPlayerUserData userData = new() { DeviceAccountId = "hustler", BuildTimePoint = 4 };
 
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("hustler");
-
-        await this.fixture.AddToDatabase(
-            new DbFortBuild()
+        DbFortBuild build =
+            new()
             {
                 DeviceAccountId = "hustler",
                 BuildId = 445,
                 PlantId = FortPlants.Smithy,
                 BuildStartDate = DateTimeOffset.UtcNow,
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(7)
-            }
-        );
+            };
 
-        await this.fortRepository.UpgradeAtOnce(userData, 445, PaymentTypes.HalidomHustleHammer);
+        this.fortRepository.ConsumeUpgradeAtOnceCost(
+            userData,
+            build,
+            PaymentTypes.HalidomHustleHammer
+        );
 
         userData.BuildTimePoint.Should().Be(3);
         this.mockPlayerIdentityService.VerifyAll();
@@ -290,24 +288,21 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
                 BuildTimePoint = 0
             };
 
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("broke");
-
         int buildId = Random.Shared.Next(500, 600);
-        await this.fixture.AddToDatabase(
-            new DbFortBuild()
+        DbFortBuild build =
+            new()
             {
                 DeviceAccountId = "broke",
                 BuildId = buildId,
                 PlantId = FortPlants.Smithy,
                 BuildStartDate = DateTimeOffset.UtcNow,
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(7)
-            }
-        );
+            };
 
-        await this.fortRepository
-            .Invoking(x => x.UpgradeAtOnce(userData, buildId, type))
+        this.fortRepository
+            .Invoking(x => x.ConsumeUpgradeAtOnceCost(userData, build, type))
             .Should()
-            .ThrowAsync<InvalidOperationException>();
+            .Throw<InvalidOperationException>();
 
         this.mockPlayerIdentityService.VerifyAll();
     }

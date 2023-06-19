@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Security.Claims;
 using DragaliaAPI.Database;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.SavefileUpdate;
@@ -115,7 +116,13 @@ builder.Services
 
 builder.Services
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
-    .AddTransient<ILogEventEnricher, PodNameEnricher>();
+    .AddTransient<ILogEventEnricher, PodNameEnricher>()
+    // Mission Feature
+    .AddScoped<IMissionRepository, MissionRepository>()
+    .AddScoped<IMissionService, MissionService>()
+    .AddScoped<IRewardService, RewardService>()
+    .AddScoped<IMissionProgressionService, MissionProgressionService>()
+    .AddScoped<IMissionInitialProgressionService, MissionInitialProgressionService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 

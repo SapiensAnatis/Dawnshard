@@ -1,10 +1,13 @@
 ﻿using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +23,7 @@ public class DungeonRecordController : DragaliaControllerBase
     private readonly IQuestRewardService questRewardService;
     private readonly IUpdateDataService updateDataService;
     private readonly ITutorialService tutorialService;
+    private readonly IMissionProgressionService missionProgressionService;
 
     private const int QuestCoin = 10_000_000;
     private const int QuestMana = 20_000;
@@ -32,7 +36,8 @@ public class DungeonRecordController : DragaliaControllerBase
         IInventoryRepository inventoryRepository,
         IQuestRewardService questRewardService,
         IUpdateDataService updateDataService,
-        ITutorialService tutorialService
+        ITutorialService tutorialService,
+        IMissionProgressionService missionProgressionService
     )
     {
         this.questRepository = questRepository;
@@ -42,6 +47,7 @@ public class DungeonRecordController : DragaliaControllerBase
         this.questRewardService = questRewardService;
         this.updateDataService = updateDataService;
         this.tutorialService = tutorialService;
+        this.missionProgressionService = missionProgressionService;
     }
 
     [HttpPost("record")]
@@ -70,6 +76,14 @@ public class DungeonRecordController : DragaliaControllerBase
             session.QuestData.Id,
             clear_time
         );
+
+        // Void battle moment :(
+        if (session.QuestData.IsPartOfVoidBattleGroups)
+        {
+            this.missionProgressionService.OnVoidBattleCleared();
+        }
+
+        this.missionProgressionService.OnQuestCleared(session.QuestData.Id);
 
         DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
 

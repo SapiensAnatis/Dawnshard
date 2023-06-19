@@ -1,5 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
@@ -18,6 +19,7 @@ public class StoryServiceTest
     private readonly Mock<ILogger<StoryService>> mockLogger;
     private readonly Mock<ITutorialService> mockTutorialService;
     private readonly Mock<IFortRepository> mockFortRepository;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
 
     private readonly IStoryService storyService;
 
@@ -30,6 +32,7 @@ public class StoryServiceTest
         this.mockLogger = new();
         this.mockTutorialService = new(MockBehavior.Strict);
         this.mockFortRepository = new(MockBehavior.Strict);
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
 
         this.storyService = new StoryService(
             mockStoryRepository.Object,
@@ -38,7 +41,8 @@ public class StoryServiceTest
             mockInventoryRepository.Object,
             mockUnitRepository.Object,
             mockTutorialService.Object,
-            mockFortRepository.Object
+            mockFortRepository.Object,
+            mockMissionProgressionService.Object
         );
     }
 
@@ -218,6 +222,7 @@ public class StoryServiceTest
         this.mockTutorialService
             .Setup(x => x.OnStoryQuestRead(1000311))
             .Returns(Task.CompletedTask);
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(1000311));
 
         this.mockUnitRepository.Setup(x => x.AddDragons(Dragons.Brunhilda)).ReturnsAsync(true);
 
@@ -334,6 +339,8 @@ public class StoryServiceTest
                     State = StoryState.Unlocked
                 }
             );
+
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(1000607));
 
         this.mockUserDataRepository.Setup(x => x.GiveWyrmite(25)).Returns(Task.CompletedTask);
         this.mockTutorialService

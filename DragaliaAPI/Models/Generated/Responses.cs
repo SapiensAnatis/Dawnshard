@@ -1,5 +1,6 @@
 #nullable disable
 
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.MessagePack;
 using MessagePack;
 
@@ -4020,7 +4021,7 @@ public class MissionGetDrillMissionListData
 }
 
 [MessagePackObject(true)]
-public class MissionGetMissionListData
+public class MissionGetMissionListData : INormalMissionEndpointResponse
 {
     public IEnumerable<NormalMissionList> normal_mission_list { get; set; }
     public IEnumerable<DailyMissionList> daily_mission_list { get; set; }
@@ -4065,7 +4066,7 @@ public class MissionGetMissionListData
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveAlbumRewardData
+public class MissionReceiveAlbumRewardData : INormalMissionEndpointResponse
 {
     public IEnumerable<NormalMissionList> normal_mission_list { get; set; }
     public IEnumerable<DailyMissionList> daily_mission_list { get; set; }
@@ -4116,7 +4117,7 @@ public class MissionReceiveAlbumRewardData
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveBeginnerRewardData
+public class MissionReceiveBeginnerRewardData : INormalMissionEndpointResponse
 {
     public IEnumerable<NormalMissionList> normal_mission_list { get; set; }
     public IEnumerable<DailyMissionList> daily_mission_list { get; set; }
@@ -4167,7 +4168,7 @@ public class MissionReceiveBeginnerRewardData
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveDailyRewardData
+public class MissionReceiveDailyRewardData : INormalMissionEndpointResponse
 {
     public IEnumerable<NormalMissionList> normal_mission_list { get; set; }
     public IEnumerable<DailyMissionList> daily_mission_list { get; set; }
@@ -4254,7 +4255,7 @@ public class MissionReceiveDrillRewardData
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveMainStoryRewardData
+public class MissionReceiveMainStoryRewardData : INormalMissionEndpointResponse
 {
     public IEnumerable<NormalMissionList> normal_mission_list { get; set; }
     public IEnumerable<DailyMissionList> daily_mission_list { get; set; }
@@ -4305,7 +4306,7 @@ public class MissionReceiveMainStoryRewardData
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveMemoryEventRewardData
+public class MissionReceiveMemoryEventRewardData : INormalMissionEndpointResponse
 {
     public IEnumerable<NormalMissionList> normal_mission_list { get; set; }
     public IEnumerable<DailyMissionList> daily_mission_list { get; set; }
@@ -4356,7 +4357,7 @@ public class MissionReceiveMemoryEventRewardData
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveNormalRewardData
+public class MissionReceiveNormalRewardData : INormalMissionEndpointResponse
 {
     public IEnumerable<NormalMissionList> normal_mission_list { get; set; }
     public IEnumerable<DailyMissionList> daily_mission_list { get; set; }
@@ -4407,7 +4408,7 @@ public class MissionReceiveNormalRewardData
 }
 
 [MessagePackObject(true)]
-public class MissionReceivePeriodRewardData
+public class MissionReceivePeriodRewardData : INormalMissionEndpointResponse
 {
     public IEnumerable<NormalMissionList> normal_mission_list { get; set; }
     public IEnumerable<DailyMissionList> daily_mission_list { get; set; }
@@ -4458,7 +4459,7 @@ public class MissionReceivePeriodRewardData
 }
 
 [MessagePackObject(true)]
-public class MissionReceiveSpecialRewardData
+public class MissionReceiveSpecialRewardData : INormalMissionEndpointResponse
 {
     public IEnumerable<NormalMissionList> normal_mission_list { get; set; }
     public IEnumerable<DailyMissionList> daily_mission_list { get; set; }

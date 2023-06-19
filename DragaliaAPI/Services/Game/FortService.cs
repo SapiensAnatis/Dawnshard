@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -22,6 +23,7 @@ public class FortService : IFortService
     private readonly ILogger<FortService> logger;
     private readonly IPlayerIdentityService playerIdentityService;
     private readonly IMapper mapper;
+    private readonly IMissionProgressionService missionProgressionService;
 
     public FortService(
         IFortRepository fortRepository,
@@ -29,7 +31,8 @@ public class FortService : IFortService
         IInventoryRepository inventoryRepository,
         ILogger<FortService> logger,
         IPlayerIdentityService playerIdentityService,
-        IMapper mapper
+        IMapper mapper,
+        IMissionProgressionService missionProgressionService
     )
     {
         this.fortRepository = fortRepository;
@@ -38,6 +41,7 @@ public class FortService : IFortService
         this.logger = logger;
         this.playerIdentityService = playerIdentityService;
         this.mapper = mapper;
+        this.missionProgressionService = missionProgressionService;
     }
 
     public async Task<IEnumerable<BuildList>> GetBuildList()
@@ -136,8 +140,12 @@ public class FortService : IFortService
         this.logger.LogDebug("CompleteAtOnce called for build {buildId}", buildId);
 
         DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
+        DbFortBuild build = await this.fortRepository.GetBuilding(buildId);
 
-        await this.fortRepository.UpgradeAtOnce(userData, buildId, paymentType);
+        // TODO: Maybe move this into FortService?
+        this.fortRepository.ConsumeUpgradeAtOnceCost(userData, build, paymentType);
+
+        await FinishUpgrade(build);
     }
 
     public async Task<DbFortBuild> CancelUpgrade(long buildId)
@@ -177,9 +185,32 @@ public class FortService : IFortService
             throw new InvalidOperationException($"This building has not completed construction.");
         }
 
+        await FinishUpgrade(build);
+    }
+
+    private async Task FinishUpgrade(DbFortBuild build)
+    {
         // Update values
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
+
+        if (build.Level is 0)
+        {
+            this.missionProgressionService.OnFortPlantBuilt(build.PlantId);
+        }
+        else
+        {
+            if (build.Level == 1)
+            {
+                this.missionProgressionService.OnFortPlantBuilt(build.PlantId);
+            }
+            else
+            {
+                this.missionProgressionService.OnFortPlantUpgraded(build.PlantId);
+            }
+
+            this.missionProgressionService.OnFortLevelup();
+        }
     }
 
     public async Task<DbFortBuild> BuildStart(FortPlants fortPlantId, int positionX, int positionZ)

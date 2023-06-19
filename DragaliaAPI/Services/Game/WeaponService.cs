@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -18,13 +19,15 @@ public class WeaponService : IWeaponService
     private readonly IFortRepository fortRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly ILogger<WeaponService> logger;
+    private readonly IMissionProgressionService missionProgressionService;
 
     public WeaponService(
         IWeaponRepository weaponRepository,
         IInventoryRepository inventoryRepository,
         IFortRepository fortRepository,
         IUserDataRepository userDataRepository,
-        ILogger<WeaponService> logger
+        ILogger<WeaponService> logger,
+        IMissionProgressionService missionProgressionService
     )
     {
         this.weaponRepository = weaponRepository;
@@ -32,6 +35,7 @@ public class WeaponService : IWeaponService
         this.fortRepository = fortRepository;
         this.userDataRepository = userDataRepository;
         this.logger = logger;
+        this.missionProgressionService = missionProgressionService;
     }
 
     public async Task<bool> ValidateCraft(WeaponBodies weaponBodyId)
@@ -102,6 +106,12 @@ public class WeaponService : IWeaponService
 
         await this.weaponRepository.Add(weaponBodyId);
         await this.weaponRepository.AddSkin((int)weaponBodyId);
+
+        this.missionProgressionService.OnWeaponEarned(
+            weaponData.ElementalType,
+            weaponData.Rarity,
+            weaponData.WeaponSeriesId
+        );
     }
 
     public async Task<bool> CheckOwned(WeaponBodies weaponBodyId) =>
@@ -205,6 +215,11 @@ public class WeaponService : IWeaponService
                 if (!ValidateStep(entity.LimitOverCount, buildup))
                     return ResultCode.WeaponBodyBuildupPieceStepError;
                 entity.LimitOverCount = buildup.step;
+                this.missionProgressionService.OnWeaponRefined(
+                    body.ElementalType,
+                    body.Rarity,
+                    body.WeaponSeriesId
+                );
                 break;
             case BuildupPieceTypes.WeaponBonus:
                 if (!ValidateStep(entity.FortPassiveCharaWeaponBuildupCount, buildup))

@@ -3,6 +3,7 @@ using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Test;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
@@ -24,12 +25,16 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     private readonly IUpdateDataService updateDataService;
 
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
+    private readonly Mock<IMissionService> mockMissionService;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
 
     public UpdateDataServiceTest(DbTestFixture fixture, ITestOutputHelper output)
     {
         this.fixture = fixture;
         this.output = output;
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
+        this.mockMissionService = new(MockBehavior.Loose);
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
 
         this.mapper = new MapperConfiguration(
             cfg => cfg.AddMaps(typeof(Program).Assembly)
@@ -37,7 +42,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         this.updateDataService = new UpdateDataService(
             this.fixture.ApiContext,
             this.mapper,
-            this.mockPlayerIdentityService.Object
+            this.mockPlayerIdentityService.Object,
+            this.mockMissionService.Object,
+            this.mockMissionProgressionService.Object
         );
 
         CommonAssertionOptions.ApplyTimeOptions();
@@ -48,6 +55,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     {
         string deviceAccountId = "some_id";
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(deviceAccountId);
+        this.mockMissionProgressionService
+            .Setup(x => x.ProcessMissionEvents())
+            .Returns(Task.CompletedTask);
 
         DbPlayerUserData userData = new(deviceAccountId);
 
@@ -199,6 +209,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     public async Task SaveChangesAsync_RetrievesIdentityColumns()
     {
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+        this.mockMissionProgressionService
+            .Setup(x => x.ProcessMissionEvents())
+            .Returns(Task.CompletedTask);
 
         // This test is bullshit because in-mem works differently to an actual database in this regard
         this.fixture.ApiContext.AddRange(
@@ -220,6 +233,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     public async Task SaveChangesAsync_NullIfNoUpdates()
     {
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+        this.mockMissionProgressionService
+            .Setup(x => x.ProcessMissionEvents())
+            .Returns(Task.CompletedTask);
 
         UpdateDataList list = await this.updateDataService.SaveChangesAsync();
 
@@ -235,6 +251,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     public async Task SaveChangesAsync_NoDataFromOtherAccounts()
     {
         this.fixture.ApiContext.PlayerCharaData.Add(new("id 1", Charas.GalaZethia));
+        this.mockMissionProgressionService
+            .Setup(x => x.ProcessMissionEvents())
+            .Returns(Task.CompletedTask);
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id 2");
 
@@ -245,6 +264,9 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     public async Task SaveChangesAsync_NullAfterSave()
     {
         this.fixture.ApiContext.PlayerCharaData.Add(new(DeviceAccountId, Charas.HalloweenLowen));
+        this.mockMissionProgressionService
+            .Setup(x => x.ProcessMissionEvents())
+            .Returns(Task.CompletedTask);
 
         await this.fixture.ApiContext.SaveChangesAsync();
 

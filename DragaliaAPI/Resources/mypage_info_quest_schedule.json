@@ -1,0 +1,3989 @@
+[
+    {
+        "schedule_detail_id": 223010106,
+        "schedule_group_id": 223010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1606888800,
+        "end_date": 1923803999,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 223010107,
+        "schedule_group_id": 223010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1606888800,
+        "end_date": 1923803999,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 223010408,
+        "schedule_group_id": 223010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1612936800,
+        "end_date": 1924927199,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 223010409,
+        "schedule_group_id": 223010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1612936800,
+        "end_date": 1924927199,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 223010410,
+        "schedule_group_id": 223010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1612936800,
+        "end_date": 1924927199,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 223010411,
+        "schedule_group_id": 223010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1640325600,
+        "end_date": 1924927199,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 223010412,
+        "schedule_group_id": 223010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1640325600,
+        "end_date": 1924927199,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 223010413,
+        "schedule_group_id": 223010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1640325600,
+        "end_date": 1924927199,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 223010414,
+        "schedule_group_id": 223010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1640325600,
+        "end_date": 1924927199,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010145,
+        "schedule_group_id": 301010103,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010146,
+        "schedule_group_id": 301010103,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010147,
+        "schedule_group_id": 301010103,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010149,
+        "schedule_group_id": 301010103,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010150,
+        "schedule_group_id": 301010103,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010151,
+        "schedule_group_id": 301010103,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010155,
+        "schedule_group_id": 301010103,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010346,
+        "schedule_group_id": 301010102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010348,
+        "schedule_group_id": 301010102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010349,
+        "schedule_group_id": 301010102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010350,
+        "schedule_group_id": 301010102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010351,
+        "schedule_group_id": 301010102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010352,
+        "schedule_group_id": 301010102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010356,
+        "schedule_group_id": 301010102,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010445,
+        "schedule_group_id": 301010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010446,
+        "schedule_group_id": 301010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010447,
+        "schedule_group_id": 301010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010448,
+        "schedule_group_id": 301010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010449,
+        "schedule_group_id": 301010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010450,
+        "schedule_group_id": 301010101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301010455,
+        "schedule_group_id": 301010101,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020135,
+        "schedule_group_id": 301020101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020136,
+        "schedule_group_id": 301020101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020137,
+        "schedule_group_id": 301020101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020138,
+        "schedule_group_id": 301020101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020139,
+        "schedule_group_id": 301020101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020140,
+        "schedule_group_id": 301020101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020146,
+        "schedule_group_id": 301020101,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020244,
+        "schedule_group_id": 301020104,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020245,
+        "schedule_group_id": 301020104,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020246,
+        "schedule_group_id": 301020104,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020247,
+        "schedule_group_id": 301020104,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020249,
+        "schedule_group_id": 301020104,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020250,
+        "schedule_group_id": 301020104,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020258,
+        "schedule_group_id": 301020104,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020438,
+        "schedule_group_id": 301020103,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020439,
+        "schedule_group_id": 301020103,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020441,
+        "schedule_group_id": 301020103,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020442,
+        "schedule_group_id": 301020103,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020443,
+        "schedule_group_id": 301020103,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020444,
+        "schedule_group_id": 301020103,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020452,
+        "schedule_group_id": 301020103,
+        "drop_bonus_percent": 100,
+        "interval_type": 6,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020533,
+        "schedule_group_id": 301020102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020534,
+        "schedule_group_id": 301020102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020535,
+        "schedule_group_id": 301020102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020536,
+        "schedule_group_id": 301020102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020537,
+        "schedule_group_id": 301020102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020539,
+        "schedule_group_id": 301020102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301020543,
+        "schedule_group_id": 301020102,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030244,
+        "schedule_group_id": 301030101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030246,
+        "schedule_group_id": 301030101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030247,
+        "schedule_group_id": 301030101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030248,
+        "schedule_group_id": 301030101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030249,
+        "schedule_group_id": 301030101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030250,
+        "schedule_group_id": 301030101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030256,
+        "schedule_group_id": 301030101,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030533,
+        "schedule_group_id": 301030102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030534,
+        "schedule_group_id": 301030102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030535,
+        "schedule_group_id": 301030102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030537,
+        "schedule_group_id": 301030102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030538,
+        "schedule_group_id": 301030102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030539,
+        "schedule_group_id": 301030102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301030547,
+        "schedule_group_id": 301030102,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040133,
+        "schedule_group_id": 301040101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040134,
+        "schedule_group_id": 301040101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040136,
+        "schedule_group_id": 301040101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040137,
+        "schedule_group_id": 301040101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040138,
+        "schedule_group_id": 301040101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040139,
+        "schedule_group_id": 301040101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040143,
+        "schedule_group_id": 301040101,
+        "drop_bonus_percent": 100,
+        "interval_type": 6,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040435,
+        "schedule_group_id": 301040103,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040436,
+        "schedule_group_id": 301040103,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040437,
+        "schedule_group_id": 301040103,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040438,
+        "schedule_group_id": 301040103,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040439,
+        "schedule_group_id": 301040103,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040440,
+        "schedule_group_id": 301040103,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040444,
+        "schedule_group_id": 301040103,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040533,
+        "schedule_group_id": 301040102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040534,
+        "schedule_group_id": 301040102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040535,
+        "schedule_group_id": 301040102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040536,
+        "schedule_group_id": 301040102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040537,
+        "schedule_group_id": 301040102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040538,
+        "schedule_group_id": 301040102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301040543,
+        "schedule_group_id": 301040102,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050138,
+        "schedule_group_id": 301050102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050139,
+        "schedule_group_id": 301050102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050140,
+        "schedule_group_id": 301050102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050141,
+        "schedule_group_id": 301050102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050142,
+        "schedule_group_id": 301050102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050143,
+        "schedule_group_id": 301050102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050148,
+        "schedule_group_id": 301050102,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050333,
+        "schedule_group_id": 301050101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050334,
+        "schedule_group_id": 301050101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050335,
+        "schedule_group_id": 301050101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050336,
+        "schedule_group_id": 301050101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050338,
+        "schedule_group_id": 301050101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050339,
+        "schedule_group_id": 301050101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050343,
+        "schedule_group_id": 301050101,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050535,
+        "schedule_group_id": 301050103,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050536,
+        "schedule_group_id": 301050103,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050538,
+        "schedule_group_id": 301050103,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050539,
+        "schedule_group_id": 301050103,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050540,
+        "schedule_group_id": 301050103,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050541,
+        "schedule_group_id": 301050103,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301050545,
+        "schedule_group_id": 301050103,
+        "drop_bonus_percent": 100,
+        "interval_type": 6,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060139,
+        "schedule_group_id": 301060102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060141,
+        "schedule_group_id": 301060102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060142,
+        "schedule_group_id": 301060102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060143,
+        "schedule_group_id": 301060102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060144,
+        "schedule_group_id": 301060102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060145,
+        "schedule_group_id": 301060102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060154,
+        "schedule_group_id": 301060102,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060334,
+        "schedule_group_id": 301060101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060335,
+        "schedule_group_id": 301060101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060336,
+        "schedule_group_id": 301060101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060337,
+        "schedule_group_id": 301060101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060338,
+        "schedule_group_id": 301060101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060340,
+        "schedule_group_id": 301060101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060344,
+        "schedule_group_id": 301060101,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060235,
+        "schedule_group_id": 301060103,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060236,
+        "schedule_group_id": 301060103,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060237,
+        "schedule_group_id": 301060103,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060239,
+        "schedule_group_id": 301060103,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060240,
+        "schedule_group_id": 301060103,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060241,
+        "schedule_group_id": 301060103,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301060245,
+        "schedule_group_id": 301060103,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070158,
+        "schedule_group_id": 301070103,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070159,
+        "schedule_group_id": 301070103,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070160,
+        "schedule_group_id": 301070103,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070161,
+        "schedule_group_id": 301070103,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070163,
+        "schedule_group_id": 301070103,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070164,
+        "schedule_group_id": 301070103,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070168,
+        "schedule_group_id": 301070103,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070253,
+        "schedule_group_id": 301070102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070254,
+        "schedule_group_id": 301070102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070256,
+        "schedule_group_id": 301070102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070257,
+        "schedule_group_id": 301070102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070258,
+        "schedule_group_id": 301070102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070259,
+        "schedule_group_id": 301070102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070263,
+        "schedule_group_id": 301070102,
+        "drop_bonus_percent": 100,
+        "interval_type": 6,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070453,
+        "schedule_group_id": 301070104,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070454,
+        "schedule_group_id": 301070104,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070455,
+        "schedule_group_id": 301070104,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070456,
+        "schedule_group_id": 301070104,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070457,
+        "schedule_group_id": 301070104,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070459,
+        "schedule_group_id": 301070104,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070463,
+        "schedule_group_id": 301070104,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070553,
+        "schedule_group_id": 301070101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070554,
+        "schedule_group_id": 301070101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070555,
+        "schedule_group_id": 301070101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070556,
+        "schedule_group_id": 301070101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070557,
+        "schedule_group_id": 301070101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070558,
+        "schedule_group_id": 301070101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 301070562,
+        "schedule_group_id": 301070101,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040331,
+        "schedule_group_id": 300040101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040332,
+        "schedule_group_id": 300040102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120235,
+        "schedule_group_id": 300120101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120236,
+        "schedule_group_id": 300120102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130431,
+        "schedule_group_id": 300130101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130432,
+        "schedule_group_id": 300130102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180534,
+        "schedule_group_id": 300180101,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180535,
+        "schedule_group_id": 300180102,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180536,
+        "schedule_group_id": 300181101,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180537,
+        "schedule_group_id": 300181102,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080133,
+        "schedule_group_id": 300080101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080134,
+        "schedule_group_id": 300080102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040337,
+        "schedule_group_id": 300041101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040338,
+        "schedule_group_id": 300041102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120241,
+        "schedule_group_id": 300121101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120242,
+        "schedule_group_id": 300121102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130437,
+        "schedule_group_id": 300131101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130438,
+        "schedule_group_id": 300131102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180542,
+        "schedule_group_id": 300180101,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180543,
+        "schedule_group_id": 300180102,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180544,
+        "schedule_group_id": 300181101,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080139,
+        "schedule_group_id": 300081101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080140,
+        "schedule_group_id": 300081102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180545,
+        "schedule_group_id": 300181102,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180553,
+        "schedule_group_id": 300180101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180554,
+        "schedule_group_id": 300180102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180559,
+        "schedule_group_id": 300181101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180560,
+        "schedule_group_id": 300181102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120290,
+        "schedule_group_id": 300120101,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120291,
+        "schedule_group_id": 300120102,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120292,
+        "schedule_group_id": 300121101,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120293,
+        "schedule_group_id": 300121102,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120298,
+        "schedule_group_id": 300120101,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120299,
+        "schedule_group_id": 300120102,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120221,
+        "schedule_group_id": 300121101,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120222,
+        "schedule_group_id": 300121102,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130481,
+        "schedule_group_id": 300130101,
+        "drop_bonus_percent": 100,
+        "interval_type": 6,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130482,
+        "schedule_group_id": 300130102,
+        "drop_bonus_percent": 100,
+        "interval_type": 6,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130483,
+        "schedule_group_id": 300131101,
+        "drop_bonus_percent": 100,
+        "interval_type": 6,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130484,
+        "schedule_group_id": 300131102,
+        "drop_bonus_percent": 100,
+        "interval_type": 6,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130489,
+        "schedule_group_id": 300130101,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130490,
+        "schedule_group_id": 300130102,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130491,
+        "schedule_group_id": 300131101,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130492,
+        "schedule_group_id": 300131102,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080181,
+        "schedule_group_id": 300080101,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080182,
+        "schedule_group_id": 300080102,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080183,
+        "schedule_group_id": 300081101,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080184,
+        "schedule_group_id": 300081102,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080189,
+        "schedule_group_id": 300080101,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080190,
+        "schedule_group_id": 300080102,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080191,
+        "schedule_group_id": 300081101,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080192,
+        "schedule_group_id": 300081102,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040380,
+        "schedule_group_id": 300040101,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040381,
+        "schedule_group_id": 300040102,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040382,
+        "schedule_group_id": 300041101,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040383,
+        "schedule_group_id": 300041102,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040388,
+        "schedule_group_id": 300040101,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040389,
+        "schedule_group_id": 300040102,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040390,
+        "schedule_group_id": 300041101,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040391,
+        "schedule_group_id": 300041102,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040301,
+        "schedule_group_id": 300040101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040302,
+        "schedule_group_id": 300040102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040303,
+        "schedule_group_id": 300041101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040304,
+        "schedule_group_id": 300041102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040305,
+        "schedule_group_id": 300040101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040306,
+        "schedule_group_id": 300040102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040307,
+        "schedule_group_id": 300041101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040308,
+        "schedule_group_id": 300041102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040309,
+        "schedule_group_id": 300040101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040310,
+        "schedule_group_id": 300040102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040311,
+        "schedule_group_id": 300041101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040312,
+        "schedule_group_id": 300041102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040313,
+        "schedule_group_id": 300040101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040314,
+        "schedule_group_id": 300040102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040315,
+        "schedule_group_id": 300041101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300040316,
+        "schedule_group_id": 300041102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120201,
+        "schedule_group_id": 300120101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120202,
+        "schedule_group_id": 300120102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120203,
+        "schedule_group_id": 300121101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120204,
+        "schedule_group_id": 300121102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120205,
+        "schedule_group_id": 300120101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120206,
+        "schedule_group_id": 300120102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120207,
+        "schedule_group_id": 300121101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120208,
+        "schedule_group_id": 300121102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120209,
+        "schedule_group_id": 300120101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120210,
+        "schedule_group_id": 300120102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120211,
+        "schedule_group_id": 300121101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120212,
+        "schedule_group_id": 300121102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120213,
+        "schedule_group_id": 300120101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120214,
+        "schedule_group_id": 300120102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120215,
+        "schedule_group_id": 300121101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300120216,
+        "schedule_group_id": 300121102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130401,
+        "schedule_group_id": 300130101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130402,
+        "schedule_group_id": 300130102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130403,
+        "schedule_group_id": 300131101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130404,
+        "schedule_group_id": 300131102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130405,
+        "schedule_group_id": 300130101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130406,
+        "schedule_group_id": 300130102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130407,
+        "schedule_group_id": 300131101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130408,
+        "schedule_group_id": 300131102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130409,
+        "schedule_group_id": 300130101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130410,
+        "schedule_group_id": 300130102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130411,
+        "schedule_group_id": 300131101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130412,
+        "schedule_group_id": 300131102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130413,
+        "schedule_group_id": 300130101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130414,
+        "schedule_group_id": 300130102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130415,
+        "schedule_group_id": 300131101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300130416,
+        "schedule_group_id": 300131102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180501,
+        "schedule_group_id": 300180101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180502,
+        "schedule_group_id": 300180102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180503,
+        "schedule_group_id": 300181101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180504,
+        "schedule_group_id": 300181102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180505,
+        "schedule_group_id": 300180101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180506,
+        "schedule_group_id": 300180102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180507,
+        "schedule_group_id": 300181101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180508,
+        "schedule_group_id": 300181102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180509,
+        "schedule_group_id": 300180101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180510,
+        "schedule_group_id": 300180102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180511,
+        "schedule_group_id": 300181101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180512,
+        "schedule_group_id": 300181102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180513,
+        "schedule_group_id": 300180101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180514,
+        "schedule_group_id": 300180102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180515,
+        "schedule_group_id": 300181101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300180516,
+        "schedule_group_id": 300181102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080101,
+        "schedule_group_id": 300080101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080102,
+        "schedule_group_id": 300080102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080103,
+        "schedule_group_id": 300081101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080104,
+        "schedule_group_id": 300081102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080105,
+        "schedule_group_id": 300080101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080106,
+        "schedule_group_id": 300080102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080107,
+        "schedule_group_id": 300081101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080108,
+        "schedule_group_id": 300081102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080109,
+        "schedule_group_id": 300080101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080110,
+        "schedule_group_id": 300080102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080111,
+        "schedule_group_id": 300081101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080112,
+        "schedule_group_id": 300081102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080113,
+        "schedule_group_id": 300080101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080114,
+        "schedule_group_id": 300080102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080115,
+        "schedule_group_id": 300081101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300080116,
+        "schedule_group_id": 300081102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220135,
+        "schedule_group_id": 300220101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220136,
+        "schedule_group_id": 300220102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310223,
+        "schedule_group_id": 300310101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310224,
+        "schedule_group_id": 300310102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280337,
+        "schedule_group_id": 300280101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280338,
+        "schedule_group_id": 300280102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240537,
+        "schedule_group_id": 300240101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240538,
+        "schedule_group_id": 300240102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220141,
+        "schedule_group_id": 300221101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220142,
+        "schedule_group_id": 300221102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310229,
+        "schedule_group_id": 300311101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310230,
+        "schedule_group_id": 300311102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280343,
+        "schedule_group_id": 300281101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280344,
+        "schedule_group_id": 300281102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240543,
+        "schedule_group_id": 300241101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240544,
+        "schedule_group_id": 300241102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1598248800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320431,
+        "schedule_group_id": 300320101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320432,
+        "schedule_group_id": 300320102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320437,
+        "schedule_group_id": 300321101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320438,
+        "schedule_group_id": 300321102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1602482400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320471,
+        "schedule_group_id": 300320101,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320472,
+        "schedule_group_id": 300320102,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320473,
+        "schedule_group_id": 300320101,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320474,
+        "schedule_group_id": 300320102,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320475,
+        "schedule_group_id": 300321101,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320476,
+        "schedule_group_id": 300321102,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320477,
+        "schedule_group_id": 300321101,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320478,
+        "schedule_group_id": 300321102,
+        "drop_bonus_percent": 100,
+        "interval_type": 7,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220187,
+        "schedule_group_id": 300221101,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220188,
+        "schedule_group_id": 300221102,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220189,
+        "schedule_group_id": 300221101,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220190,
+        "schedule_group_id": 300221102,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220191,
+        "schedule_group_id": 300220101,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220192,
+        "schedule_group_id": 300220102,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220193,
+        "schedule_group_id": 300220101,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220194,
+        "schedule_group_id": 300220102,
+        "drop_bonus_percent": 100,
+        "interval_type": 3,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310267,
+        "schedule_group_id": 300311101,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310268,
+        "schedule_group_id": 300311102,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310269,
+        "schedule_group_id": 300311101,
+        "drop_bonus_percent": 100,
+        "interval_type": 6,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310270,
+        "schedule_group_id": 300311102,
+        "drop_bonus_percent": 100,
+        "interval_type": 6,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310275,
+        "schedule_group_id": 300310101,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310276,
+        "schedule_group_id": 300310102,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310277,
+        "schedule_group_id": 300310101,
+        "drop_bonus_percent": 100,
+        "interval_type": 6,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310278,
+        "schedule_group_id": 300310102,
+        "drop_bonus_percent": 100,
+        "interval_type": 6,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280387,
+        "schedule_group_id": 300280101,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280388,
+        "schedule_group_id": 300280102,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280389,
+        "schedule_group_id": 300280101,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280390,
+        "schedule_group_id": 300280102,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280391,
+        "schedule_group_id": 300281101,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280392,
+        "schedule_group_id": 300281102,
+        "drop_bonus_percent": 100,
+        "interval_type": 4,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280393,
+        "schedule_group_id": 300281101,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280394,
+        "schedule_group_id": 300281102,
+        "drop_bonus_percent": 100,
+        "interval_type": 9,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240585,
+        "schedule_group_id": 300240101,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240586,
+        "schedule_group_id": 300240102,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240587,
+        "schedule_group_id": 300240101,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240588,
+        "schedule_group_id": 300240102,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240589,
+        "schedule_group_id": 300241101,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240590,
+        "schedule_group_id": 300241102,
+        "drop_bonus_percent": 100,
+        "interval_type": 5,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240591,
+        "schedule_group_id": 300241101,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240592,
+        "schedule_group_id": 300241102,
+        "drop_bonus_percent": 100,
+        "interval_type": 8,
+        "start_date": 1626674400,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220101,
+        "schedule_group_id": 300220101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220102,
+        "schedule_group_id": 300220102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220103,
+        "schedule_group_id": 300221101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220104,
+        "schedule_group_id": 300221102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220105,
+        "schedule_group_id": 300220101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220106,
+        "schedule_group_id": 300220102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220107,
+        "schedule_group_id": 300221101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220108,
+        "schedule_group_id": 300221102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220109,
+        "schedule_group_id": 300220101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220110,
+        "schedule_group_id": 300220102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220111,
+        "schedule_group_id": 300221101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220112,
+        "schedule_group_id": 300221102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220113,
+        "schedule_group_id": 300220101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220114,
+        "schedule_group_id": 300220102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220115,
+        "schedule_group_id": 300221101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300220116,
+        "schedule_group_id": 300221102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310201,
+        "schedule_group_id": 300310101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310202,
+        "schedule_group_id": 300310102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310203,
+        "schedule_group_id": 300311101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310204,
+        "schedule_group_id": 300311102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310205,
+        "schedule_group_id": 300310101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310206,
+        "schedule_group_id": 300310102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310207,
+        "schedule_group_id": 300311101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310208,
+        "schedule_group_id": 300311102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310209,
+        "schedule_group_id": 300310101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310210,
+        "schedule_group_id": 300310102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310211,
+        "schedule_group_id": 300311101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310212,
+        "schedule_group_id": 300311102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310213,
+        "schedule_group_id": 300310101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310214,
+        "schedule_group_id": 300310102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310215,
+        "schedule_group_id": 300311101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300310216,
+        "schedule_group_id": 300311102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280301,
+        "schedule_group_id": 300280101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280302,
+        "schedule_group_id": 300280102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280303,
+        "schedule_group_id": 300281101,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280304,
+        "schedule_group_id": 300281102,
+        "drop_bonus_percent": 0,
+        "interval_type": 5,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280305,
+        "schedule_group_id": 300280101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280306,
+        "schedule_group_id": 300280102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280307,
+        "schedule_group_id": 300281101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280308,
+        "schedule_group_id": 300281102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280309,
+        "schedule_group_id": 300280101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280310,
+        "schedule_group_id": 300280102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280311,
+        "schedule_group_id": 300281101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280312,
+        "schedule_group_id": 300281102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280313,
+        "schedule_group_id": 300280101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280314,
+        "schedule_group_id": 300280102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280315,
+        "schedule_group_id": 300281101,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300280316,
+        "schedule_group_id": 300281102,
+        "drop_bonus_percent": 0,
+        "interval_type": 3,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320401,
+        "schedule_group_id": 300320101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320402,
+        "schedule_group_id": 300320102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320403,
+        "schedule_group_id": 300321101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320404,
+        "schedule_group_id": 300321102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320405,
+        "schedule_group_id": 300320101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320406,
+        "schedule_group_id": 300320102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320407,
+        "schedule_group_id": 300321101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320408,
+        "schedule_group_id": 300321102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320409,
+        "schedule_group_id": 300320101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320410,
+        "schedule_group_id": 300320102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320411,
+        "schedule_group_id": 300321101,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320412,
+        "schedule_group_id": 300321102,
+        "drop_bonus_percent": 0,
+        "interval_type": 8,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320413,
+        "schedule_group_id": 300320101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320414,
+        "schedule_group_id": 300320102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320415,
+        "schedule_group_id": 300321101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300320416,
+        "schedule_group_id": 300321102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240501,
+        "schedule_group_id": 300240101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240502,
+        "schedule_group_id": 300240102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240503,
+        "schedule_group_id": 300241101,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240504,
+        "schedule_group_id": 300241102,
+        "drop_bonus_percent": 0,
+        "interval_type": 4,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240505,
+        "schedule_group_id": 300240101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240506,
+        "schedule_group_id": 300240102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240507,
+        "schedule_group_id": 300241101,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240508,
+        "schedule_group_id": 300241102,
+        "drop_bonus_percent": 0,
+        "interval_type": 6,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240509,
+        "schedule_group_id": 300240101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240510,
+        "schedule_group_id": 300240102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240511,
+        "schedule_group_id": 300241101,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240512,
+        "schedule_group_id": 300241102,
+        "drop_bonus_percent": 0,
+        "interval_type": 7,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240513,
+        "schedule_group_id": 300240101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240514,
+        "schedule_group_id": 300240102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240515,
+        "schedule_group_id": 300241101,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    },
+    {
+        "schedule_detail_id": 300240516,
+        "schedule_group_id": 300241102,
+        "drop_bonus_percent": 0,
+        "interval_type": 9,
+        "start_date": 1611640800,
+        "end_date": 1913781599,
+        "limit_shop_goods_type": 0
+    }
+]
