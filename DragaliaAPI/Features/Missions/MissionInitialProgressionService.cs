@@ -116,8 +116,6 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
         }
     }
 
-    private async Task<int> GetFortPlantUpgradedCount(MissionProgressionRequirement requirement) { }
-
     private async Task<int> GetQuestClearedCount(MissionProgressionRequirement requirement)
     {
         int questClearCount = await this.questRepository.Quests
