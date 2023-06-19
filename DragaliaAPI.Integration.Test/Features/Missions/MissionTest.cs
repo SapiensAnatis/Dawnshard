@@ -42,18 +42,8 @@ public class MissionTest : TestFixture
             );
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.main_story_mission_list
-            .Should()
-            .HaveCount(5)
-            .And.ContainEquivalentOf(
-                new MainStoryMissionList(
-                    10010301,
-                    0,
-                    0,
-                    DateTimeOffset.UnixEpoch,
-                    DateTimeOffset.UnixEpoch
-                )
-            );
+        resp.data.main_story_mission_list.Should().HaveCount(5);
+        // Don't test for a specific quest as other tests mess with the quest progress
     }
 
     [Fact]
@@ -87,6 +77,6 @@ public class MissionTest : TestFixture
 
         rewardResp.data_headers.result_code.Should().Be(ResultCode.Success);
         rewardResp.data.entity_result.converted_entity_list.Should().NotBeNull();
-        rewardResp.data.drill_mission_group_list.Should().HaveCount(55);
+        rewardResp.data.drill_mission_list.Should().HaveCount(55);
     }
 }
