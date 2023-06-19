@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Models.Generated;
@@ -19,6 +20,7 @@ public class LoadService : ILoadService
     private readonly ILogger<LoadService> logger;
     private readonly IOptionsMonitor<PhotonOptions> photonOptions;
     private readonly IEnumerable<ISavefileUpdate> savefileUpdates;
+    private readonly IMissionService missionService;
 
     public LoadService(
         ISavefileService savefileService,
@@ -26,7 +28,8 @@ public class LoadService : ILoadService
         IMapper mapper,
         ILogger<LoadService> logger,
         IOptionsMonitor<PhotonOptions> photonOptions,
-        IEnumerable<ISavefileUpdate> savefileUpdates
+        IEnumerable<ISavefileUpdate> savefileUpdates,
+        IMissionService missionService
     )
     {
         this.savefileService = savefileService;
@@ -35,6 +38,7 @@ public class LoadService : ILoadService
         this.logger = logger;
         this.photonOptions = photonOptions;
         this.savefileUpdates = savefileUpdates;
+        this.missionService = missionService;
     }
 
     public async Task<LoadIndexData> BuildIndexData()
@@ -102,14 +106,7 @@ public class LoadService : ILoadService
                     host = photonOptions.CurrentValue.ServerUrl,
                     app_id = string.Empty
                 },
-                mission_notice = new MissionNotice()
-                {
-                    drill_mission_notice = new AtgenNormalMissionNotice
-                    {
-                        is_update = 1,
-                        current_mission_id = 100100
-                    }
-                },
+                mission_notice = await this.missionService.GetMissionNotice(null),
                 equip_stamp_list = savefile.EquippedStampList
                     .Select(this.mapper.Map<DbEquippedStamp, EquipStampList>)
                     .OrderBy(x => x.slot)

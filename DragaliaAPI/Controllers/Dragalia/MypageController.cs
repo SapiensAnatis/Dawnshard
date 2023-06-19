@@ -19,6 +19,18 @@ public class MypageController : DragaliaControllerBase
         this.missionService = missionService;
     }
 
+    private static readonly List<QuestScheduleDetailList> AvailableQuestSchedule; // Used for unlocking void battles
+
+    static MypageController()
+    {
+        string questScheduleJson = System.IO.File.ReadAllText(
+            "Resources/mypage_info_quest_schedule.json"
+        );
+        AvailableQuestSchedule =
+            JsonSerializer.Deserialize<List<QuestScheduleDetailList>>(questScheduleJson)
+            ?? new List<QuestScheduleDetailList>();
+    }
+
     [Route("info")]
     [HttpPost]
     public async Task<DragaliaResult> Info()
@@ -36,7 +48,7 @@ public class MypageController : DragaliaControllerBase
             {
                 user_summon_list = new List<UserSummonList>(),
                 quest_event_schedule_list = new List<QuestEventScheduleList>(),
-                quest_schedule_detail_list = new List<QuestScheduleDetailList>(),
+                quest_schedule_detail_list = AvailableQuestSchedule,
                 update_data_list = new UpdateDataList()
                 {
                     mission_notice = await this.missionService.GetMissionNotice(null)

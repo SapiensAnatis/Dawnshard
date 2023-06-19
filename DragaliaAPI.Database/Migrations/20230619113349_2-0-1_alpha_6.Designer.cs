@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230618140834_missions-initial")]
-    partial class missionsinitial
+    [Migration("20230619113349_2-0-1_alpha_6")]
+    partial class _201_alpha_6
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,6 +76,24 @@ namespace DragaliaAPI.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DeviceAccounts");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbEquippedStamp", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Slot")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StampId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DeviceAccountId", "Slot");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("EquippedStamps");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbFortBuild", b =>
@@ -228,6 +246,9 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.Property<string>("AccountId")
                         .HasColumnType("text");
+
+                    b.Property<int>("SavefileVersion")
+                        .HasColumnType("integer");
 
                     b.HasKey("AccountId");
 
@@ -1045,6 +1066,17 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbEquippedStamp", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany("EquippedStampList")
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbFortBuild", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
@@ -1296,6 +1328,8 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("DragonList");
 
                     b.Navigation("DragonReliabilityList");
+
+                    b.Navigation("EquippedStampList");
 
                     b.Navigation("FortDetail");
 

@@ -7834,7 +7834,11 @@ public class QuestScheduleDetailList
     public int drop_bonus_percent { get; set; }
     public int limit_shop_goods_type { get; set; }
     public int interval_type { get; set; }
+
+    [JsonConverter(typeof(DateTimeUnixJsonConverter))]
     public DateTimeOffset start_date { get; set; }
+
+    [JsonConverter(typeof(DateTimeUnixJsonConverter))]
     public DateTimeOffset end_date { get; set; }
 
     public QuestScheduleDetailList(

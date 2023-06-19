@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DragaliaAPI.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class initialmissions : Migration
+    public partial class _201_alpha_6 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,16 +17,17 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     DeviceAccountId = table.Column<string>(type: "text", nullable: false),
                     MissionId = table.Column<int>(type: "integer", nullable: false),
+                    Type = table.Column<int>(type: "integer", nullable: false),
                     Progress = table.Column<int>(type: "integer", nullable: false),
                     State = table.Column<int>(type: "integer", nullable: false),
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    Type = table.Column<int>(type: "integer", nullable: false),
-                    Pickup = table.Column<bool>(type: "boolean", nullable: false)
+                    Pickup = table.Column<bool>(type: "boolean", nullable: false),
+                    GroupId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerMissions", x => new { x.DeviceAccountId, x.MissionId });
+                    table.PrimaryKey("PK_PlayerMissions", x => new { x.DeviceAccountId, x.Type, x.MissionId });
                     table.ForeignKey(
                         name: "FK_PlayerMissions_Players_DeviceAccountId",
                         column: x => x.DeviceAccountId,
