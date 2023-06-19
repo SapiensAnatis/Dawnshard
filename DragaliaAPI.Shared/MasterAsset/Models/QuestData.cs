@@ -5,6 +5,7 @@ namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 public record QuestData(
     int Id,
+    int Gid,
     QuestPlayModeTypes QuestPlayModeType,
     UnitElement LimitedElementalType,
     UnitElement LimitedElementalType2,
@@ -38,4 +39,10 @@ public record QuestData(
             new(this.Scene05, this.AreaName05),
             new(this.Scene06, this.AreaName06),
         }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
+
+    public bool IsPartOfVoidBattleGroups =>
+        Gid is >= FirstVoidBattleGroupId and <= LastVoidBattleGroupId;
+
+    private const int FirstVoidBattleGroupId = 30001; // First group that has _BaseQuestGroupId == 30000 (VoidBattle)
+    private const int LastVoidBattleGroupId = 30107; // Last group that has _BaseQuestGroupId == 30000 (VoidBattle)
 }

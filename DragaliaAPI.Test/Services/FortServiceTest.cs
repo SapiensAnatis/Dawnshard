@@ -1,6 +1,7 @@
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -21,6 +22,7 @@ public class FortServiceTest
     private readonly Mock<ILogger<FortService>> mockLogger;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly IMapper mapper;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
 
     private readonly IFortService fortService;
 
@@ -32,6 +34,7 @@ public class FortServiceTest
         this.mockLogger = new(MockBehavior.Loose);
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mapper = UnitTestUtils.CreateMapper();
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
 
         this.fortService = new FortService(
             this.mockFortRepository.Object,
@@ -39,7 +42,8 @@ public class FortServiceTest
             this.mockInventoryRepository.Object,
             this.mockLogger.Object,
             this.mockPlayerIdentityService.Object,
-            this.mapper
+            this.mapper,
+            this.mockMissionProgressionService.Object
         );
 
         UnitTestUtils.ApplyDateTimeAssertionOptions();
@@ -224,6 +228,18 @@ public class FortServiceTest
     public async Task CompleteAtOnce_UpgradesBuilding()
     {
         DbPlayerUserData userData = new() { DeviceAccountId = "id", BuildTimePoint = 1 };
+        DbFortBuild build =
+            new()
+            {
+                DeviceAccountId = "id",
+                Level = 2,
+                BuildStartDate = DateTimeOffset.UtcNow,
+                BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(5)
+            };
+
+        this.mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(0));
+
+        this.mockMissionProgressionService.Setup(x => x.OnFortLevelup());
 
         this.mockUserDataRepository
             .SetupGet(x => x.UserData)
@@ -233,9 +249,11 @@ public class FortServiceTest
                     .BuildMock()
             );
 
-        this.mockFortRepository
-            .Setup(x => x.UpgradeAtOnce(userData, 1, PaymentTypes.HalidomHustleHammer))
-            .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id" });
+        this.mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
+
+        this.mockFortRepository.Setup(
+            x => x.ConsumeUpgradeAtOnceCost(userData, build, PaymentTypes.HalidomHustleHammer)
+        );
 
         await this.fortService.CompleteAtOnce(PaymentTypes.HalidomHustleHammer, 1);
 
@@ -325,6 +343,10 @@ public class FortServiceTest
                 Level = 3,
             };
         this.mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
+
+        this.mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(0));
+
+        this.mockMissionProgressionService.Setup(x => x.OnFortLevelup());
 
         await this.fortService.EndUpgrade(1);
 

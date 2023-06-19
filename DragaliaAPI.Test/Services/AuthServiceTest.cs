@@ -239,7 +239,7 @@ public class AuthServiceTest
                         DeviceAccountId = AccountId,
                         Name = "Euden",
                         ViewerId = 1,
-                        LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(1)
+                        LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(15)
                     }
                 }
                     .AsQueryable()
@@ -257,7 +257,7 @@ public class AuthServiceTest
             .ReturnsAsync("session id");
 
         this.mockSavefileService
-            .Setup(x => x.ThreadSafeImport(importSavefile))
+            .Setup(x => x.ThreadSafeImport(It.IsAny<LoadIndexData>()))
             .Returns(Task.CompletedTask);
 
         await this.authService.DoAuth(token);

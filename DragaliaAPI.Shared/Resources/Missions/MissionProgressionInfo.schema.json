@@ -1,0 +1,57 @@
+{
+  "description": "Defines progression info related to endeavors",
+  "type": "array",
+  "additionalItems": false,
+  "items": {
+    "type": "object",
+    "required": [ "_Type", "_Requirements" ],
+    "additionalProperties": false,
+    "properties": {
+      "_Type": {
+        "type": "string",
+        "enum": [ "FortPlantUpgraded", "FortPlantBuilt", "FortLevelup", "QuestCleared", "VoidBattleCleared", "WeaponEarned", "WeaponRefined", "WyrmprintAugmentBuildup", "CharacterBuildup" ]
+      },
+      "_Requirements": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [ "_Missions" ],
+          "properties": {
+            "_Parameter": {
+              "type": "integer",
+              "description": "First parameter for type specification."
+            },
+            "_Parameter2": {
+              "type": "integer",
+              "default": -1
+            },
+            "_Parameter3": {
+              "type": "integer",
+              "default": -1
+            },
+            "_Parameter4": {
+              "type": "integer",
+              "default": -1
+            },
+            "_Missions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [ "_Type", "_Id" ],
+                "properties": {
+                  "_Type": {
+                    "type": "string",
+                    "enum": [ "Normal", "Daily", "Period", "Beginner", "Special", "MainStory", "MemoryEvent", "Album", "Drill" ]
+                  },
+                  "_Id": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

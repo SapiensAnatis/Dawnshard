@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -15,18 +16,21 @@ public class AbilityCrestService : IAbilityCrestService
     private readonly IInventoryRepository inventoryRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly ILogger<AbilityCrestService> logger;
+    private readonly IMissionProgressionService missionProgressionService;
 
     public AbilityCrestService(
         IAbilityCrestRepository abilityCrestRepository,
         IInventoryRepository inventoryRepository,
         IUserDataRepository userDataRepository,
-        ILogger<AbilityCrestService> logger
+        ILogger<AbilityCrestService> logger,
+        IMissionProgressionService missionProgressionService
     )
     {
         this.abilityCrestRepository = abilityCrestRepository;
         this.inventoryRepository = inventoryRepository;
         this.userDataRepository = userDataRepository;
         this.logger = logger;
+        this.missionProgressionService = missionProgressionService;
     }
 
     public async Task AddOrRefund(AbilityCrests abilityCrestId)
@@ -245,6 +249,11 @@ public class AbilityCrestService : IAbilityCrestService
         else
         {
             dbAbilityCrest.AttackPlusCount = buildup.plus_count;
+        }
+
+        for (int i = 0; i < usedAugments; i++)
+        {
+            this.missionProgressionService.OnWyrmprintAugmentBuildup(buildup.plus_count_type);
         }
 
         await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
