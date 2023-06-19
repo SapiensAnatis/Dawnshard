@@ -62,11 +62,11 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
         {
             MissionProgressType.FortPlantBuilt
                 => await this.fortRepository.Builds.CountAsync(
-                    x => x.PlantId == (FortPlants)requirement.Parameter
+                    x => x.PlantId == (FortPlants)requirement.Parameter!
                 ),
             MissionProgressType.FortPlantUpgraded
                 => await this.fortRepository.Builds
-                    .Where(x => x.PlantId == (FortPlants)requirement.Parameter)
+                    .Where(x => x.PlantId == (FortPlants)requirement.Parameter!)
                     .Select(x => x.Level)
                     .FirstOrDefaultAsync(),
             MissionProgressType.FortLevelup
@@ -137,7 +137,7 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
 
     private async Task<int> GetCharacterBuildupCount(MissionProgressionRequirement requirement)
     {
-        if ((PlusCountType)requirement.Parameter == PlusCountType.Hp)
+        if ((PlusCountType)requirement.Parameter! == PlusCountType.Hp)
             return await this.unitRepository.Charas.Select(x => x.HpPlusCount).MaxAsync();
 
         return await this.unitRepository.Charas.Select(x => x.AttackPlusCount).MaxAsync();
@@ -145,7 +145,7 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
 
     private async Task<int> GetWyrmprintBuildupCount(MissionProgressionRequirement requirement)
     {
-        if ((PlusCountType)requirement.Parameter == PlusCountType.Hp)
+        if ((PlusCountType)requirement.Parameter! == PlusCountType.Hp)
             return await this.abilityCrestRepository.AbilityCrests
                 .Select(x => x.HpPlusCount)
                 .MaxAsync();
@@ -160,9 +160,15 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
         List<WeaponBodies> validWeaponBodies = MasterAsset.WeaponBody.Enumerable
             .Where(
                 x =>
-                    x.ElementalType == (UnitElement)requirement.Parameter
-                    && x.Rarity == requirement.Parameter2
-                    && x.WeaponSeriesId == (WeaponSeries)requirement.Parameter3
+                    (
+                        requirement.Parameter is null
+                        || x.ElementalType == (UnitElement)requirement.Parameter
+                    )
+                    && (requirement.Parameter2 is null || x.Rarity == requirement.Parameter2)
+                    && (
+                        requirement.Parameter3 is null
+                        || x.WeaponSeriesId == (WeaponSeries)requirement.Parameter3
+                    )
             )
             .Select(x => x.Id)
             .ToList();
@@ -177,9 +183,15 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
         List<WeaponBodies> validWeaponBodies = MasterAsset.WeaponBody.Enumerable
             .Where(
                 x =>
-                    x.ElementalType == (UnitElement)requirement.Parameter
-                    && x.Rarity == requirement.Parameter2
-                    && x.WeaponSeriesId == (WeaponSeries)requirement.Parameter3
+                    (
+                        requirement.Parameter is null
+                        || x.ElementalType == (UnitElement)requirement.Parameter
+                    )
+                    && (requirement.Parameter2 is null || x.Rarity == requirement.Parameter2)
+                    && (
+                        requirement.Parameter3 is null
+                        || x.WeaponSeriesId == (WeaponSeries)requirement.Parameter3
+                    )
             )
             .Select(x => x.Id)
             .ToList();
@@ -192,16 +204,7 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
     private async Task<int> GetVoidBattleClearedCount(MissionProgressionRequirement requirement)
     {
         List<int> validQuests = MasterAsset.QuestData.Enumerable
-            .Where(x =>
-            {
-                if (x.Gid < 30000)
-                    return false;
-
-                QuestEventGroup group = MasterAsset.QuestEventGroup[x.Gid];
-                QuestEvent evt = MasterAsset.QuestEvent[group.BaseQuestGroupId];
-
-                return evt.QuestEventType == QuestEventType.VoidBattle;
-            })
+            .Where(x => x.IsPartOfVoidBattleGroups)
             .Select(x => x.Id)
             .ToList();
 

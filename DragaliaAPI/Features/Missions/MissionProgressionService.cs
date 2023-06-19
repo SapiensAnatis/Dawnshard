@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Numerics;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -83,6 +84,8 @@ public class MissionProgressionService : IMissionProgressionService
 
         while (this.eventQueue.TryDequeue(out Event evt))
         {
+            this.logger.LogDebug("Processing mission progression event {@event}", evt);
+
             if (
                 !MasterAsset.MissionProgressionInfo.TryGetValue(
                     evt.Type,
@@ -96,10 +99,10 @@ public class MissionProgressionService : IMissionProgressionService
             IEnumerable<int> affectedMissions = info.Requirements
                 .Where(
                     x =>
-                        (x.Parameter == -1 || x.Parameter == evt.Parameter)
-                        && (x.Parameter2 == -1 || x.Parameter2 == evt.Parameter2)
-                        && (x.Parameter3 == -1 || x.Parameter3 == evt.Parameter3)
-                        && (x.Parameter4 == -1 || x.Parameter4 == evt.Parameter4)
+                        (x.Parameter is null || x.Parameter == evt.Parameter)
+                        && (x.Parameter2 is null || x.Parameter2 == evt.Parameter2)
+                        && (x.Parameter3 is null || x.Parameter3 == evt.Parameter3)
+                        && (x.Parameter4 is null || x.Parameter4 == evt.Parameter4)
                 )
                 .SelectMany(x => x.Missions)
                 .Select(x => x.Id)
@@ -141,17 +144,17 @@ public class MissionProgressionService : IMissionProgressionService
     private readonly struct Event
     {
         public readonly MissionProgressType Type;
-        public readonly int Parameter;
-        public readonly int Parameter2;
-        public readonly int Parameter3;
-        public readonly int Parameter4;
+        public readonly int? Parameter;
+        public readonly int? Parameter2;
+        public readonly int? Parameter3;
+        public readonly int? Parameter4;
 
         public Event(
             MissionProgressType type,
-            int parameter = -1,
-            int parameter2 = -1,
-            int parameter3 = -1,
-            int parameter4 = -1
+            int? parameter = null,
+            int? parameter2 = null,
+            int? parameter3 = null,
+            int? parameter4 = null
         )
         {
             Type = type;

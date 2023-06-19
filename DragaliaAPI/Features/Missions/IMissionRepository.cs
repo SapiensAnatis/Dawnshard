@@ -15,8 +15,8 @@ public interface IMissionRepository
     Task<DbPlayerMission> AddMissionAsync(
         MissionType type,
         int id,
-        DateTimeOffset startTime = default,
-        DateTimeOffset endTime = default,
-        int groupId = -1
+        DateTimeOffset? startTime = null,
+        DateTimeOffset? endTime = null,
+        int? groupId = null
     );
 }

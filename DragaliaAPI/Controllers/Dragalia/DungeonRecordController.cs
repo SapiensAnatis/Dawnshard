@@ -78,15 +78,9 @@ public class DungeonRecordController : DragaliaControllerBase
         );
 
         // Void battle moment :(
-        if (session.QuestData.Gid > 30000)
+        if (session.QuestData.IsPartOfVoidBattleGroups)
         {
-            QuestEventGroup group = MasterAsset.QuestEventGroup[session.QuestData.Gid];
-            QuestEvent evt = MasterAsset.QuestEvent[group.BaseQuestGroupId];
-
-            if (evt.QuestEventType == QuestEventType.VoidBattle)
-            {
-                this.missionProgressionService.OnVoidBattleCleared();
-            }
+            this.missionProgressionService.OnVoidBattleCleared();
         }
 
         this.missionProgressionService.OnQuestCleared(session.QuestData.Id);

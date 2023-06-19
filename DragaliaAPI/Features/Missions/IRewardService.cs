@@ -8,8 +8,8 @@ public interface IRewardService
         EntityTypes type,
         int id,
         int quantity = 1,
-        int limitBreakCount = -1,
-        int buildupCount = -1,
-        int equipableCount = -1
+        int? limitBreakCount = null,
+        int? buildupCount = null,
+        int? equipableCount = null
     );
 }

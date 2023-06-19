@@ -23,11 +23,11 @@ namespace DragaliaAPI.Database.Migrations
                     StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     Pickup = table.Column<bool>(type: "boolean", nullable: false),
-                    GroupId = table.Column<int>(type: "integer", nullable: false)
+                    GroupId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerMissions", x => new { x.DeviceAccountId, x.Type, x.MissionId });
+                    table.PrimaryKey("PK_PlayerMissions", x => new { x.DeviceAccountId, x.MissionId, x.Type });
                     table.ForeignKey(
                         name: "FK_PlayerMissions_Players_DeviceAccountId",
                         column: x => x.DeviceAccountId,

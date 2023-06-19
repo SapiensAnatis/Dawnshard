@@ -31,9 +31,9 @@ public class RewardService : IRewardService
         EntityTypes type,
         int id,
         int quantity = 1,
-        int limitBreakCount = -1,
-        int buildupCount = -1,
-        int equippableCount = -1
+        int? limitBreakCount = null,
+        int? buildupCount = null,
+        int? equipableCount = null
     )
     {
         switch (type)
@@ -57,7 +57,7 @@ public class RewardService : IRewardService
                 await this.userDataRepository.GiveWyrmite(quantity);
                 break;
             case EntityTypes.Wyrmprint:
-                if (limitBreakCount == -1 || buildupCount == -1 || equippableCount == -1)
+                if (limitBreakCount is null || buildupCount is null || equipableCount is null)
                 {
                     throw new InvalidOperationException(
                         "Invalid parameters for granting wyrmprint."
@@ -84,7 +84,7 @@ public class RewardService : IRewardService
                         quantity,
                         limitBreakCount,
                         buildupCount,
-                        equippableCount
+                        equipableCount
                     }
                 );
                 break;

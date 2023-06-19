@@ -3,9 +3,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
+[PrimaryKey(nameof(DeviceAccountId), nameof(Id), nameof(Type))]
 public class DbPlayerMission : IDbHasAccountId
 {
     /// <inheritdoc />
@@ -42,5 +44,5 @@ public class DbPlayerMission : IDbHasAccountId
     public bool Pickup { get; set; }
 
     [Column("GroupId")]
-    public int GroupId { get; set; } = -1;
+    public int? GroupId { get; set; }
 }

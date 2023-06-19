@@ -585,19 +585,19 @@ namespace DragaliaAPI.Database.Migrations
                     b.Property<string>("DeviceAccountId")
                         .HasColumnType("text");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer")
-                        .HasColumnName("Type");
-
                     b.Property<int>("Id")
                         .HasColumnType("integer")
                         .HasColumnName("MissionId");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("Type");
 
                     b.Property<DateTimeOffset>("End")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("EndDate");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("integer")
                         .HasColumnName("GroupId");
 
@@ -617,7 +617,7 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("State");
 
-                    b.HasKey("DeviceAccountId", "Type", "Id");
+                    b.HasKey("DeviceAccountId", "Id", "Type");
 
                     b.ToTable("PlayerMissions");
                 });

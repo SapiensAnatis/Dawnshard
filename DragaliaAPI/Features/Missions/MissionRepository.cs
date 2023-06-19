@@ -47,9 +47,9 @@ public class MissionRepository : IMissionRepository
     public async Task<DbPlayerMission> AddMissionAsync(
         MissionType type,
         int id,
-        DateTimeOffset startTime = default,
-        DateTimeOffset endTime = default,
-        int groupId = -1
+        DateTimeOffset? startTime = null,
+        DateTimeOffset? endTime = null,
+        int? groupId = null
     )
     {
         if (
@@ -68,8 +68,8 @@ public class MissionRepository : IMissionRepository
                     DeviceAccountId = this.playerIdentityService.AccountId,
                     Id = id,
                     Type = type,
-                    Start = startTime == default ? DateTimeOffset.UnixEpoch : startTime,
-                    End = endTime == default ? DateTimeOffset.UnixEpoch : endTime,
+                    Start = startTime ?? DateTimeOffset.UnixEpoch,
+                    End = endTime ?? DateTimeOffset.UnixEpoch,
                     State = MissionState.InProgress,
                     GroupId = groupId
                 }
