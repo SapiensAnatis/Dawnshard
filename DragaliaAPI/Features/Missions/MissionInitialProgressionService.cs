@@ -70,7 +70,11 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
                     .Select(x => x.Level)
                     .FirstOrDefaultAsync(),
             MissionProgressType.FortLevelup
-                => await this.fortRepository.Builds.Where(x => x.PlantId != FortPlants.TheHalidom).SumAsync(x => x.Level),
+                => await this.fortRepository.Builds
+                    .Where(x => x.PlantId != FortPlants.TheHalidom)
+                    .SumAsync(
+                        x => x.BuildEndDate == DateTimeOffset.UnixEpoch ? x.Level : x.Level - 1
+                    ),
             MissionProgressType.QuestCleared => await GetQuestClearedCount(requirement),
             MissionProgressType.CharacterBuildup => await GetCharacterBuildupCount(requirement),
             MissionProgressType.WyrmprintAugmentBuildup
@@ -111,6 +115,8 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
             );
         }
     }
+
+    private async Task<int> GetFortPlantUpgradedCount(MissionProgressionRequirement requirement) { }
 
     private async Task<int> GetQuestClearedCount(MissionProgressionRequirement requirement)
     {
