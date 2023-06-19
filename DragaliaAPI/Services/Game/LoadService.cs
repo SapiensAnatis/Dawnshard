@@ -109,7 +109,8 @@ public class LoadService : ILoadService
                 mission_notice = await this.missionService.GetMissionNotice(null),
                 equip_stamp_list = savefile.EquippedStampList
                     .Select(this.mapper.Map<DbEquippedStamp, EquipStampList>)
-                    .OrderBy(x => x.slot)
+                    .OrderBy(x => x.slot),
+                quest_entry_condition_list = await this.missionService.GetEntryConditions()
             };
 
         this.logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);

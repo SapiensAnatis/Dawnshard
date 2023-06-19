@@ -291,4 +291,20 @@ public class MissionService : IMissionService
                     : 0
         };
     }
+
+    public async Task<IEnumerable<QuestEntryConditionList>> GetEntryConditions()
+    {
+        List<DbPlayerMission> mainMissions = await this.missionRepository
+            .GetMissionsByType(MissionType.MainStory)
+            .ToListAsync();
+        ILookup<int, DbPlayerMission> groupedMissions = mainMissions
+            .Where(x => x.GroupId is not null)
+            .ToLookup(x => x.GroupId!.Value);
+
+        return groupedMissions
+            .Where(x => x.All(y => y.State == MissionState.Claimed))
+            .Select(x => x.Key)
+            .Distinct()
+            .Select(x => new QuestEntryConditionList(x));
+    }
 }
