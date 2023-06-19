@@ -111,6 +111,7 @@ public class UpdateDataService : IUpdateDataService
             }
 
             list.mission_notice = await this.missionService.GetMissionNotice(missionsLookup);
+            list.quest_entry_condition_list = await this.missionService.GetEntryConditions();
         }
 
         return list;
