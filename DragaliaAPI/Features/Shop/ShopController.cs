@@ -1,7 +1,4 @@
-﻿using System;
 using DragaliaAPI.Controllers;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,27 +8,27 @@ namespace DragaliaAPI.Features.Shop;
 [Route("shop")]
 public class ShopController : DragaliaControllerBase
 {
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IInventoryRepository inventoryRepository;
     private readonly IUpdateDataService updateDataService;
     private readonly IItemSummonService itemSummonService;
+    private readonly IShopService shopService;
 
     public ShopController(
-        IUserDataRepository userDataRepository,
-        IInventoryRepository inventoryRepository,
         IUpdateDataService updateDataService,
-        IItemSummonService itemSummonService
+        IItemSummonService itemSummonService,
+        IShopService shopService
     )
     {
-        this.userDataRepository = userDataRepository;
-        this.inventoryRepository = inventoryRepository;
         this.updateDataService = updateDataService;
         this.itemSummonService = itemSummonService;
+        this.shopService = shopService;
     }
 
     [HttpPost("get_list")]
     public async Task<DragaliaResult> GetList()
     {
+        ILookup<PurchaseShopType, ShopPurchaseList> purchases =
+            await this.shopService.GetPurchases();
+
         ShopGetListData response =
             new()
             {
@@ -39,9 +36,9 @@ public class ShopController : DragaliaControllerBase
                 is_quest_bonus = 0,
                 is_stone_bonus = 0,
                 is_stamina_bonus = 0,
-                material_shop_purchase = new List<ShopPurchaseList>(),
-                normal_shop_purchase = new List<ShopPurchaseList>(),
-                special_shop_purchase = new List<ShopPurchaseList>(),
+                material_shop_purchase = purchases[PurchaseShopType.Material],
+                normal_shop_purchase = purchases[PurchaseShopType.Normal],
+                special_shop_purchase = purchases[PurchaseShopType.Special],
                 stone_bonus = new List<AtgenStoneBonus>(),
                 stamina_bonus = new List<AtgenStaminaBonus>(),
                 quest_bonus = new List<AtgenQuestBonus>(),
@@ -69,6 +66,59 @@ public class ShopController : DragaliaControllerBase
 
         resp.item_summon_reward_list = await this.itemSummonService.DoSummon(request);
         resp.user_item_summon = await this.itemSummonService.GetOrRefreshItemSummon();
+        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+
+        return Ok(resp);
+    }
+
+    [HttpPost("material_shop_purchase")]
+    public async Task<DragaliaResult> MaterialShopPurchase(ShopMaterialShopPurchaseRequest request)
+    {
+        ShopMaterialShopPurchaseData resp = new();
+
+        resp.material_shop_purchase = await this.shopService.DoPurchase(
+            request.shop_type
+                + 1 /* To convert material shop type to actual shop type */
+            ,
+            request.payment_type,
+            request.goods_id,
+            request.quantity
+        );
+
+        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+
+        return Ok(resp);
+    }
+
+    [HttpPost("normal_shop_purchase")]
+    public async Task<DragaliaResult> NormalShopPurchase(ShopNormalShopPurchaseRequest request)
+    {
+        ShopNormalShopPurchaseData resp = new();
+
+        resp.normal_shop_purchase = await this.shopService.DoPurchase(
+            ShopType.Normal,
+            request.payment_type,
+            request.goods_id,
+            request.quantity
+        );
+
+        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+
+        return Ok(resp);
+    }
+
+    [HttpPost("special_shop_purchase")]
+    public async Task<DragaliaResult> SpecialShopPurchase(ShopSpecialShopPurchaseRequest request)
+    {
+        ShopSpecialShopPurchaseData resp = new();
+
+        resp.special_shop_purchase = await this.shopService.DoPurchase(
+            ShopType.Special,
+            request.payment_type,
+            request.goods_id,
+            request.quantity
+        );
+
         resp.update_data_list = await this.updateDataService.SaveChangesAsync();
 
         return Ok(resp);

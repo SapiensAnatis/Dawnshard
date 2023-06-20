@@ -125,7 +125,8 @@ builder.Services
     // Shop Feature
     .AddScoped<IShopRepository, ShopRepository>()
     .AddScoped<IItemSummonService, ItemSummonService>()
-    .AddScoped<IPaymentService, PaymentService>();
+    .AddScoped<IPaymentService, PaymentService>()
+    .AddScoped<IShopService, ShopService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 
