@@ -21,28 +21,36 @@ public class PaymentService : IPaymentService
 
     public async Task ProcessPayment(
         PaymentTypes type,
-        PaymentTarget payment,
+        PaymentTarget? payment = null,
         int? expectedPrice = null
     )
     {
+        if (payment == null && expectedPrice == null)
+            throw new ArgumentNullException(nameof(payment), "No price provided");
+
+        bool hasPaymentTarget = payment is not null;
+
         if (expectedPrice == 0) // For free stuff, if needed.
             return;
 
-        logger.LogDebug("Processing {paymentType} payment {@payment}.", type, payment);
+        if (hasPaymentTarget)
+            logger.LogDebug("Processing {paymentType} payment {@payment}.", type, payment);
+        else
+            logger.LogDebug("Processing {paymentType} payment {@payment}.", type, new { Price = expectedPrice });
 
-        if (expectedPrice is not null && expectedPrice != payment.target_cost)
+        if (hasPaymentTarget && expectedPrice is not null && expectedPrice != payment.target_cost)
             throw new DragaliaException(ResultCode.CommonUserStatusError, "Price mismatch.");
+
+        int price = expectedPrice ?? payment!.target_cost;
+        int quantity;
+        Action updater;
 
         switch (type)
         {
             case PaymentTypes.Wyrmite:
                 DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
-                if (userData.Crystal != payment.target_hold_quantity)
-                    throw new DragaliaException(
-                        ResultCode.CommonUserStatusError,
-                        "Payment count mismatch."
-                    );
-                userData.Crystal -= payment.target_cost;
+                quantity = userData.Crystal;
+                updater = () => userData.Crystal -= price;
                 break;
             case PaymentTypes.Diamantium:
                 logger.LogDebug("Tried to pay with diamantium -- this is not supported.");
@@ -52,12 +60,8 @@ public class PaymentService : IPaymentService
                 );
             case PaymentTypes.HalidomHustleHammer:
                 userData = await this.userDataRepository.UserData.SingleAsync();
-                if (userData.BuildTimePoint != payment.target_hold_quantity)
-                    throw new DragaliaException(
-                        ResultCode.CommonUserStatusError,
-                        "Payment count mismatch."
-                    );
-                userData.BuildTimePoint -= payment.target_cost;
+                quantity = userData.BuildTimePoint;
+                updater = () => userData.BuildTimePoint -= price;
                 break;
             case PaymentTypes.Ticket:
                 // TODO: Implement ticket payments.
@@ -76,5 +80,15 @@ public class PaymentService : IPaymentService
                     "Invalid payment type."
                 );
         }
+
+        if ((hasPaymentTarget && quantity != payment!.target_hold_quantity) || quantity < price)
+        {
+            throw new DragaliaException(
+                ResultCode.CommonUserStatusError,
+                "Payment count mismatch."
+            );
+        }
+
+        updater();
     }
 }

@@ -5,5 +5,9 @@ namespace DragaliaAPI.Features.Shop;
 
 public interface IPaymentService
 {
-    Task ProcessPayment(PaymentTypes type, PaymentTarget payment, int? expectedPrice = null);
+    Task ProcessPayment(
+        PaymentTypes type,
+        PaymentTarget? payment = null,
+        int? expectedPrice = null
+    );
 }

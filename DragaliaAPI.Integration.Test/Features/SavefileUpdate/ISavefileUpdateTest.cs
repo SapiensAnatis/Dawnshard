@@ -39,7 +39,7 @@ public class ISavefileUpdateTest : TestFixture
     public void ISavefileUpdate_HasExpectedCount()
     {
         // Update this test when adding a new update.
-        this.updates.Should().HaveCount(2);
+        this.updates.Should().HaveCount(3);
     }
 
     [Fact]
