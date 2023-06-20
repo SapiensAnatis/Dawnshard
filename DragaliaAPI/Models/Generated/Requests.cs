@@ -3534,10 +3534,10 @@ public class ShopGetProductListRequest { }
 [MessagePackObject(true)]
 public class ShopItemSummonExecRequest
 {
-    public int payment_type { get; set; }
+    public PaymentTypes payment_type { get; set; }
     public PaymentTarget payment_target { get; set; }
 
-    public ShopItemSummonExecRequest(int payment_type, PaymentTarget payment_target)
+    public ShopItemSummonExecRequest(PaymentTypes payment_type, PaymentTarget payment_target)
     {
         this.payment_type = payment_type;
         this.payment_target = payment_target;

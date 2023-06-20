@@ -1,10 +1,10 @@
 using System.Reflection;
-using System.Security.Claims;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.SavefileUpdate;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
@@ -15,26 +15,23 @@ using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
-using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Core;
-using Serilog.Events;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-ConfigurationManager configuration = builder.Configuration;
-
-configuration.AddJsonFile("itemSummonOdds.json", false, true);
+IConfiguration config = builder.Configuration
+    .AddJsonFile("itemSummonOdds.json", optional: false, reloadOnChange: true)
+    .Build();
 
 builder.Services
-    .Configure<BaasOptions>(configuration.GetRequiredSection("Baas"))
-    .Configure<LoginOptions>(configuration.GetRequiredSection("Login"))
-    .Configure<DragalipatchOptions>(configuration.GetRequiredSection("Dragalipatch"))
-    .Configure<RedisOptions>(configuration.GetRequiredSection("Redis"))
-    .Configure<PhotonOptions>(configuration.GetRequiredSection(nameof(PhotonOptions)))
-    .Configure<ItemSummonOdds>(configuration);
+    .Configure<BaasOptions>(config.GetRequiredSection("Baas"))
+    .Configure<LoginOptions>(config.GetRequiredSection("Login"))
+    .Configure<DragalipatchOptions>(config.GetRequiredSection("Dragalipatch"))
+    .Configure<RedisOptions>(config.GetRequiredSection("Redis"))
+    .Configure<PhotonOptions>(config.GetRequiredSection(nameof(PhotonOptions)))
+    .Configure<ItemSummonConfig>(config);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
@@ -111,7 +108,6 @@ builder.Services
     .AddScoped<ILoadService, LoadService>()
     .AddScoped<IStampService, StampService>()
     .AddScoped<IStampRepository, StampRepository>()
-    .AddScoped<IItemSummonService, ItemSummonService>()
     .AddScoped<ISavefileUpdateService, SavefileUpdateService>();
 
 builder.Services
@@ -122,7 +118,11 @@ builder.Services
     .AddScoped<IMissionService, MissionService>()
     .AddScoped<IRewardService, RewardService>()
     .AddScoped<IMissionProgressionService, MissionProgressionService>()
-    .AddScoped<IMissionInitialProgressionService, MissionInitialProgressionService>();
+    .AddScoped<IMissionInitialProgressionService, MissionInitialProgressionService>()
+    // Shop Feature
+    .AddScoped<IShopRepository, ShopRepository>()
+    .AddScoped<IItemSummonService, ItemSummonService>()
+    .AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 
