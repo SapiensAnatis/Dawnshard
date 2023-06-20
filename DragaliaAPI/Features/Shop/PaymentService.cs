@@ -46,7 +46,7 @@ public class PaymentService : IPaymentService
             throw new DragaliaException(ResultCode.CommonUserStatusError, "Price mismatch.");
 
         int price = expectedPrice ?? payment!.target_cost;
-        int quantity;
+        long quantity;
         Action updater;
 
         switch (type)
@@ -56,16 +56,20 @@ public class PaymentService : IPaymentService
                 quantity = userData.Crystal;
                 updater = () => userData.Crystal -= price;
                 break;
-            case PaymentTypes.Diamantium:
-                logger.LogDebug("Tried to pay with diamantium -- this is not supported.");
-                throw new DragaliaException(
-                    ResultCode.ShopPaymentTypeInvalid,
-                    "Diamantium is not supported."
-                );
             case PaymentTypes.HalidomHustleHammer:
                 userData = await this.userDataRepository.UserData.SingleAsync();
                 quantity = userData.BuildTimePoint;
                 updater = () => userData.BuildTimePoint -= price;
+                break;
+            case PaymentTypes.ManaPoint:
+                userData = await this.userDataRepository.UserData.SingleAsync();
+                quantity = userData.ManaPoint;
+                updater = () => userData.ManaPoint -= price;
+                break;
+            case PaymentTypes.Coin:
+                userData = await this.userDataRepository.UserData.SingleAsync();
+                quantity = userData.Coin;
+                updater = () => userData.Coin -= price;
                 break;
             case PaymentTypes.Ticket:
                 // TODO: Implement ticket payments.
@@ -77,6 +81,12 @@ public class PaymentService : IPaymentService
                     "Tickets are not yet supported."
                 );
                 break;
+            case PaymentTypes.Diamantium:
+                logger.LogDebug("Tried to pay with diamantium -- this is not supported.");
+                throw new DragaliaException(
+                    ResultCode.ShopPaymentTypeInvalid,
+                    "Diamantium is not supported."
+                );
             default:
                 logger.LogWarning("Unknown/invalid payment type.");
                 throw new DragaliaException(

@@ -20,8 +20,7 @@ public class ShopController : DragaliaControllerBase
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
         IUpdateDataService updateDataService,
-        IItemSummonService itemSummonService,
-        IShopRepository shopRepository
+        IItemSummonService itemSummonService
     )
     {
         this.userDataRepository = userDataRepository;
