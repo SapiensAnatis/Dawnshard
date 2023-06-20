@@ -36,7 +36,11 @@ public class PaymentService : IPaymentService
         if (hasPaymentTarget)
             logger.LogDebug("Processing {paymentType} payment {@payment}.", type, payment);
         else
-            logger.LogDebug("Processing {paymentType} payment {@payment}.", type, new { Price = expectedPrice });
+            logger.LogDebug(
+                "Processing {paymentType} payment {@payment}.",
+                type,
+                new { Price = expectedPrice }
+            );
 
         if (hasPaymentTarget && expectedPrice is not null && expectedPrice != payment.target_cost)
             throw new DragaliaException(ResultCode.CommonUserStatusError, "Price mismatch.");

@@ -146,9 +146,11 @@ public class MissionProgressionService : IMissionProgressionService
         }
     }
 
-    private readonly record struct Event(MissionProgressType Type,
+    private readonly record struct Event(
+        MissionProgressType Type,
         int? Parameter = null,
         int? Parameter2 = null,
         int? Parameter3 = null,
-        int? Parameter4 = null);
+        int? Parameter4 = null
+    );
 }

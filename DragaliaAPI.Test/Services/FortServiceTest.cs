@@ -126,7 +126,7 @@ public class FortServiceTest
         this.mockFortRepository
             .Setup(x => x.UpdateFortMaximumCarpenter(existingCarpenters + 1))
             .Returns(Task.CompletedTask);
-        
+
         this.mockPaymentService
             .Setup(x => x.ProcessPayment(PaymentTypes.Wyrmite, null, expectedCost))
             .Returns(Task.CompletedTask);
@@ -570,11 +570,9 @@ public class FortServiceTest
             .Setup(x => x.ProcessPayment(PaymentTypes.Wyrmite, null, 840))
             .Returns(Task.CompletedTask);
 
-        this.mockMissionProgressionService
-            .Setup(x => x.OnFortPlantUpgraded(FortPlants.Smithy));
+        this.mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(FortPlants.Smithy));
 
-        this.mockMissionProgressionService
-            .Setup(x => x.OnFortLevelup());
+        this.mockMissionProgressionService.Setup(x => x.OnFortLevelup());
 
         await this.fortService.CompleteAtOnce(PaymentTypes.Wyrmite, 444);
 
@@ -602,16 +600,11 @@ public class FortServiceTest
             .Setup(x => x.ProcessPayment(PaymentTypes.HalidomHustleHammer, null, 1))
             .Returns(Task.CompletedTask);
 
-        this.mockMissionProgressionService
-            .Setup(x => x.OnFortPlantUpgraded(FortPlants.Smithy));
+        this.mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(FortPlants.Smithy));
 
-        this.mockMissionProgressionService
-            .Setup(x => x.OnFortLevelup());
+        this.mockMissionProgressionService.Setup(x => x.OnFortLevelup());
 
-        await this.fortService.CompleteAtOnce(
-            PaymentTypes.HalidomHustleHammer,
-            445
-        );
+        await this.fortService.CompleteAtOnce(PaymentTypes.HalidomHustleHammer, 445);
 
         this.mockMissionProgressionService.VerifyAll();
         this.mockPaymentService.VerifyAll();
@@ -641,9 +634,7 @@ public class FortServiceTest
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(7)
             };
 
-        this.mockFortRepository
-            .Setup(x => x.GetBuilding(buildId))
-            .ReturnsAsync(build);
+        this.mockFortRepository.Setup(x => x.GetBuilding(buildId)).ReturnsAsync(build);
 
         await this.fortService
             .Invoking(x => x.CompleteAtOnce(type, buildId))
