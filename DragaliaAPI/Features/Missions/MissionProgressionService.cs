@@ -75,6 +75,11 @@ public class MissionProgressionService : IMissionProgressionService
         this.eventQueue.Enqueue(new Event(MissionProgressType.CharacterBuildup, (int)type));
     }
 
+    public void OnItemSummon()
+    {
+        this.eventQueue.Enqueue(new Event(MissionProgressType.ItemSummon));
+    }
+
     public async Task ProcessMissionEvents()
     {
         if (this.eventQueue.Count == 0)

@@ -215,15 +215,6 @@
         ]
       },
       {
-        "_Parameter": 1000101,
-        "_Missions": [
-          {
-            "_Type": "Drill",
-            "_Id": 100100
-          }
-        ]
-      },
-      {
         "_Parameter": 1000106,
         "_Missions": [
           {
@@ -351,6 +342,19 @@
           {
             "_Type": "MainStory",
             "_Id": 10090501
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_Type": "ItemSummon",
+    "_Requirements": [
+      {
+        "_Missions": [
+          {
+            "_Type": "Drill",
+            "_Id": 100100
           }
         ]
       }

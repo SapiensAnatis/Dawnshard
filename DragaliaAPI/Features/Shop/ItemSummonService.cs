@@ -16,6 +16,7 @@ public class ItemSummonService : IItemSummonService
     private readonly IShopRepository shopRepository;
     private readonly IPaymentService paymentService;
     private readonly IRewardService rewardService;
+    private readonly IMissionProgressionService missionProgressionService;
     private readonly Random random;
 
     private readonly int[] summonWeights;
@@ -25,7 +26,8 @@ public class ItemSummonService : IItemSummonService
         IOptionsMonitor<ItemSummonConfig> odds,
         IShopRepository shopRepository,
         IPaymentService paymentService,
-        IRewardService rewardService
+        IRewardService rewardService,
+        IMissionProgressionService missionProgressionService
     )
     {
         this.logger = logger;
@@ -33,6 +35,7 @@ public class ItemSummonService : IItemSummonService
         this.shopRepository = shopRepository;
         this.paymentService = paymentService;
         this.rewardService = rewardService;
+        this.missionProgressionService = missionProgressionService;
         this.random = Random.Shared;
 
         this.summonWeights = new int[this.config.Odds.Count];
@@ -102,6 +105,8 @@ public class ItemSummonService : IItemSummonService
                 entity.Quantity
             );
         }
+
+        this.missionProgressionService.OnItemSummon();
 
         this.logger.LogDebug("Item summon results: {@itemSummonResults}", (object)results);
 
