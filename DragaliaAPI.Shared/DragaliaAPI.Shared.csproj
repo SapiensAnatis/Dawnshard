@@ -120,6 +120,12 @@
 		<None Update="Resources\Shop\SpecialShop.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="Resources\TreasureTrade\TreasureTrade.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\TreasureTrade\UseItem.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Resources\UnitStory.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -148,6 +154,10 @@
 	  <Compile Update="MasterAsset\Models\WeaponPassiveAbility.cs">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="MasterAsset\Models\Trade\" />
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties resources_4missions_4mainstorymissiongrouprewards_1json__JsonSchema="MainStoryMissionGroupRewards.schema.json" resources_4missions_4missionprogressioninfo_1json__JsonSchema="MissionProgressionInfo.schema.json" /></VisualStudio></ProjectExtensions>
