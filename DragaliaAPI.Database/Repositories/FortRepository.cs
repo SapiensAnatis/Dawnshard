@@ -221,32 +221,6 @@ public class FortRepository : IFortRepository
         apiContext.PlayerFortBuilds.Remove(build);
     }
 
-    public void ConsumeUpgradeAtOnceCost(
-        DbPlayerUserData userData,
-        DbFortBuild build,
-        PaymentTypes paymentType
-    )
-    {
-        if (build.BuildStatus is not FortBuildStatus.Construction)
-        {
-            throw new InvalidOperationException($"This building is not currently being upgraded.");
-        }
-
-        int paymentHeld = GetUpgradePaymentHeld(userData, paymentType);
-        int paymentCost = GetUpgradePaymentCost(
-            paymentType,
-            build.BuildStartDate,
-            build.BuildEndDate
-        );
-
-        if (paymentHeld < paymentCost)
-        {
-            throw new InvalidOperationException($"User did not have enough {paymentType}.");
-        }
-
-        ConsumePaymentCost(userData, paymentType, paymentCost);
-    }
-
     public async Task<int> GetActiveCarpenters()
     {
         // TODO: remove this when testcontainers gets merged in
@@ -255,58 +229,5 @@ public class FortRepository : IFortRepository
                 x => x.BuildEndDate != DateTimeOffset.UnixEpoch
             )
             : await this.Builds.CountAsync(x => x.BuildEndDate != DateTimeOffset.UnixEpoch);
-    }
-
-    public void ConsumePaymentCost(
-        DbPlayerUserData userData,
-        PaymentTypes paymentType,
-        int paymentCost
-    )
-    {
-        switch (paymentType)
-        {
-            case PaymentTypes.Wyrmite:
-                userData.Crystal -= paymentCost;
-                break;
-            case PaymentTypes.Diamantium:
-                // TODO How do I diamantium?
-                break;
-            case PaymentTypes.HalidomHustleHammer:
-                userData.BuildTimePoint -= paymentCost;
-                break;
-            default:
-                throw new InvalidOperationException($"Invalid payment type {paymentType}.");
-        }
-    }
-
-    private int GetUpgradePaymentHeld(DbPlayerUserData userData, PaymentTypes paymentType)
-    {
-        return paymentType switch
-        {
-            PaymentTypes.Wyrmite => userData.Crystal,
-            PaymentTypes.Diamantium => 0, // TODO How do I diamantium?
-            PaymentTypes.HalidomHustleHammer => userData.BuildTimePoint,
-            _ => throw new InvalidOperationException($"Invalid payment type for this operation."),
-        };
-    }
-
-    private int GetUpgradePaymentCost(
-        PaymentTypes paymentType,
-        DateTimeOffset BuildStartDate,
-        DateTimeOffset BuildEndDate
-    )
-    {
-        if (paymentType == PaymentTypes.HalidomHustleHammer)
-        {
-            return 1; // Only 1 Hammer is consumed
-        }
-        else
-        {
-            // Construction can be immediately completed by spending either Wyrmite or Diamantium,
-            // where the amount required depends on the time left until construction is complete.
-            // This amount scales at 1 per 12 minutes, or 5 per hour.
-            // https://dragalialost.wiki/w/Facilities
-            return (int)Math.Ceiling((BuildEndDate - BuildStartDate).TotalMinutes / 12);
-        }
     }
 }

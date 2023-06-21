@@ -1,10 +1,11 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
+using Newtonsoft.Json;
 
 namespace DragaliaAPI.Models.Options;
 
-public class ItemSummonOdds
+public class ItemSummonConfig
 {
-    public List<ItemSummonOddsEntry> Odds { get; set; } = new();
+    public required List<ItemSummonOddsEntry> Odds { get; set; }
 }
 
 public class ItemSummonOddsEntry
@@ -12,5 +13,5 @@ public class ItemSummonOddsEntry
     public EntityTypes Type { get; set; }
     public int Id { get; set; }
     public int Quantity { get; set; }
-    public double Rate { get; set; }
+    public int Rate { get; set; }
 }
