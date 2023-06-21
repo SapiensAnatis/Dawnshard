@@ -33,6 +33,9 @@ builder.Services
     .Configure<PhotonOptions>(config.GetRequiredSection(nameof(PhotonOptions)))
     .Configure<ItemSummonConfig>(config);
 
+// Ensure item summon weightings add to 100%
+builder.Services.AddOptions<ItemSummonConfig>().Validate(x => x.Odds.Sum(y => y.Rate) == 100_000);
+
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.Host.UseSerilog(
