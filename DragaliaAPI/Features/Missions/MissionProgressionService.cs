@@ -75,6 +75,11 @@ public class MissionProgressionService : IMissionProgressionService
         this.eventQueue.Enqueue(new Event(MissionProgressType.CharacterBuildup, (int)type));
     }
 
+    public void OnItemSummon()
+    {
+        this.eventQueue.Enqueue(new Event(MissionProgressType.ItemSummon));
+    }
+
     public async Task ProcessMissionEvents()
     {
         if (this.eventQueue.Count == 0)
@@ -141,27 +146,11 @@ public class MissionProgressionService : IMissionProgressionService
         }
     }
 
-    private readonly struct Event
-    {
-        public readonly MissionProgressType Type;
-        public readonly int? Parameter;
-        public readonly int? Parameter2;
-        public readonly int? Parameter3;
-        public readonly int? Parameter4;
-
-        public Event(
-            MissionProgressType type,
-            int? parameter = null,
-            int? parameter2 = null,
-            int? parameter3 = null,
-            int? parameter4 = null
-        )
-        {
-            Type = type;
-            Parameter = parameter;
-            Parameter2 = parameter2;
-            Parameter3 = parameter3;
-            Parameter4 = parameter4;
-        }
-    }
+    private readonly record struct Event(
+        MissionProgressType Type,
+        int? Parameter = null,
+        int? Parameter2 = null,
+        int? Parameter3 = null,
+        int? Parameter4 = null
+    );
 }

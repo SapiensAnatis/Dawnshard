@@ -9,7 +9,7 @@
     "properties": {
       "_Type": {
         "type": "string",
-        "enum": [ "FortPlantUpgraded", "FortPlantBuilt", "FortLevelup", "QuestCleared", "VoidBattleCleared", "WeaponEarned", "WeaponRefined", "WyrmprintAugmentBuildup", "CharacterBuildup" ]
+        "enum": [ "FortPlantUpgraded", "FortPlantBuilt", "FortLevelup", "QuestCleared", "VoidBattleCleared", "WeaponEarned", "WeaponRefined", "WyrmprintAugmentBuildup", "CharacterBuildup", "ItemSummon" ]
       },
       "_Requirements": {
         "type": "array",

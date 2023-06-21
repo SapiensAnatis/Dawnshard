@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -24,6 +25,7 @@ public class FortService : IFortService
     private readonly IPlayerIdentityService playerIdentityService;
     private readonly IMapper mapper;
     private readonly IMissionProgressionService missionProgressionService;
+    private readonly IPaymentService paymentService;
 
     public FortService(
         IFortRepository fortRepository,
@@ -32,7 +34,8 @@ public class FortService : IFortService
         ILogger<FortService> logger,
         IPlayerIdentityService playerIdentityService,
         IMapper mapper,
-        IMissionProgressionService missionProgressionService
+        IMissionProgressionService missionProgressionService,
+        IPaymentService paymentService
     )
     {
         this.fortRepository = fortRepository;
@@ -42,6 +45,7 @@ public class FortService : IFortService
         this.playerIdentityService = playerIdentityService;
         this.mapper = mapper;
         this.missionProgressionService = missionProgressionService;
+        this.paymentService = paymentService;
     }
 
     public async Task<IEnumerable<BuildList>> GetBuildList()
@@ -55,7 +59,6 @@ public class FortService : IFortService
 
         FortDetail fortDetail = await this.GetFortDetail();
 
-        int paymentHeld = 0;
         // https://dragalialost.wiki/w/Facilities
         // First 2 are free, 3rd 250, 4th 400, 5th 700
         int paymentCost = fortDetail.carpenter_num switch
@@ -64,37 +67,20 @@ public class FortService : IFortService
             2 => 250,
             3 => 400,
             4 => 750,
-            > 4
+            _
                 => throw new DragaliaException(
                     ResultCode.FortExtendCarpenterLimit,
                     $"User has reached maximum carpenter."
                 )
         };
 
-        switch (paymentType)
-        {
-            case PaymentTypes.Wyrmite:
-                paymentHeld = userData.Crystal;
-                break;
-            case PaymentTypes.Diamantium:
-                // TODO How do I diamantium?
-                break;
-            default:
-                throw new DragaliaException(
-                    ResultCode.FortExtendCarpenterLimit,
-                    $"Invalid currency used to add carpenter."
-                );
-        }
-
-        if (paymentHeld < paymentCost)
-        {
+        if (paymentType is not (PaymentTypes.Diamantium or PaymentTypes.Wyrmite))
             throw new DragaliaException(
-                ResultCode.FortExtendCarpenterLimit,
-                $"User did not have enough {paymentType}."
+                ResultCode.ShopPaymentTypeInvalid,
+                $"Invalid currency used to add carpenter."
             );
-        }
 
-        this.fortRepository.ConsumePaymentCost(userData, paymentType, paymentCost);
+        await this.paymentService.ProcessPayment(paymentType, expectedPrice: paymentCost);
 
         // Add carpenter
         await this.fortRepository.UpdateFortMaximumCarpenter(fortDetail.carpenter_num + 1);
@@ -139,13 +125,32 @@ public class FortService : IFortService
     {
         this.logger.LogDebug("CompleteAtOnce called for build {buildId}", buildId);
 
-        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
         DbFortBuild build = await this.fortRepository.GetBuilding(buildId);
 
-        // TODO: Maybe move this into FortService?
-        this.fortRepository.ConsumeUpgradeAtOnceCost(userData, build, paymentType);
+        if (build.BuildStatus is not FortBuildStatus.Construction)
+        {
+            throw new InvalidOperationException($"This building is not currently being upgraded.");
+        }
 
-        await FinishUpgrade(build);
+        if (
+            paymentType
+            is not (
+                PaymentTypes.Diamantium
+                or PaymentTypes.Wyrmite
+                or PaymentTypes.HalidomHustleHammer
+            )
+        )
+            throw new DragaliaException(ResultCode.ShopPaymentTypeInvalid, "Invalid payment type.");
+
+        int paymentCost = GetUpgradePaymentCost(
+            paymentType,
+            build.BuildStartDate,
+            build.BuildEndDate
+        );
+
+        await this.paymentService.ProcessPayment(paymentType, expectedPrice: paymentCost);
+
+        FinishUpgrade(build);
     }
 
     public async Task<DbFortBuild> CancelUpgrade(long buildId)
@@ -185,10 +190,10 @@ public class FortService : IFortService
             throw new InvalidOperationException($"This building has not completed construction.");
         }
 
-        await FinishUpgrade(build);
+        FinishUpgrade(build);
     }
 
-    private async Task FinishUpgrade(DbFortBuild build)
+    private void FinishUpgrade(DbFortBuild build)
     {
         // Update values
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
@@ -347,5 +352,25 @@ public class FortService : IFortService
         // Remove resources from player
         await this.userDataRepository.UpdateCoin(-plantDetail.Cost);
         await this.inventoryRepository.UpdateQuantity(plantDetail.CreateMaterialMap);
+    }
+
+    private static int GetUpgradePaymentCost(
+        PaymentTypes paymentType,
+        DateTimeOffset buildStartDate,
+        DateTimeOffset buildEndDate
+    )
+    {
+        if (paymentType == PaymentTypes.HalidomHustleHammer)
+        {
+            return 1; // Only 1 Hammer is consumed
+        }
+        else
+        {
+            // Construction can be immediately completed by spending either Wyrmite or Diamantium,
+            // where the amount required depends on the time left until construction is complete.
+            // This amount scales at 1 per 12 minutes, or 5 per hour.
+            // https://dragalialost.wiki/w/Facilities
+            return (int)Math.Ceiling((buildEndDate - buildStartDate).TotalMinutes / 12);
+        }
     }
 }

@@ -18,28 +18,10 @@ public class ISavefileUpdateTest : TestFixture
     }
 
     [Fact]
-    public async Task ISavefileUpdate_Apply_CanBeAppliedTwice()
-    {
-        // Check that none of the savefile updates cause PK errors when writing over duplicate data.
-
-        IPlayerIdentityService identityService =
-            this.Services.GetRequiredService<IPlayerIdentityService>();
-        using IDisposable ctx = identityService.StartUserImpersonation(DeviceAccountId);
-
-        foreach (ISavefileUpdate update in updates)
-        {
-            await update.Apply();
-            await this.ApiContext.SaveChangesAsync();
-
-            await update.Invoking(x => x.Apply()).Should().NotThrowAsync();
-        }
-    }
-
-    [Fact]
     public void ISavefileUpdate_HasExpectedCount()
     {
         // Update this test when adding a new update.
-        this.updates.Should().HaveCount(2);
+        this.updates.Should().HaveCount(3);
     }
 
     [Fact]

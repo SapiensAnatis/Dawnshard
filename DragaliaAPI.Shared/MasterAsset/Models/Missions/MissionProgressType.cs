@@ -10,5 +10,6 @@ public enum MissionProgressType
     WeaponEarned,
     WeaponRefined,
     WyrmprintAugmentBuildup,
-    CharacterBuildup
+    CharacterBuildup,
+    ItemSummon
 }

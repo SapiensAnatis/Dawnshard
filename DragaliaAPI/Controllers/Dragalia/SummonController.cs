@@ -8,10 +8,7 @@ using DragaliaAPI.Database.Repositories;
 using AutoMapper;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models;
-using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
-using System.Linq;
-using System.Text.Json;
-using Microsoft.CodeAnalysis.Elfie.Serialization;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -29,7 +26,8 @@ public class SummonController : DragaliaControllerBase
     private readonly IUpdateDataService updateDataService;
     private readonly IMapper mapper;
     private readonly ISummonRepository summonRepository;
-    private readonly ISummonService _summonService;
+    private readonly ISummonService summonService;
+    private readonly IPaymentService paymentService;
 
     // Repeated from RedoableSummonController, but no point putting this in a shared location
     // as it's all bullshit anyway
@@ -139,7 +137,8 @@ public class SummonController : DragaliaControllerBase
         IUpdateDataService updateDataService,
         IMapper mapper,
         ISummonRepository summonRepository,
-        ISummonService summonService
+        ISummonService summonService,
+        IPaymentService paymentService
     )
     {
         this.userDataRepository = userDataRepository;
@@ -147,7 +146,8 @@ public class SummonController : DragaliaControllerBase
         this.updateDataService = updateDataService;
         this.mapper = mapper;
         this.summonRepository = summonRepository;
-        _summonService = summonService;
+        this.summonService = summonService;
+        this.paymentService = paymentService;
     }
 
     /// <summary>
@@ -287,27 +287,22 @@ public class SummonController : DragaliaControllerBase
             summonRequest.exec_type == SummonExecTypes.Tenfold
                 ? 10
                 : Math.Max(1, summonRequest.exec_count);
+
         int summonPointMultiplier = bannerData.add_summon_point;
-        int paymentHeld = 0;
-        Action<int> paymentHeldSetter = reduction => { };
-        int paymentCost = 1;
+
+        int paymentCost;
+
         switch (summonRequest.payment_type)
         {
             case PaymentTypes.Diamantium:
                 summonPointMultiplier = bannerData.add_summon_point_stone;
-                paymentHeld = 0;
-                paymentHeldSetter = reduction =>
-                {
-                    playerBannerData.DailyLimitedSummonCount++;
-                };
+                playerBannerData.DailyLimitedSummonCount++;
                 paymentCost =
                     summonRequest.exec_type == SummonExecTypes.Tenfold
                         ? bannerData.multi_diamond
                         : bannerData.single_diamond * numSummons;
                 break;
             case PaymentTypes.Wyrmite:
-                paymentHeld = userData.Crystal;
-                paymentHeldSetter = reduction => userData.Crystal -= reduction;
                 paymentCost =
                     summonRequest.exec_type == SummonExecTypes.Tenfold
                         ? bannerData.multi_crystal
@@ -321,11 +316,8 @@ public class SummonController : DragaliaControllerBase
                 break;
             case PaymentTypes.FreeDailyExecDependant:
             case PaymentTypes.FreeDailyTenfold:
-                paymentHeldSetter = x =>
-                {
-                    if (bannerData.is_beginner_campaign == 1)
-                        playerBannerData.IsBeginnerFreeSummonAvailable = 0;
-                };
+                if (bannerData.is_beginner_campaign == 1)
+                    playerBannerData.IsBeginnerFreeSummonAvailable = 0;
                 paymentCost = 0;
                 break;
             default:
@@ -335,15 +327,13 @@ public class SummonController : DragaliaControllerBase
                 );
         }
 
-        if (paymentHeld < paymentCost)
-        {
-            throw new DragaliaException(
-                ResultCode.SummonPointShort,
-                $"User did not have enough {summonRequest.payment_type}."
-            );
-        }
+        await this.paymentService.ProcessPayment(
+            summonRequest.payment_type,
+            summonRequest.payment_target,
+            paymentCost
+        );
 
-        List<AtgenRedoableSummonResultUnitList> summonResult = _summonService.GenerateSummonResult(
+        List<AtgenRedoableSummonResultUnitList> summonResult = summonService.GenerateSummonResult(
             numSummons
         );
 
@@ -454,7 +444,6 @@ public class SummonController : DragaliaControllerBase
             );
         }
 
-        paymentHeldSetter(paymentCost);
         playerBannerData.SummonPoints += numSummons * summonPointMultiplier;
         playerBannerData.SummonCount += numSummons;
 

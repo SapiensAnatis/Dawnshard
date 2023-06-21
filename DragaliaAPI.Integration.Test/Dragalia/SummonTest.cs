@@ -111,6 +111,12 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonRequest_SingleSummonWyrmite_ReturnsValidResult()
     {
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(
+            x => x.DeviceAccountId == DeviceAccountId
+        );
+
+        await this.ApiContext.Entry(userData).ReloadAsync();
+
         SummonRequestData response = (
             await this.Client.PostMsgpack<SummonRequestData>(
                 "summon/request",
@@ -119,7 +125,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Single,
                     1,
                     PaymentTypes.Wyrmite,
-                    new PaymentTarget(1, 1)
+                    new PaymentTarget(userData.Crystal, 120) // TODO: Change when banners are implemented otherwise this test breaks
                 )
             )
         ).data;
@@ -134,6 +140,10 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonRequest_TenSummonWyrmite_ReturnsValidResult()
     {
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(
+            x => x.DeviceAccountId == DeviceAccountId
+        );
+
         SummonRequestData response = (
             await this.Client.PostMsgpack<SummonRequestData>(
                 "summon/request",
@@ -142,7 +152,7 @@ public class SummonTest : TestFixture
                     SummonExecTypes.Tenfold,
                     0,
                     PaymentTypes.Wyrmite,
-                    new PaymentTarget(1, 1)
+                    new PaymentTarget(userData.Crystal, 1200)
                 )
             )
         ).data;

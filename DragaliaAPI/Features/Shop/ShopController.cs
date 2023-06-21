@@ -1,10 +1,12 @@
 ﻿using System;
+using DragaliaAPI.Controllers;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.Shop;
 
 [Route("shop")]
 public class ShopController : DragaliaControllerBase
@@ -27,9 +29,8 @@ public class ShopController : DragaliaControllerBase
         this.itemSummonService = itemSummonService;
     }
 
-    [Route("get_list")]
-    [HttpPost]
-    public async Task<DragaliaResult> GetList(ShopGetListRequest request)
+    [HttpPost("get_list")]
+    public async Task<DragaliaResult> GetList()
     {
         ShopGetListData response =
             new()
@@ -46,24 +47,30 @@ public class ShopController : DragaliaControllerBase
                 quest_bonus = new List<AtgenQuestBonus>(),
                 product_lock_list = new List<AtgenProductLockList>(),
                 product_list = new List<ProductList>(),
-                update_data_list = new UpdateDataList()
-                {
-                    functional_maintenance_list = new List<FunctionalMaintenanceList>()
-                },
-                user_item_summon = new AtgenUserItemSummon()
-                {
-                    daily_summon_count = 1,
-                    last_summon_time = DateTime.UtcNow // getting rid of tempting red exclamation mark on daily item summon
-                },
-                infancy_paid_diamond_limit = 4800,
+                infancy_paid_diamond_limit = 4800
             };
+
+        response.user_item_summon = await this.itemSummonService.GetOrRefreshItemSummon();
+        response.update_data_list = await this.updateDataService.SaveChangesAsync();
 
         return Ok(response);
     }
 
-    [Route("item_summon_odd")]
+    [HttpPost("item_summon_odd")]
     public DragaliaResult GetOdds()
     {
-        return this.Ok(new ShopItemSummonOddData(itemSummonService.GetOdds()));
+        return Ok(new ShopItemSummonOddData(itemSummonService.GetOdds()));
+    }
+
+    [HttpPost("item_summon_exec")]
+    public async Task<DragaliaResult> ExecItemSummon(ShopItemSummonExecRequest request)
+    {
+        ShopItemSummonExecData resp = new();
+
+        resp.item_summon_reward_list = await this.itemSummonService.DoSummon(request);
+        resp.user_item_summon = await this.itemSummonService.GetOrRefreshItemSummon();
+        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+
+        return Ok(resp);
     }
 }
