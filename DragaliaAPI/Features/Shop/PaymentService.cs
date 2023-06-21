@@ -95,11 +95,31 @@ public class PaymentService : IPaymentService
                 );
         }
 
-        if ((hasPaymentTarget && quantity != payment!.target_hold_quantity) || quantity < price)
+        if (hasPaymentTarget && quantity != payment!.target_hold_quantity)
         {
+            this.logger.LogError(
+                "Held quantity {quantity} does not match target of payment {@payment}",
+                quantity,
+                payment
+            );
+
             throw new DragaliaException(
                 ResultCode.CommonUserStatusError,
                 "Payment count mismatch."
+            );
+        }
+
+        if (quantity < price)
+        {
+            this.logger.LogError(
+                "Held quantity {quantity} does not meet price {price}",
+                quantity,
+                price
+            );
+
+            throw new DragaliaException(
+                ResultCode.CommonMaterialShort,
+                "Insufficient quantity for payment."
             );
         }
 

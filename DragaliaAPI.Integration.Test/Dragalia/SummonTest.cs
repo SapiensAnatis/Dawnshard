@@ -115,6 +115,8 @@ public class SummonTest : TestFixture
             x => x.DeviceAccountId == DeviceAccountId
         );
 
+        await this.ApiContext.Entry(userData).ReloadAsync();
+
         SummonRequestData response = (
             await this.Client.PostMsgpack<SummonRequestData>(
                 "summon/request",
