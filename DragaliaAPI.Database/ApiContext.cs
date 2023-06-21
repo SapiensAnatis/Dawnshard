@@ -67,6 +67,10 @@ public class ApiContext : DbContext
 
         modelBuilder.Entity<DbQuest>().HasKey(e => new { e.DeviceAccountId, e.QuestId });
 
+        modelBuilder
+            .Entity<DbAbilityCrestSet>()
+            .HasKey(key => new { key.DeviceAccountId, key.AbilityCrestSetNo });
+
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         if (this.Database.IsSqlite())
@@ -124,6 +128,8 @@ public class ApiContext : DbContext
     public DbSet<DbSetUnit> PlayerSetUnits { get; set; }
 
     public DbSet<DbAbilityCrest> PlayerAbilityCrests { get; set; }
+
+    public DbSet<DbAbilityCrestSet> PlayerAbilityCrestSets { get; set; }
 
     public DbSet<DbWeaponBody> PlayerWeapons { get; set; }
 
