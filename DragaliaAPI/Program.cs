@@ -7,6 +7,7 @@ using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Trade;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
@@ -140,7 +141,10 @@ builder.Services
     // Present feature
     .AddScoped<IPresentService, PresentService>()
     .AddScoped<IPresentControllerService, PresentControllerService>()
-    .AddScoped<IPresentRepository, PresentRepository>();
+    .AddScoped<IPresentRepository, PresentRepository>()
+    // Treasure Trade Feature
+    .AddScoped<ITradeRepository, TradeRepository>()
+    .AddScoped<ITreasureTradeService, TreasureTradeService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 

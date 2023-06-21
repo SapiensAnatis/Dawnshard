@@ -5,6 +5,7 @@ using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Stamp;
+using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -23,6 +24,7 @@ public class LoadService : ILoadService
     private readonly IEnumerable<ISavefileUpdate> savefileUpdates;
     private readonly IMissionService missionService;
     private readonly IPresentService presentService;
+    private readonly ITreasureTradeService treasureTradeService;
 
     public LoadService(
         ISavefileService savefileService,
@@ -32,7 +34,8 @@ public class LoadService : ILoadService
         IOptionsMonitor<PhotonOptions> photonOptions,
         IEnumerable<ISavefileUpdate> savefileUpdates,
         IMissionService missionService,
-        IPresentService presentService
+        IPresentService presentService,
+        ITreasureTradeService treasureTradeService
     )
     {
         this.savefileService = savefileService;
@@ -43,6 +46,7 @@ public class LoadService : ILoadService
         this.savefileUpdates = savefileUpdates;
         this.missionService = missionService;
         this.presentService = presentService;
+        this.treasureTradeService = treasureTradeService;
     }
 
     public async Task<LoadIndexData> BuildIndexData()
@@ -57,6 +61,8 @@ public class LoadService : ILoadService
         FortBonusList bonusList = await bonusService.GetBonusList();
 
         this.logger.LogInformation("{time} ms: Bonus list acquired", stopwatch.ElapsedMilliseconds);
+
+        // TODO/NOTE: special shop purchase list is not set here. maybe change once that fully works?
 
         LoadIndexData data =
             new()
@@ -114,7 +120,9 @@ public class LoadService : ILoadService
                 equip_stamp_list = savefile.EquippedStampList
                     .Select(this.mapper.Map<DbEquippedStamp, EquipStampList>)
                     .OrderBy(x => x.slot),
-                quest_entry_condition_list = await this.missionService.GetEntryConditions()
+                quest_entry_condition_list = await this.missionService.GetEntryConditions(),
+                user_treasure_trade_list = await this.treasureTradeService.GetUserTradeList(),
+                treasure_trade_all_list = this.treasureTradeService.GetCurrentTradeList()
             };
 
         this.logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);

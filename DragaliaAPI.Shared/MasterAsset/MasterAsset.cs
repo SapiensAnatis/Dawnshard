@@ -2,6 +2,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
+using DragaliaAPI.Shared.MasterAsset.Models.Trade;
 
 namespace DragaliaAPI.Shared.MasterAsset;
 
@@ -187,4 +188,10 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, MaterialShop> MaterialShopMonthly =
         new("Shop/MaterialShopMonthly.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, TreasureTrade> TreasureTrade =
+        new("TreasureTrade/TreasureTrade.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, UseItem> UseItem =
+        new("TreasureTrade/UseItem.json", x => x.Id);
 }
