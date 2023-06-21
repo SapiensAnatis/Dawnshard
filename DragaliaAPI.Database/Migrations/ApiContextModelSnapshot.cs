@@ -622,6 +622,150 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerMissions");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerPresent", b =>
+                {
+                    b.Property<long>("PresentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("PresentId");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("PresentId"));
+
+                    b.Property<DateTimeOffset>("CreateTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreateTime");
+
+                    b.Property<string>("DeviceAccountId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityId");
+
+                    b.Property<int>("EntityLevel")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityLevel");
+
+                    b.Property<int>("EntityLimitBreakCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityLimitBreakCount");
+
+                    b.Property<int>("EntityQuantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityQuantity");
+
+                    b.Property<int>("EntityStatusPlusCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityStatusPlusCount");
+
+                    b.Property<int>("EntityType")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityType");
+
+                    b.Property<long>("MasterId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("MasterId");
+
+                    b.Property<int>("MessageId")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageId");
+
+                    b.Property<int>("MessageParamValue1")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue1");
+
+                    b.Property<int>("MessageParamValue2")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue2");
+
+                    b.Property<int>("MessageParamValue3")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue3");
+
+                    b.Property<int>("MessageParamValue4")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue4");
+
+                    b.Property<DateTimeOffset?>("ReceiveLimitTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ReceiveLimitTime");
+
+                    b.Property<long>("State")
+                        .HasColumnType("bigint")
+                        .HasColumnName("State");
+
+                    b.HasKey("PresentId");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("PlayerPresent");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerPresentHistory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreateTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreateTime");
+
+                    b.Property<string>("DeviceAccountId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityId");
+
+                    b.Property<int>("EntityLevel")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityLevel");
+
+                    b.Property<int>("EntityLimitBreakCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityLimitBreakCount");
+
+                    b.Property<int>("EntityQuantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityQuantity");
+
+                    b.Property<int>("EntityStatusPlusCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityStatusPlusCount");
+
+                    b.Property<int>("EntityType")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityType");
+
+                    b.Property<int>("MessageId")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageId");
+
+                    b.Property<int>("MessageParamValue1")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue1");
+
+                    b.Property<int>("MessageParamValue2")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue2");
+
+                    b.Property<int>("MessageParamValue3")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue3");
+
+                    b.Property<int>("MessageParamValue4")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue4");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("PlayerPresentHistory");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerShopInfo", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -1212,6 +1356,28 @@ namespace DragaliaAPI.Database.Migrations
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerMission", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerPresent", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerPresentHistory", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany()

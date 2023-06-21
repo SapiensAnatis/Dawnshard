@@ -20,6 +20,7 @@ using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Core;
+using Serilog.Events;
 
 Log.Logger = new LoggerConfiguration().MinimumLevel
     .Debug()
@@ -134,7 +135,7 @@ builder.Services
     // Shop Feature
     .AddScoped<IShopRepository, ShopRepository>()
     .AddScoped<IItemSummonService, ItemSummonService>()
-    .AddScoped<IPaymentService, PaymentService>();
+    .AddScoped<IPaymentService, PaymentService>()
     // Present feature
     .AddScoped<IPresentService, PresentService>()
     .AddScoped<IPresentControllerService, PresentControllerService>()

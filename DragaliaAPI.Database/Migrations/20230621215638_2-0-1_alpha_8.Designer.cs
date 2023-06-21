@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230619200000_2-0-1_alpha_7")]
-    partial class _201_alpha_7
+    [Migration("20230621215638_2-0-1_alpha_8")]
+    partial class _201_alpha_8
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -642,8 +642,8 @@ namespace DragaliaAPI.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("EntityId")
-                        .HasColumnType("bigint")
+                    b.Property<int>("EntityId")
+                        .HasColumnType("integer")
                         .HasColumnName("EntityId");
 
                     b.Property<int>("EntityLevel")
@@ -670,24 +670,24 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("MasterId");
 
-                    b.Property<long>("MessageId")
-                        .HasColumnType("bigint")
+                    b.Property<int>("MessageId")
+                        .HasColumnType("integer")
                         .HasColumnName("MessageId");
 
-                    b.Property<long>("MessageParamValue1")
-                        .HasColumnType("bigint")
+                    b.Property<int>("MessageParamValue1")
+                        .HasColumnType("integer")
                         .HasColumnName("MessageParamValue1");
 
-                    b.Property<long>("MessageParamValue2")
-                        .HasColumnType("bigint")
+                    b.Property<int>("MessageParamValue2")
+                        .HasColumnType("integer")
                         .HasColumnName("MessageParamValue2");
 
-                    b.Property<long>("MessageParamValue3")
-                        .HasColumnType("bigint")
+                    b.Property<int>("MessageParamValue3")
+                        .HasColumnType("integer")
                         .HasColumnName("MessageParamValue3");
 
-                    b.Property<long>("MessageParamValue4")
-                        .HasColumnType("bigint")
+                    b.Property<int>("MessageParamValue4")
+                        .HasColumnType("integer")
                         .HasColumnName("MessageParamValue4");
 
                     b.Property<DateTimeOffset?>("ReceiveLimitTime")
@@ -707,19 +707,19 @@ namespace DragaliaAPI.Database.Migrations
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerPresentHistory", b =>
                 {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
                     b.Property<long>("Id")
-                        .HasColumnType("bigint")
-                        .HasColumnName("Id");
+                        .HasColumnType("bigint");
 
                     b.Property<DateTimeOffset>("CreateTime")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("CreateTime");
 
-                    b.Property<long>("EntityId")
-                        .HasColumnType("bigint")
+                    b.Property<string>("DeviceAccountId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("integer")
                         .HasColumnName("EntityId");
 
                     b.Property<int>("EntityLevel")
@@ -742,31 +742,47 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("EntityType");
 
-                    b.Property<long>("MessageId")
-                        .HasColumnType("bigint")
+                    b.Property<int>("MessageId")
+                        .HasColumnType("integer")
                         .HasColumnName("MessageId");
 
-                    b.Property<long>("MessageParamValue1")
-                        .HasColumnType("bigint")
+                    b.Property<int>("MessageParamValue1")
+                        .HasColumnType("integer")
                         .HasColumnName("MessageParamValue1");
 
-                    b.Property<long>("MessageParamValue2")
-                        .HasColumnType("bigint")
+                    b.Property<int>("MessageParamValue2")
+                        .HasColumnType("integer")
                         .HasColumnName("MessageParamValue2");
 
-                    b.Property<long>("MessageParamValue3")
-                        .HasColumnType("bigint")
+                    b.Property<int>("MessageParamValue3")
+                        .HasColumnType("integer")
                         .HasColumnName("MessageParamValue3");
 
-                    b.Property<long>("MessageParamValue4")
-                        .HasColumnType("bigint")
+                    b.Property<int>("MessageParamValue4")
+                        .HasColumnType("integer")
                         .HasColumnName("MessageParamValue4");
 
-                    b.HasKey("DeviceAccountId", "Id");
+                    b.HasKey("Id");
 
                     b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PlayerPresentHistory");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerShopInfo", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DailySummonCount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("LastSummonTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("DeviceAccountId");
+
+                    b.ToTable("PlayerShopInfos");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerStoryState", b =>
@@ -1365,6 +1381,17 @@ namespace DragaliaAPI.Database.Migrations
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerPresentHistory", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerShopInfo", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany()

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class _201_alpha_7 : Migration
+    public partial class _201_alpha_8 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,16 +22,16 @@ namespace DragaliaAPI.Database.Migrations
                     MasterId = table.Column<long>(type: "bigint", nullable: false),
                     State = table.Column<long>(type: "bigint", nullable: false),
                     EntityType = table.Column<int>(type: "integer", nullable: false),
-                    EntityId = table.Column<long>(type: "bigint", nullable: false),
+                    EntityId = table.Column<int>(type: "integer", nullable: false),
                     EntityQuantity = table.Column<int>(type: "integer", nullable: false),
                     EntityLevel = table.Column<int>(type: "integer", nullable: false),
                     EntityLimitBreakCount = table.Column<int>(type: "integer", nullable: false),
                     EntityStatusPlusCount = table.Column<int>(type: "integer", nullable: false),
                     MessageId = table.Column<int>(type: "integer", nullable: false),
-                    MessageParamValue1 = table.Column<long>(type: "bigint", nullable: false),
-                    MessageParamValue2 = table.Column<long>(type: "bigint", nullable: false),
-                    MessageParamValue3 = table.Column<long>(type: "bigint", nullable: false),
-                    MessageParamValue4 = table.Column<long>(type: "bigint", nullable: false),
+                    MessageParamValue1 = table.Column<int>(type: "integer", nullable: false),
+                    MessageParamValue2 = table.Column<int>(type: "integer", nullable: false),
+                    MessageParamValue3 = table.Column<int>(type: "integer", nullable: false),
+                    MessageParamValue4 = table.Column<int>(type: "integer", nullable: false),
                     CreateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     ReceiveLimitTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
@@ -50,24 +50,24 @@ namespace DragaliaAPI.Database.Migrations
                 name: "PlayerPresentHistory",
                 columns: table => new
                 {
-                    DeviceAccountId = table.Column<string>(type: "text", nullable: false),
                     Id = table.Column<long>(type: "bigint", nullable: false),
+                    DeviceAccountId = table.Column<string>(type: "text", nullable: false),
                     EntityType = table.Column<int>(type: "integer", nullable: false),
-                    EntityId = table.Column<long>(type: "bigint", nullable: false),
+                    EntityId = table.Column<int>(type: "integer", nullable: false),
                     EntityQuantity = table.Column<int>(type: "integer", nullable: false),
                     EntityLevel = table.Column<int>(type: "integer", nullable: false),
                     EntityLimitBreakCount = table.Column<int>(type: "integer", nullable: false),
                     EntityStatusPlusCount = table.Column<int>(type: "integer", nullable: false),
                     MessageId = table.Column<int>(type: "integer", nullable: false),
-                    MessageParamValue1 = table.Column<long>(type: "bigint", nullable: false),
-                    MessageParamValue2 = table.Column<long>(type: "bigint", nullable: false),
-                    MessageParamValue3 = table.Column<long>(type: "bigint", nullable: false),
-                    MessageParamValue4 = table.Column<long>(type: "bigint", nullable: false),
+                    MessageParamValue1 = table.Column<int>(type: "integer", nullable: false),
+                    MessageParamValue2 = table.Column<int>(type: "integer", nullable: false),
+                    MessageParamValue3 = table.Column<int>(type: "integer", nullable: false),
+                    MessageParamValue4 = table.Column<int>(type: "integer", nullable: false),
                     CreateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerPresentHistory", x => new { x.DeviceAccountId, x.Id });
+                    table.PrimaryKey("PK_PlayerPresentHistory", x => x.Id);
                     table.ForeignKey(
                         name: "FK_PlayerPresentHistory_Players_DeviceAccountId",
                         column: x => x.DeviceAccountId,
