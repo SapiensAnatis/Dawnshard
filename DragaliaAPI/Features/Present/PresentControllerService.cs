@@ -101,29 +101,29 @@ public class PresentControllerService : IPresentControllerService
 
         foreach (DbPlayerPresent present in presents)
         {
-            RewardService.GrantResult result = await this.rewardService.GrantReward(
+            RewardGrantResult result = await this.rewardService.GrantReward(
                 new(
                     present.EntityType,
                     present.EntityId,
                     present.EntityQuantity,
                     present.EntityLimitBreakCount,
-                    1,
+                    0,
                     1
                 )
             );
 
             switch (result)
             {
-                case RewardService.GrantResult.Added:
+                case RewardGrantResult.Added:
                     receivedIds.Add(present.PresentId);
                     break;
-                case RewardService.GrantResult.Converted:
+                case RewardGrantResult.Converted:
                     receivedIds.Add(present.PresentId);
                     break;
-                case RewardService.GrantResult.Limit:
+                case RewardGrantResult.Limit:
                     notReceivedIds.Add(present.PresentId);
                     break;
-                case RewardService.GrantResult.Discarded:
+                case RewardGrantResult.Discarded:
                     removedIds.Add(present.PresentId);
                     break;
             }

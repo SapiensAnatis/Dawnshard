@@ -12,7 +12,7 @@ public interface IRewardService
     /// <returns>
     /// An enum indicating the result of the add operation.
     /// </returns>
-    Task<RewardService.GrantResult> GrantReward(Entity entity);
+    Task<RewardGrantResult> GrantReward(Entity entity);
 
     EntityResult GetEntityResult();
 }

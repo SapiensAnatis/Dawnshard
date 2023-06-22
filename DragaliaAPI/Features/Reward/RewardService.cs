@@ -34,7 +34,7 @@ public class RewardService : IRewardService
         this.unitRepository = unitRepository;
     }
 
-    public async Task<GrantResult> GrantReward(Entity entity)
+    public async Task<RewardGrantResult> GrantReward(Entity entity)
     {
         switch (entity.Type)
         {
@@ -66,36 +66,43 @@ public class RewardService : IRewardService
                 break;
             default:
                 logger.LogWarning("Tried to reward unsupported entity {@entity}", entity);
-                return GrantResult.FailError;
+                return RewardGrantResult.FailError;
         }
 
         this.newEntities.Add(entity);
-        return GrantResult.Added;
+        return RewardGrantResult.Added;
     }
 
-    private async Task<GrantResult> RewardCharacter(Entity entity)
+    private async Task<RewardGrantResult> RewardCharacter(Entity entity)
     {
-        if (entity.Type is not EntityTypes.Chara)
+        if (entity.Type != EntityTypes.Chara)
             throw new ArgumentException("Entity was not a character", nameof(entity));
 
-        if (await this.unitRepository.FindCharaAsync((Charas)entity.Id) is not null)
+        Charas chara = (Charas)entity.Id;
+
+        if (await this.unitRepository.FindCharaAsync(chara) is not null)
         {
             // Is it the correct behaviour to discard gifted characters?
             // Not sure -- never had characters in my gift box
             this.logger.LogDebug("Discarded character entity: {@entity}.", entity);
             discardedEntities.Add(entity);
-            return GrantResult.Discarded;
+            return RewardGrantResult.Discarded;
         }
 
         this.logger.LogDebug("Granted new character entity: {@entity}", entity);
-        await this.unitRepository.AddCharas((Charas)entity.Id);
+        await this.unitRepository.AddCharas(chara);
         newEntities.Add(entity);
-        return GrantResult.Added;
+        return RewardGrantResult.Added;
     }
 
-    private async Task<GrantResult> RewardAbilityCrest(Entity entity)
+    private async Task<RewardGrantResult> RewardAbilityCrest(Entity entity)
     {
-        if (await this.abilityCrestRepository.FindAsync((AbilityCrests)entity.Id) is not null)
+        if (entity.Type != EntityTypes.Wyrmprint)
+            throw new ArgumentException("Entity was not a wyrmprint", nameof(entity));
+
+        AbilityCrests crest = (AbilityCrests)entity.Id;
+
+        if (await this.abilityCrestRepository.FindAsync(crest) is not null)
         {
             Entity dewEntity = new(EntityTypes.Dew, Id: 0, Quantity: 4000);
             this.logger.LogDebug(
@@ -107,19 +114,19 @@ public class RewardService : IRewardService
             await this.userDataRepository.UpdateDewpoint(dewEntity.Quantity);
 
             convertedEntities.Add(new ConvertedEntity(entity, dewEntity));
-            return GrantResult.Converted;
+            return RewardGrantResult.Converted;
         }
 
         this.logger.LogDebug("Granted new ability crest entity: {@entity}", entity);
         await this.abilityCrestRepository.Add(
-            (AbilityCrests)entity.Id,
+            crest,
             entity.LimitBreakCount,
             entity.BuildupCount,
             entity.EquipableCount
         );
 
         newEntities.Add(entity);
-        return GrantResult.Added;
+        return RewardGrantResult.Added;
     }
 
     public EntityResult GetEntityResult()
@@ -134,16 +141,5 @@ public class RewardService : IRewardService
             over_present_entity_list = Enumerable.Empty<AtgenBuildEventRewardEntityList>(),
             over_present_limit_entity_list = Enumerable.Empty<AtgenBuildEventRewardEntityList>()
         };
-    }
-
-    public enum GrantResult
-    {
-        Added,
-        GiftBox,
-        Discarded,
-        GiftBoxDiscarded,
-        Converted,
-        Limit,
-        FailError,
     }
 }

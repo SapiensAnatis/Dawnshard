@@ -53,12 +53,14 @@ public class LoginController : DragaliaControllerBase
     [Route("index")]
     public async Task<DragaliaResult> Index()
     {
+        DateTimeOffset reset = DateTimeOffset.UtcNow.Date.AddHours(6);
+
         // TODO: Implement daily login bonuses/notifications/resets
         DbPlayerUserData userData =
             await userDataRepository.UserData.FirstOrDefaultAsync()
             ?? throw new DragaliaException(ResultCode.CommonDataNotFoundError);
 
-        if (userData.LastLoginTime < DateTimeOffset.UtcNow.Date.AddHours(6))
+        if (DateTimeOffset.UtcNow > reset && userData.LastLoginTime < reset)
         {
             await inventoryRepository.RefreshPurchasableDragonGiftCounts();
 
