@@ -11,6 +11,7 @@ namespace DragaliaAPI.Database.Entities;
 /// Wyrmprint set database entity.
 /// </summary>
 [Index(nameof(DeviceAccountId))]
+[PrimaryKey(nameof(DeviceAccountId), nameof(AbilityCrestSetNo))]
 public class DbAbilityCrestSet : IDbHasAccountId
 {
     /// <inheritdoc />

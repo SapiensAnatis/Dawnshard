@@ -67,10 +67,6 @@ public class ApiContext : DbContext
 
         modelBuilder.Entity<DbQuest>().HasKey(e => new { e.DeviceAccountId, e.QuestId });
 
-        modelBuilder
-            .Entity<DbAbilityCrestSet>()
-            .HasKey(key => new { key.DeviceAccountId, key.AbilityCrestSetNo });
-
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         if (this.Database.IsSqlite())

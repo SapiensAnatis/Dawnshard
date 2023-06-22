@@ -56,6 +56,7 @@ public class AbilityCrestRepository : IAbilityCrestRepository
 
     public async Task AddOrUpdateSet(DbAbilityCrestSet abilityCrestSet)
     {
+        abilityCrestSet.DeviceAccountId = this.playerIdentityService.AccountId;
         DbAbilityCrestSet? dbAbilityCrestSet = await this.FindSetAsync(
             abilityCrestSet.AbilityCrestSetNo
         );
