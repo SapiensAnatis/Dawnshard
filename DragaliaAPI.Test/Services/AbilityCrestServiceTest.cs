@@ -190,7 +190,7 @@ public class AbilityCrestServiceTest
             .Setup(x => x.FindAsync(AbilityCrests.WorthyRivals))
             .ReturnsAsync(() => null);
         this.mockAbilityCrestRepository
-            .Setup(x => x.Add(AbilityCrests.WorthyRivals))
+            .Setup(x => x.Add(AbilityCrests.WorthyRivals, null, null, null))
             .Returns(Task.CompletedTask);
 
         await this.abilityCrestService.AddOrRefund(AbilityCrests.WorthyRivals);

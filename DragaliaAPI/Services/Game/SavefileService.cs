@@ -436,6 +436,7 @@ public class SavefileService : ISavefileService
         {
             await this.apiContext.Database.RollbackTransactionAsync();
             this.apiContext.ChangeTracker.AutoDetectChangesEnabled = true;
+            this.apiContext.ChangeTracker.Clear();
             throw;
         }
     }

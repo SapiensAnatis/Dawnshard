@@ -7,6 +7,7 @@ namespace DragaliaAPI.Database;
 /// <summary>
 /// Base database context.
 /// </summary>
+/// <remarks>Do not use this class directly -- make a repository method instead. This rule is enforced to make queries easy to unit test.</remarks>
 public class ApiContext : DbContext
 {
     public ApiContext(DbContextOptions<ApiContext> options)
@@ -140,6 +141,10 @@ public class ApiContext : DbContext
     public DbSet<DbPlayerDragonGift> PlayerDragonGifts { get; set; }
 
     public DbSet<DbPlayerMission> PlayerMissions { get; set; }
+
+    public DbSet<DbPlayerPresent> PlayerPresents { get; set; }
+
+    public DbSet<DbPlayerPresentHistory> PlayerPresentHistory { get; set; }
 
     public DbSet<DbEquippedStamp> EquippedStamps { get; set; }
 

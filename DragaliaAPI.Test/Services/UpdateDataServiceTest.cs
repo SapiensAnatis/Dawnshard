@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Test;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
@@ -27,6 +28,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly Mock<IMissionService> mockMissionService;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<IPresentService> mockPresentService;
 
     public UpdateDataServiceTest(DbTestFixture fixture, ITestOutputHelper output)
     {
@@ -35,6 +37,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mockMissionService = new(MockBehavior.Loose);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockPresentService = new(MockBehavior.Strict);
 
         this.mapper = new MapperConfiguration(
             cfg => cfg.AddMaps(typeof(Program).Assembly)
@@ -44,7 +47,8 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             this.mapper,
             this.mockPlayerIdentityService.Object,
             this.mockMissionService.Object,
-            this.mockMissionProgressionService.Object
+            this.mockMissionProgressionService.Object,
+            this.mockPresentService.Object
         );
 
         CommonAssertionOptions.ApplyTimeOptions();
