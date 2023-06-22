@@ -2,6 +2,7 @@ using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -11,6 +12,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Logging;
 using MockQueryable.Moq;
+using Range = Moq.Range;
 
 namespace DragaliaAPI.Test.Services;
 
@@ -23,6 +25,7 @@ public class FortServiceTest
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly IMapper mapper;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<IPaymentService> mockPaymentService;
 
     private readonly IFortService fortService;
 
@@ -35,6 +38,7 @@ public class FortServiceTest
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mapper = UnitTestUtils.CreateMapper();
         this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockPaymentService = new(MockBehavior.Strict);
 
         this.fortService = new FortService(
             this.mockFortRepository.Object,
@@ -43,7 +47,8 @@ public class FortServiceTest
             this.mockLogger.Object,
             this.mockPlayerIdentityService.Object,
             this.mapper,
-            this.mockMissionProgressionService.Object
+            this.mockMissionProgressionService.Object,
+            this.mockPaymentService.Object
         );
 
         UnitTestUtils.ApplyDateTimeAssertionOptions();
@@ -119,16 +124,12 @@ public class FortServiceTest
                 new DbFortDetail() { CarpenterNum = existingCarpenters, DeviceAccountId = "id" }
             );
         this.mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(0);
-        this.mockFortRepository.Setup(
-            x =>
-                x.ConsumePaymentCost(
-                    It.IsAny<DbPlayerUserData>(),
-                    PaymentTypes.Wyrmite,
-                    expectedCost
-                )
-        );
         this.mockFortRepository
             .Setup(x => x.UpdateFortMaximumCarpenter(existingCarpenters + 1))
+            .Returns(Task.CompletedTask);
+
+        this.mockPaymentService
+            .Setup(x => x.ProcessPayment(PaymentTypes.Wyrmite, null, expectedCost))
             .Returns(Task.CompletedTask);
 
         await this.fortService.AddCarpenter(PaymentTypes.Wyrmite);
@@ -189,36 +190,7 @@ public class FortServiceTest
             .Invoking(x => x.AddCarpenter(PaymentTypes.Ticket))
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
-            .Where(e => e.Code == ResultCode.FortExtendCarpenterLimit);
-
-        this.mockUserDataRepository.VerifyAll();
-        this.mockFortRepository.VerifyAll();
-    }
-
-    [Fact]
-    public async Task AddCarpenter_InsufficientCurrency_Throws()
-    {
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>
-                {
-                    new() { DeviceAccountId = "id", Crystal = 1 }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
-
-        this.mockFortRepository
-            .Setup(x => x.GetFortDetail())
-            .ReturnsAsync(new DbFortDetail() { CarpenterNum = 4, DeviceAccountId = "id" });
-        this.mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(0);
-
-        await this.fortService
-            .Invoking(x => x.AddCarpenter(PaymentTypes.Wyrmite))
-            .Should()
-            .ThrowExactlyAsync<DragaliaException>()
-            .Where(e => e.Code == ResultCode.FortExtendCarpenterLimit);
+            .Where(e => e.Code == ResultCode.ShopPaymentTypeInvalid);
 
         this.mockUserDataRepository.VerifyAll();
         this.mockFortRepository.VerifyAll();
@@ -241,23 +213,16 @@ public class FortServiceTest
 
         this.mockMissionProgressionService.Setup(x => x.OnFortLevelup());
 
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData> { userData }
-                    .AsQueryable()
-                    .BuildMock()
-            );
-
         this.mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
-        this.mockFortRepository.Setup(
-            x => x.ConsumeUpgradeAtOnceCost(userData, build, PaymentTypes.HalidomHustleHammer)
-        );
+        this.mockPaymentService
+            .Setup(x => x.ProcessPayment(PaymentTypes.HalidomHustleHammer, null, 1))
+            .Returns(Task.CompletedTask);
 
         await this.fortService.CompleteAtOnce(PaymentTypes.HalidomHustleHammer, 1);
 
-        this.mockUserDataRepository.VerifyAll();
+        this.mockPaymentService.VerifyAll();
+        this.mockMissionProgressionService.VerifyAll();
         this.mockFortRepository.VerifyAll();
     }
 
@@ -549,5 +514,71 @@ public class FortServiceTest
         build.PositionZ.Should().Be(5);
 
         this.mockFortRepository.VerifyAll();
+    }
+
+    [Fact]
+    public async Task CompleteAtOnce_Wyrmite_ConsumesPayment()
+    {
+        DbFortBuild build =
+            new()
+            {
+                DeviceAccountId = "wyrmite",
+                BuildId = 444,
+                Level = 5,
+                PlantId = FortPlants.Smithy,
+                BuildStartDate = DateTimeOffset.UtcNow,
+                BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(7)
+            };
+
+        this.mockFortRepository.Setup(x => x.GetBuilding(444)).ReturnsAsync(build);
+        this.mockPaymentService
+            .Setup(
+                x =>
+                    x.ProcessPayment(
+                        PaymentTypes.Wyrmite,
+                        null,
+                        It.IsInRange(840, 842, Range.Inclusive)
+                    )
+            )
+            .Returns(Task.CompletedTask);
+
+        this.mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(FortPlants.Smithy));
+
+        this.mockMissionProgressionService.Setup(x => x.OnFortLevelup());
+
+        await this.fortService.CompleteAtOnce(PaymentTypes.Wyrmite, 444);
+
+        this.mockMissionProgressionService.VerifyAll();
+        this.mockPaymentService.VerifyAll();
+        this.mockPlayerIdentityService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task CompleteAtOnce_HustleHammers_ConsumesPayment()
+    {
+        DbFortBuild build =
+            new()
+            {
+                DeviceAccountId = "hustler",
+                BuildId = 445,
+                Level = 5,
+                PlantId = FortPlants.Smithy,
+                BuildStartDate = DateTimeOffset.UtcNow,
+                BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(7)
+            };
+
+        this.mockFortRepository.Setup(x => x.GetBuilding(445)).ReturnsAsync(build);
+        this.mockPaymentService
+            .Setup(x => x.ProcessPayment(PaymentTypes.HalidomHustleHammer, null, 1))
+            .Returns(Task.CompletedTask);
+
+        this.mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(FortPlants.Smithy));
+
+        this.mockMissionProgressionService.Setup(x => x.OnFortLevelup());
+
+        await this.fortService.CompleteAtOnce(PaymentTypes.HalidomHustleHammer, 445);
+
+        this.mockMissionProgressionService.VerifyAll();
+        this.mockPaymentService.VerifyAll();
     }
 }
