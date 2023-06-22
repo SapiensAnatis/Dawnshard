@@ -31,7 +31,8 @@ public class PresentMapProfile : Profile
             .ForMember(
                 nameof(DbPlayerPresentHistory.Id),
                 x => x.MapFrom(nameof(DbPlayerPresent.PresentId))
-            );
+            )
+            .ForMember(x => x.CreateTime, opts => opts.Ignore());
 
         this.CreateMap<DbPlayerPresentHistory, PresentHistoryList>();
 

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Immutable;
+using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Present;
@@ -60,71 +61,63 @@ public class LoginController : DragaliaControllerBase
         if (userData.LastLoginTime < DateTimeOffset.UtcNow.Date.AddHours(6))
         {
             await inventoryRepository.RefreshPurchasableDragonGiftCounts();
+
+            this.presentService.AddPresent(
+                new Present(
+                    PresentMessage.DragaliaLostTeam,
+                    EntityTypes.Material,
+                    (int)Materials.ChampionsTestament,
+                    5
+                )
+            );
+
+            this.presentService.AddPresent(
+                new Present(
+                    PresentMessage.DragaliaLostTeam,
+                    EntityTypes.Material,
+                    (int)Materials.KnightsTestament,
+                    5
+                )
+            );
+
+            this.presentService.AddPresent(
+                new Present(
+                    PresentMessage.DragaliaLostTeam,
+                    EntityTypes.Material,
+                    (int)Materials.Omnicite
+                )
+            );
+
+            this.presentService.AddPresent(
+                new Present(
+                    PresentMessage.DragaliaLostTeam,
+                    EntityTypes.Material,
+                    (int)Materials.TwinklingSand,
+                    10
+                )
+            );
+
+            this.presentService.AddPresent(
+                new Materials[]
+                {
+                    Materials.FlameTome,
+                    Materials.WindTome,
+                    Materials.WaterTome,
+                    Materials.ShadowTome,
+                    Materials.LightTome
+                }.Select(
+                    x =>
+                        new Present(
+                            PresentMessage.DragaliaLostTeam,
+                            EntityTypes.Material,
+                            (int)x,
+                            5
+                        )
+                )
+            );
         }
 
         userData.LastLoginTime = DateTimeOffset.UtcNow;
-
-#if DEBUG
-        this.presentService.AddPresent(
-            new Present(PresentMessage.Maintenance, EntityTypes.Chara, (int)Charas.Addis)
-            {
-                ExpiryTime = TimeSpan.FromHours(1),
-                MessageParamValues = new[] { 100000101 }
-            }
-        );
-
-        this.presentService.AddPresent(
-            new Present(PresentMessage.DragonBond, EntityTypes.Dragon, (int)Dragons.Agni)
-            {
-                ExpiryTime = TimeSpan.FromHours(1),
-                MessageParamValues = new[] { 100000101 }
-            }
-        );
-
-        this.presentService.AddPresent(
-            new Present(PresentMessage.AdventurerStoryRead, EntityTypes.Dew, 0)
-            {
-                ExpiryTime = TimeSpan.FromHours(1),
-                MessageParamValues = new[] { 100000101 }
-            }
-        );
-
-        this.presentService.AddPresent(
-            new Present(PresentMessage.DragonBond, EntityTypes.HustleHammer, 0, 8_000)
-            {
-                ExpiryTime = TimeSpan.FromHours(1),
-                MessageParamValues = new[] { 100000101 }
-            }
-        );
-
-        this.presentService.AddPresent(
-            new Present(PresentMessage.FirstClear, EntityTypes.Rupies, 0, 100_000)
-            {
-                ExpiryTime = TimeSpan.FromHours(1),
-                MessageParamValues = new[] { 100000101 }
-            }
-        );
-
-        this.presentService.AddPresent(
-            new Present(PresentMessage.QuestGrandBounty, EntityTypes.Wyrmite, 1_200)
-            {
-                ExpiryTime = TimeSpan.FromHours(1),
-                MessageParamValues = new[] { 100000101 }
-            }
-        );
-
-        this.presentService.AddPresent(
-            new Present(
-                PresentMessage.TeamFormationTutorial,
-                EntityTypes.Material,
-                (int)Materials.Squishums
-            )
-            {
-                ExpiryTime = TimeSpan.FromHours(1),
-                MessageParamValues = new[] { 100000101 }
-            }
-        );
-#endif
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 

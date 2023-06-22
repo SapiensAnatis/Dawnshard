@@ -14,9 +14,9 @@ public enum PresentMessage
     /// <summary>
     /// Title: A Message from the Dragalia Lost Team
     /// <br/>
-    /// Description: A Gift from the Dragalia Lost Team
+    /// Description: Accept this gift from the Dragalia Lost team as a thank-you for enjoying the game on a regular basis!
     /// </summary>
-    DragaliaLostTeam = 1000000,
+    DragaliaLostTeam = 1003000,
 
     /// <summary>
     /// Title: Maintenance Gift

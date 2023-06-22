@@ -58,5 +58,5 @@ public class DbPlayerPresentHistory : IDbHasAccountId
 
     [Column("CreateTime")]
     [TypeConverter(typeof(DateTimeOffsetConverter))]
-    public DateTimeOffset CreateTime { get; set; }
+    public DateTimeOffset CreateTime { get; set; } = DateTimeOffset.UtcNow;
 }
