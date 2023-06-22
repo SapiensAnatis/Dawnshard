@@ -77,9 +77,7 @@ public class ShopController : DragaliaControllerBase
         ShopMaterialShopPurchaseData resp = new();
 
         resp.material_shop_purchase = await this.shopService.DoPurchase(
-            request.shop_type
-                + 1 /* To convert material shop type to actual shop type */
-            ,
+            request.shop_type.ToShopType(),
             request.payment_type,
             request.goods_id,
             request.quantity

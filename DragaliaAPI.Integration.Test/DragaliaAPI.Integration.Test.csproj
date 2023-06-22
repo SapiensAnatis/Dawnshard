@@ -46,6 +46,7 @@
 
     <ItemGroup>
       <Folder Include="Features\Missions\" />
+      <Folder Include="Features\Shop\" />
     </ItemGroup>
     
 

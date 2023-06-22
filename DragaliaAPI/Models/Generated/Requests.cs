@@ -3554,13 +3554,13 @@ public class ShopItemSummonOddRequest { }
 public class ShopMaterialShopPurchaseRequest
 {
     public int goods_id { get; set; }
-    public ShopType shop_type { get; set; }
+    public MaterialShopType shop_type { get; set; }
     public PaymentTypes payment_type { get; set; }
     public int quantity { get; set; }
 
     public ShopMaterialShopPurchaseRequest(
         int goods_id,
-        ShopType shop_type,
+        MaterialShopType shop_type,
         PaymentTypes payment_type,
         int quantity
     )
