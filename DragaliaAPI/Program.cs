@@ -144,7 +144,7 @@ builder.Services
     .AddScoped<IPresentRepository, PresentRepository>()
     // Treasure Trade Feature
     .AddScoped<ITradeRepository, TradeRepository>()
-    .AddScoped<ITreasureTradeService, TreasureTradeService>();
+    .AddScoped<ITradeService, TradeService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 

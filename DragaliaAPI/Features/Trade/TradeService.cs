@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Features.Missions;
-using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -8,16 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Trade;
 
-public class TreasureTradeService : ITreasureTradeService
+public class TradeService : ITradeService
 {
     private readonly ITradeRepository tradeRepository;
     private readonly IRewardService rewardService;
-    private readonly ILogger<TreasureTradeService> logger;
+    private readonly ILogger<TradeService> logger;
 
-    public TreasureTradeService(
+    public TradeService(
         ITradeRepository tradeRepository,
         IRewardService rewardService,
-        ILogger<TreasureTradeService> logger
+        ILogger<TradeService> logger
     )
     {
         this.tradeRepository = tradeRepository;
@@ -25,7 +24,7 @@ public class TreasureTradeService : ITreasureTradeService
         this.logger = logger;
     }
 
-    public IEnumerable<TreasureTradeList> GetCurrentTradeList()
+    public IEnumerable<TreasureTradeList> GetCurrentTreasureTradeList()
     {
         DateTimeOffset current = DateTimeOffset.UtcNow;
 
@@ -60,7 +59,7 @@ public class TreasureTradeService : ITreasureTradeService
             );
     }
 
-    public async Task<IEnumerable<UserTreasureTradeList>> GetUserTradeList()
+    public async Task<IEnumerable<UserTreasureTradeList>> GetUserTreasureTradeList()
     {
         return (await this.tradeRepository.TreasureTrades.ToListAsync()).Select(
             x => new UserTreasureTradeList(x.Id, x.Count, x.LastTradeTime)

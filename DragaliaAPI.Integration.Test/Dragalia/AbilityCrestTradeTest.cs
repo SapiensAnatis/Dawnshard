@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.AbilityCrestTradeController"/>
+/// Tests <see cref="DragaliaAPI.Features.Trade.AbilityCrestTradeController"/>
 /// </summary>
 public class AbilityCrestTradeTest : TestFixture
 {

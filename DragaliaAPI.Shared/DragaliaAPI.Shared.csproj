@@ -30,7 +30,7 @@
 		<None Update="Resources\AbilityCrestRarity.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="Resources\AbilityCrestTrade.json">
+		<None Update="Resources\Trade\AbilityCrestTrade.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\CharaData.json">
@@ -120,10 +120,10 @@
 		<None Update="Resources\Shop\SpecialShop.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="Resources\TreasureTrade\TreasureTrade.json">
+		<None Update="Resources\Trade\TreasureTrade.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="Resources\TreasureTrade\UseItem.json">
+		<None Update="Resources\UseItem.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\UnitStory.json">

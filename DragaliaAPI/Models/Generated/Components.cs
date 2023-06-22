@@ -8333,9 +8333,10 @@ public class SettingSupport
 [MessagePackObject(true)]
 public class ShopNotice
 {
-    public int is_shop_notification { get; set; }
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_shop_notification { get; set; }
 
-    public ShopNotice(int is_shop_notification)
+    public ShopNotice(bool is_shop_notification)
     {
         this.is_shop_notification = is_shop_notification;
     }

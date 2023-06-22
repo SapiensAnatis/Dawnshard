@@ -2,9 +2,9 @@
 
 namespace DragaliaAPI.Features.Trade;
 
-public interface ITreasureTradeService
+public interface ITradeService
 {
-    IEnumerable<TreasureTradeList> GetCurrentTradeList();
-    Task<IEnumerable<UserTreasureTradeList>> GetUserTradeList();
+    IEnumerable<TreasureTradeList> GetCurrentTreasureTradeList();
+    Task<IEnumerable<UserTreasureTradeList>> GetUserTreasureTradeList();
     Task DoTreasureTrade(int id, int count, IEnumerable<AtgenNeedUnitList> needUnitList);
 }

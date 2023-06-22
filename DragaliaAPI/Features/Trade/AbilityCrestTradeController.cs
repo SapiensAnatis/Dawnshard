@@ -7,8 +7,9 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DragaliaAPI.Controllers;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.Trade;
 
 [Route("ability_crest_trade")]
 public class AbilityCrestTradeController : DragaliaControllerBase
@@ -40,7 +41,7 @@ public class AbilityCrestTradeController : DragaliaControllerBase
             {
                 user_ability_crest_trade_list = new List<UserAbilityCrestTradeList>(),
                 ability_crest_trade_list = abilityCrestTradeList,
-                update_data_list = await this.updateDataService.SaveChangesAsync()
+                update_data_list = await updateDataService.SaveChangesAsync()
             };
 
         return Ok(response);

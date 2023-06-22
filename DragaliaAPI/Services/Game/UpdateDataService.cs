@@ -6,7 +6,6 @@ using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -129,6 +128,13 @@ public class UpdateDataService : IUpdateDataService
         )
         {
             list.present_notice = await this.presentService.GetPresentNotice();
+        }
+
+        List<DbPlayerShopInfo> updatedInfo = entities.OfType<DbPlayerShopInfo>().ToList();
+
+        if (updatedInfo.Count > 0)
+        {
+            list.shop_notice = new ShopNotice(updatedInfo.First().DailySummonCount == 0);
         }
 
         return list;

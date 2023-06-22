@@ -4,7 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.SavefileUpdate;
-using DragaliaAPI.Features.Stamp;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
@@ -25,6 +25,8 @@ public class LoadService : ILoadService
     private readonly IMissionService missionService;
     private readonly IPresentService presentService;
     private readonly ITreasureTradeService treasureTradeService;
+    private readonly ITradeService tradeService;
+    private readonly IItemSummonService itemSummonService;
 
     public LoadService(
         ISavefileService savefileService,
@@ -35,7 +37,9 @@ public class LoadService : ILoadService
         IEnumerable<ISavefileUpdate> savefileUpdates,
         IMissionService missionService,
         IPresentService presentService,
-        ITreasureTradeService treasureTradeService
+        ITreasureTradeService treasureTradeService,
+        ITradeService tradeService,
+        IItemSummonService itemSummonService
     )
     {
         this.savefileService = savefileService;
@@ -47,6 +51,8 @@ public class LoadService : ILoadService
         this.missionService = missionService;
         this.presentService = presentService;
         this.treasureTradeService = treasureTradeService;
+        this.tradeService = tradeService;
+        this.itemSummonService = itemSummonService;
     }
 
     public async Task<LoadIndexData> BuildIndexData()
@@ -104,7 +110,6 @@ public class LoadService : ILoadService
                 present_notice = await this.presentService.GetPresentNotice(),
                 guild_notice = new(0, 0, 0, 0, 0),
                 //fort_plant_list = buildSummary,
-                shop_notice = new ShopNotice(0),
                 server_time = DateTimeOffset.UtcNow,
                 stamina_multi_system_max = 99,
                 stamina_multi_user_max = 12,
@@ -121,8 +126,11 @@ public class LoadService : ILoadService
                     .Select(this.mapper.Map<DbEquippedStamp, EquipStampList>)
                     .OrderBy(x => x.slot),
                 quest_entry_condition_list = await this.missionService.GetEntryConditions(),
-                user_treasure_trade_list = await this.treasureTradeService.GetUserTradeList(),
-                treasure_trade_all_list = this.treasureTradeService.GetCurrentTradeList()
+                user_treasure_trade_list = await this.tradeService.GetUserTreasureTradeList(),
+                treasure_trade_all_list = this.tradeService.GetCurrentTreasureTradeList(),
+                shop_notice = new ShopNotice(
+                    (await this.itemSummonService.GetOrRefreshItemSummon()).daily_summon_count == 0
+                )
             };
 
         this.logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);
