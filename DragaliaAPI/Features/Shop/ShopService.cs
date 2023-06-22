@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Features.Missions;
+﻿using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
