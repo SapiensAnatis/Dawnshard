@@ -5,7 +5,7 @@
 namespace DragaliaAPI.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class _201_alpha_8 : Migration
+    public partial class abilitycrestsets_1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

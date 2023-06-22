@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230622043026_2-0-1_alpha_8")]
-    partial class _201_alpha_8
+    [Migration("20230622183641_ability-crest-sets_1")]
+    partial class abilitycrestsets_1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
