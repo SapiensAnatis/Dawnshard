@@ -16,7 +16,5 @@ public interface IPresentControllerService
         bool isLimit
     );
 
-    public Task<IEnumerable<PresentHistoryList>> GetPresentHistoryList(
-        PresentGetHistoryListRequest request
-    );
+    public Task<IEnumerable<PresentHistoryList>> GetPresentHistoryList(ulong presentId);
 }

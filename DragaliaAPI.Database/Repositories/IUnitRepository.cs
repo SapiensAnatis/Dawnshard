@@ -27,4 +27,5 @@ public interface IUnitRepository : IBaseRepository
     IEnumerable<DbSetUnit> GetCharaSets(Charas charaId);
     Task<IDictionary<Charas, IEnumerable<DbSetUnit>>> GetCharaSets(IEnumerable<Charas> charaId);
     IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(IQueryable<DbPartyUnit> units);
+    Task<DbPlayerCharaData?> FindCharaAsync(Charas chara);
 }

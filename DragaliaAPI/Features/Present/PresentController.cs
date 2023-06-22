@@ -104,7 +104,7 @@ public class PresentController : DragaliaControllerBase
     )
     {
         IEnumerable<PresentHistoryList> list = await presentControllerService.GetPresentHistoryList(
-            request
+            request.present_history_id
         );
 
         return Ok(new PresentGetHistoryListData() { present_history_list = list, });

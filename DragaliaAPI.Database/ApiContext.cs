@@ -141,7 +141,7 @@ public class ApiContext : DbContext
     public DbSet<DbPlayerDragonGift> PlayerDragonGifts { get; set; }
 
     public DbSet<DbPlayerMission> PlayerMissions { get; set; }
-    
+
     public DbSet<DbPlayerPresent> PlayerPresents { get; set; }
 
     public DbSet<DbPlayerPresentHistory> PlayerPresentHistory { get; set; }

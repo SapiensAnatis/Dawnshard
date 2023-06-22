@@ -81,7 +81,6 @@ public class LoginController : DragaliaControllerBase
             }
         );
 
-
         this.presentService.AddPresent(
             new Present(PresentMessage.AdventurerStoryRead, EntityTypes.Dew, 0)
             {

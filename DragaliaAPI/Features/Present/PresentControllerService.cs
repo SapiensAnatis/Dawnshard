@@ -35,16 +35,21 @@ public class PresentControllerService : IPresentControllerService
         this.mapper = mapper;
     }
 
-    public async Task<IEnumerable<PresentHistoryList>> GetPresentHistoryList(
-        PresentGetHistoryListRequest request
-    )
+    public async Task<IEnumerable<PresentHistoryList>> GetPresentHistoryList(ulong presentId)
     {
-        //TODO: Currently sending full list. Maybe include fetch limit and continue from request present_id
-        return (
-            await presentRepository.PresentHistory
-                .OrderByDescending(x => x.CreateTime)
-                .ToListAsync()
-        ).Select(mapper.Map<DbPlayerPresentHistory, PresentHistoryList>);
+        IQueryable<DbPlayerPresentHistory> presentsQuery = presentRepository.PresentHistory;
+
+        if (presentId > 0)
+        {
+            presentsQuery = presentsQuery.Where(x => x.Id >= (long)presentId + PresentPageSize);
+        }
+
+        List<DbPlayerPresentHistory> list = await presentsQuery
+            .OrderBy(x => x.Id)
+            .Take(PresentPageSize)
+            .ToListAsync();
+
+        return list.Select(this.mapper.Map<DbPlayerPresentHistory, PresentHistoryList>);
     }
 
     public async Task<IEnumerable<PresentDetailList>> GetPresentList(ulong presentId) =>

@@ -78,7 +78,7 @@ public class RewardService : IRewardService
         if (entity.Type is not EntityTypes.Chara)
             throw new ArgumentException("Entity was not a character", nameof(entity));
 
-        if (!await this.unitRepository.AddCharas((Charas)entity.Id))
+        if (await this.unitRepository.FindCharaAsync((Charas)entity.Id) is not null)
         {
             // Is it the correct behaviour to discard gifted characters?
             // Not sure -- never had characters in my gift box
@@ -88,6 +88,7 @@ public class RewardService : IRewardService
         }
 
         this.logger.LogDebug("Granted new character entity: {@entity}", entity);
+        await this.unitRepository.AddCharas((Charas)entity.Id);
         newEntities.Add(entity);
         return GrantResult.Added;
     }

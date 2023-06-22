@@ -37,7 +37,7 @@ public class DbPlayerPresent : IDbHasAccountId
     public int EntityId { get; set; }
 
     [Column("EntityQuantity")]
-    public int EntityQuantity { get; set; }
+    public int EntityQuantity { get; set; } = 1;
 
     [Column("EntityLevel")]
     public int EntityLevel { get; set; }
