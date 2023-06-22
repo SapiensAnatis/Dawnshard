@@ -501,6 +501,9 @@ public class SavefileService : ISavefileService
         this.apiContext.EquippedStamps.RemoveRange(
             this.apiContext.EquippedStamps.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PlayerShopInfos.RemoveRange(
+            this.apiContext.PlayerShopInfos.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset()
@@ -559,6 +562,7 @@ public class SavefileService : ISavefileService
         await this.AddDefaultParties(deviceAccountId);
         await this.AddDefaultCharacters(deviceAccountId);
         this.AddDefaultEquippedStamps();
+        this.AddShopInfo();
         await this.apiContext.SaveChangesAsync();
     }
 
@@ -646,6 +650,13 @@ public class SavefileService : ISavefileService
                             Slot = x
                         }
                 )
+        );
+    }
+
+    private void AddShopInfo()
+    {
+        this.apiContext.PlayerShopInfos.Add(
+            new DbPlayerShopInfo() { DeviceAccountId = this.playerIdentityService.AccountId, }
         );
     }
 

@@ -13,6 +13,7 @@ public interface IMissionProgressionService
     void OnWeaponRefined(UnitElement element, int stars, WeaponSeries series);
     void OnWyrmprintAugmentBuildup(PlusCountType type);
     void OnCharacterBuildup(PlusCountType type);
+    void OnItemSummon();
 
     Task ProcessMissionEvents();
 }

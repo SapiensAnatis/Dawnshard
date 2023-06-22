@@ -82,6 +82,7 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
             MissionProgressType.WeaponEarned => await GetWeaponEarnedCount(requirement),
             MissionProgressType.WeaponRefined => await GetWeaponRefinedCount(requirement),
             MissionProgressType.VoidBattleCleared => await GetVoidBattleClearedCount(requirement),
+            MissionProgressType.ItemSummon => 0, // TODO: As daily quests also use this, should we make it actually count the item summons?
             _
                 => throw new UnreachableException(
                     $"Invalid MissionProgressType {progressionInfo.Type} in initial progress handling"
