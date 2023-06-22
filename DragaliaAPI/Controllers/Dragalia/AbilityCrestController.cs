@@ -8,6 +8,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DragaliaAPI.Models;
+using AutoMapper;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -18,18 +19,21 @@ public class AbilityCrestController : DragaliaControllerBase
     private readonly IUpdateDataService updateDataService;
     private readonly IAbilityCrestService abilityCrestService;
     private readonly ILogger<AbilityCrestController> logger;
+    private readonly IMapper mapper;
 
     public AbilityCrestController(
         IAbilityCrestRepository abilityCrestRepository,
         IUpdateDataService updateDataService,
         IAbilityCrestService abilityCrestService,
-        ILogger<AbilityCrestController> logger
+        ILogger<AbilityCrestController> logger,
+        IMapper mapper
     )
     {
         this.abilityCrestRepository = abilityCrestRepository;
         this.updateDataService = updateDataService;
         this.abilityCrestService = abilityCrestService;
         this.logger = logger;
+        this.mapper = mapper;
     }
 
     [Route("set_favorite")]
@@ -151,5 +155,88 @@ public class AbilityCrestController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
         return Ok(new AbilityCrestResetPlusCountData() { update_data_list = updateDataList });
+    }
+
+    [Route("get_ability_crest_set_list")]
+    [HttpPost]
+    public async Task<DragaliaResult> GetAbilityCrestSetList(
+        AbilityCrestGetAbilityCrestSetListRequest request
+    )
+    {
+        List<DbAbilityCrestSet> dbAbilityCrestSets = await abilityCrestRepository.AbilityCrestSets
+            .OrderBy(x => x.AbilityCrestSetNo)
+            .ToListAsync();
+
+        int index = 0;
+
+        IEnumerable<AbilityCrestSetList> abilityCrestSetList = Enumerable
+            .Range(1, 54)
+            .Select(
+                x =>
+                    index < dbAbilityCrestSets.Count()
+                    && dbAbilityCrestSets[index].AbilityCrestSetNo == x
+                        ? dbAbilityCrestSets[index++]
+                        : new DbAbilityCrestSet("", x)
+            )
+            .Select(mapper.Map<AbilityCrestSetList>)
+            .ToArray();
+
+        return Ok(
+            new AbilityCrestGetAbilityCrestSetListData()
+            {
+                ability_crest_set_list = abilityCrestSetList
+            }
+        );
+    }
+
+    [Route("set_ability_crest_set")]
+    [HttpPost]
+    public async Task<DragaliaResult> SetAbilityCrestSet(
+        AbilityCrestSetAbilityCrestSetRequest request
+    )
+    {
+        if (request.ability_crest_set_no is <= 0 or > 54)
+        {
+            this.logger.LogError("Invalid ability crest no", request.ability_crest_set_no);
+            return this.Code(ResultCode.CommonInvalidArgument);
+        }
+
+        DbAbilityCrestSet newAbilityCrestSet = mapper.Map<DbAbilityCrestSet>(request);
+        await this.abilityCrestRepository.AddOrUpdateSet(newAbilityCrestSet);
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        return Ok(new AbilityCrestSetAbilityCrestSetData() { update_data_list = updateDataList });
+    }
+
+    [Route("update_ability_crest_set_name")]
+    [HttpPost]
+    public async Task<DragaliaResult> UpdateAbilityCrestSetName(
+        AbilityCrestUpdateAbilityCrestSetNameRequest request
+    )
+    {
+        DbAbilityCrestSet? dbAbilityCrestSet = await abilityCrestRepository.FindSetAsync(
+            request.ability_crest_set_no
+        );
+
+        if (dbAbilityCrestSet is null)
+        {
+            await abilityCrestRepository.AddOrUpdateSet(
+                new DbAbilityCrestSet()
+                {
+                    DeviceAccountId = "",
+                    AbilityCrestSetNo = request.ability_crest_set_no,
+                    AbilityCrestSetName = request.ability_crest_set_name
+                }
+            );
+        }
+        else
+        {
+            dbAbilityCrestSet.AbilityCrestSetName = request.ability_crest_set_name;
+        }
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        return Ok(
+            new AbilityCrestUpdateAbilityCrestSetNameData() { update_data_list = updateDataList }
+        );
     }
 }

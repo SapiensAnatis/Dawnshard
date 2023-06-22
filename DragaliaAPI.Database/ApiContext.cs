@@ -126,6 +126,8 @@ public class ApiContext : DbContext
 
     public DbSet<DbAbilityCrest> PlayerAbilityCrests { get; set; }
 
+    public DbSet<DbAbilityCrestSet> PlayerAbilityCrestSets { get; set; }
+
     public DbSet<DbWeaponBody> PlayerWeapons { get; set; }
 
     public DbSet<DbTalisman> PlayerTalismans { get; set; }
