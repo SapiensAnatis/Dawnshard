@@ -202,7 +202,6 @@ public class AbilityCrestController : DragaliaControllerBase
         }
 
         DbAbilityCrestSet newAbilityCrestSet = mapper.Map<DbAbilityCrestSet>(request);
-        newAbilityCrestSet.DeviceAccountId = DeviceAccountId;
         await this.abilityCrestRepository.AddOrUpdateSet(newAbilityCrestSet);
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
