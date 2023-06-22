@@ -136,11 +136,12 @@ builder.Services
     .AddScoped<IShopRepository, ShopRepository>()
     .AddScoped<IItemSummonService, ItemSummonService>()
     .AddScoped<IPaymentService, PaymentService>()
-    .AddScoped<IShopService, ShopService>();
+    .AddScoped<IShopService, ShopService>()
     // Present feature
     .AddScoped<IPresentService, PresentService>()
     .AddScoped<IPresentControllerService, PresentControllerService>()
-    .AddScoped<IPresentRepository, PresentRepository>();
+    .AddScoped<IPresentRepository, PresentRepository>()
+    ;
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 
