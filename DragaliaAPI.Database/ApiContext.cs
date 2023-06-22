@@ -144,5 +144,6 @@ public class ApiContext : DbContext
     public DbSet<DbEquippedStamp> EquippedStamps { get; set; }
 
     public DbSet<DbPlayerShopInfo> PlayerShopInfos { get; set; }
+
     public DbSet<DbPlayerShopPurchase> PlayerPurchases { get; set; }
 }

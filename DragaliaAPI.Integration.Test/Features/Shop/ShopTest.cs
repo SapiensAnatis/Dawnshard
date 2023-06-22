@@ -13,6 +13,12 @@ public class ShopTest : TestFixture
     [Fact]
     public async Task GetList_NoPurchases_IsEmpty()
     {
+        this.ApiContext.RemoveRange(
+            this.ApiContext.PlayerPurchases.Where(x => x.DeviceAccountId == DeviceAccountId)
+        );
+
+        await this.ApiContext.SaveChangesAsync();
+
         DragaliaResponse<ShopGetListData> resp = await this.Client.PostMsgpack<ShopGetListData>(
             "shop/get_list",
             new ShopGetListRequest()
@@ -55,7 +61,8 @@ public class ShopTest : TestFixture
                     MaterialShopType.Daily,
                     (PaymentTypes)100,
                     1
-                )
+                ),
+                false
             );
 
         resp.data_headers.result_code.Should().Be(ResultCode.ShopPaymentTypeInvalid);
