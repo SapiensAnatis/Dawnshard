@@ -17,6 +17,9 @@ public class DbPlayer
     public virtual ICollection<DbAbilityCrest> AbilityCrestList { get; set; } =
         new List<DbAbilityCrest>();
 
+    public virtual ICollection<DbAbilityCrestSet> AbilityCrestSetList { get; set; } =
+        new List<DbAbilityCrestSet>();
+
     public virtual ICollection<DbFortBuild> BuildList { get; set; } = new List<DbFortBuild>();
 
     public virtual ICollection<DbParty> PartyList { get; set; } = new List<DbParty>();
