@@ -43,9 +43,7 @@ public record Present(
             MessageParamValue3 = this.MessageParamValues.ElementAtOrDefault(2),
             MessageParamValue4 = this.MessageParamValues.ElementAtOrDefault(3),
             CreateTime = this.CreateTime,
-            ReceiveLimitTime = ExpiryTime is null
-                ? DateTimeOffset.UnixEpoch
-                : CreateTime + ExpiryTime.Value
+            ReceiveLimitTime = CreateTime + ExpiryTime
         };
     }
 }
