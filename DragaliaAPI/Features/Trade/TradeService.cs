@@ -1,5 +1,9 @@
-﻿using DragaliaAPI.Features.Missions;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
@@ -12,16 +16,22 @@ public class TradeService : ITradeService
     private readonly ITradeRepository tradeRepository;
     private readonly IRewardService rewardService;
     private readonly ILogger<TradeService> logger;
+    private readonly IUserDataRepository userDataRepository;
+    private readonly IInventoryRepository inventoryRepository;
 
     public TradeService(
         ITradeRepository tradeRepository,
         IRewardService rewardService,
-        ILogger<TradeService> logger
+        ILogger<TradeService> logger,
+        IUserDataRepository userDataRepository,
+        IInventoryRepository inventoryRepository
     )
     {
         this.tradeRepository = tradeRepository;
         this.rewardService = rewardService;
         this.logger = logger;
+        this.userDataRepository = userDataRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
     public IEnumerable<TreasureTradeList> GetCurrentTreasureTradeList()
@@ -76,21 +86,53 @@ public class TradeService : ITradeService
 
         logger.LogDebug("Processing {tradeQuantity}x treasure trade {tradeId}", count, tradeId);
 
-        foreach (
-            (EntityTypes type, int id, int quantity, int limitBreakCount) in trade.NeedEntities
-        )
+        foreach ((EntityTypes type, int id, int quantity, _) in trade.NeedEntities)
         {
             if (type == EntityTypes.None)
                 continue;
 
-            await this.rewardService.GrantReward(type, id, -(quantity * count), limitBreakCount);
+            switch (type)
+            {
+                case EntityTypes.Material
+                or EntityTypes.FafnirMedal:
+                    DbPlayerMaterial? material = await this.inventoryRepository.GetMaterial(
+                        (Materials)id
+                    );
+                    if (material == null || material.Quantity < quantity)
+                        throw new DragaliaException(
+                            ResultCode.CommonMaterialShort,
+                            "Not enough material"
+                        );
+                    material.Quantity -= quantity;
+                    break;
+                case EntityTypes.Mana:
+                    DbPlayerUserData? userData =
+                        await this.userDataRepository.UserData.SingleAsync();
+                    if (userData == null || userData.ManaPoint < quantity)
+                        throw new DragaliaException(
+                            ResultCode.CommonMaterialShort,
+                            "Not enough mana"
+                        );
+                    userData.ManaPoint -= quantity;
+                    break;
+                case EntityTypes.DmodePoint:
+                    throw new NotImplementedException("DmodePoint treasure trade");
+                    break;
+                default:
+                    throw new DragaliaException(
+                        ResultCode.CommonDataValidationError,
+                        "Invalid EntityType in TreasureTrade"
+                    );
+            }
         }
 
         await this.rewardService.GrantReward(
-            trade.DestinationEntityType,
-            trade.DestinationEntityId,
-            trade.DestinationEntityQuantity,
-            trade.DestinationLimitBreakCount
+            new(
+                trade.DestinationEntityType,
+                trade.DestinationEntityId,
+                trade.DestinationEntityQuantity,
+                trade.DestinationLimitBreakCount
+            )
         );
 
         await this.tradeRepository.AddTrade(tradeId, count, DateTimeOffset.UtcNow);
