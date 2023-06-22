@@ -1,6 +1,7 @@
 using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -29,6 +30,7 @@ public class LoginControllerTest
             this.mockUserDataRepository.Object,
             this.mockInventoryRepository.Object,
             this.mockUpdateDataService.Object,
+            new Mock<IPresentService>().Object,
             this.mockLogger.Object
         );
     }

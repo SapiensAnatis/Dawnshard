@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -75,7 +76,7 @@ public class MissionService : IMissionService
         {
             foreach (MainStoryMissionGroupReward reward in rewards)
             {
-                await this.rewardService.GrantReward(reward.Type, reward.Id, reward.Quantity);
+                await this.rewardService.GrantReward(new(reward.Type, reward.Id, reward.Quantity));
             }
         }
 
@@ -135,19 +136,19 @@ public class MissionService : IMissionService
                 IExtendedRewardMission extendedRewardMission = (IExtendedRewardMission)
                     missionInfo.MasterAssetMission;
                 await this.rewardService.GrantReward(
-                    extendedRewardMission.EntityType,
-                    extendedRewardMission.Id,
-                    extendedRewardMission.EntityQuantity,
-                    extendedRewardMission.EntityLimitBreakCount,
-                    extendedRewardMission.EntityBuildupCount,
-                    extendedRewardMission.EntityEquipableCount
+                    new(
+                        extendedRewardMission.EntityType,
+                        extendedRewardMission.Id,
+                        extendedRewardMission.EntityQuantity,
+                        extendedRewardMission.EntityLimitBreakCount,
+                        extendedRewardMission.EntityBuildupCount,
+                        extendedRewardMission.EntityEquipableCount
+                    )
                 );
                 break;
             default:
                 await this.rewardService.GrantReward(
-                    missionInfo.EntityType,
-                    missionInfo.EntityId,
-                    missionInfo.EntityQuantity
+                    new(missionInfo.EntityType, missionInfo.EntityId, missionInfo.EntityQuantity)
                 );
                 break;
         }
@@ -187,9 +188,7 @@ public class MissionService : IMissionService
                     )
                 );
                 await this.rewardService.GrantReward(
-                    group.UnlockEntityType1,
-                    group.UnlockEntityId1,
-                    group.UnlockEntityQuantity1
+                    new(group.UnlockEntityType1, group.UnlockEntityId1, group.UnlockEntityQuantity1)
                 );
             }
         }

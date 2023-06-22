@@ -52,6 +52,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Shared",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragaliaAPI.Photon.StateManager.Test", "DragaliaAPI.Photon.StateManager.Test\DragaliaAPI.Photon.StateManager.Test.csproj", "{D940A00F-39CC-48C5-996E-DF0EC55FD140}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".husky", ".husky", "{7D333F35-F74C-4A63-AB6E-5F0EE4590ADB}"
+	ProjectSection(SolutionItems) = preProject
+		.husky\pre-commit = .husky\pre-commit
+		.husky\task-runner.json = .husky\task-runner.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,6 +126,7 @@ Global
 		{D9AC51A5-38F6-4DD1-8839-9FE881396A6B} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
 		{7394DCE5-7E1B-44C7-B3CA-735885D97695} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
 		{D940A00F-39CC-48C5-996E-DF0EC55FD140} = {8B4B2FE9-B1FC-44FC-BC49-0E277731A68A}
+		{7D333F35-F74C-4A63-AB6E-5F0EE4590ADB} = {BC72B633-A158-4169-9B47-3CB9C689A57E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D86831A9-C572-4B8D-BD12-EF0768BC9E4F}

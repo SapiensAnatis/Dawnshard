@@ -2,6 +2,7 @@
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Models.Generated;
@@ -21,6 +22,7 @@ public class LoadService : ILoadService
     private readonly IOptionsMonitor<PhotonOptions> photonOptions;
     private readonly IEnumerable<ISavefileUpdate> savefileUpdates;
     private readonly IMissionService missionService;
+    private readonly IPresentService presentService;
 
     public LoadService(
         ISavefileService savefileService,
@@ -29,7 +31,8 @@ public class LoadService : ILoadService
         ILogger<LoadService> logger,
         IOptionsMonitor<PhotonOptions> photonOptions,
         IEnumerable<ISavefileUpdate> savefileUpdates,
-        IMissionService missionService
+        IMissionService missionService,
+        IPresentService presentService
     )
     {
         this.savefileService = savefileService;
@@ -39,6 +42,7 @@ public class LoadService : ILoadService
         this.photonOptions = photonOptions;
         this.savefileUpdates = savefileUpdates;
         this.missionService = missionService;
+        this.presentService = presentService;
     }
 
     public async Task<LoadIndexData> BuildIndexData()
@@ -91,7 +95,7 @@ public class LoadService : ILoadService
                 fort_bonus_list = bonusList,
                 party_power_data = new(999999),
                 friend_notice = new(0, 0),
-                present_notice = new(0, 0),
+                present_notice = await this.presentService.GetPresentNotice(),
                 guild_notice = new(0, 0, 0, 0, 0),
                 //fort_plant_list = buildSummary,
                 shop_notice = new ShopNotice(0),

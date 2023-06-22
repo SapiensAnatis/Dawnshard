@@ -66,6 +66,14 @@ public class UnitRepository : BaseRepository, IUnitRepository
         return owned.Intersect(idList).Count() == idList.Count();
     }
 
+    public async Task<DbPlayerCharaData?> FindCharaAsync(Charas chara)
+    {
+        return await this.apiContext.PlayerCharaData.FindAsync(
+            this.playerIdentityService.AccountId,
+            chara
+        );
+    }
+
     public async Task<bool> CheckHasDragons(IEnumerable<Dragons> idList)
     {
         IEnumerable<Dragons> owned = await Dragons.Select(x => x.DragonId).ToListAsync();

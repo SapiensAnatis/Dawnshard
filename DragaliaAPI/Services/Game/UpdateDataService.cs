@@ -3,6 +3,7 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -19,13 +20,15 @@ public class UpdateDataService : IUpdateDataService
     private readonly IPlayerIdentityService playerIdentityService;
     private readonly IMissionService missionService;
     private readonly IMissionProgressionService missionProgressionService;
+    private readonly IPresentService presentService;
 
     public UpdateDataService(
         ApiContext apiContext,
         IMapper mapper,
         IPlayerIdentityService playerIdentityService,
         IMissionService missionService,
-        IMissionProgressionService missionProgressionService
+        IMissionProgressionService missionProgressionService,
+        IPresentService presentService
     )
     {
         this.apiContext = apiContext;
@@ -33,6 +36,7 @@ public class UpdateDataService : IUpdateDataService
         this.playerIdentityService = playerIdentityService;
         this.missionService = missionService;
         this.missionProgressionService = missionProgressionService;
+        this.presentService = presentService;
     }
 
     public async Task<UpdateDataList> SaveChangesAsync()
@@ -113,6 +117,14 @@ public class UpdateDataService : IUpdateDataService
             }
 
             list.mission_notice = await this.missionService.GetMissionNotice(missionsLookup);
+        }
+
+        if (
+            entities.OfType<DbPlayerPresent>().Any()
+            || entities.OfType<DbPlayerPresentHistory>().Any()
+        )
+        {
+            list.present_notice = await this.presentService.GetPresentNotice();
         }
 
         return list;
