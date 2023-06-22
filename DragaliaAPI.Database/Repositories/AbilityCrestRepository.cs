@@ -28,7 +28,12 @@ public class AbilityCrestRepository : IAbilityCrestRepository
             x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
-    public async Task Add(AbilityCrests abilityCrestId)
+    public async Task Add(
+        AbilityCrests abilityCrestId,
+        int? limitBreakCount = null,
+        int? buildupCount = null,
+        int? equipableCount = null
+    )
     {
         this.logger.LogDebug("Adding ability crest {print}", abilityCrestId);
 
@@ -38,9 +43,19 @@ public class AbilityCrestRepository : IAbilityCrestRepository
             return;
         }
 
-        await this.apiContext.PlayerAbilityCrests.AddAsync(
-            new DbAbilityCrest(this.playerIdentityService.AccountId, abilityCrestId)
+        DbAbilityCrest entity = new DbAbilityCrest(
+            this.playerIdentityService.AccountId,
+            abilityCrestId
         );
+
+        if (limitBreakCount is not null)
+            entity.LimitBreakCount = limitBreakCount.Value;
+        if (buildupCount is not null)
+            entity.BuildupCount = buildupCount.Value;
+        if (equipableCount is not null)
+            entity.EquipableCount = equipableCount.Value;
+
+        this.apiContext.PlayerAbilityCrests.Add(entity);
     }
 
     public async Task<DbAbilityCrest?> FindAsync(AbilityCrests abilityCrestId) =>

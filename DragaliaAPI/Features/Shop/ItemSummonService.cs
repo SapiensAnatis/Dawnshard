@@ -1,5 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
@@ -100,7 +101,7 @@ public class ItemSummonService : IItemSummonService
             int value = random.Next(100000);
             int index = Array.IndexOf(this.summonWeights, this.summonWeights.Last(x => x <= value));
             ItemSummonOddsEntry entity = this.config.Odds[index];
-            await this.rewardService.GrantReward(entity.Type, entity.Id, entity.Quantity);
+            await this.rewardService.GrantReward(new(entity.Type, entity.Id, entity.Quantity));
             results[i] = new AtgenBuildEventRewardEntityList(
                 entity.Type,
                 entity.Id,

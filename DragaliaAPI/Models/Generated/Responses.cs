@@ -4757,8 +4757,7 @@ public class PresentReceiveData
         IEnumerable<PresentDetailList> present_list,
         IEnumerable<PresentDetailList> present_limit_list,
         UpdateDataList update_data_list,
-        EntityResult entity_result,
-        IEnumerable<ConvertedEntityList> converted_entity_list
+        EntityResult entity_result
     )
     {
         this.receive_present_id_list = receive_present_id_list;
@@ -4769,7 +4768,6 @@ public class PresentReceiveData
         this.present_limit_list = present_limit_list;
         this.update_data_list = update_data_list;
         this.entity_result = entity_result;
-        this.converted_entity_list = converted_entity_list;
     }
 
     public PresentReceiveData() { }

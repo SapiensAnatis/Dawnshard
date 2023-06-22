@@ -3,6 +3,7 @@ using System;
 using DragaliaAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230622200753_presents-1")]
+    partial class presents1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -782,36 +785,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerShopInfos");
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerShopPurchase", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("GoodsId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("BuyCount")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("EffectEndTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("EffectStartTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("LastBuyTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("ShopType")
-                        .HasColumnType("integer");
-
-                    b.HasKey("DeviceAccountId", "GoodsId");
-
-                    b.HasIndex("DeviceAccountId");
-
-                    b.ToTable("PlayerPurchases");
-                });
-
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerStoryState", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -1419,17 +1392,6 @@ namespace DragaliaAPI.Database.Migrations
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerShopInfo", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerShopPurchase", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany()

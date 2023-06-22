@@ -143,7 +143,7 @@ public class AbilityCrestTradeControllerTest
             .Returns(new List<DbAbilityCrest>().AsQueryable().BuildMock());
 
         this.mockAbilityCrestRepository
-            .Setup(x => x.Add(AbilityCrests.WorthyRivals))
+            .Setup(x => x.Add(AbilityCrests.WorthyRivals, null, null, null))
             .Returns(Task.CompletedTask);
 
         this.mockUpdateDataService
