@@ -37,8 +37,7 @@ public class PresentControllerService : IPresentControllerService
 
     public async Task<IEnumerable<PresentHistoryList>> GetPresentHistoryList(ulong presentId)
     {
-        IQueryable<DbPlayerPresentHistory> presentsQuery =
-            presentRepository.PresentHistory.OrderByDescending(x => x.Id);
+        IQueryable<DbPlayerPresentHistory> presentsQuery = presentRepository.PresentHistory;
 
         if (presentId > 0)
         {
@@ -47,9 +46,13 @@ public class PresentControllerService : IPresentControllerService
 
         // It's a bit sus to page by ID without sorting by ID. But this is supposed to show in order of claimed date.
         // Theoretically, it should be sorted in the same way since the ID is auto-incrementing, so later date == higher ID.
-        List<DbPlayerPresentHistory> list = await presentsQuery.Take(PresentPageSize).ToListAsync();
+        List<DbPlayerPresentHistory> list = await presentsQuery
+            .OrderByDescending(x => x.Id)
+            .Take(PresentPageSize)
+            .ToListAsync();
 
-        return list.Select(this.mapper.Map<DbPlayerPresentHistory, PresentHistoryList>);
+        return list.Select(this.mapper.Map<DbPlayerPresentHistory, PresentHistoryList>)
+            .OrderByDescending(x => x.id);
     }
 
     public async Task<IEnumerable<PresentDetailList>> GetPresentList(ulong presentId) =>
