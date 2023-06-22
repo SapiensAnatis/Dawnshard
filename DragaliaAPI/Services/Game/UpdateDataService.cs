@@ -75,6 +75,10 @@ public class UpdateDataService : IUpdateDataService
                 ability_crest_list = this.ConvertEntities<AbilityCrestList, DbAbilityCrest>(
                     entities
                 ),
+                ability_crest_set_list = this.ConvertEntities<
+                    AbilityCrestSetList,
+                    DbAbilityCrestSet
+                >(entities),
                 party_list = this.ConvertEntities<PartyList, DbParty>(entities),
                 quest_story_list = this.ConvertEntities<QuestStoryList, DbPlayerStoryState>(
                     entities,

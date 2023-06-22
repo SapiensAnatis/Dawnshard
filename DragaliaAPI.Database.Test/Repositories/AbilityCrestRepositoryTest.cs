@@ -101,4 +101,63 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
             .Should()
             .BeNull();
     }
+
+    [Fact]
+    public async Task AddOrUpdateSet_AddsWhenNonexistentAndUpdatesWhenExists()
+    {
+        await this.abilityCrestRepository.AddOrUpdateSet(
+            new DbAbilityCrestSet(IdentityTestUtils.DeviceAccountId, 54)
+        );
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        this.fixture.ApiContext.PlayerAbilityCrestSets
+            .Single(
+                x =>
+                    x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
+                    && x.AbilityCrestSetNo == 54
+            )
+            .Should()
+            .BeEquivalentTo(new DbAbilityCrestSet(IdentityTestUtils.DeviceAccountId, 54));
+
+        await this.abilityCrestRepository.AddOrUpdateSet(
+            new DbAbilityCrestSet()
+            {
+                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                AbilityCrestSetNo = 54,
+                CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals
+            }
+        );
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        this.fixture.ApiContext.PlayerAbilityCrestSets
+            .Single(
+                x =>
+                    x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
+                    && x.AbilityCrestSetNo == 54
+            )
+            .Should()
+            .BeEquivalentTo(
+                new DbAbilityCrestSet()
+                {
+                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    AbilityCrestSetNo = 54,
+                    CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals
+                }
+            );
+    }
+
+    [Fact]
+    public async Task FindSetAsync_FindsAbilityCrestSetAsExpected()
+    {
+        await this.abilityCrestRepository.AddOrUpdateSet(
+            new DbAbilityCrestSet(IdentityTestUtils.DeviceAccountId, 1)
+        );
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        (await this.abilityCrestRepository.FindSetAsync(1))
+            .Should()
+            .BeEquivalentTo(new DbAbilityCrestSet(IdentityTestUtils.DeviceAccountId, 1));
+
+        (await this.abilityCrestRepository.FindSetAsync(2)).Should().BeNull();
+    }
 }

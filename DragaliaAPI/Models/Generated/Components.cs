@@ -70,25 +70,25 @@ public class AbilityCrestSetList
 {
     public int ability_crest_set_no { get; set; }
     public string ability_crest_set_name { get; set; }
-    public int crest_slot_type_1_crest_id_1 { get; set; }
-    public int crest_slot_type_1_crest_id_2 { get; set; }
-    public int crest_slot_type_1_crest_id_3 { get; set; }
-    public int crest_slot_type_2_crest_id_1 { get; set; }
-    public int crest_slot_type_2_crest_id_2 { get; set; }
-    public int crest_slot_type_3_crest_id_1 { get; set; }
-    public int crest_slot_type_3_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_3 { get; set; }
+    public AbilityCrests crest_slot_type_2_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_2_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_3_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_3_crest_id_2 { get; set; }
     public ulong talisman_key_id { get; set; }
 
     public AbilityCrestSetList(
         int ability_crest_set_no,
         string ability_crest_set_name,
-        int crest_slot_type_1_crest_id_1,
-        int crest_slot_type_1_crest_id_2,
-        int crest_slot_type_1_crest_id_3,
-        int crest_slot_type_2_crest_id_1,
-        int crest_slot_type_2_crest_id_2,
-        int crest_slot_type_3_crest_id_1,
-        int crest_slot_type_3_crest_id_2,
+        AbilityCrests crest_slot_type_1_crest_id_1,
+        AbilityCrests crest_slot_type_1_crest_id_2,
+        AbilityCrests crest_slot_type_1_crest_id_3,
+        AbilityCrests crest_slot_type_2_crest_id_1,
+        AbilityCrests crest_slot_type_2_crest_id_2,
+        AbilityCrests crest_slot_type_3_crest_id_1,
+        AbilityCrests crest_slot_type_3_crest_id_2,
         ulong talisman_key_id
     )
     {
@@ -3230,23 +3230,23 @@ public class AtgenRedoableSummonResultUnitList
 [MessagePackObject(true)]
 public class AtgenRequestAbilityCrestSetData
 {
-    public int crest_slot_type_1_crest_id_1 { get; set; }
-    public int crest_slot_type_1_crest_id_2 { get; set; }
-    public int crest_slot_type_1_crest_id_3 { get; set; }
-    public int crest_slot_type_2_crest_id_1 { get; set; }
-    public int crest_slot_type_2_crest_id_2 { get; set; }
-    public int crest_slot_type_3_crest_id_1 { get; set; }
-    public int crest_slot_type_3_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_3 { get; set; }
+    public AbilityCrests crest_slot_type_2_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_2_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_3_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_3_crest_id_2 { get; set; }
     public ulong talisman_key_id { get; set; }
 
     public AtgenRequestAbilityCrestSetData(
-        int crest_slot_type_1_crest_id_1,
-        int crest_slot_type_1_crest_id_2,
-        int crest_slot_type_1_crest_id_3,
-        int crest_slot_type_2_crest_id_1,
-        int crest_slot_type_2_crest_id_2,
-        int crest_slot_type_3_crest_id_1,
-        int crest_slot_type_3_crest_id_2,
+        AbilityCrests crest_slot_type_1_crest_id_1,
+        AbilityCrests crest_slot_type_1_crest_id_2,
+        AbilityCrests crest_slot_type_1_crest_id_3,
+        AbilityCrests crest_slot_type_2_crest_id_1,
+        AbilityCrests crest_slot_type_2_crest_id_2,
+        AbilityCrests crest_slot_type_3_crest_id_1,
+        AbilityCrests crest_slot_type_3_crest_id_2,
         ulong talisman_key_id
     )
     {

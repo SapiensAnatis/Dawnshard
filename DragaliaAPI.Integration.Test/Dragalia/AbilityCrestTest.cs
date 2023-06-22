@@ -4,6 +4,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 using Xunit.Abstractions;
+using AutoMapper;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
@@ -453,6 +454,201 @@ public class AbilityCrestTest : TestFixture
         this.GetCoin().Should().Be(oldCoin - 820_000);
         this.GetMaterial(Materials.FortifyingGemstone).Should().Be(oldFortifyingGemstone + 40);
         this.GetMaterial(Materials.AmplifyingGemstone).Should().Be(oldAmplifyingGemstone + 1);
+    }
+
+    [Fact]
+    public async Task GetAbilityCrestSetList_SuccessfullyReturnsAbilityCrestSets()
+    {
+        foreach (DbAbilityCrestSet set in this.ApiContext.PlayerAbilityCrestSets)
+        {
+            this.ApiContext.PlayerAbilityCrestSets.Remove(set);
+        }
+
+        int setNo = 54;
+        this.ApiContext.PlayerAbilityCrestSets.Add(
+            new DbAbilityCrestSet()
+            {
+                DeviceAccountId = DeviceAccountId,
+                AbilityCrestSetNo = setNo,
+                AbilityCrestSetName = "test",
+                CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals
+            }
+        );
+
+        await this.ApiContext.SaveChangesAsync();
+
+        AbilityCrestGetAbilityCrestSetListData data = (
+            await this.Client.PostMsgpack<AbilityCrestGetAbilityCrestSetListData>(
+                "ability_crest/get_ability_crest_set_list",
+                new AbilityCrestGetAbilityCrestSetListRequest()
+            )
+        ).data!;
+
+        int index = 1;
+
+        foreach (AbilityCrestSetList abilityCrestSet in data.ability_crest_set_list)
+        {
+            if (index == setNo)
+            {
+                abilityCrestSet
+                    .Should()
+                    .BeEquivalentTo(
+                        Mapper.Map<AbilityCrestSetList>(
+                            new DbAbilityCrestSet()
+                            {
+                                DeviceAccountId = DeviceAccountId,
+                                AbilityCrestSetNo = setNo,
+                                AbilityCrestSetName = "test",
+                                CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals
+                            }
+                        )
+                    );
+            }
+            else
+            {
+                abilityCrestSet
+                    .Should()
+                    .BeEquivalentTo(
+                        Mapper.Map<AbilityCrestSetList>(
+                            new DbAbilityCrestSet(DeviceAccountId, index)
+                        )
+                    );
+            }
+
+            ++index;
+        }
+
+        data.ability_crest_set_list.Count().Should().Be(54);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(55)]
+    public async Task SetAbilityCrestSet_ShouldThrowErrorAndNotAddSetWhenSetNoInvalid(int setNo)
+    {
+        ResultCodeData data = (
+            await this.Client.PostMsgpack<ResultCodeData>(
+                "ability_crest/set_ability_crest_set",
+                new AbilityCrestSetAbilityCrestSetRequest() { ability_crest_set_no = setNo },
+                ensureSuccessHeader: false
+            )
+        ).data;
+
+        await this.ApiContext.SaveChangesAsync();
+
+        (await this.ApiContext.PlayerAbilityCrestSets.FindAsync(DeviceAccountId, setNo))
+            .Should()
+            .BeNull();
+        data.result_code.Should().Be(ResultCode.CommonInvalidArgument);
+    }
+
+    [Fact]
+    public async Task SetAbilityCrestSet_ShouldAddNewSetWhenSetDoesntExist()
+    {
+        int setNo = 37;
+
+        (await this.ApiContext.PlayerAbilityCrestSets.FindAsync(DeviceAccountId, setNo))
+            .Should()
+            .BeNull();
+
+        await this.Client.PostMsgpack<ResultCodeData>(
+            "ability_crest/set_ability_crest_set",
+            new AbilityCrestSetAbilityCrestSetRequest()
+            {
+                ability_crest_set_no = setNo,
+                ability_crest_set_name = "",
+                request_ability_crest_set_data = new() { talisman_key_id = 1 }
+            }
+        );
+
+        await this.ApiContext.SaveChangesAsync();
+
+        DbAbilityCrestSet? dbAbilityCrestSet =
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(DeviceAccountId, setNo);
+        dbAbilityCrestSet.Should().NotBeNull();
+        dbAbilityCrestSet!.TalismanKeyId.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task SetAbilityCrestSet_ShouldUpdateWhenSetDoesExist()
+    {
+        int setNo = 24;
+
+        this.ApiContext.PlayerAbilityCrestSets.Add(new DbAbilityCrestSet(DeviceAccountId, setNo));
+        await this.ApiContext.SaveChangesAsync();
+
+        DbAbilityCrestSet dbAbilityCrestSet = (
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(DeviceAccountId, setNo)
+        )!;
+        dbAbilityCrestSet.CrestSlotType2CrestId2.Should().Be(0);
+
+        await this.Client.PostMsgpack<ResultCodeData>(
+            "ability_crest/set_ability_crest_set",
+            new AbilityCrestSetAbilityCrestSetRequest()
+            {
+                ability_crest_set_no = setNo,
+                ability_crest_set_name = "",
+                request_ability_crest_set_data = new()
+                {
+                    crest_slot_type_2_crest_id_2 = AbilityCrests.DragonsNest
+                }
+            }
+        );
+
+        await this.ApiContext.Entry(dbAbilityCrestSet).ReloadAsync();
+        dbAbilityCrestSet.CrestSlotType2CrestId2.Should().Be(AbilityCrests.DragonsNest);
+    }
+
+    [Fact]
+    public async Task UpdateAbilityCrestSetName_ShouldAddNewSetWhenSetDoesntExist()
+    {
+        int setNo = 12;
+
+        (await this.ApiContext.PlayerAbilityCrestSets.FindAsync(DeviceAccountId, setNo))
+            .Should()
+            .BeNull();
+
+        await this.Client.PostMsgpack<ResultCodeData>(
+            "ability_crest/update_ability_crest_set_name",
+            new AbilityCrestUpdateAbilityCrestSetNameRequest()
+            {
+                ability_crest_set_no = setNo,
+                ability_crest_set_name = "test"
+            }
+        );
+
+        await this.ApiContext.SaveChangesAsync();
+
+        DbAbilityCrestSet? dbAbilityCrestSet =
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(DeviceAccountId, setNo);
+        dbAbilityCrestSet.Should().NotBeNull();
+        dbAbilityCrestSet!.AbilityCrestSetName.Should().Be("test");
+    }
+
+    [Fact]
+    public async Task UpdateAbilityCrestSetName_ShouldUpdateWhenSetDoesExist()
+    {
+        int setNo = 46;
+
+        this.ApiContext.PlayerAbilityCrestSets.Add(new DbAbilityCrestSet(DeviceAccountId, setNo));
+        await this.ApiContext.SaveChangesAsync();
+
+        DbAbilityCrestSet dbAbilityCrestSet = (
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(DeviceAccountId, setNo)
+        )!;
+        dbAbilityCrestSet.AbilityCrestSetName.Should().Be("");
+
+        await this.Client.PostMsgpack<ResultCodeData>(
+            "ability_crest/update_ability_crest_set_name",
+            new AbilityCrestUpdateAbilityCrestSetNameRequest()
+            {
+                ability_crest_set_no = setNo,
+                ability_crest_set_name = "test"
+            }
+        );
+
+        await this.ApiContext.Entry(dbAbilityCrestSet).ReloadAsync();
+        dbAbilityCrestSet.AbilityCrestSetName.Should().Be("test");
     }
 
     private int GetDewpoint()
