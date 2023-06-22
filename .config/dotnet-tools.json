@@ -3,19 +3,19 @@
   "isRoot": true,
   "tools": {
     "husky": {
-      "version": "0.5.2",
+      "version": "0.5.4",
       "commands": [
         "husky"
       ]
     },
     "csharpier": {
-      "version": "0.23.0",
+      "version": "0.24.2",
       "commands": [
         "dotnet-csharpier"
       ]
     },
     "dotnet-ef": {
-      "version": "7.0.1",
+      "version": "7.0.8",
       "commands": [
         "dotnet-ef"
       ]

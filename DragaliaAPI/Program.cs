@@ -5,6 +5,8 @@ using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Present;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
@@ -18,6 +20,14 @@ using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Core;
+using Serilog.Events;
+
+Log.Logger = new LoggerConfiguration().MinimumLevel
+    .Debug()
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -125,7 +135,11 @@ builder.Services
     // Shop Feature
     .AddScoped<IShopRepository, ShopRepository>()
     .AddScoped<IItemSummonService, ItemSummonService>()
-    .AddScoped<IPaymentService, PaymentService>();
+    .AddScoped<IPaymentService, PaymentService>()
+    // Present feature
+    .AddScoped<IPresentService, PresentService>()
+    .AddScoped<IPresentControllerService, PresentControllerService>()
+    .AddScoped<IPresentRepository, PresentRepository>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 
