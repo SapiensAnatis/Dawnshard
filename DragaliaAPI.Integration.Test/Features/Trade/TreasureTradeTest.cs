@@ -75,6 +75,8 @@ public class TreasureTradeTest : TestFixture
     [Fact]
     public async Task Trade_ValidTrade_Trades()
     {
+        int preTradeAmount;
+
         using (
             IDisposable ctx = this.Services
                 .GetRequiredService<IPlayerIdentityService>()
@@ -87,6 +89,8 @@ public class TreasureTradeTest : TestFixture
                 await inv.GetMaterial(Materials.DamascusCrystal)
                 ?? inv.AddMaterial(Materials.DamascusCrystal);
             mat.Quantity = 10;
+
+            preTradeAmount = (await inv.GetMaterial(Materials.DamascusIngot))?.Quantity ?? 0;
 
             await this.Services.GetRequiredService<IUpdateDataService>().SaveChangesAsync();
         }
@@ -118,7 +122,7 @@ public class TreasureTradeTest : TestFixture
                     .GetMaterial(Materials.DamascusIngot)
             )!.Quantity
                 .Should()
-                .Be(1);
+                .Be(preTradeAmount + 1);
         }
     }
 }
