@@ -66,6 +66,7 @@ public class TutorialService : ITutorialService
                 break;
             case TutorialStoryIds.Halidom:
                 await this.fortRepository.InitializeFort();
+                await UpdateTutorialStatus(11001);
                 break;
             case TutorialStoryIds.Smithy:
                 await this.fortRepository.InitializeSmithy();
