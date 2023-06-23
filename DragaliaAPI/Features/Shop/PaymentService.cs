@@ -34,7 +34,9 @@ public class PaymentService : IPaymentService
             return;
 
         if (hasPaymentTarget)
+        {
             logger.LogDebug("Processing {paymentType} payment {@payment}.", type, payment);
+        }
         else
         {
             logger.LogDebug(
