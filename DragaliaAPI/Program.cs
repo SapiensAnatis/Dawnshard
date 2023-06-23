@@ -1,5 +1,6 @@
 using System.Reflection;
 using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
@@ -18,17 +19,14 @@ using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
+using EntityGraphQL.AspNet;
+using EntityGraphQL.Schema;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
-
-Log.Logger = new LoggerConfiguration().MinimumLevel
-    .Debug()
-    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateBootstrapLogger();
+using Serilog.Extensions.Logging;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -159,6 +157,28 @@ builder.Services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>
     client.BaseAddress = new(options.StateManagerUrl);
 });
 
+builder.Services.AddGraphQLSchema<ApiContext>(options =>
+{
+    options.AutoBuildSchemaFromContext = true;
+    options.PreBuildSchemaFromContext = (schema) =>
+        schema.AddScalarType<TimeSpan>("TimeSpan", "time span");
+    options.ConfigureSchema = (schema) =>
+    {
+        schema
+            .Query()
+            .AddField(
+                "player",
+                new { viewerId = ArgumentHelper.Required<long>() },
+                (ctx, args) =>
+                    ctx.Players
+                        .Include(x => x.UserData)
+                        .Include(x => x.AbilityCrestList)
+                        .First(x => x.UserData != null && x.UserData.ViewerId == args.viewerId),
+                "Fetch player by viewer id"
+            );
+    };
+});
+
 WebApplication app = builder.Build();
 
 app.UseSerilogRequestLogging();
@@ -179,6 +199,7 @@ app.UseMiddleware<NotFoundHandlerMiddleware>();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapGraphQL<ApiContext>();
 app.MapControllers();
 app.UseResponseCompression();
 app.MapHealthChecks("/health");

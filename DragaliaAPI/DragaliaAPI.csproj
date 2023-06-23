@@ -13,6 +13,8 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="EntityGraphQL" Version="4.3.0" />
+		<PackageReference Include="EntityGraphQL.AspNet" Version="4.3.0" />
 		<PackageReference Include="MessagePack" Version="2.5.108" />
 		<PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="2.5.108" />
 		<PackageReference Include="MessagePackAnalyzer" Version="2.5.108">
