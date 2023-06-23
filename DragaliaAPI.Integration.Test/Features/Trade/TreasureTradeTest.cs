@@ -81,9 +81,11 @@ public class TreasureTradeTest : TestFixture
                 .StartUserImpersonation(DeviceAccountId)
         )
         {
-            DbPlayerMaterial mat = this.Services
-                .GetRequiredService<IInventoryRepository>()
-                .AddMaterial(Materials.DamascusCrystal);
+            IInventoryRepository inv = this.Services.GetRequiredService<IInventoryRepository>();
+
+            DbPlayerMaterial mat =
+                await inv.GetMaterial(Materials.DamascusCrystal)
+                ?? inv.AddMaterial(Materials.DamascusCrystal);
             mat.Quantity = 10;
 
             await this.Services.GetRequiredService<IUpdateDataService>().SaveChangesAsync();
