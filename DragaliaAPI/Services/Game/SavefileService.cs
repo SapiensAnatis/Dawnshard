@@ -236,6 +236,13 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
+            this.AddShopInfo();
+
+            this.logger.LogDebug(
+                "Adding shop info step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             if (savefile.party_list is not null)
             {
                 // Update key ids in parties

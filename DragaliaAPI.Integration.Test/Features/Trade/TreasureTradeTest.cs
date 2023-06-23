@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Features.Trade;
@@ -74,12 +75,19 @@ public class TreasureTradeTest : TestFixture
     [Fact]
     public async Task Trade_ValidTrade_Trades()
     {
-        IInventoryRepository repo = this.Services.GetRequiredService<IInventoryRepository>();
+        using (
+            IDisposable ctx = this.Services
+                .GetRequiredService<IPlayerIdentityService>()
+                .StartUserImpersonation(DeviceAccountId)
+        )
+        {
+            DbPlayerMaterial mat = this.Services
+                .GetRequiredService<IInventoryRepository>()
+                .AddMaterial(Materials.DamascusCrystal);
+            mat.Quantity = 10;
 
-        DbPlayerMaterial mat = repo.AddMaterial(Materials.DamascusCrystal);
-        mat.Quantity = 10;
-
-        await this.Services.GetRequiredService<IUpdateDataService>().SaveChangesAsync();
+            await this.Services.GetRequiredService<IUpdateDataService>().SaveChangesAsync();
+        }
 
         TreasureTradeTradeData response = (
             await Client.PostMsgpack<TreasureTradeTradeData>(
@@ -96,6 +104,19 @@ public class TreasureTradeTest : TestFixture
         response.treasure_trade_list.Should().BeNullOrEmpty();
         response.update_data_list.Should().NotBeNull();
 
-        (await repo.GetMaterial(Materials.DamascusIngot))!.Quantity.Should().Be(1);
+        using (
+            IDisposable ctx = this.Services
+                .GetRequiredService<IPlayerIdentityService>()
+                .StartUserImpersonation(DeviceAccountId)
+        )
+        {
+            (
+                await this.Services
+                    .GetRequiredService<IInventoryRepository>()
+                    .GetMaterial(Materials.DamascusIngot)
+            )!.Quantity
+                .Should()
+                .Be(1);
+        }
     }
 }
