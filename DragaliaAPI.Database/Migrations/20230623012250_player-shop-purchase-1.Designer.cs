@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230623001052_player-shop-purchase-1")]
+    [Migration("20230623012250_player-shop-purchase-1")]
     partial class playershoppurchase1
     {
         /// <inheritdoc />
