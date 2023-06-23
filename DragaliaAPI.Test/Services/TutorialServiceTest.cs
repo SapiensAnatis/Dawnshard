@@ -90,7 +90,7 @@ public class TutorialServiceTest
 
         int currentStatus = await this.tutorialService.UpdateTutorialStatus(60999);
 
-        currentStatus.Should().Be(60120);
+        currentStatus.Should().Be(60999);
         this.mockFortRepository.VerifyAll();
     }
 }
