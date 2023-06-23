@@ -2,7 +2,7 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Trade;
 
 /// <summary>
 /// Tests <see cref="DragaliaAPI.Features.Trade.AbilityCrestTradeController"/>
@@ -28,7 +28,7 @@ public class AbilityCrestTradeTest : TestFixture
         int old_dewpoint = GetDewpoint();
 
         AbilityCrestTradeTradeData data = (
-            await this.Client.PostMsgpack<AbilityCrestTradeTradeData>(
+            await Client.PostMsgpack<AbilityCrestTradeTradeData>(
                 "ability_crest_trade/trade",
                 new AbilityCrestTradeTradeRequest()
                 {
@@ -49,7 +49,7 @@ public class AbilityCrestTradeTest : TestFixture
 
     private int GetDewpoint()
     {
-        return this.ApiContext.PlayerUserData
+        return ApiContext.PlayerUserData
             .AsNoTracking()
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .Select(x => x.DewPoint)
