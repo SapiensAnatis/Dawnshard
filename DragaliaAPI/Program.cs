@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.GraphQL;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Present;
@@ -157,27 +158,7 @@ builder.Services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>
     client.BaseAddress = new(options.StateManagerUrl);
 });
 
-builder.Services.AddGraphQLSchema<ApiContext>(options =>
-{
-    options.AutoBuildSchemaFromContext = true;
-    options.PreBuildSchemaFromContext = (schema) =>
-        schema.AddScalarType<TimeSpan>("TimeSpan", "time span");
-    options.ConfigureSchema = (schema) =>
-    {
-        schema
-            .Query()
-            .AddField(
-                "player",
-                new { viewerId = ArgumentHelper.Required<long>() },
-                (ctx, args) =>
-                    ctx.Players
-                        .Include(x => x.UserData)
-                        .Include(x => x.AbilityCrestList)
-                        .First(x => x.UserData != null && x.UserData.ViewerId == args.viewerId),
-                "Fetch player by viewer id"
-            );
-    };
-});
+builder.Services.ConfigureGraphQlSchema();
 
 WebApplication app = builder.Build();
 

@@ -70,4 +70,10 @@ public class DbPlayer
 
     public virtual ICollection<DbEquippedStamp> EquippedStampList { get; set; } =
         new List<DbEquippedStamp>();
+
+    public virtual ICollection<DbPlayerPresent> Presents { get; set; } =
+        new List<DbPlayerPresent>();
+
+    public virtual ICollection<DbPlayerPresentHistory> PresentHistory { get; set; } =
+        new List<DbPlayerPresentHistory>();
 }
