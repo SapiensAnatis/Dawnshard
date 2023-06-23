@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,36 +17,54 @@ public class TradeRepository : ITradeRepository
         this.playerIdentityService = playerIdentityService;
     }
 
-    public IQueryable<DbPlayerTreasureTrade> TreasureTrades =>
-        this.apiContext.PlayerTreasureTrades.Where(
+    public IQueryable<DbPlayerTrade> Trades =>
+        this.apiContext.PlayerTrades.Where(
             x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
-    public async Task<bool> AddTrade(int id, int count, DateTimeOffset time)
+    public async Task<ILookup<TradeType, DbPlayerTrade>> GetAllTradesAsync()
     {
-        DbPlayerTreasureTrade? existing = await this.TreasureTrades.FirstOrDefaultAsync(
-            x => x.Id == id
+        return (await this.Trades.ToListAsync()).ToLookup(x => x.Type);
+    }
+
+    public async Task<IEnumerable<DbPlayerTrade>> GetTradesByTypeAsync(TradeType type)
+    {
+        return await this.Trades.Where(x => x.Type == type).ToListAsync();
+    }
+
+    public async Task<bool> AddTrade(TradeType type, int id, int count, DateTimeOffset? time = null)
+    {
+        if (type == TradeType.None)
+            throw new ArgumentNullException(nameof(type));
+
+        if (type == TradeType.Treasure && time == null)
+            throw new ArgumentNullException(nameof(time));
+
+        DateTimeOffset actualTime = time ?? DateTimeOffset.UnixEpoch;
+
+        DbPlayerTrade? existing = await this.apiContext.PlayerTrades.FindAsync(
+            this.playerIdentityService.AccountId,
+            id
         );
 
         if (existing == null)
         {
-            this.apiContext.PlayerTreasureTrades.Add(
-                new DbPlayerTreasureTrade()
+            this.apiContext.PlayerTrades.Add(
+                new DbPlayerTrade
                 {
                     DeviceAccountId = this.playerIdentityService.AccountId,
+                    Type = type,
                     Id = id,
                     Count = count,
-                    LastTradeTime = time
+                    LastTradeTime = actualTime
                 }
             );
 
             return true;
         }
-        else
-        {
-            existing.Count += count;
-            existing.LastTradeTime = time;
-        }
+
+        existing.Count += count;
+        existing.LastTradeTime = actualTime;
 
         return false;
     }

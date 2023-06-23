@@ -1,112 +1,57 @@
-﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
-using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using DragaliaAPI.Controllers;
+using DragaliaAPI.Features.Reward;
 
 namespace DragaliaAPI.Features.Trade;
 
 [Route("ability_crest_trade")]
 public class AbilityCrestTradeController : DragaliaControllerBase
 {
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IAbilityCrestRepository abilityCrestRepository;
+    private readonly ITradeService tradeService;
     private readonly IUpdateDataService updateDataService;
+    private readonly IRewardService rewardService;
 
     public AbilityCrestTradeController(
-        IUserDataRepository userDataRepository,
-        IAbilityCrestRepository abilityCrestRepository,
-        IUpdateDataService updateDataService
+        ITradeService tradeService,
+        IUpdateDataService updateDataService,
+        IRewardService rewardService
     )
     {
-        this.userDataRepository = userDataRepository;
-        this.abilityCrestRepository = abilityCrestRepository;
+        this.tradeService = tradeService;
         this.updateDataService = updateDataService;
+        this.rewardService = rewardService;
     }
 
-    [Route("get_list")]
-    [HttpPost]
-    public async Task<DragaliaResult> GetList(AbilityCrestTradeGetListRequest request)
+    [HttpPost("get_list")]
+    public async Task<DragaliaResult> GetList()
     {
-        IEnumerable<AbilityCrestTradeList> abilityCrestTradeList =
-            await BuildAbilityCrestTradeList();
+        AbilityCrestTradeGetListData resp = new();
 
-        AbilityCrestTradeGetListData response =
-            new()
-            {
-                user_ability_crest_trade_list = new List<UserAbilityCrestTradeList>(),
-                ability_crest_trade_list = abilityCrestTradeList,
-                update_data_list = await updateDataService.SaveChangesAsync()
-            };
+        resp.ability_crest_trade_list = this.tradeService.GetCurrentAbilityCrestTradeList();
+        resp.user_ability_crest_trade_list = await this.tradeService.GetUserAbilityCrestTradeList();
+        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+        resp.entity_result = this.rewardService.GetEntityResult();
 
-        return Ok(response);
+        return Ok(resp);
     }
 
-    [Route("trade")]
-    [HttpPost]
+    [HttpPost("trade")]
     public async Task<DragaliaResult> Trade(AbilityCrestTradeTradeRequest request)
     {
-        IEnumerable<AbilityCrestTradeList> abilityCrestTradeList =
-            await BuildAbilityCrestTradeList();
+        AbilityCrestTradeTradeData resp = new();
 
-        AbilityCrestTrade abilityCrestTrade = MasterAsset.AbilityCrestTrade.Get(
-            request.ability_crest_trade_id
+        await this.tradeService.DoAbilityCrestTrade(
+            request.ability_crest_trade_id,
+            request.trade_count
         );
 
-        await abilityCrestRepository.Add(abilityCrestTrade.AbilityCrestId);
-        await userDataRepository.UpdateDewpoint(-abilityCrestTrade.NeedDewPoint);
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+        resp.entity_result = this.rewardService.GetEntityResult();
+        resp.ability_crest_trade_list = this.tradeService.GetCurrentAbilityCrestTradeList();
+        resp.user_ability_crest_trade_list = await this.tradeService.GetUserAbilityCrestTradeList();
 
-        AbilityCrestTradeTradeData response =
-            new()
-            {
-                user_ability_crest_trade_list = new List<UserAbilityCrestTradeList>()
-                {
-                    new()
-                    {
-                        ability_crest_trade_id = request.ability_crest_trade_id,
-                        trade_count = request.trade_count
-                    }
-                },
-                ability_crest_trade_list = abilityCrestTradeList,
-                update_data_list = updateDataList
-            };
-
-        return Ok(response);
-    }
-
-    private async Task<IEnumerable<AbilityCrestTradeList>> BuildAbilityCrestTradeList()
-    {
-        IEnumerable<DbAbilityCrest> ownedAbilityCrests =
-            await abilityCrestRepository.AbilityCrests.ToListAsync();
-
-        IEnumerable<AbilityCrestTrade> abilityCrestTradeList = MasterAsset
-            .AbilityCrestTrade
-            .Enumerable;
-
-        return abilityCrestTradeList
-            .Where(
-                x =>
-                    x.AbilityCrestId != 0
-                    && !ownedAbilityCrests.Any(y => y.AbilityCrestId == x.AbilityCrestId)
-            )
-            .Select(
-                x =>
-                    new AbilityCrestTradeList()
-                    {
-                        ability_crest_trade_id = x.Id,
-                        ability_crest_id = x.AbilityCrestId,
-                        need_dew_point = x.NeedDewPoint,
-                        priority = x.Priority,
-                        complete_date = 0,
-                        pickup_view_start_date = 0,
-                        pickup_view_end_date = 0,
-                    }
-            );
+        return Ok(resp);
     }
 }

@@ -154,5 +154,5 @@ public class ApiContext : DbContext
 
     public DbSet<DbPlayerShopPurchase> PlayerPurchases { get; set; }
 
-    public DbSet<DbPlayerTreasureTrade> PlayerTreasureTrades { get; set; }
+    public DbSet<DbPlayerTrade> PlayerTrades { get; set; }
 }

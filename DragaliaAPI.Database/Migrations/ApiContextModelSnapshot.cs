@@ -958,7 +958,7 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerSummonHistory");
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerTreasureTrade", b =>
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerTrade", b =>
                 {
                     b.Property<string>("DeviceAccountId")
                         .HasColumnType("text");
@@ -975,11 +975,17 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("LastTrade");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("TradeType");
+
                     b.HasKey("DeviceAccountId", "Id");
 
                     b.HasIndex("DeviceAccountId");
 
-                    b.ToTable("PlayerTreasureTrades");
+                    b.HasIndex("DeviceAccountId", "Type");
+
+                    b.ToTable("PlayerTrades");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerUserData", b =>
@@ -1540,7 +1546,7 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerTreasureTrade", b =>
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerTrade", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany()

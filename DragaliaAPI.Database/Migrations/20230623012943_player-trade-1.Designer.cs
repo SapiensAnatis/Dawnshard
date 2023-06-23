@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230621003516_2-0-1_alpha_9")]
-    partial class _201_alpha_9
+    [Migration("20230623012943_player-trade-1")]
+    partial class playertrade1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,49 @@ namespace DragaliaAPI.Database.Migrations
                     b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PlayerAbilityCrests");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbAbilityCrestSet", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("AbilityCrestSetNo")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("AbilityCrestSetName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("CrestSlotType1CrestId1")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CrestSlotType1CrestId2")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CrestSlotType1CrestId3")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CrestSlotType2CrestId1")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CrestSlotType2CrestId2")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CrestSlotType3CrestId1")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CrestSlotType3CrestId2")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("TalismanKeyId")
+                        .HasColumnType("numeric(20,0)");
+
+                    b.HasKey("DeviceAccountId", "AbilityCrestSetNo");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("PlayerAbilityCrestSets");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbDeviceAccount", b =>
@@ -625,6 +668,150 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerMissions");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerPresent", b =>
+                {
+                    b.Property<long>("PresentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("PresentId");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("PresentId"));
+
+                    b.Property<DateTimeOffset>("CreateTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreateTime");
+
+                    b.Property<string>("DeviceAccountId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityId");
+
+                    b.Property<int>("EntityLevel")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityLevel");
+
+                    b.Property<int>("EntityLimitBreakCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityLimitBreakCount");
+
+                    b.Property<int>("EntityQuantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityQuantity");
+
+                    b.Property<int>("EntityStatusPlusCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityStatusPlusCount");
+
+                    b.Property<int>("EntityType")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityType");
+
+                    b.Property<long>("MasterId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("MasterId");
+
+                    b.Property<int>("MessageId")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageId");
+
+                    b.Property<int>("MessageParamValue1")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue1");
+
+                    b.Property<int>("MessageParamValue2")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue2");
+
+                    b.Property<int>("MessageParamValue3")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue3");
+
+                    b.Property<int>("MessageParamValue4")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue4");
+
+                    b.Property<DateTimeOffset?>("ReceiveLimitTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ReceiveLimitTime");
+
+                    b.Property<long>("State")
+                        .HasColumnType("bigint")
+                        .HasColumnName("State");
+
+                    b.HasKey("PresentId");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("PlayerPresent");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerPresentHistory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("CreateTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreateTime");
+
+                    b.Property<string>("DeviceAccountId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityId");
+
+                    b.Property<int>("EntityLevel")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityLevel");
+
+                    b.Property<int>("EntityLimitBreakCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityLimitBreakCount");
+
+                    b.Property<int>("EntityQuantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityQuantity");
+
+                    b.Property<int>("EntityStatusPlusCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityStatusPlusCount");
+
+                    b.Property<int>("EntityType")
+                        .HasColumnType("integer")
+                        .HasColumnName("EntityType");
+
+                    b.Property<int>("MessageId")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageId");
+
+                    b.Property<int>("MessageParamValue1")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue1");
+
+                    b.Property<int>("MessageParamValue2")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue2");
+
+                    b.Property<int>("MessageParamValue3")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue3");
+
+                    b.Property<int>("MessageParamValue4")
+                        .HasColumnType("integer")
+                        .HasColumnName("MessageParamValue4");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("PlayerPresentHistory");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerShopInfo", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -774,7 +961,7 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerSummonHistory");
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerTreasureTrade", b =>
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerTrade", b =>
                 {
                     b.Property<string>("DeviceAccountId")
                         .HasColumnType("text");
@@ -791,11 +978,17 @@ namespace DragaliaAPI.Database.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("LastTrade");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("TradeType");
+
                     b.HasKey("DeviceAccountId", "Id");
 
                     b.HasIndex("DeviceAccountId");
 
-                    b.ToTable("PlayerTreasureTrades");
+                    b.HasIndex("DeviceAccountId", "Type");
+
+                    b.ToTable("PlayerTrades");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerUserData", b =>
@@ -1136,6 +1329,17 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbAbilityCrestSet", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany("AbilityCrestSetList")
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbEquippedStamp", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
@@ -1279,6 +1483,28 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerPresent", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerPresentHistory", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerShopInfo", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
@@ -1323,7 +1549,7 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerTreasureTrade", b =>
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerTrade", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany()
@@ -1419,6 +1645,8 @@ namespace DragaliaAPI.Database.Migrations
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayer", b =>
                 {
                     b.Navigation("AbilityCrestList");
+
+                    b.Navigation("AbilityCrestSetList");
 
                     b.Navigation("BuildList");
 

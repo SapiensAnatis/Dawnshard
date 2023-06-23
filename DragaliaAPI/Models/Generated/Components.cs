@@ -114,18 +114,18 @@ public class AbilityCrestTradeList
     public AbilityCrests ability_crest_id { get; set; }
     public int need_dew_point { get; set; }
     public int priority { get; set; }
-    public int complete_date { get; set; }
-    public int pickup_view_start_date { get; set; }
-    public int pickup_view_end_date { get; set; }
+    public DateTimeOffset complete_date { get; set; }
+    public DateTimeOffset pickup_view_start_date { get; set; }
+    public DateTimeOffset pickup_view_end_date { get; set; }
 
     public AbilityCrestTradeList(
         int ability_crest_trade_id,
         AbilityCrests ability_crest_id,
         int need_dew_point,
         int priority,
-        int complete_date,
-        int pickup_view_start_date,
-        int pickup_view_end_date
+        DateTimeOffset complete_date,
+        DateTimeOffset pickup_view_start_date,
+        DateTimeOffset pickup_view_end_date
     )
     {
         this.ability_crest_trade_id = ability_crest_trade_id;

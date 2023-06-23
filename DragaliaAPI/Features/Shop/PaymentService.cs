@@ -91,6 +91,11 @@ public class PaymentService : IPaymentService
                     ResultCode.ShopPaymentTypeInvalid,
                     "Diamantium is not supported."
                 );
+            case PaymentTypes.DewPoint:
+                userData = await this.userDataRepository.UserData.SingleAsync();
+                quantity = userData.DewPoint;
+                updater = () => userData.DewPoint -= price;
+                break;
             default:
                 logger.LogWarning("Unknown/invalid payment type.");
                 throw new DragaliaException(
