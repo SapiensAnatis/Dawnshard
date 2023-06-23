@@ -4,6 +4,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Features.Trade;
@@ -105,24 +106,19 @@ public class TreasureTradeTest : TestFixture
         response.user_treasure_trade_list
             .Should()
             .HaveCount(1)
-            .And.ContainEquivalentOf(new { treasure_trade_id = 10010101, trade_count = 1 });
+            .And.Contain(x => x.treasure_trade_id == 10010101 && x.trade_count == 1);
         response.treasure_trade_all_list.Should().NotBeEmpty();
         response.treasure_trade_list.Should().BeNullOrEmpty();
         response.update_data_list.Should().NotBeNull();
 
-        using (
-            IDisposable ctx = this.Services
-                .GetRequiredService<IPlayerIdentityService>()
-                .StartUserImpersonation(DeviceAccountId)
-        )
-        {
-            (
-                await this.Services
-                    .GetRequiredService<IInventoryRepository>()
-                    .GetMaterial(Materials.DamascusIngot)
-            )!.Quantity
-                .Should()
-                .Be(preTradeAmount + 1);
-        }
+        int newMatQuantity = this.ApiContext.PlayerMaterials
+            .AsNoTracking()
+            .Where(
+                x => x.DeviceAccountId == DeviceAccountId && x.MaterialId == Materials.DamascusIngot
+            )
+            .Select(x => x.Quantity)
+            .First();
+
+        newMatQuantity.Should().Be(preTradeAmount + 1);
     }
 }
