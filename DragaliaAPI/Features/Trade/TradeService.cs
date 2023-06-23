@@ -99,20 +99,26 @@ public class TradeService : ITradeService
                         (Materials)id
                     );
                     if (material == null || material.Quantity < quantity)
+                    {
                         throw new DragaliaException(
                             ResultCode.CommonMaterialShort,
                             "Not enough material"
                         );
+                    }
+
                     material.Quantity -= quantity;
                     break;
                 case EntityTypes.Mana:
                     DbPlayerUserData? userData =
                         await this.userDataRepository.UserData.SingleAsync();
                     if (userData == null || userData.ManaPoint < quantity)
+                    {
                         throw new DragaliaException(
                             ResultCode.CommonMaterialShort,
                             "Not enough mana"
                         );
+                    }
+
                     userData.ManaPoint -= quantity;
                     break;
                 case EntityTypes.DmodePoint:
