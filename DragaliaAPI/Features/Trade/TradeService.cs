@@ -151,17 +151,7 @@ public class TradeService : ITradeService
                     material.Quantity -= quantity;
                     break;
                 case EntityTypes.Mana:
-                    DbPlayerUserData? userData =
-                        await this.userDataRepository.UserData.SingleAsync();
-                    if (userData == null || userData.ManaPoint < quantity)
-                    {
-                        throw new DragaliaException(
-                            ResultCode.CommonMaterialShort,
-                            "Not enough mana"
-                        );
-                    }
-
-                    userData.ManaPoint -= quantity;
+                    await this.paymentService.ProcessPayment(PaymentTypes.ManaPoint, expectedPrice: quantity);
                     break;
                 case EntityTypes.DmodePoint:
                     throw new NotImplementedException("DmodePoint treasure trade");
