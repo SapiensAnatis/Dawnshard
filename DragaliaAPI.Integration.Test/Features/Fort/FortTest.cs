@@ -445,7 +445,6 @@ public class FortTest : TestFixture
         DbFortBuild halidom = this.ApiContext.PlayerFortBuilds.First(
             x => x.PlantId == FortPlants.TheHalidom && x.DeviceAccountId == DeviceAccountId
         );
-        halidom.Level = 8;
         halidom.LastIncomeDate = lastIncome;
 
         await this.ApiContext.SaveChangesAsync();
@@ -469,11 +468,10 @@ public class FortTest : TestFixture
         harvestList.build_id.Should().Be(dragonTree.BuildId);
         harvestList.add_harvest_list.Should().NotBeEmpty();
 
-        // Stamina is not implemented yet
-        // response.data.add_stamina_list.Should().NotBeEmpty();
-        // AtgenAddStaminaList staminaList = response.data.add_stamina_list.First();
-        // staminaList.build_id.Should().Be(halidom.BuildId);
-        // staminaList.add_stamina.Should().Be(12);
+        response.data.add_stamina_list.Should().NotBeEmpty();
+        AtgenAddStaminaList staminaList = response.data.add_stamina_list.First();
+        staminaList.build_id.Should().Be(halidom.BuildId);
+        staminaList.add_stamina.Should().Be(12);
 
         response.data.update_data_list.user_data.coin.Should().BeCloseTo(oldCoin + 3098, 10);
         response.data.update_data_list.material_list.Should().NotBeEmpty();
