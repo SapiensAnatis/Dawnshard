@@ -51,6 +51,7 @@ public class TutorialService : ITutorialService
         {
             userData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(flags);
             logger.LogDebug("Added tutorial flag: {flag} ({@flags})", flag, flags);
+            await OnTutorialFlagAdded(flag);
         }
 
         return flags.ToList();
@@ -65,9 +66,27 @@ public class TutorialService : ITutorialService
                 break;
             case TutorialStoryIds.Halidom:
                 await this.fortRepository.InitializeFort();
+                await UpdateTutorialStatus(11001);
                 break;
             case TutorialStoryIds.Smithy:
                 await this.fortRepository.InitializeSmithy();
+                break;
+            case TutorialStoryIds.DragonTrials:
+                await UpdateTutorialStatus(30102);
+                await AddTutorialFlag(1005);
+                break;
+            case TutorialStoryIds.Ch9Done:
+                await AddTutorialFlag(1010);
+                break;
+            case TutorialStoryIds.Ch10Done:
+                await AddTutorialFlag(1014);
+                await AddTutorialFlag(1016);
+                break;
+            case TutorialStoryIds.Sindom:
+                await AddTutorialFlag(1028);
+                break;
+            case TutorialStoryIds.Ch16Done:
+                await AddTutorialFlag(1030);
                 break;
             // TODO: Maybe more that I've missed
         }
@@ -79,6 +98,16 @@ public class TutorialService : ITutorialService
         {
             case TutorialStatusIds.Dojos:
                 await this.fortRepository.AddDojos();
+                break;
+        }
+    }
+
+    private async Task OnTutorialFlagAdded(int newFlag)
+    {
+        switch (newFlag)
+        {
+            case TutorialFlagIds.DragonUpgrading:
+                await this.fortRepository.AddDragontree();
                 break;
         }
     }
@@ -97,10 +126,20 @@ public class TutorialService : ITutorialService
         public const int Wyrmprints = 1000106;
         public const int Halidom = 1000111;
         public const int Smithy = 1000210;
+        public const int DragonTrials = 1000311;
+        public const int Ch9Done = 1000909;
+        public const int Ch10Done = 1001009;
+        public const int Sindom = 1001610;
+        public const int Ch16Done = 1001613;
     }
 
     internal static class TutorialStatusIds
     {
-        public const int Dojos = 60120;
+        public const int Dojos = 60999;
+    }
+
+    internal static class TutorialFlagIds
+    {
+        public const int DragonUpgrading = 1001;
     }
 }

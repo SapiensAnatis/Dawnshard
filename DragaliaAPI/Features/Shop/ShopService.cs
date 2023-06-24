@@ -67,9 +67,11 @@ public class ShopService : IShopService
         )
         {
             if (type != EntityTypes.None)
+            {
                 await this.rewardService.GrantReward(
                     new Entity(type, id, quantity, limitBreakCount)
                 );
+            }
         }
 
         // Now shop specific behavior

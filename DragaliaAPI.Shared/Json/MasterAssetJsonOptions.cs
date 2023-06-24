@@ -15,6 +15,7 @@ public class MasterAssetJsonOptions
     {
         Instance = new();
         Instance.Converters.Add(new BoolIntJsonConverter());
+        Instance.Converters.Add(new MasterAssetDateTimeOffsetConverter());
         Instance.PropertyNamingPolicy = new MasterAssetNamingPolicy();
     }
 }

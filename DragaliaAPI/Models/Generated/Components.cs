@@ -114,18 +114,18 @@ public class AbilityCrestTradeList
     public AbilityCrests ability_crest_id { get; set; }
     public int need_dew_point { get; set; }
     public int priority { get; set; }
-    public int complete_date { get; set; }
-    public int pickup_view_start_date { get; set; }
-    public int pickup_view_end_date { get; set; }
+    public DateTimeOffset complete_date { get; set; }
+    public DateTimeOffset pickup_view_start_date { get; set; }
+    public DateTimeOffset pickup_view_end_date { get; set; }
 
     public AbilityCrestTradeList(
         int ability_crest_trade_id,
         AbilityCrests ability_crest_id,
         int need_dew_point,
         int priority,
-        int complete_date,
-        int pickup_view_start_date,
-        int pickup_view_end_date
+        DateTimeOffset complete_date,
+        DateTimeOffset pickup_view_start_date,
+        DateTimeOffset pickup_view_end_date
     )
     {
         this.ability_crest_trade_id = ability_crest_trade_id;
@@ -2682,10 +2682,10 @@ public class AtgenNeedTradeEntityList
 [MessagePackObject(true)]
 public class AtgenNeedUnitList
 {
-    public int type { get; set; }
+    public EntityTypes type { get; set; }
     public ulong key_id { get; set; }
 
-    public AtgenNeedUnitList(int type, ulong key_id)
+    public AtgenNeedUnitList(EntityTypes type, ulong key_id)
     {
         this.type = type;
         this.key_id = key_id;
@@ -8333,9 +8333,10 @@ public class SettingSupport
 [MessagePackObject(true)]
 public class ShopNotice
 {
-    public int is_shop_notification { get; set; }
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_shop_notification { get; set; }
 
-    public ShopNotice(int is_shop_notification)
+    public ShopNotice(bool is_shop_notification)
     {
         this.is_shop_notification = is_shop_notification;
     }
@@ -8821,12 +8822,12 @@ public class TreasureTradeList
     public int treasure_trade_id { get; set; }
     public int tab_group_id { get; set; }
     public int is_lock_view { get; set; }
-    public int commence_date { get; set; }
-    public int complete_date { get; set; }
+    public DateTimeOffset commence_date { get; set; }
+    public DateTimeOffset complete_date { get; set; }
     public int reset_type { get; set; }
     public int limit { get; set; }
     public IEnumerable<AtgenNeedTradeEntityList> need_trade_entity_list { get; set; }
-    public int destination_entity_type { get; set; }
+    public EntityTypes destination_entity_type { get; set; }
     public int destination_entity_id { get; set; }
     public int destination_entity_quantity { get; set; }
     public int destination_limit_break_count { get; set; }
@@ -8836,12 +8837,12 @@ public class TreasureTradeList
         int treasure_trade_id,
         int tab_group_id,
         int is_lock_view,
-        int commence_date,
-        int complete_date,
+        DateTimeOffset commence_date,
+        DateTimeOffset complete_date,
         int reset_type,
         int limit,
         IEnumerable<AtgenNeedTradeEntityList> need_trade_entity_list,
-        int destination_entity_type,
+        EntityTypes destination_entity_type,
         int destination_entity_id,
         int destination_entity_quantity,
         int destination_limit_break_count
@@ -9462,9 +9463,9 @@ public class UserTreasureTradeList
 {
     public int treasure_trade_id { get; set; }
     public int trade_count { get; set; }
-    public int last_reset_time { get; set; }
+    public DateTimeOffset last_reset_time { get; set; }
 
-    public UserTreasureTradeList(int treasure_trade_id, int trade_count, int last_reset_time)
+    public UserTreasureTradeList(int treasure_trade_id, int trade_count, DateTimeOffset last_reset_time)
     {
         this.treasure_trade_id = treasure_trade_id;
         this.trade_count = trade_count;

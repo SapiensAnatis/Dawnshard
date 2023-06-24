@@ -2,6 +2,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
+using DragaliaAPI.Shared.MasterAsset.Models.Trade;
 
 namespace DragaliaAPI.Shared.MasterAsset;
 
@@ -87,12 +88,6 @@ public static class MasterAsset
     public static MasterAssetData<int, UnitStory> UnitStory => new("UnitStory.json", x => x.Id);
 
     /// <summary>
-    /// Contains information about ability crests in the shop.
-    /// </summary>
-    public static readonly MasterAssetData<int, AbilityCrestTrade> AbilityCrestTrade =
-        new("AbilityCrestTrade.json", x => x.Id);
-
-    /// <summary>
     /// Contains information about the materials required to unbind ability crests.
     /// </summary>
     public static readonly MasterAssetData<int, AbilityCrestBuildupGroup> AbilityCrestBuildupGroup =
@@ -121,6 +116,8 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, QuestEvent> QuestEvent =
         new("QuestEvent.json", x => x.Id);
+
+    #region Missions
 
     public static readonly MasterAssetData<int, AlbumMission> AlbumMission =
         new("Missions/MissionAlbumData.json", x => x.Id);
@@ -168,10 +165,16 @@ public static class MasterAsset
         MainStoryMissionGroupRewards
     > MainStoryMissionGroupRewards = new("Missions/MainStoryMissionGroupRewards.json", x => x.Id);
 
+    #endregion
+    #region Stamps
+
     /// <summary>
     /// Contains information about stickers.
     /// </summary>
     public static readonly MasterAssetData<int, Stamp> StampData = new("StampData.json", x => x.Id);
+
+    #endregion
+    #region Shops
 
     public static readonly MasterAssetData<int, NormalShop> NormalShop =
         new("Shop/NormalShop.json", x => x.Id);
@@ -187,4 +190,20 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, MaterialShop> MaterialShopMonthly =
         new("Shop/MaterialShopMonthly.json", x => x.Id);
+
+    #endregion
+    #region Treasure Trade / Wyrmprint Trade
+
+    /// <summary>
+    /// Contains information about ability crests in the shop.
+    /// </summary>
+    public static readonly MasterAssetData<int, AbilityCrestTrade> AbilityCrestTrade =
+        new("Trade/AbilityCrestTrade.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, TreasureTrade> TreasureTrade =
+        new("Trade/TreasureTrade.json", x => x.Id);
+
+    #endregion
+
+    public static readonly MasterAssetData<int, UseItem> UseItem = new("UseItem.json", x => x.Id);
 }

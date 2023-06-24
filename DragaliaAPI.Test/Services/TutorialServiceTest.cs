@@ -88,9 +88,9 @@ public class TutorialServiceTest
 
         this.mockFortRepository.Setup(x => x.AddDojos()).Returns(Task.CompletedTask);
 
-        int currentStatus = await this.tutorialService.UpdateTutorialStatus(60120);
+        int currentStatus = await this.tutorialService.UpdateTutorialStatus(60999);
 
-        currentStatus.Should().Be(60120);
+        currentStatus.Should().Be(60999);
         this.mockFortRepository.VerifyAll();
     }
 }
