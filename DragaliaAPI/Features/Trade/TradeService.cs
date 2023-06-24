@@ -137,21 +137,13 @@ public class TradeService : ITradeService
             {
                 case EntityTypes.Material
                 or EntityTypes.FafnirMedal:
-                    DbPlayerMaterial? material = await this.inventoryRepository.GetMaterial(
-                        (Materials)id
-                    );
-                    if (material == null || material.Quantity < quantity)
-                    {
-                        throw new DragaliaException(
-                            ResultCode.CommonMaterialShort,
-                            "Not enough material"
-                        );
-                    }
-
-                    material.Quantity -= quantity;
+                    await this.inventoryRepository.UpdateQuantity((Materials)id, quantity);
                     break;
                 case EntityTypes.Mana:
-                    await this.paymentService.ProcessPayment(PaymentTypes.ManaPoint, expectedPrice: quantity);
+                    await this.paymentService.ProcessPayment(
+                        PaymentTypes.ManaPoint,
+                        expectedPrice: quantity
+                    );
                     break;
                 case EntityTypes.DmodePoint:
                     throw new NotImplementedException("DmodePoint treasure trade");

@@ -45,14 +45,16 @@ public class TreasureTradeTest : TestFixture
             this.ApiContext.PlayerTrades.Where(x => x.DeviceAccountId == DeviceAccountId)
         );
 
-        await this.AddToDatabase(new DbPlayerTrade()
-        {
-            DeviceAccountId = DeviceAccountId,
-            Id = 1000,
-            Count = 1,
-            Type = TradeType.Treasure,
-            LastTradeTime = DateTimeOffset.UnixEpoch
-        });
+        await this.AddToDatabase(
+            new DbPlayerTrade()
+            {
+                DeviceAccountId = DeviceAccountId,
+                Id = 1000,
+                Count = 1,
+                Type = TradeType.Treasure,
+                LastTradeTime = DateTimeOffset.UnixEpoch
+            }
+        );
 
         TreasureTradeGetListAllData response = (
             await Client.PostMsgpack<TreasureTradeGetListAllData>(
@@ -80,7 +82,12 @@ public class TreasureTradeTest : TestFixture
                 .StartUserImpersonation(DeviceAccountId)
         )
         {
-            preTradeAmount = (await this.Services.GetRequiredService<IInventoryRepository>().GetMaterial(Materials.DamascusIngot))?.Quantity ?? 0;
+            preTradeAmount =
+                (
+                    await this.Services
+                        .GetRequiredService<IInventoryRepository>()
+                        .GetMaterial(Materials.DamascusIngot)
+                )?.Quantity ?? 0;
         }
 
         TreasureTradeTradeData response = (
