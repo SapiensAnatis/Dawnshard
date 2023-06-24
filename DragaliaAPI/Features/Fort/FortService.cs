@@ -128,7 +128,7 @@ public class FortService : IFortService
                 .ToListAsync()
         )
         {
-            int incomeTime = (int)build.LastIncomeTime.TotalSeconds;
+            double incomeTime = build.LastIncomeTime.TotalSeconds;
             FortPlantDetail detail = MasterAsset.FortPlant[build.FortPlantDetailId];
 
             switch (build.PlantId)
@@ -137,7 +137,7 @@ public class FortService : IFortService
                     int rupies =
                         incomeTime > detail.CostMaxTime
                             ? detail.CostMax
-                            : detail.CostMax * (incomeTime / detail.CostMaxTime);
+                            : (int)(detail.CostMax * (incomeTime / detail.CostMaxTime));
 
                     coinList.Add(new AtgenAddCoinList(build.BuildId, rupies));
                     coinTotal += rupies;
@@ -146,7 +146,7 @@ public class FortService : IFortService
                     int fruits =
                         incomeTime > detail.MaterialMaxTime
                             ? detail.MaterialMax
-                            : detail.MaterialMax * (incomeTime / detail.MaterialMaxTime);
+                            : (int)(detail.MaterialMax * (incomeTime / detail.MaterialMaxTime));
 
                     DragonfruitOdds odds = this.config.FruitOdds[detail.Odds];
 
@@ -180,7 +180,7 @@ public class FortService : IFortService
                     int stamina =
                         incomeTime > detail.StaminaMaxTime
                             ? detail.StaminaMax
-                            : detail.StaminaMax * (incomeTime / detail.StaminaMaxTime);
+                            : (int)(detail.StaminaMax * (incomeTime / detail.StaminaMaxTime));
 
                     staminaTotal += stamina;
 
