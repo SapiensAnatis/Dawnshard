@@ -2,6 +2,7 @@
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DragaliaAPI.Features.Reward;
 
@@ -12,6 +13,7 @@ public class RewardService : IRewardService
     private readonly IUserDataRepository userDataRepository;
     private readonly IAbilityCrestRepository abilityCrestRepository;
     private readonly IUnitRepository unitRepository;
+    private readonly IFortRepository fortRepository;
 
     private List<Entity> discardedEntities = new();
     private List<Entity> presentEntites = new();
@@ -24,7 +26,8 @@ public class RewardService : IRewardService
         IInventoryRepository inventoryRepository,
         IUserDataRepository userDataRepository,
         IAbilityCrestRepository abilityCrestRepository,
-        IUnitRepository unitRepository
+        IUnitRepository unitRepository,
+        IFortRepository fortRepository
     )
     {
         this.logger = logger;
@@ -32,6 +35,7 @@ public class RewardService : IRewardService
         this.userDataRepository = userDataRepository;
         this.abilityCrestRepository = abilityCrestRepository;
         this.unitRepository = unitRepository;
+        this.fortRepository = fortRepository;
     }
 
     public async Task<RewardGrantResult> GrantReward(Entity entity)
@@ -66,6 +70,9 @@ public class RewardService : IRewardService
                 break;
             case EntityTypes.Mana:
                 (await this.userDataRepository.UserData.SingleAsync()).ManaPoint += entity.Quantity;
+                break;
+            case EntityTypes.FortPlant:
+                await this.fortRepository.AddToStorage((FortPlants)entity.Id, 1);
                 break;
             default:
                 logger.LogWarning("Tried to reward unsupported entity {@entity}", entity);

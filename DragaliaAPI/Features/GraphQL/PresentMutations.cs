@@ -14,7 +14,6 @@ namespace DragaliaAPI.Features.GraphQL;
 
 public class PresentMutations : MutationBase
 {
-    private readonly IPresentRepository presentRepository;
     private readonly ApiContext apiContext;
     private readonly IPlayerIdentityService playerIdentityService;
     private readonly ILogger<PresentMutations> logger;
@@ -31,26 +30,26 @@ public class PresentMutations : MutationBase
         this.logger = logger;
     }
 
-    [GraphQLMutation("Give a player a present")]
+    [GraphQLMutation("Give a player a present.")]
     public Expression<Func<ApiContext, DbPlayerPresent>> GivePresent(
         ApiContext db,
-        long viewerId,
-        EntityTypes entityType,
-        int entityId,
-        int entityQuantity
+        GivePresentArgs args
     )
     {
-        DbPlayer player = this.GetPlayer(viewerId, query => query.Include(x => x.Presents));
+        DbPlayer player = this.GetPlayer(args.ViewerId, query => query.Include(x => x.Presents));
 
         DbPlayerPresent present =
             new()
             {
                 DeviceAccountId = player.AccountId,
-                EntityId = entityId,
-                EntityType = entityType,
+                EntityId = args.EntityId,
+                EntityType = args.EntityType,
+                EntityQuantity = args.EntityQuantity ?? 1,
+                EntityLevel = args.EntityLevel ?? 1,
                 MessageId = PresentMessage.DragaliaLostTeam,
             };
 
+        this.logger.LogInformation("Granting present {@present}", present);
         player.Presents.Add(present);
         db.SaveChanges();
 
@@ -63,10 +62,18 @@ public class PresentMutations : MutationBase
         DbPlayer player = this.GetPlayer(viewerId, query => query.Include(x => x.Presents));
 
         this.logger.LogInformation("Clearing all player presents");
-
         player.Presents.Clear();
         db.SaveChanges();
 
         return (ctx) => ctx.Players.First(x => x.AccountId == player.AccountId);
     }
+
+    [GraphQLArguments]
+    public record GivePresentArgs(
+        long ViewerId,
+        EntityTypes EntityType,
+        int EntityId,
+        int? EntityQuantity = 1,
+        int? EntityLevel = 1
+    );
 }
