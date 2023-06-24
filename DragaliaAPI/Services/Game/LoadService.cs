@@ -24,7 +24,6 @@ public class LoadService : ILoadService
     private readonly IEnumerable<ISavefileUpdate> savefileUpdates;
     private readonly IMissionService missionService;
     private readonly IPresentService presentService;
-    private readonly ITreasureTradeService treasureTradeService;
     private readonly ITradeService tradeService;
     private readonly IItemSummonService itemSummonService;
 
@@ -37,7 +36,6 @@ public class LoadService : ILoadService
         IEnumerable<ISavefileUpdate> savefileUpdates,
         IMissionService missionService,
         IPresentService presentService,
-        ITreasureTradeService treasureTradeService,
         ITradeService tradeService,
         IItemSummonService itemSummonService
     )
@@ -50,7 +48,6 @@ public class LoadService : ILoadService
         this.savefileUpdates = savefileUpdates;
         this.missionService = missionService;
         this.presentService = presentService;
-        this.treasureTradeService = treasureTradeService;
         this.tradeService = tradeService;
         this.itemSummonService = itemSummonService;
     }
