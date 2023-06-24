@@ -180,7 +180,6 @@ app.UseMiddleware<NotFoundHandlerMiddleware>();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapGraphQL<ApiContext>();
 app.MapControllers();
 app.UseResponseCompression();
 app.MapHealthChecks("/health");
