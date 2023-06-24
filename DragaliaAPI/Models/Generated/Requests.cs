@@ -1807,9 +1807,9 @@ public class FortGetDataRequest { }
 [MessagePackObject(true)]
 public class FortGetMultiIncomeRequest
 {
-    public IEnumerable<ulong> build_id_list { get; set; }
+    public IEnumerable<long> build_id_list { get; set; }
 
-    public FortGetMultiIncomeRequest(IEnumerable<ulong> build_id_list)
+    public FortGetMultiIncomeRequest(IEnumerable<long> build_id_list)
     {
         this.build_id_list = build_id_list;
     }
@@ -1891,9 +1891,9 @@ public class FortMoveRequest
 [MessagePackObject(true)]
 public class FortSetNewFortPlantRequest
 {
-    public IEnumerable<int> fort_plant_id_list { get; set; }
+    public IEnumerable<FortPlants> fort_plant_id_list { get; set; }
 
-    public FortSetNewFortPlantRequest(IEnumerable<int> fort_plant_id_list)
+    public FortSetNewFortPlantRequest(IEnumerable<FortPlants> fort_plant_id_list)
     {
         this.fort_plant_id_list = fort_plant_id_list;
     }

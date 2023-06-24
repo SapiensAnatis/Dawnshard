@@ -71,7 +71,7 @@ public class FortTest : TestFixture
                     build_start_date = start,
                     build_end_date = end,
                     fort_plant_detail_id = 10050410,
-                    build_status = FortBuildStatus.Construction,
+                    build_status = FortBuildStatus.LevelUp,
                     is_new = false,
                     remain_time = end - DateTimeOffset.UtcNow,
                     last_income_time = DateTimeOffset.UtcNow - income

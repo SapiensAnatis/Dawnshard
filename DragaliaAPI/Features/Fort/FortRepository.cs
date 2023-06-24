@@ -173,11 +173,6 @@ public class FortRepository : IFortRepository
         return result;
     }
 
-    public async Task GetFortPlantIdList(IEnumerable<int> fort_plant_id_list)
-    {
-        // What do
-    }
-
     public async Task UpdateFortMaximumCarpenter(int carpenterNum)
     {
         DbFortDetail fortDetail =

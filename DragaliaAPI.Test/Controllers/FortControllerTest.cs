@@ -1,5 +1,6 @@
-using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -11,6 +12,7 @@ public class FortControllerTest
     private readonly Mock<IFortService> mockFortService;
     private readonly Mock<IBonusService> mockBonusService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
+    private readonly Mock<IRewardService> mockRewardService;
 
     private readonly FortController fortController;
 
@@ -19,11 +21,13 @@ public class FortControllerTest
         this.mockFortService = new(MockBehavior.Strict);
         this.mockBonusService = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
+        this.mockRewardService = new(MockBehavior.Strict);
 
         this.fortController = new(
             this.mockFortService.Object,
             this.mockBonusService.Object,
-            this.mockUpdateDataService.Object
+            this.mockUpdateDataService.Object,
+            this.mockRewardService.Object
         );
     }
 
@@ -87,7 +91,7 @@ public class FortControllerTest
     }
 
     [Fact]
-    public async Task BuildAtOnce_CallsCompleteAtOnce()
+    public async Task BuildAtOnce_CallsBuildAtOnce()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
@@ -95,7 +99,7 @@ public class FortControllerTest
 
         this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         this.mockFortService
-            .Setup(x => x.CompleteAtOnce(PaymentTypes.HalidomHustleHammer, 8))
+            .Setup(x => x.BuildAtOnce(PaymentTypes.HalidomHustleHammer, 8))
             .Returns(Task.CompletedTask);
 
         this.mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
@@ -124,13 +128,13 @@ public class FortControllerTest
     }
 
     [Fact]
-    public async Task BuildCancel_CallsCancelUpgrade()
+    public async Task BuildCancel_CallsCancelBuild()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
         this.mockFortService
-            .Setup(x => x.CancelUpgrade(1))
+            .Setup(x => x.CancelBuild(1))
             .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id", BuildId = 1 });
         this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
 
@@ -150,14 +154,14 @@ public class FortControllerTest
     }
 
     [Fact]
-    public async Task BuildEnd_CallsEndUpgrade()
+    public async Task BuildEnd_CallsEndBuild()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
         this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
-        this.mockFortService.Setup(x => x.EndUpgrade(8)).Returns(Task.CompletedTask);
+        this.mockFortService.Setup(x => x.EndBuild(8)).Returns(Task.CompletedTask);
 
         this.mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
@@ -223,7 +227,7 @@ public class FortControllerTest
     }
 
     [Fact]
-    public async Task LevelupAtOnce_CallsCompleteAtOnce()
+    public async Task LevelupAtOnce_CallsLevelupAtOnce()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
@@ -231,7 +235,7 @@ public class FortControllerTest
 
         this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         this.mockFortService
-            .Setup(x => x.CompleteAtOnce(PaymentTypes.HalidomHustleHammer, 8))
+            .Setup(x => x.LevelupAtOnce(PaymentTypes.HalidomHustleHammer, 8))
             .Returns(Task.CompletedTask);
         this.mockFortService
             .Setup(x => x.GetBuildList())
@@ -271,13 +275,13 @@ public class FortControllerTest
     }
 
     [Fact]
-    public async Task LevelupCancel_CallsCancelUpgrade()
+    public async Task LevelupCancel_CallsCancelLevelup()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
         this.mockFortService
-            .Setup(x => x.CancelUpgrade(1))
+            .Setup(x => x.CancelLevelup(1))
             .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id", BuildId = 1 });
         this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
 
@@ -297,14 +301,14 @@ public class FortControllerTest
     }
 
     [Fact]
-    public async Task LevelupEnd_CallsEndUpgrade()
+    public async Task LevelupEnd_CallsEndLevelup()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
         this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
-        this.mockFortService.Setup(x => x.EndUpgrade(8)).Returns(Task.CompletedTask);
+        this.mockFortService.Setup(x => x.EndLevelup(8)).Returns(Task.CompletedTask);
         this.mockFortService
             .Setup(x => x.GetBuildList())
             .ReturnsAsync(
@@ -344,7 +348,7 @@ public class FortControllerTest
         FortDetail detail = new() { working_carpenter_num = 4 };
 
         this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
-        this.mockFortService.Setup(x => x.EndUpgrade(8)).Returns(Task.CompletedTask);
+        this.mockFortService.Setup(x => x.EndLevelup(8)).Returns(Task.CompletedTask);
         this.mockFortService
             .Setup(x => x.GetBuildList())
             .ReturnsAsync(
