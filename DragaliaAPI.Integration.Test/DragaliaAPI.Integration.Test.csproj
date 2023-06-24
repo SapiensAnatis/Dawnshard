@@ -14,6 +14,8 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="GraphQL.Client" Version="6.0.0" />
+        <PackageReference Include="GraphQL.Client.Serializer.SystemTextJson" Version="6.0.0" />
         <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.5" />
