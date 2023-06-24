@@ -2,6 +2,7 @@
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
@@ -410,5 +411,71 @@ public class FortTest : TestFixture
         );
         result.position_x.Should().Be(ExpectedPositionX);
         result.position_z.Should().Be(ExpectedPositionZ);
+    }
+
+    [Fact]
+    public async Task GetMultiIncome_ReturnsExpectedResponse()
+    {
+        DateTimeOffset lastIncome = DateTimeOffset.UtcNow - TimeSpan.FromHours(6);
+        long oldCoin = this.ApiContext.PlayerUserData
+            .AsNoTracking()
+            .First(x => x.DeviceAccountId == DeviceAccountId)
+            .Coin;
+
+        DbFortBuild rupieMine =
+            new()
+            {
+                DeviceAccountId = DeviceAccountId,
+                PlantId = FortPlants.RupieMine,
+                LastIncomeDate = lastIncome,
+                Level = 10
+            };
+        DbFortBuild dragonTree =
+            new()
+            {
+                DeviceAccountId = DeviceAccountId,
+                PlantId = FortPlants.Dragontree,
+                LastIncomeDate = lastIncome,
+                Level = 13
+            };
+
+        this.ApiContext.PlayerFortBuilds.Add(rupieMine);
+        this.ApiContext.PlayerFortBuilds.Add(dragonTree);
+
+        DbFortBuild halidom = this.ApiContext.PlayerFortBuilds.First(
+            x => x.PlantId == FortPlants.TheHalidom && x.DeviceAccountId == DeviceAccountId
+        );
+        halidom.Level = 8;
+        halidom.LastIncomeDate = lastIncome;
+
+        await this.ApiContext.SaveChangesAsync();
+
+        DragaliaResponse<FortGetMultiIncomeData> response =
+            await this.Client.PostMsgpack<FortGetMultiIncomeData>(
+                "/fort/get_multi_income",
+                new FortGetMultiIncomeRequest()
+                {
+                    build_id_list = new[] { rupieMine.BuildId, dragonTree.BuildId, halidom.BuildId }
+                }
+            );
+
+        response.data.add_coin_list.Should().NotBeEmpty();
+        AtgenAddCoinList coinList = response.data.add_coin_list.First();
+        coinList.build_id.Should().Be(rupieMine.BuildId);
+        coinList.add_coin.Should().BeCloseTo(3098, 10);
+
+        response.data.harvest_build_list.Should().NotBeEmpty();
+        AtgenHarvestBuildList harvestList = response.data.harvest_build_list.First();
+        harvestList.build_id.Should().Be(dragonTree.BuildId);
+        harvestList.add_harvest_list.Should().NotBeEmpty();
+
+        // Stamina is not implemented yet
+        // response.data.add_stamina_list.Should().NotBeEmpty();
+        // AtgenAddStaminaList staminaList = response.data.add_stamina_list.First();
+        // staminaList.build_id.Should().Be(halidom.BuildId);
+        // staminaList.add_stamina.Should().Be(12);
+
+        response.data.update_data_list.user_data.coin.Should().BeCloseTo(oldCoin + 3098, 10);
+        response.data.update_data_list.material_list.Should().NotBeEmpty();
     }
 }
