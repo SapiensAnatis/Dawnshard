@@ -1,6 +1,7 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
+using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 
 namespace DragaliaAPI.Shared.MasterAsset;
 
@@ -171,4 +172,19 @@ public static class MasterAsset
     /// Contains information about stickers.
     /// </summary>
     public static readonly MasterAssetData<int, Stamp> StampData = new("StampData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, NormalShop> NormalShop =
+        new("Shop/NormalShop.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, SpecialShop> SpecialShop =
+        new("Shop/SpecialShop.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, MaterialShop> MaterialShopDaily =
+        new("Shop/MaterialShopDaily.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, MaterialShop> MaterialShopWeekly =
+        new("Shop/MaterialShopWeekly.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, MaterialShop> MaterialShopMonthly =
+        new("Shop/MaterialShopMonthly.json", x => x.Id);
 }

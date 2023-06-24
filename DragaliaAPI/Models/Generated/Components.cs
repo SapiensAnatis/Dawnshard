@@ -8347,16 +8347,16 @@ public class ShopNotice
 public class ShopPurchaseList
 {
     public int goods_id { get; set; }
-    public int last_buy_time { get; set; }
-    public int effect_start_time { get; set; }
-    public int effect_end_time { get; set; }
+    public DateTimeOffset last_buy_time { get; set; }
+    public DateTimeOffset effect_start_time { get; set; }
+    public DateTimeOffset effect_end_time { get; set; }
     public int buy_count { get; set; }
 
     public ShopPurchaseList(
         int goods_id,
-        int last_buy_time,
-        int effect_start_time,
-        int effect_end_time,
+        DateTimeOffset last_buy_time,
+        DateTimeOffset effect_start_time,
+        DateTimeOffset effect_end_time,
         int buy_count
     )
     {
