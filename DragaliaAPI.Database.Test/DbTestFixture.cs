@@ -6,6 +6,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -23,6 +24,7 @@ public class DbTestFixture : IDisposable
         DbContextOptions<ApiContext> options = new DbContextOptionsBuilder<ApiContext>()
             .UseInMemoryDatabase($"DbTestFixture-{Guid.NewGuid()}")
             .EnableSensitiveDataLogging()
+            .ConfigureWarnings(config => config.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
         this.ApiContext = new ApiContext(options);
