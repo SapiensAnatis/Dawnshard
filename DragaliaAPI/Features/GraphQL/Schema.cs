@@ -1,4 +1,5 @@
 using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using EntityGraphQL.AspNet;
 using EntityGraphQL.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -24,11 +25,18 @@ public static class Schema
                             ctx.Players
                                 .Include(x => x.UserData)
                                 .Include(x => x.AbilityCrestList)
+                                .Include(x => x.TalismanList)
+                                .Include(x => x.StoryStates)
+                                .Include(x => x.QuestList)
                                 .Include(x => x.CharaList)
                                 .Include(x => x.DragonList)
                                 .Include(x => x.BuildList)
+                                .Include(x => x.FortDetail)
                                 .Include(x => x.Presents)
-                                .Include(x => x.PresentHistory)
+                                .Include(x => x.MaterialList)
+                                .Include(x => x.WeaponBodyList)
+                                .Include(x => x.WeaponSkinList)
+                                .Include(x => x.EquippedStampList)
                                 .AsSplitQuery()
                                 .First(
                                     x => x.UserData != null && x.UserData.ViewerId == args.viewerId
@@ -36,7 +44,7 @@ public static class Schema
                         "Fetch player by viewer id"
                     );
 
-                schema.AddMutationsFrom<PresentMutations>();
+                schema.AddMutationsFrom<MutationBase>();
             };
         });
 }
