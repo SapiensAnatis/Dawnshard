@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;

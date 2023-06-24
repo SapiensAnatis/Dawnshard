@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -34,13 +34,17 @@ public class PaymentService : IPaymentService
             return;
 
         if (hasPaymentTarget)
+        {
             logger.LogDebug("Processing {paymentType} payment {@payment}.", type, payment);
+        }
         else
+        {
             logger.LogDebug(
                 "Processing {paymentType} payment {@payment}.",
                 type,
                 new { Price = expectedPrice }
             );
+        }
 
         if (hasPaymentTarget && expectedPrice is not null && expectedPrice != payment.target_cost)
             throw new DragaliaException(ResultCode.CommonUserStatusError, "Price mismatch.");

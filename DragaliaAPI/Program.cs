@@ -136,6 +136,7 @@ builder.Services
     .AddScoped<IShopRepository, ShopRepository>()
     .AddScoped<IItemSummonService, ItemSummonService>()
     .AddScoped<IPaymentService, PaymentService>()
+    .AddScoped<IShopService, ShopService>()
     // Present feature
     .AddScoped<IPresentService, PresentService>()
     .AddScoped<IPresentControllerService, PresentControllerService>()

@@ -132,6 +132,10 @@ public class FortServiceTest
             .Setup(x => x.ProcessPayment(PaymentTypes.Wyrmite, null, expectedCost))
             .Returns(Task.CompletedTask);
 
+        this.mockPaymentService
+            .Setup(x => x.ProcessPayment(PaymentTypes.Wyrmite, null, expectedCost))
+            .Returns(Task.CompletedTask);
+
         await this.fortService.AddCarpenter(PaymentTypes.Wyrmite);
 
         this.mockUserDataRepository.VerifyAll();

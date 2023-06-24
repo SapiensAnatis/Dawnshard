@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
@@ -35,25 +35,26 @@ public class PaymentServiceTest
         int total
     )
     {
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>()
-                {
-                    new()
-                    {
-                        DeviceAccountId = IdentityTestUtils.DeviceAccountId,
-                        BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
-                        Coin = type == PaymentTypes.Coin ? total : 0,
-                        Crystal = type == PaymentTypes.Wyrmite ? total : 0,
-                        ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
-                    }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
+        DbPlayerUserData userData =
+            new()
+            {
+                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
+                Coin = type == PaymentTypes.Coin ? total : 0,
+                Crystal = type == PaymentTypes.Wyrmite ? total : 0,
+                ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
+            };
+
+        this.mockUserDataRepository.SetupUserData(userData);
 
         await this.paymentService.ProcessPayment(type, new PaymentTarget(total, cost));
+
+        userData.BuildTimePoint
+            .Should()
+            .Be(type == PaymentTypes.HalidomHustleHammer ? total - cost : 0);
+        userData.Coin.Should().Be(type == PaymentTypes.Coin ? total - cost : 0);
+        userData.Crystal.Should().Be(type == PaymentTypes.Wyrmite ? total - cost : 0);
+        userData.ManaPoint.Should().Be(type == PaymentTypes.ManaPoint ? total - cost : 0);
 
         this.mockUserDataRepository.VerifyAll();
     }
@@ -69,25 +70,26 @@ public class PaymentServiceTest
         int total
     )
     {
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>()
-                {
-                    new()
-                    {
-                        DeviceAccountId = IdentityTestUtils.DeviceAccountId,
-                        BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
-                        Coin = type == PaymentTypes.Coin ? total : 0,
-                        Crystal = type == PaymentTypes.Wyrmite ? total : 0,
-                        ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
-                    }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
+        DbPlayerUserData userData =
+            new()
+            {
+                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
+                Coin = type == PaymentTypes.Coin ? total : 0,
+                Crystal = type == PaymentTypes.Wyrmite ? total : 0,
+                ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
+            };
+
+        this.mockUserDataRepository.SetupUserData(userData);
 
         await this.paymentService.ProcessPayment(type, null, cost);
+
+        userData.BuildTimePoint
+            .Should()
+            .Be(type == PaymentTypes.HalidomHustleHammer ? total - cost : 0);
+        userData.Coin.Should().Be(type == PaymentTypes.Coin ? total - cost : 0);
+        userData.Crystal.Should().Be(type == PaymentTypes.Wyrmite ? total - cost : 0);
+        userData.ManaPoint.Should().Be(type == PaymentTypes.ManaPoint ? total - cost : 0);
 
         this.mockUserDataRepository.VerifyAll();
     }
@@ -103,23 +105,17 @@ public class PaymentServiceTest
         int total
     )
     {
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>()
-                {
-                    new()
-                    {
-                        DeviceAccountId = IdentityTestUtils.DeviceAccountId,
-                        BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
-                        Coin = type == PaymentTypes.Coin ? total : 0,
-                        Crystal = type == PaymentTypes.Wyrmite ? total : 0,
-                        ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
-                    }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
+        DbPlayerUserData userData =
+            new()
+            {
+                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
+                Coin = type == PaymentTypes.Coin ? total : 0,
+                Crystal = type == PaymentTypes.Wyrmite ? total : 0,
+                ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
+            };
+
+        this.mockUserDataRepository.SetupUserData(userData);
 
         await this.paymentService
             .Invoking(x => x.ProcessPayment(type, new PaymentTarget(total, cost)))
@@ -141,23 +137,17 @@ public class PaymentServiceTest
         int total
     )
     {
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>()
-                {
-                    new()
-                    {
-                        DeviceAccountId = IdentityTestUtils.DeviceAccountId,
-                        BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
-                        Coin = type == PaymentTypes.Coin ? total : 0,
-                        Crystal = type == PaymentTypes.Wyrmite ? total : 0,
-                        ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
-                    }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
+        DbPlayerUserData userData =
+            new()
+            {
+                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
+                Coin = type == PaymentTypes.Coin ? total : 0,
+                Crystal = type == PaymentTypes.Wyrmite ? total : 0,
+                ManaPoint = type == PaymentTypes.ManaPoint ? total : 0,
+            };
+
+        this.mockUserDataRepository.SetupUserData(userData);
 
         await this.paymentService
             .Invoking(x => x.ProcessPayment(type, null, cost))
