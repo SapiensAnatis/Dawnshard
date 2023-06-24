@@ -6,5 +6,8 @@ public record AbilityCrestTrade(
     int Id,
     AbilityCrests AbilityCrestId,
     int NeedDewPoint,
-    int Priority
+    int Priority,
+    DateTimeOffset CompleteDate,
+    DateTimeOffset PickupViewStartDate,
+    DateTimeOffset PickupViewEndDate
 );

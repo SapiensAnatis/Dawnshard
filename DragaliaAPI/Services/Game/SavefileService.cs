@@ -9,6 +9,7 @@ using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace DragaliaAPI.Services.Game;
@@ -233,6 +234,13 @@ public class SavefileService : ISavefileService
 
             this.logger.LogDebug(
                 "SaveChangesAsync() #1 step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
+            this.AddShopInfo();
+
+            this.logger.LogDebug(
+                "Adding shop info step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
@@ -509,11 +517,8 @@ public class SavefileService : ISavefileService
 
     public async Task Reset()
     {
-        this.Delete();
-
         // Unlike importing, this will not preserve the viewer id
         await this.Create();
-        await this.apiContext.SaveChangesAsync();
     }
 
     public IQueryable<DbPlayer> Load()
@@ -547,7 +552,12 @@ public class SavefileService : ISavefileService
 
         this.logger.LogInformation("Creating new savefile for account ID {id}", deviceAccountId);
 
+        await using IDbContextTransaction transaction =
+            await this.apiContext.Database.BeginTransactionAsync();
+
         this.Delete();
+        await this.apiContext.SaveChangesAsync();
+
         this.apiContext.Players.Add(
             new() { AccountId = deviceAccountId, SavefileVersion = this.maxSavefileVersion }
         );
@@ -564,7 +574,10 @@ public class SavefileService : ISavefileService
         await this.AddDefaultCharacters(deviceAccountId);
         this.AddDefaultEquippedStamps();
         this.AddShopInfo();
+
         await this.apiContext.SaveChangesAsync();
+
+        await transaction.CommitAsync();
     }
 
     public async Task Create()

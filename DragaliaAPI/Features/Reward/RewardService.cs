@@ -64,6 +64,9 @@ public class RewardService : IRewardService
                     ?? this.inventoryRepository.AddMaterial((Materials)entity.Id)
                 ).Quantity += entity.Quantity;
                 break;
+            case EntityTypes.Mana:
+                (await this.userDataRepository.UserData.SingleAsync()).ManaPoint += entity.Quantity;
+                break;
             default:
                 logger.LogWarning("Tried to reward unsupported entity {@entity}", entity);
                 return RewardGrantResult.FailError;

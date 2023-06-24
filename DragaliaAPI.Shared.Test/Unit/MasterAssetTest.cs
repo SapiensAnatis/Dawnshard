@@ -491,12 +491,13 @@ public class MasterAssetTest
         abilityCrestTrade
             .Should()
             .BeEquivalentTo(
-                new AbilityCrestTrade(
-                    Id: 5101,
-                    AbilityCrestId: AbilityCrests.SweetSurprise,
-                    NeedDewPoint: 4000,
-                    Priority: 5199
-                )
+                new
+                {
+                    Id = 5101,
+                    AbilityCrestId = AbilityCrests.SweetSurprise,
+                    NeedDewPoint = 4000,
+                    Priority = 5199
+                }
             );
     }
 

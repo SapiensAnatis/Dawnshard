@@ -1,5 +1,7 @@
 ﻿using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using MessagePack.Resolvers;
 using MessagePack;
@@ -13,10 +15,18 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class MypageController : DragaliaControllerBase
 {
     private readonly IMissionService missionService;
+    private readonly IItemSummonService itemSummonService;
+    private readonly IUpdateDataService updateDataService;
 
-    public MypageController(IMissionService missionService)
+    public MypageController(
+        IMissionService missionService,
+        IItemSummonService itemSummonService,
+        IUpdateDataService updateDataService
+    )
     {
         this.missionService = missionService;
+        this.itemSummonService = itemSummonService;
+        this.updateDataService = updateDataService;
     }
 
     private static readonly List<QuestScheduleDetailList> AvailableQuestSchedule; // Used for unlocking void battles
@@ -35,25 +45,16 @@ public class MypageController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> Info()
     {
-        /*byte[] blob = System.IO.File.ReadAllBytes("Resources/mypage_info");
-        dynamic preset_mypage = MessagePackSerializer.Deserialize<dynamic>(
-            blob,
-            ContractlessStandardResolver.Options
-        );
+        MypageInfoData resp = new();
 
-        return preset_mypage;*/
+        resp.user_summon_list = new List<UserSummonList>();
+        resp.quest_event_schedule_list = new List<QuestEventScheduleList>();
+        resp.quest_schedule_detail_list = AvailableQuestSchedule;
+        resp.is_shop_notification =
+            (await this.itemSummonService.GetOrRefreshItemSummon()).daily_summon_count == 0;
+        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+        resp.update_data_list.mission_notice = await this.missionService.GetMissionNotice(null);
 
-        return Ok(
-            new MypageInfoData()
-            {
-                user_summon_list = new List<UserSummonList>(),
-                quest_event_schedule_list = new List<QuestEventScheduleList>(),
-                quest_schedule_detail_list = AvailableQuestSchedule,
-                update_data_list = new UpdateDataList()
-                {
-                    mission_notice = await this.missionService.GetMissionNotice(null)
-                }
-            }
-        );
+        return Ok(resp);
     }
 }

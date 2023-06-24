@@ -4,7 +4,8 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.SavefileUpdate;
-using DragaliaAPI.Features.Stamp;
+using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -23,6 +24,8 @@ public class LoadService : ILoadService
     private readonly IEnumerable<ISavefileUpdate> savefileUpdates;
     private readonly IMissionService missionService;
     private readonly IPresentService presentService;
+    private readonly ITradeService tradeService;
+    private readonly IItemSummonService itemSummonService;
 
     public LoadService(
         ISavefileService savefileService,
@@ -32,7 +35,9 @@ public class LoadService : ILoadService
         IOptionsMonitor<PhotonOptions> photonOptions,
         IEnumerable<ISavefileUpdate> savefileUpdates,
         IMissionService missionService,
-        IPresentService presentService
+        IPresentService presentService,
+        ITradeService tradeService,
+        IItemSummonService itemSummonService
     )
     {
         this.savefileService = savefileService;
@@ -43,6 +48,8 @@ public class LoadService : ILoadService
         this.savefileUpdates = savefileUpdates;
         this.missionService = missionService;
         this.presentService = presentService;
+        this.tradeService = tradeService;
+        this.itemSummonService = itemSummonService;
     }
 
     public async Task<LoadIndexData> BuildIndexData()
@@ -57,6 +64,8 @@ public class LoadService : ILoadService
         FortBonusList bonusList = await bonusService.GetBonusList();
 
         this.logger.LogInformation("{time} ms: Bonus list acquired", stopwatch.ElapsedMilliseconds);
+
+        // TODO/NOTE: special shop purchase list is not set here. maybe change once that fully works?
 
         LoadIndexData data =
             new()
@@ -98,7 +107,6 @@ public class LoadService : ILoadService
                 present_notice = await this.presentService.GetPresentNotice(),
                 guild_notice = new(0, 0, 0, 0, 0),
                 //fort_plant_list = buildSummary,
-                shop_notice = new ShopNotice(0),
                 server_time = DateTimeOffset.UtcNow,
                 stamina_multi_system_max = 99,
                 stamina_multi_user_max = 12,
@@ -114,7 +122,12 @@ public class LoadService : ILoadService
                 equip_stamp_list = savefile.EquippedStampList
                     .Select(this.mapper.Map<DbEquippedStamp, EquipStampList>)
                     .OrderBy(x => x.slot),
-                quest_entry_condition_list = await this.missionService.GetEntryConditions()
+                quest_entry_condition_list = await this.missionService.GetEntryConditions(),
+                user_treasure_trade_list = await this.tradeService.GetUserTreasureTradeList(),
+                treasure_trade_all_list = this.tradeService.GetCurrentTreasureTradeList(),
+                shop_notice = new ShopNotice(
+                    (await this.itemSummonService.GetOrRefreshItemSummon()).daily_summon_count == 0
+                )
             };
 
         this.logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);

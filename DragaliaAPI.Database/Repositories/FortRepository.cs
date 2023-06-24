@@ -119,6 +119,15 @@ public class FortRepository : IFortRepository
         }
     }
 
+    public async Task AddDragontree()
+    {
+        if (!await this.Builds.AnyAsync(x => x.PlantId == FortPlants.Dragontree))
+        {
+            this.logger.LogDebug("Adding dragontree to storage.");
+            await this.AddToStorage(FortPlants.Dragontree, 1);
+        }
+    }
+
     public async Task<DbFortDetail> GetFortDetail()
     {
         DbFortDetail? details = await this.apiContext.PlayerFortDetails.FindAsync(

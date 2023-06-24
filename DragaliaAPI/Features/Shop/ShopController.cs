@@ -1,4 +1,5 @@
 using DragaliaAPI.Controllers;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,16 +12,19 @@ public class ShopController : DragaliaControllerBase
     private readonly IUpdateDataService updateDataService;
     private readonly IItemSummonService itemSummonService;
     private readonly IShopService shopService;
+    private readonly IRewardService rewardService;
 
     public ShopController(
         IUpdateDataService updateDataService,
         IItemSummonService itemSummonService,
-        IShopService shopService
+        IShopService shopService,
+        IRewardService rewardService
     )
     {
         this.updateDataService = updateDataService;
         this.itemSummonService = itemSummonService;
         this.shopService = shopService;
+        this.rewardService = rewardService;
     }
 
     [HttpPost("get_list")]
@@ -67,6 +71,7 @@ public class ShopController : DragaliaControllerBase
         resp.item_summon_reward_list = await this.itemSummonService.DoSummon(request);
         resp.user_item_summon = await this.itemSummonService.GetOrRefreshItemSummon();
         resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+        resp.entity_result = this.rewardService.GetEntityResult();
 
         return Ok(resp);
     }

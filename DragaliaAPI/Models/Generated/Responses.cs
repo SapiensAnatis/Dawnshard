@@ -4562,7 +4562,9 @@ public class MypageInfoData
     public int is_receive_event_damage_reward { get; set; }
     public int is_view_start_dash { get; set; }
     public int is_view_dream_select { get; set; }
-    public int is_shop_notification { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_shop_notification { get; set; }
     public RepeatData repeat_data { get; set; }
     public IEnumerable<UserSummonList> user_summon_list { get; set; }
     public IEnumerable<QuestEventScheduleList> quest_event_schedule_list { get; set; }
@@ -4577,7 +4579,7 @@ public class MypageInfoData
         int is_receive_event_damage_reward,
         int is_view_start_dash,
         int is_view_dream_select,
-        int is_shop_notification,
+        bool is_shop_notification,
         RepeatData repeat_data,
         IEnumerable<UserSummonList> user_summon_list,
         IEnumerable<QuestEventScheduleList> quest_event_schedule_list,
