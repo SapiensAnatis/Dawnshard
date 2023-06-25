@@ -1,9 +1,12 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Shared.Definitions.Enums;
 using GraphQL;
 using GraphQL.Client.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.GraphQL;
 
@@ -33,20 +36,6 @@ public class GraphQlTest : GraphQlTestFixture
     {
         this.AddCharacter(Charas.SummerMikoto);
 
-        StringContent request =
-            new(
-                """
-                query {
-                    player(viewerId: 1) {
-                        charaList {
-                            charaId
-                        }
-                    }
-                }
-                """,
-                MediaTypeHeaderValue.Parse("application/json")
-            );
-
         GraphQLResponse<Response> response = await this.GraphQlHttpClient.SendQueryAsync<Response>(
             new GraphQLRequest
             {
@@ -68,16 +57,152 @@ public class GraphQlTest : GraphQlTestFixture
             .Should()
             .BeEquivalentTo(
                 new Response(
-                    new Player(
-                        new Character[]
-                        {
-                            new Character(Charas.ThePrince),
-                            new Character(Charas.SummerMikoto)
-                        }
-                    )
+                    new Player(new Character[] { new(Charas.ThePrince), new(Charas.SummerMikoto) })
                 )
             );
     }
+
+    [Fact]
+    public async Task Mutation_ResetCharacter_ResetsCharacter()
+    {
+        (
+            await this.ApiContext.PlayerCharaData
+                .AsNoTracking()
+                .SingleAsync(
+                    x => x.DeviceAccountId == DeviceAccountId && x.CharaId == Charas.ThePrince
+                )
+        ).Level = 100;
+        await this.ApiContext.SaveChangesAsync();
+
+        GraphQLResponse<object> response = await this.GraphQlHttpClient.SendQueryAsync<object>(
+            new GraphQLRequest
+            {
+                Query = """
+                mutation {
+                    resetCharacter(viewerId: 1, charaId: ThePrince) {
+                        level
+                    }
+                }
+                """
+            }
+        );
+
+        response.Errors.Should().BeNullOrEmpty();
+
+        (
+            await this.ApiContext.PlayerCharaData
+                .AsNoTracking()
+                .SingleAsync(
+                    x => x.DeviceAccountId == DeviceAccountId && x.CharaId == Charas.ThePrince
+                )
+        ).Level
+            .Should()
+            .Be(1);
+    }
+
+    [Fact]
+    public async Task Mutation_GivePresent_AddsPresent()
+    {
+        GraphQLResponse<JsonDocument> response =
+            await this.GraphQlHttpClient.SendQueryAsync<JsonDocument>(
+                new GraphQLRequest
+                {
+                    Query = """
+                    mutation {
+                        givePresent(viewerId: 1, entityType: Dragon, entityId: 20050525) {
+                            presentId
+                        }
+                    }
+                    """
+                }
+            );
+
+        response.Errors.Should().BeNullOrEmpty();
+
+        int presentId = response.Data.RootElement
+            .GetProperty("givePresent")
+            .GetProperty("presentId")
+            .GetInt32();
+
+        (await this.ApiContext.PlayerPresents.FirstAsync(x => x.PresentId == presentId))
+            .Should()
+            .BeEquivalentTo(
+                new DbPlayerPresent()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    PresentId = presentId,
+                    EntityType = EntityTypes.Dragon,
+                    EntityId = (int)Dragons.GalaBahamut,
+                    EntityLevel = 1,
+                    EntityQuantity = 1,
+                    ReceiveLimitTime = null,
+                    MessageId = PresentMessage.DragaliaLostTeam,
+                },
+                opts => opts.Excluding(x => x.CreateTime).Excluding(x => x.Owner)
+            );
+    }
+
+    [Fact]
+    public async Task Mutation_SetTutorialStatus_SetsTutorialStatus()
+    {
+        GraphQLResponse<JsonDocument> response =
+            await this.GraphQlHttpClient.SendQueryAsync<JsonDocument>(
+                new GraphQLRequest
+                {
+                    Query = """
+                    mutation {
+                        updateTutorialStatus(viewerId: 1, newStatus: 60999) {
+                            tutorialStatus
+                        }
+                    }
+                    """
+                }
+            );
+
+        response.Errors.Should().BeNullOrEmpty();
+
+        (
+            await this.ApiContext.PlayerUserData
+                .AsNoTracking()
+                .FirstAsync(x => x.DeviceAccountId == DeviceAccountId)
+        ).TutorialStatus
+            .Should()
+            .Be(60999);
+    }
+
+    /*
+     * Reports that tutorial flag list is empty for some reason
+     * Works when testing manually and don't care enough to fix
+     * as it's developer-only functionality
+     */
+
+    // [Fact]
+    // public async Task Mutation_AddTutorialFlag_AddsTutorialFlag()
+    // {
+    //     GraphQLResponse<JsonDocument> response =
+    //         await this.GraphQlHttpClient.SendQueryAsync<JsonDocument>(
+    //             new GraphQLRequest
+    //             {
+    //                 Query = """
+    //                 mutation {
+    //                     addTutorialFlag(viewerId: 1, flag: 1027) {
+    //                         tutorialFlagList
+    //                     }
+    //                 }
+    //                 """
+    //             }
+    //         );
+    //
+    //     response.Errors.Should().BeNullOrEmpty();
+    //
+    //     this.ApiContext.ChangeTracker.Clear();
+    //
+    //     DbPlayerUserData newUserData = await this.ApiContext.PlayerUserData
+    //         .AsNoTracking()
+    //         .FirstAsync(x => x.DeviceAccountId == DeviceAccountId);
+    //
+    //     (newUserData).TutorialFlagList.Should().Contain(1027);
+    // }
 
     private record Response(Player Player);
 

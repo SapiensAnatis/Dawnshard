@@ -78,6 +78,10 @@ public class PresentTest : TestFixture
                             create_time = DateTimeOffset.UtcNow,
                             receive_limit_time = DateTimeOffset.UnixEpoch,
                         }
+                    },
+                    update_data_list = new UpdateDataList()
+                    {
+                        present_notice = new() { present_count = 2, present_limit_count = 0 }
                     }
                 }
             );
@@ -132,6 +136,10 @@ public class PresentTest : TestFixture
                             create_time = DateTimeOffset.UtcNow,
                             receive_limit_time = expireDate,
                         }
+                    },
+                    update_data_list = new UpdateDataList()
+                    {
+                        present_notice = new() { present_count = 0, present_limit_count = 1 }
                     }
                 }
             );
