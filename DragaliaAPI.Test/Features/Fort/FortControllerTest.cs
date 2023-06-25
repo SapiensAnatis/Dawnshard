@@ -29,18 +29,6 @@ public class FortControllerTest
             mockUpdateDataService.Object,
             mockRewardService.Object
         );
-
-        mockFortService
-            .Setup(x => x.GetRupieProduction())
-            .ReturnsAsync(new AtgenProductionRp(0, 0));
-
-        mockFortService
-            .Setup(x => x.GetDragonfruitProduction())
-            .ReturnsAsync(new AtgenProductionRp(0, 0));
-
-        mockFortService
-            .Setup(x => x.GetStaminaProduction())
-            .ReturnsAsync(new AtgenProductionRp(0, 0));
     }
 
     [Fact]
@@ -55,6 +43,18 @@ public class FortControllerTest
             };
         List<BuildList> buildList = new() { new() { fort_plant_detail_id = 4 } };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
+
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(new UpdateDataList());
 
@@ -107,6 +107,18 @@ public class FortControllerTest
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         mockFortService
             .Setup(x => x.BuildAtOnce(PaymentTypes.HalidomHustleHammer, 8))
@@ -144,6 +156,18 @@ public class FortControllerTest
         FortDetail detail = new() { working_carpenter_num = 4 };
 
         mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
             .Setup(x => x.CancelBuild(1))
             .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id", BuildId = 1 });
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
@@ -169,6 +193,18 @@ public class FortControllerTest
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
         FortDetail detail = new() { working_carpenter_num = 4 };
+
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
 
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         mockFortService.Setup(x => x.EndBuild(8)).Returns(Task.CompletedTask);
@@ -242,6 +278,18 @@ public class FortControllerTest
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
         FortDetail detail = new() { working_carpenter_num = 4 };
+
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
 
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         mockFortService
@@ -317,6 +365,18 @@ public class FortControllerTest
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         mockFortService.Setup(x => x.EndLevelup(8)).Returns(Task.CompletedTask);
         mockFortService
@@ -356,6 +416,18 @@ public class FortControllerTest
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
         FortDetail detail = new() { working_carpenter_num = 4 };
+
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
 
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         mockFortService.Setup(x => x.EndLevelup(8)).Returns(Task.CompletedTask);
@@ -444,6 +516,18 @@ public class FortControllerTest
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
+
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
 
         mockFortService
             .Setup(x => x.Move(1, 2, 3))

@@ -35,16 +35,54 @@ public class FortServiceTest
 
     public FortServiceTest()
     {
-        mockFortRepository = new(MockBehavior.Strict);
-        mockInventoryRepository = new(MockBehavior.Strict);
-        mockUserDataRepository = new(MockBehavior.Strict);
-        mockLogger = new(MockBehavior.Loose);
-        mockPlayerIdentityService = new(MockBehavior.Strict);
-        mapper = UnitTestUtils.CreateMapper();
-        mockMissionProgressionService = new(MockBehavior.Strict);
-        mockPaymentService = new(MockBehavior.Strict);
-        mockRewardService = new(MockBehavior.Strict);
-        mockConfig = new(MockBehavior.Strict);
+        this.mockFortRepository = new(MockBehavior.Strict);
+        this.mockInventoryRepository = new(MockBehavior.Strict);
+        this.mockUserDataRepository = new(MockBehavior.Strict);
+        this.mockLogger = new(MockBehavior.Loose);
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
+        this.mapper = UnitTestUtils.CreateMapper();
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockPaymentService = new(MockBehavior.Strict);
+        this.mockRewardService = new(MockBehavior.Strict);
+        this.mockConfig = new(MockBehavior.Strict);
+
+        this.mockConfig
+            .SetupGet(x => x.CurrentValue)
+            .Returns(
+                new DragonfruitConfig
+                {
+                    FruitOdds = new Dictionary<string, DragonfruitOdds>
+                    {
+                        {
+                            "NormalOdds",
+                            new DragonfruitOdds()
+                            {
+                                Normal = 100,
+                                Ripe = 0,
+                                Succulent = 0
+                            }
+                        },
+                        {
+                            "RipeOdds",
+                            new DragonfruitOdds()
+                            {
+                                Normal = 0,
+                                Ripe = 100,
+                                Succulent = 0
+                            }
+                        },
+                        {
+                            "SucculentOdds",
+                            new DragonfruitOdds()
+                            {
+                                Normal = 0,
+                                Ripe = 0,
+                                Succulent = 100
+                            }
+                        }
+                    }
+                }
+            );
 
         fortService = new FortService(
             mockFortRepository.Object,
