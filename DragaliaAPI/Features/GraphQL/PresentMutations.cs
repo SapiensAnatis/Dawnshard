@@ -1,13 +1,17 @@
 using System.Linq.Expressions;
+using System.Text.Json.Serialization;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using EntityGraphQL.Schema;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 using ILogger = Serilog.ILogger;
 
 namespace DragaliaAPI.Features.GraphQL;
@@ -71,7 +75,7 @@ public class PresentMutations : MutationBase
     [GraphQLArguments]
     public record GivePresentArgs(
         long ViewerId,
-        EntityTypes EntityType,
+        [property: JsonConverter(typeof(JsonStringEnumConverter))] EntityTypes EntityType,
         int EntityId,
         int? EntityQuantity = 1,
         int? EntityLevel = 1

@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Text.Json.Serialization;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -55,5 +56,8 @@ public class CharaMutations : MutationBase
     }
 
     [GraphQLArguments]
-    public record ResetCharacterArgs(long ViewerId, Charas CharaId);
+    public record ResetCharacterArgs(
+        long ViewerId,
+        [property: JsonConverter(typeof(JsonStringEnumConverter))] Charas CharaId
+    );
 }
