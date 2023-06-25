@@ -153,17 +153,6 @@ public class FortServiceTest
         int expectedCost
     )
     {
-        mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>
-                {
-                    new() { DeviceAccountId = "id", Crystal = 10000 }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
-
         mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(
@@ -191,17 +180,6 @@ public class FortServiceTest
     [Fact]
     public async Task AddCarpenter_OverMaxCarpenters_Throws()
     {
-        mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>
-                {
-                    new() { DeviceAccountId = "id", Crystal = 10000 }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
-
         mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(new DbFortDetail() { CarpenterNum = 5, DeviceAccountId = "id" });
@@ -220,17 +198,6 @@ public class FortServiceTest
     [Fact]
     public async Task AddCarpenter_InvalidPaymentType_Throws()
     {
-        mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>
-                {
-                    new() { DeviceAccountId = "id", Crystal = 10000 }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
-
         mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(new DbFortDetail() { CarpenterNum = 4, DeviceAccountId = "id" });
@@ -355,7 +322,7 @@ public class FortServiceTest
                 DeviceAccountId = "id",
                 BuildStartDate = DateTimeOffset.UnixEpoch,
                 BuildEndDate = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(1),
-                Level = 3,
+                Level = 2,
             };
         mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
@@ -382,7 +349,7 @@ public class FortServiceTest
                 DeviceAccountId = "id",
                 BuildStartDate = DateTimeOffset.MinValue,
                 BuildEndDate = DateTimeOffset.MaxValue,
-                Level = 3,
+                Level = 2,
             };
         mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
@@ -434,6 +401,10 @@ public class FortServiceTest
 
         mockInventoryRepository
             .Setup(x => x.UpdateQuantity(new Dictionary<Materials, int>()))
+            .Returns(Task.CompletedTask);
+
+        mockPaymentService
+            .Setup(x => x.ProcessPayment(PaymentTypes.Coin, null, 300))
             .Returns(Task.CompletedTask);
 
         await fortService.BuildStart(FortPlants.BlueFlowers, 2, 3);
