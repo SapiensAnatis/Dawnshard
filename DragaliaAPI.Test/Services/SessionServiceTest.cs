@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models;
+﻿using DragaliaAPI.Helpers;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
@@ -16,6 +17,7 @@ public class SessionServiceTest
     // TODO: Refactor this file to use the new methods
     private readonly Mock<ILogger<SessionService>> mockLogger;
     private readonly Mock<IOptionsMonitor<RedisOptions>> mockOptions;
+    private readonly Mock<IDateTimeProvider> mockDateTimeProvider;
     private readonly SessionService sessionService;
 
     [Obsolete(ObsoleteReasons.BaaS)]
@@ -30,6 +32,7 @@ public class SessionServiceTest
     {
         this.mockLogger = new(MockBehavior.Loose);
         this.mockOptions = new(MockBehavior.Strict);
+        this.mockDateTimeProvider = new(MockBehavior.Strict);
 
         IOptions<MemoryDistributedCacheOptions> opts = Options.Create(
             new MemoryDistributedCacheOptions()
@@ -40,13 +43,25 @@ public class SessionServiceTest
             .SetupGet(x => x.CurrentValue)
             .Returns(new RedisOptions() { SessionExpiryTimeMinutes = 1 });
 
-        sessionService = new(testCache, mockOptions.Object, mockLogger.Object);
+        sessionService = new(
+            testCache,
+            mockOptions.Object,
+            mockLogger.Object,
+            mockDateTimeProvider.Object
+        );
+
+        this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UnixEpoch);
     }
 
     [Fact]
     public async Task CreateSession_CanGetAfterwards()
     {
-        string sessionId = await this.sessionService.CreateSession("token", "id", 1);
+        string sessionId = await this.sessionService.CreateSession(
+            "token",
+            "id",
+            1,
+            DateTimeOffset.UnixEpoch
+        );
 
         Session session = await this.sessionService.LoadSessionSessionId(sessionId);
 
@@ -54,12 +69,18 @@ public class SessionServiceTest
         session.IdToken.Should().Be("token");
         session.DeviceAccountId.Should().Be("id");
         session.ViewerId.Should().Be(1);
+        session.LoginTime.Should().Be(DateTimeOffset.UnixEpoch);
     }
 
     [Fact]
     public async Task CreateSession_SetsExpectedKeys()
     {
-        string sessionId = await this.sessionService.CreateSession("token", "id", 1);
+        string sessionId = await this.sessionService.CreateSession(
+            "token",
+            "id",
+            1,
+            DateTimeOffset.UnixEpoch
+        );
 
         this.testCache.GetString($":session:session_id:{sessionId}").Should().NotBeNull();
         this.testCache.GetString($":session:id_token:token").Should().NotBeNull();

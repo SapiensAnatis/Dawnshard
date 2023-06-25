@@ -16,6 +16,7 @@ namespace DragaliaAPI.Features.Login;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
+[BypassDailyReset]
 public class LoginController : DragaliaControllerBase
 {
     private readonly IUserDataRepository userDataRepository;
