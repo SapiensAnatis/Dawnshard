@@ -16,7 +16,7 @@ using Microsoft.Extensions.Options;
 using MockQueryable.Moq;
 using Range = Moq.Range;
 
-namespace DragaliaAPI.Test.Services;
+namespace DragaliaAPI.Test.Features.Fort;
 
 public class FortServiceTest
 {
@@ -35,28 +35,28 @@ public class FortServiceTest
 
     public FortServiceTest()
     {
-        this.mockFortRepository = new(MockBehavior.Strict);
-        this.mockInventoryRepository = new(MockBehavior.Strict);
-        this.mockUserDataRepository = new(MockBehavior.Strict);
-        this.mockLogger = new(MockBehavior.Loose);
-        this.mockPlayerIdentityService = new(MockBehavior.Strict);
-        this.mapper = UnitTestUtils.CreateMapper();
-        this.mockMissionProgressionService = new(MockBehavior.Strict);
-        this.mockPaymentService = new(MockBehavior.Strict);
-        this.mockRewardService = new(MockBehavior.Strict);
-        this.mockConfig = new(MockBehavior.Strict);
+        mockFortRepository = new(MockBehavior.Strict);
+        mockInventoryRepository = new(MockBehavior.Strict);
+        mockUserDataRepository = new(MockBehavior.Strict);
+        mockLogger = new(MockBehavior.Loose);
+        mockPlayerIdentityService = new(MockBehavior.Strict);
+        mapper = UnitTestUtils.CreateMapper();
+        mockMissionProgressionService = new(MockBehavior.Strict);
+        mockPaymentService = new(MockBehavior.Strict);
+        mockRewardService = new(MockBehavior.Strict);
+        mockConfig = new(MockBehavior.Strict);
 
-        this.fortService = new FortService(
-            this.mockFortRepository.Object,
-            this.mockUserDataRepository.Object,
-            this.mockInventoryRepository.Object,
-            this.mockLogger.Object,
-            this.mockPlayerIdentityService.Object,
-            this.mapper,
-            this.mockMissionProgressionService.Object,
-            this.mockPaymentService.Object,
-            this.mockRewardService.Object,
-            this.mockConfig.Object
+        fortService = new FortService(
+            mockFortRepository.Object,
+            mockUserDataRepository.Object,
+            mockInventoryRepository.Object,
+            mockLogger.Object,
+            mockPlayerIdentityService.Object,
+            mapper,
+            mockMissionProgressionService.Object,
+            mockPaymentService.Object,
+            mockRewardService.Object,
+            mockConfig.Object
         );
 
         UnitTestUtils.ApplyDateTimeAssertionOptions();
@@ -65,7 +65,7 @@ public class FortServiceTest
     [Fact]
     public async Task GetBuildList_ReturnsBuildList()
     {
-        this.mockFortRepository
+        mockFortRepository
             .Setup(x => x.Builds)
             .Returns(
                 new List<DbFortBuild>()
@@ -84,7 +84,7 @@ public class FortServiceTest
                     .BuildMock()
             );
 
-        (await this.fortService.GetBuildList())
+        (await fortService.GetBuildList())
             .Should()
             .BeEquivalentTo(
                 new List<BuildList>()
@@ -103,7 +103,7 @@ public class FortServiceTest
                 opts => opts.Excluding(x => x.remain_time).Excluding(x => x.last_income_time)
             );
 
-        this.mockFortRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
     }
 
     [Theory]
@@ -115,7 +115,7 @@ public class FortServiceTest
         int expectedCost
     )
     {
-        this.mockUserDataRepository
+        mockUserDataRepository
             .SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>
@@ -126,34 +126,34 @@ public class FortServiceTest
                     .BuildMock()
             );
 
-        this.mockFortRepository
+        mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(
                 new DbFortDetail() { CarpenterNum = existingCarpenters, DeviceAccountId = "id" }
             );
-        this.mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(0);
-        this.mockFortRepository
+        mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(0);
+        mockFortRepository
             .Setup(x => x.UpdateFortMaximumCarpenter(existingCarpenters + 1))
             .Returns(Task.CompletedTask);
 
-        this.mockPaymentService
+        mockPaymentService
             .Setup(x => x.ProcessPayment(PaymentTypes.Wyrmite, null, expectedCost))
             .Returns(Task.CompletedTask);
 
-        this.mockPaymentService
+        mockPaymentService
             .Setup(x => x.ProcessPayment(PaymentTypes.Wyrmite, null, expectedCost))
             .Returns(Task.CompletedTask);
 
-        await this.fortService.AddCarpenter(PaymentTypes.Wyrmite);
+        await fortService.AddCarpenter(PaymentTypes.Wyrmite);
 
-        this.mockUserDataRepository.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
+        mockUserDataRepository.VerifyAll();
+        mockUserDataRepository.VerifyAll();
     }
 
     [Fact]
     public async Task AddCarpenter_OverMaxCarpenters_Throws()
     {
-        this.mockUserDataRepository
+        mockUserDataRepository
             .SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>
@@ -164,25 +164,25 @@ public class FortServiceTest
                     .BuildMock()
             );
 
-        this.mockFortRepository
+        mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(new DbFortDetail() { CarpenterNum = 5, DeviceAccountId = "id" });
-        this.mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(0);
+        mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(0);
 
-        await this.fortService
+        await fortService
             .Invoking(x => x.AddCarpenter(PaymentTypes.Diamantium))
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
             .Where(e => e.Code == ResultCode.FortExtendCarpenterLimit);
 
-        this.mockUserDataRepository.VerifyAll();
-        this.mockFortRepository.VerifyAll();
+        mockUserDataRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
     }
 
     [Fact]
     public async Task AddCarpenter_InvalidPaymentType_Throws()
     {
-        this.mockUserDataRepository
+        mockUserDataRepository
             .SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>
@@ -193,19 +193,19 @@ public class FortServiceTest
                     .BuildMock()
             );
 
-        this.mockFortRepository
+        mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(new DbFortDetail() { CarpenterNum = 4, DeviceAccountId = "id" });
-        this.mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(0);
+        mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(0);
 
-        await this.fortService
+        await fortService
             .Invoking(x => x.AddCarpenter(PaymentTypes.Ticket))
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
             .Where(e => e.Code == ResultCode.ShopPaymentTypeInvalid);
 
-        this.mockUserDataRepository.VerifyAll();
-        this.mockFortRepository.VerifyAll();
+        mockUserDataRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
     }
 
     [Fact]
@@ -221,21 +221,21 @@ public class FortServiceTest
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(5)
             };
 
-        this.mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(0));
+        mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(0));
 
-        this.mockMissionProgressionService.Setup(x => x.OnFortLevelup());
+        mockMissionProgressionService.Setup(x => x.OnFortLevelup());
 
-        this.mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
+        mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
-        this.mockPaymentService
+        mockPaymentService
             .Setup(x => x.ProcessPayment(PaymentTypes.HalidomHustleHammer, null, 1))
             .Returns(Task.CompletedTask);
 
-        await this.fortService.LevelupAtOnce(PaymentTypes.HalidomHustleHammer, 1);
+        await fortService.LevelupAtOnce(PaymentTypes.HalidomHustleHammer, 1);
 
-        this.mockPaymentService.VerifyAll();
-        this.mockMissionProgressionService.VerifyAll();
-        this.mockFortRepository.VerifyAll();
+        mockPaymentService.VerifyAll();
+        mockMissionProgressionService.VerifyAll();
+        mockFortRepository.VerifyAll();
     }
 
     [Fact]
@@ -250,15 +250,15 @@ public class FortServiceTest
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(1),
                 Level = 3,
             };
-        this.mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
+        mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
-        await this.fortService.CancelLevelup(1);
+        await fortService.CancelLevelup(1);
 
         build.Level.Should().Be(2);
         build.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
         build.BuildEndDate.Should().Be(DateTimeOffset.UnixEpoch);
 
-        this.mockFortRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
     }
 
     [Fact]
@@ -273,12 +273,12 @@ public class FortServiceTest
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(1),
                 Level = 0,
             };
-        this.mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
-        this.mockFortRepository.Setup(x => x.DeleteBuild(build));
+        mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
+        mockFortRepository.Setup(x => x.DeleteBuild(build));
 
-        await this.fortService.CancelBuild(1);
+        await fortService.CancelBuild(1);
 
-        this.mockFortRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
     }
 
     [Fact]
@@ -293,9 +293,9 @@ public class FortServiceTest
                 BuildEndDate = DateTimeOffset.MinValue,
                 Level = 3,
             };
-        this.mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
+        mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
-        await this.fortService
+        await fortService
             .Invoking(x => x.CancelLevelup(1))
             .Should()
             .ThrowAsync<InvalidOperationException>();
@@ -304,7 +304,7 @@ public class FortServiceTest
         build.BuildStartDate.Should().Be(DateTimeOffset.MinValue);
         build.BuildEndDate.Should().Be(DateTimeOffset.MinValue);
 
-        this.mockFortRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
     }
 
     [Fact]
@@ -319,19 +319,19 @@ public class FortServiceTest
                 BuildEndDate = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(1),
                 Level = 3,
             };
-        this.mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
+        mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
-        this.mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(0));
+        mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(0));
 
-        this.mockMissionProgressionService.Setup(x => x.OnFortLevelup());
+        mockMissionProgressionService.Setup(x => x.OnFortLevelup());
 
-        await this.fortService.EndLevelup(1);
+        await fortService.EndLevelup(1);
 
         build.Level.Should().Be(3);
         build.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
         build.BuildEndDate.Should().Be(DateTimeOffset.UnixEpoch);
 
-        this.mockFortRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
     }
 
     [Fact]
@@ -346,9 +346,9 @@ public class FortServiceTest
                 BuildEndDate = DateTimeOffset.MaxValue,
                 Level = 3,
             };
-        this.mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
+        mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
-        await this.fortService
+        await fortService
             .Invoking(x => x.EndLevelup(1))
             .Should()
             .ThrowAsync<InvalidOperationException>();
@@ -357,21 +357,21 @@ public class FortServiceTest
         build.BuildStartDate.Should().Be(DateTimeOffset.MinValue);
         build.BuildEndDate.Should().Be(DateTimeOffset.MaxValue);
 
-        this.mockFortRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
     }
 
     [Fact]
     public async Task BuildStart_StartsBuilding()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
+        mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
 
-        this.mockUserDataRepository.Setup(x => x.UpdateCoin(-300)).Returns(Task.CompletedTask);
+        mockUserDataRepository.Setup(x => x.UpdateCoin(-300)).Returns(Task.CompletedTask);
 
-        this.mockFortRepository
+        mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(new DbFortDetail() { DeviceAccountId = "id", CarpenterNum = 4 });
-        this.mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
-        this.mockFortRepository
+        mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
+        mockFortRepository
             .Setup(x => x.AddBuild(It.IsAny<DbFortBuild>()))
             .Returns(Task.CompletedTask)
             .Callback(
@@ -394,37 +394,37 @@ public class FortServiceTest
                         )
             );
 
-        this.mockInventoryRepository
+        mockInventoryRepository
             .Setup(x => x.UpdateQuantity(new Dictionary<Materials, int>()))
             .Returns(Task.CompletedTask);
 
-        await this.fortService.BuildStart(FortPlants.BlueFlowers, 2, 3);
+        await fortService.BuildStart(FortPlants.BlueFlowers, 2, 3);
 
-        this.mockFortRepository.VerifyAll();
-        this.mockInventoryRepository.VerifyAll();
-        this.mockPlayerIdentityService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
+        mockInventoryRepository.VerifyAll();
+        mockPlayerIdentityService.VerifyAll();
+        mockUserDataRepository.VerifyAll();
     }
 
     [Fact]
     public async Task BuildStart_InsufficientCarpenters_Throws()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
+        mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
 
-        this.mockFortRepository
+        mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(new DbFortDetail() { DeviceAccountId = "id", CarpenterNum = 1 });
-        this.mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
+        mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
 
-        await this.fortService
+        await fortService
             .Invoking(x => x.BuildStart(FortPlants.BlueFlowers, 2, 3))
             .Should()
             .ThrowAsync<DragaliaException>()
             .Where(e => e.Code == ResultCode.FortBuildCarpenterBusy);
 
-        this.mockFortRepository.VerifyAll();
-        this.mockPlayerIdentityService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
+        mockPlayerIdentityService.VerifyAll();
+        mockUserDataRepository.VerifyAll();
     }
 
     [Fact]
@@ -438,15 +438,15 @@ public class FortServiceTest
                 PlantId = FortPlants.Dragonata
             };
 
-        this.mockUserDataRepository.Setup(x => x.UpdateCoin(-3200)).Returns(Task.CompletedTask);
+        mockUserDataRepository.Setup(x => x.UpdateCoin(-3200)).Returns(Task.CompletedTask);
 
-        this.mockFortRepository
+        mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(new DbFortDetail() { DeviceAccountId = "id", CarpenterNum = 4 });
-        this.mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
-        this.mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
+        mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
+        mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
-        this.mockInventoryRepository
+        mockInventoryRepository
             .Setup(x => x.UpdateQuantity(It.IsAny<Dictionary<Materials, int>>()))
             .Returns(Task.CompletedTask)
             .Callback(
@@ -458,7 +458,7 @@ public class FortServiceTest
                         )
             );
 
-        await this.fortService.LevelupStart(1);
+        await fortService.LevelupStart(1);
 
         build.Level.Should().Be(21);
         build.BuildStartDate.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
@@ -469,9 +469,9 @@ public class FortServiceTest
                 TimeSpan.FromSeconds(1)
             );
 
-        this.mockFortRepository.VerifyAll();
-        this.mockInventoryRepository.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
+        mockInventoryRepository.VerifyAll();
+        mockUserDataRepository.VerifyAll();
     }
 
     [Fact]
@@ -485,13 +485,13 @@ public class FortServiceTest
                 PlantId = FortPlants.Dragonata
             };
 
-        this.mockFortRepository
+        mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(new DbFortDetail() { DeviceAccountId = "id", CarpenterNum = 1 });
-        this.mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
-        this.mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
+        mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
+        mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
-        await this.fortService
+        await fortService
             .Invoking(x => x.LevelupStart(1))
             .Should()
             .ThrowAsync<DragaliaException>()
@@ -501,8 +501,8 @@ public class FortServiceTest
         build.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
         build.BuildEndDate.Should().Be(DateTimeOffset.UnixEpoch);
 
-        this.mockFortRepository.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
+        mockUserDataRepository.VerifyAll();
     }
 
     [Fact]
@@ -518,14 +518,14 @@ public class FortServiceTest
                 PositionZ = 3,
             };
 
-        this.mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
+        mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
-        await this.fortService.Move(1, 4, 5);
+        await fortService.Move(1, 4, 5);
 
         build.PositionX.Should().Be(4);
         build.PositionZ.Should().Be(5);
 
-        this.mockFortRepository.VerifyAll();
+        mockFortRepository.VerifyAll();
     }
 
     [Fact]
@@ -542,8 +542,8 @@ public class FortServiceTest
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(7)
             };
 
-        this.mockFortRepository.Setup(x => x.GetBuilding(444)).ReturnsAsync(build);
-        this.mockPaymentService
+        mockFortRepository.Setup(x => x.GetBuilding(444)).ReturnsAsync(build);
+        mockPaymentService
             .Setup(
                 x =>
                     x.ProcessPayment(
@@ -554,15 +554,15 @@ public class FortServiceTest
             )
             .Returns(Task.CompletedTask);
 
-        this.mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(FortPlants.Smithy));
+        mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(FortPlants.Smithy));
 
-        this.mockMissionProgressionService.Setup(x => x.OnFortLevelup());
+        mockMissionProgressionService.Setup(x => x.OnFortLevelup());
 
-        await this.fortService.LevelupAtOnce(PaymentTypes.Wyrmite, 444);
+        await fortService.LevelupAtOnce(PaymentTypes.Wyrmite, 444);
 
-        this.mockMissionProgressionService.VerifyAll();
-        this.mockPaymentService.VerifyAll();
-        this.mockPlayerIdentityService.VerifyAll();
+        mockMissionProgressionService.VerifyAll();
+        mockPaymentService.VerifyAll();
+        mockPlayerIdentityService.VerifyAll();
     }
 
     [Fact]
@@ -579,18 +579,18 @@ public class FortServiceTest
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(7)
             };
 
-        this.mockFortRepository.Setup(x => x.GetBuilding(445)).ReturnsAsync(build);
-        this.mockPaymentService
+        mockFortRepository.Setup(x => x.GetBuilding(445)).ReturnsAsync(build);
+        mockPaymentService
             .Setup(x => x.ProcessPayment(PaymentTypes.HalidomHustleHammer, null, 1))
             .Returns(Task.CompletedTask);
 
-        this.mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(FortPlants.Smithy));
+        mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(FortPlants.Smithy));
 
-        this.mockMissionProgressionService.Setup(x => x.OnFortLevelup());
+        mockMissionProgressionService.Setup(x => x.OnFortLevelup());
 
-        await this.fortService.LevelupAtOnce(PaymentTypes.HalidomHustleHammer, 445);
+        await fortService.LevelupAtOnce(PaymentTypes.HalidomHustleHammer, 445);
 
-        this.mockMissionProgressionService.VerifyAll();
-        this.mockPaymentService.VerifyAll();
+        mockMissionProgressionService.VerifyAll();
+        mockPaymentService.VerifyAll();
     }
 }
