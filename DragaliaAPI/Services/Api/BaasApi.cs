@@ -63,7 +63,7 @@ public class BaasApi : IBaasApi
         return jwks.GetSigningKeys();
     }
 
-    public async Task<LoadIndexData?> GetSavefile(string idToken)
+    public async Task<LoadIndexData> GetSavefile(string idToken)
     {
         HttpResponseMessage savefileResponse = await client.PostAsJsonAsync<object>(
             SavefileEndpoint,
@@ -81,9 +81,9 @@ public class BaasApi : IBaasApi
         }
 
         return (
-            await savefileResponse.Content.ReadFromJsonAsync<DragaliaResponse<LoadIndexData>>(
-                ApiJsonOptions.Instance
-            )
-        )?.data;
+                await savefileResponse.Content.ReadFromJsonAsync<DragaliaResponse<LoadIndexData>>(
+                    ApiJsonOptions.Instance
+                )
+            )?.data ?? throw new JsonException("Deserialized savefile was null");
     }
 }
