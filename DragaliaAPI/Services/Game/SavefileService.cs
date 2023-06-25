@@ -124,11 +124,12 @@ public class SavefileService : ISavefileService
             this.playerIdentityService.AccountId
         );
 
-        this.apiContext.ChangeTracker.AutoDetectChangesEnabled = false;
-        await this.apiContext.Database.BeginTransactionAsync();
-
         try
         {
+            this.apiContext.ChangeTracker.AutoDetectChangesEnabled = false;
+            await using IDbContextTransaction transaction =
+                await this.apiContext.Database.BeginTransactionAsync();
+
             this.Delete();
 
             this.logger.LogDebug(
@@ -205,7 +206,7 @@ public class SavefileService : ISavefileService
                     this.apiContext.PlayerDragonData.Add(dbEntry)
                 ).Entity;
 
-                dragonKeyIds.Add((long)oldKeyId, addedEntry);
+                dragonKeyIds.TryAdd((long)oldKeyId, addedEntry);
             }
 
             this.logger.LogDebug(
@@ -221,7 +222,7 @@ public class SavefileService : ISavefileService
                 DbTalisman dbEntry = t.MapWithDeviceAccount<DbTalisman>(mapper, deviceAccountId);
                 DbTalisman addedEntry = this.apiContext.PlayerTalismans.Add(dbEntry).Entity;
 
-                talismanKeyIds.Add((long)oldKeyId, addedEntry);
+                talismanKeyIds.TryAdd((long)oldKeyId, addedEntry);
             }
 
             this.logger.LogDebug(
@@ -430,7 +431,7 @@ public class SavefileService : ISavefileService
             );
 
             await apiContext.SaveChangesAsync();
-            await this.apiContext.Database.CommitTransactionAsync();
+            await transaction.CommitAsync();
 
             // Remove lock
             await this.cache.RemoveAsync(RedisSchema.PendingImport(deviceAccountId));
@@ -442,7 +443,6 @@ public class SavefileService : ISavefileService
         }
         catch
         {
-            await this.apiContext.Database.RollbackTransactionAsync();
             this.apiContext.ChangeTracker.AutoDetectChangesEnabled = true;
             this.apiContext.ChangeTracker.Clear();
             throw;
