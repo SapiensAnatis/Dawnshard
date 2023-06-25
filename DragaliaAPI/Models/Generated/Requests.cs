@@ -563,9 +563,9 @@ public class CharaLimitBreakRequest
 public class CharaResetPlusCountRequest
 {
     public Charas chara_id { get; set; }
-    public int plus_count_type { get; set; }
+    public PlusCountType plus_count_type { get; set; }
 
-    public CharaResetPlusCountRequest(Charas chara_id, int plus_count_type)
+    public CharaResetPlusCountRequest(Charas chara_id, PlusCountType plus_count_type)
     {
         this.chara_id = chara_id;
         this.plus_count_type = plus_count_type;
@@ -1002,9 +1002,9 @@ public class DragonLimitBreakRequest
 public class DragonResetPlusCountRequest
 {
     public ulong dragon_key_id { get; set; }
-    public int plus_count_type { get; set; }
+    public PlusCountType plus_count_type { get; set; }
 
-    public DragonResetPlusCountRequest(ulong dragon_key_id, int plus_count_type)
+    public DragonResetPlusCountRequest(ulong dragon_key_id, PlusCountType plus_count_type)
     {
         this.dragon_key_id = dragon_key_id;
         this.plus_count_type = plus_count_type;
