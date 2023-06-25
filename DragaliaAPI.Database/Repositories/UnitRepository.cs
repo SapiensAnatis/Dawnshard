@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Diagnostics;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -422,12 +423,19 @@ public class UnitRepository : BaseRepository, IUnitRepository
             return null;
 
         CharaData data = MasterAsset.CharaData.Get(charaId);
-        bool isFirstSkill = data.EditSkillId == data.Skill1;
 
         return new DbEditSkillData()
         {
             CharaId = charaId,
-            EditSkillLevel = isFirstSkill ? skill1Level : skill2Level,
+            EditSkillLevel = data.EditSkillLevelNum switch
+            {
+                1 => skill1Level,
+                2 => skill2Level,
+                _
+                    => throw new UnreachableException(
+                        $"Invalid EditSkillLevelNum for character {charaId}"
+                    )
+            }
         };
     }
 }
