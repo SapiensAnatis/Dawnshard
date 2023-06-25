@@ -443,8 +443,6 @@ public class FortServiceTest
                 PlantId = FortPlants.Dragonata
             };
 
-        mockUserDataRepository.Setup(x => x.UpdateCoin(-3200)).Returns(Task.CompletedTask);
-
         mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(new DbFortDetail() { DeviceAccountId = "id", CarpenterNum = 4 });
