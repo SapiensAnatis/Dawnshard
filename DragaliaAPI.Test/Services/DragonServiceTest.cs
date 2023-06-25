@@ -10,6 +10,7 @@ using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;
+using Microsoft.EntityFrameworkCore;
 using MockQueryable.Moq;
 using static DragaliaAPI.Test.UnitTestUtils;
 
@@ -409,8 +410,9 @@ public class DragonServiceTest
             }
         );
 
-        userData.Coin.Should().Be(0);
-
+        
+        mockRewardService.VerifyAll();
+        mockPaymentService.VerifyAll();
         mockUserDataRepository.VerifyAll();
         mockUnitRepository.VerifyAll();
         mockInventoryRepository.VerifyAll();
