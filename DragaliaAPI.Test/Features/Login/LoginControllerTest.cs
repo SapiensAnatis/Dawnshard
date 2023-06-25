@@ -6,7 +6,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.Logging;
 
-namespace DragaliaAPI.Test.Controllers;
+namespace DragaliaAPI.Test.Features.Login;
 
 public class LoginControllerTest
 {

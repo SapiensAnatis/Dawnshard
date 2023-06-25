@@ -31,6 +31,7 @@ using Serilog.Events;
 using Serilog.Extensions.Logging;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Login;
+using DragaliaAPI.Helpers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -153,7 +154,10 @@ builder.Services
     .AddScoped<ITradeService, TradeService>()
     // Fort Feature
     .AddScoped<IFortService, FortService>()
-    .AddScoped<IFortRepository, FortRepository>();
+    .AddScoped<IFortRepository, FortRepository>()
+    // Login feature
+    .AddScoped<IResetHelper, ResetHelper>()
+    .AddScoped<IDateTimeProvider, DateTimeProvider>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();

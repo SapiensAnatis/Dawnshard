@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
     {
         foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
         {
-            if (type.GetInterfaces().Contains(typeof(ISavefileUpdate)))
+            if (type.GetInterfaces().Contains(typeof(TInterface)))
                 serviceCollection.Add(new ServiceDescriptor(typeof(TInterface), type, lifetime));
         }
 
