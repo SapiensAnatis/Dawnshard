@@ -135,7 +135,7 @@ public class FortServiceTest
                         level = 5,
                         plant_id = FortPlants.Dragontree,
                         fort_plant_detail_id = 10030105,
-                        build_status = FortBuildStatus.Building,
+                        build_status = FortBuildStatus.LevelUp,
                     },
                 },
                 opts => opts.Excluding(x => x.remain_time).Excluding(x => x.last_income_time)
@@ -253,7 +253,7 @@ public class FortServiceTest
                 DeviceAccountId = "id",
                 BuildStartDate = DateTimeOffset.UtcNow,
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(1),
-                Level = 3,
+                Level = 2,
             };
         mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
@@ -294,8 +294,8 @@ public class FortServiceTest
             {
                 BuildId = 1,
                 DeviceAccountId = "id",
-                BuildStartDate = DateTimeOffset.MinValue,
-                BuildEndDate = DateTimeOffset.MinValue,
+                BuildStartDate = DateTimeOffset.UnixEpoch,
+                BuildEndDate = DateTimeOffset.UnixEpoch,
                 Level = 3,
             };
         mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
@@ -306,8 +306,8 @@ public class FortServiceTest
             .ThrowAsync<InvalidOperationException>();
 
         build.Level.Should().Be(3);
-        build.BuildStartDate.Should().Be(DateTimeOffset.MinValue);
-        build.BuildEndDate.Should().Be(DateTimeOffset.MinValue);
+        build.BuildStartDate.Should().Be(DateTimeOffset.UnixEpoch);
+        build.BuildEndDate.Should().Be(DateTimeOffset.UnixEpoch);
 
         mockFortRepository.VerifyAll();
     }
@@ -358,7 +358,7 @@ public class FortServiceTest
             .Should()
             .ThrowAsync<InvalidOperationException>();
 
-        build.Level.Should().Be(3);
+        build.Level.Should().Be(2);
         build.BuildStartDate.Should().Be(DateTimeOffset.MinValue);
         build.BuildEndDate.Should().Be(DateTimeOffset.MaxValue);
 
@@ -369,8 +369,6 @@ public class FortServiceTest
     public async Task BuildStart_StartsBuilding()
     {
         mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
-
-        mockUserDataRepository.Setup(x => x.UpdateCoin(-300)).Returns(Task.CompletedTask);
 
         mockFortRepository
             .Setup(x => x.GetFortDetail())
@@ -418,8 +416,6 @@ public class FortServiceTest
     [Fact]
     public async Task BuildStart_InsufficientCarpenters_Throws()
     {
-        mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
-
         mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(new DbFortDetail() { DeviceAccountId = "id", CarpenterNum = 1 });
@@ -455,6 +451,10 @@ public class FortServiceTest
         mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
         mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
+        mockPaymentService
+            .Setup(x => x.ProcessPayment(PaymentTypes.Coin, null, 3200))
+            .Returns(Task.CompletedTask);
+
         mockInventoryRepository
             .Setup(x => x.UpdateQuantity(It.IsAny<Dictionary<Materials, int>>()))
             .Returns(Task.CompletedTask)
@@ -469,7 +469,7 @@ public class FortServiceTest
 
         await fortService.LevelupStart(1);
 
-        build.Level.Should().Be(21);
+        build.Level.Should().Be(20);
         build.BuildStartDate.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
         build.BuildEndDate
             .Should()

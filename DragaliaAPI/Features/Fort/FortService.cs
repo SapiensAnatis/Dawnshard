@@ -406,6 +406,8 @@ public class FortService : IFortService
             .OrderBy(x => x.Level)
             .First();
 
+        await Upgrade(plantDetail);
+
         DbFortBuild build =
             new()
             {
@@ -436,7 +438,6 @@ public class FortService : IFortService
                     : build.BuildStartDate.AddSeconds(plantDetail.Time);
         }
 
-        await Upgrade(plantDetail);
         await fortRepository.AddBuild(build);
 
         return build;
@@ -478,6 +479,8 @@ public class FortService : IFortService
             );
         }
 
+        await Upgrade(plantDetail);
+
         if (plantDetail.Time == 0)
         {
             build.BuildStartDate = build.BuildEndDate = DateTimeOffset.UnixEpoch;
@@ -487,8 +490,6 @@ public class FortService : IFortService
             build.BuildStartDate = DateTimeOffset.UtcNow;
             build.BuildEndDate = build.BuildStartDate.AddSeconds(plantDetail.Time);
         }
-
-        await Upgrade(plantDetail);
 
         return build;
     }

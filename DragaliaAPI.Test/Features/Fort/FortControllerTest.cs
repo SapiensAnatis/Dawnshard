@@ -156,18 +156,6 @@ public class FortControllerTest
         FortDetail detail = new() { working_carpenter_num = 4 };
 
         mockFortService
-            .Setup(x => x.GetRupieProduction())
-            .ReturnsAsync(new AtgenProductionRp(0, 0));
-
-        mockFortService
-            .Setup(x => x.GetDragonfruitProduction())
-            .ReturnsAsync(new AtgenProductionRp(0, 0));
-
-        mockFortService
-            .Setup(x => x.GetStaminaProduction())
-            .ReturnsAsync(new AtgenProductionRp(0, 0));
-
-        mockFortService
             .Setup(x => x.CancelBuild(1))
             .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id", BuildId = 1 });
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
@@ -489,6 +477,8 @@ public class FortControllerTest
                 BuildStartDate = DateTimeOffset.UtcNow,
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromHours(2),
             };
+
+        mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         mockFortService.Setup(x => x.LevelupStart(1)).ReturnsAsync(build);
