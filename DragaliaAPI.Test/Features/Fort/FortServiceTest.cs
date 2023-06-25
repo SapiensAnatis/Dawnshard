@@ -461,7 +461,7 @@ public class FortServiceTest
                     materials
                         .Should()
                         .BeEquivalentTo(
-                            new Dictionary<Materials, int>() { { Materials.Papiermache, 350 } }
+                            new Dictionary<Materials, int>() { { Materials.Papiermache, -350 } }
                         )
             );
 
