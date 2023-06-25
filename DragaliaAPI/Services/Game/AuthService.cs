@@ -119,13 +119,7 @@ public class AuthService : IAuthService
     {
         try
         {
-            LoadIndexData? pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
-
-            if (pendingSave is null)
-            {
-                this.logger.LogInformation("Savefile was null.");
-                return;
-            }
+            LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
 
             this.logger.LogDebug("UserData: {@userData}", pendingSave.user_data);
             await this.savefileService.ThreadSafeImport(pendingSave);

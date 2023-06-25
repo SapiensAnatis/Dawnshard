@@ -6,5 +6,5 @@ namespace DragaliaAPI.Services.Api;
 public interface IBaasApi
 {
     Task<IList<SecurityKey>> GetKeys();
-    Task<LoadIndexData?> GetSavefile(string idToken);
+    Task<LoadIndexData> GetSavefile(string idToken);
 }
