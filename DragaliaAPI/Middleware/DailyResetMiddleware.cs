@@ -12,56 +12,37 @@ namespace DragaliaAPI.Middleware;
 public class DailyResetMiddleware
 {
     private readonly RequestDelegate next;
-    private readonly IServiceProvider serviceProvider;
 
-    public DailyResetMiddleware(RequestDelegate next, IServiceProvider serviceProvider)
+    public DailyResetMiddleware(RequestDelegate next)
     {
         this.next = next;
-        this.serviceProvider = serviceProvider;
     }
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, IResetHelper resetHelper)
     {
         if (
             context.GetEndpoint()?.Metadata.GetMetadata<AllowAnonymousAttribute>() is null
             && context.GetEndpoint()?.Metadata.GetMetadata<BypassDailyResetAttribute>() is null
-            && context.Request.Headers.TryGetValue("SID", out StringValues value)
+            && context.Items.TryGetValue(
+                SessionAuthenticationHandler.LastLoginTime,
+                out object? lastLoginTimeObj
+            )
+            && lastLoginTimeObj is DateTimeOffset lastLoginTime
         )
         {
-            string? sessionId = value.FirstOrDefault();
-            if (sessionId != null)
+            if (resetHelper.LastDailyReset > lastLoginTime)
             {
-                using IServiceScope scope = serviceProvider.CreateScope();
+                context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
+                context.Response.StatusCode = 200;
 
-                ISessionService sessionService =
-                    scope.ServiceProvider.GetRequiredService<ISessionService>();
-                IResetHelper resetHelper = scope.ServiceProvider.GetRequiredService<IResetHelper>();
+                DragaliaResponse<DataHeaders> gameResponse =
+                    new(new DataHeaders(ResultCode.CommonChangeDate), ResultCode.CommonChangeDate);
 
-                try
-                {
-                    Session session = await sessionService.LoadSessionSessionId(sessionId);
-                    if (resetHelper.LastDailyReset > session.LoginTime)
-                    {
-                        context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
-                        context.Response.StatusCode = 200;
+                await context.Response.Body.WriteAsync(
+                    MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
+                );
 
-                        DragaliaResponse<DataHeaders> gameResponse =
-                            new(
-                                new DataHeaders(ResultCode.CommonChangeDate),
-                                ResultCode.CommonChangeDate
-                            );
-
-                        await context.Response.Body.WriteAsync(
-                            MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
-                        );
-
-                        return;
-                    }
-                }
-                catch (SessionException e)
-                {
-                    // ignored
-                }
+                return;
             }
         }
 

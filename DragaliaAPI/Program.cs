@@ -192,11 +192,13 @@ app.UsePathBase("/2.19.0_20220719103923"); // Latest iOS app version
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseMiddleware<NotFoundHandlerMiddleware>();
-app.UseMiddleware<DailyResetMiddleware>();
 
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<DailyResetMiddleware>();
+
 app.MapControllers();
 app.UseResponseCompression();
 app.MapHealthChecks("/health");
