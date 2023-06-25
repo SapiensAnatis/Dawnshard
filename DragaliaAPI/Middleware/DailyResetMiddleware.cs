@@ -2,6 +2,7 @@
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Exceptions;
 using MessagePack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Primitives;
@@ -36,23 +37,30 @@ public class DailyResetMiddleware
                     scope.ServiceProvider.GetRequiredService<ISessionService>();
                 IResetHelper resetHelper = scope.ServiceProvider.GetRequiredService<IResetHelper>();
 
-                Session session = await sessionService.LoadSessionSessionId(sessionId);
-                if (resetHelper.LastDailyReset > session.LoginTime)
+                try
                 {
-                    context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
-                    context.Response.StatusCode = 200;
+                    Session session = await sessionService.LoadSessionSessionId(sessionId);
+                    if (resetHelper.LastDailyReset > session.LoginTime)
+                    {
+                        context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
+                        context.Response.StatusCode = 200;
 
-                    DragaliaResponse<DataHeaders> gameResponse =
-                        new(
-                            new DataHeaders(ResultCode.CommonChangeDate),
-                            ResultCode.CommonChangeDate
+                        DragaliaResponse<DataHeaders> gameResponse =
+                            new(
+                                new DataHeaders(ResultCode.CommonChangeDate),
+                                ResultCode.CommonChangeDate
+                            );
+
+                        await context.Response.Body.WriteAsync(
+                            MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
                         );
 
-                    await context.Response.Body.WriteAsync(
-                        MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
-                    );
-
-                    return;
+                        return;
+                    }
+                }
+                catch (SessionException e)
+                {
+                    // ignored
                 }
             }
         }
