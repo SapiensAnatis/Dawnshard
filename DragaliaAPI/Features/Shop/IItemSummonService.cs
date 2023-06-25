@@ -4,7 +4,7 @@ namespace DragaliaAPI.Features.Shop;
 
 public interface IItemSummonService
 {
-    Task<AtgenUserItemSummon> GetOrRefreshItemSummon();
+    Task<AtgenUserItemSummon> GetItemSummon();
     IEnumerable<AtgenItemSummonRateList> GetOdds();
     Task<IEnumerable<AtgenBuildEventRewardEntityList>> DoSummon(ShopItemSummonExecRequest request);
 }
