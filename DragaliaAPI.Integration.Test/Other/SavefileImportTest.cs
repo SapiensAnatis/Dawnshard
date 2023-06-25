@@ -104,6 +104,10 @@ public class SavefileImportTest : TestFixture
                     );
                     opts.Excluding(x => x.user_data!.level);
                     opts.Excluding(x => x.user_data!.crystal);
+                    opts.Excluding(x => x.present_notice);
+                    opts.Excluding(x => x.treasure_trade_all_list);
+                    opts.Excluding(x => x.multi_server);
+                    opts.Excluding(x => x.mission_notice);
 
                     opts.Excluding(x => x.user_data!.fort_open_time);
 
@@ -130,19 +134,13 @@ public class SavefileImportTest : TestFixture
                     opts.Excluding(x => x.summon_ticket_list);
                     opts.Excluding(x => x.summon_point_list);
 
-                    opts.Excluding(x => x.user_treasure_trade_list);
-                    opts.Excluding(x => x.treasure_trade_all_list);
-
                     opts.Excluding(x => x.astral_item_list);
                     opts.Excluding(x => x.party_power_data);
-                    opts.Excluding(x => x.multi_server);
-                    opts.Excluding(x => x.mission_notice);
                     opts.Excluding(x => x.walker_data);
                     opts.Excluding(x => x.exchange_ticket_list);
                     opts.Excluding(x => x.lottery_ticket_list);
                     opts.Excluding(x => x.gather_item_list);
 
-                    opts.Excluding(x => x.present_notice);
                     opts.Excluding(x => x.friend_notice);
                     opts.Excluding(x => x.guild_notice);
 

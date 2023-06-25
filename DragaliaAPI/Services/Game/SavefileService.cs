@@ -422,8 +422,17 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            // TODO: unit sets
-            // TODO much later: halidom, endeavours, kaleido data
+            this.apiContext.PlayerTrades.AddRange(
+                savefile.user_treasure_trade_list.MapWithDeviceAccount<DbPlayerTrade>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbPlayerTrade step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
 
             this.logger.LogInformation(
                 "Mapping completed after {t} ms",
@@ -512,6 +521,9 @@ public class SavefileService : ISavefileService
         );
         this.apiContext.PlayerShopInfos.RemoveRange(
             this.apiContext.PlayerShopInfos.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerTrades.RemoveRange(
+            this.apiContext.PlayerTrades.Where(x => x.DeviceAccountId == deviceAccountId)
         );
     }
 
