@@ -57,7 +57,13 @@ public class GraphQlTest : GraphQlTestFixture
             .Should()
             .BeEquivalentTo(
                 new Response(
-                    new Player(new Character[] { new(Charas.ThePrince), new(Charas.SummerMikoto) })
+                    new Player(
+                        new Character[]
+                        {
+                            new((int)Charas.ThePrince),
+                            new((int)Charas.SummerMikoto)
+                        }
+                    )
                 )
             );
     }
@@ -208,5 +214,5 @@ public class GraphQlTest : GraphQlTestFixture
 
     private record Player(Character[] CharaList);
 
-    private record Character(Charas CharaId);
+    private record Character(int CharaId);
 }
