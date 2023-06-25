@@ -467,7 +467,7 @@ public class WeaponBodyTest : TestFixture
                     new()
                     {
                         DeviceAccountId = DeviceAccountId,
-                        WeaponBodyId = WeaponBodies.Ýdalir,
+                        WeaponBodyId = WeaponBodies.Ydalir,
                         LimitOverCount = 1
                     },
                     new()
@@ -486,7 +486,7 @@ public class WeaponBodyTest : TestFixture
                     new()
                     {
                         DeviceAccountId = DeviceAccountId,
-                        WeaponBodyId = WeaponBodies.Ýdalir,
+                        WeaponBodyId = WeaponBodies.Ydalir,
                         LimitOverCount = 2,
                     },
                     ExpNewSkins: new()

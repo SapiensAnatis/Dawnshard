@@ -14,16 +14,19 @@ namespace DragaliaAPI.Features.Present;
 public class PresentController : DragaliaControllerBase
 {
     private readonly IPresentControllerService presentControllerService;
+    private readonly IPresentService presentService;
     private readonly IRewardService rewardService;
     private readonly IUpdateDataService updateDataService;
 
     public PresentController(
         IPresentControllerService presentControllerService,
+        IPresentService presentService,
         IRewardService rewardService,
         IUpdateDataService updateDataService
     )
     {
         this.presentControllerService = presentControllerService;
+        this.presentService = presentService;
         this.rewardService = rewardService;
         this.updateDataService = updateDataService;
     }
@@ -53,6 +56,11 @@ public class PresentController : DragaliaControllerBase
                 request.present_id
             );
         }
+
+        data.update_data_list = new()
+        {
+            present_notice = await this.presentService.GetPresentNotice()
+        };
 
         return Ok(data);
     }

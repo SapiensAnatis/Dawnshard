@@ -24,6 +24,8 @@ public class ApiJsonOptions
         options.Converters.Add(new TimeSpanUnixJsonConverter());
         options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+        // GraphQL
+        options.IncludeFields = true;
     };
 
     static ApiJsonOptions()
