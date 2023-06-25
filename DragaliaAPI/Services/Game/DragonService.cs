@@ -762,7 +762,10 @@ public class DragonService : IDragonService
                 playerDragonData.HpPlusCount = 0;
                 break;
             default:
-                throw new UnreachableException("Invalid PlusCountType");
+                throw new DragaliaException(
+                    ResultCode.CommonInvalidArgument,
+                    "Invalid plus_count_type"
+                );
         }
 
         await this.paymentService.ProcessPayment(

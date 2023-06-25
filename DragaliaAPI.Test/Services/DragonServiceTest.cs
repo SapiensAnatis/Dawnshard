@@ -2,6 +2,8 @@
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
@@ -20,6 +22,8 @@ public class DragonServiceTest
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IStoryRepository> mockStoryRepository;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
+    private readonly Mock<IPaymentService> mockPaymentService;
+    private readonly Mock<IRewardService> mockRewardService;
 
     private readonly DragonService dragonService;
 
@@ -30,6 +34,8 @@ public class DragonServiceTest
         mockInventoryRepository = new Mock<IInventoryRepository>();
         mockStoryRepository = new Mock<IStoryRepository>();
         mockUpdateDataService = new Mock<IUpdateDataService>();
+        mockPaymentService = new(MockBehavior.Strict);
+        mockRewardService = new(MockBehavior.Strict);
 
         dragonService = new DragonService(
             mockUserDataRepository.Object,
@@ -37,7 +43,9 @@ public class DragonServiceTest
             mockInventoryRepository.Object,
             mockUpdateDataService.Object,
             mockStoryRepository.Object,
-            LoggerTestUtils.Create<DragonService>()
+            LoggerTestUtils.Create<DragonService>(),
+            mockPaymentService.Object,
+            mockRewardService.Object
         );
     }
 
@@ -363,6 +371,35 @@ public class DragonServiceTest
         mockInventoryRepository
             .Setup(x => x.GetMaterial(Materials.AmplifyingDragonscale))
             .ReturnsAsync(mat);
+
+        mockPaymentService
+            .Setup(
+                x =>
+                    x.ProcessPayment(
+                        PaymentTypes.Coin,
+                        null,
+                        DragonConstants.AugmentResetCost * dragonData.AttackPlusCount
+                    )
+            )
+            .Returns(Task.CompletedTask);
+
+        mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        new Entity(
+                            EntityTypes.Material,
+                            (int)Materials.AmplifyingDragonscale,
+                            50,
+                            null,
+                            null,
+                            null
+                        )
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
+
+        mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 
         await dragonService.DoDragonResetPlusCount(
             new DragonResetPlusCountRequest()
