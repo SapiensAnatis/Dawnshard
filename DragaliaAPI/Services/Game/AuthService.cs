@@ -98,23 +98,7 @@ public class AuthService : IAuthService
         DbPlayerUserData? userData = await this.userDataRepository.UserData.SingleOrDefaultAsync();
 
         if (GetPendingSaveImport(jwt, userData))
-        {
-            try
-            {
-                LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
-                this.logger.LogDebug("UserData: {@userData}", pendingSave.user_data);
-                await this.savefileService.ThreadSafeImport(pendingSave);
-            }
-            catch (Exception e) when (e is JsonException or AutoMapperMappingException)
-            {
-                this.logger.LogWarning(e, "Savefile was invalid.");
-            }
-            catch (Exception e)
-            {
-                this.logger.LogError(e, "Error importing save");
-                // Let them log in regardless
-            }
-        }
+            await this.ImportSave(idToken);
 
         long viewerId = await this.GetViewerId();
 
@@ -129,6 +113,26 @@ public class AuthService : IAuthService
         );
 
         return new(viewerId, sessionId);
+    }
+
+    private async Task ImportSave(string idToken)
+    {
+        try
+        {
+            LoadIndexData pendingSave = await this.baasRequestHelper.GetSavefile(idToken);
+
+            this.logger.LogDebug("UserData: {@userData}", pendingSave.user_data);
+            await this.savefileService.ThreadSafeImport(pendingSave);
+        }
+        catch (Exception e) when (e is JsonException or AutoMapperMappingException)
+        {
+            this.logger.LogInformation(e, "Savefile was invalid.");
+        }
+        catch (Exception e)
+        {
+            this.logger.LogWarning(e, "Error importing save");
+            // Let them log in regardless
+        }
     }
 
     private async Task<TokenValidationResult> ValidateToken(string idToken)
