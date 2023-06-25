@@ -1,7 +1,10 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -20,6 +23,8 @@ public class DragonService : IDragonService
     private readonly IStoryRepository storyRepository;
     private readonly ILogger<DragonService> logger;
     private readonly IUpdateDataService updateDataService;
+    private readonly IPaymentService paymentService;
+    private readonly IRewardService rewardService;
 
     public DragonService(
         IUserDataRepository userDataRepository,
@@ -27,7 +32,9 @@ public class DragonService : IDragonService
         IInventoryRepository inventoryRepository,
         IUpdateDataService updateDataService,
         IStoryRepository storyRepository,
-        ILogger<DragonService> logger
+        ILogger<DragonService> logger,
+        IPaymentService paymentService,
+        IRewardService rewardService
     )
     {
         this.userDataRepository = userDataRepository;
@@ -36,6 +43,8 @@ public class DragonService : IDragonService
         this.storyRepository = storyRepository;
         this.logger = logger;
         this.updateDataService = updateDataService;
+        this.paymentService = paymentService;
+        this.rewardService = rewardService;
     }
 
     public async Task<DragonGetContactDataData> DoDragonGetContactData(
@@ -736,51 +745,35 @@ public class DragonService : IDragonService
         DbPlayerDragonData playerDragonData = await this.unitRepository.Dragons.FirstAsync(
             dragon => (ulong)dragon.DragonKeyId == request.dragon_key_id
         );
-        Materials mat =
-            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
-                ? Materials.AmplifyingDragonscale
-                : Materials.FortifyingDragonscale;
 
-        DbPlayerMaterial upgradeMat =
-            await inventoryRepository.GetMaterial(mat) ?? inventoryRepository.AddMaterial(mat);
+        Materials material;
+        int plusCount;
 
-        //DbPlayerCurrency playerCurrency =
-        //    await inventoryRepository.GetCurrency(CurrencyTypes.Rupies)
-        //    ?? throw new DragaliaException(
-        //        ResultCode.CommonMaterialShort,
-        //        "Insufficient Rupies for reset"
-        //    );
-        DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
-        int cost =
-            DragonConstants.AugmentResetCost
-            * (
-                (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
-                    ? playerDragonData.AttackPlusCount
-                    : playerDragonData.HpPlusCount
-            );
-        //if (playerCurrency.Quantity < cost)
-        if (userData.Coin < cost)
+        switch (request.plus_count_type)
         {
-            throw new DragaliaException(
-                ResultCode.CommonMaterialShort,
-                "Insufficient Rupies for reset"
-            );
+            case PlusCountType.Atk:
+                material = Materials.AmplifyingDragonscale;
+                plusCount = playerDragonData.AttackPlusCount;
+                playerDragonData.AttackPlusCount = 0;
+                break;
+            case PlusCountType.Hp:
+                material = Materials.FortifyingDragonscale;
+                plusCount = playerDragonData.HpPlusCount;
+                playerDragonData.HpPlusCount = 0;
+                break;
+            default:
+                throw new UnreachableException("Invalid PlusCountType");
         }
-        //playerCurrency.Quantity -= cost;
-        userData.Coin -= cost;
 
-        upgradeMat.Quantity +=
-            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
-                ? playerDragonData.AttackPlusCount
-                : playerDragonData.HpPlusCount;
-        _ =
-            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
-                ? playerDragonData.AttackPlusCount = 0
-                : playerDragonData.HpPlusCount = 0;
+        await this.paymentService.ProcessPayment(
+            PaymentTypes.Coin,
+            expectedPrice: DragonConstants.AugmentResetCost * plusCount
+        );
+        await this.rewardService.GrantReward(
+            new Entity(EntityTypes.Material, (int)material, plusCount)
+        );
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
-
-        await userDataRepository.SaveChangesAsync();
 
         return new DragonResetPlusCountData(updateDataList, new());
     }

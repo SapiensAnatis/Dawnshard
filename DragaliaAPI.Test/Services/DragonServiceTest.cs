@@ -368,7 +368,7 @@ public class DragonServiceTest
             new DragonResetPlusCountRequest()
             {
                 dragon_key_id = 1,
-                plus_count_type = (int)UpgradeEnhanceTypes.AtkPlus
+                plus_count_type = PlusCountType.Atk
             }
         );
 

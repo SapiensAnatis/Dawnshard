@@ -1,9 +1,12 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -28,6 +31,8 @@ public class CharaController : DragaliaControllerBase
     private readonly ILogger<CharaController> logger;
     private readonly IMapper mapper;
     private readonly IMissionProgressionService missionProgressionService;
+    private readonly IPaymentService paymentService;
+    private readonly IRewardService rewardService;
 
     public CharaController(
         IUserDataRepository userDataRepository,
@@ -37,7 +42,9 @@ public class CharaController : DragaliaControllerBase
         IUpdateDataService updateDataService,
         ILogger<CharaController> logger,
         IMapper mapper,
-        IMissionProgressionService missionProgressionService
+        IMissionProgressionService missionProgressionService,
+        IPaymentService paymentService,
+        IRewardService rewardService
     )
     {
         this.userDataRepository = userDataRepository;
@@ -48,6 +55,8 @@ public class CharaController : DragaliaControllerBase
         this.logger = logger;
         this.mapper = mapper;
         this.missionProgressionService = missionProgressionService;
+        this.paymentService = paymentService;
+        this.rewardService = rewardService;
     }
 
     [Route("awake")]
@@ -269,50 +278,42 @@ public class CharaController : DragaliaControllerBase
         [FromBody] CharaResetPlusCountRequest request
     )
     {
-        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
         DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
-            chara => chara.CharaId == (Charas)request.chara_id
+            chara => chara.CharaId == request.chara_id
         );
-        Materials mat =
-            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
-                ? Materials.AmplifyingCrystal
-                : Materials.FortifyingCrystal;
 
-        DbPlayerMaterial upgradeMat =
-            await inventoryRepository.GetMaterial(mat) ?? inventoryRepository.AddMaterial(mat);
-        //DbPlayerCurrency playerCurrency =
-        //    await inventoryRepository.GetCurrency(DeviceAccountId, CurrencyTypes.Rupies)
-        //    ?? throw new DragaliaException(
-        //        ResultCode.CommonMaterialShort,
-        //        "Insufficient Rupies for reset"
-        //    );
-        int cost =
-            CharaConstants.AugmentResetCost
-            * (
-                (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
-                    ? playerCharData.AttackPlusCount
-                    : playerCharData.HpPlusCount
-            );
-        if (userData.Coin < cost)
+        Materials material;
+        int plusCount;
+
+        switch (request.plus_count_type)
         {
-            throw new DragaliaException(
-                ResultCode.CommonMaterialShort,
-                "Insufficient Rupies for reset"
-            );
+            case PlusCountType.Atk:
+                material = Materials.AmplifyingCrystal;
+                plusCount = playerCharData.AttackPlusCount;
+                playerCharData.AttackPlusCount = 0;
+                break;
+            case PlusCountType.Hp:
+                material = Materials.FortifyingCrystal;
+                plusCount = playerCharData.HpPlusCount;
+                playerCharData.HpPlusCount = 0;
+                break;
+            default:
+                throw new UnreachableException("Invalid PlusCountType");
         }
-        userData.Coin -= cost;
-        upgradeMat.Quantity +=
-            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
-                ? playerCharData.AttackPlusCount
-                : playerCharData.HpPlusCount;
-        _ =
-            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
-                ? playerCharData.AttackPlusCount = 0
-                : playerCharData.HpPlusCount = 0;
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        await this.paymentService.ProcessPayment(
+            PaymentTypes.Coin,
+            expectedPrice: CharaConstants.AugmentResetCost * plusCount
+        );
+        await this.rewardService.GrantReward(
+            new Entity(EntityTypes.Material, (int)material, plusCount)
+        );
 
-        return Ok(new CharaResetPlusCountData(updateDataList, new()));
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+
+        return Ok(
+            new CharaResetPlusCountData(updateDataList, this.rewardService.GetEntityResult())
+        );
     }
 
     [Route("buildup_mana")]
