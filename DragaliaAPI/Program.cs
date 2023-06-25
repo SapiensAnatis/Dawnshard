@@ -30,6 +30,7 @@ using Serilog.Core;
 using Serilog.Events;
 using Serilog.Extensions.Logging;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Login;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -155,6 +156,7 @@ builder.Services
     .AddScoped<IFortRepository, FortRepository>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
+builder.Services.AddAllOfType<IDailyResetAction>();
 
 builder.Services.AddHttpClient<IBaasApi, BaasApi>();
 builder.Services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>

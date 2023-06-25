@@ -126,7 +126,7 @@ public class LoadService : ILoadService
                 user_treasure_trade_list = await this.tradeService.GetUserTreasureTradeList(),
                 treasure_trade_all_list = this.tradeService.GetCurrentTreasureTradeList(),
                 shop_notice = new ShopNotice(
-                    (await this.itemSummonService.GetOrRefreshItemSummon()).daily_summon_count == 0
+                    (await this.itemSummonService.GetItemSummon()).daily_summon_count == 0
                 )
             };
 

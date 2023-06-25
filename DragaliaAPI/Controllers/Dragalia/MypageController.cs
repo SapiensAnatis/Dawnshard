@@ -51,7 +51,7 @@ public class MypageController : DragaliaControllerBase
         resp.quest_event_schedule_list = new List<QuestEventScheduleList>();
         resp.quest_schedule_detail_list = AvailableQuestSchedule;
         resp.is_shop_notification =
-            (await this.itemSummonService.GetOrRefreshItemSummon()).daily_summon_count == 0;
+            (await this.itemSummonService.GetItemSummon()).daily_summon_count == 0;
         resp.update_data_list = await this.updateDataService.SaveChangesAsync();
         resp.update_data_list.mission_notice = await this.missionService.GetMissionNotice(null);
 
