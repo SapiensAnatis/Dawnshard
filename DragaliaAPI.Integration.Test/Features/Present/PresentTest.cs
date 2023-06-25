@@ -139,7 +139,7 @@ public class PresentTest : TestFixture
                     },
                     update_data_list = new UpdateDataList()
                     {
-                        present_notice = new() { present_count = 0, present_limit_count = 1 }
+                        present_notice = new() { present_count = 1, present_limit_count = 1 }
                     }
                 }
             );
