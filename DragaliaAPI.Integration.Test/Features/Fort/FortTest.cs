@@ -106,7 +106,7 @@ public class FortTest : TestFixture
                 {
                     DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
-                    Level = 1,
+                    Level = 0,
                     PositionX = 2,
                     PositionZ = 2,
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
@@ -142,7 +142,7 @@ public class FortTest : TestFixture
                 {
                     DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
-                    Level = 2,
+                    Level = 0,
                     PositionX = 2,
                     PositionZ = 2,
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
@@ -172,23 +172,21 @@ public class FortTest : TestFixture
     [Fact]
     public async Task BuildEnd_ReturnsValidResult()
     {
-        DbFortBuild build = this.ApiContext.PlayerFortBuilds
-            .Add(
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    PlantId = FortPlants.StaffDojo,
-                    Level = 2,
-                    PositionX = 2,
-                    PositionZ = 2,
-                    BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1682110410),
-                    BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1682110411),
-                    IsNew = true,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
-                }
-            )
-            .Entity;
-        await this.ApiContext.SaveChangesAsync();
+        DbFortBuild build =
+            new()
+            {
+                DeviceAccountId = DeviceAccountId,
+                PlantId = FortPlants.StaffDojo,
+                Level = 0,
+                PositionX = 2,
+                PositionZ = 2,
+                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1682110410),
+                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1682110411),
+                IsNew = true,
+                LastIncomeDate = DateTimeOffset.UnixEpoch
+            };
+
+        await this.AddToDatabase(build);
 
         FortBuildEndData response = (
             await this.Client.PostMsgpack<FortBuildEndData>(
@@ -276,7 +274,7 @@ public class FortTest : TestFixture
                 {
                     DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
-                    Level = 2,
+                    Level = 1,
                     PositionX = 2,
                     PositionZ = 2,
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
@@ -373,7 +371,7 @@ public class FortTest : TestFixture
         result.build_start_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().BeAfter(result.build_start_date);
-        result.level.Should().Be(2);
+        result.level.Should().Be(1);
     }
 
     [Fact]
