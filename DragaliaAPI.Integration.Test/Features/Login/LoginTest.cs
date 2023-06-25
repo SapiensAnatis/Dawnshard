@@ -36,6 +36,8 @@ public class LoginTest : TestFixture
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.DailySummonCount, 5));
 
+        (await this.GetSummonCount()).Should().Be(5);
+
         await this.ApiContext.PlayerUserData
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ExecuteUpdateAsync(
@@ -44,13 +46,7 @@ public class LoginTest : TestFixture
 
         await this.Client.PostMsgpack<LoginIndexData>("/login/index", new LoginIndexRequest());
 
-        (
-            await this.ApiContext.PlayerShopInfos
-                .AsNoTracking()
-                .FirstAsync(x => x.DeviceAccountId == DeviceAccountId)
-        ).DailySummonCount
-            .Should()
-            .Be(0);
+        (await this.GetSummonCount()).Should().Be(0);
     }
 
     [Fact]
@@ -60,6 +56,8 @@ public class LoginTest : TestFixture
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.Quantity, 0));
 
+        (await this.GetDragonGifts()).Should().AllSatisfy(x => x.Quantity.Should().Be(0));
+
         await this.ApiContext.PlayerUserData
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ExecuteUpdateAsync(
@@ -68,12 +66,7 @@ public class LoginTest : TestFixture
 
         await this.Client.PostMsgpack<LoginIndexData>("/login/index", new LoginIndexRequest());
 
-        (
-            await this.ApiContext.PlayerDragonGifts
-                .AsNoTracking()
-                .Where(x => x.DeviceAccountId == DeviceAccountId)
-                .ToListAsync()
-        )
+        (await this.GetDragonGifts())
             .Should()
             .BeEquivalentTo(
                 new List<DbPlayerDragonGift>()
@@ -178,4 +171,17 @@ public class LoginTest : TestFixture
 
         response.Should().BeEquivalentTo(new ResultCodeData(ResultCode.Success, string.Empty));
     }
+
+    private async Task<int> GetSummonCount() =>
+        (
+            await this.ApiContext.PlayerShopInfos
+                .AsNoTracking()
+                .FirstAsync(x => x.DeviceAccountId == DeviceAccountId)
+        ).DailySummonCount;
+
+    private async Task<IEnumerable<DbPlayerDragonGift>> GetDragonGifts() =>
+        await this.ApiContext.PlayerDragonGifts
+            .AsNoTracking()
+            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .ToListAsync();
 }
