@@ -25,7 +25,7 @@ public class LoadService : ILoadService
     private readonly IMissionService missionService;
     private readonly IPresentService presentService;
     private readonly ITradeService tradeService;
-    private readonly IItemSummonService itemSummonService;
+    private readonly IShopRepository shopRepository;
 
     public LoadService(
         ISavefileService savefileService,
@@ -37,7 +37,7 @@ public class LoadService : ILoadService
         IMissionService missionService,
         IPresentService presentService,
         ITradeService tradeService,
-        IItemSummonService itemSummonService
+        IShopRepository shopRepository
     )
     {
         this.savefileService = savefileService;
@@ -49,7 +49,7 @@ public class LoadService : ILoadService
         this.missionService = missionService;
         this.presentService = presentService;
         this.tradeService = tradeService;
-        this.itemSummonService = itemSummonService;
+        this.shopRepository = shopRepository;
     }
 
     public async Task<LoadIndexData> BuildIndexData()
@@ -126,7 +126,7 @@ public class LoadService : ILoadService
                 user_treasure_trade_list = await this.tradeService.GetUserTreasureTradeList(),
                 treasure_trade_all_list = this.tradeService.GetCurrentTreasureTradeList(),
                 shop_notice = new ShopNotice(
-                    (await this.itemSummonService.GetOrRefreshItemSummon()).daily_summon_count == 0
+                    await this.shopRepository.GetDailySummonCountAsync() == 0
                 )
             };
 
