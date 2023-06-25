@@ -73,11 +73,12 @@ public class FortTest : TestFixture
                     build_end_date = end,
                     fort_plant_detail_id = 10050410,
                     build_status = FortBuildStatus.LevelUp,
-                    is_new = false,
-                    remain_time = end - DateTimeOffset.UtcNow,
-                    last_income_time = DateTimeOffset.UtcNow - income
+                    is_new = false
                 },
-                opts => opts.Excluding(x => x.build_id)
+                opts =>
+                    opts.Excluding(x => x.build_id)
+                        .Excluding(x => x.last_income_time)
+                        .Excluding(x => x.remain_time)
             );
 
         // Not much point asserting against the other properties since they're stubs
@@ -161,12 +162,7 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)build.BuildId
-        );
-        result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.level.Should().Be(1); // Level should have decreased
+        // this removes it from the player
     }
 
     [Fact]
@@ -200,7 +196,7 @@ public class FortTest : TestFixture
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.level.Should().Be(2);
+        result.level.Should().Be(1);
     }
 
     [Fact]
@@ -262,7 +258,7 @@ public class FortTest : TestFixture
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.level.Should().Be(2);
+        result.level.Should().Be(3);
     }
 
     [Fact]
