@@ -410,7 +410,6 @@ public class DragonServiceTest
             }
         );
 
-        
         mockRewardService.VerifyAll();
         mockPaymentService.VerifyAll();
         mockUserDataRepository.VerifyAll();

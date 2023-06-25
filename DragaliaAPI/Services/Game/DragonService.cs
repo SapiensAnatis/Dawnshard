@@ -778,7 +778,7 @@ public class DragonService : IDragonService
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return new DragonResetPlusCountData(updateDataList, new());
+        return new DragonResetPlusCountData(updateDataList, this.rewardService.GetEntityResult());
     }
 
     public async Task<DragonLimitBreakData> DoDragonLimitBreak(DragonLimitBreakRequest request)
