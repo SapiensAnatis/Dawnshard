@@ -17,31 +17,18 @@ public class ResetHelper : IResetHelper
         Thread.CurrentThread.CurrentCulture = culture;
     }
 
-    private DateTimeOffset GetLastDailyReset(DateTimeOffset dateTimeOffset)
-    {
-        return dateTimeOffset.Hour >= UtcHourReset
-            ? dateTimeOffset.UtcDateTime.Date.AddHours(UtcHourReset)
-            : dateTimeOffset.UtcDateTime.Date.AddDays(-1).AddHours(UtcHourReset);
-    }
-
     /// <inheritdoc />
-    public DateTimeOffset LastDailyReset => GetLastDailyReset(this.dateTimeProvider.UtcNow);
+    public DateTimeOffset LastDailyReset =>
+        this.dateTimeProvider.UtcNow.AddHours(-6).UtcDateTime.Date.AddHours(6);
 
     /// <inheritdoc />
     public DateTimeOffset LastWeeklyReset
     {
         get
         {
-            DateTimeOffset dateTimeOffset = dateTimeProvider.UtcNow;
-            DateTimeOffset lastReset = GetLastDailyReset(dateTimeOffset);
-
-            while (lastReset.DayOfWeek != DayOfWeek.Monday)
-            {
-                dateTimeOffset = dateTimeOffset.AddDays(-1);
-                lastReset = GetLastDailyReset(dateTimeOffset);
-            }
-
-            return lastReset;
+            DateTimeOffset lastDaily = LastDailyReset;
+            int diff = DayOfWeek.Monday - lastDaily.DayOfWeek;
+            return lastDaily.AddDays(diff > 0 ? diff - 7 : diff);
         }
     }
 
@@ -50,16 +37,9 @@ public class ResetHelper : IResetHelper
     {
         get
         {
-            DateTimeOffset dateTimeOffset = dateTimeProvider.UtcNow;
-            DateTimeOffset lastReset = GetLastDailyReset(dateTimeOffset);
+            DateTimeOffset lastDaily = LastDailyReset;
 
-            while (lastReset.Day != 1)
-            {
-                dateTimeOffset = dateTimeOffset.AddDays(-1);
-                lastReset = GetLastDailyReset(dateTimeOffset);
-            }
-
-            return lastReset;
+            return new DateTimeOffset(lastDaily.Year, lastDaily.Month, 1, 6, 0, 0, TimeSpan.Zero);
         }
     }
 }

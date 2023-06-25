@@ -15,17 +15,17 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class MypageController : DragaliaControllerBase
 {
     private readonly IMissionService missionService;
-    private readonly IItemSummonService itemSummonService;
+    private readonly IShopRepository shopRepository;
     private readonly IUpdateDataService updateDataService;
 
     public MypageController(
         IMissionService missionService,
-        IItemSummonService itemSummonService,
+        IShopRepository shopRepository,
         IUpdateDataService updateDataService
     )
     {
         this.missionService = missionService;
-        this.itemSummonService = itemSummonService;
+        this.shopRepository = shopRepository;
         this.updateDataService = updateDataService;
     }
 
@@ -50,8 +50,7 @@ public class MypageController : DragaliaControllerBase
         resp.user_summon_list = new List<UserSummonList>();
         resp.quest_event_schedule_list = new List<QuestEventScheduleList>();
         resp.quest_schedule_detail_list = AvailableQuestSchedule;
-        resp.is_shop_notification =
-            (await this.itemSummonService.GetItemSummon()).daily_summon_count == 0;
+        resp.is_shop_notification = await this.shopRepository.GetDailySummonCountAsync() == 0;
         resp.update_data_list = await this.updateDataService.SaveChangesAsync();
         resp.update_data_list.mission_notice = await this.missionService.GetMissionNotice(null);
 

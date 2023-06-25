@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -14,18 +15,21 @@ public class ShopService : IShopService
     private readonly IPaymentService paymentService;
     private readonly IRewardService rewardService;
     private readonly ILogger<ShopService> logger;
+    private readonly IResetHelper resetHelper;
 
     public ShopService(
         IShopRepository shopRepository,
         IPaymentService paymentService,
         IRewardService rewardService,
-        ILogger<ShopService> logger
+        ILogger<ShopService> logger,
+        IResetHelper resetHelper
     )
     {
         this.shopRepository = shopRepository;
         this.paymentService = paymentService;
         this.rewardService = rewardService;
         this.logger = logger;
+        this.resetHelper = resetHelper;
     }
 
     public async Task<IEnumerable<ShopPurchaseList>> DoPurchase(
@@ -155,33 +159,29 @@ public class ShopService : IShopService
         );
     }
 
-    private static (DateTimeOffset Start, DateTimeOffset End) GetEffectTimes(ShopType type)
+    private (DateTimeOffset Start, DateTimeOffset End) GetEffectTimes(ShopType type)
     {
-        DateTimeOffset current = DateTimeOffset.UtcNow;
-
-        DateTimeOffset effectStart =
-            new(current.Year, current.Month, current.Day, 6, 0, 0, TimeSpan.Zero);
-        if (effectStart > current)
-            effectStart = effectStart.AddDays(-1);
-
-        DateTimeOffset effectEnd = DateTimeOffset.UnixEpoch;
-
-        switch (type)
+        return type switch
         {
-            case ShopType.MaterialDaily:
-                effectEnd = effectStart.AddDays(1);
-                break;
-            case ShopType.MaterialWeekly:
-                int diff = effectStart.DayOfWeek - DayOfWeek.Monday;
-                effectStart = effectStart.AddDays(-(diff < 0 ? diff + 7 : diff));
-                effectEnd = effectStart.AddDays(7);
-                break;
-            case ShopType.MaterialMonthly:
-                effectStart = new(current.Year, current.Month, 1, 0, 0, 0, TimeSpan.Zero);
-                effectEnd = effectStart.AddMonths(1);
-                break;
-        }
-
-        return (effectStart, effectEnd);
+            ShopType.MaterialDaily
+                => (
+                    this.resetHelper.LastDailyReset,
+                    this.resetHelper.LastDailyReset.AddDays(1).AddSeconds(-1)
+                ),
+            ShopType.MaterialWeekly
+                => (
+                    this.resetHelper.LastWeeklyReset,
+                    this.resetHelper.LastWeeklyReset.AddDays(7).AddSeconds(-1)
+                ),
+            ShopType.MaterialMonthly
+                => (
+                    this.resetHelper.LastMonthlyReset,
+                    this.resetHelper.LastMonthlyReset.AddMonths(1).AddSeconds(-1)
+                ),
+            ShopType.Normal
+            or ShopType.Special
+                => (DateTimeOffset.UnixEpoch, DateTimeOffset.UnixEpoch),
+            _ => throw new DragaliaException(ResultCode.CommonInvalidArgument, "Invalid ShopType")
+        };
     }
 }
