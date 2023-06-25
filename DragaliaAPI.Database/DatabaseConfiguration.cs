@@ -5,8 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Serilog;
-using ILogger = Serilog.ILogger;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DragaliaAPI.Database.Test")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DragaliaAPI.Test")]
