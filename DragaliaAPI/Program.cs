@@ -1,9 +1,11 @@
 using System.Reflection;
 using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.GraphQL;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Present;
@@ -19,18 +21,15 @@ using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
+using EntityGraphQL.AspNet;
+using EntityGraphQL.Schema;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using Serilog.Extensions.Logging;
 using DragaliaAPI.Features.Fort;
-
-Log.Logger = new LoggerConfiguration().MinimumLevel
-    .Debug()
-    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateBootstrapLogger();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -167,6 +166,8 @@ builder.Services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>
 
     client.BaseAddress = new(options.StateManagerUrl);
 });
+
+builder.Services.ConfigureGraphQlSchema();
 
 WebApplication app = builder.Build();
 
