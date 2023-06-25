@@ -531,7 +531,7 @@ public class FortService : IFortService
             PaymentTypes.Coin,
             expectedPrice: plantDetail.Cost
         );
-        await inventoryRepository.UpdateQuantity(plantDetail.CreateMaterialMap);
+        await inventoryRepository.UpdateQuantity(plantDetail.CreateMaterialMap.Invert());
     }
 
     private static int GetUpgradePaymentCost(
