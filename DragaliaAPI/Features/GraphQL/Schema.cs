@@ -37,6 +37,7 @@ public static class Schema
                                 .Include(x => x.WeaponBodyList)
                                 .Include(x => x.WeaponSkinList)
                                 .Include(x => x.EquippedStampList)
+                                .Include(x => x.ShopInfo)
                                 .AsSplitQuery()
                                 .First(
                                     x => x.UserData != null && x.UserData.ViewerId == args.viewerId

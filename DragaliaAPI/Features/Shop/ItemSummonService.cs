@@ -51,14 +51,9 @@ public class ItemSummonService : IItemSummonService
         }
     }
 
-    public async Task<AtgenUserItemSummon> GetOrRefreshItemSummon()
+    public async Task<AtgenUserItemSummon> GetItemSummon()
     {
         DbPlayerShopInfo info = await this.shopRepository.GetShopInfoAsync();
-        if (info.LastSummonTime.Date < DateTimeOffset.UtcNow.Date)
-        {
-            info.DailySummonCount = 0;
-        }
-
         return new(info.DailySummonCount, info.LastSummonTime);
     }
 

@@ -51,7 +51,7 @@ public class ShopController : DragaliaControllerBase
                 infancy_paid_diamond_limit = 4800
             };
 
-        response.user_item_summon = await this.itemSummonService.GetOrRefreshItemSummon();
+        response.user_item_summon = await this.itemSummonService.GetItemSummon();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
 
         return Ok(response);
@@ -69,7 +69,7 @@ public class ShopController : DragaliaControllerBase
         ShopItemSummonExecData resp = new();
 
         resp.item_summon_reward_list = await this.itemSummonService.DoSummon(request);
-        resp.user_item_summon = await this.itemSummonService.GetOrRefreshItemSummon();
+        resp.user_item_summon = await this.itemSummonService.GetItemSummon();
         resp.update_data_list = await this.updateDataService.SaveChangesAsync();
         resp.entity_result = this.rewardService.GetEntityResult();
 

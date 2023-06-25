@@ -96,7 +96,7 @@ app.MapHealthChecks("/health");
 
 app.Run();
 
-namespace DragaliaAPI
+namespace DragaliaAPI.Photon.StateManager
 {
     // Needed for creating test fixture
     public partial class Program { }

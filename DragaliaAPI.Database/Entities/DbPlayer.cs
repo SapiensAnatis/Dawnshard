@@ -76,4 +76,6 @@ public class DbPlayer
 
     public virtual ICollection<DbPlayerPresentHistory> PresentHistory { get; set; } =
         new List<DbPlayerPresentHistory>();
+
+    public virtual DbPlayerShopInfo? ShopInfo { get; set; }
 }

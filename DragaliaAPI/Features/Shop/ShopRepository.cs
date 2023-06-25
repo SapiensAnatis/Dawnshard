@@ -30,7 +30,8 @@ public class ShopRepository : IShopRepository
 
     public async Task<DbPlayerShopInfo> GetShopInfoAsync()
     {
-        return await ShopInfos.SingleAsync();
+        return await this.apiContext.PlayerShopInfos.FindAsync(this.playerIdentityService.AccountId)
+            ?? throw new NullReferenceException("No ShopInfo found");
     }
 
     public void InitializeShopInfo()
@@ -38,6 +39,11 @@ public class ShopRepository : IShopRepository
         this.apiContext.PlayerShopInfos.Add(
             new DbPlayerShopInfo() { DeviceAccountId = this.playerIdentityService.AccountId, }
         );
+    }
+
+    public async Task<int> GetDailySummonCountAsync()
+    {
+        return await this.ShopInfos.Select(x => x.DailySummonCount).SingleAsync();
     }
 
     public async Task ClearExpiredShopPurchases()
