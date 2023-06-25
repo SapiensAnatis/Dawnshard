@@ -185,7 +185,7 @@ public class DragonTest : TestFixture
         DragonResetPlusCountRequest request = new DragonResetPlusCountRequest()
         {
             dragon_key_id = (ulong)dragon.DragonKeyId,
-            plus_count_type = (int)UpgradeEnhanceTypes.AtkPlus
+            plus_count_type = PlusCountType.Atk
         };
 
         DragonSetLockData? response = (
