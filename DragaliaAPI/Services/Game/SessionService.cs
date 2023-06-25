@@ -152,12 +152,16 @@ public class SessionService : ISessionService
     )
     {
         // Check for existing session
-        Session? existingSession = await this.TryLoadSession(Schema.Session_IdToken(idToken));
-        if (existingSession is not null)
-            return existingSession.SessionId;
-
-        string sessionId = Guid.NewGuid().ToString();
-        Session session = new(sessionId, idToken, accountId, viewerId, loginTime);
+        Session? session = await this.TryLoadSession(Schema.Session_IdToken(idToken));
+        if (session is null)
+        {
+            string sessionId = Guid.NewGuid().ToString();
+            session = new(sessionId, idToken, accountId, viewerId, loginTime);
+        }
+        else
+        {
+            session = session with { LoginTime = loginTime };
+        }
 
         // Register in sessions by id token (for reauth)
         await cache.SetStringAsync(
@@ -168,12 +172,12 @@ public class SessionService : ISessionService
 
         // Register in sessions by session id (for all other endpoints)
         await cache.SetStringAsync(
-            Schema.Session_SessionId(sessionId),
+            Schema.Session_SessionId(session.SessionId),
             JsonSerializer.Serialize(session),
             CacheOptions
         );
 
-        return sessionId;
+        return session.SessionId;
     }
 
     public async Task<Session> LoadSessionIdToken(string idToken) =>
