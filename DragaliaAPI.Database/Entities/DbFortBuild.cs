@@ -32,7 +32,7 @@ public class DbFortBuild : IDbHasAccountId
     public int FortPlantDetailId =>
         MasterAssetUtils.GetPlantDetailId(
             this.PlantId,
-            BuildStatus == FortBuildStatus.Building ? 1 : Level
+            BuildStatus == FortBuildStatus.Neutral ? Level : Level + 1
         );
 
     public int PositionX { get; set; }
