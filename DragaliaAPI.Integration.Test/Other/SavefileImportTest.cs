@@ -105,6 +105,8 @@ public class SavefileImportTest : TestFixture
                     opts.Excluding(x => x.user_data!.level);
                     opts.Excluding(x => x.user_data!.crystal);
 
+                    opts.Excluding(x => x.user_data!.fort_open_time);
+
                     // Ignored properties
                     opts.Excluding(x => x.user_data!.prologue_end_time);
                     opts.Excluding(x => x.fort_plant_list);

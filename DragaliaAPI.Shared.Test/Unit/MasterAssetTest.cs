@@ -285,7 +285,8 @@ public class MasterAssetTest
                     StaminaMaxTime: 0,
                     StaminaMax: 0,
                     EventEffectType: 0,
-                    EventEffectArgs: 0.0f
+                    EventEffectArgs: 0.0f,
+                    Odds: ""
                 )
             );
     }

@@ -34,7 +34,10 @@ public class BonusService : IBonusService
     public async Task<FortBonusList> GetBonusList()
     {
         IEnumerable<int> buildIds = (
-            await this.fortRepository.Builds.Select(x => new { x.PlantId, x.Level }).ToListAsync()
+            await this.fortRepository.Builds
+                .Where(x => x.Level != 0)
+                .Select(x => new { x.PlantId, x.Level })
+                .ToListAsync()
         ).Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level));
 
         IEnumerable<WeaponBodies> weaponIds = await this.weaponRepository.WeaponBodies

@@ -66,6 +66,8 @@ public class TutorialService : ITutorialService
                 break;
             case TutorialStoryIds.Halidom:
                 await this.fortRepository.InitializeFort();
+                DbPlayerUserData userData = await this.userDataRepository.GetUserDataAsync();
+                userData.FortOpenTime = DateTimeOffset.UtcNow;
                 await UpdateTutorialStatus(11001);
                 break;
             case TutorialStoryIds.Smithy:

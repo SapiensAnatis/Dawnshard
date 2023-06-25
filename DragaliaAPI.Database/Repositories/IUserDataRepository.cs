@@ -6,6 +6,9 @@ public interface IUserDataRepository : IBaseRepository
 {
     IQueryable<DbPlayerUserData> UserData { get; }
 
+    Task<DbPlayerUserData> GetUserDataAsync();
+    Task<DateTimeOffset> GetFortOpenTimeAsync();
+
     IQueryable<DbPlayerUserData> GetViewerData(long viewerId);
     Task GiveWyrmite(int quantity);
     Task SetMainPartyNo(int partyNo);

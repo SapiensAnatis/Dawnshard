@@ -29,7 +29,11 @@ public class DbFortBuild : IDbHasAccountId
     /// <remarks>Do not use in a .Select in queries; will cause the entire entity to load.</remarks>
     /// </summary>
     [NotMapped]
-    public int FortPlantDetailId => MasterAssetUtils.GetPlantDetailId(this.PlantId, this.Level);
+    public int FortPlantDetailId =>
+        MasterAssetUtils.GetPlantDetailId(
+            this.PlantId,
+            BuildStatus == FortBuildStatus.Building ? 1 : Level
+        );
 
     public int PositionX { get; set; }
 
@@ -40,18 +44,12 @@ public class DbFortBuild : IDbHasAccountId
 
     public FortBuildStatus GetBuildStatus()
     {
-        if (
-            this.BuildStartDate == DateTimeOffset.UnixEpoch
-            && this.BuildEndDate == DateTimeOffset.UnixEpoch
-        )
+        if (BuildStartDate != DateTimeOffset.UnixEpoch || BuildEndDate != DateTimeOffset.UnixEpoch)
         {
-            return FortBuildStatus.None;
+            return Level == 0 ? FortBuildStatus.Building : FortBuildStatus.LevelUp;
         }
 
-        if (DateTimeOffset.UtcNow < this.BuildEndDate)
-            return FortBuildStatus.Construction;
-
-        return FortBuildStatus.ConstructionComplete;
+        return FortBuildStatus.Neutral;
     }
 
     public DateTimeOffset BuildStartDate { get; set; } = DateTimeOffset.UnixEpoch;

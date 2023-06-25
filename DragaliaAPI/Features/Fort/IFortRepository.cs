@@ -13,7 +13,6 @@ public interface IFortRepository
     Task AddDragontree();
     Task<DbFortDetail> GetFortDetail();
     Task<bool> CheckPlantLevel(FortPlants plant, int requiredLevel);
-    Task GetFortPlantIdList(IEnumerable<int> fortPlantIdList);
     Task UpdateFortMaximumCarpenter(int carpenterNum);
     Task<DbFortBuild> GetBuilding(long buildId);
     Task AddBuild(DbFortBuild build);

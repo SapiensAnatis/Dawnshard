@@ -369,10 +369,10 @@ public class AstralItemList
 [MessagePackObject(true)]
 public class AtgenAddCoinList
 {
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
     public int add_coin { get; set; }
 
-    public AtgenAddCoinList(ulong build_id, int add_coin)
+    public AtgenAddCoinList(long build_id, int add_coin)
     {
         this.build_id = build_id;
         this.add_coin = add_coin;
@@ -384,10 +384,10 @@ public class AtgenAddCoinList
 [MessagePackObject(true)]
 public class AtgenAddHarvestList
 {
-    public int material_id { get; set; }
+    public Materials material_id { get; set; }
     public int add_num { get; set; }
 
-    public AtgenAddHarvestList(int material_id, int add_num)
+    public AtgenAddHarvestList(Materials material_id, int add_num)
     {
         this.material_id = material_id;
         this.add_num = add_num;
@@ -399,10 +399,10 @@ public class AtgenAddHarvestList
 [MessagePackObject(true)]
 public class AtgenAddStaminaList
 {
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
     public int add_stamina { get; set; }
 
-    public AtgenAddStaminaList(ulong build_id, int add_stamina)
+    public AtgenAddStaminaList(long build_id, int add_stamina)
     {
         this.build_id = build_id;
         this.add_stamina = add_stamina;
@@ -2302,10 +2302,10 @@ public class AtgenGuildInviteParamsList
 [MessagePackObject(true)]
 public class AtgenHarvestBuildList
 {
-    public ulong build_id { get; set; }
+    public long build_id { get; set; }
     public IEnumerable<AtgenAddHarvestList> add_harvest_list { get; set; }
 
-    public AtgenHarvestBuildList(ulong build_id, IEnumerable<AtgenAddHarvestList> add_harvest_list)
+    public AtgenHarvestBuildList(long build_id, IEnumerable<AtgenAddHarvestList> add_harvest_list)
     {
         this.build_id = build_id;
         this.add_harvest_list = add_harvest_list;
@@ -3991,9 +3991,9 @@ public class AtgenSupportWeaponBody
 public class AtgenTargetList
 {
     public string target_name { get; set; }
-    public IEnumerable<ulong> target_id_list { get; set; }
+    public IEnumerable<long> target_id_list { get; set; }
 
-    public AtgenTargetList(string target_name, IEnumerable<ulong> target_id_list)
+    public AtgenTargetList(string target_name, IEnumerable<long> target_id_list)
     {
         this.target_name = target_name;
         this.target_id_list = target_id_list;

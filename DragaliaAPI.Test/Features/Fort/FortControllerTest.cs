@@ -1,29 +1,33 @@
-using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.Test.Controllers;
+namespace DragaliaAPI.Test.Features.Fort;
 
 public class FortControllerTest
 {
     private readonly Mock<IFortService> mockFortService;
     private readonly Mock<IBonusService> mockBonusService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
+    private readonly Mock<IRewardService> mockRewardService;
 
     private readonly FortController fortController;
 
     public FortControllerTest()
     {
-        this.mockFortService = new(MockBehavior.Strict);
-        this.mockBonusService = new(MockBehavior.Strict);
-        this.mockUpdateDataService = new(MockBehavior.Strict);
+        mockFortService = new(MockBehavior.Strict);
+        mockBonusService = new(MockBehavior.Strict);
+        mockUpdateDataService = new(MockBehavior.Strict);
+        mockRewardService = new(MockBehavior.Strict);
 
-        this.fortController = new(
-            this.mockFortService.Object,
-            this.mockBonusService.Object,
-            this.mockUpdateDataService.Object
+        fortController = new(
+            mockFortService.Object,
+            mockBonusService.Object,
+            mockUpdateDataService.Object,
+            mockRewardService.Object
         );
     }
 
@@ -40,23 +44,33 @@ public class FortControllerTest
         List<BuildList> buildList = new() { new() { fort_plant_detail_id = 4 } };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
 
-        this.mockUpdateDataService
-            .Setup(x => x.SaveChangesAsync())
-            .ReturnsAsync(new UpdateDataList());
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
 
-        this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
-        this.mockFortService.Setup(x => x.GetBuildList()).ReturnsAsync(buildList);
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
 
-        this.mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
 
-        FortGetDataData data = (await this.fortController.GetData()).GetData<FortGetDataData>()!;
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(new UpdateDataList());
+
+        mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
+        mockFortService.Setup(x => x.GetBuildList()).ReturnsAsync(buildList);
+
+        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+
+        FortGetDataData data = (await fortController.GetData()).GetData<FortGetDataData>()!;
 
         data.build_list.Should().BeEquivalentTo(buildList);
         data.fort_bonus_list.Should().BeEquivalentTo(bonusList);
         data.fort_detail.Should().BeEquivalentTo(detail);
 
-        this.mockFortService.VerifyAll();
-        this.mockBonusService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockBonusService.VerifyAll();
     }
 
     [Fact]
@@ -65,15 +79,15 @@ public class FortControllerTest
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
-        this.mockFortService
+        mockFortService
             .Setup(x => x.AddCarpenter(PaymentTypes.Diamantium))
             .ReturnsAsync(new FortDetail());
-        this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
+        mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortAddCarpenterData data = (
-            await this.fortController.AddCarpenter(
+            await fortController.AddCarpenter(
                 new FortAddCarpenterRequest() { payment_type = PaymentTypes.Diamantium }
             )
         ).GetData<FortAddCarpenterData>()!;
@@ -82,28 +96,40 @@ public class FortControllerTest
         data.fort_detail.Should().BeEquivalentTo(detail);
         data.update_data_list.Should().BeEquivalentTo(updateDataList);
 
-        this.mockFortService.VerifyAll();
-        this.mockUpdateDataService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockUpdateDataService.VerifyAll();
     }
 
     [Fact]
-    public async Task BuildAtOnce_CallsCompleteAtOnce()
+    public async Task BuildAtOnce_CallsBuildAtOnce()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
-        this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
-        this.mockFortService
-            .Setup(x => x.CompleteAtOnce(PaymentTypes.HalidomHustleHammer, 8))
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
+        mockFortService
+            .Setup(x => x.BuildAtOnce(PaymentTypes.HalidomHustleHammer, 8))
             .Returns(Task.CompletedTask);
 
-        this.mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortBuildAtOnceData data = (
-            await this.fortController.BuildAtOnce(
+            await fortController.BuildAtOnce(
                 new FortBuildAtOnceRequest()
                 {
                     payment_type = PaymentTypes.HalidomHustleHammer,
@@ -118,26 +144,26 @@ public class FortControllerTest
         data.fort_detail.Should().BeEquivalentTo(detail);
         data.update_data_list.Should().BeEquivalentTo(updateDataList);
 
-        this.mockFortService.VerifyAll();
-        this.mockBonusService.VerifyAll();
-        this.mockUpdateDataService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockBonusService.VerifyAll();
+        mockUpdateDataService.VerifyAll();
     }
 
     [Fact]
-    public async Task BuildCancel_CallsCancelUpgrade()
+    public async Task BuildCancel_CallsCancelBuild()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
-        this.mockFortService
-            .Setup(x => x.CancelUpgrade(1))
+        mockFortService
+            .Setup(x => x.CancelBuild(1))
             .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id", BuildId = 1 });
-        this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
+        mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortBuildCancelData data = (
-            await this.fortController.BuildCancel(new FortBuildCancelRequest() { build_id = 1 })
+            await fortController.BuildCancel(new FortBuildCancelRequest() { build_id = 1 })
         ).GetData<FortBuildCancelData>()!;
 
         data.result.Should().Be(1);
@@ -145,26 +171,38 @@ public class FortControllerTest
         data.fort_detail.Should().BeEquivalentTo(detail);
         data.update_data_list.Should().BeEquivalentTo(updateDataList);
 
-        this.mockFortService.VerifyAll();
-        this.mockUpdateDataService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockUpdateDataService.VerifyAll();
     }
 
     [Fact]
-    public async Task BuildEnd_CallsEndUpgrade()
+    public async Task BuildEnd_CallsEndBuild()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
-        this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
-        this.mockFortService.Setup(x => x.EndUpgrade(8)).Returns(Task.CompletedTask);
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
 
-        this.mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
+        mockFortService.Setup(x => x.EndBuild(8)).Returns(Task.CompletedTask);
+
+        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortBuildEndData data = (
-            await this.fortController.BuildEnd(new FortBuildEndRequest() { build_id = 8 })
+            await fortController.BuildEnd(new FortBuildEndRequest() { build_id = 8 })
         ).GetData<FortBuildEndData>()!;
 
         data.result.Should().Be(1);
@@ -173,9 +211,9 @@ public class FortControllerTest
         data.fort_detail.Should().BeEquivalentTo(detail);
         data.update_data_list.Should().BeEquivalentTo(updateDataList);
 
-        this.mockFortService.VerifyAll();
-        this.mockBonusService.VerifyAll();
-        this.mockUpdateDataService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockBonusService.VerifyAll();
+        mockUpdateDataService.VerifyAll();
     }
 
     [Fact]
@@ -192,15 +230,15 @@ public class FortControllerTest
                 BuildEndDate = DateTimeOffset.UtcNow,
             };
 
-        this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
-        this.mockFortService
+        mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
+        mockFortService
             .Setup(x => x.BuildStart(FortPlants.BroadleafTree, 2, 3))
             .ReturnsAsync(build);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortBuildStartData data = (
-            await this.fortController.BuildStart(
+            await fortController.BuildStart(
                 new FortBuildStartRequest()
                 {
                     fort_plant_id = FortPlants.BroadleafTree,
@@ -218,22 +256,34 @@ public class FortControllerTest
         data.fort_detail.Should().BeEquivalentTo(detail);
         data.update_data_list.Should().BeEquivalentTo(updateDataList);
 
-        this.mockFortService.VerifyAll();
-        this.mockUpdateDataService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockUpdateDataService.VerifyAll();
     }
 
     [Fact]
-    public async Task LevelupAtOnce_CallsCompleteAtOnce()
+    public async Task LevelupAtOnce_CallsLevelupAtOnce()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
-        this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
-        this.mockFortService
-            .Setup(x => x.CompleteAtOnce(PaymentTypes.HalidomHustleHammer, 8))
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
+        mockFortService
+            .Setup(x => x.LevelupAtOnce(PaymentTypes.HalidomHustleHammer, 8))
             .Returns(Task.CompletedTask);
-        this.mockFortService
+        mockFortService
             .Setup(x => x.GetBuildList())
             .ReturnsAsync(
                 new List<BuildList>()
@@ -243,12 +293,12 @@ public class FortControllerTest
                 }
             );
 
-        this.mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortLevelupAtOnceData data = (
-            await this.fortController.LevelupAtOnce(
+            await fortController.LevelupAtOnce(
                 new FortLevelupAtOnceRequest()
                 {
                     payment_type = PaymentTypes.HalidomHustleHammer,
@@ -265,26 +315,26 @@ public class FortControllerTest
         data.fort_detail.Should().BeEquivalentTo(detail);
         data.update_data_list.Should().BeEquivalentTo(updateDataList);
 
-        this.mockFortService.VerifyAll();
-        this.mockBonusService.VerifyAll();
-        this.mockUpdateDataService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockBonusService.VerifyAll();
+        mockUpdateDataService.VerifyAll();
     }
 
     [Fact]
-    public async Task LevelupCancel_CallsCancelUpgrade()
+    public async Task LevelupCancel_CallsCancelLevelup()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
-        this.mockFortService
-            .Setup(x => x.CancelUpgrade(1))
+        mockFortService
+            .Setup(x => x.CancelLevelup(1))
             .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id", BuildId = 1 });
-        this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
+        mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortLevelupCancelData data = (
-            await this.fortController.LevelupCancel(new FortLevelupCancelRequest() { build_id = 1 })
+            await fortController.LevelupCancel(new FortLevelupCancelRequest() { build_id = 1 })
         ).GetData<FortLevelupCancelData>()!;
 
         data.result.Should().Be(1);
@@ -292,20 +342,32 @@ public class FortControllerTest
         data.fort_detail.Should().BeEquivalentTo(detail);
         data.update_data_list.Should().BeEquivalentTo(updateDataList);
 
-        this.mockFortService.VerifyAll();
-        this.mockUpdateDataService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockUpdateDataService.VerifyAll();
     }
 
     [Fact]
-    public async Task LevelupEnd_CallsEndUpgrade()
+    public async Task LevelupEnd_CallsEndLevelup()
     {
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
-        this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
-        this.mockFortService.Setup(x => x.EndUpgrade(8)).Returns(Task.CompletedTask);
-        this.mockFortService
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
+        mockFortService.Setup(x => x.EndLevelup(8)).Returns(Task.CompletedTask);
+        mockFortService
             .Setup(x => x.GetBuildList())
             .ReturnsAsync(
                 new List<BuildList>()
@@ -315,12 +377,12 @@ public class FortControllerTest
                 }
             );
 
-        this.mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortLevelupEndData data = (
-            await this.fortController.LevelupEnd(new FortLevelupEndRequest() { build_id = 8 })
+            await fortController.LevelupEnd(new FortLevelupEndRequest() { build_id = 8 })
         ).GetData<FortLevelupEndData>()!;
 
         data.result.Should().Be(1);
@@ -331,9 +393,9 @@ public class FortControllerTest
         data.fort_detail.Should().BeEquivalentTo(detail);
         data.update_data_list.Should().BeEquivalentTo(updateDataList);
 
-        this.mockFortService.VerifyAll();
-        this.mockBonusService.VerifyAll();
-        this.mockUpdateDataService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockBonusService.VerifyAll();
+        mockUpdateDataService.VerifyAll();
     }
 
     [Fact]
@@ -343,9 +405,21 @@ public class FortControllerTest
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
         FortDetail detail = new() { working_carpenter_num = 4 };
 
-        this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
-        this.mockFortService.Setup(x => x.EndUpgrade(8)).Returns(Task.CompletedTask);
-        this.mockFortService
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
+        mockFortService.Setup(x => x.EndLevelup(8)).Returns(Task.CompletedTask);
+        mockFortService
             .Setup(x => x.GetBuildList())
             .ReturnsAsync(
                 new List<BuildList>()
@@ -354,12 +428,12 @@ public class FortControllerTest
                 }
             );
 
-        this.mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortLevelupEndData data = (
-            await this.fortController.LevelupEnd(new FortLevelupEndRequest() { build_id = 8 })
+            await fortController.LevelupEnd(new FortLevelupEndRequest() { build_id = 8 })
         ).GetData<FortLevelupEndData>()!;
 
         data.result.Should().Be(1);
@@ -370,24 +444,24 @@ public class FortControllerTest
         data.fort_detail.Should().BeEquivalentTo(detail);
         data.update_data_list.Should().BeEquivalentTo(updateDataList);
 
-        this.mockFortService.VerifyAll();
-        this.mockBonusService.VerifyAll();
-        this.mockUpdateDataService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockBonusService.VerifyAll();
+        mockUpdateDataService.VerifyAll();
     }
 
     [Fact]
     public async Task LevelupEnd_NoHalidom_ThrowsInvalidOperationException()
     {
-        this.mockFortService.Setup(x => x.GetBuildList()).ReturnsAsync(new List<BuildList>() { });
+        mockFortService.Setup(x => x.GetBuildList()).ReturnsAsync(new List<BuildList>() { });
 
-        await this.fortController
+        await fortController
             .Invoking(x => x.LevelupEnd(new FortLevelupEndRequest() { build_id = 8 }))
             .Should()
             .ThrowExactlyAsync<InvalidOperationException>();
 
-        this.mockFortService.VerifyAll();
-        this.mockBonusService.VerifyAll();
-        this.mockUpdateDataService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockBonusService.VerifyAll();
+        mockUpdateDataService.VerifyAll();
     }
 
     [Fact]
@@ -404,13 +478,15 @@ public class FortControllerTest
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromHours(2),
             };
 
-        this.mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
-        this.mockFortService.Setup(x => x.LevelupStart(1)).ReturnsAsync(build);
+        mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+        mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
+        mockFortService.Setup(x => x.LevelupStart(1)).ReturnsAsync(build);
+
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortLevelupStartData data = (
-            await this.fortController.LevelupStart(new FortLevelupStartRequest() { build_id = 1 })
+            await fortController.LevelupStart(new FortLevelupStartRequest() { build_id = 1 })
         ).GetData<FortLevelupStartData>()!;
 
         data.result.Should().Be(1);
@@ -421,8 +497,8 @@ public class FortControllerTest
         data.fort_detail.Should().BeEquivalentTo(detail);
         data.update_data_list.Should().BeEquivalentTo(updateDataList);
 
-        this.mockFortService.VerifyAll();
-        this.mockUpdateDataService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockUpdateDataService.VerifyAll();
     }
 
     [Fact]
@@ -431,16 +507,28 @@ public class FortControllerTest
         UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
         FortBonusList bonusList = new() { all_bonus = new(2, 3) };
 
-        this.mockFortService
+        mockFortService
+            .Setup(x => x.GetRupieProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetDragonfruitProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
+            .Setup(x => x.GetStaminaProduction())
+            .ReturnsAsync(new AtgenProductionRp(0, 0));
+
+        mockFortService
             .Setup(x => x.Move(1, 2, 3))
             .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id", BuildId = 1 });
 
-        this.mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
+        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
-        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
+        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
 
         FortMoveData data = (
-            await this.fortController.Move(
+            await fortController.Move(
                 new FortMoveRequest()
                 {
                     build_id = 1,
@@ -455,7 +543,7 @@ public class FortControllerTest
         data.fort_bonus_list.Should().BeEquivalentTo(bonusList);
         data.update_data_list.Should().BeEquivalentTo(updateDataList);
 
-        this.mockFortService.VerifyAll();
-        this.mockUpdateDataService.VerifyAll();
+        mockFortService.VerifyAll();
+        mockUpdateDataService.VerifyAll();
     }
 }
