@@ -33,6 +33,17 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
             x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
+    public async Task<DbPlayerUserData> GetUserDataAsync()
+    {
+        return await this.apiContext.PlayerUserData.FindAsync(this.playerIdentityService.AccountId)
+            ?? throw new InvalidOperationException("No UserData found");
+    }
+
+    public async Task<DateTimeOffset> GetFortOpenTimeAsync()
+    {
+        return await this.UserData.Select(x => x.FortOpenTime).SingleAsync();
+    }
+
     public IQueryable<DbPlayerUserData> GetViewerData(long viewerId)
     {
         return this.apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId);

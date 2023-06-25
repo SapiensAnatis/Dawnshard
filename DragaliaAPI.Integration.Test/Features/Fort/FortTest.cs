@@ -2,6 +2,7 @@
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
@@ -71,12 +72,13 @@ public class FortTest : TestFixture
                     build_start_date = start,
                     build_end_date = end,
                     fort_plant_detail_id = 10050410,
-                    build_status = FortBuildStatus.Construction,
-                    is_new = false,
-                    remain_time = end - DateTimeOffset.UtcNow,
-                    last_income_time = DateTimeOffset.UtcNow - income
+                    build_status = FortBuildStatus.LevelUp,
+                    is_new = false
                 },
-                opts => opts.Excluding(x => x.build_id)
+                opts =>
+                    opts.Excluding(x => x.build_id)
+                        .Excluding(x => x.last_income_time)
+                        .Excluding(x => x.remain_time)
             );
 
         // Not much point asserting against the other properties since they're stubs
@@ -105,7 +107,7 @@ public class FortTest : TestFixture
                 {
                     DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
-                    Level = 1,
+                    Level = 0,
                     PositionX = 2,
                     PositionZ = 2,
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
@@ -141,7 +143,7 @@ public class FortTest : TestFixture
                 {
                     DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
-                    Level = 2,
+                    Level = 0,
                     PositionX = 2,
                     PositionZ = 2,
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
@@ -160,34 +162,27 @@ public class FortTest : TestFixture
             )
         ).data;
 
-        BuildList result = response.update_data_list.build_list.First(
-            x => x.build_id == (ulong)build.BuildId
-        );
-        result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.level.Should().Be(1); // Level should have decreased
+        // this removes it from the player
     }
 
     [Fact]
     public async Task BuildEnd_ReturnsValidResult()
     {
-        DbFortBuild build = this.ApiContext.PlayerFortBuilds
-            .Add(
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    PlantId = FortPlants.StaffDojo,
-                    Level = 2,
-                    PositionX = 2,
-                    PositionZ = 2,
-                    BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1682110410),
-                    BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1682110411),
-                    IsNew = true,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
-                }
-            )
-            .Entity;
-        await this.ApiContext.SaveChangesAsync();
+        DbFortBuild build =
+            new()
+            {
+                DeviceAccountId = DeviceAccountId,
+                PlantId = FortPlants.StaffDojo,
+                Level = 0,
+                PositionX = 2,
+                PositionZ = 2,
+                BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1682110410),
+                BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1682110411),
+                IsNew = true,
+                LastIncomeDate = DateTimeOffset.UnixEpoch
+            };
+
+        await this.AddToDatabase(build);
 
         FortBuildEndData response = (
             await this.Client.PostMsgpack<FortBuildEndData>(
@@ -201,7 +196,7 @@ public class FortTest : TestFixture
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.level.Should().Be(2);
+        result.level.Should().Be(1);
     }
 
     [Fact]
@@ -263,7 +258,7 @@ public class FortTest : TestFixture
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
-        result.level.Should().Be(2);
+        result.level.Should().Be(3);
     }
 
     [Fact]
@@ -275,7 +270,7 @@ public class FortTest : TestFixture
                 {
                     DeviceAccountId = DeviceAccountId,
                     PlantId = FortPlants.StaffDojo,
-                    Level = 2,
+                    Level = 1,
                     PositionX = 2,
                     PositionZ = 2,
                     BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1887924543),
@@ -372,7 +367,7 @@ public class FortTest : TestFixture
         result.build_start_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().BeAfter(result.build_start_date);
-        result.level.Should().Be(2);
+        result.level.Should().Be(1);
     }
 
     [Fact]
@@ -410,5 +405,69 @@ public class FortTest : TestFixture
         );
         result.position_x.Should().Be(ExpectedPositionX);
         result.position_z.Should().Be(ExpectedPositionZ);
+    }
+
+    [Fact]
+    public async Task GetMultiIncome_ReturnsExpectedResponse()
+    {
+        DateTimeOffset lastIncome = DateTimeOffset.UtcNow - TimeSpan.FromHours(6);
+        long oldCoin = this.ApiContext.PlayerUserData
+            .AsNoTracking()
+            .First(x => x.DeviceAccountId == DeviceAccountId)
+            .Coin;
+
+        DbFortBuild rupieMine =
+            new()
+            {
+                DeviceAccountId = DeviceAccountId,
+                PlantId = FortPlants.RupieMine,
+                LastIncomeDate = lastIncome,
+                Level = 10
+            };
+        DbFortBuild dragonTree =
+            new()
+            {
+                DeviceAccountId = DeviceAccountId,
+                PlantId = FortPlants.Dragontree,
+                LastIncomeDate = lastIncome,
+                Level = 13
+            };
+
+        this.ApiContext.PlayerFortBuilds.Add(rupieMine);
+        this.ApiContext.PlayerFortBuilds.Add(dragonTree);
+
+        DbFortBuild halidom = this.ApiContext.PlayerFortBuilds.First(
+            x => x.PlantId == FortPlants.TheHalidom && x.DeviceAccountId == DeviceAccountId
+        );
+        halidom.LastIncomeDate = lastIncome;
+
+        await this.ApiContext.SaveChangesAsync();
+
+        DragaliaResponse<FortGetMultiIncomeData> response =
+            await this.Client.PostMsgpack<FortGetMultiIncomeData>(
+                "/fort/get_multi_income",
+                new FortGetMultiIncomeRequest()
+                {
+                    build_id_list = new[] { rupieMine.BuildId, dragonTree.BuildId, halidom.BuildId }
+                }
+            );
+
+        response.data.add_coin_list.Should().NotBeEmpty();
+        AtgenAddCoinList coinList = response.data.add_coin_list.First();
+        coinList.build_id.Should().Be(rupieMine.BuildId);
+        coinList.add_coin.Should().BeCloseTo(3098, 10);
+
+        response.data.harvest_build_list.Should().NotBeEmpty();
+        AtgenHarvestBuildList harvestList = response.data.harvest_build_list.First();
+        harvestList.build_id.Should().Be(dragonTree.BuildId);
+        harvestList.add_harvest_list.Should().NotBeEmpty();
+
+        response.data.add_stamina_list.Should().NotBeEmpty();
+        AtgenAddStaminaList staminaList = response.data.add_stamina_list.First();
+        staminaList.build_id.Should().Be(halidom.BuildId);
+        staminaList.add_stamina.Should().Be(12);
+
+        response.data.update_data_list.user_data.coin.Should().BeCloseTo(oldCoin + 3098, 10);
+        response.data.update_data_list.material_list.Should().NotBeEmpty();
     }
 }

@@ -2,7 +2,7 @@
 
 public enum FortBuildStatus
 {
-    None = 0,
-    Construction = 1,
-    ConstructionComplete = 2
+    Neutral,
+    Building,
+    LevelUp
 }

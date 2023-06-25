@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
+using DragaliaAPI.Features.Fort;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -53,12 +54,14 @@ public class UpdateController : DragaliaControllerBase
                 case "friend_apply":
                 case "stamp":
                 case "emblem":
-                case "fort":
                     // TODO
                     logger.LogInformation(
                         "Unhandled type {resetType} in update/reset_new",
                         target.target_name
                     );
+                    break;
+                case "fort":
+                    await this.fortService.ClearPlantNewStatuses(target.target_id_list);
                     break;
                 default:
                     throw new DragaliaException(

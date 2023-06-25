@@ -1,0 +1,49 @@
+{
+  "FruitOdds": {
+    "FortFruitOdds_1": {
+      "Normal": 65,
+      "Ripe": 25,
+      "Succulent": 10
+    },
+    "FortFruitOdds_2": {
+      "Normal": 60,
+      "Ripe": 30,
+      "Succulent": 10
+    },
+    "FortFruitOdds_3": {
+      "Normal": 55,
+      "Ripe": 30,
+      "Succulent": 15
+    },
+    "FortFruitOdds_4": {
+      "Normal": 50,
+      "Ripe": 35,
+      "Succulent": 15
+    },
+    "FortFruitOdds_5": {
+      "Normal": 45,
+      "Ripe": 35,
+      "Succulent": 20
+    },
+    "FortFruitOdds_6": {
+      "Normal": 40,
+      "Ripe": 40,
+      "Succulent": 20
+    },
+    "FortFruitOdds_7": {
+      "Normal": 35,
+      "Ripe": 40,
+      "Succulent": 25
+    },
+    "FortFruitOdds_8": {
+      "Normal": 30,
+      "Ripe": 45,
+      "Succulent": 25
+    },
+    "FortFruitOdds_9": {
+      "Normal": 25,
+      "Ripe": 45,
+      "Succulent": 30
+    }
+  }
+}
