@@ -66,7 +66,8 @@ public record FortPlantDetail(
     int CostMax,
     int CostMaxTime,
     int StaminaMax,
-    int StaminaMaxTime
+    int StaminaMaxTime,
+    string Odds
 )
 {
     public Dictionary<Materials, int> CreateMaterialMap { get; } =

@@ -1,6 +1,7 @@
 using System.Reflection;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
@@ -28,11 +29,13 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Extensions.Logging;
+using DragaliaAPI.Features.Fort;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 IConfiguration config = builder.Configuration
     .AddJsonFile("itemSummonOdds.json", optional: false, reloadOnChange: true)
+    .AddJsonFile("dragonfruitOdds.json", optional: false, reloadOnChange: true)
     .Build();
 
 builder.Services
@@ -41,10 +44,14 @@ builder.Services
     .Configure<DragalipatchOptions>(config.GetRequiredSection("Dragalipatch"))
     .Configure<RedisOptions>(config.GetRequiredSection("Redis"))
     .Configure<PhotonOptions>(config.GetRequiredSection(nameof(PhotonOptions)))
-    .Configure<ItemSummonConfig>(config);
+    .Configure<ItemSummonConfig>(config)
+    .Configure<DragonfruitConfig>(config);
 
 // Ensure item summon weightings add to 100%
 builder.Services.AddOptions<ItemSummonConfig>().Validate(x => x.Odds.Sum(y => y.Rate) == 100_000);
+builder.Services
+    .AddOptions<DragonfruitConfig>()
+    .Validate(x => x.FruitOdds.Values.All(y => y.Normal + y.Ripe + y.Succulent == 100));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
@@ -111,7 +118,6 @@ builder.Services
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<IBonusService, BonusService>()
     .AddScoped<IWeaponService, WeaponService>()
-    .AddScoped<IFortService, FortService>()
     .AddScoped<IQuestRewardService, QuestRewardService>()
     .AddScoped<IStoryService, StoryService>()
     .AddScoped<IMatchingService, MatchingService>()
@@ -143,7 +149,10 @@ builder.Services
     .AddScoped<IPresentRepository, PresentRepository>()
     // Treasure Trade Feature
     .AddScoped<ITradeRepository, TradeRepository>()
-    .AddScoped<ITradeService, TradeService>();
+    .AddScoped<ITradeService, TradeService>()
+    // Fort Feature
+    .AddScoped<IFortService, FortService>()
+    .AddScoped<IFortRepository, FortRepository>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 
