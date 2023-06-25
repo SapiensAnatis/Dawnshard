@@ -337,18 +337,6 @@ public class DragonServiceTest
     [Fact]
     public async Task DoDragonResetPlusCount_ResetsPlusCount()
     {
-        DbPlayerUserData userData = new DbPlayerUserData()
-        {
-            DeviceAccountId = DeviceAccountId,
-            Coin = 20000 * 50
-        };
-
-        IQueryable<DbPlayerUserData> userDataList = new List<DbPlayerUserData>() { userData }
-            .AsQueryable()
-            .BuildMock();
-
-        mockUserDataRepository.SetupGet(x => x.UserData).Returns(userDataList);
-
         DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
             DeviceAccountId,
             Dragons.Garuda
@@ -368,10 +356,6 @@ public class DragonServiceTest
             MaterialId = Materials.AmplifyingDragonscale,
             Quantity = 0
         };
-
-        mockInventoryRepository
-            .Setup(x => x.GetMaterial(Materials.AmplifyingDragonscale))
-            .ReturnsAsync(mat);
 
         mockPaymentService
             .Setup(
