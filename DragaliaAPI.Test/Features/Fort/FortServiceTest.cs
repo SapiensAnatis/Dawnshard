@@ -134,7 +134,7 @@ public class FortServiceTest
                         build_start_date = new(2023, 04, 18, 18, 32, 34, TimeSpan.Zero),
                         level = 5,
                         plant_id = FortPlants.Dragontree,
-                        fort_plant_detail_id = 10030105,
+                        fort_plant_detail_id = 10030106,
                         build_status = FortBuildStatus.LevelUp,
                     },
                 },
