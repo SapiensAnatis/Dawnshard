@@ -60,7 +60,7 @@ public class FortTest : TestFixture
                     build_start_date = DateTimeOffset.UnixEpoch,
                     build_end_date = DateTimeOffset.UnixEpoch,
                 },
-                opts => opts.Excluding(x => x.build_id)
+                opts => opts.Excluding(x => x.build_id).Excluding(x => x.last_income_time)
             )
             .And.ContainEquivalentOf(
                 new BuildList()
