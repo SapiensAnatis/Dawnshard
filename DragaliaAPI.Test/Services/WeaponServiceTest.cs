@@ -471,7 +471,7 @@ public class WeaponServiceTest
     [Fact]
     public async Task TryBuildup_Stats_InvalidStats_ReturnsError()
     {
-        WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.Mjölnir);
+        WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.Mjoelnir);
 
         (
             await this.weaponService.TryBuildup(
@@ -492,7 +492,7 @@ public class WeaponServiceTest
     [Fact]
     public async Task TryBuildup_Stats_NotEnoughMaterials_ReturnsError()
     {
-        WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.Mjölnir);
+        WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.Mjoelnir);
 
         this.mockInventoryRepository
             .Setup(
@@ -524,7 +524,7 @@ public class WeaponServiceTest
     [Fact]
     public async Task TryBuildup_Stats_InvalidStep_ReturnsError()
     {
-        WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.Mjölnir);
+        WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.Mjoelnir);
 
         this.mockInventoryRepository
             .Setup(
@@ -537,7 +537,7 @@ public class WeaponServiceTest
             )
             .ReturnsAsync(true);
         this.mockWeaponRepository
-            .Setup(x => x.FindAsync(WeaponBodies.Mjölnir))
+            .Setup(x => x.FindAsync(WeaponBodies.Mjoelnir))
             .ReturnsAsync(new DbWeaponBody() { DeviceAccountId = "id", BuildupCount = 0 });
 
         (
@@ -559,7 +559,7 @@ public class WeaponServiceTest
     [Fact]
     public async Task TryBuildup_Stats_Success_ReturnsSuccess()
     {
-        WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.Mjölnir);
+        WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.Mjoelnir);
 
         this.mockInventoryRepository
             .Setup(
@@ -572,7 +572,7 @@ public class WeaponServiceTest
             )
             .ReturnsAsync(true);
         this.mockWeaponRepository
-            .Setup(x => x.FindAsync(WeaponBodies.Mjölnir))
+            .Setup(x => x.FindAsync(WeaponBodies.Mjoelnir))
             .ReturnsAsync(new DbWeaponBody() { DeviceAccountId = "id", BuildupCount = 39 });
         this.mockInventoryRepository
             .Setup(
