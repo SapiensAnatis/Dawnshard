@@ -69,7 +69,7 @@ public class ShopService : IShopService
             if (type != EntityTypes.None)
             {
                 await this.rewardService.GrantReward(
-                    new Entity(type, id, quantity, limitBreakCount)
+                    new Entity(type, id, quantity * goodsQuantity, limitBreakCount)
                 );
             }
         }
