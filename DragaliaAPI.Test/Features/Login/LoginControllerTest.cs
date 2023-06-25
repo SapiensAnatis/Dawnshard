@@ -43,6 +43,8 @@ public class LoginControllerTest
             this.mockRewardService.Object,
             this.mockDateTimeProvider.Object
         );
+
+        this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UtcNow);
     }
 
     [Fact]
@@ -66,14 +68,13 @@ public class LoginControllerTest
 
         this.mockDailyResetAction.Setup(x => x.Apply()).Returns(Task.CompletedTask);
 
-        this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UtcNow);
-
         this.mockUpdateDataService
             .Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
 
         await this.loginController.Index();
 
+        this.mockDateTimeProvider.VerifyAll();
         this.mockRewardService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockResetHelper.VerifyAll();
@@ -97,6 +98,7 @@ public class LoginControllerTest
 
         await this.loginController.Index();
 
+        this.mockDateTimeProvider.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockResetHelper.VerifyAll();
         this.mockDailyResetAction.Verify(x => x.Apply(), Times.Never);
