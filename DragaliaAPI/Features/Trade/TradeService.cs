@@ -137,7 +137,10 @@ public class TradeService : ITradeService
             {
                 case EntityTypes.Material
                 or EntityTypes.FafnirMedal:
-                    await this.inventoryRepository.UpdateQuantity((Materials)id, quantity);
+                    await this.inventoryRepository.UpdateQuantity(
+                        (Materials)id,
+                        -(quantity * count)
+                    );
                     break;
                 case EntityTypes.Mana:
                     await this.paymentService.ProcessPayment(
@@ -160,7 +163,7 @@ public class TradeService : ITradeService
             new(
                 trade.DestinationEntityType,
                 trade.DestinationEntityId,
-                trade.DestinationEntityQuantity,
+                trade.DestinationEntityQuantity * count,
                 trade.DestinationLimitBreakCount
             )
         );
