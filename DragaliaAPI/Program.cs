@@ -157,7 +157,8 @@ builder.Services
     .AddScoped<IFortRepository, FortRepository>()
     // Login feature
     .AddScoped<IResetHelper, ResetHelper>()
-    .AddScoped<IDateTimeProvider, DateTimeProvider>();
+    .AddScoped<IDateTimeProvider, DateTimeProvider>()
+    .AddScoped<ILoginBonusService, LoginBonusService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();

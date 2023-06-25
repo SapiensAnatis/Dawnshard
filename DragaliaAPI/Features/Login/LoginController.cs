@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -22,13 +23,19 @@ public class LoginController : DragaliaControllerBase
     private readonly IEnumerable<IDailyResetAction> resetActions;
     private readonly IResetHelper resetHelper;
     private readonly ILogger<LoginController> logger;
+    private readonly ILoginBonusService loginBonusService;
+    private readonly IRewardService rewardService;
+    private readonly IDateTimeProvider dateTimeProvider;
 
     public LoginController(
         IUserDataRepository userDataRepository,
         IUpdateDataService updateDataService,
         IEnumerable<IDailyResetAction> resetActions,
         IResetHelper resetHelper,
-        ILogger<LoginController> logger
+        ILogger<LoginController> logger,
+        ILoginBonusService loginBonusService,
+        IRewardService rewardService,
+        IDateTimeProvider dateTimeProvider
     )
     {
         this.userDataRepository = userDataRepository;
@@ -36,6 +43,9 @@ public class LoginController : DragaliaControllerBase
         this.resetActions = resetActions;
         this.resetHelper = resetHelper;
         this.logger = logger;
+        this.loginBonusService = loginBonusService;
+        this.rewardService = rewardService;
+        this.dateTimeProvider = dateTimeProvider;
     }
 
     [HttpPost]
@@ -50,7 +60,9 @@ public class LoginController : DragaliaControllerBase
     [Route("index")]
     public async Task<DragaliaResult> Index()
     {
-        // TODO: Implement daily login bonuses/notifications/resets
+        LoginIndexData resp = new();
+
+        // TODO: Implement daily login bonuses/notifications/resets (status: daily login bonus done)
         DbPlayerUserData userData =
             await userDataRepository.UserData.FirstOrDefaultAsync()
             ?? throw new DragaliaException(ResultCode.CommonDataNotFoundError);
@@ -62,13 +74,22 @@ public class LoginController : DragaliaControllerBase
                 this.logger.LogDebug("Applying daily reset action: {$action}", action);
                 await action.Apply();
             }
+
+            resp.login_bonus_list = await this.loginBonusService.RewardLoginBonus();
         }
 
-        userData.LastLoginTime = DateTimeOffset.UtcNow;
+        userData.LastLoginTime = this.dateTimeProvider.UtcNow;
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        resp.penalty_data = new AtgenPenaltyData();
+        resp.dragon_contact_free_gift_count = 1;
+        resp.login_lottery_reward_list = Enumerable.Empty<AtgenLoginLotteryRewardList>();
+        resp.exchange_summom_point_list = Enumerable.Empty<AtgenExchangeSummomPointList>();
+        resp.monthly_wall_receive_list = Enumerable.Empty<AtgenMonthlyWallReceiveList>();
+        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+        resp.entity_result = this.rewardService.GetEntityResult();
+        resp.server_time = DateTimeOffset.UtcNow;
 
-        return this.Ok(new LoginIndexData() { update_data_list = updateDataList });
+        return this.Ok(resp);
     }
 
     [HttpPost]

@@ -30,6 +30,12 @@
 		<None Update="Resources\AbilityCrestRarity.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="Resources\Login\LoginBonusData.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\Login\LoginBonusReward.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Resources\Trade\AbilityCrestTrade.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -157,6 +163,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="MasterAsset\Models\Login\" />
 	  <Folder Include="MasterAsset\Models\Trade\" />
 	</ItemGroup>
 
