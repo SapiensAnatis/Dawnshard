@@ -45,6 +45,8 @@ public class LoginControllerTest
         );
 
         this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UtcNow);
+
+        this.mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
     }
 
     [Fact]
@@ -59,8 +61,6 @@ public class LoginControllerTest
         );
 
         this.mockResetHelper.SetupGet(x => x.LastDailyReset).Returns(DateTimeOffset.UtcNow);
-
-        this.mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 
         this.loginBonusService
             .Setup(x => x.RewardLoginBonus())
@@ -99,6 +99,7 @@ public class LoginControllerTest
         await this.loginController.Index();
 
         this.mockDateTimeProvider.VerifyAll();
+        this.mockRewardService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockResetHelper.VerifyAll();
         this.mockDailyResetAction.Verify(x => x.Apply(), Times.Never);
