@@ -200,7 +200,7 @@ public class MissionService : IMissionService
     {
         DbPlayerMission? firstMainStoryMission = await this.missionRepository
             .GetMissionsByType(MissionType.MainStory)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.State == MissionState.InProgress);
 
         if (firstMainStoryMission == null)
             return new CurrentMainStoryMission();
