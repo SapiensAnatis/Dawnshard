@@ -445,7 +445,7 @@ public class FortServiceTest
 
         mockUserDataRepository
             .Setup(x => x.GetFortOpenTimeAsync())
-            .ReturnsAsync(DateTimeOffset.MaxValue.AddYears(-2));
+            .ReturnsAsync(DateTimeOffset.MinValue);
 
         mockFortRepository
             .Setup(x => x.GetFortDetail())
