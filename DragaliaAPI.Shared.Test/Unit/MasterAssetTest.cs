@@ -68,7 +68,8 @@ public class MasterAssetTest
                     Abilities31: 1071,
                     Abilities32: 1074,
                     Abilities33: 2041,
-                    Abilities34: 0
+                    Abilities34: 0,
+                    MinDef: 10
                 )
             );
     }
