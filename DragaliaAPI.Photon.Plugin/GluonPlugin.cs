@@ -398,6 +398,15 @@ namespace DragaliaAPI.Photon.Plugin
             );
 
             HeroParamRequestState typedUserState = (HeroParamRequestState)userState;
+            IActor owner =
+                this.PluginHost.GameActors.FirstOrDefault(
+                    x => x.ActorNr == typedUserState.OwnerActorNr
+                )
+                ?? throw new InvalidOperationException(
+                    $"HeroParam owner actor {typedUserState.OwnerActorNr} not found!"
+                );
+
+            owner.Properties.SetProperty(ActorPropertyKeys.HeroParamCount, heroParams.Count);
 
             CharacterData evt = new CharacterData()
             {
@@ -412,7 +421,7 @@ namespace DragaliaAPI.Photon.Plugin
                             }
                     )
                     .ToArray(),
-                heroParams = heroParams.Take(GetMemberCount(typedUserState.OwnerActorNr)).ToArray()
+                heroParams = heroParams.ToArray()
             };
 
             this.RaiseEvent(0x14, evt, typedUserState.RequestActorNr);
@@ -424,13 +433,7 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
         private void RaisePartyEvent(ISetPropertiesCallInfo info)
         {
-            PartyEvent evt = new PartyEvent()
-            {
-                memberCountTable = this.PluginHost.GameActors.ToDictionary(
-                    x => x.ActorNr,
-                    x => GetMemberCount(x.ActorNr)
-                )
-            };
+            PartyEvent evt = new PartyEvent() { memberCountTable = this.GetMemberCountTable() };
 
             this.RaiseEvent(0x3e, evt);
         }
@@ -459,29 +462,59 @@ namespace DragaliaAPI.Photon.Plugin
         /// </summary>
         /// <param name="actorNr">The actor number.</param>
         /// <returns>The number of units they own.</returns>
-        public int GetMemberCount(int actorNr)
+        public Dictionary<int, int> GetMemberCountTable()
         {
             if (
                 this.PluginHost.GameProperties.TryGetInt(GamePropertyKeys.QuestId, out int questId)
                 && QuestHelper.GetDungeonType(questId) == DungeonTypes.Raid
             )
             {
-                return 4;
+                // Everyone uses all of their units in a raid
+                return this.PluginHost.GameActors.ToDictionary(
+                    x => x.ActorNr,
+                    x => x.Properties.GetInt(ActorPropertyKeys.HeroParamCount)
+                );
             }
 
-            int count = this.PluginHost.GameActors.Count;
+            return BuildMemberCountTable(
+                this.PluginHost.GameActors.Select(
+                    x =>
+                        new ValueTuple<int, int>(
+                            x.ActorNr,
+                            x.Properties.GetInt(ActorPropertyKeys.HeroParamCount)
+                        )
+                )
+            );
+        }
 
-            if (count < 4 && actorNr == 1)
+        public static Dictionary<int, int> BuildMemberCountTable(
+            IEnumerable<(int ActorNr, int HeroParamCount)> actorData
+        )
+        {
+            Dictionary<int, int> result = actorData.ToDictionary(x => x.ActorNr, x => 1);
+
+            if (result.Count == 4)
+                return result;
+
+            // Add first AI units
+            foreach ((int actorNr, int heroParamCount) in actorData)
             {
-                return 2;
+                if (result.Sum(x => x.Value) >= 4)
+                    break;
+
+                result[actorNr] = Math.Min(result[actorNr] + 1, heroParamCount);
             }
 
-            if (count < 3 && actorNr == 2)
+            // Add second AI units
+            foreach ((int actorNr, int heroParamCount) in actorData)
             {
-                return 2;
+                if (result.Sum(x => x.Value) >= 4)
+                    break;
+
+                result[actorNr] = Math.Min(result[actorNr] + 1, heroParamCount);
             }
 
-            return 1;
+            return result;
         }
 
         /// <summary>

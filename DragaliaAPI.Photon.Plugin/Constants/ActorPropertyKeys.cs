@@ -19,5 +19,7 @@ namespace DragaliaAPI.Photon.Plugin.Constants
         public const string StartQuest = "StartQuest";
 
         public const string RemovedFromRedis = "RemovedFromRedis";
+
+        public const string HeroParamCount = "HeroParamCount";
     }
 }
