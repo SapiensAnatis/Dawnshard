@@ -198,14 +198,14 @@ public class MissionService : IMissionService
 
     public async Task<CurrentMainStoryMission> GetCurrentMainStoryMission()
     {
-        DbPlayerMission? firstMainStoryMission = await this.missionRepository
+        DbPlayerMission? lastMainStoryMission = await this.missionRepository
             .GetMissionsByType(MissionType.MainStory)
-            .FirstOrDefaultAsync(x => x.State == MissionState.InProgress);
+            .LastOrDefaultAsync();
 
-        if (firstMainStoryMission == null)
+        if (lastMainStoryMission == null)
             return new CurrentMainStoryMission();
 
-        MainStoryMission mission = MasterAsset.MainStoryMission.Get(firstMainStoryMission.Id);
+        MainStoryMission mission = MasterAsset.MainStoryMission.Get(lastMainStoryMission.Id);
 
         return new CurrentMainStoryMission()
         {
