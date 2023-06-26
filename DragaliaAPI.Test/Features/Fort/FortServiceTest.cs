@@ -443,6 +443,10 @@ public class FortServiceTest
                 PlantId = FortPlants.Dragonata
             };
 
+        mockUserDataRepository
+            .Setup(x => x.GetFortOpenTimeAsync())
+            .ReturnsAsync(DateTimeOffset.MaxValue);
+
         mockFortRepository
             .Setup(x => x.GetFortDetail())
             .ReturnsAsync(new DbFortDetail() { DeviceAccountId = "id", CarpenterNum = 4 });
