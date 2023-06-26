@@ -198,22 +198,20 @@ public class MissionService : IMissionService
 
     public async Task<CurrentMainStoryMission> GetCurrentMainStoryMission()
     {
-        DbPlayerMission? firstMainStoryMission = await this.missionRepository
+        int? mainStoryMissionGroupId = await this.missionRepository
             .GetMissionsByType(MissionType.MainStory)
-            .FirstOrDefaultAsync();
+            .MaxAsync(x => x.GroupId);
 
-        if (firstMainStoryMission == null)
+        if (mainStoryMissionGroupId == null)
             return new CurrentMainStoryMission();
-
-        MainStoryMission mission = MasterAsset.MainStoryMission.Get(firstMainStoryMission.Id);
 
         return new CurrentMainStoryMission()
         {
-            main_story_mission_group_id = mission.MissionMainStoryGroupId,
+            main_story_mission_group_id = mainStoryMissionGroupId.Value,
             main_story_mission_state_list = (
                 await this.missionRepository.GetMissionsByType(MissionType.MainStory).ToListAsync()
             )
-                .Where(x => x.GroupId == mission.MissionMainStoryGroupId)
+                .Where(x => x.GroupId == mainStoryMissionGroupId.Value)
                 .Select(
                     x =>
                         new AtgenMainStoryMissionStateList()

@@ -420,23 +420,7 @@ public class FortService : IFortService
                 LastIncomeDate = DateTimeOffset.UnixEpoch
             };
 
-        if (plantDetail.Time == 0)
-        {
-            build.BuildStartDate = build.BuildEndDate = DateTimeOffset.UnixEpoch;
-        }
-        else
-        {
-            DateTimeOffset fortOpenTime = await userDataRepository.GetFortOpenTimeAsync();
-            DateTimeOffset current = DateTimeOffset.UtcNow;
-
-            build.BuildStartDate = current;
-
-            // 1/2 build time for the first 30 days
-            build.BuildEndDate =
-                fortOpenTime.AddDays(30) > current
-                    ? build.BuildStartDate.AddSeconds(Math.Ceiling(plantDetail.Time * 0.5))
-                    : build.BuildStartDate.AddSeconds(plantDetail.Time);
-        }
+        await SetBuildTime(build, plantDetail);
 
         await fortRepository.AddBuild(build);
 
@@ -480,16 +464,7 @@ public class FortService : IFortService
         }
 
         await Upgrade(plantDetail);
-
-        if (plantDetail.Time == 0)
-        {
-            build.BuildStartDate = build.BuildEndDate = DateTimeOffset.UnixEpoch;
-        }
-        else
-        {
-            build.BuildStartDate = DateTimeOffset.UtcNow;
-            build.BuildEndDate = build.BuildStartDate.AddSeconds(plantDetail.Time);
-        }
+        await SetBuildTime(build, plantDetail);
 
         return build;
     }
@@ -511,6 +486,27 @@ public class FortService : IFortService
         build.PositionZ = afterPositionZ;
 
         return build;
+    }
+
+    private async Task SetBuildTime(DbFortBuild build, FortPlantDetail plantDetail)
+    {
+        if (plantDetail.Time == 0)
+        {
+            build.BuildStartDate = build.BuildEndDate = DateTimeOffset.UnixEpoch;
+        }
+        else
+        {
+            DateTimeOffset fortOpenTime = await userDataRepository.GetFortOpenTimeAsync();
+            DateTimeOffset current = DateTimeOffset.UtcNow;
+
+            build.BuildStartDate = current;
+
+            // 1/2 build time for the first 30 days
+            build.BuildEndDate =
+                fortOpenTime.AddDays(30) > current
+                    ? build.BuildStartDate.AddSeconds(Math.Ceiling(plantDetail.Time * 0.5))
+                    : build.BuildStartDate.AddSeconds(plantDetail.Time);
+        }
     }
 
     private async Task Upgrade(FortPlantDetail plantDetail)

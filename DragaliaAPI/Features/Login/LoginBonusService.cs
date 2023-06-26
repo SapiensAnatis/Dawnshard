@@ -36,11 +36,13 @@ public class LoginBonusService : ILoginBonusService
             )
         )
         {
-            int currentDay = (int)(time - bonusData.StartTime).TotalDays + 1;
+            int currentDay = (int)(time - bonusData.StartTime).TotalDays;
             int dayId = bonusData.IsLoop
                 ? currentDay
                     % MasterAsset.LoginBonusReward.Enumerable.Count(x => x.Gid == bonusData.Id)
                 : currentDay;
+
+            dayId += 1;
 
             LoginBonusReward? reward = MasterAsset.LoginBonusReward.Enumerable.FirstOrDefault(
                 x => x.Gid == bonusData.Id && x.Day == dayId
