@@ -3,6 +3,7 @@ using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
 namespace DragaliaAPI.Shared.Test.Unit;
 
@@ -53,6 +54,12 @@ public class MasterAssetTest
                     EditSkillLevelNum: 1,
                     EditSkillCost: 5,
                     ManaCircleName: "MC_0511",
+                    CharaLimitBreak: 1050201,
+                    PieceElementGroupId: 501,
+                    PieceMaterialElementId: 5012,
+                    UniqueGrowMaterialId1: Materials.Empty,
+                    UniqueGrowMaterialId2: Materials.Empty,
+                    GrowMaterialId: Materials.Empty,
                     DefaultAbility1Level: 1,
                     DefaultAbility2Level: 0,
                     DefaultAbility3Level: 0,
@@ -68,7 +75,13 @@ public class MasterAssetTest
                     Abilities31: 1071,
                     Abilities32: 1074,
                     Abilities33: 2041,
-                    Abilities34: 0
+                    Abilities34: 0,
+                    McFullReleaseEntityType1: EntityTypes.Material,
+                    McFullReleaseEntityId1: (int)Materials.DamascusCrystal,
+                    McFullReleaseEntityQuantity1: 1,
+                    McFullReleaseEntityType2: EntityTypes.Weapon,
+                    McFullReleaseEntityId2: 0,
+                    McFullReleaseEntityQuantity2: 0
                 )
             );
     }
@@ -88,6 +101,7 @@ public class MasterAssetTest
                     NecessaryManaPoint: 400,
                     UniqueGrowMaterialCount1: 0,
                     UniqueGrowMaterialCount2: 0,
+                    GrowMaterialCount: 1,
                     MC_0: 4032,
                     ManaCircleName: "MC_0403"
                 )
@@ -194,6 +208,7 @@ public class MasterAssetTest
                     NecessaryManaPoint: 450,
                     UniqueGrowMaterialCount1: 0,
                     UniqueGrowMaterialCount2: 0,
+                    GrowMaterialCount: 1,
                     MC_0: 5045,
                     ManaCircleName: "MC_0504"
                 )

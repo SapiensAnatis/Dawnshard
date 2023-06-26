@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -43,6 +44,12 @@ public record CharaData(
     int EditSkillLevelNum,
     int EditSkillCost,
     string ManaCircleName,
+    int CharaLimitBreak,
+    int PieceElementGroupId,
+    int PieceMaterialElementId,
+    Materials UniqueGrowMaterialId1,
+    Materials UniqueGrowMaterialId2,
+    Materials GrowMaterialId,
     int DefaultAbility1Level,
     int DefaultAbility2Level,
     int DefaultAbility3Level,
@@ -58,7 +65,13 @@ public record CharaData(
     int Abilities31,
     int Abilities32,
     int Abilities33,
-    int Abilities34
+    int Abilities34,
+    EntityTypes McFullReleaseEntityType1,
+    int McFullReleaseEntityId1,
+    int McFullReleaseEntityQuantity1,
+    EntityTypes McFullReleaseEntityType2,
+    int McFullReleaseEntityId2,
+    int McFullReleaseEntityQuantity2
 )
 {
     public bool HasManaSpiral => this.MaxLimitBreakCount > 4;
@@ -118,6 +131,12 @@ public record CharaData(
         AvailabilityMap.TryGetValue(this.Id, out CharaAvailabilities availability)
             ? availability
             : CharaAvailabilities.Default;
+
+    public (EntityTypes Type, int Id, int Quantity)[] McFullReleaseNeededEntities =
+    {
+        (McFullReleaseEntityType1, McFullReleaseEntityId1, McFullReleaseEntityQuantity1),
+        (McFullReleaseEntityType2, McFullReleaseEntityId2, McFullReleaseEntityQuantity2)
+    };
 
     private static readonly IReadOnlyDictionary<Charas, CharaAvailabilities> AvailabilityMap =
         new Dictionary<Charas, CharaAvailabilities>()

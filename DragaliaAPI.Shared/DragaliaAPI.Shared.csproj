@@ -54,7 +54,13 @@
 		<None Update="Resources\FortPlantDetail.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="Resources\MC.json">
+		<None Update="Resources\ManaCircle\CharaLimitBreak.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\ManaCircle\ManaPieceMaterial.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\ManaCircle\ManaPieceType.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\Missions\MainStoryMissionGroupRewards.json">
