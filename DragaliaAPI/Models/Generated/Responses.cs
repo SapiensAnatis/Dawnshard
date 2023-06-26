@@ -3707,7 +3707,7 @@ public class LoginIndexData
     public AtgenPenaltyData penalty_data { get; set; }
     public IEnumerable<AtgenExchangeSummomPointList> exchange_summom_point_list { get; set; }
     public int before_exchange_summon_item_quantity { get; set; }
-    public int server_time { get; set; }
+    public DateTimeOffset server_time { get; set; }
 
     public LoginIndexData(
         IEnumerable<AtgenLoginBonusList> login_bonus_list,
@@ -3720,7 +3720,7 @@ public class LoginIndexData
         AtgenPenaltyData penalty_data,
         IEnumerable<AtgenExchangeSummomPointList> exchange_summom_point_list,
         int before_exchange_summon_item_quantity,
-        int server_time
+        DateTimeOffset server_time
     )
     {
         this.login_bonus_list = login_bonus_list;

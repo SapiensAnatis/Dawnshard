@@ -99,6 +99,8 @@ public class RewardService : IRewardService
             return RewardGrantResult.Discarded;
         }
 
+        // TODO: Support EntityLevel/LimitBreak/etc here
+
         this.logger.LogDebug("Granted new character entity: {@entity}", entity);
         await this.unitRepository.AddCharas(chara);
         newEntities.Add(entity);

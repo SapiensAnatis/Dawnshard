@@ -1,5 +1,6 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Login;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
@@ -206,4 +207,10 @@ public static class MasterAsset
     #endregion
 
     public static readonly MasterAssetData<int, UseItem> UseItem = new("UseItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, LoginBonusData> LoginBonusData =
+        new("Login/LoginBonusData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, LoginBonusReward> LoginBonusReward =
+        new("Login/LoginBonusReward.json", x => x.Id);
 }

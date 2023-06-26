@@ -28,8 +28,14 @@ public interface ISessionService
     /// <param name="idToken">The BaaS ID token/</param>
     /// <param name="accountId">The BaaS subject.</param>
     /// <param name="viewerId">The UserData ViewerID.</param>
+    /// <param name="loginTime">The login time of the user.</param>
     /// <returns>The session ID.</returns>
-    Task<string> CreateSession(string idToken, string accountId, long viewerId);
+    Task<string> CreateSession(
+        string idToken,
+        string accountId,
+        long viewerId,
+        DateTimeOffset loginTime
+    );
 
     /// <summary>
     /// Get a session from an id.
