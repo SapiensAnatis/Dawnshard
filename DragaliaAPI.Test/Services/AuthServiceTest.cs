@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
@@ -29,6 +30,7 @@ public class AuthServiceTest
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IOptionsMonitor<LoginOptions>> mockLoginOptions;
     private readonly Mock<IOptionsMonitor<BaasOptions>> mockBaasOptions;
+    private readonly Mock<IDateTimeProvider> mockDateTimeProvider;
     private readonly Mock<ILogger<AuthService>> mockLogger;
 
     private const string AccountId = "account id";
@@ -43,6 +45,9 @@ public class AuthServiceTest
         this.mockBaasOptions = new(MockBehavior.Strict);
         this.mockLoginOptions = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
+        this.mockDateTimeProvider = new(MockBehavior.Strict);
+
+        this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UnixEpoch);
 
         this.authService = new(
             this.mockBaasRequestHelper.Object,
@@ -52,7 +57,8 @@ public class AuthServiceTest
             this.mockUserDataRepository.Object,
             this.mockLoginOptions.Object,
             this.mockBaasOptions.Object,
-            this.mockLogger.Object
+            this.mockLogger.Object,
+            this.mockDateTimeProvider.Object
         );
 
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
@@ -72,7 +78,9 @@ public class AuthServiceTest
             .ReturnsAsync("session id");
         this.mockSessionService
             .Setup(x => x.LoadSessionSessionId("session id"))
-            .ReturnsAsync(new Session("session id", "token", "device account id", 1));
+            .ReturnsAsync(
+                new Session("session id", "token", "device account id", 1, DateTimeOffset.UnixEpoch)
+            );
         this.mockUserDataRepository
             .SetupGet(x => x.UserData)
             .Returns(
@@ -129,7 +137,7 @@ public class AuthServiceTest
                     .BuildMock()
             );
         this.mockSessionService
-            .Setup(x => x.CreateSession(token, AccountId, 1))
+            .Setup(x => x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch))
             .ReturnsAsync("session id");
 
         this.mockPlayerIdentityService
@@ -253,7 +261,7 @@ public class AuthServiceTest
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
 
         this.mockSessionService
-            .Setup(x => x.CreateSession(token, AccountId, 1))
+            .Setup(x => x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch))
             .ReturnsAsync("session id");
 
         this.mockSavefileService
@@ -322,7 +330,7 @@ public class AuthServiceTest
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
 
         this.mockSessionService
-            .Setup(x => x.CreateSession(token, AccountId, 1))
+            .Setup(x => x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch))
             .ReturnsAsync("session id");
 
         await this.authService.Invoking(x => x.DoAuth(token)).Should().NotThrowAsync();
@@ -376,7 +384,7 @@ public class AuthServiceTest
             );
 
         this.mockSessionService
-            .Setup(x => x.CreateSession(token, AccountId, 1))
+            .Setup(x => x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch))
             .ReturnsAsync("session id");
 
         this.mockPlayerIdentityService
@@ -445,7 +453,7 @@ public class AuthServiceTest
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
 
         this.mockSessionService
-            .Setup(x => x.CreateSession(token, AccountId, 1))
+            .Setup(x => x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch))
             .ReturnsAsync("session id");
 
         await this.authService.DoAuth(token);

@@ -10,6 +10,7 @@ public record Entity(
     int? LimitBreakCount = null,
     int? BuildupCount = null,
     int? EquipableCount = null
+// TODO: int? Level = null
 )
 {
     public AtgenBuildEventRewardEntityList ToBuildEventRewardEntityList()

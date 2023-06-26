@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models;
+﻿using DragaliaAPI.Helpers;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
@@ -32,6 +33,7 @@ public class SessionService : ISessionService
     private readonly IDistributedCache cache;
     private readonly IOptionsMonitor<RedisOptions> options;
     private readonly ILogger<SessionService> logger;
+    private readonly IDateTimeProvider dateTimeProvider;
 
     private DistributedCacheEntryOptions CacheOptions =>
         new()
@@ -42,12 +44,14 @@ public class SessionService : ISessionService
     public SessionService(
         IDistributedCache cache,
         IOptionsMonitor<RedisOptions> options,
-        ILogger<SessionService> logger
+        ILogger<SessionService> logger,
+        IDateTimeProvider dateTimeProvider
     )
     {
         this.cache = cache;
         this.options = options;
         this.logger = logger;
+        this.dateTimeProvider = dateTimeProvider;
     }
 
     private static class Schema
@@ -78,7 +82,8 @@ public class SessionService : ISessionService
         string sessionId = Guid.NewGuid().ToString();
 
         // Filler viewerid for session as this flow is deprecated
-        Session session = new(sessionId, idToken, deviceAccount.id, 47337);
+        Session session =
+            new(sessionId, idToken, deviceAccount.id, 47337, this.dateTimeProvider.UtcNow);
         await cache.SetStringAsync(
             Schema.Session_IdToken(idToken),
             JsonSerializer.Serialize(session),
@@ -139,15 +144,24 @@ public class SessionService : ISessionService
         return session.SessionId;
     }
 
-    public async Task<string> CreateSession(string idToken, string accountId, long viewerId)
+    public async Task<string> CreateSession(
+        string idToken,
+        string accountId,
+        long viewerId,
+        DateTimeOffset loginTime
+    )
     {
         // Check for existing session
-        Session? existingSession = await this.TryLoadSession(Schema.Session_IdToken(idToken));
-        if (existingSession is not null)
-            return existingSession.SessionId;
-
-        string sessionId = Guid.NewGuid().ToString();
-        Session session = new(sessionId, idToken, accountId, viewerId);
+        Session? session = await this.TryLoadSession(Schema.Session_IdToken(idToken));
+        if (session is null)
+        {
+            string sessionId = Guid.NewGuid().ToString();
+            session = new(sessionId, idToken, accountId, viewerId, loginTime);
+        }
+        else
+        {
+            session = session with { LoginTime = loginTime };
+        }
 
         // Register in sessions by id token (for reauth)
         await cache.SetStringAsync(
@@ -158,12 +172,12 @@ public class SessionService : ISessionService
 
         // Register in sessions by session id (for all other endpoints)
         await cache.SetStringAsync(
-            Schema.Session_SessionId(sessionId),
+            Schema.Session_SessionId(session.SessionId),
             JsonSerializer.Serialize(session),
             CacheOptions
         );
 
-        return sessionId;
+        return session.SessionId;
     }
 
     public async Task<Session> LoadSessionIdToken(string idToken) =>

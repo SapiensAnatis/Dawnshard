@@ -1,6 +1,7 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
@@ -75,7 +76,14 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
     {
         IDistributedCache cache = this.Services.GetRequiredService<IDistributedCache>();
 
-        object session = new { TestFixture.SessionId, TestFixture.DeviceAccountId };
+        Session session =
+            new(
+                TestFixture.SessionId,
+                "id_token",
+                TestFixture.DeviceAccountId,
+                12,
+                DateTimeOffset.MaxValue
+            );
         cache.SetString(":session:session_id:session_id", JsonSerializer.Serialize(session));
         cache.SetString(":session_id:device_account_id:logged_in_id", TestFixture.SessionId);
     }

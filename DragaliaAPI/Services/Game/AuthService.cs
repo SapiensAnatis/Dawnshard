@@ -2,6 +2,7 @@
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
@@ -26,6 +27,7 @@ public class AuthService : IAuthService
     private readonly IOptionsMonitor<LoginOptions> loginOptions;
     private readonly IOptionsMonitor<BaasOptions> baasOptions;
     private readonly ILogger<AuthService> logger;
+    private readonly IDateTimeProvider dateTimeProvider;
     private readonly JwtSecurityTokenHandler TokenHandler = new();
 
     public AuthService(
@@ -36,7 +38,8 @@ public class AuthService : IAuthService
         IUserDataRepository userDataRepository,
         IOptionsMonitor<LoginOptions> loginOptions,
         IOptionsMonitor<BaasOptions> baasOptions,
-        ILogger<AuthService> logger
+        ILogger<AuthService> logger,
+        IDateTimeProvider dateTimeProvider
     )
     {
         this.baasRequestHelper = baasRequestHelper;
@@ -47,6 +50,7 @@ public class AuthService : IAuthService
         this.loginOptions = loginOptions;
         this.baasOptions = baasOptions;
         this.logger = logger;
+        this.dateTimeProvider = dateTimeProvider;
     }
 
     public async Task<(long viewerId, string sessionId)> DoAuth(string idToken)
@@ -104,7 +108,12 @@ public class AuthService : IAuthService
 
         using IDisposable viewerIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
 
-        string sessionId = await this.sessionService.CreateSession(idToken, jwt.Subject, viewerId);
+        string sessionId = await this.sessionService.CreateSession(
+            idToken,
+            jwt.Subject,
+            viewerId,
+            this.dateTimeProvider.UtcNow
+        );
 
         this.logger.LogInformation(
             "Authenticated user with viewer ID {id} and issued session ID {sid}",
