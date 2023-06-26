@@ -157,7 +157,8 @@ builder.Services
     .AddScoped<IFortRepository, FortRepository>()
     // Login feature
     .AddScoped<IResetHelper, ResetHelper>()
-    .AddScoped<IDateTimeProvider, DateTimeProvider>();
+    .AddScoped<IDateTimeProvider, DateTimeProvider>()
+    .AddScoped<ILoginBonusService, LoginBonusService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();
@@ -195,6 +196,9 @@ app.UseMiddleware<NotFoundHandlerMiddleware>();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<DailyResetMiddleware>();
+
 app.MapControllers();
 app.UseResponseCompression();
 app.MapHealthChecks("/health");

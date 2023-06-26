@@ -1,6 +1,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Login;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -15,6 +16,9 @@ public class LoginControllerTest
     private readonly Mock<IDailyResetAction> mockDailyResetAction;
     private readonly Mock<IResetHelper> mockResetHelper;
     private readonly Mock<ILogger<LoginController>> mockLogger;
+    private readonly Mock<ILoginBonusService> loginBonusService;
+    private readonly Mock<IRewardService> mockRewardService;
+    private readonly Mock<IDateTimeProvider> mockDateTimeProvider;
 
     private readonly LoginController loginController;
 
@@ -25,14 +29,24 @@ public class LoginControllerTest
         this.mockDailyResetAction = new(MockBehavior.Strict);
         this.mockResetHelper = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
+        this.loginBonusService = new(MockBehavior.Strict);
+        this.mockRewardService = new(MockBehavior.Strict);
+        this.mockDateTimeProvider = new(MockBehavior.Strict);
 
         this.loginController = new(
             this.mockUserDataRepository.Object,
             this.mockUpdateDataService.Object,
             new List<IDailyResetAction>() { mockDailyResetAction.Object },
             this.mockResetHelper.Object,
-            this.mockLogger.Object
+            this.mockLogger.Object,
+            this.loginBonusService.Object,
+            this.mockRewardService.Object,
+            this.mockDateTimeProvider.Object
         );
+
+        this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UtcNow);
+
+        this.mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
     }
 
     [Fact]
@@ -48,6 +62,10 @@ public class LoginControllerTest
 
         this.mockResetHelper.SetupGet(x => x.LastDailyReset).Returns(DateTimeOffset.UtcNow);
 
+        this.loginBonusService
+            .Setup(x => x.RewardLoginBonus())
+            .ReturnsAsync(Enumerable.Empty<AtgenLoginBonusList>());
+
         this.mockDailyResetAction.Setup(x => x.Apply()).Returns(Task.CompletedTask);
 
         this.mockUpdateDataService
@@ -56,6 +74,8 @@ public class LoginControllerTest
 
         await this.loginController.Index();
 
+        this.mockDateTimeProvider.VerifyAll();
+        this.mockRewardService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockResetHelper.VerifyAll();
         this.mockDailyResetAction.VerifyAll();
@@ -78,6 +98,8 @@ public class LoginControllerTest
 
         await this.loginController.Index();
 
+        this.mockDateTimeProvider.VerifyAll();
+        this.mockRewardService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockResetHelper.VerifyAll();
         this.mockDailyResetAction.Verify(x => x.Apply(), Times.Never);
