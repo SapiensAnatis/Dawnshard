@@ -426,8 +426,12 @@ public class CharaController : DragaliaControllerBase
 
         SortedSet<int> previouslyUnlockedPieces = playerCharaData.ManaCirclePieceIdList;
 
-        // Set here since this changes the ManaCirclePieceIdList
-        playerCharaData.LimitBreakCount = (byte)charaData.MaxLimitBreakCount;
+        // This check is so that we don't clear mana nodes 41-50 for charas without a spiral when those are already unlocked
+        if (playerCharaData.LimitBreakCount != charaData.MaxLimitBreakCount)
+        {
+            // Set here since this changes the ManaCirclePieceIdList
+            playerCharaData.LimitBreakCount = (byte)charaData.MaxLimitBreakCount;
+        }
 
         await CharaManaNodeUnlock(
             maxManaNodes.Where(x => !previouslyUnlockedPieces.Contains(x)),
@@ -500,6 +504,9 @@ public class CharaController : DragaliaControllerBase
         CharaUpgradeMaterialTypes isUseSpecialMaterial
     )
     {
+        if (!manaNodes.Any())
+            return;
+
         this.logger.LogDebug("Pre-upgrade CharaData: {@charaData}", playerCharData);
 
         CharaData charaData = MasterAsset.CharaData[playerCharData.CharaId];
@@ -581,7 +588,6 @@ public class CharaController : DragaliaControllerBase
         };
 
         SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
-        int previouslyUnlockedNodeCount = nodes.Count;
 
         this.logger.LogInformation("Unlocking nodes {@nodes}", manaNodes);
 
@@ -791,7 +797,7 @@ public class CharaController : DragaliaControllerBase
 
         nodes.AddRange(manaNodes);
 
-        if (previouslyUnlockedNodeCount < 50 && nodes.Count >= 50)
+        if (manaNodes.Contains(50))
         {
             this.logger.LogDebug("Applying 50MC bonus");
             playerCharData.HpNode += (ushort)charaData.McFullBonusHp5;

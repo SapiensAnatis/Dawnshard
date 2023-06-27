@@ -19,6 +19,11 @@ public class CharaTest : TestFixture
     public CharaTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
+        this.AddCharacter(Charas.Naveed);
+        this.AddCharacter(Charas.Ezelith);
+        this.AddCharacter(Charas.Marth);
+        this.AddCharacter(Charas.Mikoto);
+        this.AddCharacter(Charas.Vanessa);
         this.AddCharacter(Charas.Celliera);
         this.AddCharacter(Charas.SummerCelliera);
         this.AddCharacter(Charas.Harle);
@@ -438,23 +443,43 @@ public class CharaTest : TestFixture
     }
 
     [Theory]
-    [InlineData(40, Charas.Ezelith)]
-    [InlineData(50, Charas.Xander)]
-    [InlineData(60, Charas.Vixel)]
-    [InlineData(70, Charas.Nefaria)]
+    [InlineData(2, 0, Charas.Naveed)]
+    [InlineData(10, 1, Charas.Ezelith)]
+    [InlineData(20, 2, Charas.Marth)]
+    [InlineData(30, 3, Charas.Mikoto)]
+    [InlineData(40, 4, Charas.Vanessa)]
+    [InlineData(50, 5, Charas.Xander)]
+    [InlineData(60, 5, Charas.Vixel)]
+    [InlineData(70, 5, Charas.Nefaria)]
     public async Task CharaBuildupPlatinum_ReturnsFullyBuiltWithSpiralledCharacterWhenAlreadyHalfBuilt(
         int manaNodes,
+        int limitBreak,
         Charas id
     )
     {
-        await this.Client.PostMsgpack<CharaBuildupManaData>(
-            "chara/buildup_mana",
-            new CharaBuildupManaRequest(
-                id,
-                Enumerable.Range(1, manaNodes),
-                (int)CharaUpgradeMaterialTypes.Standard
-            )
-        );
+        if (limitBreak == 0)
+        {
+            await this.Client.PostMsgpack<CharaBuildupManaData>(
+                "chara/buildup_mana",
+                new CharaBuildupManaRequest(
+                    id,
+                    Enumerable.Range(1, manaNodes),
+                    (int)CharaUpgradeMaterialTypes.Standard
+                )
+            );
+        }
+        else
+        {
+            await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaData>(
+                "chara/limit_break_and_buildup_mana",
+                new CharaLimitBreakAndBuildupManaRequest(
+                    id,
+                    limitBreak,
+                    Enumerable.Range(1, manaNodes),
+                    CharaUpgradeMaterialTypes.Standard
+                )
+            );
+        }
 
         CharaBuildupPlatinumData response = (
             await this.Client.PostMsgpack<CharaBuildupPlatinumData>(
@@ -511,23 +536,40 @@ public class CharaTest : TestFixture
     }
 
     [Theory]
-    [InlineData(1, Charas.Mitsuba)]
-    [InlineData(25, Charas.Pipple)]
-    [InlineData(40, Charas.GalaZethia)]
-    [InlineData(50, Charas.Vida)]
+    [InlineData(1, 0, Charas.Mitsuba)]
+    [InlineData(25, 2, Charas.Pipple)]
+    [InlineData(40, 3, Charas.GalaZethia)]
+    [InlineData(50, 4, Charas.Vida)]
     public async Task CharaBuildupPlatinum_ReturnsFullyBuiltWithNonSpiralledCharacterWhenAlreadyHalfBuilt(
         int manaNodes,
+        int limitBreak,
         Charas id
     )
     {
-        await this.Client.PostMsgpack<CharaBuildupManaData>(
-            "chara/buildup_mana",
-            new CharaBuildupManaRequest(
-                id,
-                Enumerable.Range(1, manaNodes),
-                (int)CharaUpgradeMaterialTypes.Standard
-            )
-        );
+        if (limitBreak == 0)
+        {
+            await this.Client.PostMsgpack<CharaBuildupManaData>(
+                "chara/buildup_mana",
+                new CharaBuildupManaRequest(
+                    id,
+                    Enumerable.Range(1, manaNodes),
+                    (int)CharaUpgradeMaterialTypes.Standard
+                )
+            );
+        }
+        else
+        {
+            await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaData>(
+                "chara/limit_break_and_buildup_mana",
+                new CharaLimitBreakAndBuildupManaRequest(
+                    id,
+                    limitBreak,
+                    Enumerable.Range(1, manaNodes),
+                    CharaUpgradeMaterialTypes.Standard
+                )
+            );
+        }
+
         CharaBuildupPlatinumData response = (
             await this.Client.PostMsgpack<CharaBuildupPlatinumData>(
                 "chara/buildup_platinum",
