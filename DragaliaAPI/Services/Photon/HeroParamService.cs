@@ -102,7 +102,7 @@ public class HeroParamService : IHeroParamService
                 characterId = (int)unit.CharaData.CharaId,
                 hp = unit.CharaData.Hp,
                 attack = unit.CharaData.Attack,
-                defence = charaData.MinDef,
+                defence = 0, // Apparently meant to be zero
                 ability1Lv = unit.CharaData.Ability1Level,
                 ability2Lv = unit.CharaData.Ability2Level,
                 ability3Lv = unit.CharaData.Ability3Level,
@@ -135,6 +135,7 @@ public class HeroParamService : IHeroParamService
         if (unit.WeaponBodyData is not null)
         {
             result.weaponBodyId = (int)unit.WeaponBodyData.WeaponBodyId;
+            result.weaponBodyBuildupCount = unit.WeaponBodyData.BuildupCount;
             result.weaponBodyAbility1Lv = unit.WeaponBodyData.Ability1Level;
             result.weaponBodyAbility2Lv = unit.WeaponBodyData.Ability2Level;
             result.weaponBodySkillLv = unit.WeaponBodyData.SkillLevel;
@@ -226,14 +227,14 @@ public class HeroParamService : IHeroParamService
 
             result.dragonRelativeAtkFort += dragonBonus.attack / 100;
             result.dragonRelativeHpFort += dragonBonus.hp / 100;
-            result.dragonTime += dragonBonus.dragon_bonus;
+            result.dragonRelativeDmg += dragonBonus.dragon_bonus / 100;
             result.dragonTime += fortBonusList.dragon_time_bonus.dragon_time_bonus;
             result.dragonRelativeAtkAlbum += dragonAlbumBonus.attack / 100;
             result.dragonRelativeHpAlbum += dragonAlbumBonus.hp / 100;
         }
 
-        result.relativeAtk += fortBonusList.all_bonus.attack / 100;
-        result.relativeHp += fortBonusList.all_bonus.hp / 100;
+        result.plusAtk += fortBonusList.all_bonus.attack / 100;
+        result.plusHp += fortBonusList.all_bonus.hp / 100;
     }
 
     private static void MapCrests(DbDetailedPartyUnit unit, HeroParam result)
