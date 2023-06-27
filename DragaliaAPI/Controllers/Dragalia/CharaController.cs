@@ -367,8 +367,6 @@ public class CharaController : DragaliaControllerBase
             chara => chara.CharaId == request.chara_id
         );
 
-        await LimitBreakChara(playerCharData, (byte)request.next_limit_break_count);
-
         if (request.mana_circle_piece_id_list.Any())
         {
             await CharaManaNodeUnlock(
@@ -377,6 +375,8 @@ public class CharaController : DragaliaControllerBase
                 request.is_use_grow_material
             );
         }
+
+        await LimitBreakChara(playerCharData, (byte)request.next_limit_break_count);
 
         resp.update_data_list = await this.updateDataService.SaveChangesAsync();
         resp.entity_result = this.rewardService.GetEntityResult();
@@ -455,6 +455,12 @@ public class CharaController : DragaliaControllerBase
     {
         CharaData data = MasterAsset.CharaData[charaData.CharaId];
 
+        this.logger.LogDebug(
+            "Limit-breaking chara {charaId} to {limitBreakNum}",
+            data.Id,
+            limitBreakNum
+        );
+
         CharaLimitBreak limitBreak = MasterAsset.CharaLimitBreak[data.CharaLimitBreak];
 
         (
@@ -527,6 +533,14 @@ public class CharaController : DragaliaControllerBase
 
         List<int> unlockedStories = new List<int>();
 
+        int[] stepLookup = new int[70];
+        Dictionary<ManaNodeTypes, int> typeSteps = Enum.GetValues<ManaNodeTypes>()
+            .ToDictionary(x => x, x => 1);
+
+        List<ManaPieceMaterial> materials = MasterAsset.ManaPieceMaterial.Enumerable
+            .Where(x => x.ElementId == charaData.PieceMaterialElementId)
+            .ToList();
+
         for (int i = 0; i < manaNodeInfos.Count && i < 70; i++)
         {
             int floor = Math.Min(i / 10, 5);
@@ -543,7 +557,20 @@ public class CharaController : DragaliaControllerBase
                     atkNodesOnFloor[floor].Add(i + 1);
                     break;
             }
+
+            int currentStep = typeSteps[manaNodeInfos[i].ManaPieceType];
+
+            stepLookup[i] = currentStep;
+            if (
+                materials.Any(
+                    x => x.ManaPieceType == manaNodeInfos[i].ManaPieceType && x.Step == currentStep
+                )
+            )
+            {
+                typeSteps[manaNodeInfos[i].ManaPieceType]++;
+            }
         }
+
         int[] hpPerCircleTotals = new int[]
         {
             charaData.PlusHp0,
@@ -587,6 +614,8 @@ public class CharaController : DragaliaControllerBase
 
         foreach (int nodeNr in manaNodes)
         {
+            this.logger.LogDebug("Node: {nodeNr}", nodeNr);
+
             if (manaNodeInfos.Count < nodeNr)
             {
                 throw new DragaliaException(
@@ -754,7 +783,7 @@ public class CharaController : DragaliaControllerBase
                     MasterAsset.ManaPieceMaterial.Enumerable.FirstOrDefault(
                         x =>
                             x.ElementId == charaData.PieceMaterialElementId
-                            && x.Step == floor
+                            && x.Step == stepLookup[nodeNr - 1]
                             && x.ManaPieceType == manaNodeInfo.ManaPieceType
                     );
 
