@@ -92,7 +92,7 @@ public class MasterAssetData<TKey, TItem>
         return result;
     }
 
-    internal class InternalKeyedCollection : KeyedCollection<TKey, TItem>
+    private class InternalKeyedCollection : KeyedCollection<TKey, TItem>
     {
         private readonly Func<TItem, TKey> keySelector;
 
