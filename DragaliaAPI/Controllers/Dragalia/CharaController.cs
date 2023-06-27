@@ -369,14 +369,32 @@ public class CharaController : DragaliaControllerBase
 
         if (request.mana_circle_piece_id_list.Any())
         {
-            await CharaManaNodeUnlock(
-                request.mana_circle_piece_id_list,
-                playerCharData,
-                request.is_use_grow_material
-            );
-        }
+            int maxPieceId = request.next_limit_break_count * 10;
 
-        await LimitBreakChara(playerCharData, (byte)request.next_limit_break_count);
+            if (request.mana_circle_piece_id_list.Any(x => maxPieceId >= x))
+            {
+                await CharaManaNodeUnlock(
+                    request.mana_circle_piece_id_list.Where(x => maxPieceId >= x),
+                    playerCharData,
+                    request.is_use_grow_material
+                );
+            }
+
+            await LimitBreakChara(playerCharData, (byte)request.next_limit_break_count);
+
+            if (request.mana_circle_piece_id_list.Any(x => x > maxPieceId))
+            {
+                await CharaManaNodeUnlock(
+                    request.mana_circle_piece_id_list.Where(x => x > maxPieceId),
+                    playerCharData,
+                    request.is_use_grow_material
+                );
+            }
+        }
+        else
+        {
+            await LimitBreakChara(playerCharData, (byte)request.next_limit_break_count);
+        }
 
         resp.update_data_list = await this.updateDataService.SaveChangesAsync();
         resp.entity_result = this.rewardService.GetEntityResult();
@@ -610,11 +628,11 @@ public class CharaController : DragaliaControllerBase
         SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
         bool is50MCBonusNew = nodes.Count < 50 || isOmnicite;
 
-        this.logger.LogDebug("Unlocking nodes {@nodes}", manaNodes);
+        this.logger.LogInformation("Unlocking nodes {@nodes}", manaNodes);
 
         foreach (int nodeNr in manaNodes)
         {
-            this.logger.LogDebug("Node: {nodeNr}", nodeNr);
+            this.logger.LogTrace("Node: {nodeNr}", nodeNr);
 
             if (manaNodeInfos.Count < nodeNr)
             {
