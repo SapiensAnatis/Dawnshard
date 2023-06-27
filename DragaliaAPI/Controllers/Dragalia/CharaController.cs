@@ -64,36 +64,46 @@ public class CharaController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> Awake([FromBody] CharaAwakeRequest request)
     {
-        if (request.next_rarity > 5)
+        CharaAwakeData resp = new();
+
+        DbPlayerCharaData playerCharData = await unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == request.chara_id
+        );
+
+        CharaData data = MasterAsset.CharaData[request.chara_id];
+
+        switch (request.next_rarity)
         {
-            throw new DragaliaException(
-                ResultCode.CharaGrowAwakeRarityInvalid,
-                "Invalid requested rarity"
-            );
+            case 4:
+                await this.paymentService.ProcessPayment(
+                    data.AwakeNeedEntityType4.ToPaymentType(),
+                    expectedPrice: data.AwakeNeedEntityQuantity4
+                );
+                playerCharData.HpBase += (ushort)(data.MinHp4 - data.MinHp3);
+                playerCharData.AttackBase += (ushort)(data.MinAtk4 - data.MinAtk3);
+                break;
+            case 5:
+                await this.paymentService.ProcessPayment(
+                    data.AwakeNeedEntityType5.ToPaymentType(),
+                    expectedPrice: data.AwakeNeedEntityQuantity5
+                );
+                playerCharData.HpBase += (ushort)(data.MinHp5 - data.MinHp4);
+                playerCharData.AttackBase += (ushort)(data.MinAtk5 - data.MinAtk4);
+                break;
+            default:
+                throw new DragaliaException(
+                    ResultCode.CharaGrowAwakeRarityInvalid,
+                    "Invalid requested rarity"
+                );
         }
 
-        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
-        DbPlayerCharaData playerCharData = await unitRepository.Charas.FirstAsync(
-            chara => chara.CharaId == (Charas)request.chara_id
-        );
-        CharaData charData = MasterAsset.CharaData.Get(request.chara_id);
-        playerCharData.HpBase += (ushort)(
-            request.next_rarity == 4
-                ? charData.MinHp4 - charData.MinHp3
-                : charData.MinHp5 - charData.MinHp4
-        );
-        playerCharData.AttackBase += (ushort)(
-            request.next_rarity == 4
-                ? charData.MinAtk4 - charData.MinAtk3
-                : charData.MinAtk5 - charData.MinAtk4
-        );
         playerCharData.Rarity = (byte)request.next_rarity;
+
         //TODO Get and update missions relating to promoting characters
-        //MissionNoticeData missionNoticeData = null;
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
 
-        return Ok(new CharaBuildupData(updateDataList, new()));
+        return Ok(resp);
     }
 
     [Route("buildup")]
