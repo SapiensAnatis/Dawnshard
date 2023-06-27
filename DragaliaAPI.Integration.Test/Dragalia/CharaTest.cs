@@ -113,6 +113,19 @@ public class CharaTest : TestFixture
     [Fact]
     public async Task CharaBuildupMana_HasManaNodes()
     {
+        int manaPointNum;
+
+        using (
+            IDisposable ctx = this.Services
+                .GetRequiredService<IPlayerIdentityService>()
+                .StartUserImpersonation(DeviceAccountId)
+        )
+        {
+            manaPointNum = (
+                await this.Services.GetRequiredService<IUserDataRepository>().GetUserDataAsync()
+            ).ManaPoint;
+        }
+
         CharaBuildupManaData response = (
             await this.Client.PostMsgpack<CharaBuildupManaData>(
                 "chara/buildup_mana",
@@ -131,11 +144,30 @@ public class CharaTest : TestFixture
         responseCharaData.mana_circle_piece_id_list
             .Should()
             .ContainInOrder(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        response.update_data_list.user_data.mana_point
+            .Should()
+            .Be(manaPointNum - 350 - 450 - 650 - 350 - 450 - 350 - 500 - 450 - 350 - 650);
     }
 
     [Fact]
     public async Task CharaLimitBreak_HasNextFloor()
     {
+        int mat1Quantity,
+            mat2Quantity;
+
+        using (
+            IDisposable ctx = this.Services
+                .GetRequiredService<IPlayerIdentityService>()
+                .StartUserImpersonation(DeviceAccountId)
+        )
+        {
+            IInventoryRepository inventoryRepository =
+                this.Services.GetRequiredService<IInventoryRepository>();
+            mat1Quantity = (await inventoryRepository.GetMaterial(Materials.WaterOrb))!.Quantity;
+            mat2Quantity = (await inventoryRepository.GetMaterial(Materials.StreamOrb))!.Quantity;
+        }
+
         CharaLimitBreakData response = (
             await this.Client.PostMsgpack<CharaLimitBreakData>(
                 "chara/limit_break",
@@ -152,11 +184,38 @@ public class CharaTest : TestFixture
             .First();
 
         responseCharaData.limit_break_count.Should().Be(1);
+
+        response.update_data_list.material_list
+            .Should()
+            .ContainEquivalentOf(new MaterialList(Materials.WaterOrb, mat1Quantity - 8))
+            .And.ContainEquivalentOf(new MaterialList(Materials.StreamOrb, mat2Quantity - 1));
     }
 
     [Fact]
     public async Task CharaLimitBreakAndBuildupMana_ReturnCorrectData()
     {
+        int mat1Quantity,
+            mat2Quantity,
+            mat3Quantity,
+            manaPointNum;
+
+        using (
+            IDisposable ctx = this.Services
+                .GetRequiredService<IPlayerIdentityService>()
+                .StartUserImpersonation(DeviceAccountId)
+        )
+        {
+            IInventoryRepository inventoryRepository =
+                this.Services.GetRequiredService<IInventoryRepository>();
+            mat1Quantity = (await inventoryRepository.GetMaterial(Materials.WaterOrb))!.Quantity;
+            mat2Quantity = (await inventoryRepository.GetMaterial(Materials.StreamOrb))!.Quantity;
+            mat3Quantity = (await inventoryRepository.GetMaterial(Materials.DelugeOrb))!.Quantity;
+
+            manaPointNum = (
+                await this.Services.GetRequiredService<IUserDataRepository>().GetUserDataAsync()
+            ).ManaPoint;
+        }
+
         CharaLimitBreakAndBuildupManaData response = (
             await this.Client.PostMsgpack<CharaLimitBreakAndBuildupManaData>(
                 "chara/limit_break_and_buildup_mana",
@@ -203,6 +262,16 @@ public class CharaTest : TestFixture
                 25,
                 28
             );
+
+        response.update_data_list.user_data.mana_point
+            .Should()
+            .Be(manaPointNum - 2800 - 3400 - 5200 - 3400 - 2800);
+
+        response.update_data_list.material_list
+            .Should()
+            .ContainEquivalentOf(new MaterialList(Materials.WaterOrb, mat1Quantity - 15 - 25))
+            .And.ContainEquivalentOf(new MaterialList(Materials.StreamOrb, mat2Quantity - 4 - 5))
+            .And.ContainEquivalentOf(new MaterialList(Materials.DelugeOrb, mat3Quantity - 1 - 1));
     }
 
     [Fact]
