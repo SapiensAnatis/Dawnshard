@@ -82,12 +82,7 @@ public class MasterAssetTest
                     Abilities32: 1074,
                     Abilities33: 2041,
                     Abilities34: 0,
-                    McFullReleaseEntityType1: EntityTypes.Material,
-                    McFullReleaseEntityId1: (int)Materials.DamascusCrystal,
-                    McFullReleaseEntityQuantity1: 1,
-                    McFullReleaseEntityType2: EntityTypes.Weapon,
-                    McFullReleaseEntityId2: 0,
-                    McFullReleaseEntityQuantity2: 0
+                    MinDef: 10
                 )
             );
     }

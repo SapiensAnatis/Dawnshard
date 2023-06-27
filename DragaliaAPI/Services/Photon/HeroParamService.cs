@@ -102,7 +102,7 @@ public class HeroParamService : IHeroParamService
                 characterId = (int)unit.CharaData.CharaId,
                 hp = unit.CharaData.Hp,
                 attack = unit.CharaData.Attack,
-                defence = 0, // ???
+                defence = 0, // Apparently meant to be zero
                 ability1Lv = unit.CharaData.Ability1Level,
                 ability2Lv = unit.CharaData.Ability2Level,
                 ability3Lv = unit.CharaData.Ability3Level,
@@ -135,6 +135,7 @@ public class HeroParamService : IHeroParamService
         if (unit.WeaponBodyData is not null)
         {
             result.weaponBodyId = (int)unit.WeaponBodyData.WeaponBodyId;
+            result.weaponBodyBuildupCount = unit.WeaponBodyData.BuildupCount;
             result.weaponBodyAbility1Lv = unit.WeaponBodyData.Ability1Level;
             result.weaponBodyAbility2Lv = unit.WeaponBodyData.Ability2Level;
             result.weaponBodySkillLv = unit.WeaponBodyData.SkillLevel;
@@ -193,26 +194,26 @@ public class HeroParamService : IHeroParamService
         AtgenParamBonus paramBonus = fortBonusList.param_bonus.First(
             x => x.weapon_type == charaData.WeaponType
         );
-        result.relativeAtkFort += paramBonus.attack;
-        result.relativeHpFort += paramBonus.hp;
+        result.relativeAtkFort += paramBonus.attack / 100;
+        result.relativeHpFort += paramBonus.hp / 100;
 
         AtgenElementBonus elementBonus = fortBonusList.element_bonus.First(
             x => x.elemental_type == charaData.ElementalType
         );
-        result.relativeAtkFort += elementBonus.attack;
-        result.relativeHpFort += elementBonus.hp;
+        result.relativeAtkFort += elementBonus.attack / 100;
+        result.relativeHpFort += elementBonus.hp / 100;
 
         AtgenParamBonus paramBonusByWeapon = fortBonusList.param_bonus_by_weapon.First(
             x => x.weapon_type == charaData.WeaponType
         );
-        result.relativeAtkFort += paramBonusByWeapon.attack;
-        result.relativeHpFort += paramBonusByWeapon.hp;
+        result.relativeAtkFort += paramBonusByWeapon.attack / 100;
+        result.relativeHpFort += paramBonusByWeapon.hp / 100;
 
         AtgenElementBonus charaAlbumBonus = fortBonusList.chara_bonus_by_album.First(
             x => x.elemental_type == charaData.ElementalType
         );
-        result.relativeAtkAlbum += charaAlbumBonus.attack;
-        result.relativeHpAlbum += charaAlbumBonus.hp;
+        result.relativeAtkAlbum += charaAlbumBonus.attack / 100;
+        result.relativeHpAlbum += charaAlbumBonus.hp / 100;
 
         if (unit.DragonData is not null)
         {
@@ -224,16 +225,16 @@ public class HeroParamService : IHeroParamService
                 x => x.elemental_type == dragonData.ElementalType
             );
 
-            result.dragonRelativeAtkFort += dragonBonus.attack;
-            result.dragonRelativeHpFort += dragonBonus.hp;
-            result.dragonTime += dragonBonus.dragon_bonus;
+            result.dragonRelativeAtkFort += dragonBonus.attack / 100;
+            result.dragonRelativeHpFort += dragonBonus.hp / 100;
+            result.dragonRelativeDmg += dragonBonus.dragon_bonus / 100;
             result.dragonTime += fortBonusList.dragon_time_bonus.dragon_time_bonus;
-            result.dragonRelativeAtkAlbum += dragonAlbumBonus.attack;
-            result.dragonRelativeHpAlbum += dragonAlbumBonus.hp;
+            result.dragonRelativeAtkAlbum += dragonAlbumBonus.attack / 100;
+            result.dragonRelativeHpAlbum += dragonAlbumBonus.hp / 100;
         }
 
-        result.relativeAtk += fortBonusList.all_bonus.attack;
-        result.relativeHp += fortBonusList.all_bonus.hp;
+        result.plusAtk += fortBonusList.all_bonus.attack / 100;
+        result.plusHp += fortBonusList.all_bonus.hp / 100;
     }
 
     private static void MapCrests(DbDetailedPartyUnit unit, HeroParam result)

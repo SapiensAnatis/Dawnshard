@@ -72,12 +72,7 @@ public record CharaData(
     int Abilities32,
     int Abilities33,
     int Abilities34,
-    EntityTypes McFullReleaseEntityType1,
-    int McFullReleaseEntityId1,
-    int McFullReleaseEntityQuantity1,
-    EntityTypes McFullReleaseEntityType2,
-    int McFullReleaseEntityId2,
-    int McFullReleaseEntityQuantity2
+    int MinDef
 )
 {
     public bool HasManaSpiral => this.MaxLimitBreakCount > 4;
@@ -137,12 +132,6 @@ public record CharaData(
         AvailabilityMap.TryGetValue(this.Id, out CharaAvailabilities availability)
             ? availability
             : CharaAvailabilities.Default;
-
-    public (EntityTypes Type, int Id, int Quantity)[] McFullReleaseNeededEntities =
-    {
-        (McFullReleaseEntityType1, McFullReleaseEntityId1, McFullReleaseEntityQuantity1),
-        (McFullReleaseEntityType2, McFullReleaseEntityId2, McFullReleaseEntityQuantity2)
-    };
 
     private static readonly IReadOnlyDictionary<Charas, CharaAvailabilities> AvailabilityMap =
         new Dictionary<Charas, CharaAvailabilities>()

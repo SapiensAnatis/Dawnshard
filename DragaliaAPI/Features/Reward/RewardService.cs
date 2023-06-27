@@ -40,12 +40,15 @@ public class RewardService : IRewardService
 
     public async Task<RewardGrantResult> GrantReward(Entity entity)
     {
+        this.logger.LogDebug("Granting reward {@rewardEntity}", entity);
+
         switch (entity.Type)
         {
             case EntityTypes.Chara:
                 return await this.RewardCharacter(entity);
             case EntityTypes.Dragon:
-                await this.unitRepository.AddDragons((Dragons)entity.Id);
+                for (int i = 0; i < entity.Quantity; i++)
+                    await this.unitRepository.AddDragons((Dragons)entity.Id);
                 break;
             case EntityTypes.Dew:
                 await this.userDataRepository.UpdateDewpoint(entity.Quantity);
