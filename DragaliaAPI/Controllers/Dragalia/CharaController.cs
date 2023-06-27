@@ -779,10 +779,12 @@ public class CharaController : DragaliaControllerBase
                     foreach ((EntityTypes type, int id, int quantity) in pieceType.NeededEntities)
                     {
                         if (type == EntityTypes.Material)
+                        {
                             await this.paymentService.ProcessMaterialPayment(
                                 (Materials)id,
                                 quantity
                             );
+                        }
                     }
                 }
             }
