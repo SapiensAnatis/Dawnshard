@@ -308,11 +308,13 @@ namespace DragaliaAPI.Photon.Plugin
                 case 1:
                     this.SetGoToIngameInfo(info);
                     if (info.ActorNr == 1)
+                    {
+                        this.RequestHeroParam(info);
                         this.HideGameAfterStart(info);
+                    }
 
                     break;
                 case 2:
-                    this.RequestHeroParam(info);
                     break;
                 case 3:
                     this.RaisePartyEvent(info);
@@ -327,29 +329,32 @@ namespace DragaliaAPI.Photon.Plugin
         {
             foreach (IActor actor in this.PluginHost.GameActors)
             {
-                List<HeroParam> heroParams =
-                    (List<HeroParam>)
+                List<List<HeroParam>> heroParamsList =
+                    (List<List<HeroParam>>)
                         actor.Properties.GetProperty(ActorPropertyKeys.HeroParam).Value;
 
                 int memberCount = actor.Properties.GetInt(ActorPropertyKeys.MemberCount);
 
-                CharacterData evt = new CharacterData()
+                foreach (List<HeroParam> heroParams in heroParamsList)
                 {
-                    playerId = actor.ActorNr,
-                    heroParamExs = heroParams
-                        .Select(
-                            x =>
-                                new HeroParamExData()
-                                {
-                                    limitOverCount = x.exAbilityLv,
-                                    sequenceNumber = x.position
-                                }
-                        )
-                        .ToArray(),
-                    heroParams = heroParams.Take(memberCount).ToArray()
-                };
+                    CharacterData evt = new CharacterData()
+                    {
+                        playerId = actor.ActorNr,
+                        heroParamExs = heroParams
+                            .Select(
+                                x =>
+                                    new HeroParamExData()
+                                    {
+                                        limitOverCount = x.exAbilityLv,
+                                        sequenceNumber = x.position
+                                    }
+                            )
+                            .ToArray(),
+                        heroParams = heroParams.Take(memberCount).ToArray()
+                    };
 
-                this.RaiseEvent(0x14, evt);
+                    this.RaiseEvent(0x14, evt);
+                }
             }
         }
 
@@ -402,12 +407,12 @@ namespace DragaliaAPI.Photon.Plugin
                         Url = requestUri.AbsoluteUri,
                         ContentType = "application/json",
                         Callback = OnHeroParamResponse,
-                        Async = true,
+                        Async = false,
                         Accept = "application/json",
                         UserState = new HeroParamRequestState()
                         {
                             OwnerActorNr = actor.ActorNr,
-                            RequestActorNr = info.ActorNr
+                            RequestActorNr = info.ActorNr,
                         },
                     };
 
@@ -438,7 +443,20 @@ namespace DragaliaAPI.Photon.Plugin
                     $"HeroParam owner actor {typedUserState.OwnerActorNr} not found!"
                 );
 
-            owner.Properties.SetProperty(ActorPropertyKeys.HeroParam, heroParams);
+            if (
+                !owner.Properties.TryGetValue(
+                    ActorPropertyKeys.HeroParam,
+                    out object heroParamsObject
+                )
+            )
+            {
+                heroParamsObject = new List<List<HeroParam>>();
+            }
+
+            List<List<HeroParam>> heroParamsList = (List<List<HeroParam>>)heroParamsObject;
+            heroParamsList.Add(heroParams);
+
+            owner.Properties.SetProperty(ActorPropertyKeys.HeroParam, heroParamsList);
             owner.Properties.SetProperty(ActorPropertyKeys.HeroParamCount, heroParams.Count);
         }
 
