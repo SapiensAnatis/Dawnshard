@@ -419,41 +419,21 @@ public class CharaController : DragaliaControllerBase
         playerCharaData.AttackBase = charaData.HasManaSpiral
             ? (ushort)charaData.AddMaxAtk1
             : (ushort)charaData.MaxAtk;
-        playerCharaData.LimitBreakCount = (byte)charaData.MaxLimitBreakCount;
 
         IEnumerable<int> maxManaNodes = ManaNodesUtil.GetSetFromManaNodes(
             charaData.HasManaSpiral ? ManaNodes.Circle7 : ManaNodesUtil.MaxManaNodes
         );
 
+        SortedSet<int> previouslyUnlockedPieces = playerCharaData.ManaCirclePieceIdList;
+
+        // Set here since this changes the ManaCirclePieceIdList
+        playerCharaData.LimitBreakCount = (byte)charaData.MaxLimitBreakCount;
+
         await CharaManaNodeUnlock(
-            maxManaNodes,
+            maxManaNodes.Where(x => !previouslyUnlockedPieces.Contains(x)),
             playerCharaData,
             CharaUpgradeMaterialTypes.Omnicite
         );
-
-        if (
-            MasterAsset.CharaStories.TryGetValue(
-                (int)playerCharaData.CharaId,
-                out StoryData? stories
-            )
-        )
-        {
-            int[] charaStories = stories.storyIds;
-
-            for (
-                int nextStoryunlockIndex = await storyRepository.Stories
-                    .Where(x => charaStories.Contains(x.StoryId))
-                    .CountAsync();
-                nextStoryunlockIndex < charaStories.Length;
-                nextStoryunlockIndex++
-            )
-            {
-                await storyRepository.GetOrCreateStory(
-                    StoryTypes.Chara,
-                    charaStories[nextStoryunlockIndex]
-                );
-            }
-        }
 
         resp.update_data_list = await this.updateDataService.SaveChangesAsync();
         resp.entity_result = this.rewardService.GetEntityResult();
@@ -600,25 +580,8 @@ public class CharaController : DragaliaControllerBase
             charaData.PlusAtk5
         };
 
-        bool isOmnicite = isUseSpecialMaterial == CharaUpgradeMaterialTypes.Omnicite;
-
-        if (isOmnicite)
-        {
-            this.logger.LogDebug("Omnicite was used");
-            playerCharData.Skill1Level = 1;
-            playerCharData.Skill2Level = 0;
-            playerCharData.Ability1Level = (byte)charaData.DefaultAbility1Level;
-            playerCharData.Ability2Level = (byte)charaData.DefaultAbility2Level;
-            playerCharData.Ability3Level = (byte)charaData.DefaultAbility3Level;
-            playerCharData.BurstAttackLevel = (byte)charaData.DefaultBurstAttackLevel;
-            playerCharData.HpNode = 0;
-            playerCharData.AttackNode = 0;
-            playerCharData.ExAbilityLevel = 1;
-            playerCharData.ExAbility2Level = 1;
-        }
-
         SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
-        bool is50MCBonusNew = nodes.Count < 50 || isOmnicite;
+        int previouslyUnlockedNodeCount = nodes.Count;
 
         this.logger.LogInformation("Unlocking nodes {@nodes}", manaNodes);
 
@@ -723,11 +686,14 @@ public class CharaController : DragaliaControllerBase
                 case ManaNodeTypes.StdAtkUp:
                     playerCharData.ComboBuildupCount++;
                     break;
+                case ManaNodeTypes.MaxLvUp:
+                    // NOTE: This is handled in DbPlayerCharaData as a computed property.
+                    break;
                 default:
                     break;
             }
 
-            if (manaNodeInfo.IsReleaseStory && !isOmnicite)
+            if (manaNodeInfo.IsReleaseStory)
             {
                 int[] charaStories = MasterAsset.CharaStories
                     .Get((int)playerCharData.CharaId)
@@ -754,76 +720,70 @@ public class CharaController : DragaliaControllerBase
                 unlockedStories.Add(charaStories[nextStoryunlockIndex]);
             }
 
-            if (!isOmnicite)
+            // Omnicite doesn't use any material
+            if (isUseSpecialMaterial == CharaUpgradeMaterialTypes.Omnicite)
+                continue;
+
+            await this.paymentService.ProcessPayment(
+                PaymentTypes.ManaPoint,
+                expectedPrice: manaNodeInfo.NecessaryManaPoint
+            );
+
+            // they smoked some shit
+            if (manaNodeInfo.UniqueGrowMaterialCount1 > 0)
             {
-                await this.paymentService.ProcessPayment(
-                    PaymentTypes.ManaPoint,
-                    expectedPrice: manaNodeInfo.NecessaryManaPoint
+                await this.paymentService.ProcessMaterialPayment(
+                    charaData.UniqueGrowMaterialId1,
+                    manaNodeInfo.UniqueGrowMaterialCount1
                 );
+            }
 
-                // they smoked some shit
-                if (manaNodeInfo.UniqueGrowMaterialCount1 > 0)
+            if (manaNodeInfo.UniqueGrowMaterialCount2 > 0)
+            {
+                await this.paymentService.ProcessMaterialPayment(
+                    charaData.UniqueGrowMaterialId2,
+                    manaNodeInfo.UniqueGrowMaterialCount2
+                );
+            }
+
+            if (manaNodeInfo.GrowMaterialCount > 0 && charaData.GrowMaterialId != Materials.Empty)
+            {
+                await this.paymentService.ProcessMaterialPayment(
+                    charaData.GrowMaterialId,
+                    manaNodeInfo.GrowMaterialCount
+                );
+            }
+
+            ManaPieceMaterial? material = MasterAsset.ManaPieceMaterial.Enumerable.FirstOrDefault(
+                x =>
+                    x.ElementId == charaData.PieceMaterialElementId
+                    && x.Step == stepLookup[nodeNr - 1]
+                    && x.ManaPieceType == manaNodeInfo.ManaPieceType
+            );
+
+            if (material != null)
+            {
+                if (material.DewPoint > 0)
                 {
-                    await this.paymentService.ProcessMaterialPayment(
-                        charaData.UniqueGrowMaterialId1,
-                        manaNodeInfo.UniqueGrowMaterialCount1
+                    await this.paymentService.ProcessPayment(
+                        PaymentTypes.DewPoint,
+                        expectedPrice: material.DewPoint
                     );
                 }
 
-                if (manaNodeInfo.UniqueGrowMaterialCount2 > 0)
+                foreach ((Materials id, int quantity) in material.NeededMaterials)
                 {
-                    await this.paymentService.ProcessMaterialPayment(
-                        charaData.UniqueGrowMaterialId2,
-                        manaNodeInfo.UniqueGrowMaterialCount2
-                    );
+                    if (id != Materials.Empty)
+                        await this.paymentService.ProcessMaterialPayment(id, quantity);
                 }
 
-                if (
-                    manaNodeInfo.GrowMaterialCount > 0
-                    && charaData.GrowMaterialId != Materials.Empty
-                )
+                ManaPieceType pieceType = MasterAsset.ManaPieceType[manaNodeInfo.ManaPieceType];
+
+                foreach ((EntityTypes type, int id, int quantity) in pieceType.NeededEntities)
                 {
-                    await this.paymentService.ProcessMaterialPayment(
-                        charaData.GrowMaterialId,
-                        manaNodeInfo.GrowMaterialCount
-                    );
-                }
-
-                ManaPieceMaterial? material =
-                    MasterAsset.ManaPieceMaterial.Enumerable.FirstOrDefault(
-                        x =>
-                            x.ElementId == charaData.PieceMaterialElementId
-                            && x.Step == stepLookup[nodeNr - 1]
-                            && x.ManaPieceType == manaNodeInfo.ManaPieceType
-                    );
-
-                if (material != null)
-                {
-                    if (material.DewPoint > 0)
+                    if (type == EntityTypes.Material)
                     {
-                        await this.paymentService.ProcessPayment(
-                            PaymentTypes.DewPoint,
-                            expectedPrice: material.DewPoint
-                        );
-                    }
-
-                    foreach ((Materials id, int quantity) in material.NeededMaterials)
-                    {
-                        if (id != Materials.Empty)
-                            await this.paymentService.ProcessMaterialPayment(id, quantity);
-                    }
-
-                    ManaPieceType pieceType = MasterAsset.ManaPieceType[manaNodeInfo.ManaPieceType];
-
-                    foreach ((EntityTypes type, int id, int quantity) in pieceType.NeededEntities)
-                    {
-                        if (type == EntityTypes.Material)
-                        {
-                            await this.paymentService.ProcessMaterialPayment(
-                                (Materials)id,
-                                quantity
-                            );
-                        }
+                        await this.paymentService.ProcessMaterialPayment((Materials)id, quantity);
                     }
                 }
             }
@@ -831,7 +791,7 @@ public class CharaController : DragaliaControllerBase
 
         nodes.AddRange(manaNodes);
 
-        if (nodes.Count >= 50 && is50MCBonusNew)
+        if (previouslyUnlockedNodeCount < 50 && nodes.Count >= 50)
         {
             this.logger.LogDebug("Applying 50MC bonus");
             playerCharData.HpNode += (ushort)charaData.McFullBonusHp5;
