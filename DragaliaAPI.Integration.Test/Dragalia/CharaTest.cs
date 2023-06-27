@@ -22,6 +22,7 @@ public class CharaTest : TestFixture
         this.AddCharacter(Charas.Naveed);
         this.AddCharacter(Charas.Ezelith);
         this.AddCharacter(Charas.Marth);
+        this.AddCharacter(Charas.Hawk);
         this.AddCharacter(Charas.Mikoto);
         this.AddCharacter(Charas.Vanessa);
         this.AddCharacter(Charas.Celliera);
@@ -446,6 +447,7 @@ public class CharaTest : TestFixture
     [InlineData(2, 0, Charas.Naveed)]
     [InlineData(10, 1, Charas.Ezelith)]
     [InlineData(20, 2, Charas.Marth)]
+    [InlineData(30, 2, Charas.Hawk)] // limit break node not unlocked
     [InlineData(30, 3, Charas.Mikoto)]
     [InlineData(40, 4, Charas.Vanessa)]
     [InlineData(50, 5, Charas.Xander)]
