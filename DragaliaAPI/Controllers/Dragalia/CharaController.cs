@@ -367,33 +367,15 @@ public class CharaController : DragaliaControllerBase
             chara => chara.CharaId == request.chara_id
         );
 
+        await LimitBreakChara(playerCharData, (byte)request.next_limit_break_count);
+
         if (request.mana_circle_piece_id_list.Any())
         {
-            int maxPieceId = request.next_limit_break_count * 10;
-
-            if (request.mana_circle_piece_id_list.Any(x => maxPieceId >= x))
-            {
-                await CharaManaNodeUnlock(
-                    request.mana_circle_piece_id_list.Where(x => maxPieceId >= x),
-                    playerCharData,
-                    request.is_use_grow_material
-                );
-            }
-
-            await LimitBreakChara(playerCharData, (byte)request.next_limit_break_count);
-
-            if (request.mana_circle_piece_id_list.Any(x => x > maxPieceId))
-            {
-                await CharaManaNodeUnlock(
-                    request.mana_circle_piece_id_list.Where(x => x > maxPieceId),
-                    playerCharData,
-                    request.is_use_grow_material
-                );
-            }
-        }
-        else
-        {
-            await LimitBreakChara(playerCharData, (byte)request.next_limit_break_count);
+            await CharaManaNodeUnlock(
+                request.mana_circle_piece_id_list,
+                playerCharData,
+                request.is_use_grow_material
+            );
         }
 
         resp.update_data_list = await this.updateDataService.SaveChangesAsync();
@@ -577,8 +559,8 @@ public class CharaController : DragaliaControllerBase
             }
 
             int currentStep = typeSteps[manaNodeInfos[i].ManaPieceType];
-
             stepLookup[i] = currentStep;
+
             if (
                 materials.Any(
                     x => x.ManaPieceType == manaNodeInfos[i].ManaPieceType && x.Step == currentStep

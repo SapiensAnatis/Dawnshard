@@ -44,7 +44,7 @@ public static class ManaNodesUtil
             return ManaNodes.Clear;
 
         int max = enumerable.Max();
-        int finalDigit = max % 10 == 0 ? 10 : max % 10;
+        int finalDigit = max % 10;
         int ten = (max - finalDigit) / 10;
         ManaNodes flag = baseNodes;
         ManaNodes[] allNodes = Enum.GetValues<ManaNodes>();
