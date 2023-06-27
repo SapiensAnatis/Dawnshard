@@ -209,8 +209,13 @@ namespace DragaliaAPI.Photon.Plugin
             this.logger.Debug(JsonConvert.SerializeObject(info.Request.Properties));
 #endif
 
-            if (info.Request.Properties.ContainsKey(ActorPropertyKeys.GoToIngameState))
+            if (
+                info.Request.Properties.ContainsKey(ActorPropertyKeys.GoToIngameState)
+                && info.ActorNr == 1
+            )
+            {
                 this.OnSetGoToIngameState(info);
+            }
 
             if (info.Request.Properties.ContainsKey(GamePropertyKeys.EntryConditions))
                 this.OnSetEntryConditions(info);
@@ -307,14 +312,10 @@ namespace DragaliaAPI.Photon.Plugin
             {
                 case 1:
                     this.SetGoToIngameInfo(info);
-                    if (info.ActorNr == 1)
-                    {
-                        this.RequestHeroParam(info);
-                        this.HideGameAfterStart(info);
-                    }
-
+                    this.HideGameAfterStart(info);
                     break;
                 case 2:
+                    this.RequestHeroParam(info);
                     break;
                 case 3:
                     this.RaisePartyEvent(info);
@@ -407,7 +408,7 @@ namespace DragaliaAPI.Photon.Plugin
                         Url = requestUri.AbsoluteUri,
                         ContentType = "application/json",
                         Callback = OnHeroParamResponse,
-                        Async = false,
+                        Async = true,
                         Accept = "application/json",
                         UserState = new HeroParamRequestState()
                         {
