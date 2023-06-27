@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using DragaliaAPI.Photon.Plugin.Constants;
@@ -330,13 +331,13 @@ namespace DragaliaAPI.Photon.Plugin
         {
             foreach (IActor actor in this.PluginHost.GameActors)
             {
-                List<List<HeroParam>> heroParamsList =
-                    (List<List<HeroParam>>)
+                IEnumerable<IEnumerable<HeroParam>> heroParamsList =
+                    (IEnumerable<IEnumerable<HeroParam>>)
                         actor.Properties.GetProperty(ActorPropertyKeys.HeroParam).Value;
 
                 int memberCount = actor.Properties.GetInt(ActorPropertyKeys.MemberCount);
 
-                foreach (List<HeroParam> heroParams in heroParamsList)
+                foreach (IEnumerable<HeroParam> heroParams in heroParamsList)
                 {
                     CharacterData evt = new CharacterData()
                     {
@@ -391,35 +392,33 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
         private void RequestHeroParam(ISetPropertiesCallInfo info)
         {
-            foreach (IActor actor in this.PluginHost.GameActorsActive)
-            {
-                int viewerId = actor.GetViewerId();
-                int[] partySlots = actor.GetPartySlots();
-
-                foreach (int slot in partySlots)
-                {
-                    Uri requestUri = new Uri(
-                        this.config.ApiServerUrl,
-                        $"heroparam/{viewerId}/{slot}"
-                    );
-
-                    HttpRequest req = new HttpRequest()
+            IEnumerable<ActorInfo> heroParamRequest = this.PluginHost.GameActors.Select(
+                x =>
+                    new ActorInfo()
                     {
-                        Url = requestUri.AbsoluteUri,
-                        ContentType = "application/json",
-                        Callback = OnHeroParamResponse,
-                        Async = true,
-                        Accept = "application/json",
-                        UserState = new HeroParamRequestState()
-                        {
-                            OwnerActorNr = actor.ActorNr,
-                            RequestActorNr = info.ActorNr,
-                        },
-                    };
+                        ActorNr = x.ActorNr,
+                        ViewerId = x.GetViewerId(),
+                        PartySlots = x.GetPartySlots()
+                    }
+            );
 
-                    this.PluginHost.HttpRequest(req, info);
-                }
-            }
+            Uri requestUri = new Uri(this.config.ApiServerUrl, $"heroparam/batch");
+
+            HttpRequest req = new HttpRequest()
+            {
+                Url = requestUri.AbsoluteUri,
+                ContentType = "application/json",
+                Callback = OnHeroParamResponse,
+                Async = false,
+                Accept = "application/json",
+                DataStream = new MemoryStream(
+                    Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(heroParamRequest))
+                ),
+                UserState = new HeroParamRequestState() { },
+                Method = "POST",
+            };
+
+            this.PluginHost.HttpRequest(req, info);
         }
 
         /// <summary>
@@ -431,34 +430,23 @@ namespace DragaliaAPI.Photon.Plugin
         {
             LogIfFailedCallback(response, userState);
 
-            List<HeroParam> heroParams = JsonConvert.DeserializeObject<List<HeroParam>>(
+            List<HeroParamData> responseObject = JsonConvert.DeserializeObject<List<HeroParamData>>(
                 response.ResponseText
             );
 
-            HeroParamRequestState typedUserState = (HeroParamRequestState)userState;
-            IActor owner =
-                this.PluginHost.GameActors.FirstOrDefault(
-                    x => x.ActorNr == typedUserState.OwnerActorNr
-                )
-                ?? throw new InvalidOperationException(
-                    $"HeroParam owner actor {typedUserState.OwnerActorNr} not found!"
-                );
-
-            if (
-                !owner.Properties.TryGetValue(
-                    ActorPropertyKeys.HeroParam,
-                    out object heroParamsObject
-                )
-            )
+            foreach (HeroParamData data in responseObject)
             {
-                heroParamsObject = new List<List<HeroParam>>();
+                this.PluginHost.SetProperties(
+                    data.ActorNr,
+                    new Hashtable()
+                    {
+                        { ActorPropertyKeys.HeroParam, data.HeroParamLists },
+                        { ActorPropertyKeys.HeroParamCount, data.HeroParamLists.First().Count() }
+                    },
+                    null,
+                    false
+                );
             }
-
-            List<List<HeroParam>> heroParamsList = (List<List<HeroParam>>)heroParamsObject;
-            heroParamsList.Add(heroParams);
-
-            owner.Properties.SetProperty(ActorPropertyKeys.HeroParam, heroParamsList);
-            owner.Properties.SetProperty(ActorPropertyKeys.HeroParamCount, heroParams.Count);
         }
 
         /// <summary>
