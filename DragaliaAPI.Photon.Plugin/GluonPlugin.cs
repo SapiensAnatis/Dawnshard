@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using DragaliaAPI.Photon.Plugin.Constants;
 using DragaliaAPI.Photon.Plugin.Helpers;
@@ -311,13 +312,44 @@ namespace DragaliaAPI.Photon.Plugin
 
                     break;
                 case 2:
-                    this.RaiseCharacterDataEvent(info);
+                    this.RequestHeroParam(info);
                     break;
                 case 3:
                     this.RaisePartyEvent(info);
+                    this.RaiseCharacterDataEvent(info);
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void RaiseCharacterDataEvent(ISetPropertiesCallInfo info)
+        {
+            foreach (IActor actor in this.PluginHost.GameActors)
+            {
+                List<HeroParam> heroParams =
+                    (List<HeroParam>)
+                        actor.Properties.GetProperty(ActorPropertyKeys.HeroParam).Value;
+
+                int memberCount = actor.Properties.GetInt(ActorPropertyKeys.MemberCount);
+
+                CharacterData evt = new CharacterData()
+                {
+                    playerId = actor.ActorNr,
+                    heroParamExs = heroParams
+                        .Select(
+                            x =>
+                                new HeroParamExData()
+                                {
+                                    limitOverCount = x.exAbilityLv,
+                                    sequenceNumber = x.position
+                                }
+                        )
+                        .ToArray(),
+                    heroParams = heroParams.Take(memberCount).ToArray()
+                };
+
+                this.RaiseEvent(0x14, evt);
             }
         }
 
@@ -351,7 +383,7 @@ namespace DragaliaAPI.Photon.Plugin
         /// Raises the CharacterData event by making requests to the main API server for party information.
         /// </summary>
         /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
-        private void RaiseCharacterDataEvent(ISetPropertiesCallInfo info)
+        private void RequestHeroParam(ISetPropertiesCallInfo info)
         {
             foreach (IActor actor in this.PluginHost.GameActorsActive)
             {
@@ -385,7 +417,7 @@ namespace DragaliaAPI.Photon.Plugin
         }
 
         /// <summary>
-        /// HTTP request callback for the HeroParam request sent in <see cref="RaiseCharacterDataEvent(ISetPropertiesCallInfo)"/>.
+        /// HTTP request callback for the HeroParam request sent in <see cref="RequestHeroParam(ISetPropertiesCallInfo)"/>.
         /// </summary>
         /// <param name="response">The HTTP response.</param>
         /// <param name="userState">The arguments passed from the calling function.</param>
@@ -406,25 +438,8 @@ namespace DragaliaAPI.Photon.Plugin
                     $"HeroParam owner actor {typedUserState.OwnerActorNr} not found!"
                 );
 
+            owner.Properties.SetProperty(ActorPropertyKeys.HeroParam, heroParams);
             owner.Properties.SetProperty(ActorPropertyKeys.HeroParamCount, heroParams.Count);
-
-            CharacterData evt = new CharacterData()
-            {
-                playerId = typedUserState.OwnerActorNr,
-                heroParamExs = heroParams
-                    .Select(
-                        x =>
-                            new HeroParamExData()
-                            {
-                                limitOverCount = x.exAbilityLv,
-                                sequenceNumber = x.position
-                            }
-                    )
-                    .ToArray(),
-                heroParams = heroParams.ToArray()
-            };
-
-            this.RaiseEvent(0x14, evt, typedUserState.RequestActorNr);
         }
 
         /// <summary>
@@ -433,7 +448,17 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
         private void RaisePartyEvent(ISetPropertiesCallInfo info)
         {
-            PartyEvent evt = new PartyEvent() { memberCountTable = this.GetMemberCountTable() };
+            Dictionary<int, int> memberCountTable = this.GetMemberCountTable();
+
+            foreach (IActor actor in this.PluginHost.GameActors)
+            {
+                actor.Properties.Set(
+                    ActorPropertyKeys.MemberCount,
+                    memberCountTable[actor.ActorNr]
+                );
+            }
+
+            PartyEvent evt = new PartyEvent() { memberCountTable = memberCountTable };
 
             this.RaiseEvent(0x3e, evt);
         }
