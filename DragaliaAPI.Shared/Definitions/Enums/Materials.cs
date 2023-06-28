@@ -550,6 +550,61 @@ public static class UpgradeMaterials
         { Materials.SucculentDragonfruit, 3500 }
     };
 
+    public readonly static Dictionary<int, int> dragonBuildupXp = new Dictionary<int, int>()
+    {
+        { 3, 50 },
+        { 4, 1000 },
+        { 5, 1500 },
+    };
+
+    public readonly static Dictionary<UnitElement, Materials> t1Orbs = new Dictionary<
+        UnitElement,
+        Materials
+    >()
+    {
+        { UnitElement.Water, Materials.WaterOrb },
+        { UnitElement.Fire, Materials.FlameOrb },
+        { UnitElement.Wind, Materials.WindOrb },
+        { UnitElement.Light, Materials.LightOrb },
+        { UnitElement.Dark, Materials.ShadowOrb }
+    };
+
+    public readonly static Dictionary<UnitElement, Materials> t2Orbs = new Dictionary<
+        UnitElement,
+        Materials
+    >()
+    {
+        { UnitElement.Water, Materials.StreamOrb },
+        { UnitElement.Fire, Materials.BlazeOrb },
+        { UnitElement.Wind, Materials.StormOrb },
+        { UnitElement.Light, Materials.RadianceOrb },
+        { UnitElement.Dark, Materials.NightfallOrb }
+    };
+
+    public readonly static Dictionary<UnitElement, Materials> t3Orbs = new Dictionary<
+        UnitElement,
+        Materials
+    >()
+    {
+        { UnitElement.Water, Materials.DelugeOrb },
+        { UnitElement.Fire, Materials.InfernoOrb },
+        { UnitElement.Wind, Materials.MaelstromOrb },
+        { UnitElement.Light, Materials.RefulgenceOrb },
+        { UnitElement.Dark, Materials.NetherOrb }
+    };
+
+    public readonly static Dictionary<UnitElement, Materials> t4Orbs = new Dictionary<
+        UnitElement,
+        Materials
+    >()
+    {
+        { UnitElement.Water, Materials.TsunamiOrb },
+        { UnitElement.Fire, Materials.IncandescenceOrb },
+        { UnitElement.Wind, Materials.TempestOrb },
+        { UnitElement.Light, Materials.ResplendenceOrb },
+        { UnitElement.Dark, Materials.AbaddonOrb }
+    };
+
     public readonly static Dictionary<UnitElement, Materials> tomes = new Dictionary<
         UnitElement,
         Materials

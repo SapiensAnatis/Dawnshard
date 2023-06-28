@@ -23,7 +23,7 @@ public class ItemController : DragaliaControllerBase
     public async Task<DragaliaResult> GetList()
     {
         IEnumerable<ItemList> itemList = (
-            await this.inventoryRepository.GetMaterials(this.DeviceAccountId).ToListAsync()
+            await this.inventoryRepository.Materials.ToListAsync()
         ).Select(mapper.Map<ItemList>);
 
         return this.Ok(new ItemGetListData() { item_list = itemList });

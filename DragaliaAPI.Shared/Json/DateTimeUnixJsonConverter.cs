@@ -11,7 +11,7 @@ public class DateTimeUnixJsonConverter : JsonConverter<DateTimeOffset>
         JsonSerializerOptions options
     )
     {
-        return DateTimeOffset.FromUnixTimeSeconds(reader.GetInt32());
+        return DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64());
     }
 
     public override void Write(

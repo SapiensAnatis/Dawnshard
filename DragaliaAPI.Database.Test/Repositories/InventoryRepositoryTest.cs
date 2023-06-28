@@ -7,6 +7,7 @@ using static DragaliaAPI.Database.Test.DbTestFixture;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 
+[Collection("RepositoryTest")]
 public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
@@ -27,11 +28,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddMaterialQuantity_NoEntry_AddsQuantity()
     {
-        await this.inventoryRepository.UpdateQuantity(
-            DeviceAccountId,
-            Materials.WaterwyrmsGreatsphere,
-            10
-        );
+        await this.inventoryRepository.UpdateQuantity(Materials.WaterwyrmsGreatsphere, 10);
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
@@ -57,11 +54,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        await this.inventoryRepository.UpdateQuantity(
-            DeviceAccountId,
-            Materials.FirestormPrism,
-            10
-        );
+        await this.inventoryRepository.UpdateQuantity(Materials.FirestormPrism, 10);
 
         (
             await this.fixture.ApiContext.PlayerMaterials.FindAsync(
@@ -77,7 +70,6 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
     public async Task AddMaterialQuantityRange_AddsQuantities()
     {
         await this.inventoryRepository.UpdateQuantity(
-            DeviceAccountId,
             new List<Materials>() { Materials.SunlightOre, Materials.SunlightStone },
             5
         );
@@ -124,7 +116,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        (await this.inventoryRepository.GetMaterial(DeviceAccountId, Materials.AbaddonOrb))
+        (await this.inventoryRepository.GetMaterial(Materials.AbaddonOrb))
             .Should()
             .NotBeNull()
             .And.BeEquivalentTo(
@@ -167,7 +159,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        (await this.inventoryRepository.GetMaterials(DeviceAccountId).ToListAsync())
+        (await this.inventoryRepository.Materials.ToListAsync())
             .Should()
             .ContainEquivalentOf( // Savefile creation adds materials
                 new DbPlayerMaterial()

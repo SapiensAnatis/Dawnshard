@@ -51,6 +51,8 @@ public static class CharaConstants
     public readonly static int[] skillMights = new int[] { 0, 100, 200, 300, 400 };
     public readonly static int[] fsMights = new int[] { 0, 60, 120 };
 
+    public const int AugmentResetCost = 20000;
+
     public static readonly ImmutableList<int> XpLimits = new List<int>()
     {
         0,

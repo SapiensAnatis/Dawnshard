@@ -1,0 +1,358 @@
+{
+  "Odds": [
+    {
+      "Type": 4,
+      "Id": 0,
+      "Quantity": 5000,
+      "Rate": 12667
+    },
+    {
+      "Type": 4,
+      "Id": 0,
+      "Quantity": 10000,
+      "Rate": 6333
+    },
+    {
+      "Type": 4,
+      "Id": 0,
+      "Quantity": 1000000,
+      "Rate": 100
+    },
+    {
+      "Type": 18,
+      "Id": 0,
+      "Quantity": 2000,
+      "Rate": 9933
+    },
+    {
+      "Type": 18,
+      "Id": 0,
+      "Quantity": 5000,
+      "Rate": 4967
+    },
+    {
+      "Type": 18,
+      "Id": 0,
+      "Quantity": 100000,
+      "Rate": 100
+    },
+    {
+      "Type": 8,
+      "Id": 101001003,
+      "Quantity": 3,
+      "Rate": 4000
+    },
+    {
+      "Type": 8,
+      "Id": 102001003,
+      "Quantity": 5,
+      "Rate": 4000
+    },
+    {
+      "Type": 8,
+      "Id": 103001003,
+      "Quantity": 1,
+      "Rate": 4000
+    },
+    {
+      "Type": 8,
+      "Id": 113001003,
+      "Quantity": 5,
+      "Rate": 4000
+    },
+    {
+      "Type": 8,
+      "Id": 104001011,
+      "Quantity": 15,
+      "Rate": 2000
+    },
+    {
+      "Type": 8,
+      "Id": 104001012,
+      "Quantity": 3,
+      "Rate": 1000
+    },
+    {
+      "Type": 8,
+      "Id": 104001013,
+      "Quantity": 3,
+      "Rate": 200
+    },
+    {
+      "Type": 8,
+      "Id": 104001021,
+      "Quantity": 15,
+      "Rate": 2000
+    },
+    {
+      "Type": 8,
+      "Id": 104001022,
+      "Quantity": 3,
+      "Rate": 1000
+    },
+    {
+      "Type": 8,
+      "Id": 104001023,
+      "Quantity": 3,
+      "Rate": 200
+    },
+    {
+      "Type": 8,
+      "Id": 104001031,
+      "Quantity": 15,
+      "Rate": 2000
+    },
+    {
+      "Type": 8,
+      "Id": 104001032,
+      "Quantity": 3,
+      "Rate": 1000
+    },
+    {
+      "Type": 8,
+      "Id": 104001033,
+      "Quantity": 3,
+      "Rate": 200
+    },
+    {
+      "Type": 8,
+      "Id": 104001041,
+      "Quantity": 15,
+      "Rate": 2000
+    },
+    {
+      "Type": 8,
+      "Id": 104001042,
+      "Quantity": 3,
+      "Rate": 1000
+    },
+    {
+      "Type": 8,
+      "Id": 104001043,
+      "Quantity": 3,
+      "Rate": 200
+    },
+    {
+      "Type": 8,
+      "Id": 104001051,
+      "Quantity": 15,
+      "Rate": 2000
+    },
+    {
+      "Type": 8,
+      "Id": 104001052,
+      "Quantity": 3,
+      "Rate": 1000
+    },
+    {
+      "Type": 8,
+      "Id": 104001053,
+      "Quantity": 3,
+      "Rate": 200
+    },
+    {
+      "Type": 8,
+      "Id": 104001001,
+      "Quantity": 1,
+      "Rate": 200
+    },
+    {
+      "Type": 8,
+      "Id": 104002011,
+      "Quantity": 3,
+      "Rate": 1225
+    },
+    {
+      "Type": 8,
+      "Id": 104002012,
+      "Quantity": 3,
+      "Rate": 175
+    },
+    {
+      "Type": 8,
+      "Id": 104002021,
+      "Quantity": 3,
+      "Rate": 1225
+    },
+    {
+      "Type": 8,
+      "Id": 104002022,
+      "Quantity": 3,
+      "Rate": 175
+    },
+    {
+      "Type": 8,
+      "Id": 104002031,
+      "Quantity": 3,
+      "Rate": 1225
+    },
+    {
+      "Type": 8,
+      "Id": 104002032,
+      "Quantity": 3,
+      "Rate": 175
+    },
+    {
+      "Type": 8,
+      "Id": 104002041,
+      "Quantity": 3,
+      "Rate": 1225
+    },
+    {
+      "Type": 8,
+      "Id": 104002042,
+      "Quantity": 3,
+      "Rate": 175
+    },
+    {
+      "Type": 8,
+      "Id": 104002051,
+      "Quantity": 3,
+      "Rate": 1225
+    },
+    {
+      "Type": 8,
+      "Id": 104002052,
+      "Quantity": 3,
+      "Rate": 175
+    },
+    {
+      "Type": 8,
+      "Id": 201005001,
+      "Quantity": 1,
+      "Rate": 5000
+    },
+    {
+      "Type": 8,
+      "Id": 202001001,
+      "Quantity": 20,
+      "Rate": 3333
+    },
+    {
+      "Type": 8,
+      "Id": 202001002,
+      "Quantity": 10,
+      "Rate": 1333
+    },
+    {
+      "Type": 8,
+      "Id": 202001003,
+      "Quantity": 3,
+      "Rate": 333
+    },
+    {
+      "Type": 8,
+      "Id": 202002001,
+      "Quantity": 20,
+      "Rate": 3333
+    },
+    {
+      "Type": 8,
+      "Id": 202002002,
+      "Quantity": 10,
+      "Rate": 1333
+    },
+    {
+      "Type": 8,
+      "Id": 202002003,
+      "Quantity": 3,
+      "Rate": 333
+    },
+    {
+      "Type": 8,
+      "Id": 202003001,
+      "Quantity": 20,
+      "Rate": 3333
+    },
+    {
+      "Type": 8,
+      "Id": 202003002,
+      "Quantity": 10,
+      "Rate": 1333
+    },
+    {
+      "Type": 8,
+      "Id": 202003003,
+      "Quantity": 3,
+      "Rate": 333
+    },
+    {
+      "Type": 8,
+      "Id": 202004001,
+      "Quantity": 20,
+      "Rate": 3333
+    },
+    {
+      "Type": 8,
+      "Id": 202004002,
+      "Quantity": 10,
+      "Rate": 1333
+    },
+    {
+      "Type": 8,
+      "Id": 202004003,
+      "Quantity": 3,
+      "Rate": 333
+    },
+    {
+      "Type": 8,
+      "Id": 202005011,
+      "Quantity": 5,
+      "Rate": 178
+    },
+    {
+      "Type": 8,
+      "Id": 202005021,
+      "Quantity": 5,
+      "Rate": 178
+    },
+    {
+      "Type": 8,
+      "Id": 202005031,
+      "Quantity": 5,
+      "Rate": 178
+    },
+    {
+      "Type": 8,
+      "Id": 202005041,
+      "Quantity": 5,
+      "Rate": 178
+    },
+    {
+      "Type": 8,
+      "Id": 202005051,
+      "Quantity": 5,
+      "Rate": 178
+    },
+    {
+      "Type": 8,
+      "Id": 202005061,
+      "Quantity": 5,
+      "Rate": 178
+    },
+    {
+      "Type": 8,
+      "Id": 202005071,
+      "Quantity": 5,
+      "Rate": 178
+    },
+    {
+      "Type": 8,
+      "Id": 202005081,
+      "Quantity": 5,
+      "Rate": 178
+    },
+    {
+      "Type": 8,
+      "Id": 202005091,
+      "Quantity": 5,
+      "Rate": 180
+    },
+    {
+      "Type": 28,
+      "Id": 0,
+      "Quantity": 1,
+      "Rate": 100
+    }
+  ]
+}

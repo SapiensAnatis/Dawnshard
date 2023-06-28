@@ -1,15 +1,23 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public interface IStoryRepository : IBaseRepository
+public interface IStoryRepository
 {
-    public IQueryable<DbPlayerStoryState> GetStoryList(string deviceAccountId);
-    public Task<DbPlayerStoryState> GetOrCreateStory(
-        string deviceAccountId,
-        StoryTypes storyType,
-        int storyId
-    );
-    Task UpdateStory(string deviceAccountId, StoryTypes storyType, int storyId, byte newState);
+    /// <summary>
+    /// Gets the quest/unit stories for a user.
+    /// </summary>
+    IQueryable<DbPlayerStoryState> Stories { get; }
+
+    /// <summary>
+    /// Gets the quests for a user.
+    /// </summary>
+    IQueryable<DbPlayerStoryState> QuestStories { get; }
+    IQueryable<DbPlayerStoryState> UnitStories { get; }
+
+    Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId);
+
+    Task<bool> HasReadQuestStory(int storyId);
 }

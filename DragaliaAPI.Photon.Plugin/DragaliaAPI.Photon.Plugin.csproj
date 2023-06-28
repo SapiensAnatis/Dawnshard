@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net461</TargetFramework>
+		<PlatformTarget>x64</PlatformTarget>
+		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Models\RoomEntryCondition.cs~RF3a00b1.TMP" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MessagePack" Version="2.5.108" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="PhotonHivePlugin">
+			<HintPath>..\PhotonServer\src-server\Plugins\lib\net461\PhotonHivePlugin.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="xcopy /Y /Q &quot;$(TargetDir)*.*&quot; &quot;$(SolutionDir)PhotonServer\deploy\Plugins\GluonPlugin\bin\&quot;" />
+	</Target>
+
+</Project>

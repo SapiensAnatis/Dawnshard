@@ -66,5 +66,19 @@ public record FortPlantDetail(
     int CostMax,
     int CostMaxTime,
     int StaminaMax,
-    int StaminaMaxTime
-);
+    int StaminaMaxTime,
+    string Odds
+)
+{
+    public Dictionary<Materials, int> CreateMaterialMap { get; } =
+        new List<KeyValuePair<Materials, int>>()
+        {
+            new(MaterialsId1, MaterialsNum1),
+            new(MaterialsId2, MaterialsNum2),
+            new(MaterialsId3, MaterialsNum3),
+            new(MaterialsId4, MaterialsNum4),
+            new(MaterialsId5, MaterialsNum5),
+        }
+            .Where(x => x.Key != Materials.Empty)
+            .ToDictionary(x => x.Key, x => x.Value);
+}

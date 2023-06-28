@@ -1,35 +1,59 @@
 using System.Reflection;
-using System.Security.Claims;
 using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Stamp;
+using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.GraphQL;
+using DragaliaAPI.Features.SavefileUpdate;
+using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Present;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Trade;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Api;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Services.Health;
-using DragaliaAPI.Services.Helpers;
+using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
-using DragaliaAPI.Shared.PlayerDetails;
+using EntityGraphQL.AspNet;
+using EntityGraphQL.Schema;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
-
-Log.Logger = new LoggerConfiguration().MinimumLevel
-    .Debug()
-    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateBootstrapLogger();
+using Serilog.Extensions.Logging;
+using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Login;
+using DragaliaAPI.Helpers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-ConfigurationManager configuration = builder.Configuration;
+IConfiguration config = builder.Configuration
+    .AddJsonFile("itemSummonOdds.json", optional: false, reloadOnChange: true)
+    .AddJsonFile("dragonfruitOdds.json", optional: false, reloadOnChange: true)
+    .Build();
+
 builder.Services
-    .Configure<BaasOptions>(configuration.GetRequiredSection("Baas"))
-    .Configure<LoginOptions>(configuration.GetRequiredSection("Login"))
-    .Configure<DragalipatchOptions>(configuration.GetRequiredSection("Dragalipatch"))
-    .Configure<RedisOptions>(configuration.GetRequiredSection("Redis"));
+    .Configure<BaasOptions>(config.GetRequiredSection("Baas"))
+    .Configure<LoginOptions>(config.GetRequiredSection("Login"))
+    .Configure<DragalipatchOptions>(config.GetRequiredSection("Dragalipatch"))
+    .Configure<RedisOptions>(config.GetRequiredSection("Redis"))
+    .Configure<PhotonOptions>(config.GetRequiredSection(nameof(PhotonOptions)))
+    .Configure<ItemSummonConfig>(config)
+    .Configure<DragonfruitConfig>(config);
+
+// Ensure item summon weightings add to 100%
+builder.Services.AddOptions<ItemSummonConfig>().Validate(x => x.Odds.Sum(y => y.Rate) == 100_000);
+builder.Services
+    .AddOptions<DragonfruitConfig>()
+    .Validate(x => x.FruitOdds.Values.All(y => y.Normal + y.Ripe + y.Succulent == 100));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
@@ -51,10 +75,7 @@ builder.Services
         option.OutputFormatters.Add(new CustomMessagePackOutputFormatter(CustomResolver.Options));
         option.InputFormatters.Add(new CustomMessagePackInputFormatter(CustomResolver.Options));
     })
-    .AddJsonOptions(options =>
-    {
-        ApiJsonOptions.Action.Invoke(options.JsonSerializerOptions);
-    });
+    .AddJsonOptions(options => ApiJsonOptions.Action.Invoke(options.JsonSerializerOptions));
 
 builder.Services.AddRazorPages(
     options =>
@@ -83,7 +104,9 @@ builder.Services
         options.Configuration = builder.Configuration.GetConnectionString("RedisHost");
         options.InstanceName = "RedisInstance";
     })
-    .AddHttpContextAccessor()
+    .AddHttpContextAccessor();
+
+builder.Services
     .AddScoped<ISessionService, SessionService>()
 #pragma warning disable CS0618 // Type or member is obsolete
     .AddScoped<IDeviceAccountService, DeviceAccountService>()
@@ -91,61 +114,91 @@ builder.Services
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<IUpdateDataService, UpdateDataService>()
     .AddScoped<IDungeonService, DungeonService>()
+    .AddScoped<IDragonService, DragonService>()
     .AddScoped<ISavefileService, SavefileService>()
     .AddScoped<IHelperService, HelperService>()
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<IBonusService, BonusService>()
     .AddScoped<IWeaponService, WeaponService>()
+    .AddScoped<IQuestRewardService, QuestRewardService>()
+    .AddScoped<IStoryService, StoryService>()
+    .AddScoped<IMatchingService, MatchingService>()
+    .AddScoped<IAbilityCrestService, AbilityCrestService>()
+    .AddScoped<IHeroParamService, HeroParamService>()
+    .AddScoped<ITutorialService, TutorialService>()
+    .AddScoped<ILoadService, LoadService>()
+    .AddScoped<IStampService, StampService>()
+    .AddScoped<IStampRepository, StampRepository>()
+    .AddScoped<ISavefileUpdateService, SavefileUpdateService>();
+
+builder.Services
     .AddTransient<ILogEventEnricher, AccountIdEnricher>()
     .AddTransient<ILogEventEnricher, PodNameEnricher>()
-    .AddHttpClient<IBaasRequestHelper, BaasRequestHelper>();
+    // Mission Feature
+    .AddScoped<IMissionRepository, MissionRepository>()
+    .AddScoped<IMissionService, MissionService>()
+    .AddScoped<IRewardService, RewardService>()
+    .AddScoped<IMissionProgressionService, MissionProgressionService>()
+    .AddScoped<IMissionInitialProgressionService, MissionInitialProgressionService>()
+    // Shop Feature
+    .AddScoped<IShopRepository, ShopRepository>()
+    .AddScoped<IItemSummonService, ItemSummonService>()
+    .AddScoped<IPaymentService, PaymentService>()
+    .AddScoped<IShopService, ShopService>()
+    // Present feature
+    .AddScoped<IPresentService, PresentService>()
+    .AddScoped<IPresentControllerService, PresentControllerService>()
+    .AddScoped<IPresentRepository, PresentRepository>()
+    // Treasure Trade Feature
+    .AddScoped<ITradeRepository, TradeRepository>()
+    .AddScoped<ITradeService, TradeService>()
+    // Fort Feature
+    .AddScoped<IFortService, FortService>()
+    .AddScoped<IFortRepository, FortRepository>()
+    // Login feature
+    .AddScoped<IResetHelper, ResetHelper>()
+    .AddScoped<IDateTimeProvider, DateTimeProvider>()
+    .AddScoped<ILoginBonusService, LoginBonusService>();
+
+builder.Services.AddAllOfType<ISavefileUpdate>();
+builder.Services.AddAllOfType<IDailyResetAction>();
+
+builder.Services.AddHttpClient<IBaasApi, BaasApi>();
+builder.Services.AddHttpClient<IPhotonStateApi, PhotonStateApi>(client =>
+{
+    PhotonOptions? options = builder.Configuration
+        .GetRequiredSection(nameof(PhotonOptions))
+        .Get<PhotonOptions>();
+    ArgumentNullException.ThrowIfNull(options);
+
+    client.BaseAddress = new(options.StateManagerUrl);
+});
+
+builder.Services.ConfigureGraphQlSchema();
 
 WebApplication app = builder.Build();
 
-app.UseSerilogRequestLogging(
-    options =>
-        options.EnrichDiagnosticContext = (diagContext, httpContext) =>
-        {
-            diagContext.Set(
-                CustomClaimType.AccountId,
-                httpContext.User.FindFirstValue(CustomClaimType.AccountId)
-            );
-            diagContext.Set(
-                CustomClaimType.ViewerId,
-                long.Parse(httpContext.User.FindFirstValue(CustomClaimType.ViewerId) ?? "0")
-            );
-        }
-);
+app.UseSerilogRequestLogging();
 
-Log.Logger.Information("App environment: {@env}", app.Environment);
+Log.Logger.Debug("App environment: {@env}", app.Environment);
 
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
-{
     app.MigrateDatabase();
-}
-else if (app.Environment.EnvironmentName == "Testing")
-{
-    using IServiceScope scope = app.Services
-        .GetRequiredService<IServiceScopeFactory>()
-        .CreateScope();
-
-    ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
-    context.Database.EnsureCreated();
-}
 
 app.MapRazorPages();
 
-// Latest Android app version
-app.UsePathBase("/2.19.0_20220714193707");
+app.UsePathBase("/2.19.0_20220714193707"); // Latest Android app version
+app.UsePathBase("/2.19.0_20220719103923"); // Latest iOS app version
 
-// Latest iOS app version
-app.UsePathBase("/2.19.0_20220719103923");
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseMiddleware<NotFoundHandlerMiddleware>();
 
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<DailyResetMiddleware>();
+
 app.MapControllers();
 app.UseResponseCompression();
 app.MapHealthChecks("/health");

@@ -58,7 +58,8 @@ public record CharaData(
     int Abilities31,
     int Abilities32,
     int Abilities33,
-    int Abilities34
+    int Abilities34,
+    int MinDef
 )
 {
     public bool HasManaSpiral => this.MaxLimitBreakCount > 4;

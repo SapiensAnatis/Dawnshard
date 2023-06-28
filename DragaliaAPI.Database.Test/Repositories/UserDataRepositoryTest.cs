@@ -1,9 +1,9 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Serilog;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 
@@ -12,14 +12,19 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
 {
     private readonly DbTestFixture fixture;
     private readonly IUserDataRepository userDataRepository;
+    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
 
     public UserDataRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService
+            .SetupGet(x => x.AccountId)
+            .Returns(IdentityTestUtils.DeviceAccountId);
 
         this.userDataRepository = new UserDataRepository(
             this.fixture.ApiContext,
-            IdentityTestUtils.MockPlayerDetailsService.Object,
+            this.mockPlayerIdentityService.Object,
             LoggerTestUtils.Create<UserDataRepository>()
         );
     }
@@ -27,51 +32,24 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetPlayerInfo_ValidId_ReturnsInfo()
     {
-        (await this.userDataRepository.GetUserData("id").ToListAsync()).Should().NotBeEmpty();
+        (await this.userDataRepository.UserData.ToListAsync()).Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task GetPlayerInfo_InvalidId_ReturnsEmptyQueryable()
     {
-        (await this.userDataRepository.GetUserData("wrong id").ToListAsync()).Should().BeEmpty();
-    }
-
-    [Fact]
-    public async Task UpdateTutorialStatus_UpdatesTutorialStatus()
-    {
-        await this.userDataRepository.UpdateTutorialStatus("id", 80000);
-        await this.userDataRepository.SaveChangesAsync();
-
-        this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == "id")
-            .TutorialStatus.Should()
-            .Be(80000);
-    }
-
-    [Fact]
-    public async Task UpdateTutorialStatus_LowerStatus_DoesNotUpdateTutorialStatus()
-    {
-        int existingStatus = this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == "id")
-            .TutorialStatus;
-
-        await this.userDataRepository.UpdateTutorialStatus("id", 0);
-        await this.userDataRepository.SaveChangesAsync();
-
-        this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == "id")
-            .TutorialStatus.Should()
-            .Be(existingStatus);
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("wrong id");
+        (await this.userDataRepository.UserData.ToListAsync()).Should().BeEmpty();
     }
 
     [Fact]
     public async Task UpdateName_UpdatesName()
     {
-        await this.userDataRepository.UpdateName("id", "Euden 2");
+        await this.userDataRepository.UpdateName("Euden 2");
         await this.userDataRepository.SaveChangesAsync();
 
         this.fixture.ApiContext.PlayerUserData
-            .Single(x => x.DeviceAccountId == "id")
+            .Single(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
             .Name.Should()
             .Be("Euden 2");
     }
@@ -109,5 +87,95 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
             .SingleAsync();
 
         newCoin.Should().Be(oldCoin + 2000);
+    }
+
+    [Fact]
+    public async Task UpdateDewpoint_UpdatesDewpoint()
+    {
+        int oldDewpoint = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.DewPoint)
+            .SingleAsync();
+
+        await this.userDataRepository.UpdateDewpoint(4000);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        int newDewpoint = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.DewPoint)
+            .SingleAsync();
+
+        newDewpoint.Should().Be(oldDewpoint + 4000);
+    }
+
+    [Fact]
+    public async Task UpdateDewpoint_ThrowsExceptionWhenNegativeDewpoint()
+    {
+        await this.userDataRepository.SetDewpoint(1000);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
+            () => this.userDataRepository.UpdateDewpoint(-1500)
+        );
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        exception.Message.Should().Be("Player cannot have negative eldwater");
+
+        int dewpoint = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.DewPoint)
+            .SingleAsync();
+
+        dewpoint.Should().Be(1000);
+    }
+
+    [Theory]
+    [InlineData(500, true)]
+    [InlineData(1000, true)]
+    [InlineData(1500, false)]
+    public async Task CheckDewpoint_ReturnsExpectedBool(int quantity, bool expectedValue)
+    {
+        await this.userDataRepository.SetDewpoint(1000);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        bool output = await this.userDataRepository.CheckDewpoint(quantity);
+        output.Should().Be(expectedValue);
+    }
+
+    [Fact]
+    public async Task SetDewpoint_SetsDewpointValue()
+    {
+        await this.userDataRepository.SetDewpoint(10001);
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        int dewpoint = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.DewPoint)
+            .SingleAsync();
+
+        dewpoint.Should().Be(10001);
+    }
+
+    [Fact]
+    public async Task SetDewpoint_ThrowsExceptionWhenNegative()
+    {
+        int oldDewpoint = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.DewPoint)
+            .SingleAsync();
+
+        ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(
+            () => this.userDataRepository.SetDewpoint(-1)
+        );
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        exception.Message.Should().Be("Player cannot have negative eldwater");
+
+        int newDewpoint = await this.fixture.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
+            .Select(x => x.DewPoint)
+            .SingleAsync();
+
+        newDewpoint.Should().Be(oldDewpoint);
     }
 }

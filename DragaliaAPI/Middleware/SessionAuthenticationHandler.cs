@@ -19,6 +19,8 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
     private const string SessionExpired = "Session-Expired";
     private const string True = "true";
 
+    public const string LastLoginTime = "LastLoginTime";
+
     public SessionAuthenticationHandler(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
@@ -52,6 +54,8 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
 
             claims.Add(new(CustomClaimType.AccountId, session.DeviceAccountId));
             claims.Add(new(CustomClaimType.ViewerId, session.ViewerId.ToString()));
+
+            this.Context.Items[LastLoginTime] = session.LoginTime;
         }
         catch (SessionException)
         {

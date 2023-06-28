@@ -1,10 +1,13 @@
 ﻿using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,34 +20,46 @@ public class DungeonRecordController : DragaliaControllerBase
     private readonly IDungeonService dungeonService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IInventoryRepository inventoryRepository;
+    private readonly IQuestRewardService questRewardService;
     private readonly IUpdateDataService updateDataService;
+    private readonly ITutorialService tutorialService;
+    private readonly IMissionProgressionService missionProgressionService;
 
     private const int QuestCoin = 10_000_000;
     private const int QuestMana = 20_000;
+    private const int QuestDropQuantity = 100;
 
     public DungeonRecordController(
         IQuestRepository questRepository,
         IDungeonService dungeonService,
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
-        IUpdateDataService updateDataService
+        IQuestRewardService questRewardService,
+        IUpdateDataService updateDataService,
+        ITutorialService tutorialService,
+        IMissionProgressionService missionProgressionService
     )
     {
         this.questRepository = questRepository;
         this.dungeonService = dungeonService;
         this.userDataRepository = userDataRepository;
         this.inventoryRepository = inventoryRepository;
+        this.questRewardService = questRewardService;
         this.updateDataService = updateDataService;
+        this.tutorialService = tutorialService;
+        this.missionProgressionService = missionProgressionService;
     }
 
     [HttpPost("record")]
+    [HttpPost("record_multi")]
     public async Task<DragaliaResult> Record(DungeonRecordRecordRequest request)
     {
+        // TODO: Turn this method into a service call
         DungeonSession session = await this.dungeonService.FinishDungeon(request.dungeon_key);
 
-        DbQuest? oldQuestData = await this.questRepository
-            .GetQuests(this.DeviceAccountId)
-            .SingleOrDefaultAsync(x => x.QuestId == session.QuestData.Id);
+        DbQuest? oldQuestData = await this.questRepository.Quests.SingleOrDefaultAsync(
+            x => x.QuestId == session.QuestData.Id
+        );
 
         bool isFirstClear = oldQuestData is null || oldQuestData?.PlayCount == 0;
         bool oldMissionClear1 = oldQuestData?.IsMissionClear1 ?? false;
@@ -53,19 +68,24 @@ public class DungeonRecordController : DragaliaControllerBase
 
         float clear_time = request.play_record?.time ?? -1.0f;
 
-        await this.userDataRepository.AddTutorialFlag(this.DeviceAccountId, 1022);
+        await this.tutorialService.AddTutorialFlag(1022);
 
         // oldQuestData and newQuestData actually reference the same object so this is somewhat redundant
         // keeping it for clarity and because oldQuestData is null in some tests
         DbQuest newQuestData = await this.questRepository.CompleteQuest(
-            this.DeviceAccountId,
             session.QuestData.Id,
             clear_time
         );
 
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .SingleAsync();
+        // Void battle moment :(
+        if (session.QuestData.IsPartOfVoidBattleGroups)
+        {
+            this.missionProgressionService.OnVoidBattleCleared();
+        }
+
+        this.missionProgressionService.OnQuestCleared(session.QuestData.Id);
+
+        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
 
         userData.Exp += 1;
         userData.ManaPoint += QuestMana;
@@ -89,14 +109,10 @@ public class DungeonRecordController : DragaliaControllerBase
             + (clearedMissions.Where(x => x).Count() * 5)
             + (allMissionsCleared ? 5 : 0);
 
-        IEnumerable<Materials> drops = DefaultDrops.GetRandomList();
-        await this.inventoryRepository.UpdateQuantity(this.DeviceAccountId, drops, 100);
+        IEnumerable<Materials> drops = this.questRewardService.GetDrops(session.QuestData.Id);
+        await this.inventoryRepository.UpdateQuantity(drops, QuestDropQuantity);
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await this.questRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(
             new DungeonRecordRecordData()
@@ -108,26 +124,13 @@ public class DungeonRecordController : DragaliaControllerBase
                     quest_id = session.QuestData.Id,
                     reward_record = new()
                     {
-                        /*drop_all = new List<AtgenDropAll>()
-                        {
-                            new()
-                            {
-                                type = (int)EntityTypes.Material,
-                                id = 201014003, // Squishum
-                                quantity = 1,
-                                place = 0,
-                                factor = 0
-                            }
-                        },*/
                         drop_all = drops.Select(
                             x =>
                                 new AtgenDropAll()
                                 {
-                                    type = EntityTypes.Material,
                                     id = (int)x,
-                                    quantity = 10,
-                                    place = 0,
-                                    factor = 0,
+                                    type = EntityTypes.Material,
+                                    quantity = QuestDropQuantity
                                 }
                         ),
                         first_clear_set = isFirstClear
@@ -216,133 +219,5 @@ public class DungeonRecordController : DragaliaControllerBase
                 entity_result = new(),
             }
         );
-    }
-
-    [HttpPost("record_multi")]
-    public DragaliaResult RecordMulti(DungeonRecordRecordMultiRequest request)
-    {
-        return RedirectToActionPreserveMethod("Record", routeValues: new { request });
-    }
-
-    private static class DefaultDrops
-    {
-        public static readonly IReadOnlyList<Materials> Orbs = new List<Materials>()
-        {
-            // Flame
-            Materials.FlameOrb,
-            Materials.BlazeOrb,
-            Materials.InfernoOrb,
-            Materials.IncandescenceOrb,
-            // Water
-            Materials.WaterOrb,
-            Materials.StreamOrb,
-            Materials.DelugeOrb,
-            Materials.TsunamiOrb,
-            // Wind
-            Materials.WindOrb,
-            Materials.StormOrb,
-            Materials.MaelstromOrb,
-            Materials.TempestOrb,
-            // Light
-            Materials.LightOrb,
-            Materials.RadianceOrb,
-            Materials.RefulgenceOrb,
-            Materials.ResplendenceOrb,
-            // Shadow
-            Materials.ShadowOrb,
-            Materials.NightfallOrb,
-            Materials.NetherOrb,
-            Materials.AbaddonOrb,
-            // Misc
-            Materials.RainbowOrb,
-        };
-
-        public static readonly IReadOnlyList<Materials> DragonParts = new List<Materials>()
-        {
-            // Brunhilda
-            Materials.FlamewyrmsScale,
-            Materials.FlamewyrmsScaldscale,
-            Materials.FlamewyrmsGreatsphere,
-            Materials.FlamewyrmsSphere,
-            Materials.HighFlamewyrmsHorn,
-            Materials.HighFlamewyrmsTail,
-            // Mercury
-            Materials.WaterwyrmsScale,
-            Materials.WaterwyrmsGlistscale,
-            Materials.WaterwyrmsGreatsphere,
-            Materials.WaterwyrmsSphere,
-            Materials.HighWaterwyrmsHorn,
-            Materials.HighWaterwyrmsTail,
-            // Mids
-            Materials.WindwyrmsScale,
-            Materials.WindwyrmsSquallscale,
-            Materials.WindwyrmsGreatsphere,
-            Materials.WindwyrmsSphere,
-            Materials.HighWindwyrmsHorn,
-            Materials.HighWindwyrmsTail,
-            // Jupiter
-            Materials.LightwyrmsScale,
-            Materials.LightwyrmsGlowscale,
-            Materials.LightwyrmsGreatsphere,
-            Materials.LightwyrmsSphere,
-            Materials.HighLightwyrmsHorn,
-            Materials.HighLightwyrmsTail,
-            // Zodiark
-            Materials.ShadowwyrmsScale,
-            Materials.ShadowwyrmsDarkscale,
-            Materials.ShadowwyrmsGreatsphere,
-            Materials.ShadowwyrmsSphere,
-            Materials.HighShadowwyrmsHorn,
-            Materials.HighShadowwyrmsTail,
-        };
-
-        public static readonly IReadOnlyList<Materials> MiscUpgrade = new List<Materials>()
-        {
-            // === Crystals ===
-            Materials.GoldCrystal,
-            Materials.SilverCrystal,
-            Materials.BronzeCrystal,
-            // === Testaments ===
-            Materials.ChampionsTestament,
-            Materials.KnightsTestament,
-            // === Void ===
-            Materials.VoidSeed,
-            Materials.BurningHeart,
-            Materials.AzureHeart,
-            Materials.VerdantHeart,
-            Materials.CoronalHeart,
-            Materials.EbonyHeart,
-            Materials.LongingHeart,
-            // === Tomes ===
-            Materials.FlameTome,
-            Materials.WaterTome,
-            Materials.WindTome,
-            Materials.LightTome,
-            Materials.ShadowTome,
-            // === Augs ===
-            Materials.AmplifyingCrystal,
-            Materials.AmplifyingDragonscale,
-            Materials.AmplifyingGemstone,
-            Materials.AmplifyingJewel,
-            Materials.FortifyingCrystal,
-            Materials.FortifyingDragonscale,
-            Materials.FortifyingGemstone,
-            Materials.FortifyingJewel,
-            // === Misc ===
-            Materials.Omnicite,
-            Materials.LookingGlass,
-        };
-
-        public static IReadOnlyList<Materials> GetRandomList()
-        {
-            Random r = new();
-            return r.Next(0, 3) switch
-            {
-                0 => Orbs,
-                1 => DragonParts,
-                2 => MiscUpgrade,
-                _ => throw new UnreachableException("r.Next(3) returned something odd"),
-            };
-        }
     }
 }

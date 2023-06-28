@@ -1,7 +1,16 @@
 name: deploy
 
 on:
-  workflow_call: 
+  workflow_call:
+    inputs:
+      deployment:
+        type: string
+        required: true
+        description: "Kubernetes deployment name"
+      namespace:
+        type: string
+        required: true
+        description: "Kubernetes namespace"
 
 jobs:
   deploy:
@@ -15,6 +24,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
-          script: | 
-            kubectl rollout restart deployment/dragalia-api
-            kubectl rollout status deployment/dragalia-api
+          script: |
+            kubectl rollout restart deployment/${{ inputs.deployment }} -n ${{ inputs.namespace }}
+            kubectl rollout status deployment/${{ inputs.deployment }} -n ${{ inputs.namespace }}

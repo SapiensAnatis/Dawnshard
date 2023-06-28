@@ -2,6 +2,7 @@
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,112 +12,23 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [ApiController]
 public class QuestController : DragaliaControllerBase
 {
-    private readonly IQuestRepository questRepository;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IUnitRepository unitRepository;
+    private readonly IStoryService storyService;
     private readonly IHelperService helperService;
+    private readonly IQuestRewardService questRewardService;
     private readonly IUpdateDataService updateDataService;
     private readonly ILogger<QuestController> logger;
-    private const int ReadStoryState = 1;
-    private const int MaxStoryId = 1000103;
-
-    private static class StubData
-    {
-        public static QuestGetQuestClearPartyData ClearPartyData =
-            new()
-            {
-                quest_clear_party_setting_list = new List<PartySettingList>()
-                {
-                    new()
-                    {
-                        unit_no = 1,
-                        chara_id = Charas.ThePrince,
-                        equip_dragon_key_id = 0,
-                        equip_weapon_body_id = 0,
-                        equip_weapon_skin_id = 0,
-                        equip_crest_slot_type_1_crest_id_1 = 0,
-                        equip_crest_slot_type_1_crest_id_2 = 0,
-                        equip_crest_slot_type_1_crest_id_3 = 0,
-                        equip_crest_slot_type_2_crest_id_1 = 0,
-                        equip_crest_slot_type_2_crest_id_2 = 0,
-                        equip_crest_slot_type_3_crest_id_1 = 0,
-                        equip_crest_slot_type_3_crest_id_2 = 0,
-                        equip_talisman_key_id = 0,
-                        edit_skill_1_chara_id = 0,
-                        edit_skill_2_chara_id = 0,
-                    },
-                    new()
-                    {
-                        unit_no = 2,
-                        chara_id = Charas.Empty,
-                        equip_dragon_key_id = 0,
-                        equip_weapon_body_id = 0,
-                        equip_weapon_skin_id = 0,
-                        equip_crest_slot_type_1_crest_id_1 = 0,
-                        equip_crest_slot_type_1_crest_id_2 = 0,
-                        equip_crest_slot_type_1_crest_id_3 = 0,
-                        equip_crest_slot_type_2_crest_id_1 = 0,
-                        equip_crest_slot_type_2_crest_id_2 = 0,
-                        equip_crest_slot_type_3_crest_id_1 = 0,
-                        equip_crest_slot_type_3_crest_id_2 = 0,
-                        equip_talisman_key_id = 0,
-                        edit_skill_1_chara_id = 0,
-                        edit_skill_2_chara_id = 0,
-                    },
-                    new()
-                    {
-                        unit_no = 3,
-                        chara_id = Charas.Empty,
-                        equip_dragon_key_id = 0,
-                        equip_weapon_body_id = 0,
-                        equip_weapon_skin_id = 0,
-                        equip_crest_slot_type_1_crest_id_1 = 0,
-                        equip_crest_slot_type_1_crest_id_2 = 0,
-                        equip_crest_slot_type_1_crest_id_3 = 0,
-                        equip_crest_slot_type_2_crest_id_1 = 0,
-                        equip_crest_slot_type_2_crest_id_2 = 0,
-                        equip_crest_slot_type_3_crest_id_1 = 0,
-                        equip_crest_slot_type_3_crest_id_2 = 0,
-                        equip_talisman_key_id = 0,
-                        edit_skill_1_chara_id = 0,
-                        edit_skill_2_chara_id = 0,
-                    },
-                    new()
-                    {
-                        unit_no = 4,
-                        chara_id = Charas.Empty,
-                        equip_dragon_key_id = 0,
-                        equip_weapon_body_id = 0,
-                        equip_weapon_skin_id = 0,
-                        equip_crest_slot_type_1_crest_id_1 = 0,
-                        equip_crest_slot_type_1_crest_id_2 = 0,
-                        equip_crest_slot_type_1_crest_id_3 = 0,
-                        equip_crest_slot_type_2_crest_id_1 = 0,
-                        equip_crest_slot_type_2_crest_id_2 = 0,
-                        equip_crest_slot_type_3_crest_id_1 = 0,
-                        equip_crest_slot_type_3_crest_id_2 = 0,
-                        equip_talisman_key_id = 0,
-                        edit_skill_1_chara_id = 0,
-                        edit_skill_2_chara_id = 0,
-                    },
-                },
-                lost_unit_list = new List<AtgenLostUnitList>(),
-            };
-    }
 
     public QuestController(
-        IQuestRepository questRepository,
-        IUserDataRepository userDataRepository,
-        IUnitRepository unitRepository,
+        IStoryService storyService,
         IHelperService helperService,
+        IQuestRewardService questRewardService,
         IUpdateDataService updateDataService,
         ILogger<QuestController> logger
     )
     {
-        this.questRepository = questRepository;
-        this.userDataRepository = userDataRepository;
-        this.unitRepository = unitRepository;
+        this.storyService = storyService;
         this.helperService = helperService;
+        this.questRewardService = questRewardService;
         this.updateDataService = updateDataService;
         this.logger = logger;
     }
@@ -125,54 +37,26 @@ public class QuestController : DragaliaControllerBase
     [Route("read_story")]
     public async Task<DragaliaResult> ReadStory(QuestReadStoryRequest request)
     {
-        this.logger.LogDebug("Reading quest story id {storyId}", request.quest_story_id);
-
-        await this.questRepository.UpdateQuestStory(
-            this.DeviceAccountId,
-            request.quest_story_id,
-            ReadStoryState
+        IEnumerable<AtgenBuildEventRewardEntityList> rewardList = await this.storyService.ReadStory(
+            StoryTypes.Quest,
+            request.quest_story_id
         );
 
-        List<AtgenDuplicateEntityList> newGetEntityList = new();
-        List<AtgenQuestStoryRewardList> rewardList = new();
+        EntityResult entityResult = StoryService.GetEntityResult(rewardList);
+        IEnumerable<AtgenQuestStoryRewardList> questRewardList = rewardList.Select(
+            StoryService.ToQuestStoryReward
+        );
 
-        if (request.quest_story_id == MaxStoryId)
-        {
-            await this.userDataRepository.SkipTutorial(this.DeviceAccountId);
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-            await this.unitRepository.AddCharas(
-                this.DeviceAccountId,
-                new List<Charas>() { Charas.Elisanne }
-            );
-
-            newGetEntityList.Add(
-                new() { entity_id = (int)Charas.Elisanne, entity_type = EntityTypes.Chara }
-            );
-            rewardList.Add(
-                new()
-                {
-                    entity_id = (int)Charas.Elisanne,
-                    entity_level = 1,
-                    entity_limit_break_count = 0,
-                    entity_quantity = 1,
-                    entity_type = EntityTypes.Chara
-                }
-            );
-        }
-
-        UpdateDataList updateData = this.updateDataService.GetUpdateDataList(this.DeviceAccountId);
-
-        await this.questRepository.SaveChangesAsync();
-
-        QuestReadStoryData responseData =
-            new(
-                updateData,
-                new() { new_get_entity_list = newGetEntityList },
-                quest_story_reward_list: rewardList,
-                new List<ConvertedEntityList>()
-            );
-
-        return this.Ok(responseData);
+        return this.Ok(
+            new QuestReadStoryData()
+            {
+                quest_story_reward_list = questRewardList,
+                entity_result = entityResult,
+                update_data_list = updateDataList
+            }
+        );
     }
 
     [HttpPost("get_support_user_list")]
@@ -187,7 +71,25 @@ public class QuestController : DragaliaControllerBase
     public DragaliaResult GetQuestClearParty()
     {
         // TODO: Retrieve from database
-        return Ok(StubData.ClearPartyData);
+        return Ok(
+            new QuestGetQuestClearPartyData()
+            {
+                quest_clear_party_setting_list = StubData.ClearParty,
+                lost_unit_list = new List<AtgenLostUnitList>()
+            }
+        );
+    }
+
+    [HttpPost("get_quest_clear_party_multi")]
+    public DragaliaResult GetQuestClearPartyMulti()
+    {
+        return Ok(
+            new QuestGetQuestClearPartyMultiData()
+            {
+                quest_multi_clear_party_setting_list = StubData.ClearParty,
+                lost_unit_list = new List<AtgenLostUnitList>()
+            }
+        );
     }
 
     [HttpPost("set_quest_clear_party")]
@@ -195,5 +97,108 @@ public class QuestController : DragaliaControllerBase
     {
         // TODO: Store in database
         return Ok(new QuestSetQuestClearPartyData() { result = 1 });
+    }
+
+    [HttpPost("drop_list")]
+    public DragaliaResult DropList(QuestDropListRequest request)
+    {
+        IEnumerable<Materials> drops = this.questRewardService.GetDrops(request.quest_id);
+
+        return Ok(
+            new QuestDropListData()
+            {
+                quest_drop_info = new()
+                {
+                    drop_info_list = drops.Select(
+                        x =>
+                            new AtgenDuplicateEntityList()
+                            {
+                                entity_id = (int)x,
+                                entity_type = EntityTypes.Material
+                            }
+                    )
+                }
+            }
+        );
+    }
+
+    private static class StubData
+    {
+        public static List<PartySettingList> ClearParty =
+            new()
+            {
+                new()
+                {
+                    unit_no = 1,
+                    chara_id = Charas.ThePrince,
+                    equip_dragon_key_id = 0,
+                    equip_weapon_body_id = 0,
+                    equip_weapon_skin_id = 0,
+                    equip_crest_slot_type_1_crest_id_1 = 0,
+                    equip_crest_slot_type_1_crest_id_2 = 0,
+                    equip_crest_slot_type_1_crest_id_3 = 0,
+                    equip_crest_slot_type_2_crest_id_1 = 0,
+                    equip_crest_slot_type_2_crest_id_2 = 0,
+                    equip_crest_slot_type_3_crest_id_1 = 0,
+                    equip_crest_slot_type_3_crest_id_2 = 0,
+                    equip_talisman_key_id = 0,
+                    edit_skill_1_chara_id = 0,
+                    edit_skill_2_chara_id = 0,
+                },
+                new()
+                {
+                    unit_no = 2,
+                    chara_id = Charas.Empty,
+                    equip_dragon_key_id = 0,
+                    equip_weapon_body_id = 0,
+                    equip_weapon_skin_id = 0,
+                    equip_crest_slot_type_1_crest_id_1 = 0,
+                    equip_crest_slot_type_1_crest_id_2 = 0,
+                    equip_crest_slot_type_1_crest_id_3 = 0,
+                    equip_crest_slot_type_2_crest_id_1 = 0,
+                    equip_crest_slot_type_2_crest_id_2 = 0,
+                    equip_crest_slot_type_3_crest_id_1 = 0,
+                    equip_crest_slot_type_3_crest_id_2 = 0,
+                    equip_talisman_key_id = 0,
+                    edit_skill_1_chara_id = 0,
+                    edit_skill_2_chara_id = 0,
+                },
+                new()
+                {
+                    unit_no = 3,
+                    chara_id = Charas.Empty,
+                    equip_dragon_key_id = 0,
+                    equip_weapon_body_id = 0,
+                    equip_weapon_skin_id = 0,
+                    equip_crest_slot_type_1_crest_id_1 = 0,
+                    equip_crest_slot_type_1_crest_id_2 = 0,
+                    equip_crest_slot_type_1_crest_id_3 = 0,
+                    equip_crest_slot_type_2_crest_id_1 = 0,
+                    equip_crest_slot_type_2_crest_id_2 = 0,
+                    equip_crest_slot_type_3_crest_id_1 = 0,
+                    equip_crest_slot_type_3_crest_id_2 = 0,
+                    equip_talisman_key_id = 0,
+                    edit_skill_1_chara_id = 0,
+                    edit_skill_2_chara_id = 0,
+                },
+                new()
+                {
+                    unit_no = 4,
+                    chara_id = Charas.Empty,
+                    equip_dragon_key_id = 0,
+                    equip_weapon_body_id = 0,
+                    equip_weapon_skin_id = 0,
+                    equip_crest_slot_type_1_crest_id_1 = 0,
+                    equip_crest_slot_type_1_crest_id_2 = 0,
+                    equip_crest_slot_type_1_crest_id_3 = 0,
+                    equip_crest_slot_type_2_crest_id_1 = 0,
+                    equip_crest_slot_type_2_crest_id_2 = 0,
+                    equip_crest_slot_type_3_crest_id_1 = 0,
+                    equip_crest_slot_type_3_crest_id_2 = 0,
+                    equip_talisman_key_id = 0,
+                    edit_skill_1_chara_id = 0,
+                    edit_skill_2_chara_id = 0,
+                },
+            };
     }
 }

@@ -1,5 +1,35 @@
 [
     {
+        "headline": "Co-op",
+        "timestamp": 1686861026,
+        "description": "After many months of hard work, it is now possible to play co-op! This is still experimental but should mostly work."
+    },
+    {
+        "headline": "Wyrmprints",
+        "timestamp": 1683227627,
+        "description": "You can now buy and upgrade wyrmprints using eldwater. Credit to Nightmerp#0124 who worked on this feature!"
+    },
+    {
+        "headline": "Halidom upgrades",
+        "timestamp": 1682193563,
+        "description": "You should now be able to move and upgrade buildings in the Halidom. You won't be able to claim income but this should be coming soon. Thanks to Skazord#6728 for developing this feature."
+    },
+    {
+        "headline": "Story rewards",
+        "timestamp": 1678131599,
+        "description": "A small update has been made to stories to make the rewards slightly more accurate; along with fixing a few bugs, you should now be able to get the usual story units from the campaign. As a result, they have been removed from the summoning pool."
+    },
+    {
+        "headline": "Dragon updates",
+        "timestamp": 1677018558,
+        "description": "The server has been updated to support upgrading/unbinding dragons and the Dragon's Roost reliability system. Thanks to Nano#9384 for working on this!"
+    },
+    {
+        "headline": "Quest drops improvement",
+        "timestamp": 1676678446,
+        "description": "Thanks to data sourced by the Dragalia Lost Wiki, each quest will now drop the correct set of items. This should help you gather materials for weapon upgrading. However, the quantities are still wrong (100 of everything) and they aren't assigned to enemies."
+    },
+    {
         "headline": "Weapon upgrading added",
         "timestamp": 1675896266,
         "description": "It is now possible to craft and upgrade weapons. This should be fully implemented, with materials being taken and passive abilities/weapon skills being levelled up appropriately. Please test this out and speak up if you notice any bugs!"

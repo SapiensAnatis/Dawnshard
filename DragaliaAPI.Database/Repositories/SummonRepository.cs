@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
@@ -7,38 +8,43 @@ namespace DragaliaAPI.Database.Repositories;
 public class SummonRepository : BaseRepository, ISummonRepository
 {
     private readonly ApiContext apiContext;
+    private readonly IPlayerIdentityService playerIdentityService;
 
-    public SummonRepository(ApiContext apiContext)
+    public SummonRepository(ApiContext apiContext, IPlayerIdentityService playerIdentityService)
         : base(apiContext)
     {
         this.apiContext = apiContext;
+        this.playerIdentityService = playerIdentityService;
     }
 
-    public async Task<List<DbPlayerSummonHistory>> GetSummonHistory(string deviceAccountId)
-    {
-        return await apiContext.PlayerSummonHistory
-            .Where(x => x.DeviceAccountId.Equals(deviceAccountId))
-            .ToListAsync();
-    }
+    public IQueryable<DbPlayerSummonHistory> SummonHistory =>
+        this.apiContext.PlayerSummonHistory.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
+        );
 
-    public async Task<DbPlayerBannerData> GetPlayerBannerData(string deviceAccountId, int bannerId)
+    public async Task<DbPlayerBannerData> GetPlayerBannerData(int bannerId)
     {
         DbPlayerBannerData bannerData =
             await apiContext.PlayerBannerData.FirstOrDefaultAsync(
-                x => x.DeviceAccountId.Equals(deviceAccountId) && x.SummonBannerId == bannerId
-            ) ?? await this.AddPlayerBannerData(deviceAccountId, bannerId);
+                x =>
+                    x.DeviceAccountId.Equals(this.playerIdentityService.AccountId)
+                    && x.SummonBannerId == bannerId
+            ) ?? await this.AddPlayerBannerData(bannerId);
         return bannerData;
     }
 
-    public async Task<DbPlayerBannerData> AddPlayerBannerData(string deviceAccountId, int bannerId)
+    public async Task<DbPlayerBannerData> AddPlayerBannerData(int bannerId)
     {
-        DbPlayerBannerData bannerData = DbPlayerBannerDataFactory.Create(deviceAccountId, bannerId);
+        DbPlayerBannerData bannerData = DbPlayerBannerDataFactory.Create(
+            this.playerIdentityService.AccountId,
+            bannerId
+        );
         bannerData = (await apiContext.PlayerBannerData.AddAsync(bannerData)).Entity;
 
         return bannerData;
     }
 
-    public async Task AddSummonHistory(IEnumerable<DbPlayerSummonHistory> summonHistory)
+    public async Task AddSummonHistory(DbPlayerSummonHistory summonHistory)
     {
         await apiContext.PlayerSummonHistory.AddRangeAsync(summonHistory);
     }

@@ -2,6 +2,8 @@
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Test.Utils;
+using Microsoft.EntityFrameworkCore;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
 namespace DragaliaAPI.Database.Test.Repositories;
@@ -15,7 +17,10 @@ public class SummonRepositoryTest : IClassFixture<DbTestFixture>
     public SummonRepositoryTest(DbTestFixture fixture)
     {
         this.fixture = fixture;
-        this.summonRepository = new SummonRepository(this.fixture.ApiContext);
+        this.summonRepository = new SummonRepository(
+            this.fixture.ApiContext,
+            IdentityTestUtils.MockPlayerDetailsService.Object
+        );
 
         AssertionOptions.AssertEquivalencyUsing(
             options => options.Excluding(x => x.Name == "Owner")
@@ -72,7 +77,7 @@ public class SummonRepositoryTest : IClassFixture<DbTestFixture>
             }
         );
 
-        (await this.summonRepository.GetSummonHistory(DeviceAccountId))
+        (await this.summonRepository.SummonHistory.ToListAsync())
             .Should()
             .BeEquivalentTo(new List<DbPlayerSummonHistory>() { history });
     }
@@ -90,15 +95,13 @@ public class SummonRepositoryTest : IClassFixture<DbTestFixture>
             }
         );
 
-        (await this.summonRepository.GetPlayerBannerData(DeviceAccountId, 1))
-            .Should()
-            .BeEquivalentTo(bannerData);
+        (await this.summonRepository.GetPlayerBannerData(1)).Should().BeEquivalentTo(bannerData);
     }
 
     [Fact]
     public async Task GetPlayerBannerData_AddsIfNotFound()
     {
-        (await this.summonRepository.GetPlayerBannerData(DeviceAccountId, 10))
+        (await this.summonRepository.GetPlayerBannerData(10))
             .Should()
             .BeEquivalentTo(
                 DbPlayerBannerDataFactory.Create(DeviceAccountId, 10),
