@@ -414,7 +414,6 @@ namespace DragaliaAPI.Photon.Plugin
                 DataStream = new MemoryStream(
                     Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(heroParamRequest))
                 ),
-                UserState = new HeroParamRequestState() { },
                 Method = "POST",
             };
 
