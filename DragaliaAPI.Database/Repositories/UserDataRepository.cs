@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Database.Repositories;
@@ -12,71 +13,60 @@ namespace DragaliaAPI.Database.Repositories;
 public class UserDataRepository : BaseRepository, IUserDataRepository
 {
     private readonly ApiContext apiContext;
-    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly IPlayerIdentityService playerIdentityService;
     private readonly ILogger<UserDataRepository> logger;
 
     public UserDataRepository(
         ApiContext apiContext,
-        IPlayerDetailsService playerDetailsService,
+        IPlayerIdentityService playerIdentityService,
         ILogger<UserDataRepository> logger
     )
         : base(apiContext)
     {
         this.apiContext = apiContext;
-        this.playerDetailsService = playerDetailsService;
+        this.playerIdentityService = playerIdentityService;
         this.logger = logger;
     }
 
-    public IQueryable<DbPlayerUserData> GetUserData(string deviceAccountId)
-    {
-        IQueryable<DbPlayerUserData> infoQuery = apiContext.PlayerUserData.Where(
-            x => x.DeviceAccountId == deviceAccountId
+    public IQueryable<DbPlayerUserData> UserData =>
+        this.apiContext.PlayerUserData.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
-        return infoQuery;
+    public async Task<DbPlayerUserData> GetUserDataAsync()
+    {
+        return await this.apiContext.PlayerUserData.FindAsync(this.playerIdentityService.AccountId)
+            ?? throw new InvalidOperationException("No UserData found");
     }
 
-    public IQueryable<DbPlayerUserData> GetUserData(long viewerId)
+    public async Task<DateTimeOffset> GetFortOpenTimeAsync()
     {
-        return apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId);
+        return await this.UserData.Select(x => x.FortOpenTime).SingleAsync();
     }
 
-    public async Task UpdateTutorialStatus(string deviceAccountId, int newStatus)
+    public IQueryable<DbPlayerUserData> GetViewerData(long viewerId)
     {
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
-
-        if (newStatus > userData.TutorialStatus)
-            userData.TutorialStatus = newStatus;
+        return this.apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId);
     }
 
-    public async Task<ISet<int>> GetTutorialFlags(string deviceAccountId)
+    public async Task<ISet<int>> GetTutorialFlags()
     {
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+        DbPlayerUserData userData = await UserData.SingleAsync();
 
         int flags = userData.TutorialFlag;
         return TutorialFlagUtil.ConvertIntToFlagIntList(flags);
     }
 
-    public async Task<DbPlayerUserData> AddTutorialFlag(string deviceAccountId, int flag)
+    public async Task UpdateName(string newName)
     {
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
-
-        ISet<int> flags = TutorialFlagUtil.ConvertIntToFlagIntList(userData.TutorialFlag);
-        flags.Add(flag);
-        userData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(flags);
-        return userData;
-    }
-
-    public async Task UpdateName(string deviceAccountId, string newName)
-    {
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+        DbPlayerUserData userData = await UserData.SingleAsync();
 
         userData.Name = newName;
     }
 
-    public async Task SetTutorialFlags(string deviceAccountId, ISet<int> tutorialFlags)
+    public async Task SetTutorialFlags(ISet<int> tutorialFlags)
     {
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+        DbPlayerUserData userData = await UserData.SingleAsync();
 
         userData.TutorialFlag = TutorialFlagUtil.ConvertFlagIntListToInt(
             tutorialFlags,
@@ -84,56 +74,40 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         );
     }
 
-    public async Task SetMainPartyNo(string deviceAccountId, int partyNo)
+    public async Task SetMainPartyNo(int partyNo)
     {
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+        DbPlayerUserData userData = await UserData.SingleAsync();
 
         userData.MainPartyNo = partyNo;
     }
 
-    public async Task SkipTutorial(string deviceAccountId)
+    public async Task UpdateSaveImportTime()
     {
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
-
-        userData.TutorialStatus = 60999;
-        userData.TutorialFlagList = Enumerable.Range(1, 30).Select(x => x + 1000).ToHashSet();
-    }
-
-    public async Task UpdateSaveImportTime(string deviceAccountId)
-    {
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+        DbPlayerUserData userData = await UserData.SingleAsync();
 
         userData.LastSaveImportTime = DateTimeOffset.UtcNow;
     }
 
-    public async Task GiveWyrmite(string deviceAccountId, int quantity)
+    public async Task GiveWyrmite(int quantity)
     {
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+        DbPlayerUserData userData = await UserData.SingleAsync();
 
         userData.Crystal += quantity;
     }
 
-    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
-    public async Task UpdateCoin(string deviceAccountId, long offset)
+    public async Task UpdateCoin(long offset)
     {
         this.logger.LogDebug("Updating player rupies by {offset}", offset);
         if (offset == 0)
             return;
 
-        DbPlayerUserData userData = await this.LookupUserData(deviceAccountId);
+        DbPlayerUserData userData = await UserData.SingleAsync();
 
-        long newQuantity = (userData.Coin += offset);
-        if (newQuantity < 0)
+        long newQuantity = userData.Coin + offset; // changed from += to + bc otherwise it adds to quantity anyways which i don't
+        if (newQuantity < 0) // think was what was intended since it renders last line useless
             throw new ArgumentException("Player cannot have negative rupies");
 
         userData.Coin = newQuantity;
-    }
-
-    public async Task UpdateCoin(long offset)
-    {
-#pragma warning disable CS0618
-        await this.UpdateCoin(this.playerDetailsService.AccountId, offset);
-#pragma warning restore CS0618
     }
 
     public async Task<bool> CheckCoin(long quantity)
@@ -153,15 +127,38 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         return result;
     }
 
-    [Obsolete(ObsoleteReasons.UsePlayerDetailsService)]
-    public async Task<DbPlayerUserData> LookupUserData(string deviceAccountId)
+    public async Task<DbPlayerUserData> LookupUserData()
     {
-        return await apiContext.PlayerUserData.FindAsync(deviceAccountId)
+        return await apiContext.PlayerUserData.FindAsync(this.playerIdentityService.AccountId)
             ?? throw new NullReferenceException("Savefile lookup failed");
     }
 
-    public async Task<DbPlayerUserData> LookupUserData() =>
-#pragma warning disable CS0618
-        await this.LookupUserData(this.playerDetailsService.AccountId);
-#pragma warning restore CS0618
+    public async Task UpdateDewpoint(int quantity)
+    {
+        if (quantity == 0)
+            return;
+
+        DbPlayerUserData userData = await UserData.SingleAsync();
+
+        int newQuantity = userData.DewPoint + quantity;
+        if (newQuantity < 0)
+            throw new ArgumentException("Player cannot have negative eldwater");
+
+        userData.DewPoint = newQuantity;
+    }
+
+    public async Task<bool> CheckDewpoint(int quantity)
+    {
+        int dewpoint = (await this.LookupUserData()).DewPoint;
+        return dewpoint >= quantity;
+    }
+
+    public async Task SetDewpoint(int quantity)
+    {
+        if (quantity < 0)
+            throw new ArgumentException("Player cannot have negative eldwater");
+
+        DbPlayerUserData userData = await UserData.SingleAsync();
+        userData.DewPoint = quantity;
+    }
 }

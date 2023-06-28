@@ -123,7 +123,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             await this.weaponRepository.CheckOwnsWeapons(
                 WeaponBodies.Nothung,
                 WeaponBodies.Blazegambol,
-                WeaponBodies.Brísingr
+                WeaponBodies.Brisingr
             )
         )
             .Should()

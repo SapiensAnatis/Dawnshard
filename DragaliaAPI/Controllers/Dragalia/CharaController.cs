@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using AutoMapper;
-using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
-using static DragaliaAPI.Shared.Definitions.Enums.ManaNodesUtil;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -27,25 +26,37 @@ public class CharaController : DragaliaControllerBase
     private readonly IUserDataRepository userDataRepository;
     private readonly IUnitRepository unitRepository;
     private readonly IInventoryRepository inventoryRepository;
+    private readonly IStoryRepository storyRepository;
     private readonly IUpdateDataService updateDataService;
     private readonly ILogger<CharaController> logger;
     private readonly IMapper mapper;
+    private readonly IMissionProgressionService missionProgressionService;
+    private readonly IPaymentService paymentService;
+    private readonly IRewardService rewardService;
 
     public CharaController(
         IUserDataRepository userDataRepository,
         IUnitRepository unitRepository,
         IInventoryRepository inventoryRepository,
+        IStoryRepository storyRepository,
         IUpdateDataService updateDataService,
         ILogger<CharaController> logger,
-        IMapper mapper
+        IMapper mapper,
+        IMissionProgressionService missionProgressionService,
+        IPaymentService paymentService,
+        IRewardService rewardService
     )
     {
         this.userDataRepository = userDataRepository;
         this.unitRepository = unitRepository;
         this.inventoryRepository = inventoryRepository;
+        this.storyRepository = storyRepository;
         this.updateDataService = updateDataService;
         this.logger = logger;
         this.mapper = mapper;
+        this.missionProgressionService = missionProgressionService;
+        this.paymentService = paymentService;
+        this.rewardService = rewardService;
     }
 
     [Route("awake")]
@@ -60,12 +71,10 @@ public class CharaController : DragaliaControllerBase
             );
         }
 
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
+        DbPlayerCharaData playerCharData = await unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == (Charas)request.chara_id
+        );
         CharaData charData = MasterAsset.CharaData.Get(request.chara_id);
         playerCharData.HpBase += (ushort)(
             request.next_rarity == 4
@@ -81,11 +90,7 @@ public class CharaController : DragaliaControllerBase
         //TODO Get and update missions relating to promoting characters
         //MissionNoticeData missionNoticeData = null;
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await unitRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -96,19 +101,17 @@ public class CharaController : DragaliaControllerBase
     {
         IEnumerable<Materials> matIds = request.material_list.Select(x => x.id).Cast<Materials>();
 
-        Dictionary<Materials, DbPlayerMaterial> dbMats = await this.inventoryRepository
-            .GetMaterials(this.DeviceAccountId)
+        Dictionary<Materials, DbPlayerMaterial> dbMats = await this.inventoryRepository.Materials
             .Where(dbMat => matIds.Contains(dbMat.MaterialId))
             .ToDictionaryAsync(dbMat => dbMat.MaterialId);
         foreach (AtgenEnemyPiece mat in request.material_list)
         {
             if (mat.quantity < 0)
             {
-                this.logger.LogError(
-                    "Request had invalid material with invalid quantity {mat}",
-                    mat
+                throw new DragaliaException(
+                    ResultCode.CommonMaterialShort,
+                    "Invalid quantity for MaterialList in request"
                 );
-                throw new ArgumentException("Invalid quantity for MaterialList");
             }
             if (
                 mat.id != Materials.BronzeCrystal
@@ -118,20 +121,23 @@ public class CharaController : DragaliaControllerBase
                 && mat.id != Materials.FortifyingCrystal
             )
             {
-                this.logger.LogError("Request had invalid material id {mat}", mat);
-                throw new ArgumentException("Invalid MaterialList in request");
+                throw new DragaliaException(
+                    ResultCode.CharaGrowNotBoostMaterial,
+                    "Invalid materials for buildup"
+                );
             }
             if (!dbMats.ContainsKey(mat.id) || dbMats[mat.id].Quantity < mat.quantity)
             {
-                throw new ArgumentException("Insufficient materials for buildup");
+                throw new DragaliaException(
+                    ResultCode.CommonMaterialShort,
+                    "Insufficient materials for buildup"
+                );
             }
         }
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == (Charas)request.chara_id
+        );
 
         Dictionary<int, int> usedMaterials = new();
         CharaLevelUp(request.material_list, ref playerCharData, ref usedMaterials);
@@ -142,13 +148,7 @@ public class CharaController : DragaliaControllerBase
             remainingMaterials.Add(this.mapper.Map<MaterialList>(dbMats[(Materials)mat.Key]));
         }
 
-        //TODO Add element/weapontype bonus if applicable
-
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await unitRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -159,24 +159,25 @@ public class CharaController : DragaliaControllerBase
         ref Dictionary<int, int> usedMaterials
     )
     {
-        this.logger.LogDebug("Levelling up chara {@chara}", playerCharData);
+        this.logger.LogDebug("Leveling up chara {@chara}", playerCharData);
         //TODO: For now we'll trust the client to not allow leveling up/enhancing beyond allowed limits
         byte maxLevel = (byte)(
             CharaConstants.GetMaxLevelFor(playerCharData.Rarity) + playerCharData.AdditionalMaxLevel
         );
+
         //TODO: Maybe make this generic for IHasXp
-        foreach (AtgenEnemyPiece MaterialList in materials)
+        foreach (AtgenEnemyPiece materialList in materials)
         {
-            switch (MaterialList.id)
+            switch (materialList.id)
             {
                 case Materials.BronzeCrystal:
                 case Materials.SilverCrystal:
                 case Materials.GoldCrystal:
-                    playerCharData.Exp = playerCharData.Exp = Math.Min(
+                    playerCharData.Exp = Math.Min(
                         playerCharData.Exp
                             + (
-                                UpgradeMaterials.buildupXpValues[MaterialList.id]
-                                * MaterialList.quantity
+                                UpgradeMaterials.buildupXpValues[materialList.id]
+                                * materialList.quantity
                             ),
                         CharaConstants.XpLimits[maxLevel - 1]
                     );
@@ -184,25 +185,30 @@ public class CharaController : DragaliaControllerBase
                 case Materials.AmplifyingCrystal:
                     playerCharData.AttackPlusCount = (byte)
                         Math.Min(
-                            playerCharData.AttackPlusCount + MaterialList.quantity,
+                            playerCharData.AttackPlusCount + materialList.quantity,
                             CharaConstants.MaxAtkEnhance
                         );
+                    this.missionProgressionService.OnCharacterBuildup(PlusCountType.Atk);
                     break;
                 case Materials.FortifyingCrystal:
                     playerCharData.HpPlusCount = (byte)
                         Math.Min(
-                            playerCharData.HpPlusCount + MaterialList.quantity,
+                            playerCharData.HpPlusCount + materialList.quantity,
                             CharaConstants.MaxHpEnhance
                         );
+                    this.missionProgressionService.OnCharacterBuildup(PlusCountType.Hp);
                     break;
                 default:
-                    throw new ArgumentException("Invalid MaterialList");
+                    throw new DragaliaException(
+                        ResultCode.CharaGrowNotBoostMaterial,
+                        "Invalid materials for buildup"
+                    );
             }
-            if (!usedMaterials.ContainsKey((int)MaterialList.id))
+            if (!usedMaterials.ContainsKey((int)materialList.id))
             {
-                usedMaterials.Add((int)MaterialList.id, 0);
+                usedMaterials.Add((int)materialList.id, 0);
             }
-            usedMaterials[(int)MaterialList.id] += MaterialList.quantity;
+            usedMaterials[(int)materialList.id] += materialList.quantity;
         }
         if (
             playerCharData.Level < maxLevel
@@ -272,51 +278,45 @@ public class CharaController : DragaliaControllerBase
         [FromBody] CharaResetPlusCountRequest request
     )
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
-        Materials mat =
-            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
-                ? Materials.AmplifyingCrystal
-                : Materials.FortifyingCrystal;
+        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == request.chara_id
+        );
 
-        DbPlayerMaterial upgradeMat =
-            await inventoryRepository.GetMaterial(DeviceAccountId, mat)
-            ?? inventoryRepository.AddMaterial(DeviceAccountId, mat);
-        int cost =
-            20000
-            * (
-                (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
-                    ? playerCharData.AttackPlusCount
-                    : playerCharData.HpPlusCount
-            );
-        if (userData.Coin < cost)
+        Materials material;
+        int plusCount;
+
+        switch (request.plus_count_type)
         {
-            this.logger.LogError(
-                "User rupie count {count} less than augment reset requirement {req}",
-                userData.Coin,
-                cost
-            );
-            throw new ArgumentException("Insufficient Rupies for reset");
+            case PlusCountType.Atk:
+                material = Materials.AmplifyingCrystal;
+                plusCount = playerCharData.AttackPlusCount;
+                playerCharData.AttackPlusCount = 0;
+                break;
+            case PlusCountType.Hp:
+                material = Materials.FortifyingCrystal;
+                plusCount = playerCharData.HpPlusCount;
+                playerCharData.HpPlusCount = 0;
+                break;
+            default:
+                throw new DragaliaException(
+                    ResultCode.CommonInvalidArgument,
+                    "Invalid plus_count_type"
+                );
         }
-        userData.Coin -= cost;
-        upgradeMat.Quantity +=
-            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
-                ? playerCharData.AttackPlusCount
-                : playerCharData.HpPlusCount;
-        _ =
-            (UpgradeEnhanceTypes)request.plus_count_type == UpgradeEnhanceTypes.AtkPlus
-                ? playerCharData.AttackPlusCount = 0
-                : playerCharData.HpPlusCount = 0;
 
-        UpdateDataList updateDataList = updateDataService.GetUpdateDataList(DeviceAccountId);
+        await this.paymentService.ProcessPayment(
+            PaymentTypes.Coin,
+            expectedPrice: CharaConstants.AugmentResetCost * plusCount
+        );
+        await this.rewardService.GrantReward(
+            new Entity(EntityTypes.Material, (int)material, plusCount)
+        );
 
-        await userDataRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return Ok(new CharaResetPlusCountData(updateDataList, new()));
+        return Ok(
+            new CharaResetPlusCountData(updateDataList, this.rewardService.GetEntityResult())
+        );
     }
 
     [Route("buildup_mana")]
@@ -324,12 +324,10 @@ public class CharaController : DragaliaControllerBase
     public async Task<DragaliaResult> CharaBuildupMana([FromBody] CharaBuildupManaRequest request)
     {
         this.logger.LogDebug("Received mana node request {@request}", request);
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == (Charas)request.chara_id
+        );
         Dictionary<CurrencyTypes, int> usedCurrencies = new();
         Dictionary<Materials, int> usedMaterials = new();
         HashSet<int> unlockedStories = new();
@@ -345,11 +343,7 @@ public class CharaController : DragaliaControllerBase
         );
         //TODO: Party power calculation call
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await userDataRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -358,25 +352,15 @@ public class CharaController : DragaliaControllerBase
     [HttpPost]
     public async Task<DragaliaResult> CharaLimitBreak([FromBody] CharaLimitBreakRequest request)
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == (Charas)request.chara_id
+        );
         Dictionary<CurrencyTypes, int> usedCurrencies = new();
         Dictionary<Materials, int> usedMaterials = new();
         playerCharData.LimitBreakCount = (byte)request.next_limit_break_count;
-        if (request.next_limit_break_count == 5)
-        {
-            playerCharData.AdditionalMaxLevel += 5;
-        }
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await unitRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -387,12 +371,10 @@ public class CharaController : DragaliaControllerBase
         [FromBody] CharaLimitBreakAndBuildupManaRequest request
     )
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == request.chara_id
+        );
         Dictionary<CurrencyTypes, int> usedCurrencies = new();
         Dictionary<Materials, int> usedMaterials = new();
         HashSet<int> unlockedStories = new();
@@ -413,11 +395,7 @@ public class CharaController : DragaliaControllerBase
             );
         }
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await unitRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -428,12 +406,10 @@ public class CharaController : DragaliaControllerBase
         [FromBody] CharaBuildupPlatinumRequest request
     )
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharaData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == (Charas)request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharaData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == request.chara_id
+        );
 
         CharaData charaData = MasterAsset.CharaData.Get(playerCharaData.CharaId);
 
@@ -466,16 +442,31 @@ public class CharaController : DragaliaControllerBase
             CharaUpgradeMaterialTypes.Omnicite
         );
 
-        if (charaData.HasManaSpiral)
+        if (
+            MasterAsset.CharaStories.TryGetValue(
+                (int)playerCharaData.CharaId,
+                out StoryData? stories
+            )
+        )
         {
-            playerCharaData.AdditionalMaxLevel = 20;
+            int[] charaStories = stories.storyIds;
+
+            for (
+                int nextStoryunlockIndex = await storyRepository.Stories
+                    .Where(x => charaStories.Contains(x.StoryId))
+                    .CountAsync();
+                nextStoryunlockIndex < charaStories.Length;
+                nextStoryunlockIndex++
+            )
+            {
+                await storyRepository.GetOrCreateStory(
+                    StoryTypes.Chara,
+                    charaStories[nextStoryunlockIndex]
+                );
+            }
         }
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await unitRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -516,7 +507,7 @@ public class CharaController : DragaliaControllerBase
             new()
         };
 
-        for (int i = 0; i < manaNodeInfos.Count && i < 71; i++)
+        for (int i = 0; i < manaNodeInfos.Count && i < 70; i++)
         {
             int floor = Math.Min(i / 10, 5);
 
@@ -578,7 +569,10 @@ public class CharaController : DragaliaControllerBase
         {
             if (manaNodeInfos.Count < nodeNr)
             {
-                throw new ArgumentException($"No nodeInfo found for node {nodeNr}");
+                throw new DragaliaException(
+                    ResultCode.CharaGrowManaPieceNotMeetCondition,
+                    $"No nodeInfo found for node {nodeNr}"
+                );
             }
 
             ManaNode manaNodeInfo = manaNodeInfos[nodeNr - 1];
@@ -661,30 +655,38 @@ public class CharaController : DragaliaControllerBase
                     break;
                 case ManaNodeTypes.Mat:
                     DbPlayerMaterial mat =
-                        await this.inventoryRepository.GetMaterial(
-                            playerCharData.DeviceAccountId,
-                            Materials.DamascusCrystal
-                        )
-                        ?? inventoryRepository.AddMaterial(
-                            DeviceAccountId,
-                            Materials.DamascusCrystal
-                        );
+                        await this.inventoryRepository.GetMaterial(Materials.DamascusCrystal)
+                        ?? inventoryRepository.AddMaterial(Materials.DamascusCrystal);
                     mat.Quantity++;
                     break;
                 case ManaNodeTypes.StdAtkUp:
-                    //TODO: Unsure but seems like this is it. Maybe rename it to something more appropriate
                     playerCharData.ComboBuildupCount++;
-                    break;
-                case ManaNodeTypes.MaxLvUp:
-                    playerCharData.AdditionalMaxLevel += 5;
                     break;
                 default:
                     break;
             }
-            if (manaNodeInfo.IsReleaseStory)
+
+            if (manaNodeInfo.IsReleaseStory && !isOmnicite)
             {
-                //TODO: Get relevant story
-                //unlockedStories.Add((int)manaNodeInfo.StoryId);
+                int[] charaStories = MasterAsset.CharaStories
+                    .Get((int)playerCharData.CharaId)
+                    .storyIds;
+                int nextStoryunlockIndex =
+                    await storyRepository.Stories
+                        .Where(x => charaStories.Contains(x.StoryId))
+                        .CountAsync() + unlockedStories.Count;
+                if (charaStories.Length - 1 < nextStoryunlockIndex)
+                {
+                    throw new DragaliaException(
+                        ResultCode.StoryCountNotEnough,
+                        "Too many story unlocks"
+                    );
+                }
+                await storyRepository.GetOrCreateStory(
+                    StoryTypes.Chara,
+                    charaStories[nextStoryunlockIndex]
+                );
+                unlockedStories.Add(charaStories[nextStoryunlockIndex]);
             }
 
             foreach (KeyValuePair<CurrencyTypes, int> curCost in currencyCosts)
@@ -695,6 +697,7 @@ public class CharaController : DragaliaControllerBase
                 }
                 usedCurrency[curCost.Key] += curCost.Value;
             }
+
             foreach (KeyValuePair<Materials, int> matCost in materialCosts)
             {
                 if (!usedMaterials.ContainsKey(matCost.Key))
@@ -731,12 +734,10 @@ public class CharaController : DragaliaControllerBase
         [FromBody] CharaUnlockEditSkillRequest request
     )
     {
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetUserData(this.DeviceAccountId)
-            .FirstAsync();
-        DbPlayerCharaData playerCharData = await this.unitRepository
-            .GetAllCharaData(this.DeviceAccountId)
-            .FirstAsync(chara => chara.CharaId == request.chara_id);
+        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+            chara => chara.CharaId == request.chara_id
+        );
         CharaData charData = MasterAsset.CharaData.Get(playerCharData.CharaId);
         //TODO: For now trust the client won't send the id of a chara who isn't allowed to share
         if (
@@ -744,40 +745,25 @@ public class CharaController : DragaliaControllerBase
             || (ManaNodes)playerCharData.ManaNodeUnlockCount < (ManaNodes.Circle5 - 1)
         )
         {
-            this.logger.LogError(
-                "Illegal skill share unlock attempt for {@charaData}",
-                playerCharData
+            throw new DragaliaException(
+                ResultCode.CharaEditSkillCannotUnlock,
+                "Adventurer not eligible to share skill"
             );
-            throw new ArgumentException("Adventurer not eligible to share skill");
         }
 
         Materials usedMat = UpgradeMaterials.tomes[charData.ElementalType];
         int usedMatCount = charData.EditSkillCost;
-        DbPlayerMaterial? dbMat = await this.inventoryRepository.GetMaterial(
-            this.DeviceAccountId,
-            usedMat
-        );
+        DbPlayerMaterial? dbMat = await this.inventoryRepository.GetMaterial(usedMat);
         if (dbMat == null || dbMat.Quantity < usedMatCount)
         {
-            this.logger.LogError(
-                "Insufficient material quantity in entity {@dbMat} (needs: {q}) to unlock skill for {@chara}",
-                dbMat,
-                usedMatCount,
-                request.chara_id
-            );
-
             throw new DragaliaException(
-                ResultCode.CharaEditSkillCannotUnlock,
-                "Insufficient materials in storage"
+                ResultCode.CommonMaterialShort,
+                $"Insufficient material quantity in entity {dbMat} (needs: {usedMatCount}) to unlock skill for {request.chara_id}"
             );
         }
         playerCharData.IsUnlockEditSkill = true;
         dbMat.Quantity -= usedMatCount;
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await unitRepository.SaveChangesAsync();
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(new CharaBuildupData(updateDataList, new()));
     }
@@ -789,7 +775,6 @@ public class CharaController : DragaliaControllerBase
     )
     {
         IDictionary<Charas, IEnumerable<DbSetUnit>> setUnitData = await unitRepository.GetCharaSets(
-            DeviceAccountId,
             request.chara_id_list.Select(x => (Charas)x)
         );
         return Ok(
@@ -838,16 +823,8 @@ public class CharaController : DragaliaControllerBase
     )
     {
         DbSetUnit setUnitData =
-            await unitRepository.GetCharaSetData(
-                DeviceAccountId,
-                request.chara_id,
-                request.unit_set_no
-            )
-            ?? unitRepository.AddCharaSetData(
-                DeviceAccountId,
-                request.chara_id,
-                request.unit_set_no
-            );
+            await unitRepository.GetCharaSetData(request.chara_id, request.unit_set_no)
+            ?? unitRepository.AddCharaSetData(request.chara_id, request.unit_set_no);
         ;
 
         setUnitData.UnitSetName = request.unit_set_name;
@@ -881,7 +858,7 @@ public class CharaController : DragaliaControllerBase
         {
             chara_id = (int)request.chara_id,
             chara_unit_set_detail_list = unitRepository
-                .GetCharaSets(DeviceAccountId, request.chara_id)
+                .GetCharaSets(request.chara_id)
                 .Select(
                     x =>
                         new AtgenCharaUnitSetDetailList()
@@ -901,7 +878,7 @@ public class CharaController : DragaliaControllerBase
                         }
                 )
         };
-        UpdateDataList ul = updateDataService.GetUpdateDataList(DeviceAccountId);
+        UpdateDataList ul = await this.updateDataService.SaveChangesAsync();
         ul.chara_unit_set_list = new List<CharaUnitSetList> { setList };
         return Ok(new CharaSetCharaUnitSetData() { update_data_list = ul, entity_result = null });
     }

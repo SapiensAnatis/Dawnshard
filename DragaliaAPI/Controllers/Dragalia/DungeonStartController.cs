@@ -61,36 +61,41 @@ public class DungeonStartController : DragaliaControllerBase
     [HttpPost("start_multi")]
     public async Task<DragaliaResult> Start(DungeonStartStartRequest request)
     {
+        // TODO: this method is way too long. Needs to be factored out into a service
         this.logger.LogInformation("Starting dungeon for quest id {questId}", request.quest_id);
 
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        DbQuest? quest = await this.questRepository
-            .GetQuests(this.DeviceAccountId)
-            .SingleOrDefaultAsync(x => x.QuestId == request.quest_id);
+        DbQuest? quest = await this.questRepository.Quests.SingleOrDefaultAsync(
+            x => x.QuestId == request.quest_id
+        );
 
         if (quest?.State != 3)
-            await this.questRepository.UpdateQuestState(this.DeviceAccountId, request.quest_id, 2);
+            await this.questRepository.UpdateQuestState(request.quest_id, 2);
 
-        UpdateDataList updateData = this.updateDataService.GetUpdateDataList(this.DeviceAccountId);
-
-        await this.questRepository.SaveChangesAsync();
+        UpdateDataList updateData = await this.updateDataService.SaveChangesAsync();
 
         this.logger.LogInformation(
             "{time} ms: Updated QuestRepository",
             stopwatch.ElapsedMilliseconds
         );
 
-        IQueryable<DbPartyUnit> partyQuery = this.partyRepository.GetPartyUnits(
-            this.DeviceAccountId,
-            request.party_no_list
-        );
+        IQueryable<DbPartyUnit> partyQuery = request.party_no_list.Count switch
+        {
+            1 => this.partyRepository.GetPartyUnits(request.party_no_list[0]),
+            2
+                => this.partyRepository.GetPartyUnits(
+                    request.party_no_list[0],
+                    request.party_no_list[1]
+                ),
+            _ => throw new InvalidOperationException("Unsupported party list count")
+        };
 
         List<DbPartyUnit> party = await partyQuery.ToListAsync();
 
         List<DbDetailedPartyUnit> detailedPartyUnits = await this.unitRepository
-            .BuildDetailedPartyUnit(this.DeviceAccountId, partyQuery)
+            .BuildDetailedPartyUnit(partyQuery)
             .ToListAsync();
 
         // Post-processing: fix unit numbers for sindom and filter out null crests
@@ -168,10 +173,10 @@ public class DungeonStartController : DragaliaControllerBase
                     dungeon_type = questInfo.DungeonType,
                     play_type = questInfo.QuestPlayModeType,
                     quest_id = request.quest_id,
-                    is_host = true,
-                    continue_limit = 3,
-                    reborn_limit = 3,
-                    start_time = DateTime.UtcNow,
+                    is_host = false,
+                    continue_limit = questInfo.ContinueLimit,
+                    reborn_limit = questInfo.RebornLimit,
+                    start_time = DateTimeOffset.UtcNow,
                     party_info = new()
                     {
                         party_unit_list = detailedPartyUnits
@@ -257,12 +262,5 @@ public class DungeonStartController : DragaliaControllerBase
         }
 
         return this.Ok(response);
-    }
-
-    private static DbPartyUnit FixUnitNo(DbPartyUnit unit, IEnumerable<int> partyList)
-    {
-        int offset = unit.PartyNo == partyList.First() ? 0 : 4;
-        unit.UnitNo += offset;
-        return unit;
     }
 }

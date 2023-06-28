@@ -29,30 +29,27 @@ public class DbFortBuild : IDbHasAccountId
     /// <remarks>Do not use in a .Select in queries; will cause the entire entity to load.</remarks>
     /// </summary>
     [NotMapped]
-    public int FortPlantDetailId => MasterAssetUtils.GetPlantDetailId(this.PlantId, this.Level);
+    public int FortPlantDetailId =>
+        MasterAssetUtils.GetPlantDetailId(
+            this.PlantId,
+            BuildStatus == FortBuildStatus.Neutral ? Level : Level + 1
+        );
 
     public int PositionX { get; set; }
 
     public int PositionZ { get; set; }
 
     [NotMapped]
-    public FortBuildStatus BuildStatus
+    public FortBuildStatus BuildStatus => this.GetBuildStatus();
+
+    public FortBuildStatus GetBuildStatus()
     {
-        get
+        if (BuildStartDate != DateTimeOffset.UnixEpoch || BuildEndDate != DateTimeOffset.UnixEpoch)
         {
-            if (
-                this.BuildStartDate == DateTimeOffset.UnixEpoch
-                && this.BuildEndDate == DateTimeOffset.UnixEpoch
-            )
-            {
-                return FortBuildStatus.None;
-            }
-
-            if (DateTimeOffset.UtcNow < this.BuildEndDate)
-                return FortBuildStatus.Construction;
-
-            return FortBuildStatus.ConstructionComplete;
+            return Level == 0 ? FortBuildStatus.Building : FortBuildStatus.LevelUp;
         }
+
+        return FortBuildStatus.Neutral;
     }
 
     public DateTimeOffset BuildStartDate { get; set; } = DateTimeOffset.UnixEpoch;
@@ -67,7 +64,7 @@ public class DbFortBuild : IDbHasAccountId
     {
         get
         {
-            TimeSpan result = this.BuildEndDate - DateTime.UtcNow;
+            TimeSpan result = this.BuildEndDate - DateTimeOffset.UtcNow;
 
             return result > TimeSpan.Zero ? result : TimeSpan.Zero;
         }
@@ -77,5 +74,5 @@ public class DbFortBuild : IDbHasAccountId
     public DateTimeOffset LastIncomeDate { get; set; } = DateTimeOffset.UnixEpoch;
 
     [NotMapped]
-    public TimeSpan LastIncomeTime => DateTime.UtcNow - this.LastIncomeDate;
+    public TimeSpan LastIncomeTime => DateTimeOffset.UtcNow - this.LastIncomeDate;
 }

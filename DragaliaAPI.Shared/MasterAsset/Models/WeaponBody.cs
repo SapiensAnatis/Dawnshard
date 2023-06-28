@@ -6,6 +6,7 @@ namespace DragaliaAPI.Shared.MasterAsset.Models;
 /// Weapon body MasterAsset model.
 /// </summary>
 /// <param name="Id">Unique weapon ID.</param>
+/// <param name="WeaponSeriesId">Series the weapon belongs to</param>
 /// <param name="WeaponType">Weapon type (sword, bow, etc...)</param>
 /// <param name="Rarity">Weapon rarity.</param>
 /// <param name="ElementalType">Weapon element.</param>
@@ -40,6 +41,7 @@ namespace DragaliaAPI.Shared.MasterAsset.Models;
 /// <param name="NeedFortCraftLevel">Required Smithy level to craft this weapon</param>
 public record WeaponBody(
     WeaponBodies Id,
+    WeaponSeries WeaponSeriesId,
     WeaponTypes WeaponType,
     int Rarity,
     UnitElement ElementalType,

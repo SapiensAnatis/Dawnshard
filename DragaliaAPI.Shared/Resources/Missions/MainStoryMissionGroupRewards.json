@@ -1,0 +1,146 @@
+[
+  {
+    "_Id": 1,
+    "_Rewards": [
+      {
+        "_Type": "Rupies",
+        "_Id": 0,
+        "_Quantity": 300000
+      },
+      {
+        "_Type": "HustleHammer",
+        "_Id": 0,
+        "_Quantity": 10
+      },
+      {
+        "_Type": "Material",
+        "_Id": 103001003,
+        "_Quantity": 30
+      }
+    ]
+  },
+  {
+    "_Id": 2,
+    "_Rewards": [
+      {
+        "_Type": "Rupies",
+        "_Id": 0,
+        "_Quantity": 1000000
+      },
+      {
+        "_Type": "HustleHammer",
+        "_Id": 0,
+        "_Quantity": 20
+      },
+      {
+        "_Type": "Material",
+        "_Id": 103001003,
+        "_Quantity": 150
+      }
+    ]
+  },
+  {
+    "_Id": 3,
+    "_Rewards": []
+  },
+  {
+    "_Id": 8,
+    "_Rewards": [
+      {
+        "_Type": "Material",
+        "_Id": 104001013,
+        "_Quantity": 20
+      },
+      {
+        "_Type": "Material",
+        "_Id": 103001003,
+        "_Quantity": 60
+      },
+      {
+        "_Type": "HustleHammer",
+        "_Id": 0,
+        "_Quantity": 20
+      },
+      {
+        "_Type": "Material",
+        "_Id": 204021001,
+        "_Quantity": 2
+      },
+      {
+        "_Type": "Material",
+        "_Id": 204005001,
+        "_Quantity": 75
+      }
+    ]
+  },
+  {
+    "_Id": 9,
+    "_Rewards": [
+      {
+        "_Type": "Material",
+        "_Id": 104001013,
+        "_Quantity": 20
+      },
+      {
+        "_Type": "Material",
+        "_Id": 104001001,
+        "_Quantity": 20
+      },
+      {
+        "_Type": "Material",
+        "_Id": 116001001,
+        "_Quantity": 10
+      },
+      {
+        "_Type": "Material",
+        "_Id": 204022001,
+        "_Quantity": 10
+      },
+      {
+        "_Type": "Material",
+        "_Id": 204022002,
+        "_Quantity": 2
+      }
+    ]
+  },
+  {
+    "_Id": 10,
+    "_Rewards": [
+      {
+        "_Type": "Material",
+        "_Id": 104001053,
+        "_Quantity": 20
+      },
+      {
+        "_Type": "HustleHammer",
+        "_Id": 0,
+        "_Quantity": 30
+      },
+      {
+        "_Type": "Rupies",
+        "_Id": 0,
+        "_Quantity": 400000
+      }
+    ]
+  },
+  {
+    "_Id": 11,
+    "_Rewards": [
+      {
+        "_Type": "Material",
+        "_Id": 104001033,
+        "_Quantity": 20
+      },
+      {
+        "_Type": "HustleHammer",
+        "_Id": 0,
+        "_Quantity": 20
+      },
+      {
+        "_Type": "Rupies",
+        "_Id": 0,
+        "_Quantity": 500000
+      }
+    ]
+  }
+]

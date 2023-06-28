@@ -12,15 +12,15 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [ApiController]
 public partial class TutorialController : DragaliaControllerBase
 {
-    private readonly IUserDataRepository userDataRepository;
+    private readonly ITutorialService tutorialService;
     private readonly IUpdateDataService updateDataService;
 
     public TutorialController(
-        IUserDataRepository userDataRepository,
+        ITutorialService tutorialService,
         IUpdateDataService updateDataService
     )
     {
-        this.userDataRepository = userDataRepository;
+        this.tutorialService = tutorialService;
         this.updateDataService = updateDataService;
     }
 
@@ -28,33 +28,21 @@ public partial class TutorialController : DragaliaControllerBase
     [Route("update_step")]
     public async Task<DragaliaResult> UpdateStep(TutorialUpdateStepRequest request)
     {
-        await userDataRepository.UpdateTutorialStatus(this.DeviceAccountId, request.step);
+        int currentStep = await tutorialService.UpdateTutorialStatus(request.step);
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-        await this.userDataRepository.SaveChangesAsync();
-
-        return this.Ok(new TutorialUpdateStepData(request.step, updateDataList, new()));
+        return this.Ok(new TutorialUpdateStepData(currentStep, updateDataList, new()));
     }
 
     [HttpPost]
     [Route("update_flags")]
     public async Task<DragaliaResult> UpdateFlags(TutorialUpdateFlagsRequest flagRequest)
     {
-        int flag_id = flagRequest.flag_id;
+        List<int> currentFlags = await this.tutorialService.AddTutorialFlag(flagRequest.flag_id);
 
-        await this.userDataRepository.AddTutorialFlag(this.DeviceAccountId, flag_id);
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
-        UpdateDataList updateDataList = this.updateDataService.GetUpdateDataList(
-            this.DeviceAccountId
-        );
-
-        await this.userDataRepository.SaveChangesAsync();
-
-        return this.Ok(
-            new TutorialUpdateFlagsData(new List<int>() { flag_id }, updateDataList, new())
-        );
+        return this.Ok(new TutorialUpdateFlagsData(currentFlags, updateDataList, new()));
     }
 }

@@ -2,6 +2,7 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -47,7 +48,7 @@ public class FriendController : DragaliaControllerBase
             helperList.support_user_list
                 .Where(helper => helper.viewer_id == request.support_viewer_id)
                 .FirstOrDefault()
-            ?? new() { support_chara = new() { chara_id = Charas.ThePrince } };
+            ?? HelperService.StubData.SupportListData.support_user_list.First();
 
         AtgenSupportUserDetailList helperDetail =
             helperList.support_user_detail_list

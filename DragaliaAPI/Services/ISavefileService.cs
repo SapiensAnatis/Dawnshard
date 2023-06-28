@@ -5,10 +5,10 @@ namespace DragaliaAPI.Services;
 
 public interface ISavefileService
 {
-    Task Create(string deviceAccountId);
-    Task CreateBase(string deviceAccountId);
-    Task ThreadSafeImport(string deviceAccountId, LoadIndexData savefile);
-    Task Import(string deviceAccountId, LoadIndexData savefile);
-    IQueryable<DbPlayer> Load(string deviceAccountId);
-    Task Reset(string deviceAccountId);
+    Task Create();
+    Task CreateBase();
+    Task ThreadSafeImport(LoadIndexData savefile);
+    Task Import(LoadIndexData savefile);
+    IQueryable<DbPlayer> Load();
+    Task Reset();
 }

@@ -3,14 +3,14 @@ name: publish-tag
 on:
   push:
     tags:
-      - "*"
+      - "api@*"
 
 env:
   HUSKY: 0
 
 jobs:
   publish:
-    uses: ./.github/workflows/publish-base.yaml
+    uses: ./.github/workflows/publish.yaml
     with:
       ref: ${{ github.ref_name }}
       image-tag: ${{ github.ref_name }}

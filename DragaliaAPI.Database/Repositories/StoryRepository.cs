@@ -1,71 +1,74 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public class StoryRepository : BaseRepository, IStoryRepository
+public class StoryRepository : IStoryRepository
 {
     private readonly ApiContext apiContext;
+    private readonly IPlayerIdentityService playerIdentityService;
+    private readonly ILogger<StoryRepository> logger;
 
-    public StoryRepository(ApiContext apiContext)
-        : base(apiContext)
-    {
-        this.apiContext = apiContext;
-    }
-
-    public IQueryable<DbPlayerStoryState> GetStoryList(string deviceAccountId)
-    {
-        return this.apiContext.PlayerStoryState.Where(x => x.DeviceAccountId == deviceAccountId);
-    }
-
-    public async Task<DbPlayerStoryState> GetOrCreateStory(
-        string deviceAccountId,
-        StoryTypes storyType,
-        int storyId
+    public StoryRepository(
+        ApiContext apiContext,
+        IPlayerIdentityService playerIdentityService,
+        ILogger<StoryRepository> logger
     )
     {
-        return await apiContext.PlayerStoryState.SingleOrDefaultAsync(
-                x => x.DeviceAccountId == deviceAccountId && x.StoryId == storyId
-            )
-            ?? apiContext.PlayerStoryState
+        this.apiContext = apiContext;
+        this.playerIdentityService = playerIdentityService;
+        this.logger = logger;
+    }
+
+    public IQueryable<DbPlayerStoryState> Stories =>
+        this.apiContext.PlayerStoryState.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
+        );
+
+    public IQueryable<DbPlayerStoryState> UnitStories =>
+        this.Stories.Where(
+            x => x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon
+        );
+
+    public IQueryable<DbPlayerStoryState> QuestStories =>
+        this.Stories.Where(x => x.StoryType == StoryTypes.Quest);
+
+    public async Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId)
+    {
+        DbPlayerStoryState? state = await apiContext.PlayerStoryState.FindAsync(
+            this.playerIdentityService.AccountId,
+            storyType,
+            storyId
+        );
+
+        if (state is null)
+        {
+            this.logger.LogInformation(
+                "Requested story id {id} with type {type} was not found, creating...",
+                storyId,
+                storyType
+            );
+
+            state = apiContext.PlayerStoryState
                 .Add(
                     new DbPlayerStoryState()
                     {
-                        DeviceAccountId = deviceAccountId,
+                        DeviceAccountId = this.playerIdentityService.AccountId,
                         StoryId = storyId,
                         StoryType = storyType,
                         State = 0
                     }
                 )
                 .Entity;
+        }
+
+        return state;
     }
 
-    public async Task UpdateStory(
-        string deviceAccountId,
-        StoryTypes storyType,
-        int storyId,
-        byte newState
-    )
-    {
-        // TODO: I don't think we should really add them if they don't exist as that may indicate not-unlocked.
-        // Need to research how to determine if story is accessible and implement API-side validation for this.
-        // Fine for now to trust the client.
-
-        DbPlayerStoryState story =
-            await apiContext.PlayerStoryState.FindAsync(deviceAccountId, storyType, storyId)
-            ?? apiContext.PlayerStoryState
-                .Add(
-                    new DbPlayerStoryState()
-                    {
-                        DeviceAccountId = deviceAccountId,
-                        StoryId = storyId,
-                        StoryType = storyType,
-                        State = newState
-                    }
-                )
-                .Entity;
-
-        story.State = newState;
-    }
+    public async Task<bool> HasReadQuestStory(int storyId) =>
+        await this.QuestStories.AnyAsync(x => x.StoryId == storyId && x.State == StoryState.Read);
 }

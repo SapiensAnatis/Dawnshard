@@ -8,10 +8,20 @@
 /// </summary>
 public enum PaymentTypes
 {
-    Diamantium = 2,
-    Wyrmite = 3,
-    Ticket = 8,
-
-    FreeDailyExecDependant = 9,
-    FreeDailyTenfold = 10
+    None,
+    Money,
+    Diamantium,
+    Wyrmite,
+    DiamantiumOrWyrmite,
+    Coin,
+    ManaPoint,
+    DewPoint,
+    Ticket,
+    FreeDailyExecDependant,
+    FreeDailyTenfold,
+    HalidomHustleHammer,
+    ItemSummonCampaign,
+    TutorialTicketSummon,
+    SummonCampaignOneHundred,
+    Other = 99
 }

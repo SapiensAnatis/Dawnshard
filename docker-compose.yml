@@ -2,12 +2,13 @@ version: '3.4'
 
 volumes:
   pgdata:
-  logs:
+  #logs:
 
 services:
   dragaliaapi:
+    image: dragaliaapi
+    container_name: dragaliaapi
     hostname: dragaliaapi
-    image: ${DOCKER_REGISTRY-}dragaliaapi
     build:
       context: .
       dockerfile: DragaliaAPI/Dockerfile
@@ -15,11 +16,23 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "80:80"
+      - "5000:80"
     links:
       - postgres
     env_file:
       - .env
-    
+
+  photonstatemanager:
+    hostname: photonstatemanager
+    image: ${DOCKER_REGISTRY-}photonstatemanager
+    build:
+        context: .
+        dockerfile: DragaliaAPI.Photon.StateManager/Dockerfile
+    ports:
+      - "5001:80"
+    env_file:
+      - .env
+
   postgres:
     hostname: postgres
     image: postgres:latest

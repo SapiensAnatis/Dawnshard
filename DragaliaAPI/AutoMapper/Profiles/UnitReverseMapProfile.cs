@@ -19,7 +19,9 @@ public class UnitReverseMapProfile : Profile
             .ForMember(x => x.AttackBase, opts => opts.MapFrom<CharaBaseAtkResolver>())
             .ForMember(x => x.HpBase, opts => opts.MapFrom<CharaBaseHpResolver>())
             .ForMember(x => x.AttackNode, opts => opts.MapFrom<CharaNodeAtkResolver>())
-            .ForMember(x => x.HpNode, opts => opts.MapFrom<CharaNodeHpResolver>());
+            .ForMember(x => x.HpNode, opts => opts.MapFrom<CharaNodeHpResolver>())
+            // Ignore IsTemporary until we have a way to rerun events
+            .ForMember(x => x.IsTemporary, opts => opts.MapFrom(x => false));
 
         this.CreateMap<DragonReliabilityList, DbPlayerDragonReliability>()
             .ForMember(x => x.Level, opts => opts.MapFrom(src => src.reliability_level))

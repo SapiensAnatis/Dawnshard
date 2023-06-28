@@ -34,8 +34,45 @@ public class DbPlayerCharaData : IDbHasAccountId
     [Column("Level")]
     public byte Level { get; set; } = 1;
 
-    [Column("AddMaxLevel")]
-    public byte AdditionalMaxLevel { get; set; } = 0;
+    // Divides unlocked node count by nodes/limit breaks that increase max Level
+    // Only if the unlockCount is equal or higher than the divisor the quotient will return a 1, adding 5 levels for that step
+    [NotMapped]
+    public byte AdditionalMaxLevel
+    {
+        get
+        {
+            return (byte)(
+                ((ManaNodeUnlockCount / (ushort)ManaNodes.Circle5) * 5)
+                + (
+                    (
+                        ManaNodeUnlockCount
+                        / (ushort)(
+                            ManaNodes.Circle5
+                            | ManaNodes.Node1
+                            | ManaNodes.Node2
+                            | ManaNodes.Node3
+                            | ManaNodes.Node4
+                            | ManaNodes.Node5
+                        )
+                    ) * 5
+                )
+                + ((ManaNodeUnlockCount / (ushort)ManaNodes.Circle6) * 5)
+                + (
+                    (
+                        ManaNodeUnlockCount
+                        / (ushort)(
+                            ManaNodes.Circle6
+                            | ManaNodes.Node1
+                            | ManaNodes.Node2
+                            | ManaNodes.Node3
+                            | ManaNodes.Node4
+                            | ManaNodes.Node5
+                        )
+                    ) * 5
+                )
+            );
+        }
+    }
 
     [Column("HpPlusCount")]
     public byte HpPlusCount { get; set; } = 0;
@@ -72,6 +109,7 @@ public class DbPlayerCharaData : IDbHasAccountId
     [Column("BurstAtkLvl")]
     public byte BurstAttackLevel { get; set; }
 
+    // For some reason this is what the standard attack node upgrade is called
     [Column("ComboBuildupCount")]
     public int ComboBuildupCount { get; set; }
 
@@ -115,7 +153,7 @@ public class DbPlayerCharaData : IDbHasAccountId
     public bool ListViewFlag { get; set; }
 
     [Column("GetTime")]
-    public DateTimeOffset GetTime { get; set; } = DateTime.UtcNow;
+    public DateTimeOffset GetTime { get; set; } = DateTimeOffset.UtcNow;
 
     [NotMapped]
     public SortedSet<int> ManaCirclePieceIdList
@@ -167,6 +205,7 @@ public class DbPlayerCharaData : IDbHasAccountId
         this.CharaId = id;
         this.HpBase = rarityHp;
         this.AttackBase = rarityAtk;
+        this.BurstAttackLevel = (byte)data.DefaultBurstAttackLevel;
         this.Ability1Level = (byte)data.DefaultAbility1Level;
         this.Ability2Level = (byte)data.DefaultAbility2Level;
         this.Ability3Level = (byte)data.DefaultAbility3Level;

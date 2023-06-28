@@ -27,7 +27,7 @@ public class DbFortBuildTest
     }
 
     [Fact]
-    public void BuildStatus_BothDatesEpoch_IsNone()
+    public void BuildStatus_BothDatesEpoch_IsNeutral()
     {
         DbFortBuild entity =
             new()
@@ -37,15 +37,16 @@ public class DbFortBuildTest
                 BuildEndDate = DateTimeOffset.UnixEpoch
             };
 
-        entity.BuildStatus.Should().Be(FortBuildStatus.None);
+        entity.BuildStatus.Should().Be(FortBuildStatus.Neutral);
     }
 
     [Theory]
-    [InlineData(-2, -1, FortBuildStatus.ConstructionComplete)]
-    [InlineData(-2, 1, FortBuildStatus.Construction)]
+    [InlineData(-2, -1, 2, FortBuildStatus.LevelUp)]
+    [InlineData(-2, 1, 0, FortBuildStatus.Building)]
     public void BuildStatus_CalculatedCorrectly(
         int startOffsetSec,
         int endOffsetSec,
+        int level,
         FortBuildStatus expected
     )
     {
@@ -53,6 +54,7 @@ public class DbFortBuildTest
             new()
             {
                 DeviceAccountId = "id",
+                Level = level,
                 BuildStartDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(startOffsetSec),
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(endOffsetSec)
             };

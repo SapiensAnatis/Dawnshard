@@ -1,9 +1,10 @@
-﻿using DragaliaAPI.Database.Repositories;
+﻿using System.Diagnostics.CodeAnalysis;
+using DragaliaAPI.Database.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Npgsql;
-using Serilog;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DragaliaAPI.Database.Test")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DragaliaAPI.Test")]
@@ -14,7 +15,6 @@ public static class DatabaseConfiguration
 {
     private const int MigrationMaxRetries = 5;
     private const int RetrySleepMs = 3000;
-    private static readonly ILogger logger = Log.ForContext(typeof(DatabaseConfiguration));
 
     public static IServiceCollection ConfigureDatabaseServices(
         this IServiceCollection services,
@@ -22,7 +22,7 @@ public static class DatabaseConfiguration
     )
     {
         string connectionString = GetConnectionString(host);
-        logger.Information("Connecting to database using host {host}...", host);
+        // logger.Debug("Connecting to database using host {host}...", host);
 
         services = services
             .AddDbContext<ApiContext>(
@@ -44,14 +44,14 @@ public static class DatabaseConfiguration
             .AddScoped<IPartyRepository, PartyRepository>()
             .AddScoped<IQuestRepository, QuestRepository>()
             .AddScoped<IInventoryRepository, InventoryRepository>()
-            .AddScoped<IFortRepository, FortRepository>()
             .AddScoped<IWeaponRepository, WeaponRepository>()
-            .AddScoped<IStoryRepository, StoryRepository>();
+            .AddScoped<IStoryRepository, StoryRepository>()
+            .AddScoped<IAbilityCrestRepository, AbilityCrestRepository>();
 
         return services;
     }
 
-    public static string GetConnectionString(string? host)
+    private static string GetConnectionString(string? host)
     {
         NpgsqlConnectionStringBuilder connectionStringBuilder =
             new()
@@ -66,6 +66,7 @@ public static class DatabaseConfiguration
         return connectionStringBuilder.ConnectionString;
     }
 
+    [ExcludeFromCodeCoverage]
     public static void MigrateDatabase(this WebApplication app)
     {
         using IServiceScope scope = app.Services
@@ -81,7 +82,7 @@ public static class DatabaseConfiguration
         while (!context.Database.CanConnect())
         {
             tries++;
-            logger.Warning(
+            app.Logger.LogWarning(
                 "Failed to connect to database to check migration status. Retrying... ({x}/{y})",
                 tries,
                 MigrationMaxRetries
@@ -100,8 +101,8 @@ public static class DatabaseConfiguration
         IEnumerable<string> appliedMigrations = context.Database.GetAppliedMigrations();
         IEnumerable<string> pendingMigrations = context.Database.GetPendingMigrations();
 
-        logger.Information("Existing migrations: {@migrations}", appliedMigrations);
-        logger.Information("Pending migrations: {@migrations}", pendingMigrations);
+        app.Logger.LogInformation("Existing migrations: {@migrations}", appliedMigrations);
+        app.Logger.LogInformation("Pending migrations: {@migrations}", pendingMigrations);
 
         if (!pendingMigrations.Any())
             return;

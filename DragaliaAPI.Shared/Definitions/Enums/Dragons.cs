@@ -134,5 +134,38 @@ public enum Dragons
     Yulong = 20050307,
     Zephyr = 20050301,
     ZephyrImp = 20030303,
-    Zodiark = 20040501
+    Zodiark = 20040501,
+    Puppy = 29900005
+}
+
+public enum DragonLimitBreakTypes
+{
+    Normal = 10000,
+    Special = 10001
+}
+
+public enum DragonLimitBreakMatTypes
+{
+    Dupe = 1,
+    Stone = 2,
+    Spheres = 3,
+    SpheresLB5 = 4
+}
+
+public enum DragonGifts
+{
+    FreshBread = 10001,
+    TastyMilk = 10002,
+    StrawberryTart = 10003,
+    HeartyStew = 10004,
+    JuicyMeat = 20001,
+    Kaleidoscope = 20002,
+    FloralCirclet = 20003,
+    CompellingBook = 20004,
+    ManaEssence = 20005,
+    GoldenChalice = 20006,
+    FourLeafClover = 30001,
+    DragonyuleCake = 30002,
+    ValentinesCard = 30003,
+    PupGrub = 40001
 }

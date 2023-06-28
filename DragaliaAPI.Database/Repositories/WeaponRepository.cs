@@ -5,39 +5,40 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using WeaponBodiesEnum = DragaliaAPI.Shared.Definitions.Enums.WeaponBodies;
 
 namespace DragaliaAPI.Database.Repositories;
 
 public class WeaponRepository : IWeaponRepository
 {
     private readonly ApiContext apiContext;
-    private readonly IPlayerDetailsService playerDetailsService;
+    private readonly IPlayerIdentityService playerIdentityService;
     private readonly ILogger<WeaponRepository> logger;
 
     public WeaponRepository(
         ApiContext apiContext,
-        IPlayerDetailsService playerDetailsService,
+        IPlayerIdentityService playerIdentityService,
         ILogger<WeaponRepository> logger
     )
     {
         this.apiContext = apiContext;
-        this.playerDetailsService = playerDetailsService;
+        this.playerIdentityService = playerIdentityService;
         this.logger = logger;
     }
 
     public IQueryable<DbWeaponBody> WeaponBodies =>
         this.apiContext.PlayerWeapons.Where(
-            x => x.DeviceAccountId == this.playerDetailsService.AccountId
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
     public IQueryable<DbWeaponSkin> WeaponSkins =>
         this.apiContext.PlayerWeaponSkins.Where(
-            x => x.DeviceAccountId == this.playerDetailsService.AccountId
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
     public IQueryable<DbWeaponPassiveAbility> WeaponPassiveAbilities =>
         this.apiContext.PlayerPassiveAbilities.Where(
-            x => x.DeviceAccountId == this.playerDetailsService.AccountId
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
     public IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(WeaponBodies id)
@@ -50,7 +51,7 @@ public class WeaponRepository : IWeaponRepository
 
         return this.apiContext.PlayerPassiveAbilities.Where(
             x =>
-                x.DeviceAccountId == this.playerDetailsService.AccountId
+                x.DeviceAccountId == this.playerIdentityService.AccountId
                 && searchIds.Contains(x.WeaponPassiveAbilityId)
         );
     }
@@ -62,7 +63,7 @@ public class WeaponRepository : IWeaponRepository
         await this.apiContext.PlayerWeapons.AddAsync(
             new DbWeaponBody()
             {
-                DeviceAccountId = this.playerDetailsService.AccountId,
+                DeviceAccountId = this.playerIdentityService.AccountId,
                 WeaponBodyId = weaponBodyId
             }
         );
@@ -74,7 +75,7 @@ public class WeaponRepository : IWeaponRepository
 
         if (
             await this.apiContext.PlayerWeaponSkins.FindAsync(
-                this.playerDetailsService.AccountId,
+                this.playerIdentityService.AccountId,
                 weaponSkinId
             )
             is not null
@@ -87,7 +88,7 @@ public class WeaponRepository : IWeaponRepository
         await this.apiContext.PlayerWeaponSkins.AddAsync(
             new DbWeaponSkin()
             {
-                DeviceAccountId = this.playerDetailsService.AccountId,
+                DeviceAccountId = this.playerIdentityService.AccountId,
                 WeaponSkinId = weaponSkinId,
                 GetTime = DateTimeOffset.UtcNow
             }
@@ -96,9 +97,7 @@ public class WeaponRepository : IWeaponRepository
 
     public async Task<bool> CheckOwnsWeapons(params WeaponBodies[] weaponIds)
     {
-        List<WeaponBodies> filtered = weaponIds
-            .Where(x => x != Shared.Definitions.Enums.WeaponBodies.Empty)
-            .ToList();
+        List<WeaponBodies> filtered = weaponIds.Where(x => x != WeaponBodiesEnum.Empty).ToList();
 
         return (
                 await this.WeaponBodies
@@ -109,7 +108,7 @@ public class WeaponRepository : IWeaponRepository
     }
 
     public async Task<DbWeaponBody?> FindAsync(WeaponBodies id) =>
-        await this.apiContext.PlayerWeapons.FindAsync(this.playerDetailsService.AccountId, id);
+        await this.apiContext.PlayerWeapons.FindAsync(this.playerIdentityService.AccountId, id);
 
     public async Task AddPassiveAbility(WeaponBodies id, WeaponPassiveAbility passiveAbility)
     {
@@ -128,7 +127,7 @@ public class WeaponRepository : IWeaponRepository
         await this.apiContext.PlayerPassiveAbilities.AddAsync(
             new()
             {
-                DeviceAccountId = this.playerDetailsService.AccountId,
+                DeviceAccountId = this.playerIdentityService.AccountId,
                 WeaponPassiveAbilityId = passiveAbility.Id
             }
         );
