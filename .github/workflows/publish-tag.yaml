@@ -3,7 +3,7 @@ name: publish-tag
 on:
   push:
     tags:
-      - "*"
+      - "api@*"
 
 env:
   HUSKY: 0

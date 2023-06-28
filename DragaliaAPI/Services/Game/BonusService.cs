@@ -14,6 +14,9 @@ namespace DragaliaAPI.Services.Game;
 /// <summary>
 /// Service for fort, weapon, and album bonuses
 /// </summary>
+#if CHEATING
+#warning Cheats are enabled
+#endif
 public class BonusService : IBonusService
 {
     private readonly IFortRepository fortRepository;

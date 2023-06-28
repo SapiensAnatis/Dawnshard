@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using DragaliaAPI.Photon.Plugin.Constants;
 using DragaliaAPI.Photon.Plugin.Helpers;
@@ -208,8 +210,13 @@ namespace DragaliaAPI.Photon.Plugin
             this.logger.Debug(JsonConvert.SerializeObject(info.Request.Properties));
 #endif
 
-            if (info.Request.Properties.ContainsKey(ActorPropertyKeys.GoToIngameState))
+            if (
+                info.Request.Properties.ContainsKey(ActorPropertyKeys.GoToIngameState)
+                && info.ActorNr == 1
+            )
+            {
                 this.OnSetGoToIngameState(info);
+            }
 
             if (info.Request.Properties.ContainsKey(GamePropertyKeys.EntryConditions))
                 this.OnSetEntryConditions(info);
@@ -306,18 +313,50 @@ namespace DragaliaAPI.Photon.Plugin
             {
                 case 1:
                     this.SetGoToIngameInfo(info);
-                    if (info.ActorNr == 1)
-                        this.HideGameAfterStart(info);
-
+                    this.HideGameAfterStart(info);
                     break;
                 case 2:
-                    this.RaiseCharacterDataEvent(info);
+                    this.RequestHeroParam(info);
                     break;
                 case 3:
                     this.RaisePartyEvent(info);
+                    this.RaiseCharacterDataEvent(info);
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void RaiseCharacterDataEvent(ISetPropertiesCallInfo info)
+        {
+            foreach (IActor actor in this.PluginHost.GameActors)
+            {
+                IEnumerable<IEnumerable<HeroParam>> heroParamsList =
+                    (IEnumerable<IEnumerable<HeroParam>>)
+                        actor.Properties.GetProperty(ActorPropertyKeys.HeroParam).Value;
+
+                int memberCount = actor.Properties.GetInt(ActorPropertyKeys.MemberCount);
+
+                foreach (IEnumerable<HeroParam> heroParams in heroParamsList)
+                {
+                    CharacterData evt = new CharacterData()
+                    {
+                        playerId = actor.ActorNr,
+                        heroParamExs = heroParams
+                            .Select(
+                                x =>
+                                    new HeroParamExData()
+                                    {
+                                        limitOverCount = x.exAbilityLv,
+                                        sequenceNumber = x.position
+                                    }
+                            )
+                            .ToArray(),
+                        heroParams = heroParams.Take(memberCount).ToArray()
+                    };
+
+                    this.RaiseEvent(0x14, evt);
+                }
             }
         }
 
@@ -351,41 +390,38 @@ namespace DragaliaAPI.Photon.Plugin
         /// Raises the CharacterData event by making requests to the main API server for party information.
         /// </summary>
         /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
-        private void RaiseCharacterDataEvent(ISetPropertiesCallInfo info)
+        private void RequestHeroParam(ISetPropertiesCallInfo info)
         {
-            foreach (IActor actor in this.PluginHost.GameActorsActive)
-            {
-                int viewerId = actor.GetViewerId();
-                int[] partySlots = actor.GetPartySlots();
-
-                foreach (int slot in partySlots)
-                {
-                    Uri requestUri = new Uri(
-                        this.config.ApiServerUrl,
-                        $"heroparam/{viewerId}/{slot}"
-                    );
-
-                    HttpRequest req = new HttpRequest()
+            IEnumerable<ActorInfo> heroParamRequest = this.PluginHost.GameActors.Select(
+                x =>
+                    new ActorInfo()
                     {
-                        Url = requestUri.AbsoluteUri,
-                        ContentType = "application/json",
-                        Callback = OnHeroParamResponse,
-                        Async = true,
-                        Accept = "application/json",
-                        UserState = new HeroParamRequestState()
-                        {
-                            OwnerActorNr = actor.ActorNr,
-                            RequestActorNr = info.ActorNr
-                        },
-                    };
+                        ActorNr = x.ActorNr,
+                        ViewerId = x.GetViewerId(),
+                        PartySlots = x.GetPartySlots()
+                    }
+            );
 
-                    this.PluginHost.HttpRequest(req, info);
-                }
-            }
+            Uri requestUri = new Uri(this.config.ApiServerUrl, $"heroparam/batch");
+
+            HttpRequest req = new HttpRequest()
+            {
+                Url = requestUri.AbsoluteUri,
+                ContentType = "application/json",
+                Callback = OnHeroParamResponse,
+                Async = false,
+                Accept = "application/json",
+                DataStream = new MemoryStream(
+                    Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(heroParamRequest))
+                ),
+                Method = "POST",
+            };
+
+            this.PluginHost.HttpRequest(req, info);
         }
 
         /// <summary>
-        /// HTTP request callback for the HeroParam request sent in <see cref="RaiseCharacterDataEvent(ISetPropertiesCallInfo)"/>.
+        /// HTTP request callback for the HeroParam request sent in <see cref="RequestHeroParam(ISetPropertiesCallInfo)"/>.
         /// </summary>
         /// <param name="response">The HTTP response.</param>
         /// <param name="userState">The arguments passed from the calling function.</param>
@@ -393,29 +429,23 @@ namespace DragaliaAPI.Photon.Plugin
         {
             LogIfFailedCallback(response, userState);
 
-            List<HeroParam> heroParams = JsonConvert.DeserializeObject<List<HeroParam>>(
+            List<HeroParamData> responseObject = JsonConvert.DeserializeObject<List<HeroParamData>>(
                 response.ResponseText
             );
 
-            HeroParamRequestState typedUserState = (HeroParamRequestState)userState;
-
-            CharacterData evt = new CharacterData()
+            foreach (HeroParamData data in responseObject)
             {
-                playerId = typedUserState.OwnerActorNr,
-                heroParamExs = heroParams
-                    .Select(
-                        x =>
-                            new HeroParamExData()
-                            {
-                                limitOverCount = x.exAbilityLv,
-                                sequenceNumber = x.position
-                            }
-                    )
-                    .ToArray(),
-                heroParams = heroParams.Take(GetMemberCount(typedUserState.OwnerActorNr)).ToArray()
-            };
-
-            this.RaiseEvent(0x14, evt, typedUserState.RequestActorNr);
+                this.PluginHost.SetProperties(
+                    data.ActorNr,
+                    new Hashtable()
+                    {
+                        { ActorPropertyKeys.HeroParam, data.HeroParamLists },
+                        { ActorPropertyKeys.HeroParamCount, data.HeroParamLists.First().Count() }
+                    },
+                    null,
+                    false
+                );
+            }
         }
 
         /// <summary>
@@ -424,13 +454,17 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
         private void RaisePartyEvent(ISetPropertiesCallInfo info)
         {
-            PartyEvent evt = new PartyEvent()
+            Dictionary<int, int> memberCountTable = this.GetMemberCountTable();
+
+            foreach (IActor actor in this.PluginHost.GameActors)
             {
-                memberCountTable = this.PluginHost.GameActors.ToDictionary(
-                    x => x.ActorNr,
-                    x => GetMemberCount(x.ActorNr)
-                )
-            };
+                actor.Properties.Set(
+                    ActorPropertyKeys.MemberCount,
+                    memberCountTable[actor.ActorNr]
+                );
+            }
+
+            PartyEvent evt = new PartyEvent() { memberCountTable = memberCountTable };
 
             this.RaiseEvent(0x3e, evt);
         }
@@ -459,29 +493,59 @@ namespace DragaliaAPI.Photon.Plugin
         /// </summary>
         /// <param name="actorNr">The actor number.</param>
         /// <returns>The number of units they own.</returns>
-        public int GetMemberCount(int actorNr)
+        public Dictionary<int, int> GetMemberCountTable()
         {
             if (
                 this.PluginHost.GameProperties.TryGetInt(GamePropertyKeys.QuestId, out int questId)
                 && QuestHelper.GetDungeonType(questId) == DungeonTypes.Raid
             )
             {
-                return 4;
+                // Everyone uses all of their units in a raid
+                return this.PluginHost.GameActors.ToDictionary(
+                    x => x.ActorNr,
+                    x => x.Properties.GetInt(ActorPropertyKeys.HeroParamCount)
+                );
             }
 
-            int count = this.PluginHost.GameActors.Count;
+            return BuildMemberCountTable(
+                this.PluginHost.GameActors.Select(
+                    x =>
+                        new ValueTuple<int, int>(
+                            x.ActorNr,
+                            x.Properties.GetInt(ActorPropertyKeys.HeroParamCount)
+                        )
+                )
+            );
+        }
 
-            if (count < 4 && actorNr == 1)
+        public static Dictionary<int, int> BuildMemberCountTable(
+            IEnumerable<(int ActorNr, int HeroParamCount)> actorData
+        )
+        {
+            Dictionary<int, int> result = actorData.ToDictionary(x => x.ActorNr, x => 1);
+
+            if (result.Count == 4)
+                return result;
+
+            // Add first AI units
+            foreach ((int actorNr, int heroParamCount) in actorData)
             {
-                return 2;
+                if (result.Sum(x => x.Value) >= 4)
+                    break;
+
+                result[actorNr] = Math.Min(result[actorNr] + 1, heroParamCount);
             }
 
-            if (count < 3 && actorNr == 2)
+            // Add second AI units
+            foreach ((int actorNr, int heroParamCount) in actorData)
             {
-                return 2;
+                if (result.Sum(x => x.Value) >= 4)
+                    break;
+
+                result[actorNr] = Math.Min(result[actorNr] + 1, heroParamCount);
             }
 
-            return 1;
+            return result;
         }
 
         /// <summary>
