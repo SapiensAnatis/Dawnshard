@@ -51988,5 +51988,54 @@
         "_Gift": [],
         "_Consumable": [],
         "_Resource": []
+    },
+    {
+        "_QuestId": 100260108,
+        "_Material": [
+            118001001,
+            119001001
+        ],
+        "_Wyrmprint": [],
+        "_Gift": [],
+        "_Consumable": [],
+        "_Resource": []
+    },
+    {
+        "_QuestId": 100260208,
+        "_Material": [
+            118001001,
+            119001001
+        ],
+        "_Wyrmprint": [],
+        "_Gift": [],
+        "_Consumable": [],
+        "_Resource": []
+    },
+    {
+        "_QuestId": 100260308,
+        "_Material": [
+            118001001,
+            119001001
+        ],
+        "_Wyrmprint": [],
+        "_Gift": [],
+        "_Consumable": [],
+        "_Resource": []
+    },
+    {
+        "_QuestId": 301020103,
+        "_Material": [
+            201014001,
+            201014002,
+            202003001,
+            202003002,
+            204006001,
+            204019001,
+            204019002
+        ],
+        "_Wyrmprint": [],
+        "_Gift": [],
+        "_Consumable": [],
+        "_Resource": []
     }
 ]
