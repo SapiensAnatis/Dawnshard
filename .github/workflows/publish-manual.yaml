@@ -3,10 +3,23 @@ name: publish-tag-manual
 on:
   workflow_dispatch:
     inputs:
-      tag:
-        type: string
+      ref:
         required: true
-        description: "Tag to publish"
+        type: string
+        description: ref to checkout
+      dockerfile:
+        required: true
+        type: string
+        description: path to Dockerfile
+      image-name:
+        required: true
+        type: string
+        description: Docker image name
+      image-tag:
+        required: false
+        default: "undefined"
+        type: string
+        description: Docker image tag
 
 env:
   HUSKY: 0
@@ -16,5 +29,7 @@ jobs:
     uses: ./.github/workflows/publish.yaml
     with:
       ref: ${{ inputs.tag }}
+      dockerfile: ${{ inputs.dockerfile }}
+      image-name: ${{ inputs.image-name }}
       image-tag: ${{ inputs.tag }}
     secrets: inherit
