@@ -69,5 +69,6 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Build and push
         run: |
+          echo "Building ${{ inputs.dockerfile }} into image ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.derive-tag.tag }}"
           docker build . --file ${{ inputs.dockerfile }} --tag ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.derive-tag.tag }}
           docker push ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.derive-tag.tag }}
