@@ -28,8 +28,8 @@ jobs:
   publish:
     uses: ./.github/workflows/publish.yaml
     with:
-      ref: ${{ inputs.tag }}
+      ref: ${{ inputs.ref }}
       dockerfile: ${{ inputs.dockerfile }}
       image-name: ${{ inputs.image-name }}
-      image-tag: ${{ inputs.tag }}
+      image-tag: ${{ inputs.image-tag }}
     secrets: inherit
