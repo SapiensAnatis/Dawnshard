@@ -15,7 +15,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    environment:
+      name: Production
+      url: https://dawnshard.co.uk
     steps:
       - name: ssh and restart pods
         uses: appleboy/ssh-action@v0.1.6
