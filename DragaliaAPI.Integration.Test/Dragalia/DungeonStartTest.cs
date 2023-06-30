@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.DungeonStartController"/>.
+/// Tests <see cref="DragaliaAPI.Features.Dungeon.DungeonStartController"/>.
 /// </summary>
 public class DungeonStartTest : TestFixture
 {

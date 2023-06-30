@@ -19,8 +19,6 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
         ITestOutputHelper outputHelper
     )
     {
-        this.Factory = factory;
-
         this.Client = factory
             .WithWebHostBuilder(
                 (builder) =>
@@ -47,8 +45,6 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
     protected Mock<IPhotonStateApi> MockPhotonStateApi { get; }
 
     protected IServiceProvider Services { get; }
-
-    private CustomWebApplicationFactory<Program> Factory { get; }
 
     /// <summary>
     /// The device account ID which links to the seeded savefiles <see cref="SeedDatabase"/>
