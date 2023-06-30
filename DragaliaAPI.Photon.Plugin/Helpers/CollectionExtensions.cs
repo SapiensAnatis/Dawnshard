@@ -106,6 +106,19 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
             }
         }
 
+        public static int GetInt(this PropertyBag<object> properties, string key)
+        {
+            if (!properties.TryGetInt(key, out int value))
+            {
+                throw new ArgumentException(
+                    $"PropertyBag did not contain required integer value for key {key}",
+                    nameof(key)
+                );
+            }
+
+            return value;
+        }
+
         public static bool TryGetBool(
             this PropertyBag<object> properties,
             string key,

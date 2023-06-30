@@ -3,7 +3,7 @@ name: publish-tag
 on:
   push:
     tags:
-      - "*"
+      - "api@*"
 
 env:
   HUSKY: 0
@@ -13,5 +13,6 @@ jobs:
     uses: ./.github/workflows/publish.yaml
     with:
       ref: ${{ github.ref_name }}
-      image-tag: ${{ github.ref_name }}
+      dockerfile: "DragaliaAPI/Dockerfile"
+      image-name: "dragalia-api"
     secrets: inherit
