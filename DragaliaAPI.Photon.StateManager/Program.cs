@@ -10,6 +10,8 @@ using StackExchange.Redis;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+
 builder.Services.AddControllers();
 
 builder.Host.UseSerilog(
@@ -64,6 +66,8 @@ builder.Services.AddSwaggerGen(config =>
     );
 });
 
+Log.Logger.Information("App environment {@env}", builder.Environment);
+
 // Don't attempt to connect to Redis when running tests
 if (builder.Environment.EnvironmentName != "Testing")
 {
@@ -75,7 +79,10 @@ if (builder.Environment.EnvironmentName != "Testing")
     IRedisConnectionProvider provider = new RedisConnectionProvider(multiplexer);
     builder.Services.AddSingleton(provider);
 
-    await provider.Connection.CreateIndexAsync(typeof(RedisGame));
+    bool created = await provider.Connection.CreateIndexAsync(typeof(RedisGame));
+    RedisIndexInfo? info = await provider.Connection.GetIndexInfoAsync(typeof(RedisGame));
+    Log.Logger.Information("Index created: {created}", created);
+    Log.Logger.Information("Index info: {@info}", info);
 }
 
 WebApplication app = builder.Build();
