@@ -71,14 +71,9 @@ public record CharaLimitBreak(
     int GrowMaterialNum5
 )
 {
-    public (
-        (Materials Id, int Quantity)[] Orbs,
-        int UniqueGrowMaterial1,
-        int UniqueGrowMaterial2,
-        int GrowMaterial
-    )[] NeededMaterials =
+    public readonly CharaLimitBreakRequirements[] NeededMaterials =
     {
-        (
+        new(
             new[]
             {
                 (OrbData1Id1, OrbData1Num1),
@@ -91,7 +86,7 @@ public record CharaLimitBreak(
             UniqueGrowMaterial2Num1,
             GrowMaterialNum1
         ),
-        (
+        new(
             new[]
             {
                 (OrbData1Id2, OrbData1Num2),
@@ -104,7 +99,7 @@ public record CharaLimitBreak(
             UniqueGrowMaterial2Num2,
             GrowMaterialNum2
         ),
-        (
+        new(
             new[]
             {
                 (OrbData1Id3, OrbData1Num3),
@@ -117,7 +112,7 @@ public record CharaLimitBreak(
             UniqueGrowMaterial2Num3,
             GrowMaterialNum3
         ),
-        (
+        new(
             new[]
             {
                 (OrbData1Id4, OrbData1Num4),
@@ -130,7 +125,7 @@ public record CharaLimitBreak(
             UniqueGrowMaterial2Num4,
             GrowMaterialNum4
         ),
-        (
+        new(
             new[]
             {
                 (OrbData1Id5, OrbData1Num5),
@@ -144,4 +139,11 @@ public record CharaLimitBreak(
             GrowMaterialNum5
         ),
     };
-};
+}
+
+public record CharaLimitBreakRequirements(
+    (Materials Id, int Quantity)[] Orbs,
+    int UniqueGrowMaterial1,
+    int UniqueGrowMaterial2,
+    int GrowMaterial
+);

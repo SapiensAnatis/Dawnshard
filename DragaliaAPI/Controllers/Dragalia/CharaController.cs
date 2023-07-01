@@ -444,7 +444,7 @@ public class CharaController : DragaliaControllerBase
         }
 
         await CharaManaNodeUnlock(
-            maxManaNodes.Where(x => !previouslyUnlockedPieces.Contains(x)),
+            maxManaNodes.Except(previouslyUnlockedPieces),
             playerCharaData,
             CharaUpgradeMaterialTypes.Omnicite
         );
@@ -526,19 +526,11 @@ public class CharaController : DragaliaControllerBase
             .OrderBy(x => x.MC_0)
             .ToImmutableList();
 
-        List<int>[] hpNodesOnFloor = new List<int>[] { new(), new(), new(), new(), new(), new() };
-        List<int>[] atkNodesOnFloor = new List<int>[] { new(), new(), new(), new(), new(), new() };
-        List<int>[] hpAtkNodesOnFloor = new List<int>[]
-        {
-            new(),
-            new(),
-            new(),
-            new(),
-            new(),
-            new()
-        };
+        List<int>[] hpNodesOnFloor = { new(), new(), new(), new(), new(), new() };
+        List<int>[] atkNodesOnFloor = { new(), new(), new(), new(), new(), new() };
+        List<int>[] hpAtkNodesOnFloor = { new(), new(), new(), new(), new(), new() };
 
-        List<int> unlockedStories = new List<int>();
+        List<int> unlockedStories = new();
 
         int[] stepLookup = new int[70];
         Dictionary<ManaNodeTypes, int> typeSteps = Enum.GetValues<ManaNodeTypes>()
@@ -578,7 +570,7 @@ public class CharaController : DragaliaControllerBase
             }
         }
 
-        int[] hpPerCircleTotals = new int[]
+        int[] hpPerCircleTotals =
         {
             charaData.PlusHp0,
             charaData.PlusHp1,
@@ -587,7 +579,7 @@ public class CharaController : DragaliaControllerBase
             charaData.PlusHp4,
             charaData.PlusHp5
         };
-        int[] atkPerCircleTotals = new int[]
+        int[] atkPerCircleTotals =
         {
             charaData.PlusAtk0,
             charaData.PlusAtk1,
