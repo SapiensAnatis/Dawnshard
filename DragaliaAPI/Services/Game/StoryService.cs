@@ -3,10 +3,11 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services.Game;
@@ -16,11 +17,11 @@ public class StoryService : IStoryService
     private readonly IStoryRepository storyRepository;
     private readonly IUserDataRepository userDataRepository;
     private readonly IInventoryRepository inventoryRepository;
-    private readonly IUnitRepository unitRepository;
     private readonly ILogger<StoryService> logger;
     private readonly ITutorialService tutorialService;
     private readonly IFortRepository fortRepository;
     private readonly IMissionProgressionService missionProgressionService;
+    private readonly IRewardService rewardService;
 
     private const int DragonStoryWyrmite = 25;
     private const int CastleStoryWyrmite = 50;
@@ -28,58 +29,25 @@ public class StoryService : IStoryService
     private const int CharaStoryWyrmite2 = 10;
     private const int QuestStoryWyrmite = 25;
 
-    private static readonly ImmutableDictionary<int, Charas> QuestStoryCharaRewards =
-        new Dictionary<int, Charas>()
-        {
-            { 1000103, Charas.Elisanne },
-            { 1000106, Charas.Ranzal },
-            { 1000111, Charas.Cleo },
-            { 1000202, Charas.Luca },
-            { 1000808, Charas.Alex },
-            { 1001108, Charas.Laxi },
-            { 1001410, Charas.Zena },
-            { 1001610, Charas.Chelle },
-        }.ToImmutableDictionary();
-
-    private static readonly ImmutableDictionary<int, Dragons> QuestStoryDragonRewards =
-        new Dictionary<int, Dragons>()
-        {
-            { 1000109, Dragons.Midgardsormr },
-            { 1000210, Dragons.Mercury },
-            { 1000311, Dragons.Brunhilda },
-            { 1000412, Dragons.Jupiter },
-            { 1000509, Dragons.Zodiark },
-        }.ToImmutableDictionary();
-
-    internal static readonly ImmutableDictionary<int, FortPlants> QuestStoryFortPlantRewards =
-        new Dictionary<int, FortPlants>()
-        {
-            { 1000607, FortPlants.WindDracolith },
-            { 1000709, FortPlants.WaterDracolith },
-            { 1000808, FortPlants.FlameDracolith },
-            { 1000909, FortPlants.LightDracolith },
-            { 1001009, FortPlants.ShadowDracolith },
-        }.ToImmutableDictionary();
-
     public StoryService(
         IStoryRepository storyRepository,
         ILogger<StoryService> logger,
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
-        IUnitRepository unitRepository,
         ITutorialService tutorialService,
         IFortRepository fortRepository,
-        IMissionProgressionService missionProgressionService
+        IMissionProgressionService missionProgressionService,
+        IRewardService rewardService
     )
     {
         this.storyRepository = storyRepository;
         this.logger = logger;
         this.userDataRepository = userDataRepository;
         this.inventoryRepository = inventoryRepository;
-        this.unitRepository = unitRepository;
         this.tutorialService = tutorialService;
         this.fortRepository = fortRepository;
         this.missionProgressionService = missionProgressionService;
+        this.rewardService = rewardService;
     }
 
     #region Eligibility check methods
@@ -99,6 +67,7 @@ public class StoryService : IStoryService
             StoryTypes.Chara or StoryTypes.Dragon => await this.CheckUnitStoryEligibility(storyId),
             StoryTypes.Castle => await this.CheckCastleStoryEligibility(storyId),
             StoryTypes.Quest => true,
+            StoryTypes.Event => true,
             _ => throw new NotImplementedException($"Stories of type {type} are not implemented")
         };
     }
@@ -171,6 +140,7 @@ public class StoryService : IStoryService
             StoryTypes.Chara or StoryTypes.Dragon => await ReadUnitStory(storyId),
             StoryTypes.Castle => await ReadCastleStory(storyId),
             StoryTypes.Quest => await ReadQuestStory(storyId),
+            StoryTypes.Event => await ReadEventStory(storyId),
             _ => throw new NotImplementedException($"Stories of type {type} are not implemented")
         };
 
@@ -223,6 +193,13 @@ public class StoryService : IStoryService
 
     private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadQuestStory(int storyId)
     {
+        QuestStory story = MasterAsset.QuestStory[storyId];
+        if (story.PayEntityTargetType != PayTargetType.None)
+        {
+            // TODO(Events): Implement when mana circle pr gets merged
+            throw new NotImplementedException("luke you forgot to implement quest story payments");
+        }
+
         await this.tutorialService.OnStoryQuestRead(storyId);
         this.missionProgressionService.OnQuestCleared(storyId);
 
@@ -233,46 +210,61 @@ public class StoryService : IStoryService
                 new() { entity_type = EntityTypes.Wyrmite, entity_quantity = QuestStoryWyrmite }
             };
 
-        if (QuestStoryCharaRewards.TryGetValue(storyId, out Charas chara))
+        if (
+            MasterAsset.QuestStoryRewardInfo.TryGetValue(
+                storyId,
+                out QuestStoryRewardInfo? rewardInfo
+            )
+        )
         {
-            await this.unitRepository.AddCharas(chara);
-            rewardList.Add(
-                new()
-                {
-                    entity_id = (int)chara,
-                    entity_type = EntityTypes.Chara,
-                    entity_quantity = 1,
-                }
-            );
-        }
+            foreach (QuestStoryReward reward in rewardInfo.Rewards)
+            {
+                // We divert here as we care about quantity-restriction for story plants
+                if (reward.Type == EntityTypes.FortPlant)
+                    await this.fortRepository.AddToStorage(
+                        (FortPlants)reward.Id,
+                        null,
+                        reward.Quantity,
+                        true
+                    );
+                else
+                    await this.rewardService.GrantReward(
+                        new Entity(reward.Type, reward.Id, reward.Quantity)
+                    );
 
-        if (QuestStoryDragonRewards.TryGetValue(storyId, out Dragons dragon))
-        {
-            await this.unitRepository.AddDragons(dragon);
-            rewardList.Add(
-                new()
-                {
-                    entity_id = (int)dragon,
-                    entity_type = EntityTypes.Dragon,
-                    entity_quantity = 1,
-                }
-            );
-        }
-
-        if (QuestStoryFortPlantRewards.TryGetValue(storyId, out FortPlants fortPlant))
-        {
-            await this.fortRepository.AddToStorage(fortPlant, isTotalQuantity: true);
-            rewardList.Add(
-                new()
-                {
-                    entity_id = (int)fortPlant,
-                    entity_type = EntityTypes.FortPlant,
-                    entity_quantity = 1,
-                }
-            );
+                rewardList.Add(
+                    new()
+                    {
+                        entity_id = reward.Id,
+                        entity_type = reward.Type,
+                        entity_quantity = reward.Quantity,
+                    }
+                );
+            }
         }
 
         this.logger.LogInformation("Granted rewards for reading new story: {rewards}", rewardList);
+        return rewardList;
+    }
+
+    private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadEventStory(int storyId)
+    {
+        EventStory story = MasterAsset.EventStory[storyId];
+        if (story.PayEntityType != EntityTypes.None)
+        {
+            // TODO(Events): Implement when mana circle pr gets merged
+            throw new NotImplementedException("luke you forgot to implement event story payments");
+        }
+
+        await this.userDataRepository.GiveWyrmite(QuestStoryWyrmite);
+        List<AtgenBuildEventRewardEntityList> rewardList =
+            new()
+            {
+                new() { entity_type = EntityTypes.Wyrmite, entity_quantity = QuestStoryWyrmite }
+            };
+
+        // TODO(Events): ??? This is not used for compendium (maybe for collect events)
+
         return rewardList;
     }
 

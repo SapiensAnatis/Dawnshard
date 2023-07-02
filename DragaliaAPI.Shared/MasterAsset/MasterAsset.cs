@@ -3,6 +3,7 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Login;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
+using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
 
 namespace DragaliaAPI.Shared.MasterAsset;
@@ -73,20 +74,6 @@ public static class MasterAsset
     /// </summary>
     public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
         new("QuestDrops.json", x => x.QuestId);
-
-    /// <summary>
-    /// Dragon StoryId Arrays indexed by DragonId
-    /// </summary>
-    public static MasterAssetData<int, StoryData> DragonStories =>
-        new("DragonStories.json", x => x.id);
-
-    /// <summary>
-    /// Character StoryId Arrays indexed by CharaId
-    /// </summary>
-    public static MasterAssetData<int, StoryData> CharaStories =>
-        new("CharaStories.json", x => x.id);
-
-    public static MasterAssetData<int, UnitStory> UnitStory => new("UnitStory.json", x => x.Id);
 
     /// <summary>
     /// Contains information about the materials required to unbind ability crests.
@@ -213,4 +200,32 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, LoginBonusReward> LoginBonusReward =
         new("Login/LoginBonusReward.json", x => x.Id);
+
+    #region Story
+
+    /// <summary>
+    /// Dragon StoryId Arrays indexed by DragonId
+    /// </summary>
+    public static MasterAssetData<int, StoryData> DragonStories =>
+        new("Story/DragonStories.json", x => x.id);
+
+    /// <summary>
+    /// Character StoryId Arrays indexed by CharaId
+    /// </summary>
+    public static MasterAssetData<int, StoryData> CharaStories =>
+        new("Story/CharaStories.json", x => x.id);
+
+    public static MasterAssetData<int, UnitStory> UnitStory =>
+        new("Story/UnitStory.json", x => x.Id);
+
+    public static MasterAssetData<int, QuestStory> QuestStory =>
+        new("Story/QuestStory.json", x => x.Id);
+
+    public static MasterAssetData<int, EventStory> EventStory =>
+        new("Story/EventStory.json", x => x.Id);
+
+    public static MasterAssetData<int, QuestStoryRewardInfo> QuestStoryRewardInfo =>
+        new("Story/QuestStoryRewardInfo.json", x => x.Id);
+
+    #endregion
 }
