@@ -109,7 +109,7 @@ public class FortRepository : IFortRepository
 
         foreach (FortPlants plant in plants)
         {
-            await AddToStorage(plant, quantity: 2, checkQuantity: true);
+            await AddToStorage(plant, quantity: 2, isTotalQuantity: true);
         }
     }
 
@@ -201,10 +201,10 @@ public class FortRepository : IFortRepository
         FortPlants plant,
         int? level = null,
         int quantity = 1,
-        bool checkQuantity = false
+        bool isTotalQuantity = false
     )
     {
-        int startQuantity = checkQuantity
+        int startQuantity = isTotalQuantity
             ? await apiContext.PlayerFortBuilds.Where(x => x.PlantId == plant).CountAsync()
             : quantity;
 

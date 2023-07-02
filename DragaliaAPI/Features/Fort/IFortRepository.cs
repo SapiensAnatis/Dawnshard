@@ -20,7 +20,7 @@ public interface IFortRepository
         FortPlants plant,
         int? level = null,
         int quantity = 1,
-        bool checkQuantity = false
+        bool isTotalQuantity = false
     );
     void DeleteBuild(DbFortBuild build);
     Task<int> GetActiveCarpenters();

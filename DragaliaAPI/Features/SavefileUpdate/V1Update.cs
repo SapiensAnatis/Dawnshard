@@ -55,7 +55,7 @@ public class V1Update : ISavefileUpdate
                 }
 
                 this.logger.LogDebug("Adding facility {plant}", plantId);
-                await this.fortRepository.AddToStorage(plantId, checkQuantity: true);
+                await this.fortRepository.AddToStorage(plantId, isTotalQuantity: true);
             }
         }
 
