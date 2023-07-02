@@ -226,6 +226,15 @@ public class StoryServiceTest
             .Returns(Task.CompletedTask);
         this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(1000311));
 
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        new Entity(EntityTypes.Dragon, (int)Dragons.Brunhilda, 1, null, null, null)
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
+
         (await this.storyService.ReadStory(StoryTypes.Quest, 1000311))
             .Should()
             .BeEquivalentTo(
@@ -242,6 +251,7 @@ public class StoryServiceTest
             );
 
         this.mockUserDataRepository.VerifyAll();
+        this.mockRewardService.VerifyAll();
         this.mockStoryRepository.VerifyAll();
     }
 
