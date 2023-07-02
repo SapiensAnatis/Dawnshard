@@ -206,7 +206,7 @@ public class FortRepository : IFortRepository
     {
         int startQuantity = isTotalQuantity
             ? await apiContext.PlayerFortBuilds.Where(x => x.PlantId == plant).CountAsync()
-            : quantity;
+            : 0;
 
         if (startQuantity >= quantity)
             return;
