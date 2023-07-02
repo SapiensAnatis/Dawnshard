@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 
-namespace DragaliaAPI.Database.Repositories;
+namespace DragaliaAPI.Features.Fort;
 
 public interface IFortRepository
 {
@@ -16,7 +16,12 @@ public interface IFortRepository
     Task UpdateFortMaximumCarpenter(int carpenterNum);
     Task<DbFortBuild> GetBuilding(long buildId);
     Task AddBuild(DbFortBuild build);
-    Task AddToStorage(FortPlants plant, int level);
+    Task AddToStorage(
+        FortPlants plant,
+        int? level = null,
+        int quantity = 1,
+        bool checkQuantity = false
+    );
     void DeleteBuild(DbFortBuild build);
     Task<int> GetActiveCarpenters();
 }

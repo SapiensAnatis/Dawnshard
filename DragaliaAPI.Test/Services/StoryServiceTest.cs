@@ -1,5 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -348,7 +349,7 @@ public class StoryServiceTest
             .Returns(Task.CompletedTask);
 
         this.mockFortRepository
-            .Setup(x => x.AddToStorage(FortPlants.WindDracolith, 1))
+            .Setup(x => x.AddToStorage(FortPlants.WindDracolith, null, 1, true))
             .Returns(Task.CompletedTask);
 
         (await this.storyService.ReadStory(StoryTypes.Quest, 1000607))

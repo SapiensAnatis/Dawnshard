@@ -537,7 +537,7 @@ public enum UpgradeEnhanceTypes
 
 public static class UpgradeMaterials
 {
-    public readonly static Dictionary<Materials, int> buildupXpValues = new Dictionary<
+    public static readonly Dictionary<Materials, int> buildupXpValues = new Dictionary<
         Materials,
         int
     >()
@@ -550,14 +550,14 @@ public static class UpgradeMaterials
         { Materials.SucculentDragonfruit, 3500 }
     };
 
-    public readonly static Dictionary<int, int> dragonBuildupXp = new Dictionary<int, int>()
+    public static readonly Dictionary<int, int> dragonBuildupXp = new Dictionary<int, int>()
     {
         { 3, 50 },
         { 4, 1000 },
         { 5, 1500 },
     };
 
-    public readonly static Dictionary<UnitElement, Materials> t1Orbs = new Dictionary<
+    public static readonly Dictionary<UnitElement, Materials> t1Orbs = new Dictionary<
         UnitElement,
         Materials
     >()
@@ -569,7 +569,7 @@ public static class UpgradeMaterials
         { UnitElement.Dark, Materials.ShadowOrb }
     };
 
-    public readonly static Dictionary<UnitElement, Materials> t2Orbs = new Dictionary<
+    public static readonly Dictionary<UnitElement, Materials> t2Orbs = new Dictionary<
         UnitElement,
         Materials
     >()
@@ -581,7 +581,7 @@ public static class UpgradeMaterials
         { UnitElement.Dark, Materials.NightfallOrb }
     };
 
-    public readonly static Dictionary<UnitElement, Materials> t3Orbs = new Dictionary<
+    public static readonly Dictionary<UnitElement, Materials> t3Orbs = new Dictionary<
         UnitElement,
         Materials
     >()
@@ -593,7 +593,7 @@ public static class UpgradeMaterials
         { UnitElement.Dark, Materials.NetherOrb }
     };
 
-    public readonly static Dictionary<UnitElement, Materials> t4Orbs = new Dictionary<
+    public static readonly Dictionary<UnitElement, Materials> t4Orbs = new Dictionary<
         UnitElement,
         Materials
     >()
@@ -605,7 +605,7 @@ public static class UpgradeMaterials
         { UnitElement.Dark, Materials.AbaddonOrb }
     };
 
-    public readonly static Dictionary<UnitElement, Materials> tomes = new Dictionary<
+    public static readonly Dictionary<UnitElement, Materials> tomes = new Dictionary<
         UnitElement,
         Materials
     >()

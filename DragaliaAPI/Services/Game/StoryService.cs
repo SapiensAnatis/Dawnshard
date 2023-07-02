@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -260,8 +261,7 @@ public class StoryService : IStoryService
 
         if (QuestStoryFortPlantRewards.TryGetValue(storyId, out FortPlants fortPlant))
         {
-            // TODO: Maybe move AddToStorage to FortService and make it no longer take a level?
-            await this.fortRepository.AddToStorage(fortPlant, 1);
+            await this.fortRepository.AddToStorage(fortPlant, checkQuantity: true);
             rewardList.Add(
                 new()
                 {
