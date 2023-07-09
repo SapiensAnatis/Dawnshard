@@ -61,19 +61,18 @@ public class DungeonStartService : IDungeonStartService
     {
         IQueryable<DbPartyUnit> partyQuery = this.partyRepository.GetPartyUnits(partyNoList);
 
-        IEnumerable<DbPartyUnit> party = await partyQuery.ToListAsync();
-
-        IngameData result = await this.InitializeIngameData(
-            questId,
-            party.Select(mapper.Map<PartySettingList>),
-            supportViewerId
+        IEnumerable<PartySettingList> party = this.ProcessUnitList(
+            await partyQuery.ToListAsync(),
+            partyNoList.First()
         );
 
-        IEnumerable<DbDetailedPartyUnit> detailedPartyUnits = await this.dungeonRepository
+        IngameData result = await this.InitializeIngameData(questId, party, supportViewerId);
+
+        List<DbDetailedPartyUnit> detailedPartyUnits = await this.dungeonRepository
             .BuildDetailedPartyUnit(partyQuery, partyNoList.First())
             .ToListAsync();
 
-        result.party_info.party_unit_list = await this.ProcessParty(detailedPartyUnits);
+        result.party_info.party_unit_list = await this.ProcessDetailedUnitList(detailedPartyUnits);
 
         return result;
     }
@@ -95,14 +94,14 @@ public class DungeonStartService : IDungeonStartService
         )
         {
             detailedPartyUnits.Add(
-                await detailQuery.FirstOrDefaultAsync()
+                await detailQuery.SingleOrDefaultAsync()
                     ?? throw new InvalidOperationException(
                         "Detailed party query returned no results"
                     )
             );
         }
 
-        result.party_info.party_unit_list = await this.ProcessParty(detailedPartyUnits);
+        result.party_info.party_unit_list = await this.ProcessDetailedUnitList(detailedPartyUnits);
 
         return result;
     }
@@ -151,8 +150,8 @@ public class DungeonStartService : IDungeonStartService
         return new();
     }
 
-    private async Task<IEnumerable<PartyUnitList>> ProcessParty(
-        IEnumerable<DbDetailedPartyUnit> detailedPartyUnits
+    private async Task<IEnumerable<PartyUnitList>> ProcessDetailedUnitList(
+        List<DbDetailedPartyUnit> detailedPartyUnits
     )
     {
         // Post-processing: filter out null crests and load weapon passive data
@@ -170,13 +169,27 @@ public class DungeonStartService : IDungeonStartService
 
             if (detailedUnit.WeaponBodyData is not null)
             {
-                detailedUnit.GameWeaponPassiveAbilityList = await weaponRepository
+                detailedUnit.GameWeaponPassiveAbilityList = await this.weaponRepository
                     .GetPassiveAbilities(detailedUnit.WeaponBodyData.WeaponBodyId)
                     .ToListAsync();
             }
         }
 
         return detailedPartyUnits.OrderBy(x => x.Position).Select(this.mapper.Map<PartyUnitList>);
+    }
+
+    private IEnumerable<PartySettingList> ProcessUnitList(
+        List<DbPartyUnit> partyUnits,
+        int firstPartyNo
+    )
+    {
+        foreach (DbPartyUnit unit in partyUnits)
+        {
+            if (unit.PartyNo != firstPartyNo)
+                unit.UnitNo += 4;
+        }
+
+        return partyUnits.Select(this.mapper.Map<PartySettingList>).OrderBy(x => x.unit_no);
     }
 
     private async Task<IngameData> InitializeIngameData(
