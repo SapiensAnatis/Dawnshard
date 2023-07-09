@@ -400,11 +400,7 @@ public class FortService : IFortService
 
     public async Task<DbFortBuild> BuildStart(FortPlants fortPlantId, int positionX, int positionZ)
     {
-        // Get build plans
-        FortPlantDetail plantDetail = MasterAsset.FortPlant.Enumerable
-            .Where(x => x.AssetGroup == fortPlantId)
-            .OrderBy(x => x.Level)
-            .First();
+        FortPlantDetail plantDetail = MasterAssetUtils.GetInitialFortPlant(fortPlantId);
 
         await Upgrade(plantDetail);
 

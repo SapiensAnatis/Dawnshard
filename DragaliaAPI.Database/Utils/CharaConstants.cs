@@ -48,8 +48,8 @@ public static class CharaConstants
     public const byte MaxAtkEnhance = 100;
     public const byte MaxHpEnhance = 100;
 
-    public readonly static int[] skillMights = new int[] { 0, 100, 200, 300, 400 };
-    public readonly static int[] fsMights = new int[] { 0, 60, 120 };
+    public static readonly int[] skillMights = new int[] { 0, 100, 200, 300, 400 };
+    public static readonly int[] fsMights = new int[] { 0, 60, 120 };
 
     public const int AugmentResetCost = 20000;
 
