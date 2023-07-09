@@ -10,4 +10,6 @@ public interface IPaymentService
         PaymentTarget? payment = null,
         int? expectedPrice = null
     );
+
+    Task ProcessMaterialPayment(Materials id, int quantity);
 }

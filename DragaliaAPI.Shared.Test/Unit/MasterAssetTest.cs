@@ -3,6 +3,7 @@ using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
 namespace DragaliaAPI.Shared.Test.Unit;
 
@@ -53,6 +54,18 @@ public class MasterAssetTest
                     EditSkillLevelNum: 1,
                     EditSkillCost: 5,
                     ManaCircleName: "MC_0511",
+                    CharaLimitBreak: 1050201,
+                    PieceElementGroupId: 502,
+                    PieceMaterialElementId: 5091,
+                    AwakeNeedEntityType4: EntityTypes.Dew,
+                    AwakeNeedEntityId4: 0,
+                    AwakeNeedEntityQuantity4: 2500,
+                    AwakeNeedEntityType5: EntityTypes.Dew,
+                    AwakeNeedEntityId5: 0,
+                    AwakeNeedEntityQuantity5: 25000,
+                    UniqueGrowMaterialId1: Materials.GalaLaxisConviction,
+                    UniqueGrowMaterialId2: Materials.GalaLaxisDevotion,
+                    GrowMaterialId: Materials.Empty,
                     DefaultAbility1Level: 1,
                     DefaultAbility2Level: 0,
                     DefaultAbility3Level: 0,
@@ -89,6 +102,7 @@ public class MasterAssetTest
                     NecessaryManaPoint: 400,
                     UniqueGrowMaterialCount1: 0,
                     UniqueGrowMaterialCount2: 0,
+                    GrowMaterialCount: 1,
                     MC_0: 4032,
                     ManaCircleName: "MC_0403"
                 )
@@ -195,6 +209,7 @@ public class MasterAssetTest
                     NecessaryManaPoint: 450,
                     UniqueGrowMaterialCount1: 0,
                     UniqueGrowMaterialCount2: 0,
+                    GrowMaterialCount: 1,
                     MC_0: 5045,
                     ManaCircleName: "MC_0504"
                 )

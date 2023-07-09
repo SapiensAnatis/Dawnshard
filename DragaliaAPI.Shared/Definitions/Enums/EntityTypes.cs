@@ -1,4 +1,6 @@
-﻿namespace DragaliaAPI.Shared.Definitions.Enums;
+﻿using System.Diagnostics;
+
+namespace DragaliaAPI.Shared.Definitions.Enums;
 
 /// <summary>
 /// Default Entity_Id is 0
@@ -49,6 +51,21 @@ public enum EntityTypes
     Talisman,
     DmodePoint,
     DmodeDungeonItem
+}
+
+public static class EntityTypesExtensions
+{
+    public static PaymentTypes ToPaymentType(this EntityTypes entityTypes)
+    {
+        return entityTypes switch
+        {
+            EntityTypes.Rupies => PaymentTypes.Coin,
+            EntityTypes.Dew => PaymentTypes.DewPoint,
+            EntityTypes.Mana => PaymentTypes.ManaPoint,
+            EntityTypes.Wyrmite => PaymentTypes.Wyrmite,
+            _ => throw new UnreachableException("Invalid EntityType for PaymentType conversion")
+        };
+    }
 }
 
 public enum CurrencyTypes
