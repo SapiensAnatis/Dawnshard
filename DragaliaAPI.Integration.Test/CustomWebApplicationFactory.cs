@@ -145,6 +145,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Coin = 100_000_000;
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.DewPoint = 100_000_000;
+        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.ManaPoint = 100_000_000;
         apiContext.SaveChanges();
     }
 }

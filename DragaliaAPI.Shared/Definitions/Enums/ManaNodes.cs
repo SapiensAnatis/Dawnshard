@@ -44,20 +44,10 @@ public static class ManaNodesUtil
             return ManaNodes.Clear;
 
         int max = enumerable.Max();
-        int finalDigit = max % 10 == 0 ? 10 : max % 10;
-        int ten = (max - finalDigit) / 10;
         ManaNodes flag = baseNodes;
-        ManaNodes[] allNodes = Enum.GetValues<ManaNodes>();
 
-        for (int i = 1; !(i > finalDigit); i++)
-        {
-            if (enumerable.Contains((ten * 10) + i))
-            {
-                flag |= allNodes[i];
-            }
-        }
         //These flags are usually set by limitbreaking but not for circle 6 and 7, so I manually do
-        if (max > 50 && max < 71)
+        if (max is > 50 and < 71)
         {
             flag = (ManaNodes)
                 Math.Min(
@@ -65,21 +55,38 @@ public static class ManaNodesUtil
                     (ushort)ManaNodes.Circle7
                 );
         }
+
+        ManaNodes[] allNodes = Enum.GetValues<ManaNodes>();
+
+        int minNode = 10 * ((int)(flag & ManaNodes.Circle7) >> 10);
+
+        for (int i = minNode + 1; i <= max; ++i)
+        {
+            if (enumerable.Contains(i))
+            {
+                int id = (i - minNode) % 10;
+                flag |= allNodes[id == 0 ? 10 : id];
+            }
+        }
+
         return flag;
     }
 
     public static SortedSet<int> GetSetFromManaNodes(ManaNodes flag)
     {
-        SortedSet<int> nodes = new SortedSet<int>();
+        SortedSet<int> nodes = new();
         if (flag == ManaNodes.Clear)
             return nodes;
+
         ManaNodes circle = flag & ManaNodes.Circle7;
         int circleNr = ((int)circle >> 10) * 10;
         ManaNodes nodeNr = flag & ~ManaNodes.Circle7;
+
         for (int i = 1; !(i > circleNr); i++)
         {
             nodes.Add(i);
         }
+
         if (circle < ManaNodes.Circle7)
         {
             ManaNodes[] allNodes = Enum.GetValues<ManaNodes>();
@@ -89,6 +96,7 @@ public static class ManaNodesUtil
                     nodes.Add(circleNr + i);
             }
         }
+
         return nodes;
     }
 }
