@@ -199,9 +199,9 @@ public class FortRepository : IFortRepository
 
     public async Task AddToStorage(
         FortPlants plant,
-        int? level = null,
         int quantity = 1,
-        bool isTotalQuantity = false
+        bool isTotalQuantity = false,
+        int? level = null
     )
     {
         int startQuantity = isTotalQuantity

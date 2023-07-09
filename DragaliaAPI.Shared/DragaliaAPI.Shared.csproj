@@ -45,7 +45,10 @@
 		<None Update="Resources\Story\QuestStory.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="Resources\Story\QuestStoryRewardInfo.json">
+    <None Update="Resources\Story\QuestStoryRewardInfo.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\ManaCircle\MC.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\Trade\AbilityCrestTrade.json">
@@ -63,7 +66,13 @@
 		<None Update="Resources\Story\DragonStories.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="Resources\MC.json">
+		<None Update="Resources\ManaCircle\CharaLimitBreak.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\ManaCircle\ManaPieceMaterial.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\ManaCircle\ManaPieceType.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\Missions\MainStoryMissionGroupRewards.json">

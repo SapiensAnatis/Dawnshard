@@ -1,6 +1,7 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Login;
+using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
@@ -24,11 +25,6 @@ public static class MasterAsset
     /// </summary>
     public static readonly MasterAssetData<Dragons, DragonData> DragonData =
         new("DragonData.json", x => x.Id);
-
-    /// <summary>
-    /// Contains information about mana circle nodes.
-    /// </summary>
-    public static readonly MasterAssetData<int, ManaNode> ManaNode = new("MC.json", x => x.MC_0);
 
     /// <summary>
     /// Contains information about quests.
@@ -195,12 +191,32 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, UseItem> UseItem = new("UseItem.json", x => x.Id);
 
+    #region Login Bonus
+
     public static readonly MasterAssetData<int, LoginBonusData> LoginBonusData =
         new("Login/LoginBonusData.json", x => x.Id);
 
     public static readonly MasterAssetData<int, LoginBonusReward> LoginBonusReward =
         new("Login/LoginBonusReward.json", x => x.Id);
 
+    #region Mana Circles
+
+    /// <summary>
+    /// Contains information about mana circle nodes.
+    /// </summary>
+    public static readonly MasterAssetData<int, ManaNode> ManaNode =
+        new("ManaCircle/MC.json", x => x.MC_0);
+
+    public static readonly MasterAssetData<int, ManaPieceMaterial> ManaPieceMaterial =
+        new("ManaCircle/ManaPieceMaterial.json", x => x.Id);
+
+    public static readonly MasterAssetData<ManaNodeTypes, ManaPieceType> ManaPieceType =
+        new("ManaCircle/ManaPieceType.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, CharaLimitBreak> CharaLimitBreak =
+        new("ManaCircle/CharaLimitBreak.json", x => x.Id);
+
+    #endregion
     #region Story
 
     /// <summary>

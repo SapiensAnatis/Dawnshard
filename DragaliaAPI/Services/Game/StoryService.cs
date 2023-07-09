@@ -223,7 +223,6 @@ public class StoryService : IStoryService
                 if (reward.Type == EntityTypes.FortPlant)
                     await this.fortRepository.AddToStorage(
                         (FortPlants)reward.Id,
-                        null,
                         reward.Quantity,
                         true
                     );
