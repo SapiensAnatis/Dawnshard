@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -43,6 +44,18 @@ public record CharaData(
     int EditSkillLevelNum,
     int EditSkillCost,
     string ManaCircleName,
+    int CharaLimitBreak,
+    int PieceElementGroupId,
+    int PieceMaterialElementId,
+    EntityTypes AwakeNeedEntityType4,
+    int AwakeNeedEntityId4,
+    int AwakeNeedEntityQuantity4,
+    EntityTypes AwakeNeedEntityType5,
+    int AwakeNeedEntityId5,
+    int AwakeNeedEntityQuantity5,
+    Materials UniqueGrowMaterialId1,
+    Materials UniqueGrowMaterialId2,
+    Materials GrowMaterialId,
     int DefaultAbility1Level,
     int DefaultAbility2Level,
     int DefaultAbility3Level,

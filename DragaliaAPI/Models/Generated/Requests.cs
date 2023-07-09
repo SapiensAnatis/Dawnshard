@@ -454,12 +454,12 @@ public class CharaBuildupManaRequest
 {
     public Charas chara_id { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }
-    public int is_use_grow_material { get; set; }
+    public CharaUpgradeMaterialTypes is_use_grow_material { get; set; }
 
     public CharaBuildupManaRequest(
         Charas chara_id,
         IEnumerable<int> mana_circle_piece_id_list,
-        int is_use_grow_material
+        CharaUpgradeMaterialTypes is_use_grow_material
     )
     {
         this.chara_id = chara_id;
@@ -520,13 +520,13 @@ public class CharaLimitBreakAndBuildupManaRequest
     public Charas chara_id { get; set; }
     public int next_limit_break_count { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }
-    public int is_use_grow_material { get; set; }
+    public CharaUpgradeMaterialTypes is_use_grow_material { get; set; }
 
     public CharaLimitBreakAndBuildupManaRequest(
         Charas chara_id,
         int next_limit_break_count,
         IEnumerable<int> mana_circle_piece_id_list,
-        int is_use_grow_material
+        CharaUpgradeMaterialTypes is_use_grow_material
     )
     {
         this.chara_id = chara_id;

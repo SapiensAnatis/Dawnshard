@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Json;
 
-namespace DragaliaAPI.Shared.MasterAsset.Models;
+namespace DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 
 public record ManaNode(
     ManaNodeTypes ManaPieceType,
@@ -15,6 +9,7 @@ public record ManaNode(
     int NecessaryManaPoint,
     int UniqueGrowMaterialCount1,
     int UniqueGrowMaterialCount2,
+    int GrowMaterialCount,
     [property: JsonPropertyName("MC_0")] int MC_0,
     string ManaCircleName
 );

@@ -12,11 +12,17 @@ public class PaymentService : IPaymentService
 {
     private readonly ILogger<PaymentService> logger;
     private readonly IUserDataRepository userDataRepository;
+    private readonly IInventoryRepository inventoryRepository;
 
-    public PaymentService(ILogger<PaymentService> logger, IUserDataRepository userDataRepository)
+    public PaymentService(
+        ILogger<PaymentService> logger,
+        IUserDataRepository userDataRepository,
+        IInventoryRepository inventoryRepository
+    )
     {
         this.logger = logger;
         this.userDataRepository = userDataRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
     public async Task ProcessPayment(
@@ -133,5 +139,42 @@ public class PaymentService : IPaymentService
         }
 
         updater();
+    }
+
+    public async Task ProcessMaterialPayment(Materials id, int amount)
+    {
+        if (amount == 0)
+        {
+            return;
+        }
+
+        this.logger.LogDebug("Processing material payment {amount}x {material}", amount, id);
+
+        DbPlayerMaterial? material = await this.inventoryRepository.GetMaterial(id);
+
+        if (material == null)
+        {
+            this.logger.LogError("Player does not own any {material}.", id);
+            throw new DragaliaException(
+                ResultCode.CommonMaterialShort,
+                "Player does not own any material."
+            );
+        }
+
+        if (material.Quantity < amount)
+        {
+            this.logger.LogError(
+                "Held material quantity {quantity} does not meet required amount {amount}",
+                material.Quantity,
+                amount
+            );
+
+            throw new DragaliaException(
+                ResultCode.CommonMaterialShort,
+                "Insufficient material quantity for payment."
+            );
+        }
+
+        material.Quantity -= amount;
     }
 }
