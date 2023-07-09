@@ -349,7 +349,7 @@ public class StoryServiceTest
             .Returns(Task.CompletedTask);
 
         this.mockFortRepository
-            .Setup(x => x.AddToStorage(FortPlants.WindDracolith, null, 1, true))
+            .Setup(x => x.AddToStorage(FortPlants.WindDracolith, 1, true, null))
             .Returns(Task.CompletedTask);
 
         (await this.storyService.ReadStory(StoryTypes.Quest, 1000607))

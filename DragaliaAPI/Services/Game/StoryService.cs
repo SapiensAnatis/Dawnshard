@@ -261,7 +261,7 @@ public class StoryService : IStoryService
 
         if (QuestStoryFortPlantRewards.TryGetValue(storyId, out FortPlants fortPlant))
         {
-            await this.fortRepository.AddToStorage(fortPlant, isTotalQuantity: true);
+            await this.fortRepository.AddToStorage(fortPlant, quantity: 1, isTotalQuantity: true);
             rewardList.Add(
                 new()
                 {

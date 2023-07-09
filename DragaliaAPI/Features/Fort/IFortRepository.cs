@@ -18,9 +18,9 @@ public interface IFortRepository
     Task AddBuild(DbFortBuild build);
     Task AddToStorage(
         FortPlants plant,
-        int? level = null,
         int quantity = 1,
-        bool isTotalQuantity = false
+        bool isTotalQuantity = false,
+        int? level = null
     );
     void DeleteBuild(DbFortBuild build);
     Task<int> GetActiveCarpenters();
