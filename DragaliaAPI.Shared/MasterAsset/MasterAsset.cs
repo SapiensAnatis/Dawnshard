@@ -199,6 +199,7 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, LoginBonusReward> LoginBonusReward =
         new("Login/LoginBonusReward.json", x => x.Id);
 
+    #endregion
     #region Mana Circles
 
     /// <summary>
