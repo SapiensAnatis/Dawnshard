@@ -138,7 +138,7 @@ public class CharaController : DragaliaControllerBase
                 );
             }
 
-            await this.paymentService.ProcessMaterialPayment(mat.id, mat.quantity);
+            await this.paymentService.ProcessPayment(mat.id, mat.quantity);
         }
 
         DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
@@ -478,12 +478,12 @@ public class CharaController : DragaliaControllerBase
         foreach ((Materials id, int quantity) in orbs)
         {
             if (id != Materials.Empty)
-                await this.paymentService.ProcessMaterialPayment(id, quantity);
+                await this.paymentService.ProcessPayment(id, quantity);
         }
 
         if (uniqueGrowMaterial1 > 0)
         {
-            await this.paymentService.ProcessMaterialPayment(
+            await this.paymentService.ProcessPayment(
                 data.UniqueGrowMaterialId1,
                 uniqueGrowMaterial1
             );
@@ -491,7 +491,7 @@ public class CharaController : DragaliaControllerBase
 
         if (uniqueGrowMaterial2 > 0)
         {
-            await this.paymentService.ProcessMaterialPayment(
+            await this.paymentService.ProcessPayment(
                 data.UniqueGrowMaterialId2,
                 uniqueGrowMaterial2
             );
@@ -741,7 +741,7 @@ public class CharaController : DragaliaControllerBase
             // they smoked some shit
             if (manaNodeInfo.UniqueGrowMaterialCount1 > 0)
             {
-                await this.paymentService.ProcessMaterialPayment(
+                await this.paymentService.ProcessPayment(
                     charaData.UniqueGrowMaterialId1,
                     manaNodeInfo.UniqueGrowMaterialCount1
                 );
@@ -749,7 +749,7 @@ public class CharaController : DragaliaControllerBase
 
             if (manaNodeInfo.UniqueGrowMaterialCount2 > 0)
             {
-                await this.paymentService.ProcessMaterialPayment(
+                await this.paymentService.ProcessPayment(
                     charaData.UniqueGrowMaterialId2,
                     manaNodeInfo.UniqueGrowMaterialCount2
                 );
@@ -757,7 +757,7 @@ public class CharaController : DragaliaControllerBase
 
             if (manaNodeInfo.GrowMaterialCount > 0 && charaData.GrowMaterialId != Materials.Empty)
             {
-                await this.paymentService.ProcessMaterialPayment(
+                await this.paymentService.ProcessPayment(
                     charaData.GrowMaterialId,
                     manaNodeInfo.GrowMaterialCount
                 );
@@ -783,7 +783,7 @@ public class CharaController : DragaliaControllerBase
                 foreach ((Materials id, int quantity) in material.NeededMaterials)
                 {
                     if (id != Materials.Empty)
-                        await this.paymentService.ProcessMaterialPayment(id, quantity);
+                        await this.paymentService.ProcessPayment(id, quantity);
                 }
 
                 ManaPieceType pieceType = MasterAsset.ManaPieceType[manaNodeInfo.ManaPieceType];
@@ -792,7 +792,7 @@ public class CharaController : DragaliaControllerBase
                 {
                     if (type == EntityTypes.Material)
                     {
-                        await this.paymentService.ProcessMaterialPayment((Materials)id, quantity);
+                        await this.paymentService.ProcessPayment((Materials)id, quantity);
                     }
                 }
             }
@@ -845,7 +845,7 @@ public class CharaController : DragaliaControllerBase
         Materials usedMat = UpgradeMaterials.tomes[charData.ElementalType];
         int usedMatCount = charData.EditSkillCost;
 
-        await this.paymentService.ProcessMaterialPayment(usedMat, usedMatCount);
+        await this.paymentService.ProcessPayment(usedMat, usedMatCount);
 
         playerCharData.IsUnlockEditSkill = true;
 

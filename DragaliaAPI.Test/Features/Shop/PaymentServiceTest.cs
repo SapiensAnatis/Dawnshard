@@ -20,11 +20,10 @@ public class PaymentServiceTest
     {
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockInventoryRepository = new(MockBehavior.Strict);
-
         this.paymentService = new(
             LoggerTestUtils.Create<PaymentService>(),
-            this.mockUserDataRepository.Object,
-            this.mockInventoryRepository.Object
+            mockUserDataRepository.Object,
+            mockInventoryRepository.Object
         );
     }
 

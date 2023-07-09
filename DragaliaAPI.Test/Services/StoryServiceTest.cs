@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
@@ -22,6 +23,7 @@ public class StoryServiceTest
     private readonly Mock<IFortRepository> mockFortRepository;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
     private readonly Mock<IRewardService> mockRewardService;
+    private readonly Mock<IPaymentService> mockPaymentService;
 
     private readonly IStoryService storyService;
 
@@ -35,6 +37,7 @@ public class StoryServiceTest
         this.mockFortRepository = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
         this.mockRewardService = new(MockBehavior.Strict);
+        this.mockPaymentService = new(MockBehavior.Strict);
 
         this.storyService = new StoryService(
             mockStoryRepository.Object,
@@ -44,7 +47,8 @@ public class StoryServiceTest
             mockTutorialService.Object,
             mockFortRepository.Object,
             mockMissionProgressionService.Object,
-            mockRewardService.Object
+            mockRewardService.Object,
+            mockPaymentService.Object
         );
     }
 
