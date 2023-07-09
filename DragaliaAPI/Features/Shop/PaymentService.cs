@@ -179,7 +179,10 @@ public class PaymentService(
                     );
                 }
 
-                await ProcessPayment(new Entity(entityType, Quantity: expectedPrice ?? payment?.target_cost ?? 0), payment);
+                await ProcessPayment(
+                    new Entity(entityType, Quantity: expectedPrice ?? payment?.target_cost ?? 0),
+                    payment
+                );
                 break;
         }
     }
