@@ -50,7 +50,7 @@ public class PaymentServiceTest
 
         this.mockUserDataRepository.SetupUserData(userData);
 
-        await this.paymentService.ProcessPayment(type, new PaymentTarget(total, cost));
+        await this.paymentService.ProcessPayment(type, new PaymentTarget(total, cost), cost);
 
         userData.BuildTimePoint
             .Should()

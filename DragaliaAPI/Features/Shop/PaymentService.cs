@@ -172,12 +172,14 @@ public class PaymentService(
             default:
                 EntityTypes entityType = type.ToEntityType();
                 if (entityType == EntityTypes.None)
+                {
                     throw new ArgumentException(
                         $"Cannot process payment type {type}",
                         nameof(type)
                     );
+                }
 
-                await ProcessPayment(new Entity(entityType, Quantity: expectedPrice ?? 0), payment);
+                await ProcessPayment(new Entity(entityType, Quantity: expectedPrice ?? payment?.target_cost ?? 0), payment);
                 break;
         }
     }
