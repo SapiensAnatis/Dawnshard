@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -54,7 +55,7 @@ public class V1Update : ISavefileUpdate
                 }
 
                 this.logger.LogDebug("Adding facility {plant}", plantId);
-                await this.fortRepository.AddToStorage(plantId, 1);
+                await this.fortRepository.AddToStorage(plantId, quantity: 1, isTotalQuantity: true);
             }
         }
 
