@@ -4,7 +4,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Repositories;
 
-public interface IUnitRepository : IBaseRepository
+public interface IUnitRepository
 {
     IQueryable<DbPlayerCharaData> Charas { get; }
     IQueryable<DbPlayerDragonData> Dragons { get; }
@@ -18,14 +18,22 @@ public interface IUnitRepository : IBaseRepository
     Task<bool> CheckHasDragons(IEnumerable<Dragons> idList);
 
     Task<IEnumerable<(Charas id, bool isNew)>> AddCharas(IEnumerable<Charas> idList);
+
     Task<bool> AddCharas(Charas id);
+
     Task<IEnumerable<(Dragons id, bool isNew)>> AddDragons(IEnumerable<Dragons> idList);
+
     Task<bool> AddDragons(Dragons id);
+
     Task RemoveDragons(IEnumerable<long> keyIdList);
+
     Task<DbSetUnit?> GetCharaSetData(Charas charaId, int setNo);
+
     DbSetUnit AddCharaSetData(Charas charaId, int setNo);
+
     IEnumerable<DbSetUnit> GetCharaSets(Charas charaId);
+
     Task<IDictionary<Charas, IEnumerable<DbSetUnit>>> GetCharaSets(IEnumerable<Charas> charaId);
-    IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(IQueryable<DbPartyUnit> units);
+
     Task<DbPlayerCharaData?> FindCharaAsync(Charas chara);
 }

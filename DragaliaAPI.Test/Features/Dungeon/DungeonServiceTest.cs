@@ -1,14 +1,14 @@
-﻿using DragaliaAPI.Models;
+﻿using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
-using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace DragaliaAPI.Test.Services;
+namespace DragaliaAPI.Test.Features.Dungeon;
 
 public class DungeonServiceTest
 {
@@ -24,7 +24,7 @@ public class DungeonServiceTest
         );
         IDistributedCache testCache = new MemoryDistributedCache(opts);
 
-        this.mockOptions
+        mockOptions
             .SetupGet(x => x.CurrentValue)
             .Returns(new RedisOptions() { DungeonExpiryTimeMinutes = 1 });
 
@@ -44,8 +44,8 @@ public class DungeonServiceTest
                 }
             };
 
-        string key = await this.dungeonService.StartDungeon(session);
+        string key = await dungeonService.StartDungeon(session);
 
-        (await this.dungeonService.GetDungeon(key)).Should().BeEquivalentTo(session);
+        (await dungeonService.GetDungeon(key)).Should().BeEquivalentTo(session);
     }
 }

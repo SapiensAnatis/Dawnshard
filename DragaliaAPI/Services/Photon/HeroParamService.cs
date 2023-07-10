@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -31,7 +32,7 @@ public class HeroParamService : IHeroParamService
             { WeaponTypes.Gun, WeaponBodies.BattlewornManacaster }
         }.ToImmutableDictionary();
 
-    private readonly IUnitRepository unitRepository;
+    private readonly IDungeonRepository dungeonRepository;
     private readonly IWeaponRepository weaponRepository;
     private readonly IBonusService bonusService;
     private readonly IUserDataRepository userDataRepository;
@@ -40,7 +41,7 @@ public class HeroParamService : IHeroParamService
     private readonly IPlayerIdentityService playerIdentityService;
 
     public HeroParamService(
-        IUnitRepository unitRepository,
+        IDungeonRepository dungeonRepository,
         IWeaponRepository weaponRepository,
         IBonusService bonusService,
         IUserDataRepository userDataRepository,
@@ -49,7 +50,7 @@ public class HeroParamService : IHeroParamService
         IPlayerIdentityService playerIdentityService
     )
     {
-        this.unitRepository = unitRepository;
+        this.dungeonRepository = dungeonRepository;
         this.weaponRepository = weaponRepository;
         this.bonusService = bonusService;
         this.userDataRepository = userDataRepository;
@@ -73,8 +74,8 @@ public class HeroParamService : IHeroParamService
             viewerId
         );
 
-        List<DbDetailedPartyUnit> detailedPartyUnits = await this.unitRepository
-            .BuildDetailedPartyUnit(partyRepository.GetPartyUnits(partySlot))
+        List<DbDetailedPartyUnit> detailedPartyUnits = await this.dungeonRepository
+            .BuildDetailedPartyUnit(partyRepository.GetPartyUnits(partySlot), partySlot)
             .ToListAsync();
 
         foreach (DbDetailedPartyUnit unit in detailedPartyUnits)
