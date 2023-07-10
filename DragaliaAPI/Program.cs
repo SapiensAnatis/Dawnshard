@@ -164,7 +164,8 @@ builder.Services
     .AddScoped<IDungeonRepository, DungeonRepository>()
     .AddScoped<IQuestDropService, QuestDropService>()
     .AddScoped<IQuestEnemyService, QuestEnemyService>()
-    .AddScoped<IOddsInfoService, OddsInfoService>();
+    .AddScoped<IOddsInfoService, OddsInfoService>()
+    .AddScoped<IQuestCompletionService, QuestCompletionService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();

@@ -25,6 +25,7 @@ public class DungeonRecordControllerTest
     private readonly Mock<ITutorialService> mockTutorialService;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
     private readonly Mock<ILogger<DungeonRecordController>> mockLogger;
+    private readonly Mock<IQuestCompletionService> mockQuestCompletionService;
 
     private const string dungeonKey = "key";
     private const int questId = 100010101;
@@ -40,6 +41,7 @@ public class DungeonRecordControllerTest
         this.mockTutorialService = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Strict);
+        this.mockQuestCompletionService = new(MockBehavior.Strict);
 
         this.dungeonRecordController = new(
             this.mockQuestRepository.Object,
@@ -49,7 +51,8 @@ public class DungeonRecordControllerTest
             this.mockUpdateDataService.Object,
             this.mockTutorialService.Object,
             this.mockMissionProgressionService.Object,
-            this.mockLogger.Object
+            this.mockLogger.Object,
+            this.mockQuestCompletionService.Object
         );
 
         this.dungeonRecordController.SetupMockContext();
@@ -550,7 +553,7 @@ public class DungeonRecordControllerTest
     }
 
     private AtgenFirstClearSet CreateClearReward(
-        int type = (int)EntityTypes.Wyrmite,
+        EntityTypes type = EntityTypes.Wyrmite,
         int id = 0,
         int quantity = 5
     )
@@ -565,7 +568,7 @@ public class DungeonRecordControllerTest
 
     private AtgenMissionsClearSet CreateMissionReward(
         int index,
-        int type = (int)EntityTypes.Wyrmite,
+        EntityTypes type = EntityTypes.Wyrmite,
         int id = 0,
         int quantity = 5
     )

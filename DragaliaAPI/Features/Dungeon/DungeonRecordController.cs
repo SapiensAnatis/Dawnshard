@@ -25,6 +25,8 @@ public class DungeonRecordController : DragaliaControllerBase
     private readonly ITutorialService tutorialService;
     private readonly IMissionProgressionService missionProgressionService;
     private readonly ILogger<DungeonRecordController> logger;
+    private readonly IQuestCompletionService questCompletionService;
+
     private const int QuestCoin = 10_000_000;
     private const int QuestMana = 20_000;
     private const int QuestDropQuantity = 100;
@@ -37,7 +39,8 @@ public class DungeonRecordController : DragaliaControllerBase
         IUpdateDataService updateDataService,
         ITutorialService tutorialService,
         IMissionProgressionService missionProgressionService,
-        ILogger<DungeonRecordController> logger
+        ILogger<DungeonRecordController> logger,
+        IQuestCompletionService questCompletionService
     )
     {
         this.questRepository = questRepository;
@@ -48,6 +51,7 @@ public class DungeonRecordController : DragaliaControllerBase
         this.tutorialService = tutorialService;
         this.missionProgressionService = missionProgressionService;
         this.logger = logger;
+        this.questCompletionService = questCompletionService;
     }
 
     [HttpPost("record")]
@@ -62,9 +66,6 @@ public class DungeonRecordController : DragaliaControllerBase
         );
 
         bool isFirstClear = oldQuestData is null || oldQuestData?.PlayCount == 0;
-        bool oldMissionClear1 = oldQuestData?.IsMissionClear1 ?? false;
-        bool oldMissionClear2 = oldQuestData?.IsMissionClear2 ?? false;
-        bool oldMissionClear3 = oldQuestData?.IsMissionClear3 ?? false;
 
         float clear_time = request.play_record?.time ?? -1.0f;
 
@@ -85,27 +86,32 @@ public class DungeonRecordController : DragaliaControllerBase
 
         DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
 
+        if (isFirstClear)
+        {
+            userData.Crystal += 5;
+        }
+
         userData.Exp += 1;
         userData.ManaPoint += QuestMana;
         userData.Coin += QuestCoin;
 
-        bool[] clearedMissions = new bool[3]
+        bool[] oldMissionStatus =
         {
-            newQuestData.IsMissionClear1 && !oldMissionClear1,
-            newQuestData.IsMissionClear2 && !oldMissionClear2,
-            newQuestData.IsMissionClear3 && !oldMissionClear3,
+            newQuestData.IsMissionClear1,
+            newQuestData.IsMissionClear2,
+            newQuestData.IsMissionClear3
         };
 
-        bool allMissionsCleared =
-            clearedMissions.Any(x => x)
-            && newQuestData.IsMissionClear1
-            && newQuestData.IsMissionClear2
-            && newQuestData.IsMissionClear3;
+        QuestMissionStatus status = await this.questCompletionService.CompleteQuestMissions(
+            session.QuestData.Id,
+            oldMissionStatus,
+            request.play_record!,
+            session
+        );
 
-        userData.Crystal +=
-            (isFirstClear ? 5 : 0)
-            + clearedMissions.Where(x => x).Count() * 5
-            + (allMissionsCleared ? 5 : 0);
+        newQuestData.IsMissionClear1 = status.Missions[0];
+        newQuestData.IsMissionClear2 = status.Missions[1];
+        newQuestData.IsMissionClear3 = status.Missions[2];
 
         List<AtgenDropAll> drops = new();
         int manaDrop = 0;
@@ -178,7 +184,7 @@ public class DungeonRecordController : DragaliaControllerBase
                             {
                                 new()
                                 {
-                                    type = (int)EntityTypes.Wyrmite,
+                                    type = EntityTypes.Wyrmite,
                                     id = 0,
                                     quantity = 5
                                 }
@@ -186,30 +192,8 @@ public class DungeonRecordController : DragaliaControllerBase
                             : new List<AtgenFirstClearSet>(),
                         take_coin = coinDrop,
                         take_astral_item_quantity = 300,
-                        missions_clear_set = clearedMissions
-                            .Select((x, index) => new { x, index })
-                            .Where(x => x.x)
-                            .Select(
-                                x =>
-                                    new AtgenMissionsClearSet()
-                                    {
-                                        type = (int)EntityTypes.Wyrmite,
-                                        id = 0,
-                                        quantity = 5,
-                                        mission_no = x.index + 1
-                                    }
-                            ),
-                        mission_complete = allMissionsCleared
-                            ? new List<AtgenFirstClearSet>()
-                            {
-                                new()
-                                {
-                                    type = (int)EntityTypes.Wyrmite,
-                                    id = 0,
-                                    quantity = 5
-                                }
-                            }
-                            : new List<AtgenFirstClearSet>(),
+                        missions_clear_set = status.MissionsClearSet,
+                        mission_complete = status.MissionCompleteSet,
                         enemy_piece = new List<AtgenEnemyPiece>(),
                         reborn_bonus = new List<AtgenFirstClearSet>(),
                         quest_bonus_list = new List<AtgenFirstClearSet>(),

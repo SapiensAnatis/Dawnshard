@@ -2204,10 +2204,10 @@ public class AtgenFailQuestDetail
 public class AtgenFirstClearSet
 {
     public int id { get; set; }
-    public int type { get; set; }
+    public EntityTypes type { get; set; }
     public int quantity { get; set; }
 
-    public AtgenFirstClearSet(int id, int type, int quantity)
+    public AtgenFirstClearSet(int id, EntityTypes type, int quantity)
     {
         this.id = id;
         this.type = type;
@@ -2595,11 +2595,11 @@ public class AtgenMissionParamsList
 public class AtgenMissionsClearSet
 {
     public int id { get; set; }
-    public int type { get; set; }
+    public EntityTypes type { get; set; }
     public int quantity { get; set; }
     public int mission_no { get; set; }
 
-    public AtgenMissionsClearSet(int id, int type, int quantity, int mission_no)
+    public AtgenMissionsClearSet(int id, EntityTypes type, int quantity, int mission_no)
     {
         this.id = id;
         this.type = type;

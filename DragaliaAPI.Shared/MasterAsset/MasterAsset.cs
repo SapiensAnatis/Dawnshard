@@ -4,6 +4,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.Login;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
+using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
@@ -250,6 +251,7 @@ public static class MasterAsset
     #endregion
 
     #region Quest Drops
+
     /// <summary>
     /// Contains information about the <see cref="Models.QuestDrops.EnemyParam"/> IDs in particular quest maps.
     /// </summary>
@@ -270,6 +272,13 @@ public static class MasterAsset
     /// </summary>
     public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
         new("QuestDrops/QuestDrops.json", x => x.QuestId);
+
+    #endregion
+
+    #region Quest Rewards
+
+    public static readonly MasterAssetData<int, QuestRewardData> QuestRewardData =
+        new("QuestRewards/QuestRewardData.json", x => x.Id);
 
     #endregion
 }
