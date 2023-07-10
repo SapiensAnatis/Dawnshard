@@ -70,24 +70,6 @@ public static class MasterAsset
         new("WeaponPassiveAbility.json", x => x.Id);
 
     /// <summary>
-    /// Contains information about rewards from quests.
-    /// </summary>
-    public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
-        new("QuestDrops.json", x => x.QuestId);
-    /// Dragon StoryId Arrays indexed by DragonId
-    /// </summary>
-    public static MasterAssetData<int, StoryData> DragonStories =>
-        new("DragonStories.json", x => x.id);
-
-    /// <summary>
-    /// Character StoryId Arrays indexed by CharaId
-    /// </summary>
-    public static MasterAssetData<int, StoryData> CharaStories =>
-        new("CharaStories.json", x => x.id);
-
-    public static MasterAssetData<int, UnitStory> UnitStory => new("UnitStory.json", x => x.Id);
-
-    /// <summary>
     /// Contains information about the materials required to unbind ability crests.
     /// </summary>
     public static readonly MasterAssetData<int, AbilityCrestBuildupGroup> AbilityCrestBuildupGroup =
