@@ -9,13 +9,12 @@ public interface IQuestCompletionService
     public Task<(
         IEnumerable<AtgenScoreMissionSuccessList> Missions,
         int Points
-    )> CompleteQuestScoreMissions(int questId, PlayRecord record, DungeonSession session);
+    )> CompleteQuestScoreMissions(DungeonSession session, PlayRecord record);
 
     public Task<QuestMissionStatus> CompleteQuestMissions(
-        int questId,
+        DungeonSession session,
         bool[] currentState,
-        PlayRecord record,
-        DungeonSession session
+        PlayRecord record
     );
 
     public Task<bool> IsQuestMissionCompleted(

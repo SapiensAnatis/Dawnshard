@@ -103,10 +103,9 @@ public class DungeonRecordController : DragaliaControllerBase
         };
 
         QuestMissionStatus status = await this.questCompletionService.CompleteQuestMissions(
-            session.QuestData.Id,
+            session,
             oldMissionStatus,
-            request.play_record!,
-            session
+            request.play_record!
         );
 
         newQuestData.IsMissionClear1 = status.Missions[0];
@@ -166,6 +165,9 @@ public class DungeonRecordController : DragaliaControllerBase
             drops.Select(x => new KeyValuePair<Materials, int>((Materials)x.id, x.quantity))
         );
 
+        (IEnumerable<AtgenScoreMissionSuccessList> scoreMissions, int totalPoints) =
+            await questCompletionService.CompleteQuestScoreMissions(session, request.play_record!);
+
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         return Ok(
@@ -201,6 +203,7 @@ public class DungeonRecordController : DragaliaControllerBase
                         challenge_quest_bonus_list = new List<AtgenFirstClearSet>(),
                         campaign_extra_reward_list = new List<AtgenFirstClearSet>(),
                         weekly_limit_reward_list = new List<AtgenFirstClearSet>(),
+                        take_accumulate_point = totalPoints
                     },
                     grow_record = new()
                     {
@@ -231,13 +234,13 @@ public class DungeonRecordController : DragaliaControllerBase
                     quest_party_setting_list = session.Party,
                     bonus_factor_list = new List<AtgenBonusFactorList>(),
                     scoring_enemy_point_list = new List<AtgenScoringEnemyPointList>(),
-                    score_mission_success_list = new List<AtgenScoreMissionSuccessList>(),
+                    score_mission_success_list = scoreMissions,
                     event_passive_up_list = new List<AtgenEventPassiveUpList>(),
                     clear_time = clear_time,
                     is_best_clear_time = clear_time == newQuestData.BestClearTime,
                     converted_entity_list = new List<ConvertedEntityList>(),
                     dungeon_skip_type = 0,
-                    total_play_damage = 0,
+                    total_play_damage = 0
                 },
                 update_data_list = updateDataList,
                 entity_result = new(),

@@ -19,23 +19,22 @@ public class QuestCompletionService(
     public async Task<(
         IEnumerable<AtgenScoreMissionSuccessList> Missions,
         int Points
-    )> CompleteQuestScoreMissions(int questId, PlayRecord record, DungeonSession session)
+    )> CompleteQuestScoreMissions(DungeonSession session, PlayRecord record)
     {
         return await Task.FromResult((Enumerable.Empty<AtgenScoreMissionSuccessList>(), 0));
     }
 
     public async Task<QuestMissionStatus> CompleteQuestMissions(
-        int questId,
+        DungeonSession session,
         bool[] currentState,
-        PlayRecord record,
-        DungeonSession session
+        PlayRecord record
     )
     {
         List<AtgenMissionsClearSet> clearSet = new();
 
         bool[] newState = { currentState[0], currentState[1], currentState[2] };
 
-        QuestRewardData rewardData = MasterAsset.QuestRewardData[questId];
+        QuestRewardData rewardData = MasterAsset.QuestRewardData[session.QuestData.Id];
         for (int i = 0; i < 3; i++)
         {
             (QuestCompleteType type, int value) = rewardData.Missions[i];
