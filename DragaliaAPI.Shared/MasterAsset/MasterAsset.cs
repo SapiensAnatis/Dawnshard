@@ -69,12 +69,6 @@ public static class MasterAsset
         new("WeaponPassiveAbility.json", x => x.Id);
 
     /// <summary>
-    /// Contains information about rewards from quests.
-    /// </summary>
-    public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
-        new("QuestDrops.json", x => x.QuestId);
-
-    /// <summary>
     /// Dragon StoryId Arrays indexed by DragonId
     /// </summary>
     public static MasterAssetData<int, StoryData> DragonStories =>
@@ -253,7 +247,13 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, EnemyParam> EnemyParam =
         new("QuestDrops/EnemyParam.json", x => x.Id);
 
-    public static readonly MasterAssetData<int, QuestMultiplier> QuestMultiplier =
-        new("QuestDrops/QuestMultipliers.json", x => x.Id);
+    public static readonly MasterAssetData<int, QuestGroupMultiplier> QuestGroupMultiplier =
+        new("QuestDrops/QuestGroupMultipliers.json", x => x.GroupId);
+
+    /// <summary>
+    /// Contains information about rewards from quests.
+    /// </summary>
+    public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
+        new("QuestDrops/QuestDrops.json", x => x.QuestId);
     #endregion
 }

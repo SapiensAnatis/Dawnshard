@@ -20,7 +20,8 @@ public class OddsInfoService : IOddsInfoService
         // TODO: drop_obj (treasure chests / crates, I think?)
         odds.enemy = this.questEnemyService.BuildQuestEnemyList(questId, areaNum);
         odds.area_index = areaNum;
-        this.logger.LogDebug("Generated enemy list: {@list}", odds.enemy);
+
+        // this.logger.LogTrace("Generated enemy list: {@list}", odds.enemy);
 
         return odds;
     }

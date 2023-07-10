@@ -30,7 +30,7 @@ public class QuestEnemyService : IQuestEnemyService
             { MaterialRarities.Rare, 0.1 },
             { MaterialRarities.VeryRare, 0.01 } // Only used for Adamantite Ingot?
         }.ToImmutableDictionary();
-    private const int MaterialPertubation = 5;
+    private const int MaterialPertubation = 3;
 
     public QuestEnemyService(IQuestDropService dropService, ILogger<QuestEnemyService> logger)
     {
@@ -44,8 +44,15 @@ public class QuestEnemyService : IQuestEnemyService
         IEnumerable<Materials> possibleDrops = this.dropService.GetDrops(questId);
         QuestData questData = MasterAsset.QuestData[questId];
 
-        if (!MasterAsset.QuestMultiplier.TryGetValue(questId, out QuestMultiplier? questMultiplier))
+        if (
+            !MasterAsset.QuestGroupMultiplier.TryGetValue(
+                questData.Gid,
+                out QuestGroupMultiplier? questMultiplier
+            )
+        )
+        {
             questMultiplier = new(questId);
+        }
 
         this.logger.LogDebug("Using quest multiplier: {@multiplier}", questMultiplier);
 
@@ -67,7 +74,7 @@ public class QuestEnemyService : IQuestEnemyService
     private IEnumerable<EnemyDropList> GenerateEnemyDrop(
         AtgenEnemy enemy,
         IEnumerable<Materials> possibleDrops,
-        DropMultiplier dropMultiplier,
+        QuestGroupMultiplier dropMultiplier,
         double difficultyMultiplier
     )
     {
@@ -101,7 +108,8 @@ public class QuestEnemyService : IQuestEnemyService
                 ),
                 drop_list = GenerateMaterialDrops(
                     possibleDrops,
-                    toughnessMultiplier * dropMultiplier.MaterialMultiplier * difficultyMultiplier
+                    toughnessMultiplier * difficultyMultiplier,
+                    dropMultiplier
                 )
             }
         };
@@ -109,7 +117,8 @@ public class QuestEnemyService : IQuestEnemyService
 
     private static IEnumerable<AtgenDropList> GenerateMaterialDrops(
         IEnumerable<Materials> possibleDrops,
-        double multiplier
+        double baseMultiplier,
+        QuestGroupMultiplier questMultiplier
     )
     {
         const double multiplierPower = 1.5;
@@ -122,11 +131,15 @@ public class QuestEnemyService : IQuestEnemyService
             int randomizedQuantity = CalculateQuantity(
                 BaseMaterialQuantities[materialData.MaterialRarity],
                 MaterialPertubation,
-                multiplier,
+                baseMultiplier,
                 multiplierPower
             );
 
-            if (randomizedQuantity < 0)
+            randomizedQuantity = (int)(
+                randomizedQuantity * questMultiplier.MaterialMultiplier[materialData.MaterialRarity]
+            );
+
+            if (randomizedQuantity <= 0)
                 continue;
 
             yield return new()

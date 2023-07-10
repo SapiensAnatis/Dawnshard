@@ -33,7 +33,7 @@
 		<None Update="Resources\QuestDrops\EnemyParam.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Resources\QuestDrops\QuestMultipliers.json">
+		<None Update="Resources\QuestDrops\QuestGroupMultipliers.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\Login\LoginBonusData.json">
@@ -120,7 +120,7 @@
 		<None Update="Resources\QuestData.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="Resources\QuestDrops.json">
+		<None Update="Resources\QuestDrops\QuestDrops.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\QuestDrops\QuestEnemies.json">

@@ -21,7 +21,6 @@ public class DungeonRecordController : DragaliaControllerBase
     private readonly IDungeonService dungeonService;
     private readonly IUserDataRepository userDataRepository;
     private readonly IInventoryRepository inventoryRepository;
-    private readonly IQuestDropService questRewardService;
     private readonly IUpdateDataService updateDataService;
     private readonly ITutorialService tutorialService;
     private readonly IMissionProgressionService missionProgressionService;
@@ -35,7 +34,6 @@ public class DungeonRecordController : DragaliaControllerBase
         IDungeonService dungeonService,
         IUserDataRepository userDataRepository,
         IInventoryRepository inventoryRepository,
-        IQuestDropService questRewardService,
         IUpdateDataService updateDataService,
         ITutorialService tutorialService,
         IMissionProgressionService missionProgressionService,
@@ -46,7 +44,6 @@ public class DungeonRecordController : DragaliaControllerBase
         this.dungeonService = dungeonService;
         this.userDataRepository = userDataRepository;
         this.inventoryRepository = inventoryRepository;
-        this.questRewardService = questRewardService;
         this.updateDataService = updateDataService;
         this.tutorialService = tutorialService;
         this.missionProgressionService = missionProgressionService;

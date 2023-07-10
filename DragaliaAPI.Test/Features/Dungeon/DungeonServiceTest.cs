@@ -20,7 +20,7 @@ public class DungeonServiceTest
     public DungeonServiceTest()
     {
         this.mockOptions = new(MockBehavior.Strict);
-        this.mockLogger = new(MockBehavior.Strict);
+        this.mockLogger = new(MockBehavior.Loose);
 
         IOptions<MemoryDistributedCacheOptions> opts = Options.Create(
             new MemoryDistributedCacheOptions()
