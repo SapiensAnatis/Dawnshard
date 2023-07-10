@@ -1,4 +1,5 @@
 using DragaliaAPI.Controllers.Dragalia;
+using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -10,7 +11,7 @@ public class QuestControllerTest
 {
     private readonly Mock<IStoryService> mockStoryService;
     private readonly Mock<IHelperService> mockHelperService;
-    private readonly Mock<IQuestRewardService> mockQuestRewardService;
+    private readonly Mock<IQuestDropService> mockQuestRewardService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<ILogger<QuestController>> mockLogger;
 

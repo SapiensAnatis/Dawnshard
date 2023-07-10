@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -14,14 +15,14 @@ public class QuestController : DragaliaControllerBase
 {
     private readonly IStoryService storyService;
     private readonly IHelperService helperService;
-    private readonly IQuestRewardService questRewardService;
+    private readonly IQuestDropService questRewardService;
     private readonly IUpdateDataService updateDataService;
     private readonly ILogger<QuestController> logger;
 
     public QuestController(
         IStoryService storyService,
         IHelperService helperService,
-        IQuestRewardService questRewardService,
+        IQuestDropService questRewardService,
         IUpdateDataService updateDataService,
         ILogger<QuestController> logger
     )

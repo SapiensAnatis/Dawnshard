@@ -940,7 +940,6 @@ public class CharaController : DragaliaControllerBase
             .crest_slot_type_3_crest_id_2;
         setUnitData.EquipTalismanKeyId = (long)request.request_chara_unit_set_data.talisman_key_id;
 
-        await unitRepository.SaveChangesAsync();
         CharaUnitSetList setList = new CharaUnitSetList()
         {
             chara_id = (int)request.chara_id,
@@ -965,6 +964,7 @@ public class CharaController : DragaliaControllerBase
                         }
                 )
         };
+
         UpdateDataList ul = await this.updateDataService.SaveChangesAsync();
         ul.chara_unit_set_list = new List<CharaUnitSetList> { setList };
         return Ok(new CharaSetCharaUnitSetData() { update_data_list = ul, entity_result = null });

@@ -18,9 +18,8 @@ using static DragaliaAPI.Test.Utils.IdentityTestUtils;
 
 namespace DragaliaAPI.Test.Services;
 
-public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
+public class UpdateDataServiceTest : RepositoryTestFixture
 {
-    private readonly DbTestFixture fixture;
     private readonly ITestOutputHelper output;
     private readonly IMapper mapper;
     private readonly IUpdateDataService updateDataService;
@@ -30,20 +29,17 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
     private readonly Mock<IPresentService> mockPresentService;
 
-    public UpdateDataServiceTest(DbTestFixture fixture, ITestOutputHelper output)
+    public UpdateDataServiceTest(ITestOutputHelper output)
     {
-        this.fixture = fixture;
         this.output = output;
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mockMissionService = new(MockBehavior.Loose);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
         this.mockPresentService = new(MockBehavior.Strict);
 
-        this.mapper = new MapperConfiguration(
-            cfg => cfg.AddMaps(typeof(Program).Assembly)
-        ).CreateMapper();
+        this.mapper = UnitTestUtils.CreateMapper();
         this.updateDataService = new UpdateDataService(
-            this.fixture.ApiContext,
+            this.ApiContext,
             this.mapper,
             this.mockPlayerIdentityService.Object,
             this.mockMissionService.Object,
@@ -156,7 +152,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
                 BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(15)
             };
 
-        this.fixture.ApiContext.AddRange(
+        this.ApiContext.AddRange(
             new List<IDbHasAccountId>()
             {
                 userData,
@@ -218,7 +214,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
             .Returns(Task.CompletedTask);
 
         // This test is bullshit because in-mem works differently to an actual database in this regard
-        this.fixture.ApiContext.AddRange(
+        this.ApiContext.AddRange(
             new List<IDbHasAccountId>()
             {
                 DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.Arsene),
@@ -254,7 +250,7 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task SaveChangesAsync_NoDataFromOtherAccounts()
     {
-        this.fixture.ApiContext.PlayerCharaData.Add(new("id 1", Charas.GalaZethia));
+        this.ApiContext.PlayerCharaData.Add(new("id 1", Charas.GalaZethia));
         this.mockMissionProgressionService
             .Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
@@ -267,12 +263,12 @@ public class UpdateDataServiceTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task SaveChangesAsync_NullAfterSave()
     {
-        this.fixture.ApiContext.PlayerCharaData.Add(new(DeviceAccountId, Charas.HalloweenLowen));
+        this.ApiContext.PlayerCharaData.Add(new(DeviceAccountId, Charas.HalloweenLowen));
         this.mockMissionProgressionService
             .Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
 
-        await this.fixture.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         (await this.updateDataService.SaveChangesAsync()).chara_list.Should().BeNull();
     }
