@@ -248,7 +248,8 @@ public class MasterAssetTest
                     Scene06: "",
                     AreaName06: "",
                     ContinueLimit: 3,
-                    RebornLimit: 3
+                    RebornLimit: 3,
+                    Difficulty: 500
                 )
             );
 

@@ -18,7 +18,7 @@ public class OddsInfoService : IOddsInfoService
         OddsInfo odds = StubData.OddsInfo;
 
         // TODO: drop_obj (treasure chests / crates, I think?)
-        odds.enemy = this.questEnemyService.BuildEnemyList(questId, areaNum);
+        odds.enemy = this.questEnemyService.BuildQuestEnemyList(questId, areaNum);
         odds.area_index = areaNum;
         this.logger.LogDebug("Generated enemy list: {@list}", odds.enemy);
 

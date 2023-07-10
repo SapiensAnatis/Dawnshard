@@ -27,7 +27,8 @@ public record QuestData(
     string Scene06,
     string AreaName06,
     int RebornLimit,
-    int ContinueLimit
+    int ContinueLimit,
+    int Difficulty
 )
 {
     public IEnumerable<AreaInfo> AreaInfo =>

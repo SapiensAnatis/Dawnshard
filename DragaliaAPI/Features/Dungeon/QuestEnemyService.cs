@@ -26,9 +26,9 @@ public class QuestEnemyService : IQuestEnemyService
             // Bear in mind that common drops will be dropped by a lot more enemies on e.g. campaign maps
             { MaterialRarities.FacilityEvent, 2 },
             { MaterialRarities.Common, 0.1 },
-            { MaterialRarities.Uncommon, 0.3 },
-            { MaterialRarities.Rare, 0.25 },
-            { MaterialRarities.VeryRare, 0.1 } // Only used for Adamantite Ingot?
+            { MaterialRarities.Uncommon, 0.5 },
+            { MaterialRarities.Rare, 0.1 },
+            { MaterialRarities.VeryRare, 0.01 } // Only used for Adamantite Ingot?
         }.ToImmutableDictionary();
     private const int MaterialPertubation = 5;
 
@@ -38,58 +38,73 @@ public class QuestEnemyService : IQuestEnemyService
         this.logger = logger;
     }
 
-    public IEnumerable<AtgenEnemy> BuildEnemyList(int questId, int areaNum)
+    public IEnumerable<AtgenEnemy> BuildQuestEnemyList(int questId, int areaNum)
     {
         List<AtgenEnemy> enemyList = this.GetEnemyList(questId, areaNum).ToList();
         IEnumerable<Materials> possibleDrops = this.dropService.GetDrops(questId);
+        QuestData questData = MasterAsset.QuestData[questId];
 
         if (!MasterAsset.QuestMultiplier.TryGetValue(questId, out QuestMultiplier? questMultiplier))
-            questMultiplier = new(questId, 1, 1, 1);
+            questMultiplier = new(questId);
 
         this.logger.LogDebug("Using quest multiplier: {@multiplier}", questMultiplier);
 
-        const int manaToughnessPower = 3;
-        const int coinToughnessPower = 4;
-        const int toughnessLimit = 4;
+        double difficultyMultiplier = Math.Log(questData.Difficulty / 1000);
 
         foreach (AtgenEnemy enemy in enemyList)
         {
-            if (!MasterAsset.EnemyParam.TryGetValue(enemy.param_id, out EnemyParam? enemyParam))
-            {
-                this.logger.LogWarning("Failed to get EnemyParam for id {id}", enemy.param_id);
-                continue;
-            }
-
-            int toughnessMultiplier = Math.Min((int)enemyParam.Tough + 1, toughnessLimit);
-
-            List<EnemyDropList> dropListList =
-                new()
-                {
-                    new()
-                    {
-                        mana = CalculateQuantity(
-                            BaseManaQuantity,
-                            ManaPertubation,
-                            toughnessMultiplier * questMultiplier.ManaMultiplier,
-                            manaToughnessPower
-                        ),
-                        coin = CalculateQuantity(
-                            BaseRupieQuantity,
-                            RupiePertubation,
-                            toughnessMultiplier * questMultiplier.RupieMultiplier,
-                            coinToughnessPower
-                        ),
-                        drop_list = GenerateMaterialDrops(
-                            possibleDrops,
-                            toughnessMultiplier * questMultiplier.MaterialMultiplier
-                        )
-                    }
-                };
-
-            enemy.enemy_drop_list = dropListList;
+            enemy.enemy_drop_list = GenerateEnemyDrop(
+                enemy,
+                possibleDrops,
+                questMultiplier,
+                difficultyMultiplier
+            );
         }
 
         return enemyList;
+    }
+
+    private IEnumerable<EnemyDropList> GenerateEnemyDrop(
+        AtgenEnemy enemy,
+        IEnumerable<Materials> possibleDrops,
+        DropMultiplier dropMultiplier,
+        double difficultyMultiplier
+    )
+    {
+        const int manaPower = 3;
+        const int coinPower = 4;
+        const int toughnessClamp = 5;
+
+        if (!MasterAsset.EnemyParam.TryGetValue(enemy.param_id, out EnemyParam? enemyParam))
+        {
+            this.logger.LogWarning("Failed to get EnemyParam for id {id}", enemy.param_id);
+            return Enumerable.Empty<EnemyDropList>();
+        }
+
+        int toughnessMultiplier = Math.Min((int)enemyParam.Tough + 1, toughnessClamp) * 2;
+
+        return new List<EnemyDropList>()
+        {
+            new()
+            {
+                mana = CalculateQuantity(
+                    BaseManaQuantity,
+                    ManaPertubation,
+                    toughnessMultiplier * dropMultiplier.ManaMultiplier,
+                    manaPower
+                ),
+                coin = CalculateQuantity(
+                    BaseRupieQuantity,
+                    RupiePertubation,
+                    toughnessMultiplier * dropMultiplier.RupieMultiplier,
+                    coinPower
+                ),
+                drop_list = GenerateMaterialDrops(
+                    possibleDrops,
+                    toughnessMultiplier * dropMultiplier.MaterialMultiplier * difficultyMultiplier
+                )
+            }
+        };
     }
 
     private static IEnumerable<AtgenDropList> GenerateMaterialDrops(
@@ -97,7 +112,7 @@ public class QuestEnemyService : IQuestEnemyService
         double multiplier
     )
     {
-        const double materialToughnessPower = 3;
+        const double multiplierPower = 1.5;
 
         foreach (Materials material in possibleDrops)
         {
@@ -108,7 +123,7 @@ public class QuestEnemyService : IQuestEnemyService
                 BaseMaterialQuantities[materialData.MaterialRarity],
                 MaterialPertubation,
                 multiplier,
-                materialToughnessPower
+                multiplierPower
             );
 
             if (randomizedQuantity < 0)

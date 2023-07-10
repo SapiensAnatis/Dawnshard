@@ -4,5 +4,5 @@ namespace DragaliaAPI.Features.Dungeon;
 
 public interface IQuestEnemyService
 {
-    IEnumerable<AtgenEnemy> BuildEnemyList(int questId, int areaNum);
+    IEnumerable<AtgenEnemy> BuildQuestEnemyList(int questId, int areaNum);
 }
