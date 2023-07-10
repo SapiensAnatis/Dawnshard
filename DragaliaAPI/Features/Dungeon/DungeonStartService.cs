@@ -221,7 +221,7 @@ public class DungeonStartService : IDungeonStartService
 
         result.party_info.fort_bonus_list = await this.bonusService.GetBonusList();
 
-        if (supportViewerId is not null)
+        if (supportViewerId is not null and not 0)
         {
             result.party_info.support_data = await this.GetSupportData(supportViewerId.Value);
         }
