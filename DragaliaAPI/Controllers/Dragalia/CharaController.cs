@@ -533,14 +533,6 @@ public class CharaController : DragaliaControllerBase
 
         List<int> unlockedStories = new();
 
-        int[] stepLookup = new int[70];
-        Dictionary<ManaNodeTypes, int> typeSteps = Enum.GetValues<ManaNodeTypes>()
-            .ToDictionary(x => x, x => 1);
-
-        List<ManaPieceMaterial> materials = MasterAsset.ManaPieceMaterial.Enumerable
-            .Where(x => x.ElementId == charaData.PieceMaterialElementId)
-            .ToList();
-
         for (int i = 0; i < manaNodeInfos.Count && i < 70; i++)
         {
             int floor = Math.Min(i / 10, 5);
@@ -556,18 +548,6 @@ public class CharaController : DragaliaControllerBase
                 case ManaNodeTypes.Atk:
                     atkNodesOnFloor[floor].Add(i + 1);
                     break;
-            }
-
-            int currentStep = typeSteps[manaNodeInfos[i].ManaPieceType];
-            stepLookup[i] = currentStep;
-
-            if (
-                materials.Any(
-                    x => x.ManaPieceType == manaNodeInfos[i].ManaPieceType && x.Step == currentStep
-                )
-            )
-            {
-                typeSteps[manaNodeInfos[i].ManaPieceType]++;
             }
         }
 
@@ -766,7 +746,7 @@ public class CharaController : DragaliaControllerBase
             ManaPieceMaterial? material = MasterAsset.ManaPieceMaterial.Enumerable.FirstOrDefault(
                 x =>
                     x.ElementId == charaData.PieceMaterialElementId
-                    && x.Step == stepLookup[nodeNr - 1]
+                    && x.Step == manaNodeInfo.Step
                     && x.ManaPieceType == manaNodeInfo.ManaPieceType
             );
 
