@@ -66,6 +66,9 @@ public class GraphQlTest : GraphQlTestFixture
                     )
                 )
             );
+
+        response.Data.Player.CharaList.Should().Contain(x => x.CharaId == Charas.ThePrince);
+        response.Data.Player.CharaList.Should().Contain(x => x.CharaId == Charas.SummerMikoto);
     }
 
     [Fact]
