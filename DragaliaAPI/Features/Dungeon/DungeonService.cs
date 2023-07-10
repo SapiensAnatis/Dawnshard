@@ -1,6 +1,8 @@
 ﻿using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 
@@ -10,6 +12,8 @@ public class DungeonService : IDungeonService
 {
     private readonly IDistributedCache cache;
     private readonly IOptionsMonitor<RedisOptions> options;
+    private readonly ILogger<DungeonService> logger;
+
     private DistributedCacheEntryOptions CacheOptions =>
         new()
         {
@@ -21,21 +25,25 @@ public class DungeonService : IDungeonService
         public static string DungeonKey_DungeonData(string dungeonKey) => $":dungeon:{dungeonKey}";
     }
 
-    public DungeonService(IDistributedCache cache, IOptionsMonitor<RedisOptions> options)
+    public DungeonService(
+        IDistributedCache cache,
+        IOptionsMonitor<RedisOptions> options,
+        ILogger<DungeonService> logger
+    )
     {
         this.cache = cache;
         this.options = options;
+        this.logger = logger;
     }
 
     public async Task<string> StartDungeon(DungeonSession dungeonSession)
     {
-        string key = Guid.NewGuid().ToString();
-        await cache.SetStringAsync(
-            Schema.DungeonKey_DungeonData(key),
-            JsonSerializer.Serialize(dungeonSession),
-            CacheOptions
-        );
-        return key;
+        string dungeonKey = Guid.NewGuid().ToString();
+        await WriteDungeon(dungeonKey, dungeonSession);
+
+        this.logger.LogDebug("Issued dungeon key {key}", dungeonKey);
+
+        return dungeonKey;
     }
 
     public async Task<DungeonSession> GetDungeon(string dungeonKey)
@@ -48,9 +56,36 @@ public class DungeonService : IDungeonService
             ?? throw new JsonException("Could not deserialize dungeon session.");
     }
 
+    private async Task WriteDungeon(string dungeonKey, DungeonSession session)
+    {
+        await cache.SetStringAsync(
+            Schema.DungeonKey_DungeonData(dungeonKey),
+            JsonSerializer.Serialize(session),
+            CacheOptions
+        );
+    }
+
+    public async Task AddEnemies(
+        string dungeonKey,
+        int areaIndex,
+        IEnumerable<AtgenEnemy> enemyList
+    )
+    {
+        DungeonSession session = await this.GetDungeon(dungeonKey);
+
+        if (session.EnemyList.ContainsKey(areaIndex))
+            this.logger.LogWarning("The drops for area index {idx} will be overwritten", areaIndex);
+
+        session.EnemyList[areaIndex] = enemyList;
+
+        await WriteDungeon(dungeonKey, session);
+    }
+
     public async Task<DungeonSession> FinishDungeon(string dungeonKey)
     {
         DungeonSession session = await GetDungeon(dungeonKey);
+
+        this.logger.LogDebug("Completed dungeon with key {key}", dungeonKey);
 
         // Don't remove in case the client re-calls due to timeout
         // await cache.RemoveAsync(Schema.DungeonKey_DungeonData(dungeonKey));

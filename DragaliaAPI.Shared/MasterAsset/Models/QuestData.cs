@@ -13,6 +13,7 @@ public record QuestData(
     int PayStaminaSingle,
     int PayStaminaMulti,
     DungeonTypes DungeonType,
+    VariationTypes VariationType,
     string Scene01,
     string AreaName01,
     string Scene02,
@@ -26,7 +27,8 @@ public record QuestData(
     string Scene06,
     string AreaName06,
     int RebornLimit,
-    int ContinueLimit
+    int ContinueLimit,
+    int Difficulty
 )
 {
     public IEnumerable<AreaInfo> AreaInfo =>

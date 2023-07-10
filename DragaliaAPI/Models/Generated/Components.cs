@@ -1894,12 +1894,12 @@ public class AtgenDropAll
 [MessagePackObject(true)]
 public class AtgenDropList
 {
-    public int type { get; set; }
+    public EntityTypes type { get; set; }
     public int id { get; set; }
     public int quantity { get; set; }
     public int place { get; set; }
 
-    public AtgenDropList(int type, int id, int quantity, int place)
+    public AtgenDropList(EntityTypes type, int id, int quantity, int place)
     {
         this.type = type;
         this.id = id;
@@ -1975,7 +1975,7 @@ public class AtgenEnemy
     public int enemy_idx { get; set; }
 
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
-    public bool is_pop { get; set; }
+    public bool is_pop { get; set; } = true;
 
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool is_rare { get; set; }
@@ -5680,7 +5680,7 @@ public class EnemyDropList
 {
     public int coin { get; set; }
     public int mana { get; set; }
-    public IEnumerable<AtgenDropList> drop_list { get; set; }
+    public IEnumerable<AtgenDropList> drop_list { get; set; } = Enumerable.Empty<AtgenDropList>();
 
     public EnemyDropList(int coin, int mana, IEnumerable<AtgenDropList> drop_list)
     {

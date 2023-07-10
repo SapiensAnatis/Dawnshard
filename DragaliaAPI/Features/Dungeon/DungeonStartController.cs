@@ -21,16 +21,22 @@ namespace DragaliaAPI.Features.Dungeon;
 public class DungeonStartController : DragaliaControllerBase
 {
     private readonly IDungeonStartService dungeonStartService;
+    private readonly IDungeonService dungeonService;
+    private readonly IOddsInfoService oddsInfoService;
     private readonly IUpdateDataService updateDataService;
     private readonly ILogger<DungeonStartController> logger;
 
     public DungeonStartController(
         IDungeonStartService dungeonStartService,
+        IDungeonService dungeonService,
+        IOddsInfoService oddsInfoService,
         IUpdateDataService updateDataService,
         ILogger<DungeonStartController> logger
     )
     {
         this.dungeonStartService = dungeonStartService;
+        this.dungeonService = dungeonService;
+        this.oddsInfoService = oddsInfoService;
         this.updateDataService = updateDataService;
         this.logger = logger;
     }
@@ -38,30 +44,13 @@ public class DungeonStartController : DragaliaControllerBase
     [HttpPost("start")]
     public async Task<DragaliaResult> Start(DungeonStartStartRequest request)
     {
-        logger.LogDebug("Starting dungeon for quest id {questId}", request.quest_id);
-
-        IngameQuestData ingameQuestData = await this.dungeonStartService.InitiateQuest(
-            request.quest_id
-        );
-
-        UpdateDataList updateData = await this.updateDataService.SaveChangesAsync();
-
         IngameData ingameData = await this.dungeonStartService.GetIngameData(
             request.quest_id,
             request.party_no_list,
             request.support_viewer_id
         );
 
-        this.logger.LogDebug("Issued dungeon key {dungeonKey}", ingameData.dungeon_key);
-
-        DungeonStartStartData response =
-            new()
-            {
-                ingame_data = ingameData,
-                ingame_quest_data = ingameQuestData,
-                odds_info = StubData.OddsInfo,
-                update_data_list = updateData
-            };
+        DungeonStartStartData response = await this.BuildResponse(request.quest_id, ingameData);
 
         return this.Ok(response);
     }
@@ -69,32 +58,15 @@ public class DungeonStartController : DragaliaControllerBase
     [HttpPost("start_multi")]
     public async Task<DragaliaResult> StartMulti(DungeonStartStartMultiRequest request)
     {
-        this.logger.LogDebug("Starting dungeon for quest id {questId}", request.quest_id);
-
-        IngameQuestData ingameQuestData = await this.dungeonStartService.InitiateQuest(
-            request.quest_id
-        );
-
-        UpdateDataList updateData = await this.updateDataService.SaveChangesAsync();
-
         IngameData ingameData = await this.dungeonStartService.GetIngameData(
             request.quest_id,
             request.party_no_list
         );
 
-        // TODO: Enable once co-op quest clears are fixed
-        // ingameData.play_type = QuestPlayType.Multi;
+        DungeonStartStartData response = await this.BuildResponse(request.quest_id, ingameData);
 
-        this.logger.LogDebug("Issued dungeon key {dungeonKey}", ingameData.dungeon_key);
-
-        DungeonStartStartData response =
-            new()
-            {
-                ingame_data = ingameData,
-                ingame_quest_data = ingameQuestData,
-                odds_info = StubData.OddsInfo,
-                update_data_list = updateData
-            };
+        // TODO: Enable when co-op is fixed
+        // response.ingame_data.play_type = QuestPlayType.Multi;
 
         return this.Ok(response);
     }
@@ -102,80 +74,34 @@ public class DungeonStartController : DragaliaControllerBase
     [HttpPost("start_assign_unit")]
     public async Task<DragaliaResult> StartAssignUnit(DungeonStartStartAssignUnitRequest request)
     {
-        this.logger.LogDebug("Starting dungeon for quest id {questId}", request.quest_id);
-
-        IngameQuestData ingameQuestData = await this.dungeonStartService.InitiateQuest(
-            request.quest_id
-        );
-
-        UpdateDataList updateData = await updateDataService.SaveChangesAsync();
-
         IngameData ingameData = await this.dungeonStartService.GetIngameData(
             request.quest_id,
-            request.request_party_setting_list
+            request.request_party_setting_list,
+            request.support_viewer_id
         );
 
-        this.logger.LogDebug("Issued dungeon key {dungeonKey}", ingameData.dungeon_key);
-
-        DungeonStartStartData response =
-            new()
-            {
-                ingame_data = ingameData,
-                ingame_quest_data = ingameQuestData,
-                odds_info = StubData.OddsInfo,
-                update_data_list = updateData
-            };
+        DungeonStartStartData response = await this.BuildResponse(request.quest_id, ingameData);
 
         return this.Ok(response);
     }
 
-    private static class StubData
+    private async Task<DungeonStartStartData> BuildResponse(int questId, IngameData ingameData)
     {
-        public static OddsInfo OddsInfo { get; } =
-            new()
-            {
-                area_index = 0,
-                reaction_obj_count = 1,
-                drop_obj = new List<AtgenDropObj>()
-                {
-                    new()
-                    {
-                        drop_list = new List<AtgenDropList>()
-                        {
-                            new()
-                            {
-                                type = 13,
-                                id = 1001,
-                                quantity = 4000,
-                                place = 0
-                            }
-                        },
-                        obj_id = 1,
-                        obj_type = 2,
-                        is_rare = true,
-                    }
-                },
-                enemy = new List<AtgenEnemy>()
-                {
-                    new()
-                    {
-                        param_id = 100010106,
-                        is_pop = true,
-                        is_rare = true,
-                        piece = 0,
-                        enemy_drop_list = new List<EnemyDropList>()
-                        {
-                            new()
-                            {
-                                drop_list = new List<AtgenDropList>(),
-                                coin = 10000,
-                                mana = 20000,
-                            }
-                        },
-                        enemy_idx = 0,
-                    }
-                },
-                grade = new List<AtgenGrade>()
-            };
+        this.logger.LogDebug("Starting dungeon for quest id {questId}", questId);
+
+        IngameQuestData ingameQuestData = await this.dungeonStartService.InitiateQuest(questId);
+
+        UpdateDataList updateData = await updateDataService.SaveChangesAsync();
+
+        OddsInfo oddsInfo = this.oddsInfoService.GetOddsInfo(questId, 0);
+        await this.dungeonService.AddEnemies(ingameData.dungeon_key, 0, oddsInfo.enemy);
+
+        return new()
+        {
+            ingame_data = ingameData,
+            ingame_quest_data = ingameQuestData,
+            odds_info = oddsInfo,
+            update_data_list = updateData
+        };
     }
 }

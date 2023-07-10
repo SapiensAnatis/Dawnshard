@@ -122,7 +122,7 @@ public class InventoryRepository : IInventoryRepository
             await this.UpdateQuantity(m, quantity);
         }
 
-        this.logger.LogDebug(
+        this.logger.LogTrace(
             "Updated list of materials by quantity {quantity}: {list}",
             quantity,
             list
@@ -136,7 +136,7 @@ public class InventoryRepository : IInventoryRepository
             await this.UpdateQuantity(mat, quantity);
         }
 
-        this.logger.LogDebug("Updated player materials by map {@map}", quantityMap);
+        this.logger.LogTrace("Updated player materials by map {@map}", quantityMap);
     }
 
     public async Task<DbPlayerMaterial?> GetMaterial(Materials materialId)

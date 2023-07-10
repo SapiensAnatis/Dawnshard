@@ -114,14 +114,12 @@ builder.Services
 #pragma warning restore CS0618 // Type or member is obsolete
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<IUpdateDataService, UpdateDataService>()
-    .AddScoped<IDungeonService, DungeonService>()
     .AddScoped<IDragonService, DragonService>()
     .AddScoped<ISavefileService, SavefileService>()
     .AddScoped<IHelperService, HelperService>()
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<IBonusService, BonusService>()
     .AddScoped<IWeaponService, WeaponService>()
-    .AddScoped<IQuestRewardService, QuestRewardService>()
     .AddScoped<IStoryService, StoryService>()
     .AddScoped<IMatchingService, MatchingService>()
     .AddScoped<IAbilityCrestService, AbilityCrestService>()
@@ -161,8 +159,12 @@ builder.Services
     .AddScoped<IDateTimeProvider, DateTimeProvider>()
     .AddScoped<ILoginBonusService, LoginBonusService>()
     // Dungeon Feature
+    .AddScoped<IDungeonService, DungeonService>()
     .AddScoped<IDungeonStartService, DungeonStartService>()
-    .AddScoped<IDungeonRepository, DungeonRepository>();
+    .AddScoped<IDungeonRepository, DungeonRepository>()
+    .AddScoped<IQuestDropService, QuestDropService>()
+    .AddScoped<IQuestEnemyService, QuestEnemyService>()
+    .AddScoped<IOddsInfoService, OddsInfoService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();
