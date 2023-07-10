@@ -1,0 +1,20 @@
+{
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "_GroupId": { "type": "integer" },
+            "_ManaMultiplier": { "$ref": "#/$defs/multiplier" },
+            "_RupieMultiplier": { "$ref": "#/$defs/multiplier" },
+            "_CommonMaterialMultiplier": { "$ref": "#/$defs/multiplier" },
+            "_UncommonMaterialMultiplier": { "$ref": "#/$defs/multiplier" },
+            "_RareMaterialMultiplier": { "$ref": "#/$defs/multiplier" }
+        }
+    },
+    "$defs": {
+        "multiplier": {
+            "exclusiveMinimum": 0,
+            "type": "number"
+        }
+    }
+}

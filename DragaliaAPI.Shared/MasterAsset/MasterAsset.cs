@@ -3,6 +3,7 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Login;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
+using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
 
@@ -30,6 +31,9 @@ public static class MasterAsset
     /// </summary>
     public static readonly MasterAssetData<int, QuestData> QuestData =
         new("QuestData.json", x => x.Id);
+
+    public static readonly MasterAssetData<Materials, MaterialData> MaterialData =
+        new("MaterialData.json", x => x.Id);
 
     /// <summary>
     /// Contains information about Halidom buildings.
@@ -63,12 +67,6 @@ public static class MasterAsset
     /// </summary>
     public static readonly MasterAssetData<int, WeaponPassiveAbility> WeaponPassiveAbility =
         new("WeaponPassiveAbility.json", x => x.Id);
-
-    /// <summary>
-    /// Contains information about rewards from quests.
-    /// </summary>
-    public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
-        new("QuestDrops.json", x => x.QuestId);
 
     /// <summary>
     /// Dragon StoryId Arrays indexed by DragonId
@@ -113,6 +111,8 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, QuestEvent> QuestEvent =
         new("QuestEvent.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, UseItem> UseItem = new("UseItem.json", x => x.Id);
 
     #region Missions
 
@@ -163,6 +163,7 @@ public static class MasterAsset
     > MainStoryMissionGroupRewards = new("Missions/MainStoryMissionGroupRewards.json", x => x.Id);
 
     #endregion
+
     #region Stamps
 
     /// <summary>
@@ -171,6 +172,7 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, Stamp> StampData = new("StampData.json", x => x.Id);
 
     #endregion
+
     #region Shops
 
     public static readonly MasterAssetData<int, NormalShop> NormalShop =
@@ -189,6 +191,7 @@ public static class MasterAsset
         new("Shop/MaterialShopMonthly.json", x => x.Id);
 
     #endregion
+
     #region Treasure Trade / Wyrmprint Trade
 
     /// <summary>
@@ -202,8 +205,6 @@ public static class MasterAsset
 
     #endregion
 
-    public static readonly MasterAssetData<int, UseItem> UseItem = new("UseItem.json", x => x.Id);
-
     #region Login Bonus
 
     public static readonly MasterAssetData<int, LoginBonusData> LoginBonusData =
@@ -213,6 +214,7 @@ public static class MasterAsset
         new("Login/LoginBonusReward.json", x => x.Id);
 
     #endregion
+
     #region Mana Circles
 
     /// <summary>
@@ -230,5 +232,28 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, CharaLimitBreak> CharaLimitBreak =
         new("ManaCircle/CharaLimitBreak.json", x => x.Id);
 
+    #endregion
+
+    #region Quest Drops
+    /// <summary>
+    /// Contains information about the <see cref="Models.QuestDrops.EnemyParam"/> IDs in particular quest maps.
+    /// </summary>
+    public static readonly MasterAssetData<string, QuestEnemies> QuestEnemies =
+        new("QuestDrops/QuestEnemies.json", x => x.AreaName);
+
+    /// <summary>
+    /// Contains information about instances of enemies within a quest.
+    /// </summary>
+    public static readonly MasterAssetData<int, EnemyParam> EnemyParam =
+        new("QuestDrops/EnemyParam.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, QuestGroupMultiplier> QuestGroupMultiplier =
+        new("QuestDrops/QuestGroupMultipliers.json", x => x.GroupId);
+
+    /// <summary>
+    /// Contains information about rewards from quests.
+    /// </summary>
+    public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
+        new("QuestDrops/QuestDrops.json", x => x.QuestId);
     #endregion
 }

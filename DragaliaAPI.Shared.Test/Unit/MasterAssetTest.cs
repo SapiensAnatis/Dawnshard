@@ -234,6 +234,7 @@ public class MasterAssetTest
                     PayStaminaSingle: 2,
                     PayStaminaMulti: 1,
                     DungeonType: DungeonTypes.Normal,
+                    VariationType: VariationTypes.Normal,
                     Scene01: "Main/01/MAIN_01_0101_01",
                     AreaName01: "MAIN_01_0101_01",
                     Scene02: "Boss/BG001_5001_00/BG001_5001_00_00",
@@ -247,7 +248,8 @@ public class MasterAssetTest
                     Scene06: "",
                     AreaName06: "",
                     ContinueLimit: 3,
-                    RebornLimit: 3
+                    RebornLimit: 3,
+                    Difficulty: 500
                 )
             );
 
