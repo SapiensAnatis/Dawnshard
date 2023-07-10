@@ -32,6 +32,7 @@ using Serilog.Extensions.Logging;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Login;
 using DragaliaAPI.Helpers;
+using DragaliaAPI.Features.Dungeon;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -158,7 +159,10 @@ builder.Services
     // Login feature
     .AddScoped<IResetHelper, ResetHelper>()
     .AddScoped<IDateTimeProvider, DateTimeProvider>()
-    .AddScoped<ILoginBonusService, LoginBonusService>();
+    .AddScoped<ILoginBonusService, LoginBonusService>()
+    // Dungeon Feature
+    .AddScoped<IDungeonStartService, DungeonStartService>()
+    .AddScoped<IDungeonRepository, DungeonRepository>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
@@ -11,7 +12,7 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.Dungeon;
 
 [Route("dungeon_record")]
 public class DungeonRecordController : DragaliaControllerBase
@@ -55,9 +56,9 @@ public class DungeonRecordController : DragaliaControllerBase
     public async Task<DragaliaResult> Record(DungeonRecordRecordRequest request)
     {
         // TODO: Turn this method into a service call
-        DungeonSession session = await this.dungeonService.FinishDungeon(request.dungeon_key);
+        DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
 
-        DbQuest? oldQuestData = await this.questRepository.Quests.SingleOrDefaultAsync(
+        DbQuest? oldQuestData = await questRepository.Quests.SingleOrDefaultAsync(
             x => x.QuestId == session.QuestData.Id
         );
 
@@ -68,24 +69,22 @@ public class DungeonRecordController : DragaliaControllerBase
 
         float clear_time = request.play_record?.time ?? -1.0f;
 
-        await this.tutorialService.AddTutorialFlag(1022);
+        await tutorialService.AddTutorialFlag(1022);
 
         // oldQuestData and newQuestData actually reference the same object so this is somewhat redundant
         // keeping it for clarity and because oldQuestData is null in some tests
-        DbQuest newQuestData = await this.questRepository.CompleteQuest(
+        DbQuest newQuestData = await questRepository.CompleteQuest(
             session.QuestData.Id,
             clear_time
         );
 
         // Void battle moment :(
         if (session.QuestData.IsPartOfVoidBattleGroups)
-        {
-            this.missionProgressionService.OnVoidBattleCleared();
-        }
+            missionProgressionService.OnVoidBattleCleared();
 
-        this.missionProgressionService.OnQuestCleared(session.QuestData.Id);
+        missionProgressionService.OnQuestCleared(session.QuestData.Id);
 
-        DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
+        DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
 
         userData.Exp += 1;
         userData.ManaPoint += QuestMana;
@@ -106,15 +105,15 @@ public class DungeonRecordController : DragaliaControllerBase
 
         userData.Crystal +=
             (isFirstClear ? 5 : 0)
-            + (clearedMissions.Where(x => x).Count() * 5)
+            + clearedMissions.Where(x => x).Count() * 5
             + (allMissionsCleared ? 5 : 0);
 
-        IEnumerable<Materials> drops = this.questRewardService.GetDrops(session.QuestData.Id);
-        await this.inventoryRepository.UpdateQuantity(drops, QuestDropQuantity);
+        IEnumerable<Materials> drops = questRewardService.GetDrops(session.QuestData.Id);
+        await inventoryRepository.UpdateQuantity(drops, QuestDropQuantity);
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return this.Ok(
+        return Ok(
             new DungeonRecordRecordData()
             {
                 ingame_result_data = new()

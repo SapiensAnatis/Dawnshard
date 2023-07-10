@@ -4,7 +4,7 @@ using DragaliaAPI.Services.Exceptions;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 
-namespace DragaliaAPI.Services.Game;
+namespace DragaliaAPI.Features.Dungeon;
 
 public class DungeonService : IDungeonService
 {
@@ -50,7 +50,7 @@ public class DungeonService : IDungeonService
 
     public async Task<DungeonSession> FinishDungeon(string dungeonKey)
     {
-        DungeonSession session = await this.GetDungeon(dungeonKey);
+        DungeonSession session = await GetDungeon(dungeonKey);
 
         // Don't remove in case the client re-calls due to timeout
         // await cache.RemoveAsync(Schema.DungeonKey_DungeonData(dungeonKey));

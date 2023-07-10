@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Models;
 
-namespace DragaliaAPI.Services;
+namespace DragaliaAPI.Features.Dungeon;
 
 public interface IDungeonService
 {

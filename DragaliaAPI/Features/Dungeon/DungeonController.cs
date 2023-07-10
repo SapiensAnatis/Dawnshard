@@ -1,11 +1,12 @@
-﻿using DragaliaAPI.Models;
+﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.Dungeon;
 
 [Route("dungeon")]
 public class DungeonController : DragaliaControllerBase
@@ -20,9 +21,9 @@ public class DungeonController : DragaliaControllerBase
     [HttpPost("get_area_odds")]
     public async Task<DragaliaResult> GetAreaOdds(DungeonGetAreaOddsRequest request)
     {
-        DungeonSession session = await this.dungeonService.GetDungeon(request.dungeon_key);
+        DungeonSession session = await dungeonService.GetDungeon(request.dungeon_key);
 
-        return this.Ok(
+        return Ok(
             new DungeonGetAreaOddsData()
             {
                 odds_info = new()
@@ -59,9 +60,9 @@ public class DungeonController : DragaliaControllerBase
     [HttpPost("fail")]
     public async Task<DragaliaResult> Fail(DungeonFailRequest request)
     {
-        DungeonSession session = await this.dungeonService.FinishDungeon(request.dungeon_key);
+        DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
 
-        return this.Ok(
+        return Ok(
             new DungeonFailData()
             {
                 result = 1,

@@ -6534,7 +6534,7 @@ public class IngameData
     public ulong viewer_id { get; set; }
     public string dungeon_key { get; set; }
     public DungeonTypes dungeon_type { get; set; }
-    public QuestPlayModeTypes play_type { get; set; }
+    public QuestPlayType play_type { get; set; }
     public int quest_id { get; set; }
     public int bonus_type { get; set; }
     public int continue_limit { get; set; }
@@ -6559,8 +6559,8 @@ public class IngameData
 
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool is_use_event_chara_ability { get; set; }
-    public IEnumerable<EventAbilityCharaList> event_ability_chara_list { get; set; }
-    public IEnumerable<ulong> first_clear_viewer_id_list { get; set; }
+    public IEnumerable<EventAbilityCharaList> event_ability_chara_list { get; set; } = Enumerable.Empty<EventAbilityCharaList>();
+    public IEnumerable<ulong> first_clear_viewer_id_list { get; set; } = Enumerable.Empty<ulong>();
     public int multi_disconnect_type { get; set; }
     public int repeat_state { get; set; }
     public AtgenIngameWalker ingame_walker { get; set; }
@@ -6569,7 +6569,7 @@ public class IngameData
         ulong viewer_id,
         string dungeon_key,
         DungeonTypes dungeon_type,
-        QuestPlayModeTypes play_type,
+        QuestPlayType play_type,
         int quest_id,
         int bonus_type,
         int continue_limit,
@@ -7244,8 +7244,8 @@ public class PartySettingList
     public AbilityCrests equip_crest_slot_type_3_crest_id_1 { get; set; }
     public AbilityCrests equip_crest_slot_type_3_crest_id_2 { get; set; }
     public ulong equip_talisman_key_id { get; set; }
-    public int edit_skill_1_chara_id { get; set; }
-    public int edit_skill_2_chara_id { get; set; }
+    public Charas edit_skill_1_chara_id { get; set; }
+    public Charas edit_skill_2_chara_id { get; set; }
 
     public PartySettingList(
         int unit_no,
@@ -7265,8 +7265,8 @@ public class PartySettingList
         AbilityCrests equip_crest_slot_type_3_crest_id_1,
         AbilityCrests equip_crest_slot_type_3_crest_id_2,
         ulong equip_talisman_key_id,
-        int edit_skill_1_chara_id,
-        int edit_skill_2_chara_id
+        Charas edit_skill_1_chara_id,
+        Charas edit_skill_2_chara_id
     )
     {
         this.unit_no = unit_no;
