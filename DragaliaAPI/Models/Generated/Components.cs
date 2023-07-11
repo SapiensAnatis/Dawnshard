@@ -5826,13 +5826,13 @@ public class EventTradeList
     public int tab_group_id { get; set; }
     public int priority { get; set; }
     public int is_lock_view { get; set; }
-    public int commence_date { get; set; }
-    public int complete_date { get; set; }
+    public DateTimeOffset commence_date { get; set; }
+    public DateTimeOffset complete_date { get; set; }
     public int reset_type { get; set; }
     public int limit { get; set; }
     public int read_story_count { get; set; }
     public int clear_target_quest_id { get; set; }
-    public int destination_entity_type { get; set; }
+    public EntityTypes destination_entity_type { get; set; }
     public int destination_entity_id { get; set; }
     public int destination_entity_quantity { get; set; }
     public IEnumerable<AtgenBuildEventRewardEntityList> need_entity_list { get; set; }
@@ -5843,13 +5843,13 @@ public class EventTradeList
         int tab_group_id,
         int priority,
         int is_lock_view,
-        int commence_date,
-        int complete_date,
+        DateTimeOffset commence_date,
+        DateTimeOffset complete_date,
         int reset_type,
         int limit,
         int read_story_count,
         int clear_target_quest_id,
-        int destination_entity_type,
+        EntityTypes destination_entity_type,
         int destination_entity_id,
         int destination_entity_quantity,
         IEnumerable<AtgenBuildEventRewardEntityList> need_entity_list
