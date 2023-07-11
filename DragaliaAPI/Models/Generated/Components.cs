@@ -3416,12 +3416,12 @@ public class AtgenRoomMemberList
 [MessagePackObject(true)]
 public class AtgenScoreMissionSuccessList
 {
-    public int score_mission_complete_type { get; set; }
+    public QuestCompleteType score_mission_complete_type { get; set; }
     public int score_target_value { get; set; }
     public float correction_value { get; set; }
 
     public AtgenScoreMissionSuccessList(
-        int score_mission_complete_type,
+        QuestCompleteType score_mission_complete_type,
         int score_target_value,
         float correction_value
     )

@@ -21,7 +21,63 @@ public class QuestCompletionService(
         int Points
     )> CompleteQuestScoreMissions(DungeonSession session, PlayRecord record)
     {
-        return await Task.FromResult((Enumerable.Empty<AtgenScoreMissionSuccessList>(), 0));
+        List<AtgenScoreMissionSuccessList> missions = new();
+
+        int questId = session.QuestData.Id;
+
+        if (
+            !MasterAsset.QuestScoreMissionRewardInfo.TryGetValue(
+                questId,
+                out QuestScoreMissionRewardInfo? info
+            )
+        )
+        {
+            return (missions, 0);
+        }
+
+        double multiplier = 100.0f;
+
+        foreach (QuestMissionCondition condition in info.RewardConditions)
+        {
+            // The type is called AtgenScoreMission*Success*List, but a mission with correction_value == 0 means it was not completed (so greyed out)
+            int percentageAdded = await IsQuestMissionCompleted(
+                condition.QuestCompleteType,
+                condition.QuestCompleteValue,
+                record,
+                session
+            )
+                ? condition.PercentageAdded
+                : 0;
+
+            multiplier += percentageAdded;
+            missions.Add(
+                new AtgenScoreMissionSuccessList(
+                    condition.QuestCompleteType,
+                    condition.QuestCompleteValue,
+                    percentageAdded
+                )
+            );
+        }
+
+        logger.LogDebug("Completed mission score missions {@missions}", missions);
+
+        int questScoreMissionId = MasterAsset.QuestRewardData[questId].QuestScoreMissionId;
+        int baseQuantity = MasterAsset.QuestScoreMissionData[questScoreMissionId].Scores[
+            record.wave
+        ];
+
+        double obtainedAmount = baseQuantity * (multiplier / 100.0f);
+        int rewardQuantity = (int)Math.Floor(obtainedAmount);
+
+        EventKindType eventType = MasterAsset.EventData[
+            MasterAsset.QuestData[questId].Gid
+        ].EventKindType;
+
+        await rewardService.GrantReward(
+            new Entity(eventType.ToItemType(), (int)info.RewardEntityId, rewardQuantity)
+        );
+
+        return (missions, rewardQuantity);
     }
 
     public async Task<QuestMissionStatus> CompleteQuestMissions(

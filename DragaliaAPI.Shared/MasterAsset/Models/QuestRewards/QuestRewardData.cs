@@ -21,7 +21,9 @@ public record QuestRewardData(
     int MissionsClearSetEntityQuantity3,
     EntityTypes MissionCompleteEntityType,
     int MissionCompleteEntityId,
-    int MissionCompleteEntityQuantity
+    int MissionCompleteEntityQuantity,
+    int QuestScoreMissionId,
+    int QuestScoringEnemyGroupId
 )
 {
     public readonly (QuestCompleteType Type, int Value)[] Missions =

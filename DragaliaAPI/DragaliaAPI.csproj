@@ -87,6 +87,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Features\Event\" />
 		<Folder Include="logs\" />
 	</ItemGroup>
 
