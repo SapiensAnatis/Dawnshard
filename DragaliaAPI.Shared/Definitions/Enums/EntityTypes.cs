@@ -41,7 +41,7 @@ public enum EntityTypes
     LotteryTicket,
     ExHunterEventItem,
     FafnirMedal,
-    SummonSigil,
+    CombatEventItem, // SummonSigil
     SummonPoint,
     BattleRoyalEventItem,
     WeaponSkin,

@@ -71,7 +71,7 @@ public class RewardService(
             case EntityTypes.ExHunterEventItem:
             case EntityTypes.BattleRoyalEventItem:
             case EntityTypes.EarnEventItem:
-            case EntityTypes.SummonSigil:
+            case EntityTypes.CombatEventItem:
                 await eventRepository.AddItemQuantityAsync(entity.Id, entity.Quantity);
                 break;
             default:

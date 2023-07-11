@@ -31,7 +31,7 @@ public static class EventKindTypeExtensions
             EventKindType.ExRush => EntityTypes.ExRushEventItem,
             EventKindType.ExHunter => EntityTypes.ExHunterEventItem,
             EventKindType.Simple => EntityTypes.SimpleEventItem,
-            EventKindType.Combat => EntityTypes.SummonSigil,
+            EventKindType.Combat => EntityTypes.CombatEventItem,
             EventKindType.BattleRoyal => EntityTypes.BattleRoyalEventItem,
             EventKindType.Earn => EntityTypes.EarnEventItem,
             _ => EntityTypes.None
