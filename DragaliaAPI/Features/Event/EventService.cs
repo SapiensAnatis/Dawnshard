@@ -111,8 +111,8 @@ public class EventService(
             .ToListAsync();
 
         List<(int Id, int Type)> itemIds = Event
-            .GetEventItemIds(eventId)
-            .Zip(Event.GetEventItems(eventId), (x, y) => (x, y))
+            .GetEventSpecificItemIds(eventId)
+            .Zip(Event.GetEventItemTypes(eventId), (x, y) => (x, y))
             .ExceptBy(items, info => info.x)
             .ToList();
 
@@ -128,6 +128,19 @@ public class EventService(
 
     #region User Data Providers
 
+    private async Task<Dictionary<int, int>> GetEventItemDictionary(int eventId)
+    {
+        Dictionary<int, int> itemDict = await eventRepository.GetEventItemQuantityAsync(eventId);
+        foreach (
+            int itemId in Event.GetEventItemTypes(eventId).Where(x => !itemDict.ContainsKey(x))
+        )
+        {
+            itemDict[itemId] = 0;
+        }
+
+        return itemDict;
+    }
+
     public async Task<BuildEventUserList> GetBuildEventUserData(int eventId)
     {
         IEnumerable<DbPlayerEventItem> eventItems = await eventRepository.GetEventItemsAsync(
@@ -142,7 +155,7 @@ public class EventService(
 
     public async Task<RaidEventUserList> GetRaidEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await eventRepository.GetEventItemQuantityAsync(eventId);
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new RaidEventUserList(
             eventId,
@@ -160,7 +173,7 @@ public class EventService(
 
     public async Task<Clb01EventUserList> GetClb01EventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await eventRepository.GetEventItemQuantityAsync(eventId);
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new Clb01EventUserList(
             eventId,
@@ -170,7 +183,7 @@ public class EventService(
 
     public async Task<CollectEventUserList> GetCollectEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await eventRepository.GetEventItemQuantityAsync(eventId);
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new CollectEventUserList(
             eventId,
@@ -180,7 +193,7 @@ public class EventService(
 
     public async Task<CombatEventUserList> GetCombatEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await eventRepository.GetEventItemQuantityAsync(eventId);
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new CombatEventUserList(
             eventId,
@@ -194,7 +207,7 @@ public class EventService(
 
     public async Task<EarnEventUserList> GetEarnEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await eventRepository.GetEventItemQuantityAsync(eventId);
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new EarnEventUserList(
             eventId,
@@ -207,7 +220,7 @@ public class EventService(
 
     public async Task<ExHunterEventUserList> GetExHunterEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await eventRepository.GetEventItemQuantityAsync(eventId);
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new ExHunterEventUserList(
             eventId,
@@ -225,7 +238,7 @@ public class EventService(
 
     public async Task<ExRushEventUserList> GetExRushEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await eventRepository.GetEventItemQuantityAsync(eventId);
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new ExRushEventUserList(
             eventId,
@@ -236,7 +249,7 @@ public class EventService(
 
     public async Task<MazeEventUserList> GetMazeEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await eventRepository.GetEventItemQuantityAsync(eventId);
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new MazeEventUserList(
             eventId,
@@ -246,7 +259,7 @@ public class EventService(
 
     public async Task<SimpleEventUserList> GetSimpleEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await eventRepository.GetEventItemQuantityAsync(eventId);
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new SimpleEventUserList(
             eventId,
@@ -261,37 +274,29 @@ public class EventService(
 
 file static class Event
 {
-    public static IEnumerable<int> GetEventItems(int eventId)
+    public static IEnumerable<int> GetEventItemTypes(int eventId)
     {
         EventData data = MasterAsset.EventData[eventId];
 
-        return data.EventKindType switch
-        {
-            EventKindType.Build
-                => Enum.GetValues<BuildEventItemType>().Where(x => x != 0).Cast<int>(),
-            EventKindType.BattleRoyal
-                => Enum.GetValues<BattleRoyalEventItemType>().Where(x => x != 0).Cast<int>(),
-            EventKindType.Clb01
-                => Enum.GetValues<Clb01EventItemType>().Where(x => x != 0).Cast<int>(),
-            EventKindType.Collect
-                => Enum.GetValues<CollectEventItemType>().Where(x => x != 0).Cast<int>(),
-            EventKindType.Combat
-                => Enum.GetValues<CombatEventItemType>().Where(x => x != 0).Cast<int>(),
-            EventKindType.Earn
-                => Enum.GetValues<EarnEventItemType>().Where(x => x != 0).Cast<int>(),
-            EventKindType.ExHunter
-                => Enum.GetValues<ExHunterEventItemType>().Where(x => x != 0).Cast<int>(),
-            EventKindType.ExRush
-                => Enum.GetValues<ExRushEventItemType>().Where(x => x != 0).Cast<int>(),
-            EventKindType.Raid
-                => Enum.GetValues<RaidEventItemType>().Where(x => x != 0).Cast<int>(),
-            EventKindType.Simple
-                => Enum.GetValues<SimpleEventItemType>().Where(x => x != 0).Cast<int>(),
-            _ => Enumerable.Empty<int>(),
-        };
+        return (
+            data.EventKindType switch
+            {
+                EventKindType.Build => Enum.GetValues<BuildEventItemType>().Cast<int>(),
+                EventKindType.BattleRoyal => Enum.GetValues<BattleRoyalEventItemType>().Cast<int>(),
+                EventKindType.Clb01 => Enum.GetValues<Clb01EventItemType>().Cast<int>(),
+                EventKindType.Collect => Enum.GetValues<CollectEventItemType>().Cast<int>(),
+                EventKindType.Combat => Enum.GetValues<CombatEventItemType>().Cast<int>(),
+                EventKindType.Earn => Enum.GetValues<EarnEventItemType>().Cast<int>(),
+                EventKindType.ExHunter => Enum.GetValues<ExHunterEventItemType>().Cast<int>(),
+                EventKindType.ExRush => Enum.GetValues<ExRushEventItemType>().Cast<int>(),
+                EventKindType.Raid => Enum.GetValues<RaidEventItemType>().Cast<int>(),
+                EventKindType.Simple => Enum.GetValues<SimpleEventItemType>().Cast<int>(),
+                _ => Enumerable.Empty<int>(),
+            }
+        ).Where(x => x != 0);
     }
 
-    public static IEnumerable<int> GetEventItemIds(int eventId)
+    public static IEnumerable<int> GetEventSpecificItemIds(int eventId)
     {
         EventData data = MasterAsset.EventData[eventId];
 
@@ -301,28 +306,42 @@ file static class Event
                 => MasterAsset.BuildEventItem.Enumerable
                     .Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
-            /*EventKindType.Raid
+            EventKindType.Raid
                 => MasterAsset.RaidEventItem.Enumerable
                     .Where(x => x.RaidEventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Combat
                 => MasterAsset.CombatEventItem.Enumerable
                     .Where(x => x.EventId == eventId)
-                    .Select(x => x.Id),*/
-            /*EventKindType.BattleRoyal
-                => Enum.GetValues<BattleRoyalEventItemType>().Where(x => x != 0).Cast<int>(),
+                    .Select(x => x.Id),
+            EventKindType.BattleRoyal
+                => MasterAsset.BattleRoyalEventItem.Enumerable
+                    .Where(x => x.EventId == eventId)
+                    .Select(x => x.Id),
             EventKindType.Clb01
-                => Enum.GetValues<Clb01EventItemType>().Where(x => x != 0).Cast<int>(),
+                => MasterAsset.Clb01EventItem.Enumerable
+                    .Where(x => x.EventId == eventId)
+                    .Select(x => x.Id),
             EventKindType.Collect
-                => Enum.GetValues<CollectEventItemType>().Where(x => x != 0).Cast<int>(),
+                => MasterAsset.CollectEventItem.Enumerable
+                    .Where(x => x.EventId == eventId)
+                    .Select(x => x.Id),
             EventKindType.Earn
-                => Enum.GetValues<EarnEventItemType>().Where(x => x != 0).Cast<int>(),
+                => MasterAsset.EarnEventItem.Enumerable
+                    .Where(x => x.EventId == eventId)
+                    .Select(x => x.Id),
             EventKindType.ExHunter
-                => Enum.GetValues<ExHunterEventItemType>().Where(x => x != 0).Cast<int>(),
+                => MasterAsset.ExHunterEventItem.Enumerable
+                    .Where(x => x.EventId == eventId)
+                    .Select(x => x.Id),
             EventKindType.ExRush
-                => Enum.GetValues<ExRushEventItemType>().Where(x => x != 0).Cast<int>(),
+                => MasterAsset.ExRushEventItem.Enumerable
+                    .Where(x => x.EventId == eventId)
+                    .Select(x => x.Id),
             EventKindType.Simple
-                => Enum.GetValues<SimpleEventItemType>().Where(x => x != 0).Cast<int>(),*/
+                => MasterAsset.SimpleEventItem.Enumerable
+                    .Where(x => x.EventId == eventId)
+                    .Select(x => x.Id),
             _ => Enumerable.Empty<int>(),
         };
     }
