@@ -252,7 +252,11 @@ public class MasterAssetTest
                     AreaName06: "",
                     ContinueLimit: 3,
                     RebornLimit: 3,
-                    Difficulty: 500
+                    Difficulty: 500,
+                    PayEntityTargetType: PayTargetType.None,
+                    PayEntityType: 0,
+                    PayEntityId: 0,
+                    PayEntityQuantity: 0
                 )
             );
 
