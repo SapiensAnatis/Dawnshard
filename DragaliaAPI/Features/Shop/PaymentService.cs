@@ -1,5 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -12,7 +13,8 @@ namespace DragaliaAPI.Features.Shop;
 public class PaymentService(
     ILogger<PaymentService> logger,
     IUserDataRepository userDataRepository,
-    IInventoryRepository inventoryRepository
+    IInventoryRepository inventoryRepository,
+    IEventRepository eventRepository
 ) : IPaymentService
 {
     private readonly List<AtgenDeleteDragonList> dragonList = new();
@@ -92,7 +94,10 @@ public class PaymentService(
             case EntityTypes.ExHunterEventItem:
             case EntityTypes.BattleRoyalEventItem:
             case EntityTypes.EarnEventItem:
-                throw new NotImplementedException();
+                DbPlayerEventItem? item = await eventRepository.GetEventItemAsync(entity.Id);
+                quantity = item?.Quantity;
+                updater = () => item!.Quantity -= price;
+                break;
             case EntityTypes.SummonTicket:
                 // TODO: Implement ticket payments.
                 logger.LogWarning(

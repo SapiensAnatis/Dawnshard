@@ -33,6 +33,7 @@ using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Login;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Event;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -165,7 +166,9 @@ builder.Services
     .AddScoped<IQuestDropService, QuestDropService>()
     .AddScoped<IQuestEnemyService, QuestEnemyService>()
     .AddScoped<IOddsInfoService, OddsInfoService>()
-    .AddScoped<IQuestCompletionService, QuestCompletionService>();
+    .AddScoped<IQuestCompletionService, QuestCompletionService>()
+    // Event Feature
+    .AddScoped<IEventRepository, EventRepository>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();
