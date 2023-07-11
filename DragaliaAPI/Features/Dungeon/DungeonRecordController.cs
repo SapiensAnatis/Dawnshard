@@ -214,11 +214,7 @@ public class DungeonRecordController : DragaliaControllerBase
                         mana_bonus_factor = 1,
                         chara_grow_record = session.Party.Select(
                             x =>
-                                new AtgenCharaGrowRecord()
-                                {
-                                    chara_id = (int)x.chara_id,
-                                    take_exp = 240
-                                }
+                                new AtgenCharaGrowRecord() { chara_id = x.chara_id, take_exp = 240 }
                         ),
                         chara_friendship_list = new List<CharaFriendshipList>()
                     },

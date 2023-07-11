@@ -834,10 +834,10 @@ public class AtgenCategoryList
 [MessagePackObject(true)]
 public class AtgenCharaGrowRecord
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int take_exp { get; set; }
 
-    public AtgenCharaGrowRecord(int chara_id, int take_exp)
+    public AtgenCharaGrowRecord(Charas chara_id, int take_exp)
     {
         this.chara_id = chara_id;
         this.take_exp = take_exp;

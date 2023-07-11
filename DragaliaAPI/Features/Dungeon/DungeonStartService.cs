@@ -150,7 +150,37 @@ public class DungeonStartService(
             }
         }
 
-        return detailedPartyUnits.OrderBy(x => x.Position).Select(mapper.Map<PartyUnitList>);
+        List<PartyUnitList> units = detailedPartyUnits
+            .OrderBy(x => x.Position)
+            .Select(mapper.Map<PartyUnitList>)
+            .ToList();
+
+        if (units.Count != 4)
+        {
+            for (int i = units.Count; i < 4; i++)
+            {
+                units.Add(
+                    new PartyUnitList
+                    {
+                        position = i + 1,
+                        chara_data = new CharaList(),
+                        dragon_data = new DragonList(),
+                        weapon_skin_data = new GameWeaponSkin(),
+                        weapon_body_data = new GameWeaponBody(),
+                        crest_slot_type_1_crest_list = Enumerable.Empty<GameAbilityCrest>(),
+                        crest_slot_type_2_crest_list = Enumerable.Empty<GameAbilityCrest>(),
+                        crest_slot_type_3_crest_list = Enumerable.Empty<GameAbilityCrest>(),
+                        talisman_data = new TalismanList(),
+                        edit_skill_1_chara_data = new EditSkillCharaData(),
+                        edit_skill_2_chara_data = new EditSkillCharaData(),
+                        game_weapon_passive_ability_list =
+                            Enumerable.Empty<WeaponPassiveAbilityList>()
+                    }
+                );
+            }
+        }
+
+        return units;
     }
 
     private IEnumerable<PartySettingList> ProcessUnitList(
@@ -203,7 +233,7 @@ public class DungeonStartService(
         result.continue_limit = questInfo.ContinueLimit;
 
         result.dungeon_key = await dungeonService.StartDungeon(
-            new() { QuestData = questInfo, Party = party }
+            new() { QuestData = questInfo, Party = party.Where(x => x.chara_id != 0) }
         );
 
         result.party_info.fort_bonus_list = await bonusService.GetBonusList();
