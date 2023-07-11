@@ -168,7 +168,8 @@ builder.Services
     .AddScoped<IOddsInfoService, OddsInfoService>()
     .AddScoped<IQuestCompletionService, QuestCompletionService>()
     // Event Feature
-    .AddScoped<IEventRepository, EventRepository>();
+    .AddScoped<IEventRepository, EventRepository>()
+    .AddScoped<IEventService, EventService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();

@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Photon.Shared.Enums;
@@ -4592,7 +4593,7 @@ public class BeginnerMissionList
 }
 
 [MessagePackObject(true)]
-public class BuildEventRewardList
+public class BuildEventRewardList : IEventRewardList<BuildEventRewardList>
 {
     public int event_id { get; set; }
     public int event_reward_id { get; set; }
@@ -4602,6 +4603,8 @@ public class BuildEventRewardList
         this.event_id = event_id;
         this.event_reward_id = event_reward_id;
     }
+
+    public static BuildEventRewardList FromDatabase(DbPlayerEventReward reward) => new(reward.EventId, reward.RewardId);
 
     public BuildEventRewardList() { }
 }
@@ -7950,7 +7953,7 @@ public class QuestWallList
 }
 
 [MessagePackObject(true)]
-public class RaidEventRewardList
+public class RaidEventRewardList : IEventRewardList<RaidEventRewardList>
 {
     public int raid_event_id { get; set; }
     public int raid_event_reward_id { get; set; }
@@ -7960,6 +7963,8 @@ public class RaidEventRewardList
         this.raid_event_id = raid_event_id;
         this.raid_event_reward_id = raid_event_reward_id;
     }
+
+    public static RaidEventRewardList FromDatabase(DbPlayerEventReward reward) => new(reward.EventId, reward.RewardId);
 
     public RaidEventRewardList() { }
 }
@@ -9271,7 +9276,7 @@ public class UserEventItemData
 }
 
 [MessagePackObject(true)]
-public class UserEventLocationRewardList
+public class UserEventLocationRewardList : IEventRewardList<UserEventLocationRewardList>
 {
     public int event_id { get; set; }
     public int location_reward_id { get; set; }
@@ -9283,6 +9288,8 @@ public class UserEventLocationRewardList
     }
 
     public UserEventLocationRewardList() { }
+
+    public static UserEventLocationRewardList FromDatabase(DbPlayerEventReward reward) => new(reward.EventId, reward.RewardId);
 }
 
 [MessagePackObject(true)]
