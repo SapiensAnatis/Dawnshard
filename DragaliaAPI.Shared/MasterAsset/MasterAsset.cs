@@ -303,20 +303,11 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, EventTradeGroup> EventTradeGroup =
         new("Event/EventTradeGroup.json", x => x.Id);
 
-    public static readonly MasterAssetData<int, EventItem<BuildEventItemType>> BuildEventItem =
-        new("Event/BuildEventItem.json", x => x.Id);
-
     public static readonly MasterAssetGroup<int, BuildEventReward> BuildEventReward =
         new("Event/BuildEventReward.json", x => x.Id);
 
-    public static readonly MasterAssetData<int, RaidEventItem> RaidEventItem =
-        new("Event/RaidEventItem.json", x => x.Id);
-
     public static readonly MasterAssetGroup<int, RaidEventReward> RaidEventReward =
         new("Event/RaidEventReward.json", x => x.Id);
-
-    public static readonly MasterAssetData<int, EventItem<CombatEventItemType>> CombatEventItem =
-        new("Event/CombatEventItem.json", x => x.Id);
 
     public static readonly MasterAssetData<int, CombatEventLocation> CombatEventLocation =
         new("Event/CombatEventLocation.json", x => x.Id);
@@ -325,6 +316,40 @@ public static class MasterAsset
         int,
         CombatEventLocationReward
     > CombatEventLocationReward = new("Event/CombatEventLocationReward.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<BuildEventItemType>> BuildEventItem =
+        new("Event/BuildEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<CombatEventItemType>> CombatEventItem =
+        new("Event/CombatEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, RaidEventItem> RaidEventItem =
+        new("Event/RaidEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<SimpleEventItemType>> SimpleEventItem =
+        new("Event/SimpleEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<ExRushEventItemType>> ExRushEventItem =
+        new("Event/ExRushEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<
+        int,
+        EventItem<ExHunterEventItemType>
+    > ExHunterEventItem = new("Event/ExHunterEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<EarnEventItemType>> EarnEventItem =
+        new("Event/EarnEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<CollectEventItemType>> CollectEventItem =
+        new("Event/CollectEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<Clb01EventItemType>> Clb01EventItem =
+        new("Event/Clb01EventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<
+        int,
+        EventItem<BattleRoyalEventItemType>
+    > BattleRoyalEventItem = new("Event/BattleRoyalEventItem.json", x => x.Id);
 
     #endregion
 }

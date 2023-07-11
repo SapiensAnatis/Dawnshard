@@ -1,6 +1,6 @@
 ﻿namespace DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 
-public enum BattleRoyaleEventItemType
+public enum BattleRoyalEventItemType
 {
     None,
     EventPoint = 10101,
