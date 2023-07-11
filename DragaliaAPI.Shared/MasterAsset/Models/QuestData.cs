@@ -29,6 +29,7 @@ public record QuestData(
     int RebornLimit,
     int ContinueLimit,
     int Difficulty
+// TODO: Implement PayEntityType here
 )
 {
     public IEnumerable<AreaInfo> AreaInfo =>
