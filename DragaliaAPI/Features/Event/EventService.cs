@@ -73,6 +73,11 @@ public class EventService(
                     .Where(x => buildPointItem.Quantity >= x.EventItemQuantity)
         ).ToList();
 
+        if (availableRewards.Count == 0)
+        {
+            return rewardEntities;
+        }
+
         logger.LogDebug(
             "Granting rewards for event {eventId}: {@rewards}",
             eventId,
@@ -96,6 +101,7 @@ public class EventService(
     {
         if (await eventRepository.GetEventDataAsync(eventId) == null)
         {
+            logger.LogInformation("Creating event data for event {eventId}", eventId);
             eventRepository.CreateEventData(eventId);
         }
 
@@ -264,7 +270,7 @@ file static class Event
             EventKindType.Build
                 => Enum.GetValues<BuildEventItemType>().Where(x => x != 0).Cast<int>(),
             EventKindType.BattleRoyal
-                => Enum.GetValues<BattleRoyaleEventItemType>().Where(x => x != 0).Cast<int>(),
+                => Enum.GetValues<BattleRoyalEventItemType>().Where(x => x != 0).Cast<int>(),
             EventKindType.Clb01
                 => Enum.GetValues<Clb01EventItemType>().Where(x => x != 0).Cast<int>(),
             EventKindType.Collect
@@ -295,16 +301,16 @@ file static class Event
                 => MasterAsset.BuildEventItem.Enumerable
                     .Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
-            EventKindType.Raid
+            /*EventKindType.Raid
                 => MasterAsset.RaidEventItem.Enumerable
                     .Where(x => x.RaidEventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Combat
                 => MasterAsset.CombatEventItem.Enumerable
                     .Where(x => x.EventId == eventId)
-                    .Select(x => x.Id),
+                    .Select(x => x.Id),*/
             /*EventKindType.BattleRoyal
-                => Enum.GetValues<BattleRoyaleEventItemType>().Where(x => x != 0).Cast<int>(),
+                => Enum.GetValues<BattleRoyalEventItemType>().Where(x => x != 0).Cast<int>(),
             EventKindType.Clb01
                 => Enum.GetValues<Clb01EventItemType>().Where(x => x != 0).Cast<int>(),
             EventKindType.Collect
@@ -349,7 +355,7 @@ file static class Event
             EventKindType.Build => (int)BuildEventItemType.BuildEventPoint,
             EventKindType.Raid => (int)RaidEventItemType.SummonPoint,
             EventKindType.Combat => (int)CombatEventItemType.EventPoint,
-            EventKindType.BattleRoyal => (int)BattleRoyaleEventItemType.EventPoint,
+            EventKindType.BattleRoyal => (int)BattleRoyalEventItemType.EventPoint,
             EventKindType.Clb01 => (int)Clb01EventItemType.Clb01EventPoint,
             EventKindType.Earn => (int)EarnEventItemType.EarnPoint,
             EventKindType.ExHunter => (int)ExHunterEventItemType.SummonPoint,
