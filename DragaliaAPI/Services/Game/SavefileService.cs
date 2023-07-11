@@ -161,6 +161,7 @@ public class SavefileService : ISavefileService
                                 dest.Crystal += 1_200_000;
                                 dest.LastSaveImportTime = DateTimeOffset.UtcNow;
                                 dest.LastLoginTime = DateTimeOffset.UnixEpoch;
+                                dest.ActiveMemoryEventId = 0;
                             }
                         )
                 )
