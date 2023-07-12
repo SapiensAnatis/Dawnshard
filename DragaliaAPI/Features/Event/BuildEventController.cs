@@ -30,10 +30,15 @@ public class BuildEventController(
             request.event_id
         );
 
-        int tradeGroupId = MasterAsset.EventTradeGroup.Enumerable
-            .First(x => x.EventId == request.event_id)
-            .Id;
-        resp.event_trade_list = tradeService.GetEventTradeList(tradeGroupId);
+        if (
+            MasterAsset.EventTradeGroup.Enumerable
+                .FirstOrDefault(x => x.EventId == request.event_id)
+                ?.Id is
+            { } tradeGroupId
+        )
+        {
+            resp.event_trade_list = tradeService.GetEventTradeList(tradeGroupId);
+        }
 
         return Ok(resp);
     }
