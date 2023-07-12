@@ -28,7 +28,7 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
         this.Logger.LogDebug("{tokenVar}", tokenVar);
 
         string[] expectedTokens =
-            tokenVar?.Split(",")
+            tokenVar?.Split("|")
             ?? throw new NullReferenceException("No developer token specified!");
 
         // TODO: REMOVE
