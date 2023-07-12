@@ -87,6 +87,7 @@ public class TutorialService : ITutorialService
                 break;
             case TutorialStoryIds.Sindom:
                 await AddTutorialFlag(1028);
+                await AddTutorialFlag(1006);
                 break;
             case TutorialStoryIds.Ch16Done:
                 await AddTutorialFlag(1030);

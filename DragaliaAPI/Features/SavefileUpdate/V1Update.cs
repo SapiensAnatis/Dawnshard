@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Services.Game;
@@ -31,6 +32,16 @@ public class V1Update : ISavefileUpdate
 
     public int SavefileVersion => 1;
 
+    private static readonly ImmutableDictionary<int, FortPlants> QuestStoryFortPlantRewards =
+        new Dictionary<int, FortPlants>()
+        {
+            { 1000607, FortPlants.WindDracolith },
+            { 1000709, FortPlants.WaterDracolith },
+            { 1000808, FortPlants.FlameDracolith },
+            { 1000909, FortPlants.LightDracolith },
+            { 1001009, FortPlants.ShadowDracolith },
+        }.ToImmutableDictionary();
+
     public async Task Apply()
     {
         if (await this.storyRepository.HasReadQuestStory(TutorialService.TutorialStoryIds.Halidom))
@@ -44,7 +55,7 @@ public class V1Update : ISavefileUpdate
         }
 
         // Add dracoliths
-        foreach ((int storyId, FortPlants plantId) in StoryService.QuestStoryFortPlantRewards)
+        foreach ((int storyId, FortPlants plantId) in QuestStoryFortPlantRewards)
         {
             if (await this.storyRepository.HasReadQuestStory(storyId))
             {
