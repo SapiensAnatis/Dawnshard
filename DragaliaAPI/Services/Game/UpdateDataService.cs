@@ -40,25 +40,12 @@ public class UpdateDataService(
             .Select(x => x.Entity)
             .ToList();
 
-        List<IDbHasAccountId> modified = apiContext.ChangeTracker
-            .Entries<IDbHasAccountId>()
-            .Where(
-                x =>
-                    x.State == EntityState.Modified
-                    && x.Entity.DeviceAccountId == playerIdentityService.AccountId
-            )
-            .Select(x => x.Entity)
-            .ToList();
-
         await apiContext.SaveChangesAsync();
 
-        return await MapUpdateDataList(entities, modified);
+        return await MapUpdateDataList(entities);
     }
 
-    private async Task<UpdateDataList> MapUpdateDataList(
-        List<IDbHasAccountId> entities,
-        List<IDbHasAccountId> modified
-    )
+    private async Task<UpdateDataList> MapUpdateDataList(List<IDbHasAccountId> entities)
     {
         UpdateDataList list =
             new()
@@ -137,19 +124,19 @@ public class UpdateDataService(
         List<int> updatedEvents = new();
 
         updatedEvents.AddRange(
-            modified.OfType<DbPlayerEventItem>().Select(x => x.EventId).Distinct()
+            entities.OfType<DbPlayerEventItem>().Select(x => x.EventId).Distinct()
         );
         updatedEvents.AddRange(
-            modified.OfType<DbPlayerEventData>().Select(x => x.EventId).Distinct()
+            entities.OfType<DbPlayerEventData>().Select(x => x.EventId).Distinct()
         );
 
         if (updatedEvents.Count > 0)
         {
-            foreach (
-                IGrouping<EventKindType, int> eventGroup in updatedEvents
-                    .Select(x => MasterAsset.EventData[x])
-                    .ToLookup(x => x.EventKindType, x => x.Id)
-            )
+            ILookup<EventKindType, int> updatedEventIds = updatedEvents
+                .Select(x => MasterAsset.EventData[x])
+                .ToLookup(x => x.EventKindType, x => x.Id);
+
+            foreach (IGrouping<EventKindType, int> eventGroup in updatedEventIds)
             {
                 switch (eventGroup.Key)
                 {
