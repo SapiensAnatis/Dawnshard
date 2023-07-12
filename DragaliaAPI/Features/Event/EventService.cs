@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -14,7 +15,8 @@ namespace DragaliaAPI.Features.Event;
 public class EventService(
     ILogger<EventService> logger,
     IEventRepository eventRepository,
-    IRewardService rewardService
+    IRewardService rewardService,
+    IQuestRepository questRepository
 ) : IEventService
 {
     public async Task<bool> GetCustomEventFlag(int eventId)
@@ -47,8 +49,7 @@ public class EventService(
 
     public async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReceiveEventRewards(
         int eventId,
-        IEnumerable<int>? rewardIds = null,
-        bool isLocationReward = false
+        IEnumerable<int>? rewardIds = null
     )
     {
         List<AtgenBuildEventRewardEntityList> rewardEntities = new();
@@ -61,8 +62,7 @@ public class EventService(
         Dictionary<int, IEventReward> rewards = Event.GetEventRewards(eventId);
 
         IEnumerable<int> alreadyObtainedRewardIds = await eventRepository.GetEventRewardIdsAsync(
-            eventId,
-            isLocationReward
+            eventId
         );
 
         List<IEventReward> availableRewards = (
@@ -93,6 +93,49 @@ public class EventService(
             eventRepository.CreateEventReward(eventId, reward.Id);
             rewardEntities.Add(entity.ToBuildEventRewardEntityList());
         }
+
+        return rewardEntities;
+    }
+
+    public async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReceiveEventLocationReward(
+        int eventId,
+        int locationId
+    )
+    {
+        List<AtgenBuildEventRewardEntityList> rewardEntities = new();
+
+        CombatEventLocation location = MasterAsset.CombatEventLocation[locationId];
+        if (
+            await questRepository.Quests.SingleOrDefaultAsync(
+                x => x.QuestId == location.ClearQuestId
+            )
+            is not { State: 3 }
+        )
+        {
+            return rewardEntities;
+        }
+
+        List<CombatEventLocationReward> rewards = MasterAsset.CombatEventLocationReward.Enumerable
+            .Where(x => x.EventId == eventId && x.LocationRewardId == location.LocationRewardId)
+            .ToList();
+
+        logger.LogDebug(
+            "Granted location reward {locationId} for event {eventId}: {@rewards}",
+            locationId,
+            eventId,
+            rewards
+        );
+
+        foreach (CombatEventLocationReward reward in rewards)
+        {
+            Entity entity = new(reward.EntityType, reward.EntityId, reward.EntityQuantity);
+
+            await rewardService.GrantReward(entity);
+
+            rewardEntities.Add(entity.ToBuildEventRewardEntityList());
+        }
+
+        eventRepository.CreateEventReward(eventId, locationId);
 
         return rewardEntities;
     }

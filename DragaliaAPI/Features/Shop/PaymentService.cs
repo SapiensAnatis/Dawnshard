@@ -85,6 +85,7 @@ public class PaymentService(
                 updater = () => material!.Quantity -= price;
                 break;
             case EntityTypes.BuildEventItem:
+            case EntityTypes.CombatEventItem:
             case EntityTypes.Clb01EventItem:
             case EntityTypes.CollectEventItem:
             case EntityTypes.RaidEventItem:

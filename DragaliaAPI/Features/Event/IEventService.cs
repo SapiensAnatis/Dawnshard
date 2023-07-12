@@ -11,8 +11,12 @@ public interface IEventService
 
     Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReceiveEventRewards(
         int eventId,
-        IEnumerable<int>? rewardIds = null,
-        bool isLocationReward = false
+        IEnumerable<int>? rewardIds = null
+    );
+
+    Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReceiveEventLocationReward(
+        int eventId,
+        int locationId
     );
 
     Task CreateEventData(int eventId);
