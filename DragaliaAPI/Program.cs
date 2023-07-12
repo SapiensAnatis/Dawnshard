@@ -94,6 +94,7 @@ builder.Services.AddAuthentication(opts =>
 {
     opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
     opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
+    opts.AddScheme<PhotonAuthenticationHandler>(nameof(PhotonAuthenticationHandler), null);
 });
 
 builder.Services

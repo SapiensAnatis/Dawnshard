@@ -45,7 +45,6 @@ public class RedisGame : IGame
     public EntryConditions EntryConditions { get; set; } = new EntryConditions();
 
     /// <inheritdoc/>
-
     public List<Player> Players { get; set; } = new List<Player>();
 
     /// <summary>

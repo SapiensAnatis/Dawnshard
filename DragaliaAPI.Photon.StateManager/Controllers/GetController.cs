@@ -58,4 +58,15 @@ public class GetController : ControllerBase
 
         return this.Ok(new ApiGame(game));
     }
+
+    [HttpGet("[action]/{viewerId}")]
+    public async Task<ActionResult<bool>> IsHost(long viewerId)
+    {
+        // TODO: Find out how to execute this query within Redis by sub-indexing the player list
+        bool result = (
+            await this.connectionProvider.RedisCollection<RedisGame>().ToListAsync()
+        ).Any(x => x.Players.Any(y => y.ActorNr == 1 && y.ViewerId == viewerId));
+
+        return this.Ok(result);
+    }
 }

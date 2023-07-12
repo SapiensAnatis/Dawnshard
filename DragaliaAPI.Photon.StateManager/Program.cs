@@ -80,6 +80,7 @@ if (builder.Environment.EnvironmentName != "Testing")
     builder.Services.AddSingleton(provider);
 
     bool created = await provider.Connection.CreateIndexAsync(typeof(RedisGame));
+
     RedisIndexInfo? info = await provider.Connection.GetIndexInfoAsync(typeof(RedisGame));
     Log.Logger.Information("Index created: {created}", created);
     Log.Logger.Information("Index info: {@info}", info);
