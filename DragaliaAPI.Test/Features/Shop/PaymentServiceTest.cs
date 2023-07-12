@@ -20,11 +20,10 @@ public class PaymentServiceTest
     {
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockInventoryRepository = new(MockBehavior.Strict);
-
         this.paymentService = new(
             LoggerTestUtils.Create<PaymentService>(),
-            this.mockUserDataRepository.Object,
-            this.mockInventoryRepository.Object
+            mockUserDataRepository.Object,
+            mockInventoryRepository.Object
         );
     }
 
@@ -51,7 +50,7 @@ public class PaymentServiceTest
 
         this.mockUserDataRepository.SetupUserData(userData);
 
-        await this.paymentService.ProcessPayment(type, new PaymentTarget(total, cost));
+        await this.paymentService.ProcessPayment(type, new PaymentTarget(total, cost), cost);
 
         userData.BuildTimePoint
             .Should()
