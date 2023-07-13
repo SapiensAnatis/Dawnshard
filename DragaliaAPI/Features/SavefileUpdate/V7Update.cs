@@ -3,9 +3,17 @@ using DragaliaAPI.Services;
 
 namespace DragaliaAPI.Features.SavefileUpdate;
 
-public class V7Update(IStoryRepository storyRepository, ITutorialService tutorialService)
-    : ISavefileUpdate
+public class V7Update : ISavefileUpdate
 {
+    private readonly IStoryRepository storyRepository;
+    private readonly ITutorialService tutorialService;
+
+    public V7Update(IStoryRepository storyRepository, ITutorialService tutorialService)
+    {
+        this.storyRepository = storyRepository;
+        this.tutorialService = tutorialService;
+    }
+
     public int SavefileVersion => 7;
 
     public async Task Apply()
