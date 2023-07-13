@@ -59,7 +59,9 @@ public class DungeonStartService : IDungeonStartService
         ulong? supportViewerId = null
     )
     {
-        IQueryable<DbPartyUnit> partyQuery = this.partyRepository.GetPartyUnits(partyNoList);
+        IQueryable<DbPartyUnit> partyQuery = this.partyRepository
+            .GetPartyUnits(partyNoList)
+            .AsNoTracking();
 
         IEnumerable<PartySettingList> party = this.ProcessUnitList(
             await partyQuery.ToListAsync(),
@@ -94,7 +96,7 @@ public class DungeonStartService : IDungeonStartService
         )
         {
             detailedPartyUnits.Add(
-                await detailQuery.SingleOrDefaultAsync()
+                await detailQuery.AsNoTracking().SingleOrDefaultAsync()
                     ?? throw new InvalidOperationException(
                         "Detailed party query returned no results"
                     )
