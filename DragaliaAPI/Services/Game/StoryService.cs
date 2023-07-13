@@ -13,23 +13,46 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services.Game;
 
-public class StoryService(
-    IStoryRepository storyRepository,
-    ILogger<StoryService> logger,
-    IUserDataRepository userDataRepository,
-    IInventoryRepository inventoryRepository,
-    ITutorialService tutorialService,
-    IFortRepository fortRepository,
-    IMissionProgressionService missionProgressionService,
-    IRewardService rewardService,
-    IPaymentService paymentService
-) : IStoryService
+public class StoryService : IStoryService
 {
     private const int DragonStoryWyrmite = 25;
     private const int CastleStoryWyrmite = 50;
     private const int CharaStoryWyrmite1 = 25;
     private const int CharaStoryWyrmite2 = 10;
     private const int QuestStoryWyrmite = 25;
+
+    private readonly IStoryRepository storyRepository;
+    private readonly ILogger<StoryService> logger;
+    private readonly IUserDataRepository userDataRepository;
+    private readonly IInventoryRepository inventoryRepository;
+    private readonly ITutorialService tutorialService;
+    private readonly IFortRepository fortRepository;
+    private readonly IMissionProgressionService missionProgressionService;
+    private readonly IRewardService rewardService;
+    private readonly IPaymentService paymentService;
+
+    public StoryService(
+        IStoryRepository storyRepository,
+        ILogger<StoryService> logger,
+        IUserDataRepository userDataRepository,
+        IInventoryRepository inventoryRepository,
+        ITutorialService tutorialService,
+        IFortRepository fortRepository,
+        IMissionProgressionService missionProgressionService,
+        IRewardService rewardService,
+        IPaymentService paymentService
+    )
+    {
+        this.storyRepository = storyRepository;
+        this.logger = logger;
+        this.userDataRepository = userDataRepository;
+        this.inventoryRepository = inventoryRepository;
+        this.tutorialService = tutorialService;
+        this.fortRepository = fortRepository;
+        this.missionProgressionService = missionProgressionService;
+        this.rewardService = rewardService;
+        this.paymentService = paymentService;
+    }
 
     #region Eligibility check methods
     public async Task<bool> CheckStoryEligibility(StoryTypes type, int storyId)
