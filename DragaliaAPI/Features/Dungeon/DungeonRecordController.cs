@@ -57,6 +57,8 @@ public class DungeonRecordController : DragaliaControllerBase
         // TODO: Turn this method into a service call
         DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
 
+        this.logger.LogDebug("Processing completion of quest {id}", session.QuestData.Id);
+
         DbQuest? oldQuestData = await questRepository.Quests.SingleOrDefaultAsync(
             x => x.QuestId == session.QuestData.Id
         );
