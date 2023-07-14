@@ -51,12 +51,13 @@ public class QuestEnemyService : IQuestEnemyService
             )
         )
         {
-            questMultiplier = new(questId);
+            questMultiplier = new(questData.Gid);
         }
 
         this.logger.LogDebug("Using quest multiplier: {@multiplier}", questMultiplier);
 
-        double difficultyMultiplier = Math.Log(questData.Difficulty / 1000);
+        double difficultyCoeff = Math.Max(questData.Difficulty / 1000, Math.E);
+        double difficultyMultiplier = Math.Log(difficultyCoeff);
 
         foreach (AtgenEnemy enemy in enemyList)
         {
