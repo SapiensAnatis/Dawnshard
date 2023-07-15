@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -109,11 +108,12 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
 
     protected void ImportSave()
     {
-        DbPlayerUserData data = this.ApiContext.PlayerUserData
-            .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId);
-
-        if (data.LastSaveImportTime > DateTimeOffset.UnixEpoch)
+        if (
+            this.ApiContext.PlayerUserData
+                .AsNoTracking()
+                .First(x => x.DeviceAccountId == DeviceAccountId)
+                .LastSaveImportTime > DateTimeOffset.UnixEpoch
+        )
         {
             return;
         }

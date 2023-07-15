@@ -45,8 +45,6 @@ public record QuestData(
     public bool IsPartOfVoidBattleGroups =>
         Gid is >= FirstVoidBattleGroupId and <= LastVoidBattleGroupId;
 
-    public int UnitCount => this.DungeonType == DungeonTypes.PartySwitch ? 8 : 4;
-
     private const int FirstVoidBattleGroupId = 30001; // First group that has _BaseQuestGroupId == 30000 (VoidBattle)
     private const int LastVoidBattleGroupId = 30107; // Last group that has _BaseQuestGroupId == 30000 (VoidBattle)
 }

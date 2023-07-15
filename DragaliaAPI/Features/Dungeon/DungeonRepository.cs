@@ -37,11 +37,6 @@ public class DungeonRepository : IDungeonRepository
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from dragonReliability in this.apiContext.PlayerDragonReliability
-                .Where(
-                    x => x.DragonId == dragon.DragonId && x.DeviceAccountId == unit.DeviceAccountId
-                )
-                .DefaultIfEmpty()
             from weapon in this.apiContext.PlayerWeapons
                 .Where(
                     x =>
@@ -134,7 +129,6 @@ public class DungeonRepository : IDungeonRepository
                 Position = unit.UnitNo,
                 CharaData = chara,
                 DragonData = dragon,
-                DragonReliabilityLevel = (dragonReliability == null) ? 0 : dragonReliability.Level,
                 WeaponBodyData = weapon,
                 CrestSlotType1CrestList = new List<DbAbilityCrest>()
                 {

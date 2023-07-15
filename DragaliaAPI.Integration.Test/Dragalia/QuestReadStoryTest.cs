@@ -16,10 +16,6 @@ public class QuestReadStoryTest : TestFixture
     [Fact]
     public async Task ReadStory_ReturnCorrectResponse()
     {
-        // Save imports in other tests interfere with this test
-        await this.ApiContext.PlayerStoryState.ExecuteDeleteAsync();
-        await this.ApiContext.PlayerCharaData.ExecuteDeleteAsync();
-
         QuestReadStoryData response = (
             await this.Client.PostMsgpack<QuestReadStoryData>(
                 "/quest/read_story",
