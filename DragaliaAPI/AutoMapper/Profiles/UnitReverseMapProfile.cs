@@ -45,6 +45,8 @@ public class UnitReverseMapProfile : Profile
             .ForMember(x => x.PartyNo, opts => opts.Ignore())
             .ForMember(x => x.Party, opts => opts.Ignore());
 
+        this.CreateMap<PartySettingList, DbQuestClearPartyUnit>();
+
         this.CreateMap<WeaponSkinList, DbWeaponSkin>();
 
         this.CreateMap<WeaponPassiveAbilityList, DbWeaponPassiveAbility>();

@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.QuestController"/>
+/// Tests <see cref="QuestController"/>
 /// </summary>
 public class QuestTest : TestFixture
 {

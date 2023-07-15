@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DragaliaAPI.Extensions;
 
@@ -14,5 +15,25 @@ public static class IEnumerableExtensions
         element = enumerable.ElementAtOrDefault(index);
 
         return element is not null;
+    }
+
+    public static IEnumerable<TElement> PadWith<TElement>(
+        this IEnumerable<TElement> source,
+        Func<int, TElement> paddingFunc,
+        int desiredLength
+    )
+    {
+        int i = 0;
+        foreach (TElement element in source)
+        {
+            yield return element;
+            i++;
+        }
+
+        while (i <= desiredLength)
+        {
+            yield return paddingFunc.Invoke(i);
+            i++;
+        }
     }
 }

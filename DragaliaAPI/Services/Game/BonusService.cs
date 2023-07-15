@@ -1,4 +1,4 @@
-﻿//#define CHEATING
+﻿#define CHEATING
 
 using System.Collections.Immutable;
 using DragaliaAPI.Database.Repositories;
