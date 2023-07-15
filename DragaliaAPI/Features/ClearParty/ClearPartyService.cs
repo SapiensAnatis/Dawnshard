@@ -68,9 +68,10 @@ public class ClearPartyService : IClearPartyService
             .BuildDetailedPartyUnit(clearPartyQuery)
             .ToListAsync();
         IEnumerable<AtgenLostUnitList> lostUnitList = ProcessLostUnitList(
-            clearPartyUnits,
-            detailedPartyUnits
-        );
+                clearPartyUnits,
+                detailedPartyUnits
+            )
+            .ToList();
 
         this.logger.LogDebug("Generated lostUnitList: {@lostUnitList}", lostUnitList);
 
@@ -83,12 +84,6 @@ public class ClearPartyService : IClearPartyService
         IEnumerable<PartySettingList> party
     )
     {
-        this.logger.LogDebug(
-            "Storing quest clear party for quest {questId}: {@party}",
-            questId,
-            party
-        );
-
         Dictionary<long, Dragons> dragons = await this.unitRepository.Dragons
             .Where(x => party.Select(y => y.equip_dragon_key_id).Contains((ulong)x.DragonKeyId))
             .ToDictionaryAsync(x => x.DragonKeyId, x => x.DragonId);
@@ -122,6 +117,12 @@ public class ClearPartyService : IClearPartyService
                 )
         );
 
+        this.logger.LogDebug(
+            "Storing quest clear party for quest {questId}: {@party}",
+            questId,
+            dbUnits
+        );
+
         this.clearPartyRepository.SetQuestClearParty(questId, isMulti, dbUnits);
     }
 
@@ -138,13 +139,15 @@ public class ClearPartyService : IClearPartyService
             from subDetailUnit in gj.DefaultIfEmpty()
             select new ValueTuple<DbQuestClearPartyUnit, DbDetailedPartyUnit?>(
                 clearUnit,
-                subDetailUnit
+                subDetailUnit ?? null
             );
 
         foreach ((DbQuestClearPartyUnit clearUnit, DbDetailedPartyUnit? detailUnit) in query)
         {
-            if (detailUnit is null)
+            if (detailUnit?.CharaData is null)
             {
+                // The game will just grey the button out if a character is missing.
+                // I don't blame them for not wanting to deal with it...
                 yield return new AtgenLostUnitList(
                     clearUnit.UnitNo,
                     EntityTypes.Chara,

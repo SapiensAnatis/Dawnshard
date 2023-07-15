@@ -71,7 +71,7 @@ public class DungeonStartService : IDungeonStartService
         IngameData result = await this.InitializeIngameData(questId, party, supportViewerId);
 
         List<DbDetailedPartyUnit> detailedPartyUnits = await this.dungeonRepository
-            .BuildDetailedPartyUnit(partyQuery)
+            .BuildDetailedPartyUnit(partyQuery, partyNoList.First())
             .ToListAsync();
 
         result.party_info.party_unit_list = await this.ProcessDetailedUnitList(detailedPartyUnits);

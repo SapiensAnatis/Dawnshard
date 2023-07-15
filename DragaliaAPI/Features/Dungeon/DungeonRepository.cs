@@ -22,7 +22,153 @@ public class DungeonRepository : IDungeonRepository
         this.playerIdentityService = playerIdentityService;
     }
 
-    public IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(IQueryable<DbPartyUnitBase> input)
+    public IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(
+        IQueryable<DbQuestClearPartyUnit> input
+    )
+    {
+        return from unit in input
+            from chara in this.apiContext.PlayerCharaData
+                .Where(x => x.CharaId == unit.CharaId && x.DeviceAccountId == unit.DeviceAccountId)
+                .DefaultIfEmpty()
+            from dragon in this.apiContext.PlayerDragonData
+                .Where(
+                    x =>
+                        x.DragonKeyId == unit.EquipDragonKeyId
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                )
+                .DefaultIfEmpty()
+            from dragonReliability in this.apiContext.PlayerDragonReliability
+                .Where(
+                    x => x.DragonId == dragon.DragonId && x.DeviceAccountId == unit.DeviceAccountId
+                )
+                .DefaultIfEmpty()
+            from weapon in this.apiContext.PlayerWeapons
+                .Where(
+                    x =>
+                        x.WeaponBodyId == unit.EquipWeaponBodyId
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                )
+                .DefaultIfEmpty()
+            from crests11 in this.apiContext.PlayerAbilityCrests
+                .Where(
+                    x =>
+                        x.AbilityCrestId == unit.EquipCrestSlotType1CrestId1
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                )
+                .DefaultIfEmpty()
+            from crests12 in this.apiContext.PlayerAbilityCrests
+                .Where(
+                    x =>
+                        x.AbilityCrestId == unit.EquipCrestSlotType1CrestId2
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                )
+                .DefaultIfEmpty()
+            from crests13 in this.apiContext.PlayerAbilityCrests
+                .Where(
+                    x =>
+                        x.AbilityCrestId == unit.EquipCrestSlotType1CrestId3
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                )
+                .DefaultIfEmpty()
+            from crests21 in this.apiContext.PlayerAbilityCrests
+                .Where(
+                    x =>
+                        x.AbilityCrestId == unit.EquipCrestSlotType2CrestId1
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                )
+                .DefaultIfEmpty()
+            from crests22 in this.apiContext.PlayerAbilityCrests
+                .Where(
+                    x =>
+                        x.AbilityCrestId == unit.EquipCrestSlotType2CrestId2
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                )
+                .DefaultIfEmpty()
+            from crests31 in this.apiContext.PlayerAbilityCrests
+                .Where(
+                    x =>
+                        x.AbilityCrestId == unit.EquipCrestSlotType3CrestId1
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                )
+                .DefaultIfEmpty()
+            from crests32 in this.apiContext.PlayerAbilityCrests
+                .Where(
+                    x =>
+                        x.AbilityCrestId == unit.EquipCrestSlotType3CrestId2
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                )
+                .DefaultIfEmpty()
+            from charaEs1 in this.apiContext.PlayerCharaData
+                .Where(
+                    x =>
+                        x.CharaId == unit.EditSkill1CharaId
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                        && x.IsUnlockEditSkill
+                )
+                .DefaultIfEmpty()
+            from charaEs2 in this.apiContext.PlayerCharaData
+                .Where(
+                    x =>
+                        x.CharaId == unit.EditSkill2CharaId
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                        && x.IsUnlockEditSkill
+                )
+                .DefaultIfEmpty()
+            from talisman in this.apiContext.PlayerTalismans
+                .Where(
+                    x =>
+                        x.TalismanKeyId == unit.EquipTalismanKeyId
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                )
+                .DefaultIfEmpty()
+            from skin in this.apiContext.PlayerWeaponSkins
+                .Where(
+                    x =>
+                        x.WeaponSkinId == unit.EquipWeaponSkinId
+                        && x.DeviceAccountId == unit.DeviceAccountId
+                )
+                .DefaultIfEmpty()
+            select new DbDetailedPartyUnit
+            {
+                DeviceAccountId = this.playerIdentityService.AccountId,
+                Position = unit.UnitNo,
+                CharaData = chara,
+                DragonData = dragon,
+                DragonReliabilityLevel = (dragonReliability == null) ? 0 : dragonReliability.Level,
+                WeaponBodyData = weapon,
+                CrestSlotType1CrestList = new List<DbAbilityCrest>()
+                {
+                    crests11,
+                    crests12,
+                    crests13
+                },
+                CrestSlotType2CrestList = new List<DbAbilityCrest>() { crests21, crests22 },
+                CrestSlotType3CrestList = new List<DbAbilityCrest>() { crests31, crests32 },
+                EditSkill1CharaData =
+                    (charaEs1 == null)
+                        ? null
+                        : GetEditSkill(
+                            charaEs1.CharaId,
+                            charaEs1.Skill1Level,
+                            charaEs1.Skill2Level
+                        ),
+                EditSkill2CharaData =
+                    (charaEs2 == null)
+                        ? null
+                        : GetEditSkill(
+                            charaEs2.CharaId,
+                            charaEs2.Skill1Level,
+                            charaEs2.Skill2Level
+                        ),
+                TalismanData = talisman,
+                WeaponSkinData = skin
+            };
+    }
+
+    public IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(
+        IQueryable<DbPartyUnit> input,
+        int firstPartyNo
+    )
     {
         return from unit in input
             join chara in this.apiContext.PlayerCharaData
@@ -132,7 +278,7 @@ public class DungeonRepository : IDungeonRepository
             select new DbDetailedPartyUnit
             {
                 DeviceAccountId = this.playerIdentityService.AccountId,
-                Position = unit.UnitNo,
+                Position = unit.PartyNo == firstPartyNo ? unit.UnitNo : unit.UnitNo + 4,
                 CharaData = chara,
                 DragonData = dragon,
                 DragonReliabilityLevel = (dragonReliability == null) ? 0 : dragonReliability.Level,

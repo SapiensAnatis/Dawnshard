@@ -77,6 +77,8 @@ public class QuestController : DragaliaControllerBase
         (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
             await this.clearPartyService.GetQuestClearParty(request.quest_id, false);
 
+        await this.updateDataService.SaveChangesAsync(); // Updated lost entities
+
         return Ok(
             new QuestGetQuestClearPartyData()
             {
@@ -93,6 +95,8 @@ public class QuestController : DragaliaControllerBase
     {
         (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
             await this.clearPartyService.GetQuestClearParty(request.quest_id, true);
+
+        await this.updateDataService.SaveChangesAsync();
 
         return Ok(
             new QuestGetQuestClearPartyMultiData()

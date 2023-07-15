@@ -8,6 +8,8 @@ public class DbDetailedPartyUnit
 {
     public required string DeviceAccountId { get; set; }
 
+    public int PartyNo { get; set; }
+
     public int Position { get; set; }
 
     public required DbPlayerCharaData CharaData { get; set; }

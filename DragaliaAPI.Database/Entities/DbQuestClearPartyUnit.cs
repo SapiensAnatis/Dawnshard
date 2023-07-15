@@ -12,7 +12,7 @@ public class DbQuestClearPartyUnit : DbPartyUnitBase, IDbHasAccountId
     public virtual DbPlayer? Owner { get; set; }
 
     [ForeignKey(nameof(Owner))]
-    public override required string DeviceAccountId { get; set; }
+    public required string DeviceAccountId { get; set; }
 
     public int QuestId { get; set; }
 
@@ -34,6 +34,8 @@ public class DbQuestClearPartyUnit : DbPartyUnitBase, IDbHasAccountId
 
         this.EquipDragonKeyId = 0;
         this.EquipTalismanKeyId = 0;
+        this.EquippedDragonEntityId = Dragons.Empty;
+        this.EquippedTalismanEntityId = Talismans.Empty;
 
         this.EquipCrestSlotType1CrestId1 = AbilityCrests.Empty;
         this.EquipCrestSlotType1CrestId2 = AbilityCrests.Empty;

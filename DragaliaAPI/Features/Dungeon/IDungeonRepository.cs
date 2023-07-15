@@ -11,5 +11,10 @@ public interface IDungeonRepository
         IEnumerable<PartySettingList> input
     );
 
-    IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(IQueryable<DbPartyUnitBase> input);
+    IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(
+        IQueryable<DbPartyUnit> input,
+        int firstPartyNo
+    );
+
+    IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(IQueryable<DbQuestClearPartyUnit> input);
 }
