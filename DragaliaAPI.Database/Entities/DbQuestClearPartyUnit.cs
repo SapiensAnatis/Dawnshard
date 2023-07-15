@@ -14,9 +14,9 @@ public class DbQuestClearPartyUnit : DbPartyUnitBase, IDbHasAccountId
     [ForeignKey(nameof(Owner))]
     public required string DeviceAccountId { get; set; }
 
-    public int QuestId { get; set; }
+    public required int QuestId { get; set; }
 
-    public bool IsMulti { get; set; }
+    public required bool IsMulti { get; set; }
 
     public Dragons EquippedDragonEntityId { get; set; }
 

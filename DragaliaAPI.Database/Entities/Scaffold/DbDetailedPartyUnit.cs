@@ -23,10 +23,10 @@ public class DbDetailedPartyUnit
     public IEnumerable<DbAbilityCrest> CrestSlotType1CrestList { get; set; } =
         Enumerable.Empty<DbAbilityCrest>();
 
-    public IEnumerable<DbAbilityCrest> CrestSlotType2CrestList { get; set; } =
+    public IEnumerable<DbAbilityCrest?> CrestSlotType2CrestList { get; set; } =
         Enumerable.Empty<DbAbilityCrest>();
 
-    public IEnumerable<DbAbilityCrest> CrestSlotType3CrestList { get; set; } =
+    public IEnumerable<DbAbilityCrest?> CrestSlotType3CrestList { get; set; } =
         Enumerable.Empty<DbAbilityCrest>();
 
     public DbWeaponSkin? WeaponSkinData { get; set; } = null;

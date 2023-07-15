@@ -1,22 +1,25 @@
-﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
-/// <summary>
-/// Tests <see cref="QuestController"/>
-/// </summary>
-public class QuestTest : TestFixture
+public class QuestReadStoryTest : TestFixture
 {
-    public QuestTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public QuestReadStoryTest(
+        CustomWebApplicationFactory<Program> factory,
+        ITestOutputHelper outputHelper
+    )
         : base(factory, outputHelper) { }
 
     [Fact]
     public async Task ReadStory_ReturnCorrectResponse()
     {
+        // Save imports in other tests interfere with this test
+        await this.ApiContext.PlayerStoryState.ExecuteDeleteAsync();
+        await this.ApiContext.PlayerCharaData.ExecuteDeleteAsync();
+
         QuestReadStoryData response = (
             await this.Client.PostMsgpack<QuestReadStoryData>(
                 "/quest/read_story",

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -8,6 +9,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -107,11 +109,11 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
 
     protected void ImportSave()
     {
-        if (
-            this.ApiContext.PlayerUserData
-                .First(x => x.DeviceAccountId == DeviceAccountId)
-                .LastSaveImportTime > DateTimeOffset.UnixEpoch
-        )
+        DbPlayerUserData data = this.ApiContext.PlayerUserData
+            .AsNoTracking()
+            .First(x => x.DeviceAccountId == DeviceAccountId);
+
+        if (data.LastSaveImportTime > DateTimeOffset.UnixEpoch)
         {
             return;
         }

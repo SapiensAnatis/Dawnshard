@@ -144,6 +144,9 @@ public class ClearPartyService : IClearPartyService
 
         foreach ((DbQuestClearPartyUnit clearUnit, DbDetailedPartyUnit? detailUnit) in query)
         {
+            if (clearUnit.CharaId == Charas.Empty)
+                continue;
+
             if (detailUnit?.CharaData is null)
             {
                 // The game will just grey the button out if a character is missing.
@@ -324,12 +327,12 @@ public class ClearPartyService : IClearPartyService
 
 file static class Extensions
 {
-    public static bool IsMissingCrest(this IEnumerable<DbAbilityCrest> source, AbilityCrests id)
+    public static bool IsMissingCrest(this IEnumerable<DbAbilityCrest?> source, AbilityCrests id)
     {
         if (id == AbilityCrests.Empty)
             return false;
 
         // ReSharper disable once SimplifyLinqExpressionUseAll
-        return !source.Any(x => x.AbilityCrestId == id);
+        return !source.Any(x => x?.AbilityCrestId == id);
     }
 }
