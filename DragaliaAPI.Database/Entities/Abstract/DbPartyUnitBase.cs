@@ -12,4 +12,6 @@ public abstract class DbPartyUnitBase : DbUnitBase
     public Charas EditSkill1CharaId { get; set; }
 
     public Charas EditSkill2CharaId { get; set; }
+
+    public required int UnitNo { get; set; }
 }

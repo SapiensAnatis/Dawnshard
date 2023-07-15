@@ -13,9 +13,8 @@ public class DbSetUnit : DbUnitBase, IDbHasAccountId
     /// <inheritdoc />
     public virtual DbPlayer? Owner { get; set; }
 
-    /// <inheritdoc />
     [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
+    public override required string DeviceAccountId { get; set; }
 
     [Required]
     public int UnitSetNo { get; set; }

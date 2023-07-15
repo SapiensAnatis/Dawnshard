@@ -4,6 +4,9 @@ namespace DragaliaAPI.Features.ClearParty;
 
 public interface IClearPartyService
 {
-    Task<IEnumerable<PartySettingList>> GetQuestClearParty(int questId, bool isMulti);
-    void SetQuestClearParty(int questId, bool isMulti, IEnumerable<PartySettingList> party);
+    Task<(
+        IEnumerable<PartySettingList> PartyList,
+        IEnumerable<AtgenLostUnitList> LostUnitList
+    )> GetQuestClearParty(int questId, bool isMulti);
+    Task SetQuestClearParty(int questId, bool isMulti, IEnumerable<PartySettingList> party);
 }

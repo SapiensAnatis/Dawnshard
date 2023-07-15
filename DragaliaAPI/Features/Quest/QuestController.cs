@@ -74,16 +74,14 @@ public class QuestController : DragaliaControllerBase
     [HttpPost("get_quest_clear_party")]
     public async Task<DragaliaResult> GetQuestClearParty(QuestGetQuestClearPartyRequest request)
     {
-        IEnumerable<PartySettingList> clearParty = await this.clearPartyService.GetQuestClearParty(
-            request.quest_id,
-            false
-        );
+        (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
+            await this.clearPartyService.GetQuestClearParty(request.quest_id, false);
 
         return Ok(
             new QuestGetQuestClearPartyData()
             {
                 quest_clear_party_setting_list = clearParty,
-                lost_unit_list = new List<AtgenLostUnitList>()
+                lost_unit_list = lostUnitList
             }
         );
     }
@@ -93,16 +91,14 @@ public class QuestController : DragaliaControllerBase
         QuestGetQuestClearPartyMultiRequest request
     )
     {
-        IEnumerable<PartySettingList> clearParty = await this.clearPartyService.GetQuestClearParty(
-            request.quest_id,
-            true
-        );
+        (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
+            await this.clearPartyService.GetQuestClearParty(request.quest_id, true);
 
         return Ok(
             new QuestGetQuestClearPartyMultiData()
             {
                 quest_multi_clear_party_setting_list = clearParty,
-                lost_unit_list = new List<AtgenLostUnitList>()
+                lost_unit_list = lostUnitList
             }
         );
     }
@@ -110,7 +106,7 @@ public class QuestController : DragaliaControllerBase
     [HttpPost("set_quest_clear_party")]
     public async Task<DragaliaResult> SetQuestClearParty(QuestSetQuestClearPartyRequest request)
     {
-        this.clearPartyService.SetQuestClearParty(
+        await this.clearPartyService.SetQuestClearParty(
             request.quest_id,
             false,
             request.request_party_setting_list
@@ -126,7 +122,7 @@ public class QuestController : DragaliaControllerBase
         QuestSetQuestClearPartyMultiRequest request
     )
     {
-        this.clearPartyService.SetQuestClearParty(
+        await this.clearPartyService.SetQuestClearParty(
             request.quest_id,
             true,
             request.request_party_setting_list

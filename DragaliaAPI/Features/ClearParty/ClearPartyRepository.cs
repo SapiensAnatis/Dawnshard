@@ -23,17 +23,9 @@ public class ClearPartyRepository : IClearPartyRepository
             x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
-    private IQueryable<DbQuestClearPartyUnit> GetQuestClearParty(int questId, bool isMulti)
+    public IQueryable<DbQuestClearPartyUnit> GetQuestClearParty(int questId, bool isMulti)
     {
         return this.QuestClearPartyUnits.Where(x => x.QuestId == questId && x.IsMulti == isMulti);
-    }
-
-    public async Task<IEnumerable<DbQuestClearPartyUnit>> GetQuestClearPartyAsync(
-        int questId,
-        bool isMulti
-    )
-    {
-        return await this.GetQuestClearParty(questId, isMulti).ToListAsync();
     }
 
     public void SetQuestClearParty(

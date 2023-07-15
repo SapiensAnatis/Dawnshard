@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -21,10 +22,7 @@ public class DungeonRepository : IDungeonRepository
         this.playerIdentityService = playerIdentityService;
     }
 
-    public IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(
-        IQueryable<DbPartyUnit> input,
-        int firstPartyNo
-    )
+    public IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(IQueryable<DbPartyUnitBase> input)
     {
         return from unit in input
             join chara in this.apiContext.PlayerCharaData
@@ -134,7 +132,7 @@ public class DungeonRepository : IDungeonRepository
             select new DbDetailedPartyUnit
             {
                 DeviceAccountId = this.playerIdentityService.AccountId,
-                Position = unit.UnitNo + (unit.PartyNo == firstPartyNo ? 0 : 4),
+                Position = unit.UnitNo,
                 CharaData = chara,
                 DragonData = dragon,
                 DragonReliabilityLevel = (dragonReliability == null) ? 0 : dragonReliability.Level,

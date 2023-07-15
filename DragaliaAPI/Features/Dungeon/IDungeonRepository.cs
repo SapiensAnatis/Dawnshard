@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Models.Generated;
 
@@ -10,8 +11,5 @@ public interface IDungeonRepository
         IEnumerable<PartySettingList> input
     );
 
-    IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(
-        IQueryable<DbPartyUnit> input,
-        int firstPartyNo
-    );
+    IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(IQueryable<DbPartyUnitBase> input);
 }

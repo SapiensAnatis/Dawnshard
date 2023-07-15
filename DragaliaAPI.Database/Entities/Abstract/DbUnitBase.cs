@@ -7,6 +7,8 @@ namespace DragaliaAPI.Database.Entities.Abstract;
 /// </summary>
 public abstract class DbUnitBase
 {
+    public abstract string DeviceAccountId { get; set; }
+
     public Charas CharaId { get; set; }
 
     public long EquipDragonKeyId { get; set; }

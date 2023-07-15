@@ -2,6 +2,7 @@
 
 public enum Dragons
 {
+    Empty = 0,
     AC011Garland = 20050312,
     Agni = 20050101,
     Andromeda = 20050516,

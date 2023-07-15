@@ -42,8 +42,7 @@ public class DungeonRepositoryTest : RepositoryTestFixture
         );
 
         IQueryable<DbDetailedPartyUnit> buildQuery = this.dungeonRepository.BuildDetailedPartyUnit(
-            unitQuery,
-            partySlot
+            unitQuery
         );
 
         DbDetailedPartyUnit result = await buildQuery.FirstAsync();

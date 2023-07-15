@@ -75,7 +75,7 @@ public class HeroParamService : IHeroParamService
         );
 
         List<DbDetailedPartyUnit> detailedPartyUnits = await this.dungeonRepository
-            .BuildDetailedPartyUnit(partyRepository.GetPartyUnits(partySlot), partySlot)
+            .BuildDetailedPartyUnit(partyRepository.GetPartyUnits(partySlot))
             .ToListAsync();
 
         foreach (DbDetailedPartyUnit unit in detailedPartyUnits)

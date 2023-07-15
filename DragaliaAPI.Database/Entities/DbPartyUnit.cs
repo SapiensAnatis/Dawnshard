@@ -17,9 +17,7 @@ public class DbPartyUnit : DbPartyUnitBase
     [ForeignKey($"{nameof(DeviceAccountId)},{nameof(PartyNo)}")]
     public virtual DbParty? Party { get; set; }
 
-    public string DeviceAccountId { get; set; } = string.Empty;
+    public override string DeviceAccountId { get; set; } = string.Empty;
 
     public int PartyNo { get; set; }
-
-    public required int UnitNo { get; set; }
 }
