@@ -1,6 +1,7 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
@@ -44,7 +45,8 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                     Host = TestContainers.PostgresHost,
                     Port = TestContainers.PostgresPort,
                     Username = TestContainers.PostgresUser,
-                    Password = TestContainers.PostgresPassword
+                    Password = TestContainers.PostgresPassword,
+                    IncludeErrorDetail = true,
                 };
 
             services.RemoveAll<DbContextOptions<ApiContext>>();
@@ -144,6 +146,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Coin = 100_000_000;
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.DewPoint = 100_000_000;
+        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.ManaPoint = 100_000_000;
         apiContext.SaveChanges();
     }
 }

@@ -866,28 +866,28 @@ public class AtgenCharaUnitSetDetailList
     public int unit_set_no { get; set; }
     public string unit_set_name { get; set; }
     public ulong dragon_key_id { get; set; }
-    public int weapon_body_id { get; set; }
-    public int crest_slot_type_1_crest_id_1 { get; set; }
-    public int crest_slot_type_1_crest_id_2 { get; set; }
-    public int crest_slot_type_1_crest_id_3 { get; set; }
-    public int crest_slot_type_2_crest_id_1 { get; set; }
-    public int crest_slot_type_2_crest_id_2 { get; set; }
-    public int crest_slot_type_3_crest_id_1 { get; set; }
-    public int crest_slot_type_3_crest_id_2 { get; set; }
+    public WeaponBodies weapon_body_id { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_3 { get; set; }
+    public AbilityCrests crest_slot_type_2_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_2_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_3_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_3_crest_id_2 { get; set; }
     public ulong talisman_key_id { get; set; }
 
     public AtgenCharaUnitSetDetailList(
         int unit_set_no,
         string unit_set_name,
         ulong dragon_key_id,
-        int weapon_body_id,
-        int crest_slot_type_1_crest_id_1,
-        int crest_slot_type_1_crest_id_2,
-        int crest_slot_type_1_crest_id_3,
-        int crest_slot_type_2_crest_id_1,
-        int crest_slot_type_2_crest_id_2,
-        int crest_slot_type_3_crest_id_1,
-        int crest_slot_type_3_crest_id_2,
+        WeaponBodies weapon_body_id,
+        AbilityCrests crest_slot_type_1_crest_id_1,
+        AbilityCrests crest_slot_type_1_crest_id_2,
+        AbilityCrests crest_slot_type_1_crest_id_3,
+        AbilityCrests crest_slot_type_2_crest_id_1,
+        AbilityCrests crest_slot_type_2_crest_id_2,
+        AbilityCrests crest_slot_type_3_crest_id_1,
+        AbilityCrests crest_slot_type_3_crest_id_2,
         ulong talisman_key_id
     )
     {
@@ -1894,12 +1894,12 @@ public class AtgenDropAll
 [MessagePackObject(true)]
 public class AtgenDropList
 {
-    public int type { get; set; }
+    public EntityTypes type { get; set; }
     public int id { get; set; }
     public int quantity { get; set; }
     public int place { get; set; }
 
-    public AtgenDropList(int type, int id, int quantity, int place)
+    public AtgenDropList(EntityTypes type, int id, int quantity, int place)
     {
         this.type = type;
         this.id = id;
@@ -1975,7 +1975,7 @@ public class AtgenEnemy
     public int enemy_idx { get; set; }
 
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
-    public bool is_pop { get; set; }
+    public bool is_pop { get; set; } = true;
 
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool is_rare { get; set; }
@@ -3267,26 +3267,26 @@ public class AtgenRequestAbilityCrestSetData
 public class AtgenRequestCharaUnitSetData
 {
     public ulong dragon_key_id { get; set; }
-    public int weapon_body_id { get; set; }
-    public int crest_slot_type_1_crest_id_1 { get; set; }
-    public int crest_slot_type_1_crest_id_2 { get; set; }
-    public int crest_slot_type_1_crest_id_3 { get; set; }
-    public int crest_slot_type_2_crest_id_1 { get; set; }
-    public int crest_slot_type_2_crest_id_2 { get; set; }
-    public int crest_slot_type_3_crest_id_1 { get; set; }
-    public int crest_slot_type_3_crest_id_2 { get; set; }
+    public WeaponBodies weapon_body_id { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_3 { get; set; }
+    public AbilityCrests crest_slot_type_2_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_2_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_3_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_3_crest_id_2 { get; set; }
     public ulong talisman_key_id { get; set; }
 
     public AtgenRequestCharaUnitSetData(
         ulong dragon_key_id,
-        int weapon_body_id,
-        int crest_slot_type_1_crest_id_1,
-        int crest_slot_type_1_crest_id_2,
-        int crest_slot_type_1_crest_id_3,
-        int crest_slot_type_2_crest_id_1,
-        int crest_slot_type_2_crest_id_2,
-        int crest_slot_type_3_crest_id_1,
-        int crest_slot_type_3_crest_id_2,
+        WeaponBodies weapon_body_id,
+        AbilityCrests crest_slot_type_1_crest_id_1,
+        AbilityCrests crest_slot_type_1_crest_id_2,
+        AbilityCrests crest_slot_type_1_crest_id_3,
+        AbilityCrests crest_slot_type_2_crest_id_1,
+        AbilityCrests crest_slot_type_2_crest_id_2,
+        AbilityCrests crest_slot_type_3_crest_id_1,
+        AbilityCrests crest_slot_type_3_crest_id_2,
         ulong talisman_key_id
     )
     {
@@ -5680,7 +5680,7 @@ public class EnemyDropList
 {
     public int coin { get; set; }
     public int mana { get; set; }
-    public IEnumerable<AtgenDropList> drop_list { get; set; }
+    public IEnumerable<AtgenDropList> drop_list { get; set; } = Enumerable.Empty<AtgenDropList>();
 
     public EnemyDropList(int coin, int mana, IEnumerable<AtgenDropList> drop_list)
     {
@@ -6534,7 +6534,7 @@ public class IngameData
     public ulong viewer_id { get; set; }
     public string dungeon_key { get; set; }
     public DungeonTypes dungeon_type { get; set; }
-    public QuestPlayModeTypes play_type { get; set; }
+    public QuestPlayType play_type { get; set; }
     public int quest_id { get; set; }
     public int bonus_type { get; set; }
     public int continue_limit { get; set; }
@@ -6559,8 +6559,8 @@ public class IngameData
 
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool is_use_event_chara_ability { get; set; }
-    public IEnumerable<EventAbilityCharaList> event_ability_chara_list { get; set; }
-    public IEnumerable<ulong> first_clear_viewer_id_list { get; set; }
+    public IEnumerable<EventAbilityCharaList> event_ability_chara_list { get; set; } = Enumerable.Empty<EventAbilityCharaList>();
+    public IEnumerable<ulong> first_clear_viewer_id_list { get; set; } = Enumerable.Empty<ulong>();
     public int multi_disconnect_type { get; set; }
     public int repeat_state { get; set; }
     public AtgenIngameWalker ingame_walker { get; set; }
@@ -6569,7 +6569,7 @@ public class IngameData
         ulong viewer_id,
         string dungeon_key,
         DungeonTypes dungeon_type,
-        QuestPlayModeTypes play_type,
+        QuestPlayType play_type,
         int quest_id,
         int bonus_type,
         int continue_limit,
@@ -6656,7 +6656,7 @@ public class IngameQuestData
 public class IngameResultData
 {
     public string dungeon_key { get; set; }
-    public int play_type { get; set; }
+    public QuestPlayType play_type { get; set; }
     public int quest_id { get; set; }
     public RewardRecord reward_record { get; set; }
     public GrowRecord grow_record { get; set; }
@@ -6692,7 +6692,7 @@ public class IngameResultData
 
     public IngameResultData(
         string dungeon_key,
-        int play_type,
+        QuestPlayType play_type,
         int quest_id,
         RewardRecord reward_record,
         GrowRecord grow_record,
@@ -7244,8 +7244,8 @@ public class PartySettingList
     public AbilityCrests equip_crest_slot_type_3_crest_id_1 { get; set; }
     public AbilityCrests equip_crest_slot_type_3_crest_id_2 { get; set; }
     public ulong equip_talisman_key_id { get; set; }
-    public int edit_skill_1_chara_id { get; set; }
-    public int edit_skill_2_chara_id { get; set; }
+    public Charas edit_skill_1_chara_id { get; set; }
+    public Charas edit_skill_2_chara_id { get; set; }
 
     public PartySettingList(
         int unit_no,
@@ -7265,8 +7265,8 @@ public class PartySettingList
         AbilityCrests equip_crest_slot_type_3_crest_id_1,
         AbilityCrests equip_crest_slot_type_3_crest_id_2,
         ulong equip_talisman_key_id,
-        int edit_skill_1_chara_id,
-        int edit_skill_2_chara_id
+        Charas edit_skill_1_chara_id,
+        Charas edit_skill_2_chara_id
     )
     {
         this.unit_no = unit_no;
@@ -7291,6 +7291,8 @@ public class PartySettingList
     }
 
     public PartySettingList() { }
+
+    public static PartySettingList Empty(int unit_no) => new() { unit_no = unit_no };
 }
 
 #nullable enable

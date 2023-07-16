@@ -91,6 +91,19 @@ public class MatchingService : IMatchingService
         };
     }
 
+    public async Task<bool> GetIsHost()
+    {
+        long viewerId =
+            this.playerIdentityService.ViewerId
+            ?? throw new InvalidOperationException("Uninitialized ViewerId!");
+
+        bool isHost = await this.photonStateApi.GetIsHost(viewerId);
+
+        this.logger.LogDebug("Viewer ID {viewerId} isHost result: {isHost}", viewerId, isHost);
+
+        return isHost;
+    }
+
     private async Task<RoomList> MapRoomList(ApiGame game)
     {
         DbPlayerUserData hostUserData;

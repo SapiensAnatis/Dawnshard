@@ -1,11 +1,12 @@
-using System.Diagnostics;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
-namespace DragaliaAPI.Database.Repositories;
+namespace DragaliaAPI.Features.Fort;
 
 public class FortRepository : IFortRepository
 {
@@ -108,14 +109,7 @@ public class FortRepository : IFortRepository
 
         foreach (FortPlants plant in plants)
         {
-            int currentAmount = await this.Builds.CountAsync(x => x.PlantId == plant);
-            if (currentAmount >= 2)
-                continue;
-
-            for (int i = currentAmount; i != 2; i++)
-            {
-                await AddToStorage(plant, 1);
-            }
+            await AddToStorage(plant, quantity: 2, isTotalQuantity: true);
         }
     }
 
@@ -124,7 +118,7 @@ public class FortRepository : IFortRepository
         if (!await this.Builds.AnyAsync(x => x.PlantId == FortPlants.Dragontree))
         {
             this.logger.LogDebug("Adding dragontree to storage.");
-            await this.AddToStorage(FortPlants.Dragontree, 1);
+            await this.AddToStorage(FortPlants.Dragontree);
         }
     }
 
@@ -203,21 +197,38 @@ public class FortRepository : IFortRepository
         await apiContext.PlayerFortBuilds.AddAsync(build);
     }
 
-    public async Task AddToStorage(FortPlants plant, int level)
+    public async Task AddToStorage(
+        FortPlants plant,
+        int quantity = 1,
+        bool isTotalQuantity = false,
+        int? level = null
+    )
     {
-        await this.apiContext.PlayerFortBuilds.AddAsync(
-            new DbFortBuild
-            {
-                DeviceAccountId = this.playerIdentityService.AccountId,
-                PlantId = plant,
-                Level = level,
-                PositionX = -1,
-                PositionZ = -1,
-                BuildStartDate = DateTimeOffset.UnixEpoch,
-                BuildEndDate = DateTimeOffset.UnixEpoch,
-                LastIncomeDate = DateTimeOffset.UnixEpoch
-            }
-        );
+        int startQuantity = isTotalQuantity
+            ? await apiContext.PlayerFortBuilds.Where(x => x.PlantId == plant).CountAsync()
+            : 0;
+
+        if (startQuantity >= quantity)
+            return;
+
+        int actualLevel = level ?? MasterAssetUtils.GetInitialFortPlant(plant).Level;
+
+        for (int i = startQuantity; i < quantity; i++)
+        {
+            await this.apiContext.PlayerFortBuilds.AddAsync(
+                new DbFortBuild
+                {
+                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    PlantId = plant,
+                    Level = actualLevel,
+                    PositionX = -1,
+                    PositionZ = -1,
+                    BuildStartDate = DateTimeOffset.UnixEpoch,
+                    BuildEndDate = DateTimeOffset.UnixEpoch,
+                    LastIncomeDate = DateTimeOffset.UnixEpoch
+                }
+            );
+        }
     }
 
     public void DeleteBuild(DbFortBuild build)

@@ -50,6 +50,13 @@ public class UnitMapProfile : Profile
             .ForMember(nameof(PartySettingList.equip_amulet_2_key_id), opts => opts.Ignore())
             .ForMember(nameof(PartySettingList.equip_skin_weapon_id), opts => opts.Ignore());
 
+        this.CreateMap<DbQuestClearPartyUnit, PartySettingList>()
+            // Deprecated
+            .ForMember(nameof(PartySettingList.equip_weapon_key_id), opts => opts.Ignore())
+            .ForMember(nameof(PartySettingList.equip_amulet_key_id), opts => opts.Ignore())
+            .ForMember(nameof(PartySettingList.equip_amulet_2_key_id), opts => opts.Ignore())
+            .ForMember(nameof(PartySettingList.equip_skin_weapon_id), opts => opts.Ignore());
+
         this.CreateMap<DbDetailedPartyUnit, PartyUnitList>();
 
         this.CreateMap<DbAbilityCrest, GameAbilityCrest>()

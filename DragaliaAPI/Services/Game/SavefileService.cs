@@ -1000,7 +1000,7 @@ public class SavefileService : ISavefileService
     #endregion
 }
 
-static file class Extensions
+file static class Extensions
 {
     public static IEnumerable<TDest> MapWithDeviceAccount<TDest>(
         this IEnumerable<object>? source,

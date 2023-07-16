@@ -19,6 +19,12 @@ public class GetController : ControllerBase
 {
     private readonly IRedisConnectionProvider connectionProvider;
 
+    private IRedisCollection<RedisGame> Games =>
+        this.connectionProvider.RedisCollection<RedisGame>();
+
+    private IRedisCollection<RedisGame> VisibleGames =>
+        this.Games.Where(x => x.Visible == true && x.RoomId > 0);
+
     public GetController(IRedisConnectionProvider connectionProvider)
     {
         this.connectionProvider = connectionProvider;
@@ -32,9 +38,9 @@ public class GetController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ApiGame>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ApiGame>>> GameList([FromQuery] int? questId)
     {
-        IRedisCollection<RedisGame> query = this.connectionProvider
-            .RedisCollection<RedisGame>()
-            .Where(x => x.MatchingType == MatchingTypes.Anyone);
+        IRedisCollection<RedisGame> query = this.VisibleGames.Where(
+            x => x.MatchingType == MatchingTypes.Anyone
+        );
 
         if (questId is not null)
             query = query.Where(x => x.QuestId == questId);
@@ -47,15 +53,23 @@ public class GetController : ControllerBase
     [HttpGet("[action]/{roomId}")]
     public async Task<ActionResult<ApiGame>> ById(int roomId)
     {
-        // Maybe this should filter by MatchingType.ById. Probably no harm letting it join any room for now though.
-        IRedisCollection<RedisGame> query = this.connectionProvider
-            .RedisCollection<RedisGame>()
-            .Where(x => x.RoomId == roomId);
+        IRedisCollection<RedisGame> query = this.VisibleGames.Where(x => x.RoomId == roomId);
 
         RedisGame? game = await query.FirstOrDefaultAsync();
         if (game is null)
             return this.NotFound();
 
         return this.Ok(new ApiGame(game));
+    }
+
+    [HttpGet("[action]/{viewerId}")]
+    public async Task<ActionResult<bool>> IsHost(long viewerId)
+    {
+        // TODO: Find out how to execute this query within Redis by sub-indexing the player list
+        bool result = (await this.Games.ToListAsync()).Any(
+            x => x.Players.Any(y => y.ActorNr == 1 && y.ViewerId == viewerId)
+        );
+
+        return this.Ok(result);
     }
 }

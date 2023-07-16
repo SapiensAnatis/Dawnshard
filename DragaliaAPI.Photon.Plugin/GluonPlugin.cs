@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
-using System.Runtime.CompilerServices;
 using System.Text;
 using DragaliaAPI.Photon.Plugin.Constants;
 using DragaliaAPI.Photon.Plugin.Helpers;
@@ -19,10 +17,14 @@ using Photon.Hive.Plugin;
 
 namespace DragaliaAPI.Photon.Plugin
 {
-    public class GluonPlugin : PluginBase
+    /// <summary>
+    /// Main plugin game logic.
+    /// </summary>
+    public partial class GluonPlugin : PluginBase
     {
         private IPluginLogger logger;
         private PluginConfiguration config;
+        private Random rdm;
 
         private static readonly MessagePackSerializerOptions MessagePackOptions =
             MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block);
@@ -37,9 +39,12 @@ namespace DragaliaAPI.Photon.Plugin
         {
             this.logger = host.CreateLogger(this.Name);
             this.config = new PluginConfiguration(config);
+            this.rdm = new Random();
 
             return base.SetupInstance(host, config, out errorMsg);
         }
+
+        #region Photon Handlers
 
         /// <summary>
         /// Photon handler for when a game is created.
@@ -49,8 +54,7 @@ namespace DragaliaAPI.Photon.Plugin
         {
             info.Request.ActorProperties.InitializeViewerId();
 
-            Random rng = new Random();
-            info.Request.GameProperties.Add(GamePropertyKeys.RoomId, rng.Next(100_0000, 999_9999));
+            info.Request.GameProperties.Add(GamePropertyKeys.RoomId, rdm.Next(100_0000, 999_9999));
 
 #if DEBUG
             this.logger.DebugFormat(
@@ -59,20 +63,24 @@ namespace DragaliaAPI.Photon.Plugin
             );
 #endif
 
-            base.OnCreateGame(info);
+            // https://doc.photonengine.com/server/current/plugins/plugins-faq#how_to_get_the_actor_number_in_plugin_callbacks_
+            // This is only invalid if the room is recreated from an inactive state, which Dragalia doesn't do (hopefully!)
+            const int actorNr = 1;
 
-            this.PostJsonRequest(
-                this.config.GameCreateEndpoint,
+            this.PostStateManagerRequest(
+                GameCreateEndpoint,
                 new GameCreateRequest()
                 {
                     Game = DtoHelpers.CreateGame(
                         this.PluginHost.GameId,
                         info.Request.GameProperties
                     ),
-                    Player = DtoHelpers.CreatePlayer(info.Request.ActorProperties)
+                    Player = DtoHelpers.CreatePlayer(actorNr, info.Request.ActorProperties)
                 },
                 info
             );
+
+            info.Continue();
         }
 
         /// <summary>
@@ -83,17 +91,17 @@ namespace DragaliaAPI.Photon.Plugin
         {
             info.Request.ActorProperties.InitializeViewerId();
 
-            info.Continue();
-
-            this.PostJsonRequest(
-                this.config.GameJoinEndpoint,
+            this.PostStateManagerRequest(
+                GameJoinEndpoint,
                 new GameModifyRequest
                 {
                     GameName = this.PluginHost.GameId,
-                    Player = DtoHelpers.CreatePlayer(info.Request.ActorProperties)
+                    Player = DtoHelpers.CreatePlayer(info.ActorNr, info.Request.ActorProperties)
                 },
                 info
             );
+
+            info.Continue();
         }
 
         /// <summary>
@@ -106,6 +114,19 @@ namespace DragaliaAPI.Photon.Plugin
             IActor actor = this.PluginHost.GameActors.FirstOrDefault(
                 x => x.ActorNr == info.ActorNr
             );
+
+            if (!actor.Properties.TryGetValue("DeactivationTime", out object deactivationTime))
+                deactivationTime = "null";
+
+#if DEBUG
+            this.logger.DebugFormat(
+                "Leave info -- Actor: {0}, Details: {1}, IsInactive {2}, DeactivationTime: {3}",
+                info.ActorNr,
+                info.Details,
+                info.IsInactive,
+                deactivationTime
+            );
+#endif
 
             base.OnLeave(info);
 
@@ -123,8 +144,14 @@ namespace DragaliaAPI.Photon.Plugin
             if (actor.IsHost())
             {
                 this.RaiseEvent(
-                    0x17,
+                    Event.Codes.RoomBroken,
                     new RoomBroken() { Reason = RoomBroken.RoomBrokenType.HostDisconnected }
+                );
+
+                this.SetRoomVisibility(info, false);
+
+                this.PluginHost.SetGameState(
+                    new SerializableGameState() { IsOpen = false, IsVisible = false }
                 );
             }
 
@@ -135,8 +162,8 @@ namespace DragaliaAPI.Photon.Plugin
                 )
             )
             {
-                this.PostJsonRequest(
-                    this.config.GameLeaveEndpoint,
+                this.PostStateManagerRequest(
+                    GameLeaveEndpoint,
                     new GameModifyRequest
                     {
                         GameName = this.PluginHost.GameId,
@@ -158,8 +185,8 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Event information.</param>
         public override void OnCloseGame(ICloseGameCallInfo info)
         {
-            this.PostJsonRequest(
-                this.config.GameCloseEndpoint,
+            this.PostStateManagerRequest(
+                GameCloseEndpoint,
                 new GameModifyRequest { GameName = this.PluginHost.GameId, Player = null },
                 info,
                 false
@@ -174,6 +201,8 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Event information.</param>
         public override void OnRaiseEvent(IRaiseEventCallInfo info)
         {
+            base.OnRaiseEvent(info);
+
 #if DEBUG
             this.logger.DebugFormat(
                 "Actor {0} raised event: 0x{1} ({2})",
@@ -189,14 +218,55 @@ namespace DragaliaAPI.Photon.Plugin
 
             switch (info.Request.EvCode)
             {
-                case EventCodes.Ready:
+                case Event.Codes.Ready:
                     this.OnActorReady(info);
+                    break;
+                case Event.Codes.ClearQuestRequest:
+                    this.OnClearQuestRequest(info);
+                    break;
+                case Event.Codes.GameSucceed:
+                    this.OnGameSucceed(info);
+                    break;
+                case Event.Codes.FailQuestRequest:
+                    this.OnFailQuestRequest(info);
                     break;
                 default:
                     break;
             }
+        }
 
-            base.OnRaiseEvent(info);
+        private void OnFailQuestRequest(IRaiseEventCallInfo info)
+        {
+            FailQuestRequest request = info.DeserializeEvent<FailQuestRequest>();
+
+            this.logger.DebugFormat(
+                "Received FailQuestRequest with FailType {0}",
+                request.FailType.ToString()
+            );
+
+            // I assumed this would need to be POSTed to /dungeon/fail, but the event doesn't contain
+            // a request body with dungeon_key... so the API server couldn't really do anything.
+            FailQuestResponse response = new FailQuestResponse()
+            {
+                ResultType =
+                    request.FailType == FailQuestRequest.FailTypes.Timeup
+                        ? FailQuestResponse.ResultTypes.Timeup
+                        : FailQuestResponse.ResultTypes.Clear
+            };
+
+            this.RaiseEvent(Event.Codes.FailQuestResponse, response);
+
+            // TODO: Retrying a quest without a full team should kick you back to the lobby.
+        }
+
+        private void OnGameSucceed(IRaiseEventCallInfo info)
+        {
+            if (info.ActorNr == 1)
+            {
+                this.RaiseEvent(Event.Codes.GameSucceed, new { });
+                this.SetRoomId(info, this.GenerateRoomId());
+                this.SetRoomVisibility(info, true);
+            }
         }
 
         /// <summary>
@@ -205,6 +275,8 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Event information.</param>
         public override void OnSetProperties(ISetPropertiesCallInfo info)
         {
+            base.OnSetProperties(info);
+
 #if DEBUG
             this.logger.DebugFormat("Actor {0} set properties", info.ActorNr);
             this.logger.Debug(JsonConvert.SerializeObject(info.Request.Properties));
@@ -223,15 +295,17 @@ namespace DragaliaAPI.Photon.Plugin
 
             if (info.Request.Properties.ContainsKey(GamePropertyKeys.MatchingType))
                 this.OnSetMatchingType(info);
-
-            base.OnSetProperties(info);
         }
+
+        #endregion
+
+        #region Game Logic
 
         /// <summary>
         /// Custom handler for when an actor raises event 0x3 (Ready.)
         /// </summary>
         /// <param name="info">Info from <see cref="OnRaiseEvent(IRaiseEventCallInfo)"/>.</param>
-        public void OnActorReady(IRaiseEventCallInfo info)
+        private void OnActorReady(IRaiseEventCallInfo info)
         {
             this.logger.DebugFormat("Received Ready event from actor {0}", info.ActorNr);
 
@@ -246,9 +320,9 @@ namespace DragaliaAPI.Photon.Plugin
             {
                 this.logger.DebugFormat(
                     "All clients were ready, raising {0}",
-                    EventCodes.StartQuest
+                    Event.Codes.StartQuest
                 );
-                this.RaiseEvent(EventCodes.StartQuest, new Dictionary<string, string> { });
+                this.RaiseEvent(Event.Codes.StartQuest, new Dictionary<string, string> { });
             }
         }
 
@@ -261,8 +335,8 @@ namespace DragaliaAPI.Photon.Plugin
             MatchingTypes newType = (MatchingTypes)
                 info.Request.Properties.GetInt(GamePropertyKeys.MatchingType);
 
-            this.PostJsonRequest(
-                this.config.MatchingTypeEndpoint,
+            this.PostStateManagerRequest(
+                MatchingTypeEndpoint,
                 new GameModifyMatchingTypeRequest()
                 {
                     GameName = this.PluginHost.GameId,
@@ -286,8 +360,8 @@ namespace DragaliaAPI.Photon.Plugin
             if (newEntryConditions is null)
                 return;
 
-            this.PostJsonRequest(
-                this.config.EntryConditionsEndpoint,
+            this.PostStateManagerRequest(
+                EntryConditionsEndpoint,
                 new GameModifyConditionsRequest()
                 {
                     GameName = this.PluginHost.GameId,
@@ -313,7 +387,7 @@ namespace DragaliaAPI.Photon.Plugin
             {
                 case 1:
                     this.SetGoToIngameInfo(info);
-                    this.HideGameAfterStart(info);
+                    this.SetRoomVisibility(info, false);
                     break;
                 case 2:
                     this.RequestHeroParam(info);
@@ -355,7 +429,7 @@ namespace DragaliaAPI.Photon.Plugin
                         heroParams = heroParams.Take(memberCount).ToArray()
                     };
 
-                    this.RaiseEvent(0x14, evt);
+                    this.RaiseEvent(Event.Codes.CharacterData, evt);
                 }
             }
         }
@@ -408,8 +482,8 @@ namespace DragaliaAPI.Photon.Plugin
             {
                 Url = requestUri.AbsoluteUri,
                 ContentType = "application/json",
-                Callback = OnHeroParamResponse,
-                Async = false,
+                Callback = HeroParamRequestCallback,
+                Async = true,
                 Accept = "application/json",
                 DataStream = new MemoryStream(
                     Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(heroParamRequest))
@@ -425,9 +499,9 @@ namespace DragaliaAPI.Photon.Plugin
         /// </summary>
         /// <param name="response">The HTTP response.</param>
         /// <param name="userState">The arguments passed from the calling function.</param>
-        private void OnHeroParamResponse(IHttpResponse response, object userState)
+        private void HeroParamRequestCallback(IHttpResponse response, object userState)
         {
-            LogIfFailedCallback(response, userState);
+            this.LogIfFailedCallback(response, userState);
 
             List<HeroParamData> responseObject = JsonConvert.DeserializeObject<List<HeroParamData>>(
                 response.ResponseText
@@ -464,27 +538,114 @@ namespace DragaliaAPI.Photon.Plugin
                 );
             }
 
-            PartyEvent evt = new PartyEvent() { memberCountTable = memberCountTable };
+            PartyEvent evt = new PartyEvent()
+            {
+                MemberCountTable = memberCountTable,
+                ReBattleCount = this.config.ReplayTimeoutSeconds
+            };
 
-            this.RaiseEvent(0x3e, evt);
+            this.RaiseEvent(Event.Codes.Party, evt);
         }
 
         /// <summary>
-        /// Send a request to the Redis API to hide a game as it is now started.
+        /// Update the RoomId of a room and send a request to the Redis API to update it there.
         /// </summary>
-        /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
-        private void HideGameAfterStart(ISetPropertiesCallInfo info)
+        /// <param name="info">Call info from handler.</param>
+        /// <param name="roomId">The new room ID.</param>
+        private void SetRoomId(ICallInfo info, int roomId)
         {
-            this.PostJsonRequest(
-                this.config.MatchingTypeEndpoint,
-                new GameModifyMatchingTypeRequest
+            this.logger.DebugFormat("Setting room ID to {0}", roomId);
+
+            this.PluginHost.SetProperties(
+                0,
+                new Hashtable { { GamePropertyKeys.RoomId, roomId } },
+                null,
+                broadcast: true
+            );
+
+            this.PostStateManagerRequest(
+                RoomIdEndpoint,
+                new GameModifyRoomIdRequest
                 {
-                    NewMatchingType = MatchingTypes.NoDisplay,
+                    NewRoomId = roomId,
                     GameName = this.PluginHost.GameId,
                     Player = null
                 },
                 info,
+                callAsync: true
+            );
+        }
+
+        /// <summary>
+        /// Make a call to the Redis API to set the room's visibility.
+        /// </summary>
+        /// <param name="info">Call info from handler.</param>
+        /// <param name="visible">The new visibility.</param>
+        private void SetRoomVisibility(ICallInfo info, bool visible)
+        {
+            this.logger.DebugFormat("Setting room visibility to {0}", visible);
+
+            this.PostStateManagerRequest(
+                VisibleEndpoint,
+                new GameModifyVisibleRequest
+                {
+                    NewVisibility = visible,
+                    GameName = this.PluginHost.GameId,
+                    Player = null
+                },
+                info,
+                callAsync: true
+            );
+        }
+
+        private void OnClearQuestRequest(IRaiseEventCallInfo info)
+        {
+            // These properties must be set for the client to successfully rejoin the room.
+            this.PluginHost.SetProperties(
+                0,
+                new Hashtable()
+                {
+                    { GamePropertyKeys.GoToIngameInfo, null },
+                    { GamePropertyKeys.RoomId, -1 }
+                },
+                null,
                 true
+            );
+
+            // Clear HeroParam or else Photon complains about not being able to serialize it
+            // if a player joins the next room.
+            this.PluginHost.SetProperties(
+                info.ActorNr,
+                new Hashtable()
+                {
+                    { ActorPropertyKeys.HeroParam, null },
+                    { ActorPropertyKeys.HeroParamCount, null }
+                },
+                null,
+                false
+            );
+
+            ClearQuestRequest evt = info.DeserializeEvent<ClearQuestRequest>();
+
+            this.PostApiRequest(
+                this.config.DungeonRecordMultiEndpoint,
+                evt.RecordMultiRequest,
+                info,
+                ClearQuestRequestCallback,
+                callAsync: false
+            );
+        }
+
+        private void ClearQuestRequestCallback(IHttpResponse response, object userState)
+        {
+            this.LogIfFailedCallback(response, userState);
+
+            HttpRequestUserState typedUserState = (HttpRequestUserState)userState;
+
+            this.RaiseEvent(
+                Event.Codes.ClearQuestResponse,
+                new ClearQuestResponse() { RecordMultiResponse = response.ResponseData },
+                typedUserState.RequestActorNr
             );
         }
 
@@ -493,7 +654,7 @@ namespace DragaliaAPI.Photon.Plugin
         /// </summary>
         /// <param name="actorNr">The actor number.</param>
         /// <returns>The number of units they own.</returns>
-        public Dictionary<int, int> GetMemberCountTable()
+        private Dictionary<int, int> GetMemberCountTable()
         {
             if (
                 this.PluginHost.GameProperties.TryGetInt(GamePropertyKeys.QuestId, out int questId)
@@ -548,122 +709,6 @@ namespace DragaliaAPI.Photon.Plugin
             return result;
         }
 
-        /// <summary>
-        /// Helper method to raise events.
-        /// </summary>
-        /// <param name="eventCode">The event code to raise.</param>
-        /// <param name="eventData">The event data.</param>
-        /// <param name="target">The actor to target -- if null, all actors will be targeted.</param>
-        public void RaiseEvent(byte eventCode, object eventData, int? target = null)
-        {
-            byte[] serializedEvent = MessagePackSerializer.Serialize(
-                eventData,
-                MessagePackSerializerOptions.Standard.WithCompression(
-                    MessagePackCompression.Lz4Block
-                )
-            );
-            Dictionary<byte, object> props = new Dictionary<byte, object>()
-            {
-                { 245, serializedEvent },
-                { 254, 0 } // Server actor number
-            };
-
-            this.logger.DebugFormat(
-                "Raising event 0x{0} with data {1}",
-                eventCode.ToString("X"),
-                JsonConvert.SerializeObject(eventData)
-            );
-
-            if (target is null)
-            {
-                this.BroadcastEvent(eventCode, props);
-            }
-            else
-            {
-                this.logger.DebugFormat("Event will target actor {0}", target);
-                this.PluginHost.BroadcastEvent(
-                    new List<int>() { target.Value },
-                    0,
-                    eventCode,
-                    props,
-                    CacheOperations.DoNotCache
-                );
-            }
-        }
-
-        /// <summary>
-        /// Helper method to POST a JSON request body to the Redis API.
-        /// </summary>
-        /// <param name="endpoint">The endpoint to send a request to.</param>
-        /// <param name="forwardRequest">The request object.</param>
-        /// <param name="info">The event info from the current event callback.</param>
-        /// <param name="callAsync">Whether or not to suspend execution of the room while awaiting a response.</param>
-        private void PostJsonRequest(
-            Uri endpoint,
-            object forwardRequest,
-            ICallInfo info,
-            bool callAsync = true
-        )
-        {
-            HttpRequestCallback callback = this.LogIfFailedCallback;
-
-            MemoryStream stream = new MemoryStream();
-            string json = JsonConvert.SerializeObject(
-                forwardRequest,
-                new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    TypeNameHandling = TypeNameHandling.None,
-                }
-            );
-            byte[] data = Encoding.UTF8.GetBytes(json);
-            stream.Write(data, 0, data.Length);
-
-            string url = new Uri(this.config.StateManagerUrl, endpoint).AbsoluteUri;
-
-            HttpRequest request = new HttpRequest
-            {
-                Url = url,
-                Method = "POST",
-                Accept = "application/json",
-                ContentType = "application/json",
-                Callback = callback,
-                CustomHeaders = new Dictionary<string, string>()
-                {
-                    { "Authorization", $"Bearer {this.config.BearerToken}" }
-                },
-                DataStream = stream,
-                Async = callAsync
-            };
-
-            this.PluginHost.LogDebug(string.Format("PostJsonRequest: {0} - {1}", url, json));
-
-            this.PluginHost.HttpRequest(request, info);
-        }
-
-        /// <summary>
-        /// Logs an error if a HTTP response was not successful.
-        /// </summary>
-        /// <param name="httpResponse">The HTTP response.</param>
-        /// <param name="userState">The user state.</param>
-        private void LogIfFailedCallback(IHttpResponse httpResponse, object userState)
-        {
-            if (httpResponse.Status != HttpRequestQueueResult.Success)
-            {
-                this.ReportError(
-                    $"Request to {httpResponse.Request.Url} failed with Photon status {httpResponse.Status} and HTTP status {httpResponse.HttpCode} ({httpResponse.Reason})"
-                );
-            }
-        }
-
-        /// <summary>
-        /// Report an error.
-        /// </summary>
-        /// <param name="msg">The error message.</param>
-        private void ReportError(string msg)
-        {
-            this.PluginHost.LogError(msg);
-            this.PluginHost.BroadcastErrorInfoEvent(msg);
-        }
+        #endregion
     }
 }

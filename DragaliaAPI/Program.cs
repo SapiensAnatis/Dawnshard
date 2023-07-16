@@ -5,6 +5,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.GraphQL;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
@@ -32,6 +33,7 @@ using Serilog.Extensions.Logging;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Login;
 using DragaliaAPI.Helpers;
+using DragaliaAPI.Features.Dungeon;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -92,6 +94,7 @@ builder.Services.AddAuthentication(opts =>
 {
     opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
     opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
+    opts.AddScheme<PhotonAuthenticationHandler>(nameof(PhotonAuthenticationHandler), null);
 });
 
 builder.Services
@@ -113,14 +116,12 @@ builder.Services
 #pragma warning restore CS0618 // Type or member is obsolete
     .AddScoped<ISummonService, SummonService>()
     .AddScoped<IUpdateDataService, UpdateDataService>()
-    .AddScoped<IDungeonService, DungeonService>()
     .AddScoped<IDragonService, DragonService>()
     .AddScoped<ISavefileService, SavefileService>()
     .AddScoped<IHelperService, HelperService>()
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<IBonusService, BonusService>()
     .AddScoped<IWeaponService, WeaponService>()
-    .AddScoped<IQuestRewardService, QuestRewardService>()
     .AddScoped<IStoryService, StoryService>()
     .AddScoped<IMatchingService, MatchingService>()
     .AddScoped<IAbilityCrestService, AbilityCrestService>()
@@ -158,7 +159,17 @@ builder.Services
     // Login feature
     .AddScoped<IResetHelper, ResetHelper>()
     .AddScoped<IDateTimeProvider, DateTimeProvider>()
-    .AddScoped<ILoginBonusService, LoginBonusService>();
+    .AddScoped<ILoginBonusService, LoginBonusService>()
+    // Dungeon Feature
+    .AddScoped<IDungeonService, DungeonService>()
+    .AddScoped<IDungeonStartService, DungeonStartService>()
+    .AddScoped<IDungeonRepository, DungeonRepository>()
+    .AddScoped<IQuestDropService, QuestDropService>()
+    .AddScoped<IQuestEnemyService, QuestEnemyService>()
+    .AddScoped<IOddsInfoService, OddsInfoService>()
+    // Clear party feature
+    .AddScoped<IClearPartyRepository, ClearPartyRepository>()
+    .AddScoped<IClearPartyService, ClearPartyService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();

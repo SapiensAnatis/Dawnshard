@@ -3,6 +3,9 @@ using System.Runtime.CompilerServices;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Models;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -142,22 +145,38 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
 
     private async Task<int> GetCharacterBuildupCount(MissionProgressionRequirement requirement)
     {
-        if ((PlusCountType)requirement.Parameter! == PlusCountType.Hp)
-            return await this.unitRepository.Charas.Select(x => x.HpPlusCount).MaxAsync();
-
-        return await this.unitRepository.Charas.Select(x => x.AttackPlusCount).MaxAsync();
+        return (PlusCountType)requirement.Parameter! switch
+        {
+            PlusCountType.Hp
+                => await this.unitRepository.Charas.Select(x => x.HpPlusCount).MaxAsync(),
+            PlusCountType.Atk
+                => await this.unitRepository.Charas.Select(x => x.AttackPlusCount).MaxAsync(),
+            _
+                => throw new DragaliaException(
+                    ResultCode.CommonInvalidArgument,
+                    $"Invalid PlusCountType for character in mission requirement, parameter: {requirement.Parameter}"
+                ),
+        };
     }
 
     private async Task<int> GetWyrmprintBuildupCount(MissionProgressionRequirement requirement)
     {
-        if ((PlusCountType)requirement.Parameter! == PlusCountType.Hp)
-            return await this.abilityCrestRepository.AbilityCrests
-                .Select(x => x.HpPlusCount)
-                .MaxAsync();
-
-        return await this.abilityCrestRepository.AbilityCrests
-            .Select(x => x.AttackPlusCount)
-            .MaxAsync();
+        return (PlusCountType)requirement.Parameter! switch
+        {
+            PlusCountType.Hp
+                => await this.abilityCrestRepository.AbilityCrests
+                    .Select(x => x.HpPlusCount)
+                    .MaxAsync(),
+            PlusCountType.Atk
+                => await this.abilityCrestRepository.AbilityCrests
+                    .Select(x => x.AttackPlusCount)
+                    .MaxAsync(),
+            _
+                => throw new DragaliaException(
+                    ResultCode.CommonInvalidArgument,
+                    $"Invalid PlusCountType for wyrmprint in mission requirement, parameter: {requirement.Parameter}"
+                ),
+        };
     }
 
     private async Task<int> GetWeaponEarnedCount(MissionProgressionRequirement requirement)

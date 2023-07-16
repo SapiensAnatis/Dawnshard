@@ -1132,6 +1132,73 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerQuests");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbQuestClearPartyUnit", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("QuestId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsMulti")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("UnitNo")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CharaId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EditSkill1CharaId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EditSkill2CharaId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EquipCrestSlotType1CrestId1")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EquipCrestSlotType1CrestId2")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EquipCrestSlotType1CrestId3")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EquipCrestSlotType2CrestId1")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EquipCrestSlotType2CrestId2")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EquipCrestSlotType3CrestId1")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EquipCrestSlotType3CrestId2")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("EquipDragonKeyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("EquipTalismanKeyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("EquipWeaponBodyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EquipWeaponSkinId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EquippedDragonEntityId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EquippedTalismanEntityId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DeviceAccountId", "QuestId", "IsMulti", "UnitNo");
+
+                    b.ToTable("QuestClearPartyUnits");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbSetUnit", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -1483,7 +1550,7 @@ namespace DragaliaAPI.Database.Migrations
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerPresent", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
+                        .WithMany("Presents")
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1494,7 +1561,7 @@ namespace DragaliaAPI.Database.Migrations
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerPresentHistory", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
+                        .WithMany("PresentHistory")
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1505,8 +1572,8 @@ namespace DragaliaAPI.Database.Migrations
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerShopInfo", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
-                        .HasForeignKey("DeviceAccountId")
+                        .WithOne("ShopInfo")
+                        .HasForeignKey("DragaliaAPI.Database.Entities.DbPlayerShopInfo", "DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1572,6 +1639,17 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany("QuestList")
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbQuestClearPartyUnit", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1665,7 +1743,13 @@ namespace DragaliaAPI.Database.Migrations
 
                     b.Navigation("PartyList");
 
+                    b.Navigation("PresentHistory");
+
+                    b.Navigation("Presents");
+
                     b.Navigation("QuestList");
+
+                    b.Navigation("ShopInfo");
 
                     b.Navigation("StoryStates");
 

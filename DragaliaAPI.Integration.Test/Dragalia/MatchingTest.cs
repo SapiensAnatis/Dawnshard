@@ -39,6 +39,7 @@ public class MatchingTest : TestFixture
                         {
                             new()
                             {
+                                ActorNr = 1,
                                 ViewerId = 1,
                                 PartyNoList = new List<int>() { 1 }
                             }
@@ -124,6 +125,7 @@ public class MatchingTest : TestFixture
                         {
                             new()
                             {
+                                ActorNr = 1,
                                 ViewerId = 1,
                                 PartyNoList = new List<int>() { 1 }
                             }
@@ -211,6 +213,7 @@ public class MatchingTest : TestFixture
                     {
                         new()
                         {
+                            ActorNr = 1,
                             ViewerId = 1,
                             PartyNoList = new List<int>() { 1 }
                         }
@@ -294,6 +297,7 @@ public class MatchingTest : TestFixture
                     {
                         new()
                         {
+                            ActorNr = 1,
                             ViewerId = 40000,
                             PartyNoList = new List<int>() { 1 }
                         }

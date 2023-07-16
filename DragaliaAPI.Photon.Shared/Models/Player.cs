@@ -10,6 +10,11 @@ namespace DragaliaAPI.Photon.Shared.Models
     public class Player
     {
         /// <summary>
+        /// The player's actor number.
+        /// </summary>
+        public int ActorNr { get; set; }
+
+        /// <summary>
         /// The player's viewer ID.
         /// </summary>
         public long ViewerId { get; set; }

@@ -5,7 +5,7 @@ namespace DragaliaAPI.Features.Reward;
 
 public record Entity(
     EntityTypes Type,
-    int Id,
+    int Id = 0,
     int Quantity = 1,
     int? LimitBreakCount = null,
     int? BuildupCount = null,
