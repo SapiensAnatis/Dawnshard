@@ -3,6 +3,7 @@ using System;
 using DragaliaAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230715171619_quest-clear-parties-2")]
+    partial class questclearparties2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -601,74 +604,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PlayerDragonReliability");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerEventData", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("integer")
-                        .HasColumnName("EventId");
-
-                    b.Property<bool>("CustomEventFlag")
-                        .HasColumnType("boolean")
-                        .HasColumnName("CustomEventFlag");
-
-                    b.HasKey("DeviceAccountId", "EventId");
-
-                    b.HasIndex("DeviceAccountId");
-
-                    b.ToTable("PlayerEventData");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerEventItem", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("integer")
-                        .HasColumnName("EventId");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer")
-                        .HasColumnName("Quantity");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer")
-                        .HasColumnName("Type");
-
-                    b.HasKey("DeviceAccountId", "Id");
-
-                    b.HasIndex("DeviceAccountId", "EventId");
-
-                    b.ToTable("PlayerEventItems");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerEventReward", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("integer")
-                        .HasColumnName("EventId");
-
-                    b.Property<int>("RewardId")
-                        .HasColumnType("integer")
-                        .HasColumnName("RewardId");
-
-                    b.HasKey("DeviceAccountId", "EventId", "RewardId");
-
-                    b.HasIndex("DeviceAccountId", "EventId");
-
-                    b.ToTable("PlayerEventRewards");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerMaterial", b =>
@@ -1586,39 +1521,6 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany("DragonReliabilityList")
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerEventData", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerEventItem", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerEventReward", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

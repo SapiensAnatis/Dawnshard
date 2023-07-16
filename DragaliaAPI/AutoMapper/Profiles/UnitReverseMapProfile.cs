@@ -45,6 +45,13 @@ public class UnitReverseMapProfile : Profile
             .ForMember(x => x.PartyNo, opts => opts.Ignore())
             .ForMember(x => x.Party, opts => opts.Ignore());
 
+        this.CreateMap<PartySettingList, DbQuestClearPartyUnit>()
+            // Manually mapped properties
+            .ForMember(x => x.QuestId, opts => opts.Ignore())
+            .ForMember(x => x.IsMulti, opts => opts.Ignore())
+            .ForMember(x => x.EquippedDragonEntityId, opts => opts.Ignore())
+            .ForMember(x => x.EquippedTalismanEntityId, opts => opts.Ignore());
+
         this.CreateMap<WeaponSkinList, DbWeaponSkin>();
 
         this.CreateMap<WeaponPassiveAbilityList, DbWeaponPassiveAbility>();

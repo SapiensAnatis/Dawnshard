@@ -40,7 +40,7 @@ public class DungeonRecordControllerTest
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
-        this.mockLogger = new(MockBehavior.Strict);
+        this.mockLogger = new(MockBehavior.Loose);
         this.mockQuestCompletionService = new(MockBehavior.Strict);
 
         this.dungeonRecordController = new(

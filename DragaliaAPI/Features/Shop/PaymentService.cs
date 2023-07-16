@@ -21,6 +21,20 @@ public class PaymentService(
     private readonly List<AtgenDeleteAmuletList> amuletList = new();
     private readonly List<AtgenDeleteTalismanList> talismanList = new();
     private readonly List<AtgenDeleteWeaponList> weaponList = new();
+    private readonly ILogger<PaymentService> logger;
+    private readonly IUserDataRepository userDataRepository;
+    private readonly IInventoryRepository inventoryRepository;
+
+    public PaymentService(
+        ILogger<PaymentService> logger,
+        IUserDataRepository userDataRepository,
+        IInventoryRepository inventoryRepository
+    )
+    {
+        this.logger = logger;
+        this.userDataRepository = userDataRepository;
+        this.inventoryRepository = inventoryRepository;
+    }
 
     public async Task ProcessPayment(Entity entity, PaymentTarget? payment = null)
     {

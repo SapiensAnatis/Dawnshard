@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
 [Index(nameof(DeviceAccountId))]
-public class DbPartyUnit
+public class DbPartyUnit : DbPartyUnitBase
 {
     // In theory, a composite primary key of [Party, UnitNo] would work great.
     // However, EF Core doesn't like navigation properties being used as keys.
@@ -19,34 +20,4 @@ public class DbPartyUnit
     public string DeviceAccountId { get; set; } = string.Empty;
 
     public int PartyNo { get; set; }
-
-    public required int UnitNo { get; set; }
-
-    public required Charas CharaId { get; set; }
-
-    public long EquipDragonKeyId { get; set; } = 0;
-
-    public WeaponBodies EquipWeaponBodyId { get; set; }
-
-    public int EquipWeaponSkinId { get; set; }
-
-    public AbilityCrests EquipCrestSlotType1CrestId1 { get; set; }
-
-    public AbilityCrests EquipCrestSlotType1CrestId2 { get; set; }
-
-    public AbilityCrests EquipCrestSlotType1CrestId3 { get; set; }
-
-    public AbilityCrests EquipCrestSlotType2CrestId1 { get; set; }
-
-    public AbilityCrests EquipCrestSlotType2CrestId2 { get; set; }
-
-    public AbilityCrests EquipCrestSlotType3CrestId1 { get; set; }
-
-    public AbilityCrests EquipCrestSlotType3CrestId2 { get; set; }
-
-    public long EquipTalismanKeyId { get; set; }
-
-    public Charas EditSkill1CharaId { get; set; }
-
-    public Charas EditSkill2CharaId { get; set; }
 }
