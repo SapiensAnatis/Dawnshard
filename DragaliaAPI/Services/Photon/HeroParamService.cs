@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.ComponentModel.DataAnnotations;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
@@ -11,7 +10,6 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services.Photon;
@@ -62,8 +60,6 @@ public class HeroParamService : IHeroParamService
     public async Task<IEnumerable<HeroParam>> GetHeroParam(long viewerId, int partySlot)
     {
         this.logger.LogDebug("Fetching HeroParam for slot {partySlots}", partySlot);
-
-        List<HeroParam> result = new();
 
         DbPlayerUserData userData = await this.userDataRepository
             .GetViewerData(viewerId)

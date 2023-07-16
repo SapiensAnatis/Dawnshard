@@ -8,6 +8,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -109,6 +110,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         if (
             this.ApiContext.PlayerUserData
+                .AsNoTracking()
                 .First(x => x.DeviceAccountId == DeviceAccountId)
                 .LastSaveImportTime > DateTimeOffset.UnixEpoch
         )

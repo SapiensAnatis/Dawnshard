@@ -155,4 +155,6 @@ public class ApiContext : DbContext
     public DbSet<DbPlayerShopPurchase> PlayerPurchases { get; set; }
 
     public DbSet<DbPlayerTrade> PlayerTrades { get; set; }
+
+    public DbSet<DbQuestClearPartyUnit> QuestClearPartyUnits { get; set; }
 }

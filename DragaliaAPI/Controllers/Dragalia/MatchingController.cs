@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Photon;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
@@ -54,7 +53,7 @@ public class MatchingController : DragaliaControllerBase
     }
 
     [HttpPost("check_penalty_user")]
-    public async Task<DragaliaResult> CheckPenaltyUser(MatchingCheckPenaltyUserRequest request)
+    public DragaliaResult CheckPenaltyUser(MatchingCheckPenaltyUserRequest request)
     {
         return this.Ok(new MatchingCheckPenaltyUserData() { result = 1 });
     }

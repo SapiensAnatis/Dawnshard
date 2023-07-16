@@ -207,7 +207,7 @@ public class SummonController : DragaliaControllerBase
 
     [HttpPost]
     [Route("get_summon_list")]
-    public async Task<DragaliaResult> GetSummonList()
+    public DragaliaResult GetSummonList()
     {
         return Ok(Data.SummonListData);
     }

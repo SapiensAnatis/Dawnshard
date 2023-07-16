@@ -866,28 +866,28 @@ public class AtgenCharaUnitSetDetailList
     public int unit_set_no { get; set; }
     public string unit_set_name { get; set; }
     public ulong dragon_key_id { get; set; }
-    public int weapon_body_id { get; set; }
-    public int crest_slot_type_1_crest_id_1 { get; set; }
-    public int crest_slot_type_1_crest_id_2 { get; set; }
-    public int crest_slot_type_1_crest_id_3 { get; set; }
-    public int crest_slot_type_2_crest_id_1 { get; set; }
-    public int crest_slot_type_2_crest_id_2 { get; set; }
-    public int crest_slot_type_3_crest_id_1 { get; set; }
-    public int crest_slot_type_3_crest_id_2 { get; set; }
+    public WeaponBodies weapon_body_id { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_3 { get; set; }
+    public AbilityCrests crest_slot_type_2_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_2_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_3_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_3_crest_id_2 { get; set; }
     public ulong talisman_key_id { get; set; }
 
     public AtgenCharaUnitSetDetailList(
         int unit_set_no,
         string unit_set_name,
         ulong dragon_key_id,
-        int weapon_body_id,
-        int crest_slot_type_1_crest_id_1,
-        int crest_slot_type_1_crest_id_2,
-        int crest_slot_type_1_crest_id_3,
-        int crest_slot_type_2_crest_id_1,
-        int crest_slot_type_2_crest_id_2,
-        int crest_slot_type_3_crest_id_1,
-        int crest_slot_type_3_crest_id_2,
+        WeaponBodies weapon_body_id,
+        AbilityCrests crest_slot_type_1_crest_id_1,
+        AbilityCrests crest_slot_type_1_crest_id_2,
+        AbilityCrests crest_slot_type_1_crest_id_3,
+        AbilityCrests crest_slot_type_2_crest_id_1,
+        AbilityCrests crest_slot_type_2_crest_id_2,
+        AbilityCrests crest_slot_type_3_crest_id_1,
+        AbilityCrests crest_slot_type_3_crest_id_2,
         ulong talisman_key_id
     )
     {
@@ -3267,26 +3267,26 @@ public class AtgenRequestAbilityCrestSetData
 public class AtgenRequestCharaUnitSetData
 {
     public ulong dragon_key_id { get; set; }
-    public int weapon_body_id { get; set; }
-    public int crest_slot_type_1_crest_id_1 { get; set; }
-    public int crest_slot_type_1_crest_id_2 { get; set; }
-    public int crest_slot_type_1_crest_id_3 { get; set; }
-    public int crest_slot_type_2_crest_id_1 { get; set; }
-    public int crest_slot_type_2_crest_id_2 { get; set; }
-    public int crest_slot_type_3_crest_id_1 { get; set; }
-    public int crest_slot_type_3_crest_id_2 { get; set; }
+    public WeaponBodies weapon_body_id { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_1_crest_id_3 { get; set; }
+    public AbilityCrests crest_slot_type_2_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_2_crest_id_2 { get; set; }
+    public AbilityCrests crest_slot_type_3_crest_id_1 { get; set; }
+    public AbilityCrests crest_slot_type_3_crest_id_2 { get; set; }
     public ulong talisman_key_id { get; set; }
 
     public AtgenRequestCharaUnitSetData(
         ulong dragon_key_id,
-        int weapon_body_id,
-        int crest_slot_type_1_crest_id_1,
-        int crest_slot_type_1_crest_id_2,
-        int crest_slot_type_1_crest_id_3,
-        int crest_slot_type_2_crest_id_1,
-        int crest_slot_type_2_crest_id_2,
-        int crest_slot_type_3_crest_id_1,
-        int crest_slot_type_3_crest_id_2,
+        WeaponBodies weapon_body_id,
+        AbilityCrests crest_slot_type_1_crest_id_1,
+        AbilityCrests crest_slot_type_1_crest_id_2,
+        AbilityCrests crest_slot_type_1_crest_id_3,
+        AbilityCrests crest_slot_type_2_crest_id_1,
+        AbilityCrests crest_slot_type_2_crest_id_2,
+        AbilityCrests crest_slot_type_3_crest_id_1,
+        AbilityCrests crest_slot_type_3_crest_id_2,
         ulong talisman_key_id
     )
     {
@@ -7291,6 +7291,8 @@ public class PartySettingList
     }
 
     public PartySettingList() { }
+
+    public static PartySettingList Empty(int unit_no) => new() { unit_no = unit_no };
 }
 
 #nullable enable
