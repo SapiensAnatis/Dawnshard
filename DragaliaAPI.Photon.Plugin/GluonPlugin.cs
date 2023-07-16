@@ -228,7 +228,9 @@ namespace DragaliaAPI.Photon.Plugin
         {
             if (info.ActorNr == 1)
             {
-                this.RaiseEvent(0x18, new { });
+                this.RaiseEvent(Event.Codes.GameSucceed, new { });
+                this.SetRoomId(info, this.GenerateRoomId());
+                this.SetRoomVisibility(info, true);
             }
         }
 
@@ -350,7 +352,7 @@ namespace DragaliaAPI.Photon.Plugin
             {
                 case 1:
                     this.SetGoToIngameInfo(info);
-                    this.HideGameAfterStart(info);
+                    this.SetRoomVisibility(info, false);
                     break;
                 case 2:
                     this.RequestHeroParam(info);
@@ -511,26 +513,59 @@ namespace DragaliaAPI.Photon.Plugin
         }
 
         /// <summary>
-        /// Send a request to the Redis API to hide a game as it is now started.
+        /// Update the RoomId of a room and send a request to the Redis API to update it there.
         /// </summary>
-        /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
-        private void HideGameAfterStart(ISetPropertiesCallInfo info)
+        /// <param name="info">Call info from handler.</param>
+        /// <param name="roomId">The new room ID.</param>
+        private void SetRoomId(ICallInfo info, int roomId)
         {
+            this.logger.DebugFormat("Setting room ID to {0}", roomId);
+
+            this.PluginHost.SetProperties(
+                0,
+                new Hashtable { { GamePropertyKeys.RoomId, roomId } },
+                null,
+                broadcast: true
+            );
+
             this.PostStateManagerRequest(
-                this.config.MatchingTypeEndpoint,
-                new GameModifyMatchingTypeRequest
+                RoomIdEndpoint,
+                new GameModifyRoomIdRequest
                 {
-                    NewMatchingType = MatchingTypes.NoDisplay,
+                    NewRoomId = roomId,
                     GameName = this.PluginHost.GameId,
                     Player = null
                 },
                 info,
-                true
+                callAsync: true
+            );
+        }
+
+        /// <summary>
+        /// Make a call to the Redis API to set the room's visibility.
+        /// </summary>
+        /// <param name="info">Call info from handler.</param>
+        /// <param name="visible">The new visibility.</param>
+        private void SetRoomVisibility(ICallInfo info, bool visible)
+        {
+            this.logger.DebugFormat("Setting room visibility to {0}", visible);
+
+            this.PostStateManagerRequest(
+                VisibleEndpoint,
+                new GameModifyVisibleRequest
+                {
+                    NewVisibility = visible,
+                    GameName = this.PluginHost.GameId,
+                    Player = null
+                },
+                info,
+                callAsync: true
             );
         }
 
         private void OnQuestClearRequest(IRaiseEventCallInfo info)
         {
+            // These properties must be set for the client to successfully rejoin the room.
             this.PluginHost.SetProperties(
                 0,
                 new Hashtable()
@@ -542,23 +577,33 @@ namespace DragaliaAPI.Photon.Plugin
                 true
             );
 
+            // Clear HeroParam or else Photon complains about not being able to serialize it
+            // if a player joins the next room.
+            this.PluginHost.SetProperties(
+                info.ActorNr,
+                new Hashtable()
+                {
+                    { ActorPropertyKeys.HeroParam, null },
+                    { ActorPropertyKeys.HeroParamCount, null }
+                },
+                null,
+                false
+            );
+
             ClearQuestRequest evt = info.DeserializeEvent<ClearQuestRequest>();
 
             this.PostApiRequest(
                 new Uri("/dungeon_record/record_multi", UriKind.Relative),
                 evt.RecordMultiRequest,
                 info,
-                OnDungeonRecordResponse,
+                OnQuestClearResponse,
                 callAsync: false
             );
         }
 
-        private void OnDungeonRecordResponse(IHttpResponse response, object userState)
+        private void OnQuestClearResponse(IHttpResponse response, object userState)
         {
-            this.logger.DebugFormat(
-                "Received DungeonRecord response: status {0}",
-                response.HttpCode
-            );
+            this.LogIfFailedCallback(response, userState);
 
             LogIfFailedCallback(response, userState);
 

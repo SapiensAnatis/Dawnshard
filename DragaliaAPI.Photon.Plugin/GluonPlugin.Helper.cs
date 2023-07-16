@@ -176,5 +176,10 @@ namespace DragaliaAPI.Photon.Plugin
             this.PluginHost.LogError(msg);
             this.PluginHost.BroadcastErrorInfoEvent(msg);
         }
+
+        private int GenerateRoomId()
+        {
+            return this.rdm.Next(100_0000, 999_9999);
+        }
     }
 }
