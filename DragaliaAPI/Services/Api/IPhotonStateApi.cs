@@ -7,4 +7,5 @@ public interface IPhotonStateApi
     Task<IEnumerable<ApiGame>> GetAllGames();
     Task<IEnumerable<ApiGame>> GetByQuestId(int questId);
     Task<ApiGame?> GetGameById(int id);
+    Task<bool> GetIsHost(long viewerId);
 }

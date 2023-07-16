@@ -7,51 +7,28 @@ namespace DragaliaAPI.Photon.Plugin.Models
 {
     internal class PluginConfiguration
     {
-        public Uri ApiServerUrl { get; set; }
+        public Uri StateManagerUrl { get; }
 
-        public Uri StateManagerUrl { get; set; }
+        public Uri ApiServerUrl { get; }
 
-        public Uri GameCreateEndpoint { get; set; }
+        public Uri DungeonRecordMultiEndpoint { get; }
 
-        public Uri GameCloseEndpoint { get; set; }
+        public int ReplayTimeoutSeconds { get; }
 
-        public Uri GameJoinEndpoint { get; set; }
-
-        public Uri GameLeaveEndpoint { get; set; }
-
-        public Uri EntryConditionsEndpoint { get; set; }
-
-        public Uri MatchingTypeEndpoint { get; set; }
-
-        public string BearerToken { get; set; }
+        public string BearerToken { get; }
 
         public PluginConfiguration(IDictionary<string, string> config)
         {
             this.ApiServerUrl = config.GetUri(nameof(this.ApiServerUrl), UriKind.Absolute);
             this.StateManagerUrl = config.GetUri(nameof(this.StateManagerUrl), UriKind.Absolute);
-            this.GameCreateEndpoint = config.GetUri(
-                nameof(this.GameCreateEndpoint),
-                UriKind.Relative
-            );
-            this.GameJoinEndpoint = config.GetUri(nameof(this.GameJoinEndpoint), UriKind.Relative);
-            this.GameCloseEndpoint = config.GetUri(
-                nameof(this.GameCloseEndpoint),
-                UriKind.Relative
-            );
-            this.GameLeaveEndpoint = config.GetUri(
-                nameof(this.GameLeaveEndpoint),
-                UriKind.Relative
-            );
-            this.EntryConditionsEndpoint = config.GetUri(
-                nameof(this.EntryConditionsEndpoint),
-                UriKind.Relative
-            );
-            this.MatchingTypeEndpoint = config.GetUri(
-                nameof(this.MatchingTypeEndpoint),
+
+            this.DungeonRecordMultiEndpoint = config.GetUri(
+                nameof(this.DungeonRecordMultiEndpoint),
                 UriKind.Relative
             );
 
             this.BearerToken = config[nameof(BearerToken)];
+            this.ReplayTimeoutSeconds = config.GetInt(nameof(ReplayTimeoutSeconds));
         }
     }
 }

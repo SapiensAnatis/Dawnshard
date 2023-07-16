@@ -6656,7 +6656,7 @@ public class IngameQuestData
 public class IngameResultData
 {
     public string dungeon_key { get; set; }
-    public int play_type { get; set; }
+    public QuestPlayType play_type { get; set; }
     public int quest_id { get; set; }
     public RewardRecord reward_record { get; set; }
     public GrowRecord grow_record { get; set; }
@@ -6692,7 +6692,7 @@ public class IngameResultData
 
     public IngameResultData(
         string dungeon_key,
-        int play_type,
+        QuestPlayType play_type,
         int quest_id,
         RewardRecord reward_record,
         GrowRecord grow_record,

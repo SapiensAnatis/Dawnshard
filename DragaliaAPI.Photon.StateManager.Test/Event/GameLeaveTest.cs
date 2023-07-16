@@ -131,6 +131,6 @@ public class GameLeaveTest : TestFixture
         RedisGame? storedGame = await this.RedisConnectionProvider.GetGame(game.Name);
         storedGame.Should().NotBeNull();
         storedGame!.Players.Should().BeEmpty();
-        storedGame!.MatchingType.Should().Be(MatchingTypes.NoDisplay);
+        storedGame!.Visible.Should().BeFalse();
     }
 }

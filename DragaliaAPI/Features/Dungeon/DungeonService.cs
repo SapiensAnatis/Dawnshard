@@ -81,6 +81,15 @@ public class DungeonService : IDungeonService
         await WriteDungeon(dungeonKey, session);
     }
 
+    public async Task SetIsHost(string dungeonKey, bool isHost)
+    {
+        DungeonSession session = await this.GetDungeon(dungeonKey);
+
+        session.IsHost = isHost;
+
+        await WriteDungeon(dungeonKey, session);
+    }
+
     public async Task<DungeonSession> FinishDungeon(string dungeonKey)
     {
         DungeonSession session = await GetDungeon(dungeonKey);

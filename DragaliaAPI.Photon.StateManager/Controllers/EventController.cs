@@ -131,7 +131,7 @@ public class EventController : ControllerBase
         {
             // Don't remove it just yet, as Photon will request that shortly
             this.logger.LogDebug("Hiding game {@game}", game);
-            game.MatchingType = MatchingTypes.NoDisplay;
+            game.Visible = false;
         }
 
         await this.Games.UpdateAsync(game);
@@ -218,6 +218,57 @@ public class EventController : ControllerBase
             "Updated game {game} matching type to {type}",
             game.Name,
             game.MatchingType
+        );
+
+        return this.Ok();
+    }
+
+    /// <summary>
+    /// Register a game's room ID being changed.
+    /// </summary>
+    /// <param name="request">The webhook data.</param>
+    /// <returns>A HTTP response.</returns>
+    [HttpPost("[action]")]
+    public async Task<IActionResult> RoomId(GameModifyRoomIdRequest request)
+    {
+        RedisGame? game = await this.Games.FindByIdAsync(request.GameName);
+
+        if (game is null)
+        {
+            this.logger.LogError("Could not find game {name}", request.GameName);
+            return this.NotFound();
+        }
+
+        game.RoomId = request.NewRoomId;
+        await this.Games.UpdateAsync(game);
+
+        this.logger.LogInformation(
+            "Updated game {game} room ID to {newId}",
+            game.Name,
+            game.RoomId
+        );
+
+        return this.Ok();
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> Visible(GameModifyVisibleRequest request)
+    {
+        RedisGame? game = await this.Games.FindByIdAsync(request.GameName);
+
+        if (game is null)
+        {
+            this.logger.LogError("Could not find game {name}", request.GameName);
+            return this.NotFound();
+        }
+
+        game.Visible = request.NewVisibility;
+        await this.Games.UpdateAsync(game);
+
+        this.logger.LogInformation(
+            "Updated game {game} visibility to {newVisibility}",
+            game.Name,
+            game.Visible
         );
 
         return this.Ok();

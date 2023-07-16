@@ -12,10 +12,11 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
     /// </summary>
     internal static class DtoHelpers
     {
-        public static Player CreatePlayer(Hashtable actorProperties)
+        public static Player CreatePlayer(int actorNr, Hashtable actorProperties)
         {
             return new Player()
             {
+                ActorNr = actorNr,
                 ViewerId = actorProperties.GetInt(ActorPropertyKeys.PlayerId),
                 PartyNoList = (int[])actorProperties[ActorPropertyKeys.UsePartySlot]
             };
