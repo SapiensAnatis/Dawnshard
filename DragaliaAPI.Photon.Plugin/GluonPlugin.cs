@@ -68,7 +68,7 @@ namespace DragaliaAPI.Photon.Plugin
             const int actorNr = 1;
 
             this.PostStateManagerRequest(
-                this.config.GameCreateEndpoint,
+                GameCreateEndpoint,
                 new GameCreateRequest()
                 {
                     Game = DtoHelpers.CreateGame(
@@ -92,7 +92,7 @@ namespace DragaliaAPI.Photon.Plugin
             info.Request.ActorProperties.InitializeViewerId();
 
             this.PostStateManagerRequest(
-                this.config.GameJoinEndpoint,
+                GameJoinEndpoint,
                 new GameModifyRequest
                 {
                     GameName = this.PluginHost.GameId,
@@ -118,6 +118,7 @@ namespace DragaliaAPI.Photon.Plugin
             if (!actor.Properties.TryGetValue("DeactivationTime", out object deactivationTime))
                 deactivationTime = "null";
 
+#if DEBUG
             this.logger.DebugFormat(
                 "Leave info -- Actor: {0}, Details: {1}, IsInactive {2}, DeactivationTime: {3}",
                 info.ActorNr,
@@ -125,6 +126,7 @@ namespace DragaliaAPI.Photon.Plugin
                 info.IsInactive,
                 deactivationTime
             );
+#endif
 
             base.OnLeave(info);
 
@@ -155,7 +157,7 @@ namespace DragaliaAPI.Photon.Plugin
             )
             {
                 this.PostStateManagerRequest(
-                    this.config.GameLeaveEndpoint,
+                    GameLeaveEndpoint,
                     new GameModifyRequest
                     {
                         GameName = this.PluginHost.GameId,
@@ -178,7 +180,7 @@ namespace DragaliaAPI.Photon.Plugin
         public override void OnCloseGame(ICloseGameCallInfo info)
         {
             this.PostStateManagerRequest(
-                this.config.GameCloseEndpoint,
+                GameCloseEndpoint,
                 new GameModifyRequest { GameName = this.PluginHost.GameId, Player = null },
                 info,
                 false
@@ -301,7 +303,7 @@ namespace DragaliaAPI.Photon.Plugin
                 info.Request.Properties.GetInt(GamePropertyKeys.MatchingType);
 
             this.PostStateManagerRequest(
-                this.config.MatchingTypeEndpoint,
+                MatchingTypeEndpoint,
                 new GameModifyMatchingTypeRequest()
                 {
                     GameName = this.PluginHost.GameId,
@@ -326,7 +328,7 @@ namespace DragaliaAPI.Photon.Plugin
                 return;
 
             this.PostStateManagerRequest(
-                this.config.EntryConditionsEndpoint,
+                EntryConditionsEndpoint,
                 new GameModifyConditionsRequest()
                 {
                     GameName = this.PluginHost.GameId,
@@ -506,7 +508,7 @@ namespace DragaliaAPI.Photon.Plugin
             PartyEvent evt = new PartyEvent()
             {
                 MemberCountTable = memberCountTable,
-                ReBattleCount = 20
+                ReBattleCount = this.config.ReplayTimeoutSeconds
             };
 
             this.RaiseEvent(0x3e, evt);
@@ -593,7 +595,7 @@ namespace DragaliaAPI.Photon.Plugin
             ClearQuestRequest evt = info.DeserializeEvent<ClearQuestRequest>();
 
             this.PostApiRequest(
-                new Uri("/dungeon_record/record_multi", UriKind.Relative),
+                this.config.DungeonRecordMultiEndpoint,
                 evt.RecordMultiRequest,
                 info,
                 OnQuestClearResponse,
