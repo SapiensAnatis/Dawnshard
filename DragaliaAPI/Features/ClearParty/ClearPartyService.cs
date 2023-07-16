@@ -49,9 +49,9 @@ public class ClearPartyService : IClearPartyService
         IEnumerable<DbQuestClearPartyUnit> clearPartyUnits = await clearPartyQuery.ToListAsync();
 
         this.logger.LogDebug(
-            "Retrieved quest clear party for quest {questId}: {@party}",
+            "Retrieved quest clear party for quest {questId} with {n} units",
             questId,
-            clearPartyQuery
+            clearPartyUnits.Count()
         );
 
         IEnumerable<PartySettingList> mappedPartyList = clearPartyUnits.Select(
@@ -118,9 +118,9 @@ public class ClearPartyService : IClearPartyService
         );
 
         this.logger.LogDebug(
-            "Storing quest clear party for quest {questId}: {@party}",
+            "Storing quest clear party for quest {questId} with {n} units",
             questId,
-            dbUnits
+            dbUnits.Count()
         );
 
         this.clearPartyRepository.SetQuestClearParty(questId, isMulti, dbUnits);
@@ -191,6 +191,20 @@ public class ClearPartyService : IClearPartyService
                     (int)clearUnit.EquipWeaponBodyId
                 );
                 clearUnit.EquipWeaponBodyId = 0;
+
+                // Also remove prints, since those are equipped on a weapon
+                clearUnit.EquipCrestSlotType1CrestId1 = 0;
+                clearUnit.EquipCrestSlotType1CrestId2 = 0;
+                clearUnit.EquipCrestSlotType1CrestId3 = 0;
+
+                clearUnit.EquipCrestSlotType2CrestId1 = 0;
+                clearUnit.EquipCrestSlotType2CrestId2 = 0;
+
+                clearUnit.EquipCrestSlotType3CrestId1 = 0;
+                clearUnit.EquipCrestSlotType3CrestId2 = 0;
+
+                clearUnit.EquipTalismanKeyId = 0;
+                clearUnit.EquippedTalismanEntityId = 0;
             }
 
             if (clearUnit.EquipWeaponSkinId != 0 && detailUnit.WeaponSkinData is null)
