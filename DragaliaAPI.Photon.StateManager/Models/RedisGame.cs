@@ -17,35 +17,34 @@ public class RedisGame : IGame
     public int RoomId { get; set; }
 
     /// <inheritdoc/>
-
     [RedisIdField]
     public string Name { get; set; } = string.Empty;
 
     /// <inheritdoc/>
-
     [Indexed]
     public int MatchingCompatibleId { get; set; }
 
     /// <inheritdoc/>
-
     [Indexed(Sortable = true)]
     public MatchingTypes MatchingType { get; set; }
 
     /// <inheritdoc/>
-
     [Indexed]
     public int QuestId { get; set; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Determines whether a game should be visible or not. Redis-only property.
+    /// </summary>
+    [Indexed]
+    public bool Visible { get; set; } = true;
 
+    /// <inheritdoc/>
     public DateTimeOffset StartEntryTime { get; set; } = DateTimeOffset.UtcNow;
 
     /// <inheritdoc/>
-
     public EntryConditions EntryConditions { get; set; } = new EntryConditions();
 
     /// <inheritdoc/>
-
     public List<Player> Players { get; set; } = new List<Player>();
 
     /// <summary>
