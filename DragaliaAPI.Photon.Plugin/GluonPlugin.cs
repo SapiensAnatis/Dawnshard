@@ -144,8 +144,14 @@ namespace DragaliaAPI.Photon.Plugin
             if (actor.IsHost())
             {
                 this.RaiseEvent(
-                    0x17,
+                    Event.Codes.RoomBroken,
                     new RoomBroken() { Reason = RoomBroken.RoomBrokenType.HostDisconnected }
+                );
+
+                this.SetRoomVisibility(info, false);
+
+                this.PluginHost.SetGameState(
+                    new SerializableGameState() { IsOpen = false, IsVisible = false }
                 );
             }
 
