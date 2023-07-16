@@ -222,7 +222,7 @@ namespace DragaliaAPI.Photon.Plugin
                     this.OnActorReady(info);
                     break;
                 case Event.Codes.ClearQuestRequest:
-                    this.OnQuestClearRequest(info);
+                    this.OnClearQuestRequest(info);
                     break;
                 case Event.Codes.GameSucceed:
                     this.OnGameSucceed(info);
@@ -233,8 +233,6 @@ namespace DragaliaAPI.Photon.Plugin
                 default:
                     break;
             }
-
-            base.OnRaiseEvent(info);
         }
 
         private void OnFailQuestRequest(IRaiseEventCallInfo info)
@@ -431,7 +429,7 @@ namespace DragaliaAPI.Photon.Plugin
                         heroParams = heroParams.Take(memberCount).ToArray()
                     };
 
-                    this.RaiseEvent(0x14, evt);
+                    this.RaiseEvent(Event.Codes.CharacterData, evt);
                 }
             }
         }
@@ -484,7 +482,7 @@ namespace DragaliaAPI.Photon.Plugin
             {
                 Url = requestUri.AbsoluteUri,
                 ContentType = "application/json",
-                Callback = OnHeroParamResponse,
+                Callback = HeroParamRequestCallback,
                 Async = true,
                 Accept = "application/json",
                 DataStream = new MemoryStream(
@@ -501,9 +499,9 @@ namespace DragaliaAPI.Photon.Plugin
         /// </summary>
         /// <param name="response">The HTTP response.</param>
         /// <param name="userState">The arguments passed from the calling function.</param>
-        private void OnHeroParamResponse(IHttpResponse response, object userState)
+        private void HeroParamRequestCallback(IHttpResponse response, object userState)
         {
-            LogIfFailedCallback(response, userState);
+            this.LogIfFailedCallback(response, userState);
 
             List<HeroParamData> responseObject = JsonConvert.DeserializeObject<List<HeroParamData>>(
                 response.ResponseText
@@ -546,7 +544,7 @@ namespace DragaliaAPI.Photon.Plugin
                 ReBattleCount = this.config.ReplayTimeoutSeconds
             };
 
-            this.RaiseEvent(0x3e, evt);
+            this.RaiseEvent(Event.Codes.Party, evt);
         }
 
         /// <summary>
@@ -600,7 +598,7 @@ namespace DragaliaAPI.Photon.Plugin
             );
         }
 
-        private void OnQuestClearRequest(IRaiseEventCallInfo info)
+        private void OnClearQuestRequest(IRaiseEventCallInfo info)
         {
             // These properties must be set for the client to successfully rejoin the room.
             this.PluginHost.SetProperties(
@@ -633,16 +631,14 @@ namespace DragaliaAPI.Photon.Plugin
                 this.config.DungeonRecordMultiEndpoint,
                 evt.RecordMultiRequest,
                 info,
-                OnQuestClearResponse,
+                ClearQuestRequestCallback,
                 callAsync: false
             );
         }
 
-        private void OnQuestClearResponse(IHttpResponse response, object userState)
+        private void ClearQuestRequestCallback(IHttpResponse response, object userState)
         {
             this.LogIfFailedCallback(response, userState);
-
-            LogIfFailedCallback(response, userState);
 
             HttpRequestUserState typedUserState = (HttpRequestUserState)userState;
 
@@ -651,8 +647,6 @@ namespace DragaliaAPI.Photon.Plugin
                 new ClearQuestResponse() { RecordMultiResponse = response.ResponseData },
                 typedUserState.RequestActorNr
             );
-
-            this.RaiseEvent(0x2, new { }, typedUserState.RequestActorNr);
         }
 
         /// <summary>
