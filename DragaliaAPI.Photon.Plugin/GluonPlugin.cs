@@ -221,9 +221,38 @@ namespace DragaliaAPI.Photon.Plugin
                 case Event.Codes.GameSucceed:
                     this.OnGameSucceed(info);
                     break;
+                case Event.Codes.FailQuestRequest:
+                    this.OnFailQuestRequest(info);
+                    break;
                 default:
                     break;
             }
+
+            base.OnRaiseEvent(info);
+        }
+
+        private void OnFailQuestRequest(IRaiseEventCallInfo info)
+        {
+            FailQuestRequest request = info.DeserializeEvent<FailQuestRequest>();
+
+            this.logger.DebugFormat(
+                "Received FailQuestRequest with FailType {0}",
+                request.FailType.ToString()
+            );
+
+            // I assumed this would need to be POSTed to /dungeon/fail, but the event doesn't contain
+            // a request body with dungeon_key... so the API server couldn't really do anything.
+            FailQuestResponse response = new FailQuestResponse()
+            {
+                ResultType =
+                    request.FailType == FailQuestRequest.FailTypes.Timeup
+                        ? FailQuestResponse.ResultTypes.Timeup
+                        : FailQuestResponse.ResultTypes.Clear
+            };
+
+            this.RaiseEvent(Event.Codes.FailQuestResponse, response);
+
+            // TODO: Retrying a quest without a full team should kick you back to the lobby.
         }
 
         private void OnGameSucceed(IRaiseEventCallInfo info)

@@ -19,6 +19,10 @@ namespace DragaliaAPI.Photon.Plugin.Constants
             public const int ClearQuestRequest = 0x3f;
 
             public const int ClearQuestResponse = 0x40;
+
+            public const int FailQuestRequest = 0x43;
+
+            public const int FailQuestResponse = 0x44;
         }
 
         public static class Constants
