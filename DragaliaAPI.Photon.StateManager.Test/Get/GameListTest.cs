@@ -75,6 +75,33 @@ public class GameListTest : TestFixture
                         }
                     }
                 },
+                // Visible = false
+
+                new()
+                {
+                    RoomId = 12345,
+                    Name = "04e2c5dd-055c-4c3b-85d0-29b4ea90b03e",
+                    MatchingCompatibleId = 36,
+                    MatchingType = MatchingTypes.Anyone,
+                    QuestId = 301010103,
+                    StartEntryTime = DateTimeOffset.UtcNow,
+                    EntryConditions = new()
+                    {
+                        UnacceptedElementTypeList = new List<int>() { 2, 3, 4, 5 },
+                        UnacceptedWeaponTypeList = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 },
+                        RequiredPartyPower = 11700,
+                        ObjectiveTextId = 1,
+                    },
+                    Players = new List<Player>()
+                    {
+                        new()
+                        {
+                            ViewerId = 3,
+                            PartyNoList = new List<int>() { 40 }
+                        }
+                    },
+                    Visible = false,
+                },
             };
 
         await this.RedisConnectionProvider.RedisCollection<RedisGame>().InsertAsync(games);

@@ -22,7 +22,8 @@ public class GetController : ControllerBase
     private IRedisCollection<RedisGame> Games =>
         this.connectionProvider.RedisCollection<RedisGame>();
 
-    private IRedisCollection<RedisGame> VisibleGames => this.Games.Where(x => x.Visible == true);
+    private IRedisCollection<RedisGame> VisibleGames =>
+        this.Games.Where(x => x.Visible == true && x.RoomId > 0);
 
     public GetController(IRedisConnectionProvider connectionProvider)
     {
