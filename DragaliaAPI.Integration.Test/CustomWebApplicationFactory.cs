@@ -45,7 +45,8 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                     Host = TestContainers.PostgresHost,
                     Port = TestContainers.PostgresPort,
                     Username = TestContainers.PostgresUser,
-                    Password = TestContainers.PostgresPassword
+                    Password = TestContainers.PostgresPassword,
+                    IncludeErrorDetail = true,
                 };
 
             services.RemoveAll<DbContextOptions<ApiContext>>();

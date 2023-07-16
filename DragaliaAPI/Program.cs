@@ -5,6 +5,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.GraphQL;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
@@ -164,7 +165,10 @@ builder.Services
     .AddScoped<IDungeonRepository, DungeonRepository>()
     .AddScoped<IQuestDropService, QuestDropService>()
     .AddScoped<IQuestEnemyService, QuestEnemyService>()
-    .AddScoped<IOddsInfoService, OddsInfoService>();
+    .AddScoped<IOddsInfoService, OddsInfoService>()
+    // Clear party feature
+    .AddScoped<IClearPartyRepository, ClearPartyRepository>()
+    .AddScoped<IClearPartyService, ClearPartyService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();
