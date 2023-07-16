@@ -22,9 +22,11 @@ public class DeveloperAuthenticationHandler : AuthenticationHandler<Authenticati
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        string[] expectedTokens =
-            Environment.GetEnvironmentVariable("DEVELOPER_TOKEN")?.Split(",")
+        string? tokenVar =
+            Environment.GetEnvironmentVariable("DEVELOPER_TOKEN")
             ?? throw new NullReferenceException("No developer token specified!");
+
+        string[] expectedTokens = tokenVar.Split("|");
 
         if (!this.Request.Headers.Authorization.Any())
         {

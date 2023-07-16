@@ -9,6 +9,7 @@ namespace DragaliaAPI.Shared.Definitions.Enums;
 
 public enum Talismans
 {
+    Empty = 0,
     Addis = 50240302,
     Aeleen = 50540301,
     Akasha = 50850301,

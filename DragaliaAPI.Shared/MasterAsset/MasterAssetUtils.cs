@@ -18,4 +18,10 @@ public static class MasterAssetUtils
     /// <returns>The inverted material map.</returns>
     public static Dictionary<Materials, int> Invert(this Dictionary<Materials, int> map) =>
         map.ToDictionary(x => x.Key, x => -x.Value);
+
+    public static FortPlantDetail GetInitialFortPlant(FortPlants id) =>
+        MasterAsset.FortPlant.Enumerable
+            .Where(x => x.AssetGroup == id)
+            .OrderBy(x => x.Level)
+            .First();
 }

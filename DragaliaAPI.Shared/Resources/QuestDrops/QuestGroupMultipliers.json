@@ -1,0 +1,108 @@
+[
+  {
+    "$comment": "Avenue To Fortune",
+    "_GroupId": 20206,
+    "_RupieMultiplier": 2.0
+  },
+  {
+    "$comment": "Volk",
+    "_GroupId": 21901,
+    "_RareMaterialMultiplier": 1
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 21101,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 21102,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 21103,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 21104,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 21105,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 22701,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 22702,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 22703,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 22704,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 22705,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 22706,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 22707,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 22708,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 22709,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 22710,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  },
+  {
+    "$comment": "Imperial Onslaught",
+    "_GroupId": 22711,
+    "_UncommonMaterialMultiplier": 50,
+    "_RareMaterialMultiplier": 50
+  }
+]

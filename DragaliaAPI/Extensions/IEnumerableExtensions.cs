@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DragaliaAPI.Extensions;
 
@@ -9,7 +10,7 @@ public static class IEnumerableExtensions
         int index,
         [NotNullWhen(true)] out TElement? element
     )
-        where TElement : class
+        where TElement : class?
     {
         element = enumerable.ElementAtOrDefault(index);
 

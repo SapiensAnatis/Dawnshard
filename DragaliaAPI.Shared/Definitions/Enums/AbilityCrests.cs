@@ -5,6 +5,7 @@
 /// </summary>
 public enum AbilityCrests
 {
+    Empty = 0,
     RingofExaltation = 40020001,
     SeafoodSoup = 40020002,
     DragonArcanum = 40020003,

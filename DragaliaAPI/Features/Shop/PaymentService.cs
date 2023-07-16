@@ -1,5 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -10,72 +11,99 @@ namespace DragaliaAPI.Features.Shop;
 
 public class PaymentService : IPaymentService
 {
+    private readonly List<AtgenDeleteDragonList> dragonList = new();
+    private readonly List<AtgenDeleteAmuletList> amuletList = new();
+    private readonly List<AtgenDeleteTalismanList> talismanList = new();
+    private readonly List<AtgenDeleteWeaponList> weaponList = new();
     private readonly ILogger<PaymentService> logger;
     private readonly IUserDataRepository userDataRepository;
+    private readonly IInventoryRepository inventoryRepository;
 
-    public PaymentService(ILogger<PaymentService> logger, IUserDataRepository userDataRepository)
+    public PaymentService(
+        ILogger<PaymentService> logger,
+        IUserDataRepository userDataRepository,
+        IInventoryRepository inventoryRepository
+    )
     {
         this.logger = logger;
         this.userDataRepository = userDataRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
-    public async Task ProcessPayment(
-        PaymentTypes type,
-        PaymentTarget? payment = null,
-        int? expectedPrice = null
-    )
+    public async Task ProcessPayment(Entity entity, PaymentTarget? payment = null)
     {
-        if (payment == null && expectedPrice == null)
-            throw new ArgumentNullException(nameof(payment), "No price provided");
+        if (entity.Type == EntityTypes.None)
+            throw new ArgumentException("Invalid entity type", nameof(entity.Type));
 
         bool hasPaymentTarget = payment is not null;
 
-        if (expectedPrice == 0) // For free stuff, if needed.
+        if (entity.Quantity == 0) // For free stuff, if needed.
             return;
 
-        if (hasPaymentTarget)
-        {
-            logger.LogDebug("Processing {paymentType} payment {@payment}.", type, payment);
-        }
-        else
-        {
-            logger.LogDebug(
-                "Processing {paymentType} payment {@payment}.",
-                type,
-                new { Price = expectedPrice }
-            );
-        }
+        logger.LogDebug(
+            "Processing {paymentType} payment {@payment}.",
+            entity.Type,
+            hasPaymentTarget ? payment : entity
+        );
 
-        if (hasPaymentTarget && expectedPrice is not null && expectedPrice != payment.target_cost)
+        if (hasPaymentTarget && entity.Quantity != payment!.target_cost)
             throw new DragaliaException(ResultCode.CommonUserStatusError, "Price mismatch.");
 
-        int price = expectedPrice ?? payment!.target_cost;
-        long quantity;
+        int price = entity.Quantity;
+        long? quantity;
         Action updater;
 
-        switch (type)
+        switch (entity.Type)
         {
-            case PaymentTypes.Wyrmite:
-                DbPlayerUserData userData = await this.userDataRepository.UserData.SingleAsync();
+            case EntityTypes.Wyrmite:
+                DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
                 quantity = userData.Crystal;
                 updater = () => userData.Crystal -= price;
                 break;
-            case PaymentTypes.HalidomHustleHammer:
-                userData = await this.userDataRepository.UserData.SingleAsync();
+            case EntityTypes.HustleHammer:
+                userData = await userDataRepository.UserData.SingleAsync();
                 quantity = userData.BuildTimePoint;
                 updater = () => userData.BuildTimePoint -= price;
                 break;
-            case PaymentTypes.ManaPoint:
-                userData = await this.userDataRepository.UserData.SingleAsync();
+            case EntityTypes.Mana:
+                userData = await userDataRepository.UserData.SingleAsync();
                 quantity = userData.ManaPoint;
                 updater = () => userData.ManaPoint -= price;
                 break;
-            case PaymentTypes.Coin:
-                userData = await this.userDataRepository.UserData.SingleAsync();
+            case EntityTypes.Rupies:
+                userData = await userDataRepository.UserData.SingleAsync();
                 quantity = userData.Coin;
                 updater = () => userData.Coin -= price;
                 break;
-            case PaymentTypes.Ticket:
+            case EntityTypes.Dew:
+                userData = await userDataRepository.UserData.SingleAsync();
+                quantity = userData.DewPoint;
+                updater = () => userData.DewPoint -= price;
+                break;
+            case EntityTypes.SkipTicket:
+                userData = await userDataRepository.UserData.SingleAsync();
+                quantity = userData.QuestSkipPoint;
+                updater = () => userData.QuestSkipPoint -= price;
+                break;
+            case EntityTypes.Material:
+                DbPlayerMaterial? material = await inventoryRepository.GetMaterial(
+                    (Materials)entity.Id
+                );
+                quantity = material?.Quantity;
+                updater = () => material!.Quantity -= price;
+                break;
+            case EntityTypes.BuildEventItem:
+            case EntityTypes.Clb01EventItem:
+            case EntityTypes.CollectEventItem:
+            case EntityTypes.RaidEventItem:
+            case EntityTypes.MazeEventItem:
+            case EntityTypes.ExRushEventItem:
+            case EntityTypes.SimpleEventItem:
+            case EntityTypes.ExHunterEventItem:
+            case EntityTypes.BattleRoyalEventItem:
+            case EntityTypes.EarnEventItem:
+                throw new NotImplementedException();
+            case EntityTypes.SummonTicket:
                 // TODO: Implement ticket payments.
                 logger.LogWarning(
                     "Tried to pay with summon tickets - this is not (yet) supported!"
@@ -84,29 +112,31 @@ public class PaymentService : IPaymentService
                     ResultCode.ShopPaymentTypeInvalid,
                     "Tickets are not yet supported."
                 );
-                break;
-            case PaymentTypes.Diamantium:
+            case EntityTypes.FreeDiamantium:
+            case EntityTypes.PaidDiamantium:
                 logger.LogDebug("Tried to pay with diamantium -- this is not supported.");
                 throw new DragaliaException(
                     ResultCode.ShopPaymentTypeInvalid,
                     "Diamantium is not supported."
                 );
-            case PaymentTypes.DewPoint:
-                userData = await this.userDataRepository.UserData.SingleAsync();
-                quantity = userData.DewPoint;
-                updater = () => userData.DewPoint -= price;
-                break;
             default:
-                logger.LogWarning("Unknown/invalid payment type.");
+                logger.LogWarning("Unknown/invalid entity type for payment.");
                 throw new DragaliaException(
                     ResultCode.ShopPaymentTypeInvalid,
                     "Invalid payment type."
                 );
         }
 
+        if (quantity == null)
+        {
+            logger.LogError("Player does not own any of the entity.");
+
+            throw new DragaliaException(ResultCode.CommonMaterialShort, "No entity owned.");
+        }
+
         if (hasPaymentTarget && quantity != payment!.target_hold_quantity)
         {
-            this.logger.LogError(
+            logger.LogError(
                 "Held quantity {quantity} does not match target of payment {@payment}",
                 quantity,
                 payment
@@ -120,7 +150,7 @@ public class PaymentService : IPaymentService
 
         if (quantity < price)
         {
-            this.logger.LogError(
+            logger.LogError(
                 "Held quantity {quantity} does not meet price {price}",
                 quantity,
                 price
@@ -133,5 +163,47 @@ public class PaymentService : IPaymentService
         }
 
         updater();
+    }
+
+    public async Task ProcessPayment(
+        PaymentTypes type,
+        PaymentTarget? payment = null,
+        int? expectedPrice = null
+    )
+    {
+        if (type == PaymentTypes.DiamantiumOrWyrmite)
+            throw new ArgumentException(
+                "Cannot process DiamantiumOrWyrmite payment type",
+                nameof(type)
+            );
+
+        switch (type)
+        {
+            default:
+                EntityTypes entityType = type.ToEntityType();
+                if (entityType == EntityTypes.None)
+                {
+                    throw new ArgumentException(
+                        $"Cannot process payment type {type}",
+                        nameof(type)
+                    );
+                }
+
+                await ProcessPayment(
+                    new Entity(entityType, Quantity: expectedPrice ?? payment?.target_cost ?? 0),
+                    payment
+                );
+                break;
+        }
+    }
+
+    public Task ProcessPayment(Materials id, int quantity)
+    {
+        return ProcessPayment(new Entity(EntityTypes.Material, (int)id, quantity));
+    }
+
+    public DeleteDataList GetDeleteDataList()
+    {
+        return new DeleteDataList(dragonList, talismanList, weaponList, amuletList);
     }
 }

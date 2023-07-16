@@ -1,6 +1,6 @@
 # Dawnshard
 
-[![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml/badge.svg?branch=develop)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml) [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/sapiensanatis/dragalia-api?label=docker%20image&logo=docker)](https://hub.docker.com/r/sapiensanatis/dragalia-api)
+[![test](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml/badge.svg?branch=develop)](https://github.com/SapiensAnatis/DragaliaAPI/actions/workflows/test.yaml)
 
 Dawnshard (internally named DragaliaAPI) is a server emulator for Dragalia Lost.
 
@@ -18,6 +18,14 @@ See also the [API documentation](https://dragalia-api-docs.readthedocs.io/en/lat
 
 ## Hosting your own instance
 
-- On a dedicated server, it is recommended to use the [Kubernetes helm chart](https://github.com/SapiensAnatis/helm-charts). The application is deployed as three services: the main ASP.NET service which is stateless, and two stateful services in Redis (session management) and PostgreSQL (savefile storage).
-- If you don't want to use Kubernetes, or are looking to host a local instance, you can use the docker-compose.yml file here with [the published Docker image](https://hub.docker.com/repository/docker/sapiensanatis/dragalia-api/general).
-- If you don't want to use Docker at all, see the [no-docker branch](https://github.com/sapiensAnatis/dragaliaAPI/tree/no-docker) which uses an SQLite DB and an in-memory IDistributedCache for session management. Please note that this version is not regularly updated and no guarantees are made that it functions correctly.
+The application is deployed as three services: the main ASP.NET service which is stateless, and two stateful services in Redis (session management) and PostgreSQL (savefile storage).
+
+### Locally
+
+The recommended way to self-host is using `docker-compose` which handles setting up the database and Redis. Docker images are published to [the GitHub container registry](https://github.com/SapiensAnatis/Dawnshard/pkgs/container/dragalia-api). Sample `docker-compose.yaml` files coming soon.
+
+If you don't want to use Docker, see the [no-docker branch](https://github.com/sapiensAnatis/dragaliaAPI/tree/no-docker) which uses an SQLite DB and an in-memory IDistributedCache for session management. Please note that this version is not regularly updated and no guarantees are made that it functions correctly. It also cannot support co-op as this requires Redis.
+
+### Dedicated server
+
+On a dedicated server, it is recommended to use the [Kubernetes helm chart](https://github.com/SapiensAnatis/helm-charts). 

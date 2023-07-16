@@ -1,4 +1,7 @@
 using DragaliaAPI.Controllers.Dragalia;
+using DragaliaAPI.Features.ClearParty;
+using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -10,8 +13,9 @@ public class QuestControllerTest
 {
     private readonly Mock<IStoryService> mockStoryService;
     private readonly Mock<IHelperService> mockHelperService;
-    private readonly Mock<IQuestRewardService> mockQuestRewardService;
+    private readonly Mock<IQuestDropService> mockQuestRewardService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
+    private readonly Mock<IClearPartyService> mockClearPartyService;
     private readonly Mock<ILogger<QuestController>> mockLogger;
 
     private readonly QuestController questController;
@@ -22,6 +26,7 @@ public class QuestControllerTest
         this.mockHelperService = new(MockBehavior.Strict);
         this.mockQuestRewardService = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
+        this.mockClearPartyService = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
 
         this.questController = new(
@@ -29,6 +34,7 @@ public class QuestControllerTest
             this.mockHelperService.Object,
             this.mockQuestRewardService.Object,
             this.mockUpdateDataService.Object,
+            this.mockClearPartyService.Object,
             this.mockLogger.Object
         );
     }

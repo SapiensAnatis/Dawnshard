@@ -163,7 +163,7 @@ public static class DragonConstants
 
     public const int maxRelLevel = 30;
 
-    public readonly static ImmutableArray<DragonGifts> rotatingGifts = new DragonGifts[]
+    public static readonly ImmutableArray<DragonGifts> rotatingGifts = new DragonGifts[]
     {
         DragonGifts.GoldenChalice,
         DragonGifts.JuicyMeat,
@@ -174,7 +174,7 @@ public static class DragonConstants
         DragonGifts.GoldenChalice
     }.ToImmutableArray();
 
-    public readonly static ImmutableDictionary<DragonGifts, int> favorVals = new Dictionary<
+    public static readonly ImmutableDictionary<DragonGifts, int> favorVals = new Dictionary<
         DragonGifts,
         int
     >()
@@ -195,7 +195,7 @@ public static class DragonConstants
         { DragonGifts.PupGrub, 200 }
     }.ToImmutableDictionary();
 
-    public readonly static ImmutableDictionary<DragonGifts, int> buyGiftPrices = new Dictionary<
+    public static readonly ImmutableDictionary<DragonGifts, int> buyGiftPrices = new Dictionary<
         DragonGifts,
         int
     >()

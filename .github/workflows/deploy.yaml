@@ -3,19 +3,17 @@ name: deploy
 on:
   workflow_call:
     inputs:
-      deployment:
+      github-environment:
         type: string
         required: true
-        description: "Kubernetes deployment name"
-      namespace:
-        type: string
-        required: true
-        description: "Kubernetes namespace"
+        description: "GitHub environment name"
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    environment:
+      name: ${{ inputs.github-environment }}
+      url: https://dawnshard.co.uk
     steps:
       - name: ssh and restart pods
         uses: appleboy/ssh-action@v0.1.6
@@ -25,5 +23,5 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
           script: |
-            kubectl rollout restart deployment/${{ inputs.deployment }} -n ${{ inputs.namespace }}
-            kubectl rollout status deployment/${{ inputs.deployment }} -n ${{ inputs.namespace }}
+            kubectl rollout restart deployment/${{ vars.K8S_DEPLOYMENT }} -n ${{ vars.K8S_NAMESPACE }}
+            kubectl rollout status deployment/${{ vars.K8S_DEPLOYMENT }} -n ${{ vars.K8S_NAMESPACE }}

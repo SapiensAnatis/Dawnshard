@@ -35,11 +35,11 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        if (this.Context.GetEndpoint()?.Metadata.GetMetadata<AuthorizeAttribute>() is null)
-            return AuthenticateResult.NoResult();
-
         if (!this.Request.Headers.TryGetValue("SID", out StringValues value))
-            return AuthenticateResult.Fail("Missing SID header");
+        {
+            this.Logger.LogDebug("SID header was missing.");
+            return AuthenticateResult.NoResult();
+        }
 
         string? sid = value.FirstOrDefault();
 

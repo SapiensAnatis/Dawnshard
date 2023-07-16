@@ -25,3 +25,20 @@ public enum PaymentTypes
     SummonCampaignOneHundred,
     Other = 99
 }
+
+public static class PaymentTypesExtensions
+{
+    public static EntityTypes ToEntityType(this PaymentTypes type)
+    {
+        return type switch
+        {
+            PaymentTypes.Wyrmite => EntityTypes.Wyrmite,
+            PaymentTypes.Coin => EntityTypes.Rupies,
+            PaymentTypes.ManaPoint => EntityTypes.Mana,
+            PaymentTypes.DewPoint => EntityTypes.Dew,
+            PaymentTypes.Ticket => EntityTypes.SummonTicket,
+            PaymentTypes.HalidomHustleHammer => EntityTypes.HustleHammer,
+            _ => EntityTypes.None
+        };
+    }
+}

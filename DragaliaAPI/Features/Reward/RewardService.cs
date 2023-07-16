@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -75,7 +76,10 @@ public class RewardService : IRewardService
                 (await this.userDataRepository.UserData.SingleAsync()).ManaPoint += entity.Quantity;
                 break;
             case EntityTypes.FortPlant:
-                await this.fortRepository.AddToStorage((FortPlants)entity.Id, 1);
+                await this.fortRepository.AddToStorage(
+                    (FortPlants)entity.Id,
+                    quantity: entity.Quantity
+                );
                 break;
             default:
                 logger.LogWarning("Tried to reward unsupported entity {@entity}", entity);

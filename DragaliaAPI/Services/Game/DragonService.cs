@@ -464,8 +464,6 @@ public class DragonService : IDragonService
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        await unitRepository.SaveChangesAsync();
-
         return new DragonBuyGiftToSendMultipleData()
         {
             dragon_contact_free_gift_count = 0,
@@ -538,8 +536,6 @@ public class DragonService : IDragonService
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        await unitRepository.SaveChangesAsync();
-
         logger.LogDebug(
             "Creating response from rewards {@rewards} and levelGifts: {@levelGifts}",
             rewards,
@@ -610,8 +606,6 @@ public class DragonService : IDragonService
         );
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
-
-        await unitRepository.SaveChangesAsync();
 
         return new DragonBuildupData(
             updateDataList,
@@ -877,8 +871,6 @@ public class DragonService : IDragonService
         }
 
         UpdateDataList udl = await updateDataService.SaveChangesAsync();
-
-        await unitRepository.SaveChangesAsync();
 
         return new DragonLimitBreakData()
         {

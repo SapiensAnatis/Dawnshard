@@ -13,13 +13,13 @@ public enum ManaNodeTypes
     Atk = 10102,
     HpAtk = 10103,
     FS = 10201,
-    S1 = 10401,
-    S2 = 10402,
     A1 = 10301,
     A2 = 10302,
     A3 = 10303,
+    S1 = 10401,
+    S2 = 10402,
     Ex = 10501,
     Mat = 10601,
-    MaxLvUp = 10801,
-    StdAtkUp = 10701
+    StdAtkUp = 10701,
+    MaxLvUp = 10801
 }

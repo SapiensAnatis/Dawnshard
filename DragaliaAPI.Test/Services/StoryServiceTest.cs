@@ -1,6 +1,9 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
@@ -15,11 +18,12 @@ public class StoryServiceTest
     private readonly Mock<IStoryRepository> mockStoryRepository;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
-    private readonly Mock<IUnitRepository> mockUnitRepository;
     private readonly Mock<ILogger<StoryService>> mockLogger;
     private readonly Mock<ITutorialService> mockTutorialService;
     private readonly Mock<IFortRepository> mockFortRepository;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<IRewardService> mockRewardService;
+    private readonly Mock<IPaymentService> mockPaymentService;
 
     private readonly IStoryService storyService;
 
@@ -28,21 +32,23 @@ public class StoryServiceTest
         this.mockStoryRepository = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockInventoryRepository = new(MockBehavior.Strict);
-        this.mockUnitRepository = new(MockBehavior.Strict);
         this.mockLogger = new();
         this.mockTutorialService = new(MockBehavior.Strict);
         this.mockFortRepository = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockRewardService = new(MockBehavior.Strict);
+        this.mockPaymentService = new(MockBehavior.Strict);
 
         this.storyService = new StoryService(
             mockStoryRepository.Object,
             mockLogger.Object,
             mockUserDataRepository.Object,
             mockInventoryRepository.Object,
-            mockUnitRepository.Object,
             mockTutorialService.Object,
             mockFortRepository.Object,
-            mockMissionProgressionService.Object
+            mockMissionProgressionService.Object,
+            mockRewardService.Object,
+            mockPaymentService.Object
         );
     }
 
@@ -224,7 +230,14 @@ public class StoryServiceTest
             .Returns(Task.CompletedTask);
         this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(1000311));
 
-        this.mockUnitRepository.Setup(x => x.AddDragons(Dragons.Brunhilda)).ReturnsAsync(true);
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        new Entity(EntityTypes.Dragon, (int)Dragons.Brunhilda, 1, null, null, null)
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
 
         (await this.storyService.ReadStory(StoryTypes.Quest, 1000311))
             .Should()
@@ -242,6 +255,7 @@ public class StoryServiceTest
             );
 
         this.mockUserDataRepository.VerifyAll();
+        this.mockRewardService.VerifyAll();
         this.mockStoryRepository.VerifyAll();
     }
 
@@ -323,7 +337,6 @@ public class StoryServiceTest
             );
 
         this.mockStoryRepository.VerifyAll();
-        this.mockUnitRepository.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
     }
 
@@ -348,7 +361,7 @@ public class StoryServiceTest
             .Returns(Task.CompletedTask);
 
         this.mockFortRepository
-            .Setup(x => x.AddToStorage(FortPlants.WindDracolith, 1))
+            .Setup(x => x.AddToStorage(FortPlants.WindDracolith, 1, true, null))
             .Returns(Task.CompletedTask);
 
         (await this.storyService.ReadStory(StoryTypes.Quest, 1000607))

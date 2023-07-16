@@ -2,10 +2,13 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -19,8 +22,6 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
         ITestOutputHelper outputHelper
     )
     {
-        this.Factory = factory;
-
         this.Client = factory
             .WithWebHostBuilder(
                 (builder) =>
@@ -47,8 +48,6 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
     protected Mock<IPhotonStateApi> MockPhotonStateApi { get; }
 
     protected IServiceProvider Services { get; }
-
-    private CustomWebApplicationFactory<Program> Factory { get; }
 
     /// <summary>
     /// The device account ID which links to the seeded savefiles <see cref="SeedDatabase"/>
@@ -96,15 +95,34 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
 
     protected void SetupSaveImport()
     {
-        this.MockBaasApi
-            .Setup(x => x.GetSavefile(It.IsAny<string>()))
-            .ReturnsAsync(
-                JsonSerializer
-                    .Deserialize<DragaliaResponse<LoadIndexData>>(
-                        File.ReadAllText(Path.Join("Data", "endgame_savefile.json")),
-                        ApiJsonOptions.Instance
-                    )!
-                    .data
-            );
+        this.MockBaasApi.Setup(x => x.GetSavefile(It.IsAny<string>())).ReturnsAsync(GetSavefile());
+    }
+
+    private static LoadIndexData GetSavefile() =>
+        JsonSerializer
+            .Deserialize<DragaliaResponse<LoadIndexData>>(
+                File.ReadAllText(Path.Join("Data", "endgame_savefile.json")),
+                ApiJsonOptions.Instance
+            )!
+            .data;
+
+    protected void ImportSave()
+    {
+        if (
+            this.ApiContext.PlayerUserData
+                .AsNoTracking()
+                .First(x => x.DeviceAccountId == DeviceAccountId)
+                .LastSaveImportTime > DateTimeOffset.UnixEpoch
+        )
+        {
+            return;
+        }
+
+        ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
+        IPlayerIdentityService playerIdentityService =
+            this.Services.GetRequiredService<IPlayerIdentityService>();
+
+        using IDisposable ctx = playerIdentityService.StartUserImpersonation(DeviceAccountId);
+        savefileService.Import(GetSavefile()).Wait();
     }
 }

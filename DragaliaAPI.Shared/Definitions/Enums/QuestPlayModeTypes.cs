@@ -9,3 +9,10 @@ public enum QuestPlayModeTypes
     RandomMatching,
     RandomMatchingSixteen
 }
+
+public enum QuestPlayType
+{
+    Default = 1,
+    Multi = 2,
+    Battle = 3,
+}

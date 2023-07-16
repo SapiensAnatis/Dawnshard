@@ -16,7 +16,7 @@ jobs:
           [
             {
               dockerfile: "DragaliaAPI.Photon.StateManager/Dockerfile",
-              image: "dragalia-api-statemanager",
+              image: "photon-state-manager",
             },
             { dockerfile: "DragaliaAPI/Dockerfile", image: "dragalia-api" },
           ]
@@ -31,17 +31,9 @@ jobs:
   deploy:
     strategy:
       matrix:
-        args:
-          [
-            {
-              deployment: "photonstatemanager",
-              namespace: "photonstatemanager",
-            },
-            { deployment: "dragalia-api-dawnshard", namespace: "dragalia-api" },
-          ]
+        github-environment: ["PhotonStateManager", "Dawnshard"]
     needs: publish
     uses: ./.github/workflows/deploy.yaml
     with:
-      deployment: ${{ matrix.args.deployment }}
-      namespace: ${{ matrix.args.namespace }}
+      github-environment: ${{ matrix.github-environment }}
     secrets: inherit
