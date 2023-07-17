@@ -8,6 +8,7 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
+using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -24,12 +25,14 @@ public class DungeonStartController : DragaliaControllerBase
     private readonly IDungeonService dungeonService;
     private readonly IOddsInfoService oddsInfoService;
     private readonly IUpdateDataService updateDataService;
+    private readonly IMatchingService matchingService;
     private readonly ILogger<DungeonStartController> logger;
 
     public DungeonStartController(
         IDungeonStartService dungeonStartService,
         IDungeonService dungeonService,
         IOddsInfoService oddsInfoService,
+        IMatchingService matchingService,
         IUpdateDataService updateDataService,
         ILogger<DungeonStartController> logger
     )
@@ -38,6 +41,7 @@ public class DungeonStartController : DragaliaControllerBase
         this.dungeonService = dungeonService;
         this.oddsInfoService = oddsInfoService;
         this.updateDataService = updateDataService;
+        this.matchingService = matchingService;
         this.logger = logger;
     }
 
@@ -63,10 +67,12 @@ public class DungeonStartController : DragaliaControllerBase
             request.party_no_list
         );
 
-        DungeonStartStartData response = await this.BuildResponse(request.quest_id, ingameData);
-
         // TODO: Enable when co-op is fixed
-        // response.ingame_data.play_type = QuestPlayType.Multi;
+        ingameData.play_type = QuestPlayType.Multi;
+        ingameData.is_host = await this.matchingService.GetIsHost();
+        await this.dungeonService.SetIsHost(ingameData.dungeon_key, ingameData.is_host);
+
+        DungeonStartStartData response = await this.BuildResponse(request.quest_id, ingameData);
 
         return this.Ok(response);
     }

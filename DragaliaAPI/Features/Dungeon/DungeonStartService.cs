@@ -213,6 +213,7 @@ public class DungeonStartService(
                 play_type = QuestPlayType.Default,
                 party_info = new() { support_data = new() },
                 start_time = DateTimeOffset.UtcNow,
+                is_host = true,
             };
 
         QuestData questInfo = MasterAsset.QuestData.Get(questId);

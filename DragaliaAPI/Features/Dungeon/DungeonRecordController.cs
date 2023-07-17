@@ -3,12 +3,15 @@ using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,10 +29,6 @@ public class DungeonRecordController : DragaliaControllerBase
     private readonly IMissionProgressionService missionProgressionService;
     private readonly ILogger<DungeonRecordController> logger;
     private readonly IQuestCompletionService questCompletionService;
-
-    private const int QuestCoin = 10_000_000;
-    private const int QuestMana = 20_000;
-    private const int QuestDropQuantity = 100;
 
     public DungeonRecordController(
         IQuestRepository questRepository,
@@ -55,11 +54,33 @@ public class DungeonRecordController : DragaliaControllerBase
     }
 
     [HttpPost("record")]
-    [HttpPost("record_multi")]
     public async Task<DragaliaResult> Record(DungeonRecordRecordRequest request)
     {
+        return this.Ok(await BuildResponse(request.dungeon_key, request.play_record));
+    }
+
+    [HttpPost("record_multi")]
+    [Authorize(AuthenticationSchemes = nameof(PhotonAuthenticationHandler))]
+    public async Task<DragaliaResult> RecordMulti(DungeonRecordRecordMultiRequest request)
+    {
+        DungeonRecordRecordData response = await BuildResponse(
+            request.dungeon_key,
+            request.play_record
+        );
+
+        response.ingame_result_data.play_type = QuestPlayType.Multi;
+
+        return this.Ok(response);
+    }
+
+    private async Task<DungeonRecordRecordData> BuildResponse(
+        string dungeonKey,
+        PlayRecord playRecord
+    )
+    {
         // TODO: Turn this method into a service call
-        DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
+        DungeonSession session = await dungeonService.FinishDungeon(dungeonKey);
+        this.logger.LogDebug("session.IsHost: {isHost}", session.IsHost);
 
         this.logger.LogDebug("Processing completion of quest {id}", session.QuestData.Id);
 
@@ -69,7 +90,7 @@ public class DungeonRecordController : DragaliaControllerBase
 
         bool isFirstClear = oldQuestData is null || oldQuestData?.PlayCount == 0;
 
-        float clear_time = request.play_record?.time ?? -1.0f;
+        float clear_time = playRecord?.time ?? -1.0f;
 
         await tutorialService.AddTutorialFlag(1022);
 
@@ -94,8 +115,6 @@ public class DungeonRecordController : DragaliaControllerBase
         }
 
         userData.Exp += 1;
-        userData.ManaPoint += QuestMana;
-        userData.Coin += QuestCoin;
 
         bool[] oldMissionStatus =
         {
@@ -119,7 +138,7 @@ public class DungeonRecordController : DragaliaControllerBase
         int coinDrop = 0;
 
         foreach (
-            AtgenTreasureRecord record in request.play_record?.treasure_record
+            AtgenTreasureRecord record in playRecord?.treasure_record
                 ?? Enumerable.Empty<AtgenTreasureRecord>()
         )
         {
@@ -172,77 +191,90 @@ public class DungeonRecordController : DragaliaControllerBase
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return Ok(
-            new DungeonRecordRecordData()
+        return new DungeonRecordRecordData()
+        {
+            ingame_result_data = new()
             {
-                ingame_result_data = new()
+                dungeon_key = dungeonKey,
+                play_type = QuestPlayType.Default,
+                quest_id = session.QuestData.Id,
+                reward_record = new()
                 {
-                    dungeon_key = request.dungeon_key,
-                    play_type = 1,
-                    quest_id = session.QuestData.Id,
-                    reward_record = new()
-                    {
-                        drop_all = drops,
-                        first_clear_set = isFirstClear
-                            ? new List<AtgenFirstClearSet>()
+                    drop_all = drops,
+                    first_clear_set = isFirstClear
+                        ? new List<AtgenFirstClearSet>()
+                        {
+                            new()
                             {
-                                new()
-                                {
-                                    type = EntityTypes.Wyrmite,
-                                    id = 0,
-                                    quantity = 5
-                                }
+                                type = (int)EntityTypes.Wyrmite,
+                                id = 0,
+                                quantity = 5
                             }
-                            : new List<AtgenFirstClearSet>(),
-                        take_coin = coinDrop,
-                        take_astral_item_quantity = 300,
-                        missions_clear_set = status.MissionsClearSet,
-                        mission_complete = status.MissionCompleteSet,
-                        enemy_piece = new List<AtgenEnemyPiece>(),
-                        reborn_bonus = new List<AtgenFirstClearSet>(),
-                        quest_bonus_list = new List<AtgenFirstClearSet>(),
-                        carry_bonus = new List<AtgenFirstClearSet>(),
-                        challenge_quest_bonus_list = new List<AtgenFirstClearSet>(),
-                        campaign_extra_reward_list = new List<AtgenFirstClearSet>(),
-                        weekly_limit_reward_list = new List<AtgenFirstClearSet>(),
-                        take_accumulate_point = totalPoints
-                    },
-                    grow_record = new()
-                    {
-                        take_player_exp = 1,
-                        take_chara_exp = 4000,
-                        take_mana = manaDrop,
-                        bonus_factor = 1,
-                        mana_bonus_factor = 1,
-                        chara_grow_record = session.Party.Select(
-                            x =>
-                                new AtgenCharaGrowRecord() { chara_id = x.chara_id, take_exp = 240 }
-                        ),
-                        chara_friendship_list = new List<CharaFriendshipList>()
-                    },
-                    start_time = DateTimeOffset.UtcNow,
-                    end_time = DateTimeOffset.FromUnixTimeSeconds(0),
-                    current_play_count = 1,
-                    is_clear = false,
-                    state = 1,
-                    is_host = true,
-                    reborn_count = 0,
-                    helper_list = new List<UserSupportList>(),
-                    helper_detail_list = new List<AtgenHelperDetailList>(),
-                    quest_party_setting_list = session.Party,
-                    bonus_factor_list = new List<AtgenBonusFactorList>(),
-                    scoring_enemy_point_list = new List<AtgenScoringEnemyPointList>(),
-                    score_mission_success_list = scoreMissions,
-                    event_passive_up_list = new List<AtgenEventPassiveUpList>(),
-                    clear_time = clear_time,
-                    is_best_clear_time = clear_time == newQuestData.BestClearTime,
-                    converted_entity_list = new List<ConvertedEntityList>(),
-                    dungeon_skip_type = 0,
-                    total_play_damage = 0
+                        }
+                        : new List<AtgenFirstClearSet>(),
+                    take_coin = coinDrop,
+                    take_astral_item_quantity = 300,
+                    missions_clear_set = status.MissionsClearSet,
+                    mission_complete = status.MissionCompleteSet,
+                    enemy_piece = new List<AtgenEnemyPiece>(),
+                    reborn_bonus = new List<AtgenFirstClearSet>(),
+                    quest_bonus_list = new List<AtgenFirstClearSet>(),
+                    carry_bonus = new List<AtgenFirstClearSet>(),
+                    challenge_quest_bonus_list = new List<AtgenFirstClearSet>(),
+                    campaign_extra_reward_list = new List<AtgenFirstClearSet>(),
+                    weekly_limit_reward_list = new List<AtgenFirstClearSet>(),
+                    take_accumulate_point = totalPoints
                 },
-                update_data_list = updateDataList,
-                entity_result = new(),
-            }
-        );
+                grow_record = new()
+                {
+                    take_player_exp = 1,
+                    take_chara_exp = 4000,
+                    take_mana = manaDrop,
+                    bonus_factor = 1,
+                    mana_bonus_factor = 1,
+                    chara_grow_record = session.Party.Select(
+                        x =>
+                            new AtgenCharaGrowRecord()
+                            {
+                                chara_id = (int)x.chara_id,
+                                take_exp = 240
+                            }
+                    ),
+                    chara_friendship_list = new List<CharaFriendshipList>()
+                },
+                start_time = DateTimeOffset.UtcNow,
+                end_time = DateTimeOffset.FromUnixTimeSeconds(0),
+                current_play_count = 1,
+                is_clear = true,
+                state = -1,
+                is_host = session.IsHost,
+                reborn_count = 0,
+                helper_list = HelperService.StubData.SupportListData.support_user_list
+                    .Skip(1)
+                    .Take(1),
+                helper_detail_list = new List<AtgenHelperDetailList>()
+                {
+                    new()
+                    {
+                        viewer_id = 1001,
+                        is_friend = 1,
+                        apply_send_status = 0,
+                        get_mana_point = 50
+                    }
+                },
+                quest_party_setting_list = session.Party,
+                bonus_factor_list = new List<AtgenBonusFactorList>(),
+                scoring_enemy_point_list = new List<AtgenScoringEnemyPointList>(),
+                score_mission_success_list = new List<AtgenScoreMissionSuccessList>(),
+                event_passive_up_list = new List<AtgenEventPassiveUpList>(),
+                clear_time = clear_time,
+                is_best_clear_time = clear_time == newQuestData.BestClearTime,
+                converted_entity_list = new List<ConvertedEntityList>(),
+                dungeon_skip_type = 0,
+                total_play_damage = 0,
+            },
+            update_data_list = updateDataList,
+            entity_result = new(),
+        };
     }
 }
