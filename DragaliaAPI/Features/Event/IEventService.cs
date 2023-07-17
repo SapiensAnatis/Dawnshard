@@ -9,6 +9,8 @@ public interface IEventService
     Task<IEnumerable<T>> GetEventRewardList<T>(int eventId, bool isLocationReward = false)
         where T : IEventRewardList<T>;
 
+    Task<EventPassiveList> GetEventPassiveList(int eventId);
+
     Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReceiveEventRewards(
         int eventId,
         IEnumerable<int>? rewardIds = null

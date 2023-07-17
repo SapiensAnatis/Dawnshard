@@ -47,6 +47,18 @@ public class EventService(
         return rewards.Select(T.FromDatabase);
     }
 
+    public async Task<EventPassiveList> GetEventPassiveList(int eventId)
+    {
+        IEnumerable<DbPlayerEventPassive> passives = await eventRepository.GetEventPassivesAsync(
+            eventId
+        );
+
+        return new EventPassiveList(
+            eventId,
+            passives.Select(x => new AtgenEventPassiveUpList(x.PassiveId, x.Progress))
+        );
+    }
+
     public async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReceiveEventRewards(
         int eventId,
         IEnumerable<int>? rewardIds = null
@@ -161,6 +173,19 @@ public class EventService(
 
         if (itemIds.Count > 0)
             eventRepository.CreateEventItems(eventId, itemIds);
+
+        IEnumerable<int> currentEventPassiveIds = await eventRepository.Passives
+            .Where(x => x.EventId == eventId)
+            .Select(x => x.PassiveId)
+            .ToListAsync();
+
+        List<int> neededEventPassiveIds = Event
+            .GetEventPassiveIds(eventId)
+            .Except(currentEventPassiveIds)
+            .ToList();
+
+        if (neededEventPassiveIds.Count > 0)
+            eventRepository.CreateEventPassives(eventId, neededEventPassiveIds);
     }
 
     private async Task<DbPlayerEventData> GetEventData(int eventId)
@@ -432,5 +457,12 @@ file static class Event
                 => 0 /* maybe 10101 */
             ,
         };
+    }
+
+    public static IEnumerable<int> GetEventPassiveIds(int eventId)
+    {
+        return MasterAsset.EventPassive.Enumerable
+            .Where(x => x.EventId == eventId)
+            .Select(x => x.Id);
     }
 }

@@ -23,6 +23,11 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
             x => x.DeviceAccountId == playerIdentityService.AccountId
         );
 
+    public IQueryable<DbPlayerEventPassive> Passives =>
+        apiContext.PlayerEventPassives.Where(
+            x => x.DeviceAccountId == playerIdentityService.AccountId
+        );
+
     public async Task<DbPlayerEventData?> GetEventDataAsync(int eventId)
     {
         return await apiContext.PlayerEventData.FindAsync(playerIdentityService.AccountId, eventId);
@@ -74,6 +79,20 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
         return await Items
             .Where(x => x.EventId == eventId)
             .ToDictionaryAsync(x => x.Type, x => x.Quantity);
+    }
+
+    public async Task<IEnumerable<DbPlayerEventPassive>> GetEventPassivesAsync(int eventId)
+    {
+        return await Passives.Where(x => x.EventId == eventId).ToListAsync();
+    }
+
+    public async Task<DbPlayerEventPassive?> GetEventPassiveAsync(int eventId, int passiveId)
+    {
+        return await apiContext.PlayerEventPassives.FindAsync(
+            playerIdentityService.AccountId,
+            eventId,
+            passiveId
+        );
     }
 
     public DbPlayerEventData CreateEventData(int eventId, bool customEventFlag = false)
@@ -133,6 +152,34 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
         return items;
     }
 
+    public IEnumerable<DbPlayerEventPassive> CreateEventPassives(
+        int eventId,
+        IEnumerable<int> passiveIds
+    )
+    {
+        List<DbPlayerEventPassive> passives = new();
+
+        string accountId = playerIdentityService.AccountId;
+
+        foreach (int passiveId in passiveIds)
+        {
+            passives.Add(
+                apiContext.PlayerEventPassives
+                    .Add(
+                        new DbPlayerEventPassive
+                        {
+                            DeviceAccountId = accountId,
+                            EventId = eventId,
+                            PassiveId = passiveId
+                        }
+                    )
+                    .Entity
+            );
+        }
+
+        return passives;
+    }
+
     public async Task AddItemQuantityAsync(int itemId, int quantity)
     {
         if (quantity < 0)
@@ -155,5 +202,17 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
             ?? throw new DragaliaException(ResultCode.CommonDbError, "Event item not found");
 
         item.Quantity -= quantity;
+    }
+
+    public async Task AddEventPassiveProgressAsync(int eventId, int passiveId, int progress)
+    {
+        if (progress < 0)
+            throw new ArgumentOutOfRangeException(nameof(progress));
+
+        DbPlayerEventPassive passive =
+            await GetEventPassiveAsync(eventId, passiveId)
+            ?? throw new DragaliaException(ResultCode.CommonDbError, "Event passive not found");
+
+        passive.Progress += progress;
     }
 }

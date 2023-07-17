@@ -7,6 +7,7 @@ public interface IEventRepository
     IQueryable<DbPlayerEventData> EventData { get; }
     IQueryable<DbPlayerEventReward> Rewards { get; }
     IQueryable<DbPlayerEventItem> Items { get; }
+    IQueryable<DbPlayerEventPassive> Passives { get; }
 
     Task<DbPlayerEventData?> GetEventDataAsync(int eventId);
 
@@ -21,13 +22,19 @@ public interface IEventRepository
     Task<IEnumerable<DbPlayerEventItem>> GetEventItemsAsync(int eventId);
     Task<Dictionary<int, int>> GetEventItemQuantityAsync(int eventId);
 
+    Task<IEnumerable<DbPlayerEventPassive>> GetEventPassivesAsync(int eventId);
+    Task<DbPlayerEventPassive?> GetEventPassiveAsync(int eventId, int passiveId);
+
     DbPlayerEventData CreateEventData(int eventId, bool customEventFlag = false);
     DbPlayerEventReward CreateEventReward(int eventId, int rewardId);
     IEnumerable<DbPlayerEventItem> CreateEventItems(
         int eventId,
         IEnumerable<(int Id, int Type)> itemIds
     );
+    IEnumerable<DbPlayerEventPassive> CreateEventPassives(int eventId, IEnumerable<int> passiveIds);
 
     Task AddItemQuantityAsync(int itemId, int quantity);
     Task RemoveItemQuantityAsync(int itemId, int quantity);
+
+    Task AddEventPassiveProgressAsync(int eventId, int passiveId, int progress);
 }

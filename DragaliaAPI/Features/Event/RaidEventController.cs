@@ -30,6 +30,10 @@ public class RaidEventController(
         resp.raid_event_reward_list = await eventService.GetEventRewardList<RaidEventRewardList>(
             request.raid_event_id
         );
+        resp.event_passive_list = new List<EventPassiveList>
+        {
+            await eventService.GetEventPassiveList(request.raid_event_id)
+        };
 
         if (
             MasterAsset.EventTradeGroup.Enumerable

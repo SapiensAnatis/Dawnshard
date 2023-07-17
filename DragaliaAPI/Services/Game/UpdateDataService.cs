@@ -206,6 +206,22 @@ public class UpdateDataService(
             }
         }
 
+        List<DbPlayerEventPassive> updatedPassives = entities
+            .OfType<DbPlayerEventPassive>()
+            .ToList();
+
+        if (updatedPassives.Count > 0)
+        {
+            List<EventPassiveList> passiveList = new();
+
+            foreach (int updatedEventId in updatedPassives.Select(x => x.EventId).Distinct())
+            {
+                passiveList.Add(await eventService.GetEventPassiveList(updatedEventId));
+            }
+
+            list.event_passive_list = passiveList;
+        }
+
         return list;
 
         static async Task<IEnumerable<T>> GetEventDataList<T>(
@@ -229,12 +245,9 @@ public class UpdateDataService(
     )
         where TDatabase : IDbHasAccountId
     {
-        IEnumerable<TDatabase> typedEntries = baseEntries.OfType<TDatabase>();
-
-        if (filterPredicate is not null)
-        {
-            typedEntries = typedEntries.Where(filterPredicate);
-        }
+        List<TDatabase> typedEntries = filterPredicate is not null
+            ? baseEntries.OfType<TDatabase>().Where(filterPredicate).ToList()
+            : baseEntries.OfType<TDatabase>().ToList();
 
         return typedEntries.Any()
             ? typedEntries.Select(x => mapper.Map<TNetwork>(x)).ToList()
