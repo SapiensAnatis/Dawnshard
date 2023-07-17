@@ -351,5 +351,8 @@ public static class MasterAsset
         EventItem<BattleRoyalEventItemType>
     > BattleRoyalEventItem = new("Event/BattleRoyalEventItem.json", x => x.Id);
 
+    public static readonly MasterAssetData<int, EventPassive> EventPassive =
+        new("Event/EventPassive.json", x => x.Id);
+
     #endregion
 }
