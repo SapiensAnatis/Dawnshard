@@ -126,7 +126,7 @@ public class DungeonRecordController : DragaliaControllerBase
         QuestMissionStatus status = await this.questCompletionService.CompleteQuestMissions(
             session,
             oldMissionStatus,
-            request.play_record!
+            playRecord!
         );
 
         newQuestData.IsMissionClear1 = status.Missions[0];
@@ -187,7 +187,7 @@ public class DungeonRecordController : DragaliaControllerBase
         );
 
         (IEnumerable<AtgenScoreMissionSuccessList> scoreMissions, int totalPoints) =
-            await questCompletionService.CompleteQuestScoreMissions(session, request.play_record!);
+            await questCompletionService.CompleteQuestScoreMissions(session, playRecord!);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
@@ -206,7 +206,7 @@ public class DungeonRecordController : DragaliaControllerBase
                         {
                             new()
                             {
-                                type = (int)EntityTypes.Wyrmite,
+                                type = EntityTypes.Wyrmite,
                                 id = 0,
                                 quantity = 5
                             }
@@ -233,12 +233,7 @@ public class DungeonRecordController : DragaliaControllerBase
                     bonus_factor = 1,
                     mana_bonus_factor = 1,
                     chara_grow_record = session.Party.Select(
-                        x =>
-                            new AtgenCharaGrowRecord()
-                            {
-                                chara_id = (int)x.chara_id,
-                                take_exp = 240
-                            }
+                        x => new AtgenCharaGrowRecord() { chara_id = x.chara_id, take_exp = 240 }
                     ),
                     chara_friendship_list = new List<CharaFriendshipList>()
                 },

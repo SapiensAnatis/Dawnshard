@@ -34,7 +34,7 @@ public class DungeonStartService(
         ulong? supportViewerId = null
     )
     {
-        IQueryable<DbPartyUnit> partyQuery = this.partyRepository
+        IQueryable<DbPartyUnit> partyQuery = partyRepository
             .GetPartyUnits(partyNoList)
             .AsNoTracking();
 
