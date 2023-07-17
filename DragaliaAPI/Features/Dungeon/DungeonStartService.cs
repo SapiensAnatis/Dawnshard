@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset;
@@ -25,7 +26,8 @@ public class DungeonStartService(
     IHelperService helperService,
     IMapper mapper,
     ILogger<DungeonStartService> logger,
-    IPaymentService paymentService
+    IPaymentService paymentService,
+    IEventService eventService
 ) : IDungeonStartService
 {
     public async Task<IngameData> GetIngameData(
@@ -245,6 +247,10 @@ public class DungeonStartService(
         {
             result.party_info.support_data = await GetSupportData(supportViewerId.Value);
         }
+
+        result.party_info.event_passive_grow_list = (
+            await eventService.GetEventPassiveList(questInfo.Gid)
+        ).event_passive_grow_list;
 
         return result;
     }

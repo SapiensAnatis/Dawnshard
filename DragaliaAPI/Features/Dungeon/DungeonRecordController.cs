@@ -260,7 +260,7 @@ public class DungeonRecordController : DragaliaControllerBase
                 quest_party_setting_list = session.Party,
                 bonus_factor_list = new List<AtgenBonusFactorList>(),
                 scoring_enemy_point_list = new List<AtgenScoringEnemyPointList>(),
-                score_mission_success_list = new List<AtgenScoreMissionSuccessList>(),
+                score_mission_success_list = scoreMissions,
                 event_passive_up_list = new List<AtgenEventPassiveUpList>(),
                 clear_time = clear_time,
                 is_best_clear_time = clear_time == newQuestData.BestClearTime,
