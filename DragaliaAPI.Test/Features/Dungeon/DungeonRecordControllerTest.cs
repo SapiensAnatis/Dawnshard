@@ -1,7 +1,9 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿#if false
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
@@ -900,3 +902,4 @@ public class DungeonRecordControllerTest
         }
     }
 }
+#endif

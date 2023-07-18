@@ -10,10 +10,11 @@ public interface IRewardService
     /// Grant a reward of an arbitrary entity type to the player.
     /// </summary>
     /// <param name="entity">The entity to grant.</param>
+    /// <param name="log">Log the rewards. Disable if making a large number of calls.</param>
     /// <returns>
     /// An enum indicating the result of the add operation.
     /// </returns>
-    Task<RewardGrantResult> GrantReward(Entity entity);
+    Task<RewardGrantResult> GrantReward(Entity entity, bool log = true);
 
     Task<(RewardGrantResult Result, DbTalisman? Talisman)> GrantTalisman(
         Talismans id,

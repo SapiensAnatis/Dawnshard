@@ -28,6 +28,8 @@ using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Login;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Dungeon.Start;
+using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Emblem;
@@ -169,6 +171,8 @@ builder.Services
     .AddScoped<IQuestDropService, QuestDropService>()
     .AddScoped<IQuestEnemyService, QuestEnemyService>()
     .AddScoped<IOddsInfoService, OddsInfoService>()
+    .AddScoped<IDungeonRecordService, DungeonRecordService>()
+    .AddScoped<IDungeonRecordMultiService, DungeonRecordMultiService>()
     .AddScoped<IQuestCompletionService, QuestCompletionService>()
     .AddScoped<IAbilityCrestMultiplierService, AbilityCrestMultiplierService>()
     // Event Feature
