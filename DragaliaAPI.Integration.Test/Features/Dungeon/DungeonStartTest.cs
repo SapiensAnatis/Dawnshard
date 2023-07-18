@@ -144,9 +144,10 @@ public class DungeonStartTest : TestFixture
             )
         ).data;
 
-        Snapshot.Match(response.ingame_data.party_info.party_unit_list, SnapshotOptions);
+        // Only test the first two since the others are empty
+        Snapshot.Match(response.ingame_data.party_info.party_unit_list.Take(2), SnapshotOptions);
 
-        response.ingame_data.party_info.party_unit_list.Should().HaveCount(2);
+        response.ingame_data.party_info.party_unit_list.Should().HaveCount(4);
         response.ingame_data.party_info.party_unit_list
             .Should()
             .Contain(x => x.chara_data!.chara_id == Charas.GalaLeonidas)
