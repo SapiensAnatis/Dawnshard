@@ -18,45 +18,23 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Features.Dungeon;
 
 [Route("dungeon_record")]
-public class DungeonRecordController : DragaliaControllerBase
+public class DungeonRecordController(
+    IQuestRepository questRepository,
+    IDungeonService dungeonService,
+    IUserDataRepository userDataRepository,
+    IInventoryRepository inventoryRepository,
+    IUpdateDataService updateDataService,
+    ITutorialService tutorialService,
+    IMissionProgressionService missionProgressionService,
+    ILogger<DungeonRecordController> logger,
+    IQuestCompletionService questCompletionService,
+    IQuestDropService questDropService
+) : DragaliaControllerBase
 {
-    private readonly IQuestRepository questRepository;
-    private readonly IDungeonService dungeonService;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IInventoryRepository inventoryRepository;
-    private readonly IUpdateDataService updateDataService;
-    private readonly ITutorialService tutorialService;
-    private readonly IMissionProgressionService missionProgressionService;
-    private readonly ILogger<DungeonRecordController> logger;
-    private readonly IQuestCompletionService questCompletionService;
-
-    public DungeonRecordController(
-        IQuestRepository questRepository,
-        IDungeonService dungeonService,
-        IUserDataRepository userDataRepository,
-        IInventoryRepository inventoryRepository,
-        IUpdateDataService updateDataService,
-        ITutorialService tutorialService,
-        IMissionProgressionService missionProgressionService,
-        ILogger<DungeonRecordController> logger,
-        IQuestCompletionService questCompletionService
-    )
-    {
-        this.questRepository = questRepository;
-        this.dungeonService = dungeonService;
-        this.userDataRepository = userDataRepository;
-        this.inventoryRepository = inventoryRepository;
-        this.updateDataService = updateDataService;
-        this.tutorialService = tutorialService;
-        this.missionProgressionService = missionProgressionService;
-        this.logger = logger;
-        this.questCompletionService = questCompletionService;
-    }
-
     [HttpPost("record")]
     public async Task<DragaliaResult> Record(DungeonRecordRecordRequest request)
     {
-        return this.Ok(await BuildResponse(request.dungeon_key, request.play_record));
+        return Ok(await BuildResponse(request.dungeon_key, request.play_record));
     }
 
     [HttpPost("record_multi")]
@@ -70,7 +48,7 @@ public class DungeonRecordController : DragaliaControllerBase
 
         response.ingame_result_data.play_type = QuestPlayType.Multi;
 
-        return this.Ok(response);
+        return Ok(response);
     }
 
     private async Task<DungeonRecordRecordData> BuildResponse(
@@ -80,9 +58,9 @@ public class DungeonRecordController : DragaliaControllerBase
     {
         // TODO: Turn this method into a service call
         DungeonSession session = await dungeonService.FinishDungeon(dungeonKey);
-        this.logger.LogDebug("session.IsHost: {isHost}", session.IsHost);
+        logger.LogDebug("session.IsHost: {isHost}", session.IsHost);
 
-        this.logger.LogDebug("Processing completion of quest {id}", session.QuestData.Id);
+        logger.LogDebug("Processing completion of quest {id}", session.QuestData.Id);
 
         DbQuest? oldQuestData = await questRepository.Quests.SingleOrDefaultAsync(
             x => x.QuestId == session.QuestData.Id
@@ -123,7 +101,7 @@ public class DungeonRecordController : DragaliaControllerBase
             newQuestData.IsMissionClear3
         };
 
-        QuestMissionStatus status = await this.questCompletionService.CompleteQuestMissions(
+        QuestMissionStatus status = await questCompletionService.CompleteQuestMissions(
             session,
             oldMissionStatus,
             playRecord!
@@ -149,7 +127,7 @@ public class DungeonRecordController : DragaliaControllerBase
                 )
             )
             {
-                this.logger.LogWarning(
+                logger.LogWarning(
                     "Could not retrieve enemy list for area_idx {idx}",
                     record.area_idx
                 );
@@ -188,6 +166,9 @@ public class DungeonRecordController : DragaliaControllerBase
 
         (IEnumerable<AtgenScoreMissionSuccessList> scoreMissions, int totalPoints) =
             await questCompletionService.CompleteQuestScoreMissions(session, playRecord!);
+
+        IEnumerable<AtgenEventPassiveUpList> eventPassiveDrops =
+            await questDropService.GetEventPassiveDrops(session.QuestData);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
@@ -261,7 +242,7 @@ public class DungeonRecordController : DragaliaControllerBase
                 bonus_factor_list = new List<AtgenBonusFactorList>(),
                 scoring_enemy_point_list = new List<AtgenScoringEnemyPointList>(),
                 score_mission_success_list = scoreMissions,
-                event_passive_up_list = new List<AtgenEventPassiveUpList>(),
+                event_passive_up_list = eventPassiveDrops,
                 clear_time = clear_time,
                 is_best_clear_time = clear_time == newQuestData.BestClearTime,
                 converted_entity_list = new List<ConvertedEntityList>(),
