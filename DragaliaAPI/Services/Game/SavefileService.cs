@@ -526,6 +526,18 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerTrades.RemoveRange(
             this.apiContext.PlayerTrades.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PlayerEventData.RemoveRange(
+            this.apiContext.PlayerEventData.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerEventItems.RemoveRange(
+            this.apiContext.PlayerEventItems.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerEventRewards.RemoveRange(
+            this.apiContext.PlayerEventRewards.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerEventPassives.RemoveRange(
+            this.apiContext.PlayerEventPassives.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset()
