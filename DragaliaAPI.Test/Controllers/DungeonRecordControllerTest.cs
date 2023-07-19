@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -24,6 +25,7 @@ public class DungeonRecordControllerTest
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<ITutorialService> mockTutorialService;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<ILogger<DungeonRecordController>> mockLogger;
 
     private const string dungeonKey = "key";
@@ -39,6 +41,7 @@ public class DungeonRecordControllerTest
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockRewardService = new(MockBehavior.Loose); // This file is about to be overhauled anyway
         this.mockLogger = new(MockBehavior.Loose);
 
         this.dungeonRecordController = new(
@@ -49,6 +52,7 @@ public class DungeonRecordControllerTest
             this.mockUpdateDataService.Object,
             this.mockTutorialService.Object,
             this.mockMissionProgressionService.Object,
+            this.mockRewardService.Object,
             this.mockLogger.Object
         );
 

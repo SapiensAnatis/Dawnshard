@@ -3,6 +3,7 @@ using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -27,6 +28,7 @@ public class DungeonRecordController : DragaliaControllerBase
     private readonly IUpdateDataService updateDataService;
     private readonly ITutorialService tutorialService;
     private readonly IMissionProgressionService missionProgressionService;
+    private readonly IRewardService rewardService;
     private readonly ILogger<DungeonRecordController> logger;
 
     public DungeonRecordController(
@@ -37,6 +39,7 @@ public class DungeonRecordController : DragaliaControllerBase
         IUpdateDataService updateDataService,
         ITutorialService tutorialService,
         IMissionProgressionService missionProgressionService,
+        IRewardService rewardService,
         ILogger<DungeonRecordController> logger
     )
     {
@@ -47,6 +50,7 @@ public class DungeonRecordController : DragaliaControllerBase
         this.updateDataService = updateDataService;
         this.tutorialService = tutorialService;
         this.missionProgressionService = missionProgressionService;
+        this.rewardService = rewardService;
         this.logger = logger;
     }
 
@@ -181,6 +185,9 @@ public class DungeonRecordController : DragaliaControllerBase
         await inventoryRepository.UpdateQuantity(
             drops.Select(x => new KeyValuePair<Materials, int>((Materials)x.id, x.quantity))
         );
+
+        await this.rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
+        await this.rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
