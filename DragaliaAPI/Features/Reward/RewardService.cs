@@ -26,7 +26,11 @@ public class RewardService(
 
     public async Task<RewardGrantResult> GrantReward(Entity entity)
     {
-        Debug.Assert(entity.Quantity > 0, "entity.Quantity > 0");
+        if (entity.Quantity <= 0)
+        {
+            // NOTE: Should this be an invalid case?
+            return RewardGrantResult.Added;
+        }
 
         logger.LogDebug("Granting reward {@rewardEntity}", entity);
 
