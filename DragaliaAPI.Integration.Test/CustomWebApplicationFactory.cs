@@ -104,7 +104,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             TestFixture.DeviceAccountId
         );
 
-        savefileService.CreateBase().Wait();
+        savefileService.Create().Wait();
 
         apiContext.PlayerMaterials.AddRange(
             Enum.GetValues<Materials>()
