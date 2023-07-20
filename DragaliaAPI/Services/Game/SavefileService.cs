@@ -676,7 +676,7 @@ public class SavefileService : ISavefileService
     internal static class DefaultSavefileData
     {
         public static readonly ImmutableList<Charas> Characters = MasterAsset.CharaData.Enumerable
-            .Where(x => x.Rarity == 3)
+            .Where(x => x.Rarity == 3 && x.IsPlayable)
             .Select(x => x.Id)
             .Append(Charas.ThePrince)
             .ToImmutableList();
