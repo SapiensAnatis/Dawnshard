@@ -4,6 +4,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -29,7 +30,8 @@ public class DungeonRecordController(
     IMissionProgressionService missionProgressionService,
     ILogger<DungeonRecordController> logger,
     IQuestCompletionService questCompletionService,
-    IEventDropService eventDropService
+    IEventDropService eventDropService,
+    IRewardService rewardService
 ) : DragaliaControllerBase
 {
     [HttpPost("record")]
@@ -174,6 +176,9 @@ public class DungeonRecordController(
         drops.AddRange(
             await eventDropService.ProcessEventMaterialDrops(session.QuestData, playRecord)
         );
+
+        await this.rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
+        await this.rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 

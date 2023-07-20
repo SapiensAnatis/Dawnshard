@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -26,6 +27,7 @@ public class DungeonRecordControllerTest
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<ITutorialService> mockTutorialService;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<ILogger<DungeonRecordController>> mockLogger;
     private readonly Mock<IQuestCompletionService> mockQuestCompletionService;
     private readonly Mock<IEventDropService> mockEventDropService;
@@ -43,6 +45,7 @@ public class DungeonRecordControllerTest
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockRewardService = new(MockBehavior.Loose); // This file is about to be overhauled anyway
         this.mockLogger = new(MockBehavior.Loose);
         this.mockQuestCompletionService = new(MockBehavior.Strict);
         this.mockEventDropService = new(MockBehavior.Strict);
@@ -57,7 +60,8 @@ public class DungeonRecordControllerTest
             this.mockMissionProgressionService.Object,
             this.mockLogger.Object,
             this.mockQuestCompletionService.Object,
-            this.mockEventDropService.Object
+            this.mockEventDropService.Object,
+            this.mockRewardService.Object
         );
 
         this.dungeonRecordController.SetupMockContext();
