@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Repositories;
+﻿using System.Diagnostics;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Models.Generated;
@@ -25,6 +26,8 @@ public class RewardService(
 
     public async Task<RewardGrantResult> GrantReward(Entity entity)
     {
+        Debug.Assert(entity.Quantity > 0, "entity.Quantity > 0");
+
         logger.LogDebug("Granting reward {@rewardEntity}", entity);
 
         switch (entity.Type)

@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -27,7 +28,7 @@ public class DungeonRecordControllerTest
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
     private readonly Mock<ILogger<DungeonRecordController>> mockLogger;
     private readonly Mock<IQuestCompletionService> mockQuestCompletionService;
-    private readonly Mock<IQuestDropService> mockQuestDropService;
+    private readonly Mock<IEventDropService> mockEventDropService;
 
     private const string dungeonKey = "key";
     private const int questId = 100010101;
@@ -44,7 +45,7 @@ public class DungeonRecordControllerTest
         this.mockMissionProgressionService = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
         this.mockQuestCompletionService = new(MockBehavior.Strict);
-        this.mockQuestDropService = new(MockBehavior.Strict);
+        this.mockEventDropService = new(MockBehavior.Strict);
 
         this.dungeonRecordController = new(
             this.mockQuestRepository.Object,
@@ -56,7 +57,7 @@ public class DungeonRecordControllerTest
             this.mockMissionProgressionService.Object,
             this.mockLogger.Object,
             this.mockQuestCompletionService.Object,
-            this.mockQuestDropService.Object
+            this.mockEventDropService.Object
         );
 
         this.dungeonRecordController.SetupMockContext();
@@ -148,9 +149,13 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
 
-        this.mockQuestDropService
-            .Setup(x => x.GetEventPassiveDrops(It.IsAny<QuestData>()))
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
+
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventMaterialDrops(It.IsAny<QuestData>(), It.IsAny<PlayRecord>()))
+            .ReturnsAsync(new List<AtgenDropAll>());
 
         DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
 
@@ -235,9 +240,13 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
 
-        this.mockQuestDropService
-            .Setup(x => x.GetEventPassiveDrops(It.IsAny<QuestData>()))
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
+
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventMaterialDrops(It.IsAny<QuestData>(), It.IsAny<PlayRecord>()))
+            .ReturnsAsync(new List<AtgenDropAll>());
 
         DungeonRecordRecordRequest request =
             new()
@@ -321,9 +330,13 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
 
-        this.mockQuestDropService
-            .Setup(x => x.GetEventPassiveDrops(It.IsAny<QuestData>()))
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
+
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventMaterialDrops(It.IsAny<QuestData>(), It.IsAny<PlayRecord>()))
+            .ReturnsAsync(new List<AtgenDropAll>());
 
         DungeonRecordRecordRequest request =
             new()
@@ -417,9 +430,13 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
 
-        this.mockQuestDropService
-            .Setup(x => x.GetEventPassiveDrops(It.IsAny<QuestData>()))
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
+
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventMaterialDrops(It.IsAny<QuestData>(), It.IsAny<PlayRecord>()))
+            .ReturnsAsync(new List<AtgenDropAll>());
 
         DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
 
@@ -522,9 +539,13 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
 
-        this.mockQuestDropService
-            .Setup(x => x.GetEventPassiveDrops(It.IsAny<QuestData>()))
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
+
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventMaterialDrops(It.IsAny<QuestData>(), It.IsAny<PlayRecord>()))
+            .ReturnsAsync(new List<AtgenDropAll>());
 
         DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
 
@@ -630,9 +651,13 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
 
-        this.mockQuestDropService
-            .Setup(x => x.GetEventPassiveDrops(It.IsAny<QuestData>()))
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
+
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventMaterialDrops(It.IsAny<QuestData>(), It.IsAny<PlayRecord>()))
+            .ReturnsAsync(new List<AtgenDropAll>());
 
         DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
 
@@ -724,9 +749,13 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
 
-        this.mockQuestDropService
-            .Setup(x => x.GetEventPassiveDrops(It.IsAny<QuestData>()))
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
+
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventMaterialDrops(It.IsAny<QuestData>(), It.IsAny<PlayRecord>()))
+            .ReturnsAsync(new List<AtgenDropAll>());
 
         DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
 
