@@ -21,6 +21,7 @@ public class QuestCompletionService(
         int Points
     )> CompleteQuestScoreMissions(DungeonSession session, PlayRecord record)
     {
+        // TODO: Add Enemy scoring
         List<AtgenScoreMissionSuccessList> missions = new();
 
         int questId = session.QuestData.Id;

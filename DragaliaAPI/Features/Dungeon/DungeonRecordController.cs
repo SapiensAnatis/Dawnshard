@@ -174,11 +174,11 @@ public class DungeonRecordController(
             await eventDropService.ProcessEventPassiveDrops(session.QuestData);
 
         drops.AddRange(
-            await eventDropService.ProcessEventMaterialDrops(session.QuestData, playRecord)
+            await eventDropService.ProcessEventMaterialDrops(session.QuestData, playRecord!)
         );
 
-        await this.rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
-        await this.rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
+        await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
+        await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
