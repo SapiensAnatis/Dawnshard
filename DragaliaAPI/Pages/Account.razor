@@ -1,0 +1,93 @@
+﻿@page "/account"
+@using DragaliaAPI.Database.Entities;
+@using DragaliaAPI.Database.Repositories;
+@using DragaliaAPI.Models.Generated;
+@using DragaliaAPI.Models;
+@using DragaliaAPI.Services;
+@using System.Text.Json;
+
+@inject ILoadService loadService;
+@inject IUserDataRepository userDataRepository;
+@inject IJSRuntime js;
+@inject ILogger<Account> logger;
+
+<script>
+    window.downloadFileFromStream = async (fileName, contentStreamReference) => {
+        const arrayBuffer = await contentStreamReference.arrayBuffer();
+        const blob = new Blob([arrayBuffer]);
+        const url = URL.createObjectURL(blob);
+        const anchorElement = document.createElement('a');
+        anchorElement.href = url;
+        anchorElement.download = fileName ?? '';
+        anchorElement.click();
+        anchorElement.remove();
+        URL.revokeObjectURL(url);
+    }
+</script>
+
+
+<PageTitle>Account management</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <MudText Typo="Typo.h4" GutterBottom=true>Account management</MudText>
+        <MudDivider Class="mb-2" />
+            <MudText Typo="Typo.h5">Account information</MudText>   
+            <MudList Clickable=false>
+                @if (UserData is not null)
+                {
+                    <MudListItem Icon="@Icons.Material.Filled._123"><strong>Viewer ID</strong>: @UserData.ViewerId</MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.Person"><strong>Player name</strong>: @UserData.Name</MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.CalendarToday"><strong>Last save import time</strong>: @UserData.LastSaveImportTime</MudListItem>
+                }
+            </MudList>
+
+            <MudText Typo="Typo.h5" GutterBottom=true Class="mt-1">Save export</MudText>
+            <MudText Typo="Typo.body1" GutterBottom=true>Press the button below to download your save file. This can then be edited or imported onto another server.</MudText>
+
+            <MudContainer Class="d-flex flex-column">
+                <MudButton OnClick="OnClickExportSave" Disabled=this.Loading Class="p-3" FullWidth=true Variant="Variant.Outlined">Export save</MudButton>
+                @if (this.Loading)
+                {
+                    <MudProgressLinear Indeterminate="true" Class="ma-3" />
+                }
+            </MudContainer>
+                   
+
+            <MudAlert Class="ma-2" Icon="@Icons.Material.Filled.CloudUpload" Severity="Severity.Normal">You can upload saves to be imported at <MudLink Typo="Typo.body2" Href="https://baas.lukefz.xyz/"><b>https://baas.lukefz.xyz/</b></MudLink>.</MudAlert>
+            <MudAlert Class="ma-2" Severity="Severity.Normal" Icon="@Icons.Material.Outlined.Edit">For a user-friendly way to edit your save file, check out sockperson's save editor at <MudLink Typo="Typo.body2" Href="https://github.com/sockperson/DragaliaSaveEditor"><b>https://github.com/sockperson/DragaliaSaveEditor</b></MudLink>.</MudAlert>
+    </Authorized>
+    <NotAuthorized>
+        <Login/>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    public bool Loading { get; set; }
+
+    public DbPlayerUserData? UserData { get; set; }
+
+    private async Task OnClickExportSave()
+    {
+        logger.LogInformation("Exporting save...");
+
+        this.Loading = true;
+        LoadIndexData savefile = await this.loadService.BuildIndexData();
+        DragaliaResponse<LoadIndexData> response = new(savefile);
+
+        string filename = "savedata.txt";
+
+        var savefileStream = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(response));
+
+        using var streamRef = new DotNetStreamReference(savefileStream);
+
+        await js.InvokeVoidAsync("downloadFileFromStream", filename, streamRef);
+        this.Loading = false;
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.UserData = await userDataRepository.GetUserDataAsync();
+    }
+}

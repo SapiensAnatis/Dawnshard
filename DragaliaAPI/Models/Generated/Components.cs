@@ -10,6 +10,7 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.Json;
 using MessagePack;
 

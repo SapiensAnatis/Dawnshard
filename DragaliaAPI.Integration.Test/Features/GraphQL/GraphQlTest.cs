@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Presents;
 using GraphQL;
 using GraphQL.Client.Http;
 using Microsoft.EntityFrameworkCore;

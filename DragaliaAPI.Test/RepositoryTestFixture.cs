@@ -1,18 +1,15 @@
 ﻿using AutoMapper;
-using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.SavefileUpdate;
-using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
-using DragaliaAPI.Test;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using Moq;
 
-namespace DragaliaAPI.Database.Test;
+namespace DragaliaAPI.Test;
 
 [Collection(nameof(RepositoryTestFixture))]
 public class RepositoryTestFixture : IDisposable

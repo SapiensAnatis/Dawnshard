@@ -1,0 +1,74 @@
+﻿@page "/"
+
+<PageTitle>Dawnshard</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Welcome to Dawnshard</MudText>
+<MudText Typo=Typo.h5 Class="mb-4">Dawnshard is a server emulator project aimed at enabling continued play of Dragalia Lost.</MudText>
+<MudText Class="mb-6">Ever since the official servers were discontinued in November 2022, Dawnshard has been in development as a fan-led reimplementation of the game.</MudText>
+<MudText Typo="Typo.body1"></MudText>
+
+<MudContainer Class="d-flex pl-1 gap-4">
+    <MudIconButton Icon="@Icons.Custom.Brands.GitHub"  Size="Size.Large" Variant="Variant.Filled" Href="https://github.com/SapiensAnatis/Dawnshard" />
+    <MudIconButton Icon="@Icons.Custom.Brands.Discord" Size="Size.Large" Variant="Variant.Filled" Href="https://discord.gg/j9zSttjjWj" />
+</MudContainer>
+
+<MudDivider Class="ma-10"/>
+
+<MudText Typo="Typo.h4" GutterBottom=true>Frequently asked questions</MudText>
+<MudGrid Spacing="5" Class="pa-2">
+    <MudItem lg="6" sm="12">
+        <MudCard>
+            <MudCardContent>
+                <MudText Typo="Typo.h6">How can I play on Android?</MudText>
+                <MudText Typo="Typo.body2">On an Android device, it is easiest to play using the Dragalipatch app by LukeFZ. This creates a modified app you can use to play Dawnshard by patching to <MudLink Href="https://dawnshard.co.uk">https://dawnshard.co.uk</MudLink>.</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Href="https://github.com/LukeFZ/DragaliPatch/releases/latest">Download Dragalipatch</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>  
+    <MudItem lg="6" sm="12">
+        <MudCard>
+            <MudCardContent>
+                <MudText Typo="Typo.h6">How can I play on iOS?</MudText>
+                <MudText Typo="Typo.body2">The iOS setup process is a little more involved -- please see the <code>#ios-setup-support</code> channel on the Discord server.</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Href="https://discord.gg/j9zSttjjWj">Join Discord</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>  
+    <MudItem lg="12" sm="12">
+        <MudCard>
+            <MudCardContent>
+                <MudText Typo="Typo.h6">Do I have to start over?</MudText>
+                <MudText Typo="Typo.body2">You can start over, or you can create an account on the BaaS server, which is a replacement for the Nintendo account mechanism from the original game. You can attach a savefile to this and have that uploaded onto a server.</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Href="https://baas.lukefz.xyz/">Visit baas.lukefz.xyz</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+
+<MudDivider Class="ma-10" />
+
+<MudText Typo="Typo.h4" GutterBottom=true>Special thanks</MudText>
+<MudText>Thanks to the following people, who have contributed to the server source code or its development in general:</MudText>
+
+<MudContainer Class="mt-2">
+    <Acknowledgement Name="LukeFZ" ImageSrc="img/lukefz.webp">
+        for developing the BaaS account system, DragaliPatch, and implementing features including the event compendium, endeavours, and more.
+    </Acknowledgement>
+
+    <Acknowledgement Name="Ceris" ImageSrc="img/ceris.webp">
+        for developing <MudLink Href="https://orchis.cherrymint.live">Orchis</MudLink>, another server revival project for Dragalia Lost.
+    </Acknowledgement>
+
+    <Acknowledgement Name="Nano" ImageSrc="img/nano.png">for contributing character, summoning and dragon functionality to the server.</Acknowledgement>
+    
+    <Acknowledgement Name="Nightmerp" ImageSrc="img/nightmerp.webp">for developing helper, wyrmprint, and quest-related features.</Acknowledgement>
+
+    <Acknowledgement Name="Skazord" ImageSrc="img/skazord.webp">for working on the Halidom.</Acknowledgement>
+</MudContainer>
