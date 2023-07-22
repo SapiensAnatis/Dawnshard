@@ -153,6 +153,10 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
 
+        this.mockQuestCompletionService
+            .Setup(x => x.GrantFirstClearRewards(questId))
+            .ReturnsAsync(new List<AtgenFirstClearSet>());
+
         this.mockEventDropService
             .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
@@ -244,6 +248,10 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
 
+        this.mockQuestCompletionService
+            .Setup(x => x.GrantFirstClearRewards(questId))
+            .ReturnsAsync(new List<AtgenFirstClearSet>());
+
         this.mockEventDropService
             .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
@@ -326,6 +334,10 @@ public class DungeonRecordControllerTest
                     new List<AtgenFirstClearSet>()
                 )
             );
+
+        this.mockQuestCompletionService
+            .Setup(x => x.GrantFirstClearRewards(questId))
+            .ReturnsAsync(new List<AtgenFirstClearSet>());
 
         this.mockQuestCompletionService
             .Setup(
@@ -433,6 +445,10 @@ public class DungeonRecordControllerTest
                     x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
             )
             .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
+
+        this.mockQuestCompletionService
+            .Setup(x => x.GrantFirstClearRewards(questId))
+            .ReturnsAsync(firstClearReward);
 
         this.mockEventDropService
             .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
