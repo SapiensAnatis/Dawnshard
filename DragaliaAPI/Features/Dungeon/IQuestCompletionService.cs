@@ -23,4 +23,6 @@ public interface IQuestCompletionService
         PlayRecord record,
         DungeonSession session
     );
+
+    public Task<IEnumerable<AtgenFirstClearSet>> GrantFirstClearRewards(int questId);
 }

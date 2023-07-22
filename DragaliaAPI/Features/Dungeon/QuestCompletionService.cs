@@ -278,4 +278,24 @@ public class QuestCompletionService(
             _ => throw new NotImplementedException(),
         };
     }
+
+    public async Task<IEnumerable<AtgenFirstClearSet>> GrantFirstClearRewards(int questId)
+    {
+        List<AtgenFirstClearSet> rewards = new();
+
+        QuestRewardData rewardData = MasterAsset.QuestRewardData[questId];
+        foreach (
+            Entity rewardEntity in rewardData.FirstClearEntities.Select(
+                x => new Entity(x.Type, x.Id, x.Quantity)
+            )
+        )
+        {
+            await rewardService.GrantReward(rewardEntity);
+            rewards.Add(
+                new AtgenFirstClearSet(rewardEntity.Id, rewardEntity.Type, rewardEntity.Quantity)
+            );
+        }
+
+        return rewards;
+    }
 }

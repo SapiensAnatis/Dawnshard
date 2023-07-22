@@ -90,10 +90,9 @@ public class DungeonRecordController(
 
         DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
 
-        if (isFirstClear)
-        {
-            userData.Crystal += 5;
-        }
+        IEnumerable<AtgenFirstClearSet> firstClearRewards = isFirstClear
+            ? await questCompletionService.GrantFirstClearRewards(session.QuestData.Id)
+            : Enumerable.Empty<AtgenFirstClearSet>();
 
         userData.Exp += 1;
 
@@ -192,17 +191,7 @@ public class DungeonRecordController(
                 reward_record = new()
                 {
                     drop_all = drops,
-                    first_clear_set = isFirstClear
-                        ? new List<AtgenFirstClearSet>()
-                        {
-                            new()
-                            {
-                                type = EntityTypes.Wyrmite,
-                                id = 0,
-                                quantity = 5
-                            }
-                        }
-                        : new List<AtgenFirstClearSet>(),
+                    first_clear_set = firstClearRewards,
                     take_coin = coinDrop,
                     take_astral_item_quantity = 300,
                     missions_clear_set = status.MissionsClearSet,

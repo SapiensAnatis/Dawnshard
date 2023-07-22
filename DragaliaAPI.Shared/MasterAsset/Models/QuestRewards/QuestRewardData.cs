@@ -23,7 +23,22 @@ public record QuestRewardData(
     int MissionCompleteEntityId,
     int MissionCompleteEntityQuantity,
     int QuestScoreMissionId,
-    int QuestScoringEnemyGroupId
+    int QuestScoringEnemyGroupId,
+    EntityTypes FirstClearSetEntityType1,
+    int FirstClearSetEntityId1,
+    int FirstClearSetEntityQuantity1,
+    EntityTypes FirstClearSetEntityType2,
+    int FirstClearSetEntityId2,
+    int FirstClearSetEntityQuantity2,
+    EntityTypes FirstClearSetEntityType3,
+    int FirstClearSetEntityId3,
+    int FirstClearSetEntityQuantity3,
+    EntityTypes FirstClearSetEntityType4,
+    int FirstClearSetEntityId4,
+    int FirstClearSetEntityQuantity4,
+    EntityTypes FirstClearSetEntityType5,
+    int FirstClearSetEntityId5,
+    int FirstClearSetEntityQuantity5
 )
 {
     public readonly (QuestCompleteType Type, int Value)[] Missions =
@@ -38,5 +53,14 @@ public record QuestRewardData(
         (MissionsClearSetEntityType1, MissionsClearSetEntityId1, MissionsClearSetEntityQuantity1),
         (MissionsClearSetEntityType2, MissionsClearSetEntityId2, MissionsClearSetEntityQuantity2),
         (MissionsClearSetEntityType3, MissionsClearSetEntityId3, MissionsClearSetEntityQuantity3)
+    };
+
+    public readonly (EntityTypes Type, int Id, int Quantity)[] FirstClearEntities =
+    {
+        (FirstClearSetEntityType1, FirstClearSetEntityId1, FirstClearSetEntityQuantity1),
+        (FirstClearSetEntityType2, FirstClearSetEntityId2, FirstClearSetEntityQuantity2),
+        (FirstClearSetEntityType3, FirstClearSetEntityId3, FirstClearSetEntityQuantity3),
+        (FirstClearSetEntityType4, FirstClearSetEntityId4, FirstClearSetEntityQuantity4),
+        (FirstClearSetEntityType5, FirstClearSetEntityId5, FirstClearSetEntityQuantity5),
     };
 };
