@@ -10,7 +10,7 @@ namespace DragaliaAPI.Shared.Test.Unit;
 
 public class MasterAssetTest
 {
-        [Fact]
+    [Fact]
     public void CharaData_Get_ReturnsExpectedProperties()
     {
         CharaData laxi = MasterAsset.MasterAsset.CharaData.Get(Charas.GalaLaxi);
