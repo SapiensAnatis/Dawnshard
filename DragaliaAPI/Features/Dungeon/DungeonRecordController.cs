@@ -31,7 +31,8 @@ public class DungeonRecordController(
     ILogger<DungeonRecordController> logger,
     IQuestCompletionService questCompletionService,
     IEventDropService eventDropService,
-    IRewardService rewardService
+    IRewardService rewardService,
+    IAbilityCrestMultiplierService abilityCrestMultiplierService
 ) : DragaliaControllerBase
 {
     [HttpPost("record")]
@@ -172,8 +173,17 @@ public class DungeonRecordController(
         IEnumerable<AtgenEventPassiveUpList> eventPassiveDrops =
             await eventDropService.ProcessEventPassiveDrops(session.QuestData);
 
+        double crestMultiplier = await abilityCrestMultiplierService.GetFacilityEventMultiplier(
+            session.Party,
+            session.QuestData.Gid
+        );
+
         drops.AddRange(
-            await eventDropService.ProcessEventMaterialDrops(session.QuestData, playRecord!)
+            await eventDropService.ProcessEventMaterialDrops(
+                session.QuestData,
+                playRecord!,
+                crestMultiplier
+            )
         );
 
         await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));

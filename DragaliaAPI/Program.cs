@@ -162,6 +162,7 @@ builder.Services
     .AddScoped<IQuestEnemyService, QuestEnemyService>()
     .AddScoped<IOddsInfoService, OddsInfoService>()
     .AddScoped<IQuestCompletionService, QuestCompletionService>()
+    .AddScoped<IAbilityCrestMultiplierService, AbilityCrestMultiplierService>()
     // Event Feature
     .AddScoped<IEventRepository, EventRepository>()
     .AddScoped<IEventService, EventService>()
