@@ -285,9 +285,9 @@ public class QuestCompletionService(
 
         QuestRewardData rewardData = MasterAsset.QuestRewardData[questId];
         foreach (
-            Entity rewardEntity in rewardData.FirstClearEntities.Select(
-                x => new Entity(x.Type, x.Id, x.Quantity)
-            )
+            Entity rewardEntity in rewardData.FirstClearEntities
+                .Where(x => x.Type != EntityTypes.None)
+                .Select(x => new Entity(x.Type, x.Id, x.Quantity))
         )
         {
             await rewardService.GrantReward(rewardEntity);
