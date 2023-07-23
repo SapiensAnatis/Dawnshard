@@ -64,6 +64,8 @@ public class MasterAssetTest
                     AwakeNeedEntityType5: EntityTypes.Dew,
                     AwakeNeedEntityId5: 0,
                     AwakeNeedEntityQuantity5: 25000,
+                    GrowMaterialOnlyStartDate: DateTimeOffset.UnixEpoch,
+                    GrowMaterialOnlyEndDate: DateTimeOffset.UnixEpoch,
                     UniqueGrowMaterialId1: Materials.GalaLaxisConviction,
                     UniqueGrowMaterialId2: Materials.GalaLaxisDevotion,
                     GrowMaterialId: Materials.Empty,

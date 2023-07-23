@@ -7,6 +7,7 @@ using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -23,44 +24,20 @@ using NuGet.Packaging;
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("chara")]
-public class CharaController : DragaliaControllerBase
+public class CharaController(
+    IUserDataRepository userDataRepository,
+    IUnitRepository unitRepository,
+    IInventoryRepository inventoryRepository,
+    IStoryRepository storyRepository,
+    IUpdateDataService updateDataService,
+    ILogger<CharaController> logger,
+    IMapper mapper,
+    IMissionProgressionService missionProgressionService,
+    IPaymentService paymentService,
+    IRewardService rewardService,
+    IDateTimeProvider dateTimeProvider
+) : DragaliaControllerBase
 {
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IUnitRepository unitRepository;
-    private readonly IInventoryRepository inventoryRepository;
-    private readonly IStoryRepository storyRepository;
-    private readonly IUpdateDataService updateDataService;
-    private readonly ILogger<CharaController> logger;
-    private readonly IMapper mapper;
-    private readonly IMissionProgressionService missionProgressionService;
-    private readonly IPaymentService paymentService;
-    private readonly IRewardService rewardService;
-
-    public CharaController(
-        IUserDataRepository userDataRepository,
-        IUnitRepository unitRepository,
-        IInventoryRepository inventoryRepository,
-        IStoryRepository storyRepository,
-        IUpdateDataService updateDataService,
-        ILogger<CharaController> logger,
-        IMapper mapper,
-        IMissionProgressionService missionProgressionService,
-        IPaymentService paymentService,
-        IRewardService rewardService
-    )
-    {
-        this.userDataRepository = userDataRepository;
-        this.unitRepository = unitRepository;
-        this.inventoryRepository = inventoryRepository;
-        this.storyRepository = storyRepository;
-        this.updateDataService = updateDataService;
-        this.logger = logger;
-        this.mapper = mapper;
-        this.missionProgressionService = missionProgressionService;
-        this.paymentService = paymentService;
-        this.rewardService = rewardService;
-    }
-
     [Route("awake")]
     [HttpPost]
     public async Task<DragaliaResult> Awake([FromBody] CharaAwakeRequest request)
@@ -76,7 +53,7 @@ public class CharaController : DragaliaControllerBase
         switch (request.next_rarity)
         {
             case 4:
-                await this.paymentService.ProcessPayment(
+                await paymentService.ProcessPayment(
                     data.AwakeNeedEntityType4.ToPaymentType(),
                     expectedPrice: data.AwakeNeedEntityQuantity4
                 );
@@ -84,7 +61,7 @@ public class CharaController : DragaliaControllerBase
                 playerCharData.AttackBase += (ushort)(data.MinAtk4 - data.MinAtk3);
                 break;
             case 5:
-                await this.paymentService.ProcessPayment(
+                await paymentService.ProcessPayment(
                     data.AwakeNeedEntityType5.ToPaymentType(),
                     expectedPrice: data.AwakeNeedEntityQuantity5
                 );
@@ -102,7 +79,7 @@ public class CharaController : DragaliaControllerBase
 
         //TODO Get and update missions relating to promoting characters
 
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
+        resp.update_data_list = await updateDataService.SaveChangesAsync();
 
         return Ok(resp);
     }
@@ -138,18 +115,18 @@ public class CharaController : DragaliaControllerBase
                 );
             }
 
-            await this.paymentService.ProcessPayment(mat.id, mat.quantity);
+            await paymentService.ProcessPayment(mat.id, mat.quantity);
         }
 
-        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+        DbPlayerCharaData playerCharData = await unitRepository.Charas.FirstAsync(
             chara => chara.CharaId == request.chara_id
         );
 
         Dictionary<int, int> usedMaterials = new();
         CharaLevelUp(request.material_list, ref playerCharData, ref usedMaterials);
 
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
-        resp.entity_result = this.rewardService.GetEntityResult();
+        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.entity_result = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -160,7 +137,7 @@ public class CharaController : DragaliaControllerBase
         ref Dictionary<int, int> usedMaterials
     )
     {
-        this.logger.LogDebug("Leveling up chara {@chara}", playerCharData);
+        logger.LogDebug("Leveling up chara {@chara}", playerCharData);
         //TODO: For now we'll trust the client to not allow leveling up/enhancing beyond allowed limits
         byte maxLevel = (byte)(
             CharaConstants.GetMaxLevelFor(playerCharData.Rarity) + playerCharData.AdditionalMaxLevel
@@ -192,7 +169,7 @@ public class CharaController : DragaliaControllerBase
                     for (int i = 0; i < materialList.quantity; i++)
                     {
                         // HACK (TODO: We need a mission progression refactor)
-                        this.missionProgressionService.OnCharacterBuildup(PlusCountType.Atk);
+                        missionProgressionService.OnCharacterBuildup(PlusCountType.Atk);
                     }
 
                     break;
@@ -205,7 +182,7 @@ public class CharaController : DragaliaControllerBase
                     for (int i = 0; i < materialList.quantity; i++)
                     {
                         // HACK (TODO: We need a mission progression refactor)
-                        this.missionProgressionService.OnCharacterBuildup(PlusCountType.Hp);
+                        missionProgressionService.OnCharacterBuildup(PlusCountType.Hp);
                     }
 
                     break;
@@ -282,7 +259,7 @@ public class CharaController : DragaliaControllerBase
                 Math.Ceiling((atkStep * (playerCharData.Level - lvlBase)) + atkBase);
         }
 
-        this.logger.LogDebug("New char data: {@chara}", playerCharData);
+        logger.LogDebug("New char data: {@chara}", playerCharData);
     }
 
     [Route("reset_plus_count")]
@@ -291,7 +268,7 @@ public class CharaController : DragaliaControllerBase
         [FromBody] CharaResetPlusCountRequest request
     )
     {
-        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+        DbPlayerCharaData playerCharData = await unitRepository.Charas.FirstAsync(
             chara => chara.CharaId == request.chara_id
         );
 
@@ -317,19 +294,15 @@ public class CharaController : DragaliaControllerBase
                 );
         }
 
-        await this.paymentService.ProcessPayment(
+        await paymentService.ProcessPayment(
             PaymentTypes.Coin,
             expectedPrice: CharaConstants.AugmentResetCost * plusCount
         );
-        await this.rewardService.GrantReward(
-            new Entity(EntityTypes.Material, (int)material, plusCount)
-        );
+        await rewardService.GrantReward(new Entity(EntityTypes.Material, (int)material, plusCount));
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return Ok(
-            new CharaResetPlusCountData(updateDataList, this.rewardService.GetEntityResult())
-        );
+        return Ok(new CharaResetPlusCountData(updateDataList, rewardService.GetEntityResult()));
     }
 
     [Route("buildup_mana")]
@@ -338,9 +311,9 @@ public class CharaController : DragaliaControllerBase
     {
         CharaBuildupManaData resp = new();
 
-        this.logger.LogDebug("Received mana node request {@request}", request);
+        logger.LogDebug("Received mana node request {@request}", request);
 
-        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+        DbPlayerCharaData playerCharData = await unitRepository.Charas.FirstAsync(
             chara => chara.CharaId == request.chara_id
         );
 
@@ -352,8 +325,8 @@ public class CharaController : DragaliaControllerBase
 
         //TODO: Party power calculation call
 
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
-        resp.entity_result = this.rewardService.GetEntityResult();
+        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.entity_result = rewardService.GetEntityResult();
 
         return this.Ok(resp);
     }
@@ -364,14 +337,14 @@ public class CharaController : DragaliaControllerBase
     {
         CharaBuildupData resp = new();
 
-        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+        DbPlayerCharaData playerCharData = await unitRepository.Charas.FirstAsync(
             chara => chara.CharaId == request.chara_id
         );
 
         await LimitBreakChara(playerCharData, (byte)request.next_limit_break_count);
 
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
-        resp.entity_result = this.rewardService.GetEntityResult();
+        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.entity_result = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -384,7 +357,7 @@ public class CharaController : DragaliaControllerBase
     {
         CharaLimitBreakAndBuildupManaData resp = new();
 
-        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+        DbPlayerCharaData playerCharData = await unitRepository.Charas.FirstAsync(
             chara => chara.CharaId == request.chara_id
         );
 
@@ -399,8 +372,8 @@ public class CharaController : DragaliaControllerBase
             );
         }
 
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
-        resp.entity_result = this.rewardService.GetEntityResult();
+        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.entity_result = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -413,7 +386,7 @@ public class CharaController : DragaliaControllerBase
     {
         CharaBuildupPlatinumData resp = new();
 
-        DbPlayerCharaData playerCharaData = await this.unitRepository.Charas.FirstAsync(
+        DbPlayerCharaData playerCharaData = await unitRepository.Charas.FirstAsync(
             chara => chara.CharaId == request.chara_id
         );
 
@@ -450,8 +423,8 @@ public class CharaController : DragaliaControllerBase
             CharaUpgradeMaterialTypes.Omnicite
         );
 
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
-        resp.entity_result = this.rewardService.GetEntityResult();
+        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.entity_result = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -460,7 +433,7 @@ public class CharaController : DragaliaControllerBase
     {
         CharaData data = MasterAsset.CharaData[charaData.CharaId];
 
-        this.logger.LogDebug(
+        logger.LogDebug(
             "Limit-breaking chara {charaId} to {limitBreakNum}",
             data.Id,
             limitBreakNum
@@ -478,23 +451,17 @@ public class CharaController : DragaliaControllerBase
         foreach ((Materials id, int quantity) in orbs)
         {
             if (id != Materials.Empty)
-                await this.paymentService.ProcessPayment(id, quantity);
+                await paymentService.ProcessPayment(id, quantity);
         }
 
         if (uniqueGrowMaterial1 > 0)
         {
-            await this.paymentService.ProcessPayment(
-                data.UniqueGrowMaterialId1,
-                uniqueGrowMaterial1
-            );
+            await paymentService.ProcessPayment(data.UniqueGrowMaterialId1, uniqueGrowMaterial1);
         }
 
         if (uniqueGrowMaterial2 > 0)
         {
-            await this.paymentService.ProcessPayment(
-                data.UniqueGrowMaterialId2,
-                uniqueGrowMaterial2
-            );
+            await paymentService.ProcessPayment(data.UniqueGrowMaterialId2, uniqueGrowMaterial2);
         }
 
         // GrowMaterial is always 1 but unused?
@@ -518,7 +485,9 @@ public class CharaController : DragaliaControllerBase
         if (!manaNodes.Any())
             return;
 
-        this.logger.LogDebug("Pre-upgrade CharaData: {@charaData}", playerCharData);
+        DateTimeOffset time = dateTimeProvider.UtcNow;
+
+        logger.LogDebug("Pre-upgrade CharaData: {@charaData}", playerCharData);
 
         CharaData charaData = MasterAsset.CharaData[playerCharData.CharaId];
 
@@ -572,11 +541,11 @@ public class CharaController : DragaliaControllerBase
 
         SortedSet<int> nodes = playerCharData.ManaCirclePieceIdList;
 
-        this.logger.LogInformation("Unlocking nodes {@nodes}", manaNodes);
+        logger.LogInformation("Unlocking nodes {@nodes}", manaNodes);
 
         foreach (int nodeNr in manaNodes)
         {
-            this.logger.LogTrace("Node: {nodeNr}", nodeNr);
+            logger.LogTrace("Node: {nodeNr}", nodeNr);
 
             if (manaNodeInfos.Count < nodeNr)
             {
@@ -668,7 +637,7 @@ public class CharaController : DragaliaControllerBase
                     playerCharData.ExAbility2Level++;
                     break;
                 case ManaNodeTypes.Mat:
-                    await this.rewardService.GrantReward(
+                    await rewardService.GrantReward(
                         new Entity(EntityTypes.Material, (int)Materials.DamascusCrystal)
                     );
                     break;
@@ -713,7 +682,7 @@ public class CharaController : DragaliaControllerBase
             if (isUseSpecialMaterial == CharaUpgradeMaterialTypes.Omnicite)
                 continue;
 
-            await this.paymentService.ProcessPayment(
+            await paymentService.ProcessPayment(
                 PaymentTypes.ManaPoint,
                 expectedPrice: manaNodeInfo.NecessaryManaPoint
             );
@@ -721,7 +690,7 @@ public class CharaController : DragaliaControllerBase
             // they smoked some shit
             if (manaNodeInfo.UniqueGrowMaterialCount1 > 0)
             {
-                await this.paymentService.ProcessPayment(
+                await paymentService.ProcessPayment(
                     charaData.UniqueGrowMaterialId1,
                     manaNodeInfo.UniqueGrowMaterialCount1
                 );
@@ -729,15 +698,20 @@ public class CharaController : DragaliaControllerBase
 
             if (manaNodeInfo.UniqueGrowMaterialCount2 > 0)
             {
-                await this.paymentService.ProcessPayment(
+                await paymentService.ProcessPayment(
                     charaData.UniqueGrowMaterialId2,
                     manaNodeInfo.UniqueGrowMaterialCount2
                 );
             }
 
-            if (manaNodeInfo.GrowMaterialCount > 0 && charaData.GrowMaterialId != Materials.Empty)
+            if (
+                charaData.GrowMaterialOnlyStartDate <= time
+                && charaData.GrowMaterialOnlyEndDate >= time
+                && manaNodeInfo.GrowMaterialCount > 0
+                && charaData.GrowMaterialId != Materials.Empty
+            )
             {
-                await this.paymentService.ProcessPayment(
+                await paymentService.ProcessPayment(
                     charaData.GrowMaterialId,
                     manaNodeInfo.GrowMaterialCount
                 );
@@ -754,7 +728,7 @@ public class CharaController : DragaliaControllerBase
             {
                 if (material.DewPoint > 0)
                 {
-                    await this.paymentService.ProcessPayment(
+                    await paymentService.ProcessPayment(
                         PaymentTypes.DewPoint,
                         expectedPrice: material.DewPoint
                     );
@@ -763,7 +737,7 @@ public class CharaController : DragaliaControllerBase
                 foreach ((Materials id, int quantity) in material.NeededMaterials)
                 {
                     if (id != Materials.Empty)
-                        await this.paymentService.ProcessPayment(id, quantity);
+                        await paymentService.ProcessPayment(id, quantity);
                 }
 
                 ManaPieceType pieceType = MasterAsset.ManaPieceType[manaNodeInfo.ManaPieceType];
@@ -772,7 +746,7 @@ public class CharaController : DragaliaControllerBase
                 {
                     if (type == EntityTypes.Material)
                     {
-                        await this.paymentService.ProcessPayment((Materials)id, quantity);
+                        await paymentService.ProcessPayment((Materials)id, quantity);
                     }
                 }
             }
@@ -782,15 +756,15 @@ public class CharaController : DragaliaControllerBase
 
         if (manaNodes.Contains(50))
         {
-            this.logger.LogDebug("Applying 50MC bonus");
+            logger.LogDebug("Applying 50MC bonus");
             playerCharData.HpNode += (ushort)charaData.McFullBonusHp5;
             playerCharData.AttackNode += (ushort)charaData.McFullBonusAtk5;
         }
 
         playerCharData.ManaCirclePieceIdList = nodes;
-        this.logger.LogDebug("New CharaData: {@charaData}", playerCharData);
+        logger.LogDebug("New CharaData: {@charaData}", playerCharData);
 
-        this.logger.LogDebug(
+        logger.LogDebug(
             "New bitmask: {bitmask}",
             Convert.ToString(playerCharData.ManaNodeUnlockCount, 2)
         );
@@ -804,7 +778,7 @@ public class CharaController : DragaliaControllerBase
     {
         CharaUnlockEditSkillData resp = new();
 
-        DbPlayerCharaData playerCharData = await this.unitRepository.Charas.FirstAsync(
+        DbPlayerCharaData playerCharData = await unitRepository.Charas.FirstAsync(
             chara => chara.CharaId == request.chara_id
         );
 
@@ -825,12 +799,12 @@ public class CharaController : DragaliaControllerBase
         Materials usedMat = UpgradeMaterials.tomes[charData.ElementalType];
         int usedMatCount = charData.EditSkillCost;
 
-        await this.paymentService.ProcessPayment(usedMat, usedMatCount);
+        await paymentService.ProcessPayment(usedMat, usedMatCount);
 
         playerCharData.IsUnlockEditSkill = true;
 
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
-        resp.entity_result = this.rewardService.GetEntityResult();
+        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.entity_result = rewardService.GetEntityResult();
 
         return Ok(resp);
     }
@@ -945,7 +919,7 @@ public class CharaController : DragaliaControllerBase
                 )
         };
 
-        UpdateDataList ul = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList ul = await updateDataService.SaveChangesAsync();
         ul.chara_unit_set_list = new List<CharaUnitSetList> { setList };
         return Ok(new CharaSetCharaUnitSetData() { update_data_list = ul, entity_result = null });
     }
