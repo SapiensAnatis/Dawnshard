@@ -24,7 +24,6 @@ public class DungeonRecordControllerTest
     private readonly DungeonRecordController dungeonRecordController;
     private readonly Mock<IQuestRepository> mockQuestRepository;
     private readonly Mock<IDungeonService> mockDungeonService;
-    private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<ITutorialService> mockTutorialService;
@@ -86,22 +85,6 @@ public class DungeonRecordControllerTest
         this.mockTutorialService
             .Setup(x => x.AddTutorialFlag(1022))
             .ReturnsAsync(new List<int> { 1022 });
-
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>()
-                {
-                    new()
-                    {
-                        DeviceAccountId = DeviceAccountId,
-                        Name = "Euden",
-                        ViewerId = 1
-                    }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
 
         this.mockInventoryRepository
             .Setup(x => x.UpdateQuantity(It.IsAny<IEnumerable<KeyValuePair<Materials, int>>>()))
@@ -200,7 +183,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -295,7 +277,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -391,7 +372,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -501,7 +481,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -612,7 +591,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -726,7 +704,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -826,7 +803,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
