@@ -1,0 +1,25 @@
+﻿@using DragaliaAPI.Shared.MasterAsset.Models
+@using DragaliaAPI.Features.Dungeon
+@inject IQuestEnemyService QuestEnemyService
+
+<MudStack Class="pa-3">
+    <MudText>Quest ID: @Quest.Id</MudText>
+    <MudText>Quest Type: @Quest.DungeonType</MudText>
+    <MudText>Quest Difficulty: @Quest.Difficulty</MudText>
+    <MudText>Quest Variation: @Quest.VariationType</MudText>
+    <MudText>Quest Enemy Count: @EnemyCount</MudText>
+</MudStack>
+
+@code {
+    [Parameter]
+    public QuestData Quest { get; set; }
+
+    private int EnemyCount;
+
+    protected override void OnInitialized()
+    {
+        EnemyCount = QuestEnemyService.BuildQuestEnemyList(Quest.Id, 0).Count();
+        base.OnInitialized();
+    }
+
+}

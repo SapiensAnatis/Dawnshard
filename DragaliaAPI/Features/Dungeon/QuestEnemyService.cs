@@ -41,8 +41,17 @@ public class QuestEnemyService : IQuestEnemyService
     public IEnumerable<AtgenEnemy> BuildQuestEnemyList(int questId, int areaNum)
     {
         List<AtgenEnemy> enemyList = this.GetEnemyList(questId, areaNum).ToList();
-        IEnumerable<Materials> possibleDrops = this.dropService.GetDrops(questId);
+        IEnumerable<Materials> possibleDrops = this.dropService.GetDrops(questId).ToList();
+        var dropRarityDict = possibleDrops
+            .ToLookup(x => MasterAsset.MaterialData[x].MaterialRarity, x => x)
+            .ToDictionary(x => x.Key, x => x.ToList());
+
         QuestData questData = MasterAsset.QuestData[questId];
+
+        int dropAmount = Random.Shared.Next(
+            (int)Math.Floor(questData.PayStaminaSingle * 0.66f),
+            questData.PayStaminaSingle
+        );
 
         if (
             !MasterAsset.QuestGroupMultiplier.TryGetValue(
@@ -59,6 +68,34 @@ public class QuestEnemyService : IQuestEnemyService
         double difficultyCoeff = Math.Max(questData.Difficulty / 1000, Math.E);
         double difficultyMultiplier = Math.Log(difficultyCoeff);
 
+        Dictionary<Materials, int> drops = new();
+
+        for (int i = 0; i < dropAmount; i++)
+        {
+            int roll = Random.Shared.Next(100);
+
+            List<Materials> pool = dropRarityDict.Values.First();
+
+            if (
+                roll > 75
+                && dropRarityDict.TryGetValue(MaterialRarities.Uncommon, out List<Materials>? value)
+            )
+                pool = value;
+            if (roll > 90 && dropRarityDict.TryGetValue(MaterialRarities.Rare, out value))
+                pool = value;
+            if (roll > 99 && dropRarityDict.TryGetValue(MaterialRarities.VeryRare, out value))
+                pool = value;
+
+            Materials drop = pool[Random.Shared.Next(pool.Count - 1)];
+            if (drops.ContainsKey(drop))
+                drops[drop]++;
+            else
+                drops[drop] = 1;
+        }
+
+        int remainingDropCount = drops.Sum(x => x.Value);
+        int remainingEnemyCount = enemyList.Count;
+
         foreach (AtgenEnemy enemy in enemyList)
         {
             enemy.enemy_drop_list = GenerateEnemyDrop(
@@ -69,7 +106,101 @@ public class QuestEnemyService : IQuestEnemyService
             );
         }
 
+        AssignDropsToEnemies(
+            enemyList.Where(x => MasterAsset.EnemyParam[x.param_id].Tough == Toughness.Boss),
+            true,
+            0.5
+        );
+        AssignDropsToEnemies(
+            enemyList.Where(x => MasterAsset.EnemyParam[x.param_id].Tough == Toughness.Menace),
+            true,
+            0.25
+        );
+        AssignDropsToEnemies(
+            enemyList.Where(
+                x =>
+                    MasterAsset.EnemyParam[x.param_id].Tough
+                        is not (Toughness.Boss or Toughness.Menace)
+            )
+        );
+
         return enemyList;
+
+        void AssignDropsToEnemies(
+            IEnumerable<AtgenEnemy> enemies,
+            bool skipChance = false,
+            double minPercentage = double.NaN
+        )
+        {
+            foreach (AtgenEnemy enemy in enemies)
+            {
+                AssignDropsToEnemy(enemy, skipChance, minPercentage);
+            }
+        }
+
+        void AssignDropsToEnemy(
+            AtgenEnemy enemy,
+            bool skipChance = false,
+            double minPercentage = double.NaN
+        )
+        {
+            if (remainingDropCount == 0)
+                return;
+
+            List<AtgenDropList> enemyDrops = new();
+
+            if (
+                skipChance
+                || (Random.Shared.NextDouble() < 1d / remainingEnemyCount && remainingDropCount > 0)
+            )
+            {
+                Dictionary<Materials, int> currentDrops = new();
+
+                int minCount = Math.Max(
+                    (int)
+                        Math.Ceiling(
+                            double.IsNaN(minPercentage) ? 1 : remainingDropCount * minPercentage
+                        ),
+                    1
+                );
+                int amountToDrop = Random.Shared.Next(minCount, remainingDropCount);
+                for (int i = 0; i < amountToDrop; i++)
+                {
+                    Materials element = Random.Shared.NextElement(drops.ToList()).Key;
+                    if (drops[element] == 1)
+                        drops.Remove(element);
+                    else
+                        drops[element]--;
+
+                    if (currentDrops.ContainsKey(element))
+                        currentDrops[element]++;
+                    else
+                        currentDrops[element] = 1;
+
+                    remainingDropCount--;
+                }
+
+                enemyDrops.AddRange(
+                    currentDrops.Select(
+                        x => new AtgenDropList(EntityTypes.Material, (int)x.Key, x.Value, 0)
+                    )
+                );
+            }
+
+            remainingEnemyCount--;
+
+            if (remainingEnemyCount == 0 && drops.Count > 0)
+            {
+                enemyDrops.AddRange(
+                    drops.Select(
+                        x => new AtgenDropList(EntityTypes.Material, (int)x.Key, x.Value, 0)
+                    )
+                );
+                drops.Clear();
+            }
+
+            enemy.enemy_drop_list.First().drop_list = enemyDrops;
+        }
     }
 
     private IEnumerable<EnemyDropList> GenerateEnemyDrop(
@@ -107,11 +238,11 @@ public class QuestEnemyService : IQuestEnemyService
                     toughnessMultiplier * dropMultiplier.RupieMultiplier,
                     coinPower
                 ),
-                drop_list = GenerateMaterialDrops(
-                    possibleDrops,
-                    toughnessMultiplier * difficultyMultiplier,
-                    dropMultiplier
-                )
+                //drop_list = GenerateMaterialDrops(
+                //    possibleDrops,
+                //    toughnessMultiplier * difficultyMultiplier,
+                //    dropMultiplier
+                //)
             }
         };
     }

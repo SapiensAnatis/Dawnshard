@@ -1,0 +1,118 @@
+﻿@page "/EnemyVisualizer"
+@using DragaliaAPI.Features.Dungeon
+@using DragaliaAPI.Shared.MasterAsset
+@using DragaliaAPI.Shared.MasterAsset.Models
+@inject IOddsInfoService OddsInfoService
+
+<PageTitle>EnemyVisualizer</PageTitle>
+
+<div>
+    <MudStack>
+        <MudText Align="Align.Center" Typo="Typo.h6">Total item drop count</MudText>
+        <MudChart ChartType="ChartType.Bar" ChartSeries="@DataPoints" ChartOptions="@Options" @bind-SelectedIndex="Index" Width="100%" Height="350px"/>
+    </MudStack>
+</div>
+<div>
+    <MudExpansionPanels>
+        <MudExpansionPanel Text="Chart Options">
+            <MudSlider @bind-Value="Options.YAxisTicks" Step="50" TickMarks="true" ValueLabel="true" Max="1000" Min="0" Variant="Variant.Filled">Y-Axis Ticks</MudSlider>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+    <MudNumericField @bind-Value="QuestId1" Label="Quest ID 1" Variant="Variant.Outlined"/>
+    <MudNumericField @bind-Value="QuestId2" Label="Quest ID 2" Variant="Variant.Outlined"/>
+    <MudNumericField @bind-Value="QuestId3" Label="Quest ID 3" Variant="Variant.Outlined"/>
+    <MudButton Variant="Variant.Filled" Color="Color.Success" FullWidth="true" OnClick="CalculateDrops">Calculate drops</MudButton>
+    <MudStack Row="true">
+        @if (QuestData1 != null)
+        {
+            <QuestInfo Quest="QuestData1"/>
+        }
+        @if (QuestData2 != null)
+        {
+            <QuestInfo Quest="QuestData2"/>
+        }
+        @if (QuestData3 != null)
+        {
+            <QuestInfo Quest="QuestData3"/>
+        }
+    </MudStack>
+</div>
+
+@code {
+    public int Index { get; set; }
+
+    public int QuestId1 { get; set; } = 222190103;
+    public int QuestId2 { get; set; } = 208160302;
+    public int QuestId3 { get; set; } = 100240101;
+
+    public QuestData? QuestData1 { get; set; }
+    public QuestData? QuestData2 { get; set; }
+    public QuestData? QuestData3 { get; set; }
+
+    public ChartOptions Options { get; set; } = new()
+    {
+        YAxisTicks = 500,
+        MaxNumYAxisTicks = 10
+    };
+
+    public List<ChartSeries> DataPoints { get; set; } = new();
+
+    private async Task CalculateDrops()
+    {
+        ChartSeries GenerateChartSeries(int questId, int amount = 5)
+        {
+            var cumulative = 0L;
+            var totalList = new List<double>();
+
+            for (int i = 0; i < amount; i++)
+            {
+                var odds = OddsInfoService.GetOddsInfo(questId, 0).enemy.ToList();
+                var enemyCount = odds.Count;
+                var drops = odds.SelectMany(x => x.enemy_drop_list).ToList();
+                var dropCount = drops.Count;
+                var allDroppedItems = drops.SelectMany(x => x.drop_list).ToList();
+                var allItemsCount = allDroppedItems.Count;
+                var totalItemAmount = allDroppedItems.Sum(x => x.quantity);
+                cumulative += totalItemAmount;
+                totalList.Add(totalItemAmount);
+            }
+
+            return new ChartSeries()
+            {
+                Name = questId.ToString(),
+                Data = totalList.ToArray()
+            };
+        }
+
+        var list = new List<ChartSeries>();
+        if (QuestId1 != 0)
+        {
+            list.Add(GenerateChartSeries(QuestId1));
+            QuestData1 = MasterAsset.QuestData[QuestId1];
+        }
+        else
+        {
+            QuestData1 = null;
+        }
+        if (QuestId2 != 0)
+        {
+            list.Add(GenerateChartSeries(QuestId2));
+            QuestData2 = MasterAsset.QuestData[QuestId2];
+        }
+        else
+        {
+            QuestData2 = null;
+        }
+        if (QuestId3 != 0)
+        {
+            list.Add(GenerateChartSeries(QuestId3));
+            QuestData3 = MasterAsset.QuestData[QuestId3];
+        }
+        else
+        {
+            QuestData3 = null;
+        }
+        DataPoints = list;
+        //Options.YAxisTicks = CurrentSpacing;
+    }
+}
