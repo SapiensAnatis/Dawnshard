@@ -28,6 +28,7 @@ using DragaliaAPI.Features.Login;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.Item;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -168,7 +169,10 @@ builder.Services
     .AddScoped<IEventDropService, EventDropService>()
     // Clear party feature
     .AddScoped<IClearPartyRepository, ClearPartyRepository>()
-    .AddScoped<IClearPartyService, ClearPartyService>();
+    .AddScoped<IClearPartyService, ClearPartyService>()
+    // Item feature
+    .AddScoped<IItemRepository, ItemRepository>()
+    .AddScoped<IItemService, ItemService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();
