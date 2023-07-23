@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
+﻿using DragaliaAPI.Features.Player;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -12,14 +11,10 @@ namespace DragaliaAPI.Features.Item;
 
 public class ItemService(
     IItemRepository itemRepository,
-    IUserDataRepository userDataRepository,
-    ILogger<ItemService> logger
+    ILogger<ItemService> logger,
+    IUserService userService
 ) : IItemService
 {
-    private const int MaxSingleStamina = 999;
-    private const int MaxMultiStamina = 99;
-    private const int MaxQuestSkipPoint = 400;
-
     public async Task<IEnumerable<ItemList>> GetItemList()
     {
         return (await itemRepository.Items.ToListAsync()).Select(
@@ -42,31 +37,18 @@ public class ItemService(
             totalQuantity += data.ItemEffectValue;
         }
 
-        DateTimeOffset time = DateTimeOffset.UtcNow;
-        DbPlayerUserData userData = await userDataRepository.GetUserDataAsync();
         switch (effect)
         {
             case UseItemEffect.None:
                 throw new DragaliaException(ResultCode.CommonInvalidArgument, "None UseItemEffect");
             case UseItemEffect.RecoverStamina:
-                userData.StaminaSingle = Math.Min(
-                    MaxSingleStamina,
-                    userData.StaminaSingle + totalQuantity
-                );
-                userData.LastStaminaSingleUpdateTime = time;
+                await userService.AddStamina(StaminaType.Single, totalQuantity);
                 break;
             case UseItemEffect.RecoverMulti:
-                userData.StaminaMulti = Math.Min(
-                    MaxMultiStamina,
-                    userData.StaminaMulti + totalQuantity
-                );
-                userData.LastStaminaMultiUpdateTime = time;
+                await userService.AddStamina(StaminaType.Multi, totalQuantity);
                 break;
             case UseItemEffect.QuestSkip:
-                userData.QuestSkipPoint = Math.Min(
-                    MaxQuestSkipPoint,
-                    userData.QuestSkipPoint + totalQuantity
-                );
+                await userService.AddQuestSkipPoint(totalQuantity);
                 break;
             default:
                 throw new DragaliaException(
