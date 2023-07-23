@@ -97,30 +97,6 @@ internal static class EventDataExtensions
         };
     }
 
-    public static int GetEventRewardItem(this EventData data)
-    {
-        return data.EventKindType switch
-        {
-            EventKindType.Build => (int)BuildEventItemType.BuildEventPoint,
-            EventKindType.Raid => (int)RaidEventItemType.SummonPoint,
-            EventKindType.Combat => (int)CombatEventItemType.EventPoint,
-            EventKindType.BattleRoyal => (int)BattleRoyalEventItemType.EventPoint,
-            EventKindType.Clb01 => (int)Clb01EventItemType.Clb01EventPoint,
-            EventKindType.Earn => (int)EarnEventItemType.EarnPoint,
-            EventKindType.ExHunter => (int)ExHunterEventItemType.SummonPoint,
-            /*
-            EventKindType.Collect
-                => Enum.GetValues<CollectEventItemType>().Where(x => x != 0).Cast<int>(),
-            EventKindType.ExRush
-                => Enum.GetValues<ExRushEventItemType>().Where(x => x != 0).Cast<int>(),
-            EventKindType.Simple
-                => Enum.GetValues<SimpleEventItemType>().Where(x => x != 0).Cast<int>(),*/
-            _
-                => 0 /* maybe 10101 */
-            ,
-        };
-    }
-
     public static IEnumerable<int> GetEventPassiveIds(this EventData data)
     {
         int eventId = data.Id;

@@ -68,10 +68,9 @@ public class EventService(
 
         List<AtgenBuildEventRewardEntityList> rewardEntities = new();
 
-        DbPlayerEventItem buildPointItem = await eventRepository.GetEventItemAsync(
-            eventId,
-            data.GetEventRewardItem()
-        );
+        Dictionary<int, int> eventItemQuantities = (
+            await eventRepository.GetEventItemsAsync(eventId)
+        ).ToDictionary(x => x.Id, x => x.Quantity);
 
         Dictionary<int, IEventReward> rewards = data.GetEventRewards();
 
@@ -84,7 +83,11 @@ public class EventService(
                 ? rewardIds.Select(x => rewards[x])
                 : rewards.Values
                     .ExceptBy(alreadyObtainedRewardIds, x => x.Id)
-                    .Where(x => buildPointItem.Quantity >= x.EventItemQuantity)
+                    .Where(
+                        x =>
+                            eventItemQuantities.ContainsKey(x.EventItemId)
+                            && eventItemQuantities[x.EventItemId] >= x.EventItemQuantity
+                    )
         ).ToList();
 
         if (availableRewards.Count == 0)

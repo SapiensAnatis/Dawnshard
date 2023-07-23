@@ -16,6 +16,8 @@ public class EarnEventController(
     ITradeService tradeService
 ) : DragaliaControllerBase
 {
+    // TODO: This is not fully implemented. However, no compendium event uses it.
+
     [HttpPost("get_event_data")]
     public async Task<DragaliaResult> GetEventData(EarnEventGetEventDataRequest request)
     {

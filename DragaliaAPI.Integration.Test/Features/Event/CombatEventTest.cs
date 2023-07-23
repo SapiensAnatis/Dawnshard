@@ -1,0 +1,111 @@
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
+using Microsoft.EntityFrameworkCore;
+
+namespace DragaliaAPI.Integration.Test.Features.Event;
+
+public class CombatEventTest : TestFixture
+{
+    public CombatEventTest(
+        CustomWebApplicationFactory<Program> factory,
+        ITestOutputHelper outputHelper
+    )
+        : base(factory, outputHelper) { }
+
+    private const int EventId = 22213;
+    private const string Prefix = "combat_event";
+
+    [Fact]
+    public async Task GetEventData_ReturnsEventData()
+    {
+        await Client.PostMsgpack<MemoryEventActivateData>(
+            "memory_event/activate",
+            new MemoryEventActivateRequest(EventId)
+        );
+
+        DragaliaResponse<CombatEventGetEventDataData> evtData =
+            await Client.PostMsgpack<CombatEventGetEventDataData>(
+                $"{Prefix}/get_event_data",
+                new CombatEventGetEventDataRequest(EventId)
+            );
+
+        evtData.data.combat_event_user_data.Should().NotBeNull();
+        evtData.data.user_event_location_reward_list.Should().NotBeNull();
+        evtData.data.event_reward_list.Should().NotBeNull();
+        evtData.data.event_trade_list.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task ReceiveEventRewards_ReturnsEventRewards()
+    {
+        await Client.PostMsgpack<MemoryEventActivateData>(
+            "memory_event/activate",
+            new MemoryEventActivateRequest(EventId)
+        );
+
+        DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
+            x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
+        );
+
+        pointItem.Quantity += 500;
+
+        ApiContext.PlayerEventRewards.RemoveRange(
+            ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId)
+        );
+
+        await ApiContext.SaveChangesAsync();
+
+        DragaliaResponse<CombatEventReceiveEventPointRewardData> evtResp =
+            await Client.PostMsgpack<CombatEventReceiveEventPointRewardData>(
+                $"{Prefix}/receive_event_point_reward",
+                new CombatEventReceiveEventPointRewardRequest(EventId)
+            );
+
+        evtResp.data.event_reward_entity_list.Should().NotBeNullOrEmpty();
+        evtResp.data.event_reward_list.Should().NotBeNullOrEmpty();
+        evtResp.data.entity_result.Should().NotBeNull();
+        evtResp.data.update_data_list.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task ReceiveEventLocationRewards_ReturnsEventLocationRewards()
+    {
+        await Client.PostMsgpack<MemoryEventActivateData>(
+            "memory_event/activate",
+            new MemoryEventActivateRequest(EventId)
+        );
+
+        DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
+            x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
+        );
+
+        pointItem.Quantity += 500;
+
+        ApiContext.PlayerQuests.RemoveRange(
+            ApiContext.PlayerQuests.Where(x => x.DeviceAccountId == DeviceAccountId)
+        );
+
+        ApiContext.PlayerQuests.Add(
+            new DbQuest
+            {
+                DeviceAccountId = DeviceAccountId,
+                QuestId = 222130103,
+                State = 3
+            }
+        );
+
+        await ApiContext.SaveChangesAsync();
+
+        DragaliaResponse<CombatEventReceiveEventLocationRewardData> evtResp =
+            await Client.PostMsgpack<CombatEventReceiveEventLocationRewardData>(
+                $"{Prefix}/receive_event_location_reward",
+                new CombatEventReceiveEventLocationRewardRequest(EventId, 2221302)
+            );
+
+        evtResp.data.event_location_reward_entity_list.Should().NotBeNullOrEmpty();
+        evtResp.data.user_event_location_reward_list.Should().NotBeNullOrEmpty();
+        evtResp.data.update_data_list.Should().NotBeNull();
+    }
+}
