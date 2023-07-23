@@ -52,7 +52,7 @@ public class ItemTest : TestFixture
             }
         );
 
-        var userData = await ApiContext.PlayerUserData.SingleAsync(
+        DbPlayerUserData userData = await ApiContext.PlayerUserData.SingleAsync(
             x => x.DeviceAccountId == DeviceAccountId
         );
 
