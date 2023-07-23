@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
@@ -17,46 +18,22 @@ using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Fort;
 
-public class FortService : IFortService
+public class FortService(
+    IFortRepository fortRepository,
+    IUserDataRepository userDataRepository,
+    IInventoryRepository inventoryRepository,
+    ILogger<FortService> logger,
+    IPlayerIdentityService playerIdentityService,
+    IMapper mapper,
+    IMissionProgressionService missionProgressionService,
+    IPaymentService paymentService,
+    IRewardService rewardService,
+    IOptionsMonitor<DragonfruitConfig> config,
+    IUserService userService
+) : IFortService
 {
     public const int MaximumCarpenterNum = 5;
-
-    private readonly IFortRepository fortRepository;
-    private readonly IInventoryRepository inventoryRepository;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly ILogger<FortService> logger;
-    private readonly IPlayerIdentityService playerIdentityService;
-    private readonly IMapper mapper;
-    private readonly IMissionProgressionService missionProgressionService;
-    private readonly IPaymentService paymentService;
-    private readonly IRewardService rewardService;
-    private readonly DragonfruitConfig config;
-
-    public FortService(
-        IFortRepository fortRepository,
-        IUserDataRepository userDataRepository,
-        IInventoryRepository inventoryRepository,
-        ILogger<FortService> logger,
-        IPlayerIdentityService playerIdentityService,
-        IMapper mapper,
-        IMissionProgressionService missionProgressionService,
-        IPaymentService paymentService,
-        IRewardService rewardService,
-        IOptionsMonitor<DragonfruitConfig> config
-    )
-    {
-        this.fortRepository = fortRepository;
-        this.userDataRepository = userDataRepository;
-        this.inventoryRepository = inventoryRepository;
-        this.logger = logger;
-        this.playerIdentityService = playerIdentityService;
-        this.mapper = mapper;
-        this.missionProgressionService = missionProgressionService;
-        this.paymentService = paymentService;
-        this.rewardService = rewardService;
-
-        this.config = config.CurrentValue;
-    }
+    private readonly DragonfruitConfig config = config.CurrentValue;
 
     public async Task<IEnumerable<BuildList>> GetBuildList()
     {
@@ -198,33 +175,33 @@ public class FortService : IFortService
 
         if (coinTotal != 0)
         {
-            await this.rewardService.GrantReward(new Entity(EntityTypes.Rupies, 1, coinTotal));
+            await rewardService.GrantReward(new Entity(EntityTypes.Rupies, 1, coinTotal));
         }
 
         if (normalTotal != 0)
         {
-            await this.rewardService.GrantReward(
+            await rewardService.GrantReward(
                 new Entity(EntityTypes.Material, (int)Materials.Dragonfruit, coinTotal)
             );
         }
 
         if (ripeTotal != 0)
         {
-            await this.rewardService.GrantReward(
+            await rewardService.GrantReward(
                 new Entity(EntityTypes.Material, (int)Materials.RipeDragonfruit, coinTotal)
             );
         }
 
         if (succulentTotal != 0)
         {
-            await this.rewardService.GrantReward(
+            await rewardService.GrantReward(
                 new Entity(EntityTypes.Material, (int)Materials.SucculentDragonfruit, coinTotal)
             );
         }
 
         if (staminaTotal != 0)
         {
-            // TODO: Add stamina
+            await userService.AddStamina(StaminaType.Single, staminaTotal);
         }
 
         resp.add_coin_list = coinList;
@@ -323,7 +300,7 @@ public class FortService : IFortService
         if (build.BuildStatus is not FortBuildStatus.Building)
             throw new InvalidOperationException($"This building is not currently being built.");
 
-        this.fortRepository.DeleteBuild(build);
+        fortRepository.DeleteBuild(build);
 
         return build;
     }
@@ -519,10 +496,7 @@ public class FortService : IFortService
         }
 
         // Remove resources from player
-        await this.paymentService.ProcessPayment(
-            PaymentTypes.Coin,
-            expectedPrice: plantDetail.Cost
-        );
+        await paymentService.ProcessPayment(PaymentTypes.Coin, expectedPrice: plantDetail.Cost);
         await inventoryRepository.UpdateQuantity(plantDetail.CreateMaterialMap.Invert());
     }
 
@@ -546,7 +520,7 @@ public class FortService : IFortService
     {
         List<FortPlants> ids = plantIds.ToList();
 
-        foreach (DbFortBuild build in await this.fortRepository.Builds.ToListAsync())
+        foreach (DbFortBuild build in await fortRepository.Builds.ToListAsync())
         {
             build.IsNew = ids.Contains(build.PlantId);
         }
@@ -555,7 +529,7 @@ public class FortService : IFortService
     public async Task ClearPlantNewStatuses(IEnumerable<long> buildIds)
     {
         foreach (
-            DbFortBuild build in await this.fortRepository.Builds
+            DbFortBuild build in await fortRepository.Builds
                 .Where(x => buildIds.Contains(x.BuildId))
                 .ToListAsync()
         )
@@ -570,7 +544,7 @@ public class FortService : IFortService
         int max = 0;
 
         foreach (
-            DbFortBuild build in await this.fortRepository.Builds
+            DbFortBuild build in await fortRepository.Builds
                 .Where(x => x.PlantId == FortPlants.RupieMine)
                 .ToListAsync()
         )
@@ -585,7 +559,7 @@ public class FortService : IFortService
 
     public async Task<AtgenProductionRp> GetDragonfruitProduction()
     {
-        DbFortBuild? build = await this.fortRepository.Builds.SingleOrDefaultAsync(
+        DbFortBuild? build = await fortRepository.Builds.SingleOrDefaultAsync(
             x => x.PlantId == FortPlants.Dragontree
         );
         if (build == null)
@@ -603,7 +577,7 @@ public class FortService : IFortService
 
     public async Task<AtgenProductionRp> GetStaminaProduction()
     {
-        DbFortBuild? build = await this.fortRepository.Builds.SingleOrDefaultAsync(
+        DbFortBuild? build = await fortRepository.Builds.SingleOrDefaultAsync(
             x => x.PlantId == FortPlants.TheHalidom
         );
         if (build == null)

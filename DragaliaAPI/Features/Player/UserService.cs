@@ -35,6 +35,8 @@ public class UserService(
         if (type == StaminaType.None)
             throw new ArgumentOutOfRangeException(nameof(type));
 
+        logger.LogDebug("Adding {staminaAmount}x {staminaType}", amount, type);
+
         DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
         DateTimeOffset time = dateTimeProvider.UtcNow;
 
@@ -66,6 +68,8 @@ public class UserService(
 
         if (type == StaminaType.None)
             throw new ArgumentOutOfRangeException(nameof(type));
+
+        logger.LogDebug("Removing {staminaAmount}x {staminaType}", amount, type);
 
         int currentStamina = await GetAndUpdateStamina(type);
         if (amount > currentStamina)
