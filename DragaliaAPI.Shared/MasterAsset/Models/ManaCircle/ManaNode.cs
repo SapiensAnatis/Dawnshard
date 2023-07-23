@@ -11,5 +11,6 @@ public record ManaNode(
     int UniqueGrowMaterialCount2,
     int GrowMaterialCount,
     [property: JsonPropertyName("MC_0")] int MC_0,
-    string ManaCircleName
+    string ManaCircleName,
+    int Step
 );
