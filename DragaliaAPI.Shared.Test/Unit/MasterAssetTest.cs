@@ -107,6 +107,7 @@ public class MasterAssetTest
                     UniqueGrowMaterialCount2: 0,
                     GrowMaterialCount: 1,
                     MC_0: 4032,
+                    Step: 1,
                     ManaCircleName: "MC_0403"
                 )
             );
@@ -214,6 +215,7 @@ public class MasterAssetTest
                     UniqueGrowMaterialCount2: 0,
                     GrowMaterialCount: 1,
                     MC_0: 5045,
+                    Step: 3,
                     ManaCircleName: "MC_0504"
                 )
             );
