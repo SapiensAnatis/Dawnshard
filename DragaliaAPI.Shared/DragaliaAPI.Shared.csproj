@@ -257,7 +257,6 @@
 
 	<ItemGroup>
 	  <Folder Include="MasterAsset\Models\Login\" />
-	  <Folder Include="MasterAsset\Models\Trade\" />
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties resources_4missions_4mainstorymissiongrouprewards_1json__JsonSchema="MainStoryMissionGroupRewards.schema.json" resources_4missions_4missionprogressioninfo_1json__JsonSchema="MissionProgressionInfo.schema.json" /></VisualStudio></ProjectExtensions>
