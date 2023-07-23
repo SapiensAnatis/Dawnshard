@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -32,6 +33,7 @@ public class DungeonRecordControllerTest
     private readonly Mock<IQuestCompletionService> mockQuestCompletionService;
     private readonly Mock<IEventDropService> mockEventDropService;
     private readonly Mock<IAbilityCrestMultiplierService> mockCrestMultiplierService;
+    private readonly Mock<IUserService> mockUserService;
 
     private const string dungeonKey = "key";
     private const int questId = 100010101;
@@ -58,6 +60,7 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService = new(MockBehavior.Strict);
         this.mockEventDropService = new(MockBehavior.Strict);
         this.mockCrestMultiplierService = new(MockBehavior.Strict);
+        this.mockUserService = new(MockBehavior.Loose); // yes loose
 
         this.dungeonRecordController = new(
             this.mockQuestRepository.Object,
@@ -71,7 +74,8 @@ public class DungeonRecordControllerTest
             this.mockQuestCompletionService.Object,
             this.mockEventDropService.Object,
             this.mockRewardService.Object,
-            this.mockCrestMultiplierService.Object
+            this.mockCrestMultiplierService.Object,
+            this.mockUserService.Object
         );
 
         this.dungeonRecordController.SetupMockContext();
