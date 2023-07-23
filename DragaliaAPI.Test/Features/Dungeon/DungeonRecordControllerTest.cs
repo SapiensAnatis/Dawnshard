@@ -5,6 +5,7 @@ using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -50,7 +51,6 @@ public class DungeonRecordControllerTest
     {
         this.mockQuestRepository = new(MockBehavior.Strict);
         this.mockDungeonService = new(MockBehavior.Strict);
-        this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Strict);
@@ -65,7 +65,6 @@ public class DungeonRecordControllerTest
         this.dungeonRecordController = new(
             this.mockQuestRepository.Object,
             this.mockDungeonService.Object,
-            this.mockUserDataRepository.Object,
             this.mockInventoryRepository.Object,
             this.mockUpdateDataService.Object,
             this.mockTutorialService.Object,

@@ -6,14 +6,13 @@ using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +23,6 @@ namespace DragaliaAPI.Features.Dungeon;
 public class DungeonRecordController(
     IQuestRepository questRepository,
     IDungeonService dungeonService,
-    IUserDataRepository userDataRepository,
     IInventoryRepository inventoryRepository,
     IUpdateDataService updateDataService,
     ITutorialService tutorialService,
@@ -40,7 +38,7 @@ public class DungeonRecordController(
     [HttpPost("record")]
     public async Task<DragaliaResult> Record(DungeonRecordRecordRequest request)
     {
-        return Ok(await BuildResponse(request.dungeon_key, request.play_record));
+        return Ok(await BuildResponse(request.dungeon_key, request.play_record, false));
     }
 
     [HttpPost("record_multi")]
@@ -49,7 +47,8 @@ public class DungeonRecordController(
     {
         DungeonRecordRecordData response = await BuildResponse(
             request.dungeon_key,
-            request.play_record
+            request.play_record,
+            true
         );
 
         response.ingame_result_data.play_type = QuestPlayType.Multi;
@@ -59,7 +58,8 @@ public class DungeonRecordController(
 
     private async Task<DungeonRecordRecordData> BuildResponse(
         string dungeonKey,
-        PlayRecord playRecord
+        PlayRecord playRecord,
+        bool isMulti
     )
     {
         // TODO: Turn this method into a service call
@@ -73,6 +73,33 @@ public class DungeonRecordController(
         );
 
         bool isFirstClear = oldQuestData is null || oldQuestData?.PlayCount == 0;
+
+        if (
+            !isFirstClear && (playRecord.is_clear == 1 || session.QuestData.IsPayForceStaminaSingle)
+        )
+        {
+            // TODO: Campaign support
+
+            StaminaType type = StaminaType.None;
+            int amount = 0;
+
+            if (isMulti)
+            {
+                if (session.IsHost)
+                {
+                    type = StaminaType.Multi;
+                    amount = session.QuestData.PayStaminaMulti;
+                }
+            }
+            else
+            {
+                type = StaminaType.Single;
+                amount = session.QuestData.PayStaminaSingle;
+            }
+
+            if (type != StaminaType.None && amount != 0)
+                await userService.RemoveStamina(type, amount);
+        }
 
         float clear_time = playRecord?.time ?? -1.0f;
 
@@ -207,7 +234,11 @@ public class DungeonRecordController(
         await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
         await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
 
-        int experience = (int)Math.Floor(session.QuestData.PayStaminaSingle * 10d);
+        // Constant for quests with no stamina usage, wip?
+        int staminaExpAmount =
+            session.QuestData.PayStaminaSingle == 0 ? 15 : session.QuestData.PayStaminaSingle;
+
+        int experience = (int)Math.Floor(staminaExpAmount * 10d);
         PlayerLevelResult playerLevelResult = await userService.AddExperience(experience); // TODO: Exp boost
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();

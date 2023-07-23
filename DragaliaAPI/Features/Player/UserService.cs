@@ -1,15 +1,19 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Diagnostics;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.User;
 
 namespace DragaliaAPI.Features.Player;
 
-public class UserService(IUserDataRepository userDataRepository, ILogger<UserService> logger)
-    : IUserService
+public class UserService(
+    IUserDataRepository userDataRepository,
+    ILogger<UserService> logger,
+    IDateTimeProvider dateTimeProvider
+) : IUserService
 {
     private const int MaxSingleStamina = 999;
     private const int MaxMultiStamina = 99;
@@ -32,7 +36,7 @@ public class UserService(IUserDataRepository userDataRepository, ILogger<UserSer
             throw new ArgumentOutOfRangeException(nameof(type));
 
         DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
-        DateTimeOffset time = DateTimeOffset.UtcNow;
+        DateTimeOffset time = dateTimeProvider.UtcNow;
 
         switch (type)
         {
@@ -50,6 +54,111 @@ public class UserService(IUserDataRepository userDataRepository, ILogger<UserSer
                     "Invalid stamina type"
                 );
         }
+    }
+
+    public async Task RemoveStamina(StaminaType type, int amount)
+    {
+        if (amount < 0)
+            throw new ArgumentOutOfRangeException(nameof(amount));
+
+        if (amount == 0)
+            return;
+
+        if (type == StaminaType.None)
+            throw new ArgumentOutOfRangeException(nameof(type));
+
+        int currentStamina = await GetAndUpdateStamina(type);
+        if (amount > currentStamina)
+            throw new DragaliaException(ResultCode.QuestStaminaMultiShort, "Not enough stamina");
+
+        DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
+
+        switch (type)
+        {
+            case StaminaType.Single:
+                data.StaminaSingle -= amount;
+                break;
+            case StaminaType.Multi:
+                data.StaminaMulti -= amount;
+                break;
+            default:
+                throw new DragaliaException(
+                    ResultCode.CommonInvalidArgument,
+                    "Invalid stamina type"
+                );
+        }
+    }
+
+    public async Task<int> GetAndUpdateStamina(StaminaType type)
+    {
+        if (type is not (StaminaType.Single or StaminaType.Multi))
+            throw new ArgumentOutOfRangeException(nameof(type));
+
+        DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
+
+        DateTimeOffset lastUpdatedTime;
+        int secondsToRegenOne;
+        int maxStamina;
+        int currentStamina;
+
+        switch (type)
+        {
+            case StaminaType.Single:
+                currentStamina = data.StaminaSingle;
+                maxStamina = MasterAsset.UserLevel[data.Level].StaminaSingle;
+                secondsToRegenOne = 6 * 60; // 6 Minutes
+                lastUpdatedTime = data.LastStaminaSingleUpdateTime;
+                break;
+            case StaminaType.Multi:
+                currentStamina = data.StaminaMulti;
+                maxStamina = 12;
+                secondsToRegenOne = 1 * 60 * 60; // 1 Hour
+                lastUpdatedTime = data.LastStaminaMultiUpdateTime;
+                break;
+            default:
+                throw new UnreachableException();
+        }
+
+        if (currentStamina > maxStamina)
+        {
+            return currentStamina;
+        }
+
+        DateTimeOffset currentTime = dateTimeProvider.UtcNow;
+
+        long nowSeconds = currentTime.ToUnixTimeSeconds();
+        long lastUpdatedSeconds = lastUpdatedTime.ToUnixTimeSeconds();
+
+        // Rounding to last stamina increase
+        DateTimeOffset lastReset = DateTimeOffset.FromUnixTimeSeconds(
+            nowSeconds - (nowSeconds % secondsToRegenOne)
+        );
+        DateTimeOffset lastUpdatedReset = DateTimeOffset.FromUnixTimeSeconds(
+            lastUpdatedSeconds - (lastUpdatedSeconds % secondsToRegenOne)
+        );
+
+        while (
+            lastReset >= lastUpdatedReset.AddSeconds(secondsToRegenOne)
+            && maxStamina > currentStamina
+        )
+        {
+            lastUpdatedReset = lastUpdatedReset.AddSeconds(secondsToRegenOne);
+            currentStamina++;
+        }
+
+        switch (type)
+        {
+            case StaminaType.Single:
+                data.StaminaSingle = currentStamina;
+                data.LastStaminaSingleUpdateTime = currentTime;
+                break;
+            case StaminaType.Multi:
+                data.StaminaMulti = currentStamina;
+                data.LastStaminaMultiUpdateTime = currentTime;
+                break;
+        }
+
+        return currentStamina;
     }
 
     public async Task AddQuestSkipPoint(int amount)
