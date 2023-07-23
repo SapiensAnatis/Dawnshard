@@ -7,16 +7,11 @@ namespace DragaliaAPI.Test.Services;
 
 public class QuestDropServiceTest
 {
-    private readonly Mock<IEventRepository> mockEventRepository;
     private readonly IQuestDropService questDropService;
 
     public QuestDropServiceTest()
     {
-        this.mockEventRepository = new(MockBehavior.Strict);
-        this.questDropService = new QuestDropService(
-            LoggerTestUtils.Create<QuestEnemyService>(),
-            this.mockEventRepository.Object
-        );
+        this.questDropService = new QuestDropService(LoggerTestUtils.Create<QuestEnemyService>());
     }
 
     [Fact]
