@@ -56,6 +56,10 @@ public record CharaData(
     Materials UniqueGrowMaterialId1,
     Materials UniqueGrowMaterialId2,
     Materials GrowMaterialId,
+    [property: JsonConverter(typeof(MasterAssetDateTimeOffsetConverter))]
+        DateTimeOffset GrowMaterialOnlyStartDate,
+    [property: JsonConverter(typeof(MasterAssetDateTimeOffsetConverter))]
+        DateTimeOffset GrowMaterialOnlyEndDate,
     int DefaultAbility1Level,
     int DefaultAbility2Level,
     int DefaultAbility3Level,
