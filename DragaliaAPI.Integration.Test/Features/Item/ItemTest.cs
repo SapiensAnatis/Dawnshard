@@ -43,6 +43,10 @@ public class ItemTest : TestFixture
     [Fact]
     public async Task UseRecoveryStamina_RecoversStamina()
     {
+        ApiContext.PlayerUseItems.RemoveRange(
+            ApiContext.PlayerUseItems.Where(x => x.DeviceAccountId == DeviceAccountId)
+        );
+
         ApiContext.PlayerUseItems.Add(
             new DbPlayerUseItem()
             {
