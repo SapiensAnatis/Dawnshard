@@ -62,6 +62,6 @@ public class RaidEventTest : TestFixture
         evtResp.data.raid_event_reward_list.Should().HaveCount(1);
         evtResp.data.entity_result.Should().NotBeNull();
         evtResp.data.update_data_list.Should().NotBeNull();
-        evtResp.data.update_data_list.raid_event_user_list.Should().HaveCount(1);
+        evtResp.data.update_data_list.raid_event_user_list.Should().HaveCount(1); // Reward is a raid event item so we test this
     }
 }

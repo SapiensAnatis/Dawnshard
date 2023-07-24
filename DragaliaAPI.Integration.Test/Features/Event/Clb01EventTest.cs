@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using Microsoft.EntityFrameworkCore;
 
@@ -59,10 +60,12 @@ public class Clb01EventTest : TestFixture
                 new Clb01EventReceiveClb01PointRewardRequest(EventId)
             );
 
-        evtResp.data.clb_01_event_reward_entity_list.Should().HaveCount(1);
+        evtResp.data.clb_01_event_reward_entity_list
+            .Should()
+            .HaveCount(1)
+            .And.Contain(new AtgenBuildEventRewardEntityList(EntityTypes.Material, 101001003, 5));
         evtResp.data.clb_01_event_reward_list.Should().HaveCount(1);
         evtResp.data.entity_result.Should().NotBeNull();
         evtResp.data.update_data_list.Should().NotBeNull();
-        evtResp.data.update_data_list.clb_01_event_user_list.Should().HaveCount(1);
     }
 }

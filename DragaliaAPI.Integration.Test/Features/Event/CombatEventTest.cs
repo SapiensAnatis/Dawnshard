@@ -65,7 +65,7 @@ public class CombatEventTest : TestFixture
         evtResp.data.event_reward_list.Should().HaveCount(1);
         evtResp.data.entity_result.Should().NotBeNull();
         evtResp.data.update_data_list.Should().NotBeNull();
-        evtResp.data.update_data_list.combat_event_user_list.Should().HaveCount(1);
+        evtResp.data.update_data_list.combat_event_user_list.Should().HaveCount(1); // Reward is event item so we check this
     }
 
     [Fact]
@@ -101,6 +101,5 @@ public class CombatEventTest : TestFixture
         evtResp.data.event_location_reward_entity_list.Should().HaveCount(9);
         evtResp.data.user_event_location_reward_list.Should().HaveCount(1);
         evtResp.data.update_data_list.Should().NotBeNull();
-        evtResp.data.update_data_list.combat_event_user_list.Should().HaveCount(1);
     }
 }

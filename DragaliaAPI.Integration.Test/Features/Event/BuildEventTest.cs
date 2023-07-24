@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using Microsoft.EntityFrameworkCore;
 
@@ -61,10 +62,12 @@ public class BuildEventTest : TestFixture
                 new BuildEventReceiveBuildPointRewardRequest(EventId)
             );
 
-        evtResp.data.build_event_reward_entity_list.Should().HaveCount(1);
+        evtResp.data.build_event_reward_entity_list
+            .Should()
+            .HaveCount(1)
+            .And.Contain(new AtgenBuildEventRewardEntityList(EntityTypes.Mana, 0, 3000));
         evtResp.data.build_event_reward_list.Should().HaveCount(1);
         evtResp.data.entity_result.Should().NotBeNull();
         evtResp.data.update_data_list.Should().NotBeNull();
-        evtResp.data.update_data_list.build_event_user_list.Should().HaveCount(1);
     }
 }
