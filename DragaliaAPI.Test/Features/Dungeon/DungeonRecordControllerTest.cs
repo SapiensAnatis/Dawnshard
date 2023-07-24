@@ -162,7 +162,12 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync(new List<AtgenDropAll>());
 
-        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord() { is_clear = 1 }
+            };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
             request
@@ -262,7 +267,7 @@ public class DungeonRecordControllerTest
             new()
             {
                 dungeon_key = dungeonKey,
-                play_record = new() { time = clearTime }
+                play_record = new() { time = clearTime, is_clear = 1 }
             };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
@@ -357,7 +362,7 @@ public class DungeonRecordControllerTest
             new()
             {
                 dungeon_key = dungeonKey,
-                play_record = new() { time = clearTime }
+                play_record = new() { time = clearTime, is_clear = 1 }
             };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
@@ -458,7 +463,12 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync(new List<AtgenDropAll>());
 
-        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord() { is_clear = 1 }
+            };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
             request
@@ -568,7 +578,12 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync(new List<AtgenDropAll>());
 
-        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord() { is_clear = 1 }
+            };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
             request
@@ -681,7 +696,12 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync(new List<AtgenDropAll>());
 
-        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord() { is_clear = 1 }
+            };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
             request
@@ -780,7 +800,12 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync(new List<AtgenDropAll>());
 
-        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord() { is_clear = 1 }
+            };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
             request
