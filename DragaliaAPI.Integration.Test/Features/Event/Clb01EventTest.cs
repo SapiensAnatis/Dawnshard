@@ -46,7 +46,7 @@ public class Clb01EventTest : TestFixture
             x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
         );
 
-        pointItem.Quantity += 500;
+        pointItem.Quantity += 20;
 
         ApiContext.PlayerEventRewards.RemoveRange(
             ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId)
@@ -63,7 +63,9 @@ public class Clb01EventTest : TestFixture
         evtResp.data.clb_01_event_reward_entity_list
             .Should()
             .HaveCount(1)
-            .And.Contain(new AtgenBuildEventRewardEntityList(EntityTypes.Material, 101001003, 5));
+            .And.ContainEquivalentOf(
+                new AtgenBuildEventRewardEntityList(EntityTypes.Material, 101001003, 5)
+            );
         evtResp.data.clb_01_event_reward_list.Should().HaveCount(1);
         evtResp.data.entity_result.Should().NotBeNull();
         evtResp.data.update_data_list.Should().NotBeNull();
