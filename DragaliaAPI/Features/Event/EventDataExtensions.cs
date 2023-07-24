@@ -85,13 +85,13 @@ internal static class EventDataExtensions
         {
             EventKindType.Raid
             or EventKindType.ExHunter
-                => MasterAsset.RaidEventReward[eventId]
+                => MasterAsset.RaidEventReward[eventId].Values
                     .Cast<IEventReward>()
                     .ToDictionary(x => x.Id, x => x),
 
             // BuildEventReward is the default
             _
-                => MasterAsset.BuildEventReward[eventId]
+                => MasterAsset.BuildEventReward[eventId].Values
                     .Cast<IEventReward>()
                     .ToDictionary(x => x.Id, x => x)
         };
