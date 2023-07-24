@@ -1,5 +1,7 @@
-﻿using DragaliaAPI.Shared.Json;
+﻿using System.Collections.Immutable;
+using DragaliaAPI.Shared.Json;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
@@ -28,7 +30,7 @@ public class MasterAssetGroup<TKey, TItem>
     /// <param name="key">The key to index with.</param>
     /// <returns>The returned value.</returns>
     /// <exception cref="KeyNotFoundException">The given key was not present in the collection.</exception>
-    public KeyedCollection<TKey, TItem> Get(int key) => this[key];
+    public IDictionary<TKey, TItem> Get(int key) => this[key];
 
     /// <summary>
     /// Get a <typeparam name="TItem"> instance corresponding to the given <typeparam name="TKey"/> key.</typeparam>
@@ -36,7 +38,8 @@ public class MasterAssetGroup<TKey, TItem>
     /// <param name="key">The key to index with.</param>
     /// <returns>The returned value.</returns>
     /// <exception cref="KeyNotFoundException">The given key was not present in the collection.</exception>
-    public KeyedCollection<TKey, TItem> this[int key] => this.internalDictionary.Value[key];
+    public IDictionary<TKey, TItem> this[int key] =>
+        this.internalDictionary.Value[key].AsImmutableDictionary();
 
     /// <summary>
     /// Attempts to get a <typeparam name="TItem"> instance corresponding to the given <typeparam name="TKey"/> key.</typeparam>
@@ -111,6 +114,13 @@ public class MasterAssetGroup<TKey, TItem>
         protected override TKey GetKeyForItem(TItem item)
         {
             return this.keySelector.Invoke(item);
+        }
+
+        public IDictionary<TKey, TItem> AsImmutableDictionary()
+        {
+            Debug.Assert(this.Dictionary != null, "this.Dictionary != null");
+
+            return this.Dictionary.ToImmutableDictionary();
         }
     }
 }

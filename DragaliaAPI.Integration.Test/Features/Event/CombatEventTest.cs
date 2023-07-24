@@ -12,7 +12,15 @@ public class CombatEventTest : TestFixture
         CustomWebApplicationFactory<Program> factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        _ = Client
+            .PostMsgpack<MemoryEventActivateData>(
+                "memory_event/activate",
+                new MemoryEventActivateRequest(EventId)
+            )
+            .Result;
+    }
 
     private const int EventId = 22213;
     private const string Prefix = "combat_event";
@@ -20,11 +28,6 @@ public class CombatEventTest : TestFixture
     [Fact]
     public async Task GetEventData_ReturnsEventData()
     {
-        await Client.PostMsgpack<MemoryEventActivateData>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(EventId)
-        );
-
         DragaliaResponse<CombatEventGetEventDataData> evtData =
             await Client.PostMsgpack<CombatEventGetEventDataData>(
                 $"{Prefix}/get_event_data",
@@ -40,13 +43,8 @@ public class CombatEventTest : TestFixture
     [Fact]
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
-        await Client.PostMsgpack<MemoryEventActivateData>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(EventId)
-        );
-
         DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
-            x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
+            x => x.EventId == EventId && x.Type == (int)CombatEventItemType.EventPoint
         );
 
         pointItem.Quantity += 500;
@@ -63,20 +61,16 @@ public class CombatEventTest : TestFixture
                 new CombatEventReceiveEventPointRewardRequest(EventId)
             );
 
-        evtResp.data.event_reward_entity_list.Should().NotBeNullOrEmpty();
-        evtResp.data.event_reward_list.Should().NotBeNullOrEmpty();
+        evtResp.data.event_reward_entity_list.Should().HaveCount(1);
+        evtResp.data.event_reward_list.Should().HaveCount(1);
         evtResp.data.entity_result.Should().NotBeNull();
         evtResp.data.update_data_list.Should().NotBeNull();
+        evtResp.data.update_data_list.combat_event_user_list.Should().HaveCount(1);
     }
 
     [Fact]
     public async Task ReceiveEventLocationRewards_ReturnsEventLocationRewards()
     {
-        await Client.PostMsgpack<MemoryEventActivateData>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(EventId)
-        );
-
         DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
             x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
         );
@@ -104,8 +98,9 @@ public class CombatEventTest : TestFixture
                 new CombatEventReceiveEventLocationRewardRequest(EventId, 2221302)
             );
 
-        evtResp.data.event_location_reward_entity_list.Should().NotBeNullOrEmpty();
-        evtResp.data.user_event_location_reward_list.Should().NotBeNullOrEmpty();
+        evtResp.data.event_location_reward_entity_list.Should().HaveCount(9);
+        evtResp.data.user_event_location_reward_list.Should().HaveCount(1);
         evtResp.data.update_data_list.Should().NotBeNull();
+        evtResp.data.update_data_list.combat_event_user_list.Should().HaveCount(1);
     }
 }

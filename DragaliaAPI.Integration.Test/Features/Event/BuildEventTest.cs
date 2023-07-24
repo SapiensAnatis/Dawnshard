@@ -12,18 +12,21 @@ public class BuildEventTest : TestFixture
         CustomWebApplicationFactory<Program> factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        _ = Client
+            .PostMsgpack<MemoryEventActivateData>(
+                "memory_event/activate",
+                new MemoryEventActivateRequest(EventId)
+            )
+            .Result;
+    }
 
     private const int EventId = 20816;
 
     [Fact]
     public async Task GetEventData_ReturnsEventData()
     {
-        await Client.PostMsgpack<MemoryEventActivateData>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(EventId)
-        );
-
         DragaliaResponse<BuildEventGetEventDataData> evtData =
             await Client.PostMsgpack<BuildEventGetEventDataData>(
                 "build_event/get_event_data",
@@ -40,11 +43,6 @@ public class BuildEventTest : TestFixture
     [Fact]
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
-        await Client.PostMsgpack<MemoryEventActivateData>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(EventId)
-        );
-
         DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
             x => x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint
         );
@@ -63,9 +61,10 @@ public class BuildEventTest : TestFixture
                 new BuildEventReceiveBuildPointRewardRequest(EventId)
             );
 
-        evtResp.data.build_event_reward_entity_list.Should().NotBeNullOrEmpty();
-        evtResp.data.build_event_reward_list.Should().NotBeNullOrEmpty();
+        evtResp.data.build_event_reward_entity_list.Should().HaveCount(1);
+        evtResp.data.build_event_reward_list.Should().HaveCount(1);
         evtResp.data.entity_result.Should().NotBeNull();
         evtResp.data.update_data_list.Should().NotBeNull();
+        evtResp.data.update_data_list.build_event_user_list.Should().HaveCount(1);
     }
 }

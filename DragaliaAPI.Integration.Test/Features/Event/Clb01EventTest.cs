@@ -12,7 +12,15 @@ public class Clb01EventTest : TestFixture
         CustomWebApplicationFactory<Program> factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        _ = Client
+            .PostMsgpack<MemoryEventActivateData>(
+                "memory_event/activate",
+                new MemoryEventActivateRequest(EventId)
+            )
+            .Result;
+    }
 
     private const int EventId = 21401;
     private const string Prefix = "clb01_event";
@@ -20,11 +28,6 @@ public class Clb01EventTest : TestFixture
     [Fact]
     public async Task GetEventData_ReturnsEventData()
     {
-        await Client.PostMsgpack<MemoryEventActivateData>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(EventId)
-        );
-
         DragaliaResponse<Clb01EventGetEventDataData> evtData =
             await Client.PostMsgpack<Clb01EventGetEventDataData>(
                 $"{Prefix}/get_event_data",
@@ -38,11 +41,6 @@ public class Clb01EventTest : TestFixture
     [Fact]
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
-        await Client.PostMsgpack<MemoryEventActivateData>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(EventId)
-        );
-
         DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
             x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
         );
@@ -61,9 +59,10 @@ public class Clb01EventTest : TestFixture
                 new Clb01EventReceiveClb01PointRewardRequest(EventId)
             );
 
-        evtResp.data.clb_01_event_reward_entity_list.Should().NotBeNullOrEmpty();
-        evtResp.data.clb_01_event_reward_list.Should().NotBeNullOrEmpty();
+        evtResp.data.clb_01_event_reward_entity_list.Should().HaveCount(1);
+        evtResp.data.clb_01_event_reward_list.Should().HaveCount(1);
         evtResp.data.entity_result.Should().NotBeNull();
         evtResp.data.update_data_list.Should().NotBeNull();
+        evtResp.data.update_data_list.clb_01_event_user_list.Should().HaveCount(1);
     }
 }

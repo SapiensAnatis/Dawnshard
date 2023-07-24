@@ -12,7 +12,15 @@ public class RaidEventTest : TestFixture
         CustomWebApplicationFactory<Program> factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        _ = Client
+            .PostMsgpack<MemoryEventActivateData>(
+                "memory_event/activate",
+                new MemoryEventActivateRequest(EventId)
+            )
+            .Result;
+    }
 
     private const int EventId = 20455;
     private const string Prefix = "raid_event";
@@ -20,11 +28,6 @@ public class RaidEventTest : TestFixture
     [Fact]
     public async Task GetEventData_ReturnsEventData()
     {
-        await Client.PostMsgpack<MemoryEventActivateData>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(EventId)
-        );
-
         DragaliaResponse<RaidEventGetEventDataData> evtData =
             await Client.PostMsgpack<RaidEventGetEventDataData>(
                 $"{Prefix}/get_event_data",
@@ -38,11 +41,6 @@ public class RaidEventTest : TestFixture
     [Fact]
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
-        await Client.PostMsgpack<MemoryEventActivateData>(
-            "memory_event/activate",
-            new MemoryEventActivateRequest(EventId)
-        );
-
         DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
             x => x.EventId == EventId && x.Type == (int)RaidEventItemType.RaidPoint1
         );
@@ -61,8 +59,9 @@ public class RaidEventTest : TestFixture
                 new RaidEventReceiveRaidPointRewardRequest(EventId, new[] { 1001 })
             );
 
-        evtResp.data.raid_event_reward_list.Should().NotBeNullOrEmpty();
+        evtResp.data.raid_event_reward_list.Should().HaveCount(1);
         evtResp.data.entity_result.Should().NotBeNull();
         evtResp.data.update_data_list.Should().NotBeNull();
+        evtResp.data.update_data_list.raid_event_user_list.Should().HaveCount(1);
     }
 }
