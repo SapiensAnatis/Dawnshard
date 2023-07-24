@@ -7,5 +7,9 @@ namespace DragaliaAPI.Features.Event;
 public interface IEventDropService
 {
     Task<IEnumerable<AtgenEventPassiveUpList>> ProcessEventPassiveDrops(QuestData quest);
-    Task<IEnumerable<AtgenDropAll>> ProcessEventMaterialDrops(QuestData quest, PlayRecord record);
+    Task<IEnumerable<AtgenDropAll>> ProcessEventMaterialDrops(
+        QuestData quest,
+        PlayRecord record,
+        double buildDropMultiplier
+    );
 }

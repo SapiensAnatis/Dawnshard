@@ -688,7 +688,13 @@ public class MasterAssetTest
                     UniqueBuildupMaterialId: Materials.GeniusoftheCenturysMemory,
                     DuplicateEntityId: Materials.GeniusoftheCenturysMemory,
                     DuplicateEntityQuantity: 6,
-                    DuplicateEntityType: EntityTypes.Material
+                    DuplicateEntityType: EntityTypes.Material,
+                    Abilities11: 2338,
+                    Abilities12: 2339,
+                    Abilities13: 2340,
+                    Abilities21: 0,
+                    Abilities22: 0,
+                    Abilities23: 0
                 )
             );
     }
@@ -726,5 +732,26 @@ public class MasterAssetTest
             .BeEquivalentTo(
                 new Dictionary<Materials, int>() { { Materials.GeniusoftheCenturysMemory, 6 } }
             );
+    }
+
+    [Fact]
+    public void AbilityCrest_GetAbilities_ReturnsExpected()
+    {
+        AbilityCrest crest = MasterAsset.MasterAsset.AbilityCrest[AbilityCrests.TotheExtreme];
+
+        crest
+            .GetAbilities(1)
+            .Should()
+            .BeEquivalentTo(new List<int>() { crest.Abilities11, crest.Abilities21 });
+
+        crest
+            .GetAbilities(2)
+            .Should()
+            .BeEquivalentTo(new List<int>() { crest.Abilities12, crest.Abilities22 });
+
+        crest
+            .GetAbilities(3)
+            .Should()
+            .BeEquivalentTo(new List<int>() { crest.Abilities13, crest.Abilities23 });
     }
 }

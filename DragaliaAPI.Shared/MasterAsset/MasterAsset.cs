@@ -104,6 +104,12 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, UseItem> UseItem = new("UseItem.json", x => x.Id);
 
+    public static readonly MasterAssetData<int, AbilityData> AbilityData =
+        new("AbilityData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, AbilityLimitedGroup> AbilityLimitedGroup =
+        new("AbilityLimitedGroup.json", x => x.Id);
+
     #region Missions
 
     public static readonly MasterAssetData<int, AlbumMission> AlbumMission =

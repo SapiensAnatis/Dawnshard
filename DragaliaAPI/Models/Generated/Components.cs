@@ -7295,7 +7295,19 @@ public class PartySettingList
 
     public PartySettingList() { }
 
-    public static PartySettingList Empty(int unit_no) => new() { unit_no = unit_no };
+   public static PartySettingList Empty(int unit_no) => new() { unit_no = unit_no };
+
+   public IEnumerable<AbilityCrests> GetAbilityCrestList() => new List<AbilityCrests>()
+   {
+       this.equip_crest_slot_type_1_crest_id_1, 
+       this.equip_crest_slot_type_1_crest_id_2,
+       this.equip_crest_slot_type_1_crest_id_3,
+       this.equip_crest_slot_type_2_crest_id_1,
+       this.equip_crest_slot_type_2_crest_id_2,
+       this.equip_crest_slot_type_3_crest_id_1,
+       this.equip_crest_slot_type_3_crest_id_2
+   };
+
 }
 
 #nullable enable
