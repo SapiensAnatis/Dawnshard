@@ -245,7 +245,6 @@ public class StoryService(
             );
         }
 
-        logger.LogInformation("Granted rewards for reading new story: {@rewards}", rewardList);
         return rewardList;
     }
 
