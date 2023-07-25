@@ -204,9 +204,18 @@ public class FortRepository : IFortRepository
         int? level = null
     )
     {
+        this.logger.LogDebug(
+            "Adding {quantity} copies of {plant} to storage (isTotalQuantity: {isTotalQuantity})",
+            quantity,
+            plant,
+            isTotalQuantity
+        );
+
         int startQuantity = isTotalQuantity
-            ? await apiContext.PlayerFortBuilds.Where(x => x.PlantId == plant).CountAsync()
+            ? await this.Builds.Where(x => x.PlantId == plant).CountAsync()
             : 0;
+
+        this.logger.LogDebug("User already owns {startQuantity} copies.", startQuantity);
 
         if (startQuantity >= quantity)
             return;
