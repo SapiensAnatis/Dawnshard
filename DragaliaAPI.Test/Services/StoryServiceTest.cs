@@ -384,6 +384,52 @@ public class StoryServiceTest
         this.mockStoryRepository.VerifyAll();
     }
 
+    [Fact]
+    public async Task ReadQuestStory_EventGuestUnlocked_ClearsTemporaryFlag()
+    {
+        int storyId = 2042704; // Fractured Futures compendium -- Audric join story
+
+        this.mockStoryRepository
+            .Setup(x => x.GetOrCreateStory(StoryTypes.Quest, storyId))
+            .ReturnsAsync(
+                new DbPlayerStoryState()
+                {
+                    DeviceAccountId = string.Empty,
+                    State = StoryState.Unlocked
+                }
+            );
+
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(storyId));
+
+        this.mockUserDataRepository.Setup(x => x.GiveWyrmite(25)).Returns(Task.CompletedTask);
+        this.mockTutorialService
+            .Setup(x => x.OnStoryQuestRead(storyId))
+            .Returns(Task.CompletedTask);
+
+        this.mockUnitRepository
+            .Setup(x => x.ClearIsTemporary(Charas.Audric))
+            .Returns(Task.CompletedTask);
+
+        (await this.storyService.ReadStory(StoryTypes.Quest, storyId))
+            .Should()
+            .BeEquivalentTo(
+                new List<AtgenBuildEventRewardEntityList>()
+                {
+                    new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 25 },
+                    new()
+                    {
+                        entity_type = EntityTypes.Chara,
+                        entity_id = (int)Charas.Audric,
+                        entity_quantity = 1,
+                    }
+                }
+            );
+
+        this.mockUnitRepository.VerifyAll();
+        this.mockUserDataRepository.VerifyAll();
+        this.mockStoryRepository.VerifyAll();
+    }
+
     private class UnitStoryTheoryData : TheoryData<DbPlayerStoryState, int>
     {
         public UnitStoryTheoryData()

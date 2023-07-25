@@ -18,5 +18,7 @@ public record EventData(
     EntityTypes ViewEntityType4,
     int ViewEntityId4,
     EntityTypes ViewEntityType5,
-    int ViewEntityId5
+    int ViewEntityId5,
+    Charas EventCharaId,
+    int GuestJoinStoryId
 );
