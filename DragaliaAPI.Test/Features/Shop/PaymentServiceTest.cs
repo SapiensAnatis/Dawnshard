@@ -1,12 +1,12 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Test.Utils;
-using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Features.Shop;
 
@@ -15,15 +15,19 @@ public class PaymentServiceTest
     private readonly PaymentService paymentService;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
+    private readonly Mock<IEventRepository> mockEventRepository;
 
     public PaymentServiceTest()
     {
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockInventoryRepository = new(MockBehavior.Strict);
+        this.mockEventRepository = new(MockBehavior.Strict);
+
         this.paymentService = new(
             LoggerTestUtils.Create<PaymentService>(),
             mockUserDataRepository.Object,
-            mockInventoryRepository.Object
+            mockInventoryRepository.Object,
+            mockEventRepository.Object
         );
     }
 

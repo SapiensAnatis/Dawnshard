@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
@@ -8,51 +7,29 @@ using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services.Game;
 
-public class StoryService : IStoryService
+public class StoryService(
+    IStoryRepository storyRepository,
+    ILogger<StoryService> logger,
+    IUserDataRepository userDataRepository,
+    IInventoryRepository inventoryRepository,
+    ITutorialService tutorialService,
+    IFortRepository fortRepository,
+    IMissionProgressionService missionProgressionService,
+    IRewardService rewardService,
+    IPaymentService paymentService
+) : IStoryService
 {
     private const int DragonStoryWyrmite = 25;
     private const int CastleStoryWyrmite = 50;
     private const int CharaStoryWyrmite1 = 25;
     private const int CharaStoryWyrmite2 = 10;
     private const int QuestStoryWyrmite = 25;
-
-    private readonly IStoryRepository storyRepository;
-    private readonly ILogger<StoryService> logger;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IInventoryRepository inventoryRepository;
-    private readonly ITutorialService tutorialService;
-    private readonly IFortRepository fortRepository;
-    private readonly IMissionProgressionService missionProgressionService;
-    private readonly IRewardService rewardService;
-    private readonly IPaymentService paymentService;
-
-    public StoryService(
-        IStoryRepository storyRepository,
-        ILogger<StoryService> logger,
-        IUserDataRepository userDataRepository,
-        IInventoryRepository inventoryRepository,
-        ITutorialService tutorialService,
-        IFortRepository fortRepository,
-        IMissionProgressionService missionProgressionService,
-        IRewardService rewardService,
-        IPaymentService paymentService
-    )
-    {
-        this.storyRepository = storyRepository;
-        this.logger = logger;
-        this.userDataRepository = userDataRepository;
-        this.inventoryRepository = inventoryRepository;
-        this.tutorialService = tutorialService;
-        this.fortRepository = fortRepository;
-        this.missionProgressionService = missionProgressionService;
-        this.rewardService = rewardService;
-        this.paymentService = paymentService;
-    }
 
     #region Eligibility check methods
     public async Task<bool> CheckStoryEligibility(StoryTypes type, int storyId)
@@ -247,7 +224,27 @@ public class StoryService : IStoryService
             }
         }
 
-        logger.LogInformation("Granted rewards for reading new story: {rewards}", rewardList);
+        if (
+            MasterAsset.EventData.TryGetValue(story.GroupId, out EventData? eventData)
+            && eventData.IsMemoryEvent // Real events need to set is_temporary and do friendship points
+            && eventData.GuestJoinStoryId == storyId
+        )
+        {
+            logger.LogDebug("Granting memory event character {chara}", eventData.EventCharaId);
+
+            await rewardService.GrantReward(
+                new Entity(EntityTypes.Chara, Id: (int)eventData.EventCharaId)
+            );
+            rewardList.Add(
+                new AtgenBuildEventRewardEntityList()
+                {
+                    entity_id = (int)eventData.EventCharaId,
+                    entity_quantity = 1,
+                    entity_type = EntityTypes.Chara
+                }
+            );
+        }
+
         return rewardList;
     }
 

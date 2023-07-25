@@ -90,7 +90,8 @@ public class PartyController : DragaliaControllerBase
     public async Task<DragaliaResult> SetMainPartyNo(PartySetMainPartyNoRequest request)
     {
         await this.userDataRepository.SetMainPartyNo(request.main_party_no);
-        await this.userDataRepository.SaveChangesAsync();
+
+        await this.updateDataService.SaveChangesAsync();
 
         return this.Ok(new PartySetMainPartyNoData(request.main_party_no));
     }

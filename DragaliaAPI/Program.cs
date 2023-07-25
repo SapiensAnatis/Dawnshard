@@ -1,7 +1,5 @@
 using System.Reflection;
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
@@ -22,18 +20,14 @@ using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
-using EntityGraphQL.AspNet;
-using EntityGraphQL.Schema;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Core;
-using Serilog.Events;
-using Serilog.Extensions.Logging;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Login;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Event;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -167,6 +161,12 @@ builder.Services
     .AddScoped<IQuestDropService, QuestDropService>()
     .AddScoped<IQuestEnemyService, QuestEnemyService>()
     .AddScoped<IOddsInfoService, OddsInfoService>()
+    .AddScoped<IQuestCompletionService, QuestCompletionService>()
+    .AddScoped<IAbilityCrestMultiplierService, AbilityCrestMultiplierService>()
+    // Event Feature
+    .AddScoped<IEventRepository, EventRepository>()
+    .AddScoped<IEventService, EventService>()
+    .AddScoped<IEventDropService, EventDropService>()
     // Clear party feature
     .AddScoped<IClearPartyRepository, ClearPartyRepository>()
     .AddScoped<IClearPartyService, ClearPartyService>();

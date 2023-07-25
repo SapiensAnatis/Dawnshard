@@ -2,6 +2,7 @@
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Middleware;
@@ -19,45 +20,25 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Features.Dungeon;
 
 [Route("dungeon_record")]
-public class DungeonRecordController : DragaliaControllerBase
+public class DungeonRecordController(
+    IQuestRepository questRepository,
+    IDungeonService dungeonService,
+    IUserDataRepository userDataRepository,
+    IInventoryRepository inventoryRepository,
+    IUpdateDataService updateDataService,
+    ITutorialService tutorialService,
+    IMissionProgressionService missionProgressionService,
+    ILogger<DungeonRecordController> logger,
+    IQuestCompletionService questCompletionService,
+    IEventDropService eventDropService,
+    IRewardService rewardService,
+    IAbilityCrestMultiplierService abilityCrestMultiplierService
+) : DragaliaControllerBase
 {
-    private readonly IQuestRepository questRepository;
-    private readonly IDungeonService dungeonService;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IInventoryRepository inventoryRepository;
-    private readonly IUpdateDataService updateDataService;
-    private readonly ITutorialService tutorialService;
-    private readonly IMissionProgressionService missionProgressionService;
-    private readonly IRewardService rewardService;
-    private readonly ILogger<DungeonRecordController> logger;
-
-    public DungeonRecordController(
-        IQuestRepository questRepository,
-        IDungeonService dungeonService,
-        IUserDataRepository userDataRepository,
-        IInventoryRepository inventoryRepository,
-        IUpdateDataService updateDataService,
-        ITutorialService tutorialService,
-        IMissionProgressionService missionProgressionService,
-        IRewardService rewardService,
-        ILogger<DungeonRecordController> logger
-    )
-    {
-        this.questRepository = questRepository;
-        this.dungeonService = dungeonService;
-        this.userDataRepository = userDataRepository;
-        this.inventoryRepository = inventoryRepository;
-        this.updateDataService = updateDataService;
-        this.tutorialService = tutorialService;
-        this.missionProgressionService = missionProgressionService;
-        this.rewardService = rewardService;
-        this.logger = logger;
-    }
-
     [HttpPost("record")]
     public async Task<DragaliaResult> Record(DungeonRecordRecordRequest request)
     {
-        return this.Ok(await BuildResponse(request.dungeon_key, request.play_record));
+        return Ok(await BuildResponse(request.dungeon_key, request.play_record));
     }
 
     [HttpPost("record_multi")]
@@ -71,7 +52,7 @@ public class DungeonRecordController : DragaliaControllerBase
 
         response.ingame_result_data.play_type = QuestPlayType.Multi;
 
-        return this.Ok(response);
+        return Ok(response);
     }
 
     private async Task<DungeonRecordRecordData> BuildResponse(
@@ -81,18 +62,15 @@ public class DungeonRecordController : DragaliaControllerBase
     {
         // TODO: Turn this method into a service call
         DungeonSession session = await dungeonService.FinishDungeon(dungeonKey);
-        this.logger.LogDebug("session.IsHost: {isHost}", session.IsHost);
+        logger.LogDebug("session.IsHost: {isHost}", session.IsHost);
 
-        this.logger.LogDebug("Processing completion of quest {id}", session.QuestData.Id);
+        logger.LogDebug("Processing completion of quest {id}", session.QuestData.Id);
 
         DbQuest? oldQuestData = await questRepository.Quests.SingleOrDefaultAsync(
             x => x.QuestId == session.QuestData.Id
         );
 
         bool isFirstClear = oldQuestData is null || oldQuestData?.PlayCount == 0;
-        bool oldMissionClear1 = oldQuestData?.IsMissionClear1 ?? false;
-        bool oldMissionClear2 = oldQuestData?.IsMissionClear2 ?? false;
-        bool oldMissionClear3 = oldQuestData?.IsMissionClear3 ?? false;
 
         float clear_time = playRecord?.time ?? -1.0f;
 
@@ -113,25 +91,28 @@ public class DungeonRecordController : DragaliaControllerBase
 
         DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
 
+        IEnumerable<AtgenFirstClearSet> firstClearRewards = isFirstClear
+            ? await questCompletionService.GrantFirstClearRewards(session.QuestData.Id)
+            : Enumerable.Empty<AtgenFirstClearSet>();
+
         userData.Exp += 1;
 
-        bool[] clearedMissions = new bool[3]
+        bool[] oldMissionStatus =
         {
-            newQuestData.IsMissionClear1 && !oldMissionClear1,
-            newQuestData.IsMissionClear2 && !oldMissionClear2,
-            newQuestData.IsMissionClear3 && !oldMissionClear3,
+            newQuestData.IsMissionClear1,
+            newQuestData.IsMissionClear2,
+            newQuestData.IsMissionClear3
         };
 
-        bool allMissionsCleared =
-            clearedMissions.Any(x => x)
-            && newQuestData.IsMissionClear1
-            && newQuestData.IsMissionClear2
-            && newQuestData.IsMissionClear3;
+        QuestMissionStatus status = await questCompletionService.CompleteQuestMissions(
+            session,
+            oldMissionStatus,
+            playRecord!
+        );
 
-        userData.Crystal +=
-            (isFirstClear ? 5 : 0)
-            + clearedMissions.Where(x => x).Count() * 5
-            + (allMissionsCleared ? 5 : 0);
+        newQuestData.IsMissionClear1 = status.Missions[0];
+        newQuestData.IsMissionClear2 = status.Missions[1];
+        newQuestData.IsMissionClear3 = status.Missions[2];
 
         List<AtgenDropAll> drops = new();
         int manaDrop = 0;
@@ -149,7 +130,7 @@ public class DungeonRecordController : DragaliaControllerBase
                 )
             )
             {
-                this.logger.LogWarning(
+                logger.LogWarning(
                     "Could not retrieve enemy list for area_idx {idx}",
                     record.area_idx
                 );
@@ -186,8 +167,27 @@ public class DungeonRecordController : DragaliaControllerBase
             drops.Select(x => new KeyValuePair<Materials, int>((Materials)x.id, x.quantity))
         );
 
-        await this.rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
-        await this.rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
+        (IEnumerable<AtgenScoreMissionSuccessList> scoreMissions, int totalPoints) =
+            await questCompletionService.CompleteQuestScoreMissions(session, playRecord!);
+
+        IEnumerable<AtgenEventPassiveUpList> eventPassiveDrops =
+            await eventDropService.ProcessEventPassiveDrops(session.QuestData);
+
+        double crestMultiplier = await abilityCrestMultiplierService.GetFacilityEventMultiplier(
+            session.Party,
+            session.QuestData.Gid
+        );
+
+        drops.AddRange(
+            await eventDropService.ProcessEventMaterialDrops(
+                session.QuestData,
+                playRecord!,
+                crestMultiplier
+            )
+        );
+
+        await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
+        await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
@@ -201,43 +201,11 @@ public class DungeonRecordController : DragaliaControllerBase
                 reward_record = new()
                 {
                     drop_all = drops,
-                    first_clear_set = isFirstClear
-                        ? new List<AtgenFirstClearSet>()
-                        {
-                            new()
-                            {
-                                type = (int)EntityTypes.Wyrmite,
-                                id = 0,
-                                quantity = 5
-                            }
-                        }
-                        : new List<AtgenFirstClearSet>(),
+                    first_clear_set = firstClearRewards,
                     take_coin = coinDrop,
                     take_astral_item_quantity = 300,
-                    missions_clear_set = clearedMissions
-                        .Select((x, index) => new { x, index })
-                        .Where(x => x.x)
-                        .Select(
-                            x =>
-                                new AtgenMissionsClearSet()
-                                {
-                                    type = (int)EntityTypes.Wyrmite,
-                                    id = 0,
-                                    quantity = 5,
-                                    mission_no = x.index + 1
-                                }
-                        ),
-                    mission_complete = allMissionsCleared
-                        ? new List<AtgenFirstClearSet>()
-                        {
-                            new()
-                            {
-                                type = (int)EntityTypes.Wyrmite,
-                                id = 0,
-                                quantity = 5
-                            }
-                        }
-                        : new List<AtgenFirstClearSet>(),
+                    missions_clear_set = status.MissionsClearSet,
+                    mission_complete = status.MissionCompleteSet,
                     enemy_piece = new List<AtgenEnemyPiece>(),
                     reborn_bonus = new List<AtgenFirstClearSet>(),
                     quest_bonus_list = new List<AtgenFirstClearSet>(),
@@ -245,6 +213,7 @@ public class DungeonRecordController : DragaliaControllerBase
                     challenge_quest_bonus_list = new List<AtgenFirstClearSet>(),
                     campaign_extra_reward_list = new List<AtgenFirstClearSet>(),
                     weekly_limit_reward_list = new List<AtgenFirstClearSet>(),
+                    take_accumulate_point = totalPoints
                 },
                 grow_record = new()
                 {
@@ -254,12 +223,7 @@ public class DungeonRecordController : DragaliaControllerBase
                     bonus_factor = 1,
                     mana_bonus_factor = 1,
                     chara_grow_record = session.Party.Select(
-                        x =>
-                            new AtgenCharaGrowRecord()
-                            {
-                                chara_id = (int)x.chara_id,
-                                take_exp = 240
-                            }
+                        x => new AtgenCharaGrowRecord() { chara_id = x.chara_id, take_exp = 240 }
                     ),
                     chara_friendship_list = new List<CharaFriendshipList>()
                 },
@@ -286,8 +250,8 @@ public class DungeonRecordController : DragaliaControllerBase
                 quest_party_setting_list = session.Party,
                 bonus_factor_list = new List<AtgenBonusFactorList>(),
                 scoring_enemy_point_list = new List<AtgenScoringEnemyPointList>(),
-                score_mission_success_list = new List<AtgenScoreMissionSuccessList>(),
-                event_passive_up_list = new List<AtgenEventPassiveUpList>(),
+                score_mission_success_list = scoreMissions,
+                event_passive_up_list = eventPassiveDrops,
                 clear_time = clear_time,
                 is_best_clear_time = clear_time == newQuestData.BestClearTime,
                 converted_entity_list = new List<ConvertedEntityList>(),

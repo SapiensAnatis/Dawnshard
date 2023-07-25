@@ -1,5 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -9,26 +10,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Shop;
 
-public class PaymentService : IPaymentService
+public class PaymentService(
+    ILogger<PaymentService> logger,
+    IUserDataRepository userDataRepository,
+    IInventoryRepository inventoryRepository,
+    IEventRepository eventRepository
+) : IPaymentService
 {
     private readonly List<AtgenDeleteDragonList> dragonList = new();
     private readonly List<AtgenDeleteAmuletList> amuletList = new();
     private readonly List<AtgenDeleteTalismanList> talismanList = new();
     private readonly List<AtgenDeleteWeaponList> weaponList = new();
-    private readonly ILogger<PaymentService> logger;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IInventoryRepository inventoryRepository;
-
-    public PaymentService(
-        ILogger<PaymentService> logger,
-        IUserDataRepository userDataRepository,
-        IInventoryRepository inventoryRepository
-    )
-    {
-        this.logger = logger;
-        this.userDataRepository = userDataRepository;
-        this.inventoryRepository = inventoryRepository;
-    }
 
     public async Task ProcessPayment(Entity entity, PaymentTarget? payment = null)
     {
@@ -93,6 +85,7 @@ public class PaymentService : IPaymentService
                 updater = () => material!.Quantity -= price;
                 break;
             case EntityTypes.BuildEventItem:
+            case EntityTypes.CombatEventItem:
             case EntityTypes.Clb01EventItem:
             case EntityTypes.CollectEventItem:
             case EntityTypes.RaidEventItem:
@@ -102,7 +95,10 @@ public class PaymentService : IPaymentService
             case EntityTypes.ExHunterEventItem:
             case EntityTypes.BattleRoyalEventItem:
             case EntityTypes.EarnEventItem:
-                throw new NotImplementedException();
+                DbPlayerEventItem? item = await eventRepository.GetEventItemAsync(entity.Id);
+                quantity = item?.Quantity;
+                updater = () => item!.Quantity -= price;
+                break;
             case EntityTypes.SummonTicket:
                 // TODO: Implement ticket payments.
                 logger.LogWarning(

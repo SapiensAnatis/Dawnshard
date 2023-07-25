@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Photon.Shared.Enums;
@@ -833,10 +834,10 @@ public class AtgenCategoryList
 [MessagePackObject(true)]
 public class AtgenCharaGrowRecord
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int take_exp { get; set; }
 
-    public AtgenCharaGrowRecord(int chara_id, int take_exp)
+    public AtgenCharaGrowRecord(Charas chara_id, int take_exp)
     {
         this.chara_id = chara_id;
         this.take_exp = take_exp;
@@ -2204,10 +2205,10 @@ public class AtgenFailQuestDetail
 public class AtgenFirstClearSet
 {
     public int id { get; set; }
-    public int type { get; set; }
+    public EntityTypes type { get; set; }
     public int quantity { get; set; }
 
-    public AtgenFirstClearSet(int id, int type, int quantity)
+    public AtgenFirstClearSet(int id, EntityTypes type, int quantity)
     {
         this.id = id;
         this.type = type;
@@ -2595,11 +2596,11 @@ public class AtgenMissionParamsList
 public class AtgenMissionsClearSet
 {
     public int id { get; set; }
-    public int type { get; set; }
+    public EntityTypes type { get; set; }
     public int quantity { get; set; }
     public int mission_no { get; set; }
 
-    public AtgenMissionsClearSet(int id, int type, int quantity, int mission_no)
+    public AtgenMissionsClearSet(int id, EntityTypes type, int quantity, int mission_no)
     {
         this.id = id;
         this.type = type;
@@ -3416,12 +3417,12 @@ public class AtgenRoomMemberList
 [MessagePackObject(true)]
 public class AtgenScoreMissionSuccessList
 {
-    public int score_mission_complete_type { get; set; }
+    public QuestCompleteType score_mission_complete_type { get; set; }
     public int score_target_value { get; set; }
     public float correction_value { get; set; }
 
     public AtgenScoreMissionSuccessList(
-        int score_mission_complete_type,
+        QuestCompleteType score_mission_complete_type,
         int score_target_value,
         float correction_value
     )
@@ -4592,7 +4593,7 @@ public class BeginnerMissionList
 }
 
 [MessagePackObject(true)]
-public class BuildEventRewardList
+public class BuildEventRewardList : IEventRewardList<BuildEventRewardList>
 {
     public int event_id { get; set; }
     public int event_reward_id { get; set; }
@@ -4602,6 +4603,8 @@ public class BuildEventRewardList
         this.event_id = event_id;
         this.event_reward_id = event_reward_id;
     }
+
+    public static BuildEventRewardList FromDatabase(DbPlayerEventReward reward) => new(reward.EventId, reward.RewardId);
 
     public BuildEventRewardList() { }
 }
@@ -5826,13 +5829,13 @@ public class EventTradeList
     public int tab_group_id { get; set; }
     public int priority { get; set; }
     public int is_lock_view { get; set; }
-    public int commence_date { get; set; }
-    public int complete_date { get; set; }
+    public DateTimeOffset commence_date { get; set; }
+    public DateTimeOffset complete_date { get; set; }
     public int reset_type { get; set; }
     public int limit { get; set; }
     public int read_story_count { get; set; }
     public int clear_target_quest_id { get; set; }
-    public int destination_entity_type { get; set; }
+    public EntityTypes destination_entity_type { get; set; }
     public int destination_entity_id { get; set; }
     public int destination_entity_quantity { get; set; }
     public IEnumerable<AtgenBuildEventRewardEntityList> need_entity_list { get; set; }
@@ -5843,13 +5846,13 @@ public class EventTradeList
         int tab_group_id,
         int priority,
         int is_lock_view,
-        int commence_date,
-        int complete_date,
+        DateTimeOffset commence_date,
+        DateTimeOffset complete_date,
         int reset_type,
         int limit,
         int read_story_count,
         int clear_target_quest_id,
-        int destination_entity_type,
+        EntityTypes destination_entity_type,
         int destination_entity_id,
         int destination_entity_quantity,
         IEnumerable<AtgenBuildEventRewardEntityList> need_entity_list
@@ -7292,7 +7295,19 @@ public class PartySettingList
 
     public PartySettingList() { }
 
-    public static PartySettingList Empty(int unit_no) => new() { unit_no = unit_no };
+   public static PartySettingList Empty(int unit_no) => new() { unit_no = unit_no };
+
+   public IEnumerable<AbilityCrests> GetAbilityCrestList() => new List<AbilityCrests>()
+   {
+       this.equip_crest_slot_type_1_crest_id_1, 
+       this.equip_crest_slot_type_1_crest_id_2,
+       this.equip_crest_slot_type_1_crest_id_3,
+       this.equip_crest_slot_type_2_crest_id_1,
+       this.equip_crest_slot_type_2_crest_id_2,
+       this.equip_crest_slot_type_3_crest_id_1,
+       this.equip_crest_slot_type_3_crest_id_2
+   };
+
 }
 
 #nullable enable
@@ -7952,7 +7967,7 @@ public class QuestWallList
 }
 
 [MessagePackObject(true)]
-public class RaidEventRewardList
+public class RaidEventRewardList : IEventRewardList<RaidEventRewardList>
 {
     public int raid_event_id { get; set; }
     public int raid_event_reward_id { get; set; }
@@ -7962,6 +7977,8 @@ public class RaidEventRewardList
         this.raid_event_id = raid_event_id;
         this.raid_event_reward_id = raid_event_reward_id;
     }
+
+    public static RaidEventRewardList FromDatabase(DbPlayerEventReward reward) => new(reward.EventId, reward.RewardId);
 
     public RaidEventRewardList() { }
 }
@@ -9273,7 +9290,7 @@ public class UserEventItemData
 }
 
 [MessagePackObject(true)]
-public class UserEventLocationRewardList
+public class UserEventLocationRewardList : IEventRewardList<UserEventLocationRewardList>
 {
     public int event_id { get; set; }
     public int location_reward_id { get; set; }
@@ -9285,6 +9302,8 @@ public class UserEventLocationRewardList
     }
 
     public UserEventLocationRewardList() { }
+
+    public static UserEventLocationRewardList FromDatabase(DbPlayerEventReward reward) => new(reward.EventId, reward.RewardId);
 }
 
 [MessagePackObject(true)]

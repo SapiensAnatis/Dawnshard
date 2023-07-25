@@ -52,8 +52,19 @@ public class ShopService : IShopService
 
         IShop shop = Shop.From(shopType, goodsId);
 
-        if (shop.PaymentType != paymentType)
+        if (shop.PaymentType != PaymentTypes.DiamantiumOrWyrmite && shop.PaymentType != paymentType)
             throw new DragaliaException(ResultCode.ShopPaymentTypeInvalid, "Payment type mismatch");
+
+        if (
+            shop.PaymentType == PaymentTypes.DiamantiumOrWyrmite
+            && paymentType is not (PaymentTypes.Wyrmite or PaymentTypes.Diamantium)
+        )
+        {
+            throw new DragaliaException(
+                ResultCode.ShopPaymentTypeInvalid,
+                "Invalid payment type, needs to be either Wyrmite or Diamantium"
+            );
+        }
 
         int price = shop.NeedCost * goodsQuantity;
         if (price < 0)

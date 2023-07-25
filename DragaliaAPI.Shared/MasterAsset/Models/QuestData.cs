@@ -28,7 +28,11 @@ public record QuestData(
     string AreaName06,
     int RebornLimit,
     int ContinueLimit,
-    int Difficulty
+    int Difficulty,
+    PayTargetType PayEntityTargetType,
+    EntityTypes PayEntityType,
+    int PayEntityId,
+    int PayEntityQuantity
 )
 {
     public IEnumerable<AreaInfo> AreaInfo =>
