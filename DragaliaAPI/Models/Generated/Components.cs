@@ -2808,11 +2808,13 @@ public class AtgenOption
 public class AtgenOwnDamageRankingList
 {
     public int rank { get; set; }
-    public int is_new { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_new { get; set; }
     public int chara_id { get; set; }
     public long damage_value { get; set; }
 
-    public AtgenOwnDamageRankingList(int rank, int is_new, int chara_id, long damage_value)
+    public AtgenOwnDamageRankingList(int rank, bool is_new, int chara_id, long damage_value)
     {
         this.rank = rank;
         this.is_new = is_new;

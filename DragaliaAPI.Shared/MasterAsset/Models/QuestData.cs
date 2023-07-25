@@ -1,5 +1,7 @@
-﻿using DragaliaAPI.Photon.Shared.Enums;
+﻿using System.Text.Json.Serialization;
+using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -35,7 +37,8 @@ public record QuestData(
     int PayEntityQuantity,
     EntityTypes HoldEntityType,
     int HoldEntityId,
-    int HoldEntityQuantity
+    int HoldEntityQuantity,
+    [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsSumUpTotalDamage
 )
 {
     public IEnumerable<AreaInfo> AreaInfo =>
