@@ -10,7 +10,13 @@ public record AbilityCrest(
     Materials UniqueBuildupMaterialId,
     Materials DuplicateEntityId,
     int DuplicateEntityQuantity,
-    EntityTypes DuplicateEntityType
+    EntityTypes DuplicateEntityType,
+    int Abilities11,
+    int Abilities12,
+    int Abilities13,
+    int Abilities21,
+    int Abilities22,
+    int Abilities23
 )
 {
     public int GetBuildupGroupId(BuildupPieceTypes type, int step) =>
@@ -22,4 +28,15 @@ public record AbilityCrest(
         new List<KeyValuePair<Materials, int>>() { new(DuplicateEntityId, DuplicateEntityQuantity) }
             .Where(x => x.Key != Materials.Empty)
             .ToDictionary(x => x.Key, x => x.Value);
+
+    public IEnumerable<int> GetAbilities(int level)
+    {
+        return level switch
+        {
+            1 => new[] { Abilities11, Abilities21 },
+            2 => new[] { Abilities12, Abilities22 },
+            3 => new[] { Abilities13, Abilities23 },
+            _ => Enumerable.Empty<int>()
+        };
+    }
 };

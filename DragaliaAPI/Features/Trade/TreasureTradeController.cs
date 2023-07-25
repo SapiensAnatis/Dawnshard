@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Trade;
@@ -33,7 +34,8 @@ public class TreasureTradeController : DragaliaControllerBase
     {
         TreasureTradeTradeData resp = new();
 
-        await this.tradeService.DoTreasureTrade(
+        await this.tradeService.DoTrade(
+            TradeType.Treasure,
             request.treasure_trade_id,
             request.trade_count,
             request.need_unit_list

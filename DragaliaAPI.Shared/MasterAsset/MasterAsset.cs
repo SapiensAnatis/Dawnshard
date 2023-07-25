@@ -1,9 +1,12 @@
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.Login;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
+using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
@@ -101,6 +104,12 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, UseItem> UseItem = new("UseItem.json", x => x.Id);
 
+    public static readonly MasterAssetData<int, AbilityData> AbilityData =
+        new("AbilityData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, AbilityLimitedGroup> AbilityLimitedGroup =
+        new("AbilityLimitedGroup.json", x => x.Id);
+
     #region Missions
 
     public static readonly MasterAssetData<int, AlbumMission> AlbumMission =
@@ -190,6 +199,9 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, TreasureTrade> TreasureTrade =
         new("Trade/TreasureTrade.json", x => x.Id);
 
+    public static readonly MasterAssetData<int, TreasureTrade> EventTreasureTrade =
+        new("Trade/EventTreasureTradeInfo.json", x => x.Id);
+
     #endregion
 
     #region Login Bonus
@@ -250,6 +262,7 @@ public static class MasterAsset
     #endregion
 
     #region Quest Drops
+
     /// <summary>
     /// Contains information about the <see cref="Models.QuestDrops.EnemyParam"/> IDs in particular quest maps.
     /// </summary>
@@ -270,6 +283,82 @@ public static class MasterAsset
     /// </summary>
     public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
         new("QuestDrops/QuestDrops.json", x => x.QuestId);
+
+    #endregion
+
+    #region Quest Rewards
+
+    public static readonly MasterAssetData<int, QuestRewardData> QuestRewardData =
+        new("QuestRewards/QuestRewardData.json", x => x.Id);
+
+    public static readonly MasterAssetData<
+        int,
+        QuestScoreMissionRewardInfo
+    > QuestScoreMissionRewardInfo = new("QuestRewards/QuestScoreMissionRewardInfo.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, QuestScoreMissionData> QuestScoreMissionData =
+        new("QuestRewards/QuestScoreMissionData.json", x => x.Id);
+
+    #endregion
+
+    #region Events
+
+    public static readonly MasterAssetData<int, EventData> EventData =
+        new("Event/EventData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventTradeGroup> EventTradeGroup =
+        new("Event/EventTradeGroup.json", x => x.Id);
+
+    public static readonly MasterAssetGroup<int, BuildEventReward> BuildEventReward =
+        new("Event/BuildEventReward.json", x => x.Id);
+
+    public static readonly MasterAssetGroup<int, RaidEventReward> RaidEventReward =
+        new("Event/RaidEventReward.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, CombatEventLocation> CombatEventLocation =
+        new("Event/CombatEventLocation.json", x => x.Id);
+
+    public static readonly MasterAssetData<
+        int,
+        CombatEventLocationReward
+    > CombatEventLocationReward = new("Event/CombatEventLocationReward.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<BuildEventItemType>> BuildEventItem =
+        new("Event/BuildEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<CombatEventItemType>> CombatEventItem =
+        new("Event/CombatEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, RaidEventItem> RaidEventItem =
+        new("Event/RaidEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<SimpleEventItemType>> SimpleEventItem =
+        new("Event/SimpleEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<ExRushEventItemType>> ExRushEventItem =
+        new("Event/ExRushEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<
+        int,
+        EventItem<ExHunterEventItemType>
+    > ExHunterEventItem = new("Event/ExHunterEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<EarnEventItemType>> EarnEventItem =
+        new("Event/EarnEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<CollectEventItemType>> CollectEventItem =
+        new("Event/CollectEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventItem<Clb01EventItemType>> Clb01EventItem =
+        new("Event/Clb01EventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<
+        int,
+        EventItem<BattleRoyalEventItemType>
+    > BattleRoyalEventItem = new("Event/BattleRoyalEventItem.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, EventPassive> EventPassive =
+        new("Event/EventPassive.json", x => x.Id);
 
     #endregion
 }

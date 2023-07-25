@@ -37,7 +37,8 @@ public class UpdateController : DragaliaControllerBase
     public async Task<DragaliaResult> Post(UpdateNamechangeRequest request)
     {
         await userDataRepository.UpdateName(request.name);
-        await userDataRepository.SaveChangesAsync();
+
+        await updateDataService.SaveChangesAsync();
 
         return this.Ok(new UpdateNamechangeData(request.name));
     }

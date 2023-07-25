@@ -33,7 +33,18 @@ public class DungeonRecordTest : TestFixture
         DungeonRecordRecordData response = (
             await this.Client.PostMsgpack<DungeonRecordRecordData>(
                 "/dungeon_record/record",
-                new DungeonRecordRecordRequest() { dungeon_key = key }
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        treasure_record = new List<AtgenTreasureRecord>(),
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord()
+                    }
+                }
             )
         ).data;
 

@@ -163,6 +163,7 @@ public class SavefileService : ISavefileService
                                 dest.Crystal += 1_200_000;
                                 dest.LastSaveImportTime = DateTimeOffset.UtcNow;
                                 dest.LastLoginTime = DateTimeOffset.UnixEpoch;
+                                dest.ActiveMemoryEventId = 0;
                             }
                         )
                 )
@@ -526,6 +527,18 @@ public class SavefileService : ISavefileService
         );
         this.apiContext.PlayerTrades.RemoveRange(
             this.apiContext.PlayerTrades.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerEventData.RemoveRange(
+            this.apiContext.PlayerEventData.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerEventItems.RemoveRange(
+            this.apiContext.PlayerEventItems.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerEventRewards.RemoveRange(
+            this.apiContext.PlayerEventRewards.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerEventPassives.RemoveRange(
+            this.apiContext.PlayerEventPassives.Where(x => x.DeviceAccountId == deviceAccountId)
         );
     }
 

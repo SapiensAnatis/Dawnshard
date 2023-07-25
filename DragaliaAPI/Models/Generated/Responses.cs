@@ -544,13 +544,15 @@ public class BuildEventEntryData
     public BuildEventUserList build_event_user_data { get; set; }
     public UpdateDataList update_data_list { get; set; }
     public EntityResult entity_result { get; set; }
-    public int is_receivable_event_daily_bonus { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_receivable_event_daily_bonus { get; set; }
 
     public BuildEventEntryData(
         BuildEventUserList build_event_user_data,
         UpdateDataList update_data_list,
         EntityResult entity_result,
-        int is_receivable_event_daily_bonus
+        bool is_receivable_event_daily_bonus
     )
     {
         this.build_event_user_data = build_event_user_data;
@@ -566,14 +568,16 @@ public class BuildEventEntryData
 public class BuildEventGetEventDataData
 {
     public BuildEventUserList build_event_user_data { get; set; }
-    public int is_receivable_event_daily_bonus { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_receivable_event_daily_bonus { get; set; }
     public IEnumerable<BuildEventRewardList> build_event_reward_list { get; set; }
     public IEnumerable<EventTradeList> event_trade_list { get; set; }
     public AtgenEventFortData event_fort_data { get; set; }
 
     public BuildEventGetEventDataData(
         BuildEventUserList build_event_user_data,
-        int is_receivable_event_daily_bonus,
+        bool is_receivable_event_daily_bonus,
         IEnumerable<BuildEventRewardList> build_event_reward_list,
         IEnumerable<EventTradeList> event_trade_list,
         AtgenEventFortData event_fort_data

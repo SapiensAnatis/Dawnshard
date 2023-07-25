@@ -60,8 +60,8 @@ public class UnitMapProfile : Profile
         this.CreateMap<DbDetailedPartyUnit, PartyUnitList>();
 
         this.CreateMap<DbAbilityCrest, GameAbilityCrest>()
-            .ForMember(x => x.ability_1_level, opts => opts.MapFrom(x => 3))
-            .ForMember(x => x.ability_2_level, opts => opts.MapFrom(x => 3));
+            .ForMember(x => x.ability_1_level, opts => opts.MapFrom(x => x.AbilityLevel))
+            .ForMember(x => x.ability_2_level, opts => opts.MapFrom(x => x.AbilityLevel));
 
         this.CreateMap<DbWeaponSkin, GameWeaponSkin>();
 
