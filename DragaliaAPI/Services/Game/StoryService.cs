@@ -1,7 +1,5 @@
-using System.Collections.Immutable;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
@@ -24,8 +22,7 @@ public class StoryService(
     IFortRepository fortRepository,
     IMissionProgressionService missionProgressionService,
     IRewardService rewardService,
-    IPaymentService paymentService,
-    IUnitRepository unitRepository
+    IPaymentService paymentService
 ) : IStoryService
 {
     private const int DragonStoryWyrmite = 25;

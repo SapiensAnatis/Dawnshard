@@ -385,7 +385,7 @@ public class StoryServiceTest
     }
 
     [Fact]
-    public async Task ReadQuestStory_EventGuestUnlocked_ClearsTemporaryFlag()
+    public async Task ReadQuestStory_EventGuestUnlocked_GrantsCharacterReward()
     {
         int storyId = 2042704; // Fractured Futures compendium -- Audric join story
 
@@ -406,9 +406,16 @@ public class StoryServiceTest
             .Setup(x => x.OnStoryQuestRead(storyId))
             .Returns(Task.CompletedTask);
 
-        this.mockUnitRepository
-            .Setup(x => x.ClearIsTemporary(Charas.Audric))
-            .Returns(Task.CompletedTask);
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        It.Is<Entity>(
+                            y => y.Type == EntityTypes.Chara && y.Id == (int)Charas.Audric
+                        )
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
 
         (await this.storyService.ReadStory(StoryTypes.Quest, storyId))
             .Should()
@@ -425,9 +432,9 @@ public class StoryServiceTest
                 }
             );
 
-        this.mockUnitRepository.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockStoryRepository.VerifyAll();
+        this.mockRewardService.VerifyAll();
     }
 
     private class UnitStoryTheoryData : TheoryData<DbPlayerStoryState, int>
