@@ -354,4 +354,62 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         this.mockPlayerIdentityService.VerifyAll();
     }
+
+    [Fact]
+    public async Task AddToStorage_IsTotalQuantity_AddsBuilds()
+    {
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
+
+        this.fixture.ApiContext.PlayerFortBuilds.AddRange(
+            new List<DbFortBuild>()
+            {
+                new() { DeviceAccountId = "some other id", PlantId = FortPlants.FlameDracolith, }
+            }
+        );
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        await this.fortRepository.AddToStorage(
+            FortPlants.FlameDracolith,
+            quantity: 1,
+            isTotalQuantity: true,
+            level: 4
+        );
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        this.fixture.ApiContext.PlayerFortBuilds
+            .Should()
+            .Contain(
+                x =>
+                    x.DeviceAccountId == "account id"
+                    && x.Level == 4
+                    && x.PositionX == -1
+                    && x.PositionZ == -1
+            );
+    }
+
+    [Fact]
+    public async Task AddToStorage_IsTotalQuantity_AlreadyOwned_DoesNotAddBuilds()
+    {
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
+
+        this.fixture.ApiContext.PlayerFortBuilds.AddRange(
+            new List<DbFortBuild>()
+            {
+                new() { DeviceAccountId = "account id", PlantId = FortPlants.WindDracolith, }
+            }
+        );
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        await this.fortRepository.AddToStorage(
+            FortPlants.WindDracolith,
+            quantity: 1,
+            isTotalQuantity: true,
+            level: 4
+        );
+        await this.fixture.ApiContext.SaveChangesAsync();
+
+        this.fixture.ApiContext.PlayerFortBuilds
+            .Should()
+            .ContainSingle(x => x.PlantId == FortPlants.WindDracolith);
+    }
 }
