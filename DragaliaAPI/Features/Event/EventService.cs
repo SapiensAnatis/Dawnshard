@@ -159,10 +159,13 @@ public class EventService(
 
     public async Task CreateEventData(int eventId)
     {
+        bool firstEventEnter = false;
+
         if (await eventRepository.GetEventDataAsync(eventId) == null)
         {
             logger.LogInformation("Creating event data for event {eventId}", eventId);
             eventRepository.CreateEventData(eventId);
+            firstEventEnter = true;
         }
 
         EventData data = MasterAsset.EventData[eventId];
@@ -191,6 +194,42 @@ public class EventService(
 
         if (neededEventPassiveIds.Count > 0)
             eventRepository.CreateEventPassives(eventId, neededEventPassiveIds);
+
+        // Doing this at the end so that everything should've been created
+        if (data.EventKindType == EventKindType.Combat && firstEventEnter)
+        {
+            List<int> completedQuestIds = await questRepository.Quests
+                .Where(x => x.State == 3)
+                .Select(x => x.QuestId)
+                .ToListAsync();
+
+            foreach (
+                (int entityId, int entityQuantity) in MasterAsset.QuestData.Enumerable
+                    .Where(
+                        x =>
+                            x.Gid == eventId
+                            && x.HoldEntityType == EntityTypes.CombatEventItem
+                            && x.HoldEntityQuantity != 0
+                            && completedQuestIds.Contains(x.Id)
+                    )
+                    .ToLookup(x => x.HoldEntityId, x => x.HoldEntityQuantity)
+                    .ToDictionary(x => x.Key, x => x.Max())
+            )
+            {
+                await rewardService.GrantReward(
+                    new Entity(EntityTypes.CombatEventItem, entityId, entityQuantity)
+                );
+            }
+
+            foreach (
+                int locationId in MasterAsset.CombatEventLocation.Enumerable
+                    .Where(x => x.EventId == eventId && completedQuestIds.Contains(x.ClearQuestId))
+                    .Select(x => x.Id)
+            )
+            {
+                eventRepository.CreateEventReward(eventId, locationId);
+            }
+        }
     }
 
     private async Task<DbPlayerEventData> GetEventData(int eventId)

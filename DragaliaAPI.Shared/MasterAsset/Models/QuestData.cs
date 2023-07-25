@@ -32,7 +32,10 @@ public record QuestData(
     PayTargetType PayEntityTargetType,
     EntityTypes PayEntityType,
     int PayEntityId,
-    int PayEntityQuantity
+    int PayEntityQuantity,
+    EntityTypes HoldEntityType,
+    int HoldEntityId,
+    int HoldEntityQuantity
 )
 {
     public IEnumerable<AreaInfo> AreaInfo =>
