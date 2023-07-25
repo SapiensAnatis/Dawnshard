@@ -186,6 +186,26 @@ public class DungeonRecordController(
             )
         );
 
+        EventDamageRanking? damageRanking = null;
+        if (session.QuestData.IsSumUpTotalDamage)
+        {
+            damageRanking = new()
+            {
+                event_id = session.QuestData.Gid,
+                own_damage_ranking_list = new List<AtgenOwnDamageRankingList>()
+                {
+                    // TODO: track in database to determine if it's a new personal best
+                    new AtgenOwnDamageRankingList()
+                    {
+                        chara_id = 0,
+                        rank = 0,
+                        damage_value = playRecord?.total_play_damage ?? 0,
+                        is_new = false,
+                    }
+                }
+            };
+        }
+
         await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
         await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
 
@@ -256,9 +276,10 @@ public class DungeonRecordController(
                 is_best_clear_time = clear_time == newQuestData.BestClearTime,
                 converted_entity_list = new List<ConvertedEntityList>(),
                 dungeon_skip_type = 0,
-                total_play_damage = 0,
+                total_play_damage = playRecord?.total_play_damage ?? 0,
             },
             update_data_list = updateDataList,
+            event_damage_ranking = damageRanking,
             entity_result = new(),
         };
     }
