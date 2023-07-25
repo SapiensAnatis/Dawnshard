@@ -85,11 +85,9 @@ public class DungeonRecordController(
 
             if (isMulti)
             {
-                if (session.IsHost)
-                {
-                    type = StaminaType.Multi;
-                    amount = session.QuestData.PayStaminaMulti;
-                }
+                // TODO/NOTE: We do not deduct wings because of the low amount of players playing coop at this point
+                // type = StaminaType.Multi;
+                // amount = session.QuestData.PayStaminaMulti;
             }
             else
             {
