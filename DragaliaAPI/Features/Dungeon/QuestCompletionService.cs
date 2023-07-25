@@ -180,8 +180,7 @@ public class QuestCompletionService(
             QuestCompleteType.WeaponRequired
                 => party.All(x => x.equip_weapon_body_id == (WeaponBodies)completionValue),
             QuestCompleteType.MaxTraps => record.trap_count <= completionValue,
-            QuestCompleteType.MaxAfflicted
-                => record.damage_record.Count(x => x.enchant != 0) <= completionValue,
+            QuestCompleteType.MaxAfflicted => record.bad_status <= completionValue,
             QuestCompleteType.TreasureChestCount
                 => record.treasure_record.Count() >= completionValue,
             QuestCompleteType.AllTreasureChestsOpened => true, // TODO
