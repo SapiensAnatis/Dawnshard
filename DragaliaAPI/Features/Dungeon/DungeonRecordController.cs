@@ -257,6 +257,7 @@ public class DungeonRecordController(
                 converted_entity_list = new List<ConvertedEntityList>(),
                 dungeon_skip_type = 0,
                 total_play_damage = 0,
+                wave_count = playRecord?.wave ?? 0
             },
             update_data_list = updateDataList,
             entity_result = new(),
