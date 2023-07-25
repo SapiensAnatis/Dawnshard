@@ -235,10 +235,13 @@ public class DungeonRecordController(
         await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
 
         // Constant for quests with no stamina usage, wip?
-        int staminaExpAmount =
-            session.QuestData.PayStaminaSingle == 0 ? 15 : session.QuestData.PayStaminaSingle;
+        int experience =
+            session.QuestData.PayStaminaSingle != 0
+                ? session.QuestData.PayStaminaSingle * 10
+                : session.QuestData.PayStaminaMulti != 0
+                    ? session.QuestData.PayStaminaMulti * 100
+                    : 150;
 
-        int experience = (int)Math.Floor(staminaExpAmount * 10d);
         PlayerLevelResult playerLevelResult = await userService.AddExperience(experience); // TODO: Exp boost
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();

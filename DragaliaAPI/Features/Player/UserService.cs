@@ -19,6 +19,8 @@ public class UserService(
     private const int MaxMultiStamina = 99;
     private const int MaxQuestSkipPoint = 400;
 
+    private const int MaxMultiStaminaRegen = 12;
+
     private const int WyrmiteLevelUpReward = 50;
 
     public int QuestSkipPointMax => MaxQuestSkipPoint;
@@ -115,7 +117,7 @@ public class UserService(
                 break;
             case StaminaType.Multi:
                 currentStamina = data.StaminaMulti;
-                maxStamina = 12;
+                maxStamina = MaxMultiStaminaRegen;
                 secondsToRegenOne = 1 * 60 * 60; // 1 Hour
                 lastUpdatedTime = data.LastStaminaMultiUpdateTime;
                 break;
@@ -206,6 +208,7 @@ public class UserService(
             totalReward += WyrmiteLevelUpReward;
 
             await AddStamina(StaminaType.Single, next.StaminaSingle);
+            await AddStamina(StaminaType.Multi, MaxMultiStaminaRegen);
             logger.LogDebug("Player leveled up to level {level}", data.Level);
             current = next;
         }
