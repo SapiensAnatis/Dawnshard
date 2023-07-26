@@ -229,7 +229,7 @@
     "_Type": "WyrmprintAugmentBuildup",
     "_Requirements": [
       {
-        "_Parameter": 0,
+        "_Parameter": 1,
         "_Missions": [
           {
             "_Type": "MainStory",
@@ -238,7 +238,7 @@
         ]
       },
       {
-        "_Parameter": 1,
+        "_Parameter": 2,
         "_Missions": [
           {
             "_Type": "MainStory",
