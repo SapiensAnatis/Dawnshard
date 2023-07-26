@@ -261,7 +261,8 @@ public class MasterAssetTest
                     PayEntityTargetType: PayTargetType.None,
                     PayEntityType: 0,
                     PayEntityId: 0,
-                    PayEntityQuantity: 0
+                    PayEntityQuantity: 0,
+                    IsSumUpTotalDamage: false
                 )
             );
 

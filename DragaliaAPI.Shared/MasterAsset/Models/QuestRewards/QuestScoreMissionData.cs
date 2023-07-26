@@ -16,6 +16,7 @@ public record QuestScoreMissionData(
 {
     public readonly int[] Scores =
     {
+        0,
         BaseScore1,
         BaseScore2,
         BaseScore3,

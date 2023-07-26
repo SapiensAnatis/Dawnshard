@@ -37,7 +37,8 @@ public record QuestData(
     PayTargetType PayEntityTargetType,
     EntityTypes PayEntityType,
     int PayEntityId,
-    int PayEntityQuantity
+    int PayEntityQuantity,
+    [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsSumUpTotalDamage
 )
 {
     public IEnumerable<AreaInfo> AreaInfo =>
