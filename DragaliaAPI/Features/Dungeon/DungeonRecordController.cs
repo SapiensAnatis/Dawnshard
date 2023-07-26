@@ -75,7 +75,7 @@ public class DungeonRecordController(
         bool isFirstClear = oldQuestData is null || oldQuestData?.PlayCount == 0;
 
         if (
-            !isFirstClear && (playRecord.is_clear == 1 || session.QuestData.IsPayForceStaminaSingle)
+            !isFirstClear // TODO: session.QuestData.IsPayForceStaminaSingle
         )
         {
             // TODO: Campaign support
