@@ -7,6 +7,7 @@ using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using Microsoft.EntityFrameworkCore;
 
@@ -157,6 +158,15 @@ public class EventService(
         return rewardEntities;
     }
 
+    private static Dictionary<int, List<QuestData>> CombatEventQuestLookup =
+        MasterAsset.EventData.Enumerable
+            .Where(x => x.EventKindType == EventKindType.Combat)
+            .Select(x => x.Id)
+            .ToDictionary(
+                x => x,
+                x => MasterAsset.QuestData.Enumerable.Where(y => y.Gid == x).ToList()
+            );
+
     public async Task CreateEventData(int eventId)
     {
         bool firstEventEnter = false;
@@ -198,19 +208,25 @@ public class EventService(
         // Doing this at the end so that everything should've been created
         if (data.EventKindType == EventKindType.Combat && firstEventEnter)
         {
+            HashSet<int> relevantQuestIds = CombatEventQuestLookup[data.Id]
+                .Select(x => x.Id)
+                .ToHashSet();
+
             List<int> completedQuestIds = await questRepository.Quests
-                .Where(x => x.State == 3)
+                .Where(x => x.State == 3 && relevantQuestIds.Contains(x.QuestId))
                 .Select(x => x.QuestId)
                 .ToListAsync();
 
             foreach (
-                (int entityId, int entityQuantity) in MasterAsset.QuestData.Enumerable
+                (int entityId, int entityQuantity) in CombatEventQuestLookup[data.Id]
                     .Where(
                         x =>
-                            x.Gid == eventId
-                            && x.HoldEntityType == EntityTypes.CombatEventItem
-                            && x.HoldEntityQuantity != 0
-                            && completedQuestIds.Contains(x.Id)
+                            completedQuestIds.Contains(x.Id)
+                            && x
+                                is {
+                                    HoldEntityType: EntityTypes.CombatEventItem,
+                                    HoldEntityQuantity: > 0
+                                }
                     )
                     .ToLookup(x => x.HoldEntityId, x => x.HoldEntityQuantity)
                     .ToDictionary(x => x.Key, x => x.Max())
