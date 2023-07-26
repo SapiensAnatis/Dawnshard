@@ -1,5 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Player;
@@ -18,6 +19,7 @@ public class PaymentServiceTest
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IEventRepository> mockEventRepository;
+    private readonly Mock<IDmodeRepository> mockDmodeRepository;
     private readonly Mock<IItemRepository> mockItemRepository;
 
     public PaymentServiceTest()
@@ -25,6 +27,7 @@ public class PaymentServiceTest
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockEventRepository = new(MockBehavior.Strict);
+        this.mockDmodeRepository = new(MockBehavior.Strict);
         this.mockItemRepository = new(MockBehavior.Strict);
 
         this.paymentService = new(
@@ -32,6 +35,7 @@ public class PaymentServiceTest
             mockUserDataRepository.Object,
             mockInventoryRepository.Object,
             mockEventRepository.Object,
+            mockDmodeRepository.Object
             mockItemRepository.Object
         );
     }

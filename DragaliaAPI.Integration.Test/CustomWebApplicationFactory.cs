@@ -151,6 +151,24 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Coin = 100_000_000;
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.DewPoint = 100_000_000;
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.ManaPoint = 100_000_000;
+
+        apiContext.PlayerDmodeInfos.Add(
+            new DbPlayerDmodeInfo
+            {
+                DeviceAccountId = TestFixture.DeviceAccountId,
+                Point1Quantity = 100_000_000,
+                Point2Quantity = 100_000_000
+            }
+        );
+
+        apiContext.PlayerDmodeDungeons.Add(
+            new DbPlayerDmodeDungeon { DeviceAccountId = TestFixture.DeviceAccountId }
+        );
+
+        apiContext.PlayerDmodeExpeditions.Add(
+            new DbPlayerDmodeExpedition { DeviceAccountId = TestFixture.DeviceAccountId }
+        );
+
         apiContext.SaveChanges();
     }
 }
