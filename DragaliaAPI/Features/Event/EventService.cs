@@ -216,6 +216,13 @@ public class EventService(
                     .ToDictionary(x => x.Key, x => x.Max())
             )
             {
+                logger.LogDebug(
+                    "Granting {quantity}x {itemId} ({eventId}) due to completed quests",
+                    entityQuantity,
+                    entityId,
+                    eventId
+                );
+
                 await rewardService.GrantReward(
                     new Entity(EntityTypes.CombatEventItem, entityId, entityQuantity)
                 );
@@ -227,6 +234,12 @@ public class EventService(
                     .Select(x => x.Id)
             )
             {
+                logger.LogDebug(
+                    "Completing location reward {rewardId} ({eventId}) due to completed quests",
+                    locationId,
+                    eventId
+                );
+
                 eventRepository.CreateEventReward(eventId, locationId);
             }
         }
