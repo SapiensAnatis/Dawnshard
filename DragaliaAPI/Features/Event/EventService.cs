@@ -7,6 +7,7 @@ using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using Microsoft.EntityFrameworkCore;
 
@@ -157,12 +158,24 @@ public class EventService(
         return rewardEntities;
     }
 
+    private static Dictionary<int, List<QuestData>> CombatEventQuestLookup =
+        MasterAsset.EventData.Enumerable
+            .Where(x => x.EventKindType == EventKindType.Combat)
+            .Select(x => x.Id)
+            .ToDictionary(
+                x => x,
+                x => MasterAsset.QuestData.Enumerable.Where(y => y.Gid == x).ToList()
+            );
+
     public async Task CreateEventData(int eventId)
     {
+        bool firstEventEnter = false;
+
         if (await eventRepository.GetEventDataAsync(eventId) == null)
         {
             logger.LogInformation("Creating event data for event {eventId}", eventId);
             eventRepository.CreateEventData(eventId);
+            firstEventEnter = true;
         }
 
         EventData data = MasterAsset.EventData[eventId];
@@ -191,6 +204,61 @@ public class EventService(
 
         if (neededEventPassiveIds.Count > 0)
             eventRepository.CreateEventPassives(eventId, neededEventPassiveIds);
+
+        // Doing this at the end so that everything should've been created
+        if (data.EventKindType == EventKindType.Combat && firstEventEnter)
+        {
+            HashSet<int> relevantQuestIds = CombatEventQuestLookup[data.Id]
+                .Select(x => x.Id)
+                .ToHashSet();
+
+            List<int> completedQuestIds = await questRepository.Quests
+                .Where(x => x.State == 3 && relevantQuestIds.Contains(x.QuestId))
+                .Select(x => x.QuestId)
+                .ToListAsync();
+
+            foreach (
+                (int entityId, int entityQuantity) in CombatEventQuestLookup[data.Id]
+                    .Where(
+                        x =>
+                            completedQuestIds.Contains(x.Id)
+                            && x
+                                is {
+                                    HoldEntityType: EntityTypes.CombatEventItem,
+                                    HoldEntityQuantity: > 0
+                                }
+                    )
+                    .ToLookup(x => x.HoldEntityId, x => x.HoldEntityQuantity)
+                    .ToDictionary(x => x.Key, x => x.Max())
+            )
+            {
+                logger.LogDebug(
+                    "Granting {quantity}x {itemId} ({eventId}) due to completed quests",
+                    entityQuantity,
+                    entityId,
+                    eventId
+                );
+
+                await rewardService.GrantReward(
+                    new Entity(EntityTypes.CombatEventItem, entityId, entityQuantity)
+                );
+            }
+
+            foreach (
+                int locationId in MasterAsset.CombatEventLocation.Enumerable
+                    .Where(x => x.EventId == eventId && completedQuestIds.Contains(x.ClearQuestId))
+                    .Select(x => x.Id)
+            )
+            {
+                logger.LogDebug(
+                    "Completing location reward {rewardId} ({eventId}) due to completed quests",
+                    locationId,
+                    eventId
+                );
+
+                eventRepository.CreateEventReward(eventId, locationId);
+            }
+        }
     }
 
     private async Task<DbPlayerEventData> GetEventData(int eventId)

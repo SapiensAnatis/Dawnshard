@@ -116,7 +116,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "DelFrith",
       "buildup_count": 80,
@@ -328,7 +330,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "ClaiomhSolais",
       "buildup_count": 80,
@@ -544,7 +548,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "Brionac",
       "buildup_count": 80,
@@ -769,7 +775,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "Fragarach",
       "buildup_count": 80,
@@ -873,7 +881,10 @@
       "is_lock": true,
       "gettime": "2022-01-08T20:49:41+00:00"
     },
-    "edit_skill_1_chara_data": null,
+    "edit_skill_1_chara_data": {
+      "chara_id": 0,
+      "edit_skill_level": 0
+    },
     "edit_skill_2_chara_data": {
       "chara_id": 10840402,
       "edit_skill_level": 4

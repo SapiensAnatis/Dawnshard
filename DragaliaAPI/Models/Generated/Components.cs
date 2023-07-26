@@ -7318,19 +7318,19 @@ public class PartySettingList
 public class PartyUnitList
 {
     public int position { get; set; }
-    public CharaList? chara_data { get; set; }
-    public DragonList? dragon_data { get; set; }
-    public GameWeaponSkin? weapon_skin_data { get; set; }
-    public GameWeaponBody? weapon_body_data { get; set; }
+    public CharaList? chara_data { get; set; } = new();
+    public DragonList? dragon_data { get; set; } = new();
+    public GameWeaponSkin? weapon_skin_data { get; set; } = new();
+    public GameWeaponBody? weapon_body_data { get; set; } = new();
     public IEnumerable<GameAbilityCrest> crest_slot_type_1_crest_list { get; set; } =
         new List<GameAbilityCrest>();
     public IEnumerable<GameAbilityCrest> crest_slot_type_2_crest_list { get; set; } =
         new List<GameAbilityCrest>();
     public IEnumerable<GameAbilityCrest> crest_slot_type_3_crest_list { get; set; } =
         new List<GameAbilityCrest>();
-    public TalismanList? talisman_data { get; set; }
-    public EditSkillCharaData? edit_skill_1_chara_data { get; set; }
-    public EditSkillCharaData? edit_skill_2_chara_data { get; set; }
+    public TalismanList? talisman_data { get; set; } = new();
+    public EditSkillCharaData? edit_skill_1_chara_data { get; set; } = new();
+    public EditSkillCharaData? edit_skill_2_chara_data { get; set; } = new();
     public IEnumerable<WeaponPassiveAbilityList> game_weapon_passive_ability_list { get; set; } =
         new List<WeaponPassiveAbilityList>();
     public int dragon_reliability_level { get; set; } = 0;

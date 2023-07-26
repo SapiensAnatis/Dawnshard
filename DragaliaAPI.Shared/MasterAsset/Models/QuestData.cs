@@ -35,6 +35,9 @@ public record QuestData(
     EntityTypes PayEntityType,
     int PayEntityId,
     int PayEntityQuantity,
+    EntityTypes HoldEntityType,
+    int HoldEntityId,
+    int HoldEntityQuantity,
     [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsSumUpTotalDamage
 )
 {

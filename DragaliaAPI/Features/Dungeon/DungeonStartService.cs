@@ -163,25 +163,23 @@ public class DungeonStartService(
         {
             for (int i = units.Count; i < 4; i++)
             {
-                units.Add(
-                    new PartyUnitList
-                    {
-                        position = i + 1,
-                        chara_data = new CharaList(),
-                        dragon_data = new DragonList(),
-                        weapon_skin_data = new GameWeaponSkin(),
-                        weapon_body_data = new GameWeaponBody(),
-                        crest_slot_type_1_crest_list = Enumerable.Empty<GameAbilityCrest>(),
-                        crest_slot_type_2_crest_list = Enumerable.Empty<GameAbilityCrest>(),
-                        crest_slot_type_3_crest_list = Enumerable.Empty<GameAbilityCrest>(),
-                        talisman_data = new TalismanList(),
-                        edit_skill_1_chara_data = new EditSkillCharaData(),
-                        edit_skill_2_chara_data = new EditSkillCharaData(),
-                        game_weapon_passive_ability_list =
-                            Enumerable.Empty<WeaponPassiveAbilityList>()
-                    }
-                );
+                units.Add(new PartyUnitList { position = i + 1 });
             }
+        }
+
+        foreach (PartyUnitList unit in units)
+        {
+            unit.chara_data ??= new CharaList();
+            unit.dragon_data ??= new DragonList();
+            unit.weapon_skin_data ??= new GameWeaponSkin();
+            unit.weapon_body_data ??= new GameWeaponBody();
+            unit.crest_slot_type_1_crest_list ??= Enumerable.Empty<GameAbilityCrest>();
+            unit.crest_slot_type_2_crest_list ??= Enumerable.Empty<GameAbilityCrest>();
+            unit.crest_slot_type_3_crest_list ??= Enumerable.Empty<GameAbilityCrest>();
+            unit.talisman_data ??= new TalismanList();
+            unit.edit_skill_1_chara_data ??= new EditSkillCharaData();
+            unit.edit_skill_2_chara_data ??= new EditSkillCharaData();
+            unit.game_weapon_passive_ability_list ??= Enumerable.Empty<WeaponPassiveAbilityList>();
         }
 
         return units;

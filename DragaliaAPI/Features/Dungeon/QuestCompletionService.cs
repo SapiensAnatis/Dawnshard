@@ -213,7 +213,7 @@ public class QuestCompletionService(
                         )
                 ),
             QuestCompleteType.SaveMinHouses => record.visit_private_house >= completionValue,
-            QuestCompleteType.MinGateHp => record.protection_damage <= completionValue, // No idea if this is correct
+            QuestCompleteType.MinGateHp => record.protection_damage >= completionValue,
             QuestCompleteType.MinTimeRemaining => record.remaining_time >= completionValue,
             QuestCompleteType.MinDrawbridgesLowered
                 => record.lower_drawbridge_count >= completionValue,
