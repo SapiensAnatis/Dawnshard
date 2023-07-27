@@ -88,11 +88,6 @@ public class ExceptionHandlerMiddleware
         }
     }
 
-    private static string? GetRedisKey(string? deviceId)
-    {
-        return deviceId is null ? null : $"refresh_sent:{deviceId}";
-    }
-
     private async Task WriteResultCode(HttpContext context, ResultCode code)
     {
         context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
