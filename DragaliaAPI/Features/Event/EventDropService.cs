@@ -314,7 +314,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
         // In general versions of defensive events, Stratagems are a resource that can be used to challenge EX defensive battles.
         // They can be obtained as drops from Master-difficulty quests.
-        if (variation == VariationTypes.VeryHard)
+        if (variation >= VariationTypes.VeryHard)
         {
             int stratagemQuantity = GenerateDropAmount(2d);
             yield return new Entity(
