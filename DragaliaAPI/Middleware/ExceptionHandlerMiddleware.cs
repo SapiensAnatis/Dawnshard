@@ -12,16 +12,10 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Middleware;
 
-public class ExceptionHandlerMiddleware
+public class ExceptionHandlerMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate next;
     private static readonly DistributedCacheEntryOptions CacheOptions =
         new() { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5) };
-
-    public ExceptionHandlerMiddleware(RequestDelegate next)
-    {
-        this.next = next;
-    }
 
     public async Task InvokeAsync(
         HttpContext context,
@@ -39,13 +33,13 @@ public class ExceptionHandlerMiddleware
 
         try
         {
-            await this.next(context);
+            await next(context);
         }
         catch (SecurityTokenExpiredException ex) when (serializeException && deviceId is not null)
         {
             logger.LogDebug("ID token was expired. Expiry: {expiry}", ex.Expires);
 
-            // This should cause the client to route back to Nintendo login.
+            // Setting the below header should cause the client to route back to Nintendo login.
             // However, sometimes the client returns with the same invalid ID token.
 
             string redisKey = $"refresh_sent:{deviceId}";
@@ -58,22 +52,20 @@ public class ExceptionHandlerMiddleware
                 return;
             }
 
-            logger.LogDebug("Issuing ID token refresh request.");
             await cache.SetStringAsync(redisKey, "true", CacheOptions);
 
-            context.Response.StatusCode = 400;
+            logger.LogDebug("Issuing ID token refresh request.");
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
             context.Response.Headers.Add("Is-Required-Refresh-Id-Token", "true");
+        }
+        catch (Exception ex)
+            when (serializeException && context.RequestAborted.IsCancellationRequested)
+        {
+            logger.LogWarning(ex, "Client cancelled request.");
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
         }
         catch (Exception ex) when (serializeException)
         {
-            if (context.RequestAborted.IsCancellationRequested)
-            {
-                logger.LogWarning(ex, "Client cancelled request.");
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-
-                return;
-            }
-
             ResultCode code = ex is DragaliaException dragaliaException
                 ? dragaliaException.Code
                 : ResultCode.CommonServerError;
@@ -91,7 +83,7 @@ public class ExceptionHandlerMiddleware
     private async Task WriteResultCode(HttpContext context, ResultCode code)
     {
         context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
-        context.Response.StatusCode = 200;
+        context.Response.StatusCode = StatusCodes.Status200OK;
         DragaliaResponse<DataHeaders> gameResponse = new(new DataHeaders(code), code);
 
         await context.Response.Body.WriteAsync(
