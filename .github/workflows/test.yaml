@@ -59,12 +59,13 @@ jobs:
         run: dotnet restore ${{ matrix.project }}
       - name: Test
         run: >
-          dotnet test ${{ matrix.project }} 
+          cd ${{ matrix.project }}
+          dotnet test ${{ matrix.project }}.csproj
           --no-restore 
           --logger "console;verbosity=detailed"
           --logger "trx;LogFileName=${{ matrix.project }}.trx"
       - name: Upload test report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: success() || failure() # run this step even if previous step failed
         with:
           name: test-results
