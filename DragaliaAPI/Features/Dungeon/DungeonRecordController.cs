@@ -310,6 +310,7 @@ public class DungeonRecordController(
                 is_best_clear_time = clear_time == newQuestData.BestClearTime,
                 converted_entity_list = new List<ConvertedEntityList>(),
                 dungeon_skip_type = 0,
+                wave_count = playRecord?.wave ?? 0,
                 total_play_damage = playRecord?.total_play_damage ?? 0,
             },
             update_data_list = updateDataList,

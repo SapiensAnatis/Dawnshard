@@ -96,7 +96,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "GaeAssail",
       "buildup_count": 90,
@@ -332,7 +334,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "Caladbolg",
       "buildup_count": 80,
@@ -574,7 +578,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "DelFrith",
       "buildup_count": 80,
@@ -786,7 +792,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "Brionac",
       "buildup_count": 80,
@@ -1013,7 +1021,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "Kunado",
       "buildup_count": 80,
@@ -1245,7 +1255,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "AmenoNuhoko",
       "buildup_count": 80,
@@ -1457,7 +1469,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "Omizununo",
       "buildup_count": 80,
@@ -1669,7 +1683,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "AmenoHabakiri",
       "buildup_count": 80,

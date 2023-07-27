@@ -262,6 +262,9 @@ public class MasterAssetTest
                     PayEntityType: 0,
                     PayEntityId: 0,
                     PayEntityQuantity: 0,
+                    HoldEntityType: EntityTypes.None,
+                    HoldEntityId: 0,
+                    HoldEntityQuantity: 0,
                     IsSumUpTotalDamage: false
                 )
             );
