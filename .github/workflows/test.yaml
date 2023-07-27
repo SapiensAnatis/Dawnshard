@@ -59,16 +59,13 @@ jobs:
         run: dotnet restore ${{ matrix.project }}
       - name: Test
         run: >
-          dotnet test ${{ matrix.project }} 
+          dotnet test ${{ matrix.project }}
           --no-restore 
           --logger "console;verbosity=detailed"
-          -p:CollectCoverage=true 
-          -p:CoverletOutputFormat="cobertura" 
-          -p:CoverletOutput="coverage_report.xml"
-          -p:Exclude=\"[*.Test]*,[DragaliaAPI.Test.Utils]*,[DragaliaAPI.Photon.Plugin]*,[DragaliaAPI.Database]DragaliaAPI.Database.Migrations.*,[DragaliaAPI]DragaliaAPI.Models.Generated.*\"
-      - name: Upload coverage reports
+          --logger "trx;LogFileName=${{ matrix.project }}.trx"
+      - name: Upload test report
         uses: actions/upload-artifact@v3
+        if: success() || failure() # run this step even if previous step failed
         with:
-          name: ${{ matrix.project }} coverage report
-          path: ${{ matrix.project }}/coverage_report.xml
-          retention-days: 2
+          name: test-results
+          path: ${{ matrix.project }}/TestResults/${{ matrix.project }}.trx
