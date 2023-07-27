@@ -5,6 +5,7 @@ using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
 using MessagePack;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
@@ -51,11 +52,10 @@ public class ExceptionHandlerMiddleware
 
             if (await cache.GetStringAsync(redisKey) is not null)
             {
-                logger.LogWarning("Detected repeated SecurityTokenExpiredException.");
-                throw new DragaliaException(
-                    ResultCode.CommonAuthError,
-                    "Detected repeated SecurityTokenExpiredException."
-                );
+                logger.LogError("Detected repeated SecurityTokenExpiredException.");
+                await WriteResultCode(context, ResultCode.CommonAuthError);
+
+                return;
             }
 
             logger.LogDebug("Issuing ID token refresh request.");
@@ -63,7 +63,6 @@ public class ExceptionHandlerMiddleware
 
             context.Response.StatusCode = 400;
             context.Response.Headers.Add("Is-Required-Refresh-Id-Token", "true");
-            return;
         }
         catch (Exception ex) when (serializeException)
         {
@@ -75,9 +74,6 @@ public class ExceptionHandlerMiddleware
                 return;
             }
 
-            context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
-            context.Response.StatusCode = 200;
-
             ResultCode code = ex is DragaliaException dragaliaException
                 ? dragaliaException.Code
                 : ResultCode.CommonServerError;
@@ -88,16 +84,23 @@ public class ExceptionHandlerMiddleware
                 code
             );
 
-            DragaliaResponse<DataHeaders> gameResponse = new(new DataHeaders(code), code);
-
-            await context.Response.Body.WriteAsync(
-                MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
-            );
+            await WriteResultCode(context, code);
         }
     }
 
     private static string? GetRedisKey(string? deviceId)
     {
         return deviceId is null ? null : $"refresh_sent:{deviceId}";
+    }
+
+    private async Task WriteResultCode(HttpContext context, ResultCode code)
+    {
+        context.Response.ContentType = CustomMessagePackOutputFormatter.ContentType;
+        context.Response.StatusCode = 200;
+        DragaliaResponse<DataHeaders> gameResponse = new(new DataHeaders(code), code);
+
+        await context.Response.Body.WriteAsync(
+            MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
+        );
     }
 }

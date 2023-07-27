@@ -92,6 +92,13 @@ public class AuthService : IAuthService
         TokenValidationResult result = await this.ValidateToken(idToken);
         JwtSecurityToken jwt = (JwtSecurityToken)result.SecurityToken;
 
+        this.logger.LogDebug(
+            "Token {token} validity: from {fromTime} to {toTime}",
+            jwt.ToString(),
+            jwt.ValidFrom,
+            jwt.ValidTo
+        );
+
         using IDisposable accIdLog = LogContext.PushProperty(
             CustomClaimType.AccountId,
             jwt.Subject
