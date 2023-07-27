@@ -37,7 +37,7 @@ public class UserService(
         if (type == StaminaType.None)
             throw new ArgumentOutOfRangeException(nameof(type));
 
-        logger.LogDebug("Adding {staminaAmount}x {staminaType}", amount, type);
+        logger.LogDebug("Adding {staminaAmount}x {staminaType} stamina", amount, type);
 
         DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
         DateTimeOffset time = dateTimeProvider.UtcNow;
@@ -71,7 +71,7 @@ public class UserService(
         if (type == StaminaType.None)
             throw new ArgumentOutOfRangeException(nameof(type));
 
-        logger.LogDebug("Removing {staminaAmount}x {staminaType}", amount, type);
+        logger.LogDebug("Removing {staminaAmount}x {staminaType} stamina", amount, type);
 
         int currentStamina = await GetAndUpdateStamina(type);
         if (amount > currentStamina)
@@ -125,6 +125,14 @@ public class UserService(
                 throw new UnreachableException();
         }
 
+        logger.LogDebug(
+            "Processing {type} stamina update: current stamina {currentStamina} / {maxStamina}, last updated at {lastUpdatedTime}",
+            type,
+            currentStamina,
+            maxStamina,
+            lastUpdatedTime
+        );
+
         if (currentStamina > maxStamina)
         {
             return currentStamina;
@@ -151,6 +159,12 @@ public class UserService(
             lastUpdatedReset = lastUpdatedReset.AddSeconds(secondsToRegenOne);
             currentStamina++;
         }
+
+        logger.LogDebug(
+            "Replenished stamina to {currentStamina} / {maxStamina}",
+            currentStamina,
+            maxStamina
+        );
 
         switch (type)
         {
