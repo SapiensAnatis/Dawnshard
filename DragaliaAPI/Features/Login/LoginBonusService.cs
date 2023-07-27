@@ -66,7 +66,7 @@ public class LoginBonusService(
                 continue;
             }
 
-            if (dbBonus.CurrentDay == bonusCount && !bonusData.IsLoop)
+            if (dbBonus.CurrentDay >= bonusCount && !bonusData.IsLoop)
                 dbBonus.IsComplete = true;
 
             await this.rewardService.GrantReward(

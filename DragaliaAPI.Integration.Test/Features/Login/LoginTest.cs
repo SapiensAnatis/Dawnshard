@@ -145,11 +145,13 @@ public class LoginTest : TestFixture
     [Fact]
     public async Task LoginIndex_GrantsLoginBonusBasedOnDb_GrantsEachDayReward()
     {
+        /*
         int oldSkipTickets = (
             await this.ApiContext.PlayerUserData
                 .AsNoTracking()
                 .FirstAsync(x => x.DeviceAccountId == DeviceAccountId)
         ).QuestSkipPoint;
+        */
 
         await this.AddToDatabase(
             new DbLoginBonus()
@@ -259,11 +261,7 @@ public class LoginTest : TestFixture
             .Should()
             .BeTrue();
 
-        await this.ApiContext.PlayerUserData
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
-            .ExecuteUpdateAsync(
-                entity => entity.SetProperty(x => x.LastLoginTime, DateTimeOffset.UnixEpoch)
-            );
+        this.ResetLastLoginTime();
 
         DragaliaResponse<LoginIndexData> secondResponse =
             await this.Client.PostMsgpack<LoginIndexData>("/login/index", new LoginIndexRequest());
