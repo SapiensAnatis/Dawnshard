@@ -3,6 +3,7 @@ using System;
 using DragaliaAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230727194756_login-bonus")]
+    partial class loginbonus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1099,26 +1102,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerTrades");
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerUseItem", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("integer")
-                        .HasColumnName("ItemId");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer")
-                        .HasColumnName("Quantity");
-
-                    b.HasKey("DeviceAccountId", "ItemId");
-
-                    b.HasIndex("DeviceAccountId");
-
-                    b.ToTable("PlayerUseItems");
-                });
-
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerUserData", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -1800,17 +1783,6 @@ namespace DragaliaAPI.Database.Migrations
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerTrade", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerUseItem", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany()
