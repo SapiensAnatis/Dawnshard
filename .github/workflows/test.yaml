@@ -59,8 +59,7 @@ jobs:
         run: dotnet restore ${{ matrix.project }}
       - name: Test
         run: >
-          cd ${{ matrix.project }}
-          dotnet test ${{ matrix.project }}.csproj
+          dotnet test ${{ matrix.project }}
           --no-restore 
           --logger "console;verbosity=detailed"
           --logger "trx;LogFileName=${{ matrix.project }}.trx"
@@ -69,4 +68,4 @@ jobs:
         if: success() || failure() # run this step even if previous step failed
         with:
           name: test-results
-          path: ${{ matrix.project }}.trx
+          path: ${{ matrix.project }}/${{ matrix.project }}.trx
