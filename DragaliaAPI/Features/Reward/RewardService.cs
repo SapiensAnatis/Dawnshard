@@ -2,6 +2,8 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Item;
+using DragaliaAPI.Features.Player;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +17,9 @@ public class RewardService(
     IAbilityCrestRepository abilityCrestRepository,
     IUnitRepository unitRepository,
     IFortRepository fortRepository,
-    IEventRepository eventRepository
+    IEventRepository eventRepository,
+    IItemRepository itemRepository,
+    IUserService userService
 ) : IRewardService
 {
     private readonly List<Entity> discardedEntities = new();
@@ -38,6 +42,9 @@ public class RewardService(
         {
             case EntityTypes.Chara:
                 return await RewardCharacter(entity);
+            case EntityTypes.Item:
+                await itemRepository.AddItemQuantityAsync((UseItem)entity.Id, entity.Quantity);
+                break;
             case EntityTypes.Dragon:
                 for (int i = 0; i < entity.Quantity; i++)
                     await unitRepository.AddDragons((Dragons)entity.Id);
@@ -50,6 +57,9 @@ public class RewardService(
                 break;
             case EntityTypes.Rupies:
                 await userDataRepository.UpdateCoin(entity.Quantity);
+                break;
+            case EntityTypes.SkipTicket:
+                await userService.AddQuestSkipPoint(entity.Quantity);
                 break;
             case EntityTypes.Wyrmite:
                 await userDataRepository.GiveWyrmite(entity.Quantity);
