@@ -37,4 +37,9 @@ public class ItemRepository(ApiContext apiContext, IPlayerIdentityService player
 
         item.Quantity += quantity;
     }
+
+    public async Task<DbPlayerUseItem?> GetItemAsync(UseItem id)
+    {
+        return await apiContext.PlayerUseItems.FindAsync(playerIdentityService.AccountId, id);
+    }
 }
