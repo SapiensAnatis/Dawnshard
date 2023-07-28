@@ -190,22 +190,30 @@ public class DungeonRecordController(
             drops.Select(x => new KeyValuePair<Materials, int>((Materials)x.id, x.quantity))
         );
 
-        (IEnumerable<AtgenScoreMissionSuccessList> scoreMissions, int totalPoints) =
-            await questCompletionService.CompleteQuestScoreMissions(session, playRecord!);
+        (double materialMultiplier, double pointMultiplier) =
+            await abilityCrestMultiplierService.GetEventMultiplier(
+                session.Party,
+                session.QuestData.Gid
+            );
+
+        (
+            IEnumerable<AtgenScoreMissionSuccessList> scoreMissions,
+            int totalPoints,
+            int boostedPoints
+        ) = await questCompletionService.CompleteQuestScoreMissions(
+            session,
+            playRecord!,
+            pointMultiplier
+        );
 
         IEnumerable<AtgenEventPassiveUpList> eventPassiveDrops =
             await eventDropService.ProcessEventPassiveDrops(session.QuestData);
-
-        double crestMultiplier = await abilityCrestMultiplierService.GetFacilityEventMultiplier(
-            session.Party,
-            session.QuestData.Gid
-        );
 
         drops.AddRange(
             await eventDropService.ProcessEventMaterialDrops(
                 session.QuestData,
                 playRecord!,
-                crestMultiplier
+                materialMultiplier
             )
         );
 
@@ -267,7 +275,8 @@ public class DungeonRecordController(
                     campaign_extra_reward_list = new List<AtgenFirstClearSet>(),
                     weekly_limit_reward_list = new List<AtgenFirstClearSet>(),
                     take_accumulate_point = totalPoints,
-                    player_level_up_fstone = playerLevelResult.RewardedWyrmite
+                    player_level_up_fstone = playerLevelResult.RewardedWyrmite,
+                    take_boost_accumulate_point = boostedPoints
                 },
                 grow_record = new()
                 {

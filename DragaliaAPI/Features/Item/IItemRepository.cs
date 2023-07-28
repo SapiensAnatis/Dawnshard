@@ -8,4 +8,6 @@ public interface IItemRepository
     IQueryable<DbPlayerUseItem> Items { get; }
 
     Task AddItemQuantityAsync(UseItem item, int quantity);
+
+    Task<DbPlayerUseItem?> GetItemAsync(UseItem id);
 }
