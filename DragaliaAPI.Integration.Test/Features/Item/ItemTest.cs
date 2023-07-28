@@ -41,7 +41,7 @@ public class ItemTest : TestFixture
     }
 
     [Fact]
-    public async Task UseRecoveryStamina_RecoversStamina()
+    public async Task UseRecoveryStamina_SingleItem_RecoversStamina()
     {
         ApiContext.PlayerUseItems.RemoveRange(
             ApiContext.PlayerUseItems.Where(x => x.DeviceAccountId == DeviceAccountId)
@@ -75,5 +75,48 @@ public class ItemTest : TestFixture
         resp.data.recover_data.recover_stamina_type.Should().Be(UseItemEffect.RecoverStamina);
         resp.data.recover_data.recover_stamina_point.Should().Be(10);
         resp.data.update_data_list.user_data.stamina_single.Should().Be(15);
+        resp.data.update_data_list.item_list
+            .Should()
+            .ContainEquivalentOf(new ItemList(UseItem.Honey, 49));
+    }
+
+    [Fact]
+    public async Task UseRecoveryStamina_MultipleItems_RecoversStamina()
+    {
+        ApiContext.PlayerUseItems.RemoveRange(
+            ApiContext.PlayerUseItems.Where(x => x.DeviceAccountId == DeviceAccountId)
+        );
+
+        ApiContext.PlayerUseItems.Add(
+            new DbPlayerUseItem()
+            {
+                DeviceAccountId = DeviceAccountId,
+                ItemId = UseItem.Honey,
+                Quantity = 50
+            }
+        );
+
+        DbPlayerUserData userData = await ApiContext.PlayerUserData.SingleAsync(
+            x => x.DeviceAccountId == DeviceAccountId
+        );
+
+        userData.StaminaSingle = 5;
+
+        await ApiContext.SaveChangesAsync();
+
+        DragaliaResponse<ItemUseRecoveryStaminaData> resp =
+            await Client.PostMsgpack<ItemUseRecoveryStaminaData>(
+                "item/use_recovery_stamina",
+                new ItemUseRecoveryStaminaRequest(
+                    new List<AtgenUseItemList> { new(UseItem.Honey, 5) }
+                )
+            );
+
+        resp.data.recover_data.recover_stamina_type.Should().Be(UseItemEffect.RecoverStamina);
+        resp.data.recover_data.recover_stamina_point.Should().Be(10 * 5);
+        resp.data.update_data_list.user_data.stamina_single.Should().Be(5 + (10 * 5));
+        resp.data.update_data_list.item_list
+            .Should()
+            .ContainEquivalentOf(new ItemList(UseItem.Honey, 45));
     }
 }
