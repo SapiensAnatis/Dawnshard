@@ -191,7 +191,7 @@ public class DungeonRecordController(
         );
 
         (double materialMultiplier, double pointMultiplier) =
-            await abilityCrestMultiplierService.GetFacilityEventMultiplier(
+            await abilityCrestMultiplierService.GetEventMultiplier(
                 session.Party,
                 session.QuestData.Gid
             );

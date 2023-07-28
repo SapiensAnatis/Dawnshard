@@ -14,7 +14,7 @@ public class AbilityCrestMultiplierService(
     ILogger<AbilityCrestMultiplierService> logger
 ) : IAbilityCrestMultiplierService
 {
-    public async Task<(double Material, double Point)> GetFacilityEventMultiplier(
+    public async Task<(double Material, double Point)> GetEventMultiplier(
         IEnumerable<PartySettingList> partySettingList,
         int eventId
     )

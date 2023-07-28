@@ -95,8 +95,8 @@ public class DungeonRecordControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         this.mockCrestMultiplierService
-            .Setup(x => x.GetFacilityEventMultiplier(party, questData.Gid))
-            .ReturnsAsync(1);
+            .Setup(x => x.GetEventMultiplier(party, questData.Gid))
+            .ReturnsAsync((1, 1));
     }
 
     // Tests that QuestId and party data show up in response
@@ -140,9 +140,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        4
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
 
         this.mockQuestCompletionService
             .Setup(x => x.GrantFirstClearRewards(questId))
@@ -153,8 +157,8 @@ public class DungeonRecordControllerTest
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
 
         this.mockCrestMultiplierService
-            .Setup(x => x.GetFacilityEventMultiplier(party, questData.Gid))
-            .ReturnsAsync(4);
+            .Setup(x => x.GetEventMultiplier(party, questData.Gid))
+            .ReturnsAsync((4, 4));
 
         this.mockEventDropService
             .Setup(
@@ -245,9 +249,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        1
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
 
         this.mockQuestCompletionService
             .Setup(x => x.GrantFirstClearRewards(questId))
@@ -344,9 +352,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        1
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
 
         this.mockEventDropService
             .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
@@ -445,10 +457,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        1
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
-
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
         this.mockQuestCompletionService
             .Setup(x => x.GrantFirstClearRewards(questId))
             .ReturnsAsync(firstClearReward);
@@ -564,9 +579,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        1
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
 
         this.mockEventDropService
             .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
@@ -682,10 +701,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        1
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
-
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
         this.mockEventDropService
             .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
@@ -786,10 +808,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        1
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
-
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
         this.mockEventDropService
             .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
