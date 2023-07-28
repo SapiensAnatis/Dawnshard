@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230727194756_login-bonus")]
+    [Migration("20230728164715_login-bonus")]
     partial class loginbonus
     {
         /// <inheritdoc />
@@ -1102,6 +1102,26 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerTrades");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerUseItem", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("integer")
+                        .HasColumnName("ItemId");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("Quantity");
+
+                    b.HasKey("DeviceAccountId", "ItemId");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("PlayerUseItems");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerUserData", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -1783,6 +1803,17 @@ namespace DragaliaAPI.Database.Migrations
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerTrade", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerUseItem", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany()
