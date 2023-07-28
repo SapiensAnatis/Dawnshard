@@ -10,6 +10,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
+using DragaliaAPI.Shared.MasterAsset.Models.User;
 
 namespace DragaliaAPI.Shared.MasterAsset;
 
@@ -102,7 +103,8 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, QuestEvent> QuestEvent =
         new("QuestEvent.json", x => x.Id);
 
-    public static readonly MasterAssetData<int, UseItem> UseItem = new("UseItem.json", x => x.Id);
+    public static readonly MasterAssetData<UseItem, UseItemData> UseItem =
+        new("UseItem.json", x => x.Id);
 
     public static readonly MasterAssetData<int, AbilityData> AbilityData =
         new("AbilityData.json", x => x.Id);
@@ -359,6 +361,13 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, EventPassive> EventPassive =
         new("Event/EventPassive.json", x => x.Id);
+
+    #endregion
+
+    #region User
+
+    public static readonly MasterAssetData<int, UserLevel> UserLevel =
+        new("User/UserLevel.json", x => x.Id);
 
     #endregion
 }

@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
@@ -30,6 +31,7 @@ public class FortServiceTest
     private readonly Mock<IPaymentService> mockPaymentService;
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IOptionsMonitor<DragonfruitConfig>> mockConfig;
+    private readonly Mock<IUserService> mockUserService;
 
     private readonly IFortService fortService;
 
@@ -45,6 +47,7 @@ public class FortServiceTest
         this.mockPaymentService = new(MockBehavior.Strict);
         this.mockRewardService = new(MockBehavior.Strict);
         this.mockConfig = new(MockBehavior.Strict);
+        this.mockUserService = new(MockBehavior.Strict);
 
         this.mockConfig
             .SetupGet(x => x.CurrentValue)
@@ -94,7 +97,8 @@ public class FortServiceTest
             mockMissionProgressionService.Object,
             mockPaymentService.Object,
             mockRewardService.Object,
-            mockConfig.Object
+            mockConfig.Object,
+            mockUserService.Object
         );
 
         UnitTestUtils.ApplyDateTimeAssertionOptions();

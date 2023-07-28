@@ -3201,10 +3201,10 @@ public class AtgenReceiveQuestBonus
 [MessagePackObject(true)]
 public class AtgenRecoverData
 {
-    public int recover_stamina_type { get; set; }
+    public UseItemEffect recover_stamina_type { get; set; }
     public int recover_stamina_point { get; set; }
 
-    public AtgenRecoverData(int recover_stamina_type, int recover_stamina_point)
+    public AtgenRecoverData(UseItemEffect recover_stamina_type, int recover_stamina_point)
     {
         this.recover_stamina_type = recover_stamina_type;
         this.recover_stamina_point = recover_stamina_point;
@@ -4125,10 +4125,10 @@ public class AtgenUnitList
 [MessagePackObject(true)]
 public class AtgenUseItemList
 {
-    public int item_id { get; set; }
+    public UseItem item_id { get; set; }
     public int item_quantity { get; set; }
 
-    public AtgenUseItemList(int item_id, int item_quantity)
+    public AtgenUseItemList(UseItem item_id, int item_quantity)
     {
         this.item_id = item_id;
         this.item_quantity = item_quantity;
@@ -6773,10 +6773,10 @@ public class IngameWallData
 [MessagePackObject(true)]
 public class ItemList
 {
-    public int item_id { get; set; }
+    public UseItem item_id { get; set; }
     public int quantity { get; set; }
 
-    public ItemList(int item_id, int quantity)
+    public ItemList(UseItem item_id, int quantity)
     {
         this.item_id = item_id;
         this.quantity = quantity;

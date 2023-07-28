@@ -540,6 +540,9 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerEventPassives.RemoveRange(
             this.apiContext.PlayerEventPassives.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PlayerUseItems.RemoveRange(
+            this.apiContext.PlayerUseItems.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset()

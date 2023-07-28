@@ -2,4 +2,4 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Trade;
 
-public record UseItem(int Id, UseItemEffect ItemEffect, int ItemEffectValue);
+public record UseItemData(UseItem Id, UseItemEffect ItemEffect, int ItemEffectValue);
