@@ -14,12 +14,13 @@ public class AbilityCrestMultiplierService(
     ILogger<AbilityCrestMultiplierService> logger
 ) : IAbilityCrestMultiplierService
 {
-    public async Task<double> GetFacilityEventMultiplier(
+    public async Task<(double Material, double Point)> GetFacilityEventMultiplier(
         IEnumerable<PartySettingList> partySettingList,
         int eventId
     )
     {
-        double percentTotal = 0;
+        double materialBoost = 0;
+        double pointBoost = 0;
 
         IEnumerable<AbilityCrests> equippedCrestIds = partySettingList.SelectMany(
             y => y.GetAbilityCrestList()
@@ -31,48 +32,75 @@ public class AbilityCrestMultiplierService(
 
         foreach (PartySettingList partyUnit in partySettingList)
         {
-            IEnumerable<DbAbilityCrest> dbCrests = equippedCrests.IntersectBy(
-                partyUnit.GetAbilityCrestList(),
-                x => x.AbilityCrestId
-            );
+            IEnumerable<DbAbilityCrest> dbCrests = equippedCrests
+                .IntersectBy(partyUnit.GetAbilityCrestList(), x => x.AbilityCrestId)
+                .ToList();
 
-            IEnumerable<AbilityData> buildAbilities = this.GetUnitCrestAbilities(dbCrests)
-                .Where(x => x.AbilityType1 == AbilityTypes.BuildEventBoost && x.EventId == eventId)
+            List<AbilityData> buildPointAbilities = this.GetUnitCrestAbilities(dbCrests)
+                .Where(
+                    x =>
+                        x.AbilityType1
+                            is AbilityTypes.BuildEventPointBoost
+                                or AbilityTypes.DefensiveEventPointBoost
+                        && x.EventId == eventId
+                )
                 .ToList();
 
             logger.LogTrace(
-                "Unit {unitNo} build event abilities: {@abilities}",
+                "Unit {unitNo} build event point abilities: {@abilities}",
                 partyUnit.unit_no,
-                buildAbilities
+                buildPointAbilities
             );
 
-            if (!buildAbilities.Any())
-                continue;
+            pointBoost += CalculatePercentageValue(buildPointAbilities);
+
+            List<AbilityData> buildMaterialAbilities = this.GetUnitCrestAbilities(dbCrests)
+                .Where(
+                    x =>
+                        x.AbilityType1 is AbilityTypes.BuildEventMaterialBoost
+                        && x.EventId == eventId
+                )
+                .ToList();
+
+            logger.LogTrace(
+                "Unit {unitNo} build event material abilities: {@abilities}",
+                partyUnit.unit_no,
+                buildPointAbilities
+            );
+
+            materialBoost += CalculatePercentageValue(buildMaterialAbilities);
+        }
+
+        logger.LogDebug(
+            "Calculated build event multipliers for event {eventId}: Material {materialMultiplier}% / Points {pointMultiplier}%",
+            eventId,
+            materialBoost,
+            pointBoost
+        );
+
+        return (1 + (materialBoost / 100), 1 + (pointBoost / 100));
+
+        double CalculatePercentageValue(IReadOnlyCollection<AbilityData> abilities)
+        {
+            if (!abilities.Any())
+                return 0;
 
             // After filtering by event ID, they should all have the same AbilityLimitedGroupId1
             Debug.Assert(
-                buildAbilities.All(
-                    x => x.AbilityLimitedGroupId1 == buildAbilities.First().AbilityLimitedGroupId1
+                abilities.All(
+                    x => x.AbilityLimitedGroupId1 == abilities.First().AbilityLimitedGroupId1
                 )
             );
 
             double abilityLimit = MasterAsset.AbilityLimitedGroup[
-                buildAbilities.First().AbilityLimitedGroupId1
+                abilities.First().AbilityLimitedGroupId1
             ].MaxLimitedValue;
 
-            double sum = buildAbilities.Sum(x => x.AbilityType1UpValue);
+            double sum = abilities.Sum(x => x.AbilityType1UpValue);
 
             // Note: other abilities, such as player XP boosts, may be capped per-party instead of per-unit.
-            percentTotal += Math.Min(sum, abilityLimit);
+            return Math.Min(sum, abilityLimit);
         }
-
-        logger.LogDebug(
-            "Calculated build event multiplier for event {eventId}: {result}%",
-            eventId,
-            percentTotal
-        );
-
-        return 1 + (percentTotal / 100);
     }
 
     private IEnumerable<AbilityData> GetUnitCrestAbilities(IEnumerable<DbAbilityCrest> crests)
