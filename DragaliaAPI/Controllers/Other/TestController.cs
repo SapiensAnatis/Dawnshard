@@ -3,6 +3,7 @@ using DragaliaAPI.Services.Exceptions;
 using MessagePack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Controllers.Other;
 
@@ -49,6 +50,12 @@ public class TestController : DragaliaControllerBase
     public IActionResult Dragalia()
     {
         throw new DragaliaException(ResultCode.AbilityCrestBuildupPieceShortLevel);
+    }
+
+    [HttpPost("securitytokenexpired")]
+    public IActionResult SecurityTokenExpired()
+    {
+        throw new SecurityTokenExpiredException();
     }
 }
 #endif
