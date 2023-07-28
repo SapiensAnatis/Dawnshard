@@ -13,19 +13,14 @@ public class LoginBonusService(
     IRewardService rewardService,
     IDateTimeProvider dateTimeProvider,
     ILoginBonusRepository loginBonusRepository,
-    IPlayerIdentityService playerIdentityService,
     ILogger<LoginBonusService> logger
 ) : ILoginBonusService
 {
-    private readonly IRewardService rewardService = rewardService;
-    private readonly IDateTimeProvider dateTimeProvider = dateTimeProvider;
-    private readonly ILogger<LoginBonusService> logger = logger;
-
     public async Task<IEnumerable<AtgenLoginBonusList>> RewardLoginBonus()
     {
         List<AtgenLoginBonusList> bonusList = new();
 
-        DateTimeOffset time = this.dateTimeProvider.UtcNow;
+        DateTimeOffset time = dateTimeProvider.UtcNow;
 
         foreach (
             LoginBonusData bonusData in MasterAsset.LoginBonusData.Enumerable.Where(
@@ -43,13 +38,13 @@ public class LoginBonusService(
                 continue;
             }
 
-            dbBonus.CurrentDay += 1;
-
             int bonusCount = MasterAsset.LoginBonusReward.Enumerable.Count(
                 x => x.Gid == bonusData.Id
             );
 
             int dayId = bonusData.IsLoop ? dbBonus.CurrentDay % bonusCount : dbBonus.CurrentDay;
+
+            dayId += 1;
 
             LoginBonusReward? reward = MasterAsset.LoginBonusReward.Enumerable.FirstOrDefault(
                 x => x.Gid == bonusData.Id && x.Day == dayId
@@ -57,7 +52,7 @@ public class LoginBonusService(
 
             if (reward == null)
             {
-                this.logger.LogWarning(
+                logger.LogWarning(
                     "Failed to get reward for bonus data {bonusDataId} with day {dayId} (IsLoop: {isLoop})",
                     bonusData.Id,
                     dayId,
@@ -66,11 +61,12 @@ public class LoginBonusService(
                 continue;
             }
 
+            dbBonus.CurrentDay = dayId;
             if (dbBonus.CurrentDay >= bonusCount && !bonusData.IsLoop)
                 dbBonus.IsComplete = true;
 
-            await this.rewardService.GrantReward(
-                new(
+            await rewardService.GrantReward(
+                new Entity(
                     reward.EntityType,
                     reward.EntityId,
                     reward.EntityQuantity,
@@ -96,7 +92,7 @@ public class LoginBonusService(
 
             if (bonusData.EachDayEntityType != EntityTypes.None)
             {
-                await this.rewardService.GrantReward(
+                await rewardService.GrantReward(
                     new Entity(
                         bonusData.EachDayEntityType,
                         bonusData.EachDayEntityId,

@@ -210,7 +210,7 @@ public class LoginTest : TestFixture
                 {
                     login_bonus_id = 17,
                     reward_day = 1,
-                    total_login_day = 11,
+                    total_login_day = 1,
                     entity_type = EntityTypes.Material,
                     entity_id = 101001003,
                     entity_quantity = 10,
