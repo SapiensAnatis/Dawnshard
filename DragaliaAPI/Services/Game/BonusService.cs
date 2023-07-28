@@ -18,33 +18,25 @@ namespace DragaliaAPI.Services.Game;
 #if CHEATING
 #warning Cheats are enabled
 #endif
-public class BonusService : IBonusService
+public class BonusService(IFortRepository fortRepository, IWeaponRepository weaponRepository)
+    : IBonusService
 {
-    private readonly IFortRepository fortRepository;
-    private readonly IWeaponRepository weaponRepository;
-    private readonly IPlayerIdentityService playerIdentityService;
-
-    public BonusService(
-        IFortRepository fortRepository,
-        IWeaponRepository weaponRepository,
-        IPlayerIdentityService playerIdentityService
-    )
-    {
-        this.fortRepository = fortRepository;
-        this.weaponRepository = weaponRepository;
-        this.playerIdentityService = playerIdentityService;
-    }
+    private static readonly ImmutableList<FortPlants> EventFacilityIds =
+        MasterAsset.FortPlant.Enumerable
+            .Where(x => x.EventEffectType != 0 && x.EventEffectArgs != 0)
+            .Select(x => x.AssetGroup)
+            .ToImmutableList();
 
     public async Task<FortBonusList> GetBonusList()
     {
         IEnumerable<int> buildIds = (
-            await this.fortRepository.Builds
+            await fortRepository.Builds
                 .Where(x => x.Level != 0)
                 .Select(x => new { x.PlantId, x.Level })
                 .ToListAsync()
         ).Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level));
 
-        IEnumerable<WeaponBodies> weaponIds = await this.weaponRepository.WeaponBodies
+        IEnumerable<WeaponBodies> weaponIds = await weaponRepository.WeaponBodies
             .Where(x => x.FortPassiveCharaWeaponBuildupCount != 0)
             .Select(x => x.WeaponBodyId)
             .ToListAsync();
@@ -73,6 +65,16 @@ public class BonusService : IBonusService
 #endif
             },
         };
+    }
+
+    public async Task<AtgenEventBoost> GetEventBoost()
+    {
+        IEnumerable<int> buildIds = (
+            await fortRepository.Builds
+                .Where(x => x.Level != 0 && EventFacilityIds.Contains(x.PlantId))
+                .Select(x => new { x.PlantId, x.Level })
+                .ToListAsync()
+        ).Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level));
     }
 
     private static IEnumerable<AtgenElementBonus> GetFortElementBonus(IEnumerable<int> buildIds)
