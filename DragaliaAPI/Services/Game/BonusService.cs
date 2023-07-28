@@ -7,8 +7,10 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace DragaliaAPI.Services.Game;
 
@@ -18,15 +20,12 @@ namespace DragaliaAPI.Services.Game;
 #if CHEATING
 #warning Cheats are enabled
 #endif
-public class BonusService(IFortRepository fortRepository, IWeaponRepository weaponRepository)
-    : IBonusService
+public class BonusService(
+    IFortRepository fortRepository,
+    IWeaponRepository weaponRepository,
+    ILogger<BonusService> logger
+) : IBonusService
 {
-    private static readonly ImmutableList<FortPlants> EventFacilityIds =
-        MasterAsset.FortPlant.Enumerable
-            .Where(x => x.EventEffectType != 0 && x.EventEffectArgs != 0)
-            .Select(x => x.AssetGroup)
-            .ToImmutableList();
-
     public async Task<FortBonusList> GetBonusList()
     {
         IEnumerable<int> buildIds = (
@@ -67,14 +66,35 @@ public class BonusService(IFortRepository fortRepository, IWeaponRepository weap
         };
     }
 
-    public async Task<AtgenEventBoost> GetEventBoost()
+    public async Task<AtgenEventBoost?> GetEventBoost(int eventId)
     {
-        IEnumerable<int> buildIds = (
-            await fortRepository.Builds
-                .Where(x => x.Level != 0 && EventFacilityIds.Contains(x.PlantId))
-                .Select(x => new { x.PlantId, x.Level })
-                .ToListAsync()
-        ).Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level));
+        if (
+            !MasterAsset.EventData.TryGetValue(eventId, out EventData? eventData)
+            || eventData.EventFortId == 0
+        )
+        {
+            logger.LogDebug("No event facility found for eventId {eventId}", eventId);
+            return null;
+        }
+
+        int level = await fortRepository.Builds
+            .Where(x => x.PlantId == eventData.EventFortId)
+            .Select(x => x.Level)
+            .SingleOrDefaultAsync();
+
+        if (level == 0)
+        {
+            logger.LogDebug("Player did not own event facility {facility}", eventData.EventFortId);
+            return null;
+        }
+
+        FortPlantDetail detail = MasterAssetUtils.GetFortPlant(eventData.EventFortId, level);
+
+        return new AtgenEventBoost()
+        {
+            event_effect = detail.EventEffectType,
+            effect_value = detail.EventEffectArgs
+        };
     }
 
     private static IEnumerable<AtgenElementBonus> GetFortElementBonus(IEnumerable<int> buildIds)
