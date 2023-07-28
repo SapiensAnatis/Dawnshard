@@ -167,4 +167,6 @@ public class ApiContext : DbContext
     public DbSet<DbQuestClearPartyUnit> QuestClearPartyUnits { get; set; }
 
     public DbSet<DbPlayerUseItem> PlayerUseItems { get; set; }
+
+    public DbSet<DbLoginBonus> LoginBonuses { get; set; }
 }

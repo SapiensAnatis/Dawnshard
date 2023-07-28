@@ -156,6 +156,7 @@ builder.Services
     .AddScoped<IResetHelper, ResetHelper>()
     .AddScoped<IDateTimeProvider, DateTimeProvider>()
     .AddScoped<ILoginBonusService, LoginBonusService>()
+    .AddScoped<ILoginBonusRepository, LoginBonusRepository>()
     // Dungeon Feature
     .AddScoped<IDungeonService, DungeonService>()
     .AddScoped<IDungeonStartService, DungeonStartService>()

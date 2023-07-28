@@ -2,6 +2,7 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
@@ -31,12 +32,15 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
     public Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
 
+    public Mock<IDateTimeProvider> MockDateTimeProvider { get; } = new();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>
         {
             services.AddScoped(x => this.MockBaasApi.Object);
             services.AddScoped(x => this.MockPhotonStateApi.Object);
+            services.AddScoped(x => this.MockDateTimeProvider.Object);
             services.Configure<LoginOptions>(x => x.UseBaasLogin = true);
 
             NpgsqlConnectionStringBuilder connectionStringBuilder =

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -41,11 +42,16 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
 
         this.MockBaasApi = factory.MockBaasApi;
         this.MockPhotonStateApi = factory.MockPhotonStateApi;
+        this.MockDateTimeProvider = factory.MockDateTimeProvider;
+
+        this.MockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UtcNow);
     }
 
     protected Mock<IBaasApi> MockBaasApi { get; }
 
     protected Mock<IPhotonStateApi> MockPhotonStateApi { get; }
+
+    protected Mock<IDateTimeProvider> MockDateTimeProvider { get; }
 
     protected IServiceProvider Services { get; }
 
