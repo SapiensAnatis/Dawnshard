@@ -131,7 +131,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
         IEnumerable<Entity> drops = type switch
         {
-            EventKindType.Build => ProcessBuildEventDrops(quest, evt, record, buildDropMultiplier),
+            EventKindType.Build => ProcessBuildEventDrops(quest, evt, record),
             EventKindType.Raid => ProcessRaidEventDrops(quest, evt, record),
             EventKindType.Combat => ProcessCombatEventDrops(quest, evt, record),
             EventKindType.Clb01 => ProcessClb01EventDrops(quest, evt, record),
@@ -152,14 +152,22 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
             await rewardService.GrantReward(drop);
             dropList.Add(
-                new AtgenDropAll(
-                    drop.Id,
-                    drop.Type,
-                    drop.Quantity,
-                    0,
-                    drop.Type == EntityTypes.BuildEventItem ? (float)buildDropMultiplier : 0
-                )
+                new AtgenDropAll(drop.Id, drop.Type, drop.Quantity, RewardItemPlaceType.Normal, 0)
             );
+
+            if (drop.Id == evt.ViewEntityId1 && buildDropMultiplier > 1)
+            {
+                int extraQuantity = (int)Math.Floor(drop.Quantity * (buildDropMultiplier - 1));
+                dropList.Add(
+                    new AtgenDropAll(
+                        drop.Id,
+                        drop.Type,
+                        extraQuantity,
+                        RewardItemPlaceType.Bonus,
+                        0
+                    )
+                );
+            }
         }
 
         return dropList;
@@ -168,8 +176,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
     private IEnumerable<Entity> ProcessBuildEventDrops(
         QuestData quest,
         EventData evt,
-        PlayRecord record,
-        double buildDropMultiplier
+        PlayRecord record
     )
     {
         // https://dragalialost.wiki/w/Facility_Events
@@ -183,7 +190,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         {
             // T3 only drops from Challenge Battle quests
             int t3Quantity = GenerateDropAmount(
-                10 * record.wave * ((variation - VariationTypes.Hard) / 2d) * buildDropMultiplier
+                10 * record.wave * ((variation - VariationTypes.Hard) / 2d)
             );
             yield return new Entity(evt.ViewEntityType3, evt.ViewEntityId3, t3Quantity);
         }
@@ -191,17 +198,14 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         // T1 and T2 drop from all quests
         // But more often on harder quests
         int t2Quantity = GenerateDropAmount(
-            10d
-                * (int)variation
-                * (variation < VariationTypes.VeryHard ? 0.5 : 1)
-                * buildDropMultiplier
+            10d * (int)variation * (variation < VariationTypes.VeryHard ? 0.5 : 1)
         );
         yield return new Entity(evt.ViewEntityType2, evt.ViewEntityId2, t2Quantity);
 
         // T1 drops from every quest
         // But we incentivize playing the other non Challenge Battle quests for it
         int t1Quantity = GenerateDropAmount(
-            10d * (int)variation * (type == DungeonTypes.Normal ? 1.5 : 1) * buildDropMultiplier
+            10d * (int)variation * (type == DungeonTypes.Normal ? 1.5 : 1)
         );
         yield return new Entity(evt.ViewEntityType1, evt.ViewEntityId1, t1Quantity);
 

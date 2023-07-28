@@ -311,7 +311,10 @@ public class DungeonRecordController(
                     }
                 },
                 quest_party_setting_list = session.Party,
-                bonus_factor_list = new List<AtgenBonusFactorList>(),
+                bonus_factor_list = new List<AtgenBonusFactorList>()
+                {
+                    new() { factor_type = 1, factor_value = 100 }
+                },
                 scoring_enemy_point_list = new List<AtgenScoringEnemyPointList>(),
                 score_mission_success_list = scoreMissions,
                 event_passive_up_list = eventPassiveDrops,
