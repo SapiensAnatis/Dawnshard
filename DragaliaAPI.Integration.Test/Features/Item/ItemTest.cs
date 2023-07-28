@@ -9,14 +9,9 @@ namespace DragaliaAPI.Integration.Test.Features.Item;
 public class ItemTest : TestFixture
 {
     public ItemTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
-
-    [Fact]
-    public async Task GetList_ReturnsItemList()
+        : base(factory, outputHelper)
     {
-        ApiContext.PlayerUseItems.RemoveRange(
-            ApiContext.PlayerUseItems.Where(x => x.DeviceAccountId == DeviceAccountId)
-        );
+        ApiContext.PlayerUseItems.Where(x => x.DeviceAccountId == DeviceAccountId).ExecuteDelete();
 
         ApiContext.PlayerUseItems.Add(
             new DbPlayerUseItem()
@@ -27,8 +22,19 @@ public class ItemTest : TestFixture
             }
         );
 
-        await ApiContext.SaveChangesAsync();
+        DbPlayerUserData userData = ApiContext.PlayerUserData.Single(
+            x => x.DeviceAccountId == DeviceAccountId
+        );
 
+        userData.StaminaSingle = 5;
+
+        ApiContext.SaveChanges();
+        ApiContext.ChangeTracker.Clear();
+    }
+
+    [Fact]
+    public async Task GetList_ReturnsItemList()
+    {
         DragaliaResponse<ItemGetListData> resp = await Client.PostMsgpack<ItemGetListData>(
             "item/get_list",
             new ItemGetListRequest()
@@ -43,27 +49,6 @@ public class ItemTest : TestFixture
     [Fact]
     public async Task UseRecoveryStamina_SingleItem_RecoversStamina()
     {
-        ApiContext.PlayerUseItems.RemoveRange(
-            ApiContext.PlayerUseItems.Where(x => x.DeviceAccountId == DeviceAccountId)
-        );
-
-        ApiContext.PlayerUseItems.Add(
-            new DbPlayerUseItem()
-            {
-                DeviceAccountId = DeviceAccountId,
-                ItemId = UseItem.Honey,
-                Quantity = 50
-            }
-        );
-
-        DbPlayerUserData userData = await ApiContext.PlayerUserData.SingleAsync(
-            x => x.DeviceAccountId == DeviceAccountId
-        );
-
-        userData.StaminaSingle = 5;
-
-        await ApiContext.SaveChangesAsync();
-
         DragaliaResponse<ItemUseRecoveryStaminaData> resp =
             await Client.PostMsgpack<ItemUseRecoveryStaminaData>(
                 "item/use_recovery_stamina",
@@ -83,27 +68,6 @@ public class ItemTest : TestFixture
     [Fact]
     public async Task UseRecoveryStamina_MultipleItems_RecoversStamina()
     {
-        ApiContext.PlayerUseItems.RemoveRange(
-            ApiContext.PlayerUseItems.Where(x => x.DeviceAccountId == DeviceAccountId)
-        );
-
-        ApiContext.PlayerUseItems.Add(
-            new DbPlayerUseItem()
-            {
-                DeviceAccountId = DeviceAccountId,
-                ItemId = UseItem.Honey,
-                Quantity = 50
-            }
-        );
-
-        DbPlayerUserData userData = await ApiContext.PlayerUserData.SingleAsync(
-            x => x.DeviceAccountId == DeviceAccountId
-        );
-
-        userData.StaminaSingle = 5;
-
-        await ApiContext.SaveChangesAsync();
-
         DragaliaResponse<ItemUseRecoveryStaminaData> resp =
             await Client.PostMsgpack<ItemUseRecoveryStaminaData>(
                 "item/use_recovery_stamina",
