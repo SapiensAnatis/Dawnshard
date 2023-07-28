@@ -166,7 +166,9 @@ public class TradeService(
             if (type == EntityTypes.None)
                 continue;
 
-            await paymentService.ProcessPayment(new Entity(type, id, quantity, limitBreakCount));
+            await paymentService.ProcessPayment(
+                new Entity(type, id, quantity * count, limitBreakCount)
+            );
         }
 
         await rewardService.GrantReward(

@@ -151,7 +151,15 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
                 continue;
 
             await rewardService.GrantReward(drop);
-            dropList.Add(new AtgenDropAll(drop.Id, drop.Type, drop.Quantity, 0, 0));
+            dropList.Add(
+                new AtgenDropAll(
+                    drop.Id,
+                    drop.Type,
+                    drop.Quantity,
+                    0,
+                    drop.Type == EntityTypes.BuildEventItem ? (float)buildDropMultiplier : 0
+                )
+            );
         }
 
         return dropList;

@@ -35,15 +35,15 @@ public enum AbilityTypes
     UniqueKiller,
     Dummy01,
     Dummy02,
-    BuildEventBoost, // Originally Dummy03
-    Dummy04,
+    BuildEventPointBoost, // Originally Dummy03
+    BuildEventMaterialBoost, // Dummy04
     ModeGaugeSuppression,
     DragonDamageUp,
     EnemyAbilityKiller,
     HitAttribute,
     PassiveGrant,
     ActiveGaugeStatusUp,
-    Dummy05,
+    DefensiveEventPointBoost, // Dummy05
     HitAttributeShift,
     ReferenceOther,
     EnhancedSkill,

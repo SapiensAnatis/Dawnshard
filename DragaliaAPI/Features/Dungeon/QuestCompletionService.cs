@@ -18,8 +18,13 @@ public class QuestCompletionService(
 {
     public async Task<(
         IEnumerable<AtgenScoreMissionSuccessList> Missions,
-        int Points
-    )> CompleteQuestScoreMissions(DungeonSession session, PlayRecord record)
+        int Points,
+        int BoostedPoints
+    )> CompleteQuestScoreMissions(
+        DungeonSession session,
+        PlayRecord record,
+        double abilityMultiplier
+    )
     {
         // TODO: Add Enemy scoring
         List<AtgenScoreMissionSuccessList> missions = new();
@@ -33,7 +38,7 @@ public class QuestCompletionService(
             )
         )
         {
-            return (missions, 0);
+            return (missions, 0, 0);
         }
 
         double multiplier = 100.0f;
@@ -78,7 +83,23 @@ public class QuestCompletionService(
             new Entity(eventType.ToItemType(), (int)info.RewardEntityId, rewardQuantity)
         );
 
-        return (missions, rewardQuantity);
+        int boostPoints = 0;
+
+        if (abilityMultiplier != 1)
+        {
+            boostPoints = (int)Math.Floor(rewardQuantity * (abilityMultiplier - 1));
+
+            logger.LogDebug(
+                "Rewarding {boostPointQuantity} extra points due to abilities",
+                boostPoints
+            );
+
+            await rewardService.GrantReward(
+                new Entity(eventType.ToItemType(), (int)info.RewardEntityId, boostPoints)
+            );
+        }
+
+        return (missions, rewardQuantity, boostPoints);
     }
 
     public async Task<QuestMissionStatus> CompleteQuestMissions(

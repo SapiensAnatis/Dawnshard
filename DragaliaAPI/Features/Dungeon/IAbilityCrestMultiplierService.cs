@@ -4,7 +4,7 @@ namespace DragaliaAPI.Features.Dungeon;
 
 public interface IAbilityCrestMultiplierService
 {
-    Task<double> GetFacilityEventMultiplier(
+    Task<(double Material, double Point)> GetEventMultiplier(
         IEnumerable<PartySettingList> partySettingList,
         int eventId
     );

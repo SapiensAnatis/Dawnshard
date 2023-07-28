@@ -1,4 +1,6 @@
 ﻿using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -12,7 +14,8 @@ namespace DragaliaAPI.Features.Item;
 public class ItemService(
     IItemRepository itemRepository,
     ILogger<ItemService> logger,
-    IUserService userService
+    IUserService userService,
+    IPaymentService paymentService
 ) : IItemService
 {
     public async Task<IEnumerable<ItemList>> GetItemList()
@@ -34,7 +37,11 @@ public class ItemService(
             UseItemData data = MasterAsset.UseItem[item.item_id];
             if (effect == UseItemEffect.None)
                 effect = data.ItemEffect;
-            totalQuantity += data.ItemEffectValue;
+            totalQuantity += data.ItemEffectValue * item.item_quantity;
+
+            await paymentService.ProcessPayment(
+                new Entity(EntityTypes.Item, (int)item.item_id, item.item_quantity)
+            );
         }
 
         switch (effect)

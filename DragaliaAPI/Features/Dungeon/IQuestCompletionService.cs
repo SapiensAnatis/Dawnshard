@@ -8,8 +8,9 @@ public interface IQuestCompletionService
 {
     public Task<(
         IEnumerable<AtgenScoreMissionSuccessList> Missions,
-        int Points
-    )> CompleteQuestScoreMissions(DungeonSession session, PlayRecord record);
+        int Points,
+        int BoostedPoints
+    )> CompleteQuestScoreMissions(DungeonSession session, PlayRecord record, double multiplier);
 
     public Task<QuestMissionStatus> CompleteQuestMissions(
         DungeonSession session,
