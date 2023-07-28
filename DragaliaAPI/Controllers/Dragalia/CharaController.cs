@@ -1,6 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Diagnostics;
-using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
@@ -15,7 +13,6 @@ using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
-using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,13 +22,10 @@ namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("chara")]
 public class CharaController(
-    IUserDataRepository userDataRepository,
     IUnitRepository unitRepository,
-    IInventoryRepository inventoryRepository,
     IStoryRepository storyRepository,
     IUpdateDataService updateDataService,
     ILogger<CharaController> logger,
-    IMapper mapper,
     IMissionProgressionService missionProgressionService,
     IPaymentService paymentService,
     IRewardService rewardService,
