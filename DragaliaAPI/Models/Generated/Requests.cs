@@ -827,9 +827,10 @@ public class DmodeBuildupServitorPassiveRequest
 [MessagePackObject(true)]
 public class DmodeDungeonFinishRequest
 {
-    public int is_game_over { get; set; }
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_game_over { get; set; }
 
-    public DmodeDungeonFinishRequest(int is_game_over)
+    public DmodeDungeonFinishRequest(bool is_game_over)
     {
         this.is_game_over = is_game_over;
     }
@@ -840,9 +841,9 @@ public class DmodeDungeonFinishRequest
 [MessagePackObject(true)]
 public class DmodeDungeonFloorRequest
 {
-    public DmodePlayRecord dmode_play_record { get; set; }
+    public DmodePlayRecord? dmode_play_record { get; set; }
 
-    public DmodeDungeonFloorRequest(DmodePlayRecord dmode_play_record)
+    public DmodeDungeonFloorRequest(DmodePlayRecord? dmode_play_record)
     {
         this.dmode_play_record = dmode_play_record;
     }
@@ -862,13 +863,13 @@ public class DmodeDungeonStartRequest
     public Charas chara_id { get; set; }
     public int start_floor_num { get; set; }
     public int servitor_id { get; set; }
-    public IEnumerable<int> bring_edit_skill_chara_id_list { get; set; }
+    public IEnumerable<Charas> bring_edit_skill_chara_id_list { get; set; }
 
     public DmodeDungeonStartRequest(
         Charas chara_id,
         int start_floor_num,
         int servitor_id,
-        IEnumerable<int> bring_edit_skill_chara_id_list
+        IEnumerable<Charas> bring_edit_skill_chara_id_list
     )
     {
         this.chara_id = chara_id;
@@ -899,9 +900,9 @@ public class DmodeExpeditionForceFinishRequest { }
 public class DmodeExpeditionStartRequest
 {
     public int target_floor_num { get; set; }
-    public IEnumerable<int> chara_id_list { get; set; }
+    public IEnumerable<Charas> chara_id_list { get; set; }
 
-    public DmodeExpeditionStartRequest(int target_floor_num, IEnumerable<int> chara_id_list)
+    public DmodeExpeditionStartRequest(int target_floor_num, IEnumerable<Charas> chara_id_list)
     {
         this.target_floor_num = target_floor_num;
         this.chara_id_list = chara_id_list;

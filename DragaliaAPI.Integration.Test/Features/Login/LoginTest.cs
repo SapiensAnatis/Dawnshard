@@ -21,7 +21,7 @@ public class LoginTest : TestFixture
     public void IDailyResetAction_HasExpectedCount()
     {
         // Update this test when adding a new reset action
-        this.Services.GetServices<IDailyResetAction>().Should().HaveCount(3);
+        this.Services.GetServices<IDailyResetAction>().Should().HaveCount(4);
     }
 
     [Fact]

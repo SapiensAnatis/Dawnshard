@@ -2,4 +2,4 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 
-public record EnemyParam(int Id, Toughness Tough);
+public record EnemyParam(int Id, Toughness Tough, int DmodeEnemyParamGroupId);

@@ -4,6 +4,7 @@ using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.ClearParty;
+using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.GraphQL;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
@@ -28,6 +29,7 @@ using DragaliaAPI.Features.Login;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Player;
 
@@ -173,6 +175,11 @@ builder.Services
     // Clear party feature
     .AddScoped<IClearPartyRepository, ClearPartyRepository>()
     .AddScoped<IClearPartyService, ClearPartyService>()
+    // Dmode feature
+    .AddScoped<IDmodeRepository, DmodeRepository>()
+    .AddScoped<IDmodeCacheService, DmodeCacheService>()
+    .AddScoped<IDmodeService, DmodeService>()
+    .AddScoped<IDmodeDungeonService, DmodeDungeonService>()
     // Item feature
     .AddScoped<IItemRepository, ItemRepository>()
     .AddScoped<IItemService, ItemService>()
