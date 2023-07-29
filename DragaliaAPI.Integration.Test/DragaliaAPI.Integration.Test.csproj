@@ -48,6 +48,7 @@
 
     <ItemGroup>
       <Folder Include="Features\Missions\" />
+      <Folder Include="Features\Dmode\" />
       <Folder Include="Features\Item\" />
       <Folder Include="Features\Shop\" />
     </ItemGroup>

@@ -256,6 +256,30 @@ public class UnitRepository : IUnitRepository
             .ToDictionaryAsync(x => x.Key, x => x.AsEnumerable());
     }
 
+    public void AddTalisman(
+        Talismans id,
+        int abilityId1,
+        int abilityId2,
+        int abilityId3,
+        int additionalHp,
+        int additionalAttack
+    )
+    {
+        apiContext.PlayerTalismans.Add(
+            new DbTalisman
+            {
+                DeviceAccountId = playerIdentityService.AccountId,
+                TalismanId = id,
+                TalismanAbilityId1 = abilityId1,
+                TalismanAbilityId2 = abilityId2,
+                TalismanAbilityId3 = abilityId3,
+                AdditionalHp = additionalHp,
+                AdditionalAttack = additionalAttack,
+                GetTime = DateTimeOffset.UtcNow
+            }
+        );
+    }
+
     private static List<(TEnum id, bool isNew)> MarkNewIds<TEnum>(
         IEnumerable<TEnum> owned,
         IEnumerable<TEnum> idList

@@ -2,6 +2,7 @@
 
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.MessagePack;
+using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Generated;
@@ -1148,13 +1149,13 @@ public class DmodeBuildupServitorPassiveData
 [MessagePackObject(true)]
 public class DmodeDungeonFinishData
 {
-    public int dmode_dungeon_state { get; set; }
+    public DungeonState dmode_dungeon_state { get; set; }
     public DmodeIngameResult dmode_ingame_result { get; set; }
     public UpdateDataList update_data_list { get; set; }
     public EntityResult entity_result { get; set; }
 
     public DmodeDungeonFinishData(
-        int dmode_dungeon_state,
+        DungeonState dmode_dungeon_state,
         DmodeIngameResult dmode_ingame_result,
         UpdateDataList update_data_list,
         EntityResult entity_result
@@ -1172,22 +1173,19 @@ public class DmodeDungeonFinishData
 [MessagePackObject(true)]
 public class DmodeDungeonFloorData
 {
-    public int dmode_dungeon_state { get; set; }
+    public DungeonState dmode_dungeon_state { get; set; }
     public DmodeFloorData dmode_floor_data { get; set; }
     public UpdateDataList update_data_list { get; set; }
-    public EntityResult entity_result { get; set; }
 
     public DmodeDungeonFloorData(
-        int dmode_dungeon_state,
+        DungeonState dmode_dungeon_state,
         DmodeFloorData dmode_floor_data,
-        UpdateDataList update_data_list,
-        EntityResult entity_result
+        UpdateDataList update_data_list
     )
     {
         this.dmode_dungeon_state = dmode_dungeon_state;
         this.dmode_floor_data = dmode_floor_data;
         this.update_data_list = update_data_list;
-        this.entity_result = entity_result;
     }
 
     public DmodeDungeonFloorData() { }
@@ -1196,19 +1194,16 @@ public class DmodeDungeonFloorData
 [MessagePackObject(true)]
 public class DmodeDungeonFloorSkipData
 {
-    public int dmode_dungeon_state { get; set; }
+    public DungeonState dmode_dungeon_state { get; set; }
     public UpdateDataList update_data_list { get; set; }
-    public EntityResult entity_result { get; set; }
 
     public DmodeDungeonFloorSkipData(
-        int dmode_dungeon_state,
-        UpdateDataList update_data_list,
-        EntityResult entity_result
+        DungeonState dmode_dungeon_state,
+        UpdateDataList update_data_list
     )
     {
         this.dmode_dungeon_state = dmode_dungeon_state;
         this.update_data_list = update_data_list;
-        this.entity_result = entity_result;
     }
 
     public DmodeDungeonFloorSkipData() { }
@@ -1218,9 +1213,9 @@ public class DmodeDungeonFloorSkipData
 public class DmodeDungeonRestartData
 {
     public DmodeIngameData dmode_ingame_data { get; set; }
-    public int dmode_dungeon_state { get; set; }
+    public DungeonState dmode_dungeon_state { get; set; }
 
-    public DmodeDungeonRestartData(DmodeIngameData dmode_ingame_data, int dmode_dungeon_state)
+    public DmodeDungeonRestartData(DmodeIngameData dmode_ingame_data, DungeonState dmode_dungeon_state)
     {
         this.dmode_ingame_data = dmode_ingame_data;
         this.dmode_dungeon_state = dmode_dungeon_state;
@@ -1233,9 +1228,9 @@ public class DmodeDungeonRestartData
 public class DmodeDungeonStartData
 {
     public DmodeIngameData dmode_ingame_data { get; set; }
-    public int dmode_dungeon_state { get; set; }
+    public DungeonState dmode_dungeon_state { get; set; }
 
-    public DmodeDungeonStartData(DmodeIngameData dmode_ingame_data, int dmode_dungeon_state)
+    public DmodeDungeonStartData(DmodeIngameData dmode_ingame_data, DungeonState dmode_dungeon_state)
     {
         this.dmode_ingame_data = dmode_ingame_data;
         this.dmode_dungeon_state = dmode_dungeon_state;
@@ -1247,19 +1242,16 @@ public class DmodeDungeonStartData
 [MessagePackObject(true)]
 public class DmodeDungeonSystemHaltData
 {
-    public int dmode_dungeon_state { get; set; }
+    public DungeonState dmode_dungeon_state { get; set; }
     public UpdateDataList update_data_list { get; set; }
-    public EntityResult entity_result { get; set; }
 
     public DmodeDungeonSystemHaltData(
-        int dmode_dungeon_state,
-        UpdateDataList update_data_list,
-        EntityResult entity_result
+        DungeonState dmode_dungeon_state,
+        UpdateDataList update_data_list
     )
     {
         this.dmode_dungeon_state = dmode_dungeon_state;
         this.update_data_list = update_data_list;
-        this.entity_result = entity_result;
     }
 
     public DmodeDungeonSystemHaltData() { }
@@ -1268,19 +1260,16 @@ public class DmodeDungeonSystemHaltData
 [MessagePackObject(true)]
 public class DmodeDungeonUserHaltData
 {
-    public int dmode_dungeon_state { get; set; }
+    public DungeonState dmode_dungeon_state { get; set; }
     public UpdateDataList update_data_list { get; set; }
-    public EntityResult entity_result { get; set; }
 
     public DmodeDungeonUserHaltData(
-        int dmode_dungeon_state,
-        UpdateDataList update_data_list,
-        EntityResult entity_result
+        DungeonState dmode_dungeon_state,
+        UpdateDataList update_data_list
     )
     {
         this.dmode_dungeon_state = dmode_dungeon_state;
         this.update_data_list = update_data_list;
-        this.entity_result = entity_result;
     }
 
     public DmodeDungeonUserHaltData() { }
@@ -1294,15 +1283,13 @@ public class DmodeEntryData
     public IEnumerable<DmodeServitorPassiveList> dmode_servitor_passive_list { get; set; }
     public DmodeDungeonInfo dmode_dungeon_info { get; set; }
     public UpdateDataList update_data_list { get; set; }
-    public EntityResult entity_result { get; set; }
 
     public DmodeEntryData(
         DmodeInfo dmode_info,
         IEnumerable<DmodeCharaList> dmode_chara_list,
         IEnumerable<DmodeServitorPassiveList> dmode_servitor_passive_list,
         DmodeDungeonInfo dmode_dungeon_info,
-        UpdateDataList update_data_list,
-        EntityResult entity_result
+        UpdateDataList update_data_list
     )
     {
         this.dmode_info = dmode_info;
@@ -1310,7 +1297,6 @@ public class DmodeEntryData
         this.dmode_servitor_passive_list = dmode_servitor_passive_list;
         this.dmode_dungeon_info = dmode_dungeon_info;
         this.update_data_list = update_data_list;
-        this.entity_result = entity_result;
     }
 
     public DmodeEntryData() { }
@@ -1369,17 +1355,14 @@ public class DmodeExpeditionStartData
 {
     public DmodeExpedition dmode_expedition { get; set; }
     public UpdateDataList update_data_list { get; set; }
-    public EntityResult entity_result { get; set; }
 
     public DmodeExpeditionStartData(
         DmodeExpedition dmode_expedition,
-        UpdateDataList update_data_list,
-        EntityResult entity_result
+        UpdateDataList update_data_list
     )
     {
         this.dmode_expedition = dmode_expedition;
         this.update_data_list = update_data_list;
-        this.entity_result = entity_result;
     }
 
     public DmodeExpeditionStartData() { }
@@ -1396,7 +1379,9 @@ public class DmodeGetDataData
     public DmodeExpedition dmode_expedition { get; set; }
     public UpdateDataList update_data_list { get; set; }
     public EntityResult entity_result { get; set; }
-    public int current_server_time { get; set; }
+
+    [MessagePackFormatter(typeof(DateTimeOffsetIntFormatter))]
+    public DateTimeOffset current_server_time { get; set; }
 
     public DmodeGetDataData(
         DmodeInfo dmode_info,
@@ -1407,7 +1392,7 @@ public class DmodeGetDataData
         DmodeExpedition dmode_expedition,
         UpdateDataList update_data_list,
         EntityResult entity_result,
-        int current_server_time
+        DateTimeOffset current_server_time
     )
     {
         this.dmode_info = dmode_info;

@@ -1562,10 +1562,10 @@ public class AtgenDmodeAreaInfo
 [MessagePackObject(true)]
 public class AtgenDmodeDragonUseList
 {
-    public int dragon_id { get; set; }
+    public Dragons dragon_id { get; set; }
     public int use_count { get; set; }
 
-    public AtgenDmodeDragonUseList(int dragon_id, int use_count)
+    public AtgenDmodeDragonUseList(Dragons dragon_id, int use_count)
     {
         this.dragon_id = dragon_id;
         this.use_count = use_count;
@@ -1577,11 +1577,11 @@ public class AtgenDmodeDragonUseList
 [MessagePackObject(true)]
 public class AtgenDmodeDropList
 {
-    public int type { get; set; }
+    public EntityTypes type { get; set; }
     public int id { get; set; }
     public int quantity { get; set; }
 
-    public AtgenDmodeDropList(int type, int id, int quantity)
+    public AtgenDmodeDropList(EntityTypes type, int id, int quantity)
     {
         this.type = type;
         this.id = id;
@@ -1631,9 +1631,9 @@ public class AtgenDmodeDungeonItemOptionList
 public class AtgenDmodeDungeonItemStateList
 {
     public int item_no { get; set; }
-    public int state { get; set; }
+    public DmodeDungeonItemState state { get; set; }
 
-    public AtgenDmodeDungeonItemStateList(int item_no, int state)
+    public AtgenDmodeDungeonItemStateList(int item_no, DmodeDungeonItemState state)
     {
         this.item_no = item_no;
         this.state = state;
@@ -1646,12 +1646,12 @@ public class AtgenDmodeDungeonItemStateList
 public class AtgenDmodeDungeonOdds
 {
     public IEnumerable<AtgenDmodeSelectDragonList> dmode_select_dragon_list { get; set; }
-    public IEnumerable<DmodeDungeonItemList> dmode_dungeon_item_list { get; set; }
+    public ICollection<DmodeDungeonItemList> dmode_dungeon_item_list { get; set; }
     public DmodeOddsInfo dmode_odds_info { get; set; }
 
     public AtgenDmodeDungeonOdds(
         IEnumerable<AtgenDmodeSelectDragonList> dmode_select_dragon_list,
-        IEnumerable<DmodeDungeonItemList> dmode_dungeon_item_list,
+        ICollection<DmodeDungeonItemList> dmode_dungeon_item_list,
         DmodeOddsInfo dmode_odds_info
     )
     {
@@ -1693,10 +1693,10 @@ public class AtgenDmodeEnemy
 [MessagePackObject(true)]
 public class AtgenDmodeHoldDragonList
 {
-    public int dragon_id { get; set; }
+    public Dragons dragon_id { get; set; }
     public int count { get; set; }
 
-    public AtgenDmodeHoldDragonList(int dragon_id, int count)
+    public AtgenDmodeHoldDragonList(Dragons dragon_id, int count)
     {
         this.dragon_id = dragon_id;
         this.count = count;
@@ -1709,15 +1709,17 @@ public class AtgenDmodeHoldDragonList
 public class AtgenDmodeSelectDragonList
 {
     public int select_dragon_no { get; set; }
-    public int dragon_id { get; set; }
-    public int is_rare { get; set; }
+    public Dragons dragon_id { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_rare { get; set; }
     public int pay_dmode_point_1 { get; set; }
     public int pay_dmode_point_2 { get; set; }
 
     public AtgenDmodeSelectDragonList(
         int select_dragon_no,
-        int dragon_id,
-        int is_rare,
+        Dragons dragon_id,
+        bool is_rare,
         int pay_dmode_point_1,
         int pay_dmode_point_2
     )
@@ -1752,7 +1754,7 @@ public class AtgenDmodeUnitInfo
 {
     public int level { get; set; }
     public int exp { get; set; }
-    public IEnumerable<int> equip_crest_item_no_sort_list { get; set; }
+    public int[] equip_crest_item_no_sort_list { get; set; }
     public IEnumerable<int> bag_item_no_sort_list { get; set; }
     public IEnumerable<int> skill_bag_item_no_sort_list { get; set; }
     public IEnumerable<AtgenDmodeHoldDragonList> dmode_hold_dragon_list { get; set; }
@@ -1762,7 +1764,7 @@ public class AtgenDmodeUnitInfo
     public AtgenDmodeUnitInfo(
         int level,
         int exp,
-        IEnumerable<int> equip_crest_item_no_sort_list,
+        int[] equip_crest_item_no_sort_list,
         IEnumerable<int> bag_item_no_sort_list,
         IEnumerable<int> skill_bag_item_no_sort_list,
         IEnumerable<AtgenDmodeHoldDragonList> dmode_hold_dragon_list,
@@ -3376,7 +3378,7 @@ public class AtgenResultUnitList
 [MessagePackObject(true)]
 public class AtgenRewardTalismanList
 {
-    public int talisman_id { get; set; }
+    public Talismans talisman_id { get; set; }
     public int talisman_ability_id_1 { get; set; }
     public int talisman_ability_id_2 { get; set; }
     public int talisman_ability_id_3 { get; set; }
@@ -3384,7 +3386,7 @@ public class AtgenRewardTalismanList
     public int additional_attack { get; set; }
 
     public AtgenRewardTalismanList(
-        int talisman_id,
+        Talismans talisman_id,
         int talisman_ability_id_1,
         int talisman_ability_id_2,
         int talisman_ability_id_3,
@@ -4068,7 +4070,7 @@ public class AtgenUnit
 [MessagePackObject(true)]
 public class AtgenUnitData
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int skill_1_level { get; set; }
     public int skill_2_level { get; set; }
     public int ability_1_level { get; set; }
@@ -4080,7 +4082,7 @@ public class AtgenUnitData
     public int combo_buildup_count { get; set; }
 
     public AtgenUnitData(
-        int chara_id,
+        Charas chara_id,
         int skill_1_level,
         int skill_2_level,
         int ability_1_level,
@@ -5051,21 +5053,21 @@ public class DiamondData
 [MessagePackObject(true)]
 public class DmodeCharaList
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int max_floor_num { get; set; }
     public int select_servitor_id { get; set; }
-    public int select_edit_skill_chara_id_1 { get; set; }
-    public int select_edit_skill_chara_id_2 { get; set; }
-    public int select_edit_skill_chara_id_3 { get; set; }
+    public Charas select_edit_skill_chara_id_1 { get; set; }
+    public Charas select_edit_skill_chara_id_2 { get; set; }
+    public Charas select_edit_skill_chara_id_3 { get; set; }
     public int max_dmode_score { get; set; }
 
     public DmodeCharaList(
-        int chara_id,
+        Charas chara_id,
         int max_floor_num,
         int select_servitor_id,
-        int select_edit_skill_chara_id_1,
-        int select_edit_skill_chara_id_2,
-        int select_edit_skill_chara_id_3,
+        Charas select_edit_skill_chara_id_1,
+        Charas select_edit_skill_chara_id_2,
+        Charas select_edit_skill_chara_id_3,
         int max_dmode_score
     )
     {
@@ -5084,20 +5086,22 @@ public class DmodeCharaList
 [MessagePackObject(true)]
 public class DmodeDungeonInfo
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int floor_num { get; set; }
     public int quest_time { get; set; }
     public int dungeon_score { get; set; }
-    public int is_play_end { get; set; }
-    public int state { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_play_end { get; set; }
+    public DungeonState state { get; set; }
 
     public DmodeDungeonInfo(
-        int chara_id,
+        Charas chara_id,
         int floor_num,
         int quest_time,
         int dungeon_score,
-        int is_play_end,
-        int state
+        bool is_play_end,
+        DungeonState state
     )
     {
         this.chara_id = chara_id;
@@ -5116,10 +5120,10 @@ public class DmodeDungeonItemList
 {
     public int item_no { get; set; }
     public int item_id { get; set; }
-    public int item_state { get; set; }
+    public DmodeDungeonItemState item_state { get; set; }
     public AtgenOption option { get; set; }
 
-    public DmodeDungeonItemList(int item_no, int item_id, int item_state, AtgenOption option)
+    public DmodeDungeonItemList(int item_no, int item_id, DmodeDungeonItemState item_state, AtgenOption option)
     {
         this.item_no = item_no;
         this.item_id = item_id;
@@ -5133,22 +5137,22 @@ public class DmodeDungeonItemList
 [MessagePackObject(true)]
 public class DmodeExpedition
 {
-    public int chara_id_1 { get; set; }
-    public int chara_id_2 { get; set; }
-    public int chara_id_3 { get; set; }
-    public int chara_id_4 { get; set; }
-    public int start_time { get; set; }
+    public Charas chara_id_1 { get; set; }
+    public Charas chara_id_2 { get; set; }
+    public Charas chara_id_3 { get; set; }
+    public Charas chara_id_4 { get; set; }
+    public DateTimeOffset start_time { get; set; }
     public int target_floor_num { get; set; }
-    public int state { get; set; }
+    public ExpeditionState state { get; set; }
 
     public DmodeExpedition(
-        int chara_id_1,
-        int chara_id_2,
-        int chara_id_3,
-        int chara_id_4,
-        int start_time,
+        Charas chara_id_1,
+        Charas chara_id_2,
+        Charas chara_id_3,
+        Charas chara_id_4,
+        DateTimeOffset start_time,
         int target_floor_num,
-        int state
+        ExpeditionState state
     )
     {
         this.chara_id_1 = chara_id_1;
@@ -5168,9 +5172,15 @@ public class DmodeFloorData
 {
     public string unique_key { get; set; }
     public string floor_key { get; set; }
-    public int is_end { get; set; }
-    public int is_play_end { get; set; }
-    public int is_view_area_start_equipment { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_end { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_play_end { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_view_area_start_equipment { get; set; }
     public AtgenDmodeAreaInfo dmode_area_info { get; set; }
     public AtgenDmodeUnitInfo dmode_unit_info { get; set; }
     public AtgenDmodeDungeonOdds dmode_dungeon_odds { get; set; }
@@ -5178,9 +5188,9 @@ public class DmodeFloorData
     public DmodeFloorData(
         string unique_key,
         string floor_key,
-        int is_end,
-        int is_play_end,
-        int is_view_area_start_equipment,
+        bool is_end,
+        bool is_play_end,
+        bool is_view_area_start_equipment,
         AtgenDmodeAreaInfo dmode_area_info,
         AtgenDmodeUnitInfo dmode_unit_info,
         AtgenDmodeDungeonOdds dmode_dungeon_odds
@@ -5204,22 +5214,24 @@ public class DmodeInfo
 {
     public int total_max_floor_num { get; set; }
     public int recovery_count { get; set; }
-    public int recovery_time { get; set; }
+    public DateTimeOffset recovery_time { get; set; }
     public int floor_skip_count { get; set; }
-    public int floor_skip_time { get; set; }
+    public DateTimeOffset floor_skip_time { get; set; }
     public int dmode_point_1 { get; set; }
     public int dmode_point_2 { get; set; }
-    public int is_entry { get; set; }
+
+    [MessagePackFormatter((typeof(BoolToIntFormatter)))]
+    public bool is_entry { get; set; }
 
     public DmodeInfo(
         int total_max_floor_num,
         int recovery_count,
-        int recovery_time,
+        DateTimeOffset recovery_time,
         int floor_skip_count,
-        int floor_skip_time,
+        DateTimeOffset floor_skip_time,
         int dmode_point_1,
         int dmode_point_2,
-        int is_entry
+        bool is_entry
     )
     {
         this.total_max_floor_num = total_max_floor_num;
@@ -5242,7 +5254,7 @@ public class DmodeIngameData
     public int start_floor_num { get; set; }
     public int target_floor_num { get; set; }
     public int recovery_count { get; set; }
-    public int recovery_time { get; set; }
+    public DateTimeOffset recovery_time { get; set; }
     public int servitor_id { get; set; }
     public int dmode_level_group_id { get; set; }
     public AtgenUnitData unit_data { get; set; }
@@ -5253,7 +5265,7 @@ public class DmodeIngameData
         int start_floor_num,
         int target_floor_num,
         int recovery_count,
-        int recovery_time,
+        DateTimeOffset recovery_time,
         int servitor_id,
         int dmode_level_group_id,
         AtgenUnitData unit_data,
@@ -5278,10 +5290,14 @@ public class DmodeIngameData
 public class DmodeIngameResult
 {
     public int floor_num { get; set; }
-    public int is_record_floor_num { get; set; }
-    public IEnumerable<int> chara_id_list { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_record_floor_num { get; set; }
+    public IEnumerable<Charas> chara_id_list { get; set; }
     public float quest_time { get; set; }
-    public int is_view_quest_time { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_view_quest_time { get; set; }
     public int dmode_score { get; set; }
     public IEnumerable<AtgenRewardTalismanList> reward_talisman_list { get; set; }
     public int take_dmode_point_1 { get; set; }
@@ -5292,10 +5308,10 @@ public class DmodeIngameResult
 
     public DmodeIngameResult(
         int floor_num,
-        int is_record_floor_num,
-        IEnumerable<int> chara_id_list,
+        bool is_record_floor_num,
+        IEnumerable<Charas> chara_id_list,
         float quest_time,
-        int is_view_quest_time,
+        bool is_view_quest_time,
         int dmode_score,
         IEnumerable<AtgenRewardTalismanList> reward_talisman_list,
         int take_dmode_point_1,
@@ -5346,12 +5362,14 @@ public class DmodePlayRecord
     public string unique_key { get; set; }
     public string floor_key { get; set; }
     public int floor_num { get; set; }
-    public int is_floor_incomplete { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_floor_incomplete { get; set; }
     public AtgenDmodeTreasureRecord dmode_treasure_record { get; set; }
     public IEnumerable<AtgenDmodeDungeonItemStateList> dmode_dungeon_item_state_list { get; set; }
     public IEnumerable<AtgenDmodeDungeonItemOptionList> dmode_dungeon_item_option_list { get; set; }
     public IEnumerable<AtgenDmodeDragonUseList> dmode_dragon_use_list { get; set; }
-    public IEnumerable<int> equip_crest_item_no_sort_list { get; set; }
+    public int[] equip_crest_item_no_sort_list { get; set; }
     public IEnumerable<int> bag_item_no_sort_list { get; set; }
     public IEnumerable<int> skill_bag_item_no_sort_list { get; set; }
     public float quest_time { get; set; }
@@ -5361,12 +5379,12 @@ public class DmodePlayRecord
         string unique_key,
         string floor_key,
         int floor_num,
-        int is_floor_incomplete,
+        bool is_floor_incomplete,
         AtgenDmodeTreasureRecord dmode_treasure_record,
         IEnumerable<AtgenDmodeDungeonItemStateList> dmode_dungeon_item_state_list,
         IEnumerable<AtgenDmodeDungeonItemOptionList> dmode_dungeon_item_option_list,
         IEnumerable<AtgenDmodeDragonUseList> dmode_dragon_use_list,
-        IEnumerable<int> equip_crest_item_no_sort_list,
+        int[] equip_crest_item_no_sort_list,
         IEnumerable<int> bag_item_no_sort_list,
         IEnumerable<int> skill_bag_item_no_sort_list,
         float quest_time,
@@ -5394,10 +5412,10 @@ public class DmodePlayRecord
 [MessagePackObject(true)]
 public class DmodeServitorPassiveList
 {
-    public int passive_no { get; set; }
+    public DmodeServitorPassiveType passive_no { get; set; }
     public int passive_level { get; set; }
 
-    public DmodeServitorPassiveList(int passive_no, int passive_level)
+    public DmodeServitorPassiveList(DmodeServitorPassiveType passive_no, int passive_level)
     {
         this.passive_no = passive_no;
         this.passive_level = passive_level;
@@ -5410,6 +5428,7 @@ public class DmodeServitorPassiveList
 public class DmodeStoryList
 {
     public int dmode_story_id { get; set; }
+
     public int is_read { get; set; }
 
     public DmodeStoryList(int dmode_story_id, int is_read)
@@ -7297,11 +7316,11 @@ public class PartySettingList
 
     public PartySettingList() { }
 
-   public static PartySettingList Empty(int unit_no) => new() { unit_no = unit_no };
+    public static PartySettingList Empty(int unit_no) => new() { unit_no = unit_no };
 
-   public IEnumerable<AbilityCrests> GetAbilityCrestList() => new List<AbilityCrests>()
+    public IEnumerable<AbilityCrests> GetAbilityCrestList() => new List<AbilityCrests>()
    {
-       this.equip_crest_slot_type_1_crest_id_1, 
+       this.equip_crest_slot_type_1_crest_id_1,
        this.equip_crest_slot_type_1_crest_id_2,
        this.equip_crest_slot_type_1_crest_id_3,
        this.equip_crest_slot_type_2_crest_id_1,

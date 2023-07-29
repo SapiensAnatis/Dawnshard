@@ -1,6 +1,7 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.Login;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
@@ -361,6 +362,57 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, EventPassive> EventPassive =
         new("Event/EventPassive.json", x => x.Id);
+
+    #endregion
+
+    #region Dmode
+
+    public static readonly MasterAssetData<int, DmodeQuestFloor> DmodeQuestFloor =
+        new("Dmode/DmodeQuestFloor.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DmodeDungeonArea> DmodeDungeonArea =
+        new("Dmode/DmodeDungeonArea.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DmodeDungeonTheme> DmodeDungeonTheme =
+        new("Dmode/DmodeDungeonTheme.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DmodeEnemyTheme> DmodeEnemyTheme =
+        new("Dmode/DmodeEnemyTheme.json", x => x.Id);
+
+    public static readonly MasterAssetData<string, DmodeAreaInfo> DmodeAreaInfo =
+        new("Dmode/DmodeAreaInfo.json", x => x.AreaName);
+
+    public static readonly MasterAssetData<int, DmodeEnemyParam> DmodeEnemyParam =
+        new("Dmode/DmodeEnemyParam.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DmodeCharaLevel> DmodeCharaLevel =
+        new("Dmode/DmodeCharaLevel.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DmodeWeapon> DmodeWeapon =
+        new("Dmode/DmodeWeapon.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DmodeAbilityCrest> DmodeAbilityCrest =
+        new("Dmode/DmodeAbilityCrest.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DmodeStrengthParam> DmodeStrengthParam =
+        new("Dmode/DmodeStrengthParam.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DmodeStrengthSkill> DmodeStrengthSkill =
+        new("Dmode/DmodeStrengthSkill.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DmodeStrengthAbility> DmodeStrengthAbility =
+        new("Dmode/DmodeStrengthAbility.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DmodeDungeonItemData> DmodeDungeonItemData =
+        new("Dmode/DmodeDungeonItemData.json", x => x.Id);
+
+    public static readonly MasterAssetData<
+        int,
+        DmodeServitorPassiveLevel
+    > DmodeServitorPassiveLevel = new("Dmode/DmodeServitorPassiveLevel.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, DmodeExpeditionFloor> DmodeExpeditionFloor =
+        new("Dmode/DmodeExpeditionFloor.json", x => x.Id);
 
     #endregion
 

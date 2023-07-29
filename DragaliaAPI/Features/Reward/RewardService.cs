@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Item;
@@ -18,6 +20,7 @@ public class RewardService(
     IUnitRepository unitRepository,
     IFortRepository fortRepository,
     IEventRepository eventRepository,
+    IDmodeRepository dmodeRepository,
     IItemRepository itemRepository,
     IUserService userService
 ) : IRewardService
@@ -90,6 +93,15 @@ public class RewardService(
             case EntityTypes.EarnEventItem:
             case EntityTypes.CombatEventItem:
                 await eventRepository.AddItemQuantityAsync(entity.Id, entity.Quantity);
+                break;
+            case EntityTypes.DmodePoint:
+                DbPlayerDmodeInfo info = await dmodeRepository.GetInfoAsync();
+                if (entity.Id == (int)DmodePoint.Point1)
+                    info.Point1Quantity += entity.Quantity;
+                else if (entity.Id == (int)DmodePoint.Point2)
+                    info.Point2Quantity += entity.Quantity;
+                else
+                    throw new UnreachableException("Invalid dmode point id");
                 break;
             default:
                 logger.LogWarning("Tried to reward unsupported entity {@entity}", entity);

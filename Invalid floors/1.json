@@ -1,0 +1,841 @@
+{
+    "unique_key": ":dmode_ingame_info:-DFuUeamHBvRustr",
+    "floor_key": "ba9dc5db-8992-40f1-812a-ed3e11ec66c0",
+    "is_end": false,
+    "is_play_end": false,
+    "is_view_area_start_equipment": false,
+    "dmode_area_info": {
+        "floor_num": 5,
+        "quest_time": 236.59601,
+        "dmode_score": 18050,
+        "current_area_theme_id": 14,
+        "current_area_id": 1407
+    },
+    "dmode_unit_info": {
+        "level": 5,
+        "exp": 4160,
+        "equip_crest_item_no_sort_list": [
+            0,
+            0,
+            0
+        ],
+        "bag_item_no_sort_list": [
+            9,
+            11,
+            10,
+            12,
+            20,
+            24,
+            19,
+            32,
+            30,
+            0
+        ],
+        "skill_bag_item_no_sort_list": [
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            14,
+            26
+        ],
+        "dmode_hold_dragon_list": [
+            {
+                "dragon_id": 20050113,
+                "count": 0
+            }
+        ],
+        "take_dmode_point_1": 86,
+        "take_dmode_point_2": 0
+    },
+    "dmode_dungeon_odds": {
+        "dmode_select_dragon_list": [],
+        "dmode_dungeon_item_list": [
+            {
+                "item_no": 1,
+                "item_id": 108405011,
+                "item_state": 14,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 2,
+                "item_id": 104403011,
+                "item_state": 14,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 3,
+                "item_id": 105302022,
+                "item_state": 14,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 4,
+                "item_id": 105504021,
+                "item_state": 3,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 5,
+                "item_id": 106404011,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 6,
+                "item_id": 107403021,
+                "item_state": 14,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 7,
+                "item_id": 101402012,
+                "item_state": 14,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 8,
+                "item_id": 104505022,
+                "item_state": 14,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 9,
+                "item_id": 30110190,
+                "item_state": 11,
+                "option": {
+                    "strength_param_id": 3010106,
+                    "strength_ability_id": 3010107,
+                    "strength_skill_id": 3010105,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 10,
+                "item_id": 30710190,
+                "item_state": 11,
+                "option": {
+                    "strength_param_id": 3010102,
+                    "strength_ability_id": 3010107,
+                    "strength_skill_id": 3010102,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 11,
+                "item_id": 30710190,
+                "item_state": 11,
+                "option": {
+                    "strength_param_id": 3010105,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 3010105,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 12,
+                "item_id": 40020001,
+                "item_state": 11,
+                "option": {
+                    "strength_param_id": 4010106,
+                    "strength_ability_id": 4010115,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 13,
+                "item_id": 106503021,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 14,
+                "item_id": 107305011,
+                "item_state": 14,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 15,
+                "item_id": 106503021,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 16,
+                "item_id": 108504021,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 17,
+                "item_id": 102304011,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 18,
+                "item_id": 101502011,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 19,
+                "item_id": 40020001,
+                "item_state": 11,
+                "option": {
+                    "strength_param_id": 4010103,
+                    "strength_ability_id": 4010119,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 20,
+                "item_id": 30510190,
+                "item_state": 11,
+                "option": {
+                    "strength_param_id": 3010103,
+                    "strength_ability_id": 3010110,
+                    "strength_skill_id": 3010102,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 21,
+                "item_id": 101501011,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 22,
+                "item_id": 101502046,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 23,
+                "item_id": 107505031,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 24,
+                "item_id": 30410190,
+                "item_state": 11,
+                "option": {
+                    "strength_param_id": 3010106,
+                    "strength_ability_id": 3010103,
+                    "strength_skill_id": 3010103,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 25,
+                "item_id": 104501031,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 26,
+                "item_id": 101501041,
+                "item_state": 14,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 27,
+                "item_id": 104401011,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 28,
+                "item_id": 101504031,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 29,
+                "item_id": 106503041,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 30,
+                "item_id": 40030024,
+                "item_state": 11,
+                "option": {
+                    "strength_param_id": 4020102,
+                    "strength_ability_id": 4020106,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 31,
+                "item_id": 103504021,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 32,
+                "item_id": 30420190,
+                "item_state": 11,
+                "option": {
+                    "strength_param_id": 3020106,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 3020102,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 33,
+                "item_id": 102304011,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 34,
+                "item_id": 108501049,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 35,
+                "item_id": 108502035,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 36,
+                "item_id": 107504055,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 37,
+                "item_id": 108503036,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 38,
+                "item_id": 102503031,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 39,
+                "item_id": 105304012,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 40,
+                "item_id": 108302011,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 41,
+                "item_id": 103505055,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 42,
+                "item_id": 103501031,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 43,
+                "item_id": 108503022,
+                "item_state": 1,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 44,
+                "item_id": 105505046,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 45,
+                "item_id": 30210190,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 3010105,
+                    "strength_ability_id": 3010104,
+                    "strength_skill_id": 3010105,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 46,
+                "item_id": 107404011,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 47,
+                "item_id": 103501011,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 48,
+                "item_id": 107401011,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 49,
+                "item_id": 108401021,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 50,
+                "item_id": 104401022,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 51,
+                "item_id": 102502034,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            },
+            {
+                "item_no": 52,
+                "item_id": 107504011,
+                "item_state": 0,
+                "option": {
+                    "strength_param_id": 0,
+                    "strength_ability_id": 0,
+                    "strength_skill_id": 0,
+                    "abnormal_status_invalid_count": 0
+                }
+            }
+        ],
+        "dmode_odds_info": {
+            "dmode_drop_obj": [
+                {
+                    "obj_id": 1,
+                    "obj_type": 2,
+                    "dmode_drop_list": [
+                        {
+                            "type": 13,
+                            "id": 1001,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "obj_id": 2,
+                    "obj_type": 2,
+                    "dmode_drop_list": [
+                        {
+                            "type": 13,
+                            "id": 1001,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "obj_id": 3,
+                    "obj_type": 2,
+                    "dmode_drop_list": [
+                        {
+                            "type": 13,
+                            "id": 1001,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "obj_id": 4,
+                    "obj_type": 2,
+                    "dmode_drop_list": [
+                        {
+                            "type": 13,
+                            "id": 1001,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "obj_id": 5,
+                    "obj_type": 2,
+                    "dmode_drop_list": [
+                        {
+                            "type": 13,
+                            "id": 1001,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "obj_id": 6,
+                    "obj_type": 2,
+                    "dmode_drop_list": [
+                        {
+                            "type": 13,
+                            "id": 1001,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "obj_id": 7,
+                    "obj_type": 2,
+                    "dmode_drop_list": [
+                        {
+                            "type": 13,
+                            "id": 1001,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "obj_id": 8,
+                    "obj_type": 2,
+                    "dmode_drop_list": [
+                        {
+                            "type": 13,
+                            "id": 1001,
+                            "quantity": 1
+                        }
+                    ]
+                }
+            ],
+            "dmode_enemy": [
+                {
+                    "enemy_idx": 0,
+                    "is_pop": 1,
+                    "level": 7,
+                    "param_id": 231011309,
+                    "dmode_drop_list": [
+                        {
+                            "type": 43,
+                            "id": 44,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "enemy_idx": 1,
+                    "is_pop": 1,
+                    "level": 6,
+                    "param_id": 231011312,
+                    "dmode_drop_list": [
+                        {
+                            "type": 43,
+                            "id": 45,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "enemy_idx": 2,
+                    "is_pop": 1,
+                    "level": 3,
+                    "param_id": 231011313,
+                    "dmode_drop_list": [
+                        {
+                            "type": 43,
+                            "id": 46,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "enemy_idx": 3,
+                    "is_pop": 1,
+                    "level": 3,
+                    "param_id": 231011308,
+                    "dmode_drop_list": [
+                        {
+                            "type": 43,
+                            "id": 47,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "enemy_idx": 4,
+                    "is_pop": 1,
+                    "level": 5,
+                    "param_id": 231011304,
+                    "dmode_drop_list": [
+                        {
+                            "type": 43,
+                            "id": 48,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "enemy_idx": 5,
+                    "is_pop": 1,
+                    "level": 5,
+                    "param_id": 231011313,
+                    "dmode_drop_list": [
+                        {
+                            "type": 43,
+                            "id": 49,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "enemy_idx": 6,
+                    "is_pop": 1,
+                    "level": 7,
+                    "param_id": 231011308,
+                    "dmode_drop_list": [
+                        {
+                            "type": 43,
+                            "id": 50,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "enemy_idx": 7,
+                    "is_pop": 1,
+                    "level": 2,
+                    "param_id": 231011312,
+                    "dmode_drop_list": [
+                        {
+                            "type": 43,
+                            "id": 51,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "enemy_idx": 8,
+                    "is_pop": 1,
+                    "level": 6,
+                    "param_id": 231011303,
+                    "dmode_drop_list": [
+                        {
+                            "type": 43,
+                            "id": 52,
+                            "quantity": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

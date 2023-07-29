@@ -44,7 +44,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
         this.MockPhotonStateApi = factory.MockPhotonStateApi;
         this.MockDateTimeProvider = factory.MockDateTimeProvider;
 
-        this.MockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UtcNow);
+        this.MockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(() => DateTimeOffset.UtcNow);
     }
 
     protected Mock<IBaasApi> MockBaasApi { get; }
