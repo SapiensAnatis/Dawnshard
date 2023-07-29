@@ -35,7 +35,7 @@ public class PaymentServiceTest
             mockUserDataRepository.Object,
             mockInventoryRepository.Object,
             mockEventRepository.Object,
-            mockDmodeRepository.Object
+            mockDmodeRepository.Object,
             mockItemRepository.Object
         );
     }

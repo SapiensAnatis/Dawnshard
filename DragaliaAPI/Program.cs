@@ -179,7 +179,7 @@ builder.Services
     .AddScoped<IDmodeRepository, DmodeRepository>()
     .AddScoped<IDmodeCacheService, DmodeCacheService>()
     .AddScoped<IDmodeService, DmodeService>()
-    .AddScoped<IDmodeDungeonService, DmodeDungeonService>();
+    .AddScoped<IDmodeDungeonService, DmodeDungeonService>()
     // Item feature
     .AddScoped<IItemRepository, ItemRepository>()
     .AddScoped<IItemService, ItemService>()

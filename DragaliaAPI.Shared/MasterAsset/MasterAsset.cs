@@ -413,9 +413,9 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, DmodeExpeditionFloor> DmodeExpeditionFloor =
         new("Dmode/DmodeExpeditionFloor.json", x => x.Id);
-        
+
     #endregion
-    
+
     #region User
 
     public static readonly MasterAssetData<int, UserLevel> UserLevel =

@@ -20,7 +20,7 @@ public class RewardService(
     IUnitRepository unitRepository,
     IFortRepository fortRepository,
     IEventRepository eventRepository,
-    IDmodeRepository dmodeRepository
+    IDmodeRepository dmodeRepository,
     IItemRepository itemRepository,
     IUserService userService
 ) : IRewardService

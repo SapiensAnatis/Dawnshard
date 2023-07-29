@@ -17,7 +17,7 @@ public class PaymentService(
     IUserDataRepository userDataRepository,
     IInventoryRepository inventoryRepository,
     IEventRepository eventRepository,
-    IDmodeRepository dmodeRepository
+    IDmodeRepository dmodeRepository,
     IItemRepository itemRepository
 ) : IPaymentService
 {
