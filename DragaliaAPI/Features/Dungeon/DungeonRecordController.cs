@@ -274,7 +274,7 @@ public class DungeonRecordController(
                     challenge_quest_bonus_list = new List<AtgenFirstClearSet>(),
                     campaign_extra_reward_list = new List<AtgenFirstClearSet>(),
                     weekly_limit_reward_list = new List<AtgenFirstClearSet>(),
-                    take_accumulate_point = totalPoints,
+                    take_accumulate_point = totalPoints + boostedPoints,
                     player_level_up_fstone = playerLevelResult.RewardedWyrmite,
                     take_boost_accumulate_point = boostedPoints
                 },
