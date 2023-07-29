@@ -240,6 +240,9 @@ public class DungeonStartService(
         );
 
         result.party_info.fort_bonus_list = await bonusService.GetBonusList();
+        result.party_info.event_boost = await bonusService.GetEventBoost(questInfo.Gid);
+
+        logger.LogDebug("Using event boost {@boost}", result.party_info.event_boost);
 
         if (supportViewerId is not null and not 0)
         {

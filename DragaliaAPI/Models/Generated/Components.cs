@@ -2061,10 +2061,10 @@ public class AtgenEntryConditions
 [MessagePackObject(true)]
 public class AtgenEventBoost
 {
-    public int event_effect { get; set; }
+    public EventEffectTypes event_effect { get; set; }
     public float effect_value { get; set; }
 
-    public AtgenEventBoost(int event_effect, float effect_value)
+    public AtgenEventBoost(EventEffectTypes event_effect, float effect_value)
     {
         this.event_effect = event_effect;
         this.effect_value = effect_value;
