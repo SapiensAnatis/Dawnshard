@@ -474,9 +474,15 @@ public class DmodeDungeonService(
                 enemy.param_id
             ].DmodeEnemyParamGroupId;
 
-            DmodeEnemyParam enemyParam = MasterAsset.DmodeEnemyParam[
-                (dmodeEnemyParamGroupId * 1000) + enemy.level
-            ];
+            if (
+                !MasterAsset.DmodeEnemyParam.TryGetValue(
+                    (dmodeEnemyParamGroupId * 1000) + enemy.level,
+                    out DmodeEnemyParam? enemyParam
+                )
+            )
+            {
+                continue;
+            }
             unitInfo.exp += (int)Math.Ceiling(enemyParam.DropExp * expMultiplier);
             unitInfo.take_dmode_point_1 += enemyParam.DropDmodePoint1;
             unitInfo.take_dmode_point_2 += enemyParam.DropDmodePoint2;
