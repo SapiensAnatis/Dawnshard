@@ -639,6 +639,7 @@ public class DmodeDungeonService(
 
         IEnumerable<AtgenDmodeEnemy> dmodeEnemies = GenerateEnemies(
             areaInfo,
+            area.IsSelectedEntity,
             baseLevel,
             theme.PlusLevelMin,
             theme.PlusLevelMax,
@@ -942,6 +943,7 @@ public class DmodeDungeonService(
 
     private IEnumerable<AtgenDmodeEnemy> GenerateEnemies(
         DmodeAreaInfo areaInfo,
+        bool isSelectedEntity,
         int baseLevel,
         int plusMin,
         int plusMax,
@@ -950,26 +952,36 @@ public class DmodeDungeonService(
     {
         int maxEnemyCount = areaInfo.EnemyThemes.Length;
 
-        int enemyCount = rdm.Next((int)Math.Ceiling(maxEnemyCount * 0.25d), maxEnemyCount); // Ceiling so 1 * 0.25 = 1 for boss stages
+        int enemyCount = isSelectedEntity
+            ? maxEnemyCount
+            : rdm.Next((int)Math.Ceiling(maxEnemyCount * 0.8d), maxEnemyCount); // Ceiling so 1 * 0.8 = 1 for boss stages
 
         List<AtgenDmodeEnemy> dmodeEnemies = new();
 
         for (int i = 0; i < enemyCount; i++)
         {
-            int enemyThemeId = rdm.Next(areaInfo.EnemyThemes);
             int enemyLevel = rdm.Next(baseLevel + plusMin, baseLevel + plusMax);
-
-            int[] enemyParams = MasterAsset.DmodeEnemyTheme.TryGetValue(
-                enemyThemeId,
-                out DmodeEnemyTheme? enemyTheme
-            )
-                ? enemyTheme.AvailableParams
-                : areaInfo.EnemyParams;
-
             int enemyParam = 0;
-            while (enemyParam == 0)
+
+            if (isSelectedEntity)
             {
-                enemyParam = rdm.Next(enemyParams);
+                enemyParam = areaInfo.EnemyParams[i];
+            }
+            else
+            {
+                int enemyThemeId = rdm.Next(areaInfo.EnemyThemes);
+
+                int[] enemyParams = MasterAsset.DmodeEnemyTheme.TryGetValue(
+                    enemyThemeId,
+                    out DmodeEnemyTheme? enemyTheme
+                )
+                    ? enemyTheme.AvailableParams
+                    : areaInfo.EnemyParams;
+
+                while (enemyParam == 0)
+                {
+                    enemyParam = rdm.Next(enemyParams);
+                }
             }
 
             List<AtgenDmodeDropList> enemyDropList = new();
