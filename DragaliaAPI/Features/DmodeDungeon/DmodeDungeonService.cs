@@ -907,23 +907,24 @@ public class DmodeDungeonService(
             item.option.strength_param_id = param.Id;
         }
 
-        if (strengthSkillGroupId != 0)
+        if (strengthSkillGroupId != 0 && rdm.Next(100) > 50)
         {
             DmodeStrengthSkill skill = rdm.Next(
                 MasterAsset.DmodeStrengthSkill.Enumerable
-                    .Where(x => x.StrengthSkillGroupId == strengthSkillGroupId)
+                    .Where(x => x.StrengthSkillGroupId == strengthSkillGroupId && x.SkillId != 0)
                     .ToArray()
             );
 
-            if (skill.SkillId == 0)
-                item.option.strength_skill_id = skill.Id;
+            item.option.strength_skill_id = skill.Id;
         }
 
-        if (strengthAbilityGroupId != 0)
+        if (strengthAbilityGroupId != 0 && rdm.Next(100) > 50)
         {
             DmodeStrengthAbility ability = rdm.Next(
                 MasterAsset.DmodeStrengthAbility.Enumerable
-                    .Where(x => x.StrengthAbilityGroupId == strengthAbilityGroupId)
+                    .Where(
+                        x => x.StrengthAbilityGroupId == strengthAbilityGroupId && x.AbilityId != 0
+                    )
                     .ToArray()
             );
 
