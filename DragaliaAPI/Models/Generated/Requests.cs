@@ -3880,9 +3880,9 @@ public class SummonSummonPointTradeRequest
 [MessagePackObject(true)]
 public class TalismanSellRequest
 {
-    public IEnumerable<ulong> talisman_key_id_list { get; set; }
+    public IEnumerable<long> talisman_key_id_list { get; set; }
 
-    public TalismanSellRequest(IEnumerable<ulong> talisman_key_id_list)
+    public TalismanSellRequest(IEnumerable<long> talisman_key_id_list)
     {
         this.talisman_key_id_list = talisman_key_id_list;
     }
@@ -3893,10 +3893,12 @@ public class TalismanSellRequest
 [MessagePackObject(true)]
 public class TalismanSetLockRequest
 {
-    public ulong talisman_key_id { get; set; }
-    public int is_lock { get; set; }
+    public long talisman_key_id { get; set; }
 
-    public TalismanSetLockRequest(ulong talisman_key_id, int is_lock)
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_lock { get; set; }
+
+    public TalismanSetLockRequest(long talisman_key_id, bool is_lock)
     {
         this.talisman_key_id = talisman_key_id;
         this.is_lock = is_lock;

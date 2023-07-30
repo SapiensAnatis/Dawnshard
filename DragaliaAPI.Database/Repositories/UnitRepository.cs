@@ -256,7 +256,7 @@ public class UnitRepository : IUnitRepository
             .ToDictionaryAsync(x => x.Key, x => x.AsEnumerable());
     }
 
-    public void AddTalisman(
+    public DbTalisman AddTalisman(
         Talismans id,
         int abilityId1,
         int abilityId2,
@@ -265,19 +265,26 @@ public class UnitRepository : IUnitRepository
         int additionalAttack
     )
     {
-        apiContext.PlayerTalismans.Add(
-            new DbTalisman
-            {
-                DeviceAccountId = playerIdentityService.AccountId,
-                TalismanId = id,
-                TalismanAbilityId1 = abilityId1,
-                TalismanAbilityId2 = abilityId2,
-                TalismanAbilityId3 = abilityId3,
-                AdditionalHp = additionalHp,
-                AdditionalAttack = additionalAttack,
-                GetTime = DateTimeOffset.UtcNow
-            }
-        );
+        return apiContext.PlayerTalismans
+            .Add(
+                new DbTalisman
+                {
+                    DeviceAccountId = playerIdentityService.AccountId,
+                    TalismanId = id,
+                    TalismanAbilityId1 = abilityId1,
+                    TalismanAbilityId2 = abilityId2,
+                    TalismanAbilityId3 = abilityId3,
+                    AdditionalHp = additionalHp,
+                    AdditionalAttack = additionalAttack,
+                    GetTime = DateTimeOffset.UtcNow
+                }
+            )
+            .Entity;
+    }
+
+    public void RemoveTalisman(DbTalisman talisman)
+    {
+        apiContext.PlayerTalismans.Remove(talisman);
     }
 
     private static List<(TEnum id, bool isNew)> MarkNewIds<TEnum>(
