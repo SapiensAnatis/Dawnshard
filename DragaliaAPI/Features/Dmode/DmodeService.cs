@@ -358,7 +358,7 @@ public class DmodeService(
         {
             AtgenRewardTalismanList talisman = TalismanHelper.GenerateTalisman(rdm, charaId, 0);
 
-            unitRepository.AddTalisman(
+            await rewardService.GrantTalisman(
                 talisman.talisman_id,
                 talisman.talisman_ability_id_1,
                 talisman.talisman_ability_id_2,
