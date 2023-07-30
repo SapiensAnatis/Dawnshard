@@ -735,7 +735,7 @@ public class DmodeDungeonService(
 
                 int dragonRarity = MasterAsset.DragonData[selectDragon.dragon_id].Rarity;
 
-                if (rdm.Next(100) > 80)
+                if (rdm.Next(100) > 80 && dragonList.Any(x => !x.is_rare))
                 {
                     selectDragon.is_rare = true;
                     selectDragon.pay_dmode_point_1 = rdm.Next(
