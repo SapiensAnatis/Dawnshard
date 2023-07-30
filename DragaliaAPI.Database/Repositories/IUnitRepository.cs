@@ -37,7 +37,7 @@ public interface IUnitRepository
 
     Task<DbPlayerCharaData?> FindCharaAsync(Charas chara);
 
-    void AddTalisman(
+    DbTalisman AddTalisman(
         Talismans id,
         int abilityId1,
         int abilityId2,
@@ -45,4 +45,6 @@ public interface IUnitRepository
         int additionalHp,
         int additionalAttack
     );
+
+    void RemoveTalisman(DbTalisman talisman);
 }

@@ -6,6 +6,7 @@ using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -110,6 +111,41 @@ public class RewardService(
 
         newEntities.Add(entity);
         return RewardGrantResult.Added;
+    }
+
+    public async Task<(RewardGrantResult Result, DbTalisman? Talisman)> GrantTalisman(
+        Talismans id,
+        int abilityId1,
+        int abilityId2,
+        int abilityId3,
+        int hp,
+        int atk
+    )
+    {
+        int currentCount = await unitRepository.Talismans.CountAsync();
+
+        if (currentCount >= TalismanService.TalismanMaxCount)
+        {
+            Entity coinReward = new(EntityTypes.Rupies, 0, TalismanService.TalismanCoinReward);
+            await GrantReward(coinReward);
+
+            convertedEntities.Add(
+                new ConvertedEntity(new Entity(EntityTypes.Talisman, (int)id), coinReward)
+            );
+
+            return (RewardGrantResult.Converted, null);
+        }
+
+        DbTalisman talisman = unitRepository.AddTalisman(
+            id,
+            abilityId1,
+            abilityId2,
+            abilityId3,
+            hp,
+            atk
+        );
+
+        return (RewardGrantResult.Added, talisman);
     }
 
     private async Task<RewardGrantResult> RewardCharacter(Entity entity)

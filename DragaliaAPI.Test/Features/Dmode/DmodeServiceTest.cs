@@ -539,17 +539,28 @@ public class DmodeServiceTest
         mockRewardService
             .Setup(x => x.GrantReward(It.IsAny<Entity>()))
             .ReturnsAsync(RewardGrantResult.Added);
-        mockUnitRepository.Setup(
-            x =>
-                x.AddTalisman(
-                    It.IsAny<Talismans>(),
-                    It.IsAny<int>(),
-                    It.IsAny<int>(),
-                    It.IsAny<int>(),
-                    It.IsAny<int>(),
-                    It.IsAny<int>()
+        mockRewardService
+            .Setup(
+                x =>
+                    x.GrantTalisman(
+                        It.IsAny<Talismans>(),
+                        It.IsAny<int>(),
+                        It.IsAny<int>(),
+                        It.IsAny<int>(),
+                        It.IsAny<int>(),
+                        It.IsAny<int>()
+                    )
+            )
+            .ReturnsAsync(
+                (
+                    RewardGrantResult.Added,
+                    new DbTalisman()
+                    {
+                        DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                        TalismanId = Talismans.ThePrince
+                    }
                 )
-        );
+            );
 
         mockDmodeRepository
             .SetupGet(x => x.ServitorPassives)

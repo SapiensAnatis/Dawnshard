@@ -1509,9 +1509,9 @@ public class AtgenDeleteDragonList
 [MessagePackObject(true)]
 public class AtgenDeleteTalismanList
 {
-    public ulong talisman_key_id { get; set; }
+    public long talisman_key_id { get; set; }
 
-    public AtgenDeleteTalismanList(ulong talisman_key_id)
+    public AtgenDeleteTalismanList(long talisman_key_id)
     {
         this.talisman_key_id = talisman_key_id;
     }
