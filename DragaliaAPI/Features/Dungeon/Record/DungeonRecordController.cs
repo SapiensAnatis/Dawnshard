@@ -1,58 +1,48 @@
-﻿using System.Diagnostics;
-using DragaliaAPI.Controllers;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Missions;
+﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
 [Route("dungeon_record")]
-public class DungeonRecordController : DragaliaControllerBase
+public class DungeonRecordController(
+    IDungeonRecordService dungeonRecordService,
+    IDungeonRecordDamageService dungeonRecordDamageService,
+    IDungeonService dungeonService,
+    ITutorialService tutorialService,
+    IUpdateDataService updateDataService
+) : DragaliaControllerBase
 {
-    private readonly IUpdateDataService updateDataService;
-    private readonly IDungeonRecordService dungeonRecordService;
-    private readonly ITutorialService tutorialService;
-    private readonly ILogger<DungeonRecordController> logger;
-
-    public DungeonRecordController(
-        IUpdateDataService updateDataService,
-        IDungeonRecordService dungeonRecordService,
-        ITutorialService tutorialService,
-        ILogger<DungeonRecordController> logger
-    )
-    {
-        this.updateDataService = updateDataService;
-        this.dungeonRecordService = dungeonRecordService;
-        this.tutorialService = tutorialService;
-        this.logger = logger;
-    }
-
     [HttpPost("record")]
     public async Task<DragaliaResult> Record(DungeonRecordRecordRequest request)
     {
+        DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
+
         await tutorialService.AddTutorialFlag(1022);
 
-        IngameResultData ingameResultData =
-            await this.dungeonRecordService.GenerateIngameResultData(
-                request.dungeon_key,
-                request.play_record
-            );
+        IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(
+            request.dungeon_key,
+            request.play_record,
+            session
+        );
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         DungeonRecordRecordData response =
             new() { ingame_result_data = ingameResultData, update_data_list = updateDataList, };
+
+        if (session.QuestData.IsSumUpTotalDamage)
+        {
+            response.event_damage_ranking = await dungeonRecordDamageService.GetEventDamageRanking(
+                request.play_record,
+                session.QuestData.Gid
+            );
+        }
 
         return Ok(response);
     }
@@ -61,20 +51,30 @@ public class DungeonRecordController : DragaliaControllerBase
     [Authorize(AuthenticationSchemes = nameof(PhotonAuthenticationHandler))]
     public async Task<DragaliaResult> RecordMulti(DungeonRecordRecordMultiRequest request)
     {
+        DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
+
         await tutorialService.AddTutorialFlag(1022);
 
-        IngameResultData ingameResultData =
-            await this.dungeonRecordService.GenerateIngameResultData(
-                request.dungeon_key,
-                request.play_record
-            );
+        IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(
+            request.dungeon_key,
+            request.play_record,
+            session
+        );
 
         ingameResultData.play_type = QuestPlayType.Multi;
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        DungeonRecordRecordMultiData response =
+        DungeonRecordRecordData response =
             new() { ingame_result_data = ingameResultData, update_data_list = updateDataList, };
+
+        if (session.QuestData.IsSumUpTotalDamage)
+        {
+            response.event_damage_ranking = await dungeonRecordDamageService.GetEventDamageRanking(
+                request.play_record,
+                session.QuestData.Gid
+            );
+        }
 
         return Ok(response);
     }

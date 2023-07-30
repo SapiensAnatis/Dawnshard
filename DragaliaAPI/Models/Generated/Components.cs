@@ -8130,7 +8130,7 @@ public class ResponseCommon
 [MessagePackObject(true)]
 public class RewardRecord
 {
-    public IEnumerable<AtgenDropAll> drop_all { get; set; } = Enumerable.Empty<AtgenDropAll>();
+    public List<AtgenDropAll> drop_all { get; set; } = new List<AtgenDropAll>();
     public IEnumerable<AtgenFirstClearSet> first_clear_set { get; set; } = Enumerable.Empty<AtgenFirstClearSet>();
     public IEnumerable<AtgenFirstClearSet> mission_complete { get; set; } = Enumerable.Empty<AtgenFirstClearSet>();
     public IEnumerable<AtgenMissionsClearSet> missions_clear_set { get; set; } = Enumerable.Empty<AtgenMissionsClearSet>();
@@ -8150,7 +8150,7 @@ public class RewardRecord
     public int take_astral_item_quantity { get; set; }
 
     public RewardRecord(
-        IEnumerable<AtgenDropAll> drop_all,
+        List<AtgenDropAll> drop_all,
         IEnumerable<AtgenFirstClearSet> first_clear_set,
         IEnumerable<AtgenFirstClearSet> mission_complete,
         IEnumerable<AtgenMissionsClearSet> missions_clear_set,
