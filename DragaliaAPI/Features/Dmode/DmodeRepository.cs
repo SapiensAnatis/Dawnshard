@@ -78,30 +78,10 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
         );
     }
 
-    public DbPlayerDmodeChara AddChara(
-        Charas charaId,
-        int servitorId,
-        IEnumerable<Charas> editSkillCharaIds
-    )
+    public DbPlayerDmodeChara AddChara(Charas charaId)
     {
         DbPlayerDmodeChara dmodeChara =
-            new()
-            {
-                DeviceAccountId = playerIdentityService.AccountId,
-                CharaId = charaId,
-                SelectedServitorId = servitorId
-            };
-
-        Charas[] editSkillArray = editSkillCharaIds.ToArray();
-
-        if (editSkillArray.Length > 0)
-            dmodeChara.SelectEditSkillCharaId1 = editSkillArray[0];
-
-        if (editSkillArray.Length > 1)
-            dmodeChara.SelectEditSkillCharaId1 = editSkillArray[1];
-
-        if (editSkillArray.Length > 2)
-            dmodeChara.SelectEditSkillCharaId1 = editSkillArray[2];
+            new() { DeviceAccountId = playerIdentityService.AccountId, CharaId = charaId, };
 
         return apiContext.PlayerDmodeCharas.Add(dmodeChara).Entity;
     }

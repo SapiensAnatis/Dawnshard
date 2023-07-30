@@ -38,9 +38,13 @@ public class DmodeDungeonService(
         DbPlayerDmodeDungeon dungeon = await dmodeRepository.GetDungeonAsync();
         DbPlayerDmodeInfo info = await dmodeRepository.GetInfoAsync();
 
-        _ =
+        DbPlayerDmodeChara dmodeChara =
             await dmodeRepository.Charas.SingleOrDefaultAsync(x => x.CharaId == charaId)
-            ?? dmodeRepository.AddChara(charaId, servitorId, editSkillCharaIds);
+            ?? dmodeRepository.AddChara(charaId);
+
+        dmodeChara.SelectEditSkillCharaId1 = editSkillCharaIds.ElementAtOrDefault(0);
+        dmodeChara.SelectEditSkillCharaId2 = editSkillCharaIds.ElementAtOrDefault(1);
+        dmodeChara.SelectedServitorId = servitorId;
 
         dungeon.State = startFloor == 1 ? DungeonState.WaitingInitEnd : DungeonState.WaitingSkip;
 
