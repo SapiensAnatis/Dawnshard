@@ -359,7 +359,7 @@ public class DmodeDungeonService(
             );
         }
 
-        floorData.dmode_area_info = GenerateAreaInfo(floor, 0, 0);
+        floorData.dmode_area_info = GenerateAreaInfo(floor, 0, 0, floorData.floor_key);
         floorData.dmode_unit_info = new AtgenDmodeUnitInfo
         {
             level = 1,
@@ -591,9 +591,14 @@ public class DmodeDungeonService(
         );
 
         // Generate random floor data
-        DmodeQuestFloor floor = MasterAsset.DmodeQuestFloor[playRecord.floor_num + 1];
+        DmodeQuestFloor floor = MasterAsset.DmodeQuestFloor[Math.Min(playRecord.floor_num + 1, 60)];
 
-        AtgenDmodeAreaInfo areaInfo = GenerateAreaInfo(floor, playRecord.quest_time, dmodeScore);
+        AtgenDmodeAreaInfo areaInfo = GenerateAreaInfo(
+            floor,
+            playRecord.quest_time,
+            dmodeScore,
+            previousFloor.floor_key
+        );
         AtgenDmodeDungeonOdds odds = GenerateOddsInfo(
             floor,
             areaInfo,
@@ -607,7 +612,7 @@ public class DmodeDungeonService(
             {
                 unique_key = previousFloor.unique_key,
                 floor_key = previousFloor.floor_key, // Done so we can always reference the current floor
-                is_end = areaInfo.floor_num == ingameData.target_floor_num, // Game ignores this
+                is_end = playRecord.floor_num == ingameData.target_floor_num, // Game ignores this
                 is_play_end = playRecord.is_floor_incomplete, // Game ignores this
                 is_view_area_start_equipment = false, // This can never be true as it only applies to the first floor after skipping
                 dmode_area_info = areaInfo,
@@ -618,7 +623,12 @@ public class DmodeDungeonService(
         return floorData;
     }
 
-    private AtgenDmodeAreaInfo GenerateAreaInfo(DmodeQuestFloor floor, float questTime, int score)
+    private AtgenDmodeAreaInfo GenerateAreaInfo(
+        DmodeQuestFloor floor,
+        float questTime,
+        int score,
+        string floorKey
+    )
     {
         int floorTheme = 0;
 
@@ -631,7 +641,9 @@ public class DmodeDungeonService(
             .Where(x => x.ThemeGroupId == floorTheme)
             .ToList();
 
-        DmodeDungeonArea area = rdm.Next(areas);
+        DmodeDungeonArea area = floor.Id is 45 or 50 // Agito bosses
+            ? areas[floorKey.Sum(x => x) % areas.Count] // NOTE: This needs to be changed if floor key is made floor-independent
+            : rdm.Next(areas);
 
         return new AtgenDmodeAreaInfo(floor.FloorNum, questTime, score, area.ThemeGroupId, area.Id);
     }
