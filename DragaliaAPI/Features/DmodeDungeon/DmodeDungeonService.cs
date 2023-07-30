@@ -396,7 +396,12 @@ public class DmodeDungeonService(
 
             for (int i = 0; i < floor.FloorNum; i += 10)
             {
-                DmodeDungeonItemData dragon = rdm.Next(dragonPool);
+                DmodeDungeonItemData dragon;
+                do
+                {
+                    dragon = rdm.Next(dragonPool);
+                } while (holdDragonList.Any(x => (int)x.dragon_id == dragon.Id));
+
                 holdDragonList.Add(
                     new AtgenDmodeHoldDragonList() { count = 0, dragon_id = (Dragons)dragon.Id }
                 );
