@@ -539,9 +539,9 @@ public class DmodeServiceTest
         mockRewardService
             .Setup(x => x.GrantReward(It.IsAny<Entity>()))
             .ReturnsAsync(RewardGrantResult.Added);
-        mockUnitRepository.Setup(
+        mockRewardService.Setup(
             x =>
-                x.AddTalisman(
+                x.GrantTalisman(
                     It.IsAny<Talismans>(),
                     It.IsAny<int>(),
                     It.IsAny<int>(),
