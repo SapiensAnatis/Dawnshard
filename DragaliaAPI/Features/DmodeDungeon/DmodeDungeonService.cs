@@ -707,14 +707,17 @@ public class DmodeDungeonService(
 
         if (theme.BossAppear && dmodeUnitInfo.dmode_hold_dragon_list.Count() < 8)
         {
+            List<int> alreadyRolledDragonIds = new();
+            IEnumerable<int> alreadyOwnedDragonIds = dmodeUnitInfo.dmode_hold_dragon_list.Select(
+                x => (int)x.dragon_id
+            );
+
             DmodeDungeonItemData[] dragonPool = MasterAsset.DmodeDungeonItemData.Enumerable
                 .Where(x => x.DmodeDungeonItemType == DmodeDungeonItemType.Dragon)
+                .ExceptBy(alreadyOwnedDragonIds, x => x.Id)
                 .ToArray();
 
-            List<int> alreadyRolledDragonIds = new();
-
-            int count = rdm.Next(1, 4);
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < 3; i++)
             {
                 DmodeDungeonItemData dragon;
 
@@ -730,7 +733,9 @@ public class DmodeDungeonService(
                 selectDragon.select_dragon_no = i + 1;
                 selectDragon.dragon_id = (Dragons)dragon.DungeonItemTargetId;
 
-                if (i == 3)
+                int dragonRarity = MasterAsset.DragonData[selectDragon.dragon_id].Rarity;
+
+                if (rdm.Next(100) > 80 && dragonList.Any(x => !x.is_rare))
                 {
                     selectDragon.is_rare = true;
                     selectDragon.pay_dmode_point_1 = rdm.Next(
