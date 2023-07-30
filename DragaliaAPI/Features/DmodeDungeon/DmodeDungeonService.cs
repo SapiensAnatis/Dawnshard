@@ -969,7 +969,7 @@ public class DmodeDungeonService(
             }
             else
             {
-                int enemyThemeId = rdm.Next(areaInfo.EnemyThemes);
+                int enemyThemeId = areaInfo.EnemyThemes[i];
 
                 int[] enemyParams = MasterAsset.DmodeEnemyTheme.TryGetValue(
                     enemyThemeId,
