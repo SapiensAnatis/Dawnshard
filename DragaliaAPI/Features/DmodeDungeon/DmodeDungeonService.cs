@@ -476,7 +476,7 @@ public class DmodeDungeonService(
 
             if (
                 !MasterAsset.DmodeEnemyParam.TryGetValue(
-                    (dmodeEnemyParamGroupId * 1000) + enemy.level,
+                    (dmodeEnemyParamGroupId * 1000) + Math.Min(enemy.level, 100),
                     out DmodeEnemyParam? enemyParam
                 )
             )
