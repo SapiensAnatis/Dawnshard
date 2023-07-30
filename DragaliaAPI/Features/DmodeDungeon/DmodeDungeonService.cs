@@ -476,7 +476,7 @@ public class DmodeDungeonService(
 
             if (
                 !MasterAsset.DmodeEnemyParam.TryGetValue(
-                    (dmodeEnemyParamGroupId * 1000) + enemy.level,
+                    (dmodeEnemyParamGroupId * 1000) + Math.Min(enemy.level, 100),
                     out DmodeEnemyParam? enemyParam
                 )
             )
@@ -491,7 +491,10 @@ public class DmodeDungeonService(
 
         // Now process levels
         DmodeCharaLevel currentLevel = MasterAsset.DmodeCharaLevel[1000 + unitInfo.level]; // DmodeLevelGroup * 1000 (always 1) + level
-        while (unitInfo.exp > currentLevel.TotalExp + currentLevel.NecessaryExp)
+        while (
+            currentLevel.NecessaryExp != 0
+            && unitInfo.exp > currentLevel.TotalExp + currentLevel.NecessaryExp
+        )
         {
             unitInfo.level++;
             currentLevel = MasterAsset.DmodeCharaLevel[1000 + unitInfo.level];
@@ -531,9 +534,15 @@ public class DmodeDungeonService(
                 optionChange.abnormal_status_invalid_count;
         }
 
-        List<AtgenDmodeHoldDragonList> dragonList = playRecord.dmode_dragon_use_list
-            .Select(x => new AtgenDmodeHoldDragonList(x.dragon_id, x.use_count))
-            .ToList();
+        Dictionary<Dragons, int> dragonDict = unitInfo.dmode_hold_dragon_list.ToDictionary(
+            x => x.dragon_id,
+            x => x.count
+        );
+
+        foreach (AtgenDmodeDragonUseList dragonUse in playRecord.dmode_dragon_use_list)
+        {
+            dragonDict[dragonUse.dragon_id] += dragonUse.use_count;
+        }
 
         // Now process dragon selection (if applicable)
         if (playRecord.select_dragon_no != 0)
@@ -570,14 +579,16 @@ public class DmodeDungeonService(
                 unitInfo.take_dmode_point_2 -= dragon.pay_dmode_point_2;
             }
 
-            dragonList.Add(new AtgenDmodeHoldDragonList(dragon.dragon_id, 0));
+            dragonDict[dragon.dragon_id] = 0;
         }
 
         // Transfer properties from play record
         unitInfo.bag_item_no_sort_list = playRecord.bag_item_no_sort_list;
         unitInfo.equip_crest_item_no_sort_list = playRecord.equip_crest_item_no_sort_list;
         unitInfo.skill_bag_item_no_sort_list = playRecord.skill_bag_item_no_sort_list;
-        unitInfo.dmode_hold_dragon_list = dragonList;
+        unitInfo.dmode_hold_dragon_list = dragonDict.Select(
+            x => new AtgenDmodeHoldDragonList(x.Key, x.Value)
+        );
 
         // Generate random floor data
         DmodeQuestFloor floor = MasterAsset.DmodeQuestFloor[playRecord.floor_num + 1];
@@ -976,7 +987,7 @@ public class DmodeDungeonService(
 
         for (int i = 0; i < enemyCount; i++)
         {
-            int enemyLevel = rdm.Next(baseLevel + plusMin, baseLevel + plusMax);
+            int enemyLevel = Math.Min(rdm.Next(baseLevel + plusMin, baseLevel + plusMax), 100);
             int enemyParam = 0;
 
             if (isSelectedEntity)
