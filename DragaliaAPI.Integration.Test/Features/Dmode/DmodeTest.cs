@@ -54,6 +54,18 @@ public class DmodeTest : TestFixture
                         entity_type = EntityTypes.Wyrmite,
                         entity_id = 0,
                         entity_quantity = 25
+                    },
+                    new()
+                    {
+                        entity_type = EntityTypes.DmodePoint,
+                        entity_id = (int)DmodePoint.Point1,
+                        entity_quantity = 5000,
+                    },
+                    new()
+                    {
+                        entity_type = EntityTypes.DmodePoint,
+                        entity_id = (int)DmodePoint.Point2,
+                        entity_quantity = 1000,
                     }
                 }
             );
