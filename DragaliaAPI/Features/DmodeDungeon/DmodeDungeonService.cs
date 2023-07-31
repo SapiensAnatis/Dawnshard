@@ -617,7 +617,7 @@ public class DmodeDungeonService(
                 unique_key = previousFloor.unique_key,
                 floor_key = previousFloor.floor_key, // Done so we can always reference the current floor
                 is_end = playRecord.floor_num == ingameData.target_floor_num, // Game ignores this
-                is_play_end = playRecord.is_floor_incomplete, // Game ignores this
+                is_play_end = playRecord.is_floor_incomplete, // Game ignores this (it only checks the one in DmodeIngameData)
                 is_view_area_start_equipment = false, // This can never be true as it only applies to the first floor after skipping
                 dmode_area_info = areaInfo,
                 dmode_unit_info = unitInfo,
@@ -915,7 +915,7 @@ public class DmodeDungeonService(
                     .ToArray()
             );
 
-            item.option.strength_skill_id = skill.Id;
+                item.option.strength_skill_id = skill.Id;
         }
 
         if (strengthAbilityGroupId != 0 && rdm.Next(100) > 50)
@@ -1004,7 +1004,6 @@ public class DmodeDungeonService(
 
         for (int i = 0; i < enemyCount; i++)
         {
-            int enemyLevel = Math.Min(rdm.Next(baseLevel + plusMin, baseLevel + plusMax), 100);
             int enemyParam = 0;
 
             if (isSelectedEntity)
@@ -1028,8 +1027,10 @@ public class DmodeDungeonService(
                 }
             }
 
-            List<AtgenDmodeDropList> enemyDropList = new();
             EnemyParam paramData = MasterAsset.EnemyParam[enemyParam];
+            int enemyLevel = GenerateEnemyLevel(paramData.Id);
+
+            List<AtgenDmodeDropList> enemyDropList = new();
 
             int numDrops = (int)paramData.Tough * 2;
 
@@ -1043,10 +1044,81 @@ public class DmodeDungeonService(
                 enemyDropList.Add(enemyDrop);
             }
 
-            dmodeEnemies.Add(new AtgenDmodeEnemy(i, 1, enemyLevel, enemyParam, enemyDropList));
+            // Give drops to second form
+            bool hasSecondForm = paramData.Form2nd != 0;
+
+            dmodeEnemies.Add(
+                new AtgenDmodeEnemy(
+                    dmodeEnemies.Count,
+                    1,
+                    enemyLevel,
+                    enemyParam,
+                    hasSecondForm ? Enumerable.Empty<AtgenDmodeDropList>() : enemyDropList
+                )
+            );
+
+            foreach ((int param, int count) in paramData.Children)
+            {
+                AddChildEnemies(param, count);
+            }
+
+            if (hasSecondForm)
+            {
+                int level = GenerateEnemyLevel(paramData.Form2nd);
+                dmodeEnemies.Add(
+                    new AtgenDmodeEnemy(
+                        dmodeEnemies.Count,
+                        0,
+                        level,
+                        paramData.Form2nd,
+                        enemyDropList
+                    )
+                );
+
+                EnemyParam secondFormParam = MasterAsset.EnemyParam[paramData.Form2nd];
+
+                foreach ((int param, int count) in secondFormParam.Children)
+                {
+                    AddChildEnemies(param, count);
+                }
+            }
         }
 
         return dmodeEnemies;
+
+        int GenerateEnemyLevel(int enemyParam)
+        {
+            EnemyParam paramData = MasterAsset.EnemyParam[enemyParam];
+
+            return paramData.DmodeEnemyLevelType switch
+            {
+                DmodeEnemyLevelType.None => 1,
+                DmodeEnemyLevelType.Dynamic
+                    => Math.Min(rdm.Next(baseLevel + plusMin, baseLevel + plusMax), 100),
+                DmodeEnemyLevelType.Fixed
+                    => MasterAsset.DmodeEnemyParam.Enumerable
+                        .Single(x => x.DmodeEnemyParamGroupId == paramData.DmodeEnemyParamGroupId)
+                        .Level,
+                _ => 1
+            };
+        }
+
+        void AddChildEnemies(int enemyParam, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                int level = GenerateEnemyLevel(enemyParam);
+                dmodeEnemies.Add(
+                    new AtgenDmodeEnemy(
+                        dmodeEnemies.Count,
+                        0,
+                        level,
+                        enemyParam,
+                        Enumerable.Empty<AtgenDmodeDropList>()
+                    )
+                );
+            }
+        }
     }
 
     private int GetMinRarity(int floorNum)
