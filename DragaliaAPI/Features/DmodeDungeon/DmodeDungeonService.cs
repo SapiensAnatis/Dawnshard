@@ -663,7 +663,6 @@ public class DmodeDungeonService(
         DmodeDungeonTheme theme = MasterAsset.DmodeDungeonTheme[
             dmodeAreaInfo.current_area_theme_id
         ];
-        int baseLevel = theme.BossAppear ? floor.BaseBossEnemyLevel : floor.BaseEnemyLevel;
 
         DmodeDungeonArea area = MasterAsset.DmodeDungeonArea[dmodeAreaInfo.current_area_id];
         string assetName = $"{area.Scene}/{area.AreaName}".ToLowerInvariant();
@@ -678,7 +677,8 @@ public class DmodeDungeonService(
         IEnumerable<AtgenDmodeEnemy> dmodeEnemies = GenerateEnemies(
             areaInfo,
             area.IsSelectedEntity,
-            baseLevel,
+            floor.BaseEnemyLevel,
+            floor.BaseBossEnemyLevel,
             theme.PlusLevelMin,
             theme.PlusLevelMax,
             toughness =>
@@ -915,7 +915,7 @@ public class DmodeDungeonService(
                     .ToArray()
             );
 
-                item.option.strength_skill_id = skill.Id;
+            item.option.strength_skill_id = skill.Id;
         }
 
         if (strengthAbilityGroupId != 0 && rdm.Next(100) > 50)
@@ -988,7 +988,8 @@ public class DmodeDungeonService(
     private IEnumerable<AtgenDmodeEnemy> GenerateEnemies(
         DmodeAreaInfo areaInfo,
         bool isSelectedEntity,
-        int baseLevel,
+        int baseEnemyLevel,
+        int baseBossLevel,
         int plusMin,
         int plusMax,
         Func<int, AtgenDmodeDropList> generateDmodeItemDrop
@@ -1093,12 +1094,10 @@ public class DmodeDungeonService(
             return paramData.DmodeEnemyLevelType switch
             {
                 DmodeEnemyLevelType.None => 1,
-                DmodeEnemyLevelType.Dynamic
-                    => Math.Min(rdm.Next(baseLevel + plusMin, baseLevel + plusMax), 100),
-                DmodeEnemyLevelType.Fixed
-                    => MasterAsset.DmodeEnemyParam.Enumerable
-                        .Single(x => x.DmodeEnemyParamGroupId == paramData.DmodeEnemyParamGroupId)
-                        .Level,
+                DmodeEnemyLevelType.Enemy
+                    => rdm.Next(baseEnemyLevel + plusMin, baseEnemyLevel + plusMax),
+                DmodeEnemyLevelType.BossEnemy
+                    => rdm.Next(baseBossLevel + plusMin, baseBossLevel + plusMax),
                 _ => 1
             };
         }

@@ -3,6 +3,6 @@
 public enum DmodeEnemyLevelType
 {
     None,
-    Dynamic,
-    Fixed
+    Enemy,
+    BossEnemy
 }
