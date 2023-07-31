@@ -4,6 +4,7 @@ using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -18,7 +19,8 @@ public class PaymentService(
     IInventoryRepository inventoryRepository,
     IEventRepository eventRepository,
     IDmodeRepository dmodeRepository,
-    IItemRepository itemRepository
+    IItemRepository itemRepository,
+    ITicketRepository ticketRepository
 ) : IPaymentService
 {
     private readonly List<AtgenDeleteDragonList> dragonList = new();
@@ -121,14 +123,13 @@ public class PaymentService(
                 };
                 break;
             case EntityTypes.SummonTicket:
-                // TODO: Implement ticket payments.
-                logger.LogWarning(
-                    "Tried to pay with summon tickets - this is not (yet) supported!"
+                DbSummonTicket? ticket = await ticketRepository.Tickets.SingleOrDefaultAsync(
+                    x => x.TicketKeyId == entity.Id
                 );
-                throw new DragaliaException(
-                    ResultCode.ShopPaymentTypeInvalid,
-                    "Tickets are not yet supported."
-                );
+                quantity = ticket?.Quantity ?? 0;
+                // NOTE: Maybe remove here once quantity == 0?
+                updater = () => ticket!.Quantity -= price;
+                break;
             case EntityTypes.FreeDiamantium:
             case EntityTypes.PaidDiamantium:
                 logger.LogDebug("Tried to pay with diamantium -- this is not supported.");

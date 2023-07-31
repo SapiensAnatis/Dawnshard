@@ -8776,12 +8776,12 @@ public class SummonPrizeOddsRateList
 [MessagePackObject(true)]
 public class SummonTicketList
 {
-    public ulong key_id { get; set; }
-    public int summon_ticket_id { get; set; }
+    public long key_id { get; set; }
+    public SummonTickets summon_ticket_id { get; set; }
     public int quantity { get; set; }
-    public int use_limit_time { get; set; }
+    public DateTimeOffset use_limit_time { get; set; }
 
-    public SummonTicketList(ulong key_id, int summon_ticket_id, int quantity, int use_limit_time)
+    public SummonTicketList(long key_id, SummonTickets summon_ticket_id, int quantity, DateTimeOffset use_limit_time)
     {
         this.key_id = key_id;
         this.summon_ticket_id = summon_ticket_id;

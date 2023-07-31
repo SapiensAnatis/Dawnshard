@@ -33,6 +33,7 @@ using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Talisman;
+using DragaliaAPI.Features.Tickets;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -187,7 +188,9 @@ builder.Services
     // User feature
     .AddScoped<IUserService, UserService>()
     // Talisman feature
-    .AddScoped<ITalismanService, TalismanService>();
+    .AddScoped<ITalismanService, TalismanService>()
+    // Tickets feature
+    .AddScoped<ITicketRepository, TicketRepository>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();
