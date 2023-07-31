@@ -1082,6 +1082,17 @@ public class DmodeDungeonService(
                 {
                     AddChildEnemies(param, count);
                 }
+
+                foreach ((int param, int count) in secondFormParam.Weaks)
+                {
+                    AddChildEnemies(param, count);
+                }
+
+                foreach (int param in secondFormParam.Parts)
+                {
+                    if (param != 0)
+                        AddChildEnemies(param, 1);
+                }
             }
         }
 
