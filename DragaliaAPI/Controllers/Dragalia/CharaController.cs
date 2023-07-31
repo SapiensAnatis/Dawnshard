@@ -680,8 +680,7 @@ public class CharaController(
             switch (upgradeMaterialType)
             {
                 case CharaUpgradeMaterialTypes.Omnicite:
-                    // Omnicite doesn't use any other material
-                    await paymentService.ProcessPayment(Materials.Omnicite, 1);
+                    // No payment
                     break;
                 case CharaUpgradeMaterialTypes.GrowthMaterial:
                 case { } when isOnlyUsingGrowMaterial:
@@ -763,6 +762,12 @@ public class CharaController(
 
                     break;
             }
+        }
+
+        if (upgradeMaterialType == CharaUpgradeMaterialTypes.Omnicite)
+        {
+            // Omnicite doesn't use any other material
+            await paymentService.ProcessPayment(Materials.Omnicite, 1);
         }
 
         nodes.AddRange(manaNodes);
