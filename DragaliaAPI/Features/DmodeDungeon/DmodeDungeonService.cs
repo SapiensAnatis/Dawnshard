@@ -38,9 +38,13 @@ public class DmodeDungeonService(
         DbPlayerDmodeDungeon dungeon = await dmodeRepository.GetDungeonAsync();
         DbPlayerDmodeInfo info = await dmodeRepository.GetInfoAsync();
 
-        _ =
+        DbPlayerDmodeChara dmodeChara =
             await dmodeRepository.Charas.SingleOrDefaultAsync(x => x.CharaId == charaId)
-            ?? dmodeRepository.AddChara(charaId, servitorId, editSkillCharaIds);
+            ?? dmodeRepository.AddChara(charaId);
+
+        dmodeChara.SelectEditSkillCharaId1 = editSkillCharaIds.ElementAtOrDefault(0);
+        dmodeChara.SelectEditSkillCharaId2 = editSkillCharaIds.ElementAtOrDefault(1);
+        dmodeChara.SelectedServitorId = servitorId;
 
         dungeon.State = startFloor == 1 ? DungeonState.WaitingInitEnd : DungeonState.WaitingSkip;
 
@@ -903,23 +907,24 @@ public class DmodeDungeonService(
             item.option.strength_param_id = param.Id;
         }
 
-        if (strengthSkillGroupId != 0)
+        if (strengthSkillGroupId != 0 && rdm.Next(100) > 50)
         {
             DmodeStrengthSkill skill = rdm.Next(
                 MasterAsset.DmodeStrengthSkill.Enumerable
-                    .Where(x => x.StrengthSkillGroupId == strengthSkillGroupId)
+                    .Where(x => x.StrengthSkillGroupId == strengthSkillGroupId && x.SkillId != 0)
                     .ToArray()
             );
 
-            if (skill.SkillId == 0)
-                item.option.strength_skill_id = skill.Id;
+            item.option.strength_skill_id = skill.Id;
         }
 
-        if (strengthAbilityGroupId != 0)
+        if (strengthAbilityGroupId != 0 && rdm.Next(100) > 50)
         {
             DmodeStrengthAbility ability = rdm.Next(
                 MasterAsset.DmodeStrengthAbility.Enumerable
-                    .Where(x => x.StrengthAbilityGroupId == strengthAbilityGroupId)
+                    .Where(
+                        x => x.StrengthAbilityGroupId == strengthAbilityGroupId && x.AbilityId != 0
+                    )
                     .ToArray()
             );
 

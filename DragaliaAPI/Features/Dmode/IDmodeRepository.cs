@@ -20,11 +20,7 @@ public interface IDmodeRepository
 
     void InitializeForPlayer();
 
-    DbPlayerDmodeChara AddChara(
-        Charas charaId,
-        int servitorId,
-        IEnumerable<Charas> editSkillCharaIds
-    );
+    DbPlayerDmodeChara AddChara(Charas charaId);
 
     DbPlayerDmodeServitorPassive AddServitorPassive(
         DmodeServitorPassiveType passiveId,
