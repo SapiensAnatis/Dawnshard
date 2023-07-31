@@ -689,22 +689,6 @@ public class CharaController(
                         expectedPrice: manaNodeInfo.NecessaryManaPoint
                     );
 
-                    if (manaNodeInfo.UniqueGrowMaterialCount1 > 0)
-                    {
-                        await paymentService.ProcessPayment(
-                            charaData.UniqueGrowMaterialId1,
-                            manaNodeInfo.UniqueGrowMaterialCount1
-                        );
-                    }
-
-                    if (manaNodeInfo.UniqueGrowMaterialCount2 > 0)
-                    {
-                        await paymentService.ProcessPayment(
-                            charaData.UniqueGrowMaterialId2,
-                            manaNodeInfo.UniqueGrowMaterialCount2
-                        );
-                    }
-
                     if (
                         manaNodeInfo.GrowMaterialCount > 0
                         && charaData.GrowMaterialId != Materials.Empty
@@ -758,6 +742,22 @@ public class CharaController(
                             if (type != EntityTypes.None)
                                 await paymentService.ProcessPayment(new Entity(type, id, quantity));
                         }
+                    }
+
+                    if (manaNodeInfo.UniqueGrowMaterialCount1 > 0)
+                    {
+                        await paymentService.ProcessPayment(
+                            charaData.UniqueGrowMaterialId1,
+                            manaNodeInfo.UniqueGrowMaterialCount1
+                        );
+                    }
+
+                    if (manaNodeInfo.UniqueGrowMaterialCount2 > 0)
+                    {
+                        await paymentService.ProcessPayment(
+                            charaData.UniqueGrowMaterialId2,
+                            manaNodeInfo.UniqueGrowMaterialCount2
+                        );
                     }
 
                     break;
