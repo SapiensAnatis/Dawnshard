@@ -38,8 +38,6 @@ public class DmodeDungeonService(
         DbPlayerDmodeDungeon dungeon = await dmodeRepository.GetDungeonAsync();
         DbPlayerDmodeInfo info = await dmodeRepository.GetInfoAsync();
 
-        startFloor = 60;
-
         DbPlayerDmodeChara dmodeChara =
             await dmodeRepository.Charas.SingleOrDefaultAsync(x => x.CharaId == charaId)
             ?? dmodeRepository.AddChara(charaId);
