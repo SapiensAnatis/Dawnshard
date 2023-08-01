@@ -468,12 +468,12 @@ public class CharaController(
     /// </summary>
     /// <param name="playerCharData">Chara to upgrade</param>
     /// <param name="manaNodes">Mananodes to unlock</param>
-    /// <param name="isUseSpecialMaterial"></param>
+    /// <param name="upgradeMaterialType"></param>
     /// <returns></returns>
     private async Task CharaManaNodeUnlock(
         IEnumerable<int> manaNodes,
         DbPlayerCharaData playerCharData,
-        CharaUpgradeMaterialTypes isUseSpecialMaterial
+        CharaUpgradeMaterialTypes upgradeMaterialType
     )
     {
         if (!manaNodes.Any())
@@ -672,78 +672,102 @@ public class CharaController(
                 unlockedStories.Add(charaStories[nextStoryunlockIndex]);
             }
 
-            // Omnicite doesn't use any material
-            if (isUseSpecialMaterial == CharaUpgradeMaterialTypes.Omnicite)
-                continue;
-
-            await paymentService.ProcessPayment(
-                PaymentTypes.ManaPoint,
-                expectedPrice: manaNodeInfo.NecessaryManaPoint
-            );
+            bool isOnlyUsingGrowMaterial =
+                charaData.GrowMaterialOnlyStartDate <= time
+                && charaData.GrowMaterialOnlyEndDate >= time;
 
             // they smoked some shit
-            if (manaNodeInfo.UniqueGrowMaterialCount1 > 0)
+            switch (upgradeMaterialType)
             {
-                await paymentService.ProcessPayment(
-                    charaData.UniqueGrowMaterialId1,
-                    manaNodeInfo.UniqueGrowMaterialCount1
-                );
-            }
-
-            if (manaNodeInfo.UniqueGrowMaterialCount2 > 0)
-            {
-                await paymentService.ProcessPayment(
-                    charaData.UniqueGrowMaterialId2,
-                    manaNodeInfo.UniqueGrowMaterialCount2
-                );
-            }
-
-            if (
-                charaData.GrowMaterialOnlyStartDate <= time
-                && charaData.GrowMaterialOnlyEndDate >= time
-                && manaNodeInfo.GrowMaterialCount > 0
-                && charaData.GrowMaterialId != Materials.Empty
-            )
-            {
-                await paymentService.ProcessPayment(
-                    charaData.GrowMaterialId,
-                    manaNodeInfo.GrowMaterialCount
-                );
-            }
-
-            ManaPieceMaterial? material = MasterAsset.ManaPieceMaterial.Enumerable.FirstOrDefault(
-                x =>
-                    x.ElementId == charaData.PieceMaterialElementId
-                    && x.Step == manaNodeInfo.Step
-                    && x.ManaPieceType == manaNodeInfo.ManaPieceType
-            );
-
-            if (material != null)
-            {
-                if (material.DewPoint > 0)
-                {
+                case CharaUpgradeMaterialTypes.Omnicite:
+                    // No payment
+                    break;
+                case CharaUpgradeMaterialTypes.GrowthMaterial:
+                case { } when isOnlyUsingGrowMaterial:
                     await paymentService.ProcessPayment(
-                        PaymentTypes.DewPoint,
-                        expectedPrice: material.DewPoint
+                        PaymentTypes.ManaPoint,
+                        expectedPrice: manaNodeInfo.NecessaryManaPoint
                     );
-                }
 
-                foreach ((Materials id, int quantity) in material.NeededMaterials)
-                {
-                    if (id != Materials.Empty)
-                        await paymentService.ProcessPayment(id, quantity);
-                }
-
-                ManaPieceType pieceType = MasterAsset.ManaPieceType[manaNodeInfo.ManaPieceType];
-
-                foreach ((EntityTypes type, int id, int quantity) in pieceType.NeededEntities)
-                {
-                    if (type == EntityTypes.Material)
+                    if (
+                        manaNodeInfo.GrowMaterialCount > 0
+                        && charaData.GrowMaterialId != Materials.Empty
+                    )
                     {
-                        await paymentService.ProcessPayment((Materials)id, quantity);
+                        await paymentService.ProcessPayment(
+                            charaData.GrowMaterialId,
+                            manaNodeInfo.GrowMaterialCount
+                        );
                     }
-                }
+
+                    break;
+                case CharaUpgradeMaterialTypes.Standard:
+                    await paymentService.ProcessPayment(
+                        PaymentTypes.ManaPoint,
+                        expectedPrice: manaNodeInfo.NecessaryManaPoint
+                    );
+
+                    ManaPieceMaterial? material =
+                        MasterAsset.ManaPieceMaterial.Enumerable.FirstOrDefault(
+                            x =>
+                                x.ElementId == charaData.PieceMaterialElementId
+                                && x.Step == manaNodeInfo.Step
+                                && x.ManaPieceType == manaNodeInfo.ManaPieceType
+                        );
+
+                    if (material != null)
+                    {
+                        if (material.DewPoint > 0)
+                        {
+                            await paymentService.ProcessPayment(
+                                PaymentTypes.DewPoint,
+                                expectedPrice: material.DewPoint
+                            );
+                        }
+
+                        foreach ((Materials id, int quantity) in material.NeededMaterials)
+                        {
+                            if (id != Materials.Empty)
+                                await paymentService.ProcessPayment(id, quantity);
+                        }
+
+                        ManaPieceType pieceType = MasterAsset.ManaPieceType[
+                            manaNodeInfo.ManaPieceType
+                        ];
+
+                        foreach (
+                            (EntityTypes type, int id, int quantity) in pieceType.NeededEntities
+                        )
+                        {
+                            if (type != EntityTypes.None)
+                                await paymentService.ProcessPayment(new Entity(type, id, quantity));
+                        }
+                    }
+
+                    if (manaNodeInfo.UniqueGrowMaterialCount1 > 0)
+                    {
+                        await paymentService.ProcessPayment(
+                            charaData.UniqueGrowMaterialId1,
+                            manaNodeInfo.UniqueGrowMaterialCount1
+                        );
+                    }
+
+                    if (manaNodeInfo.UniqueGrowMaterialCount2 > 0)
+                    {
+                        await paymentService.ProcessPayment(
+                            charaData.UniqueGrowMaterialId2,
+                            manaNodeInfo.UniqueGrowMaterialCount2
+                        );
+                    }
+
+                    break;
             }
+        }
+
+        if (upgradeMaterialType == CharaUpgradeMaterialTypes.Omnicite)
+        {
+            // Omnicite doesn't use any other material
+            await paymentService.ProcessPayment(Materials.Omnicite, 1);
         }
 
         nodes.AddRange(manaNodes);
