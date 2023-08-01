@@ -13,8 +13,8 @@ namespace DragaliaAPI.Features.Dungeon.Record;
 public class DungeonRecordController(
     IDungeonRecordService dungeonRecordService,
     IDungeonRecordDamageService dungeonRecordDamageService,
+    IDungeonRecordHelperService dungeonRecordHelperService,
     IDungeonService dungeonService,
-    ITutorialService tutorialService,
     IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
@@ -23,13 +23,19 @@ public class DungeonRecordController(
     {
         DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
 
-        await tutorialService.AddTutorialFlag(1022);
-
         IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(
             request.dungeon_key,
             request.play_record,
             session
         );
+
+        (
+            IEnumerable<UserSupportList> helperList,
+            IEnumerable<AtgenHelperDetailList> helperDetailList
+        ) = await dungeonRecordHelperService.ProcessHelperDataSolo(session.SupportViewerId);
+
+        ingameResultData.helper_list = helperList;
+        ingameResultData.helper_detail_list = helperDetailList;
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
@@ -53,14 +59,19 @@ public class DungeonRecordController(
     {
         DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
 
-        await tutorialService.AddTutorialFlag(1022);
-
         IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(
             request.dungeon_key,
             request.play_record,
             session
         );
 
+        (
+            IEnumerable<UserSupportList> helperList,
+            IEnumerable<AtgenHelperDetailList> helperDetailList
+        ) = await dungeonRecordHelperService.ProcessHelperDataMulti();
+
+        ingameResultData.helper_list = helperList;
+        ingameResultData.helper_detail_list = helperDetailList;
         ingameResultData.play_type = QuestPlayType.Multi;
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();

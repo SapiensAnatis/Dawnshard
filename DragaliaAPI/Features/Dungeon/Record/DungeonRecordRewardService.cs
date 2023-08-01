@@ -13,36 +13,9 @@ public class DungeonRecordRewardService(
     IAbilityCrestMultiplierService abilityCrestMultiplierService,
     IEventDropService eventDropService,
     ILogger<DungeonRecordRewardService> logger
-)
+) : IDungeonRecordRewardService
 {
-    public async Task<IngameResultData> ProcessQuestRewards(
-        IngameResultData resultData,
-        DungeonSession session,
-        PlayRecord playRecord,
-        DbQuest questData
-    )
-    {
-        await this.ProcessEnemyDrops(
-            resultData.reward_record,
-            resultData.grow_record, // Mana drops are added to the grow record. For some reason.
-            playRecord,
-            session
-        );
-
-        await this.ProcessQuestMissionCompletion(
-            resultData.reward_record,
-            playRecord,
-            session,
-            questData
-        );
-
-        await this.ProcessEventRewards(resultData, playRecord, session);
-
-        return resultData;
-    }
-
-    private async Task ProcessQuestMissionCompletion(
-        RewardRecord rewardRecord,
+    public async Task<QuestMissionStatus> ProcessQuestMissionCompletion(
         PlayRecord playRecord,
         DungeonSession session,
         DbQuest questData
@@ -71,17 +44,14 @@ public class DungeonRecordRewardService(
         questData.IsMissionClear2 = status.Missions[1];
         questData.IsMissionClear3 = status.Missions[2];
 
-        rewardRecord.first_clear_set = firstClearRewards;
-        rewardRecord.mission_complete = status.MissionCompleteSet;
-        rewardRecord.missions_clear_set = status.MissionsClearSet;
+        return status;
     }
 
-    private async Task ProcessEnemyDrops(
-        RewardRecord rewardRecord,
-        GrowRecord growRecord,
-        PlayRecord playRecord,
-        DungeonSession session
-    )
+    public async Task<(
+        IEnumerable<AtgenDropAll> DropList,
+        int ManaDrop,
+        int CoinDrop
+    )> ProcessEnemyDrops(PlayRecord playRecord, DungeonSession session)
     {
         int manaDrop = 0;
         int coinDrop = 0;
@@ -130,16 +100,13 @@ public class DungeonRecordRewardService(
             }
         }
 
-        rewardRecord.drop_all = drops;
-        rewardRecord.take_coin = coinDrop;
-        growRecord.take_mana = manaDrop;
-
         await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
         await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
+
+        return (drops, manaDrop, coinDrop);
     }
 
-    private async Task ProcessEventRewards(
-        IngameResultData ingameResultData,
+    public async Task<EventRewardData> ProcessEventRewards(
         PlayRecord playRecord,
         DungeonSession session
     )
@@ -160,20 +127,29 @@ public class DungeonRecordRewardService(
             pointMultiplier
         );
 
-        ingameResultData.score_mission_success_list = scoreMissions;
-        ingameResultData.reward_record.take_accumulate_point = totalPoints + boostedPoints;
-        ingameResultData.reward_record.take_boost_accumulate_point = boostedPoints;
+        IEnumerable<AtgenEventPassiveUpList> passiveUpList =
+            await eventDropService.ProcessEventPassiveDrops(session.QuestData);
 
-        ingameResultData.event_passive_up_list = await eventDropService.ProcessEventPassiveDrops(
-            session.QuestData
+        IEnumerable<AtgenDropAll> eventDrops = await eventDropService.ProcessEventMaterialDrops(
+            session.QuestData,
+            playRecord!,
+            materialMultiplier
         );
 
-        ingameResultData.reward_record.drop_all.AddRange(
-            await eventDropService.ProcessEventMaterialDrops(
-                session.QuestData,
-                playRecord!,
-                materialMultiplier
-            )
+        return new EventRewardData(
+            ScoreMissions: scoreMissions,
+            TakeAccumulatePoint: totalPoints + boostedPoints,
+            TakeBoostAccumulatePoint: boostedPoints,
+            PassiveUpList: passiveUpList,
+            EventDrops: eventDrops
         );
     }
+
+    public record EventRewardData(
+        IEnumerable<AtgenScoreMissionSuccessList> ScoreMissions,
+        int TakeAccumulatePoint,
+        int TakeBoostAccumulatePoint,
+        IEnumerable<AtgenEventPassiveUpList> PassiveUpList,
+        IEnumerable<AtgenDropAll> EventDrops
+    );
 }

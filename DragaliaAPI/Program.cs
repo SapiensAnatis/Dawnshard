@@ -173,6 +173,8 @@ builder.Services
     .AddScoped<IOddsInfoService, OddsInfoService>()
     .AddScoped<IDungeonRecordService, DungeonRecordService>()
     .AddScoped<IDungeonRecordHelperService, DungeonRecordHelperService>()
+    .AddScoped<IDungeonRecordRewardService, DungeonRecordRewardService>()
+    .AddScoped<IDungeonRecordDamageService, DungeonRecordDamageService>()
     .AddScoped<IQuestCompletionService, QuestCompletionService>()
     .AddScoped<IAbilityCrestMultiplierService, AbilityCrestMultiplierService>()
     // Event Feature

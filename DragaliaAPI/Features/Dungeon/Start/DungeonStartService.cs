@@ -94,7 +94,7 @@ public class DungeonStartService(
         if (quest?.State < 3)
         {
             logger.LogDebug("Updating quest {@quest} state", quest);
-            await questRepository.UpdateQuestState(questId, 2);
+            quest.State = 2;
         }
 
         return new()

@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 
@@ -6,10 +6,19 @@ namespace DragaliaAPI.Features.Dungeon.Record;
 
 public interface IDungeonRecordRewardService
 {
-    Task<IngameResultData> ProcessQuestRewards(
-        IngameResultData resultData,
-        DungeonSession session,
+    Task<QuestMissionStatus> ProcessQuestMissionCompletion(
         PlayRecord playRecord,
+        DungeonSession session,
         DbQuest questData
+    );
+
+    Task<(IEnumerable<AtgenDropAll> DropList, int ManaDrop, int CoinDrop)> ProcessEnemyDrops(
+        PlayRecord playRecord,
+        DungeonSession session
+    );
+
+    Task<DungeonRecordRewardService.EventRewardData> ProcessEventRewards(
+        PlayRecord playRecord,
+        DungeonSession session
     );
 }

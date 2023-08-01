@@ -15,11 +15,11 @@ using PhotonPlayer = DragaliaAPI.Photon.Shared.Models.Player;
 namespace DragaliaAPI.Features.Dungeon.Record;
 
 public class DungeonRecordService(
-    IDungeonRecordHelperService dungeonRecordHelperService,
     IDungeonRecordRewardService dungeonRecordRewardService,
     IQuestRepository questRepository,
     IMissionProgressionService missionProgressionService,
     IUserService userService,
+    ITutorialService tutorialService,
     ILogger<DungeonRecordService> logger
 ) : IDungeonRecordService
 {
@@ -29,6 +29,8 @@ public class DungeonRecordService(
         DungeonSession session
     )
     {
+        await tutorialService.AddTutorialFlag(1022);
+
         logger.LogDebug(
             "Processing completion of quest {id}. isHost: {isHost}",
             session.QuestData.Id,
@@ -47,9 +49,8 @@ public class DungeonRecordService(
                 end_time = DateTimeOffset.UtcNow,
                 current_play_count = 1,
                 reborn_count = playRecord.reborn_count,
-                state = -1,
-                is_clear = true,
                 total_play_damage = playRecord.total_play_damage,
+                is_clear = true,
             };
 
         DbQuest questData = await questRepository.GetQuestDataAsync(session.QuestData.Id);
@@ -61,19 +62,26 @@ public class DungeonRecordService(
         await this.ProcessStaminaConsumption(session);
         await this.ProcessPlayerLevel(ingameResultData.reward_record, session);
 
-        ingameResultData = await dungeonRecordRewardService.ProcessQuestRewards(
-            ingameResultData,
-            session,
-            playRecord,
-            questData
-        );
+        (IEnumerable<AtgenDropAll> dropList, int manaDrop, int coinDrop) =
+            await dungeonRecordRewardService.ProcessEnemyDrops(playRecord, session);
 
-        ingameResultData = session.IsMulti
-            ? await dungeonRecordHelperService.ProcessHelperDataSolo(
-                ingameResultData,
-                session.SupportViewerId
-            )
-            : await dungeonRecordHelperService.ProcessHelperDataMulti(ingameResultData);
+        ingameResultData.reward_record.take_coin = coinDrop;
+        ingameResultData.grow_record.take_mana = manaDrop;
+        ingameResultData.reward_record.drop_all.AddRange(dropList);
+
+        (
+            IEnumerable<AtgenScoreMissionSuccessList> scoreMissionSuccessList,
+            int takeAccumulatePoint,
+            int takeBoostAccumulatePoint,
+            IEnumerable<AtgenEventPassiveUpList> eventPassiveUpLists,
+            IEnumerable<AtgenDropAll> eventDrops
+        ) = await dungeonRecordRewardService.ProcessEventRewards(playRecord, session);
+
+        ingameResultData.score_mission_success_list = scoreMissionSuccessList;
+        ingameResultData.reward_record.take_accumulate_point = takeAccumulatePoint;
+        ingameResultData.reward_record.take_boost_accumulate_point = takeBoostAccumulatePoint;
+        ingameResultData.event_passive_up_list = eventPassiveUpLists;
+        ingameResultData.reward_record.drop_all.AddRange(eventDrops);
 
         return ingameResultData;
     }

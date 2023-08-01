@@ -17,38 +17,43 @@ public class DungeonRecordHelperService(
     ILogger<DungeonRecordHelperService> logger
 ) : IDungeonRecordHelperService
 {
-    public async Task<IngameResultData> ProcessHelperDataSolo(
-        IngameResultData resultData,
-        ulong? supportViewerId
-    )
+    public async Task<(
+        IEnumerable<UserSupportList> HelperList,
+        IEnumerable<AtgenHelperDetailList> HelperDetailList
+    )> ProcessHelperDataSolo(ulong? supportViewerId)
     {
+        List<UserSupportList> helperList = new();
+        List<AtgenHelperDetailList> helperDetailList = new();
+
         if (supportViewerId is null)
-            return resultData;
+            return (helperList, helperDetailList);
 
         UserSupportList? supportList = await helperService.GetHelper(supportViewerId.Value);
 
-        if (supportList is null)
-            return resultData;
-
-        resultData.helper_list = new List<UserSupportList>() { supportList };
-
-        // TODO: Replace with friend system once implemented
-        resultData.helper_detail_list = new List<AtgenHelperDetailList>()
+        if (supportList is not null)
         {
-            new()
-            {
-                viewer_id = supportList.viewer_id,
-                is_friend = true,
-                apply_send_status = 1,
-                get_mana_point = 50
-            }
-        };
+            helperList.Add(supportList);
 
-        return resultData;
+            // TODO: Replace with friends system once fully added
+            helperDetailList.Add(
+                new AtgenHelperDetailList()
+                {
+                    viewer_id = supportList.viewer_id,
+                    is_friend = true,
+                    apply_send_status = 1,
+                    get_mana_point = 50
+                }
+            );
+        }
+
+        return (helperList, helperDetailList);
     }
 
     // TODO: test with empty weapon / dragon / print slots / etc
-    public async Task<IngameResultData> ProcessHelperDataMulti(IngameResultData resultData)
+    public async Task<(
+        IEnumerable<UserSupportList> HelperList,
+        IEnumerable<AtgenHelperDetailList> HelperDetailList
+    )> ProcessHelperDataMulti()
     {
         IEnumerable<PhotonPlayer> teammates = await matchingService.GetTeammates();
 
@@ -68,10 +73,7 @@ public class DungeonRecordHelperService(
                 }
         );
 
-        resultData.helper_list = teammateSupportLists;
-        resultData.helper_detail_list = teammateDetailLists;
-
-        return resultData;
+        return (teammateSupportLists, teammateDetailLists);
     }
 
     private async Task<IEnumerable<UserSupportList>> GetTeammateSupportList(
@@ -112,7 +114,6 @@ public class DungeonRecordHelperService(
                     "Failed to populate multiplayer support info for player {@player}",
                     player
                 );
-                continue;
             }
         }
 
