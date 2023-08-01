@@ -5,5 +5,7 @@ public record DmodeEnemyParam(
     int DropExp,
     int DropDmodePoint1,
     int DropDmodePoint2,
-    int DmodeScore
+    int DmodeScore,
+    int DmodeEnemyParamGroupId,
+    int Level
 );

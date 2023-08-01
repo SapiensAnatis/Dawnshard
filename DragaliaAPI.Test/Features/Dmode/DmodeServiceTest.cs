@@ -23,7 +23,6 @@ public class DmodeServiceTest
     private readonly Mock<IDmodeCacheService> mockDmodeCacheService;
     private readonly Mock<ILogger<DmodeService>> mockLogger;
     private readonly Mock<IPaymentService> mockPaymentService;
-    private readonly Mock<IUnitRepository> mockUnitRepository;
     private readonly Mock<IRewardService> mockRewardService;
 
     private readonly DmodeService dmodeService;
@@ -37,7 +36,6 @@ public class DmodeServiceTest
         mockDmodeCacheService = new(MockBehavior.Strict);
         mockLogger = new(MockBehavior.Loose);
         mockPaymentService = new(MockBehavior.Strict);
-        mockUnitRepository = new(MockBehavior.Strict);
         mockRewardService = new(MockBehavior.Strict);
 
         dmodeService = new(
@@ -46,7 +44,6 @@ public class DmodeServiceTest
             mockDmodeCacheService.Object,
             mockLogger.Object,
             mockPaymentService.Object,
-            mockUnitRepository.Object,
             mockRewardService.Object
         );
 
@@ -586,7 +583,6 @@ public class DmodeServiceTest
         mockDateTimeProvider.VerifyAll();
         mockDmodeRepository.VerifyAll();
         mockRewardService.VerifyAll();
-        mockUnitRepository.VerifyAll();
     }
 
     [Fact]

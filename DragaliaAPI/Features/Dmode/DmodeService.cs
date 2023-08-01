@@ -21,7 +21,6 @@ public class DmodeService(
     IDmodeCacheService dmodeCacheService,
     ILogger<DmodeService> logger,
     IPaymentService paymentService,
-    IUnitRepository unitRepository,
     IRewardService rewardService
 ) : IDmodeService
 {
