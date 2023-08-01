@@ -38,6 +38,8 @@ public class DmodeDungeonService(
         DbPlayerDmodeDungeon dungeon = await dmodeRepository.GetDungeonAsync();
         DbPlayerDmodeInfo info = await dmodeRepository.GetInfoAsync();
 
+        startFloor = 60;
+
         DbPlayerDmodeChara dmodeChara =
             await dmodeRepository.Charas.SingleOrDefaultAsync(x => x.CharaId == charaId)
             ?? dmodeRepository.AddChara(charaId);
@@ -375,6 +377,7 @@ public class DmodeDungeonService(
             take_dmode_point_1 = 0,
             take_dmode_point_2 = 0
         };
+
         floorData.dmode_dungeon_odds = GenerateOddsInfo(
             floor,
             floorData.dmode_area_info,
@@ -396,6 +399,12 @@ public class DmodeDungeonService(
 
             DmodeDungeonItemData[] dragonPool = MasterAsset.DmodeDungeonItemData.Enumerable
                 .Where(x => x.DmodeDungeonItemType == DmodeDungeonItemType.Dragon)
+                .Where(
+                    x =>
+                        floorData.dmode_dungeon_odds.dmode_select_dragon_list.All(
+                            y => y.dragon_id != (Dragons)x.Id
+                        )
+                )
                 .ToArray();
 
             for (int i = 0; i < floor.FloorNum; i += 10)
@@ -1058,10 +1067,7 @@ public class DmodeDungeonService(
                 )
             );
 
-            foreach ((int param, int count) in paramData.Children)
-            {
-                AddChildEnemies(param, count);
-            }
+            GenerateSubEnemies(paramData);
 
             if (hasSecondForm)
             {
@@ -1078,25 +1084,30 @@ public class DmodeDungeonService(
 
                 EnemyParam secondFormParam = MasterAsset.EnemyParam[paramData.Form2nd];
 
-                foreach ((int param, int count) in secondFormParam.Children)
-                {
-                    AddChildEnemies(param, count);
-                }
-
-                foreach ((int param, int count) in secondFormParam.Weaks)
-                {
-                    AddChildEnemies(param, count);
-                }
-
-                foreach (int param in secondFormParam.Parts)
-                {
-                    if (param != 0)
-                        AddChildEnemies(param, 1);
-                }
+                GenerateSubEnemies(secondFormParam);
             }
         }
 
         return dmodeEnemies;
+
+        void GenerateSubEnemies(EnemyParam paramData)
+        {
+            foreach ((int param, int count) in paramData.Children)
+            {
+                AddChildEnemies(param, count);
+            }
+
+            foreach ((int param, int count) in paramData.Weaks)
+            {
+                AddChildEnemies(param, count);
+            }
+
+            foreach (int param in paramData.Parts)
+            {
+                if (param != 0)
+                    AddChildEnemies(param, 1);
+            }
+        }
 
         int GenerateEnemyLevel(int enemyParam)
         {
