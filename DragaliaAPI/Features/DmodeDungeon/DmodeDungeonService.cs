@@ -58,18 +58,20 @@ public class DmodeDungeonService(
             x => x.CharaId == charaId
         );
 
+        CharaData charaData = MasterAsset.CharaData[charaId];
+
         AtgenUnitData unitData =
             new(
                 chara.CharaId,
-                chara.Skill1Level,
-                chara.Skill2Level,
-                chara.Ability1Level,
-                chara.Ability2Level,
-                chara.Ability3Level,
-                chara.ExAbilityLevel,
-                chara.ExAbility2Level,
-                chara.BurstAttackLevel,
-                chara.ComboBuildupCount
+                charaData.HasManaSpiral ? 4 : 3,
+                charaData.HasManaSpiral ? 3 : 2,
+                charaData.MaxAbility1Level,
+                charaData.MaxAbility2Level,
+                charaData.MaxAbility3Level,
+                5,
+                5,
+                2,
+                0
             );
 
         const int dmodeLevelGroupId = 1; // Everyone has 1 /* MasterAsset.CharaData[chara.CharaId].DmodeLevelGroupId; */
