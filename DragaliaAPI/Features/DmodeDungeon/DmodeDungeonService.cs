@@ -71,7 +71,7 @@ public class DmodeDungeonService(
                 5,
                 5,
                 2,
-                0
+                charaData.HasManaSpiral ? 1 : 0
             );
 
         const int dmodeLevelGroupId = 1; // Everyone has 1 /* MasterAsset.CharaData[chara.CharaId].DmodeLevelGroupId; */
