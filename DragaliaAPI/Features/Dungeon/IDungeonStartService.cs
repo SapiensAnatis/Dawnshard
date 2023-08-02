@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities.Scaffold;
+using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Features.Dungeon;
 

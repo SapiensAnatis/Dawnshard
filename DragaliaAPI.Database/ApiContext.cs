@@ -165,4 +165,6 @@ public class ApiContext : DbContext
     public DbSet<DbPlayerEventPassive> PlayerEventPassives { get; set; }
 
     public DbSet<DbQuestClearPartyUnit> QuestClearPartyUnits { get; set; }
+
+    public DbSet<DbQuestWall> QuestWalls { get; set; }
 }

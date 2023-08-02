@@ -26,6 +26,20 @@ public class OddsInfoService : IOddsInfoService
         return odds;
     }
 
+    // Mercurial Gauntlet
+    public OddsInfo GetWallOddsInfo(int wallId, int wallLevel)
+    {
+        OddsInfo odds = StubData.OddsInfo;
+
+        // TODO: drop_obj (treasure chests / crates, I think?)
+        odds.enemy = this.questEnemyService.BuildQuestWallEnemyList(wallId, wallLevel);
+        odds.area_index = 0;
+
+        // this.logger.LogTrace("Generated enemy list: {@list}", odds.enemy);
+
+        return odds;
+    }
+
     private static class StubData
     {
         public static OddsInfo OddsInfo =>

@@ -1,0 +1,125 @@
+﻿using System.Configuration;
+using System.Drawing.Text;
+using DragaliaAPI.Controllers;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
+using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
+using AutoMapper;
+
+using Microsoft.AspNetCore.Mvc;
+using DragaliaAPI.Shared.MasterAsset;
+
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Reflection.Metadata;
+
+namespace DragaliaAPI.Features.Wall;
+
+[Route("wall_start")]
+public class WallStartController : DragaliaControllerBase
+{
+    private readonly IMapper mapper;
+    private readonly ILogger<WallStartController> logger;
+    private readonly IUpdateDataService updateDataService;
+    private readonly IOddsInfoService oddsInfoService;
+    private readonly IDungeonStartService dungeonStartService;
+
+    public WallStartController(
+        IMapper mapper,
+        ILogger<WallStartController> logger,
+        IUpdateDataService updateDataService,
+        IOddsInfoService oddsInfoService,
+        IDungeonStartService dungeonStartService
+    )
+    {
+        this.mapper = mapper;
+        this.logger = logger;
+        this.updateDataService = updateDataService;
+        this.oddsInfoService = oddsInfoService;
+        //this.wallService = wallService;
+        this.dungeonStartService = dungeonStartService;
+    }
+
+    
+    [HttpPost("start")]
+    public async Task<DragaliaResult> Start(WallStartStartRequest request)
+    {
+        QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(request.wall_id, request.wall_level);
+
+        IngameData ingameData = await this.dungeonStartService.GetIngameData(
+            0,
+            new List<int>() { request.party_no },
+            request.support_viewer_id
+        );
+        ingameData.area_info_list = questWallDetail.AreaInfo.Select(mapper.Map<AreaInfoList>);
+
+        IngameWallData ingameWallData = new() {
+            wall_id = request.wall_id,
+            wall_level = request.wall_level
+        };
+
+        OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(request.wall_id, request.wall_level);
+
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+
+        WallStartStartData data =
+            new()
+            {
+                ingame_data = ingameData,
+                ingame_wall_data = ingameWallData,
+                odds_info = oddsInfo,
+                update_data_list = updateDataList
+            };
+
+        logger.LogInformation("[wall_start/start] Started Mercurial Gauntlet quest with 'wall_id' {@wall_id}, 'wall_level' {@wall_level}, dungeon key {@key}",
+            request.wall_id, request.wall_level, ingameData.dungeon_key);
+
+        return Ok(data);
+    }
+
+    
+    [HttpPost("start_assign_unit")]
+    public async Task<DragaliaResult> StartAssignUnit(WallStartStartAssignUnitRequest request)
+    {
+
+        QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(request.wall_id, request.wall_level);
+
+        IngameData ingameData = await this.dungeonStartService.GetIngameData(
+            0,
+            request.request_party_setting_list,
+            request.support_viewer_id
+        );
+        ingameData.area_info_list = questWallDetail.AreaInfo.Select(mapper.Map<AreaInfoList>);
+
+        IngameWallData ingameWallData = new()
+        {
+            wall_id = request.wall_id,
+            wall_level = request.wall_level
+        };
+
+        OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(request.wall_id, request.wall_level);
+
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+
+        WallStartStartAssignUnitData data =
+            new()
+            {
+                ingame_data = ingameData,
+                ingame_wall_data = ingameWallData,
+                odds_info = oddsInfo,
+                update_data_list = updateDataList
+            };
+
+        logger.LogInformation("[wall_start/start_assign_unit] Started Mercurial Gauntlet quest with 'wall_id' {@wall_id}, 'wall_level' {@wall_level}, dungeon key {@key}",
+                        request.wall_id, request.wall_level, ingameData.dungeon_key);
+
+        return Ok(data);
+    }
+    
+
+}

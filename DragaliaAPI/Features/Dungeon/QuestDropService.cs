@@ -13,6 +13,11 @@ public class QuestDropService(ILogger<QuestEnemyService> logger, IEventRepositor
 {
     public IEnumerable<Materials> GetDrops(int questId)
     {
+        if (questId == 0) 
+        { 
+            return Enumerable.Empty<Materials>();
+        }
+
         if (!MasterAsset.QuestDrops.TryGetValue(questId, out QuestDropInfo? questDropInfo))
         {
             logger.LogWarning("Unable to retrieve drop list for quest id {quest}", questId);

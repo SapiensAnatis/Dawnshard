@@ -198,6 +198,9 @@
 		<None Update="Resources\QuestEvent.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="Resources\QuestWallDetail.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Resources\QuestEventGroup.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
