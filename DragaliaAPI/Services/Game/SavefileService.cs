@@ -540,6 +540,26 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerEventPassives.RemoveRange(
             this.apiContext.PlayerEventPassives.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PlayerDmodeInfos.RemoveRange(
+            this.apiContext.PlayerDmodeInfos.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerDmodeCharas.RemoveRange(
+            this.apiContext.PlayerDmodeCharas.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerDmodeDungeons.RemoveRange(
+            this.apiContext.PlayerDmodeDungeons.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerDmodeServitorPassives.RemoveRange(
+            this.apiContext.PlayerDmodeServitorPassives.Where(
+                x => x.DeviceAccountId == deviceAccountId
+            )
+        );
+        this.apiContext.PlayerDmodeExpeditions.RemoveRange(
+            this.apiContext.PlayerDmodeExpeditions.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerUseItems.RemoveRange(
+            this.apiContext.PlayerUseItems.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset()

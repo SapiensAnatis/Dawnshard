@@ -38,6 +38,12 @@ public class AbilityCrestMultiplierServiceTest
                         DeviceAccountId = "id",
                         AbilityCrestId = AbilityCrests.SistersDayOut,
                         LimitBreakCount = 4
+                    },
+                    new()
+                    {
+                        DeviceAccountId = "id",
+                        AbilityCrestId = AbilityCrests.TheDragonSmiths,
+                        LimitBreakCount = 4
                     }
                 }
                     .AsQueryable()
@@ -47,20 +53,37 @@ public class AbilityCrestMultiplierServiceTest
         List<PartySettingList> party =
             new()
             {
-                new() { equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, },
-                new() { equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, },
-                new() { equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, },
-                new() { equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, },
+                new()
+                {
+                    equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut,
+                    equip_crest_slot_type_1_crest_id_2 = AbilityCrests.TheDragonSmiths
+                },
+                new()
+                {
+                    equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut,
+                    equip_crest_slot_type_1_crest_id_2 = AbilityCrests.TheDragonSmiths
+                },
+                new()
+                {
+                    equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut,
+                    equip_crest_slot_type_1_crest_id_2 = AbilityCrests.TheDragonSmiths
+                },
+                new()
+                {
+                    equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut,
+                    equip_crest_slot_type_1_crest_id_2 = AbilityCrests.TheDragonSmiths
+                },
             };
 
-        (
-            await this.abilityCrestMultiplierService.GetFacilityEventMultiplier(
+        (double material, double point) = (
+            await this.abilityCrestMultiplierService.GetEventMultiplier(
                 party,
                 flamesOfReflectionCompendiumId
             )
-        )
-            .Should()
-            .Be(7); // +600%
+        );
+
+        material.Should().Be(4); // +300%
+        point.Should().Be(7); // +600%
     }
 
     [Fact]
@@ -100,14 +123,15 @@ public class AbilityCrestMultiplierServiceTest
                 },
             };
 
-        (
-            await this.abilityCrestMultiplierService.GetFacilityEventMultiplier(
+        (double material, double point) = (
+            await this.abilityCrestMultiplierService.GetEventMultiplier(
                 party,
                 flamesOfReflectionCompendiumId
             )
-        )
-            .Should()
-            .Be(2.5); // +150%
+        );
+
+        material.Should().Be(1);
+        point.Should().Be(2.5); // +150%
     }
 
     [Fact]
@@ -152,14 +176,15 @@ public class AbilityCrestMultiplierServiceTest
                 },
             };
 
-        (
-            await this.abilityCrestMultiplierService.GetFacilityEventMultiplier(
+        (double material, double point) = (
+            await this.abilityCrestMultiplierService.GetEventMultiplier(
                 party,
                 flamesOfReflectionCompendiumId
             )
-        )
-            .Should()
-            .Be(4); // +300%
+        );
+
+        material.Should().Be(1);
+        point.Should().Be(4); // +300%
     }
 
     [Fact]
@@ -178,6 +203,12 @@ public class AbilityCrestMultiplierServiceTest
                         AbilityCrestId = AbilityCrests.SistersDayOut,
                         LimitBreakCount = 0
                     },
+                    new()
+                    {
+                        DeviceAccountId = "id",
+                        AbilityCrestId = AbilityCrests.TheDragonSmiths,
+                        LimitBreakCount = 0
+                    },
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -189,17 +220,19 @@ public class AbilityCrestMultiplierServiceTest
                 new()
                 {
                     equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, // +100%
+                    equip_crest_slot_type_1_crest_id_2 = AbilityCrests.TheDragonSmiths, // +50%
                 },
             };
 
-        (
-            await this.abilityCrestMultiplierService.GetFacilityEventMultiplier(
+        (double material, double point) = (
+            await this.abilityCrestMultiplierService.GetEventMultiplier(
                 party,
                 flamesOfReflectionCompendiumId
             )
-        )
-            .Should()
-            .Be(2); // +100%
+        );
+
+        material.Should().Be(1.5); // +50%
+        point.Should().Be(2); // +100%
     }
 
     [Fact]
@@ -232,13 +265,14 @@ public class AbilityCrestMultiplierServiceTest
                 new() { equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut, },
             };
 
-        (
-            await this.abilityCrestMultiplierService.GetFacilityEventMultiplier(
+        (double material, double point) = (
+            await this.abilityCrestMultiplierService.GetEventMultiplier(
                 party,
                 accursedArchivesCompendiumId
             )
-        )
-            .Should()
-            .Be(1);
+        );
+
+        material.Should().Be(1);
+        point.Should().Be(1);
     }
 }

@@ -1,6 +1,8 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -14,7 +16,9 @@ public class PaymentService(
     ILogger<PaymentService> logger,
     IUserDataRepository userDataRepository,
     IInventoryRepository inventoryRepository,
-    IEventRepository eventRepository
+    IEventRepository eventRepository,
+    IDmodeRepository dmodeRepository,
+    IItemRepository itemRepository
 ) : IPaymentService
 {
     private readonly List<AtgenDeleteDragonList> dragonList = new();
@@ -98,6 +102,23 @@ public class PaymentService(
                 DbPlayerEventItem? item = await eventRepository.GetEventItemAsync(entity.Id);
                 quantity = item?.Quantity;
                 updater = () => item!.Quantity -= price;
+                break;
+            case EntityTypes.Item:
+                DbPlayerUseItem? useItem = await itemRepository.GetItemAsync((UseItem)entity.Id);
+                quantity = useItem?.Quantity ?? 0;
+                updater = () => useItem!.Quantity -= price;
+                break;
+            case EntityTypes.DmodePoint:
+                DbPlayerDmodeInfo dmodeInfo = await dmodeRepository.GetInfoAsync();
+                bool isPoint1 = entity.Id == (int)DmodePoint.Point1;
+                quantity = isPoint1 ? dmodeInfo.Point1Quantity : dmodeInfo.Point2Quantity;
+                updater = () =>
+                {
+                    if (isPoint1)
+                        dmodeInfo.Point1Quantity -= price;
+                    else
+                        dmodeInfo.Point2Quantity -= price;
+                };
                 break;
             case EntityTypes.SummonTicket:
                 // TODO: Implement ticket payments.

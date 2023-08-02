@@ -2,6 +2,7 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
@@ -31,12 +32,15 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
     public Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
 
+    public Mock<IDateTimeProvider> MockDateTimeProvider { get; } = new();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>
         {
             services.AddScoped(x => this.MockBaasApi.Object);
             services.AddScoped(x => this.MockPhotonStateApi.Object);
+            services.AddScoped(x => this.MockDateTimeProvider.Object);
             services.Configure<LoginOptions>(x => x.UseBaasLogin = true);
 
             NpgsqlConnectionStringBuilder connectionStringBuilder =
@@ -147,6 +151,24 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Coin = 100_000_000;
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.DewPoint = 100_000_000;
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.ManaPoint = 100_000_000;
+
+        apiContext.PlayerDmodeInfos.Add(
+            new DbPlayerDmodeInfo
+            {
+                DeviceAccountId = TestFixture.DeviceAccountId,
+                Point1Quantity = 100_000_000,
+                Point2Quantity = 100_000_000
+            }
+        );
+
+        apiContext.PlayerDmodeDungeons.Add(
+            new DbPlayerDmodeDungeon { DeviceAccountId = TestFixture.DeviceAccountId }
+        );
+
+        apiContext.PlayerDmodeExpeditions.Add(
+            new DbPlayerDmodeExpedition { DeviceAccountId = TestFixture.DeviceAccountId }
+        );
+
         apiContext.SaveChanges();
     }
 }

@@ -1,7 +1,12 @@
 ﻿using System.Diagnostics;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Item;
+using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +20,10 @@ public class RewardService(
     IAbilityCrestRepository abilityCrestRepository,
     IUnitRepository unitRepository,
     IFortRepository fortRepository,
-    IEventRepository eventRepository
+    IEventRepository eventRepository,
+    IDmodeRepository dmodeRepository,
+    IItemRepository itemRepository,
+    IUserService userService
 ) : IRewardService
 {
     private readonly List<Entity> discardedEntities = new();
@@ -38,6 +46,9 @@ public class RewardService(
         {
             case EntityTypes.Chara:
                 return await RewardCharacter(entity);
+            case EntityTypes.Item:
+                await itemRepository.AddItemQuantityAsync((UseItem)entity.Id, entity.Quantity);
+                break;
             case EntityTypes.Dragon:
                 for (int i = 0; i < entity.Quantity; i++)
                     await unitRepository.AddDragons((Dragons)entity.Id);
@@ -50,6 +61,9 @@ public class RewardService(
                 break;
             case EntityTypes.Rupies:
                 await userDataRepository.UpdateCoin(entity.Quantity);
+                break;
+            case EntityTypes.SkipTicket:
+                await userService.AddQuestSkipPoint(entity.Quantity);
                 break;
             case EntityTypes.Wyrmite:
                 await userDataRepository.GiveWyrmite(entity.Quantity);
@@ -81,6 +95,15 @@ public class RewardService(
             case EntityTypes.CombatEventItem:
                 await eventRepository.AddItemQuantityAsync(entity.Id, entity.Quantity);
                 break;
+            case EntityTypes.DmodePoint:
+                DbPlayerDmodeInfo info = await dmodeRepository.GetInfoAsync();
+                if (entity.Id == (int)DmodePoint.Point1)
+                    info.Point1Quantity += entity.Quantity;
+                else if (entity.Id == (int)DmodePoint.Point2)
+                    info.Point2Quantity += entity.Quantity;
+                else
+                    throw new UnreachableException("Invalid dmode point id");
+                break;
             default:
                 logger.LogWarning("Tried to reward unsupported entity {@entity}", entity);
                 return RewardGrantResult.FailError;
@@ -88,6 +111,41 @@ public class RewardService(
 
         newEntities.Add(entity);
         return RewardGrantResult.Added;
+    }
+
+    public async Task<(RewardGrantResult Result, DbTalisman? Talisman)> GrantTalisman(
+        Talismans id,
+        int abilityId1,
+        int abilityId2,
+        int abilityId3,
+        int hp,
+        int atk
+    )
+    {
+        int currentCount = await unitRepository.Talismans.CountAsync();
+
+        if (currentCount >= TalismanService.TalismanMaxCount)
+        {
+            Entity coinReward = new(EntityTypes.Rupies, 0, TalismanService.TalismanCoinReward);
+            await GrantReward(coinReward);
+
+            convertedEntities.Add(
+                new ConvertedEntity(new Entity(EntityTypes.Talisman, (int)id), coinReward)
+            );
+
+            return (RewardGrantResult.Converted, null);
+        }
+
+        DbTalisman talisman = unitRepository.AddTalisman(
+            id,
+            abilityId1,
+            abilityId2,
+            abilityId3,
+            hp,
+            atk
+        );
+
+        return (RewardGrantResult.Added, talisman);
     }
 
     private async Task<RewardGrantResult> RewardCharacter(Entity entity)

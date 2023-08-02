@@ -30,6 +30,7 @@ public class StoryService(
     private const int CharaStoryWyrmite1 = 25;
     private const int CharaStoryWyrmite2 = 10;
     private const int QuestStoryWyrmite = 25;
+    private const int DmodeStoryWyrmite = 25;
 
     #region Eligibility check methods
     public async Task<bool> CheckStoryEligibility(StoryTypes type, int storyId)
@@ -122,6 +123,7 @@ public class StoryService(
             StoryTypes.Castle => await ReadCastleStory(storyId),
             StoryTypes.Quest => await ReadQuestStory(storyId),
             StoryTypes.Event => await ReadEventStory(storyId),
+            StoryTypes.DungeonMode => await ReadDmodeStory(storyId),
             _ => throw new NotImplementedException($"Stories of type {type} are not implemented")
         };
 
@@ -266,6 +268,34 @@ public class StoryService(
             };
 
         // TODO(Events): ??? This is not used for compendium (maybe for collect events)
+
+        return rewardList;
+    }
+
+    private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadDmodeStory(int storyId)
+    {
+        await userDataRepository.GiveWyrmite(DmodeStoryWyrmite);
+
+        // Temporary measure to make fafnir upgrades more obtainable until endeavours are added
+        Entity dmodePoint1Entity =
+            new(EntityTypes.DmodePoint, Id: (int)DmodePoint.Point1, Quantity: 5_000);
+        Entity dmodePoint2Entity =
+            new(EntityTypes.DmodePoint, Id: (int)DmodePoint.Point2, Quantity: 1_000);
+        await rewardService.GrantReward(dmodePoint1Entity);
+        await rewardService.GrantReward(dmodePoint2Entity);
+
+        List<AtgenBuildEventRewardEntityList> rewardList =
+            new()
+            {
+                new()
+                {
+                    entity_type = EntityTypes.Wyrmite,
+                    entity_id = 0,
+                    entity_quantity = DmodeStoryWyrmite
+                },
+                dmodePoint1Entity.ToBuildEventRewardEntityList(),
+                dmodePoint2Entity.ToBuildEventRewardEntityList()
+            };
 
         return rewardList;
     }

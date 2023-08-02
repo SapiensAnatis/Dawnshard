@@ -3,6 +3,7 @@ using System.Diagnostics;
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Present;
@@ -23,7 +24,8 @@ public class UpdateDataService(
     IMissionService missionService,
     IMissionProgressionService missionProgressionService,
     IPresentService presentService,
-    IEventService eventService
+    IEventService eventService,
+    IDmodeService dmodeService
 ) : IUpdateDataService
 {
     public async Task<UpdateDataList> SaveChangesAsync()
@@ -76,6 +78,10 @@ public class UpdateDataService(
                     entities,
                     x => x.StoryType == StoryTypes.Castle
                 ),
+                dmode_story_list = ConvertEntities<DmodeStoryList, DbPlayerStoryState>(
+                    entities,
+                    x => x.StoryType == StoryTypes.DungeonMode
+                ),
                 material_list = ConvertEntities<MaterialList, DbPlayerMaterial>(entities),
                 dragon_gift_list = ConvertEntities<DragonGiftList, DbPlayerDragonGift>(
                     entities,
@@ -86,7 +92,9 @@ public class UpdateDataService(
                 weapon_passive_ability_list = ConvertEntities<
                     WeaponPassiveAbilityList,
                     DbWeaponPassiveAbility
-                >(entities)
+                >(entities),
+                item_list = ConvertEntities<ItemList, DbPlayerUseItem>(entities),
+                talisman_list = ConvertEntities<TalismanList, DbTalisman>(entities)
             };
 
         IEnumerable<DbPlayerMission> updatedMissions = entities.OfType<DbPlayerMission>();
@@ -220,6 +228,14 @@ public class UpdateDataService(
             }
 
             list.event_passive_list = passiveList;
+        }
+
+        if (entities.OfType<DbPlayerDmodeInfo>().Any())
+        {
+            DmodeInfo info = await dmodeService.GetInfo();
+            if (info.is_entry)
+                // This is done to ensure that the change tracker does not mess anything up
+                list.dmode_info = info;
         }
 
         return list;

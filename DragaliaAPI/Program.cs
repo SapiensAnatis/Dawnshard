@@ -4,6 +4,7 @@ using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.ClearParty;
+using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.GraphQL;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
@@ -28,6 +29,10 @@ using DragaliaAPI.Features.Login;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.DmodeDungeon;
+using DragaliaAPI.Features.Item;
+using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Talisman;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -154,6 +159,7 @@ builder.Services
     .AddScoped<IResetHelper, ResetHelper>()
     .AddScoped<IDateTimeProvider, DateTimeProvider>()
     .AddScoped<ILoginBonusService, LoginBonusService>()
+    .AddScoped<ILoginBonusRepository, LoginBonusRepository>()
     // Dungeon Feature
     .AddScoped<IDungeonService, DungeonService>()
     .AddScoped<IDungeonStartService, DungeonStartService>()
@@ -169,7 +175,19 @@ builder.Services
     .AddScoped<IEventDropService, EventDropService>()
     // Clear party feature
     .AddScoped<IClearPartyRepository, ClearPartyRepository>()
-    .AddScoped<IClearPartyService, ClearPartyService>();
+    .AddScoped<IClearPartyService, ClearPartyService>()
+    // Dmode feature
+    .AddScoped<IDmodeRepository, DmodeRepository>()
+    .AddScoped<IDmodeCacheService, DmodeCacheService>()
+    .AddScoped<IDmodeService, DmodeService>()
+    .AddScoped<IDmodeDungeonService, DmodeDungeonService>()
+    // Item feature
+    .AddScoped<IItemRepository, ItemRepository>()
+    .AddScoped<IItemService, ItemService>()
+    // User feature
+    .AddScoped<IUserService, UserService>()
+    // Talisman feature
+    .AddScoped<ITalismanService, TalismanService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();

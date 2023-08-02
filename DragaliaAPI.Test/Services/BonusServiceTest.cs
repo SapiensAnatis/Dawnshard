@@ -1,12 +1,15 @@
 ﻿using System.Text.Json;
+using Castle.Core.Logging;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.Extensions.Logging;
 using MockQueryable.Moq;
 using static DragaliaAPI.Test.Utils.IdentityTestUtils;
 
@@ -16,27 +19,25 @@ public class BonusServiceTest
 {
     private readonly Mock<IFortRepository> mockFortRepository;
     private readonly Mock<IWeaponRepository> mockWeaponBodyRepository;
-    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
+    private readonly Mock<ILogger<BonusService>> mockLogger;
     private readonly IBonusService bonusService;
 
     public BonusServiceTest()
     {
         this.mockFortRepository = new(MockBehavior.Strict);
-        this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mockWeaponBodyRepository = new(MockBehavior.Strict);
+        this.mockLogger = new(MockBehavior.Loose);
 
         this.bonusService = new BonusService(
             this.mockFortRepository.Object,
             this.mockWeaponBodyRepository.Object,
-            this.mockPlayerIdentityService.Object
+            this.mockLogger.Object
         );
     }
 
     [Fact]
     public async Task GetBonusList_ReturnsCorrectBonuses()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
-
         string json = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
         // Not deserializing to LoadIndexData directly as fort_bonus_list is [JsonIgnore]'d
@@ -101,6 +102,38 @@ public class BonusServiceTest
                 opts =>
                     opts.Excluding(x => x!.chara_bonus_by_album)
                         .Excluding(x => x!.dragon_bonus_by_album)
+            );
+    }
+
+    [Fact]
+    public async Task GetEventBoost_ReturnsExpectedResult()
+    {
+        int flamesOfReflectionCompendiumId = 20816;
+
+        this.mockFortRepository
+            .SetupGet(x => x.Builds)
+            .Returns(
+                new List<DbFortBuild>()
+                {
+                    new()
+                    {
+                        DeviceAccountId = DeviceAccountId,
+                        PlantId = FortPlants.ArctosMonument,
+                        Level = 10,
+                    }
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
+
+        (await this.bonusService.GetEventBoost(flamesOfReflectionCompendiumId))
+            .Should()
+            .BeEquivalentTo(
+                new AtgenEventBoost()
+                {
+                    event_effect = EventEffectTypes.EventDamageBoost,
+                    effect_value = 50
+                }
             );
     }
 }

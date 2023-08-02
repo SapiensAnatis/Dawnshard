@@ -3,7 +3,9 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -22,7 +24,6 @@ public class DungeonRecordControllerTest
     private readonly DungeonRecordController dungeonRecordController;
     private readonly Mock<IQuestRepository> mockQuestRepository;
     private readonly Mock<IDungeonService> mockDungeonService;
-    private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<ITutorialService> mockTutorialService;
@@ -32,6 +33,7 @@ public class DungeonRecordControllerTest
     private readonly Mock<IQuestCompletionService> mockQuestCompletionService;
     private readonly Mock<IEventDropService> mockEventDropService;
     private readonly Mock<IAbilityCrestMultiplierService> mockCrestMultiplierService;
+    private readonly Mock<IUserService> mockUserService;
 
     private const string dungeonKey = "key";
     private const int questId = 100010101;
@@ -48,7 +50,6 @@ public class DungeonRecordControllerTest
     {
         this.mockQuestRepository = new(MockBehavior.Strict);
         this.mockDungeonService = new(MockBehavior.Strict);
-        this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Strict);
@@ -58,11 +59,11 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService = new(MockBehavior.Strict);
         this.mockEventDropService = new(MockBehavior.Strict);
         this.mockCrestMultiplierService = new(MockBehavior.Strict);
+        this.mockUserService = new(MockBehavior.Loose); // yes loose
 
         this.dungeonRecordController = new(
             this.mockQuestRepository.Object,
             this.mockDungeonService.Object,
-            this.mockUserDataRepository.Object,
             this.mockInventoryRepository.Object,
             this.mockUpdateDataService.Object,
             this.mockTutorialService.Object,
@@ -71,7 +72,8 @@ public class DungeonRecordControllerTest
             this.mockQuestCompletionService.Object,
             this.mockEventDropService.Object,
             this.mockRewardService.Object,
-            this.mockCrestMultiplierService.Object
+            this.mockCrestMultiplierService.Object,
+            this.mockUserService.Object
         );
 
         this.dungeonRecordController.SetupMockContext();
@@ -84,22 +86,6 @@ public class DungeonRecordControllerTest
             .Setup(x => x.AddTutorialFlag(1022))
             .ReturnsAsync(new List<int> { 1022 });
 
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>()
-                {
-                    new()
-                    {
-                        DeviceAccountId = DeviceAccountId,
-                        Name = "Euden",
-                        ViewerId = 1
-                    }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
-
         this.mockInventoryRepository
             .Setup(x => x.UpdateQuantity(It.IsAny<IEnumerable<KeyValuePair<Materials, int>>>()))
             .Returns(Task.CompletedTask);
@@ -109,8 +95,8 @@ public class DungeonRecordControllerTest
             .ReturnsAsync(new UpdateDataList());
 
         this.mockCrestMultiplierService
-            .Setup(x => x.GetFacilityEventMultiplier(party, questData.Gid))
-            .ReturnsAsync(1);
+            .Setup(x => x.GetEventMultiplier(party, questData.Gid))
+            .ReturnsAsync((1, 1));
     }
 
     // Tests that QuestId and party data show up in response
@@ -154,9 +140,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        4
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
 
         this.mockQuestCompletionService
             .Setup(x => x.GrantFirstClearRewards(questId))
@@ -167,8 +157,8 @@ public class DungeonRecordControllerTest
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
 
         this.mockCrestMultiplierService
-            .Setup(x => x.GetFacilityEventMultiplier(party, questData.Gid))
-            .ReturnsAsync(4);
+            .Setup(x => x.GetEventMultiplier(party, questData.Gid))
+            .ReturnsAsync((4, 4));
 
         this.mockEventDropService
             .Setup(
@@ -176,7 +166,12 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync(new List<AtgenDropAll>());
 
-        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord() { is_clear = 1 }
+            };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
             request
@@ -197,7 +192,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -255,9 +249,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        1
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
 
         this.mockQuestCompletionService
             .Setup(x => x.GrantFirstClearRewards(questId))
@@ -277,7 +275,7 @@ public class DungeonRecordControllerTest
             new()
             {
                 dungeon_key = dungeonKey,
-                play_record = new() { time = clearTime }
+                play_record = new() { time = clearTime, is_clear = 1 }
             };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
@@ -292,7 +290,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -355,9 +352,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        1
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
 
         this.mockEventDropService
             .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
@@ -373,7 +374,7 @@ public class DungeonRecordControllerTest
             new()
             {
                 dungeon_key = dungeonKey,
-                play_record = new() { time = clearTime }
+                play_record = new() { time = clearTime, is_clear = 1 }
             };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
@@ -388,7 +389,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -457,10 +457,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        1
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
-
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
         this.mockQuestCompletionService
             .Setup(x => x.GrantFirstClearRewards(questId))
             .ReturnsAsync(firstClearReward);
@@ -475,7 +478,12 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync(new List<AtgenDropAll>());
 
-        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord() { is_clear = 1 }
+            };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
             request
@@ -498,7 +506,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -572,9 +579,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        1
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
 
         this.mockEventDropService
             .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
@@ -586,7 +597,12 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync(new List<AtgenDropAll>());
 
-        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord() { is_clear = 1 }
+            };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
             request
@@ -609,7 +625,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -686,10 +701,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        1
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
-
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
         this.mockEventDropService
             .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
@@ -700,7 +718,12 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync(new List<AtgenDropAll>());
 
-        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord() { is_clear = 1 }
+            };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
             request
@@ -723,7 +746,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
@@ -786,10 +808,13 @@ public class DungeonRecordControllerTest
         this.mockQuestCompletionService
             .Setup(
                 x =>
-                    x.CompleteQuestScoreMissions(It.IsAny<DungeonSession>(), It.IsAny<PlayRecord>())
+                    x.CompleteQuestScoreMissions(
+                        It.IsAny<DungeonSession>(),
+                        It.IsAny<PlayRecord>(),
+                        1
+                    )
             )
-            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0));
-
+            .ReturnsAsync((new List<AtgenScoreMissionSuccessList>(), 0, 0));
         this.mockEventDropService
             .Setup(x => x.ProcessEventPassiveDrops(It.IsAny<QuestData>()))
             .ReturnsAsync(new List<AtgenEventPassiveUpList>());
@@ -800,7 +825,12 @@ public class DungeonRecordControllerTest
             )
             .ReturnsAsync(new List<AtgenDropAll>());
 
-        DungeonRecordRecordRequest request = new() { dungeon_key = dungeonKey };
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord() { is_clear = 1 }
+            };
 
         ActionResult<DragaliaResponse<object>> response = await this.dungeonRecordController.Record(
             request
@@ -823,7 +853,6 @@ public class DungeonRecordControllerTest
 
         this.mockQuestRepository.VerifyAll();
         this.mockDungeonService.VerifyAll();
-        this.mockUserDataRepository.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
