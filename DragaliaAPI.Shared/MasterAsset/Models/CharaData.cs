@@ -76,7 +76,17 @@ public record CharaData(
     int Abilities32,
     int Abilities33,
     int Abilities34,
-    int MinDef
+    int MinDef,
+    int ExAbilityData1,
+    int ExAbilityData2,
+    int ExAbilityData3,
+    int ExAbilityData4,
+    int ExAbilityData5,
+    int ExAbility2Data1,
+    int ExAbility2Data2,
+    int ExAbility2Data3,
+    int ExAbility2Data4,
+    int ExAbility2Data5
 )
 {
     public bool HasManaSpiral => this.MaxLimitBreakCount > 4;
@@ -150,4 +160,21 @@ public record CharaData(
             { Charas.Chelle, CharaAvailabilities.Story },
             { Charas.Zena, CharaAvailabilities.Story }
         };
+
+    public readonly int[] ExAbility =
+    {
+        ExAbilityData1,
+        ExAbilityData2,
+        ExAbilityData3,
+        ExAbilityData4,
+        ExAbilityData5
+    };
+    public readonly int[] ExAbility2 =
+    {
+        ExAbility2Data1,
+        ExAbility2Data2,
+        ExAbility2Data3,
+        ExAbility2Data4,
+        ExAbility2Data5
+    };
 }

@@ -16,7 +16,12 @@ public record AbilityCrest(
     int Abilities13,
     int Abilities21,
     int Abilities22,
-    int Abilities23
+    int Abilities23,
+    int BaseAtk,
+    int MaxAtk,
+    int BaseHp,
+    int MaxHp,
+    int UnionAbilityGroupId
 )
 {
     public int GetBuildupGroupId(BuildupPieceTypes type, int step) =>
