@@ -89,7 +89,7 @@ public class V9Update(
                     continue;
 
                 logger.LogDebug(
-                    "Adding missing story {storyId} (episode {episode)} for chara {chara}",
+                    "Adding missing story {storyId} (episode {episode}) for chara {chara}",
                     storyId,
                     storyArrayIdx + 1,
                     chara
