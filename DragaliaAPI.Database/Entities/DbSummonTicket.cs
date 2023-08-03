@@ -27,4 +27,8 @@ public class DbSummonTicket : IDbHasAccountId
 
     [Column("ExpirationTime")]
     public DateTimeOffset ExpirationTime { get; set; }
+
+    [NotMapped]
+    public bool IsExpired =>
+        ExpirationTime != DateTimeOffset.UnixEpoch && ExpirationTime > DateTimeOffset.UtcNow;
 }
