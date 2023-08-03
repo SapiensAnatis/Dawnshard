@@ -217,8 +217,10 @@ public class CharaController(
             int lvlBase;
             if (playerCharData.Level > CharaConstants.MaxLevel)
             {
-                hpStep = (charaData.AddMaxHp1 - charaData.MaxHp) / (double)CharaConstants.AddMaxLevel;
-                atkStep = (charaData.AddMaxAtk1 - charaData.MaxAtk) / (double)CharaConstants.AddMaxLevel;
+                hpStep =
+                    (charaData.AddMaxHp1 - charaData.MaxHp) / (double)CharaConstants.AddMaxLevel;
+                atkStep =
+                    (charaData.AddMaxAtk1 - charaData.MaxAtk) / (double)CharaConstants.AddMaxLevel;
                 hpBase = charaData.MaxHp;
                 atkBase = charaData.MaxAtk;
                 lvlBase = CharaConstants.MaxLevel;
