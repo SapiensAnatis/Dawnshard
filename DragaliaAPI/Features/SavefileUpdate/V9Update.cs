@@ -7,6 +7,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
+using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,13 +48,16 @@ public class V9Update(
 
         foreach ((Charas chara, SortedSet<int> manaNodes) in charaManaData)
         {
-            if (!MasterAsset.CharaData.TryGetValue(chara, out CharaData? charaData))
+            if (
+                !MasterAsset.CharaData.TryGetValue(chara, out CharaData? charaData)
+                || !MasterAsset.CharaStories.TryGetValue((int)chara, out StoryData? storyData)
+            )
             {
                 logger.LogDebug("Skipping unknown character {chara}", chara);
                 continue;
             }
 
-            int[] storyArray = MasterAsset.CharaStories[(int)chara].storyIds;
+            int[] storyArray = storyData.storyIds;
 
             if (!stories.Contains(storyArray[0]))
             {
