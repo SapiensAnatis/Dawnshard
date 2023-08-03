@@ -135,4 +135,29 @@ public record WeaponBody(
     public readonly int[] Hp = { BaseHp, MaxHp1, MaxHp2, MaxHp3 };
 
     public readonly int[] Atk = { BaseAtk, MaxAtk1, MaxAtk2, MaxAtk3 };
+
+    public readonly int[][] Abilities =
+    {
+        new[] { Abilities11, Abilities12, Abilities13 },
+        new[] { Abilities21, Abilities22, Abilities23 }
+    };
+
+    public int GetAbility(int abilityNo, int level)
+    {
+        int[] pool = Abilities[abilityNo - 1];
+
+        int current = 0;
+
+        for (int i = 0; i < level; i++)
+        {
+            int val = pool[i];
+
+            if (val == 0)
+                break;
+
+            current = val;
+        }
+
+        return current;
+    }
 };

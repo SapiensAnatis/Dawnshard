@@ -4,5 +4,9 @@ namespace DragaliaAPI.Features.PartyPower;
 
 public interface IPartyPowerService
 {
-    Task<int> CalculateCharacterPower(PartySettingList partySetting);
+    Task<int> CalculatePartyPower(IEnumerable<PartySettingList> party);
+    Task<int> CalculateCharacterPower(
+        PartySettingList partySetting,
+        bool shouldAddSkillBonus = true
+    );
 }

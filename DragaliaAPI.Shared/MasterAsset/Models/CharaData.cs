@@ -169,6 +169,7 @@ public record CharaData(
         ExAbilityData4,
         ExAbilityData5
     };
+
     public readonly int[] ExAbility2 =
     {
         ExAbility2Data1,
@@ -177,4 +178,30 @@ public record CharaData(
         ExAbility2Data4,
         ExAbility2Data5
     };
+
+    public readonly int[][] Abilities =
+    {
+        new[] { Abilities11, Abilities12, Abilities13, Abilities14 },
+        new[] { Abilities21, Abilities22, Abilities23, Abilities24 },
+        new[] { Abilities31, Abilities32, Abilities33, Abilities34 }
+    };
+
+    public int GetAbility(int abilityNo, int level)
+    {
+        int[] pool = Abilities[abilityNo - 1];
+
+        int current = 0;
+
+        for (int i = 0; i < level; i++)
+        {
+            int val = pool[i];
+
+            if (val == 0)
+                break;
+
+            current = val;
+        }
+
+        return current;
+    }
 }

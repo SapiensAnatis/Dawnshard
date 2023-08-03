@@ -45,6 +45,13 @@ public class PartyController(
         // TODO: Talisman validation
         // TODO: Shared skill validation
 
+        int partyPower = await powerService.CalculatePartyPower(
+            requestParty.request_party_setting_list
+        );
+        logger.LogInformation("party power: {power}", partyPower);
+
+        bool isFirst = true;
+
         foreach (PartySettingList partyUnit in requestParty.request_party_setting_list)
         {
             if (
@@ -56,7 +63,9 @@ public class PartyController(
             }
 
             // TODO Remove before merging
-            int charaPower = await powerService.CalculateCharacterPower(partyUnit);
+            int charaPower = await powerService.CalculateCharacterPower(partyUnit, isFirst);
+            logger.LogInformation("chara power: {power}", charaPower);
+            isFirst = false;
         }
 
         DbParty dbEntry = mapper.Map<DbParty>(

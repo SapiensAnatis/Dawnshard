@@ -16,15 +16,30 @@ public class PartyPowerService(
     IBonusService bonusService
 ) : IPartyPowerService
 {
-    public async Task<int> CalculateCharacterPower(PartySettingList partyList)
+    public async Task<int> CalculatePartyPower(IEnumerable<PartySettingList> party)
+    {
+        int power = 0;
+
+        bool isFirst = true;
+
+        foreach (PartySettingList partySetting in party)
+        {
+            power += await CalculateCharacterPower(partySetting, isFirst);
+            isFirst = false;
+        }
+
+        return power;
+    }
+
+    public async Task<int> CalculateCharacterPower(
+        PartySettingList partyList,
+        bool shouldAddSkillBonus = true
+    )
     {
         if (partyList.chara_id == 0)
             return 0;
 
         FortBonusList bonus = await bonusService.GetBonusList();
-
-        // TODO: Ability party power param
-        double abilityPartyPowerParam = 0;
 
         DbPlayerCharaData chara =
             await unitRepository.FindCharaAsync(partyList.chara_id)
@@ -32,28 +47,43 @@ public class PartyPowerService(
 
         CharaData charaData = MasterAsset.CharaData[partyList.chara_id];
 
-        double charaPowerParam = GetCharacterPower(ref chara, ref bonus);
+        DbPlayerDragonData? dragon = null;
+        DbPlayerDragonReliability? reliability = null;
+        DragonData? dragonData = null;
+        DragonRarity? dragonRarity = null;
 
-        DbPlayerDragonData? dragon =
-            partyList.equip_dragon_key_id == 0
+        if (partyList.equip_dragon_key_id != 0)
+        {
+            dragon = await unitRepository.Dragons.SingleAsync(
+                x => x.DragonKeyId == (long)partyList.equip_dragon_key_id
+            );
+
+            reliability = await unitRepository.DragonReliabilities.SingleAsync(
+                x => x.DragonId == dragon.DragonId
+            );
+
+            dragonData = MasterAsset.DragonData[dragon.DragonId];
+            dragonRarity = MasterAsset.DragonRarity[dragonData.Rarity];
+        }
+
+        DbWeaponBody? dbWeapon = null;
+        WeaponBody? weaponBody = null;
+
+        if (partyList.equip_weapon_body_id != 0)
+        {
+            dbWeapon = await unitRepository.WeaponBodies.SingleAsync(
+                x => x.WeaponBodyId == partyList.equip_weapon_body_id
+            );
+
+            weaponBody = MasterAsset.WeaponBody[dbWeapon.WeaponBodyId];
+        }
+
+        DbTalisman? talisman =
+            partyList.equip_talisman_key_id == 0
                 ? null
-                : await unitRepository.Dragons.SingleAsync(
-                    x => x.DragonKeyId == (long)partyList.equip_dragon_key_id
+                : await unitRepository.Talismans.SingleAsync(
+                    x => x.TalismanKeyId == (long)partyList.equip_talisman_key_id
                 );
-
-        DbPlayerDragonReliability? reliability =
-            dragon == null
-                ? null
-                : await unitRepository.DragonReliabilities.SingleOrDefaultAsync(
-                    x => x.DragonId == dragon.DragonId
-                );
-
-        double dragonPowerParam = GetDragonPower(
-            dragon,
-            reliability,
-            ref bonus,
-            charaData.ElementalType
-        );
 
         AbilityCrests[] crests =
         {
@@ -66,32 +96,48 @@ public class PartyPowerService(
             partyList.equip_crest_slot_type_3_crest_id_2
         };
 
-        ulong talismanId = partyList.equip_talisman_key_id;
-
         List<DbAbilityCrest> dbCrests = await abilityCrestRepository.AbilityCrests
             .Where(x => crests.Contains(x.AbilityCrestId))
             .ToListAsync();
-        DbTalisman? talisman =
-            talismanId == 0
-                ? null
-                : await unitRepository.Talismans.SingleAsync(
-                    x => x.TalismanKeyId == (long)talismanId
-                );
+
+        double charaPowerParam = GetCharacterPower(
+            ref chara,
+            partyList.edit_skill_1_chara_id,
+            partyList.edit_skill_2_chara_id,
+            ref bonus,
+            shouldAddSkillBonus
+        );
+
+        double dragonPowerParam = GetDragonPower(
+            ref dragon,
+            ref reliability,
+            ref bonus,
+            ref dragonData,
+            ref dragonRarity,
+            charaData.ElementalType
+        );
 
         double crestPowerParam = GetCrestPower(dbCrests, talisman);
 
-        DbWeaponBody? weaponBody =
-            partyList.equip_weapon_body_id == 0
-                ? null
-                : await unitRepository.WeaponBodies.SingleAsync(
-                    x => x.WeaponBodyId == partyList.equip_weapon_body_id
-                );
-
-        double weaponPowerParam = GetWeaponPower(weaponBody, charaData.ElementalType);
+        double weaponPowerParam = GetWeaponPower(
+            ref dbWeapon,
+            ref weaponBody,
+            charaData.ElementalType
+        );
 
         double exAbilityPowerParam = GetExAbilityPower(ref chara, ref charaData);
 
         double unionBonusPowerParam = GetUnionAbilityPower(dbCrests);
+
+        double abilityPartyPowerParam = GetAbilityPartyPower(
+            ref chara,
+            ref charaData,
+            ref dragon,
+            ref dragonData,
+            ref dbWeapon,
+            ref weaponBody,
+            dbCrests
+        );
 
         double power =
             unionBonusPowerParam
@@ -105,7 +151,13 @@ public class PartyPowerService(
         return CeilToInt(power);
     }
 
-    private static double GetCharacterPower(ref DbPlayerCharaData dbChara, ref FortBonusList bonus)
+    private static int GetCharacterPower(
+        ref DbPlayerCharaData dbChara,
+        Charas editSkill1,
+        Charas editSkill2,
+        ref FortBonusList bonus,
+        bool addSkillBonus
+    )
     {
         if (dbChara.CharaId == 0)
             return 0;
@@ -128,16 +180,25 @@ public class PartyPowerService(
         int charaAtk = normalAtk + fortAtk + albumAtk;
         int charaHp = normalHp + fortHp + albumHp;
 
-        double skillPower = (dbChara.Skill1Level + dbChara.Skill2Level) * 100.0;
-        double burstPower = dbChara.BurstAttackLevel * 60.0;
-        double comboPower = dbChara.ComboBuildupCount * 200.0;
+        int skillPower = (dbChara.Skill1Level + dbChara.Skill2Level) * 100;
+        int burstPower = dbChara.BurstAttackLevel * 60;
+        int comboPower = dbChara.ComboBuildupCount * 200;
 
-        double charaPowerParam = charaAtk + charaHp + skillPower + burstPower + comboPower;
+        int charaPowerParam = charaAtk + charaHp + skillPower + burstPower + comboPower;
+
+        if (addSkillBonus)
+        {
+            if (editSkill1 != 0)
+                charaPowerParam += 100;
+
+            if (editSkill2 != 0)
+                charaPowerParam += 100;
+        }
 
         return charaPowerParam;
     }
 
-    private static double GetCrestPower(IEnumerable<DbAbilityCrest> crests, DbTalisman? talisman)
+    private static int GetCrestPower(IEnumerable<DbAbilityCrest> crests, DbTalisman? talisman)
     {
         int totalCrestAtk = 0;
         int totalCrestHp = 0;
@@ -160,45 +221,44 @@ public class PartyPowerService(
             totalCrestAtk += 10 + talisman.AdditionalAttack;
         }
 
-        double crestPower = totalCrestHp + totalCrestAtk;
+        int crestPower = totalCrestHp + totalCrestAtk;
 
         return crestPower;
     }
 
-    private static double GetDragonPower(
-        DbPlayerDragonData? dbDragon,
-        DbPlayerDragonReliability? reliability,
+    private static int GetDragonPower(
+        ref DbPlayerDragonData? dbDragon,
+        ref DbPlayerDragonReliability? reliability,
         ref FortBonusList bonus,
+        ref DragonData? dragonData,
+        ref DragonRarity? rarity,
         UnitElement charaElement
     )
     {
-        if (dbDragon == null)
+        if (dbDragon == null || reliability == null || dragonData == null || rarity == null)
             return 0;
-
-        DragonData dragonData = MasterAsset.DragonData[dbDragon.DragonId];
-        DragonRarity rarity = MasterAsset.DragonRarity[dragonData.Rarity];
 
         int maxLevel = rarity.Id == 5 ? rarity.LimitLevel04 : rarity.MaxLimitLevel;
 
         int levelMultiplier = Math.Min(dbDragon.Level, maxLevel);
 
-        int dragonHp = CeilToInt(
+        int baseHp = CeilToInt(
             ((maxLevel + -1.0) / (levelMultiplier + -1.0) * (dragonData.MaxHp - dragonData.MinHp))
                 + dragonData.MinHp
         );
-        int dragonAtk = CeilToInt(
+        int baseAtk = CeilToInt(
             ((maxLevel + -1.0) / (levelMultiplier + -1.0) * (dragonData.MaxAtk - dragonData.MinAtk))
                 + dragonData.MinAtk
         );
 
         if (dragonData.MaxLimitBreakCount == 5)
         {
-            dragonAtk +=
+            baseAtk +=
                 (dragonData.AddMaxAtk1 - dragonData.MaxAtk)
                 * (Math.Min(dbDragon.Level, rarity.LimitLevel05) - rarity.LimitLevel04)
                 / (rarity.LimitLevel05 - rarity.LimitLevel04);
 
-            dragonHp +=
+            baseHp +=
                 (dragonData.AddMaxHp1 - dragonData.MaxHp)
                 * (Math.Min(dbDragon.Level, rarity.LimitLevel05) - rarity.LimitLevel04)
                 / (rarity.LimitLevel05 - rarity.LimitLevel04);
@@ -206,52 +266,53 @@ public class PartyPowerService(
 
         double multiplier = dragonData.ElementalType == charaElement ? 1.5 : 1;
 
-        dragonAtk = CeilToInt((dragonAtk + dbDragon.AttackPlusCount) * multiplier);
-        dragonHp = CeilToInt((dragonHp + dbDragon.HpPlusCount) * multiplier);
+        int normalAtk = CeilToInt((baseAtk + dbDragon.AttackPlusCount) * multiplier);
+        int normalHp = CeilToInt((baseHp + dbDragon.HpPlusCount) * multiplier);
 
         // set totalUnitAtk + totalUnitHp
 
         BonusParams bonusParams = BonusParams.GetBonus(ref bonus, dbDragon.DragonId);
 
-        int fortAtk = CeilToInt(dragonAtk * bonusParams.FortAtk);
-        int fortHp = CeilToInt(dragonHp * bonusParams.FortHp);
+        int fortAtk = CeilToInt(normalAtk * bonusParams.FortAtk);
+        int fortHp = CeilToInt(normalHp * bonusParams.FortHp);
 
-        int albumAtk = CeilToInt(dragonAtk * bonusParams.AlbumAtk);
-        int albumHp = CeilToInt(dragonHp * bonusParams.AlbumHp);
+        int albumAtk = CeilToInt(normalAtk * bonusParams.AlbumAtk);
+        int albumHp = CeilToInt(normalHp * bonusParams.AlbumHp);
 
-        double dragonPowerParam =
+        int dragonAtk = normalAtk + fortAtk + albumAtk;
+        int dragonHp = normalHp + fortHp + albumHp;
+
+        int dragonPowerParam =
             dragonAtk
-            + fortAtk
-            + albumAtk
             + dragonHp
-            + fortHp
-            + albumHp
-            + (dbDragon.Skill1Level * 50.0)
-            + ((reliability?.Level ?? 1) * 10.0)
+            + (dbDragon.Skill1Level * 50)
+            + ((reliability?.Level ?? 1) * 10)
             + rarity.RarityBasePartyPower
             + (rarity.LimitBreakCountPartyPowerWeight * dbDragon.LimitBreakCount);
 
         return dragonPowerParam;
     }
 
-    private static double GetWeaponPower(DbWeaponBody? dbWeapon, UnitElement charaElement)
+    private static int GetWeaponPower(
+        ref DbWeaponBody? dbWeapon,
+        ref WeaponBody? weaponBody,
+        UnitElement charaElement
+    )
     {
-        if (dbWeapon == null)
+        if (dbWeapon == null || weaponBody == null)
             return 0;
-
-        WeaponBody weaponBody = MasterAsset.WeaponBody[dbWeapon.WeaponBodyId];
 
         // TODO: Weapon body calculations
         // TODO: Fix this calculation - very convoluted
         int weaponBodyHp = weaponBody.MaxHp2;
         int weaponBodyAtk = weaponBody.MaxAtk2;
 
-        double weaponPower = weaponBodyHp + weaponBodyAtk;
-        weaponPower *= weaponBody.ElementalType == charaElement ? 1.5 : 1;
+        double multiplier = weaponBody.ElementalType == charaElement ? 1.5 : 1;
+        int weaponPower = CeilToInt((weaponBodyHp + weaponBodyAtk) * multiplier);
 
-        double weaponSkillPower = dbWeapon.SkillLevel * 50.0;
+        int weaponSkillPower = dbWeapon.SkillLevel * 50;
 
-        double weaponBodyPowerParam = weaponPower + weaponSkillPower;
+        int weaponBodyPowerParam = weaponPower + weaponSkillPower;
 
         if (dbWeapon.LimitOverCount >= 1)
             weaponBodyPowerParam += weaponBody.LimitOverCountPartyPower1;
@@ -262,12 +323,12 @@ public class PartyPowerService(
         return weaponBodyPowerParam;
     }
 
-    private static double GetExAbilityPower(ref DbPlayerCharaData dbChara, ref CharaData charaData)
+    private static int GetExAbilityPower(ref DbPlayerCharaData dbChara, ref CharaData charaData)
     {
         if (dbChara.ExAbilityLevel == 0)
             return 0;
 
-        double power = MasterAsset.ExAbilityData[
+        int power = MasterAsset.ExAbilityData[
             charaData.ExAbility[dbChara.ExAbilityLevel - 1]
         ].PartyPowerWeight;
 
@@ -281,9 +342,9 @@ public class PartyPowerService(
             ].PartyPowerWeight;
     }
 
-    private static double GetUnionAbilityPower(IEnumerable<DbAbilityCrest> crests)
+    private static int GetUnionAbilityPower(IEnumerable<DbAbilityCrest> crests)
     {
-        double totalPower = 0;
+        int totalPower = 0;
 
         foreach (
             (int unionId, int unionCrestCount) in crests
@@ -295,7 +356,7 @@ public class PartyPowerService(
         {
             UnionAbility ability = MasterAsset.UnionAbility[unionId];
 
-            double maxPower = 0;
+            int maxPower = 0;
 
             foreach ((int count, int abilityId, int power) in ability.Abilities)
             {
@@ -312,14 +373,60 @@ public class PartyPowerService(
         return totalPower;
     }
 
+    private static int GetAbilityPartyPower(
+        ref DbPlayerCharaData dbChara,
+        ref CharaData charaData,
+        ref DbPlayerDragonData? dbDragon,
+        ref DragonData? dragonData,
+        ref DbWeaponBody? dbWeapon,
+        ref WeaponBody? weaponData,
+        IEnumerable<DbAbilityCrest> crests
+    )
+    {
+        List<int> abilityIdList = new();
+
+        int[] abilityIds =
+        {
+            charaData.GetAbility(1, dbChara.Ability1Level),
+            charaData.GetAbility(2, dbChara.Ability2Level),
+            charaData.GetAbility(3, dbChara.Ability3Level),
+            dbDragon == null || dragonData == null
+                ? 0
+                : dragonData.GetAbility(1, dbDragon.Ability1Level),
+            dbDragon == null || dragonData == null
+                ? 0
+                : dragonData.GetAbility(2, dbDragon.Ability2Level),
+            dbWeapon == null || weaponData == null
+                ? 0
+                : weaponData.GetAbility(1, dbWeapon.Ability1Level),
+            dbWeapon == null || weaponData == null
+                ? 0
+                : weaponData.GetAbility(2, dbWeapon.Ability2Level)
+        };
+
+        abilityIdList.AddRange(abilityIds);
+        abilityIdList.AddRange(
+            crests.SelectMany(
+                x => MasterAsset.AbilityCrest[x.AbilityCrestId].GetAbilities(x.AbilityLevel)
+            )
+        );
+
+        int power = abilityIdList
+            .Where(x => x != 0)
+            .Select(x => MasterAsset.AbilityData[x].PartyPowerWeight)
+            .Sum();
+
+        return power;
+    }
+
     private static (int AtkPlus, int HpPlus) GetStatusPlusParam(ref FortBonusList bonus)
     {
         return (bonus.all_bonus.attack, bonus.all_bonus.hp);
     }
 
-    private static int CeilToInt(double value, int digits = 3)
+    private static int CeilToInt(double value)
     {
-        return (int)Math.Round(value, digits, MidpointRounding.ToPositiveInfinity);
+        return (int)Math.Ceiling(value);
     }
 
     private static (int Atk, int Hp) GetAbilityCrest(
