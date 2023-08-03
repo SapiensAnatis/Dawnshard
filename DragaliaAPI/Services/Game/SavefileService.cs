@@ -628,6 +628,7 @@ public class SavefileService : ISavefileService
         await this.AddDefaultCharacters(deviceAccountId);
         this.AddDefaultEquippedStamps();
         this.AddShopInfo();
+        this.AddDefaultEmblem();
 
         await this.apiContext.SaveChangesAsync();
 
@@ -711,6 +712,19 @@ public class SavefileService : ISavefileService
         );
     }
 
+    private void AddDefaultEmblem()
+    {
+        this.apiContext.Emblems.Add(
+            new DbEmblem
+            {
+                DeviceAccountId = playerIdentityService.AccountId,
+                EmblemId = DefaultSavefileData.DefaultEmblem,
+                GetTime = DateTimeOffset.UnixEpoch,
+                IsNew = false
+            }
+        );
+    }
+
     internal static class DefaultSavefileData
     {
         public static readonly ImmutableList<Charas> Characters = MasterAsset.CharaData.Enumerable
@@ -720,6 +734,8 @@ public class SavefileService : ISavefileService
             .ToImmutableList();
 
         public const int PartySlotCount = 54;
+
+        public const Emblems DefaultEmblem = Emblems.DragonbloodPrince;
     }
 }
 
