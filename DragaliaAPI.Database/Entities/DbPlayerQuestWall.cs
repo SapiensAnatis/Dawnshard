@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Database.Entities;
 
 [Index(nameof(DeviceAccountId))]
-public class DbQuestWall : IDbHasAccountId
+public class DbPlayerQuestWall : IDbHasAccountId
 {
    
     /// <inheritdoc />
@@ -16,7 +16,7 @@ public class DbQuestWall : IDbHasAccountId
     public required string DeviceAccountId { get; set; }
 
     [Key]
-    public long WallId { get; set; }
+    public int WallId { get; set; }
 
     public int WallLevel { get; set; }
 

@@ -180,5 +180,5 @@ public class ApiContext : DbContext
 
     public DbSet<DbLoginBonus> LoginBonuses { get; set; }
 
-    public DbSet<DbQuestWall> QuestWalls { get; set; }
+    public DbSet<DbPlayerQuestWall> PlayerQuestWalls { get; set; }
 }
