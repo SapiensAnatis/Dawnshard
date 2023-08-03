@@ -56,12 +56,12 @@ public class PresentControllerService(
         if (presentId > 0)
         {
             presentsQuery = presentsQuery.Where(
-                x => x.PresentId >= (long)presentId + PresentPageSize
+                x => x.PresentId <= (long)presentId - PresentPageSize
             );
         }
 
         List<DbPlayerPresent> list = await presentsQuery
-            .OrderBy(x => x.PresentId)
+            .OrderByDescending(x => x.PresentId)
             .Take(PresentPageSize)
             .ToListAsync();
 
