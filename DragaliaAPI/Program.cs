@@ -30,6 +30,7 @@ using DragaliaAPI.Helpers;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.DmodeDungeon;
+using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Talisman;
@@ -187,7 +188,9 @@ builder.Services
     // User feature
     .AddScoped<IUserService, UserService>()
     // Talisman feature
-    .AddScoped<ITalismanService, TalismanService>();
+    .AddScoped<ITalismanService, TalismanService>()
+    // Emblem feature
+    .AddScoped<IEmblemRepository, EmblemRepository>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();

@@ -564,6 +564,9 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerUseItems.RemoveRange(
             this.apiContext.PlayerUseItems.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.Emblems.RemoveRange(
+            this.apiContext.Emblems.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset()
