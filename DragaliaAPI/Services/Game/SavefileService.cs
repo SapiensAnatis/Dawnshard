@@ -3,6 +3,7 @@ using System.Diagnostics;
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Models.Generated;
@@ -23,6 +24,7 @@ public class SavefileService : ISavefileService
     private readonly IMapper mapper;
     private readonly ILogger<SavefileService> logger;
     private readonly IPlayerIdentityService playerIdentityService;
+    private readonly IUnitRepository unitRepository;
 
     private const int RecheckLockMs = 1000;
     private const int LockFailsafeExpiryMin = 5;
@@ -35,7 +37,8 @@ public class SavefileService : ISavefileService
         IMapper mapper,
         ILogger<SavefileService> logger,
         IPlayerIdentityService playerIdentityService,
-        IEnumerable<ISavefileUpdate> savefileUpdates
+        IEnumerable<ISavefileUpdate> savefileUpdates,
+        IUnitRepository unitRepository
     )
     {
         this.apiContext = apiContext;
@@ -43,6 +46,7 @@ public class SavefileService : ISavefileService
         this.mapper = mapper;
         this.logger = logger;
         this.playerIdentityService = playerIdentityService;
+        this.unitRepository = unitRepository;
 
         this.maxSavefileVersion =
             savefileUpdates.MaxBy(x => x.SavefileVersion)?.SavefileVersion ?? 0;
@@ -677,9 +681,7 @@ public class SavefileService : ISavefileService
 
     private async Task AddDefaultCharacters(string deviceAccountId)
     {
-        await this.apiContext.PlayerCharaData.AddRangeAsync(
-            DefaultSavefileData.Characters.Select(x => new DbPlayerCharaData(deviceAccountId, x))
-        );
+        await this.unitRepository.AddCharas(DefaultSavefileData.Characters);
     }
 
     private void AddDefaultEquippedStamps()

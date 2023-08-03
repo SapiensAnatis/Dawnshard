@@ -131,13 +131,14 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddCharas_CorrectlyMarksDuplicates()
     {
-        List<Charas> idList = new() { Charas.ThePrince, Charas.Chrom, Charas.Chrom };
+        List<Charas> idList =
+            new() { Charas.Chrom, Charas.Chrom, Charas.Panther, Charas.Izumo, Charas.Izumo };
 
         (await this.unitRepository.AddCharas(idList))
             .Where(x => x.isNew)
             .Select(x => x.id)
             .Should()
-            .BeEquivalentTo(new List<Charas>() { Charas.Chrom });
+            .BeEquivalentTo(new List<Charas>() { Charas.Chrom, Charas.Panther, Charas.Izumo });
     }
 
     [Fact]
