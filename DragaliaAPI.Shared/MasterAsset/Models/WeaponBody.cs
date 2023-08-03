@@ -145,19 +145,6 @@ public record WeaponBody(
     public int GetAbility(int abilityNo, int level)
     {
         int[] pool = Abilities[abilityNo - 1];
-
-        int current = 0;
-
-        for (int i = 0; i < level; i++)
-        {
-            int val = pool[i];
-
-            if (val == 0)
-                break;
-
-            current = val;
-        }
-
-        return current;
+        return level < 1 || level > 3 ? 0 : pool[level - 1];
     }
 };

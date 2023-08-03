@@ -164,6 +164,7 @@ public class PartyPowerService(
 
         DbWeaponBody? dbWeapon = null;
         WeaponBody? weaponBody = null;
+        WeaponRarity? weaponRarity = null;
 
         if (weaponBodyId != 0)
         {
@@ -175,6 +176,7 @@ public class PartyPowerService(
                 );
 
             weaponBody = MasterAsset.WeaponBody[dbWeapon.WeaponBodyId];
+            weaponRarity = MasterAsset.WeaponRarity[weaponBody.Rarity];
         }
 
         DbTalisman? talisman =
@@ -217,6 +219,7 @@ public class PartyPowerService(
         double weaponPowerParam = GetWeaponPower(
             ref dbWeapon,
             ref weaponBody,
+            ref weaponRarity,
             charaData.ElementalType
         );
 
@@ -391,27 +394,94 @@ public class PartyPowerService(
     private static int GetWeaponPower(
         ref DbWeaponBody? dbWeapon,
         ref WeaponBody? weaponBody,
+        ref WeaponRarity? weaponRarity,
         UnitElement charaElement
     )
     {
-        if (dbWeapon == null || weaponBody == null)
+        if (dbWeapon == null || weaponBody == null || weaponRarity == null)
             return 0;
 
-        // TODO: Weapon body calculations
-        // TODO: Fix this calculation - very convoluted
-        int weaponBodyHp = weaponBody.MaxHp2;
-        int weaponBodyAtk = weaponBody.MaxAtk2;
+        int weaponBodyHp = 0;
+        int weaponBodyAtk = 0;
+
+        if (
+            weaponRarity.MaxLimitLevelByLimitBreak4 != 0
+            && dbWeapon.BuildupCount <= weaponRarity.MaxLimitLevelByLimitBreak4
+        )
+        {
+            weaponBodyHp = CeilToInt(
+                (double)dbWeapon.BuildupCount
+                    / weaponRarity.MaxLimitLevelByLimitBreak4
+                    * (weaponBody.MaxHp1 - weaponBody.BaseHp)
+                    + weaponBody.BaseHp
+            );
+            weaponBodyAtk = CeilToInt(
+                (double)dbWeapon.BuildupCount
+                    / weaponRarity.MaxLimitLevelByLimitBreak4
+                    * (weaponBody.MaxAtk1 - weaponBody.BaseAtk)
+                    + weaponBody.BaseAtk
+            );
+        }
+        else if (
+            weaponRarity.MaxLimitLevelByLimitBreak4 < dbWeapon.BuildupCount
+            && dbWeapon.BuildupCount <= weaponRarity.MaxLimitLevelByLimitBreak8
+        )
+        {
+            weaponBodyHp = CeilToInt(
+                (double)(dbWeapon.BuildupCount - weaponRarity.MaxLimitLevelByLimitBreak4)
+                    / (
+                        weaponRarity.MaxLimitLevelByLimitBreak8
+                        - weaponRarity.MaxLimitLevelByLimitBreak4
+                    )
+                    * (weaponBody.MaxHp2 - weaponBody.MaxHp1)
+                    + weaponBody.MaxHp1
+            );
+            weaponBodyAtk = CeilToInt(
+                (double)(dbWeapon.BuildupCount - weaponRarity.MaxLimitLevelByLimitBreak4)
+                    / (
+                        weaponRarity.MaxLimitLevelByLimitBreak8
+                        - weaponRarity.MaxLimitLevelByLimitBreak4
+                    )
+                    * (weaponBody.MaxAtk2 - weaponBody.MaxAtk1)
+                    + weaponBody.MaxAtk1
+            );
+        }
+        else if (
+            weaponRarity.MaxLimitLevelByLimitBreak8 < dbWeapon.BuildupCount
+            && dbWeapon.BuildupCount <= weaponRarity.MaxLimitLevelByLimitBreak9
+        )
+        {
+            weaponBodyHp = CeilToInt(
+                (double)(dbWeapon.BuildupCount - weaponRarity.MaxLimitLevelByLimitBreak8)
+                    / (
+                        weaponRarity.MaxLimitLevelByLimitBreak9
+                        - weaponRarity.MaxLimitLevelByLimitBreak8
+                    )
+                    * (weaponBody.MaxHp3 - weaponBody.MaxHp2)
+                    + weaponBody.MaxHp2
+            );
+            weaponBodyAtk = CeilToInt(
+                (double)(dbWeapon.BuildupCount - weaponRarity.MaxLimitLevelByLimitBreak8)
+                    / (
+                        weaponRarity.MaxLimitLevelByLimitBreak9
+                        - weaponRarity.MaxLimitLevelByLimitBreak8
+                    )
+                    * (weaponBody.MaxAtk3 - weaponBody.MaxAtk2)
+                    + weaponBody.MaxAtk2
+            );
+        }
 
         double multiplier = weaponBody.ElementalType == charaElement ? 1.5 : 1;
         int weaponPower = CeilToInt((weaponBodyHp + weaponBodyAtk) * multiplier);
 
-        int weaponSkillPower = dbWeapon.SkillLevel * 50;
+        int weaponSkillPower = dbWeapon.SkillNo == 0 ? 0 : dbWeapon.SkillLevel * 50;
 
         int weaponBodyPowerParam = weaponPower + weaponSkillPower;
 
         if (dbWeapon.LimitOverCount >= 1)
             weaponBodyPowerParam += weaponBody.LimitOverCountPartyPower1;
 
+        // funnily enough the only weapons that can reach limit over count 2, agito weapons, don't have stat boosts for it
         if (dbWeapon.LimitOverCount >= 2)
             weaponBodyPowerParam += weaponBody.LimitOverCountPartyPower2;
 
