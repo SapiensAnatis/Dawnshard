@@ -10,30 +10,14 @@ namespace DragaliaAPI.Features.Present;
 /// <summary>
 /// Present service to back <see cref="PresentController"/>.
 /// </summary>
-public class PresentControllerService : IPresentControllerService
+public class PresentControllerService(
+    ILogger<PresentControllerService> logger,
+    IPresentRepository presentRepository,
+    IRewardService rewardService,
+    IMapper mapper
+) : IPresentControllerService
 {
-    private const int PresentPageSize = 7;
-
-    private readonly IPresentRepository presentRepository;
-    private readonly IRewardService rewardService;
-    private readonly IPlayerIdentityService playerIdentityService;
-    private readonly IMapper mapper;
-    private readonly ILogger<PresentControllerService> logger;
-
-    public PresentControllerService(
-        ILogger<PresentControllerService> logger,
-        IPresentRepository presentRepository,
-        IRewardService rewardService,
-        IPlayerIdentityService playerIdentityService,
-        IMapper mapper
-    )
-    {
-        this.presentRepository = presentRepository;
-        this.rewardService = rewardService;
-        this.playerIdentityService = playerIdentityService;
-        this.logger = logger;
-        this.mapper = mapper;
-    }
+    private const int PresentPageSize = 100;
 
     public async Task<IEnumerable<PresentHistoryList>> GetPresentHistoryList(ulong presentId)
     {
@@ -51,7 +35,7 @@ public class PresentControllerService : IPresentControllerService
             .Take(PresentPageSize)
             .ToListAsync();
 
-        return list.Select(this.mapper.Map<DbPlayerPresentHistory, PresentHistoryList>)
+        return list.Select(mapper.Map<DbPlayerPresentHistory, PresentHistoryList>)
             .OrderByDescending(x => x.id);
     }
 
@@ -72,17 +56,17 @@ public class PresentControllerService : IPresentControllerService
         if (presentId > 0)
         {
             presentsQuery = presentsQuery.Where(
-                x => x.PresentId >= (long)presentId + PresentPageSize
+                x => x.PresentId <= (long)presentId - PresentPageSize
             );
         }
 
         List<DbPlayerPresent> list = await presentsQuery
-            .OrderBy(x => x.PresentId)
+            .OrderByDescending(x => x.PresentId)
             .Take(PresentPageSize)
             .ToListAsync();
 
         return (list)
-            .Select(this.mapper.Map<DbPlayerPresent, PresentDetailList>)
+            .Select(mapper.Map<DbPlayerPresent, PresentDetailList>)
             .OrderBy(x => x.present_id);
     }
 
@@ -104,7 +88,7 @@ public class PresentControllerService : IPresentControllerService
 
         foreach (DbPlayerPresent present in presents)
         {
-            RewardGrantResult result = await this.rewardService.GrantReward(
+            RewardGrantResult result = await rewardService.GrantReward(
                 new(
                     present.EntityType,
                     present.EntityId,
@@ -131,13 +115,13 @@ public class PresentControllerService : IPresentControllerService
                     break;
             }
 
-            this.logger.LogDebug("Claimed present {@present}", present);
-            this.presentRepository.AddPlayerPresentHistory(
-                this.mapper.Map<DbPlayerPresent, DbPlayerPresentHistory>(present)
+            logger.LogDebug("Claimed present {@present}", present);
+            presentRepository.AddPlayerPresentHistory(
+                mapper.Map<DbPlayerPresent, DbPlayerPresentHistory>(present)
             );
         }
 
-        await this.presentRepository.DeletePlayerPresents(receivedIds.Concat(removedIds));
+        await presentRepository.DeletePlayerPresents(receivedIds.Concat(removedIds));
 
         return new(receivedIds, notReceivedIds, removedIds);
     }
