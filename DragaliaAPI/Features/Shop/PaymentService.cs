@@ -107,7 +107,7 @@ public class PaymentService(
                 break;
             case EntityTypes.Item:
                 DbPlayerUseItem? useItem = await itemRepository.GetItemAsync((UseItem)entity.Id);
-                quantity = useItem?.Quantity ?? 0;
+                quantity = useItem?.Quantity;
                 updater = () => useItem!.Quantity -= price;
                 break;
             case EntityTypes.DmodePoint:
@@ -126,7 +126,7 @@ public class PaymentService(
                 DbSummonTicket? ticket = await ticketRepository.Tickets.SingleOrDefaultAsync(
                     x => x.TicketKeyId == entity.Id
                 );
-                quantity = ticket?.Quantity ?? 0;
+                quantity = ticket?.Quantity;
                 // NOTE: Maybe remove here once quantity == 0?
                 updater = () => ticket!.Quantity -= price;
                 break;
