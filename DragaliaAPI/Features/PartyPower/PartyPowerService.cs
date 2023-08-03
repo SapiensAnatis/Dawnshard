@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -16,15 +18,37 @@ public class PartyPowerService(
     IBonusService bonusService
 ) : IPartyPowerService
 {
-    public async Task<int> CalculatePartyPower(IEnumerable<PartySettingList> party)
+    public async Task<int> CalculatePartyPower(
+        IEnumerable<PartySettingList> party,
+        FortBonusList? bonusList = null
+    )
     {
         int power = 0;
 
         bool isFirst = true;
 
+        bonusList ??= await bonusService.GetBonusList();
+
         foreach (PartySettingList partySetting in party)
         {
-            power += await CalculateCharacterPower(partySetting, isFirst);
+            power += await CalculateCharacterPower(partySetting, isFirst, bonusList);
+            isFirst = false;
+        }
+
+        return power;
+    }
+
+    public async Task<int> CalculatePartyPower(DbParty party, FortBonusList? bonusList = null)
+    {
+        int power = 0;
+
+        bool isFirst = true;
+
+        bonusList ??= await bonusService.GetBonusList();
+
+        foreach (DbPartyUnit partyUnit in party.Units)
+        {
+            power += await CalculateCharacterPower(partyUnit, isFirst, bonusList);
             isFirst = false;
         }
 
@@ -32,35 +56,107 @@ public class PartyPowerService(
     }
 
     public async Task<int> CalculateCharacterPower(
-        PartySettingList partyList,
-        bool shouldAddSkillBonus = true
+        PartySettingList partySetting,
+        bool shouldAddSkillBonus = true,
+        FortBonusList? bonusList = null
     )
     {
-        if (partyList.chara_id == 0)
+        return await CalculateCharacterPower(
+            partySetting.chara_id,
+            (long)partySetting.equip_dragon_key_id,
+            partySetting.equip_weapon_body_id,
+            (long)partySetting.equip_talisman_key_id,
+            partySetting.edit_skill_1_chara_id,
+            partySetting.edit_skill_2_chara_id,
+            partySetting.equip_crest_slot_type_1_crest_id_1,
+            partySetting.equip_crest_slot_type_1_crest_id_2,
+            partySetting.equip_crest_slot_type_1_crest_id_3,
+            partySetting.equip_crest_slot_type_2_crest_id_1,
+            partySetting.equip_crest_slot_type_2_crest_id_2,
+            partySetting.equip_crest_slot_type_3_crest_id_1,
+            partySetting.equip_crest_slot_type_3_crest_id_2,
+            shouldAddSkillBonus,
+            bonusList
+        );
+    }
+
+    public async Task<int> CalculateCharacterPower(
+        DbPartyUnit partyUnit,
+        bool shouldAddSkillBonus = true,
+        FortBonusList? bonusList = null
+    )
+    {
+        return await CalculateCharacterPower(
+            partyUnit.CharaId,
+            partyUnit.EquipDragonKeyId,
+            partyUnit.EquipWeaponBodyId,
+            partyUnit.EquipTalismanKeyId,
+            partyUnit.EditSkill1CharaId,
+            partyUnit.EditSkill2CharaId,
+            partyUnit.EquipCrestSlotType1CrestId1,
+            partyUnit.EquipCrestSlotType1CrestId2,
+            partyUnit.EquipCrestSlotType1CrestId3,
+            partyUnit.EquipCrestSlotType2CrestId1,
+            partyUnit.EquipCrestSlotType2CrestId2,
+            partyUnit.EquipCrestSlotType3CrestId1,
+            partyUnit.EquipCrestSlotType3CrestId2,
+            shouldAddSkillBonus,
+            bonusList
+        );
+    }
+
+    private async Task<int> CalculateCharacterPower(
+        Charas charaId,
+        long dragonKeyId,
+        WeaponBodies weaponBodyId,
+        long talismanId,
+        Charas editSkill1,
+        Charas editSkill2,
+        AbilityCrests crestType1No1,
+        AbilityCrests crestType1No2,
+        AbilityCrests crestType1No3,
+        AbilityCrests crestType2No1,
+        AbilityCrests crestType2No2,
+        AbilityCrests crestType3No1,
+        AbilityCrests crestType3No2,
+        bool shouldAddSkillBonus = true,
+        FortBonusList? bonus = null
+    )
+    {
+        if (charaId == 0)
             return 0;
 
-        FortBonusList bonus = await bonusService.GetBonusList();
+        bonus ??= await bonusService.GetBonusList();
 
         DbPlayerCharaData chara =
-            await unitRepository.FindCharaAsync(partyList.chara_id)
-            ?? throw new UnreachableException();
+            await unitRepository.FindCharaAsync(charaId)
+            ?? throw new DragaliaException(
+                ResultCode.CommonDbError,
+                "No chara found for power calculation"
+            );
 
-        CharaData charaData = MasterAsset.CharaData[partyList.chara_id];
+        CharaData charaData = MasterAsset.CharaData[charaId];
 
         DbPlayerDragonData? dragon = null;
         DbPlayerDragonReliability? reliability = null;
         DragonData? dragonData = null;
         DragonRarity? dragonRarity = null;
 
-        if (partyList.equip_dragon_key_id != 0)
+        if (dragonKeyId != 0)
         {
-            dragon = await unitRepository.Dragons.SingleAsync(
-                x => x.DragonKeyId == (long)partyList.equip_dragon_key_id
-            );
+            dragon =
+                await unitRepository.FindDragonAsync(dragonKeyId)
+                ?? throw new DragaliaException(
+                    ResultCode.CommonDbError,
+                    "No dragon found for power calculation"
+                );
 
-            reliability = await unitRepository.DragonReliabilities.SingleAsync(
-                x => x.DragonId == dragon.DragonId
-            );
+            reliability =
+                await unitRepository.FindDragonReliabilityAsync(dragon.DragonId)
+                ?? throw new DragaliaException(
+                    ResultCode.CommonDbError,
+                    "No reliability found for power calculation"
+                );
 
             dragonData = MasterAsset.DragonData[dragon.DragonId];
             dragonRarity = MasterAsset.DragonRarity[dragonData.Rarity];
@@ -69,31 +165,30 @@ public class PartyPowerService(
         DbWeaponBody? dbWeapon = null;
         WeaponBody? weaponBody = null;
 
-        if (partyList.equip_weapon_body_id != 0)
+        if (weaponBodyId != 0)
         {
-            dbWeapon = await unitRepository.WeaponBodies.SingleAsync(
-                x => x.WeaponBodyId == partyList.equip_weapon_body_id
-            );
+            dbWeapon =
+                await unitRepository.FindWeaponBodyAsync(weaponBodyId)
+                ?? throw new DragaliaException(
+                    ResultCode.CommonDbError,
+                    "No weapon body found for power calculation"
+                );
 
             weaponBody = MasterAsset.WeaponBody[dbWeapon.WeaponBodyId];
         }
 
         DbTalisman? talisman =
-            partyList.equip_talisman_key_id == 0
-                ? null
-                : await unitRepository.Talismans.SingleAsync(
-                    x => x.TalismanKeyId == (long)partyList.equip_talisman_key_id
-                );
+            talismanId == 0 ? null : await unitRepository.FindTalismanAsync(talismanId);
 
         AbilityCrests[] crests =
         {
-            partyList.equip_crest_slot_type_1_crest_id_1,
-            partyList.equip_crest_slot_type_1_crest_id_2,
-            partyList.equip_crest_slot_type_1_crest_id_3,
-            partyList.equip_crest_slot_type_2_crest_id_1,
-            partyList.equip_crest_slot_type_2_crest_id_2,
-            partyList.equip_crest_slot_type_3_crest_id_1,
-            partyList.equip_crest_slot_type_3_crest_id_2
+            crestType1No1,
+            crestType1No2,
+            crestType1No3,
+            crestType2No1,
+            crestType2No2,
+            crestType3No1,
+            crestType3No2
         };
 
         List<DbAbilityCrest> dbCrests = await abilityCrestRepository.AbilityCrests
@@ -102,8 +197,8 @@ public class PartyPowerService(
 
         double charaPowerParam = GetCharacterPower(
             ref chara,
-            partyList.edit_skill_1_chara_id,
-            partyList.edit_skill_2_chara_id,
+            editSkill1,
+            editSkill2,
             ref bonus,
             shouldAddSkillBonus
         );
