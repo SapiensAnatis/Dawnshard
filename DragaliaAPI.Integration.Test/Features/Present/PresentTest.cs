@@ -3,7 +3,6 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using FluentAssertions.Equivalency;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Present;
@@ -150,59 +149,21 @@ public class PresentTest : TestFixture
     [Fact]
     public async Task GetPresentList_IsPagedCorrectly()
     {
-        List<DbPlayerPresent> presents =
-            new()
-            {
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Wyrmite,
-                    EntityQuantity = 100,
-                },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Dew,
-                    EntityQuantity = 200,
-                },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Chara,
-                    EntityId = (int)Charas.Akasha,
-                },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Wyrmprint,
-                    EntityId = (int)AbilityCrests.ADogsDay,
-                },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Material,
-                    EntityId = (int)Materials.Squishums,
-                    EntityQuantity = 100,
-                },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Dragon,
-                    EntityId = (int)Dragons.Arsene,
-                },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.HustleHammer,
-                    EntityQuantity = 100,
-                },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Rupies,
-                    EntityQuantity = 100_000,
-                }
-            };
+        List<DbPlayerPresent> presents = Enumerable
+            .Range(1000, 120)
+            .Select(
+                x =>
+                    new DbPlayerPresent()
+                    {
+                        PresentId = x,
+                        DeviceAccountId = DeviceAccountId,
+                        EntityType = EntityTypes.Rupies,
+                        EntityQuantity = 100_000,
+                        CreateTime = DateTimeOffset.UnixEpoch,
+                    }
+            )
+            .OrderByDescending(x => x.PresentId)
+            .ToList();
 
         await this.AddRangeToDatabase(presents);
 
@@ -212,7 +173,7 @@ public class PresentTest : TestFixture
                 new PresentGetPresentListRequest() { is_limit = false, present_id = 0 }
             );
 
-        firstResponse.data.present_list.Should().HaveCount(7);
+        firstResponse.data.present_list.Should().HaveCount(100);
 
         DragaliaResponse<PresentGetPresentListData> secondResponse =
             await this.Client.PostMsgpack<PresentGetPresentListData>(
@@ -224,18 +185,12 @@ public class PresentTest : TestFixture
                 }
             );
 
-        secondResponse.data.present_list
+        secondResponse.data.present_list.Should().HaveCount(20);
+
+        firstResponse.data.present_list
+            .Concat(secondResponse.data.present_list)
             .Should()
-            .ContainSingle()
-            .And.ContainEquivalentOf(
-                new PresentDetailList()
-                {
-                    create_time = DateTimeOffset.UtcNow,
-                    receive_limit_time = DateTimeOffset.UnixEpoch,
-                    entity_type = EntityTypes.Rupies,
-                    entity_quantity = 100_000
-                }
-            );
+            .OnlyHaveUniqueItems(x => x.present_id);
     }
 
     [Fact]
@@ -509,75 +464,21 @@ public class PresentTest : TestFixture
     [Fact]
     public async Task GetPresentHistoryList_IsPagedCorrectly()
     {
-        List<DbPlayerPresentHistory> presentHistories =
-            new()
-            {
-                new()
-                {
-                    Id = 1007,
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Wyrmite,
-                    EntityQuantity = 100,
-                    CreateTime = DateTimeOffset.UnixEpoch,
-                },
-                new()
-                {
-                    Id = 1006,
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Dew,
-                    EntityQuantity = 200,
-                    CreateTime = DateTimeOffset.UnixEpoch,
-                },
-                new()
-                {
-                    Id = 1005,
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Chara,
-                    EntityId = (int)Charas.Akasha,
-                    CreateTime = DateTimeOffset.UnixEpoch,
-                },
-                new()
-                {
-                    Id = 1004,
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Wyrmprint,
-                    EntityId = (int)AbilityCrests.ADogsDay,
-                    CreateTime = DateTimeOffset.UnixEpoch,
-                },
-                new()
-                {
-                    Id = 1003,
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Material,
-                    EntityId = (int)Materials.Squishums,
-                    EntityQuantity = 100,
-                    CreateTime = DateTimeOffset.UnixEpoch,
-                },
-                new()
-                {
-                    Id = 1002,
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Dragon,
-                    EntityId = (int)Dragons.Arsene,
-                    CreateTime = DateTimeOffset.UnixEpoch,
-                },
-                new()
-                {
-                    Id = 1001,
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.HustleHammer,
-                    EntityQuantity = 100,
-                    CreateTime = DateTimeOffset.UnixEpoch,
-                },
-                new()
-                {
-                    Id = 1000,
-                    DeviceAccountId = DeviceAccountId,
-                    EntityType = EntityTypes.Rupies,
-                    EntityQuantity = 100_000,
-                    CreateTime = DateTimeOffset.UnixEpoch,
-                }
-            };
+        List<DbPlayerPresentHistory> presentHistories = Enumerable
+            .Range(2000, 120)
+            .Select(
+                x =>
+                    new DbPlayerPresentHistory()
+                    {
+                        Id = x,
+                        DeviceAccountId = DeviceAccountId,
+                        EntityType = EntityTypes.Rupies,
+                        EntityQuantity = 100_000,
+                        CreateTime = DateTimeOffset.UnixEpoch,
+                    }
+            )
+            .OrderByDescending(x => x.Id)
+            .ToList();
 
         await this.AddRangeToDatabase(presentHistories);
 
@@ -589,26 +490,23 @@ public class PresentTest : TestFixture
 
         firstResponse.data.present_history_list
             .Should()
-            .HaveCount(7)
+            .HaveCount(100)
             .And.BeInDescendingOrder(x => x.id);
 
         DragaliaResponse<PresentGetHistoryListData> secondResponse =
             await this.Client.PostMsgpack<PresentGetHistoryListData>(
                 $"{Controller}/get_history_list",
-                new PresentGetHistoryListRequest() { present_history_id = 1007 }
-            );
-
-        secondResponse.data.present_history_list
-            .Should()
-            .ContainSingle()
-            .And.ContainEquivalentOf(
-                new PresentHistoryList()
+                new PresentGetHistoryListRequest()
                 {
-                    id = 1000,
-                    create_time = DateTimeOffset.UnixEpoch,
-                    entity_type = EntityTypes.Rupies,
-                    entity_quantity = 100_000
+                    present_history_id = (ulong)presentHistories[0].Id
                 }
             );
+
+        secondResponse.data.present_history_list.Should().HaveCount(20);
+
+        firstResponse.data.present_history_list
+            .Concat(secondResponse.data.present_history_list)
+            .Should()
+            .OnlyHaveUniqueItems(x => x.id);
     }
 }
