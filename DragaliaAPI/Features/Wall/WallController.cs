@@ -41,7 +41,7 @@ public class WallController : DragaliaControllerBase
     public async Task<DragaliaResult> Fail(WallFailRequest request)
     {
         DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
-
+     
         return Ok(
             new DungeonFailData()
             {

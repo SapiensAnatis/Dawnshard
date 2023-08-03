@@ -94,7 +94,8 @@ public class UpdateDataService(
                     DbWeaponPassiveAbility
                 >(entities),
                 item_list = ConvertEntities<ItemList, DbPlayerUseItem>(entities),
-                talisman_list = ConvertEntities<TalismanList, DbTalisman>(entities)
+                talisman_list = ConvertEntities<TalismanList, DbTalisman>(entities),
+                quest_wall_list = ConvertEntities<QuestWallList, DbPlayerQuestWall>(entities)
             };
 
         IEnumerable<DbPlayerMission> updatedMissions = entities.OfType<DbPlayerMission>();

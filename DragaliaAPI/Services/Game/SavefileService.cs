@@ -437,6 +437,18 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
+            this.apiContext.PlayerQuestWalls.AddRange(
+                savefile.quest_wall_list.MapWithDeviceAccount<DbPlayerQuestWall>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbPlayerQuestWall step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             this.logger.LogInformation(
                 "Mapping completed after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds

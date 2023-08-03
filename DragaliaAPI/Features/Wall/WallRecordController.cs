@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -16,18 +17,24 @@ namespace DragaliaAPI.Features.Wall;
 public class WallRecordController : DragaliaControllerBase
 {
     private readonly IUpdateDataService updateDataService;
+    private readonly IWallRepository wallRepository;
+    private readonly IWallService wallService;
     private readonly IRewardService rewardService;
     private readonly IDungeonService dungeonService;
-    private readonly ILogger<WallStartController> logger;
+    private readonly ILogger<WallRecordController> logger;
 
     public WallRecordController(
         IUpdateDataService updateDataService,
+        IWallRepository wallRepository,
+        IWallService wallService,
         IRewardService rewardService,
         IDungeonService dungeonService,
-        ILogger<WallStartController> logger
+        ILogger<WallRecordController> logger
     )
     {
         this.updateDataService = updateDataService;
+        this.wallRepository = wallRepository;
+        this.wallService = wallService;
         this.rewardService = rewardService;
         this.dungeonService = dungeonService;
         this.logger = logger;
@@ -37,10 +44,17 @@ public class WallRecordController : DragaliaControllerBase
     [HttpPost("record")]
     public async Task<DragaliaResult> Record(WallRecordRecordRequest request)
     {
-        DungeonSession dungeonSession = dungeonService.FinishDungeon(request.dungeon_key).Result;
+        DungeonSession dungeonSession = await dungeonService.FinishDungeon(request.dungeon_key);
 
-        int current_level = 0;
+        DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(request.wall_id);
 
+        logger.LogInformation("[wall_record/record] cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}",
+            request.wall_id, questWall.WallLevel);
+
+        // Level up completed wall quest
+        await wallService.LevelupQuestWall(request.wall_id);
+
+        // Response data
         AtgenWallUnitInfo wallUnitInfo =
             new()
             {

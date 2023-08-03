@@ -7,6 +7,7 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Trade;
+using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -25,7 +26,8 @@ public class LoadService(
     IPresentService presentService,
     ITradeService tradeService,
     IShopRepository shopRepository,
-    IUserService userService
+    IUserService userService,
+    IWallService wallService
 ) : ILoadService
 {
     public async Task<LoadIndexData> BuildIndexData()
@@ -99,7 +101,8 @@ public class LoadService(
                 quest_entry_condition_list = await missionService.GetEntryConditions(),
                 user_treasure_trade_list = await tradeService.GetUserTreasureTradeList(),
                 treasure_trade_all_list = tradeService.GetCurrentTreasureTradeList(),
-                shop_notice = new ShopNotice(await shopRepository.GetDailySummonCountAsync() == 0)
+                shop_notice = new ShopNotice(await shopRepository.GetDailySummonCountAsync() == 0),
+                quest_wall_list = await wallService.GetQuestWallList()
             };
 
         logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);
