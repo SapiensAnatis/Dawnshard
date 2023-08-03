@@ -145,7 +145,9 @@ public record WeaponBody(
     public int GetAbility(int abilityNo, int level)
     {
         int[] pool = Abilities[abilityNo - 1];
+        return level < 1 || level > 3 ? 0 : pool[level - 1];
 
+        /* causing issues with agito weapons; their ability level 1 id is 0
         int current = 0;
 
         for (int i = 0; i < level; i++)
@@ -158,6 +160,6 @@ public record WeaponBody(
             current = val;
         }
 
-        return current;
+        return current;*/
     }
 };
