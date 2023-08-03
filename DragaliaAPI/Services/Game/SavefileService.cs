@@ -441,6 +441,24 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
+            if (savefile.user_data.emblem_id != Emblems.DragonbloodPrince)
+            {
+                this.apiContext.Emblems.Add(
+                    new DbEmblem
+                    {
+                        DeviceAccountId = deviceAccountId,
+                        EmblemId = savefile.user_data.emblem_id,
+                        GetTime = DateTimeOffset.UnixEpoch,
+                        IsNew = false
+                    }
+                );
+            }
+
+            this.logger.LogDebug(
+                "Adding DbEmblem step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             this.logger.LogInformation(
                 "Mapping completed after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
