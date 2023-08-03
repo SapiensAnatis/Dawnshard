@@ -47,8 +47,13 @@ public class V9Update(
 
         foreach ((Charas chara, SortedSet<int> manaNodes) in charaManaData)
         {
+            if (!MasterAsset.CharaData.TryGetValue(chara, out CharaData? charaData))
+            {
+                logger.LogDebug("Skipping unknown character {chara}", chara);
+                continue;
+            }
+
             int[] storyArray = MasterAsset.CharaStories[(int)chara].storyIds;
-            CharaData charaData = MasterAsset.CharaData[chara];
 
             if (!stories.Contains(storyArray[0]))
             {
