@@ -5653,11 +5653,13 @@ public class EditSkillCharaData
 [MessagePackObject(true)]
 public class EmblemList
 {
-    public int emblem_id { get; set; }
-    public int is_new { get; set; }
-    public int gettime { get; set; }
+    public Emblems emblem_id { get; set; }
 
-    public EmblemList(int emblem_id, int is_new, int gettime)
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_new { get; set; }
+    public DateTimeOffset gettime { get; set; }
+
+    public EmblemList(Emblems emblem_id, bool is_new, DateTimeOffset gettime)
     {
         this.emblem_id = emblem_id;
         this.is_new = is_new;
@@ -9218,7 +9220,7 @@ public class UserData
     public int build_time_point { get; set; }
     public int age_group { get; set; }
     public int main_party_no { get; set; }
-    public int emblem_id { get; set; }
+    public Emblems emblem_id { get; set; }
     public int active_memory_event_id { get; set; }
     public int mana_point { get; set; }
     public DateTimeOffset last_login_time { get; set; }
@@ -9250,7 +9252,7 @@ public class UserData
         int build_time_point,
         int age_group,
         int main_party_no,
-        int emblem_id,
+        Emblems emblem_id,
         int active_memory_event_id,
         int mana_point,
         DateTimeOffset last_login_time,
@@ -9444,7 +9446,7 @@ public class UserSupportList
     public int level { get; set; }
 
     public DateTimeOffset last_login_date { get; set; }
-    public int emblem_id { get; set; }
+    public Emblems emblem_id { get; set; }
     public int max_party_power { get; set; }
     public AtgenGuild guild { get; set; }
     public AtgenSupportChara support_chara { get; set; }
@@ -9463,7 +9465,7 @@ public class UserSupportList
         string name,
         int level,
         DateTimeOffset last_login_date,
-        int emblem_id,
+        Emblems emblem_id,
         int max_party_power,
         AtgenGuild guild,
         AtgenSupportChara support_chara,

@@ -1461,9 +1461,9 @@ public class EmblemGetListRequest { }
 [MessagePackObject(true)]
 public class EmblemSetRequest
 {
-    public int emblem_id { get; set; }
+    public Emblems emblem_id { get; set; }
 
-    public EmblemSetRequest(int emblem_id)
+    public EmblemSetRequest(Emblems emblem_id)
     {
         this.emblem_id = emblem_id;
     }
