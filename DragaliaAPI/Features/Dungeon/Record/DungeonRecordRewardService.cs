@@ -95,7 +95,7 @@ public class DungeonRecordRewardService(
 
                     drops.Add(reward.ToDropAll());
 
-                    await rewardService.GrantReward(reward, log: false);
+                    await rewardService.GrantReward(reward);
                 }
             }
         }

@@ -60,7 +60,11 @@ public class DungeonRecordService(
         this.ProcessMissionProgression(session);
         await this.ProcessGrowth(ingameResultData.grow_record, session);
         await this.ProcessStaminaConsumption(session);
-        await this.ProcessPlayerLevel(ingameResultData.reward_record, session);
+        await this.ProcessPlayerLevel(
+            ingameResultData.grow_record,
+            ingameResultData.reward_record,
+            session
+        );
 
         (IEnumerable<AtgenDropAll> dropList, int manaDrop, int coinDrop) =
             await dungeonRecordRewardService.ProcessEnemyDrops(playRecord, session);
@@ -143,7 +147,11 @@ public class DungeonRecordService(
             await userService.RemoveStamina(type, amount);
     }
 
-    private async Task ProcessPlayerLevel(RewardRecord rewardRecord, DungeonSession session)
+    private async Task ProcessPlayerLevel(
+        GrowRecord growRecord,
+        RewardRecord rewardRecord,
+        DungeonSession session
+    )
     {
         // Constant for quests with no stamina usage, wip?
         int experience =
@@ -156,5 +164,6 @@ public class DungeonRecordService(
         PlayerLevelResult playerLevelResult = await userService.AddExperience(experience); // TODO: Exp boost
 
         rewardRecord.player_level_up_fstone = playerLevelResult.RewardedWyrmite;
+        growRecord.take_player_exp = experience;
     }
 }

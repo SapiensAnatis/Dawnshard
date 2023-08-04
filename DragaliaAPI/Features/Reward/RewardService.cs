@@ -34,7 +34,7 @@ public class RewardService(
     private readonly List<Entity> newEntities = new();
     private readonly List<ConvertedEntity> convertedEntities = new();
 
-    public async Task<RewardGrantResult> GrantReward(Entity entity, bool log = true)
+    public async Task<RewardGrantResult> GrantReward(Entity entity)
     {
         if (entity.Quantity <= 0)
         {
@@ -42,7 +42,7 @@ public class RewardService(
             return RewardGrantResult.Added;
         }
 
-        logger.LogDebug("Granting reward {@rewardEntity}", entity);
+        logger.LogTrace("Granting reward {@rewardEntity}", entity);
 
         switch (entity.Type)
         {

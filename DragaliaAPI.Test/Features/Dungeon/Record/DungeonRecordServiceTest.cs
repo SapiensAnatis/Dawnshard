@@ -1,0 +1,204 @@
+using Castle.Core.Logging;
+using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dungeon.Record;
+using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Player;
+using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
+using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Test.Utils;
+using Humanizer;
+using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
+
+namespace DragaliaAPI.Test.Features.Dungeon.Record;
+
+public class DungeonRecordServiceTest
+{
+    private readonly Mock<IDungeonRecordRewardService> mockDungeonRewardService;
+    private readonly Mock<IQuestRepository> mockQuestRepository;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<IUserService> mockUserService;
+    private readonly Mock<ITutorialService> mockTutorialService;
+    private readonly Mock<ILogger<DungeonRecordService>> mockLogger;
+
+    private readonly IDungeonRecordService dungeonRecordService;
+
+    public DungeonRecordServiceTest()
+    {
+        this.mockDungeonRewardService = new(MockBehavior.Strict);
+        this.mockQuestRepository = new(MockBehavior.Strict);
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockUserService = new(MockBehavior.Strict);
+        this.mockTutorialService = new(MockBehavior.Strict);
+        this.mockLogger = new(MockBehavior.Loose);
+
+        this.dungeonRecordService = new DungeonRecordService(
+            this.mockDungeonRewardService.Object,
+            this.mockQuestRepository.Object,
+            this.mockMissionProgressionService.Object,
+            this.mockUserService.Object,
+            this.mockTutorialService.Object,
+            this.mockLogger.Object
+        );
+
+        this.mockTutorialService.Setup(x => x.AddTutorialFlag(1022)).ReturnsAsync(new List<int>());
+
+        CommonAssertionOptions.ApplyTimeOptions();
+    }
+
+    [Fact]
+    public async Task GenerateIngameResultData_CallsExpectedMethods()
+    {
+        int lSurtrSoloId = 232031101;
+
+        DungeonSession session =
+            new()
+            {
+                QuestData = MasterAsset.QuestData[lSurtrSoloId],
+                Party = new List<PartySettingList>(),
+                StartTime = DateTimeOffset.UtcNow
+            };
+        PlayRecord playRecord = new() { time = 10, };
+
+        DbQuest mockQuest =
+            new()
+            {
+                DeviceAccountId = "id",
+                QuestId = lSurtrSoloId,
+                State = 0,
+                BestClearTime = 999
+            };
+
+        List<AtgenDropAll> dropList =
+            new()
+            {
+                new()
+                {
+                    id = (int)Materials.FirestormRuby,
+                    quantity = 10,
+                    type = EntityTypes.Material
+                }
+            };
+
+        List<AtgenDropAll> eventDrops =
+            new()
+            {
+                new()
+                {
+                    id = (int)Materials.WoodlandHerbs,
+                    quantity = 20,
+                    type = EntityTypes.Material
+                }
+            };
+
+        List<AtgenScoreMissionSuccessList> scoreMissionSuccessLists =
+            new()
+            {
+                new()
+                {
+                    score_mission_complete_type = QuestCompleteType.LimitFall,
+                    score_target_value = 100,
+                }
+            };
+
+        List<AtgenEventPassiveUpList> passiveUpLists =
+            new()
+            {
+                new() { passive_id = 1, progress = 2 }
+            };
+
+        int takeCoin = 10;
+        int takeMana = 20;
+        int takeAccumulatePoint = 30;
+        int takeBoostAccumulatePoint = 40;
+
+        this.mockQuestRepository
+            .Setup(x => x.GetQuestDataAsync(lSurtrSoloId))
+            .ReturnsAsync(mockQuest);
+
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(lSurtrSoloId));
+
+        this.mockUserService
+            .Setup(x => x.RemoveStamina(StaminaType.Single, 40))
+            .Returns(Task.CompletedTask);
+        this.mockUserService
+            .Setup(x => x.AddExperience(400))
+            .ReturnsAsync(new PlayerLevelResult(true, 100, 50));
+
+        this.mockDungeonRewardService
+            .Setup(x => x.ProcessEnemyDrops(playRecord, session))
+            .ReturnsAsync((dropList, takeMana, takeCoin));
+        this.mockDungeonRewardService
+            .Setup(x => x.ProcessEventRewards(playRecord, session))
+            .ReturnsAsync(
+                new DungeonRecordRewardService.EventRewardData(
+                    scoreMissionSuccessLists,
+                    takeAccumulatePoint,
+                    takeBoostAccumulatePoint,
+                    passiveUpLists,
+                    eventDrops
+                )
+            );
+
+        IngameResultData ingameResultData =
+            await this.dungeonRecordService.GenerateIngameResultData(
+                "dungeonKey",
+                playRecord,
+                session
+            );
+
+        ingameResultData
+            .Should()
+            .BeEquivalentTo(
+                new IngameResultData()
+                {
+                    dungeon_key = "dungeonKey",
+                    play_type = QuestPlayType.Default,
+                    quest_id = lSurtrSoloId,
+                    is_host = true,
+                    quest_party_setting_list = session.Party,
+                    start_time = session.StartTime,
+                    end_time = DateTimeOffset.UtcNow,
+                    reborn_count = playRecord.reborn_count,
+                    total_play_damage = playRecord.total_play_damage,
+                    is_clear = true,
+                    current_play_count = 1,
+                    reward_record = new()
+                    {
+                        drop_all = dropList.Concat(eventDrops).ToList(),
+                        take_boost_accumulate_point = takeBoostAccumulatePoint,
+                        take_accumulate_point = takeAccumulatePoint,
+                        take_coin = takeCoin,
+                        take_astral_item_quantity = 0,
+                        player_level_up_fstone = 50,
+                    },
+                    grow_record = new()
+                    {
+                        take_mana = takeMana,
+                        take_player_exp = 400,
+                        take_chara_exp = 1,
+                        bonus_factor = 1,
+                        mana_bonus_factor = 1,
+                        chara_grow_record = new List<AtgenCharaGrowRecord>()
+                    },
+                    event_passive_up_list = passiveUpLists,
+                    score_mission_success_list = scoreMissionSuccessLists,
+                    is_best_clear_time = true,
+                    clear_time = playRecord.time,
+                }
+            );
+
+        mockQuest.State.Should().Be(3);
+
+        this.mockDungeonRewardService.VerifyAll();
+        this.mockQuestRepository.VerifyAll();
+        this.mockMissionProgressionService.VerifyAll();
+        this.mockUserService.VerifyAll();
+        this.mockTutorialService.VerifyAll();
+        this.mockLogger.VerifyAll();
+    }
+}
