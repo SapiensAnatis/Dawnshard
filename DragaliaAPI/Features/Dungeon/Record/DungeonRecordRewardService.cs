@@ -15,7 +15,10 @@ public class DungeonRecordRewardService(
     ILogger<DungeonRecordRewardService> logger
 ) : IDungeonRecordRewardService
 {
-    public async Task<QuestMissionStatus> ProcessQuestMissionCompletion(
+    public async Task<(
+        QuestMissionStatus MissionStatus,
+        IEnumerable<AtgenFirstClearSet> FirstClearRewards
+    )> ProcessQuestMissionCompletion(
         PlayRecord playRecord,
         DungeonSession session,
         DbQuest questData
@@ -44,7 +47,7 @@ public class DungeonRecordRewardService(
         questData.IsMissionClear2 = status.Missions[1];
         questData.IsMissionClear3 = status.Missions[2];
 
-        return status;
+        return (status, firstClearRewards);
     }
 
     public async Task<(

@@ -1,6 +1,7 @@
 using Castle.Core.Logging;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
@@ -111,6 +112,41 @@ public class DungeonRecordServiceTest
                 new() { passive_id = 1, progress = 2 }
             };
 
+        List<AtgenMissionsClearSet> missionsClearSets = new List<AtgenMissionsClearSet>()
+        {
+            new()
+            {
+                type = EntityTypes.CollectEventItem,
+                id = 1,
+                quantity = 2
+            }
+        };
+
+        List<AtgenFirstClearSet> missionCompleteSets =
+            new()
+            {
+                new()
+                {
+                    type = EntityTypes.ExchangeTicket,
+                    id = 2,
+                    quantity = 3
+                }
+            };
+
+        List<AtgenFirstClearSet> firstClearSets =
+            new()
+            {
+                new()
+                {
+                    type = EntityTypes.RaidEventItem,
+                    id = 4,
+                    quantity = 5
+                }
+            };
+
+        QuestMissionStatus missionStatus =
+            new(new bool[] { }, missionsClearSets, missionCompleteSets);
+
         int takeCoin = 10;
         int takeMana = 20;
         int takeAccumulatePoint = 30;
@@ -129,6 +165,9 @@ public class DungeonRecordServiceTest
             .Setup(x => x.AddExperience(400))
             .ReturnsAsync(new PlayerLevelResult(true, 100, 50));
 
+        this.mockDungeonRewardService
+            .Setup(x => x.ProcessQuestMissionCompletion(playRecord, session, mockQuest))
+            .ReturnsAsync((missionStatus, firstClearSets));
         this.mockDungeonRewardService
             .Setup(x => x.ProcessEnemyDrops(playRecord, session))
             .ReturnsAsync((dropList, takeMana, takeCoin));
@@ -175,6 +214,9 @@ public class DungeonRecordServiceTest
                         take_coin = takeCoin,
                         take_astral_item_quantity = 0,
                         player_level_up_fstone = 50,
+                        first_clear_set = firstClearSets,
+                        mission_complete = missionCompleteSets,
+                        missions_clear_set = missionsClearSets,
                     },
                     grow_record = new()
                     {

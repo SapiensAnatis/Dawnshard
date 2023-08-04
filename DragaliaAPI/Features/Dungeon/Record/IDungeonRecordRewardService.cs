@@ -6,7 +6,10 @@ namespace DragaliaAPI.Features.Dungeon.Record;
 
 public interface IDungeonRecordRewardService
 {
-    Task<QuestMissionStatus> ProcessQuestMissionCompletion(
+    Task<(
+        QuestMissionStatus MissionStatus,
+        IEnumerable<AtgenFirstClearSet> FirstClearRewards
+    )> ProcessQuestMissionCompletion(
         PlayRecord playRecord,
         DungeonSession session,
         DbQuest questData

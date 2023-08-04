@@ -66,6 +66,17 @@ public class DungeonRecordService(
             session
         );
 
+        (QuestMissionStatus missionStatus, IEnumerable<AtgenFirstClearSet>? firstClearSets) =
+            await dungeonRecordRewardService.ProcessQuestMissionCompletion(
+                playRecord,
+                session,
+                questData
+            );
+
+        ingameResultData.reward_record.first_clear_set = firstClearSets;
+        ingameResultData.reward_record.missions_clear_set = missionStatus.MissionsClearSet;
+        ingameResultData.reward_record.mission_complete = missionStatus.MissionCompleteSet;
+
         (IEnumerable<AtgenDropAll> dropList, int manaDrop, int coinDrop) =
             await dungeonRecordRewardService.ProcessEnemyDrops(playRecord, session);
 

@@ -7,7 +7,9 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using Microsoft.EntityFrameworkCore.Update;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
 
 namespace DragaliaAPI.Test.Features.Dungeon.Record;
 
@@ -89,10 +91,234 @@ public class DungeonRecordRewardServiceTest
             )
         )
             .Should()
-            .Be(status);
+            .Be((status, firstClearRewards));
 
         questEntity.IsMissionClear1.Should().BeTrue();
         questEntity.IsMissionClear2.Should().BeTrue();
         questEntity.IsMissionClear3.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ProcessEnemyDrops_RewardsCorrectDrops()
+    {
+        PlayRecord playRecord =
+            new()
+            {
+                treasure_record = new List<AtgenTreasureRecord>()
+                {
+                    new()
+                    {
+                        area_idx = 0,
+                        enemy = new List<int>() { 1, 0, 1 }
+                    },
+                    new()
+                    {
+                        area_idx = 1,
+                        enemy = new List<int>() { 0, 1, 0 }
+                    }
+                }
+            };
+
+        DungeonSession session =
+            new()
+            {
+                QuestData = null!,
+                Party = null!,
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                {
+                    {
+                        0,
+                        new List<AtgenEnemy>()
+                        {
+                            new()
+                            {
+                                enemy_drop_list = new List<EnemyDropList>()
+                                {
+                                    new()
+                                    {
+                                        mana = 10,
+                                        coin = 10,
+                                        drop_list = new List<AtgenDropList>()
+                                        {
+                                            new() { type = EntityTypes.Dew, quantity = 10 },
+                                            new() { type = EntityTypes.HustleHammer, quantity = 10 }
+                                        }
+                                    },
+                                }
+                            },
+                            new()
+                            {
+                                enemy_drop_list = new List<EnemyDropList>()
+                                {
+                                    new()
+                                    {
+                                        mana = 10,
+                                        coin = 10,
+                                        drop_list = new List<AtgenDropList>()
+                                        {
+                                            new() { type = EntityTypes.AstralItem, quantity = 10 }
+                                        }
+                                    },
+                                }
+                            },
+                            new()
+                            {
+                                enemy_drop_list = new List<EnemyDropList>()
+                                {
+                                    new()
+                                    {
+                                        mana = 10,
+                                        coin = 10,
+                                        drop_list = new List<AtgenDropList>()
+                                        {
+                                            new() { type = EntityTypes.Wyrmite, quantity = 10 }
+                                        }
+                                    },
+                                    new()
+                                    {
+                                        mana = 10,
+                                        coin = 10,
+                                        drop_list = new List<AtgenDropList>()
+                                        {
+                                            new() { type = EntityTypes.FafnirMedal, quantity = 10 }
+                                        }
+                                    },
+                                }
+                            }
+                        }
+                    },
+                    {
+                        1,
+                        new List<AtgenEnemy>()
+                        {
+                            new(),
+                            new()
+                            {
+                                enemy_drop_list = new List<EnemyDropList>()
+                                {
+                                    new() { coin = 10, mana = 10, }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+        this.mockRewardService
+            .Setup(x => x.GrantReward(It.Is<Entity>(e => e.Type == EntityTypes.Dew)))
+            .ReturnsAsync(RewardGrantResult.Added);
+        this.mockRewardService
+            .Setup(x => x.GrantReward(It.Is<Entity>(e => e.Type == EntityTypes.HustleHammer)))
+            .ReturnsAsync(RewardGrantResult.Added);
+        this.mockRewardService
+            .Setup(x => x.GrantReward(It.Is<Entity>(e => e.Type == EntityTypes.Wyrmite)))
+            .ReturnsAsync(RewardGrantResult.Added);
+        this.mockRewardService
+            .Setup(x => x.GrantReward(It.Is<Entity>(e => e.Type == EntityTypes.FafnirMedal)))
+            .ReturnsAsync(RewardGrantResult.Added);
+
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        It.Is<Entity>(e => e.Type == EntityTypes.Mana && e.Quantity == 40)
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        It.Is<Entity>(e => e.Type == EntityTypes.Rupies && e.Quantity == 40)
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
+
+        (await this.dungeonRecordRewardService.ProcessEnemyDrops(playRecord, session))
+            .Should()
+            .BeEquivalentTo(
+                (
+                    new List<AtgenDropAll>()
+                    {
+                        new() { type = EntityTypes.Dew, quantity = 10 },
+                        new() { type = EntityTypes.HustleHammer, quantity = 10 },
+                        new() { type = EntityTypes.FafnirMedal, quantity = 10 },
+                        new() { type = EntityTypes.Wyrmite, quantity = 10 }
+                    },
+                    40,
+                    40
+                )
+            );
+
+        this.mockRewardService.VerifyAll();
+    }
+
+    [Fact]
+    public async Task ProcessEventRewards_CallsExpectedMethods()
+    {
+        List<PartySettingList> party = new();
+        DungeonSession session =
+            new() { QuestData = MasterAsset.QuestData[100010101], Party = party, };
+        PlayRecord playRecord = new();
+
+        List<AtgenScoreMissionSuccessList> scoreMissionSuccessLists =
+            new()
+            {
+                new()
+                {
+                    score_mission_complete_type = QuestCompleteType.DragonElementLocked,
+                    score_target_value = 2,
+                }
+            };
+
+        List<AtgenEventPassiveUpList> passiveUpLists =
+            new()
+            {
+                new() { passive_id = 3, progress = 10 }
+            };
+
+        List<AtgenDropAll> eventDrops =
+            new()
+            {
+                new() { type = EntityTypes.Clb01EventItem, quantity = 100 }
+            };
+
+        int materialMultiplier = 2;
+        int pointMultiplier = 3;
+        int points = 10;
+        int boostedPoints = 20;
+
+        this.mockAbilityCrestMultiplierService
+            .Setup(x => x.GetEventMultiplier(session.Party, session.QuestData.Gid))
+            .ReturnsAsync((materialMultiplier, pointMultiplier));
+
+        this.mockQuestCompletionService
+            .Setup(x => x.CompleteQuestScoreMissions(session, playRecord, pointMultiplier))
+            .ReturnsAsync((scoreMissionSuccessLists, points, boostedPoints));
+
+        this.mockEventDropService
+            .Setup(x => x.ProcessEventPassiveDrops(session.QuestData))
+            .ReturnsAsync(passiveUpLists);
+        this.mockEventDropService
+            .Setup(
+                x => x.ProcessEventMaterialDrops(session.QuestData, playRecord, materialMultiplier)
+            )
+            .ReturnsAsync(eventDrops);
+
+        (await this.dungeonRecordRewardService.ProcessEventRewards(playRecord, session))
+            .Should()
+            .BeEquivalentTo(
+                new DungeonRecordRewardService.EventRewardData(
+                    scoreMissionSuccessLists,
+                    points + boostedPoints,
+                    boostedPoints,
+                    passiveUpLists,
+                    eventDrops
+                )
+            );
+
+        this.mockAbilityCrestMultiplierService.VerifyAll();
+        this.mockQuestCompletionService.VerifyAll();
+        this.mockEventDropService.VerifyAll();
     }
 }
