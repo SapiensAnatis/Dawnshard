@@ -180,5 +180,7 @@ public class ApiContext : DbContext
 
     public DbSet<DbLoginBonus> LoginBonuses { get; set; }
 
+    public DbSet<DbSummonTicket> PlayerSummonTickets { get; set; }
+
     public DbSet<DbEmblem> Emblems { get; set; }
 }

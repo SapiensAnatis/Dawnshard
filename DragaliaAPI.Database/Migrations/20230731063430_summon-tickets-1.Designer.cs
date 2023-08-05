@@ -3,6 +3,7 @@ using System;
 using DragaliaAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230731063430_summon-tickets-1")]
+    partial class summontickets1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,30 +119,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DeviceAccounts");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbEmblem", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("EmblemId")
-                        .HasColumnType("integer")
-                        .HasColumnName("EmblemId");
-
-                    b.Property<DateTimeOffset>("GetTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("GetTime");
-
-                    b.Property<bool>("IsNew")
-                        .HasColumnType("boolean")
-                        .HasColumnName("IsNew");
-
-                    b.HasKey("DeviceAccountId", "EmblemId");
-
-                    b.HasIndex("DeviceAccountId");
-
-                    b.ToTable("Emblems");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbEquippedStamp", b =>
@@ -1749,17 +1728,6 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany("AbilityCrestSetList")
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbEmblem", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

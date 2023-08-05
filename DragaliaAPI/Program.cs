@@ -34,6 +34,7 @@ using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Talisman;
+using DragaliaAPI.Features.Tickets;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -189,6 +190,8 @@ builder.Services
     .AddScoped<IUserService, UserService>()
     // Talisman feature
     .AddScoped<ITalismanService, TalismanService>()
+    // Tickets feature
+    .AddScoped<ITicketRepository, TicketRepository>()
     // Emblem feature
     .AddScoped<IEmblemRepository, EmblemRepository>();
 
