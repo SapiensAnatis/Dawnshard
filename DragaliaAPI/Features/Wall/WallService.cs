@@ -27,6 +27,8 @@ public class WallService(
 ) : IWallService
 {
     public const int MaximumQuestWallLevel = 80;
+    public const int WallQuestGroupId = 21601;
+    public const int FlameWallId = 216010001;
 
     public async Task LevelupQuestWall(int wallId)
     {
@@ -35,7 +37,14 @@ public class WallService(
         if (questWall.WallLevel < MaximumQuestWallLevel) 
         {
             questWall.WallLevel++;
+            questWall.IsStartNextLevel = false;
         }
+    }
+
+    public async Task SetQuestWallIsStartNextLevel(int wallId, bool value)
+    {
+        DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(wallId);
+        questWall.IsStartNextLevel = value;
     }
 
     public async Task<IEnumerable<QuestWallList>> GetQuestWallList()
@@ -48,7 +57,7 @@ public class WallService(
         int levelTotal = 0;
         for (int i = 0; i < 5; i++)
         {
-            levelTotal += (await wallRepository.GetQuestWall(216010001 + i)).WallLevel;
+            levelTotal += (await wallRepository.GetQuestWall(FlameWallId + i)).WallLevel;
         }
         return levelTotal;
     }

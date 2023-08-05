@@ -27,6 +27,7 @@ public class WallStartController : DragaliaControllerBase
     private readonly ILogger<WallStartController> logger;
     private readonly IUpdateDataService updateDataService;
     private readonly IOddsInfoService oddsInfoService;
+    private readonly IWallService wallService;
     private readonly IDungeonStartService dungeonStartService;
 
     public WallStartController(
@@ -34,6 +35,7 @@ public class WallStartController : DragaliaControllerBase
         ILogger<WallStartController> logger,
         IUpdateDataService updateDataService,
         IOddsInfoService oddsInfoService,
+        IWallService wallService,
         IDungeonStartService dungeonStartService
     )
     {
@@ -41,14 +43,17 @@ public class WallStartController : DragaliaControllerBase
         this.logger = logger;
         this.updateDataService = updateDataService;
         this.oddsInfoService = oddsInfoService;
-        //this.wallService = wallService;
+        this.wallService = wallService;
         this.dungeonStartService = dungeonStartService;
     }
 
-    
+    // Called when starting a Mercurial Gauntlet quest
     [HttpPost("start")]
     public async Task<DragaliaResult> Start(WallStartStartRequest request)
     {
+        // Set flag for having played the next level
+        await wallService.SetQuestWallIsStartNextLevel(request.wall_id, true);
+
         QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(request.wall_id, request.wall_level);
 
         IngameData ingameData = await this.dungeonStartService.GetIngameData(
@@ -82,7 +87,7 @@ public class WallStartController : DragaliaControllerBase
         return Ok(data);
     }
 
-    
+    // Called from the play next button from the MG clear screen
     [HttpPost("start_assign_unit")]
     public async Task<DragaliaResult> StartAssignUnit(WallStartStartAssignUnitRequest request)
     {

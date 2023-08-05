@@ -572,6 +572,9 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerUseItems.RemoveRange(
             this.apiContext.PlayerUseItems.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PlayerQuestWalls.RemoveRange(
+            this.apiContext.PlayerQuestWalls.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset()
@@ -602,6 +605,7 @@ public class SavefileService : ISavefileService
             .Include(x => x.WeaponSkinList)
             .Include(x => x.WeaponPassiveAbilityList)
             .Include(x => x.EquippedStampList)
+            .Include(x => x.QuestWalls)
             .AsSplitQuery();
     }
 
@@ -622,11 +626,13 @@ public class SavefileService : ISavefileService
         );
 
         DbPlayerUserData userData =
-            new(deviceAccountId) {
+            new(deviceAccountId)
+            {
 #if DEBUG
                 TutorialStatus = 10151,
 #endif
-                Crystal = 1_200_000 };
+                Crystal = 1_200_000
+            };
 
         apiContext.PlayerUserData.Add(userData);
         await this.AddDefaultParties(deviceAccountId);

@@ -4249,14 +4249,14 @@ public class AtgenUserWallRewardList
 {
     public int quest_group_id { get; set; }
     public int sum_wall_level { get; set; }
-    public int last_reward_date { get; set; }
-    public int reward_status { get; set; }
+    public DateTimeOffset last_reward_date { get; set; }
+    public RewardStatus reward_status { get; set; }
 
     public AtgenUserWallRewardList(
         int quest_group_id,
         int sum_wall_level,
-        int last_reward_date,
-        int reward_status
+        DateTimeOffset last_reward_date,
+        RewardStatus reward_status
     )
     {
         this.quest_group_id = quest_group_id;

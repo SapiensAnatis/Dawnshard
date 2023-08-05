@@ -40,7 +40,8 @@ public class WallRecordController : DragaliaControllerBase
         this.logger = logger;
     }
 
-
+    // Called upon completing a MG quest
+    // stub: handle drops from clearing lv80
     [HttpPost("record")]
     public async Task<DragaliaResult> Record(WallRecordRecordRequest request)
     {

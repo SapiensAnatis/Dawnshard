@@ -8,6 +8,8 @@ public interface IWallService
 {
     Task LevelupQuestWall(int wallId);
 
+    Task SetQuestWallIsStartNextLevel(int wallId, bool value);
+
     Task<IEnumerable<QuestWallList>> GetQuestWallList();
 
     Task<int> GetTotalWallLevel();
