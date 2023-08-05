@@ -441,6 +441,18 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
+            this.apiContext.PlayerSummonTickets.AddRange(
+                savefile.summon_ticket_list.MapWithDeviceAccount<DbSummonTicket>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbSummonTicket step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             if (savefile.user_data.emblem_id != Emblems.DragonbloodPrince)
             {
                 this.apiContext.Emblems.Add(
@@ -581,6 +593,9 @@ public class SavefileService : ISavefileService
         );
         this.apiContext.PlayerUseItems.RemoveRange(
             this.apiContext.PlayerUseItems.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.PlayerSummonTickets.RemoveRange(
+            this.apiContext.PlayerSummonTickets.Where(x => x.DeviceAccountId == deviceAccountId)
         );
         this.apiContext.Emblems.RemoveRange(
             this.apiContext.Emblems.Where(x => x.DeviceAccountId == deviceAccountId)
