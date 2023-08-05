@@ -22,6 +22,8 @@ namespace DragaliaAPI.Photon.Plugin
     /// </summary>
     public partial class GluonPlugin : PluginBase
     {
+        private const int DataEventDelayMs = 3000;
+
         private IPluginLogger logger;
         private PluginConfiguration config;
         private Random rdm;
@@ -237,6 +239,14 @@ namespace DragaliaAPI.Photon.Plugin
 
         private void OnFailQuestRequest(IRaiseEventCallInfo info)
         {
+            // Clear StartQuest so quests don't start instantly next time.
+            this.PluginHost.SetProperties(
+                info.ActorNr,
+                new Hashtable() { { ActorPropertyKeys.StartQuest, false }, },
+                null,
+                true
+            );
+
             FailQuestRequest request = info.DeserializeEvent<FailQuestRequest>();
 
             this.logger.DebugFormat(
@@ -429,7 +439,8 @@ namespace DragaliaAPI.Photon.Plugin
                         heroParams = heroParams.Take(memberCount).ToArray()
                     };
 
-                    this.RaiseEvent(Event.Codes.CharacterData, evt);
+                    void raiseEvent() => this.RaiseEvent(Event.Codes.CharacterData, evt);
+                    this.PluginHost.CreateOneTimeTimer(info, raiseEvent, DataEventDelayMs);
                 }
             }
         }
@@ -544,7 +555,8 @@ namespace DragaliaAPI.Photon.Plugin
                 ReBattleCount = this.config.ReplayTimeoutSeconds
             };
 
-            this.RaiseEvent(Event.Codes.Party, evt);
+            void raiseEvent() => this.RaiseEvent(Event.Codes.Party, evt);
+            this.PluginHost.CreateOneTimeTimer(info, raiseEvent, DataEventDelayMs);
         }
 
         /// <summary>
@@ -619,7 +631,8 @@ namespace DragaliaAPI.Photon.Plugin
                 new Hashtable()
                 {
                     { ActorPropertyKeys.HeroParam, null },
-                    { ActorPropertyKeys.HeroParamCount, null }
+                    { ActorPropertyKeys.HeroParamCount, null },
+                    { ActorPropertyKeys.StartQuest, null }
                 },
                 null,
                 false
