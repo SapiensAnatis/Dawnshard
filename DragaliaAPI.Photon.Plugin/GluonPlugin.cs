@@ -128,20 +128,7 @@ namespace DragaliaAPI.Photon.Plugin
             );
 #endif
 
-            base.OnLeave(info);
-
-            // It is not critical to update the Redis state, so don't crash the room if we can't find
-            // the actor or certain properties attached to them.
-            if (actor is null)
-            {
-                this.logger.InfoFormat(
-                    "OnLeave: could not find actor {0} -- GameLeave request aborted",
-                    info.ActorNr
-                );
-                return;
-            }
-
-            if (actor.IsHost())
+            if (info.ActorNr == 1)
             {
                 this.RaiseEvent(
                     Event.Codes.RoomBroken,
@@ -153,6 +140,19 @@ namespace DragaliaAPI.Photon.Plugin
                 this.PluginHost.SetGameState(
                     new SerializableGameState() { IsOpen = false, IsVisible = false }
                 );
+            }
+
+            base.OnLeave(info);
+
+            // It is not critical to update the Redis state, so don't crash the room if we can't find
+            // the actor or certain properties attached to them.
+            if (actor is null)
+            {
+                this.logger.InfoFormat(
+                    "OnLeave: could not find actor {0} -- GameLeave request aborted",
+                    info.ActorNr
+                );
+                return;
             }
 
             if (
