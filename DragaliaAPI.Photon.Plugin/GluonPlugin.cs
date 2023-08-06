@@ -58,7 +58,6 @@ namespace DragaliaAPI.Photon.Plugin
             info.Request.ActorProperties.InitializeViewerId();
 
             info.Request.GameProperties.Add(GamePropertyKeys.RoomId, rdm.Next(100_0000, 999_9999));
-            info.Request.GameProperties.Add(GamePropertyKeys.GoToIngameState, 0);
 
 #if DEBUG
             this.logger.DebugFormat(
@@ -241,12 +240,20 @@ namespace DragaliaAPI.Photon.Plugin
 
         private void OnFailQuestRequest(IRaiseEventCallInfo info)
         {
+            this.minGoToIngameState = 0;
+
             // Clear StartQuest so quests don't start instantly next time.
+            // Also clear same HeroParam properties that cause serialization issues.
             this.PluginHost.SetProperties(
                 info.ActorNr,
-                new Hashtable() { { ActorPropertyKeys.StartQuest, false }, },
+                new Hashtable()
+                {
+                    { ActorPropertyKeys.HeroParam, null },
+                    { ActorPropertyKeys.HeroParamCount, null },
+                    { ActorPropertyKeys.StartQuest, false },
+                },
                 null,
-                true
+                false
             );
 
             FailQuestRequest request = info.DeserializeEvent<FailQuestRequest>();
@@ -627,6 +634,8 @@ namespace DragaliaAPI.Photon.Plugin
 
         private void OnClearQuestRequest(IRaiseEventCallInfo info)
         {
+            this.minGoToIngameState = 0;
+
             // These properties must be set for the client to successfully rejoin the room.
             this.PluginHost.SetProperties(
                 0,
