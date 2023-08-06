@@ -26,6 +26,11 @@ public class QuestReverseMapProfile : Profile
             .ForMember(x => x.State, o => o.MapFrom(src => src.is_read))
             .ForMember(x => x.StoryType, o => o.MapFrom(src => StoryTypes.Castle));
 
+        this.CreateMap<DmodeStoryList, DbPlayerStoryState>()
+            .ForMember(x => x.StoryId, o => o.MapFrom(src => src.dmode_story_id))
+            .ForMember(x => x.State, o => o.MapFrom(src => src.is_read))
+            .ForMember(x => x.StoryType, o => o.MapFrom(src => StoryTypes.DungeonMode));
+
         this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
         this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;
     }

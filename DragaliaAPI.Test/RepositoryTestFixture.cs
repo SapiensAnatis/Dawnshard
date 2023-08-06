@@ -32,9 +32,11 @@ public class RepositoryTestFixture : IDisposable
             .Options;
 
         this.ApiContext = new ApiContext(options);
-        Mock<ILogger<SavefileService>> mockLogger = new(MockBehavior.Loose);
         // Unused for creating saves
+        Mock<ILogger<SavefileService>> mockLogger = new(MockBehavior.Loose);
         Mock<IDistributedCache> mockCache = new(MockBehavior.Loose);
+        // Used but we probably don't want it to actually add characters?
+        Mock<IUnitRepository> mockUnitRepository = new(MockBehavior.Loose);
 
         SavefileService savefileService =
             new(
@@ -45,7 +47,8 @@ public class RepositoryTestFixture : IDisposable
                 ).CreateMapper(),
                 mockLogger.Object,
                 IdentityTestUtils.MockPlayerDetailsService.Object,
-                Enumerable.Empty<ISavefileUpdate>()
+                Enumerable.Empty<ISavefileUpdate>(),
+                mockUnitRepository.Object
             );
         savefileService.Create().Wait();
 

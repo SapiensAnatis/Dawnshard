@@ -1,12 +1,16 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dmode;
+using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.Item;
+using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Test.Utils;
-using MockQueryable.Moq;
 
 namespace DragaliaAPI.Test.Features.Shop;
 
@@ -15,15 +19,28 @@ public class PaymentServiceTest
     private readonly PaymentService paymentService;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
+    private readonly Mock<IEventRepository> mockEventRepository;
+    private readonly Mock<IDmodeRepository> mockDmodeRepository;
+    private readonly Mock<IItemRepository> mockItemRepository;
+    private readonly Mock<ITicketRepository> mockTicketRepository;
 
     public PaymentServiceTest()
     {
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockInventoryRepository = new(MockBehavior.Strict);
+        this.mockEventRepository = new(MockBehavior.Strict);
+        this.mockDmodeRepository = new(MockBehavior.Strict);
+        this.mockItemRepository = new(MockBehavior.Strict);
+        this.mockTicketRepository = new(MockBehavior.Strict);
+
         this.paymentService = new(
             LoggerTestUtils.Create<PaymentService>(),
             mockUserDataRepository.Object,
-            mockInventoryRepository.Object
+            mockInventoryRepository.Object,
+            mockEventRepository.Object,
+            mockDmodeRepository.Object,
+            mockItemRepository.Object,
+            mockTicketRepository.Object
         );
     }
 

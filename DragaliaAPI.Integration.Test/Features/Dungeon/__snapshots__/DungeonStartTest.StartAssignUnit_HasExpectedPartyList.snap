@@ -96,7 +96,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "Draupnir",
       "buildup_count": 90,
@@ -308,7 +310,9 @@
       "attack_plus_count": 50,
       "status_plus_count": 0
     },
-    "weapon_skin_data": null,
+    "weapon_skin_data": {
+      "weapon_skin_id": 0
+    },
     "weapon_body_data": {
       "weapon_body_id": "Mjoelnir",
       "buildup_count": 80,
@@ -412,8 +416,14 @@
       "is_lock": true,
       "gettime": "2021-12-27T10:29:11+00:00"
     },
-    "edit_skill_1_chara_data": null,
-    "edit_skill_2_chara_data": null,
+    "edit_skill_1_chara_data": {
+      "chara_id": 0,
+      "edit_skill_level": 0
+    },
+    "edit_skill_2_chara_data": {
+      "chara_id": 0,
+      "edit_skill_level": 0
+    },
     "game_weapon_passive_ability_list": [],
     "dragon_reliability_level": 30
   }

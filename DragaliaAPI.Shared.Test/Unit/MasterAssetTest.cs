@@ -64,6 +64,8 @@ public class MasterAssetTest
                     AwakeNeedEntityType5: EntityTypes.Dew,
                     AwakeNeedEntityId5: 0,
                     AwakeNeedEntityQuantity5: 25000,
+                    GrowMaterialOnlyStartDate: DateTimeOffset.UnixEpoch,
+                    GrowMaterialOnlyEndDate: DateTimeOffset.UnixEpoch,
                     UniqueGrowMaterialId1: Materials.GalaLaxisConviction,
                     UniqueGrowMaterialId2: Materials.GalaLaxisDevotion,
                     GrowMaterialId: Materials.Empty,
@@ -105,6 +107,7 @@ public class MasterAssetTest
                     UniqueGrowMaterialCount2: 0,
                     GrowMaterialCount: 1,
                     MC_0: 4032,
+                    Step: 1,
                     ManaCircleName: "MC_0403"
                 )
             );
@@ -212,6 +215,7 @@ public class MasterAssetTest
                     UniqueGrowMaterialCount2: 0,
                     GrowMaterialCount: 1,
                     MC_0: 5045,
+                    Step: 3,
                     ManaCircleName: "MC_0504"
                 )
             );
@@ -232,8 +236,11 @@ public class MasterAssetTest
                     LimitedElementalType: 0,
                     LimitedElementalType2: 0,
                     LimitedWeaponTypePatternId: 0,
+                    IsPayForceStaminaSingle: false,
                     PayStaminaSingle: 2,
+                    CampaignStaminaSingle: 1,
                     PayStaminaMulti: 1,
+                    CampaignStaminaMulti: 1,
                     DungeonType: DungeonTypes.Normal,
                     VariationType: VariationTypes.Normal,
                     Scene01: "Main/01/MAIN_01_0101_01",
@@ -250,7 +257,15 @@ public class MasterAssetTest
                     AreaName06: "",
                     ContinueLimit: 3,
                     RebornLimit: 3,
-                    Difficulty: 500
+                    Difficulty: 500,
+                    PayEntityTargetType: PayTargetType.None,
+                    PayEntityType: 0,
+                    PayEntityId: 0,
+                    PayEntityQuantity: 0,
+                    HoldEntityType: EntityTypes.None,
+                    HoldEntityId: 0,
+                    HoldEntityQuantity: 0,
+                    IsSumUpTotalDamage: false
                 )
             );
 
@@ -680,7 +695,13 @@ public class MasterAssetTest
                     UniqueBuildupMaterialId: Materials.GeniusoftheCenturysMemory,
                     DuplicateEntityId: Materials.GeniusoftheCenturysMemory,
                     DuplicateEntityQuantity: 6,
-                    DuplicateEntityType: EntityTypes.Material
+                    DuplicateEntityType: EntityTypes.Material,
+                    Abilities11: 2338,
+                    Abilities12: 2339,
+                    Abilities13: 2340,
+                    Abilities21: 0,
+                    Abilities22: 0,
+                    Abilities23: 0
                 )
             );
     }
@@ -718,5 +739,26 @@ public class MasterAssetTest
             .BeEquivalentTo(
                 new Dictionary<Materials, int>() { { Materials.GeniusoftheCenturysMemory, 6 } }
             );
+    }
+
+    [Fact]
+    public void AbilityCrest_GetAbilities_ReturnsExpected()
+    {
+        AbilityCrest crest = MasterAsset.MasterAsset.AbilityCrest[AbilityCrests.TotheExtreme];
+
+        crest
+            .GetAbilities(1)
+            .Should()
+            .BeEquivalentTo(new List<int>() { crest.Abilities11, crest.Abilities21 });
+
+        crest
+            .GetAbilities(2)
+            .Should()
+            .BeEquivalentTo(new List<int>() { crest.Abilities12, crest.Abilities22 });
+
+        crest
+            .GetAbilities(3)
+            .Should()
+            .BeEquivalentTo(new List<int>() { crest.Abilities13, crest.Abilities23 });
     }
 }

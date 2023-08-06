@@ -1,4 +1,7 @@
-﻿using DragaliaAPI.Features.Reward;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -9,29 +12,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Shop;
 
-public class ShopService : IShopService
+public class ShopService(
+    IShopRepository shopRepository,
+    IPaymentService paymentService,
+    IRewardService rewardService,
+    ILogger<ShopService> logger,
+    IResetHelper resetHelper,
+    IUserService userService,
+    IUserDataRepository userDataRepository
+) : IShopService
 {
-    private readonly IShopRepository shopRepository;
-    private readonly IPaymentService paymentService;
-    private readonly IRewardService rewardService;
-    private readonly ILogger<ShopService> logger;
-    private readonly IResetHelper resetHelper;
-
-    public ShopService(
-        IShopRepository shopRepository,
-        IPaymentService paymentService,
-        IRewardService rewardService,
-        ILogger<ShopService> logger,
-        IResetHelper resetHelper
-    )
-    {
-        this.shopRepository = shopRepository;
-        this.paymentService = paymentService;
-        this.rewardService = rewardService;
-        this.logger = logger;
-        this.resetHelper = resetHelper;
-    }
-
     public async Task<IEnumerable<ShopPurchaseList>> DoPurchase(
         ShopType shopType,
         PaymentTypes paymentType,
@@ -52,14 +42,36 @@ public class ShopService : IShopService
 
         IShop shop = Shop.From(shopType, goodsId);
 
-        if (shop.PaymentType != paymentType)
-            throw new DragaliaException(ResultCode.ShopPaymentTypeInvalid, "Payment type mismatch");
-
+        PaymentTypes shopPaymentType = shop.PaymentType;
         int price = shop.NeedCost * goodsQuantity;
+
         if (price < 0)
             throw new DragaliaException(ResultCode.CommonDataValidationError, "Price overflow");
 
-        await this.paymentService.ProcessPayment(paymentType, expectedPrice: price);
+        if (shopPaymentType == PaymentTypes.Other)
+        {
+            // TODO?: Only single stamina refills use the PriceChangeData (which should be used in this case)
+            shopPaymentType = PaymentTypes.Wyrmite;
+            price = 30;
+        }
+
+        if (shopPaymentType != PaymentTypes.DiamantiumOrWyrmite && shopPaymentType != paymentType)
+        {
+            throw new DragaliaException(ResultCode.ShopPaymentTypeInvalid, "Payment type mismatch");
+        }
+
+        if (
+            shopPaymentType == PaymentTypes.DiamantiumOrWyrmite
+            && paymentType is not (PaymentTypes.Wyrmite or PaymentTypes.Diamantium)
+        )
+        {
+            throw new DragaliaException(
+                ResultCode.ShopPaymentTypeInvalid,
+                "Invalid payment type, needs to be either Wyrmite or Diamantium"
+            );
+        }
+
+        await paymentService.ProcessPayment(paymentType, expectedPrice: price);
 
         foreach (
             (
@@ -72,41 +84,42 @@ public class ShopService : IShopService
         {
             if (type != EntityTypes.None)
             {
-                await this.rewardService.GrantReward(
+                await rewardService.GrantReward(
                     new Entity(type, id, quantity * goodsQuantity, limitBreakCount)
                 );
             }
         }
 
         // Now shop specific behavior
-        if (shopType is ShopType.Normal or ShopType.Special)
-        {
-            throw new NotImplementedException("Normal or Special shop");
+        if (shopType is ShopType.Special)
+            throw new NotImplementedException("We dont take Diamantium nor real money");
 
+        if (shopType is ShopType.Normal)
+        {
             NormalShop normalShop = (NormalShop)shop;
-            if (normalShop.BonusGoodsType != 0)
+
+            if (normalShop.AddMaxDragonQuantity != 0)
             {
-                logger.LogWarning(
-                    "Tried to purchase shop item with bonus goods -- these are not yet supported."
-                );
-                throw new NotImplementedException("BonusGoodsType != 0 (NormalShop)");
+                DbPlayerUserData userData = await userDataRepository.GetUserDataAsync();
+                userData.MaxDragonQuantity += normalShop.AddMaxDragonQuantity;
             }
 
-            if (normalShop.AddMaxDragonQuantity != 0) { }
-            // TODO
+            if (normalShop.StaminaSingleCount != 0)
+            {
+                await userService.AddStamina(StaminaType.Single, normalShop.StaminaSingleCount);
+            }
 
-            if (normalShop.StaminaSingleCount != 0) { }
-            // TODO
-
-            if (normalShop.StaminaMultiCount != 0) { }
-            // TODO
+            if (normalShop.StaminaMultiCount != 0)
+            {
+                await userService.AddStamina(StaminaType.Multi, normalShop.StaminaMultiCount);
+            }
         }
 
         DateTimeOffset purchaseTime = DateTimeOffset.UtcNow;
 
         (DateTimeOffset startTime, DateTimeOffset endTime) = GetEffectTimes(shopType);
 
-        bool newlyAdded = await this.shopRepository.AddShopPurchase(
+        bool newlyAdded = await shopRepository.AddShopPurchase(
             shopType,
             goodsId,
             goodsQuantity,
@@ -118,7 +131,7 @@ public class ShopService : IShopService
         PurchaseShopType purchaseType = shopType.ToPurchaseShopType();
 
         List<ShopPurchaseList> currentPurchases = (
-            await this.shopRepository.Purchases.Where(x => x.ShopType == purchaseType).ToListAsync()
+            await shopRepository.Purchases.Where(x => x.ShopType == purchaseType).ToListAsync()
         )
             .Select(
                 x =>
@@ -144,9 +157,9 @@ public class ShopService : IShopService
 
     public async Task<ILookup<PurchaseShopType, ShopPurchaseList>> GetPurchases()
     {
-        await this.shopRepository.ClearExpiredShopPurchases();
+        await shopRepository.ClearExpiredShopPurchases();
 
-        return (await this.shopRepository.Purchases.ToListAsync()).ToLookup(
+        return (await shopRepository.Purchases.ToListAsync()).ToLookup(
             x => x.ShopType,
             x =>
                 new ShopPurchaseList(
@@ -165,18 +178,18 @@ public class ShopService : IShopService
         {
             ShopType.MaterialDaily
                 => (
-                    this.resetHelper.LastDailyReset,
-                    this.resetHelper.LastDailyReset.AddDays(1).AddSeconds(-1)
+                    resetHelper.LastDailyReset,
+                    resetHelper.LastDailyReset.AddDays(1).AddSeconds(-1)
                 ),
             ShopType.MaterialWeekly
                 => (
-                    this.resetHelper.LastWeeklyReset,
-                    this.resetHelper.LastWeeklyReset.AddDays(7).AddSeconds(-1)
+                    resetHelper.LastWeeklyReset,
+                    resetHelper.LastWeeklyReset.AddDays(7).AddSeconds(-1)
                 ),
             ShopType.MaterialMonthly
                 => (
-                    this.resetHelper.LastMonthlyReset,
-                    this.resetHelper.LastMonthlyReset.AddMonths(1).AddSeconds(-1)
+                    resetHelper.LastMonthlyReset,
+                    resetHelper.LastMonthlyReset.AddMonths(1).AddSeconds(-1)
                 ),
             ShopType.Normal
             or ShopType.Special

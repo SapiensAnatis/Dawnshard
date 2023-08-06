@@ -1,4 +1,7 @@
-﻿//#define CHEATING
+﻿// #define CHEATS
+#if CHEATS && DEBUG
+#define CHEATING
+#endif
 
 using System.Collections.Immutable;
 using DragaliaAPI.Database.Repositories;
@@ -7,44 +10,32 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace DragaliaAPI.Services.Game;
 
 /// <summary>
 /// Service for fort, weapon, and album bonuses
 /// </summary>
-#if CHEATING
-#warning Cheats are enabled
-#endif
-public class BonusService : IBonusService
+public class BonusService(
+    IFortRepository fortRepository,
+    IWeaponRepository weaponRepository,
+    ILogger<BonusService> logger
+) : IBonusService
 {
-    private readonly IFortRepository fortRepository;
-    private readonly IWeaponRepository weaponRepository;
-    private readonly IPlayerIdentityService playerIdentityService;
-
-    public BonusService(
-        IFortRepository fortRepository,
-        IWeaponRepository weaponRepository,
-        IPlayerIdentityService playerIdentityService
-    )
-    {
-        this.fortRepository = fortRepository;
-        this.weaponRepository = weaponRepository;
-        this.playerIdentityService = playerIdentityService;
-    }
-
     public async Task<FortBonusList> GetBonusList()
     {
         IEnumerable<int> buildIds = (
-            await this.fortRepository.Builds
+            await fortRepository.Builds
                 .Where(x => x.Level != 0)
                 .Select(x => new { x.PlantId, x.Level })
                 .ToListAsync()
         ).Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level));
 
-        IEnumerable<WeaponBodies> weaponIds = await this.weaponRepository.WeaponBodies
+        IEnumerable<WeaponBodies> weaponIds = await weaponRepository.WeaponBodies
             .Where(x => x.FortPassiveCharaWeaponBuildupCount != 0)
             .Select(x => x.WeaponBodyId)
             .ToListAsync();
@@ -72,6 +63,37 @@ public class BonusService : IBonusService
                 hp = 100
 #endif
             },
+        };
+    }
+
+    public async Task<AtgenEventBoost?> GetEventBoost(int eventId)
+    {
+        if (
+            !MasterAsset.EventData.TryGetValue(eventId, out EventData? eventData)
+            || eventData.EventFortId == 0
+        )
+        {
+            logger.LogDebug("No event facility found for eventId {eventId}", eventId);
+            return null;
+        }
+
+        int level = await fortRepository.Builds
+            .Where(x => x.PlantId == eventData.EventFortId)
+            .Select(x => x.Level)
+            .SingleOrDefaultAsync();
+
+        if (level == 0)
+        {
+            logger.LogDebug("Player did not own event facility {facility}", eventData.EventFortId);
+            return null;
+        }
+
+        FortPlantDetail detail = MasterAssetUtils.GetFortPlant(eventData.EventFortId, level);
+
+        return new AtgenEventBoost()
+        {
+            event_effect = detail.EventEffectType,
+            effect_value = detail.EventEffectArgs
         };
     }
 

@@ -19,16 +19,16 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class SummonController : DragaliaControllerBase
+public class SummonController(
+    IUserDataRepository userDataRepository,
+    IUnitRepository unitRepository,
+    IUpdateDataService updateDataService,
+    IMapper mapper,
+    ISummonRepository summonRepository,
+    ISummonService summonService,
+    IPaymentService paymentService
+) : DragaliaControllerBase
 {
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IUnitRepository unitRepository;
-    private readonly IUpdateDataService updateDataService;
-    private readonly IMapper mapper;
-    private readonly ISummonRepository summonRepository;
-    private readonly ISummonService summonService;
-    private readonly IPaymentService paymentService;
-
     // Repeated from RedoableSummonController, but no point putting this in a shared location
     // as it's all bullshit anyway
     private static class Data
@@ -131,25 +131,6 @@ public class SummonController : DragaliaControllerBase
             );
     }
 
-    public SummonController(
-        IUserDataRepository userDataRepository,
-        IUnitRepository unitRepository,
-        IUpdateDataService updateDataService,
-        IMapper mapper,
-        ISummonRepository summonRepository,
-        ISummonService summonService,
-        IPaymentService paymentService
-    )
-    {
-        this.userDataRepository = userDataRepository;
-        this.unitRepository = unitRepository;
-        this.updateDataService = updateDataService;
-        this.mapper = mapper;
-        this.summonRepository = summonRepository;
-        this.summonService = summonService;
-        this.paymentService = paymentService;
-    }
-
     /// <summary>
     /// Returns excluded/excludable units for special banners
     /// </summary>
@@ -161,7 +142,7 @@ public class SummonController : DragaliaControllerBase
     public async Task<DragaliaResult> SummonExcludeGetList(SummonExcludeGetListRequest request)
     {
         int bannerId = request.summon_id;
-        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync();
         //TODO Replace DummyData with real exludes from BannerInfo
         List<AtgenDuplicateEntityList> excludableList = new();
         foreach (Charas c in Enum.GetValues<Charas>())
@@ -181,7 +162,7 @@ public class SummonController : DragaliaControllerBase
     public async Task<DragaliaResult> GetOddsData(SummonGetOddsDataRequest request)
     {
         int bannerId = request.summon_id;
-        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync();
         //TODO Replace Dummy data with oddscalculation
 
         return this.Ok(
@@ -209,6 +190,7 @@ public class SummonController : DragaliaControllerBase
     [Route("get_summon_list")]
     public DragaliaResult GetSummonList()
     {
+        // TODO: Add tickets into this when refactoring
         return Ok(Data.SummonListData);
     }
 
@@ -217,11 +199,9 @@ public class SummonController : DragaliaControllerBase
     public async Task<DragaliaResult> GetSummonPointTrade(SummonGetSummonPointTradeRequest request)
     {
         int bannerId = request.summon_id;
-        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync();
         //TODO maybe throw BadRequest on bad banner id, for now generate empty data if not exists
-        DbPlayerBannerData playerBannerData = await this.summonRepository.GetPlayerBannerData(
-            bannerId
-        );
+        DbPlayerBannerData playerBannerData = await summonRepository.GetPlayerBannerData(bannerId);
         //TODO get real list from persisted BannerInfo or dynamic List from Db, dunno yet
         List<AtgenSummonPointTradeList> tradableUnits =
             new()
@@ -277,11 +257,11 @@ public class SummonController : DragaliaControllerBase
 
         DateTimeOffset summonDate = DateTimeOffset.UtcNow;
 
-        DbPlayerBannerData playerBannerData = await this.summonRepository.GetPlayerBannerData(
+        DbPlayerBannerData playerBannerData = await summonRepository.GetPlayerBannerData(
             bannerData.summon_id
         );
 
-        DbPlayerUserData userData = await this.userDataRepository.UserData.FirstAsync();
+        DbPlayerUserData userData = await userDataRepository.UserData.FirstAsync();
 
         int numSummons =
             summonRequest.exec_type == SummonExecTypes.Tenfold
@@ -327,7 +307,7 @@ public class SummonController : DragaliaControllerBase
                 );
         }
 
-        await this.paymentService.ProcessPayment(
+        await paymentService.ProcessPayment(
             summonRequest.payment_type,
             summonRequest.payment_target,
             paymentCost
@@ -346,7 +326,7 @@ public class SummonController : DragaliaControllerBase
         int countOfRare4 = 0;
 
         List<Dragons> newDragons = (
-            await this.unitRepository.AddDragons(
+            await unitRepository.AddDragons(
                 summonResult
                     .Where(x => x.entity_type == EntityTypes.Dragon)
                     .Select(x => (Dragons)x.id)
@@ -357,7 +337,7 @@ public class SummonController : DragaliaControllerBase
             .ToList();
 
         List<Charas> newCharas = (
-            await this.unitRepository.AddCharas(
+            await unitRepository.AddCharas(
                 summonResult
                     .Where(x => x.entity_type == EntityTypes.Chara)
                     .Select(x => (Charas)x.id)
@@ -480,7 +460,7 @@ public class SummonController : DragaliaControllerBase
             }
         }
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         var response = new SummonRequestData(
             returnedResult,

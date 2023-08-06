@@ -23,7 +23,7 @@ public class HeroParamTest : TestFixture
     [Fact]
     public async Task HeroParam_ReturnsData()
     {
-        await this.ImportSave();
+        this.ImportSave();
 
         HttpResponseMessage httpResponse = await this.Client.GetAsync("/heroparam/1/1");
 
@@ -45,16 +45,5 @@ public class HeroParamTest : TestFixture
                 x.editSkillLv1.Should().Be(0);
                 x.editSkillLv2.Should().Be(0);
             });
-    }
-
-    private async Task ImportSave()
-    {
-        Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
-        this.Client.DefaultRequestHeaders.Add("Authorization", $"Bearer supersecrettoken");
-        string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
-        await this.Client.PostAsync(
-            "/savefile/import/1",
-            new StringContent(savefileJson, Encoding.UTF8, "application/json")
-        );
     }
 }

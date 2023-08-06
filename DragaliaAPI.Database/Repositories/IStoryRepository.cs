@@ -17,6 +17,8 @@ public interface IStoryRepository
     IQueryable<DbPlayerStoryState> QuestStories { get; }
     IQueryable<DbPlayerStoryState> UnitStories { get; }
 
+    IQueryable<DbPlayerStoryState> DmodeStories { get; }
+
     Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId);
 
     Task<bool> HasReadQuestStory(int storyId);

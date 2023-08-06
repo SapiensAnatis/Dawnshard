@@ -384,6 +384,59 @@ public class StoryServiceTest
         this.mockStoryRepository.VerifyAll();
     }
 
+    [Fact]
+    public async Task ReadQuestStory_EventGuestUnlocked_GrantsCharacterReward()
+    {
+        int storyId = 2042704; // Fractured Futures compendium -- Audric join story
+
+        this.mockStoryRepository
+            .Setup(x => x.GetOrCreateStory(StoryTypes.Quest, storyId))
+            .ReturnsAsync(
+                new DbPlayerStoryState()
+                {
+                    DeviceAccountId = string.Empty,
+                    State = StoryState.Unlocked
+                }
+            );
+
+        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(storyId));
+
+        this.mockUserDataRepository.Setup(x => x.GiveWyrmite(25)).Returns(Task.CompletedTask);
+        this.mockTutorialService
+            .Setup(x => x.OnStoryQuestRead(storyId))
+            .Returns(Task.CompletedTask);
+
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        It.Is<Entity>(
+                            y => y.Type == EntityTypes.Chara && y.Id == (int)Charas.Audric
+                        )
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
+
+        (await this.storyService.ReadStory(StoryTypes.Quest, storyId))
+            .Should()
+            .BeEquivalentTo(
+                new List<AtgenBuildEventRewardEntityList>()
+                {
+                    new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 25 },
+                    new()
+                    {
+                        entity_type = EntityTypes.Chara,
+                        entity_id = (int)Charas.Audric,
+                        entity_quantity = 1,
+                    }
+                }
+            );
+
+        this.mockUserDataRepository.VerifyAll();
+        this.mockStoryRepository.VerifyAll();
+        this.mockRewardService.VerifyAll();
+    }
+
     private class UnitStoryTheoryData : TheoryData<DbPlayerStoryState, int>
     {
         public UnitStoryTheoryData()

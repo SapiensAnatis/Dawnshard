@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
+﻿using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Dungeon;
 

@@ -38,6 +38,11 @@ public static class Schema
                                 .Include(x => x.WeaponSkinList)
                                 .Include(x => x.EquippedStampList)
                                 .Include(x => x.ShopInfo)
+                                .Include(x => x.DmodeCharas)
+                                .Include(x => x.DmodeDungeon)
+                                .Include(x => x.DmodeExpedition)
+                                .Include(x => x.DmodeInfo)
+                                .Include(x => x.DmodeServitorPassives)
                                 .AsSplitQuery()
                                 .First(
                                     x => x.UserData != null && x.UserData.ViewerId == args.viewerId

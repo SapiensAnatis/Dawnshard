@@ -61,10 +61,6 @@ public class QuestRepository : IQuestRepository
 
         questData.State = 3;
 
-        // TODO: need to track actual completion of missions in DungeonRecordController
-        questData.IsMissionClear1 = true;
-        questData.IsMissionClear2 = true;
-        questData.IsMissionClear3 = true;
         questData.PlayCount++;
         questData.DailyPlayCount++;
         questData.WeeklyPlayCount++;
