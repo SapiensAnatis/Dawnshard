@@ -37,11 +37,10 @@ namespace DragaliaAPI.Photon.Plugin
                 { 254, 0 } // Server actor number
             };
 
-            this.logger.DebugFormat(
-                "Raising event 0x{0} with data {1}",
-                eventCode.ToString("X"),
-                JsonConvert.SerializeObject(eventData)
-            );
+            this.logger.InfoFormat("Raising event 0x{0}", eventCode.ToString("X"));
+#if DEBUG
+            this.logger.DebugFormat("Event data: {0}", JsonConvert.SerializeObject(eventData));
+#endif
 
             if (target is null)
             {
@@ -49,7 +48,7 @@ namespace DragaliaAPI.Photon.Plugin
             }
             else
             {
-                this.logger.DebugFormat("Event will target actor {0}", target);
+                this.logger.InfoFormat("Event will target actor {0}", target);
                 this.PluginHost.BroadcastEvent(
                     new List<int>() { target.Value },
                     0,

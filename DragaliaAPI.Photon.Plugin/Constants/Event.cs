@@ -34,6 +34,8 @@ namespace DragaliaAPI.Photon.Plugin.Constants
 
             public const int FailQuestResponse = 0x44;
 
+            public const int Dead = 0x48;
+
             public const int SuccessiveGameTimer = 0x53;
         }
 
