@@ -31,7 +31,5 @@ namespace DragaliaAPI.Photon.Plugin.Constants
         public const string HeroParamCount = "PLUGIN_HeroParamCount";
 
         public const string MemberCount = "PLUGIN_MemberCount";
-
-        public const string FailQuest = "PLUGIN_FailQuest";
     }
 }

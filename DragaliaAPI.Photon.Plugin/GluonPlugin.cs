@@ -22,12 +22,10 @@ namespace DragaliaAPI.Photon.Plugin
     /// </summary>
     public partial class GluonPlugin : PluginBase
     {
-        private const int DataEventDelayMs = 3000;
-
         private IPluginLogger logger;
         private PluginConfiguration config;
         private Random rdm;
-        private int minGoToIngameState;
+        private int minGoToIngameState = 0;
 
         private static readonly MessagePackSerializerOptions MessagePackOptions =
             MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block);
@@ -139,10 +137,6 @@ namespace DragaliaAPI.Photon.Plugin
                 );
 
                 this.SetRoomVisibility(info, false);
-
-                this.PluginHost.SetGameState(
-                    new SerializableGameState() { IsOpen = false, IsVisible = false }
-                );
             }
 
             base.OnLeave(info);
