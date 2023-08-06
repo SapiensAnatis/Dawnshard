@@ -1,4 +1,7 @@
-﻿//#define CHEATING
+﻿// #define CHEATS
+#if CHEATS && DEBUG
+#define CHEATING
+#endif
 
 using System.Collections.Immutable;
 using DragaliaAPI.Database.Repositories;
@@ -17,9 +20,6 @@ namespace DragaliaAPI.Services.Game;
 /// <summary>
 /// Service for fort, weapon, and album bonuses
 /// </summary>
-#if CHEATING
-#warning Cheats are enabled
-#endif
 public class BonusService(
     IFortRepository fortRepository,
     IWeaponRepository weaponRepository,

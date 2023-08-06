@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace DragaliaAPI.Photon.Plugin.Constants
 {
+    /// <summary>
+    /// Actor property keys.
+    /// </summary>
+    /// <remarks>
+    /// The PLUGIN_ prefix denotes properties that are used for plugin logic and not by the game.
+    /// </remarks>
     public class ActorPropertyKeys
     {
         public const string PlayerId = "PlayerId";
@@ -16,14 +22,14 @@ namespace DragaliaAPI.Photon.Plugin.Constants
 
         public const string GoToIngameState = "GoToIngameState";
 
-        public const string StartQuest = "StartQuest";
+        public const string StartQuest = "PLUGIN_StartQuest";
 
-        public const string RemovedFromRedis = "RemovedFromRedis";
+        public const string RemovedFromRedis = "PLUGIN_RemovedFromRedis";
 
-        public const string HeroParam = "HeroParam";
+        public const string HeroParam = "PLUGIN_HeroParam";
 
-        public const string HeroParamCount = "HeroParamCount";
+        public const string HeroParamCount = "PLUGIN_HeroParamCount";
 
-        public const string MemberCount = "MemberCount";
+        public const string MemberCount = "PLUGIN_MemberCount";
     }
 }
