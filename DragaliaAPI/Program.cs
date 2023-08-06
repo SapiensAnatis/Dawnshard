@@ -1,11 +1,10 @@
 using System.Reflection;
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.ClearParty;
+using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.GraphQL;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
@@ -22,18 +21,20 @@ using DragaliaAPI.Services.Health;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
-using EntityGraphQL.AspNet;
-using EntityGraphQL.Schema;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Core;
-using Serilog.Events;
-using Serilog.Extensions.Logging;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Login;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.DmodeDungeon;
+using DragaliaAPI.Features.Emblem;
+using DragaliaAPI.Features.Item;
+using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Talisman;
+using DragaliaAPI.Features.Tickets;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -160,6 +161,7 @@ builder.Services
     .AddScoped<IResetHelper, ResetHelper>()
     .AddScoped<IDateTimeProvider, DateTimeProvider>()
     .AddScoped<ILoginBonusService, LoginBonusService>()
+    .AddScoped<ILoginBonusRepository, LoginBonusRepository>()
     // Dungeon Feature
     .AddScoped<IDungeonService, DungeonService>()
     .AddScoped<IDungeonStartService, DungeonStartService>()
@@ -167,9 +169,31 @@ builder.Services
     .AddScoped<IQuestDropService, QuestDropService>()
     .AddScoped<IQuestEnemyService, QuestEnemyService>()
     .AddScoped<IOddsInfoService, OddsInfoService>()
+    .AddScoped<IQuestCompletionService, QuestCompletionService>()
+    .AddScoped<IAbilityCrestMultiplierService, AbilityCrestMultiplierService>()
+    // Event Feature
+    .AddScoped<IEventRepository, EventRepository>()
+    .AddScoped<IEventService, EventService>()
+    .AddScoped<IEventDropService, EventDropService>()
     // Clear party feature
     .AddScoped<IClearPartyRepository, ClearPartyRepository>()
-    .AddScoped<IClearPartyService, ClearPartyService>();
+    .AddScoped<IClearPartyService, ClearPartyService>()
+    // Dmode feature
+    .AddScoped<IDmodeRepository, DmodeRepository>()
+    .AddScoped<IDmodeCacheService, DmodeCacheService>()
+    .AddScoped<IDmodeService, DmodeService>()
+    .AddScoped<IDmodeDungeonService, DmodeDungeonService>()
+    // Item feature
+    .AddScoped<IItemRepository, ItemRepository>()
+    .AddScoped<IItemService, ItemService>()
+    // User feature
+    .AddScoped<IUserService, UserService>()
+    // Talisman feature
+    .AddScoped<ITalismanService, TalismanService>()
+    // Tickets feature
+    .AddScoped<ITicketRepository, TicketRepository>()
+    // Emblem feature
+    .AddScoped<IEmblemRepository, EmblemRepository>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();
@@ -213,6 +237,8 @@ app.UseMiddleware<DailyResetMiddleware>();
 app.MapControllers();
 app.UseResponseCompression();
 app.MapHealthChecks("/health");
+
+app.UseStaticFiles();
 
 app.Run();
 

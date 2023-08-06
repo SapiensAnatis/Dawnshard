@@ -37,6 +37,9 @@ public class StoryRepository : IStoryRepository
     public IQueryable<DbPlayerStoryState> QuestStories =>
         this.Stories.Where(x => x.StoryType == StoryTypes.Quest);
 
+    public IQueryable<DbPlayerStoryState> DmodeStories =>
+        this.Stories.Where(x => x.StoryType == StoryTypes.DungeonMode);
+
     public async Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId)
     {
         DbPlayerStoryState? state = await apiContext.PlayerStoryState.FindAsync(
@@ -47,7 +50,7 @@ public class StoryRepository : IStoryRepository
 
         if (state is null)
         {
-            this.logger.LogInformation(
+            this.logger.LogDebug(
                 "Requested story id {id} with type {type} was not found, creating...",
                 storyId,
                 storyType

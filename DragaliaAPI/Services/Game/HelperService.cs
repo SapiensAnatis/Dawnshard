@@ -60,7 +60,7 @@ public class HelperService : IHelperService
                         name = "dreadfullydistinct",
                         level = 400,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 40000002,
+                        emblem_id = Emblems.TraitorousPrince,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -108,7 +108,7 @@ public class HelperService : IHelperService
                         name = "Nightmerp",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10250305,
+                        emblem_id = (Emblems)10250305,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -241,7 +241,7 @@ public class HelperService : IHelperService
                         name = "Alicia",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10150503,
+                        emblem_id = (Emblems)10150503,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -374,7 +374,7 @@ public class HelperService : IHelperService
                         name = "alkaemist",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10850503,
+                        emblem_id = (Emblems)10850503,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -507,7 +507,7 @@ public class HelperService : IHelperService
                         name = "QwerbyKing",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10850502,
+                        emblem_id = (Emblems)10850502,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -640,7 +640,7 @@ public class HelperService : IHelperService
                         name = "Zappypants",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10550103,
+                        emblem_id = (Emblems)10550103,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -773,7 +773,7 @@ public class HelperService : IHelperService
                         name = "stairs",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10550103,
+                        emblem_id = (Emblems)10550103,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -906,7 +906,7 @@ public class HelperService : IHelperService
                         name = "no",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10250302,
+                        emblem_id = (Emblems)10250302,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -1039,7 +1039,7 @@ public class HelperService : IHelperService
                         name = "Euden",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10850301,
+                        emblem_id = (Emblems)10850301,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -1172,7 +1172,7 @@ public class HelperService : IHelperService
                         name = "Euden",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10850301,
+                        emblem_id = (Emblems)10850301,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -1305,7 +1305,7 @@ public class HelperService : IHelperService
                         name = "Leon",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10850301,
+                        emblem_id = (Emblems)10850301,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -1438,7 +1438,7 @@ public class HelperService : IHelperService
                         name = "Crown",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10750201,
+                        emblem_id = (Emblems)10750201,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -1571,7 +1571,7 @@ public class HelperService : IHelperService
                         name = "Euden",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10150303,
+                        emblem_id = (Emblems)10150303,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -1704,7 +1704,7 @@ public class HelperService : IHelperService
                         name = "sockperson",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10350502,
+                        emblem_id = (Emblems)10350502,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -1837,7 +1837,7 @@ public class HelperService : IHelperService
                         name = "Delpolo",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10840402,
+                        emblem_id = (Emblems)10840402,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -1970,7 +1970,7 @@ public class HelperService : IHelperService
                         name = "Euden",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10850402,
+                        emblem_id = (Emblems)10850402,
                         max_party_power = 9999,
                         support_chara = new()
                         {
@@ -2103,7 +2103,7 @@ public class HelperService : IHelperService
                         name = "Nahxela",
                         level = 250,
                         last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-                        emblem_id = 10350303,
+                        emblem_id = (Emblems)10350303,
                         max_party_power = 9999,
                         support_chara = new()
                         {

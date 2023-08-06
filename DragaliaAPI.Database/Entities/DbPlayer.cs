@@ -77,5 +77,17 @@ public class DbPlayer
     public virtual ICollection<DbPlayerPresentHistory> PresentHistory { get; set; } =
         new List<DbPlayerPresentHistory>();
 
+    public virtual ICollection<DbPlayerDmodeChara> DmodeCharas { get; set; } =
+        new List<DbPlayerDmodeChara>();
+
+    public virtual DbPlayerDmodeDungeon? DmodeDungeon { get; set; }
+
+    public virtual DbPlayerDmodeExpedition? DmodeExpedition { get; set; }
+
+    public virtual DbPlayerDmodeInfo? DmodeInfo { get; set; }
+
+    public virtual ICollection<DbPlayerDmodeServitorPassive> DmodeServitorPassives { get; set; } =
+        new List<DbPlayerDmodeServitorPassive>();
+
     public virtual DbPlayerShopInfo? ShopInfo { get; set; }
 }

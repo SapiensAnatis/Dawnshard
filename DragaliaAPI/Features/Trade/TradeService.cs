@@ -1,6 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Reward;
+﻿using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -13,32 +11,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Trade;
 
-public class TradeService : ITradeService
+public class TradeService(
+    ITradeRepository tradeRepository,
+    IRewardService rewardService,
+    ILogger<TradeService> logger,
+    IPaymentService paymentService
+) : ITradeService
 {
-    private readonly ITradeRepository tradeRepository;
-    private readonly IRewardService rewardService;
-    private readonly ILogger<TradeService> logger;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IInventoryRepository inventoryRepository;
-    private readonly IPaymentService paymentService;
-
-    public TradeService(
-        ITradeRepository tradeRepository,
-        IRewardService rewardService,
-        ILogger<TradeService> logger,
-        IUserDataRepository userDataRepository,
-        IInventoryRepository inventoryRepository,
-        IPaymentService paymentService
-    )
-    {
-        this.tradeRepository = tradeRepository;
-        this.rewardService = rewardService;
-        this.logger = logger;
-        this.userDataRepository = userDataRepository;
-        this.inventoryRepository = inventoryRepository;
-        this.paymentService = paymentService;
-    }
-
     public IEnumerable<TreasureTradeList> GetCurrentTreasureTradeList()
     {
         DateTimeOffset current = DateTimeOffset.UtcNow;
@@ -95,9 +74,40 @@ public class TradeService : ITradeService
             );
     }
 
+    public IEnumerable<EventTradeList> GetEventTradeList(int tradeGroupId)
+    {
+        return MasterAsset.EventTreasureTrade.Enumerable
+            .Where(x => x.TradeGroupId == tradeGroupId)
+            .Select(
+                x =>
+                    new EventTradeList
+                    {
+                        event_trade_id = x.Id,
+                        trade_group_id = x.TradeGroupId,
+                        tab_group_id = x.TabGroupId,
+                        priority = x.Priority,
+                        is_lock_view = x.IsLockView,
+                        commence_date = x.CommenceDate,
+                        complete_date = x.CompleteDate,
+                        reset_type = x.ResetType,
+                        limit = x.Limit,
+                        destination_entity_type = x.DestinationEntityType,
+                        destination_entity_id = x.DestinationEntityId,
+                        destination_entity_quantity = x.DestinationEntityQuantity,
+                        need_entity_list = x.NeedEntities
+                            .Where(y => y.Type != EntityTypes.None)
+                            .Select(
+                                z => new AtgenBuildEventRewardEntityList(z.Type, z.Id, z.Quantity)
+                            ),
+                        read_story_count = 0,
+                        clear_target_quest_id = 0
+                    }
+            );
+    }
+
     public async Task<IEnumerable<AtgenUserEventTradeList>> GetUserEventTradeList()
     {
-        return await this.tradeRepository.Trades
+        return await tradeRepository.Trades
             .Where(x => x.Type == TradeType.Event)
             .Select(x => new AtgenUserEventTradeList(x.Id, x.Count))
             .ToListAsync();
@@ -105,7 +115,7 @@ public class TradeService : ITradeService
 
     public async Task<IEnumerable<UserAbilityCrestTradeList>> GetUserAbilityCrestTradeList()
     {
-        return await this.tradeRepository.Trades
+        return await tradeRepository.Trades
             .Where(x => x.Type == TradeType.AbilityCrest)
             .Select(x => new UserAbilityCrestTradeList(x.Id, x.Count))
             .ToListAsync();
@@ -113,53 +123,55 @@ public class TradeService : ITradeService
 
     public async Task<IEnumerable<UserTreasureTradeList>> GetUserTreasureTradeList()
     {
-        return (await this.tradeRepository.GetTradesByTypeAsync(TradeType.Treasure)).Select(
+        return (await tradeRepository.GetTradesByTypeAsync(TradeType.Treasure)).Select(
             x => new UserTreasureTradeList(x.Id, x.Count, x.LastTradeTime)
         );
     }
 
-    public async Task DoTreasureTrade(
+    public async Task DoTrade(
+        TradeType tradeType,
         int tradeId,
         int count,
-        IEnumerable<AtgenNeedUnitList>? needUnitList
+        IEnumerable<AtgenNeedUnitList>? needUnitList = null
     )
     {
-        logger.LogDebug("Processing {tradeQuantity}x treasure trade {tradeId}", count, tradeId);
+        logger.LogDebug(
+            "Processing {tradeQuantity}x {tradeId} of trade type {tradeType}",
+            count,
+            tradeId,
+            tradeType
+        );
 
-        TreasureTrade trade = MasterAsset.TreasureTrade[tradeId];
+        TreasureTrade trade = tradeType switch
+        {
+            TradeType.None
+                => throw new DragaliaException(
+                    ResultCode.CommonDataValidationError,
+                    "Invalid trade type none"
+                ),
+            TradeType.Treasure => MasterAsset.TreasureTrade[tradeId],
+            TradeType.Event => MasterAsset.EventTreasureTrade[tradeId],
+            TradeType.AbilityCrest
+                => throw new DragaliaException(
+                    ResultCode.CommonInvalidArgument,
+                    "Cannot process ability crest type in normal trade endpoint"
+                ),
+            _ => throw new DragaliaException(ResultCode.CommonInvalidArgument, "Invalid trade type")
+        };
 
-        foreach ((EntityTypes type, int id, int quantity, _) in trade.NeedEntities)
+        foreach (
+            (EntityTypes type, int id, int quantity, int limitBreakCount) in trade.NeedEntities
+        )
         {
             if (type == EntityTypes.None)
                 continue;
 
-            switch (type)
-            {
-                case EntityTypes.Material
-                or EntityTypes.FafnirMedal:
-                    await this.inventoryRepository.UpdateQuantity(
-                        (Materials)id,
-                        -(quantity * count)
-                    );
-                    break;
-                case EntityTypes.Mana:
-                    await this.paymentService.ProcessPayment(
-                        PaymentTypes.ManaPoint,
-                        expectedPrice: quantity
-                    );
-                    break;
-                case EntityTypes.DmodePoint:
-                    throw new NotImplementedException("DmodePoint treasure trade");
-                    break;
-                default:
-                    throw new DragaliaException(
-                        ResultCode.CommonDataValidationError,
-                        "Invalid EntityType in TreasureTrade"
-                    );
-            }
+            await paymentService.ProcessPayment(
+                new Entity(type, id, quantity * count, limitBreakCount)
+            );
         }
 
-        await this.rewardService.GrantReward(
+        await rewardService.GrantReward(
             new(
                 trade.DestinationEntityType,
                 trade.DestinationEntityId,
@@ -168,12 +180,7 @@ public class TradeService : ITradeService
             )
         );
 
-        await this.tradeRepository.AddTrade(
-            TradeType.Treasure,
-            tradeId,
-            count,
-            DateTimeOffset.UtcNow
-        );
+        await tradeRepository.AddTrade(tradeType, tradeId, count, DateTimeOffset.UtcNow);
     }
 
     public async Task DoAbilityCrestTrade(int id, int count)
@@ -185,14 +192,15 @@ public class TradeService : ITradeService
 
         AbilityCrestTrade trade = MasterAsset.AbilityCrestTrade[id];
 
-        await this.paymentService.ProcessPayment(
+        await paymentService.ProcessPayment(
             PaymentTypes.DewPoint,
             expectedPrice: trade.NeedDewPoint
         );
-        await this.rewardService.GrantReward(
+
+        await rewardService.GrantReward(
             new Entity(EntityTypes.Wyrmprint, (int)trade.AbilityCrestId)
         );
 
-        await this.tradeRepository.AddTrade(TradeType.AbilityCrest, id, count);
+        await tradeRepository.AddTrade(TradeType.AbilityCrest, id, count);
     }
 }

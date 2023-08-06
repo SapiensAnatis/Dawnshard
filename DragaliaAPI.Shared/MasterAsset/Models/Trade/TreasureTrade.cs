@@ -4,6 +4,7 @@ namespace DragaliaAPI.Shared.MasterAsset.Models.Trade;
 
 public record TreasureTrade(
     int Id,
+    int TradeGroupId,
     int Limit,
     int Priority,
     int TabGroupId,

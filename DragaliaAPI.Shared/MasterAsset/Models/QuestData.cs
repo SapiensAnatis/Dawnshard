@@ -1,5 +1,7 @@
-﻿using DragaliaAPI.Photon.Shared.Enums;
+﻿using System.Text.Json.Serialization;
+using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -10,8 +12,11 @@ public record QuestData(
     UnitElement LimitedElementalType,
     UnitElement LimitedElementalType2,
     int LimitedWeaponTypePatternId,
+    [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsPayForceStaminaSingle,
     int PayStaminaSingle,
+    int CampaignStaminaSingle,
     int PayStaminaMulti,
+    int CampaignStaminaMulti,
     DungeonTypes DungeonType,
     VariationTypes VariationType,
     string Scene01,
@@ -28,7 +33,15 @@ public record QuestData(
     string AreaName06,
     int RebornLimit,
     int ContinueLimit,
-    int Difficulty
+    int Difficulty,
+    PayTargetType PayEntityTargetType,
+    EntityTypes PayEntityType,
+    int PayEntityId,
+    int PayEntityQuantity,
+    EntityTypes HoldEntityType,
+    int HoldEntityId,
+    int HoldEntityQuantity,
+    [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsSumUpTotalDamage
 )
 {
     public IEnumerable<AreaInfo> AreaInfo =>

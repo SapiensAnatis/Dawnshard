@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Photon.Shared.Enums;
@@ -833,10 +834,10 @@ public class AtgenCategoryList
 [MessagePackObject(true)]
 public class AtgenCharaGrowRecord
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int take_exp { get; set; }
 
-    public AtgenCharaGrowRecord(int chara_id, int take_exp)
+    public AtgenCharaGrowRecord(Charas chara_id, int take_exp)
     {
         this.chara_id = chara_id;
         this.take_exp = take_exp;
@@ -1508,9 +1509,9 @@ public class AtgenDeleteDragonList
 [MessagePackObject(true)]
 public class AtgenDeleteTalismanList
 {
-    public ulong talisman_key_id { get; set; }
+    public long talisman_key_id { get; set; }
 
-    public AtgenDeleteTalismanList(ulong talisman_key_id)
+    public AtgenDeleteTalismanList(long talisman_key_id)
     {
         this.talisman_key_id = talisman_key_id;
     }
@@ -1561,10 +1562,10 @@ public class AtgenDmodeAreaInfo
 [MessagePackObject(true)]
 public class AtgenDmodeDragonUseList
 {
-    public int dragon_id { get; set; }
+    public Dragons dragon_id { get; set; }
     public int use_count { get; set; }
 
-    public AtgenDmodeDragonUseList(int dragon_id, int use_count)
+    public AtgenDmodeDragonUseList(Dragons dragon_id, int use_count)
     {
         this.dragon_id = dragon_id;
         this.use_count = use_count;
@@ -1576,11 +1577,11 @@ public class AtgenDmodeDragonUseList
 [MessagePackObject(true)]
 public class AtgenDmodeDropList
 {
-    public int type { get; set; }
+    public EntityTypes type { get; set; }
     public int id { get; set; }
     public int quantity { get; set; }
 
-    public AtgenDmodeDropList(int type, int id, int quantity)
+    public AtgenDmodeDropList(EntityTypes type, int id, int quantity)
     {
         this.type = type;
         this.id = id;
@@ -1630,9 +1631,9 @@ public class AtgenDmodeDungeonItemOptionList
 public class AtgenDmodeDungeonItemStateList
 {
     public int item_no { get; set; }
-    public int state { get; set; }
+    public DmodeDungeonItemState state { get; set; }
 
-    public AtgenDmodeDungeonItemStateList(int item_no, int state)
+    public AtgenDmodeDungeonItemStateList(int item_no, DmodeDungeonItemState state)
     {
         this.item_no = item_no;
         this.state = state;
@@ -1645,12 +1646,12 @@ public class AtgenDmodeDungeonItemStateList
 public class AtgenDmodeDungeonOdds
 {
     public IEnumerable<AtgenDmodeSelectDragonList> dmode_select_dragon_list { get; set; }
-    public IEnumerable<DmodeDungeonItemList> dmode_dungeon_item_list { get; set; }
+    public ICollection<DmodeDungeonItemList> dmode_dungeon_item_list { get; set; }
     public DmodeOddsInfo dmode_odds_info { get; set; }
 
     public AtgenDmodeDungeonOdds(
         IEnumerable<AtgenDmodeSelectDragonList> dmode_select_dragon_list,
-        IEnumerable<DmodeDungeonItemList> dmode_dungeon_item_list,
+        ICollection<DmodeDungeonItemList> dmode_dungeon_item_list,
         DmodeOddsInfo dmode_odds_info
     )
     {
@@ -1692,10 +1693,10 @@ public class AtgenDmodeEnemy
 [MessagePackObject(true)]
 public class AtgenDmodeHoldDragonList
 {
-    public int dragon_id { get; set; }
+    public Dragons dragon_id { get; set; }
     public int count { get; set; }
 
-    public AtgenDmodeHoldDragonList(int dragon_id, int count)
+    public AtgenDmodeHoldDragonList(Dragons dragon_id, int count)
     {
         this.dragon_id = dragon_id;
         this.count = count;
@@ -1708,15 +1709,17 @@ public class AtgenDmodeHoldDragonList
 public class AtgenDmodeSelectDragonList
 {
     public int select_dragon_no { get; set; }
-    public int dragon_id { get; set; }
-    public int is_rare { get; set; }
+    public Dragons dragon_id { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_rare { get; set; }
     public int pay_dmode_point_1 { get; set; }
     public int pay_dmode_point_2 { get; set; }
 
     public AtgenDmodeSelectDragonList(
         int select_dragon_no,
-        int dragon_id,
-        int is_rare,
+        Dragons dragon_id,
+        bool is_rare,
         int pay_dmode_point_1,
         int pay_dmode_point_2
     )
@@ -1751,7 +1754,7 @@ public class AtgenDmodeUnitInfo
 {
     public int level { get; set; }
     public int exp { get; set; }
-    public IEnumerable<int> equip_crest_item_no_sort_list { get; set; }
+    public int[] equip_crest_item_no_sort_list { get; set; }
     public IEnumerable<int> bag_item_no_sort_list { get; set; }
     public IEnumerable<int> skill_bag_item_no_sort_list { get; set; }
     public IEnumerable<AtgenDmodeHoldDragonList> dmode_hold_dragon_list { get; set; }
@@ -1761,7 +1764,7 @@ public class AtgenDmodeUnitInfo
     public AtgenDmodeUnitInfo(
         int level,
         int exp,
-        IEnumerable<int> equip_crest_item_no_sort_list,
+        int[] equip_crest_item_no_sort_list,
         IEnumerable<int> bag_item_no_sort_list,
         IEnumerable<int> skill_bag_item_no_sort_list,
         IEnumerable<AtgenDmodeHoldDragonList> dmode_hold_dragon_list,
@@ -2060,10 +2063,10 @@ public class AtgenEntryConditions
 [MessagePackObject(true)]
 public class AtgenEventBoost
 {
-    public int event_effect { get; set; }
+    public EventEffectTypes event_effect { get; set; }
     public float effect_value { get; set; }
 
-    public AtgenEventBoost(int event_effect, float effect_value)
+    public AtgenEventBoost(EventEffectTypes event_effect, float effect_value)
     {
         this.event_effect = event_effect;
         this.effect_value = effect_value;
@@ -2204,10 +2207,10 @@ public class AtgenFailQuestDetail
 public class AtgenFirstClearSet
 {
     public int id { get; set; }
-    public int type { get; set; }
+    public EntityTypes type { get; set; }
     public int quantity { get; set; }
 
-    public AtgenFirstClearSet(int id, int type, int quantity)
+    public AtgenFirstClearSet(int id, EntityTypes type, int quantity)
     {
         this.id = id;
         this.type = type;
@@ -2595,11 +2598,11 @@ public class AtgenMissionParamsList
 public class AtgenMissionsClearSet
 {
     public int id { get; set; }
-    public int type { get; set; }
+    public EntityTypes type { get; set; }
     public int quantity { get; set; }
     public int mission_no { get; set; }
 
-    public AtgenMissionsClearSet(int id, int type, int quantity, int mission_no)
+    public AtgenMissionsClearSet(int id, EntityTypes type, int quantity, int mission_no)
     {
         this.id = id;
         this.type = type;
@@ -2807,11 +2810,13 @@ public class AtgenOption
 public class AtgenOwnDamageRankingList
 {
     public int rank { get; set; }
-    public int is_new { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_new { get; set; }
     public int chara_id { get; set; }
     public long damage_value { get; set; }
 
-    public AtgenOwnDamageRankingList(int rank, int is_new, int chara_id, long damage_value)
+    public AtgenOwnDamageRankingList(int rank, bool is_new, int chara_id, long damage_value)
     {
         this.rank = rank;
         this.is_new = is_new;
@@ -3198,10 +3203,10 @@ public class AtgenReceiveQuestBonus
 [MessagePackObject(true)]
 public class AtgenRecoverData
 {
-    public int recover_stamina_type { get; set; }
+    public UseItemEffect recover_stamina_type { get; set; }
     public int recover_stamina_point { get; set; }
 
-    public AtgenRecoverData(int recover_stamina_type, int recover_stamina_point)
+    public AtgenRecoverData(UseItemEffect recover_stamina_type, int recover_stamina_point)
     {
         this.recover_stamina_type = recover_stamina_type;
         this.recover_stamina_point = recover_stamina_point;
@@ -3373,7 +3378,7 @@ public class AtgenResultUnitList
 [MessagePackObject(true)]
 public class AtgenRewardTalismanList
 {
-    public int talisman_id { get; set; }
+    public Talismans talisman_id { get; set; }
     public int talisman_ability_id_1 { get; set; }
     public int talisman_ability_id_2 { get; set; }
     public int talisman_ability_id_3 { get; set; }
@@ -3381,7 +3386,7 @@ public class AtgenRewardTalismanList
     public int additional_attack { get; set; }
 
     public AtgenRewardTalismanList(
-        int talisman_id,
+        Talismans talisman_id,
         int talisman_ability_id_1,
         int talisman_ability_id_2,
         int talisman_ability_id_3,
@@ -3416,12 +3421,12 @@ public class AtgenRoomMemberList
 [MessagePackObject(true)]
 public class AtgenScoreMissionSuccessList
 {
-    public int score_mission_complete_type { get; set; }
+    public QuestCompleteType score_mission_complete_type { get; set; }
     public int score_target_value { get; set; }
     public float correction_value { get; set; }
 
     public AtgenScoreMissionSuccessList(
-        int score_mission_complete_type,
+        QuestCompleteType score_mission_complete_type,
         int score_target_value,
         float correction_value
     )
@@ -4065,7 +4070,7 @@ public class AtgenUnit
 [MessagePackObject(true)]
 public class AtgenUnitData
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int skill_1_level { get; set; }
     public int skill_2_level { get; set; }
     public int ability_1_level { get; set; }
@@ -4077,7 +4082,7 @@ public class AtgenUnitData
     public int combo_buildup_count { get; set; }
 
     public AtgenUnitData(
-        int chara_id,
+        Charas chara_id,
         int skill_1_level,
         int skill_2_level,
         int ability_1_level,
@@ -4122,10 +4127,10 @@ public class AtgenUnitList
 [MessagePackObject(true)]
 public class AtgenUseItemList
 {
-    public int item_id { get; set; }
+    public UseItem item_id { get; set; }
     public int item_quantity { get; set; }
 
-    public AtgenUseItemList(int item_id, int item_quantity)
+    public AtgenUseItemList(UseItem item_id, int item_quantity)
     {
         this.item_id = item_id;
         this.item_quantity = item_quantity;
@@ -4592,7 +4597,7 @@ public class BeginnerMissionList
 }
 
 [MessagePackObject(true)]
-public class BuildEventRewardList
+public class BuildEventRewardList : IEventRewardList<BuildEventRewardList>
 {
     public int event_id { get; set; }
     public int event_reward_id { get; set; }
@@ -4602,6 +4607,8 @@ public class BuildEventRewardList
         this.event_id = event_id;
         this.event_reward_id = event_reward_id;
     }
+
+    public static BuildEventRewardList FromDatabase(DbPlayerEventReward reward) => new(reward.EventId, reward.RewardId);
 
     public BuildEventRewardList() { }
 }
@@ -5046,21 +5053,21 @@ public class DiamondData
 [MessagePackObject(true)]
 public class DmodeCharaList
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int max_floor_num { get; set; }
     public int select_servitor_id { get; set; }
-    public int select_edit_skill_chara_id_1 { get; set; }
-    public int select_edit_skill_chara_id_2 { get; set; }
-    public int select_edit_skill_chara_id_3 { get; set; }
+    public Charas select_edit_skill_chara_id_1 { get; set; }
+    public Charas select_edit_skill_chara_id_2 { get; set; }
+    public Charas select_edit_skill_chara_id_3 { get; set; }
     public int max_dmode_score { get; set; }
 
     public DmodeCharaList(
-        int chara_id,
+        Charas chara_id,
         int max_floor_num,
         int select_servitor_id,
-        int select_edit_skill_chara_id_1,
-        int select_edit_skill_chara_id_2,
-        int select_edit_skill_chara_id_3,
+        Charas select_edit_skill_chara_id_1,
+        Charas select_edit_skill_chara_id_2,
+        Charas select_edit_skill_chara_id_3,
         int max_dmode_score
     )
     {
@@ -5079,20 +5086,22 @@ public class DmodeCharaList
 [MessagePackObject(true)]
 public class DmodeDungeonInfo
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int floor_num { get; set; }
     public int quest_time { get; set; }
     public int dungeon_score { get; set; }
-    public int is_play_end { get; set; }
-    public int state { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_play_end { get; set; }
+    public DungeonState state { get; set; }
 
     public DmodeDungeonInfo(
-        int chara_id,
+        Charas chara_id,
         int floor_num,
         int quest_time,
         int dungeon_score,
-        int is_play_end,
-        int state
+        bool is_play_end,
+        DungeonState state
     )
     {
         this.chara_id = chara_id;
@@ -5111,10 +5120,10 @@ public class DmodeDungeonItemList
 {
     public int item_no { get; set; }
     public int item_id { get; set; }
-    public int item_state { get; set; }
+    public DmodeDungeonItemState item_state { get; set; }
     public AtgenOption option { get; set; }
 
-    public DmodeDungeonItemList(int item_no, int item_id, int item_state, AtgenOption option)
+    public DmodeDungeonItemList(int item_no, int item_id, DmodeDungeonItemState item_state, AtgenOption option)
     {
         this.item_no = item_no;
         this.item_id = item_id;
@@ -5128,22 +5137,22 @@ public class DmodeDungeonItemList
 [MessagePackObject(true)]
 public class DmodeExpedition
 {
-    public int chara_id_1 { get; set; }
-    public int chara_id_2 { get; set; }
-    public int chara_id_3 { get; set; }
-    public int chara_id_4 { get; set; }
-    public int start_time { get; set; }
+    public Charas chara_id_1 { get; set; }
+    public Charas chara_id_2 { get; set; }
+    public Charas chara_id_3 { get; set; }
+    public Charas chara_id_4 { get; set; }
+    public DateTimeOffset start_time { get; set; }
     public int target_floor_num { get; set; }
-    public int state { get; set; }
+    public ExpeditionState state { get; set; }
 
     public DmodeExpedition(
-        int chara_id_1,
-        int chara_id_2,
-        int chara_id_3,
-        int chara_id_4,
-        int start_time,
+        Charas chara_id_1,
+        Charas chara_id_2,
+        Charas chara_id_3,
+        Charas chara_id_4,
+        DateTimeOffset start_time,
         int target_floor_num,
-        int state
+        ExpeditionState state
     )
     {
         this.chara_id_1 = chara_id_1;
@@ -5163,9 +5172,15 @@ public class DmodeFloorData
 {
     public string unique_key { get; set; }
     public string floor_key { get; set; }
-    public int is_end { get; set; }
-    public int is_play_end { get; set; }
-    public int is_view_area_start_equipment { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_end { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_play_end { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_view_area_start_equipment { get; set; }
     public AtgenDmodeAreaInfo dmode_area_info { get; set; }
     public AtgenDmodeUnitInfo dmode_unit_info { get; set; }
     public AtgenDmodeDungeonOdds dmode_dungeon_odds { get; set; }
@@ -5173,9 +5188,9 @@ public class DmodeFloorData
     public DmodeFloorData(
         string unique_key,
         string floor_key,
-        int is_end,
-        int is_play_end,
-        int is_view_area_start_equipment,
+        bool is_end,
+        bool is_play_end,
+        bool is_view_area_start_equipment,
         AtgenDmodeAreaInfo dmode_area_info,
         AtgenDmodeUnitInfo dmode_unit_info,
         AtgenDmodeDungeonOdds dmode_dungeon_odds
@@ -5199,22 +5214,24 @@ public class DmodeInfo
 {
     public int total_max_floor_num { get; set; }
     public int recovery_count { get; set; }
-    public int recovery_time { get; set; }
+    public DateTimeOffset recovery_time { get; set; }
     public int floor_skip_count { get; set; }
-    public int floor_skip_time { get; set; }
+    public DateTimeOffset floor_skip_time { get; set; }
     public int dmode_point_1 { get; set; }
     public int dmode_point_2 { get; set; }
-    public int is_entry { get; set; }
+
+    [MessagePackFormatter((typeof(BoolToIntFormatter)))]
+    public bool is_entry { get; set; }
 
     public DmodeInfo(
         int total_max_floor_num,
         int recovery_count,
-        int recovery_time,
+        DateTimeOffset recovery_time,
         int floor_skip_count,
-        int floor_skip_time,
+        DateTimeOffset floor_skip_time,
         int dmode_point_1,
         int dmode_point_2,
-        int is_entry
+        bool is_entry
     )
     {
         this.total_max_floor_num = total_max_floor_num;
@@ -5237,7 +5254,7 @@ public class DmodeIngameData
     public int start_floor_num { get; set; }
     public int target_floor_num { get; set; }
     public int recovery_count { get; set; }
-    public int recovery_time { get; set; }
+    public DateTimeOffset recovery_time { get; set; }
     public int servitor_id { get; set; }
     public int dmode_level_group_id { get; set; }
     public AtgenUnitData unit_data { get; set; }
@@ -5248,7 +5265,7 @@ public class DmodeIngameData
         int start_floor_num,
         int target_floor_num,
         int recovery_count,
-        int recovery_time,
+        DateTimeOffset recovery_time,
         int servitor_id,
         int dmode_level_group_id,
         AtgenUnitData unit_data,
@@ -5273,10 +5290,14 @@ public class DmodeIngameData
 public class DmodeIngameResult
 {
     public int floor_num { get; set; }
-    public int is_record_floor_num { get; set; }
-    public IEnumerable<int> chara_id_list { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_record_floor_num { get; set; }
+    public IEnumerable<Charas> chara_id_list { get; set; }
     public float quest_time { get; set; }
-    public int is_view_quest_time { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_view_quest_time { get; set; }
     public int dmode_score { get; set; }
     public IEnumerable<AtgenRewardTalismanList> reward_talisman_list { get; set; }
     public int take_dmode_point_1 { get; set; }
@@ -5287,10 +5308,10 @@ public class DmodeIngameResult
 
     public DmodeIngameResult(
         int floor_num,
-        int is_record_floor_num,
-        IEnumerable<int> chara_id_list,
+        bool is_record_floor_num,
+        IEnumerable<Charas> chara_id_list,
         float quest_time,
-        int is_view_quest_time,
+        bool is_view_quest_time,
         int dmode_score,
         IEnumerable<AtgenRewardTalismanList> reward_talisman_list,
         int take_dmode_point_1,
@@ -5341,12 +5362,14 @@ public class DmodePlayRecord
     public string unique_key { get; set; }
     public string floor_key { get; set; }
     public int floor_num { get; set; }
-    public int is_floor_incomplete { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_floor_incomplete { get; set; }
     public AtgenDmodeTreasureRecord dmode_treasure_record { get; set; }
     public IEnumerable<AtgenDmodeDungeonItemStateList> dmode_dungeon_item_state_list { get; set; }
     public IEnumerable<AtgenDmodeDungeonItemOptionList> dmode_dungeon_item_option_list { get; set; }
     public IEnumerable<AtgenDmodeDragonUseList> dmode_dragon_use_list { get; set; }
-    public IEnumerable<int> equip_crest_item_no_sort_list { get; set; }
+    public int[] equip_crest_item_no_sort_list { get; set; }
     public IEnumerable<int> bag_item_no_sort_list { get; set; }
     public IEnumerable<int> skill_bag_item_no_sort_list { get; set; }
     public float quest_time { get; set; }
@@ -5356,12 +5379,12 @@ public class DmodePlayRecord
         string unique_key,
         string floor_key,
         int floor_num,
-        int is_floor_incomplete,
+        bool is_floor_incomplete,
         AtgenDmodeTreasureRecord dmode_treasure_record,
         IEnumerable<AtgenDmodeDungeonItemStateList> dmode_dungeon_item_state_list,
         IEnumerable<AtgenDmodeDungeonItemOptionList> dmode_dungeon_item_option_list,
         IEnumerable<AtgenDmodeDragonUseList> dmode_dragon_use_list,
-        IEnumerable<int> equip_crest_item_no_sort_list,
+        int[] equip_crest_item_no_sort_list,
         IEnumerable<int> bag_item_no_sort_list,
         IEnumerable<int> skill_bag_item_no_sort_list,
         float quest_time,
@@ -5389,10 +5412,10 @@ public class DmodePlayRecord
 [MessagePackObject(true)]
 public class DmodeServitorPassiveList
 {
-    public int passive_no { get; set; }
+    public DmodeServitorPassiveType passive_no { get; set; }
     public int passive_level { get; set; }
 
-    public DmodeServitorPassiveList(int passive_no, int passive_level)
+    public DmodeServitorPassiveList(DmodeServitorPassiveType passive_no, int passive_level)
     {
         this.passive_no = passive_no;
         this.passive_level = passive_level;
@@ -5405,6 +5428,7 @@ public class DmodeServitorPassiveList
 public class DmodeStoryList
 {
     public int dmode_story_id { get; set; }
+
     public int is_read { get; set; }
 
     public DmodeStoryList(int dmode_story_id, int is_read)
@@ -5629,11 +5653,13 @@ public class EditSkillCharaData
 [MessagePackObject(true)]
 public class EmblemList
 {
-    public int emblem_id { get; set; }
-    public int is_new { get; set; }
-    public int gettime { get; set; }
+    public Emblems emblem_id { get; set; }
 
-    public EmblemList(int emblem_id, int is_new, int gettime)
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_new { get; set; }
+    public DateTimeOffset gettime { get; set; }
+
+    public EmblemList(Emblems emblem_id, bool is_new, DateTimeOffset gettime)
     {
         this.emblem_id = emblem_id;
         this.is_new = is_new;
@@ -5826,13 +5852,13 @@ public class EventTradeList
     public int tab_group_id { get; set; }
     public int priority { get; set; }
     public int is_lock_view { get; set; }
-    public int commence_date { get; set; }
-    public int complete_date { get; set; }
+    public DateTimeOffset commence_date { get; set; }
+    public DateTimeOffset complete_date { get; set; }
     public int reset_type { get; set; }
     public int limit { get; set; }
     public int read_story_count { get; set; }
     public int clear_target_quest_id { get; set; }
-    public int destination_entity_type { get; set; }
+    public EntityTypes destination_entity_type { get; set; }
     public int destination_entity_id { get; set; }
     public int destination_entity_quantity { get; set; }
     public IEnumerable<AtgenBuildEventRewardEntityList> need_entity_list { get; set; }
@@ -5843,13 +5869,13 @@ public class EventTradeList
         int tab_group_id,
         int priority,
         int is_lock_view,
-        int commence_date,
-        int complete_date,
+        DateTimeOffset commence_date,
+        DateTimeOffset complete_date,
         int reset_type,
         int limit,
         int read_story_count,
         int clear_target_quest_id,
-        int destination_entity_type,
+        EntityTypes destination_entity_type,
         int destination_entity_id,
         int destination_entity_quantity,
         IEnumerable<AtgenBuildEventRewardEntityList> need_entity_list
@@ -6768,10 +6794,10 @@ public class IngameWallData
 [MessagePackObject(true)]
 public class ItemList
 {
-    public int item_id { get; set; }
+    public UseItem item_id { get; set; }
     public int quantity { get; set; }
 
-    public ItemList(int item_id, int quantity)
+    public ItemList(UseItem item_id, int quantity)
     {
         this.item_id = item_id;
         this.quantity = quantity;
@@ -7293,6 +7319,18 @@ public class PartySettingList
     public PartySettingList() { }
 
     public static PartySettingList Empty(int unit_no) => new() { unit_no = unit_no };
+
+    public IEnumerable<AbilityCrests> GetAbilityCrestList() => new List<AbilityCrests>()
+   {
+       this.equip_crest_slot_type_1_crest_id_1,
+       this.equip_crest_slot_type_1_crest_id_2,
+       this.equip_crest_slot_type_1_crest_id_3,
+       this.equip_crest_slot_type_2_crest_id_1,
+       this.equip_crest_slot_type_2_crest_id_2,
+       this.equip_crest_slot_type_3_crest_id_1,
+       this.equip_crest_slot_type_3_crest_id_2
+   };
+
 }
 
 #nullable enable
@@ -7301,19 +7339,19 @@ public class PartySettingList
 public class PartyUnitList
 {
     public int position { get; set; }
-    public CharaList? chara_data { get; set; }
-    public DragonList? dragon_data { get; set; }
-    public GameWeaponSkin? weapon_skin_data { get; set; }
-    public GameWeaponBody? weapon_body_data { get; set; }
+    public CharaList? chara_data { get; set; } = new();
+    public DragonList? dragon_data { get; set; } = new();
+    public GameWeaponSkin? weapon_skin_data { get; set; } = new();
+    public GameWeaponBody? weapon_body_data { get; set; } = new();
     public IEnumerable<GameAbilityCrest> crest_slot_type_1_crest_list { get; set; } =
         new List<GameAbilityCrest>();
     public IEnumerable<GameAbilityCrest> crest_slot_type_2_crest_list { get; set; } =
         new List<GameAbilityCrest>();
     public IEnumerable<GameAbilityCrest> crest_slot_type_3_crest_list { get; set; } =
         new List<GameAbilityCrest>();
-    public TalismanList? talisman_data { get; set; }
-    public EditSkillCharaData? edit_skill_1_chara_data { get; set; }
-    public EditSkillCharaData? edit_skill_2_chara_data { get; set; }
+    public TalismanList? talisman_data { get; set; } = new();
+    public EditSkillCharaData? edit_skill_1_chara_data { get; set; } = new();
+    public EditSkillCharaData? edit_skill_2_chara_data { get; set; } = new();
     public IEnumerable<WeaponPassiveAbilityList> game_weapon_passive_ability_list { get; set; } =
         new List<WeaponPassiveAbilityList>();
     public int dragon_reliability_level { get; set; } = 0;
@@ -7952,7 +7990,7 @@ public class QuestWallList
 }
 
 [MessagePackObject(true)]
-public class RaidEventRewardList
+public class RaidEventRewardList : IEventRewardList<RaidEventRewardList>
 {
     public int raid_event_id { get; set; }
     public int raid_event_reward_id { get; set; }
@@ -7962,6 +8000,8 @@ public class RaidEventRewardList
         this.raid_event_id = raid_event_id;
         this.raid_event_reward_id = raid_event_reward_id;
     }
+
+    public static RaidEventRewardList FromDatabase(DbPlayerEventReward reward) => new(reward.EventId, reward.RewardId);
 
     public RaidEventRewardList() { }
 }
@@ -8738,12 +8778,12 @@ public class SummonPrizeOddsRateList
 [MessagePackObject(true)]
 public class SummonTicketList
 {
-    public ulong key_id { get; set; }
-    public int summon_ticket_id { get; set; }
+    public long key_id { get; set; }
+    public SummonTickets summon_ticket_id { get; set; }
     public int quantity { get; set; }
-    public int use_limit_time { get; set; }
+    public DateTimeOffset use_limit_time { get; set; }
 
-    public SummonTicketList(ulong key_id, int summon_ticket_id, int quantity, int use_limit_time)
+    public SummonTicketList(long key_id, SummonTickets summon_ticket_id, int quantity, DateTimeOffset use_limit_time)
     {
         this.key_id = key_id;
         this.summon_ticket_id = summon_ticket_id;
@@ -9180,7 +9220,7 @@ public class UserData
     public int build_time_point { get; set; }
     public int age_group { get; set; }
     public int main_party_no { get; set; }
-    public int emblem_id { get; set; }
+    public Emblems emblem_id { get; set; }
     public int active_memory_event_id { get; set; }
     public int mana_point { get; set; }
     public DateTimeOffset last_login_time { get; set; }
@@ -9212,7 +9252,7 @@ public class UserData
         int build_time_point,
         int age_group,
         int main_party_no,
-        int emblem_id,
+        Emblems emblem_id,
         int active_memory_event_id,
         int mana_point,
         DateTimeOffset last_login_time,
@@ -9273,7 +9313,7 @@ public class UserEventItemData
 }
 
 [MessagePackObject(true)]
-public class UserEventLocationRewardList
+public class UserEventLocationRewardList : IEventRewardList<UserEventLocationRewardList>
 {
     public int event_id { get; set; }
     public int location_reward_id { get; set; }
@@ -9285,6 +9325,8 @@ public class UserEventLocationRewardList
     }
 
     public UserEventLocationRewardList() { }
+
+    public static UserEventLocationRewardList FromDatabase(DbPlayerEventReward reward) => new(reward.EventId, reward.RewardId);
 }
 
 [MessagePackObject(true)]
@@ -9404,7 +9446,7 @@ public class UserSupportList
     public int level { get; set; }
 
     public DateTimeOffset last_login_date { get; set; }
-    public int emblem_id { get; set; }
+    public Emblems emblem_id { get; set; }
     public int max_party_power { get; set; }
     public AtgenGuild guild { get; set; }
     public AtgenSupportChara support_chara { get; set; }
@@ -9423,7 +9465,7 @@ public class UserSupportList
         string name,
         int level,
         DateTimeOffset last_login_date,
-        int emblem_id,
+        Emblems emblem_id,
         int max_party_power,
         AtgenGuild guild,
         AtgenSupportChara support_chara,

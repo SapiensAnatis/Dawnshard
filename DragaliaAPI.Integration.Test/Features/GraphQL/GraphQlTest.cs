@@ -53,19 +53,8 @@ public class GraphQlTest : GraphQlTestFixture
 
         response.Errors.Should().BeNullOrEmpty();
 
-        response.Data
-            .Should()
-            .BeEquivalentTo(
-                new Response(
-                    new Player(
-                        new Character[]
-                        {
-                            new((int)Charas.ThePrince),
-                            new((int)Charas.SummerMikoto)
-                        }
-                    )
-                )
-            );
+        response.Data.Player.CharaList.Should().Contain(x => x.CharaId == (int)Charas.ThePrince);
+        response.Data.Player.CharaList.Should().Contain(x => x.CharaId == (int)Charas.SummerMikoto);
     }
 
     [Fact]

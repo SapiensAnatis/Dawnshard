@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Test.Utils;
 

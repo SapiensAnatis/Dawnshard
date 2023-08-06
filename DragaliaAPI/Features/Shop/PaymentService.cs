@@ -1,6 +1,10 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dmode;
+using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -9,26 +13,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Shop;
 
-public class PaymentService : IPaymentService
+public class PaymentService(
+    ILogger<PaymentService> logger,
+    IUserDataRepository userDataRepository,
+    IInventoryRepository inventoryRepository,
+    IEventRepository eventRepository,
+    IDmodeRepository dmodeRepository,
+    IItemRepository itemRepository,
+    ITicketRepository ticketRepository
+) : IPaymentService
 {
     private readonly List<AtgenDeleteDragonList> dragonList = new();
     private readonly List<AtgenDeleteAmuletList> amuletList = new();
     private readonly List<AtgenDeleteTalismanList> talismanList = new();
     private readonly List<AtgenDeleteWeaponList> weaponList = new();
-    private readonly ILogger<PaymentService> logger;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IInventoryRepository inventoryRepository;
-
-    public PaymentService(
-        ILogger<PaymentService> logger,
-        IUserDataRepository userDataRepository,
-        IInventoryRepository inventoryRepository
-    )
-    {
-        this.logger = logger;
-        this.userDataRepository = userDataRepository;
-        this.inventoryRepository = inventoryRepository;
-    }
 
     public async Task ProcessPayment(Entity entity, PaymentTarget? payment = null)
     {
@@ -93,6 +91,7 @@ public class PaymentService : IPaymentService
                 updater = () => material!.Quantity -= price;
                 break;
             case EntityTypes.BuildEventItem:
+            case EntityTypes.CombatEventItem:
             case EntityTypes.Clb01EventItem:
             case EntityTypes.CollectEventItem:
             case EntityTypes.RaidEventItem:
@@ -102,16 +101,35 @@ public class PaymentService : IPaymentService
             case EntityTypes.ExHunterEventItem:
             case EntityTypes.BattleRoyalEventItem:
             case EntityTypes.EarnEventItem:
-                throw new NotImplementedException();
+                DbPlayerEventItem? item = await eventRepository.GetEventItemAsync(entity.Id);
+                quantity = item?.Quantity;
+                updater = () => item!.Quantity -= price;
+                break;
+            case EntityTypes.Item:
+                DbPlayerUseItem? useItem = await itemRepository.GetItemAsync((UseItem)entity.Id);
+                quantity = useItem?.Quantity;
+                updater = () => useItem!.Quantity -= price;
+                break;
+            case EntityTypes.DmodePoint:
+                DbPlayerDmodeInfo dmodeInfo = await dmodeRepository.GetInfoAsync();
+                bool isPoint1 = entity.Id == (int)DmodePoint.Point1;
+                quantity = isPoint1 ? dmodeInfo.Point1Quantity : dmodeInfo.Point2Quantity;
+                updater = () =>
+                {
+                    if (isPoint1)
+                        dmodeInfo.Point1Quantity -= price;
+                    else
+                        dmodeInfo.Point2Quantity -= price;
+                };
+                break;
             case EntityTypes.SummonTicket:
-                // TODO: Implement ticket payments.
-                logger.LogWarning(
-                    "Tried to pay with summon tickets - this is not (yet) supported!"
+                DbSummonTicket? ticket = await ticketRepository.Tickets.SingleOrDefaultAsync(
+                    x => x.TicketKeyId == entity.Id
                 );
-                throw new DragaliaException(
-                    ResultCode.ShopPaymentTypeInvalid,
-                    "Tickets are not yet supported."
-                );
+                quantity = ticket?.Quantity;
+                // NOTE: Maybe remove here once quantity == 0?
+                updater = () => ticket!.Quantity -= price;
+                break;
             case EntityTypes.FreeDiamantium:
             case EntityTypes.PaidDiamantium:
                 logger.LogDebug("Tried to pay with diamantium -- this is not supported.");

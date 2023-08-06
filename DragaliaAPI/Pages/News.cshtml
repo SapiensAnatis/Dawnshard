@@ -7,7 +7,11 @@
 <div id="root">
 	<h1 class="title">Welcome to Dawnshard</h1>
 	<h3 class="title">Version: @Model.Version</h3>
+	
+	<img src="~/ebishodo.webp" class="center" />
+
 	<hr />
+
 
 	<div id="news">
 	<h1 class="title">News</h1>
@@ -31,9 +35,9 @@
 
 	<h2>What should work</h2>
 	<ul>
-		<li>The tutorial up until halfway through Ch. 1</li>
+		<li>The tutorial</li>
 		<li>Editing parties</li>
-		<li>Most boss fights and main story quests<sup>1</sup></li>
+		<li>Most boss fights and main story quests</li>
 		<li>Summoning</li>
 		<li>Upgrading characters and their mana circles</li>
 		<li>Upgrading and crafting weapons</li>
@@ -41,22 +45,24 @@
 		<li>Upgrading and buying wyrmprints</li>
 		<li>Bonding with dragons and the dragon's roost</li>
 		<li>The Halidom</li>
+		<li>Treasure trade</li>
+		<li>Event compendium</li>
+		<li>Co-op</li>
+		<li>Kaleidoscape</li>
 	</ul>
 
 	<h2>What does not work</h2>
 	<ul>
 		<li>Accurate quest drops<sup>1</sup></li>
 		<li>The encyclopedia</li>
-		<li>Events and event compendium</li>
-		<li>Co-op, including battle royale and raids</li>
-		<li>Endeavours</li>
-		<li>Kaleidoscape</li>
+		<li>Battle royale</li>
+		<li>Most endeavours</li>
 		<li>The Mercurial Gauntlet</li>
+		<li>Auto-repeat</li>
+		<li>Skip tickets</li>
 		<li>Wagabond Pupper</li>
-		<li>Treasure trade</li>
-		<li>Collecting Halidom income</li>
 	</ul>
-	<p><sup>1</sup>Each quest drops broadly the right items, but the quantities are wrong and the items are not assigned per-enemy.</p>
+	<p><sup>1</sup>Each quest drops broadly the right items, but the quantities are a bit off and wyrmprints are not available.</p>
 
 	<h2>Importing a save</h2>
 	<p>To import a savefile, create an account and upload your savedata.txt at <a href="https://baas.lukefz.xyz/">https://baas.lukefz.xyz/</a>. Then, link that same account to your device when logging into the server. The savefile should then be imported automatically.</p>
@@ -111,10 +117,6 @@
 		font-size: 1.1rem;
 	}
 
-	@@media (max-width: 1000px) p {
-		font-size: 36px;
-	}
-
 	.title {
 		text-align: center;
 	}
@@ -138,5 +140,11 @@
 		margin-left: auto;
 		margin-top: auto;
 		margin-bottom: auto;
+	}
+
+	.center {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
 	}
 </style>

@@ -1,34 +1,26 @@
-﻿using DragaliaAPI.Features.Reward;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Login;
+using DragaliaAPI.Shared.PlayerDetails;
 
 namespace DragaliaAPI.Features.Login;
 
-public class LoginBonusService : ILoginBonusService
+public class LoginBonusService(
+    IRewardService rewardService,
+    IDateTimeProvider dateTimeProvider,
+    ILoginBonusRepository loginBonusRepository,
+    ILogger<LoginBonusService> logger
+) : ILoginBonusService
 {
-    private readonly IRewardService rewardService;
-    private readonly IDateTimeProvider dateTimeProvider;
-    private readonly ILogger<LoginBonusService> logger;
-
-    public LoginBonusService(
-        IRewardService rewardService,
-        IDateTimeProvider dateTimeProvider,
-        ILogger<LoginBonusService> logger
-    )
-    {
-        this.rewardService = rewardService;
-        this.dateTimeProvider = dateTimeProvider;
-        this.logger = logger;
-    }
-
     public async Task<IEnumerable<AtgenLoginBonusList>> RewardLoginBonus()
     {
         List<AtgenLoginBonusList> bonusList = new();
 
-        DateTimeOffset time = this.dateTimeProvider.UtcNow;
+        DateTimeOffset time = dateTimeProvider.UtcNow;
 
         foreach (
             LoginBonusData bonusData in MasterAsset.LoginBonusData.Enumerable.Where(
@@ -36,20 +28,31 @@ public class LoginBonusService : ILoginBonusService
             )
         )
         {
-            int currentDay = (int)(time - bonusData.StartTime).TotalDays;
-            int dayId = bonusData.IsLoop
-                ? currentDay
-                    % MasterAsset.LoginBonusReward.Enumerable.Count(x => x.Gid == bonusData.Id)
-                : currentDay;
+            DbLoginBonus dbBonus = await loginBonusRepository.Get(bonusData.Id);
+            if (dbBonus.IsComplete)
+            {
+                logger.LogDebug(
+                    "Player has already completed login bonus {@bonus}, skipping...",
+                    dbBonus
+                );
+                continue;
+            }
+
+            int bonusCount = MasterAsset.LoginBonusReward.Enumerable.Count(
+                x => x.Gid == bonusData.Id
+            );
+
+            int dayId = bonusData.IsLoop ? dbBonus.CurrentDay % bonusCount : dbBonus.CurrentDay;
 
             dayId += 1;
 
             LoginBonusReward? reward = MasterAsset.LoginBonusReward.Enumerable.FirstOrDefault(
                 x => x.Gid == bonusData.Id && x.Day == dayId
             );
+
             if (reward == null)
             {
-                this.logger.LogWarning(
+                logger.LogWarning(
                     "Failed to get reward for bonus data {bonusDataId} with day {dayId} (IsLoop: {isLoop})",
                     bonusData.Id,
                     dayId,
@@ -58,8 +61,12 @@ public class LoginBonusService : ILoginBonusService
                 continue;
             }
 
-            await this.rewardService.GrantReward(
-                new(
+            dbBonus.CurrentDay = dayId;
+            if (dbBonus.CurrentDay >= bonusCount && !bonusData.IsLoop)
+                dbBonus.IsComplete = true;
+
+            await rewardService.GrantReward(
+                new Entity(
                     reward.EntityType,
                     reward.EntityId,
                     reward.EntityQuantity,
@@ -73,7 +80,7 @@ public class LoginBonusService : ILoginBonusService
                 new AtgenLoginBonusList(
                     0,
                     bonusData.Id,
-                    currentDay,
+                    dbBonus.CurrentDay,
                     dayId,
                     reward.EntityType,
                     reward.EntityId,
@@ -85,7 +92,7 @@ public class LoginBonusService : ILoginBonusService
 
             if (bonusData.EachDayEntityType != EntityTypes.None)
             {
-                await this.rewardService.GrantReward(
+                await rewardService.GrantReward(
                     new Entity(
                         bonusData.EachDayEntityType,
                         bonusData.EachDayEntityId,

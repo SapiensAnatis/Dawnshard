@@ -144,6 +144,8 @@ public class SavefileImportTest : TestFixture
                     opts.Excluding(x => x.friend_notice);
                     opts.Excluding(x => x.guild_notice);
 
+                    opts.Excluding(x => x.user_data!.active_memory_event_id);
+
                     return opts;
                 }
             );

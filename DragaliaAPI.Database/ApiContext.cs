@@ -156,5 +156,31 @@ public class ApiContext : DbContext
 
     public DbSet<DbPlayerTrade> PlayerTrades { get; set; }
 
+    public DbSet<DbPlayerEventData> PlayerEventData { get; set; }
+
+    public DbSet<DbPlayerEventItem> PlayerEventItems { get; set; }
+
+    public DbSet<DbPlayerEventReward> PlayerEventRewards { get; set; }
+
+    public DbSet<DbPlayerEventPassive> PlayerEventPassives { get; set; }
+
     public DbSet<DbQuestClearPartyUnit> QuestClearPartyUnits { get; set; }
+
+    public DbSet<DbPlayerDmodeInfo> PlayerDmodeInfos { get; set; }
+
+    public DbSet<DbPlayerDmodeChara> PlayerDmodeCharas { get; set; }
+
+    public DbSet<DbPlayerDmodeDungeon> PlayerDmodeDungeons { get; set; }
+
+    public DbSet<DbPlayerDmodeServitorPassive> PlayerDmodeServitorPassives { get; set; }
+
+    public DbSet<DbPlayerDmodeExpedition> PlayerDmodeExpeditions { get; set; }
+
+    public DbSet<DbPlayerUseItem> PlayerUseItems { get; set; }
+
+    public DbSet<DbLoginBonus> LoginBonuses { get; set; }
+
+    public DbSet<DbSummonTicket> PlayerSummonTickets { get; set; }
+
+    public DbSet<DbEmblem> Emblems { get; set; }
 }

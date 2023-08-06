@@ -2,79 +2,56 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Models;
 using DragaliaAPI.Services;
-using DragaliaAPI.Services.Game;
-using System.IO;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
 
 namespace DragaliaAPI.Features.Dungeon;
 
-public class DungeonStartService : IDungeonStartService
+public class DungeonStartService(
+    IPartyRepository partyRepository,
+    IDungeonRepository dungeonRepository,
+    IWeaponRepository weaponRepository,
+    IDungeonService dungeonService,
+    IPlayerIdentityService playerIdentityService,
+    IQuestRepository questRepository,
+    IBonusService bonusService,
+    IHelperService helperService,
+    IMapper mapper,
+    ILogger<DungeonStartService> logger,
+    IPaymentService paymentService,
+    IEventService eventService
+) : IDungeonStartService
 {
-    private readonly IPartyRepository partyRepository;
-    private readonly IDungeonRepository dungeonRepository;
-    private readonly IWeaponRepository weaponRepository;
-    private readonly IDungeonService dungeonService;
-    private readonly IPlayerIdentityService playerIdentityService;
-    private readonly IQuestRepository questRepository;
-    private readonly IBonusService bonusService;
-    private readonly IHelperService helperService;
-    private readonly IMapper mapper;
-    private readonly ILogger<DungeonStartService> logger;
-
-    public DungeonStartService(
-        IPartyRepository partyRepository,
-        IDungeonRepository dungeonRepository,
-        IWeaponRepository weaponRepository,
-        IDungeonService dungeonService,
-        IPlayerIdentityService playerIdentityService,
-        IQuestRepository questRepository,
-        IBonusService bonusService,
-        IHelperService helperService,
-        IMapper mapper,
-        ILogger<DungeonStartService> logger
-    )
-    {
-        this.partyRepository = partyRepository;
-        this.dungeonRepository = dungeonRepository;
-        this.weaponRepository = weaponRepository;
-        this.dungeonService = dungeonService;
-        this.playerIdentityService = playerIdentityService;
-        this.questRepository = questRepository;
-        this.bonusService = bonusService;
-        this.helperService = helperService;
-        this.mapper = mapper;
-        this.logger = logger;
-    }
-
     public async Task<IngameData> GetIngameData(
         int questId,
         IEnumerable<int> partyNoList,
         ulong? supportViewerId = null
     )
     {
-        IQueryable<DbPartyUnit> partyQuery = this.partyRepository
+        IQueryable<DbPartyUnit> partyQuery = partyRepository
             .GetPartyUnits(partyNoList)
             .AsNoTracking();
 
-        IEnumerable<PartySettingList> party = this.ProcessUnitList(
+        IEnumerable<PartySettingList> party = ProcessUnitList(
             await partyQuery.ToListAsync(),
             partyNoList.First()
         );
 
-        IngameData result = await this.InitializeIngameData(questId, party, supportViewerId);
+        IngameData result = await InitializeIngameData(questId, party, supportViewerId);
 
-        List<DbDetailedPartyUnit> detailedPartyUnits = await this.dungeonRepository
+        List<DbDetailedPartyUnit> detailedPartyUnits = await dungeonRepository
             .BuildDetailedPartyUnit(partyQuery, partyNoList.First())
             .ToListAsync();
 
-        result.party_info.party_unit_list = await this.ProcessDetailedUnitList(detailedPartyUnits);
+        result.party_info.party_unit_list = await ProcessDetailedUnitList(detailedPartyUnits);
 
         return result;
     }
@@ -85,12 +62,12 @@ public class DungeonStartService : IDungeonStartService
         ulong? supportViewerId = null
     )
     {
-        IngameData result = await this.InitializeIngameData(questId, party, supportViewerId);
+        IngameData result = await InitializeIngameData(questId, party, supportViewerId);
 
         List<DbDetailedPartyUnit> detailedPartyUnits = new();
 
         foreach (
-            IQueryable<DbDetailedPartyUnit> detailQuery in this.dungeonRepository.BuildDetailedPartyUnit(
+            IQueryable<DbDetailedPartyUnit> detailQuery in dungeonRepository.BuildDetailedPartyUnit(
                 party
             )
         )
@@ -103,7 +80,7 @@ public class DungeonStartService : IDungeonStartService
             );
         }
 
-        result.party_info.party_unit_list = await this.ProcessDetailedUnitList(detailedPartyUnits);
+        result.party_info.party_unit_list = await ProcessDetailedUnitList(detailedPartyUnits);
 
         return result;
     }
@@ -116,7 +93,7 @@ public class DungeonStartService : IDungeonStartService
 
         if (quest?.State < 3)
         {
-            this.logger.LogDebug("Updating quest {@quest} state", quest);
+            logger.LogDebug("Updating quest {@quest} state", quest);
             await questRepository.UpdateQuestState(questId, 2);
         }
 
@@ -148,7 +125,7 @@ public class DungeonStartService : IDungeonStartService
             return helperService.BuildHelperData(helperInfo, helperDetails);
         }
 
-        this.logger.LogDebug("SupportViewerId {id} returned null helper data.", supportViewerId);
+        logger.LogDebug("SupportViewerId {id} returned null helper data.", supportViewerId);
         return new();
     }
 
@@ -171,13 +148,41 @@ public class DungeonStartService : IDungeonStartService
 
             if (detailedUnit.WeaponBodyData is not null)
             {
-                detailedUnit.GameWeaponPassiveAbilityList = await this.weaponRepository
+                detailedUnit.GameWeaponPassiveAbilityList = await weaponRepository
                     .GetPassiveAbilities(detailedUnit.WeaponBodyData.WeaponBodyId)
                     .ToListAsync();
             }
         }
 
-        return detailedPartyUnits.OrderBy(x => x.Position).Select(this.mapper.Map<PartyUnitList>);
+        List<PartyUnitList> units = detailedPartyUnits
+            .OrderBy(x => x.Position)
+            .Select(mapper.Map<PartyUnitList>)
+            .ToList();
+
+        if (units.Count != 4)
+        {
+            for (int i = units.Count; i < 4; i++)
+            {
+                units.Add(new PartyUnitList { position = i + 1 });
+            }
+        }
+
+        foreach (PartyUnitList unit in units)
+        {
+            unit.chara_data ??= new CharaList();
+            unit.dragon_data ??= new DragonList();
+            unit.weapon_skin_data ??= new GameWeaponSkin();
+            unit.weapon_body_data ??= new GameWeaponBody();
+            unit.crest_slot_type_1_crest_list ??= Enumerable.Empty<GameAbilityCrest>();
+            unit.crest_slot_type_2_crest_list ??= Enumerable.Empty<GameAbilityCrest>();
+            unit.crest_slot_type_3_crest_list ??= Enumerable.Empty<GameAbilityCrest>();
+            unit.talisman_data ??= new TalismanList();
+            unit.edit_skill_1_chara_data ??= new EditSkillCharaData();
+            unit.edit_skill_2_chara_data ??= new EditSkillCharaData();
+            unit.game_weapon_passive_ability_list ??= Enumerable.Empty<WeaponPassiveAbilityList>();
+        }
+
+        return units;
     }
 
     private IEnumerable<PartySettingList> ProcessUnitList(
@@ -191,7 +196,7 @@ public class DungeonStartService : IDungeonStartService
                 unit.UnitNo += 4;
         }
 
-        return partyUnits.Select(this.mapper.Map<PartySettingList>).OrderBy(x => x.unit_no);
+        return partyUnits.Select(mapper.Map<PartySettingList>).OrderBy(x => x.unit_no);
     }
 
     private async Task<IngameData> InitializeIngameData(
@@ -204,7 +209,7 @@ public class DungeonStartService : IDungeonStartService
             new()
             {
                 quest_id = questId,
-                viewer_id = (ulong?)this.playerIdentityService.ViewerId ?? 0UL,
+                viewer_id = (ulong?)playerIdentityService.ViewerId ?? 0UL,
                 play_type = QuestPlayType.Default,
                 party_info = new() { support_data = new() },
                 start_time = DateTimeOffset.UtcNow,
@@ -213,21 +218,40 @@ public class DungeonStartService : IDungeonStartService
 
         QuestData questInfo = MasterAsset.QuestData.Get(questId);
 
-        result.area_info_list = questInfo.AreaInfo.Select(this.mapper.Map<AreaInfoList>);
+        if (questInfo.PayEntityTargetType != PayTargetType.None)
+        {
+            // TODO: Make this more fine grained
+            await paymentService.ProcessPayment(
+                new Entity(
+                    questInfo.PayEntityType,
+                    questInfo.PayEntityId,
+                    questInfo.PayEntityQuantity
+                )
+            );
+        }
+
+        result.area_info_list = questInfo.AreaInfo.Select(mapper.Map<AreaInfoList>);
         result.dungeon_type = questInfo.DungeonType;
         result.reborn_limit = questInfo.RebornLimit;
         result.continue_limit = questInfo.ContinueLimit;
 
-        result.dungeon_key = await this.dungeonService.StartDungeon(
-            new() { QuestData = questInfo, Party = party }
+        result.dungeon_key = await dungeonService.StartDungeon(
+            new() { QuestData = questInfo, Party = party.Where(x => x.chara_id != 0) }
         );
 
-        result.party_info.fort_bonus_list = await this.bonusService.GetBonusList();
+        result.party_info.fort_bonus_list = await bonusService.GetBonusList();
+        result.party_info.event_boost = await bonusService.GetEventBoost(questInfo.Gid);
 
-        if (supportViewerId is not null)
+        logger.LogDebug("Using event boost {@boost}", result.party_info.event_boost);
+
+        if (supportViewerId is not null and not 0)
         {
-            result.party_info.support_data = await this.GetSupportData(supportViewerId.Value);
+            result.party_info.support_data = await GetSupportData(supportViewerId.Value);
         }
+
+        result.party_info.event_passive_grow_list = (
+            await eventService.GetEventPassiveList(questInfo.Gid)
+        ).event_passive_grow_list;
 
         return result;
     }

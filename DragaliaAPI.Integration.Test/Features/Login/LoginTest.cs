@@ -11,22 +11,17 @@ namespace DragaliaAPI.Integration.Test.Features.Login;
 public class LoginTest : TestFixture
 {
     public LoginTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
-
-    [Fact]
-    public async Task LoginIndex_ReturnsSuccess()
+        : base(factory, outputHelper)
     {
-        await this.Client
-            .Invoking(x => x.PostMsgpack<LoginIndexData>("/login/index", new()))
-            .Should()
-            .NotThrowAsync();
+        this.ResetLastLoginTime();
+        this.ClearLoginBonuses();
     }
 
     [Fact]
     public void IDailyResetAction_HasExpectedCount()
     {
         // Update this test when adding a new reset action
-        this.Services.GetServices<IDailyResetAction>().Should().HaveCount(3);
+        this.Services.GetServices<IDailyResetAction>().Should().HaveCount(4);
     }
 
     [Fact]
@@ -37,12 +32,6 @@ public class LoginTest : TestFixture
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.DailySummonCount, 5));
 
         (await this.GetSummonCount()).Should().Be(5);
-
-        await this.ApiContext.PlayerUserData
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
-            .ExecuteUpdateAsync(
-                entity => entity.SetProperty(x => x.LastLoginTime, DateTimeOffset.UnixEpoch)
-            );
 
         await this.Client.PostMsgpack<LoginIndexData>("/login/index", new LoginIndexRequest());
 
@@ -57,12 +46,6 @@ public class LoginTest : TestFixture
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.Quantity, 0));
 
         (await this.GetDragonGifts()).Should().AllSatisfy(x => x.Quantity.Should().Be(0));
-
-        await this.ApiContext.PlayerUserData
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
-            .ExecuteUpdateAsync(
-                entity => entity.SetProperty(x => x.LastLoginTime, DateTimeOffset.UnixEpoch)
-            );
 
         await this.Client.PostMsgpack<LoginIndexData>("/login/index", new LoginIndexRequest());
 
@@ -160,6 +143,133 @@ public class LoginTest : TestFixture
     }
 
     [Fact]
+    public async Task LoginIndex_GrantsLoginBonusBasedOnDb_GrantsEachDayReward()
+    {
+        /*
+        int oldSkipTickets = (
+            await this.ApiContext.PlayerUserData
+                .AsNoTracking()
+                .FirstAsync(x => x.DeviceAccountId == DeviceAccountId)
+        ).QuestSkipPoint;
+        */
+
+        await this.AddToDatabase(
+            new DbLoginBonus()
+            {
+                DeviceAccountId = DeviceAccountId,
+                CurrentDay = 4,
+                Id = 17 // Standard daily login bonus
+            }
+        );
+
+        DragaliaResponse<LoginIndexData> response = await this.Client.PostMsgpack<LoginIndexData>(
+            "/login/index",
+            new LoginIndexRequest()
+        );
+
+        response.data.login_bonus_list
+            .Should()
+            .ContainSingle()
+            .And.ContainEquivalentOf(
+                new AtgenLoginBonusList()
+                {
+                    login_bonus_id = 17,
+                    reward_day = 5,
+                    total_login_day = 5,
+                    entity_type = EntityTypes.Rupies,
+                    entity_quantity = 30_000,
+                }
+            );
+
+        // Skip tickets can't yet be rewarded
+        // response.data.update_data_list.user_data.quest_skip_point.Should().Be(oldSkipTickets + 12);
+    }
+
+    [Fact]
+    public async Task LoginIndex_LoginBonusLastDay_IsLoopTrue_RollsOver()
+    {
+        await this.AddToDatabase(
+            new DbLoginBonus()
+            {
+                DeviceAccountId = DeviceAccountId,
+                CurrentDay = 10,
+                Id = 17 // Standard daily login bonus
+            }
+        );
+
+        DragaliaResponse<LoginIndexData> response = await this.Client.PostMsgpack<LoginIndexData>(
+            "/login/index",
+            new LoginIndexRequest()
+        );
+
+        response.data.login_bonus_list
+            .Should()
+            .ContainSingle()
+            .And.ContainEquivalentOf(
+                new AtgenLoginBonusList()
+                {
+                    login_bonus_id = 17,
+                    reward_day = 1,
+                    total_login_day = 1,
+                    entity_type = EntityTypes.Material,
+                    entity_id = 101001003,
+                    entity_quantity = 10,
+                }
+            );
+    }
+
+    [Fact]
+    public async Task LoginIndex_LoginBonusLastDay_IsLoopFalse_SetsIsComplete()
+    {
+        this.MockDateTimeProvider
+            .SetupGet(x => x.UtcNow)
+            .Returns(DateTime.Parse("2018/09/28").ToUniversalTime());
+
+        await this.AddToDatabase(
+            new DbLoginBonus()
+            {
+                DeviceAccountId = DeviceAccountId,
+                CurrentDay = 6,
+                Id = 2 // Launch Celebration Daily Bonus
+            }
+        );
+
+        DragaliaResponse<LoginIndexData> response = await this.Client.PostMsgpack<LoginIndexData>(
+            "/login/index",
+            new LoginIndexRequest()
+        );
+
+        response.data.login_bonus_list
+            .Should()
+            .ContainEquivalentOf(
+                new AtgenLoginBonusList()
+                {
+                    login_bonus_id = 2,
+                    reward_day = 7,
+                    total_login_day = 7,
+                    entity_type = EntityTypes.Wyrmite,
+                    entity_id = 0,
+                    entity_quantity = 150,
+                }
+            );
+
+        (
+            await this.ApiContext.LoginBonuses
+                .AsNoTracking()
+                .FirstAsync(x => x.DeviceAccountId == DeviceAccountId && x.Id == 2)
+        ).IsComplete
+            .Should()
+            .BeTrue();
+
+        this.ResetLastLoginTime();
+
+        DragaliaResponse<LoginIndexData> secondResponse =
+            await this.Client.PostMsgpack<LoginIndexData>("/login/index", new LoginIndexRequest());
+
+        secondResponse.data.login_bonus_list.Should().NotContain(x => x.login_bonus_id == 2);
+    }
+
+    [Fact]
     public async Task LoginVerifyJws_ReturnsOK()
     {
         ResultCodeData response = (
@@ -184,4 +294,17 @@ public class LoginTest : TestFixture
             .AsNoTracking()
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ToListAsync();
+
+    private void ResetLastLoginTime() =>
+        this.ApiContext.PlayerUserData
+            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .ExecuteUpdate(
+                entity => entity.SetProperty(x => x.LastLoginTime, DateTimeOffset.UnixEpoch)
+            );
+
+    private void ClearLoginBonuses()
+    {
+        this.ApiContext.LoginBonuses.ExecuteDelete();
+        this.ApiContext.ChangeTracker.Clear();
+    }
 }

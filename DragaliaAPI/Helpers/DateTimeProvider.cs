@@ -2,5 +2,6 @@ namespace DragaliaAPI.Helpers;
 
 public class DateTimeProvider : IDateTimeProvider
 {
-    public DateTimeOffset UtcNow => DateTimeOffset.UtcNow;
+    // So that it always returns the same time
+    public DateTimeOffset UtcNow { get; } = DateTimeOffset.UtcNow;
 }

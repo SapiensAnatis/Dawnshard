@@ -17,7 +17,7 @@ public static class TestData
             name = "Euden",
             level = 10,
             last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-            emblem_id = 40000002,
+            emblem_id = (Emblems)40000002,
             max_party_power = 9999,
             support_chara = new()
             {
@@ -67,7 +67,7 @@ public static class TestData
             name = "Elisanne",
             level = 10,
             last_login_date = DateTimeOffset.UtcNow - TimeSpan.FromDays(1),
-            emblem_id = 40000002,
+            emblem_id = (Emblems)40000002,
             max_party_power = 9999,
             support_chara = new()
             {
