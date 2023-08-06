@@ -67,25 +67,17 @@ public class WallController : DragaliaControllerBase
     }
 
 
-
+    // When is this called?
     [HttpPost("get_monthly_reward")]
-    public async Task<DragaliaResult> GetMonthlyReward(WallGetMonthlyRewardRequest request)
+    public async Task<DragaliaResult> GetMonthlyReward()
     {
-      
-        AtgenUserWallRewardList wallRewardList =
-            new()
-            {
-                quest_group_id = request.quest_group_id,
-                sum_wall_level = await wallService.GetTotalWallLevel(),
-                last_reward_date = DateTimeOffset.UtcNow,
-                reward_status = RewardStatus.Received
-            };
 
-        WallGetMonthlyRewardData data =
-            new()
-            {
-                user_wall_reward_list = new[] { wallRewardList } 
-            };
+        int totalLevel = await wallService.GetTotalWallLevel();
+
+        IEnumerable<AtgenUserWallRewardList> userWallRewardList =
+            wallService.GetUserWallRewardList(totalLevel, RewardStatus.Received);
+
+        WallGetMonthlyRewardData data = new() { user_wall_reward_list = userWallRewardList };
 
         return Ok(data);
     }
@@ -108,21 +100,46 @@ public class WallController : DragaliaControllerBase
         return Ok(data);
     }
 
-
+    // Called upon entering the MG menu when the user is available to receive
+    // monthly MG rewards (i assume)
     [HttpPost("receive_monthly_reward")]
     public async Task<DragaliaResult> ReceiveMonthlyReward(WallReceiveMonthlyRewardRequest request)
     {
+        int totalLevel = await wallService.GetTotalWallLevel();
+
+        IEnumerable<AtgenBuildEventRewardEntityList> rewardEntityList =
+            wallService.GetMonthlyRewardEntityList(totalLevel);
+
+        IEnumerable<AtgenUserWallRewardList> userWallRewardList =
+            wallService.GetUserWallRewardList(totalLevel, RewardStatus.Received);
+
+        // Grant Rewards
+        foreach (AtgenBuildEventRewardEntityList entity in rewardEntityList)
+        {
+            await rewardService.GrantReward(
+                new(entity.entity_type, entity.entity_id, entity.entity_quantity)
+            );
+        }
+
+        EntityResult entityResult = this.rewardService.GetEntityResult();
+
+        AtgenMonthlyWallReceiveList monthlyWallReceiveList =
+            new()
+            {
+                quest_group_id = WallService.WallQuestGroupId,
+                is_receive_reward = RewardStatus.Received
+            };
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-        //stub
+       
         WallReceiveMonthlyRewardData data =
             new()
             {
                 update_data_list = updateDataList,
-                entity_result = null,
-                wall_monthly_reward_list = null,
-                user_wall_reward_list = null,
-                monthly_wall_receive_list = null
+                entity_result = entityResult,
+                wall_monthly_reward_list = rewardEntityList,
+                user_wall_reward_list = userWallRewardList,
+                monthly_wall_receive_list = new[] { monthlyWallReceiveList } 
             };
 
         return Ok(data);
@@ -130,8 +147,9 @@ public class WallController : DragaliaControllerBase
 
 
     // Called upon clearing a MG quest and then clicking on the Next button
+    // what does this actually do?
     [HttpPost("set_wall_clear_party")] 
-    public async Task<DragaliaResult> SetWallClearParty(WallSetWallClearPartyRequest request)
+    public async Task<DragaliaResult> SetWallClearParty()
     {
 
         WallSetWallClearPartyData data =

@@ -9,7 +9,6 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using AutoMapper;
 
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +16,7 @@ using DragaliaAPI.Shared.MasterAsset;
 
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Reflection.Metadata;
+using DragaliaAPI.Shared.MasterAsset.Models.Wall;
 
 namespace DragaliaAPI.Features.Wall;
 
@@ -87,7 +87,7 @@ public class WallStartController : DragaliaControllerBase
         return Ok(data);
     }
 
-    // Called from the play next button from the MG clear screen
+    // Called from the play next level button from the MG clear screen
     [HttpPost("start_assign_unit")]
     public async Task<DragaliaResult> StartAssignUnit(WallStartStartAssignUnitRequest request)
     {

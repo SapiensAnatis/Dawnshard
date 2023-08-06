@@ -31,7 +31,6 @@ public class OddsInfoService : IOddsInfoService
     {
         OddsInfo odds = StubData.OddsInfo;
 
-        // TODO: drop_obj (treasure chests / crates, I think?)
         odds.enemy = this.questEnemyService.BuildQuestWallEnemyList(wallId, wallLevel);
         odds.area_index = 0;
 

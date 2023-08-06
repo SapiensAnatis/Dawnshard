@@ -3,7 +3,7 @@ using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 
-namespace DragaliaAPI.Shared.MasterAsset.Models;
+namespace DragaliaAPI.Shared.MasterAsset.Models.Wall;
 
 public record QuestWallDetail(
     int Id,
@@ -55,6 +55,6 @@ public record QuestWallDetail(
     public IEnumerable<AreaInfo> AreaInfo =>
           new List<AreaInfo>()
           {
-            new(this.Scene01, this.AreaName01)
+            new(Scene01, AreaName01)
           }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
 }

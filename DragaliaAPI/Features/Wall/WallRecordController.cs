@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -21,6 +22,7 @@ public class WallRecordController : DragaliaControllerBase
     private readonly IWallService wallService;
     private readonly IRewardService rewardService;
     private readonly IDungeonService dungeonService;
+    private readonly IPresentService presentService;
     private readonly ILogger<WallRecordController> logger;
 
     public WallRecordController(
@@ -29,6 +31,7 @@ public class WallRecordController : DragaliaControllerBase
         IWallService wallService,
         IRewardService rewardService,
         IDungeonService dungeonService,
+        IPresentService presentService,
         ILogger<WallRecordController> logger
     )
     {
@@ -37,17 +40,22 @@ public class WallRecordController : DragaliaControllerBase
         this.wallService = wallService;
         this.rewardService = rewardService;
         this.dungeonService = dungeonService;
+        this.presentService = presentService;
         this.logger = logger;
     }
 
     // Called upon completing a MG quest
-    // stub: handle drops from clearing lv80
     [HttpPost("record")]
     public async Task<DragaliaResult> Record(WallRecordRecordRequest request)
     {
         DungeonSession dungeonSession = await dungeonService.FinishDungeon(request.dungeon_key);
 
         DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(request.wall_id);
+
+        int previousLevel = questWall.WallLevel;
+
+        // Don't grant first clear wyrmite if you are re-clearing the last level
+        bool toGrantFirstClearWyrmite = previousLevel != WallService.MaximumQuestWallLevel;
 
         logger.LogInformation("[wall_record/record] cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}",
             request.wall_id, questWall.WallLevel);
@@ -67,7 +75,7 @@ public class WallRecordController : DragaliaControllerBase
         AtgenWallDropReward wallDropReward =
             new()
             {
-                reward_entity_list = GOLD_CRYSTALS,
+                reward_entity_list = new[] { GoldCrystals.ToBuildEventRewardEntityList() },
                 take_coin = 500,
                 take_mana = 120
             };
@@ -76,9 +84,37 @@ public class WallRecordController : DragaliaControllerBase
             new()
             {
                 wall_id = request.wall_id,
-                before_wall_level = 0,
-                after_wall_level = 1
+                before_wall_level = previousLevel,
+                after_wall_level = previousLevel + 1
             };
+
+        // Grant Rewards
+        await rewardService.GrantReward(GoldCrystals);
+        
+        await rewardService.GrantReward(
+            new Entity(EntityTypes.Rupies, 1, 500)
+        );
+        
+        await rewardService.GrantReward(
+            new Entity(EntityTypes.Mana, 0, 120)
+        );
+        
+        if (toGrantFirstClearWyrmite)
+        {
+            presentService.AddPresent(
+                new Present.Present(
+                    PresentMessage.FirstClear,
+                    Wyrmites.Type,
+                    Wyrmites.Id,
+                    Wyrmites.Quantity
+                )
+            );
+        }
+
+        IEnumerable<AtgenBuildEventRewardEntityList> wallClearRewardList =
+            toGrantFirstClearWyrmite ?
+            new[] { Wyrmites.ToBuildEventRewardEntityList() } :
+            Enumerable.Empty<AtgenBuildEventRewardEntityList>();
 
         EntityResult entityResult = rewardService.GetEntityResult();
 
@@ -90,7 +126,7 @@ public class WallRecordController : DragaliaControllerBase
                 update_data_list = updateDataList,
                 entity_result = entityResult,
                 play_wall_detail = playWallDetail,
-                wall_clear_reward_list = WYRMITES,
+                wall_clear_reward_list = wallClearRewardList,
                 wall_drop_reward = wallDropReward,
                 wall_unit_info = wallUnitInfo
             };
@@ -98,23 +134,8 @@ public class WallRecordController : DragaliaControllerBase
 
     }
 
-    private IEnumerable<AtgenBuildEventRewardEntityList> GOLD_CRYSTALS =
-        new List<AtgenBuildEventRewardEntityList>() {
-            new AtgenBuildEventRewardEntityList ()
-            {
-                entity_type = EntityTypes.Material,
-                entity_id = (int)Materials.GoldCrystal,
-                entity_quantity = 3
-            }
-        };
+    private readonly Entity GoldCrystals = new(EntityTypes.Material, (int)Materials.GoldCrystal, 3);
 
-    private IEnumerable<AtgenBuildEventRewardEntityList> WYRMITES =
-        new List<AtgenBuildEventRewardEntityList>() {
-            new AtgenBuildEventRewardEntityList ()
-            {
-                entity_type = EntityTypes.Wyrmite,
-                entity_id = 0,
-                entity_quantity = 10
-            }
-        };
+    private readonly Entity Wyrmites = new(EntityTypes.Wyrmite, 0, 10);
+
 }

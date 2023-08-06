@@ -33,8 +33,19 @@ public class WallRepository : IWallRepository
     public async Task InitializeWall()
     {
         this.logger.LogInformation("Initializing wall.");
-        //...
-       
+
+        for (int element = 0; element < 5; element++)
+        {
+            await apiContext.PlayerQuestWalls.AddAsync(
+                    new DbPlayerQuestWall()
+                    {
+                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        WallId = WallService.FlameWallId + element,
+                        WallLevel = 0,
+                        IsStartNextLevel = false,
+                    }
+            );
+        }
     }
 
     public async Task<DbPlayerQuestWall> GetQuestWall(int wallId)

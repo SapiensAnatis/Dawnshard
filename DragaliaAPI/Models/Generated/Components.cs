@@ -2617,9 +2617,9 @@ public class AtgenMissionsClearSet
 public class AtgenMonthlyWallReceiveList
 {
     public int quest_group_id { get; set; }
-    public int is_receive_reward { get; set; }
+    public RewardStatus is_receive_reward { get; set; }
 
-    public AtgenMonthlyWallReceiveList(int quest_group_id, int is_receive_reward)
+    public AtgenMonthlyWallReceiveList(int quest_group_id, RewardStatus is_receive_reward)
     {
         this.quest_group_id = quest_group_id;
         this.is_receive_reward = is_receive_reward;

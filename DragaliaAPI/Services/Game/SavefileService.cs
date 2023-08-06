@@ -605,7 +605,6 @@ public class SavefileService : ISavefileService
             .Include(x => x.WeaponSkinList)
             .Include(x => x.WeaponPassiveAbilityList)
             .Include(x => x.EquippedStampList)
-            .Include(x => x.QuestWalls)
             .AsSplitQuery();
     }
 
