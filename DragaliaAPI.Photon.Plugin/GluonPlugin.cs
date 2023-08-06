@@ -27,6 +27,7 @@ namespace DragaliaAPI.Photon.Plugin
         private IPluginLogger logger;
         private PluginConfiguration config;
         private Random rdm;
+        private int minGoToIngameState;
 
         private static readonly MessagePackSerializerOptions MessagePackOptions =
             MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block);
@@ -57,6 +58,7 @@ namespace DragaliaAPI.Photon.Plugin
             info.Request.ActorProperties.InitializeViewerId();
 
             info.Request.GameProperties.Add(GamePropertyKeys.RoomId, rdm.Next(100_0000, 999_9999));
+            info.Request.GameProperties.Add(GamePropertyKeys.GoToIngameState, 0);
 
 #if DEBUG
             this.logger.DebugFormat(
@@ -117,10 +119,10 @@ namespace DragaliaAPI.Photon.Plugin
                 x => x.ActorNr == info.ActorNr
             );
 
+#if DEBUG
             if (!actor.Properties.TryGetValue("DeactivationTime", out object deactivationTime))
                 deactivationTime = "null";
 
-#if DEBUG
             this.logger.DebugFormat(
                 "Leave info -- Actor: {0}, Details: {1}, IsInactive {2}, DeactivationTime: {3}",
                 info.ActorNr,
@@ -292,12 +294,27 @@ namespace DragaliaAPI.Photon.Plugin
             this.logger.Debug(JsonConvert.SerializeObject(info.Request.Properties));
 #endif
 
-            if (
-                info.Request.Properties.ContainsKey(ActorPropertyKeys.GoToIngameState)
-                && info.ActorNr == 1
-            )
+            if (info.Request.Properties.ContainsKey(ActorPropertyKeys.GoToIngameState))
             {
-                this.OnSetGoToIngameState(info);
+                // Wait for everyone to reach a particular GoToIngameState value before doing anything.
+                // But let the host set GoToIngameState = 1 unilaterally to signal the game start process.
+
+                int value = info.Request.Properties.GetInt(ActorPropertyKeys.GoToIngameState);
+
+                int minValue = this.PluginHost.GameActors
+                    .Select(x => x.Properties.GetInt(ActorPropertyKeys.GoToIngameState))
+                    .Min();
+
+                if (minValue > this.minGoToIngameState)
+                {
+                    this.minGoToIngameState = minValue;
+                    this.OnSetGoToIngameState(info);
+                }
+                else if (value == 1 && info.ActorNr == 1)
+                {
+                    this.minGoToIngameState = value;
+                    this.OnSetGoToIngameState(info);
+                }
             }
 
             if (info.Request.Properties.ContainsKey(GamePropertyKeys.EntryConditions))
@@ -439,8 +456,7 @@ namespace DragaliaAPI.Photon.Plugin
                         heroParams = heroParams.Take(memberCount).ToArray()
                     };
 
-                    void raiseEvent() => this.RaiseEvent(Event.Codes.CharacterData, evt);
-                    this.PluginHost.CreateOneTimeTimer(info, raiseEvent, DataEventDelayMs);
+                    this.RaiseEvent(Event.Codes.CharacterData, evt);
                 }
             }
         }
@@ -555,8 +571,7 @@ namespace DragaliaAPI.Photon.Plugin
                 ReBattleCount = this.config.ReplayTimeoutSeconds
             };
 
-            void raiseEvent() => this.RaiseEvent(Event.Codes.Party, evt);
-            this.PluginHost.CreateOneTimeTimer(info, raiseEvent, DataEventDelayMs);
+            this.RaiseEvent(Event.Codes.Party, evt);
         }
 
         /// <summary>
