@@ -105,7 +105,7 @@ public class DungeonRecordService(
     {
         bool isBestClearTime = false;
 
-        if (questEntity.BestClearTime > clearTime)
+        if (questEntity.BestClearTime < 0 || questEntity.BestClearTime > clearTime)
         {
             isBestClearTime = true;
             questEntity.BestClearTime = clearTime;

@@ -185,6 +185,8 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
         if (quantity < 0)
             throw new ArgumentOutOfRangeException(nameof(quantity));
 
+        var b = this.Items.ToList();
+
         DbPlayerEventItem item =
             await GetEventItemAsync(itemId)
             ?? throw new DragaliaException(ResultCode.CommonDbError, "Event item not found");
