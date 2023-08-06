@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
-using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -14,81 +12,67 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Missions;
 
-public class MissionInitialProgressionService : IMissionInitialProgressionService
+public class MissionInitialProgressionService(
+    ILogger<MissionInitialProgressionService> logger,
+    IFortMissionProgressionService fortMissionProgressionService,
+    IAbilityCrestRepository abilityCrestRepository,
+    IQuestRepository questRepository,
+    IUnitRepository unitRepository,
+    IWeaponRepository weaponRepository,
+    IStoryRepository storyRepository,
+    IUserDataRepository userDataRepository
+) : IMissionInitialProgressionService
 {
-    private readonly ILogger<MissionInitialProgressionService> logger;
-    private readonly IAbilityCrestRepository abilityCrestRepository;
-    private readonly IFortRepository fortRepository;
-    private readonly IQuestRepository questRepository;
-    private readonly IUnitRepository unitRepository;
-    private readonly IWeaponRepository weaponRepository;
-    private readonly IStoryRepository storyRepository;
-
-    public MissionInitialProgressionService(
-        ILogger<MissionInitialProgressionService> logger,
-        IAbilityCrestRepository abilityCrestRepository,
-        IFortRepository fortRepository,
-        IQuestRepository questRepository,
-        IUnitRepository unitRepository,
-        IWeaponRepository weaponRepository,
-        IStoryRepository storyRepository
-    )
-    {
-        this.logger = logger;
-        this.abilityCrestRepository = abilityCrestRepository;
-        this.fortRepository = fortRepository;
-        this.questRepository = questRepository;
-        this.unitRepository = unitRepository;
-        this.weaponRepository = weaponRepository;
-        this.storyRepository = storyRepository;
-    }
-
     public async Task GetInitialMissionProgress(DbPlayerMission mission)
     {
         Mission missionInfo = Mission.From(mission.Type, mission.Id);
 
-        MissionInfo info = new(mission.Id, mission.Type);
         MissionProgressionInfo? progressionInfo =
-            MasterAsset.MissionProgressionInfo.Enumerable.FirstOrDefault(
-                x => x.Requirements.Any(x => x.Missions.Contains(info))
+            MasterAsset.MissionProgressionInfo.Enumerable.SingleOrDefault(
+                x => x.MissionType == mission.Type && x.MissionId == mission.Id
             );
 
         if (progressionInfo == null)
             return;
 
-        MissionProgressionRequirement requirement = progressionInfo.Requirements.First(
-            x => x.Missions.Contains(info)
-        );
-
         int amountToComplete = missionInfo.CompleteValue;
-        int currentAmount = progressionInfo.Type switch
+        int currentAmount = progressionInfo.CompleteType switch
         {
-            MissionProgressType.FortPlantBuilt
-                => await this.fortRepository.Builds.CountAsync(
-                    x => x.PlantId == (FortPlants)requirement.Parameter!
+            MissionCompleteType.FortPlantLevelUp
+                => await fortMissionProgressionService.GetMaxFortPlantLevel(
+                    (FortPlants)progressionInfo.Parameter!
                 ),
-            MissionProgressType.FortPlantUpgraded
-                => await this.fortRepository.Builds
-                    .Where(x => x.PlantId == (FortPlants)requirement.Parameter!)
-                    .Select(x => x.Level)
-                    .FirstOrDefaultAsync(),
-            MissionProgressType.FortLevelup
-                => await this.fortRepository.Builds
-                    .Where(x => x.PlantId != FortPlants.TheHalidom)
-                    .SumAsync(
-                        x => x.BuildEndDate == DateTimeOffset.UnixEpoch ? x.Level : x.Level - 1
-                    ),
-            MissionProgressType.QuestCleared => await GetQuestClearedCount(requirement),
-            MissionProgressType.CharacterBuildup => await GetCharacterBuildupCount(requirement),
-            MissionProgressType.WyrmprintAugmentBuildup
-                => await GetWyrmprintBuildupCount(requirement),
-            MissionProgressType.WeaponEarned => await GetWeaponEarnedCount(requirement),
-            MissionProgressType.WeaponRefined => await GetWeaponRefinedCount(requirement),
-            MissionProgressType.VoidBattleCleared => await GetVoidBattleClearedCount(requirement),
-            MissionProgressType.ItemSummon => 0, // TODO: As daily quests also use this, should we make it actually count the item summons?
+            MissionCompleteType.FortPlantBuilt
+            or MissionCompleteType.FortPlantPlaced
+                => await fortMissionProgressionService.GetFortPlantCount(
+                    (FortPlants)progressionInfo.Parameter!
+                ),
+            MissionCompleteType.FortLevelUp
+                => await fortMissionProgressionService.GetTotalFortLevel(),
+            MissionCompleteType.QuestCleared => await GetQuestClearedCount(progressionInfo),
+            MissionCompleteType.QuestStoryCleared
+                => await storyRepository.QuestStories
+                    .Where(
+                        x => x.StoryId == progressionInfo.Parameter && x.State == StoryState.Read
+                    )
+                    .AnyAsync()
+                    ? 1
+                    : 0,
+            MissionCompleteType.QuestGroupCleared
+                => await GetQuestGroupClearedCount(progressionInfo),
+            MissionCompleteType.WeaponEarned => await GetWeaponEarnedCount(progressionInfo),
+            MissionCompleteType.WeaponRefined => await GetWeaponRefinedCount(progressionInfo),
+            MissionCompleteType.AbilityCrestBuildupPlusCount
+                => await GetWyrmprintBuildupCount(progressionInfo),
+            MissionCompleteType.CharacterBuildupPlusCount
+                => await GetCharacterBuildupCount(progressionInfo),
+            MissionCompleteType.ItemSummon => 0, // TODO: As daily quests also use this, should we make it actually count the item summons?
+            MissionCompleteType.PlayerLevelUp
+                => (await userDataRepository.GetUserDataAsync()).Level,
+            MissionCompleteType.AccountLinked => 0,
             _
                 => throw new UnreachableException(
-                    $"Invalid MissionProgressType {progressionInfo.Type} in initial progress handling"
+                    $"Invalid MissionProgressType {progressionInfo.CompleteType} in initial progress handling"
                 )
         };
 
@@ -120,37 +104,21 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
         }
     }
 
-    private async Task<int> GetQuestClearedCount(MissionProgressionRequirement requirement)
+    private async Task<int> GetQuestClearedCount(MissionProgressionInfo requirement)
     {
-        int questClearCount = await this.questRepository.Quests
+        return await questRepository.Quests
             .Where(x => x.QuestId == requirement.Parameter)
             .Select(x => x.PlayCount)
             .FirstOrDefaultAsync();
-
-        if (questClearCount == 0)
-        {
-            // Okay, this might be a quest story.
-            if (
-                await this.storyRepository.QuestStories
-                    .Where(x => x.StoryId == requirement.Parameter && x.State == StoryState.Read)
-                    .AnyAsync()
-            )
-            {
-                return 1;
-            }
-        }
-
-        return questClearCount;
     }
 
-    private async Task<int> GetCharacterBuildupCount(MissionProgressionRequirement requirement)
+    private async Task<int> GetCharacterBuildupCount(MissionProgressionInfo requirement)
     {
         return (PlusCountType)requirement.Parameter! switch
         {
-            PlusCountType.Hp
-                => await this.unitRepository.Charas.Select(x => x.HpPlusCount).MaxAsync(),
+            PlusCountType.Hp => await unitRepository.Charas.Select(x => x.HpPlusCount).MaxAsync(),
             PlusCountType.Atk
-                => await this.unitRepository.Charas.Select(x => x.AttackPlusCount).MaxAsync(),
+                => await unitRepository.Charas.Select(x => x.AttackPlusCount).MaxAsync(),
             _
                 => throw new DragaliaException(
                     ResultCode.CommonInvalidArgument,
@@ -159,16 +127,14 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
         };
     }
 
-    private async Task<int> GetWyrmprintBuildupCount(MissionProgressionRequirement requirement)
+    private async Task<int> GetWyrmprintBuildupCount(MissionProgressionInfo requirement)
     {
         return (PlusCountType)requirement.Parameter! switch
         {
             PlusCountType.Hp
-                => await this.abilityCrestRepository.AbilityCrests
-                    .Select(x => x.HpPlusCount)
-                    .MaxAsync(),
+                => await abilityCrestRepository.AbilityCrests.Select(x => x.HpPlusCount).MaxAsync(),
             PlusCountType.Atk
-                => await this.abilityCrestRepository.AbilityCrests
+                => await abilityCrestRepository.AbilityCrests
                     .Select(x => x.AttackPlusCount)
                     .MaxAsync(),
             _
@@ -179,7 +145,7 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
         };
     }
 
-    private async Task<int> GetWeaponEarnedCount(MissionProgressionRequirement requirement)
+    private async Task<int> GetWeaponEarnedCount(MissionProgressionInfo requirement)
     {
         List<WeaponBodies> validWeaponBodies = MasterAsset.WeaponBody.Enumerable
             .Where(
@@ -197,12 +163,12 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
             .Select(x => x.Id)
             .ToList();
 
-        return await this.weaponRepository.WeaponBodies.CountAsync(
+        return await weaponRepository.WeaponBodies.CountAsync(
             x => validWeaponBodies.Contains(x.WeaponBodyId)
         );
     }
 
-    private async Task<int> GetWeaponRefinedCount(MissionProgressionRequirement requirement)
+    private async Task<int> GetWeaponRefinedCount(MissionProgressionInfo requirement)
     {
         List<WeaponBodies> validWeaponBodies = MasterAsset.WeaponBody.Enumerable
             .Where(
@@ -220,19 +186,29 @@ public class MissionInitialProgressionService : IMissionInitialProgressionServic
             .Select(x => x.Id)
             .ToList();
 
-        return await this.weaponRepository.WeaponBodies
+        return await weaponRepository.WeaponBodies
             .Where(x => validWeaponBodies.Contains(x.WeaponBodyId))
             .SumAsync(x => x.LimitOverCount);
     }
 
-    private async Task<int> GetVoidBattleClearedCount(MissionProgressionRequirement requirement)
+    private async Task<int> GetQuestGroupClearedCount(MissionProgressionInfo requirement)
     {
         List<int> validQuests = MasterAsset.QuestData.Enumerable
-            .Where(x => x.IsPartOfVoidBattleGroups)
+            .Where(
+                x =>
+                    x.Gid == requirement.Parameter
+                    || (
+                        MasterAsset.QuestEventGroup.TryGetValue(
+                            x.Gid,
+                            out QuestEventGroup? eventGroup
+                        )
+                        && eventGroup.BaseQuestGroupId == requirement.Parameter
+                    )
+            )
             .Select(x => x.Id)
             .ToList();
 
-        return await this.questRepository.Quests
+        return await questRepository.Quests
             .Where(x => validQuests.Contains(x.QuestId))
             .SumAsync(x => x.PlayCount);
     }
