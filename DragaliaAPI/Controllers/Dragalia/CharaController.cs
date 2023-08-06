@@ -160,12 +160,13 @@ public class CharaController(
                             playerCharData.AttackPlusCount + materialList.quantity,
                             CharaConstants.MaxAtkEnhance
                         );
-                    for (int i = 0; i < materialList.quantity; i++)
-                    {
-                        // HACK (TODO: We need a mission progression refactor)
-                        missionProgressionService.OnCharacterBuildup(PlusCountType.Atk);
-                    }
 
+                    missionProgressionService.OnCharacterBuildupPlusCount(
+                        playerCharData.CharaId,
+                        PlusCountType.Atk,
+                        materialList.quantity,
+                        playerCharData.AttackPlusCount
+                    );
                     break;
                 case Materials.FortifyingCrystal:
                     playerCharData.HpPlusCount = (byte)
@@ -173,12 +174,13 @@ public class CharaController(
                             playerCharData.HpPlusCount + materialList.quantity,
                             CharaConstants.MaxHpEnhance
                         );
-                    for (int i = 0; i < materialList.quantity; i++)
-                    {
-                        // HACK (TODO: We need a mission progression refactor)
-                        missionProgressionService.OnCharacterBuildup(PlusCountType.Hp);
-                    }
 
+                    missionProgressionService.OnCharacterBuildupPlusCount(
+                        playerCharData.CharaId,
+                        PlusCountType.Hp,
+                        materialList.quantity,
+                        playerCharData.HpPlusCount
+                    );
                     break;
                 default:
                     throw new DragaliaException(
@@ -200,6 +202,8 @@ public class CharaController(
             && !(playerCharData.Exp < CharaConstants.XpLimits[playerCharData.Level])
         )
         {
+            int levelDifference = 0;
+
             while (
                 playerCharData.Level < maxLevel
                 && playerCharData.Level < CharaConstants.XpLimits.Count
@@ -207,6 +211,16 @@ public class CharaController(
             )
             {
                 playerCharData.Level++;
+                levelDifference++;
+            }
+
+            if (levelDifference > 0)
+            {
+                missionProgressionService.OnCharacterLevelUp(
+                    playerCharData.CharaId,
+                    levelDifference,
+                    playerCharData.Level
+                );
             }
 
             CharaData charaData = MasterAsset.CharaData.Get(playerCharData.CharaId);

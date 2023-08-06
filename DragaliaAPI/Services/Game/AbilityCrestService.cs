@@ -251,10 +251,12 @@ public class AbilityCrestService : IAbilityCrestService
             dbAbilityCrest.AttackPlusCount = buildup.plus_count;
         }
 
-        for (int i = 0; i < usedAugments; i++)
-        {
-            this.missionProgressionService.OnWyrmprintAugmentBuildup(buildup.plus_count_type);
-        }
+        this.missionProgressionService.OnAbilityCrestBuildupPlusCount(
+            dbAbilityCrest.AbilityCrestId,
+            buildup.plus_count_type,
+            usedAugments,
+            buildup.plus_count
+        );
 
         await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
         return ResultCode.Success;

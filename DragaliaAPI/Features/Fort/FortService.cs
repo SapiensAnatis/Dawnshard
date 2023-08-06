@@ -25,7 +25,7 @@ public class FortService(
     ILogger<FortService> logger,
     IPlayerIdentityService playerIdentityService,
     IMapper mapper,
-    IMissionProgressionService missionProgressionService,
+    IFortMissionProgressionService fortMissionProgressionService,
     IPaymentService paymentService,
     IRewardService rewardService,
     IOptionsMonitor<DragonfruitConfig> config,
@@ -249,7 +249,7 @@ public class FortService(
             throw new InvalidOperationException($"This building is not currently being built.");
         }
 
-        await CompleteAtOnce(build, paymentType);
+        await CompleteAtOnce(build, paymentType, false);
     }
 
     public async Task LevelupAtOnce(PaymentTypes paymentType, long buildId)
@@ -263,10 +263,10 @@ public class FortService(
             throw new InvalidOperationException($"This building is not currently being upgraded.");
         }
 
-        await CompleteAtOnce(build, paymentType);
+        await CompleteAtOnce(build, paymentType, true);
     }
 
-    private async Task CompleteAtOnce(DbFortBuild build, PaymentTypes paymentType)
+    private async Task CompleteAtOnce(DbFortBuild build, PaymentTypes paymentType, bool levelUp)
     {
         if (
             paymentType
@@ -288,7 +288,7 @@ public class FortService(
 
         await paymentService.ProcessPayment(paymentType, expectedPrice: paymentCost);
 
-        FinishUpgrade(build);
+        await FinishUpgrade(build, levelUp);
     }
 
     public async Task<DbFortBuild> CancelBuild(long buildId)
@@ -332,13 +332,15 @@ public class FortService(
             throw new DragaliaException(ResultCode.FortBuildIncomplete, "Invalid state");
 
         if (current < build.BuildEndDate)
+        {
             throw new DragaliaException(
                 ResultCode.FortBuildIncomplete,
                 $"This building has not completed construction."
             );
+        }
 
         build.LastIncomeDate = current;
-        FinishUpgrade(build);
+        await FinishUpgrade(build, false);
     }
 
     public async Task EndLevelup(long buildId)
@@ -353,26 +355,20 @@ public class FortService(
         )
             throw new InvalidOperationException($"This building has not completed levelling up.");
 
-        FinishUpgrade(build);
+        await FinishUpgrade(build, true);
     }
 
-    private void FinishUpgrade(DbFortBuild build)
+    private async Task FinishUpgrade(DbFortBuild build, bool levelUp)
     {
         // Update values
         build.BuildStartDate = DateTimeOffset.UnixEpoch;
         build.BuildEndDate = DateTimeOffset.UnixEpoch;
         build.Level++;
 
-        if (build.Level == 1)
-        {
-            missionProgressionService.OnFortPlantBuilt(build.PlantId);
-        }
+        if (levelUp)
+            await fortMissionProgressionService.OnFortPlantLevelUp(build.PlantId, build.Level);
         else
-        {
-            missionProgressionService.OnFortPlantUpgraded(build.PlantId);
-        }
-
-        missionProgressionService.OnFortLevelup();
+            await fortMissionProgressionService.OnFortPlantBuild(build.PlantId);
     }
 
     public async Task<DbFortBuild> BuildStart(FortPlants fortPlantId, int positionX, int positionZ)
@@ -444,15 +440,29 @@ public class FortService(
 
     public async Task<DbFortBuild> Move(long buildId, int afterPositionX, int afterPositionZ)
     {
-        logger.LogDebug(
-            "Move performed for build {buildId} - New Position {x}/{z}",
-            buildId,
-            afterPositionX,
-            afterPositionZ
-        );
-
         // Get building
         DbFortBuild build = await fortRepository.GetBuilding(buildId);
+
+        if (build is { PositionX: -1, PositionZ: -1 })
+        {
+            logger.LogDebug(
+                "Placed build {buildId} from storage to {x}/{z}",
+                buildId,
+                afterPositionX,
+                afterPositionZ
+            );
+
+            await fortMissionProgressionService.OnFortPlantPlace(build.PlantId);
+        }
+        else
+        {
+            logger.LogDebug(
+                "Move performed for build {buildId} - New Position {x}/{z}",
+                buildId,
+                afterPositionX,
+                afterPositionZ
+            );
+        }
 
         // Move building to requested coordinate
         build.PositionX = afterPositionX;

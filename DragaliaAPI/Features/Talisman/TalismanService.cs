@@ -31,10 +31,12 @@ public class TalismanService(
         foreach (DbTalisman talisman in dbTalismans)
         {
             if (talisman.IsLock)
+            {
                 throw new DragaliaException(
                     ResultCode.TalismanSellLocked,
                     "Tried to sell locked talisman"
                 );
+            }
 
             unitRepository.RemoveTalisman(talisman);
             await rewardService.GrantReward(new Entity(EntityTypes.Rupies, 0, TalismanCoinReward));
