@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DragaliaAPI.Photon.Plugin.Constants
 {
+    /// <summary>
+    /// Game property keys.
+    /// </summary>
     public class GamePropertyKeys
     {
         public const string MatchingCompatibleId = "MatchingCompatibleId";
