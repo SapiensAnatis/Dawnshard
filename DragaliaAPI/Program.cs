@@ -238,6 +238,8 @@ app.MapControllers();
 app.UseResponseCompression();
 app.MapHealthChecks("/health");
 
+app.UseStaticFiles();
+
 app.Run();
 
 namespace DragaliaAPI
