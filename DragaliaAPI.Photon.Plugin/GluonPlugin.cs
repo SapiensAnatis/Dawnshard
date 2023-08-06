@@ -409,9 +409,7 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
         private void OnSetGoToIngameState(ISetPropertiesCallInfo info)
         {
-            int value = info.Request.Properties.GetInt(ActorPropertyKeys.GoToIngameState);
-
-            switch (value)
+            switch (this.minGoToIngameState)
             {
                 case 1:
                     this.SetGoToIngameInfo(info);
