@@ -27,7 +27,7 @@ public class FortServiceTest
     private readonly Mock<ILogger<FortService>> mockLogger;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly IMapper mapper;
-    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<IFortMissionProgressionService> mockFortMissionProgressionService;
     private readonly Mock<IPaymentService> mockPaymentService;
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IOptionsMonitor<DragonfruitConfig>> mockConfig;
@@ -43,7 +43,7 @@ public class FortServiceTest
         this.mockLogger = new(MockBehavior.Loose);
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
         this.mapper = UnitTestUtils.CreateMapper();
-        this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockFortMissionProgressionService = new(MockBehavior.Strict);
         this.mockPaymentService = new(MockBehavior.Strict);
         this.mockRewardService = new(MockBehavior.Strict);
         this.mockConfig = new(MockBehavior.Strict);
@@ -94,7 +94,7 @@ public class FortServiceTest
             mockLogger.Object,
             mockPlayerIdentityService.Object,
             mapper,
-            mockMissionProgressionService.Object,
+            mockFortMissionProgressionService.Object,
             mockPaymentService.Object,
             mockRewardService.Object,
             mockConfig.Object,
@@ -230,9 +230,9 @@ public class FortServiceTest
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(5)
             };
 
-        mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(0));
-
-        mockMissionProgressionService.Setup(x => x.OnFortLevelup());
+        mockFortMissionProgressionService
+            .Setup(x => x.OnFortPlantLevelUp(0, 3))
+            .Returns(Task.CompletedTask);
 
         mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
@@ -243,7 +243,7 @@ public class FortServiceTest
         await fortService.LevelupAtOnce(PaymentTypes.HalidomHustleHammer, 1);
 
         mockPaymentService.VerifyAll();
-        mockMissionProgressionService.VerifyAll();
+        mockFortMissionProgressionService.VerifyAll();
         mockFortRepository.VerifyAll();
     }
 
@@ -330,9 +330,9 @@ public class FortServiceTest
             };
         mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
-        mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(0));
-
-        mockMissionProgressionService.Setup(x => x.OnFortLevelup());
+        mockFortMissionProgressionService
+            .Setup(x => x.OnFortPlantLevelUp(0, 3))
+            .Returns(Task.CompletedTask);
 
         await fortService.EndLevelup(1);
 
@@ -569,13 +569,13 @@ public class FortServiceTest
             )
             .Returns(Task.CompletedTask);
 
-        mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(FortPlants.Smithy));
-
-        mockMissionProgressionService.Setup(x => x.OnFortLevelup());
+        mockFortMissionProgressionService
+            .Setup(x => x.OnFortPlantLevelUp(FortPlants.Smithy, 6))
+            .Returns(Task.CompletedTask);
 
         await fortService.LevelupAtOnce(PaymentTypes.Wyrmite, 444);
 
-        mockMissionProgressionService.VerifyAll();
+        mockFortMissionProgressionService.VerifyAll();
         mockPaymentService.VerifyAll();
         mockPlayerIdentityService.VerifyAll();
     }
@@ -599,13 +599,13 @@ public class FortServiceTest
             .Setup(x => x.ProcessPayment(PaymentTypes.HalidomHustleHammer, null, 1))
             .Returns(Task.CompletedTask);
 
-        mockMissionProgressionService.Setup(x => x.OnFortPlantUpgraded(FortPlants.Smithy));
-
-        mockMissionProgressionService.Setup(x => x.OnFortLevelup());
+        mockFortMissionProgressionService
+            .Setup(x => x.OnFortPlantLevelUp(FortPlants.Smithy, 6))
+            .Returns(Task.CompletedTask);
 
         await fortService.LevelupAtOnce(PaymentTypes.HalidomHustleHammer, 445);
 
-        mockMissionProgressionService.VerifyAll();
+        mockFortMissionProgressionService.VerifyAll();
         mockPaymentService.VerifyAll();
     }
 }

@@ -228,7 +228,7 @@ public class StoryServiceTest
         this.mockTutorialService
             .Setup(x => x.OnStoryQuestRead(1000311))
             .Returns(Task.CompletedTask);
-        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(1000311));
+        this.mockMissionProgressionService.Setup(x => x.OnQuestStoryCleared(1000311));
 
         this.mockRewardService
             .Setup(
@@ -353,7 +353,7 @@ public class StoryServiceTest
                 }
             );
 
-        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(1000607));
+        this.mockMissionProgressionService.Setup(x => x.OnQuestStoryCleared(1000607));
 
         this.mockUserDataRepository.Setup(x => x.GiveWyrmite(25)).Returns(Task.CompletedTask);
         this.mockTutorialService
@@ -399,7 +399,7 @@ public class StoryServiceTest
                 }
             );
 
-        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(storyId));
+        this.mockMissionProgressionService.Setup(x => x.OnQuestStoryCleared(storyId));
 
         this.mockUserDataRepository.Setup(x => x.GiveWyrmite(25)).Returns(Task.CompletedTask);
         this.mockTutorialService

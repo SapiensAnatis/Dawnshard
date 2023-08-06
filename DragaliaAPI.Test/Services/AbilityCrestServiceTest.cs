@@ -1136,7 +1136,9 @@ public class AbilityCrestServiceTest
         int amount
     )
     {
-        this.mockMissionProgressionService.Setup(x => x.OnWyrmprintAugmentBuildup(augmentType));
+        this.mockMissionProgressionService.Setup(
+            x => x.OnAbilityCrestBuildupPlusCount(abilityCrestId, augmentType, amount, amount)
+        );
 
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);
         AtgenPlusCountParamsList augmentParams =
@@ -1167,6 +1169,7 @@ public class AbilityCrestServiceTest
             .Be(ResultCode.Success);
 
         this.mockAbilityCrestRepository.VerifyAll();
+        this.mockMissionProgressionService.VerifyAll();
         this.mockInventoryRepository.VerifyAll();
     }
 
