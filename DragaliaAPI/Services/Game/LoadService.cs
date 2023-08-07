@@ -7,6 +7,7 @@ using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
@@ -27,6 +28,7 @@ public class LoadService(
     ITradeService tradeService,
     IShopRepository shopRepository,
     IUserService userService,
+    ITicketRepository ticketRepository,
     IPartyPowerService partyPowerService
 ) : ILoadService
 {
@@ -112,7 +114,10 @@ public class LoadService(
                 quest_entry_condition_list = await missionService.GetEntryConditions(),
                 user_treasure_trade_list = await tradeService.GetUserTreasureTradeList(),
                 treasure_trade_all_list = tradeService.GetCurrentTreasureTradeList(),
-                shop_notice = new ShopNotice(await shopRepository.GetDailySummonCountAsync() == 0)
+                shop_notice = new ShopNotice(await shopRepository.GetDailySummonCountAsync() == 0),
+                summon_ticket_list = (await ticketRepository.GetTicketsAsync()).Select(
+                    mapper.Map<SummonTicketList>
+                )
             };
 
         logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);

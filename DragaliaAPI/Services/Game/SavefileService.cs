@@ -3,6 +3,7 @@ using System.Diagnostics;
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Models.Generated;
@@ -23,6 +24,7 @@ public class SavefileService : ISavefileService
     private readonly IMapper mapper;
     private readonly ILogger<SavefileService> logger;
     private readonly IPlayerIdentityService playerIdentityService;
+    private readonly IUnitRepository unitRepository;
 
     private const int RecheckLockMs = 1000;
     private const int LockFailsafeExpiryMin = 5;
@@ -35,7 +37,8 @@ public class SavefileService : ISavefileService
         IMapper mapper,
         ILogger<SavefileService> logger,
         IPlayerIdentityService playerIdentityService,
-        IEnumerable<ISavefileUpdate> savefileUpdates
+        IEnumerable<ISavefileUpdate> savefileUpdates,
+        IUnitRepository unitRepository
     )
     {
         this.apiContext = apiContext;
@@ -43,6 +46,7 @@ public class SavefileService : ISavefileService
         this.mapper = mapper;
         this.logger = logger;
         this.playerIdentityService = playerIdentityService;
+        this.unitRepository = unitRepository;
 
         this.maxSavefileVersion =
             savefileUpdates.MaxBy(x => x.SavefileVersion)?.SavefileVersion ?? 0;
@@ -437,6 +441,36 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
+            this.apiContext.PlayerSummonTickets.AddRange(
+                savefile.summon_ticket_list.MapWithDeviceAccount<DbSummonTicket>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbSummonTicket step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
+            if (savefile.user_data.emblem_id != Emblems.DragonbloodPrince)
+            {
+                this.apiContext.Emblems.Add(
+                    new DbEmblem
+                    {
+                        DeviceAccountId = deviceAccountId,
+                        EmblemId = savefile.user_data.emblem_id,
+                        GetTime = DateTimeOffset.UnixEpoch,
+                        IsNew = false
+                    }
+                );
+            }
+
+            this.logger.LogDebug(
+                "Adding DbEmblem step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             this.logger.LogInformation(
                 "Mapping completed after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
@@ -560,6 +594,12 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerUseItems.RemoveRange(
             this.apiContext.PlayerUseItems.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PlayerSummonTickets.RemoveRange(
+            this.apiContext.PlayerSummonTickets.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.Emblems.RemoveRange(
+            this.apiContext.Emblems.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset()
@@ -621,6 +661,7 @@ public class SavefileService : ISavefileService
         await this.AddDefaultCharacters(deviceAccountId);
         this.AddDefaultEquippedStamps();
         this.AddShopInfo();
+        this.AddDefaultEmblem();
 
         await this.apiContext.SaveChangesAsync();
 
@@ -677,9 +718,7 @@ public class SavefileService : ISavefileService
 
     private async Task AddDefaultCharacters(string deviceAccountId)
     {
-        await this.apiContext.PlayerCharaData.AddRangeAsync(
-            DefaultSavefileData.Characters.Select(x => new DbPlayerCharaData(deviceAccountId, x))
-        );
+        await this.unitRepository.AddCharas(DefaultSavefileData.Characters);
     }
 
     private void AddDefaultEquippedStamps()
@@ -706,6 +745,19 @@ public class SavefileService : ISavefileService
         );
     }
 
+    private void AddDefaultEmblem()
+    {
+        this.apiContext.Emblems.Add(
+            new DbEmblem
+            {
+                DeviceAccountId = playerIdentityService.AccountId,
+                EmblemId = DefaultSavefileData.DefaultEmblem,
+                GetTime = DateTimeOffset.UnixEpoch,
+                IsNew = false
+            }
+        );
+    }
+
     internal static class DefaultSavefileData
     {
         public static readonly ImmutableList<Charas> Characters = MasterAsset.CharaData.Enumerable
@@ -715,6 +767,8 @@ public class SavefileService : ISavefileService
             .ToImmutableList();
 
         public const int PartySlotCount = 54;
+
+        public const Emblems DefaultEmblem = Emblems.DragonbloodPrince;
     }
 }
 

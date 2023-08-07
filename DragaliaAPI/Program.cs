@@ -30,10 +30,12 @@ using DragaliaAPI.Helpers;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.DmodeDungeon;
+using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Talisman;
+using DragaliaAPI.Features.Tickets;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -189,6 +191,10 @@ builder.Services
     .AddScoped<IUserService, UserService>()
     // Talisman feature
     .AddScoped<ITalismanService, TalismanService>()
+    // Tickets feature
+    .AddScoped<ITicketRepository, TicketRepository>()
+    // Emblem feature
+    .AddScoped<IEmblemRepository, EmblemRepository>()
     // Party power feature
     .AddScoped<IPartyPowerService, PartyPowerService>();
 
@@ -234,6 +240,8 @@ app.UseMiddleware<DailyResetMiddleware>();
 app.MapControllers();
 app.UseResponseCompression();
 app.MapHealthChecks("/health");
+
+app.UseStaticFiles();
 
 app.Run();
 

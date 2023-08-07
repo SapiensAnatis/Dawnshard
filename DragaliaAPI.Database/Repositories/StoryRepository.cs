@@ -50,7 +50,7 @@ public class StoryRepository : IStoryRepository
 
         if (state is null)
         {
-            this.logger.LogInformation(
+            this.logger.LogDebug(
                 "Requested story id {id} with type {type} was not found, creating...",
                 storyId,
                 storyType

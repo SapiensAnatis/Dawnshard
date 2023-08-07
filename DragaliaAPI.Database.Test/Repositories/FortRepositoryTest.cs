@@ -331,9 +331,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             FortPlants.BowDojo,
             FortPlants.DaggerDojo,
             FortPlants.LanceDojo,
-            FortPlants.SwordDojo,
             FortPlants.ManacasterDojo,
-            FortPlants.SwordDojo,
             FortPlants.StaffDojo,
             FortPlants.WandDojo
         };

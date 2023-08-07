@@ -25,6 +25,7 @@ namespace DragaliaAPI.Photon.Plugin
         private IPluginLogger logger;
         private PluginConfiguration config;
         private Random rdm;
+        private int minGoToIngameState = 0;
 
         private static readonly MessagePackSerializerOptions MessagePackOptions =
             MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block);
@@ -115,10 +116,10 @@ namespace DragaliaAPI.Photon.Plugin
                 x => x.ActorNr == info.ActorNr
             );
 
+#if DEBUG
             if (!actor.Properties.TryGetValue("DeactivationTime", out object deactivationTime))
                 deactivationTime = "null";
 
-#if DEBUG
             this.logger.DebugFormat(
                 "Leave info -- Actor: {0}, Details: {1}, IsInactive {2}, DeactivationTime: {3}",
                 info.ActorNr,
@@ -127,6 +128,16 @@ namespace DragaliaAPI.Photon.Plugin
                 deactivationTime
             );
 #endif
+
+            if (info.ActorNr == 1)
+            {
+                this.RaiseEvent(
+                    Event.Codes.RoomBroken,
+                    new RoomBroken() { Reason = RoomBroken.RoomBrokenType.HostDisconnected }
+                );
+
+                this.SetRoomVisibility(info, false);
+            }
 
             base.OnLeave(info);
 
@@ -139,20 +150,6 @@ namespace DragaliaAPI.Photon.Plugin
                     info.ActorNr
                 );
                 return;
-            }
-
-            if (actor.IsHost())
-            {
-                this.RaiseEvent(
-                    Event.Codes.RoomBroken,
-                    new RoomBroken() { Reason = RoomBroken.RoomBrokenType.HostDisconnected }
-                );
-
-                this.SetRoomVisibility(info, false);
-
-                this.PluginHost.SetGameState(
-                    new SerializableGameState() { IsOpen = false, IsVisible = false }
-                );
             }
 
             if (
@@ -237,6 +234,22 @@ namespace DragaliaAPI.Photon.Plugin
 
         private void OnFailQuestRequest(IRaiseEventCallInfo info)
         {
+            this.minGoToIngameState = 0;
+
+            // Clear StartQuest so quests don't start instantly next time.
+            // Also clear same HeroParam properties that cause serialization issues.
+            this.PluginHost.SetProperties(
+                info.ActorNr,
+                new Hashtable()
+                {
+                    { ActorPropertyKeys.HeroParam, null },
+                    { ActorPropertyKeys.HeroParamCount, null },
+                    { ActorPropertyKeys.StartQuest, false },
+                },
+                null,
+                false
+            );
+
             FailQuestRequest request = info.DeserializeEvent<FailQuestRequest>();
 
             this.logger.DebugFormat(
@@ -282,12 +295,27 @@ namespace DragaliaAPI.Photon.Plugin
             this.logger.Debug(JsonConvert.SerializeObject(info.Request.Properties));
 #endif
 
-            if (
-                info.Request.Properties.ContainsKey(ActorPropertyKeys.GoToIngameState)
-                && info.ActorNr == 1
-            )
+            if (info.Request.Properties.ContainsKey(ActorPropertyKeys.GoToIngameState))
             {
-                this.OnSetGoToIngameState(info);
+                // Wait for everyone to reach a particular GoToIngameState value before doing anything.
+                // But let the host set GoToIngameState = 1 unilaterally to signal the game start process.
+
+                int value = info.Request.Properties.GetInt(ActorPropertyKeys.GoToIngameState);
+
+                int minValue = this.PluginHost.GameActors
+                    .Select(x => x.Properties.GetInt(ActorPropertyKeys.GoToIngameState))
+                    .Min();
+
+                if (minValue > this.minGoToIngameState)
+                {
+                    this.minGoToIngameState = minValue;
+                    this.OnSetGoToIngameState(info);
+                }
+                else if (value == 1 && info.ActorNr == 1)
+                {
+                    this.minGoToIngameState = value;
+                    this.OnSetGoToIngameState(info);
+                }
             }
 
             if (info.Request.Properties.ContainsKey(GamePropertyKeys.EntryConditions))
@@ -381,9 +409,7 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
         private void OnSetGoToIngameState(ISetPropertiesCallInfo info)
         {
-            int value = info.Request.Properties.GetInt(ActorPropertyKeys.GoToIngameState);
-
-            switch (value)
+            switch (this.minGoToIngameState)
             {
                 case 1:
                     this.SetGoToIngameInfo(info);
@@ -600,6 +626,8 @@ namespace DragaliaAPI.Photon.Plugin
 
         private void OnClearQuestRequest(IRaiseEventCallInfo info)
         {
+            this.minGoToIngameState = 0;
+
             // These properties must be set for the client to successfully rejoin the room.
             this.PluginHost.SetProperties(
                 0,
@@ -619,7 +647,8 @@ namespace DragaliaAPI.Photon.Plugin
                 new Hashtable()
                 {
                     { ActorPropertyKeys.HeroParam, null },
-                    { ActorPropertyKeys.HeroParamCount, null }
+                    { ActorPropertyKeys.HeroParamCount, null },
+                    { ActorPropertyKeys.StartQuest, null }
                 },
                 null,
                 false
