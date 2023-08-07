@@ -13,7 +13,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 
-namespace DragaliaAPI.Features.Dungeon;
+namespace DragaliaAPI.Features.Dungeon.Start;
 
 public class DungeonStartService(
     IPartyRepository partyRepository,
@@ -94,7 +94,7 @@ public class DungeonStartService(
         if (quest?.State < 3)
         {
             logger.LogDebug("Updating quest {@quest} state", quest);
-            await questRepository.UpdateQuestState(questId, 2);
+            quest.State = 2;
         }
 
         return new()
@@ -121,9 +121,7 @@ public class DungeonStartService(
             );
 
         if (helperInfo is not null && helperDetails is not null)
-        {
             return helperService.BuildHelperData(helperInfo, helperDetails);
-        }
 
         logger.LogDebug("SupportViewerId {id} returned null helper data.", supportViewerId);
         return new();

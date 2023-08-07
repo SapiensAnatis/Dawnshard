@@ -9,4 +9,6 @@ public interface IHelperService
         UserSupportList helperInfo,
         AtgenSupportUserDetailList helperDetails
     );
+    Task<UserSupportList?> GetHelper(ulong viewerId);
+    Task<UserSupportList> GetLeadUnit(int partyNo);
 }

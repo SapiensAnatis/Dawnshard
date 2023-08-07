@@ -1,6 +1,6 @@
+using DragaliaAPI.Photon.StateManager;
 using DragaliaAPI.Photon.StateManager.Authentication;
 using DragaliaAPI.Photon.StateManager.Models;
-using DragaliaAPI.Services.Health;
 using Microsoft.AspNetCore.Authentication;
 using Redis.OM;
 using Redis.OM.Contracts;
