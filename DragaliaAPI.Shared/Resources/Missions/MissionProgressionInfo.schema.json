@@ -4,53 +4,77 @@
   "additionalItems": false,
   "items": {
     "type": "object",
-    "required": [ "_Type", "_Requirements" ],
+    "required": [ "_Id", "_MissionType", "_MissionId", "_CompleteType", "_UseTotalValue" ],
     "additionalProperties": false,
     "properties": {
-      "_Type": {
-        "type": "string",
-        "enum": [ "FortPlantUpgraded", "FortPlantBuilt", "FortLevelup", "QuestCleared", "VoidBattleCleared", "WeaponEarned", "WeaponRefined", "WyrmprintAugmentBuildup", "CharacterBuildup", "ItemSummon" ]
+      "_Id": {
+        "description": "Unique ID for this progression info (MissionId * 100 + MissionType)",
+        "type": "integer",
+        "minimum": 1
       },
-      "_Requirements": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "required": [ "_Missions" ],
-          "properties": {
-            "_Parameter": {
-              "type": "integer",
-              "description": "First parameter for type specification."
-            },
-            "_Parameter2": {
-              "type": "integer",
-              "default": -1
-            },
-            "_Parameter3": {
-              "type": "integer",
-              "default": -1
-            },
-            "_Parameter4": {
-              "type": "integer",
-              "default": -1
-            },
-            "_Missions": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "required": [ "_Type", "_Id" ],
-                "properties": {
-                  "_Type": {
-                    "type": "string",
-                    "enum": [ "Normal", "Daily", "Period", "Beginner", "Special", "MainStory", "MemoryEvent", "Album", "Drill" ]
-                  },
-                  "_Id": {
-                    "type": "integer"
-                  }
-                }
-              }
-            }
-          }
-        }
+      "_MissionType": {
+        "description": "Type of mission this progression info represents",
+        "type": "string",
+        "enum": [ "Normal", "Daily", "Period", "Beginner", "Special", "MainStory", "MemoryEvent", "Album", "Drill" ]
+      },
+      "_MissionId": {
+        "description": "ID of mission this progression info represents",
+        "type": "integer"
+      },
+      "_CompleteType": {
+        "description": "Type of event this progression info requires",
+        "type": "string",
+        "enum": [
+          "FortPlantLevelUp",
+          "FortPlantBuilt",
+          "FortPlantPlaced",
+          "FortLevelUp",
+          "QuestCleared",
+          "EventGroupCleared",
+          "QuestStoryCleared",
+          "WeaponEarned",
+          "WeaponRefined",
+          "AbilityCrestBuildupPlusCount",
+          "AbilityCrestTotalPlusCountUp",
+          "AbilityCrestLevelUp",
+          "CharacterBuildupPlusCount",
+          "CharacterLevelUp",
+          "CharacterManaNodeUnlock",
+          "DragonLevelUp",
+          "DragonGiftSent",
+          "DragonBondLevelUp",
+          "ItemSummon",
+          "PlayerLevelUp",
+          "AccountLinked",
+          "PartyOptimized",
+          "AbilityCrestTradeViewed",
+          "GuildCheckInRewardClaimed",
+          "PartyPowerReached",
+          "TreasureTrade",
+          "UnimplementedAutoComplete"
+        ]
+      },
+      "_UseTotalValue": {
+        "description": "Determines whether this mission should be progressed according to the event value vs. the total value (ex. level up x times -> false, level 1 character to lv. 100 -> true)",
+        "minimum": 0,
+        "maximum": 1,
+        "type": "integer"
+      },
+      "_Parameter": {
+        "type": "integer"
+      },
+      "_Parameter2": {
+        "type": "integer"
+      },
+      "_Parameter3": {
+        "type": "integer"
+      },
+      "_Parameter4": {
+        "type": "integer"
+      },
+      "_comment": {
+        "description": "Description of the current mission.",
+        "type": "string"
       }
     }
   }

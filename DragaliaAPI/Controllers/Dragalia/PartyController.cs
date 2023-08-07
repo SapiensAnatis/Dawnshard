@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.PartyPower;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -24,7 +25,8 @@ public class PartyController(
     IMapper mapper,
     ILogger<PartyController> logger,
     IPartyPowerService partyPowerService,
-    IPartyPowerRepository partyPowerRepository
+    IPartyPowerRepository partyPowerRepository,
+    IMissionProgressionService missionProgressionService
 ) : DragaliaControllerBase
 {
     /// <summary>
@@ -75,6 +77,11 @@ public class PartyController(
         );
 
         await partyRepository.SetParty(dbEntry);
+
+        if (requestParty.is_entrust)
+        {
+            missionProgressionService.OnPartyOptimized(requestParty.entrust_element);
+        }
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 

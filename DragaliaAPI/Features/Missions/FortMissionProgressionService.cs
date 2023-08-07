@@ -15,10 +15,7 @@ public class FortMissionProgressionService(
         return await fortRepository.Builds
                 .Where(x => x.PlantId != FortPlants.TheHalidom)
                 .SumAsync(
-                    x =>
-                        x.BuildEndDate == DateTimeOffset.UnixEpoch
-                            ? x.Level
-                            : (int?)x.Level - 1
+                    x => x.BuildEndDate == DateTimeOffset.UnixEpoch ? x.Level : (int?)x.Level - 1
                 ) ?? 0;
     }
 

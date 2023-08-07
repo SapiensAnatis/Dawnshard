@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+﻿using System.Text.Json.Serialization;
+using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
@@ -7,11 +9,11 @@ public record DrillMissionGroup(
     string TextName,
     string TextNameShort,
     int Step,
-    int TextTitle,
+    string TextTitle,
     string TextDetail,
     EntityTypes UnlockEntityType1,
     int UnlockEntityId1,
     int UnlockEntityQuantity1,
-    string StartDate,
-    string EndDate
+    [property: JsonConverter(typeof(MasterAssetDateTimeOffsetConverter))] DateTimeOffset StartDate,
+    [property: JsonConverter(typeof(MasterAssetDateTimeOffsetConverter))] DateTimeOffset EndDate
 );

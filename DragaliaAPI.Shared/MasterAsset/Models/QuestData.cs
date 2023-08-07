@@ -8,6 +8,7 @@ namespace DragaliaAPI.Shared.MasterAsset.Models;
 public record QuestData(
     int Id,
     int Gid,
+    QuestGroupType GroupType,
     QuestPlayModeTypes QuestPlayModeType,
     UnitElement LimitedElementalType,
     UnitElement LimitedElementalType2,

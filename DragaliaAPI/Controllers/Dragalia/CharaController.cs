@@ -137,6 +137,8 @@ public class CharaController(
             CharaConstants.GetMaxLevelFor(playerCharData.Rarity) + playerCharData.AdditionalMaxLevel
         );
 
+        CharaData charaData = MasterAsset.CharaData.Get(playerCharData.CharaId);
+
         //TODO: Maybe make this generic for IHasXp
         foreach (AtgenEnemyPiece materialList in materials)
         {
@@ -163,6 +165,7 @@ public class CharaController(
 
                     missionProgressionService.OnCharacterBuildupPlusCount(
                         playerCharData.CharaId,
+                        charaData.ElementalType,
                         PlusCountType.Atk,
                         materialList.quantity,
                         playerCharData.AttackPlusCount
@@ -177,6 +180,7 @@ public class CharaController(
 
                     missionProgressionService.OnCharacterBuildupPlusCount(
                         playerCharData.CharaId,
+                        charaData.ElementalType,
                         PlusCountType.Hp,
                         materialList.quantity,
                         playerCharData.HpPlusCount
@@ -196,6 +200,7 @@ public class CharaController(
 
             usedMaterials[(int)materialList.id] += materialList.quantity;
         }
+
         if (
             playerCharData.Level < maxLevel
             && playerCharData.Level < CharaConstants.XpLimits.Count
@@ -218,12 +223,12 @@ public class CharaController(
             {
                 missionProgressionService.OnCharacterLevelUp(
                     playerCharData.CharaId,
+                    charaData.ElementalType,
                     levelDifference,
                     playerCharData.Level
                 );
             }
 
-            CharaData charaData = MasterAsset.CharaData.Get(playerCharData.CharaId);
             double hpStep;
             double atkStep;
             int hpBase;
@@ -787,6 +792,13 @@ public class CharaController(
         }
 
         nodes.AddRange(manaNodes);
+
+        missionProgressionService.OnCharacterManaNodeUnlock(
+            playerCharData.CharaId,
+            charaData.ElementalType,
+            manaNodes.Count(),
+            nodes.Count
+        );
 
         if (manaNodes.Contains(50))
         {

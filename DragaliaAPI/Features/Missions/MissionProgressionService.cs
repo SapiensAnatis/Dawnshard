@@ -1,4 +1,3 @@
-using System.Numerics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -15,14 +14,40 @@ public class MissionProgressionService(
 {
     private readonly Queue<MissionEvent> eventQueue = new();
 
-    public void OnQuestCleared(int questId, int count, int total)
+    public void OnQuestCleared(
+        int questId,
+        int questGroupId,
+        QuestPlayModeTypes playMode,
+        int count,
+        int total
+    )
     {
-        EnqueueEvent(MissionCompleteType.QuestCleared, count, total, questId);
+        EnqueueEvent(
+            MissionCompleteType.QuestCleared,
+            count,
+            total,
+            questId,
+            questGroupId,
+            (int)playMode
+        );
     }
 
-    public void OnQuestGroupCleared(int questGroupId, int count, int total)
+    public void OnEventGroupCleared(
+        int eventGroupId,
+        VariationTypes type,
+        QuestPlayModeTypes playMode,
+        int count,
+        int total
+    )
     {
-        EnqueueEvent(MissionCompleteType.QuestGroupCleared, count, total, questGroupId);
+        EnqueueEvent(
+            MissionCompleteType.EventGroupCleared,
+            count,
+            total,
+            eventGroupId,
+            (int)type,
+            (int)playMode
+        );
     }
 
     public void OnQuestStoryCleared(int id)
@@ -84,30 +109,118 @@ public class MissionProgressionService(
         );
     }
 
+    public void OnAbilityCrestTotalPlusCountUp(AbilityCrests crest, int count, int total)
+    {
+        EnqueueEvent(MissionCompleteType.AbilityCrestTotalPlusCountUp, count, total, (int)crest);
+    }
+
     public void OnAbilityCrestLevelUp(AbilityCrests crest, int count, int totalLevel)
     {
         EnqueueEvent(MissionCompleteType.AbilityCrestLevelUp, count, totalLevel, (int)crest);
     }
 
-    public void OnCharacterBuildupPlusCount(Charas chara, PlusCountType type, int count, int total)
+    public void OnCharacterBuildupPlusCount(
+        Charas chara,
+        UnitElement element,
+        PlusCountType type,
+        int count,
+        int total
+    )
     {
         EnqueueEvent(
             MissionCompleteType.CharacterBuildupPlusCount,
             count,
             total,
             (int)chara,
+            (int)element,
             (int)type
         );
     }
 
-    public void OnCharacterLevelUp(Charas chara, int count, int totalLevel)
+    public void OnCharacterLevelUp(Charas chara, UnitElement element, int count, int totalLevel)
     {
-        EnqueueEvent(MissionCompleteType.CharacterLevelUp, count, totalLevel, (int)chara);
+        EnqueueEvent(
+            MissionCompleteType.CharacterLevelUp,
+            count,
+            totalLevel,
+            (int)chara,
+            (int)element
+        );
+    }
+
+    public void OnCharacterManaNodeUnlock(Charas chara, UnitElement element, int count, int total)
+    {
+        EnqueueEvent(
+            MissionCompleteType.CharacterManaNodeUnlock,
+            count,
+            total,
+            (int)chara,
+            (int)element
+        );
+    }
+
+    public void OnDragonLevelUp(Dragons dragon, UnitElement element, int count, int total)
+    {
+        EnqueueEvent(MissionCompleteType.DragonLevelUp, count, total, (int)dragon, (int)element);
+    }
+
+    public void OnDragonGiftSent(
+        Dragons dragon,
+        DragonGifts gift,
+        UnitElement element,
+        int count,
+        int total
+    )
+    {
+        EnqueueEvent(
+            MissionCompleteType.DragonGiftSent,
+            count,
+            total,
+            (int)dragon,
+            (int)gift,
+            (int)element
+        );
+    }
+
+    public void OnDragonBondLevelUp(Dragons dragon, UnitElement element, int count, int total)
+    {
+        EnqueueEvent(
+            MissionCompleteType.DragonBondLevelUp,
+            count,
+            total,
+            (int)dragon,
+            (int)element
+        );
     }
 
     public void OnItemSummon()
     {
         EnqueueEvent(MissionCompleteType.ItemSummon);
+    }
+
+    public void OnPartyOptimized(UnitElement element)
+    {
+        EnqueueEvent(MissionCompleteType.PartyOptimized, parameter: (int)element);
+    }
+
+    public void OnAbilityCrestTradeViewed()
+    {
+        EnqueueEvent(MissionCompleteType.AbilityCrestTradeViewed);
+    }
+
+    public void OnGuildCheckInRewardClaimed()
+    {
+        EnqueueEvent(MissionCompleteType.GuildCheckInRewardClaimed);
+    }
+
+    public void OnPartyPowerReached(int might)
+    {
+        EnqueueEvent(MissionCompleteType.PartyPowerReached, 0, might);
+    }
+
+    public void OnTreasureTrade(int tradeId, EntityTypes type, int id, int count, int total)
+    {
+        EnqueueEvent(MissionCompleteType.TreasureTrade, count, total, tradeId, (int)type, id);
     }
 
     public void EnqueueEvent(

@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -20,7 +22,8 @@ public class MissionInitialProgressionService(
     IUnitRepository unitRepository,
     IWeaponRepository weaponRepository,
     IStoryRepository storyRepository,
-    IUserDataRepository userDataRepository
+    IUserDataRepository userDataRepository,
+    ITradeRepository tradeRepository
 ) : IMissionInitialProgressionService
 {
     public async Task GetInitialMissionProgress(DbPlayerMission mission)
@@ -51,14 +54,12 @@ public class MissionInitialProgressionService(
                 => await fortMissionProgressionService.GetTotalFortLevel(),
             MissionCompleteType.QuestCleared => await GetQuestClearedCount(progressionInfo),
             MissionCompleteType.QuestStoryCleared
-                => await storyRepository.QuestStories
-                    .Where(
-                        x => x.StoryId == progressionInfo.Parameter && x.State == StoryState.Read
-                    )
-                    .AnyAsync()
+                => await storyRepository.QuestStories.AnyAsync(
+                    x => x.StoryId == progressionInfo.Parameter && x.State == StoryState.Read
+                )
                     ? 1
                     : 0,
-            MissionCompleteType.QuestGroupCleared
+            MissionCompleteType.EventGroupCleared
                 => await GetQuestGroupClearedCount(progressionInfo),
             MissionCompleteType.WeaponEarned => await GetWeaponEarnedCount(progressionInfo),
             MissionCompleteType.WeaponRefined => await GetWeaponRefinedCount(progressionInfo),
@@ -66,10 +67,72 @@ public class MissionInitialProgressionService(
                 => await GetWyrmprintBuildupCount(progressionInfo),
             MissionCompleteType.CharacterBuildupPlusCount
                 => await GetCharacterBuildupCount(progressionInfo),
-            MissionCompleteType.ItemSummon => 0, // TODO: As daily quests also use this, should we make it actually count the item summons?
             MissionCompleteType.PlayerLevelUp
                 => (await userDataRepository.GetUserDataAsync()).Level,
+            MissionCompleteType.AbilityCrestTotalPlusCountUp
+                => (
+                    await abilityCrestRepository.AbilityCrests
+                        .Where(
+                            x =>
+                                progressionInfo.Parameter == null
+                                || x.AbilityCrestId == (AbilityCrests)progressionInfo.Parameter
+                        )
+                        .Select(x => new { x.AttackPlusCount, x.HpPlusCount })
+                        .ToListAsync()
+                )
+                    .Select(x => (int?)Math.Min(x.AttackPlusCount, x.HpPlusCount))
+                    .Max() ?? 0,
+            MissionCompleteType.AbilityCrestLevelUp
+                => (
+                    await abilityCrestRepository.AbilityCrests
+                        .Where(
+                            x =>
+                                progressionInfo.Parameter == null
+                                || x.AbilityCrestId == (AbilityCrests)progressionInfo.Parameter
+                        )
+                        .Select(x => (int?)x.BuildupCount)
+                        .ToListAsync()
+                ).Sum() ?? 0,
+            MissionCompleteType.CharacterLevelUp => await GetCharacterMaxLevel(progressionInfo),
+            MissionCompleteType.CharacterManaNodeUnlock
+                => await GetCharacterManaNodeCount(progressionInfo),
+            MissionCompleteType.DragonLevelUp => await GetDragonMaxLevel(progressionInfo),
+            MissionCompleteType.DragonGiftSent => 0, // Unsure about this
+            MissionCompleteType.DragonBondLevelUp => await GetDragonBondLevel(progressionInfo),
+            MissionCompleteType.ItemSummon => 0, // TODO: As daily quests also use this, should we make it actually count the item summons?
             MissionCompleteType.AccountLinked => 0,
+            MissionCompleteType.PartyOptimized => 0,
+            MissionCompleteType.AbilityCrestTradeViewed => 0,
+            MissionCompleteType.GuildCheckInRewardClaimed => amountToComplete, // TODO
+            MissionCompleteType.PartyPowerReached => 0, // TODO: Change when party power calc is merged
+            MissionCompleteType.TreasureTrade
+                => (
+                    await tradeRepository.Trades
+                        .Where(
+                            x =>
+                                x.Type == TradeType.Treasure
+                                && (
+                                    progressionInfo.Parameter == null
+                                    || x.Id == progressionInfo.Parameter
+                                )
+                        )
+                        .Select(x => x.Id)
+                        .ToListAsync()
+                )
+                    .Select(x => MasterAsset.TreasureTrade[x])
+                    .Count(
+                        x =>
+                            (
+                                progressionInfo.Parameter2 == null
+                                || x.DestinationEntityType
+                                    == (EntityTypes)progressionInfo.Parameter2
+                            )
+                            && (
+                                progressionInfo.Parameter3 == null
+                                || x.DestinationEntityId == progressionInfo.Parameter3
+                            )
+                    ),
+            MissionCompleteType.UnimplementedAutoComplete => amountToComplete,
             _
                 => throw new UnreachableException(
                     $"Invalid MissionProgressType {progressionInfo.CompleteType} in initial progress handling"
@@ -104,12 +167,143 @@ public class MissionInitialProgressionService(
         }
     }
 
+    private async Task<int> GetCharacterMaxLevel(MissionProgressionInfo requirement)
+    {
+        if (requirement.Parameter != null)
+        {
+            return (await unitRepository.FindCharaAsync((Charas)requirement.Parameter))?.Level ?? 0;
+        }
+
+        if (requirement.Parameter2 != null)
+        {
+            return (
+                    await unitRepository.Charas
+                        .Select(x => new { x.CharaId, x.Level })
+                        .ToListAsync()
+                )
+                    .Where(
+                        x =>
+                            MasterAsset.CharaData[x.CharaId].ElementalType
+                            == (UnitElement)requirement.Parameter2
+                    )
+                    .Select(x => (int?)x.Level)
+                    .Max() ?? 0;
+        }
+
+        return await unitRepository.Charas.MaxAsync(x => x.Level);
+    }
+
+    private async Task<int> GetCharacterManaNodeCount(MissionProgressionInfo requirement)
+    {
+        if (requirement.Parameter != null)
+        {
+            return (
+                    await unitRepository.FindCharaAsync((Charas)requirement.Parameter)
+                )?.ManaNodeUnlockCount ?? 0;
+        }
+
+        if (requirement.Parameter2 != null)
+        {
+            return (await unitRepository.Charas.ToListAsync())
+                    .Where(
+                        x =>
+                            MasterAsset.CharaData[x.CharaId].ElementalType
+                            == (UnitElement)requirement.Parameter2
+                    )
+                    .Select(x => (int?)x.ManaNodeUnlockCount)
+                    .Max() ?? 0;
+        }
+
+        return (await unitRepository.Charas.ToListAsync())
+                .Select(x => (int?)x.ManaNodeUnlockCount)
+                .Max() ?? 0;
+    }
+
+    private async Task<int> GetDragonMaxLevel(MissionProgressionInfo requirement)
+    {
+        if (requirement.Parameter != null)
+        {
+            return (
+                    await unitRepository.Dragons.SingleOrDefaultAsync(
+                        x => x.DragonId == (Dragons)requirement.Parameter
+                    )
+                )?.Level ?? 0;
+        }
+
+        if (requirement.Parameter2 != null)
+        {
+            return (
+                    await unitRepository.Dragons
+                        .Select(x => new { x.DragonId, x.Level })
+                        .ToListAsync()
+                )
+                    .Where(
+                        x =>
+                            MasterAsset.DragonData[x.DragonId].ElementalType
+                            == (UnitElement)requirement.Parameter2
+                    )
+                    .Select(x => (int?)x.Level)
+                    .Max() ?? 0;
+        }
+
+        return await unitRepository.Dragons.MaxAsync(x => x.Level);
+    }
+
+    private async Task<int> GetDragonBondLevel(MissionProgressionInfo requirement)
+    {
+        if (requirement.Parameter != null)
+        {
+            return (
+                    await unitRepository.DragonReliabilities.SingleOrDefaultAsync(
+                        x => x.DragonId == (Dragons)requirement.Parameter
+                    )
+                )?.Level ?? 0;
+        }
+
+        if (requirement.Parameter2 != null)
+        {
+            return (
+                    await unitRepository.DragonReliabilities
+                        .Select(x => new { x.DragonId, x.Level })
+                        .ToListAsync()
+                )
+                    .Where(
+                        x =>
+                            MasterAsset.DragonData[x.DragonId].ElementalType
+                            == (UnitElement)requirement.Parameter2
+                    )
+                    .Select(x => (int?)x.Level)
+                    .Max() ?? 0;
+        }
+
+        return await unitRepository.DragonReliabilities.MaxAsync(x => x.Level);
+    }
+
     private async Task<int> GetQuestClearedCount(MissionProgressionInfo requirement)
     {
+        if (requirement.Parameter != null)
+        {
+            return await questRepository.Quests
+                .Where(x => x.QuestId == requirement.Parameter)
+                .Select(x => x.PlayCount)
+                .FirstOrDefaultAsync();
+        }
+
+        List<int> validQuests = MasterAsset.QuestData.Enumerable
+            .Where(
+                x =>
+                    x.Gid == requirement.Parameter2
+                    && (
+                        requirement.Parameter3 == null
+                        || x.QuestPlayModeType == (QuestPlayModeTypes)requirement.Parameter3
+                    )
+            )
+            .Select(x => x.Id)
+            .ToList();
+
         return await questRepository.Quests
-            .Where(x => x.QuestId == requirement.Parameter)
-            .Select(x => x.PlayCount)
-            .FirstOrDefaultAsync();
+                .Where(x => validQuests.Contains(x.QuestId))
+                .SumAsync(x => (int?)x.PlayCount) ?? 0;
     }
 
     private async Task<int> GetCharacterBuildupCount(MissionProgressionInfo requirement)
@@ -203,6 +397,10 @@ public class MissionInitialProgressionService(
                             out QuestEventGroup? eventGroup
                         )
                         && eventGroup.BaseQuestGroupId == requirement.Parameter
+                        && (
+                            requirement.Parameter2 == null
+                            || x.VariationType == (VariationTypes)requirement.Parameter2
+                        )
                     )
             )
             .Select(x => x.Id)

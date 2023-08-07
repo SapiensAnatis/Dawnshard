@@ -204,6 +204,12 @@ public class AbilityCrestService : IAbilityCrestService
             return ResultCode.AbilityCrestBuildupPieceShortLimitBreakCount;
         }
 
+        missionProgressionService.OnAbilityCrestLevelUp(
+            dbAbilityCrest.AbilityCrestId,
+            buildup.step - dbAbilityCrest.BuildupCount,
+            buildup.step
+        );
+
         dbAbilityCrest.BuildupCount = buildup.step;
         await this.inventoryRepository.UpdateQuantity(materialMap.Invert());
 
@@ -256,6 +262,12 @@ public class AbilityCrestService : IAbilityCrestService
             buildup.plus_count_type,
             usedAugments,
             buildup.plus_count
+        );
+
+        this.missionProgressionService.OnAbilityCrestTotalPlusCountUp(
+            dbAbilityCrest.AbilityCrestId,
+            0,
+            Math.Min(dbAbilityCrest.HpPlusCount, dbAbilityCrest.AttackPlusCount)
         );
 
         await this.inventoryRepository.UpdateQuantity(materialMap.Invert());

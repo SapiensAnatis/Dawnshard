@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
@@ -25,6 +26,7 @@ public class DragonServiceTest
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<IPaymentService> mockPaymentService;
     private readonly Mock<IRewardService> mockRewardService;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
 
     private readonly DragonService dragonService;
 
@@ -37,6 +39,7 @@ public class DragonServiceTest
         mockUpdateDataService = new Mock<IUpdateDataService>();
         mockPaymentService = new(MockBehavior.Strict);
         mockRewardService = new(MockBehavior.Strict);
+        mockMissionProgressionService = new(MockBehavior.Strict);
 
         dragonService = new DragonService(
             mockUserDataRepository.Object,
@@ -46,7 +49,8 @@ public class DragonServiceTest
             mockStoryRepository.Object,
             LoggerTestUtils.Create<DragonService>(),
             mockPaymentService.Object,
-            mockRewardService.Object
+            mockRewardService.Object,
+            mockMissionProgressionService.Object
         );
     }
 
