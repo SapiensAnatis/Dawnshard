@@ -1,12 +1,21 @@
 ﻿using AutoMapper;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
+using Microsoft.Extensions.Logging;
 
 namespace DragaliaAPI.Test.Services;
 
 public class HelperServiceTest
 {
+    private readonly Mock<IPartyRepository> mockPartyRepository;
+    private readonly Mock<IDungeonRepository> mockDungeonRepository;
+    private readonly Mock<IUserDataRepository> mockUserDataRepository;
+    private readonly Mock<ILogger<HelperService>> mockLogger;
+
     private readonly IHelperService helperService;
     private readonly IMapper mapper;
 
@@ -16,7 +25,18 @@ public class HelperServiceTest
             cfg => cfg.AddMaps(typeof(Program).Assembly)
         ).CreateMapper();
 
-        this.helperService = new HelperService(this.mapper);
+        this.mockPartyRepository = new(MockBehavior.Strict);
+        this.mockDungeonRepository = new(MockBehavior.Strict);
+        this.mockUserDataRepository = new(MockBehavior.Strict);
+        this.mockLogger = new(MockBehavior.Loose);
+
+        this.helperService = new HelperService(
+            this.mockPartyRepository.Object,
+            this.mockDungeonRepository.Object,
+            this.mockUserDataRepository.Object,
+            this.mapper,
+            this.mockLogger.Object
+        );
     }
 
     [Fact]

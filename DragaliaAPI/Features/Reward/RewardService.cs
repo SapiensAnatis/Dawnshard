@@ -42,7 +42,7 @@ public class RewardService(
             return RewardGrantResult.Added;
         }
 
-        logger.LogDebug("Granting reward {@rewardEntity}", entity);
+        logger.LogTrace("Granting reward {@rewardEntity}", entity);
 
         switch (entity.Type)
         {

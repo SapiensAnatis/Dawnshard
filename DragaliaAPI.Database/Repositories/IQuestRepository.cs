@@ -7,6 +7,5 @@ public interface IQuestRepository
 {
     IQueryable<DbQuest> Quests { get; }
 
-    Task<DbQuest> CompleteQuest(int questId, float clearTime);
-    Task UpdateQuestState(int questId, int state);
+    Task<DbQuest> GetQuestDataAsync(int questId);
 }

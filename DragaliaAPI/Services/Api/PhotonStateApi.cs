@@ -6,9 +6,10 @@ namespace DragaliaAPI.Services.Api;
 
 public class PhotonStateApi : IPhotonStateApi
 {
-    private const string GameListEndpoint = "get/gamelist";
-    private const string ByIdEndpoint = "get/byid";
-    private const string IsHostEndpoint = "get/ishost";
+    private const string GameListEndpoint = "Get/GameList";
+    private const string ByIdEndpoint = "Get/ById";
+    private const string ByViewerIdEndpoint = "Get/ByViewerId";
+    private const string IsHostEndpoint = "Get/IsHost";
 
     private readonly HttpClient client;
 
@@ -70,5 +71,23 @@ public class PhotonStateApi : IPhotonStateApi
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadFromJsonAsync<bool>();
+    }
+
+    public async Task<ApiGame?> GetGameByViewerId(long viewerId)
+    {
+        Uri endpoint = new($"{ByViewerIdEndpoint}/{viewerId}", UriKind.Relative);
+
+        HttpResponseMessage response = await this.client.GetAsync(endpoint);
+
+        try
+        {
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode is System.Net.HttpStatusCode.NotFound)
+        {
+            return null;
+        }
+
+        return await response.Content.ReadFromJsonAsync<ApiGame>();
     }
 }

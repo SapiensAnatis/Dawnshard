@@ -1,16 +1,37 @@
 ﻿using AutoMapper;
+using DragaliaAPI.Database.Entities.Scaffold;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Shared.Definitions.Enums;
+using Serilog;
+using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dungeon;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services.Game;
 
 public class HelperService : IHelperService
 {
+    private readonly IPartyRepository partyRepository;
+    private readonly IDungeonRepository dungeonRepository;
+    private readonly IUserDataRepository userDataRepository;
     private readonly IMapper mapper;
+    private readonly ILogger<HelperService> logger;
 
-    public HelperService(IMapper mapper)
+    public HelperService(
+        IPartyRepository partyRepository,
+        IDungeonRepository dungeonRepository,
+        IUserDataRepository userDataRepository,
+        IMapper mapper,
+        ILogger<HelperService> logger
+    )
     {
+        this.partyRepository = partyRepository;
+        this.dungeonRepository = dungeonRepository;
+        this.userDataRepository = userDataRepository;
         this.mapper = mapper;
+        this.logger = logger;
     }
 
     public async Task<QuestGetSupportUserListData> GetHelpers()
@@ -19,6 +40,50 @@ public class HelperService : IHelperService
         await Task.CompletedTask;
 
         return StubData.SupportListData;
+    }
+
+    public async Task<UserSupportList?> GetHelper(ulong viewerId)
+    {
+        UserSupportList? helper = (await this.GetHelpers()).support_user_list.FirstOrDefault(
+            x => x.viewer_id == viewerId
+        );
+
+        this.logger.LogDebug("Retrieved support list {@helper}", helper);
+
+        return helper;
+    }
+
+    public async Task<UserSupportList> GetLeadUnit(int partyNo)
+    {
+        DbPlayerUserData userData = await this.userDataRepository.GetUserDataAsync();
+
+        IQueryable<DbPartyUnit> leadUnitQuery = this.partyRepository.GetPartyUnits(partyNo).Take(1);
+        DbDetailedPartyUnit? detailedUnit = await this.dungeonRepository
+            .BuildDetailedPartyUnit(leadUnitQuery, 0)
+            .FirstAsync();
+
+        UserSupportList supportList =
+            new()
+            {
+                viewer_id = (ulong)userData.ViewerId,
+                name = userData.Name,
+                last_login_date = userData.LastLoginTime,
+                level = userData.Level,
+                emblem_id = userData.EmblemId,
+                max_party_power = 1000,
+                guild = new() { guild_id = 0, }
+            };
+
+        this.mapper.Map(detailedUnit, supportList);
+
+        supportList.support_crest_slot_type_1_list =
+            supportList.support_crest_slot_type_1_list.Where(x => x != null);
+        supportList.support_crest_slot_type_2_list =
+            supportList.support_crest_slot_type_2_list.Where(x => x != null);
+        supportList.support_crest_slot_type_3_list =
+            supportList.support_crest_slot_type_3_list.Where(x => x != null);
+
+        return supportList;
     }
 
     public AtgenSupportData BuildHelperData(
