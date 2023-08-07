@@ -95,7 +95,7 @@ public class MasterAssetTest
                     ExAbility2Data2: 400000736,
                     ExAbility2Data3: 400000737,
                     ExAbility2Data4: 400000738,
-                    ExAbility2Data5: 400000739
+                    ExAbility2Data5: 400000740
                 )
             );
     }
@@ -722,10 +722,10 @@ public class MasterAssetTest
                     Abilities21: 0,
                     Abilities22: 0,
                     Abilities23: 0,
-                    BaseHp: 12,
-                    MaxHp: 75,
+                    BaseHp: 14,
+                    MaxHp: 44,
                     BaseAtk: 5,
-                    MaxAtk: 28,
+                    MaxAtk: 25,
                     UnionAbilityGroupId: 0
                 )
             );
