@@ -23,7 +23,7 @@ public class PartyController(
     IUpdateDataService updateDataService,
     IMapper mapper,
     ILogger<PartyController> logger,
-    IPartyPowerService powerService
+    IPartyPowerService partyPowerService
 ) : DragaliaControllerBase
 {
     /// <summary>
@@ -45,13 +45,6 @@ public class PartyController(
         // TODO: Talisman validation
         // TODO: Shared skill validation
 
-        int partyPower = await powerService.CalculatePartyPower(
-            requestParty.request_party_setting_list
-        );
-        logger.LogInformation("party power: {power}", partyPower);
-
-        bool isFirst = true;
-
         foreach (PartySettingList partyUnit in requestParty.request_party_setting_list)
         {
             if (
@@ -61,12 +54,13 @@ public class PartyController(
             {
                 throw new DragaliaException(ResultCode.PartySwitchSettingCharaShort);
             }
-
-            // TODO Remove before merging
-            int charaPower = await powerService.CalculateCharacterPower(partyUnit, isFirst);
-            logger.LogInformation("chara power: {power}", charaPower);
-            isFirst = false;
         }
+
+        int partyPower = await partyPowerService.CalculatePartyPower(
+            requestParty.request_party_setting_list
+        );
+        logger.LogTrace("Party power {power}", partyPower);
+        // TODO: PartyPower event
 
         DbParty dbEntry = mapper.Map<DbParty>(
             new PartyList(
