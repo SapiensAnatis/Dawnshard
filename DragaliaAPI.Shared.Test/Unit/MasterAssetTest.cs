@@ -726,7 +726,7 @@ public class MasterAssetTest
                     MaxHp: 44,
                     BaseAtk: 5,
                     MaxAtk: 25,
-                    UnionAbilityGroupId: 0
+                    UnionAbilityGroupId: 4
                 )
             );
     }
