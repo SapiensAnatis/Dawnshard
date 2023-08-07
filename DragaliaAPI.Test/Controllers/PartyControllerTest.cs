@@ -38,7 +38,8 @@ public class PartyControllerTest
             this.mockUpdateDataService.Object,
             mapper,
             this.mockLogger.Object,
-            new Mock<IPartyPowerService>().Object
+            new Mock<IPartyPowerService>().Object,
+            new Mock<IPartyPowerRepository>().Object
         );
         this.partyController.SetupMockContext();
     }

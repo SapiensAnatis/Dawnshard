@@ -29,7 +29,7 @@ public class LoadService(
     IShopRepository shopRepository,
     IUserService userService,
     ITicketRepository ticketRepository,
-    IPartyPowerService partyPowerService
+    IPartyPowerRepository partyPowerRepository
 ) : ILoadService
 {
     public async Task<LoadIndexData> BuildIndexData()
@@ -46,17 +46,6 @@ public class LoadService(
         logger.LogInformation("{time} ms: Bonus list acquired", stopwatch.ElapsedMilliseconds);
 
         // TODO/NOTE: special shop purchase list is not set here. maybe change once that fully works?
-
-        int maxPartyPower = 0;
-
-        foreach (DbParty party in savefile.PartyList)
-        {
-            int currentPartyPower = await partyPowerService.CalculatePartyPower(party, bonusList);
-            if (currentPartyPower > maxPartyPower)
-                maxPartyPower = currentPartyPower;
-        }
-
-        logger.LogInformation("{time} ms: Party power calculated", stopwatch.ElapsedMilliseconds);
 
         LoadIndexData data =
             new()
@@ -91,7 +80,7 @@ public class LoadService(
                     mapper.Map<WeaponPassiveAbilityList>
                 ),
                 fort_bonus_list = bonusList,
-                party_power_data = new(maxPartyPower),
+                party_power_data = new(await partyPowerRepository.GetMaxPartyPowerAsync()),
                 friend_notice = new(0, 0),
                 present_notice = await presentService.GetPresentNotice(),
                 guild_notice = new(0, 0, 0, 0, 0),

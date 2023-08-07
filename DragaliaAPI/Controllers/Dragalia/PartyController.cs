@@ -23,7 +23,8 @@ public class PartyController(
     IUpdateDataService updateDataService,
     IMapper mapper,
     ILogger<PartyController> logger,
-    IPartyPowerService partyPowerService
+    IPartyPowerService partyPowerService,
+    IPartyPowerRepository partyPowerRepository
 ) : DragaliaControllerBase
 {
     /// <summary>
@@ -59,6 +60,9 @@ public class PartyController(
         int partyPower = await partyPowerService.CalculatePartyPower(
             requestParty.request_party_setting_list
         );
+
+        await partyPowerRepository.SetMaxPartyPowerAsync(partyPower);
+
         logger.LogTrace("Party power {power}", partyPower);
         // TODO: PartyPower event
 

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -8,7 +7,6 @@ using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.PartyPower;
 
@@ -193,9 +191,11 @@ public class PartyPowerService(
             crestType3No2
         };
 
-        List<DbAbilityCrest> dbCrests = await abilityCrestRepository.AbilityCrests
-            .Where(x => crests.Contains(x.AbilityCrestId))
-            .ToListAsync();
+        HashSet<AbilityCrests> uniqueCrests = crests.Where(x => x != 0).ToHashSet();
+
+        List<DbAbilityCrest> dbCrests = abilityCrestRepository.AbilityCrests
+            .Where(x => uniqueCrests.Contains(x.AbilityCrestId))
+            .ToList();
 
         double charaPowerParam = GetCharacterPower(
             ref chara,

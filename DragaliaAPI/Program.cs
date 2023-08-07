@@ -202,7 +202,8 @@ builder.Services
     // Emblem feature
     .AddScoped<IEmblemRepository, EmblemRepository>()
     // Party power feature
-    .AddScoped<IPartyPowerService, PartyPowerService>();
+    .AddScoped<IPartyPowerService, PartyPowerService>()
+    .AddScoped<IPartyPowerRepository, PartyPowerRepository>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();

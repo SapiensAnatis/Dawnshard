@@ -600,6 +600,9 @@ public class SavefileService : ISavefileService
         this.apiContext.Emblems.RemoveRange(
             this.apiContext.Emblems.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PartyPowers.RemoveRange(
+            this.apiContext.PartyPowers.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset()
