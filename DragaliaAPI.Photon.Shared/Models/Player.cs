@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Redis.OM.Modeling;
 
 namespace DragaliaAPI.Photon.Shared.Models
 {

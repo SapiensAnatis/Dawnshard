@@ -3,7 +3,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Redis.OM;
 using Redis.OM.Contracts;
 
-namespace DragaliaAPI.Services.Health;
+namespace DragaliaAPI.Photon.StateManager;
 
 public class RedisHealthCheck : IHealthCheck
 {
@@ -11,7 +11,7 @@ public class RedisHealthCheck : IHealthCheck
 
     public RedisHealthCheck(IRedisConnectionProvider connectionProvider)
     {
-        this.connectionprovider = connectionProvider;
+        connectionprovider = connectionProvider;
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(
@@ -21,7 +21,7 @@ public class RedisHealthCheck : IHealthCheck
     {
         try
         {
-            RedisReply reply = await this.connectionprovider.Connection.ExecuteAsync("PING");
+            RedisReply reply = await connectionprovider.Connection.ExecuteAsync("PING");
             if (reply.Error)
             {
                 return new HealthCheckResult(

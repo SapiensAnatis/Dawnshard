@@ -30,7 +30,10 @@ public class DungeonController : DragaliaControllerBase
             request.area_idx
         );
 
-        await this.dungeonService.AddEnemies(request.dungeon_key, request.area_idx, oddsInfo.enemy);
+        await this.dungeonService.ModifySession(
+            request.dungeon_key,
+            session => session.EnemyList[request.area_idx] = oddsInfo.enemy
+        );
 
         return Ok(new DungeonGetAreaOddsData() { odds_info = oddsInfo });
     }

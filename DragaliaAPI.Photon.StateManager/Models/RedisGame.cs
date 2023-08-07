@@ -41,10 +41,14 @@ public class RedisGame : IGame
     /// <inheritdoc/>
     public DateTimeOffset StartEntryTime { get; set; } = DateTimeOffset.UtcNow;
 
+    [Indexed(Sortable = true)]
+    public long StartEntryTimestamp => StartEntryTime.ToUnixTimeSeconds();
+
     /// <inheritdoc/>
     public EntryConditions EntryConditions { get; set; } = new EntryConditions();
 
     /// <inheritdoc/>
+    [Indexed(CascadeDepth = 1)]
     public List<Player> Players { get; set; } = new List<Player>();
 
     /// <summary>

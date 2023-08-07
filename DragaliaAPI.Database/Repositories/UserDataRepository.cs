@@ -49,6 +49,11 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
         return this.apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId);
     }
 
+    public IQueryable<DbPlayerUserData> GetMultipleViewerData(IEnumerable<long> viewerIds)
+    {
+        return this.apiContext.PlayerUserData.Where(x => viewerIds.Contains(x.ViewerId));
+    }
+
     public async Task<ISet<int>> GetTutorialFlags()
     {
         DbPlayerUserData userData = await UserData.SingleAsync();

@@ -20,7 +20,7 @@ public class DbDetailedPartyUnit
 
     public DbWeaponBody? WeaponBodyData { get; set; }
 
-    public IEnumerable<DbAbilityCrest> CrestSlotType1CrestList { get; set; } =
+    public IEnumerable<DbAbilityCrest?> CrestSlotType1CrestList { get; set; } =
         Enumerable.Empty<DbAbilityCrest>();
 
     public IEnumerable<DbAbilityCrest?> CrestSlotType2CrestList { get; set; } =

@@ -15,7 +15,7 @@ using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Features.Dungeon;
+namespace DragaliaAPI.Features.Dungeon.Start;
 
 [ApiController]
 [Route("dungeon_start")]
@@ -48,59 +48,69 @@ public class DungeonStartController : DragaliaControllerBase
     [HttpPost("start")]
     public async Task<DragaliaResult> Start(DungeonStartStartRequest request)
     {
-        IngameData ingameData = await this.dungeonStartService.GetIngameData(
+        IngameData ingameData = await dungeonStartService.GetIngameData(
             request.quest_id,
             request.party_no_list,
             request.support_viewer_id
         );
 
-        DungeonStartStartData response = await this.BuildResponse(request.quest_id, ingameData);
+        DungeonStartStartData response = await BuildResponse(request.quest_id, ingameData);
 
-        return this.Ok(response);
+        return Ok(response);
     }
 
     [HttpPost("start_multi")]
     public async Task<DragaliaResult> StartMulti(DungeonStartStartMultiRequest request)
     {
-        IngameData ingameData = await this.dungeonStartService.GetIngameData(
+        IngameData ingameData = await dungeonStartService.GetIngameData(
             request.quest_id,
             request.party_no_list
         );
 
-        // TODO: Enable when co-op is fixed
         ingameData.play_type = QuestPlayType.Multi;
-        ingameData.is_host = await this.matchingService.GetIsHost();
-        await this.dungeonService.SetIsHost(ingameData.dungeon_key, ingameData.is_host);
+        ingameData.is_host = await matchingService.GetIsHost();
 
-        DungeonStartStartData response = await this.BuildResponse(request.quest_id, ingameData);
+        await dungeonService.ModifySession(
+            ingameData.dungeon_key,
+            session =>
+            {
+                session.IsHost = ingameData.is_host;
+                session.IsMulti = true;
+            }
+        );
 
-        return this.Ok(response);
+        DungeonStartStartData response = await BuildResponse(request.quest_id, ingameData);
+
+        return Ok(response);
     }
 
     [HttpPost("start_assign_unit")]
     public async Task<DragaliaResult> StartAssignUnit(DungeonStartStartAssignUnitRequest request)
     {
-        IngameData ingameData = await this.dungeonStartService.GetIngameData(
+        IngameData ingameData = await dungeonStartService.GetIngameData(
             request.quest_id,
             request.request_party_setting_list,
             request.support_viewer_id
         );
 
-        DungeonStartStartData response = await this.BuildResponse(request.quest_id, ingameData);
+        DungeonStartStartData response = await BuildResponse(request.quest_id, ingameData);
 
-        return this.Ok(response);
+        return Ok(response);
     }
 
     private async Task<DungeonStartStartData> BuildResponse(int questId, IngameData ingameData)
     {
-        this.logger.LogDebug("Starting dungeon for quest id {questId}", questId);
+        logger.LogDebug("Starting dungeon for quest id {questId}", questId);
 
-        IngameQuestData ingameQuestData = await this.dungeonStartService.InitiateQuest(questId);
+        IngameQuestData ingameQuestData = await dungeonStartService.InitiateQuest(questId);
 
         UpdateDataList updateData = await updateDataService.SaveChangesAsync();
 
-        OddsInfo oddsInfo = this.oddsInfoService.GetOddsInfo(questId, 0);
-        await this.dungeonService.AddEnemies(ingameData.dungeon_key, 0, oddsInfo.enemy);
+        OddsInfo oddsInfo = oddsInfoService.GetOddsInfo(questId, 0);
+        await dungeonService.ModifySession(
+            ingameData.dungeon_key,
+            session => session.EnemyList[0] = oddsInfo.enemy
+        );
 
         return new()
         {
