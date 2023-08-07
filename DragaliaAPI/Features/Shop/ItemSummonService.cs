@@ -39,8 +39,6 @@ public class ItemSummonService : IItemSummonService
         this.missionProgressionService = missionProgressionService;
         this.random = Random.Shared;
 
-        var b = this.config.Odds.Sum(x => x.Rate);
-
         this.summonWeights = new int[this.config.Odds.Count];
 
         int weight = 0;
