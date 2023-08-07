@@ -128,12 +128,15 @@ public class DragonService(
                 }
             }
 
-            missionProgressionService.OnDragonBondLevelUp(
-                dragonData.Id,
-                dragonData.ElementalType,
-                levelDifference,
-                dragonReliability.Level
-            );
+            if (levelDifference > 0)
+            {
+                missionProgressionService.OnDragonBondLevelUp(
+                    dragonData.Id,
+                    dragonData.ElementalType,
+                    levelDifference,
+                    dragonReliability.Level
+                );
+            }
 
             levelGifts.Add(
                 new Tuple<DragonGifts, List<RewardReliabilityList>>(
@@ -719,12 +722,15 @@ public class DragonService(
             playerDragonData.Level++;
         }
 
-        missionProgressionService.OnDragonLevelUp(
-            playerDragonData.DragonId,
-            dragonData.ElementalType,
-            levelDifference,
-            playerDragonData.Level
-        );
+        if (levelDifference > 0)
+        {
+            missionProgressionService.OnDragonLevelUp(
+                playerDragonData.DragonId,
+                dragonData.ElementalType,
+                levelDifference,
+                playerDragonData.Level
+            );
+        }
 
         int gainedDragonHpAugs = Math.Min(
             DragonConstants.MaxHpEnhance - playerDragonData.HpPlusCount,

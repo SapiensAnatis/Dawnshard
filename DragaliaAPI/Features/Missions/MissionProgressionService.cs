@@ -245,10 +245,13 @@ public class MissionProgressionService(
 
         List<DbPlayerMission>? missionList = null;
 
+        logger.LogDebug(
+            "Processing mission progression events {@events}",
+            this.eventQueue.ToList()
+        );
+
         while (this.eventQueue.TryDequeue(out MissionEvent? evt))
         {
-            logger.LogDebug("Processing mission progression event {@event}", evt);
-
             List<(MissionType Type, int Id)> affectedMissions =
                 MasterAsset.MissionProgressionInfo.Enumerable
                     .Where(x => x.CompleteType == evt.Type)
