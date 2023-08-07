@@ -306,7 +306,7 @@
 		<None Update="Resources\AbilityLimitedGroup.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Update="Resources\WeaponRarity.json">
+		<None Update="Resources\WeaponBodyRarity.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

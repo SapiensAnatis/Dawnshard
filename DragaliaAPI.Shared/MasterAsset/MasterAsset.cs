@@ -77,8 +77,8 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, WeaponPassiveAbility> WeaponPassiveAbility =
         new("WeaponPassiveAbility.json", x => x.Id);
 
-    public static readonly MasterAssetData<int, WeaponRarity> WeaponRarity =
-        new("WeaponRarity.json", x => x.Id);
+    public static readonly MasterAssetData<int, WeaponBodyRarity> WeaponBodyRarity =
+        new("WeaponBodyRarity.json", x => x.Id);
 
     /// <summary>
     /// Contains information about the materials required to unbind ability crests.

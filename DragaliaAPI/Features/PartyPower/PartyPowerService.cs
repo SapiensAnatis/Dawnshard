@@ -164,7 +164,7 @@ public class PartyPowerService(
 
         DbWeaponBody? dbWeapon = null;
         WeaponBody? weaponBody = null;
-        WeaponRarity? weaponRarity = null;
+        WeaponBodyRarity? weaponRarity = null;
 
         if (weaponBodyId != 0)
         {
@@ -176,7 +176,7 @@ public class PartyPowerService(
                 );
 
             weaponBody = MasterAsset.WeaponBody[dbWeapon.WeaponBodyId];
-            weaponRarity = MasterAsset.WeaponRarity[weaponBody.Rarity];
+            weaponRarity = MasterAsset.WeaponBodyRarity[weaponBody.Rarity];
         }
 
         DbTalisman? talisman =
@@ -394,7 +394,7 @@ public class PartyPowerService(
     private static int GetWeaponPower(
         ref DbWeaponBody? dbWeapon,
         ref WeaponBody? weaponBody,
-        ref WeaponRarity? weaponRarity,
+        ref WeaponBodyRarity? weaponRarity,
         UnitElement charaElement
     )
     {
