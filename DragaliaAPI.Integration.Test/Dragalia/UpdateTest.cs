@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,12 +8,9 @@ using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
-public class UpdateNamechangeTest : TestFixture
+public class UpdateTest : TestFixture
 {
-    public UpdateNamechangeTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public UpdateTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]
@@ -42,5 +40,24 @@ public class UpdateNamechangeTest : TestFixture
         ).data;
 
         response.checked_name.Should().Be(newName);
+    }
+
+    [Fact]
+    public async Task UpdateResetNew_NullList_Handles()
+    {
+        DragaliaResponse<UpdateResetNewData> response = (
+            await this.Client.PostMsgpack<UpdateResetNewData>(
+                "/update/reset_new",
+                new UpdateResetNewRequest()
+                {
+                    target_list = new List<AtgenTargetList>()
+                    {
+                        new AtgenTargetList() { target_name = "emblem", target_id_list = null, }
+                    }
+                }
+            )
+        );
+
+        response.data_headers.result_code.Should().Be(ResultCode.Success);
     }
 }

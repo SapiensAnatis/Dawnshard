@@ -6,7 +6,6 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
@@ -239,5 +238,55 @@ public class DungeonRecordTest : TestFixture
         response.ingame_result_data.score_mission_success_list.Should().NotBeEmpty();
         response.ingame_result_data.reward_record.take_accumulate_point.Should().NotBe(0);
         response.ingame_result_data.reward_record.take_boost_accumulate_point.Should().NotBe(0);
+    }
+
+    [Fact]
+    public async Task Record_HandlesNonExistentQuestData()
+    {
+        int questId = 219031102;
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>()
+                {
+                    new()
+                    {
+                        chara_id = Charas.ThePrince,
+                        equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut
+                    }
+                },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                {
+                    { 1, Enumerable.Empty<AtgenEnemy>() }
+                }
+            };
+
+        string key = await this.Services
+            .GetRequiredService<IDungeonService>()
+            .StartDungeon(mockSession);
+
+        DragaliaResponse<DungeonRecordRecordData> response = (
+            await this.Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record = new List<AtgenTreasureRecord>(),
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord(),
+                        wave = 3
+                    }
+                }
+            )
+        );
+
+        response.data_headers.result_code.Should().Be(ResultCode.Success);
     }
 }
