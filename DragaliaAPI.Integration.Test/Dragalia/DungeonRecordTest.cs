@@ -143,7 +143,9 @@ public class DungeonRecordTest : TestFixture
 
         response.ingame_result_data.grow_record.take_player_exp.Should().NotBe(0);
 
-        response.update_data_list.user_data.coin.Should().Be(oldUserData.Coin + 10);
+        response.update_data_list.user_data.coin
+            .Should()
+            .BeInRange(oldUserData.Coin + 10, oldUserData.Coin + 10 + 1000); // +1000 because of temp. quest event group reward
         response.update_data_list.user_data.mana_point.Should().Be(oldUserData.ManaPoint + 10);
 
         response.update_data_list.material_list
