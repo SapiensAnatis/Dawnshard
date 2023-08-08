@@ -269,6 +269,7 @@ namespace DragaliaAPI.Photon.Plugin
         private void OnFailQuestRequest(IRaiseEventCallInfo info)
         {
             this.roomState = new RoomState();
+            this.actorState[info.ActorNr].Ready = false;
 
             FailQuestRequest request = info.DeserializeEvent<FailQuestRequest>();
 
