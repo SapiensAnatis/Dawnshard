@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using DragaliaAPI.Photon.Plugin.Constants;
 using DragaliaAPI.Photon.Plugin.Helpers;
@@ -102,7 +101,7 @@ namespace DragaliaAPI.Photon.Plugin
         /// <summary>
         /// Photon handler for when a player joins an existing game.
         /// </summary>
-        /// <param name="info">Event information/</param>
+        /// <param name="info">Event information.</param>
         public override void OnJoin(IJoinGameCallInfo info)
         {
             info.Request.ActorProperties.InitializeViewerId();
@@ -154,7 +153,7 @@ namespace DragaliaAPI.Photon.Plugin
             if (info.ActorNr == 1)
             {
                 this.RaiseEvent(
-                    Event.Codes.RoomBroken,
+                    Event.RoomBroken,
                     new RoomBroken() { Reason = RoomBroken.RoomBrokenType.HostDisconnected }
                 );
 
@@ -167,7 +166,7 @@ namespace DragaliaAPI.Photon.Plugin
             // the actor or certain properties attached to them.
             if (actor is null)
             {
-                this.logger.InfoFormat(
+                this.logger.WarnFormat(
                     "OnLeave: could not find actor {0} -- GameLeave request aborted",
                     info.ActorNr
                 );
@@ -240,21 +239,22 @@ namespace DragaliaAPI.Photon.Plugin
             );
 #endif
 
-            switch (info.Request.EvCode)
+            switch ((Event)info.Request.EvCode)
             {
-                case Event.Codes.Ready:
+                case Event.Ready:
                     this.OnActorReady(info);
                     break;
-                case Event.Codes.ClearQuestRequest:
+                case Event.ClearQuestRequest:
                     this.OnClearQuestRequest(info);
                     break;
-                case Event.Codes.GameSucceed:
+                case Event.GameSucceed:
                     this.OnGameSucceed(info);
                     break;
-                case Event.Codes.FailQuestRequest:
+                case Event.FailQuestRequest:
                     this.OnFailQuestRequest(info);
                     break;
-                case Event.Codes.Dead:
+                case Event.Dead:
+                    // !!! TODO: How does this behave with AI units?
                     this.actorState[info.ActorNr].Dead = true;
                     break;
                 default:
@@ -262,6 +262,10 @@ namespace DragaliaAPI.Photon.Plugin
             }
         }
 
+        /// <summary>
+        /// Handler for when the client calls <see cref="Event.FailQuestRequest"/>.
+        /// </summary>
+        /// <param name="info">Event call info.</param>
         private void OnFailQuestRequest(IRaiseEventCallInfo info)
         {
             this.roomState = new RoomState();
@@ -273,8 +277,6 @@ namespace DragaliaAPI.Photon.Plugin
                 request.FailType.ToString()
             );
 
-            // I assumed this would need to be POSTed to /dungeon/fail, but the event doesn't contain
-            // a request body with dungeon_key... so the API server couldn't really do anything.
             FailQuestResponse response = new FailQuestResponse()
             {
                 ResultType =
@@ -283,7 +285,7 @@ namespace DragaliaAPI.Photon.Plugin
                         : FailQuestResponse.ResultTypes.Clear
             };
 
-            this.RaiseEvent(Event.Codes.FailQuestResponse, response, info.ActorNr);
+            this.RaiseEvent(Event.FailQuestResponse, response, info.ActorNr);
 
             if (
                 this.PluginHost.GameActors.Count < this.roomState.StartActorCount
@@ -309,6 +311,10 @@ namespace DragaliaAPI.Photon.Plugin
             }
         }
 
+        /// <summary>
+        /// Handler for when a client calls <see cref="Event.GameSucceed"/>.
+        /// </summary>
+        /// <param name="info">Info from <see cref="OnRaiseEvent(IRaiseEventCallInfo)"/>.</param>
         private void OnGameSucceed(IRaiseEventCallInfo info)
         {
             this.logger.InfoFormat("Received GameSucceed from actor {0}", info.ActorNr);
@@ -316,12 +322,16 @@ namespace DragaliaAPI.Photon.Plugin
             if (info.ActorNr == 1)
             {
                 this.roomState = new RoomState();
-                this.RaiseEvent(Event.Codes.GameSucceed, new { });
+                this.RaiseEvent(Event.GameSucceed, new { });
                 this.SetRoomId(info, this.GenerateRoomId());
                 this.SetRoomVisibility(info, true);
             }
         }
 
+        /// <summary>
+        /// Photon handler for when a client requests to set a property.
+        /// </summary>
+        /// <param name="info">Event information.</param>
         public override void BeforeSetProperties(IBeforeSetPropertiesCallInfo info)
         {
             if (
@@ -409,7 +419,7 @@ namespace DragaliaAPI.Photon.Plugin
             {
                 this.logger.Info("All clients were ready, raising StartQuest");
 
-                this.RaiseEvent(Event.Codes.StartQuest, new Dictionary<string, string> { });
+                this.RaiseEvent(Event.StartQuest, new Dictionary<string, string> { });
 
                 this.roomState.StartActorCount = this.PluginHost.GameActors.Count;
             }
@@ -439,7 +449,7 @@ namespace DragaliaAPI.Photon.Plugin
         /// <summary>
         /// Custom handler for when an actor sets the RoomEntryCondition property (i.e. allowed weapon/element types).
         /// </summary>
-        /// <param name="info"></param>
+        /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
         private void OnSetEntryConditions(ISetPropertiesCallInfo info)
         {
             EntryConditions newEntryConditions = DtoHelpers.CreateEntryConditions(
@@ -467,7 +477,7 @@ namespace DragaliaAPI.Photon.Plugin
         /// <remarks>
         /// Represents various stages of loading into a quest, during which events/properties need to be raised/set.
         /// </remarks>
-        /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
+        /// <param name="info">Info from <see cref="BeforeSetProperties(IBeforeSetPropertiesCallInfo)"/>.</param>
         private void OnSetGoToIngameState(IBeforeSetPropertiesCallInfo info)
         {
             this.logger.InfoFormat(
@@ -493,6 +503,9 @@ namespace DragaliaAPI.Photon.Plugin
             }
         }
 
+        /// <summary>
+        /// Raise <see cref="Event.CharacterData"/> using cached <see cref="HeroParamData"/>.
+        /// </summary>
         private void RaiseCharacterDataEvent()
         {
             foreach (IActor actor in this.PluginHost.GameActors)
@@ -519,7 +532,7 @@ namespace DragaliaAPI.Photon.Plugin
                         heroParams = heroParams.Take(actorState.MemberCount).ToArray()
                     };
 
-                    this.RaiseEvent(Event.Codes.CharacterData, evt);
+                    this.RaiseEvent(Event.CharacterData, evt);
                 }
             }
         }
@@ -550,7 +563,7 @@ namespace DragaliaAPI.Photon.Plugin
         }
 
         /// <summary>
-        /// Raises the CharacterData event by making requests to the main API server for party information.
+        /// Makes an outgoing request for <see cref="HeroParamData"/> for each player in the room.
         /// </summary>
         /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
         private void RequestHeroParam(IBeforeSetPropertiesCallInfo info)
@@ -584,7 +597,7 @@ namespace DragaliaAPI.Photon.Plugin
         }
 
         /// <summary>
-        /// HTTP request callback for the HeroParam request sent in <see cref="RequestHeroParam(ISetPropertiesCallInfo)"/>.
+        /// HTTP request callback for the HeroParam request sent in <see cref="RequestHeroParam(IBeforeSetPropertiesCallInfo)"/>.
         /// </summary>
         /// <param name="response">The HTTP response.</param>
         /// <param name="userState">The arguments passed from the calling function.</param>
@@ -601,7 +614,7 @@ namespace DragaliaAPI.Photon.Plugin
         }
 
         /// <summary>
-        /// Raises the Party event containing information about how many characters each player owns.
+        /// Raises the <see cref="Event.Party"/> event.
         /// </summary>
         /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
         private void RaisePartyEvent()
@@ -617,7 +630,7 @@ namespace DragaliaAPI.Photon.Plugin
                 ReBattleCount = this.config.ReplayTimeoutSeconds
             };
 
-            this.RaiseEvent(Event.Codes.Party, evt);
+            this.RaiseEvent(Event.Party, evt);
         }
 
         /// <summary>
@@ -671,6 +684,10 @@ namespace DragaliaAPI.Photon.Plugin
             );
         }
 
+        /// <summary>
+        /// Handler for when the client raises <see cref="Event.ClearQuestRequest"/>.
+        /// </summary>
+        /// <param name="info">Event call info.</param>
         private void OnClearQuestRequest(IRaiseEventCallInfo info)
         {
             // These properties must be set for the client to successfully rejoin the room.
@@ -698,6 +715,11 @@ namespace DragaliaAPI.Photon.Plugin
             );
         }
 
+        /// <summary>
+        /// Callback for HTTP request sent in <see cref="OnClearQuestRequest(IRaiseEventCallInfo)"/>.
+        /// </summary>
+        /// <param name="response">The HTTP response.</param>
+        /// <param name="userState">The user state.</param>
         private void ClearQuestRequestCallback(IHttpResponse response, object userState)
         {
             this.LogIfFailedCallback(response, userState);
@@ -705,7 +727,7 @@ namespace DragaliaAPI.Photon.Plugin
             HttpRequestUserState typedUserState = (HttpRequestUserState)userState;
 
             this.RaiseEvent(
-                Event.Codes.ClearQuestResponse,
+                Event.ClearQuestResponse,
                 new ClearQuestResponse() { RecordMultiResponse = response.ResponseData },
                 typedUserState.RequestActorNr
             );
@@ -742,6 +764,11 @@ namespace DragaliaAPI.Photon.Plugin
             ;
         }
 
+        /// <summary>
+        /// Static unit-testable method to build the member count table.
+        /// </summary>
+        /// <param name="actorData">List of actors and how many hero params they have.</param>
+        /// <returns>The member count table.</returns>
         public static Dictionary<int, int> BuildMemberCountTable(
             IEnumerable<(int ActorNr, int HeroParamCount)> actorData
         )
