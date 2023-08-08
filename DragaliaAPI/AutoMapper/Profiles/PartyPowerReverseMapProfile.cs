@@ -13,7 +13,7 @@ public class PartyPowerReverseMapProfile : Profile
 
         this.CreateMap<PartyPowerData, DbPartyPower>();
 
-        this.SourceMemberNamingConvention = DatabaseNamingConvention.Instance;
-        this.DestinationMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
+        this.SourceMemberNamingConvention = LowerUnderscoreNamingConvention.Instance;
+        this.DestinationMemberNamingConvention = DatabaseNamingConvention.Instance;
     }
 }
