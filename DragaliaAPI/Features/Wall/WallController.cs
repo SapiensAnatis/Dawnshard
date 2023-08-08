@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using DragaliaAPI.Controllers;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Reward;
@@ -15,29 +13,29 @@ namespace DragaliaAPI.Features.Wall;
 [Route("wall")]
 public class WallController : DragaliaControllerBase
 {
-    private readonly IBonusService bonusService;
     private readonly IUpdateDataService updateDataService;
     private readonly IRewardService rewardService;
     private readonly IClearPartyService clearPartyService;
     private readonly IDungeonService dungeonService;
     private readonly IWallService wallService;
+    private readonly ILogger<WallController> logger;
 
 
     public WallController(
-        IBonusService bonusService,
         IUpdateDataService updateDataService,
         IRewardService rewardService,
         IClearPartyService clearPartyService,
         IDungeonService dungeonService,
-        IWallService wallService
+        IWallService wallService,
+        ILogger<WallController> logger
     )
     {
-        this.bonusService = bonusService;
         this.updateDataService = updateDataService;
         this.rewardService = rewardService;
         this.clearPartyService = clearPartyService;
         this.dungeonService = dungeonService;
         this.wallService = wallService;
+        this.logger = logger;
     }
 
 
@@ -114,12 +112,7 @@ public class WallController : DragaliaControllerBase
             wallService.GetUserWallRewardList(totalLevel, RewardStatus.Received);
 
         // Grant Rewards
-        foreach (AtgenBuildEventRewardEntityList entity in rewardEntityList)
-        {
-            await rewardService.GrantReward(
-                new(entity.entity_type, entity.entity_id, entity.entity_quantity)
-            );
-        }
+        await wallService.GrantMonthlyRewardEntityList(rewardEntityList);
 
         EntityResult entityResult = this.rewardService.GetEntityResult();
 
