@@ -48,7 +48,7 @@ namespace DragaliaAPI.Photon.Plugin
             }
             else
             {
-                this.logger.InfoFormat("Event will target actor {0}", target);
+                this.logger.DebugFormat("Event will target actor {0}", target);
                 this.PluginHost.BroadcastEvent(
                     new List<int>() { target.Value },
                     0,
