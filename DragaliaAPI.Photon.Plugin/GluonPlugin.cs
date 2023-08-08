@@ -268,7 +268,6 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Event call info.</param>
         private void OnFailQuestRequest(IRaiseEventCallInfo info)
         {
-            this.roomState = new RoomState();
             this.actorState[info.ActorNr].Ready = false;
 
             FailQuestRequest request = info.DeserializeEvent<FailQuestRequest>();
@@ -310,6 +309,8 @@ namespace DragaliaAPI.Photon.Plugin
 
                 this.SetRoomVisibility(info, true);
             }
+
+            this.roomState = new RoomState();
         }
 
         /// <summary>
