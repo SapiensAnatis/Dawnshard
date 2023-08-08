@@ -90,4 +90,6 @@ public class DbPlayer
         new List<DbPlayerDmodeServitorPassive>();
 
     public virtual DbPlayerShopInfo? ShopInfo { get; set; }
+
+    public virtual DbPartyPower? PartyPower { get; set; }
 }

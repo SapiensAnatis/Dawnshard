@@ -28,8 +28,7 @@ public class LoadService(
     ITradeService tradeService,
     IShopRepository shopRepository,
     IUserService userService,
-    ITicketRepository ticketRepository,
-    IPartyPowerRepository partyPowerRepository
+    ITicketRepository ticketRepository
 ) : ILoadService
 {
     public async Task<LoadIndexData> BuildIndexData()
@@ -80,7 +79,7 @@ public class LoadService(
                     mapper.Map<WeaponPassiveAbilityList>
                 ),
                 fort_bonus_list = bonusList,
-                party_power_data = new(await partyPowerRepository.GetMaxPartyPowerAsync()),
+                party_power_data = mapper.Map<PartyPowerData>(savefile.PartyPower),
                 friend_notice = new(0, 0),
                 present_notice = await presentService.GetPresentNotice(),
                 guild_notice = new(0, 0, 0, 0, 0),
