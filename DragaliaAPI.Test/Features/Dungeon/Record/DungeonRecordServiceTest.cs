@@ -235,7 +235,7 @@ public class DungeonRecordServiceTest
                 }
             );
 
-        mockQuest.State.Should().Be(3);
+        mockQuest.State.Should().Be(0); // set to 3 in QuestService
 
         this.mockDungeonRewardService.VerifyAll();
         this.mockQuestService.VerifyAll();
