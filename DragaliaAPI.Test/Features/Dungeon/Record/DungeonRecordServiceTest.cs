@@ -5,6 +5,7 @@ using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -20,7 +21,7 @@ namespace DragaliaAPI.Test.Features.Dungeon.Record;
 public class DungeonRecordServiceTest
 {
     private readonly Mock<IDungeonRecordRewardService> mockDungeonRewardService;
-    private readonly Mock<IQuestRepository> mockQuestRepository;
+    private readonly Mock<IQuestService> mockQuestService;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
     private readonly Mock<IUserService> mockUserService;
     private readonly Mock<ITutorialService> mockTutorialService;
@@ -31,7 +32,7 @@ public class DungeonRecordServiceTest
     public DungeonRecordServiceTest()
     {
         this.mockDungeonRewardService = new(MockBehavior.Strict);
-        this.mockQuestRepository = new(MockBehavior.Strict);
+        this.mockQuestService = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
         this.mockUserService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Strict);
@@ -39,7 +40,7 @@ public class DungeonRecordServiceTest
 
         this.dungeonRecordService = new DungeonRecordService(
             this.mockDungeonRewardService.Object,
-            this.mockQuestRepository.Object,
+            this.mockQuestService.Object,
             this.mockMissionProgressionService.Object,
             this.mockUserService.Object,
             this.mockTutorialService.Object,
@@ -152,9 +153,9 @@ public class DungeonRecordServiceTest
         int takeAccumulatePoint = 30;
         int takeBoostAccumulatePoint = 40;
 
-        this.mockQuestRepository
-            .Setup(x => x.GetQuestDataAsync(lSurtrSoloId))
-            .ReturnsAsync(mockQuest);
+        this.mockQuestService
+            .Setup(x => x.ProcessQuestCompletion(lSurtrSoloId, 10))
+            .ReturnsAsync((mockQuest, true, new List<AtgenFirstClearSet>()));
 
         this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(lSurtrSoloId));
 
@@ -237,7 +238,7 @@ public class DungeonRecordServiceTest
         mockQuest.State.Should().Be(3);
 
         this.mockDungeonRewardService.VerifyAll();
-        this.mockQuestRepository.VerifyAll();
+        this.mockQuestService.VerifyAll();
         this.mockMissionProgressionService.VerifyAll();
         this.mockUserService.VerifyAll();
         this.mockTutorialService.VerifyAll();

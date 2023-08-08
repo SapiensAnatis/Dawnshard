@@ -183,4 +183,6 @@ public class ApiContext : DbContext
     public DbSet<DbSummonTicket> PlayerSummonTickets { get; set; }
 
     public DbSet<DbEmblem> Emblems { get; set; }
+
+    public DbSet<DbQuestEvent> QuestEvents { get; set; }
 }

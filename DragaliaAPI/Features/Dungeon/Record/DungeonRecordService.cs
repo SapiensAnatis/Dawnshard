@@ -1,22 +1,17 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset.Models;
-using PhotonPlayer = DragaliaAPI.Photon.Shared.Models.Player;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
 public class DungeonRecordService(
     IDungeonRecordRewardService dungeonRecordRewardService,
-    IQuestRepository questRepository,
+    IQuestService questService,
     IMissionProgressionService missionProgressionService,
     IUserService userService,
     ITutorialService tutorialService,
@@ -53,8 +48,11 @@ public class DungeonRecordService(
                 is_clear = true,
             };
 
-        DbQuest questData = await questRepository.GetQuestDataAsync(session.QuestData.Id);
-        questData.State = 3;
+        (
+            DbQuest questData,
+            ingameResultData.is_best_clear_time,
+            ingameResultData.reward_record.quest_bonus_list
+        ) = await questService.ProcessQuestCompletion(session.QuestData.Id, playRecord.time);
 
         this.ProcessClearTime(ingameResultData, playRecord.time, questData);
         this.ProcessMissionProgression(session);

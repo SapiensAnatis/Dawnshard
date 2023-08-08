@@ -35,6 +35,7 @@ using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.Tickets;
 
@@ -199,7 +200,10 @@ builder.Services
     // Tickets feature
     .AddScoped<ITicketRepository, TicketRepository>()
     // Emblem feature
-    .AddScoped<IEmblemRepository, EmblemRepository>();
+    .AddScoped<IEmblemRepository, EmblemRepository>()
+    // Quest feature
+    .AddScoped<IQuestService, QuestService>()
+    .AddScoped<IQuestCacheService, QuestCacheService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();

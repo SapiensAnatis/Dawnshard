@@ -1,6 +1,9 @@
 ﻿using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
 using DragaliaAPI.Shared.MasterAsset;
 
 namespace DragaliaAPI.Test.Controllers;
@@ -9,6 +12,9 @@ public class DungeonControllerTest
 {
     private readonly Mock<IDungeonService> mockDungeonService;
     private readonly Mock<IOddsInfoService> mockOddsInfoService;
+    private readonly Mock<IQuestService> mockQuestService;
+    private readonly Mock<IUpdateDataService> mockUpdateDataService;
+    private readonly Mock<IRewardService> mockRewardService;
 
     private readonly DungeonController dungeonController;
 
@@ -16,10 +22,16 @@ public class DungeonControllerTest
     {
         this.mockDungeonService = new(MockBehavior.Strict);
         this.mockOddsInfoService = new(MockBehavior.Strict);
+        this.mockQuestService = new(MockBehavior.Strict);
+        this.mockUpdateDataService = new(MockBehavior.Strict);
+        this.mockRewardService = new(MockBehavior.Strict);
 
         this.dungeonController = new(
             this.mockDungeonService.Object,
-            this.mockOddsInfoService.Object
+            this.mockOddsInfoService.Object,
+            this.mockQuestService.Object,
+            this.mockUpdateDataService.Object,
+            this.mockRewardService.Object
         );
 
         dungeonController.SetupMockContext();
