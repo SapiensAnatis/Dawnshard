@@ -180,7 +180,8 @@ namespace DragaliaAPI.Photon.Plugin
             )
             {
                 this.logger.InfoFormat(
-                    "Viewer ID {0} left game {1}",
+                    "Actor {0} with viewer ID {1} left game {2}",
+                    info.ActorNr,
                     viewerId,
                     this.PluginHost.GameId
                 );
@@ -426,8 +427,6 @@ namespace DragaliaAPI.Photon.Plugin
 
             if (this.actorState.All(x => x.Value.Ready))
             {
-                this.logger.Info("All clients were ready, raising StartQuest");
-
                 this.RaiseEvent(Event.StartQuest, new Dictionary<string, string> { });
 
                 this.roomState.StartActorCount = this.PluginHost.GameActors.Count;
@@ -649,7 +648,7 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="roomId">The new room ID.</param>
         private void SetRoomId(ICallInfo info, int roomId)
         {
-            this.logger.DebugFormat("Setting room ID to {0}", roomId);
+            this.logger.InfoFormat("Setting room ID to {0}", roomId);
 
             this.PluginHost.SetProperties(
                 0,
@@ -678,7 +677,7 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="visible">The new visibility.</param>
         private void SetRoomVisibility(ICallInfo info, bool visible)
         {
-            this.logger.DebugFormat("Setting room visibility to {0}", visible);
+            this.logger.InfoFormat("Setting room visibility to {0}", visible);
 
             this.PostStateManagerRequest(
                 VisibleEndpoint,
@@ -754,6 +753,7 @@ namespace DragaliaAPI.Photon.Plugin
                 && QuestHelper.GetIsRaid(questId)
             )
             {
+                logger.InfoFormat("GetMemberCountTable: Quest {0} is a raid", questId);
                 // Everyone uses all of their units in a raid
                 return this.PluginHost.GameActors.ToDictionary(
                     x => x.ActorNr,
