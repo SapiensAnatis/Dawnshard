@@ -85,7 +85,17 @@ public class MasterAssetTest
                     Abilities32: 1074,
                     Abilities33: 2041,
                     Abilities34: 0,
-                    MinDef: 10
+                    MinDef: 10,
+                    ExAbilityData1: 106070004,
+                    ExAbilityData2: 106070005,
+                    ExAbilityData3: 106070006,
+                    ExAbilityData4: 106070007,
+                    ExAbilityData5: 106070008,
+                    ExAbility2Data1: 400000735,
+                    ExAbility2Data2: 400000736,
+                    ExAbility2Data3: 400000737,
+                    ExAbility2Data4: 400000738,
+                    ExAbility2Data5: 400000740
                 )
             );
     }
@@ -371,7 +381,17 @@ public class MasterAssetTest
                     CreateEntityId4: Materials.StreamOrb,
                     CreateEntityQuantity4: 8,
                     CreateEntityId5: 0,
-                    CreateEntityQuantity5: 0
+                    CreateEntityQuantity5: 0,
+                    LimitOverCountPartyPower1: 100,
+                    LimitOverCountPartyPower2: 150,
+                    BaseHp: 45,
+                    MaxHp1: 151,
+                    MaxHp2: 216,
+                    MaxHp3: 0,
+                    BaseAtk: 97,
+                    MaxAtk1: 324,
+                    MaxAtk2: 590,
+                    MaxAtk3: 0
                 )
             );
     }
@@ -701,7 +721,12 @@ public class MasterAssetTest
                     Abilities13: 2340,
                     Abilities21: 0,
                     Abilities22: 0,
-                    Abilities23: 0
+                    Abilities23: 0,
+                    BaseHp: 14,
+                    MaxHp: 44,
+                    BaseAtk: 5,
+                    MaxAtk: 25,
+                    UnionAbilityGroupId: 4
                 )
             );
     }

@@ -34,6 +34,7 @@ using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Item;
+using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Talisman;
@@ -203,7 +204,10 @@ builder.Services
     .AddScoped<IEmblemRepository, EmblemRepository>()
     // Quest feature
     .AddScoped<IQuestService, QuestService>()
-    .AddScoped<IQuestCacheService, QuestCacheService>();
+    .AddScoped<IQuestCacheService, QuestCacheService>()
+    // Party power feature
+    .AddScoped<IPartyPowerService, PartyPowerService>()
+    .AddScoped<IPartyPowerRepository, PartyPowerRepository>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();

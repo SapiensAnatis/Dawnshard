@@ -44,6 +44,7 @@ public static class Schema
                                 .Include(x => x.DmodeInfo)
                                 .Include(x => x.DmodeServitorPassives)
                                 .Include(x => x.QuestEvents)
+                                .Include(x => x.PartyPower)
                                 .AsSplitQuery()
                                 .First(
                                     x => x.UserData != null && x.UserData.ViewerId == args.viewerId

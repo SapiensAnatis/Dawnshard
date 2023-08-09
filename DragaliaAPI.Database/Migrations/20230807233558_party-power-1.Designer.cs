@@ -3,6 +3,7 @@ using System;
 using DragaliaAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230807233558_party-power-1")]
+    partial class partypower1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1445,11 +1448,11 @@ namespace DragaliaAPI.Database.Migrations
                     b.Property<bool>("IsMissionClear3")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTimeOffset>("LastDailyResetTime")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("LastDailyResetTime")
+                        .HasColumnType("integer");
 
-                    b.Property<DateTimeOffset>("LastWeeklyResetTime")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("LastWeeklyResetTime")
+                        .HasColumnType("integer");
 
                     b.Property<int>("PlayCount")
                         .HasColumnType("integer");
@@ -1532,58 +1535,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.HasKey("DeviceAccountId", "QuestId", "IsMulti", "UnitNo");
 
                     b.ToTable("QuestClearPartyUnits");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbQuestEvent", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("QuestEventId")
-                        .HasColumnType("integer")
-                        .HasColumnName("QuestEventId");
-
-                    b.Property<int>("DailyPlayCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("DailyPlayCount");
-
-                    b.Property<DateTimeOffset>("LastDailyResetTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("LastDailyResetTime");
-
-                    b.Property<DateTimeOffset>("LastWeeklyResetTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("LastWeeklyResetTime");
-
-                    b.Property<int>("QuestBonusReceiveCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("QuestBonusReceiveCount");
-
-                    b.Property<int>("QuestBonusReserveCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("QuestBonusReserveCount");
-
-                    b.Property<DateTimeOffset>("QuestBonusReserveTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("QuestBonusReserveTime");
-
-                    b.Property<int>("QuestBonusStackCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("QuestBonusStackCount");
-
-                    b.Property<DateTimeOffset>("QuestBonusStackTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("QuestBonusStackTime");
-
-                    b.Property<int>("WeeklyPlayCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("WeeklyPlayCount");
-
-                    b.HasKey("DeviceAccountId", "QuestEventId");
-
-                    b.HasIndex("DeviceAccountId");
-
-                    b.ToTable("QuestEvents");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbSetUnit", b =>
@@ -2218,17 +2169,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbQuestEvent", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany("QuestEvents")
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbSetUnit", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
@@ -2339,8 +2279,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("PresentHistory");
 
                     b.Navigation("Presents");
-
-                    b.Navigation("QuestEvents");
 
                     b.Navigation("QuestList");
 

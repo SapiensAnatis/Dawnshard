@@ -92,4 +92,6 @@ public class DbPlayer
     public virtual DbPlayerShopInfo? ShopInfo { get; set; }
 
     public virtual ICollection<DbQuestEvent> QuestEvents { get; set; } = new List<DbQuestEvent>();
+
+    public virtual DbPartyPower? PartyPower { get; set; }
 }
