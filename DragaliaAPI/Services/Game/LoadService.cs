@@ -28,8 +28,9 @@ public class LoadService(
     IPresentService presentService,
     ITradeService tradeService,
     IShopRepository shopRepository,
-    IUserService userService
-    ITicketRepository ticketRepository
+    IUserService userService,
+    ITicketRepository ticketRepository,
+    IWallService wallService
 ) : ILoadService
 {
     public async Task<LoadIndexData> BuildIndexData()
@@ -106,7 +107,7 @@ public class LoadService(
                 shop_notice = new ShopNotice(await shopRepository.GetDailySummonCountAsync() == 0),
                 summon_ticket_list = (await ticketRepository.GetTicketsAsync()).Select(
                     mapper.Map<SummonTicketList>
-                )
+                ),
                 quest_wall_list = await wallService.GetQuestWallList()
             };
 

@@ -204,8 +204,7 @@ builder.Services
     .AddScoped<IEmblemRepository, EmblemRepository>()
     // Party power feature
     .AddScoped<IPartyPowerService, PartyPowerService>()
-    .AddScoped<IPartyPowerRepository, PartyPowerRepository>();
-    .AddScoped<ITalismanService, TalismanService>()
+    .AddScoped<IPartyPowerRepository, PartyPowerRepository>()
     // Wall feature
     .AddScoped<IWallService, WallService>()
     .AddScoped<IWallRepository, WallRepository>();
