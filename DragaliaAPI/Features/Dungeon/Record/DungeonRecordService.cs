@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Models;
@@ -12,7 +11,6 @@ namespace DragaliaAPI.Features.Dungeon.Record;
 public class DungeonRecordService(
     IDungeonRecordRewardService dungeonRecordRewardService,
     IQuestService questService,
-    IMissionProgressionService missionProgressionService,
     IUserService userService,
     ITutorialService tutorialService,
     ILogger<DungeonRecordService> logger
@@ -55,7 +53,6 @@ public class DungeonRecordService(
         ) = await questService.ProcessQuestCompletion(session.QuestData.Id, playRecord.time);
 
         this.ProcessClearTime(ingameResultData, playRecord.time, questData);
-        this.ProcessMissionProgression(session);
         await this.ProcessGrowth(ingameResultData.grow_record, session);
         await this.ProcessStaminaConsumption(session);
         await this.ProcessPlayerLevel(
@@ -125,14 +122,6 @@ public class DungeonRecordService(
         );
 
         return Task.CompletedTask;
-    }
-
-    private void ProcessMissionProgression(DungeonSession session)
-    {
-        if (session.QuestData.IsPartOfVoidBattleGroups)
-            missionProgressionService.OnVoidBattleCleared();
-
-        missionProgressionService.OnQuestCleared(session.QuestData.Id);
     }
 
     private async Task ProcessStaminaConsumption(DungeonSession session)

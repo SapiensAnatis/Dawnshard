@@ -22,7 +22,6 @@ public class DungeonRecordServiceTest
 {
     private readonly Mock<IDungeonRecordRewardService> mockDungeonRewardService;
     private readonly Mock<IQuestService> mockQuestService;
-    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
     private readonly Mock<IUserService> mockUserService;
     private readonly Mock<ITutorialService> mockTutorialService;
     private readonly Mock<ILogger<DungeonRecordService>> mockLogger;
@@ -33,7 +32,6 @@ public class DungeonRecordServiceTest
     {
         this.mockDungeonRewardService = new(MockBehavior.Strict);
         this.mockQuestService = new(MockBehavior.Strict);
-        this.mockMissionProgressionService = new(MockBehavior.Strict);
         this.mockUserService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
@@ -41,7 +39,6 @@ public class DungeonRecordServiceTest
         this.dungeonRecordService = new DungeonRecordService(
             this.mockDungeonRewardService.Object,
             this.mockQuestService.Object,
-            this.mockMissionProgressionService.Object,
             this.mockUserService.Object,
             this.mockTutorialService.Object,
             this.mockLogger.Object
@@ -157,8 +154,6 @@ public class DungeonRecordServiceTest
             .Setup(x => x.ProcessQuestCompletion(lSurtrSoloId, 10))
             .ReturnsAsync((mockQuest, true, new List<AtgenFirstClearSet>()));
 
-        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(lSurtrSoloId));
-
         this.mockUserService
             .Setup(x => x.RemoveStamina(StaminaType.Single, 40))
             .Returns(Task.CompletedTask);
@@ -239,7 +234,6 @@ public class DungeonRecordServiceTest
 
         this.mockDungeonRewardService.VerifyAll();
         this.mockQuestService.VerifyAll();
-        this.mockMissionProgressionService.VerifyAll();
         this.mockUserService.VerifyAll();
         this.mockTutorialService.VerifyAll();
         this.mockLogger.VerifyAll();

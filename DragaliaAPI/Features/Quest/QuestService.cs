@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
@@ -18,7 +19,8 @@ public class QuestService(
     IDateTimeProvider dateTimeProvider,
     IResetHelper resetHelper,
     IQuestCacheService questCacheService,
-    IRewardService rewardService
+    IRewardService rewardService,
+    IMissionProgressionService missionProgressionService
 ) : IQuestService
 {
     public async Task<(
@@ -29,6 +31,8 @@ public class QuestService(
     {
         DbQuest quest = await questRepository.GetQuestDataAsync(questId);
         quest.State = 3;
+
+        missionProgressionService.OnQuestCleared(questId);
 
         bool isBestClearTime = false;
 
@@ -81,6 +85,10 @@ public class QuestService(
     )
     {
         logger.LogTrace("Completing quest for quest group {eventGroupId}", eventGroupId);
+
+        // TODO: Remove when missions pr is merged
+        if (eventGroupId == 30000)
+            missionProgressionService.OnVoidBattleCleared();
 
         DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
         QuestEvent questEventData = MasterAsset.QuestEvent[eventGroupId];
