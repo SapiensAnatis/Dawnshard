@@ -10,7 +10,7 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
     /// <code>
     /// SELECT q._Id || ', // ' || t._Text FROM "QuestData" q
     /// JOIN "TextLabel" t on q._QuestViewName = t._Id
-    /// WHERE q._DungeonType = 2
+    /// WHERE q._DungeonType = 2 or q._DungeonType = 18 -- DungeonTypes.Raid or DungeonTypes.RaidSixteen
     /// </code>
     /// </remarks>
     public partial class QuestHelper
@@ -431,6 +431,7 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
                 320240101, // Surtr's Trial (Light): Standard
                 320240102, // Surtr's Trial (Light): Expert
                 320240103, // Surtr's Trial (Light): Master
+                204390501, // Satan Clash: Nightmare
             }.ToImmutableHashSet();
         }
     }
