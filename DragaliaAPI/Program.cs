@@ -34,6 +34,7 @@ using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Item;
+using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.Tickets;
@@ -199,7 +200,10 @@ builder.Services
     // Tickets feature
     .AddScoped<ITicketRepository, TicketRepository>()
     // Emblem feature
-    .AddScoped<IEmblemRepository, EmblemRepository>();
+    .AddScoped<IEmblemRepository, EmblemRepository>()
+    // Party power feature
+    .AddScoped<IPartyPowerService, PartyPowerService>()
+    .AddScoped<IPartyPowerRepository, PartyPowerRepository>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();
