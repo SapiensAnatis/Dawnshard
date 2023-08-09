@@ -84,6 +84,15 @@ if (builder.Environment.EnvironmentName != "Testing")
     RedisIndexInfo? info = await provider.Connection.GetIndexInfoAsync(typeof(RedisGame));
     Log.Logger.Information("Index created: {created}", created);
     Log.Logger.Information("Index info: {@info}", info);
+
+    if (builder.Environment.IsDevelopment())
+    {
+        Log.Logger.Information("App is in development mode -- clearing all pre-existing games");
+
+        await provider
+            .RedisCollection<RedisGame>()
+            .DeleteAsync(provider.RedisCollection<RedisGame>());
+    }
 }
 
 WebApplication app = builder.Build();

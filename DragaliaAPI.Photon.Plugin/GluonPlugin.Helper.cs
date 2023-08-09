@@ -17,35 +17,32 @@ namespace DragaliaAPI.Photon.Plugin
     /// </summary>
     public partial class GluonPlugin
     {
+        private const int EventDataKey = 245;
+        private const int EventActorNrKey = 254;
+
         /// <summary>
         /// Helper method to raise events.
         /// </summary>
         /// <param name="eventCode">The event code to raise.</param>
         /// <param name="eventData">The event data.</param>
         /// <param name="target">The actor to target -- if null, all actors will be targeted.</param>
-        public void RaiseEvent(byte eventCode, object eventData, int? target = null)
+        public void RaiseEvent(Event eventCode, object eventData, int? target = null)
         {
-            byte[] serializedEvent = MessagePackSerializer.Serialize(
-                eventData,
-                MessagePackSerializerOptions.Standard.WithCompression(
-                    MessagePackCompression.Lz4Block
-                )
-            );
+            byte[] serializedEvent = MessagePackSerializer.Serialize(eventData, MessagePackOptions);
             Dictionary<byte, object> props = new Dictionary<byte, object>()
             {
-                { 245, serializedEvent },
-                { 254, 0 } // Server actor number
+                { EventDataKey, serializedEvent },
+                { EventActorNrKey, 0 }
             };
 
-            this.logger.DebugFormat(
-                "Raising event 0x{0} with data {1}",
-                eventCode.ToString("X"),
-                JsonConvert.SerializeObject(eventData)
-            );
+            this.logger.InfoFormat("Raising event {0} (0x{1})", eventCode, eventCode.ToString("X"));
+#if DEBUG
+            this.logger.DebugFormat("Event data: {0}", JsonConvert.SerializeObject(eventData));
+#endif
 
             if (target is null)
             {
-                this.BroadcastEvent(eventCode, props);
+                this.BroadcastEvent((byte)eventCode, props);
             }
             else
             {
@@ -53,7 +50,7 @@ namespace DragaliaAPI.Photon.Plugin
                 this.PluginHost.BroadcastEvent(
                     new List<int>() { target.Value },
                     0,
-                    eventCode,
+                    (byte)eventCode,
                     props,
                     CacheOperations.DoNotCache
                 );

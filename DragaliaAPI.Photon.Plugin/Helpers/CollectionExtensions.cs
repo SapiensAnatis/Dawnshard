@@ -119,6 +119,16 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
             return value;
         }
 
+        public static int GetIntOrDefault(this PropertyBag<object> properties, string key)
+        {
+            if (!properties.TryGetInt(key, out int value))
+            {
+                return 0;
+            }
+
+            return value;
+        }
+
         public static bool TryGetBool(
             this PropertyBag<object> properties,
             string key,

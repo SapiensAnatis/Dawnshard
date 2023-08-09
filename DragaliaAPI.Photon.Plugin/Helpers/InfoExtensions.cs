@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DragaliaAPI.Photon.Plugin.Constants;
 using DragaliaAPI.Photon.Plugin.Models.Events;
 using MessagePack;
 using Photon.Hive.Plugin;
@@ -12,14 +11,14 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
 {
     public static class InfoExtensions
     {
+        private const int EventDataKey = 245;
+
         public static TEvent DeserializeEvent<TEvent>(this IRaiseEventCallInfo info)
             where TEvent : EventBase<TEvent>
         {
             if (
-                !info.Request.Parameters.TryGetValue(
-                    Event.Constants.EventDataKey,
-                    out object eventDataObj
-                ) || !(eventDataObj is byte[] blob)
+                !info.Request.Parameters.TryGetValue(EventDataKey, out object eventDataObj)
+                || !(eventDataObj is byte[] blob)
             )
             {
                 throw new ArgumentException(
