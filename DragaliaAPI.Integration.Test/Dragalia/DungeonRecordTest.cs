@@ -15,7 +15,10 @@ public class DungeonRecordTest : TestFixture
         CustomWebApplicationFactory<Program> factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        CommonAssertionOptions.ApplyTimeOptions(2);
+    }
 
     [Fact]
     public async Task Record_ReturnsExpectedResponse()
@@ -158,11 +161,16 @@ public class DungeonRecordTest : TestFixture
                 {
                     quest_id = questId,
                     state = 3,
+                    daily_play_count = 1,
+                    play_count = 1,
+                    weekly_play_count = 1,
                     is_appear = 1,
                     is_mission_clear_1 = 1,
                     is_mission_clear_2 = 1,
                     is_mission_clear_3 = 1,
-                    best_clear_time = 10
+                    best_clear_time = 10,
+                    last_daily_reset_time = DateTimeOffset.UtcNow,
+                    last_weekly_reset_time = DateTimeOffset.UtcNow
                 }
             );
     }

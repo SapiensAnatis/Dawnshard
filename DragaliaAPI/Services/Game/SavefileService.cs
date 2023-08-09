@@ -482,7 +482,7 @@ public class SavefileService : ISavefileService
                 "Mapping DbPartyPower step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
-            
+
             this.apiContext.QuestEvents.AddRange(
                 savefile.quest_event_list.MapWithDeviceAccount<DbQuestEvent>(
                     mapper,
