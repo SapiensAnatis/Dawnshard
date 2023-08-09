@@ -9,7 +9,6 @@ using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using CharasEnum = DragaliaAPI.Shared.Definitions.Enums.Charas;
 
 namespace DragaliaAPI.Database.Repositories;
 
@@ -72,6 +71,32 @@ public class UnitRepository : IUnitRepository
         return await this.apiContext.PlayerCharaData.FindAsync(
             this.playerIdentityService.AccountId,
             chara
+        );
+    }
+
+    public async Task<DbPlayerDragonData?> FindDragonAsync(long dragonKeyId)
+    {
+        return await apiContext.PlayerDragonData.FindAsync(dragonKeyId);
+    }
+
+    public async Task<DbPlayerDragonReliability?> FindDragonReliabilityAsync(Dragons dragon)
+    {
+        return await apiContext.PlayerDragonReliability.FindAsync(
+            playerIdentityService.AccountId,
+            dragon
+        );
+    }
+
+    public async Task<DbTalisman?> FindTalismanAsync(long talismanKeyId)
+    {
+        return await apiContext.PlayerTalismans.FindAsync(talismanKeyId);
+    }
+
+    public async Task<DbWeaponBody?> FindWeaponBodyAsync(WeaponBodies weaponBody)
+    {
+        return await apiContext.PlayerWeapons.FindAsync(
+            playerIdentityService.AccountId,
+            weaponBody
         );
     }
 

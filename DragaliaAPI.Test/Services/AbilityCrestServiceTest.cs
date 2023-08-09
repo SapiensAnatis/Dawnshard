@@ -322,7 +322,27 @@ public class AbilityCrestServiceTest
     )
     {
         AbilityCrest abilityCrest =
-            new(0, 0, 0, 0, Materials.Empty, Materials.Empty, 0, 0, 0, 0, 0, 0, 0, 0);
+            new(
+                0,
+                0,
+                0,
+                0,
+                Materials.Empty,
+                Materials.Empty,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            );
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -713,7 +733,27 @@ public class AbilityCrestServiceTest
     public async Task TryBuildup_Level_WithInvalidBuildupLevelIdReturnsInvalidResultCode()
     {
         AbilityCrest abilityCrest =
-            new(0, 0, 0, 0, Materials.Empty, Materials.Empty, 0, 0, 0, 0, 0, 0, 0, 0);
+            new(
+                0,
+                0,
+                0,
+                0,
+                Materials.Empty,
+                Materials.Empty,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            );
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {

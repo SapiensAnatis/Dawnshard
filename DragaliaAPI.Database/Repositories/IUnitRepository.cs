@@ -36,6 +36,10 @@ public interface IUnitRepository
     Task<IDictionary<Charas, IEnumerable<DbSetUnit>>> GetCharaSets(IEnumerable<Charas> charaId);
 
     Task<DbPlayerCharaData?> FindCharaAsync(Charas chara);
+    Task<DbPlayerDragonData?> FindDragonAsync(long dragonKeyId);
+    Task<DbPlayerDragonReliability?> FindDragonReliabilityAsync(Dragons dragon);
+    Task<DbTalisman?> FindTalismanAsync(long talismanKeyId);
+    Task<DbWeaponBody?> FindWeaponBodyAsync(WeaponBodies weaponBody);
 
     DbTalisman AddTalisman(
         Talismans id,
