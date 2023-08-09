@@ -15,9 +15,12 @@ public static class MasterAssetUtils
     public static int GetQuestWallDetailId(int wallId, int wallLevel)
     {
         int element = (wallId - 216010000);
-        int questWallId = Convert.ToInt32("10" + element + (wallLevel > 9 ? "0" : "00") + wallLevel);
+        int questWallId = Convert.ToInt32(
+            "10" + element + (wallLevel > 9 ? "0" : "00") + wallLevel
+        );
         return questWallId;
     }
+
     public static QuestWallDetail GetQuestWallDetail(int wallId, int wallLevel)
     {
         return MasterAsset.QuestWallDetail.Get(GetQuestWallDetailId(wallId, wallLevel));

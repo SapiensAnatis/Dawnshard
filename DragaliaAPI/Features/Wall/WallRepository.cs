@@ -37,13 +37,13 @@ public class WallRepository : IWallRepository
         for (int element = 0; element < 5; element++)
         {
             await apiContext.PlayerQuestWalls.AddAsync(
-                    new DbPlayerQuestWall()
-                    {
-                        DeviceAccountId = this.playerIdentityService.AccountId,
-                        WallId = WallService.FlameWallId + element,
-                        WallLevel = 0,
-                        IsStartNextLevel = false,
-                    }
+                new DbPlayerQuestWall()
+                {
+                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    WallId = WallService.FlameWallId + element,
+                    WallLevel = 0,
+                    IsStartNextLevel = false,
+                }
             );
         }
     }
@@ -63,5 +63,4 @@ public class WallRepository : IWallRepository
 
         return questWall;
     }
-
 }

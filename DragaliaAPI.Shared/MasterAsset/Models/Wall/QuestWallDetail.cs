@@ -53,8 +53,7 @@ public record QuestWallDetail(
 )
 {
     public IEnumerable<AreaInfo> AreaInfo =>
-          new List<AreaInfo>()
-          {
-            new(Scene01, AreaName01)
-          }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
+        new List<AreaInfo>() { new(Scene01, AreaName01) }.Where(
+            x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName)
+        );
 }

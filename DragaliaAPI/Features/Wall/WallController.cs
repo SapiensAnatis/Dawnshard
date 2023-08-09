@@ -20,7 +20,6 @@ public class WallController : DragaliaControllerBase
     private readonly IWallService wallService;
     private readonly ILogger<WallController> logger;
 
-
     public WallController(
         IUpdateDataService updateDataService,
         IRewardService rewardService,
@@ -37,7 +36,6 @@ public class WallController : DragaliaControllerBase
         this.wallService = wallService;
         this.logger = logger;
     }
-
 
     // Called when failing a MG quest
     // should return the ID and level of the failed quest in the response...
@@ -64,16 +62,16 @@ public class WallController : DragaliaControllerBase
         );
     }
 
-
     // When is this called?
     [HttpPost("get_monthly_reward")]
     public async Task<DragaliaResult> GetMonthlyReward()
     {
-
         int totalLevel = await wallService.GetTotalWallLevel();
 
-        IEnumerable<AtgenUserWallRewardList> userWallRewardList =
-            wallService.GetUserWallRewardList(totalLevel, RewardStatus.Received);
+        IEnumerable<AtgenUserWallRewardList> userWallRewardList = wallService.GetUserWallRewardList(
+            totalLevel,
+            RewardStatus.Received
+        );
 
         WallGetMonthlyRewardData data = new() { user_wall_reward_list = userWallRewardList };
 
@@ -90,11 +88,7 @@ public class WallController : DragaliaControllerBase
         await this.updateDataService.SaveChangesAsync(); // Updated lost entities
 
         WallGetWallClearPartyData data =
-            new()
-            {
-                wall_clear_party_setting_list = clearParty,
-                lost_unit_list = lostUnitList
-            };
+            new() { wall_clear_party_setting_list = clearParty, lost_unit_list = lostUnitList };
         return Ok(data);
     }
 
@@ -108,8 +102,10 @@ public class WallController : DragaliaControllerBase
         IEnumerable<AtgenBuildEventRewardEntityList> rewardEntityList =
             wallService.GetMonthlyRewardEntityList(totalLevel);
 
-        IEnumerable<AtgenUserWallRewardList> userWallRewardList =
-            wallService.GetUserWallRewardList(totalLevel, RewardStatus.Received);
+        IEnumerable<AtgenUserWallRewardList> userWallRewardList = wallService.GetUserWallRewardList(
+            totalLevel,
+            RewardStatus.Received
+        );
 
         // Grant Rewards
         await wallService.GrantMonthlyRewardEntityList(rewardEntityList);
@@ -124,7 +120,7 @@ public class WallController : DragaliaControllerBase
             };
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-       
+
         WallReceiveMonthlyRewardData data =
             new()
             {
@@ -132,26 +128,19 @@ public class WallController : DragaliaControllerBase
                 entity_result = entityResult,
                 wall_monthly_reward_list = rewardEntityList,
                 user_wall_reward_list = userWallRewardList,
-                monthly_wall_receive_list = new[] { monthlyWallReceiveList } 
+                monthly_wall_receive_list = new[] { monthlyWallReceiveList }
             };
 
         return Ok(data);
     }
-
 
     // Called upon clearing a MG quest and then clicking on the Next button
     // what does this actually do?
-    [HttpPost("set_wall_clear_party")] 
+    [HttpPost("set_wall_clear_party")]
     public async Task<DragaliaResult> SetWallClearParty()
     {
-
-        WallSetWallClearPartyData data =
-            new()
-            {
-                result = 1
-            };
+        WallSetWallClearPartyData data = new() { result = 1 };
 
         return Ok(data);
     }
-
 }

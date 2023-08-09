@@ -16,7 +16,4 @@ public record QuestWallMonthlyReward(
     int RewardEntityQuantity,
     string ReceiveStartDate,
     string ReceiveEndDate
-)
-{
-
-}
+) { }

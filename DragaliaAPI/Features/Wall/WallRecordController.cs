@@ -54,8 +54,11 @@ public class WallRecordController : DragaliaControllerBase
         // Don't grant first clear wyrmite if you are re-clearing the last level
         bool toGrantFirstClearWyrmite = previousLevel != WallService.MaximumQuestWallLevel;
 
-        logger.LogInformation("[wall_record/record] Cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}",
-            request.wall_id, questWall.WallLevel);
+        logger.LogInformation(
+            "[wall_record/record] Cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}",
+            request.wall_id,
+            questWall.WallLevel
+        );
 
         // Level up completed wall quest
         await wallService.LevelupQuestWall(request.wall_id);
@@ -87,15 +90,11 @@ public class WallRecordController : DragaliaControllerBase
 
         // Grant Rewards
         await rewardService.GrantReward(GoldCrystals);
-        
-        await rewardService.GrantReward(
-            new Entity(EntityTypes.Rupies, 1, 500)
-        );
-        
-        await rewardService.GrantReward(
-            new Entity(EntityTypes.Mana, 0, 120)
-        );
-        
+
+        await rewardService.GrantReward(new Entity(EntityTypes.Rupies, 1, 500));
+
+        await rewardService.GrantReward(new Entity(EntityTypes.Mana, 0, 120));
+
         if (toGrantFirstClearWyrmite)
         {
             presentService.AddPresent(
@@ -108,10 +107,9 @@ public class WallRecordController : DragaliaControllerBase
             );
         }
 
-        IEnumerable<AtgenBuildEventRewardEntityList> wallClearRewardList =
-            toGrantFirstClearWyrmite ?
-            new[] { Wyrmites.ToBuildEventRewardEntityList() } :
-            Enumerable.Empty<AtgenBuildEventRewardEntityList>();
+        IEnumerable<AtgenBuildEventRewardEntityList> wallClearRewardList = toGrantFirstClearWyrmite
+            ? new[] { Wyrmites.ToBuildEventRewardEntityList() }
+            : Enumerable.Empty<AtgenBuildEventRewardEntityList>();
 
         EntityResult entityResult = rewardService.GetEntityResult();
 
@@ -128,11 +126,9 @@ public class WallRecordController : DragaliaControllerBase
                 wall_unit_info = wallUnitInfo
             };
         return Ok(data);
-
     }
 
     private readonly Entity GoldCrystals = new(EntityTypes.Material, (int)Materials.GoldCrystal, 3);
 
     private readonly Entity Wyrmites = new(EntityTypes.Wyrmite, 0, 10);
-
 }

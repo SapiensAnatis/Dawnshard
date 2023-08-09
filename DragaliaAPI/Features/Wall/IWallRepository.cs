@@ -10,5 +10,4 @@ public interface IWallRepository
     Task InitializeWall();
 
     Task<DbPlayerQuestWall> GetQuestWall(int wallId);
-    
 }

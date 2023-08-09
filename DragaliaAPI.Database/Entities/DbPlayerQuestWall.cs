@@ -8,7 +8,6 @@ namespace DragaliaAPI.Database.Entities;
 [PrimaryKey(nameof(DeviceAccountId), nameof(WallId))]
 public class DbPlayerQuestWall : IDbHasAccountId
 {
-
     /// <inheritdoc />
     public virtual DbPlayer? Owner { get; set; }
 
@@ -21,5 +20,4 @@ public class DbPlayerQuestWall : IDbHasAccountId
     public int WallLevel { get; set; }
 
     public bool IsStartNextLevel { get; set; }
-
 }

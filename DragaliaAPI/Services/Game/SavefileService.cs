@@ -682,13 +682,11 @@ public class SavefileService : ISavefileService
         );
 
         DbPlayerUserData userData =
-            new(deviceAccountId)
-            {
+            new(deviceAccountId) {
 #if DEBUG
                 TutorialStatus = 10151,
 #endif
-                Crystal = 1_200_000
-            };
+                Crystal = 1_200_000 };
 
         apiContext.PlayerUserData.Add(userData);
         await this.AddDefaultParties(deviceAccountId);

@@ -77,7 +77,7 @@ public class QuestEnemyService : IQuestEnemyService
     public IEnumerable<AtgenEnemy> BuildQuestWallEnemyList(int wallId, int wallLevel)
     {
         List<AtgenEnemy> enemyList = this.GetWallEnemyList(wallId, wallLevel).ToList();
-        // should handle enemy drops but eh    
+        // should handle enemy drops but eh
         return enemyList;
     }
 

@@ -8,8 +8,8 @@ public class QuestDropService(ILogger<QuestEnemyService> logger) : IQuestDropSer
 {
     public IEnumerable<Materials> GetDrops(int questId)
     {
-        if (questId == 0) 
-        { 
+        if (questId == 0)
+        {
             return Enumerable.Empty<Materials>();
         }
 

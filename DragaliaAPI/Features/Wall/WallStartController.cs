@@ -44,7 +44,10 @@ public class WallStartController : DragaliaControllerBase
         // Set flag for having played the next level
         await wallService.SetQuestWallIsStartNextLevel(request.wall_id, true);
 
-        QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(request.wall_id, request.wall_level);
+        QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(
+            request.wall_id,
+            request.wall_level
+        );
 
         IngameData ingameData = await this.dungeonStartService.GetIngameData(
             0,
@@ -53,12 +56,13 @@ public class WallStartController : DragaliaControllerBase
         );
         ingameData.area_info_list = questWallDetail.AreaInfo.Select(mapper.Map<AreaInfoList>);
 
-        IngameWallData ingameWallData = new() {
-            wall_id = request.wall_id,
-            wall_level = request.wall_level
-        };
+        IngameWallData ingameWallData =
+            new() { wall_id = request.wall_id, wall_level = request.wall_level };
 
-        OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(request.wall_id, request.wall_level);
+        OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(
+            request.wall_id,
+            request.wall_level
+        );
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
@@ -78,8 +82,10 @@ public class WallStartController : DragaliaControllerBase
     [HttpPost("start_assign_unit")]
     public async Task<DragaliaResult> StartAssignUnit(WallStartStartAssignUnitRequest request)
     {
-
-        QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(request.wall_id, request.wall_level);
+        QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(
+            request.wall_id,
+            request.wall_level
+        );
 
         IngameData ingameData = await this.dungeonStartService.GetIngameData(
             0,
@@ -88,13 +94,13 @@ public class WallStartController : DragaliaControllerBase
         );
         ingameData.area_info_list = questWallDetail.AreaInfo.Select(mapper.Map<AreaInfoList>);
 
-        IngameWallData ingameWallData = new()
-        {
-            wall_id = request.wall_id,
-            wall_level = request.wall_level
-        };
+        IngameWallData ingameWallData =
+            new() { wall_id = request.wall_id, wall_level = request.wall_level };
 
-        OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(request.wall_id, request.wall_level);
+        OddsInfo oddsInfo = this.oddsInfoService.GetWallOddsInfo(
+            request.wall_id,
+            request.wall_level
+        );
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
@@ -109,6 +115,4 @@ public class WallStartController : DragaliaControllerBase
 
         return Ok(data);
     }
-    
-
 }

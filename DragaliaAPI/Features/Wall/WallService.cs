@@ -28,7 +28,7 @@ public class WallService(
         DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(wallId);
 
         // Increment level if it's not at max
-        if (questWall.WallLevel < MaximumQuestWallLevel) 
+        if (questWall.WallLevel < MaximumQuestWallLevel)
         {
             questWall.WallLevel++;
             questWall.IsStartNextLevel = false;
@@ -56,17 +56,24 @@ public class WallService(
 
         if (levelTotal > MaximumQuestWallTotalLevel)
         {
-            logger.LogWarning("User {@accountId} had a quest wall total level above the max of 400: {@levelTotal}",
-                playerIdentityService.AccountId, levelTotal);
+            logger.LogWarning(
+                "User {@accountId} had a quest wall total level above the max of 400: {@levelTotal}",
+                playerIdentityService.AccountId,
+                levelTotal
+            );
             return MaximumQuestWallTotalLevel;
         }
         return levelTotal;
     }
 
-    public async Task GrantMonthlyRewardEntityList(IEnumerable<AtgenBuildEventRewardEntityList> rewards)
+    public async Task GrantMonthlyRewardEntityList(
+        IEnumerable<AtgenBuildEventRewardEntityList> rewards
+    )
     {
-        logger.LogInformation("Granting wall monthly reward list with size: {@wallRewardListSize}", 
-            rewards.Count());
+        logger.LogInformation(
+            "Granting wall monthly reward list with size: {@wallRewardListSize}",
+            rewards.Count()
+        );
 
         int totalRupies = 0;
         int totalMana = 0;
@@ -90,25 +97,18 @@ public class WallService(
 
         if (totalRupies > 0)
         {
-            await rewardService.GrantReward(
-                new Entity(EntityTypes.Rupies, 0, totalRupies)
-            );
+            await rewardService.GrantReward(new Entity(EntityTypes.Rupies, 0, totalRupies));
         }
 
         if (totalMana > 0)
         {
-            await rewardService.GrantReward(
-                new Entity(EntityTypes.Mana, 0, totalMana)
-            );
+            await rewardService.GrantReward(new Entity(EntityTypes.Mana, 0, totalMana));
         }
 
         if (totalEldwater > 0)
         {
-            await rewardService.GrantReward(
-                new Entity(EntityTypes.Dew, 0, totalEldwater)
-            );
+            await rewardService.GrantReward(new Entity(EntityTypes.Dew, 0, totalEldwater));
         }
-
     }
 
     public IEnumerable<AtgenBuildEventRewardEntityList> GetMonthlyRewardEntityList(int levelTotal)
@@ -130,7 +130,10 @@ public class WallService(
         return rewardList;
     }
 
-    public IEnumerable<AtgenUserWallRewardList> GetUserWallRewardList(int levelTotal, RewardStatus rewardStatus)
+    public IEnumerable<AtgenUserWallRewardList> GetUserWallRewardList(
+        int levelTotal,
+        RewardStatus rewardStatus
+    )
     {
         AtgenUserWallRewardList rewardList =
             new()
@@ -140,7 +143,6 @@ public class WallService(
                 last_reward_date = DateTimeOffset.UtcNow,
                 reward_status = rewardStatus
             };
-        return new[] { rewardList }; 
+        return new[] { rewardList };
     }
-
 }

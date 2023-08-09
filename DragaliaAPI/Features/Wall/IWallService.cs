@@ -18,5 +18,8 @@ public interface IWallService
 
     IEnumerable<AtgenBuildEventRewardEntityList> GetMonthlyRewardEntityList(int levelTotal);
 
-    IEnumerable<AtgenUserWallRewardList> GetUserWallRewardList(int levelTotal, RewardStatus rewardStatus);
+    IEnumerable<AtgenUserWallRewardList> GetUserWallRewardList(
+        int levelTotal,
+        RewardStatus rewardStatus
+    );
 }
