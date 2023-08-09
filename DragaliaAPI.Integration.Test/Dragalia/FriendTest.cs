@@ -35,7 +35,7 @@ public class FriendTest : TestFixture
                     viewer_id = 1001,
                     name = "Nightmerp",
                     level = 250,
-                    emblem_id = 10250305,
+                    emblem_id = (Emblems)10250305,
                     max_party_power = 9999,
                     support_chara = new()
                     {

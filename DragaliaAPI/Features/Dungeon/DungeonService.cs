@@ -65,27 +65,21 @@ public class DungeonService : IDungeonService
         );
     }
 
-    public async Task AddEnemies(
-        string dungeonKey,
-        int areaIndex,
-        IEnumerable<AtgenEnemy> enemyList
-    )
+    /// <summary>
+    /// Update a session already in the cache.
+    /// </summary>
+    /// <remarks>
+    /// This method should not exist. The dungeon_start code could be better structured to avoid its use.
+    /// TODO: Remove all usages
+    /// </remarks>
+    /// <param name="dungeonKey">The dungeon key.</param>
+    /// <param name="update">The action to update with.</param>
+    /// <returns>A task.</returns>
+    public async Task ModifySession(string dungeonKey, Action<DungeonSession> update)
     {
         DungeonSession session = await this.GetDungeon(dungeonKey);
 
-        if (session.EnemyList.ContainsKey(areaIndex))
-            this.logger.LogWarning("The drops for area index {idx} will be overwritten", areaIndex);
-
-        session.EnemyList[areaIndex] = enemyList;
-
-        await WriteDungeon(dungeonKey, session);
-    }
-
-    public async Task SetIsHost(string dungeonKey, bool isHost)
-    {
-        DungeonSession session = await this.GetDungeon(dungeonKey);
-
-        session.IsHost = isHost;
+        update.Invoke(session);
 
         await WriteDungeon(dungeonKey, session);
     }

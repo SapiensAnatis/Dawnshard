@@ -33,6 +33,9 @@ public static class MasterAsset
     public static readonly MasterAssetData<Dragons, DragonData> DragonData =
         new("DragonData.json", x => x.Id);
 
+    public static readonly MasterAssetData<int, DragonRarity> DragonRarity =
+        new("DragonRarity.json", x => x.Id);
+
     /// <summary>
     /// Contains information about quests.
     /// </summary>
@@ -74,6 +77,9 @@ public static class MasterAsset
     /// </summary>
     public static readonly MasterAssetData<int, WeaponPassiveAbility> WeaponPassiveAbility =
         new("WeaponPassiveAbility.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, WeaponBodyRarity> WeaponBodyRarity =
+        new("WeaponBodyRarity.json", x => x.Id);
 
     /// <summary>
     /// Contains information about the materials required to unbind ability crests.
@@ -125,6 +131,12 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, AbilityLimitedGroup> AbilityLimitedGroup =
         new("AbilityLimitedGroup.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, ExAbilityData> ExAbilityData =
+        new("ExAbilityData.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, UnionAbility> UnionAbility =
+        new("UnionAbility.json", x => x.Id);
 
     #region Missions
 

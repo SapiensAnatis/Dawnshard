@@ -118,6 +118,30 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("DeviceAccounts");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbEmblem", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("EmblemId")
+                        .HasColumnType("integer")
+                        .HasColumnName("EmblemId");
+
+                    b.Property<DateTimeOffset>("GetTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("GetTime");
+
+                    b.Property<bool>("IsNew")
+                        .HasColumnType("boolean")
+                        .HasColumnName("IsNew");
+
+                    b.HasKey("DeviceAccountId", "EmblemId");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("Emblems");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbEquippedStamp", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -233,6 +257,20 @@ namespace DragaliaAPI.Database.Migrations
                     b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PartyData");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPartyPower", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("MaxPartyPower")
+                        .HasColumnType("integer")
+                        .HasColumnName("MaxPartyPower");
+
+                    b.HasKey("DeviceAccountId");
+
+                    b.ToTable("PartyPowers");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPartyUnit", b =>
@@ -1569,6 +1607,37 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PlayerSetUnit");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbSummonTicket", b =>
+                {
+                    b.Property<long>("TicketKeyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("TicketKeyId"));
+
+                    b.Property<string>("DeviceAccountId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("ExpirationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ExpirationTime");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("Quantity");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("Type");
+
+                    b.HasKey("TicketKeyId");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("PlayerSummonTickets");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbTalisman", b =>
                 {
                     b.Property<long>("TalismanKeyId")
@@ -1722,6 +1791,17 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbEmblem", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbEquippedStamp", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
@@ -1770,6 +1850,17 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany("PartyList")
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPartyPower", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2111,6 +2202,17 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany("UnitSets")
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbSummonTicket", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

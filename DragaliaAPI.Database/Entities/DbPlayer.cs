@@ -91,6 +91,8 @@ public class DbPlayer
 
     public virtual DbPlayerShopInfo? ShopInfo { get; set; }
 
+    public virtual DbPartyPower? PartyPower { get; set; }
+
     public virtual ICollection<DbPlayerQuestWall> QuestWalls { get; set; } =
         new List<DbPlayerQuestWall>();
 }

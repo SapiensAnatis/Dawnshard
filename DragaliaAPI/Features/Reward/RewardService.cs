@@ -7,6 +7,7 @@ using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Talisman;
+using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,8 @@ public class RewardService(
     IEventRepository eventRepository,
     IDmodeRepository dmodeRepository,
     IItemRepository itemRepository,
-    IUserService userService
+    IUserService userService,
+    ITicketRepository ticketRepository
 ) : IRewardService
 {
     private readonly List<Entity> discardedEntities = new();
@@ -40,7 +42,7 @@ public class RewardService(
             return RewardGrantResult.Added;
         }
 
-        logger.LogDebug("Granting reward {@rewardEntity}", entity);
+        logger.LogTrace("Granting reward {@rewardEntity}", entity);
 
         switch (entity.Type)
         {
@@ -103,6 +105,9 @@ public class RewardService(
                     info.Point2Quantity += entity.Quantity;
                 else
                     throw new UnreachableException("Invalid dmode point id");
+                break;
+            case EntityTypes.SummonTicket:
+                ticketRepository.AddTicket((SummonTickets)entity.Id, entity.Quantity);
                 break;
             default:
                 logger.LogWarning("Tried to reward unsupported entity {@entity}", entity);

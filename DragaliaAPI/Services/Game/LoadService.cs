@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
-using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Models.Generated;
@@ -26,8 +28,8 @@ public class LoadService(
     IPresentService presentService,
     ITradeService tradeService,
     IShopRepository shopRepository,
-    IUserService userService,
-    IWallService wallService
+    IUserService userService
+    ITicketRepository ticketRepository
 ) : ILoadService
 {
     public async Task<LoadIndexData> BuildIndexData()
@@ -78,7 +80,7 @@ public class LoadService(
                     mapper.Map<WeaponPassiveAbilityList>
                 ),
                 fort_bonus_list = bonusList,
-                party_power_data = new(999999),
+                party_power_data = mapper.Map<PartyPowerData>(savefile.PartyPower),
                 friend_notice = new(0, 0),
                 present_notice = await presentService.GetPresentNotice(),
                 guild_notice = new(0, 0, 0, 0, 0),
@@ -102,6 +104,9 @@ public class LoadService(
                 user_treasure_trade_list = await tradeService.GetUserTreasureTradeList(),
                 treasure_trade_all_list = tradeService.GetCurrentTreasureTradeList(),
                 shop_notice = new ShopNotice(await shopRepository.GetDailySummonCountAsync() == 0),
+                summon_ticket_list = (await ticketRepository.GetTicketsAsync()).Select(
+                    mapper.Map<SummonTicketList>
+                )
                 quest_wall_list = await wallService.GetQuestWallList()
             };
 

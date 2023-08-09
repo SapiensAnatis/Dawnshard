@@ -7,5 +7,6 @@ public record AbilityData(
     AbilityTypes AbilityType1,
     double AbilityType1UpValue,
     int AbilityLimitedGroupId1,
-    int EventId
+    int EventId,
+    int PartyPowerWeight
 );

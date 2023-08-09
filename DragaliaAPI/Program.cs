@@ -28,11 +28,16 @@ using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Login;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Dungeon.Start;
+using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.DmodeDungeon;
+using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Item;
+using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Talisman;
+using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.Wall;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -168,6 +173,10 @@ builder.Services
     .AddScoped<IQuestDropService, QuestDropService>()
     .AddScoped<IQuestEnemyService, QuestEnemyService>()
     .AddScoped<IOddsInfoService, OddsInfoService>()
+    .AddScoped<IDungeonRecordService, DungeonRecordService>()
+    .AddScoped<IDungeonRecordHelperService, DungeonRecordHelperService>()
+    .AddScoped<IDungeonRecordRewardService, DungeonRecordRewardService>()
+    .AddScoped<IDungeonRecordDamageService, DungeonRecordDamageService>()
     .AddScoped<IQuestCompletionService, QuestCompletionService>()
     .AddScoped<IAbilityCrestMultiplierService, AbilityCrestMultiplierService>()
     // Event Feature
@@ -188,6 +197,14 @@ builder.Services
     // User feature
     .AddScoped<IUserService, UserService>()
     // Talisman feature
+    .AddScoped<ITalismanService, TalismanService>()
+    // Tickets feature
+    .AddScoped<ITicketRepository, TicketRepository>()
+    // Emblem feature
+    .AddScoped<IEmblemRepository, EmblemRepository>()
+    // Party power feature
+    .AddScoped<IPartyPowerService, PartyPowerService>()
+    .AddScoped<IPartyPowerRepository, PartyPowerRepository>();
     .AddScoped<ITalismanService, TalismanService>()
     // Wall feature
     .AddScoped<IWallService, WallService>()
@@ -235,6 +252,8 @@ app.UseMiddleware<DailyResetMiddleware>();
 app.MapControllers();
 app.UseResponseCompression();
 app.MapHealthChecks("/health");
+
+app.UseStaticFiles();
 
 app.Run();
 
