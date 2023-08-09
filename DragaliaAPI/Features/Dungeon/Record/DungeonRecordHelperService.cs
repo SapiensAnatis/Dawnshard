@@ -61,6 +61,8 @@ public class DungeonRecordHelperService(
             teammates
         );
 
+        logger.LogDebug("Retrieved teammate support list {@supportList}", teammateSupportLists);
+
         // TODO: Replace with friend system once implemented
         IEnumerable<AtgenHelperDetailList> teammateDetailLists = teammates.Select(
             x =>
@@ -90,7 +92,7 @@ public class DungeonRecordHelperService(
         {
             if (!userDetails.TryGetValue(player.ViewerId, out DbPlayerUserData? userData))
             {
-                logger.LogDebug("No user details returned for player {@player}", player);
+                logger.LogWarning("No user details returned for player {@player}", player);
                 continue;
             }
 
@@ -109,7 +111,7 @@ public class DungeonRecordHelperService(
             }
             catch (Exception e)
             {
-                logger.LogDebug(
+                logger.LogWarning(
                     e,
                     "Failed to populate multiplayer support info for player {@player}",
                     player

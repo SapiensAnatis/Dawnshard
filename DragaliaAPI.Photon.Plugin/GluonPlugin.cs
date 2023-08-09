@@ -228,10 +228,10 @@ namespace DragaliaAPI.Photon.Plugin
 
 #if DEBUG
             this.logger.DebugFormat(
-                "Actor {0} raised event: 0x{1} ({2})",
+                "Actor {0} raised event: {1} (0x{2})",
                 info.ActorNr,
-                info.Request.EvCode.ToString("X"),
-                info.Request.EvCode
+                (Event)info.Request.EvCode,
+                info.Request.EvCode.ToString("X")
             );
             this.logger.DebugFormat(
                 "Event properties: {0}",
@@ -270,6 +270,13 @@ namespace DragaliaAPI.Photon.Plugin
         {
             this.actorState[info.ActorNr].Ready = false;
 
+            this.PluginHost.SetProperties(
+                info.ActorNr,
+                new Hashtable() { { ActorPropertyKeys.GoToIngameState, 0 }, },
+                null,
+                false
+            );
+
             FailQuestRequest request = info.DeserializeEvent<FailQuestRequest>();
 
             this.logger.DebugFormat(
@@ -301,7 +308,7 @@ namespace DragaliaAPI.Photon.Plugin
                     new Hashtable()
                     {
                         { GamePropertyKeys.GoToIngameInfo, null },
-                        // { GamePropertyKeys.RoomId, -1 } TODO: Show 'play again with the same players?' screen on failed retry after wipe
+                        { GamePropertyKeys.RoomId, -1 }
                     },
                     null,
                     true
