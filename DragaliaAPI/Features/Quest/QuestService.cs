@@ -97,7 +97,7 @@ public class QuestService(
         {
             if (questEventData.QuestBonusType == QuestResetIntervalType.Daily)
             {
-                ResetQuestEventBonus(ref questEvent, ref questEventData);
+                ResetQuestEventBonus(questEvent, questEventData);
             }
 
             questEvent.DailyPlayCount = 0;
@@ -110,7 +110,7 @@ public class QuestService(
         {
             if (questEventData.QuestBonusType == QuestResetIntervalType.Weekly)
             {
-                ResetQuestEventBonus(ref questEvent, ref questEventData);
+                ResetQuestEventBonus(questEvent, questEventData);
             }
 
             questEvent.WeeklyPlayCount = 0;
@@ -216,7 +216,7 @@ public class QuestService(
         return new AtgenReceiveQuestBonus(questId, count, 1, bonusRewards);
     }
 
-    private void ResetQuestEventBonus(ref DbQuestEvent questEvent, ref QuestEvent questEventData)
+    private void ResetQuestEventBonus(DbQuestEvent questEvent, QuestEvent questEventData)
     {
         questEvent.QuestBonusReceiveCount = 0;
 

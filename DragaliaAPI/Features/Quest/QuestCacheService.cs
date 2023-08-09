@@ -5,7 +5,8 @@ namespace DragaliaAPI.Features.Quest;
 
 public class QuestCacheService(
     IDistributedCache distributedCache,
-    IPlayerIdentityService playerIdentityService
+    IPlayerIdentityService playerIdentityService,
+    ILogger<QuestCacheService> logger
 ) : IQuestCacheService
 {
     private static readonly DistributedCacheEntryOptions QuestEntryCacheOptions =
@@ -30,6 +31,11 @@ public class QuestCacheService(
         {
             return questId;
         }
+
+        logger.LogError(
+            "Tried to parse cached quest id string {questIdString} but it was not an int",
+            questIdString
+        );
 
         return null;
     }
