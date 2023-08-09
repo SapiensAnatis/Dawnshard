@@ -751,7 +751,7 @@ namespace DragaliaAPI.Photon.Plugin
         {
             if (
                 this.PluginHost.GameProperties.TryGetInt(GamePropertyKeys.QuestId, out int questId)
-                && QuestHelper.GetDungeonType(questId) == DungeonTypes.Raid
+                && QuestHelper.GetIsRaid(questId)
             )
             {
                 // Everyone uses all of their units in a raid
