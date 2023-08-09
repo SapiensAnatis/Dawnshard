@@ -103,7 +103,7 @@ public class MatchingService : IMatchingService
 
         if (game is null)
         {
-            this.logger.LogDebug("Failed to retrieve game for ID {viewerId}", viewerId);
+            this.logger.LogWarning("Failed to retrieve game for ID {viewerId}", viewerId);
             return Enumerable.Empty<Player>();
         }
 
