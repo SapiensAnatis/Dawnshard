@@ -38,7 +38,7 @@ public class DungeonControllerTest
             this.mockOddsInfoService.Object,
             this.mockQuestService.Object,
             this.mockUpdateDataService.Object,
-            this.mockRewardService.Object
+            this.mockRewardService.Object,
             this.mockMatchingService.Object,
             this.mockDungeonRecordHelperService.Object
         );
