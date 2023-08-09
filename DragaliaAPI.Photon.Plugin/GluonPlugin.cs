@@ -308,7 +308,7 @@ namespace DragaliaAPI.Photon.Plugin
                     new Hashtable()
                     {
                         { GamePropertyKeys.GoToIngameInfo, null },
-                        // { GamePropertyKeys.RoomId, -1 } TODO: Show 'play again with the same players?' screen on failed retry after wipe
+                        { GamePropertyKeys.RoomId, -1 }
                     },
                     null,
                     true
