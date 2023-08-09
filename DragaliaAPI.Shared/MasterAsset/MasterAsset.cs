@@ -111,18 +111,6 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, QuestEvent> QuestEvent =
         new("QuestEvent.json", x => x.Id);
 
-    /// <summary>
-    /// Contains information about Mercurial Gauntlet quests.
-    /// </summary>
-    public static readonly MasterAssetData<int, QuestWallDetail> QuestWallDetail =
-        new("Wall/QuestWallDetail.json", x => x.Id);
-
-    /// <summary>
-    /// Contains information about Mercurial Gauntlet monthly rewards.
-    /// </summary>
-    public static readonly MasterAssetData<int, QuestWallMonthlyReward> QuestWallMonthlyReward =
-        new("Wall/QuestWallMonthlyReward.json", x => x.TotalWallLevel);
-
     public static readonly MasterAssetData<UseItem, UseItemData> UseItem =
         new("UseItem.json", x => x.Id);
 
@@ -446,5 +434,19 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, UserLevel> UserLevel =
         new("User/UserLevel.json", x => x.Id);
 
+    #endregion
+
+    #region Wall
+    /// <summary>
+    /// Contains information about Mercurial Gauntlet quests.
+    /// </summary>
+    public static readonly MasterAssetData<int, QuestWallDetail> QuestWallDetail =
+        new("Wall/QuestWallDetail.json", x => x.Id);
+
+    /// <summary>
+    /// Contains information about Mercurial Gauntlet monthly rewards.
+    /// </summary>
+    public static readonly MasterAssetData<int, QuestWallMonthlyReward> QuestWallMonthlyReward =
+        new("Wall/QuestWallMonthlyReward.json", x => x.TotalWallLevel);
     #endregion
 }

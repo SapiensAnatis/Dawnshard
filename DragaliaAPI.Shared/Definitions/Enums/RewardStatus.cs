@@ -1,7 +1,7 @@
 ﻿namespace DragaliaAPI.Shared.Definitions.Enums;
 
 /// <summary>
-/// Mapping for _Tough parameter in EnemyParam.
+/// Mapping for player reward status for Mercurial Gauntlet.
 /// </summary>
 public enum RewardStatus
 {
