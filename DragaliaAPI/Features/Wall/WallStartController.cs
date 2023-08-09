@@ -71,9 +71,6 @@ public class WallStartController : DragaliaControllerBase
                 update_data_list = updateDataList
             };
 
-        logger.LogInformation("[wall_start/start] Started Mercurial Gauntlet quest with 'wall_id' {@wall_id}, 'wall_level' {@wall_level}, dungeon key {@key}",
-            request.wall_id, request.wall_level, ingameData.dungeon_key);
-
         return Ok(data);
     }
 
@@ -109,9 +106,6 @@ public class WallStartController : DragaliaControllerBase
                 odds_info = oddsInfo,
                 update_data_list = updateDataList
             };
-
-        logger.LogInformation("[wall_start/start_assign_unit] Started Mercurial Gauntlet quest with 'wall_id' {@wall_id}, 'wall_level' {@wall_level}, dungeon key {@key}",
-                        request.wall_id, request.wall_level, ingameData.dungeon_key);
 
         return Ok(data);
     }

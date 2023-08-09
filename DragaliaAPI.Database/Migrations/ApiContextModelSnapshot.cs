@@ -1088,15 +1088,11 @@ namespace DragaliaAPI.Database.Migrations
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerQuestWall", b =>
                 {
-                    b.Property<int>("WallId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("WallId"));
-
                     b.Property<string>("DeviceAccountId")
-                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("WallId")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsStartNextLevel")
                         .HasColumnType("boolean");
@@ -1104,7 +1100,7 @@ namespace DragaliaAPI.Database.Migrations
                     b.Property<int>("WallLevel")
                         .HasColumnType("integer");
 
-                    b.HasKey("WallId");
+                    b.HasKey("DeviceAccountId", "WallId");
 
                     b.HasIndex("DeviceAccountId");
 
@@ -2004,7 +2000,7 @@ namespace DragaliaAPI.Database.Migrations
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPlayerQuestWall", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
+                        .WithMany("QuestWalls")
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2212,6 +2208,8 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Presents");
 
                     b.Navigation("QuestList");
+
+                    b.Navigation("QuestWalls");
 
                     b.Navigation("ShopInfo");
 

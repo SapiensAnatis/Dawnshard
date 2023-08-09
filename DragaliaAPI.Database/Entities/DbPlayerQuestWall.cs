@@ -5,9 +5,10 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Database.Entities;
 
 [Index(nameof(DeviceAccountId))]
+[PrimaryKey(nameof(DeviceAccountId), nameof(WallId))]
 public class DbPlayerQuestWall : IDbHasAccountId
 {
-   
+
     /// <inheritdoc />
     public virtual DbPlayer? Owner { get; set; }
 
@@ -15,8 +16,7 @@ public class DbPlayerQuestWall : IDbHasAccountId
     [ForeignKey(nameof(Owner))]
     public required string DeviceAccountId { get; set; }
 
-    [Key]
-    public int WallId { get; set; }
+    public required int WallId { get; set; }
 
     public int WallLevel { get; set; }
 

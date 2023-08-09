@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -15,15 +14,14 @@ namespace DragaliaAPI.Database.Migrations
                 name: "PlayerQuestWalls",
                 columns: table => new
                 {
-                    WallId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     DeviceAccountId = table.Column<string>(type: "text", nullable: false),
+                    WallId = table.Column<int>(type: "integer", nullable: false),
                     WallLevel = table.Column<int>(type: "integer", nullable: false),
                     IsStartNextLevel = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerQuestWalls", x => x.WallId);
+                    table.PrimaryKey("PK_PlayerQuestWalls", x => new { x.DeviceAccountId, x.WallId });
                     table.ForeignKey(
                         name: "FK_PlayerQuestWalls_Players_DeviceAccountId",
                         column: x => x.DeviceAccountId,

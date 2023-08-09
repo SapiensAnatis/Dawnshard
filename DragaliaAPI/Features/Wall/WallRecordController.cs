@@ -54,7 +54,7 @@ public class WallRecordController : DragaliaControllerBase
         // Don't grant first clear wyrmite if you are re-clearing the last level
         bool toGrantFirstClearWyrmite = previousLevel != WallService.MaximumQuestWallLevel;
 
-        logger.LogInformation("[wall_record/record] cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}",
+        logger.LogInformation("[wall_record/record] Cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}",
             request.wall_id, questWall.WallLevel);
 
         // Level up completed wall quest
