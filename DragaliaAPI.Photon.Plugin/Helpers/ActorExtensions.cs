@@ -7,17 +7,6 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
 {
     public static class ActorExtensions
     {
-        public static bool IsHost(this IActor actor)
-        {
-            return actor.ActorNr == 1;
-        }
-
-        public static bool IsReady(this IActor actor)
-        {
-            return actor.Properties.TryGetBool(ActorPropertyKeys.StartQuest, out bool ready)
-                && ready;
-        }
-
         public static bool TryGetViewerId(this IActor actor, out int viewerId)
         {
             return actor.Properties.TryGetInt(ActorPropertyKeys.PlayerId, out viewerId);
