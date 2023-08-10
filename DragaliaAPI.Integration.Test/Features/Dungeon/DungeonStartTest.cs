@@ -7,7 +7,7 @@ using Snapshooter.Xunit;
 namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
 /// <summary>
-/// Tests <see cref="DragaliaAPI.Features.Dungeon.DungeonStartController"/>.
+/// Tests <see cref="DragaliaAPI.Features.Dungeon.Start.DungeonStartController"/>.
 /// </summary>
 public class DungeonStartTest : TestFixture
 {

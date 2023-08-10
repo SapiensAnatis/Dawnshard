@@ -259,6 +259,20 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("PartyData");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPartyPower", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("MaxPartyPower")
+                        .HasColumnType("integer")
+                        .HasColumnName("MaxPartyPower");
+
+                    b.HasKey("DeviceAccountId");
+
+                    b.ToTable("PartyPowers");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPartyUnit", b =>
                 {
                     b.Property<string>("Id")
@@ -1815,6 +1829,17 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany("PartyList")
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPartyPower", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

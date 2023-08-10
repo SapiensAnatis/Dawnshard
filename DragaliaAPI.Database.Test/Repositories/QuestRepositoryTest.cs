@@ -49,29 +49,4 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
             )
             .And.BeEquivalentTo(this.questRepository.Quests);
     }
-
-    [Fact]
-    public async Task CompleteQuest_CompletesQuest()
-    {
-        DbQuest quest = await this.questRepository.CompleteQuest(3, 1.0f);
-
-        quest
-            .Should()
-            .BeEquivalentTo(
-                new DbQuest()
-                {
-                    DeviceAccountId = "id",
-                    QuestId = 3,
-                    State = 3,
-                    IsMissionClear1 = false,
-                    IsMissionClear2 = false,
-                    IsMissionClear3 = false,
-                    PlayCount = 1,
-                    DailyPlayCount = 1,
-                    WeeklyPlayCount = 1,
-                    IsAppear = true,
-                    BestClearTime = 1.0f,
-                }
-            );
-    }
 }

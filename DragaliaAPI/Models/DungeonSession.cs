@@ -12,5 +12,11 @@ public class DungeonSession
 
     public bool IsHost { get; set; } = true;
 
+    public bool IsMulti { get; set; }
+
+    public ulong? SupportViewerId { get; set; }
+
+    public DateTimeOffset StartTime { get; set; }
+
     public Dictionary<int, IEnumerable<AtgenEnemy>> EnemyList { get; set; } = new();
 }

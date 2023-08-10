@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.Logging;
@@ -36,7 +37,9 @@ public class PartyControllerTest
             this.mockUserDataRepository.Object,
             this.mockUpdateDataService.Object,
             mapper,
-            this.mockLogger.Object
+            this.mockLogger.Object,
+            new Mock<IPartyPowerService>().Object,
+            new Mock<IPartyPowerRepository>().Object
         );
         this.partyController.SetupMockContext();
     }

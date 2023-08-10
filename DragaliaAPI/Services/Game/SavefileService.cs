@@ -471,6 +471,18 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
+            apiContext.PartyPowers.Add(
+                savefile.party_power_data.MapWithDeviceAccount<DbPartyPower>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbPartyPower step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             this.logger.LogInformation(
                 "Mapping completed after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
@@ -600,6 +612,9 @@ public class SavefileService : ISavefileService
         this.apiContext.Emblems.RemoveRange(
             this.apiContext.Emblems.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PartyPowers.RemoveRange(
+            this.apiContext.PartyPowers.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset()
@@ -630,6 +645,7 @@ public class SavefileService : ISavefileService
             .Include(x => x.WeaponSkinList)
             .Include(x => x.WeaponPassiveAbilityList)
             .Include(x => x.EquippedStampList)
+            .Include(x => x.PartyPower)
             .AsSplitQuery();
     }
 

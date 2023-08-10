@@ -27,4 +27,19 @@ public record Entity(
     {
         return new() { entity_id = this.Id, entity_type = this.Type };
     }
+
+    public AtgenFirstClearSet ToFirstClearSet()
+    {
+        return new AtgenFirstClearSet(this.Id, this.Type, this.Quantity);
+    }
+
+    public AtgenMissionsClearSet ToMissionClearSet(int missionNo)
+    {
+        return new AtgenMissionsClearSet(this.Id, this.Type, this.Quantity, missionNo);
+    }
+
+    public AtgenDropAll ToDropAll()
+    {
+        return new AtgenDropAll(this.Id, this.Type, this.Quantity, 0, 0);
+    }
 };
