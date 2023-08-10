@@ -215,6 +215,22 @@ namespace DragaliaAPI.Photon.Plugin
                 // Prevent duplicate requests by setting a flag.
                 actorState.RemovedFromRedis = true;
             }
+
+            if (this.roomState.MinGoToIngameState > 0)
+            {
+                int newMinGoToIngameState = this.PluginHost.GameActors
+                    .Where(x => x.ActorNr != info.ActorNr)
+                    .Select(x => x.Properties.GetIntOrDefault(ActorPropertyKeys.GoToIngameState))
+                    .Min();
+
+                this.roomState.MinGoToIngameState = newMinGoToIngameState;
+                this.OnSetGoToIngameState(info);
+
+                if (this.actorState.Where(x => x.Key != info.ActorNr).All(x => x.Value.Ready))
+                {
+                    this.RaiseEvent(Event.StartQuest, new Dictionary<string, string> { });
+                }
+            }
         }
 
         /// <summary>
@@ -499,8 +515,8 @@ namespace DragaliaAPI.Photon.Plugin
         /// <remarks>
         /// Represents various stages of loading into a quest, during which events/properties need to be raised/set.
         /// </remarks>
-        /// <param name="info">Info from <see cref="BeforeSetProperties(IBeforeSetPropertiesCallInfo)"/>.</param>
-        private void OnSetGoToIngameState(IBeforeSetPropertiesCallInfo info)
+        /// <param name="info">Call info.</param>
+        private void OnSetGoToIngameState(ICallInfo info)
         {
             this.logger.InfoFormat(
                 "OnSetGoToIngameState: updating with value {0}",
@@ -587,8 +603,8 @@ namespace DragaliaAPI.Photon.Plugin
         /// <summary>
         /// Makes an outgoing request for <see cref="HeroParamData"/> for each player in the room.
         /// </summary>
-        /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
-        private void RequestHeroParam(IBeforeSetPropertiesCallInfo info)
+        /// <param name="info">Call info.</param>
+        private void RequestHeroParam(ICallInfo info)
         {
             IEnumerable<ActorInfo> heroParamRequest = this.PluginHost.GameActors.Select(
                 x =>
