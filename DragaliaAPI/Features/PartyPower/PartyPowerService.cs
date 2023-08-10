@@ -389,7 +389,7 @@ public class PartyPowerService(
             dragonAtk
             + dragonHp
             + (dbDragon.Skill1Level * 50)
-            + ((reliability?.Level ?? 1) * 10)
+            + (reliability.Level * 10)
             + rarity.RarityBasePartyPower
             + (rarity.LimitBreakCountPartyPowerWeight * dbDragon.LimitBreakCount);
 
