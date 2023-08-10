@@ -19,4 +19,5 @@ public interface IUserDataRepository : IBaseRepository
     Task UpdateDewpoint(int quantity);
     Task<bool> CheckDewpoint(int quantity);
     Task SetDewpoint(int quantity);
+    IQueryable<DbPlayerUserData> GetMultipleViewerData(IEnumerable<long> viewerIds);
 }

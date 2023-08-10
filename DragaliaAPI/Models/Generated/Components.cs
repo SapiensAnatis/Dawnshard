@@ -2321,13 +2321,15 @@ public class AtgenHarvestBuildList
 public class AtgenHelperDetailList
 {
     public ulong viewer_id { get; set; }
-    public int is_friend { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_friend { get; set; }
     public int get_mana_point { get; set; }
     public int apply_send_status { get; set; }
 
     public AtgenHelperDetailList(
         ulong viewer_id,
-        int is_friend,
+        bool is_friend,
         int get_mana_point,
         int apply_send_status
     )
@@ -6220,8 +6222,8 @@ public class GrowRecord
     public int take_mana { get; set; }
     public float bonus_factor { get; set; }
     public float mana_bonus_factor { get; set; }
-    public IEnumerable<AtgenCharaGrowRecord> chara_grow_record { get; set; }
-    public IEnumerable<CharaFriendshipList> chara_friendship_list { get; set; }
+    public IEnumerable<AtgenCharaGrowRecord> chara_grow_record { get; set; } = Enumerable.Empty<AtgenCharaGrowRecord>();
+    public IEnumerable<CharaFriendshipList> chara_friendship_list { get; set; } = Enumerable.Empty<CharaFriendshipList>();
 
     public GrowRecord(
         int take_player_exp,
@@ -6684,8 +6686,8 @@ public class IngameResultData
     public string dungeon_key { get; set; }
     public QuestPlayType play_type { get; set; }
     public int quest_id { get; set; }
-    public RewardRecord reward_record { get; set; }
-    public GrowRecord grow_record { get; set; }
+    public RewardRecord reward_record { get; set; } = new();
+    public GrowRecord grow_record { get; set; } = new();
     public DateTimeOffset start_time { get; set; }
     public DateTimeOffset end_time { get; set; }
 
@@ -6702,19 +6704,19 @@ public class IngameResultData
     public int wave_count { get; set; }
     public int current_play_count { get; set; }
     public int reborn_count { get; set; }
-    public IEnumerable<PartySettingList> quest_party_setting_list { get; set; }
-    public IEnumerable<UserSupportList> helper_list { get; set; }
-    public IEnumerable<AtgenScoringEnemyPointList> scoring_enemy_point_list { get; set; }
-    public IEnumerable<AtgenHelperDetailList> helper_detail_list { get; set; }
-    public IEnumerable<AtgenScoreMissionSuccessList> score_mission_success_list { get; set; }
-    public IEnumerable<AtgenBonusFactorList> bonus_factor_list { get; set; }
-    public IEnumerable<AtgenEventPassiveUpList> event_passive_up_list { get; set; }
+    public IEnumerable<PartySettingList> quest_party_setting_list { get; set; } = Enumerable.Empty<PartySettingList>();
+    public IEnumerable<UserSupportList> helper_list { get; set; } = Enumerable.Empty<UserSupportList>();
+    public IEnumerable<AtgenScoringEnemyPointList> scoring_enemy_point_list { get; set; } = Enumerable.Empty<AtgenScoringEnemyPointList>();
+    public IEnumerable<AtgenHelperDetailList> helper_detail_list { get; set; } = Enumerable.Empty<AtgenHelperDetailList>();
+    public IEnumerable<AtgenScoreMissionSuccessList> score_mission_success_list { get; set; } = Enumerable.Empty<AtgenScoreMissionSuccessList>();
+    public IEnumerable<AtgenBonusFactorList> bonus_factor_list { get; set; } = Enumerable.Empty<AtgenBonusFactorList>();
+    public IEnumerable<AtgenEventPassiveUpList> event_passive_up_list { get; set; } = Enumerable.Empty<AtgenEventPassiveUpList>();
     public float clear_time { get; set; }
 
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool is_best_clear_time { get; set; }
     public long total_play_damage { get; set; }
-    public IEnumerable<ConvertedEntityList> converted_entity_list { get; set; }
+    public IEnumerable<ConvertedEntityList> converted_entity_list { get; set; } = Enumerable.Empty<ConvertedEntityList>();
 
     public IngameResultData(
         string dungeon_key,
@@ -8128,18 +8130,18 @@ public class ResponseCommon
 [MessagePackObject(true)]
 public class RewardRecord
 {
-    public IEnumerable<AtgenDropAll> drop_all { get; set; }
-    public IEnumerable<AtgenFirstClearSet> first_clear_set { get; set; }
-    public IEnumerable<AtgenFirstClearSet> mission_complete { get; set; }
-    public IEnumerable<AtgenMissionsClearSet> missions_clear_set { get; set; }
-    public IEnumerable<AtgenFirstClearSet> quest_bonus_list { get; set; }
-    public IEnumerable<AtgenFirstClearSet> challenge_quest_bonus_list { get; set; }
-    public IEnumerable<AtgenFirstClearSet> campaign_extra_reward_list { get; set; }
-    public IEnumerable<AtgenEnemyPiece> enemy_piece { get; set; }
-    public AtgenFirstMeeting first_meeting { get; set; }
-    public IEnumerable<AtgenFirstClearSet> carry_bonus { get; set; }
-    public IEnumerable<AtgenFirstClearSet> reborn_bonus { get; set; }
-    public IEnumerable<AtgenFirstClearSet> weekly_limit_reward_list { get; set; }
+    public List<AtgenDropAll> drop_all { get; set; } = new List<AtgenDropAll>();
+    public IEnumerable<AtgenFirstClearSet> first_clear_set { get; set; } = Enumerable.Empty<AtgenFirstClearSet>();
+    public IEnumerable<AtgenFirstClearSet> mission_complete { get; set; } = Enumerable.Empty<AtgenFirstClearSet>();
+    public IEnumerable<AtgenMissionsClearSet> missions_clear_set { get; set; } = Enumerable.Empty<AtgenMissionsClearSet>();
+    public IEnumerable<AtgenFirstClearSet> quest_bonus_list { get; set; } = Enumerable.Empty<AtgenFirstClearSet>();
+    public IEnumerable<AtgenFirstClearSet> challenge_quest_bonus_list { get; set; } = Enumerable.Empty<AtgenFirstClearSet>();
+    public IEnumerable<AtgenFirstClearSet> campaign_extra_reward_list { get; set; } = Enumerable.Empty<AtgenFirstClearSet>();
+    public IEnumerable<AtgenEnemyPiece> enemy_piece { get; set; } = Enumerable.Empty<AtgenEnemyPiece>();
+    public AtgenFirstMeeting first_meeting { get; set; } = new();
+    public IEnumerable<AtgenFirstClearSet> carry_bonus { get; set; } = Enumerable.Empty<AtgenFirstClearSet>();
+    public IEnumerable<AtgenFirstClearSet> reborn_bonus { get; set; } = Enumerable.Empty<AtgenFirstClearSet>();
+    public IEnumerable<AtgenFirstClearSet> weekly_limit_reward_list { get; set; } = Enumerable.Empty<AtgenFirstClearSet>();
     public int take_coin { get; set; }
     public float shop_quest_bonus_factor { get; set; }
     public int player_level_up_fstone { get; set; }
@@ -8148,7 +8150,7 @@ public class RewardRecord
     public int take_astral_item_quantity { get; set; }
 
     public RewardRecord(
-        IEnumerable<AtgenDropAll> drop_all,
+        List<AtgenDropAll> drop_all,
         IEnumerable<AtgenFirstClearSet> first_clear_set,
         IEnumerable<AtgenFirstClearSet> mission_complete,
         IEnumerable<AtgenMissionsClearSet> missions_clear_set,

@@ -43,6 +43,21 @@ public class QuestRepository : IQuestRepository
         questData.State = (byte)state;
     }
 
+    public async Task<DbQuest> GetQuestDataAsync(int questId)
+    {
+        DbQuest? questData = await this.Quests.SingleOrDefaultAsync(x => x.QuestId == questId);
+        questData ??= this.apiContext.PlayerQuests
+            .Add(
+                new DbQuest()
+                {
+                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    QuestId = questId
+                }
+            )
+            .Entity;
+        return questData;
+    }
+
     public async Task<DbQuest> CompleteQuest(int questId, float clearTime)
     {
         DbQuest? questData = await apiContext.PlayerQuests.SingleOrDefaultAsync(

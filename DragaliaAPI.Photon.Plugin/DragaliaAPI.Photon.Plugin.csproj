@@ -4,6 +4,7 @@
 		<TargetFramework>net461</TargetFramework>
 		<PlatformTarget>x64</PlatformTarget>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+		<AssemblyVersion>2.1.0</AssemblyVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

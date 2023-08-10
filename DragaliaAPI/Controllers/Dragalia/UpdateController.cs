@@ -40,6 +40,9 @@ public class UpdateController(
     {
         foreach (AtgenTargetList target in request.target_list)
         {
+            logger.LogDebug("reset_new target: {@target}", target);
+            target.target_id_list ??= Enumerable.Empty<long>();
+
             switch (target.target_name)
             {
                 case "friend":

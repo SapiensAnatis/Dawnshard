@@ -91,6 +91,25 @@ public class MatchingService : IMatchingService
         };
     }
 
+    public async Task<IEnumerable<Player>> GetTeammates()
+    {
+        long viewerId =
+            this.playerIdentityService.ViewerId
+            ?? throw new InvalidOperationException(
+                "Attempted to fetch teammates with null ViewerId"
+            );
+
+        ApiGame? game = await this.photonStateApi.GetGameByViewerId(viewerId);
+
+        if (game is null)
+        {
+            this.logger.LogWarning("Failed to retrieve game for ID {viewerId}", viewerId);
+            return Enumerable.Empty<Player>();
+        }
+
+        return game.Players.Where(x => x.ViewerId != viewerId);
+    }
+
     public async Task<bool> GetIsHost()
     {
         long viewerId =

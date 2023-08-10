@@ -21,6 +21,14 @@ public class PartyTest : TestFixture
     {
         this.AddCharacter(Charas.Ilia);
 
+        await AddToDatabase(
+            new DbWeaponBody
+            {
+                DeviceAccountId = DeviceAccountId,
+                WeaponBodyId = WeaponBodies.DivineTrigger
+            }
+        );
+
         await this.Client.PostMsgpack<PartySetPartySettingData>(
             "/party/set_party_setting",
             new PartySetPartySettingRequest(

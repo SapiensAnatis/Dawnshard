@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -15,32 +16,17 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class PartyController : DragaliaControllerBase
+public class PartyController(
+    IPartyRepository partyRepository,
+    IUnitRepository unitRepository,
+    IUserDataRepository userDataRepository,
+    IUpdateDataService updateDataService,
+    IMapper mapper,
+    ILogger<PartyController> logger,
+    IPartyPowerService partyPowerService,
+    IPartyPowerRepository partyPowerRepository
+) : DragaliaControllerBase
 {
-    private readonly IPartyRepository partyRepository;
-    private readonly IUnitRepository unitRepository;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IUpdateDataService updateDataService;
-    private readonly IMapper mapper;
-    private readonly ILogger<PartyController> logger;
-
-    public PartyController(
-        IPartyRepository partyRepository,
-        IUnitRepository unitRepository,
-        IUserDataRepository userDataRepository,
-        IUpdateDataService updateDataService,
-        IMapper mapper,
-        ILogger<PartyController> logger
-    )
-    {
-        this.partyRepository = partyRepository;
-        this.unitRepository = unitRepository;
-        this.userDataRepository = userDataRepository;
-        this.updateDataService = updateDataService;
-        this.mapper = mapper;
-        this.logger = logger;
-    }
-
     /// <summary>
     /// Does not seem to do anything useful.
     /// ILSpy indicates the response should contain halidom info, but it is always empty and only called on fresh accounts.
@@ -71,6 +57,15 @@ public class PartyController : DragaliaControllerBase
             }
         }
 
+        int partyPower = await partyPowerService.CalculatePartyPower(
+            requestParty.request_party_setting_list
+        );
+
+        await partyPowerRepository.SetMaxPartyPowerAsync(partyPower);
+
+        logger.LogTrace("Party power {power}", partyPower);
+        // TODO: PartyPower event
+
         DbParty dbEntry = mapper.Map<DbParty>(
             new PartyList(
                 requestParty.party_no,
@@ -89,9 +84,9 @@ public class PartyController : DragaliaControllerBase
     [HttpPost("set_main_party_no")]
     public async Task<DragaliaResult> SetMainPartyNo(PartySetMainPartyNoRequest request)
     {
-        await this.userDataRepository.SetMainPartyNo(request.main_party_no);
+        await userDataRepository.SetMainPartyNo(request.main_party_no);
 
-        await this.updateDataService.SaveChangesAsync();
+        await updateDataService.SaveChangesAsync();
 
         return this.Ok(new PartySetMainPartyNoData(request.main_party_no));
     }
@@ -99,9 +94,9 @@ public class PartyController : DragaliaControllerBase
     [HttpPost("update_party_name")]
     public async Task<DragaliaResult> UpdatePartyName(PartyUpdatePartyNameRequest request)
     {
-        await this.partyRepository.UpdatePartyName(request.party_no, request.party_name);
+        await partyRepository.UpdatePartyName(request.party_no, request.party_name);
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         return this.Ok(new PartyUpdatePartyNameData() { update_data_list = updateDataList });
     }
@@ -112,7 +107,7 @@ public class PartyController : DragaliaControllerBase
             return true;
 
         // TODO: can make this single query instead of 8 (this method is called in a loop)
-        IEnumerable<Charas> ownedCharaIds = await this.unitRepository.Charas
+        IEnumerable<Charas> ownedCharaIds = await unitRepository.Charas
             .Select(x => x.CharaId)
             .ToListAsync();
 
@@ -137,7 +132,7 @@ public class PartyController : DragaliaControllerBase
         if (keyId == 0)
             return true;
 
-        IEnumerable<long> ownedDragonKeyIds = await this.unitRepository.Dragons
+        IEnumerable<long> ownedDragonKeyIds = await unitRepository.Dragons
             .Select(x => x.DragonKeyId)
             .ToListAsync();
 
