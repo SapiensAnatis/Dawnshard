@@ -350,19 +350,18 @@ public class PartyPowerService(
             (levelMultiplier * (dragonData.MaxAtk - dragonData.MinAtk)) + dragonData.MinAtk
         );
 
-        if (dragonData.MaxLimitBreakCount == 5)
+        if (dragonData.MaxLimitBreakCount == 5 && dbDragon.Level > rarity.LimitLevel04)
         {
             int limitBreak5Level =
                 Math.Min(dbDragon.Level, rarity.LimitLevel05) - rarity.LimitLevel04;
 
             double limitBreak5LevelCount = rarity.LimitLevel05 - rarity.LimitLevel04;
 
-            double limitBreak5Multiplier =
-                limitBreak5Level == 0 || limitBreak5LevelCount == 0
-                    ? 0.0
-                    : limitBreak5Level / limitBreak5LevelCount;
+            double limitBreak5Multiplier = limitBreak5Level / limitBreak5LevelCount;
 
-            baseAtk += CeilToInt((dragonData.AddMaxAtk1 - dragonData.MaxAtk) * limitBreak5Multiplier);
+            baseAtk += CeilToInt(
+                (dragonData.AddMaxAtk1 - dragonData.MaxAtk) * limitBreak5Multiplier
+            );
 
             baseHp += CeilToInt((dragonData.AddMaxHp1 - dragonData.MaxHp) * limitBreak5Multiplier);
         }
