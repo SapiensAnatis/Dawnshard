@@ -357,14 +357,14 @@ public class PartyPowerService(
 
             double limitBreak5LevelCount = rarity.LimitLevel05 - rarity.LimitLevel04;
 
-            levelMultiplier =
+            double limitBreak5Multiplier =
                 limitBreak5Level == 0 || limitBreak5LevelCount == 0
                     ? 0.0
                     : limitBreak5Level / limitBreak5LevelCount;
 
-            baseAtk += CeilToInt((dragonData.AddMaxAtk1 - dragonData.MaxAtk) * levelMultiplier);
+            baseAtk += CeilToInt((dragonData.AddMaxAtk1 - dragonData.MaxAtk) * limitBreak5Multiplier);
 
-            baseHp += CeilToInt((dragonData.AddMaxHp1 - dragonData.MaxHp) * levelMultiplier);
+            baseHp += CeilToInt((dragonData.AddMaxHp1 - dragonData.MaxHp) * limitBreak5Multiplier);
         }
 
         double multiplier = dragonData.ElementalType == charaElement ? 1.5 : 1;
