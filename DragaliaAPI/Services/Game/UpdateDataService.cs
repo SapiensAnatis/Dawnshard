@@ -96,7 +96,8 @@ public class UpdateDataService(
                 item_list = ConvertEntities<ItemList, DbPlayerUseItem>(entities),
                 talisman_list = ConvertEntities<TalismanList, DbTalisman>(entities),
                 summon_ticket_list = ConvertEntities<SummonTicketList, DbSummonTicket>(entities),
-                quest_event_list = ConvertEntities<QuestEventList, DbQuestEvent>(entities)
+                quest_event_list = ConvertEntities<QuestEventList, DbQuestEvent>(entities),
+                party_power_data = ConvertEntities<PartyPowerData, DbPartyPower>(entities)?.Single()
             };
 
         IEnumerable<DbPlayerMission> updatedMissions = entities.OfType<DbPlayerMission>();

@@ -338,28 +338,32 @@ public class PartyPowerService(
 
         int maxLevel = rarity.Id == 5 ? rarity.LimitLevel04 : rarity.MaxLimitLevel;
 
-        int levelMultiplier = Math.Min(dbDragon.Level, maxLevel);
+        int currentLevel = Math.Min(dbDragon.Level, maxLevel);
+
+        double levelMultiplier =
+            currentLevel == 1 || maxLevel == 1 ? 0.0 : (maxLevel - 1.0) / (currentLevel - 1.0);
 
         int baseHp = CeilToInt(
-            ((maxLevel + -1.0) / (levelMultiplier + -1.0) * (dragonData.MaxHp - dragonData.MinHp))
-                + dragonData.MinHp
+            (levelMultiplier * (dragonData.MaxHp - dragonData.MinHp)) + dragonData.MinHp
         );
         int baseAtk = CeilToInt(
-            ((maxLevel + -1.0) / (levelMultiplier + -1.0) * (dragonData.MaxAtk - dragonData.MinAtk))
-                + dragonData.MinAtk
+            (levelMultiplier * (dragonData.MaxAtk - dragonData.MinAtk)) + dragonData.MinAtk
         );
 
-        if (dragonData.MaxLimitBreakCount == 5)
+        if (dragonData.MaxLimitBreakCount == 5 && dbDragon.Level > rarity.LimitLevel04)
         {
-            baseAtk +=
-                (dragonData.AddMaxAtk1 - dragonData.MaxAtk)
-                * (Math.Min(dbDragon.Level, rarity.LimitLevel05) - rarity.LimitLevel04)
-                / (rarity.LimitLevel05 - rarity.LimitLevel04);
+            int limitBreak5Level =
+                Math.Min(dbDragon.Level, rarity.LimitLevel05) - rarity.LimitLevel04;
 
-            baseHp +=
-                (dragonData.AddMaxHp1 - dragonData.MaxHp)
-                * (Math.Min(dbDragon.Level, rarity.LimitLevel05) - rarity.LimitLevel04)
-                / (rarity.LimitLevel05 - rarity.LimitLevel04);
+            double limitBreak5LevelCount = rarity.LimitLevel05 - rarity.LimitLevel04;
+
+            double limitBreak5Multiplier = limitBreak5Level / limitBreak5LevelCount;
+
+            baseAtk += CeilToInt(
+                (dragonData.AddMaxAtk1 - dragonData.MaxAtk) * limitBreak5Multiplier
+            );
+
+            baseHp += CeilToInt((dragonData.AddMaxHp1 - dragonData.MaxHp) * limitBreak5Multiplier);
         }
 
         double multiplier = dragonData.ElementalType == charaElement ? 1.5 : 1;
@@ -384,7 +388,7 @@ public class PartyPowerService(
             dragonAtk
             + dragonHp
             + (dbDragon.Skill1Level * 50)
-            + ((reliability?.Level ?? 1) * 10)
+            + (reliability.Level * 10)
             + rarity.RarityBasePartyPower
             + (rarity.LimitBreakCountPartyPowerWeight * dbDragon.LimitBreakCount);
 
@@ -638,9 +642,11 @@ file record BonusParams(double FortAtk, double FortHp, double AlbumAtk, double A
         CharaData data = MasterAsset.CharaData[charaId];
 
         AtgenParamBonus paramBonus = bonus.param_bonus.First(x => x.weapon_type == data.WeaponType);
+
         AtgenElementBonus elementBonus = bonus.element_bonus.First(
             x => x.elemental_type == data.ElementalType
         );
+
         AtgenParamBonus paramByWeaponBonus = bonus.param_bonus_by_weapon.First(
             x => x.weapon_type == data.WeaponType
         );

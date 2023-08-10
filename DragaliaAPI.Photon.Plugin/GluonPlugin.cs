@@ -104,6 +104,20 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Event information.</param>
         public override void OnJoin(IJoinGameCallInfo info)
         {
+            int currentActorCount = this.PluginHost.GameActors.Count(
+                x => x.ActorNr != info.ActorNr
+            );
+            if (currentActorCount >= 4)
+            {
+                this.logger.WarnFormat(
+                    "Player attempted to join game which already had {0} actors",
+                    currentActorCount
+                );
+
+                info.Fail();
+                return;
+            }
+
             info.Request.ActorProperties.InitializeViewerId();
             this.actorState[info.ActorNr] = new ActorState();
 
@@ -180,7 +194,8 @@ namespace DragaliaAPI.Photon.Plugin
             )
             {
                 this.logger.InfoFormat(
-                    "Viewer ID {0} left game {1}",
+                    "Actor {0} with viewer ID {1} left game {2}",
+                    info.ActorNr,
                     viewerId,
                     this.PluginHost.GameId
                 );
@@ -199,6 +214,22 @@ namespace DragaliaAPI.Photon.Plugin
                 // For some strange reason on completing a quest this appears to be raised twice for each actor.
                 // Prevent duplicate requests by setting a flag.
                 actorState.RemovedFromRedis = true;
+            }
+
+            if (this.roomState.MinGoToIngameState > 0)
+            {
+                int newMinGoToIngameState = this.PluginHost.GameActors
+                    .Where(x => x.ActorNr != info.ActorNr)
+                    .Select(x => x.Properties.GetIntOrDefault(ActorPropertyKeys.GoToIngameState))
+                    .Min();
+
+                this.roomState.MinGoToIngameState = newMinGoToIngameState;
+                this.OnSetGoToIngameState(info);
+
+                if (this.actorState.Where(x => x.Key != info.ActorNr).All(x => x.Value.Ready))
+                {
+                    this.RaiseEvent(Event.StartQuest, new Dictionary<string, string> { });
+                }
             }
         }
 
@@ -426,8 +457,6 @@ namespace DragaliaAPI.Photon.Plugin
 
             if (this.actorState.All(x => x.Value.Ready))
             {
-                this.logger.Info("All clients were ready, raising StartQuest");
-
                 this.RaiseEvent(Event.StartQuest, new Dictionary<string, string> { });
 
                 this.roomState.StartActorCount = this.PluginHost.GameActors.Count;
@@ -486,8 +515,8 @@ namespace DragaliaAPI.Photon.Plugin
         /// <remarks>
         /// Represents various stages of loading into a quest, during which events/properties need to be raised/set.
         /// </remarks>
-        /// <param name="info">Info from <see cref="BeforeSetProperties(IBeforeSetPropertiesCallInfo)"/>.</param>
-        private void OnSetGoToIngameState(IBeforeSetPropertiesCallInfo info)
+        /// <param name="info">Call info.</param>
+        private void OnSetGoToIngameState(ICallInfo info)
         {
             this.logger.InfoFormat(
                 "OnSetGoToIngameState: updating with value {0}",
@@ -574,8 +603,8 @@ namespace DragaliaAPI.Photon.Plugin
         /// <summary>
         /// Makes an outgoing request for <see cref="HeroParamData"/> for each player in the room.
         /// </summary>
-        /// <param name="info">Info from <see cref="OnSetProperties(ISetPropertiesCallInfo)"/>.</param>
-        private void RequestHeroParam(IBeforeSetPropertiesCallInfo info)
+        /// <param name="info">Call info.</param>
+        private void RequestHeroParam(ICallInfo info)
         {
             IEnumerable<ActorInfo> heroParamRequest = this.PluginHost.GameActors.Select(
                 x =>
@@ -649,7 +678,7 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="roomId">The new room ID.</param>
         private void SetRoomId(ICallInfo info, int roomId)
         {
-            this.logger.DebugFormat("Setting room ID to {0}", roomId);
+            this.logger.InfoFormat("Setting room ID to {0}", roomId);
 
             this.PluginHost.SetProperties(
                 0,
@@ -678,7 +707,7 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="visible">The new visibility.</param>
         private void SetRoomVisibility(ICallInfo info, bool visible)
         {
-            this.logger.DebugFormat("Setting room visibility to {0}", visible);
+            this.logger.InfoFormat("Setting room visibility to {0}", visible);
 
             this.PostStateManagerRequest(
                 VisibleEndpoint,
@@ -751,9 +780,10 @@ namespace DragaliaAPI.Photon.Plugin
         {
             if (
                 this.PluginHost.GameProperties.TryGetInt(GamePropertyKeys.QuestId, out int questId)
-                && QuestHelper.GetDungeonType(questId) == DungeonTypes.Raid
+                && QuestHelper.GetIsRaid(questId)
             )
             {
+                logger.InfoFormat("GetMemberCountTable: Quest {0} is a raid", questId);
                 // Everyone uses all of their units in a raid
                 return this.PluginHost.GameActors.ToDictionary(
                     x => x.ActorNr,
