@@ -104,6 +104,20 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Event information.</param>
         public override void OnJoin(IJoinGameCallInfo info)
         {
+            int currentActorCount = this.PluginHost.GameActors.Count(
+                x => x.ActorNr != info.ActorNr
+            );
+            if (currentActorCount >= 4)
+            {
+                this.logger.WarnFormat(
+                    "Player attempted to join game which already had {0} actors",
+                    currentActorCount
+                );
+
+                info.Fail();
+                return;
+            }
+
             info.Request.ActorProperties.InitializeViewerId();
             this.actorState[info.ActorNr] = new ActorState();
 
