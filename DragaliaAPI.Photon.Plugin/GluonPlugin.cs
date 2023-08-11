@@ -170,8 +170,6 @@ namespace DragaliaAPI.Photon.Plugin
                     Event.RoomBroken,
                     new RoomBroken() { Reason = RoomBroken.RoomBrokenType.HostDisconnected }
                 );
-
-                this.SetRoomVisibility(info, false);
             }
 
             if (!this.actorState.Remove(info.ActorNr))
@@ -195,40 +193,39 @@ namespace DragaliaAPI.Photon.Plugin
                 return;
             }
 
-            if (
-                actor.TryGetViewerId(out int viewerId)
-                && this.actorState.TryGetValue(info.ActorNr, out ActorState actorState)
-                && !actorState.RemovedFromRedis
-            )
+            if (!actor.TryGetViewerId(out int viewerId))
             {
-                this.logger.InfoFormat(
-                    "Actor {0} with viewer ID {1} left game {2}",
-                    info.ActorNr,
-                    viewerId,
-                    this.PluginHost.GameId
+                this.logger.WarnFormat(
+                    "OnLeave: failed to acquire viewer ID of actor {0}",
+                    info.ActorNr
                 );
-
-                this.PostStateManagerRequest(
-                    GameLeaveEndpoint,
-                    new GameModifyRequest
-                    {
-                        GameName = this.PluginHost.GameId,
-                        Player = new Player() { ViewerId = viewerId }
-                    },
-                    info,
-                    true
-                );
-
-                // For some strange reason on completing a quest this appears to be raised twice for each actor.
-                // Prevent duplicate requests by setting a flag.
-                actorState.RemovedFromRedis = true;
+                return;
             }
+
+            this.logger.InfoFormat(
+                "Actor {0} with viewer ID {1} left game {2}",
+                info.ActorNr,
+                viewerId,
+                this.PluginHost.GameId
+            );
+
+            this.PostStateManagerRequest(
+                GameLeaveEndpoint,
+                new GameModifyRequest
+                {
+                    GameName = this.PluginHost.GameId,
+                    Player = new Player() { ViewerId = viewerId }
+                },
+                info,
+                true
+            );
 
             if (this.roomState.MinGoToIngameState > 0)
             {
                 int newMinGoToIngameState = this.PluginHost.GameActors
                     .Where(x => x.ActorNr != info.ActorNr)
                     .Select(x => x.Properties.GetIntOrDefault(ActorPropertyKeys.GoToIngameState))
+                    .DefaultIfEmpty()
                     .Min();
 
                 this.roomState.MinGoToIngameState = newMinGoToIngameState;
