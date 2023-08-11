@@ -66,7 +66,6 @@ public class PartyController(
         await partyPowerRepository.SetMaxPartyPowerAsync(partyPower);
 
         logger.LogTrace("Party power {power}", partyPower);
-        // TODO: PartyPower event
 
         DbParty dbEntry = mapper.Map<DbParty>(
             new PartyList(
