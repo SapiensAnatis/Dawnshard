@@ -33,9 +33,9 @@ public class DbQuest : IDbHasAccountId
 
     public int WeeklyPlayCount { get; set; } = 0;
 
-    public int LastDailyResetTime { get; set; } = 0;
+    public DateTimeOffset LastDailyResetTime { get; set; } = DateTimeOffset.UnixEpoch;
 
-    public int LastWeeklyResetTime { get; set; } = 0;
+    public DateTimeOffset LastWeeklyResetTime { get; set; } = DateTimeOffset.UnixEpoch;
 
     public bool IsAppear { get; set; } = true;
 

@@ -3,6 +3,7 @@ using System;
 using DragaliaAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20230808101930_quest-event-1")]
+    partial class questevent1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -257,20 +260,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.HasIndex("DeviceAccountId");
 
                     b.ToTable("PartyData");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPartyPower", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("MaxPartyPower")
-                        .HasColumnType("integer")
-                        .HasColumnName("MaxPartyPower");
-
-                    b.HasKey("DeviceAccountId");
-
-                    b.ToTable("PartyPowers");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPartyUnit", b =>
@@ -1881,17 +1870,6 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
                         .WithMany("PartyList")
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbPartyPower", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
                         .HasForeignKey("DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -1,8 +1,10 @@
 ﻿using DragaliaAPI.Controllers;
-using DragaliaAPI.Features.Dungeon.Record;
+using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions;
@@ -14,6 +16,9 @@ namespace DragaliaAPI.Features.Dungeon;
 public class DungeonController(
     IDungeonService dungeonService,
     IOddsInfoService oddsInfoService,
+    IQuestService questService,
+    IUpdateDataService updateDataService,
+    IRewardService rewardService,
     IMatchingService matchingService,
     IDungeonRecordHelperService dungeonRecordHelperService
 ) : DragaliaControllerBase
@@ -66,5 +71,22 @@ public class DungeonController(
         }
 
         return this.Ok(response);
+    }
+
+    [HttpPost("receive_quest_bonus")]
+    public async Task<DragaliaResult> ReceiveQuestBonus(DungeonReceiveQuestBonusRequest request)
+    {
+        DungeonReceiveQuestBonusData resp = new();
+
+        resp.receive_quest_bonus = await questService.ReceiveQuestBonus(
+            request.quest_event_id,
+            request.is_receive,
+            request.receive_bonus_count
+        );
+
+        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.entity_result = rewardService.GetEntityResult();
+
+        return Ok(resp);
     }
 }

@@ -7782,11 +7782,11 @@ public class QuestEventList
     public int weekly_play_count { get; set; }
     public int quest_bonus_receive_count { get; set; }
     public int quest_bonus_stack_count { get; set; }
-    public int quest_bonus_stack_time { get; set; }
+    public DateTimeOffset quest_bonus_stack_time { get; set; }
     public int quest_bonus_reserve_count { get; set; }
-    public int quest_bonus_reserve_time { get; set; }
-    public int last_daily_reset_time { get; set; }
-    public int last_weekly_reset_time { get; set; }
+    public DateTimeOffset quest_bonus_reserve_time { get; set; }
+    public DateTimeOffset last_daily_reset_time { get; set; }
+    public DateTimeOffset last_weekly_reset_time { get; set; }
 
     public QuestEventList(
         int quest_event_id,
@@ -7794,11 +7794,11 @@ public class QuestEventList
         int weekly_play_count,
         int quest_bonus_receive_count,
         int quest_bonus_stack_count,
-        int quest_bonus_stack_time,
+        DateTimeOffset quest_bonus_stack_time,
         int quest_bonus_reserve_count,
-        int quest_bonus_reserve_time,
-        int last_daily_reset_time,
-        int last_weekly_reset_time
+        DateTimeOffset quest_bonus_reserve_time,
+        DateTimeOffset last_daily_reset_time,
+        DateTimeOffset last_weekly_reset_time
     )
     {
         this.quest_event_id = quest_event_id;
@@ -7872,8 +7872,8 @@ public class QuestList
     public int daily_play_count { get; set; }
     public int weekly_play_count { get; set; }
     public int play_count { get; set; }
-    public int last_daily_reset_time { get; set; }
-    public int last_weekly_reset_time { get; set; }
+    public DateTimeOffset last_daily_reset_time { get; set; }
+    public DateTimeOffset last_weekly_reset_time { get; set; }
     public int is_appear { get; set; }
     public float best_clear_time { get; set; }
 
@@ -7886,8 +7886,8 @@ public class QuestList
         int daily_play_count,
         int weekly_play_count,
         int play_count,
-        int last_daily_reset_time,
-        int last_weekly_reset_time,
+        DateTimeOffset last_daily_reset_time,
+        DateTimeOffset last_weekly_reset_time,
         int is_appear,
         float best_clear_time
     )

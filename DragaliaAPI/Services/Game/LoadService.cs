@@ -73,6 +73,7 @@ public class LoadService(
                     .Where(x => x.StoryType == StoryTypes.Castle)
                     .Select(mapper.Map<CastleStoryList>),
                 quest_list = savefile.QuestList.Select(mapper.Map<QuestList>),
+                quest_event_list = savefile.QuestEvents.Select(mapper.Map<QuestEventList>),
                 material_list = savefile.MaterialList.Select(mapper.Map<MaterialList>),
                 weapon_skin_list = savefile.WeaponSkinList.Select(mapper.Map<WeaponSkinList>),
                 weapon_passive_ability_list = savefile.WeaponPassiveAbilityList.Select(
@@ -105,7 +106,8 @@ public class LoadService(
                 shop_notice = new ShopNotice(await shopRepository.GetDailySummonCountAsync() == 0),
                 summon_ticket_list = (await ticketRepository.GetTicketsAsync()).Select(
                     mapper.Map<SummonTicketList>
-                )
+                ),
+                quest_bonus_stack_base_time = 1617775200 // 7. April 2017
             };
 
         logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);

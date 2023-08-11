@@ -184,5 +184,7 @@ public class ApiContext : DbContext
 
     public DbSet<DbEmblem> Emblems { get; set; }
 
+    public DbSet<DbQuestEvent> QuestEvents { get; set; }
+
     public DbSet<DbPartyPower> PartyPowers { get; set; }
 }
