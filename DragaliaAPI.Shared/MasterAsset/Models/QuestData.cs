@@ -56,6 +56,5 @@ public record QuestData(
             new(this.Scene06, this.AreaName06),
         }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
 
-    // Main Campaign quests use 100xx
-    public bool IsEventQuest => Gid >= 20000;
+    public bool IsEventQuest => GroupType == QuestGroupType.Event;
 }
