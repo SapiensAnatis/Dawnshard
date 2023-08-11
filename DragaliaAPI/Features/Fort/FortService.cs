@@ -446,7 +446,7 @@ public class FortService(
         if (build is { PositionX: -1, PositionZ: -1 })
         {
             logger.LogDebug(
-                "Placed build {buildId} from storage to {x}/{z}",
+                "Placed build {buildId} from storage at {x}/{z}",
                 buildId,
                 afterPositionX,
                 afterPositionZ
@@ -457,7 +457,7 @@ public class FortService(
         else
         {
             logger.LogDebug(
-                "Move performed for build {buildId} - New Position {x}/{z}",
+                "Moved build {buildId} to {x}/{z}",
                 buildId,
                 afterPositionX,
                 afterPositionZ
