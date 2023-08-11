@@ -174,6 +174,14 @@ namespace DragaliaAPI.Photon.Plugin
                 this.SetRoomVisibility(info, false);
             }
 
+            if (!this.actorState.Remove(info.ActorNr))
+            {
+                this.logger.WarnFormat(
+                    "Failed to remove actor nr {0} from actor state",
+                    info.ActorNr
+                );
+            }
+
             base.OnLeave(info);
 
             // It is not critical to update the Redis state, so don't crash the room if we can't find
