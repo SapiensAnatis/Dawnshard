@@ -3,6 +3,7 @@ using System.Linq;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
@@ -23,7 +24,8 @@ public class MissionInitialProgressionService(
     IWeaponRepository weaponRepository,
     IStoryRepository storyRepository,
     IUserDataRepository userDataRepository,
-    ITradeRepository tradeRepository
+    ITradeRepository tradeRepository,
+    IPartyPowerRepository partyPowerRepository
 ) : IMissionInitialProgressionService
 {
     public async Task GetInitialMissionProgress(DbPlayerMission mission)
@@ -97,41 +99,16 @@ public class MissionInitialProgressionService(
             MissionCompleteType.CharacterManaNodeUnlock
                 => await GetCharacterManaNodeCount(progressionInfo),
             MissionCompleteType.DragonLevelUp => await GetDragonMaxLevel(progressionInfo),
-            MissionCompleteType.DragonGiftSent => 0, // Unsure about this
+            MissionCompleteType.TreasureTrade => await GetTreasureTradeCount(progressionInfo),
             MissionCompleteType.DragonBondLevelUp => await GetDragonBondLevel(progressionInfo),
+            MissionCompleteType.PartyPowerReached
+                => await partyPowerRepository.GetMaxPartyPowerAsync(),
+            MissionCompleteType.DragonGiftSent => 0, // Unsure about this
             MissionCompleteType.ItemSummon => 0, // TODO: As daily quests also use this, should we make it actually count the item summons?
             MissionCompleteType.AccountLinked => 0,
             MissionCompleteType.PartyOptimized => 0,
             MissionCompleteType.AbilityCrestTradeViewed => 0,
             MissionCompleteType.GuildCheckInRewardClaimed => amountToComplete, // TODO
-            MissionCompleteType.PartyPowerReached => 0, // TODO: Change when party power calc is merged
-            MissionCompleteType.TreasureTrade
-                => (
-                    await tradeRepository.Trades
-                        .Where(
-                            x =>
-                                x.Type == TradeType.Treasure
-                                && (
-                                    progressionInfo.Parameter == null
-                                    || x.Id == progressionInfo.Parameter
-                                )
-                        )
-                        .Select(x => x.Id)
-                        .ToListAsync()
-                )
-                    .Select(x => MasterAsset.TreasureTrade[x])
-                    .Count(
-                        x =>
-                            (
-                                progressionInfo.Parameter2 == null
-                                || x.DestinationEntityType
-                                    == (EntityTypes)progressionInfo.Parameter2
-                            )
-                            && (
-                                progressionInfo.Parameter3 == null
-                                || x.DestinationEntityId == progressionInfo.Parameter3
-                            )
-                    ),
             MissionCompleteType.UnimplementedAutoComplete => amountToComplete,
             _
                 => throw new UnreachableException(
@@ -165,6 +142,32 @@ public class MissionInitialProgressionService(
                 amountToComplete
             );
         }
+    }
+
+    private async Task<int> GetTreasureTradeCount(MissionProgressionInfo requirement)
+    {
+        List<int> trades = await tradeRepository.Trades
+            .Where(
+                x =>
+                    x.Type == TradeType.Treasure
+                    && (requirement.Parameter == null || x.Id == requirement.Parameter)
+            )
+            .Select(x => x.Id)
+            .ToListAsync();
+
+        return trades
+            .Select(x => MasterAsset.TreasureTrade[x])
+            .Count(
+                x =>
+                    (
+                        requirement.Parameter2 == null
+                        || x.DestinationEntityType == (EntityTypes)requirement.Parameter2
+                    )
+                    && (
+                        requirement.Parameter3 == null
+                        || x.DestinationEntityId == requirement.Parameter3
+                    )
+            );
     }
 
     private async Task<int> GetCharacterMaxLevel(MissionProgressionInfo requirement)
