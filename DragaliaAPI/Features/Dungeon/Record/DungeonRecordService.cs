@@ -1,23 +1,16 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Extensions;
-using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset.Models;
-using PhotonPlayer = DragaliaAPI.Photon.Shared.Models.Player;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
 public class DungeonRecordService(
     IDungeonRecordRewardService dungeonRecordRewardService,
-    IQuestRepository questRepository,
-    IMissionProgressionService missionProgressionService,
+    IQuestService questService,
     IUserService userService,
     ITutorialService tutorialService,
     ILogger<DungeonRecordService> logger
@@ -53,11 +46,13 @@ public class DungeonRecordService(
                 is_clear = true,
             };
 
-        DbQuest questData = await questRepository.GetQuestDataAsync(session.QuestData.Id);
-        questData.State = 3;
+        (
+            DbQuest questData,
+            ingameResultData.is_best_clear_time,
+            ingameResultData.reward_record.quest_bonus_list
+        ) = await questService.ProcessQuestCompletion(session.QuestData.Id, playRecord.time);
 
         this.ProcessClearTime(ingameResultData, playRecord.time, questData);
-        this.ProcessMissionProgression(session);
         await this.ProcessGrowth(ingameResultData.grow_record, session);
         await this.ProcessStaminaConsumption(session);
         await this.ProcessPlayerLevel(
@@ -127,14 +122,6 @@ public class DungeonRecordService(
         );
 
         return Task.CompletedTask;
-    }
-
-    private void ProcessMissionProgression(DungeonSession session)
-    {
-        if (session.QuestData.IsPartOfVoidBattleGroups)
-            missionProgressionService.OnVoidBattleCleared();
-
-        missionProgressionService.OnQuestCleared(session.QuestData.Id);
     }
 
     private async Task ProcessStaminaConsumption(DungeonSession session)

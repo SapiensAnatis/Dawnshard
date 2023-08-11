@@ -15,7 +15,10 @@ public class DungeonRecordTest : TestFixture
         CustomWebApplicationFactory<Program> factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        CommonAssertionOptions.ApplyTimeOptions(2);
+    }
 
     [Fact]
     public async Task Record_ReturnsExpectedResponse()
@@ -143,7 +146,9 @@ public class DungeonRecordTest : TestFixture
 
         response.ingame_result_data.grow_record.take_player_exp.Should().NotBe(0);
 
-        response.update_data_list.user_data.coin.Should().Be(oldUserData.Coin + 10);
+        response.update_data_list.user_data.coin
+            .Should()
+            .BeInRange(oldUserData.Coin + 10, oldUserData.Coin + 10 + 1000); // +1000 because of temp. quest event group reward
         response.update_data_list.user_data.mana_point.Should().Be(oldUserData.ManaPoint + 10);
 
         response.update_data_list.material_list
@@ -156,11 +161,16 @@ public class DungeonRecordTest : TestFixture
                 {
                     quest_id = questId,
                     state = 3,
+                    daily_play_count = 1,
+                    play_count = 1,
+                    weekly_play_count = 1,
                     is_appear = 1,
                     is_mission_clear_1 = 1,
                     is_mission_clear_2 = 1,
                     is_mission_clear_3 = 1,
-                    best_clear_time = 10
+                    best_clear_time = 10,
+                    last_daily_reset_time = DateTimeOffset.UtcNow,
+                    last_weekly_reset_time = DateTimeOffset.UtcNow
                 }
             );
     }

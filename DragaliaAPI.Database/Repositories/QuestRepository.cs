@@ -22,30 +22,19 @@ public class QuestRepository : IQuestRepository
             x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
-    public async Task UpdateQuestState(int questId, int state)
-    {
-        DbQuest? questData = await apiContext.PlayerQuests.FindAsync(
-            this.playerIdentityService.AccountId,
-            questId
+    public IQueryable<DbQuestEvent> QuestEvents =>
+        this.apiContext.QuestEvents.Where(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
-        if (questData is null)
-        {
-            questData = new()
-            {
-                DeviceAccountId = this.playerIdentityService.AccountId,
-                QuestId = questId,
-                State = (byte)state
-            };
-            apiContext.PlayerQuests.Add(questData);
-        }
-
-        questData.State = (byte)state;
+    private async Task<DbQuest?> FindQuestAsync(int questId)
+    {
+        return await apiContext.PlayerQuests.FindAsync(playerIdentityService.AccountId, questId);
     }
 
     public async Task<DbQuest> GetQuestDataAsync(int questId)
     {
-        DbQuest? questData = await this.Quests.SingleOrDefaultAsync(x => x.QuestId == questId);
+        DbQuest? questData = await FindQuestAsync(questId);
         questData ??= this.apiContext.PlayerQuests
             .Add(
                 new DbQuest()
@@ -58,34 +47,25 @@ public class QuestRepository : IQuestRepository
         return questData;
     }
 
-    public async Task<DbQuest> CompleteQuest(int questId, float clearTime)
+    private async Task<DbQuestEvent?> FindQuestEventAsync(int questEventId)
     {
-        DbQuest? questData = await apiContext.PlayerQuests.SingleOrDefaultAsync(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId && x.QuestId == questId
+        return await apiContext.QuestEvents.FindAsync(
+            playerIdentityService.AccountId,
+            questEventId
         );
+    }
 
-        if (questData is null)
-        {
-            questData = new()
-            {
-                DeviceAccountId = this.playerIdentityService.AccountId,
-                QuestId = questId,
-            };
-            apiContext.PlayerQuests.Add(questData);
-        }
-
-        questData.State = 3;
-
-        questData.PlayCount++;
-        questData.DailyPlayCount++;
-        questData.WeeklyPlayCount++;
-        questData.IsAppear = true;
-
-        if (clearTime < questData.BestClearTime || questData.BestClearTime == -1.0f)
-        {
-            questData.BestClearTime = clearTime;
-        }
-
-        return questData;
+    public async Task<DbQuestEvent> GetQuestEventAsync(int questEventId)
+    {
+        return await FindQuestEventAsync(questEventId)
+            ?? apiContext.QuestEvents
+                .Add(
+                    new DbQuestEvent
+                    {
+                        DeviceAccountId = playerIdentityService.AccountId,
+                        QuestEventId = questEventId
+                    }
+                )
+                .Entity;
     }
 }

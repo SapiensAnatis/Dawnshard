@@ -1142,12 +1142,14 @@ public class DungeonGetAreaOddsRequest
 public class DungeonReceiveQuestBonusRequest
 {
     public int quest_event_id { get; set; }
-    public int is_receive { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_receive { get; set; }
     public int receive_bonus_count { get; set; }
 
     public DungeonReceiveQuestBonusRequest(
         int quest_event_id,
-        int is_receive,
+        bool is_receive,
         int receive_bonus_count
     )
     {

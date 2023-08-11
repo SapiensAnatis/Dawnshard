@@ -1,7 +1,10 @@
 ﻿using DragaliaAPI.Features.Dungeon;
-using DragaliaAPI.Features.Dungeon.Record;
+using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
+using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -12,6 +15,9 @@ public class DungeonControllerTest
 {
     private readonly Mock<IDungeonService> mockDungeonService;
     private readonly Mock<IOddsInfoService> mockOddsInfoService;
+    private readonly Mock<IQuestService> mockQuestService;
+    private readonly Mock<IUpdateDataService> mockUpdateDataService;
+    private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IMatchingService> mockMatchingService;
     private readonly Mock<IDungeonRecordHelperService> mockDungeonRecordHelperService;
 
@@ -21,12 +27,18 @@ public class DungeonControllerTest
     {
         this.mockDungeonService = new(MockBehavior.Strict);
         this.mockOddsInfoService = new(MockBehavior.Strict);
+        this.mockQuestService = new(MockBehavior.Strict);
+        this.mockUpdateDataService = new(MockBehavior.Strict);
+        this.mockRewardService = new(MockBehavior.Strict);
         this.mockMatchingService = new(MockBehavior.Strict);
         this.mockDungeonRecordHelperService = new(MockBehavior.Strict);
 
         this.dungeonController = new(
             this.mockDungeonService.Object,
             this.mockOddsInfoService.Object,
+            this.mockQuestService.Object,
+            this.mockUpdateDataService.Object,
+            this.mockRewardService.Object,
             this.mockMatchingService.Object,
             this.mockDungeonRecordHelperService.Object
         );
