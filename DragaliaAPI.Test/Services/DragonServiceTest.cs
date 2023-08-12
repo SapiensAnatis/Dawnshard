@@ -94,7 +94,13 @@ public class DragonServiceTest
         dragonRels.Add(DbPlayerDragonReliabilityFactory.Create(DeviceAccountId, Dragons.Garuda));
 
         mockMissionProgressionService.Setup(
-            x => x.OnDragonBondLevelUp(Dragons.Garuda, UnitElement.Wind, 3, 4)
+            x =>
+                x.OnDragonBondLevelUp(
+                    Dragons.Garuda,
+                    UnitElement.Wind,
+                    It.IsIn(3, 6),
+                    It.IsIn(4, 10)
+                )
         );
 
         mockMissionProgressionService.Setup(
@@ -235,7 +241,9 @@ public class DragonServiceTest
             x => x.OnDragonBondLevelUp(dragon, element, expectedLvl - 1, expectedLvl)
         );
 
-        mockMissionProgressionService.Setup(x => x.OnDragonGiftSent(dragon, gift, element, 1, 0));
+        mockMissionProgressionService.Setup(
+            x => x.OnDragonGiftSent(dragon, gift, element, usedQuantity, 0)
+        );
 
         DragonSendGiftMultipleData responseData = await dragonService.DoDragonSendGiftMultiple(
             new DragonSendGiftMultipleRequest()
