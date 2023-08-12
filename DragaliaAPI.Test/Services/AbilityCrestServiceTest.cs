@@ -988,11 +988,16 @@ public class AbilityCrestServiceTest
             .Setup(x => x.UpdateQuantity(materialMap.Invert()))
             .Returns(Task.CompletedTask);
 
+        this.mockMissionProgressionService.Setup(
+            x => x.OnAbilityCrestLevelUp(abilityCrestId, 1, step)
+        );
+
         (await this.abilityCrestService.TryBuildup(abilityCrest, pieceList))
             .Should()
             .Be(ResultCode.Success);
 
         this.mockInventoryRepository.VerifyAll();
+        this.mockMissionProgressionService.VerifyAll();
         this.mockAbilityCrestRepository.VerifyAll();
     }
 
@@ -1138,6 +1143,11 @@ public class AbilityCrestServiceTest
     {
         this.mockMissionProgressionService.Setup(
             x => x.OnAbilityCrestBuildupPlusCount(abilityCrestId, augmentType, amount, amount)
+        );
+
+        // 0, 0 since this only ever levels up one augment
+        this.mockMissionProgressionService.Setup(
+            x => x.OnAbilityCrestTotalPlusCountUp(abilityCrestId, 0, 0)
         );
 
         AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(abilityCrestId);

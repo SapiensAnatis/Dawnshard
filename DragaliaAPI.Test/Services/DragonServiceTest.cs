@@ -10,6 +10,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.Moq;
@@ -92,6 +93,21 @@ public class DragonServiceTest
 
         dragonRels.Add(DbPlayerDragonReliabilityFactory.Create(DeviceAccountId, Dragons.Garuda));
 
+        mockMissionProgressionService.Setup(
+            x => x.OnDragonBondLevelUp(Dragons.Garuda, UnitElement.Wind, 3, 4)
+        );
+
+        mockMissionProgressionService.Setup(
+            x =>
+                x.OnDragonGiftSent(
+                    Dragons.Garuda,
+                    It.IsIn(DragonGifts.StrawberryTart, DragonGifts.CompellingBook),
+                    UnitElement.Wind,
+                    1,
+                    0
+                )
+        );
+
         long startCoin = userData.Coin;
         DragonBuyGiftToSendMultipleData responseData =
             await dragonService.DoDragonBuyGiftToSendMultiple(
@@ -130,6 +146,7 @@ public class DragonServiceTest
         mockUserDataRepository.Verify(x => x.UserData);
         mockInventoryRepository.Verify(x => x.DragonGifts);
         mockInventoryRepository.Setup(x => x.GetMaterial(It.IsAny<Materials>()));
+        mockMissionProgressionService.VerifyAll();
         mockStoryRepository.VerifyAll();
     }
 
@@ -153,6 +170,10 @@ public class DragonServiceTest
         dd.Exp = 36300;
 
         dragonRels.Add(dd);
+
+        mockMissionProgressionService.Setup(
+            x => x.OnDragonGiftSent(Dragons.Garuda, DragonGifts.FreshBread, UnitElement.Wind, 1, 0)
+        );
 
         long startCoin = userData.Coin;
         DragonBuyGiftToSendMultipleData responseData =
@@ -183,6 +204,7 @@ public class DragonServiceTest
         mockUserDataRepository.Verify(x => x.UserData);
         mockInventoryRepository.Verify(x => x.DragonGifts);
         mockInventoryRepository.Setup(x => x.GetMaterial(It.IsAny<Materials>()));
+        mockMissionProgressionService.VerifyAll();
     }
 
     [Theory]
@@ -207,6 +229,14 @@ public class DragonServiceTest
 
         dragonRels.Add(DbPlayerDragonReliabilityFactory.Create(DeviceAccountId, dragon));
 
+        UnitElement element = MasterAsset.DragonData[dragon].ElementalType;
+
+        mockMissionProgressionService.Setup(
+            x => x.OnDragonBondLevelUp(dragon, element, expectedLvl - 1, expectedLvl)
+        );
+
+        mockMissionProgressionService.Setup(x => x.OnDragonGiftSent(dragon, gift, element, 1, 0));
+
         DragonSendGiftMultipleData responseData = await dragonService.DoDragonSendGiftMultiple(
             new DragonSendGiftMultipleRequest()
             {
@@ -225,6 +255,7 @@ public class DragonServiceTest
         mockUnitRepository.VerifyAll();
         mockInventoryRepository.Verify(x => x.DragonGifts);
         mockInventoryRepository.Setup(x => x.GetMaterial(It.IsAny<Materials>()));
+        mockMissionProgressionService.VerifyAll();
         if (dragon != Dragons.Puppy && dragonRels[0].Level > 4)
             mockStoryRepository.VerifyAll();
     }
@@ -301,6 +332,12 @@ public class DragonServiceTest
             .SetupGet(x => x.Dragons)
             .Returns(dragonDataList.AsQueryable().BuildMock());
 
+        UnitElement element = MasterAsset.DragonData[dragon].ElementalType;
+
+        mockMissionProgressionService.Setup(
+            x => x.OnDragonLevelUp(dragon, element, expectedLvl - 1, expectedLvl)
+        );
+
         DbPlayerMaterial mat = new DbPlayerMaterial()
         {
             DeviceAccountId = DeviceAccountId,
@@ -335,6 +372,7 @@ public class DragonServiceTest
         mat.Quantity.Should().Be(0);
 
         mockUnitRepository.VerifyAll();
+        mockMissionProgressionService.VerifyAll();
         mockInventoryRepository.VerifyAll();
     }
 
