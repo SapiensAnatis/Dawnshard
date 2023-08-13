@@ -32,6 +32,10 @@ public class WallRepository : IWallRepository
 
     public async Task InitializeWall()
     {
+        if (await IsInitialized()) {
+            return;
+        }
+
         this.logger.LogInformation("Initializing wall.");
 
         for (int element = 0; element < 5; element++)
@@ -46,6 +50,11 @@ public class WallRepository : IWallRepository
                 }
             );
         }
+    }
+
+    public async Task<bool> IsInitialized()
+    {
+        return await this.QuestWalls.CountAsync() > 0;
     }
 
     public async Task<DbPlayerQuestWall> GetQuestWall(int wallId)
