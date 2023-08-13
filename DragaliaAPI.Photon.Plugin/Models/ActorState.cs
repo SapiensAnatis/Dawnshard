@@ -19,7 +19,5 @@ namespace DragaliaAPI.Photon.Plugin.Models
         public bool Dead { get; set; }
 
         public bool Ready { get; set; }
-
-        public bool RemovedFromRedis { get; set; }
     }
 }
