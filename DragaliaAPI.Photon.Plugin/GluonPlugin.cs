@@ -58,6 +58,9 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Event information.</param>
         public override void OnCreateGame(ICreateGameCallInfo info)
         {
+            // Not 0 to allow for any outgoing GameLeave Redis requests to complete
+            info.Request.EmptyRoomLiveTime = 500;
+
             info.Request.ActorProperties.InitializeViewerId();
 
             int roomId = this.GenerateRoomId();
@@ -107,12 +110,21 @@ namespace DragaliaAPI.Photon.Plugin
             int currentActorCount = this.PluginHost.GameActors.Count(
                 x => x.ActorNr != info.ActorNr
             );
+
             if (currentActorCount >= 4)
             {
                 this.logger.WarnFormat(
                     "Player attempted to join game which already had {0} actors",
                     currentActorCount
                 );
+
+                info.Fail();
+                return;
+            }
+
+            if (!this.PluginHost.GameActors.Any(x => x.ActorNr == 1))
+            {
+                this.logger.InfoFormat("Rejecting join request -- room has no host");
 
                 info.Fail();
                 return;
@@ -152,7 +164,10 @@ namespace DragaliaAPI.Photon.Plugin
             );
 
 #if DEBUG
-            if (!actor.Properties.TryGetValue("DeactivationTime", out object deactivationTime))
+            if (
+                actor == null
+                || !actor.Properties.TryGetValue("DeactivationTime", out object deactivationTime)
+            )
                 deactivationTime = "null";
 
             this.logger.DebugFormat(
@@ -214,7 +229,7 @@ namespace DragaliaAPI.Photon.Plugin
                 new GameModifyRequest
                 {
                     GameName = this.PluginHost.GameId,
-                    Player = new Player() { ViewerId = viewerId }
+                    Player = new Player() { ActorNr = info.ActorNr, ViewerId = viewerId }
                 },
                 info,
                 true
