@@ -10,6 +10,7 @@ using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 
 namespace DragaliaAPI.Features.Quest;
 
@@ -120,7 +121,7 @@ public class QuestService(
         questEvent.WeeklyPlayCount++;
 
         int totalBonusCount = questEvent.QuestBonusReserveCount + questEvent.QuestBonusReceiveCount;
-        if (questEventData.QuestBonusCount > totalBonusCount)
+        if (questEventData.QuestBonusCount < totalBonusCount)
         {
             return Enumerable.Empty<AtgenFirstClearSet>();
         }
@@ -144,13 +145,25 @@ public class QuestService(
 
         List<Entity> drops = new();
 
+        if (
+            !MasterAsset.QuestBonusRewards.TryGetValue(
+                questId,
+                out QuestBonusReward? questBonusReward
+            )
+        )
+        {
+            logger.LogWarning("Failed to retrieve bonus rewards for quest {questId}", questId);
+            return drops;
+        }
+
         for (int i = 0; i < count; i++)
         {
-            Entity entity = new(EntityTypes.Rupies, 0, 1000);
-
-            await rewardService.GrantReward(entity);
-
-            drops.Add(entity);
+            foreach (Drop drop in questBonusReward.Bonuses)
+            {
+                Entity entity = Entity.FromDrop(drop);
+                await rewardService.GrantReward(entity);
+                drops.Add(entity);
+            }
         }
 
         return drops;
