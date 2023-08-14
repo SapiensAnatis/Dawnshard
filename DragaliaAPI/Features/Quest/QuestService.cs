@@ -121,7 +121,7 @@ public class QuestService(
         questEvent.WeeklyPlayCount++;
 
         int totalBonusCount = questEvent.QuestBonusReserveCount + questEvent.QuestBonusReceiveCount;
-        if (questEventData.QuestBonusCount < totalBonusCount)
+        if (questEventData.QuestBonusCount <= totalBonusCount)
         {
             return Enumerable.Empty<AtgenFirstClearSet>();
         }
