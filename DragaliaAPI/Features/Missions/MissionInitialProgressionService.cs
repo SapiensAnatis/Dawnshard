@@ -279,7 +279,7 @@ public class MissionInitialProgressionService(
                     .Max() ?? 0;
         }
 
-        return await unitRepository.DragonReliabilities.MaxAsync(x => x.Level);
+        return await unitRepository.DragonReliabilities.MaxAsync(x => (int?)x.Level) ?? 0;
     }
 
     private async Task<int> GetQuestClearedCount(MissionProgressionInfo requirement)
@@ -313,9 +313,10 @@ public class MissionInitialProgressionService(
     {
         return (PlusCountType)requirement.Parameter! switch
         {
-            PlusCountType.Hp => await unitRepository.Charas.Select(x => x.HpPlusCount).MaxAsync(),
+            PlusCountType.Hp
+                => await unitRepository.Charas.Select(x => (int?)x.HpPlusCount).MaxAsync() ?? 0,
             PlusCountType.Atk
-                => await unitRepository.Charas.Select(x => x.AttackPlusCount).MaxAsync(),
+                => await unitRepository.Charas.Select(x => (int?)x.AttackPlusCount).MaxAsync() ?? 0,
             _
                 => throw new DragaliaException(
                     ResultCode.CommonInvalidArgument,
@@ -329,11 +330,13 @@ public class MissionInitialProgressionService(
         return (PlusCountType)requirement.Parameter! switch
         {
             PlusCountType.Hp
-                => await abilityCrestRepository.AbilityCrests.Select(x => x.HpPlusCount).MaxAsync(),
+                => await abilityCrestRepository.AbilityCrests
+                    .Select(x => (int?)x.HpPlusCount)
+                    .MaxAsync() ?? 0,
             PlusCountType.Atk
                 => await abilityCrestRepository.AbilityCrests
-                    .Select(x => x.AttackPlusCount)
-                    .MaxAsync(),
+                    .Select(x => (int?)x.AttackPlusCount)
+                    .MaxAsync() ?? 0,
             _
                 => throw new DragaliaException(
                     ResultCode.CommonInvalidArgument,
@@ -384,8 +387,8 @@ public class MissionInitialProgressionService(
             .ToList();
 
         return await weaponRepository.WeaponBodies
-            .Where(x => validWeaponBodies.Contains(x.WeaponBodyId))
-            .SumAsync(x => x.LimitOverCount);
+                .Where(x => validWeaponBodies.Contains(x.WeaponBodyId))
+                .SumAsync(x => (int?)x.LimitOverCount) ?? 0;
     }
 
     private async Task<int> GetQuestGroupClearedCount(MissionProgressionInfo requirement)
@@ -410,7 +413,7 @@ public class MissionInitialProgressionService(
             .ToList();
 
         return await questRepository.Quests
-            .Where(x => validQuests.Contains(x.QuestId))
-            .SumAsync(x => x.PlayCount);
+                .Where(x => validQuests.Contains(x.QuestId))
+                .SumAsync(x => (int?)x.PlayCount) ?? 0;
     }
 }
