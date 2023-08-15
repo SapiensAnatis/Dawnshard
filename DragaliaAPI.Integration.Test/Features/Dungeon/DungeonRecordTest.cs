@@ -7,7 +7,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
 public class DungeonRecordTest : TestFixture
 {
@@ -24,7 +24,7 @@ public class DungeonRecordTest : TestFixture
     public async Task Record_ReturnsExpectedResponse()
     {
         int questId = 227100106;
-        await this.AddToDatabase(
+        await AddToDatabase(
             new DbQuest()
             {
                 QuestId = questId,
@@ -33,7 +33,7 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        DbPlayerUserData oldUserData = await this.ApiContext.PlayerUserData
+        DbPlayerUserData oldUserData = await ApiContext.PlayerUserData
             .AsNoTracking()
             .SingleAsync(x => x.DeviceAccountId == DeviceAccountId);
 
@@ -95,12 +95,10 @@ public class DungeonRecordTest : TestFixture
                 }
             };
 
-        string key = await this.Services
-            .GetRequiredService<IDungeonService>()
-            .StartDungeon(mockSession);
+        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await this.Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordData>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -181,7 +179,7 @@ public class DungeonRecordTest : TestFixture
         int eventId = 20816;
         int questId = 208160502; // Flames of Reflection -- The Path To Mastery: Master
 
-        await this.AddToDatabase(
+        await AddToDatabase(
             new DbQuest()
             {
                 QuestId = questId,
@@ -190,7 +188,7 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        await this.AddToDatabase(
+        await AddToDatabase(
             new DbAbilityCrest()
             {
                 DeviceAccountId = DeviceAccountId,
@@ -198,7 +196,7 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        await this.Client.PostMsgpack<MemoryEventActivateData>(
+        await Client.PostMsgpack<MemoryEventActivateData>(
             "/memory_event/activate",
             new MemoryEventActivateRequest() { event_id = eventId }
         );
@@ -221,12 +219,10 @@ public class DungeonRecordTest : TestFixture
                 }
             };
 
-        string key = await this.Services
-            .GetRequiredService<IDungeonService>()
-            .StartDungeon(mockSession);
+        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
         DungeonRecordRecordData response = (
-            await this.Client.PostMsgpack<DungeonRecordRecordData>(
+            await Client.PostMsgpack<DungeonRecordRecordData>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -273,12 +269,10 @@ public class DungeonRecordTest : TestFixture
                 }
             };
 
-        string key = await this.Services
-            .GetRequiredService<IDungeonService>()
-            .StartDungeon(mockSession);
+        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
 
-        DragaliaResponse<DungeonRecordRecordData> response = (
-            await this.Client.PostMsgpack<DungeonRecordRecordData>(
+        DragaliaResponse<DungeonRecordRecordData> response =
+            await Client.PostMsgpack<DungeonRecordRecordData>(
                 "/dungeon_record/record",
                 new DungeonRecordRecordRequest()
                 {
@@ -294,8 +288,7 @@ public class DungeonRecordTest : TestFixture
                         wave = 3
                     }
                 }
-            )
-        );
+            );
 
         response.data_headers.result_code.Should().Be(ResultCode.Success);
     }
