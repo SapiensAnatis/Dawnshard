@@ -44,7 +44,7 @@ public record Entity(
         return new AtgenDropAll(this.Id, this.Type, this.Quantity, 0, 0);
     }
 
-    public static Entity FromDrop(Drop drop)
+    public static Entity FromQuestBonusDrop(QuestBonusDrop drop)
     {
         return new Entity(Type: drop.EntityType, Id: drop.Id, Quantity: drop.Quantity);
     }

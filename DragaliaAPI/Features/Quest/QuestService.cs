@@ -121,7 +121,9 @@ public class QuestService(
         questEvent.WeeklyPlayCount++;
 
         int totalBonusCount = questEvent.QuestBonusReserveCount + questEvent.QuestBonusReceiveCount;
-        if (questEventData.QuestBonusCount <= totalBonusCount)
+        if (
+            questEventData.QuestBonusCount == 0 || questEventData.QuestBonusCount <= totalBonusCount
+        )
         {
             return Enumerable.Empty<AtgenFirstClearSet>();
         }
@@ -158,9 +160,9 @@ public class QuestService(
 
         for (int i = 0; i < count; i++)
         {
-            foreach (Drop drop in questBonusReward.Bonuses)
+            foreach (QuestBonusDrop drop in questBonusReward.Bonuses)
             {
-                Entity entity = Entity.FromDrop(drop);
+                Entity entity = Entity.FromQuestBonusDrop(drop);
                 await rewardService.GrantReward(entity);
                 drops.Add(entity);
             }
