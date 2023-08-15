@@ -222,7 +222,7 @@ public class DungeonRecordServiceTest
                     {
                         take_mana = takeMana,
                         take_player_exp = 400,
-                        take_chara_exp = 1,
+                        take_chara_exp = 0,
                         bonus_factor = 1,
                         mana_bonus_factor = 1,
                         chara_grow_record = new List<AtgenCharaGrowRecord>()
