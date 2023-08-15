@@ -3,6 +3,7 @@ using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.Shared.Requests;
 using DragaliaAPI.Photon.StateManager.Authentication;
 using DragaliaAPI.Photon.StateManager.Models;
+using MessagePack.Formatters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -90,6 +91,17 @@ public class EventController : ControllerBase
             return this.Conflict();
         }
 
+        if (game.Players.Any(x => x.ViewerId == request.Player.ViewerId))
+        {
+            this.logger.LogError(
+                "Player {@player} attempted to join game {@game} that they were already in.",
+                request.Player,
+                game
+            );
+
+            return this.Conflict();
+        }
+
         game.Players.Add(request.Player);
         await this.Games.UpdateAsync(game);
 
@@ -117,17 +129,17 @@ public class EventController : ControllerBase
         Player? toRemove = game.Players.FirstOrDefault(x => x.ViewerId == request.Player.ViewerId);
         if (toRemove is null)
         {
-            this.logger.LogError(
-                "Cannot remove player {@player} from game {@game} as they are not in it.",
+            this.logger.LogInformation(
+                "Player {@player} was not in game {@game}",
                 request.Player,
                 game
             );
 
-            return this.BadRequest();
+            return this.Ok();
         }
 
         game.Players.Remove(toRemove);
-        if (game.Players.Count == 0)
+        if (game.Players.Count == 0 || request.Player.ActorNr == 1)
         {
             // Don't remove it just yet, as Photon will request that shortly
             this.logger.LogDebug("Hiding game {@game}", game);
@@ -157,8 +169,12 @@ public class EventController : ControllerBase
 
         if (game is null)
         {
-            this.logger.LogError("Could not find game {name}", request.GameName);
-            return this.NotFound();
+            this.logger.LogInformation(
+                "Could not find game {name}. It may have already been closed.",
+                request.GameName
+            );
+
+            return this.Ok();
         }
 
         await this.Games.DeleteAsync(game);

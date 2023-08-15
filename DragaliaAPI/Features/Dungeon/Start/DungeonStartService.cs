@@ -234,7 +234,12 @@ public class DungeonStartService(
         result.continue_limit = questInfo.ContinueLimit;
 
         result.dungeon_key = await dungeonService.StartDungeon(
-            new() { QuestData = questInfo, Party = party.Where(x => x.chara_id != 0) }
+            new()
+            {
+                QuestData = questInfo,
+                Party = party.Where(x => x.chara_id != 0),
+                SupportViewerId = supportViewerId
+            }
         );
 
         result.party_info.fort_bonus_list = await bonusService.GetBonusList();

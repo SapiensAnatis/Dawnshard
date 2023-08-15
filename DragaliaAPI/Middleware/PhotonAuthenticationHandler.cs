@@ -30,14 +30,14 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        AuthenticationHeaderValue authenticationHeader;
-        try
+        if (
+            !AuthenticationHeaderValue.TryParse(
+                this.Request.Headers.Authorization,
+                out AuthenticationHeaderValue? authenticationHeader
+            )
+        )
         {
-            authenticationHeader = AuthenticationHeaderValue.Parse(Request.Headers.Authorization);
-        }
-        catch (Exception ex)
-        {
-            Logger.LogDebug("Failed to parse Authorization header: {reason}", ex.Message);
+            Logger.LogDebug("Failed to parse Authorization header.");
             return AuthenticateResult.NoResult();
         }
 
