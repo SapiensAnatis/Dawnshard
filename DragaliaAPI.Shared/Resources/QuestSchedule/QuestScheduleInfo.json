@@ -1,0 +1,5393 @@
+[
+ {
+  "_comment": "223010106 - The Alberian Battle Royale (1) - Wednesday - 2020/12/02 06:00:00 - 2030/12/18 05:59:59 - +0%",
+  "_Id": 223010106,
+  "_ScheduleGroupId": 223010101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/12/02 06:00:00",
+  "_EndDate": "2030/12/18 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "223010107 - The Alberian Battle Royale (1) - Thursday - 2020/12/02 06:00:00 - 2030/12/18 05:59:59 - +0%",
+  "_Id": 223010107,
+  "_ScheduleGroupId": 223010101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/12/02 06:00:00",
+  "_EndDate": "2030/12/18 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "223010408 - The Alberian Battle Royale (1) - Wednesday - 2021/02/10 06:00:00 - 2030/12/31 05:59:59 - +0%",
+  "_Id": 223010408,
+  "_ScheduleGroupId": 223010101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/02/10 06:00:00",
+  "_EndDate": "2030/12/31 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "223010409 - The Alberian Battle Royale (1) - Thursday - 2021/02/10 06:00:00 - 2030/12/31 05:59:59 - +0%",
+  "_Id": 223010409,
+  "_ScheduleGroupId": 223010101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/02/10 06:00:00",
+  "_EndDate": "2030/12/31 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "223010410 - The Alberian Battle Royale (1) - Sunday - 2021/02/10 06:00:00 - 2030/12/31 05:59:59 - +0%",
+  "_Id": 223010410,
+  "_ScheduleGroupId": 223010101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/02/10 06:00:00",
+  "_EndDate": "2030/12/31 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "223010411 - The Alberian Battle Royale (1) - Monday - 2021/12/24 06:00:00 - 2030/12/31 05:59:59 - +0%",
+  "_Id": 223010411,
+  "_ScheduleGroupId": 223010101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/12/24 06:00:00",
+  "_EndDate": "2030/12/31 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "223010412 - The Alberian Battle Royale (1) - Tuesday - 2021/12/24 06:00:00 - 2030/12/31 05:59:59 - +0%",
+  "_Id": 223010412,
+  "_ScheduleGroupId": 223010101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/12/24 06:00:00",
+  "_EndDate": "2030/12/31 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "223010413 - The Alberian Battle Royale (1) - Friday - 2021/12/24 06:00:00 - 2030/12/31 05:59:59 - +0%",
+  "_Id": 223010413,
+  "_ScheduleGroupId": 223010101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/12/24 06:00:00",
+  "_EndDate": "2030/12/31 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "223010414 - The Alberian Battle Royale (1) - Saturday - 2021/12/24 06:00:00 - 2030/12/31 05:59:59 - +0%",
+  "_Id": 223010414,
+  "_ScheduleGroupId": 223010101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/12/24 06:00:00",
+  "_EndDate": "2030/12/31 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010145 - Scalding Shroom Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010145,
+  "_ScheduleGroupId": 301010103,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010146 - Scalding Shroom Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010146,
+  "_ScheduleGroupId": 301010103,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010147 - Scalding Shroom Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010147,
+  "_ScheduleGroupId": 301010103,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010149 - Scalding Shroom Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010149,
+  "_ScheduleGroupId": 301010103,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010150 - Scalding Shroom Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010150,
+  "_ScheduleGroupId": 301010103,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010151 - Scalding Shroom Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010151,
+  "_ScheduleGroupId": 301010103,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010155 - Scalding Shroom Strike (1) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301010155,
+  "_ScheduleGroupId": 301010103,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301010346 - Gust Shroom Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010346,
+  "_ScheduleGroupId": 301010102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010348 - Gust Shroom Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010348,
+  "_ScheduleGroupId": 301010102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010349 - Gust Shroom Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010349,
+  "_ScheduleGroupId": 301010102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010350 - Gust Shroom Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010350,
+  "_ScheduleGroupId": 301010102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010351 - Gust Shroom Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010351,
+  "_ScheduleGroupId": 301010102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010352 - Gust Shroom Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010352,
+  "_ScheduleGroupId": 301010102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010356 - Gust Shroom Strike (1) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301010356,
+  "_ScheduleGroupId": 301010102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301010445 - Wandering Shroom Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010445,
+  "_ScheduleGroupId": 301010101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010446 - Wandering Shroom Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010446,
+  "_ScheduleGroupId": 301010101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010447 - Wandering Shroom Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010447,
+  "_ScheduleGroupId": 301010101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010448 - Wandering Shroom Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010448,
+  "_ScheduleGroupId": 301010101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010449 - Wandering Shroom Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010449,
+  "_ScheduleGroupId": 301010101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010450 - Wandering Shroom Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301010450,
+  "_ScheduleGroupId": 301010101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301010455 - Wandering Shroom Strike (1) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301010455,
+  "_ScheduleGroupId": 301010101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301020135 - Blazing Ghost Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020135,
+  "_ScheduleGroupId": 301020101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020136 - Blazing Ghost Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020136,
+  "_ScheduleGroupId": 301020101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020137 - Blazing Ghost Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020137,
+  "_ScheduleGroupId": 301020101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020138 - Blazing Ghost Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020138,
+  "_ScheduleGroupId": 301020101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020139 - Blazing Ghost Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020139,
+  "_ScheduleGroupId": 301020101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020140 - Blazing Ghost Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020140,
+  "_ScheduleGroupId": 301020101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020146 - Blazing Ghost Strike (1) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301020146,
+  "_ScheduleGroupId": 301020101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301020244 - Cerulean Ghost Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020244,
+  "_ScheduleGroupId": 301020104,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020245 - Cerulean Ghost Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020245,
+  "_ScheduleGroupId": 301020104,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020246 - Cerulean Ghost Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020246,
+  "_ScheduleGroupId": 301020104,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020247 - Cerulean Ghost Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020247,
+  "_ScheduleGroupId": 301020104,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020249 - Cerulean Ghost Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020249,
+  "_ScheduleGroupId": 301020104,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020250 - Cerulean Ghost Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020250,
+  "_ScheduleGroupId": 301020104,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020258 - Cerulean Ghost Strike (1) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301020258,
+  "_ScheduleGroupId": 301020104,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301020438 - Lambent Ghost Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020438,
+  "_ScheduleGroupId": 301020103,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020439 - Lambent Ghost Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020439,
+  "_ScheduleGroupId": 301020103,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020441 - Lambent Ghost Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020441,
+  "_ScheduleGroupId": 301020103,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020442 - Lambent Ghost Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020442,
+  "_ScheduleGroupId": 301020103,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020443 - Lambent Ghost Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020443,
+  "_ScheduleGroupId": 301020103,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020444 - Lambent Ghost Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020444,
+  "_ScheduleGroupId": 301020103,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020452 - Lambent Ghost Strike (1) - Wednesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301020452,
+  "_ScheduleGroupId": 301020103,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301020533 - Violet Ghost Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020533,
+  "_ScheduleGroupId": 301020102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020534 - Violet Ghost Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020534,
+  "_ScheduleGroupId": 301020102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020535 - Violet Ghost Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020535,
+  "_ScheduleGroupId": 301020102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020536 - Violet Ghost Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020536,
+  "_ScheduleGroupId": 301020102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020537 - Violet Ghost Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020537,
+  "_ScheduleGroupId": 301020102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020539 - Violet Ghost Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301020539,
+  "_ScheduleGroupId": 301020102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301020543 - Violet Ghost Strike (1) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301020543,
+  "_ScheduleGroupId": 301020102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301030244 - Frost Hermit Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301030244,
+  "_ScheduleGroupId": 301030101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301030246 - Frost Hermit Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301030246,
+  "_ScheduleGroupId": 301030101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301030247 - Frost Hermit Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301030247,
+  "_ScheduleGroupId": 301030101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301030248 - Frost Hermit Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301030248,
+  "_ScheduleGroupId": 301030101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301030249 - Frost Hermit Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301030249,
+  "_ScheduleGroupId": 301030101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301030250 - Frost Hermit Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301030250,
+  "_ScheduleGroupId": 301030101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301030256 - Frost Hermit Strike (1) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301030256,
+  "_ScheduleGroupId": 301030101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301030533 - Twilight Hermit Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301030533,
+  "_ScheduleGroupId": 301030102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301030534 - Twilight Hermit Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301030534,
+  "_ScheduleGroupId": 301030102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301030535 - Twilight Hermit Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301030535,
+  "_ScheduleGroupId": 301030102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301030537 - Twilight Hermit Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301030537,
+  "_ScheduleGroupId": 301030102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301030538 - Twilight Hermit Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301030538,
+  "_ScheduleGroupId": 301030102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301030539 - Twilight Hermit Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301030539,
+  "_ScheduleGroupId": 301030102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301030547 - Twilight Hermit Strike (1) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301030547,
+  "_ScheduleGroupId": 301030102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301040133 - Steel Golem Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040133,
+  "_ScheduleGroupId": 301040101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040134 - Steel Golem Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040134,
+  "_ScheduleGroupId": 301040101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040136 - Steel Golem Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040136,
+  "_ScheduleGroupId": 301040101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040137 - Steel Golem Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040137,
+  "_ScheduleGroupId": 301040101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040138 - Steel Golem Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040138,
+  "_ScheduleGroupId": 301040101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040139 - Steel Golem Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040139,
+  "_ScheduleGroupId": 301040101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040143 - Steel Golem Strike (1) - Wednesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301040143,
+  "_ScheduleGroupId": 301040101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301040435 - Amber Golem Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040435,
+  "_ScheduleGroupId": 301040103,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040436 - Amber Golem Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040436,
+  "_ScheduleGroupId": 301040103,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040437 - Amber Golem Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040437,
+  "_ScheduleGroupId": 301040103,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040438 - Amber Golem Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040438,
+  "_ScheduleGroupId": 301040103,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040439 - Amber Golem Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040439,
+  "_ScheduleGroupId": 301040103,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040440 - Amber Golem Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040440,
+  "_ScheduleGroupId": 301040103,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040444 - Amber Golem Strike (1) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301040444,
+  "_ScheduleGroupId": 301040103,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301040533 - Obsidian Golem Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040533,
+  "_ScheduleGroupId": 301040102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040534 - Obsidian Golem Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040534,
+  "_ScheduleGroupId": 301040102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040535 - Obsidian Golem Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040535,
+  "_ScheduleGroupId": 301040102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040536 - Obsidian Golem Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040536,
+  "_ScheduleGroupId": 301040102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040537 - Obsidian Golem Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040537,
+  "_ScheduleGroupId": 301040102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040538 - Obsidian Golem Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301040538,
+  "_ScheduleGroupId": 301040102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301040543 - Obsidian Golem Strike (1) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301040543,
+  "_ScheduleGroupId": 301040102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301050138 - Catoblepas Fotia Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050138,
+  "_ScheduleGroupId": 301050102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050139 - Catoblepas Fotia Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050139,
+  "_ScheduleGroupId": 301050102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050140 - Catoblepas Fotia Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050140,
+  "_ScheduleGroupId": 301050102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050141 - Catoblepas Fotia Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050141,
+  "_ScheduleGroupId": 301050102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050142 - Catoblepas Fotia Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050142,
+  "_ScheduleGroupId": 301050102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050143 - Catoblepas Fotia Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050143,
+  "_ScheduleGroupId": 301050102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050148 - Catoblepas Fotia Strike (1) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301050148,
+  "_ScheduleGroupId": 301050102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301050333 - Catoblepas Anemos Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050333,
+  "_ScheduleGroupId": 301050101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050334 - Catoblepas Anemos Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050334,
+  "_ScheduleGroupId": 301050101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050335 - Catoblepas Anemos Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050335,
+  "_ScheduleGroupId": 301050101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050336 - Catoblepas Anemos Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050336,
+  "_ScheduleGroupId": 301050101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050338 - Catoblepas Anemos Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050338,
+  "_ScheduleGroupId": 301050101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050339 - Catoblepas Anemos Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050339,
+  "_ScheduleGroupId": 301050101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050343 - Catoblepas Anemos Strike (1) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301050343,
+  "_ScheduleGroupId": 301050101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301050535 - Catoblepas Skia Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050535,
+  "_ScheduleGroupId": 301050103,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050536 - Catoblepas Skia Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050536,
+  "_ScheduleGroupId": 301050103,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050538 - Catoblepas Skia Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050538,
+  "_ScheduleGroupId": 301050103,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050539 - Catoblepas Skia Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050539,
+  "_ScheduleGroupId": 301050103,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050540 - Catoblepas Skia Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050540,
+  "_ScheduleGroupId": 301050103,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050541 - Catoblepas Skia Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301050541,
+  "_ScheduleGroupId": 301050103,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301050545 - Catoblepas Skia Strike (1) - Wednesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301050545,
+  "_ScheduleGroupId": 301050103,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301060139 - Infernal Phantom Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060139,
+  "_ScheduleGroupId": 301060102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060141 - Infernal Phantom Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060141,
+  "_ScheduleGroupId": 301060102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060142 - Infernal Phantom Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060142,
+  "_ScheduleGroupId": 301060102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060143 - Infernal Phantom Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060143,
+  "_ScheduleGroupId": 301060102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060144 - Infernal Phantom Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060144,
+  "_ScheduleGroupId": 301060102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060145 - Infernal Phantom Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060145,
+  "_ScheduleGroupId": 301060102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060154 - Infernal Phantom Strike (1) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301060154,
+  "_ScheduleGroupId": 301060102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301060334 - Eolian Phantom Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060334,
+  "_ScheduleGroupId": 301060101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060335 - Eolian Phantom Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060335,
+  "_ScheduleGroupId": 301060101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060336 - Eolian Phantom Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060336,
+  "_ScheduleGroupId": 301060101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060337 - Eolian Phantom Strike (1) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060337,
+  "_ScheduleGroupId": 301060101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060338 - Eolian Phantom Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060338,
+  "_ScheduleGroupId": 301060101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060340 - Eolian Phantom Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060340,
+  "_ScheduleGroupId": 301060101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060344 - Eolian Phantom Strike (1) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301060344,
+  "_ScheduleGroupId": 301060101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301060235 - Abyssal Phantom Strike (1) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060235,
+  "_ScheduleGroupId": 301060103,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060236 - Abyssal Phantom Strike (1) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060236,
+  "_ScheduleGroupId": 301060103,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060237 - Abyssal Phantom Strike (1) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060237,
+  "_ScheduleGroupId": 301060103,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060239 - Abyssal Phantom Strike (1) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060239,
+  "_ScheduleGroupId": 301060103,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060240 - Abyssal Phantom Strike (1) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060240,
+  "_ScheduleGroupId": 301060103,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060241 - Abyssal Phantom Strike (1) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301060241,
+  "_ScheduleGroupId": 301060103,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301060245 - Abyssal Phantom Strike (1) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301060245,
+  "_ScheduleGroupId": 301060103,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301070158 - Smoldering Manticore Strike (1) - Monday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070158,
+  "_ScheduleGroupId": 301070103,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070159 - Smoldering Manticore Strike (1) - Tuesday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070159,
+  "_ScheduleGroupId": 301070103,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070160 - Smoldering Manticore Strike (1) - Wednesday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070160,
+  "_ScheduleGroupId": 301070103,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070161 - Smoldering Manticore Strike (1) - Thursday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070161,
+  "_ScheduleGroupId": 301070103,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070163 - Smoldering Manticore Strike (1) - Saturday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070163,
+  "_ScheduleGroupId": 301070103,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070164 - Smoldering Manticore Strike (1) - Sunday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070164,
+  "_ScheduleGroupId": 301070103,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070168 - Smoldering Manticore Strike (1) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301070168,
+  "_ScheduleGroupId": 301070103,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301070253 - Greedy Manticore Strike (1) - Monday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070253,
+  "_ScheduleGroupId": 301070102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070254 - Greedy Manticore Strike (1) - Tuesday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070254,
+  "_ScheduleGroupId": 301070102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070256 - Greedy Manticore Strike (1) - Thursday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070256,
+  "_ScheduleGroupId": 301070102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070257 - Greedy Manticore Strike (1) - Friday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070257,
+  "_ScheduleGroupId": 301070102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070258 - Greedy Manticore Strike (1) - Saturday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070258,
+  "_ScheduleGroupId": 301070102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070259 - Greedy Manticore Strike (1) - Sunday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070259,
+  "_ScheduleGroupId": 301070102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070263 - Greedy Manticore Strike (1) - Wednesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301070263,
+  "_ScheduleGroupId": 301070102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301070453 - Proud Manticore Strike (1) - Monday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070453,
+  "_ScheduleGroupId": 301070104,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070454 - Proud Manticore Strike (1) - Tuesday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070454,
+  "_ScheduleGroupId": 301070104,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070455 - Proud Manticore Strike (1) - Wednesday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070455,
+  "_ScheduleGroupId": 301070104,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070456 - Proud Manticore Strike (1) - Thursday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070456,
+  "_ScheduleGroupId": 301070104,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070457 - Proud Manticore Strike (1) - Friday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070457,
+  "_ScheduleGroupId": 301070104,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070459 - Proud Manticore Strike (1) - Sunday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070459,
+  "_ScheduleGroupId": 301070104,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070463 - Proud Manticore Strike (1) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301070463,
+  "_ScheduleGroupId": 301070104,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "301070553 - Raging Manticore Strike (1) - Tuesday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070553,
+  "_ScheduleGroupId": 301070101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070554 - Raging Manticore Strike (1) - Wednesday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070554,
+  "_ScheduleGroupId": 301070101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070555 - Raging Manticore Strike (1) - Thursday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070555,
+  "_ScheduleGroupId": 301070101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070556 - Raging Manticore Strike (1) - Friday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070556,
+  "_ScheduleGroupId": 301070101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070557 - Raging Manticore Strike (1) - Saturday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070557,
+  "_ScheduleGroupId": 301070101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070558 - Raging Manticore Strike (1) - Sunday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 301070558,
+  "_ScheduleGroupId": 301070101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "301070562 - Raging Manticore Strike (1) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 301070562,
+  "_ScheduleGroupId": 301070101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300040331 - Void Zephyr Strike: Standard (3) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040331,
+  "_ScheduleGroupId": 300040101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040332 - Void Zephyr Strike: Expert (3) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040332,
+  "_ScheduleGroupId": 300040102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120235 - Void Poseidon Strike: Standard (3) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120235,
+  "_ScheduleGroupId": 300120101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120236 - Void Poseidon Strike: Expert (3) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120236,
+  "_ScheduleGroupId": 300120102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130431 - Void Jeanne d'Arc Strike: Standard (3) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130431,
+  "_ScheduleGroupId": 300130101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130432 - Void Jeanne d'Arc Strike: Expert (3) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130432,
+  "_ScheduleGroupId": 300130102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180534 - Void Nidhogg Strike: Standard (3) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300180534,
+  "_ScheduleGroupId": 300180101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300180535 - Void Nidhogg Strike: Expert (3) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300180535,
+  "_ScheduleGroupId": 300180102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300180536 - Void Nidhogg Strike: Standard (2) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300180536,
+  "_ScheduleGroupId": 300181101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300180537 - Void Nidhogg Strike: Expert (2) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300180537,
+  "_ScheduleGroupId": 300181102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300080133 - Void Agni Strike: Standard (3) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080133,
+  "_ScheduleGroupId": 300080101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080134 - Void Agni Strike: Expert (3) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080134,
+  "_ScheduleGroupId": 300080102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040337 - Void Zephyr Strike: Standard (2) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040337,
+  "_ScheduleGroupId": 300041101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040338 - Void Zephyr Strike: Expert (2) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040338,
+  "_ScheduleGroupId": 300041102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120241 - Void Poseidon Strike: Standard (2) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120241,
+  "_ScheduleGroupId": 300121101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120242 - Void Poseidon Strike: Expert (2) - Friday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120242,
+  "_ScheduleGroupId": 300121102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130437 - Void Jeanne d'Arc Strike: Standard (2) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130437,
+  "_ScheduleGroupId": 300131101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130438 - Void Jeanne d'Arc Strike: Expert (2) - Monday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130438,
+  "_ScheduleGroupId": 300131102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180542 - Void Nidhogg Strike: Standard (3) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300180542,
+  "_ScheduleGroupId": 300180101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300180543 - Void Nidhogg Strike: Expert (3) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300180543,
+  "_ScheduleGroupId": 300180102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300180544 - Void Nidhogg Strike: Standard (2) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300180544,
+  "_ScheduleGroupId": 300181101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300080139 - Void Agni Strike: Standard (2) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080139,
+  "_ScheduleGroupId": 300081101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080140 - Void Agni Strike: Expert (2) - Tuesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080140,
+  "_ScheduleGroupId": 300081102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180545 - Void Nidhogg Strike: Expert (2) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300180545,
+  "_ScheduleGroupId": 300181102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300180553 - Void Nidhogg Strike: Standard (3) - Saturday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180553,
+  "_ScheduleGroupId": 300180101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180554 - Void Nidhogg Strike: Expert (3) - Saturday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180554,
+  "_ScheduleGroupId": 300180102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180559 - Void Nidhogg Strike: Standard (2) - Saturday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180559,
+  "_ScheduleGroupId": 300181101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180560 - Void Nidhogg Strike: Expert (2) - Saturday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180560,
+  "_ScheduleGroupId": 300181102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120290 - Void Poseidon Strike: Standard (3) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300120290,
+  "_ScheduleGroupId": 300120101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300120291 - Void Poseidon Strike: Expert (3) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300120291,
+  "_ScheduleGroupId": 300120102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300120292 - Void Poseidon Strike: Standard (2) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300120292,
+  "_ScheduleGroupId": 300121101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300120293 - Void Poseidon Strike: Expert (2) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300120293,
+  "_ScheduleGroupId": 300121102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300120298 - Void Poseidon Strike: Standard (3) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300120298,
+  "_ScheduleGroupId": 300120101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300120299 - Void Poseidon Strike: Expert (3) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300120299,
+  "_ScheduleGroupId": 300120102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300120221 - Void Poseidon Strike: Standard (2) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300120221,
+  "_ScheduleGroupId": 300121101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300120222 - Void Poseidon Strike: Expert (2) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300120222,
+  "_ScheduleGroupId": 300121102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300130481 - Void Jeanne d'Arc Strike: Standard (3) - Wednesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300130481,
+  "_ScheduleGroupId": 300130101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300130482 - Void Jeanne d'Arc Strike: Expert (3) - Wednesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300130482,
+  "_ScheduleGroupId": 300130102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300130483 - Void Jeanne d'Arc Strike: Standard (2) - Wednesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300130483,
+  "_ScheduleGroupId": 300131101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300130484 - Void Jeanne d'Arc Strike: Expert (2) - Wednesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300130484,
+  "_ScheduleGroupId": 300131102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300130489 - Void Jeanne d'Arc Strike: Standard (3) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300130489,
+  "_ScheduleGroupId": 300130101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300130490 - Void Jeanne d'Arc Strike: Expert (3) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300130490,
+  "_ScheduleGroupId": 300130102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300130491 - Void Jeanne d'Arc Strike: Standard (2) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300130491,
+  "_ScheduleGroupId": 300131101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300130492 - Void Jeanne d'Arc Strike: Expert (2) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300130492,
+  "_ScheduleGroupId": 300131102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300080181 - Void Agni Strike: Standard (3) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300080181,
+  "_ScheduleGroupId": 300080101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300080182 - Void Agni Strike: Expert (3) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300080182,
+  "_ScheduleGroupId": 300080102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300080183 - Void Agni Strike: Standard (2) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300080183,
+  "_ScheduleGroupId": 300081101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300080184 - Void Agni Strike: Expert (2) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300080184,
+  "_ScheduleGroupId": 300081102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300080189 - Void Agni Strike: Standard (3) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300080189,
+  "_ScheduleGroupId": 300080101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300080190 - Void Agni Strike: Expert (3) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300080190,
+  "_ScheduleGroupId": 300080102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300080191 - Void Agni Strike: Standard (2) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300080191,
+  "_ScheduleGroupId": 300081101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300080192 - Void Agni Strike: Expert (2) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300080192,
+  "_ScheduleGroupId": 300081102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300040380 - Void Zephyr Strike: Standard (3) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300040380,
+  "_ScheduleGroupId": 300040101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300040381 - Void Zephyr Strike: Expert (3) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300040381,
+  "_ScheduleGroupId": 300040102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300040382 - Void Zephyr Strike: Standard (2) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300040382,
+  "_ScheduleGroupId": 300041101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300040383 - Void Zephyr Strike: Expert (2) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300040383,
+  "_ScheduleGroupId": 300041102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300040388 - Void Zephyr Strike: Standard (3) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300040388,
+  "_ScheduleGroupId": 300040101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300040389 - Void Zephyr Strike: Expert (3) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300040389,
+  "_ScheduleGroupId": 300040102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300040390 - Void Zephyr Strike: Standard (2) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300040390,
+  "_ScheduleGroupId": 300041101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300040391 - Void Zephyr Strike: Expert (2) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300040391,
+  "_ScheduleGroupId": 300041102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300040301 - Void Zephyr Strike: Standard (3) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040301,
+  "_ScheduleGroupId": 300040101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040302 - Void Zephyr Strike: Expert (3) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040302,
+  "_ScheduleGroupId": 300040102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040303 - Void Zephyr Strike: Standard (2) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040303,
+  "_ScheduleGroupId": 300041101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040304 - Void Zephyr Strike: Expert (2) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040304,
+  "_ScheduleGroupId": 300041102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040305 - Void Zephyr Strike: Standard (3) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040305,
+  "_ScheduleGroupId": 300040101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040306 - Void Zephyr Strike: Expert (3) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040306,
+  "_ScheduleGroupId": 300040102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040307 - Void Zephyr Strike: Standard (2) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040307,
+  "_ScheduleGroupId": 300041101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040308 - Void Zephyr Strike: Expert (2) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040308,
+  "_ScheduleGroupId": 300041102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040309 - Void Zephyr Strike: Standard (3) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040309,
+  "_ScheduleGroupId": 300040101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040310 - Void Zephyr Strike: Expert (3) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040310,
+  "_ScheduleGroupId": 300040102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040311 - Void Zephyr Strike: Standard (2) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040311,
+  "_ScheduleGroupId": 300041101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040312 - Void Zephyr Strike: Expert (2) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040312,
+  "_ScheduleGroupId": 300041102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040313 - Void Zephyr Strike: Standard (3) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040313,
+  "_ScheduleGroupId": 300040101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040314 - Void Zephyr Strike: Expert (3) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040314,
+  "_ScheduleGroupId": 300040102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040315 - Void Zephyr Strike: Standard (2) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040315,
+  "_ScheduleGroupId": 300041101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300040316 - Void Zephyr Strike: Expert (2) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300040316,
+  "_ScheduleGroupId": 300041102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120201 - Void Poseidon Strike: Standard (3) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120201,
+  "_ScheduleGroupId": 300120101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120202 - Void Poseidon Strike: Expert (3) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120202,
+  "_ScheduleGroupId": 300120102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120203 - Void Poseidon Strike: Standard (2) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120203,
+  "_ScheduleGroupId": 300121101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120204 - Void Poseidon Strike: Expert (2) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120204,
+  "_ScheduleGroupId": 300121102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120205 - Void Poseidon Strike: Standard (3) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120205,
+  "_ScheduleGroupId": 300120101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120206 - Void Poseidon Strike: Expert (3) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120206,
+  "_ScheduleGroupId": 300120102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120207 - Void Poseidon Strike: Standard (2) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120207,
+  "_ScheduleGroupId": 300121101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120208 - Void Poseidon Strike: Expert (2) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120208,
+  "_ScheduleGroupId": 300121102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120209 - Void Poseidon Strike: Standard (3) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120209,
+  "_ScheduleGroupId": 300120101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120210 - Void Poseidon Strike: Expert (3) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120210,
+  "_ScheduleGroupId": 300120102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120211 - Void Poseidon Strike: Standard (2) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120211,
+  "_ScheduleGroupId": 300121101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120212 - Void Poseidon Strike: Expert (2) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120212,
+  "_ScheduleGroupId": 300121102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120213 - Void Poseidon Strike: Standard (3) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120213,
+  "_ScheduleGroupId": 300120101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120214 - Void Poseidon Strike: Expert (3) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120214,
+  "_ScheduleGroupId": 300120102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120215 - Void Poseidon Strike: Standard (2) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120215,
+  "_ScheduleGroupId": 300121101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300120216 - Void Poseidon Strike: Expert (2) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300120216,
+  "_ScheduleGroupId": 300121102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130401 - Void Jeanne d'Arc Strike: Standard (3) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130401,
+  "_ScheduleGroupId": 300130101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130402 - Void Jeanne d'Arc Strike: Expert (3) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130402,
+  "_ScheduleGroupId": 300130102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130403 - Void Jeanne d'Arc Strike: Standard (2) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130403,
+  "_ScheduleGroupId": 300131101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130404 - Void Jeanne d'Arc Strike: Expert (2) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130404,
+  "_ScheduleGroupId": 300131102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130405 - Void Jeanne d'Arc Strike: Standard (3) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130405,
+  "_ScheduleGroupId": 300130101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130406 - Void Jeanne d'Arc Strike: Expert (3) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130406,
+  "_ScheduleGroupId": 300130102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130407 - Void Jeanne d'Arc Strike: Standard (2) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130407,
+  "_ScheduleGroupId": 300131101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130408 - Void Jeanne d'Arc Strike: Expert (2) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130408,
+  "_ScheduleGroupId": 300131102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130409 - Void Jeanne d'Arc Strike: Standard (3) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130409,
+  "_ScheduleGroupId": 300130101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130410 - Void Jeanne d'Arc Strike: Expert (3) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130410,
+  "_ScheduleGroupId": 300130102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130411 - Void Jeanne d'Arc Strike: Standard (2) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130411,
+  "_ScheduleGroupId": 300131101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130412 - Void Jeanne d'Arc Strike: Expert (2) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130412,
+  "_ScheduleGroupId": 300131102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130413 - Void Jeanne d'Arc Strike: Standard (3) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130413,
+  "_ScheduleGroupId": 300130101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130414 - Void Jeanne d'Arc Strike: Expert (3) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130414,
+  "_ScheduleGroupId": 300130102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130415 - Void Jeanne d'Arc Strike: Standard (2) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130415,
+  "_ScheduleGroupId": 300131101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300130416 - Void Jeanne d'Arc Strike: Expert (2) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300130416,
+  "_ScheduleGroupId": 300131102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180501 - Void Nidhogg Strike: Standard (3) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180501,
+  "_ScheduleGroupId": 300180101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180502 - Void Nidhogg Strike: Expert (3) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180502,
+  "_ScheduleGroupId": 300180102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180503 - Void Nidhogg Strike: Standard (2) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180503,
+  "_ScheduleGroupId": 300181101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180504 - Void Nidhogg Strike: Expert (2) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180504,
+  "_ScheduleGroupId": 300181102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180505 - Void Nidhogg Strike: Standard (3) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180505,
+  "_ScheduleGroupId": 300180101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180506 - Void Nidhogg Strike: Expert (3) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180506,
+  "_ScheduleGroupId": 300180102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180507 - Void Nidhogg Strike: Standard (2) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180507,
+  "_ScheduleGroupId": 300181101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180508 - Void Nidhogg Strike: Expert (2) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180508,
+  "_ScheduleGroupId": 300181102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180509 - Void Nidhogg Strike: Standard (3) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180509,
+  "_ScheduleGroupId": 300180101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180510 - Void Nidhogg Strike: Expert (3) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180510,
+  "_ScheduleGroupId": 300180102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180511 - Void Nidhogg Strike: Standard (2) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180511,
+  "_ScheduleGroupId": 300181101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180512 - Void Nidhogg Strike: Expert (2) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180512,
+  "_ScheduleGroupId": 300181102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180513 - Void Nidhogg Strike: Standard (3) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180513,
+  "_ScheduleGroupId": 300180101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180514 - Void Nidhogg Strike: Expert (3) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180514,
+  "_ScheduleGroupId": 300180102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180515 - Void Nidhogg Strike: Standard (2) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180515,
+  "_ScheduleGroupId": 300181101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300180516 - Void Nidhogg Strike: Expert (2) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300180516,
+  "_ScheduleGroupId": 300181102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080101 - Void Agni Strike: Standard (3) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080101,
+  "_ScheduleGroupId": 300080101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080102 - Void Agni Strike: Expert (3) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080102,
+  "_ScheduleGroupId": 300080102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080103 - Void Agni Strike: Standard (2) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080103,
+  "_ScheduleGroupId": 300081101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080104 - Void Agni Strike: Expert (2) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080104,
+  "_ScheduleGroupId": 300081102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080105 - Void Agni Strike: Standard (3) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080105,
+  "_ScheduleGroupId": 300080101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080106 - Void Agni Strike: Expert (3) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080106,
+  "_ScheduleGroupId": 300080102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080107 - Void Agni Strike: Standard (2) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080107,
+  "_ScheduleGroupId": 300081101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080108 - Void Agni Strike: Expert (2) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080108,
+  "_ScheduleGroupId": 300081102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080109 - Void Agni Strike: Standard (3) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080109,
+  "_ScheduleGroupId": 300080101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080110 - Void Agni Strike: Expert (3) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080110,
+  "_ScheduleGroupId": 300080102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080111 - Void Agni Strike: Standard (2) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080111,
+  "_ScheduleGroupId": 300081101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080112 - Void Agni Strike: Expert (2) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080112,
+  "_ScheduleGroupId": 300081102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080113 - Void Agni Strike: Standard (3) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080113,
+  "_ScheduleGroupId": 300080101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080114 - Void Agni Strike: Expert (3) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080114,
+  "_ScheduleGroupId": 300080102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080115 - Void Agni Strike: Standard (2) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080115,
+  "_ScheduleGroupId": 300081101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300080116 - Void Agni Strike: Expert (2) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300080116,
+  "_ScheduleGroupId": 300081102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220135 - Volcanic Chimera Strike: Standard (3) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220135,
+  "_ScheduleGroupId": 300220101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220136 - Volcanic Chimera Strike: Expert (3) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220136,
+  "_ScheduleGroupId": 300220102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310223 - Tidal Chimera Strike: Standard (3) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310223,
+  "_ScheduleGroupId": 300310101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310224 - Tidal Chimera Strike: Expert (3) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310224,
+  "_ScheduleGroupId": 300310102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280337 - Tempest Chimera Strike: Standard (3) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280337,
+  "_ScheduleGroupId": 300280101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280338 - Tempest Chimera Strike: Expert (3) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280338,
+  "_ScheduleGroupId": 300280102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240537 - Ebon Chimera Strike: Standard (3) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240537,
+  "_ScheduleGroupId": 300240101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240538 - Ebon Chimera Strike: Expert (3) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240538,
+  "_ScheduleGroupId": 300240102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220141 - Volcanic Chimera Strike: Standard (2) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220141,
+  "_ScheduleGroupId": 300221101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220142 - Volcanic Chimera Strike: Expert (2) - Wednesday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220142,
+  "_ScheduleGroupId": 300221102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310229 - Tidal Chimera Strike: Standard (2) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310229,
+  "_ScheduleGroupId": 300311101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310230 - Tidal Chimera Strike: Expert (2) - Saturday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310230,
+  "_ScheduleGroupId": 300311102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280343 - Tempest Chimera Strike: Standard (2) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280343,
+  "_ScheduleGroupId": 300281101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280344 - Tempest Chimera Strike: Expert (2) - Thursday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280344,
+  "_ScheduleGroupId": 300281102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240543 - Ebon Chimera Strike: Standard (2) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240543,
+  "_ScheduleGroupId": 300241101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240544 - Ebon Chimera Strike: Expert (2) - Sunday - 2020/08/24 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240544,
+  "_ScheduleGroupId": 300241102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/08/24 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320431 - Luminous Chimera Strike: Standard (3) - Sunday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320431,
+  "_ScheduleGroupId": 300320101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320432 - Luminous Chimera Strike: Expert (3) - Sunday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320432,
+  "_ScheduleGroupId": 300320102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320437 - Luminous Chimera Strike: Standard (2) - Sunday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320437,
+  "_ScheduleGroupId": 300321101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320438 - Luminous Chimera Strike: Expert (2) - Sunday - 2020/10/12 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320438,
+  "_ScheduleGroupId": 300321102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2020/10/12 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320471 - Luminous Chimera Strike: Standard (3) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300320471,
+  "_ScheduleGroupId": 300320101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300320472 - Luminous Chimera Strike: Expert (3) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300320472,
+  "_ScheduleGroupId": 300320102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300320473 - Luminous Chimera Strike: Standard (3) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300320473,
+  "_ScheduleGroupId": 300320101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300320474 - Luminous Chimera Strike: Expert (3) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300320474,
+  "_ScheduleGroupId": 300320102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300320475 - Luminous Chimera Strike: Standard (2) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300320475,
+  "_ScheduleGroupId": 300321101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300320476 - Luminous Chimera Strike: Expert (2) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300320476,
+  "_ScheduleGroupId": 300321102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300320477 - Luminous Chimera Strike: Standard (2) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300320477,
+  "_ScheduleGroupId": 300321101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300320478 - Luminous Chimera Strike: Expert (2) - Thursday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300320478,
+  "_ScheduleGroupId": 300321102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300220187 - Volcanic Chimera Strike: Standard (2) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300220187,
+  "_ScheduleGroupId": 300221101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300220188 - Volcanic Chimera Strike: Expert (2) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300220188,
+  "_ScheduleGroupId": 300221102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300220189 - Volcanic Chimera Strike: Standard (2) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300220189,
+  "_ScheduleGroupId": 300221101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300220190 - Volcanic Chimera Strike: Expert (2) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300220190,
+  "_ScheduleGroupId": 300221102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300220191 - Volcanic Chimera Strike: Standard (3) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300220191,
+  "_ScheduleGroupId": 300220101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300220192 - Volcanic Chimera Strike: Expert (3) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300220192,
+  "_ScheduleGroupId": 300220102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300220193 - Volcanic Chimera Strike: Standard (3) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300220193,
+  "_ScheduleGroupId": 300220101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300220194 - Volcanic Chimera Strike: Expert (3) - Sunday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300220194,
+  "_ScheduleGroupId": 300220102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300310267 - Tidal Chimera Strike: Standard (2) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300310267,
+  "_ScheduleGroupId": 300311101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300310268 - Tidal Chimera Strike: Expert (2) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300310268,
+  "_ScheduleGroupId": 300311102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300310269 - Tidal Chimera Strike: Standard (2) - Wednesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300310269,
+  "_ScheduleGroupId": 300311101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300310270 - Tidal Chimera Strike: Expert (2) - Wednesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300310270,
+  "_ScheduleGroupId": 300311102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300310275 - Tidal Chimera Strike: Standard (3) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300310275,
+  "_ScheduleGroupId": 300310101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300310276 - Tidal Chimera Strike: Expert (3) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300310276,
+  "_ScheduleGroupId": 300310102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300310277 - Tidal Chimera Strike: Standard (3) - Wednesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300310277,
+  "_ScheduleGroupId": 300310101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300310278 - Tidal Chimera Strike: Expert (3) - Wednesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300310278,
+  "_ScheduleGroupId": 300310102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300280387 - Tempest Chimera Strike: Standard (3) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300280387,
+  "_ScheduleGroupId": 300280101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300280388 - Tempest Chimera Strike: Expert (3) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300280388,
+  "_ScheduleGroupId": 300280102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300280389 - Tempest Chimera Strike: Standard (3) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300280389,
+  "_ScheduleGroupId": 300280101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300280390 - Tempest Chimera Strike: Expert (3) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300280390,
+  "_ScheduleGroupId": 300280102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300280391 - Tempest Chimera Strike: Standard (2) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300280391,
+  "_ScheduleGroupId": 300281101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300280392 - Tempest Chimera Strike: Expert (2) - Monday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300280392,
+  "_ScheduleGroupId": 300281102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300280393 - Tempest Chimera Strike: Standard (2) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300280393,
+  "_ScheduleGroupId": 300281101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300280394 - Tempest Chimera Strike: Expert (2) - Saturday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300280394,
+  "_ScheduleGroupId": 300281102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300240585 - Ebon Chimera Strike: Standard (3) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300240585,
+  "_ScheduleGroupId": 300240101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300240586 - Ebon Chimera Strike: Expert (3) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300240586,
+  "_ScheduleGroupId": 300240102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300240587 - Ebon Chimera Strike: Standard (3) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300240587,
+  "_ScheduleGroupId": 300240101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300240588 - Ebon Chimera Strike: Expert (3) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300240588,
+  "_ScheduleGroupId": 300240102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300240589 - Ebon Chimera Strike: Standard (2) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300240589,
+  "_ScheduleGroupId": 300241101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300240590 - Ebon Chimera Strike: Expert (2) - Tuesday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300240590,
+  "_ScheduleGroupId": 300241102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300240591 - Ebon Chimera Strike: Standard (2) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300240591,
+  "_ScheduleGroupId": 300241101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300240592 - Ebon Chimera Strike: Expert (2) - Friday - 2021/07/19 06:00:00 - 2030/08/24 05:59:59 - +100%",
+  "_Id": 300240592,
+  "_ScheduleGroupId": 300241102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/07/19 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 100
+ },
+ {
+  "_comment": "300220101 - Volcanic Chimera Strike: Standard (3) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220101,
+  "_ScheduleGroupId": 300220101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220102 - Volcanic Chimera Strike: Expert (3) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220102,
+  "_ScheduleGroupId": 300220102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220103 - Volcanic Chimera Strike: Standard (2) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220103,
+  "_ScheduleGroupId": 300221101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220104 - Volcanic Chimera Strike: Expert (2) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220104,
+  "_ScheduleGroupId": 300221102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220105 - Volcanic Chimera Strike: Standard (3) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220105,
+  "_ScheduleGroupId": 300220101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220106 - Volcanic Chimera Strike: Expert (3) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220106,
+  "_ScheduleGroupId": 300220102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220107 - Volcanic Chimera Strike: Standard (2) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220107,
+  "_ScheduleGroupId": 300221101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220108 - Volcanic Chimera Strike: Expert (2) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220108,
+  "_ScheduleGroupId": 300221102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220109 - Volcanic Chimera Strike: Standard (3) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220109,
+  "_ScheduleGroupId": 300220101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220110 - Volcanic Chimera Strike: Expert (3) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220110,
+  "_ScheduleGroupId": 300220102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220111 - Volcanic Chimera Strike: Standard (2) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220111,
+  "_ScheduleGroupId": 300221101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220112 - Volcanic Chimera Strike: Expert (2) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220112,
+  "_ScheduleGroupId": 300221102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220113 - Volcanic Chimera Strike: Standard (3) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220113,
+  "_ScheduleGroupId": 300220101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220114 - Volcanic Chimera Strike: Expert (3) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220114,
+  "_ScheduleGroupId": 300220102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220115 - Volcanic Chimera Strike: Standard (2) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220115,
+  "_ScheduleGroupId": 300221101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300220116 - Volcanic Chimera Strike: Expert (2) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300220116,
+  "_ScheduleGroupId": 300221102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310201 - Tidal Chimera Strike: Standard (3) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310201,
+  "_ScheduleGroupId": 300310101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310202 - Tidal Chimera Strike: Expert (3) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310202,
+  "_ScheduleGroupId": 300310102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310203 - Tidal Chimera Strike: Standard (2) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310203,
+  "_ScheduleGroupId": 300311101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310204 - Tidal Chimera Strike: Expert (2) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310204,
+  "_ScheduleGroupId": 300311102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310205 - Tidal Chimera Strike: Standard (3) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310205,
+  "_ScheduleGroupId": 300310101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310206 - Tidal Chimera Strike: Expert (3) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310206,
+  "_ScheduleGroupId": 300310102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310207 - Tidal Chimera Strike: Standard (2) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310207,
+  "_ScheduleGroupId": 300311101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310208 - Tidal Chimera Strike: Expert (2) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310208,
+  "_ScheduleGroupId": 300311102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310209 - Tidal Chimera Strike: Standard (3) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310209,
+  "_ScheduleGroupId": 300310101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310210 - Tidal Chimera Strike: Expert (3) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310210,
+  "_ScheduleGroupId": 300310102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310211 - Tidal Chimera Strike: Standard (2) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310211,
+  "_ScheduleGroupId": 300311101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310212 - Tidal Chimera Strike: Expert (2) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310212,
+  "_ScheduleGroupId": 300311102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310213 - Tidal Chimera Strike: Standard (3) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310213,
+  "_ScheduleGroupId": 300310101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310214 - Tidal Chimera Strike: Expert (3) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310214,
+  "_ScheduleGroupId": 300310102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310215 - Tidal Chimera Strike: Standard (2) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310215,
+  "_ScheduleGroupId": 300311101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300310216 - Tidal Chimera Strike: Expert (2) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300310216,
+  "_ScheduleGroupId": 300311102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280301 - Tempest Chimera Strike: Standard (3) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280301,
+  "_ScheduleGroupId": 300280101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280302 - Tempest Chimera Strike: Expert (3) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280302,
+  "_ScheduleGroupId": 300280102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280303 - Tempest Chimera Strike: Standard (2) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280303,
+  "_ScheduleGroupId": 300281101,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280304 - Tempest Chimera Strike: Expert (2) - Tuesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280304,
+  "_ScheduleGroupId": 300281102,
+  "_IntervalType": "Tuesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280305 - Tempest Chimera Strike: Standard (3) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280305,
+  "_ScheduleGroupId": 300280101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280306 - Tempest Chimera Strike: Expert (3) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280306,
+  "_ScheduleGroupId": 300280102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280307 - Tempest Chimera Strike: Standard (2) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280307,
+  "_ScheduleGroupId": 300281101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280308 - Tempest Chimera Strike: Expert (2) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280308,
+  "_ScheduleGroupId": 300281102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280309 - Tempest Chimera Strike: Standard (3) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280309,
+  "_ScheduleGroupId": 300280101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280310 - Tempest Chimera Strike: Expert (3) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280310,
+  "_ScheduleGroupId": 300280102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280311 - Tempest Chimera Strike: Standard (2) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280311,
+  "_ScheduleGroupId": 300281101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280312 - Tempest Chimera Strike: Expert (2) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280312,
+  "_ScheduleGroupId": 300281102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280313 - Tempest Chimera Strike: Standard (3) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280313,
+  "_ScheduleGroupId": 300280101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280314 - Tempest Chimera Strike: Expert (3) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280314,
+  "_ScheduleGroupId": 300280102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280315 - Tempest Chimera Strike: Standard (2) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280315,
+  "_ScheduleGroupId": 300281101,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300280316 - Tempest Chimera Strike: Expert (2) - Sunday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300280316,
+  "_ScheduleGroupId": 300281102,
+  "_IntervalType": "Sunday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320401 - Luminous Chimera Strike: Standard (3) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320401,
+  "_ScheduleGroupId": 300320101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320402 - Luminous Chimera Strike: Expert (3) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320402,
+  "_ScheduleGroupId": 300320102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320403 - Luminous Chimera Strike: Standard (2) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320403,
+  "_ScheduleGroupId": 300321101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320404 - Luminous Chimera Strike: Expert (2) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320404,
+  "_ScheduleGroupId": 300321102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320405 - Luminous Chimera Strike: Standard (3) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320405,
+  "_ScheduleGroupId": 300320101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320406 - Luminous Chimera Strike: Expert (3) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320406,
+  "_ScheduleGroupId": 300320102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320407 - Luminous Chimera Strike: Standard (2) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320407,
+  "_ScheduleGroupId": 300321101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320408 - Luminous Chimera Strike: Expert (2) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320408,
+  "_ScheduleGroupId": 300321102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320409 - Luminous Chimera Strike: Standard (3) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320409,
+  "_ScheduleGroupId": 300320101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320410 - Luminous Chimera Strike: Expert (3) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320410,
+  "_ScheduleGroupId": 300320102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320411 - Luminous Chimera Strike: Standard (2) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320411,
+  "_ScheduleGroupId": 300321101,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320412 - Luminous Chimera Strike: Expert (2) - Friday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320412,
+  "_ScheduleGroupId": 300321102,
+  "_IntervalType": "Friday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320413 - Luminous Chimera Strike: Standard (3) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320413,
+  "_ScheduleGroupId": 300320101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320414 - Luminous Chimera Strike: Expert (3) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320414,
+  "_ScheduleGroupId": 300320102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320415 - Luminous Chimera Strike: Standard (2) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320415,
+  "_ScheduleGroupId": 300321101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300320416 - Luminous Chimera Strike: Expert (2) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300320416,
+  "_ScheduleGroupId": 300321102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240501 - Ebon Chimera Strike: Standard (3) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240501,
+  "_ScheduleGroupId": 300240101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240502 - Ebon Chimera Strike: Expert (3) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240502,
+  "_ScheduleGroupId": 300240102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240503 - Ebon Chimera Strike: Standard (2) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240503,
+  "_ScheduleGroupId": 300241101,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240504 - Ebon Chimera Strike: Expert (2) - Monday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240504,
+  "_ScheduleGroupId": 300241102,
+  "_IntervalType": "Monday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240505 - Ebon Chimera Strike: Standard (3) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240505,
+  "_ScheduleGroupId": 300240101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240506 - Ebon Chimera Strike: Expert (3) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240506,
+  "_ScheduleGroupId": 300240102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240507 - Ebon Chimera Strike: Standard (2) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240507,
+  "_ScheduleGroupId": 300241101,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240508 - Ebon Chimera Strike: Expert (2) - Wednesday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240508,
+  "_ScheduleGroupId": 300241102,
+  "_IntervalType": "Wednesday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240509 - Ebon Chimera Strike: Standard (3) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240509,
+  "_ScheduleGroupId": 300240101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240510 - Ebon Chimera Strike: Expert (3) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240510,
+  "_ScheduleGroupId": 300240102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240511 - Ebon Chimera Strike: Standard (2) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240511,
+  "_ScheduleGroupId": 300241101,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240512 - Ebon Chimera Strike: Expert (2) - Thursday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240512,
+  "_ScheduleGroupId": 300241102,
+  "_IntervalType": "Thursday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240513 - Ebon Chimera Strike: Standard (3) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240513,
+  "_ScheduleGroupId": 300240101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240514 - Ebon Chimera Strike: Expert (3) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240514,
+  "_ScheduleGroupId": 300240102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240515 - Ebon Chimera Strike: Standard (2) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240515,
+  "_ScheduleGroupId": 300241101,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "300240516 - Ebon Chimera Strike: Expert (2) - Saturday - 2021/01/26 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 300240516,
+  "_ScheduleGroupId": 300241102,
+  "_IntervalType": "Saturday",
+  "_StartDate": "2021/01/26 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Thor's Trial: Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320010101,
+  "_ScheduleGroupId": 320010101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Thor's Trial: Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320010102,
+  "_ScheduleGroupId": 320010102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Thor's Trial: Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320010103,
+  "_ScheduleGroupId": 320010103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Thor's Trial: Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320011101,
+  "_ScheduleGroupId": 320011101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Thor's Trial: Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320011102,
+  "_ScheduleGroupId": 320011102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Thor's Trial: Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320011103,
+  "_ScheduleGroupId": 320011103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Kamuy's Trial: Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320040101,
+  "_ScheduleGroupId": 320040101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Kamuy's Trial: Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320040102,
+  "_ScheduleGroupId": 320040102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Kamuy's Trial: Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320040103,
+  "_ScheduleGroupId": 320040103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Kamuy's Trial: Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320041101,
+  "_ScheduleGroupId": 320041101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Kamuy's Trial: Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320041102,
+  "_ScheduleGroupId": 320041102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Kamuy's Trial: Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320041103,
+  "_ScheduleGroupId": 320041103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Chthonius's Trial: Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320050101,
+  "_ScheduleGroupId": 320050101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Chthonius's Trial: Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320050102,
+  "_ScheduleGroupId": 320050102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Chthonius's Trial: Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320050103,
+  "_ScheduleGroupId": 320050103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Chthonius's Trial: Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320051101,
+  "_ScheduleGroupId": 320051101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Chthonius's Trial: Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320051102,
+  "_ScheduleGroupId": 320051102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Chthonius's Trial: Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320051103,
+  "_ScheduleGroupId": 320051103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Mars's Trial: Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320060101,
+  "_ScheduleGroupId": 320060101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Mars's Trial: Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320060102,
+  "_ScheduleGroupId": 320060102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Mars's Trial: Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320060103,
+  "_ScheduleGroupId": 320060103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Mars's Trial: Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320061101,
+  "_ScheduleGroupId": 320061101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Mars's Trial: Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320061102,
+  "_ScheduleGroupId": 320061102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Mars's Trial: Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320061103,
+  "_ScheduleGroupId": 320061103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Agni's Trial: Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320080101,
+  "_ScheduleGroupId": 320080101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Agni's Trial: Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320080102,
+  "_ScheduleGroupId": 320080102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Agni's Trial: Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320080103,
+  "_ScheduleGroupId": 320080103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Agni's Trial: Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320081101,
+  "_ScheduleGroupId": 320081101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Agni's Trial: Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320081102,
+  "_ScheduleGroupId": 320081102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Agni's Trial: Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320081103,
+  "_ScheduleGroupId": 320081103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jeanne d'Arc's Trial: Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320090101,
+  "_ScheduleGroupId": 320090101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jeanne d'Arc's Trial: Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320090102,
+  "_ScheduleGroupId": 320090102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jeanne d'Arc's Trial: Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320090103,
+  "_ScheduleGroupId": 320090103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jeanne d'Arc's Trial: Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320091101,
+  "_ScheduleGroupId": 320091101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jeanne d'Arc's Trial: Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320091102,
+  "_ScheduleGroupId": 320091102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jeanne d'Arc's Trial: Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320091103,
+  "_ScheduleGroupId": 320091103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Grimnir's Trial: Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320100101,
+  "_ScheduleGroupId": 320100101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Grimnir's Trial: Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320100102,
+  "_ScheduleGroupId": 320100102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Grimnir's Trial: Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320100103,
+  "_ScheduleGroupId": 320100103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Grimnir's Trial: Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320101101,
+  "_ScheduleGroupId": 320101101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Grimnir's Trial: Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320101102,
+  "_ScheduleGroupId": 320101102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Grimnir's Trial: Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320101103,
+  "_ScheduleGroupId": 320101103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Light Legion's Trial: Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320110101,
+  "_ScheduleGroupId": 320110101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Light Legion's Trial: Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320110102,
+  "_ScheduleGroupId": 320110102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Light Legion's Trial: Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320110103,
+  "_ScheduleGroupId": 320110103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Light Legion's Trial: Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320111101,
+  "_ScheduleGroupId": 320111101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Light Legion's Trial: Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320111102,
+  "_ScheduleGroupId": 320111102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Light Legion's Trial: Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320111103,
+  "_ScheduleGroupId": 320111103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Lilith's Trial (Shadow): Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320120101,
+  "_ScheduleGroupId": 320120101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Lilith's Trial (Shadow): Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320120102,
+  "_ScheduleGroupId": 320120102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Lilith's Trial (Shadow): Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320120103,
+  "_ScheduleGroupId": 320120103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Lilith's Trial (Shadow): Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320121101,
+  "_ScheduleGroupId": 320121101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Lilith's Trial (Shadow): Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320121102,
+  "_ScheduleGroupId": 320121102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Lilith's Trial (Shadow): Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320121103,
+  "_ScheduleGroupId": 320121103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Lilith's Trial (Flame): Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320130101,
+  "_ScheduleGroupId": 320130101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Lilith's Trial (Flame): Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320130102,
+  "_ScheduleGroupId": 320130102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Lilith's Trial (Flame): Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320130103,
+  "_ScheduleGroupId": 320130103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Lilith's Trial (Flame): Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320131101,
+  "_ScheduleGroupId": 320131101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Lilith's Trial (Flame): Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320131102,
+  "_ScheduleGroupId": 320131102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Lilith's Trial (Flame): Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320131103,
+  "_ScheduleGroupId": 320131103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jaldabaoth's Trial (Wind): Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320150101,
+  "_ScheduleGroupId": 320150101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jaldabaoth's Trial (Wind): Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320150102,
+  "_ScheduleGroupId": 320150102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jaldabaoth's Trial (Wind): Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320150103,
+  "_ScheduleGroupId": 320150103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jaldabaoth's Trial (Wind): Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320151101,
+  "_ScheduleGroupId": 320151101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jaldabaoth's Trial (Wind): Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320151102,
+  "_ScheduleGroupId": 320151102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jaldabaoth's Trial (Wind): Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320151103,
+  "_ScheduleGroupId": 320151103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jaldabaoth's Trial (Water): Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320160101,
+  "_ScheduleGroupId": 320160101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jaldabaoth's Trial (Water): Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320160102,
+  "_ScheduleGroupId": 320160102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jaldabaoth's Trial (Water): Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320160103,
+  "_ScheduleGroupId": 320160103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jaldabaoth's Trial (Water): Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320161101,
+  "_ScheduleGroupId": 320161101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jaldabaoth's Trial (Water): Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320161102,
+  "_ScheduleGroupId": 320161102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Jaldabaoth's Trial (Water): Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320161103,
+  "_ScheduleGroupId": 320161103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Wind Legion's Trial: Standard (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320170101,
+  "_ScheduleGroupId": 320170101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Wind Legion's Trial: Expert (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320170102,
+  "_ScheduleGroupId": 320170102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Wind Legion's Trial: Master (3) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320170103,
+  "_ScheduleGroupId": 320170103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Wind Legion's Trial: Standard (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320171101,
+  "_ScheduleGroupId": 320171101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Wind Legion's Trial: Expert (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320171102,
+  "_ScheduleGroupId": 320171102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Wind Legion's Trial: Master (2) - Daily - 2023/08/02 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320171103,
+  "_ScheduleGroupId": 320171103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/02 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Poseidon's Trial: Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320020101,
+  "_ScheduleGroupId": 320020101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Poseidon's Trial: Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320020102,
+  "_ScheduleGroupId": 320020102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Poseidon's Trial: Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320020103,
+  "_ScheduleGroupId": 320020103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Poseidon's Trial: Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320021101,
+  "_ScheduleGroupId": 320021101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Poseidon's Trial: Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320021102,
+  "_ScheduleGroupId": 320021102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Poseidon's Trial: Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320021103,
+  "_ScheduleGroupId": 320021103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Zephyr's Trial: Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320030101,
+  "_ScheduleGroupId": 320030101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Zephyr's Trial: Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320030102,
+  "_ScheduleGroupId": 320030102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Zephyr's Trial: Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320030103,
+  "_ScheduleGroupId": 320030103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Zephyr's Trial: Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320031101,
+  "_ScheduleGroupId": 320031101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Zephyr's Trial: Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320031102,
+  "_ScheduleGroupId": 320031102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Zephyr's Trial: Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320031103,
+  "_ScheduleGroupId": 320031103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Shadow Legion's Trial: Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320070101,
+  "_ScheduleGroupId": 320070101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Shadow Legion's Trial: Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320070102,
+  "_ScheduleGroupId": 320070102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Shadow Legion's Trial: Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320070103,
+  "_ScheduleGroupId": 320070103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Shadow Legion's Trial: Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320071101,
+  "_ScheduleGroupId": 320071101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Shadow Legion's Trial: Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320071102,
+  "_ScheduleGroupId": 320071102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Shadow Legion's Trial: Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320071103,
+  "_ScheduleGroupId": 320071103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Nidhogg's Trial: Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320140101,
+  "_ScheduleGroupId": 320140101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Nidhogg's Trial: Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320140102,
+  "_ScheduleGroupId": 320140102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Nidhogg's Trial: Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320140103,
+  "_ScheduleGroupId": 320140103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Nidhogg's Trial: Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320141101,
+  "_ScheduleGroupId": 320141101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Nidhogg's Trial: Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320141102,
+  "_ScheduleGroupId": 320141102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Nidhogg's Trial: Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320141103,
+  "_ScheduleGroupId": 320141103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Harle's Trial: Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320180101,
+  "_ScheduleGroupId": 320180101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Harle's Trial: Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320180102,
+  "_ScheduleGroupId": 320180102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Harle's Trial: Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320180103,
+  "_ScheduleGroupId": 320180103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Harle's Trial: Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320181101,
+  "_ScheduleGroupId": 320181101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Harle's Trial: Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320181102,
+  "_ScheduleGroupId": 320181102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Harle's Trial: Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320181103,
+  "_ScheduleGroupId": 320181103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Asura's Trial (Light): Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320190101,
+  "_ScheduleGroupId": 320190101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Asura's Trial (Light): Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320190102,
+  "_ScheduleGroupId": 320190102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Asura's Trial (Light): Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320190103,
+  "_ScheduleGroupId": 320190103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Asura's Trial (Light): Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320191101,
+  "_ScheduleGroupId": 320191101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Asura's Trial (Light): Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320191102,
+  "_ScheduleGroupId": 320191102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Asura's Trial (Light): Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320191103,
+  "_ScheduleGroupId": 320191103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Asura's Trial (Wind): Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320200101,
+  "_ScheduleGroupId": 320200101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Asura's Trial (Wind): Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320200102,
+  "_ScheduleGroupId": 320200102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Asura's Trial (Wind): Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320200103,
+  "_ScheduleGroupId": 320200103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Asura's Trial (Wind): Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320201101,
+  "_ScheduleGroupId": 320201101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Asura's Trial (Wind): Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320201102,
+  "_ScheduleGroupId": 320201102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Asura's Trial (Wind): Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320201103,
+  "_ScheduleGroupId": 320201103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Iblis's Trial (Water): Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320210101,
+  "_ScheduleGroupId": 320210101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Iblis's Trial (Water): Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320210102,
+  "_ScheduleGroupId": 320210102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Iblis's Trial (Water): Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320210103,
+  "_ScheduleGroupId": 320210103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Iblis's Trial (Water): Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320211101,
+  "_ScheduleGroupId": 320211101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Iblis's Trial (Water): Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320211102,
+  "_ScheduleGroupId": 320211102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Iblis's Trial (Water): Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320211103,
+  "_ScheduleGroupId": 320211103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Iblis's Trial (Shadow): Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320220101,
+  "_ScheduleGroupId": 320220101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Iblis's Trial (Shadow): Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320220102,
+  "_ScheduleGroupId": 320220102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Iblis's Trial (Shadow): Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320220103,
+  "_ScheduleGroupId": 320220103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Iblis's Trial (Shadow): Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320221101,
+  "_ScheduleGroupId": 320221101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Iblis's Trial (Shadow): Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320221102,
+  "_ScheduleGroupId": 320221102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Iblis's Trial (Shadow): Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320221103,
+  "_ScheduleGroupId": 320221103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Surtr's Trial (Flame): Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320230101,
+  "_ScheduleGroupId": 320230101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Surtr's Trial (Flame): Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320230102,
+  "_ScheduleGroupId": 320230102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Surtr's Trial (Flame): Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320230103,
+  "_ScheduleGroupId": 320230103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Surtr's Trial (Flame): Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320231101,
+  "_ScheduleGroupId": 320231101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Surtr's Trial (Flame): Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320231102,
+  "_ScheduleGroupId": 320231102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Surtr's Trial (Flame): Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320231103,
+  "_ScheduleGroupId": 320231103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Surtr's Trial (Light): Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320240101,
+  "_ScheduleGroupId": 320240101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Surtr's Trial (Light): Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320240102,
+  "_ScheduleGroupId": 320240102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Surtr's Trial (Light): Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320240103,
+  "_ScheduleGroupId": 320240103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Surtr's Trial (Light): Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320241101,
+  "_ScheduleGroupId": 320241101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Surtr's Trial (Light): Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320241102,
+  "_ScheduleGroupId": 320241102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Surtr's Trial (Light): Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320241103,
+  "_ScheduleGroupId": 320241103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Flame Legion's Trial: Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320250101,
+  "_ScheduleGroupId": 320250101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Flame Legion's Trial: Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320250102,
+  "_ScheduleGroupId": 320250102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Flame Legion's Trial: Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320250103,
+  "_ScheduleGroupId": 320250103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Flame Legion's Trial: Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320251101,
+  "_ScheduleGroupId": 320251101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Flame Legion's Trial: Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320251102,
+  "_ScheduleGroupId": 320251102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Flame Legion's Trial: Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320251103,
+  "_ScheduleGroupId": 320251103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Water Legion's Trial: Standard (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320260101,
+  "_ScheduleGroupId": 320260101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Water Legion's Trial: Expert (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320260102,
+  "_ScheduleGroupId": 320260102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Water Legion's Trial: Master (3) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320260103,
+  "_ScheduleGroupId": 320260103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Water Legion's Trial: Standard (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320261101,
+  "_ScheduleGroupId": 320261101,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Water Legion's Trial: Expert (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320261102,
+  "_ScheduleGroupId": 320261102,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ },
+ {
+  "_comment": "Water Legion's Trial: Master (2) - Daily - 2023/08/01 06:00:00 - 2030/08/24 05:59:59 - +0%",
+  "_Id": 320261103,
+  "_ScheduleGroupId": 320261103,
+  "_IntervalType": "Daily",
+  "_StartDate": "2023/08/01 06:00:00",
+  "_EndDate": "2030/08/24 05:59:59",
+  "_DropBonusCount": 0
+ }
+]
