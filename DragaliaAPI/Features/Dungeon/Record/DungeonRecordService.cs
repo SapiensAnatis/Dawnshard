@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Models;
@@ -13,7 +14,8 @@ public class DungeonRecordService(
     IQuestService questService,
     IUserService userService,
     ITutorialService tutorialService,
-    ILogger<DungeonRecordService> logger
+    ILogger<DungeonRecordService> logger,
+    ICharaService charaService
 ) : IDungeonRecordService
 {
     public async Task<IngameResultData> GenerateIngameResultData(
@@ -55,7 +57,7 @@ public class DungeonRecordService(
         this.ProcessClearTime(ingameResultData, playRecord.time, questData);
         await this.ProcessGrowth(ingameResultData.grow_record, session);
         await this.ProcessStaminaConsumption(session);
-        await this.ProcessPlayerLevel(
+        await this.ProcessExperience(
             ingameResultData.grow_record,
             ingameResultData.reward_record,
             session
@@ -113,13 +115,13 @@ public class DungeonRecordService(
     private Task ProcessGrowth(GrowRecord growRecord, DungeonSession session)
     {
         // TODO: actual implementation. Extract out into a service at that time
-        growRecord.take_player_exp = 1;
-        growRecord.take_chara_exp = 1;
+        // growRecord.take_player_exp = 1;
+        // growRecord.take_chara_exp = 1;
         growRecord.bonus_factor = 1;
         growRecord.mana_bonus_factor = 1;
-        growRecord.chara_grow_record = session.Party.Select(
-            x => new AtgenCharaGrowRecord() { chara_id = x.chara_id, take_exp = 1 }
-        );
+        // growRecord.chara_grow_record = session.Party.Select(
+        //    x => new AtgenCharaGrowRecord() { chara_id = x.chara_id, take_exp = 1 }
+        // );
 
         return Task.CompletedTask;
     }
@@ -145,7 +147,7 @@ public class DungeonRecordService(
             await userService.RemoveStamina(type, amount);
     }
 
-    private async Task ProcessPlayerLevel(
+    private async Task ProcessExperience(
         GrowRecord growRecord,
         RewardRecord rewardRecord,
         DungeonSession session
@@ -163,5 +165,22 @@ public class DungeonRecordService(
 
         rewardRecord.player_level_up_fstone = playerLevelResult.RewardedWyrmite;
         growRecord.take_player_exp = experience;
+
+        int experiencePerChara = experience * 2;
+
+        List<AtgenCharaGrowRecord> charaGrowRecord = new();
+
+        foreach (PartySettingList chara in session.Party)
+        {
+            if (chara.chara_id == 0)
+                continue;
+
+            await charaService.LevelUpChara(chara.chara_id, experiencePerChara);
+
+            charaGrowRecord.Add(new AtgenCharaGrowRecord(chara.chara_id, experiencePerChara));
+            growRecord.take_chara_exp += experiencePerChara;
+        }
+
+        growRecord.chara_grow_record = charaGrowRecord;
     }
 }

@@ -4,6 +4,7 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.GraphQL;
@@ -209,7 +210,9 @@ builder.Services
     .AddScoped<IQuestCacheService, QuestCacheService>()
     // Party power feature
     .AddScoped<IPartyPowerService, PartyPowerService>()
-    .AddScoped<IPartyPowerRepository, PartyPowerRepository>();
+    .AddScoped<IPartyPowerRepository, PartyPowerRepository>()
+    // Chara feature
+    .AddScoped<ICharaService, CharaService>();
 
 builder.Services.AddAllOfType<ISavefileUpdate>();
 builder.Services.AddAllOfType<IDailyResetAction>();

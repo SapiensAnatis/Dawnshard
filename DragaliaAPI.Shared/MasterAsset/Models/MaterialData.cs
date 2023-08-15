@@ -2,4 +2,10 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
-public record MaterialData(Materials Id, MaterialRarities MaterialRarity);
+public record MaterialData(
+    Materials Id,
+    MaterialCategory Category,
+    MaterialRarities MaterialRarity,
+    int Exp,
+    int Plus
+);
