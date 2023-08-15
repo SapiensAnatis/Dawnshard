@@ -138,6 +138,9 @@
 		<None Update="Resources\QuestDrops\EnemyParam.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Resources\QuestDrops\QuestBonusRewards.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Resources\QuestDrops\QuestGroupMultipliers.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

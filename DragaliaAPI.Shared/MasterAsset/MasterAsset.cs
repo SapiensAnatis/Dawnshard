@@ -297,8 +297,20 @@ public static class MasterAsset
     /// <summary>
     /// Contains information about rewards from quests.
     /// </summary>
+    /// <remarks>
+    /// Generated from parsing wiki Cargo data.
+    /// </remarks>
     public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
         new("QuestDrops/QuestDrops.json", x => x.QuestId);
+
+    /// <summary>
+    /// Contains information about bonus rewards from quests.
+    /// </summary>
+    /// <remarks>
+    /// Generated from parsing wiki Cargo data.
+    /// </remarks>
+    public static readonly MasterAssetData<int, QuestBonusReward> QuestBonusRewards =
+        new("QuestDrops/QuestBonusRewards.json", x => x.QuestId);
 
     #endregion
 

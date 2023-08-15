@@ -1,5 +1,6 @@
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 
 namespace DragaliaAPI.Features.Reward;
 
@@ -41,5 +42,10 @@ public record Entity(
     public AtgenDropAll ToDropAll()
     {
         return new AtgenDropAll(this.Id, this.Type, this.Quantity, 0, 0);
+    }
+
+    public static Entity FromQuestBonusDrop(QuestBonusDrop drop)
+    {
+        return new Entity(Type: drop.EntityType, Id: drop.Id, Quantity: drop.Quantity);
     }
 };
