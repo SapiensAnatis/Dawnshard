@@ -7823,7 +7823,7 @@ public class QuestEventScheduleList
     public int event_schedule_type { get; set; }
     public DateTimeOffset start_date { get; set; }
     public DateTimeOffset end_date { get; set; }
-    public int interval_type { get; set; }
+    public QuestGroupIntervalType interval_type { get; set; }
     public string fever_time_start_1 { get; set; }
     public string fever_time_end_1 { get; set; }
     public string fever_time_start_2 { get; set; }
@@ -7836,7 +7836,7 @@ public class QuestEventScheduleList
         int event_schedule_type,
         DateTimeOffset start_date,
         DateTimeOffset end_date,
-        int interval_type,
+        QuestGroupIntervalType interval_type,
         string fever_time_start_1,
         string fever_time_end_1,
         string fever_time_start_2,
@@ -7916,7 +7916,7 @@ public class QuestScheduleDetailList
     public int schedule_group_id { get; set; }
     public int drop_bonus_percent { get; set; }
     public int limit_shop_goods_type { get; set; }
-    public int interval_type { get; set; }
+    public QuestGroupIntervalType interval_type { get; set; }
 
     [JsonConverter(typeof(DateTimeUnixJsonConverter))]
     public DateTimeOffset start_date { get; set; }
@@ -7929,7 +7929,7 @@ public class QuestScheduleDetailList
         int schedule_group_id,
         int drop_bonus_percent,
         int limit_shop_goods_type,
-        int interval_type,
+        QuestGroupIntervalType interval_type,
         DateTimeOffset start_date,
         DateTimeOffset end_date
     )

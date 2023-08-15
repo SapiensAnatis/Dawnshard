@@ -8,6 +8,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
+using DragaliaAPI.Shared.MasterAsset.Models.QuestSchedule;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
@@ -432,6 +433,13 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, UserLevel> UserLevel =
         new("User/UserLevel.json", x => x.Id);
+
+    #endregion
+
+    #region Quest Schedule
+
+    public static readonly MasterAssetData<int, QuestScheduleInfo> QuestScheduleInfo =
+        new("QuestSchedule/QuestScheduleInfo.json", x => x.Id);
 
     #endregion
 }

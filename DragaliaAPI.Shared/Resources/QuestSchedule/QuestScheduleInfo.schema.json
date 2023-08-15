@@ -1,0 +1,71 @@
+{
+  "description": "Defines the current quest schedule data.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [ "_Id", "_ScheduleGroupId", "_IntervalType", "_StartDate", "_EndDate", "_DropBonusCount" ],
+    "additionalProperties": false,
+    "properties": {
+      "_Id": {
+        "type": "integer",
+        "description": "Unique ID for the current schedule entry."
+      },
+      "_ScheduleGroupId": {
+        "type": "integer",
+        "description": "ID of the schedule group this schedule entry applies to."
+      },
+      "_IntervalType": {
+        "type": "string",
+        "description": "Interval in which the quest associated with this schedule group in the period of this schedule element should be accessible",
+        "enum": [
+          "None",
+          "Daily",
+          "Weekend",
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "MonAndSun",
+          "MonAndTue",
+          "MonAndWed",
+          "MonAndThu",
+          "MonAndFri",
+          "MonAndSat",
+          "WeekendAndMon",
+          "WeekendAndTue",
+          "WeekendAndWed",
+          "WeekendAndThu",
+          "WeekendAndFri",
+          "WeekendAndSat",
+          "EventSchedule",
+          "MonThuSatSun",
+          "TueFriSatSun",
+          "MonWedSatSun",
+          "WedFriSatSun",
+          "TueThuSatSun",
+          "SatAndSun"
+        ]
+      },
+      "_StartDate": {
+        "type": "string",
+        "description": "Start date of the schedule element (YYYY/MM/DD HH:MM:SS)",
+        "pattern": "^\\d{4}(\\/\\d{2}){2} (?:0[0-9]|1[0-2]|2[0-4]):[0-5][0-9]:[0-5][0-9]$",
+        "examples": [ "2023/01/04 05:59:59" ]
+      },
+      "_EndDate": {
+        "type": "string",
+        "description": "End date of the schedule element (YYYY/MM/DD HH:MM:SS)",
+        "pattern": "^\\d{4}(\\/\\d{2}){2} (?:0[0-9]|1[0-2]|2[0-4]):[0-5][0-9]:[0-5][0-9]$",
+        "examples": [ "2023/01/04 05:59:59" ]
+      },
+      "_DropBonusCount": {
+        "type": "integer",
+        "description": "Bonus drop percentage for the associated quest while it is active during this schedule period",
+        "default": 0
+      }
+    }
+  }
+}

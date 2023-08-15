@@ -156,6 +156,9 @@
 		<None Update="Resources\QuestRewards\QuestScoreMissionRewardInfo.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="Resources\QuestSchedule\QuestScheduleInfo.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Resources\Story\EventStory.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -323,9 +326,11 @@
 
 	<ItemGroup>
 	  <Folder Include="MasterAsset\Models\Login\" />
+	  <Folder Include="MasterAsset\Models\QuestSchedule\" />
 	  <Folder Include="MasterAsset\Models\User\" />
+	  <Folder Include="Resources\QuestSchedule\" />
 	</ItemGroup>
 
-	<ProjectExtensions><VisualStudio><UserProperties resources_4missions_4mainstorymissiongrouprewards_1json__JsonSchema="MainStoryMissionGroupRewards.schema.json" resources_4missions_4missionprogressioninfo_1json__JsonSchema="MissionProgressionInfo.schema.json" /></VisualStudio></ProjectExtensions>
+	<ProjectExtensions><VisualStudio><UserProperties resources_4missions_4mainstorymissiongrouprewards_1json__JsonSchema="MainStoryMissionGroupRewards.schema.json" resources_4missions_4missionprogressioninfo_1json__JsonSchema="MissionProgressionInfo.schema.json" resources_4questschedule_4questscheduleinfo_1json__JsonSchema="QuestScheduleInfo.schema.json" /></VisualStudio></ProjectExtensions>
 
 </Project>
