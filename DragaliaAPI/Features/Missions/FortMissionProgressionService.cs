@@ -32,7 +32,6 @@ public class FortMissionProgressionService(
         return await fortRepository.Builds.CountAsync(
             x =>
                 x.PlantId == plant
-                && x.BuildEndDate == DateTimeOffset.UnixEpoch
                 && x.PositionX != -1 // not in storage
                 && x.PositionZ != -1
         );
