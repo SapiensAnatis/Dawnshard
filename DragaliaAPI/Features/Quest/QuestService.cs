@@ -137,12 +137,25 @@ public class QuestService(
             1
         );
 
+        if (questEvent.QuestBonusCount == 0) 
+        {
+            return Enumerable.Empty<AtgenFirstClearSet>();
+        }
+
         int totalBonusCount = questEvent.QuestBonusReserveCount + questEvent.QuestBonusReceiveCount;
         int remainingBonusCount = questEventData.QuestBonusCount - totalBonusCount;
 
-        if (questEventData.QuestBonusCount == 0 || remainingBonusCount <= 0)
+        if (remainingBonusCount <= 0)
         {
-            return Enumerable.Empty<AtgenFirstClearSet>();
+            if (questEvent.QuestBonusStackCount > 0)
+            {
+                questEvent.QuestBonusStackCount--;
+                questEvent.QuestBonusStackTime = dateTimeProvider.UtcNow;
+            }
+            else
+            {
+                return Enumerable.Empty<AtgenFirstClearSet>();
+            }
         }
 
         int bonusesToReceive = Math.Min(playCount, remainingBonusCount);
@@ -198,14 +211,30 @@ public class QuestService(
         int count
     )
     {
+        DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
+
         if (!isReceive)
         {
+            questEvent.QuestBonusReserveCount = 0;
+            questEvent.QuestBonusReserveTime = DateTimeOffset.UnixEpoch;
+
+            QuestEvent questEventData = MasterAsset.QuestEvent[eventGroupId];
+
+            if (
+                questEventData.QuestBonusStackCountMax > 0
+                && questEventData.QuestBonusStackCountMax - 1 > questEvent.QuestBonusStackCount
+            )
+            {
+                questEvent.QuestBonusStackCount++;
+                questEvent.QuestBonusStackTime = dateTimeProvider.UtcNow;
+            }
+
             await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
 
             return new AtgenReceiveQuestBonus();
         }
 
-        DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
+        Debug.Assert(count == 1, "Tried to claim more than one bonus at a time");
 
         int questId =
             await questCacheService.GetQuestGroupQuestIdAsync(eventGroupId)
@@ -214,7 +243,12 @@ public class QuestService(
                 $"Could not find latest quest clear id for group {eventGroupId} in cache."
             );
 
-        if (count > questEvent.QuestBonusReserveCount + questEvent.QuestBonusStackCount)
+        if (questEvent.QuestBonusReserveCount > 0)
+        {
+            questEvent.QuestBonusReserveCount--;
+            questEvent.QuestBonusReserveTime = DateTimeOffset.UnixEpoch;
+        }
+        else
         {
             throw new DragaliaException(
                 ResultCode.QuestSelectBonusReceivableLimit,
@@ -222,24 +256,7 @@ public class QuestService(
             );
         }
 
-        if (count > questEvent.QuestBonusReserveCount)
-        {
-            questEvent.QuestBonusStackCount -= count - questEvent.QuestBonusReserveCount;
-            questEvent.QuestBonusStackTime =
-                questEvent.QuestBonusStackCount == 0
-                    ? DateTimeOffset.UnixEpoch
-                    : dateTimeProvider.UtcNow;
-
-            count = questEvent.QuestBonusReserveCount;
-        }
-
-        questEvent.QuestBonusReserveCount -= count;
-        questEvent.QuestBonusReserveTime =
-            questEvent.QuestBonusReserveCount == 0
-                ? DateTimeOffset.UnixEpoch
-                : dateTimeProvider.UtcNow;
-
-        questEvent.QuestBonusReceiveCount += count;
+        questEvent.QuestBonusReceiveCount++;
 
         // TODO: bonus factor?
         IEnumerable<AtgenBuildEventRewardEntityList> bonusRewards = (
@@ -254,19 +271,27 @@ public class QuestService(
 
     private void ResetQuestEventBonus(DbQuestEvent questEvent, QuestEvent questEventData)
     {
-        questEvent.QuestBonusReceiveCount = 0;
-
         if (questEventData.QuestBonusReceiveType != QuestBonusReceiveType.AutoReceive)
         {
             if (questEventData.QuestBonusStackCountMax > 0)
             {
-                int newStackCount =
-                    questEvent.QuestBonusReserveCount + questEvent.QuestBonusStackCount;
+                (DateTimeOffset lastReset, TimeSpan resetInterval) =
+                    questEventData.QuestBonusType switch
+                    {
+                        QuestResetIntervalType.Daily
+                            => (questEvent.LastDailyResetTime, TimeSpan.FromDays(1)),
+                        QuestResetIntervalType.Weekly
+                            => (questEvent.LastWeeklyResetTime, TimeSpan.FromDays(7)),
+                        _ => throw new UnreachableException()
+                    };
 
-                questEvent.QuestBonusStackCount = Math.Min(
-                    questEventData.QuestBonusStackCountMax,
-                    newStackCount
-                );
+                while (
+                    dateTimeProvider.UtcNow >= lastReset + resetInterval
+                    && questEventData.QuestBonusStackCountMax - 1 > questEvent.QuestBonusStackCount
+                )
+                {
+                    questEvent.QuestBonusStackCount++;
+                }
 
                 questEvent.QuestBonusStackTime = dateTimeProvider.UtcNow;
             }
@@ -274,5 +299,9 @@ public class QuestService(
             questEvent.QuestBonusReserveCount = 0;
             questEvent.QuestBonusReserveTime = dateTimeProvider.UtcNow;
         }
+
+        questEvent.QuestBonusReceiveCount = 0;
+
+        logger.LogDebug("Reset quest event counts to {@questEvent}", questEvent);
     }
 }
