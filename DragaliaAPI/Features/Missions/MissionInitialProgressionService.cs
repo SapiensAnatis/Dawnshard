@@ -56,9 +56,7 @@ public class MissionInitialProgressionService(
                 => await fortMissionProgressionService.GetTotalFortLevel(),
             MissionCompleteType.QuestCleared => await GetQuestClearedCount(progressionInfo),
             MissionCompleteType.QuestStoryCleared
-                => await storyRepository.QuestStories.AnyAsync(
-                    x => x.StoryId == progressionInfo.Parameter && x.State == StoryState.Read
-                )
+                => await storyRepository.HasReadQuestStory(progressionInfo.Parameter!.Value)
                     ? 1
                     : 0,
             MissionCompleteType.EventGroupCleared

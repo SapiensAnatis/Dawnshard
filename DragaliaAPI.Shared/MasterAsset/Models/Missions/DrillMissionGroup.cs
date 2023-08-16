@@ -14,6 +14,6 @@ public record DrillMissionGroup(
     EntityTypes UnlockEntityType1,
     int UnlockEntityId1,
     int UnlockEntityQuantity1,
-    [property: JsonConverter(typeof(MasterAssetDateTimeOffsetConverter))] DateTimeOffset StartDate,
-    [property: JsonConverter(typeof(MasterAssetDateTimeOffsetConverter))] DateTimeOffset EndDate
+    DateTimeOffset StartDate,
+    DateTimeOffset EndDate
 );

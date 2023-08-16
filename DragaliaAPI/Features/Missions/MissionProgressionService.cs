@@ -300,7 +300,7 @@ public class MissionProgressionService(
                         progressingMission.Progress += evt.Value;
                     }
 
-                    if (progressingMission.Progress == mission.CompleteValue)
+                    if (progressingMission.Progress >= mission.CompleteValue)
                     {
                         logger.LogDebug(
                             "Completed {missionType} mission {missionId}",
