@@ -109,42 +109,6 @@ public class DungeonRecordRewardService(
         return (drops, manaDrop, coinDrop);
     }
 
-    public async Task<(
-        IEnumerable<AtgenDropAll> DropList,
-        int ManaDrop,
-        int CoinDrop
-    )> ProcessEnemyDrops(DungeonSession session)
-    {
-        int manaDrop = 0;
-        int coinDrop = 0;
-        List<AtgenDropAll> drops = new();
-
-        foreach (
-            EnemyDropList enemyDropList in session.EnemyList
-                .SelectMany(x => x.Value)
-                .SelectMany(x => x.enemy_drop_list)
-        )
-        {
-            manaDrop += enemyDropList.mana;
-            coinDrop += enemyDropList.coin;
-
-            foreach (AtgenDropList dropList in enemyDropList.drop_list)
-            {
-                Entity reward =
-                    new(dropList.type, dropList.id, dropList.quantity * session.PlayCount);
-
-                drops.Add(reward.ToDropAll());
-
-                await rewardService.GrantReward(reward);
-            }
-        }
-
-        await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
-        await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
-
-        return (drops, manaDrop, coinDrop);
-    }
-
     public async Task<EventRewardData> ProcessEventRewards(
         PlayRecord playRecord,
         DungeonSession session

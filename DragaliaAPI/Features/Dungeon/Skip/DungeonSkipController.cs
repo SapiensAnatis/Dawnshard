@@ -137,9 +137,7 @@ public class DungeonSkipController(
         DungeonSkipStartMultipleQuestAssignUnitRequest request
     )
     {
-        // I can't work out what calls this endpoint -- start_multiple is for 'daily bonus quick skip',
-        // and 'assign_unit' is for repeating on the end screen, but you can't do the daily bonus quick
-        // skip more than once per day...
+        // Unsure what calls this endpoint -- can't repeat daily bonus skip or do it with assigned team
 
         int totalSkipQuantity = request.request_quest_multiple_list.Sum(x => x.play_count);
 
