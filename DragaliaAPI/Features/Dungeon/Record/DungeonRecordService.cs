@@ -43,6 +43,7 @@ public class DungeonRecordService(
                 current_play_count = 1,
                 reborn_count = playRecord.reborn_count,
                 total_play_damage = playRecord.total_play_damage,
+                clear_time = playRecord.time,
                 is_clear = true,
             };
 
@@ -50,9 +51,12 @@ public class DungeonRecordService(
             DbQuest questData,
             ingameResultData.is_best_clear_time,
             ingameResultData.reward_record.quest_bonus_list
-        ) = await questService.ProcessQuestCompletion(session.QuestData.Id, playRecord.time);
+        ) = await questService.ProcessQuestCompletion(
+            session.QuestData.Id,
+            playRecord.time,
+            session.PlayCount
+        );
 
-        this.ProcessClearTime(ingameResultData, playRecord.time, questData);
         await this.ProcessGrowth(ingameResultData.grow_record, session);
         await this.ProcessStaminaConsumption(session);
         await this.ProcessPlayerLevel(
@@ -96,20 +100,6 @@ public class DungeonRecordService(
         return ingameResultData;
     }
 
-    private void ProcessClearTime(IngameResultData resultData, float clearTime, DbQuest questEntity)
-    {
-        bool isBestClearTime = false;
-
-        if (questEntity.BestClearTime < 0 || questEntity.BestClearTime > clearTime)
-        {
-            isBestClearTime = true;
-            questEntity.BestClearTime = clearTime;
-        }
-
-        resultData.clear_time = clearTime;
-        resultData.is_best_clear_time = isBestClearTime;
-    }
-
     private Task ProcessGrowth(GrowRecord growRecord, DungeonSession session)
     {
         // TODO: actual implementation. Extract out into a service at that time
@@ -141,6 +131,8 @@ public class DungeonRecordService(
             amount = session.QuestData.PayStaminaSingle;
         }
 
+        amount *= session.PlayCount;
+
         if (type != StaminaType.None && amount != 0)
             await userService.RemoveStamina(type, amount);
     }
@@ -158,6 +150,8 @@ public class DungeonRecordService(
                 : session.QuestData.PayStaminaMulti != 0
                     ? session.QuestData.PayStaminaMulti * 100
                     : 150;
+
+        experience *= session.PlayCount;
 
         PlayerLevelResult playerLevelResult = await userService.AddExperience(experience); // TODO: Exp boost
 

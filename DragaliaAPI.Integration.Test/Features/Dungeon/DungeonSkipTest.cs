@@ -18,7 +18,10 @@ public class DungeonSkipTest : TestFixture
         CustomWebApplicationFactory<Program> factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        CommonAssertionOptions.ApplyTimeOptions();
+    }
 
     [Fact]
     public async Task DungeonSkipStart_GrantsRewards()
@@ -199,5 +202,61 @@ public class DungeonSkipTest : TestFixture
         response.data.update_data_list.user_data.quest_skip_point
             .Should()
             .Be(oldUserData.QuestSkipPoint - 5);
+    }
+
+    [Fact]
+    public async Task DungeonSkipStart_ReservesCorrectBonusCount()
+    {
+        int questId = 219011103; // Volk's Wrath: Master (Solo)
+        int questEventId = 21900; // QuestData._Gid -> QuestEventGroup._BaseQuestGroupId -> QuestEvent._Id
+        int playCount = 5;
+
+        DateTimeOffset resetTime = DateTimeOffset.UtcNow;
+
+        await this.AddToDatabase(
+            new DbQuestEvent()
+            {
+                DeviceAccountId = DeviceAccountId,
+                QuestEventId = questEventId,
+                LastWeeklyResetTime = resetTime,
+                LastDailyResetTime = resetTime,
+                WeeklyPlayCount = 2,
+                QuestBonusReceiveCount = 2,
+            }
+        );
+
+        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData
+            .AsNoTracking()
+            .First(x => x.DeviceAccountId == DeviceAccountId);
+
+        DragaliaResponse<DungeonSkipStartData> response =
+            await this.Client.PostMsgpack<DungeonSkipStartData>(
+                $"{Endpoint}/start",
+                new DungeonSkipStartRequest()
+                {
+                    party_no = 1,
+                    play_count = playCount,
+                    support_viewer_id = 1000,
+                    quest_id = questId
+                }
+            );
+
+        response.data.update_data_list.quest_event_list
+            .Should()
+            .ContainEquivalentOf(
+                new QuestEventList()
+                {
+                    quest_event_id = questEventId,
+                    weekly_play_count = playCount + 2,
+                    daily_play_count = playCount,
+                    last_daily_reset_time = resetTime,
+                    last_weekly_reset_time = resetTime,
+                    quest_bonus_receive_count = 2,
+                    quest_bonus_reserve_count = 3,
+                    quest_bonus_reserve_time = response.data.ingame_result_data.end_time,
+                    quest_bonus_stack_count = 0,
+                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch
+                }
+            );
     }
 }

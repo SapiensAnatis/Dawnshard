@@ -151,7 +151,7 @@ public class DungeonRecordServiceTest
         int takeBoostAccumulatePoint = 40;
 
         this.mockQuestService
-            .Setup(x => x.ProcessQuestCompletion(lSurtrSoloId, 10f))
+            .Setup(x => x.ProcessQuestCompletion(lSurtrSoloId, 10f, 1))
             .ReturnsAsync((mockQuest, true, new List<AtgenFirstClearSet>()));
 
         this.mockUserService
