@@ -1,5 +1,10 @@
 [
   {
+    "headline": "Trials of the Mighty",
+    "timestamp": 1692134624,
+    "description": "You can now play Trials of the Mighty. Currently all quests are available without a schedule. Daily and weekly bonuses from these quests and other event quests should also work."
+  },
+  {
     "headline": "Kaleidoscape",
     "timestamp": 1691282079,
     "description": "You can now play Enter the Kaleidoscape. Some RNG still needs to be worked out but the mode is mostly functional."
