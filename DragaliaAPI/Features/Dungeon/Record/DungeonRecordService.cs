@@ -115,13 +115,8 @@ public class DungeonRecordService(
     private Task ProcessGrowth(GrowRecord growRecord, DungeonSession session)
     {
         // TODO: actual implementation. Extract out into a service at that time
-        // growRecord.take_player_exp = 1;
-        // growRecord.take_chara_exp = 1;
         growRecord.bonus_factor = 1;
         growRecord.mana_bonus_factor = 1;
-        // growRecord.chara_grow_record = session.Party.Select(
-        //    x => new AtgenCharaGrowRecord() { chara_id = x.chara_id, take_exp = 1 }
-        // );
 
         return Task.CompletedTask;
     }
