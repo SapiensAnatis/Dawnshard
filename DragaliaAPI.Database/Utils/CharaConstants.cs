@@ -1,7 +1,4 @@
 ﻿using System.Collections.Immutable;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Shared.Definitions;
-using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Database.Utils;
 
@@ -9,36 +6,9 @@ public static class CharaConstants
 {
     public static byte GetMaxLevelFor(int rarity)
     {
-        return rarity < 3 || rarity > 5
+        return rarity is < 3 or > 5
             ? throw new ArgumentException("Invalid Rarity")
             : (byte)(MinMaxLevel + ((rarity - 3) * 10));
-    }
-
-    public static int CalcMight(
-        DbPlayerCharaData dbCharData,
-        CharaData charData,
-        bool addSharedSkillMight = false,
-        bool isLeader = false
-    )
-    {
-        return dbCharData.Hp
-            + dbCharData.HpPlusCount
-            + dbCharData.Attack
-            + dbCharData.AttackPlusCount
-            + fsMights[dbCharData.BurstAttackLevel]
-            + skillMights[dbCharData.Skill1Level]
-            + skillMights[dbCharData.Skill1Level]
-            // a1 Might
-            + 0
-            // a2 Might
-            + 0
-            // a3 Might
-            + 0
-            // Ex Might
-            + 0
-            //sharedSkillMight
-            + (addSharedSkillMight ? 0 : 0)
-            + (isLeader ? 200 : 0);
     }
 
     public const byte MinLevel = 1;
@@ -47,9 +17,6 @@ public static class CharaConstants
     public const byte AddMaxLevel = 20;
     public const byte MaxAtkEnhance = 100;
     public const byte MaxHpEnhance = 100;
-
-    public static readonly int[] skillMights = new int[] { 0, 100, 200, 300, 400 };
-    public static readonly int[] fsMights = new int[] { 0, 60, 120 };
 
     public const int AugmentResetCost = 20000;
 

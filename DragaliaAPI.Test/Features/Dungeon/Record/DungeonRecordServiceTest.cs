@@ -1,6 +1,7 @@
 using Castle.Core.Logging;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Missions;
@@ -25,6 +26,7 @@ public class DungeonRecordServiceTest
     private readonly Mock<IUserService> mockUserService;
     private readonly Mock<ITutorialService> mockTutorialService;
     private readonly Mock<ILogger<DungeonRecordService>> mockLogger;
+    private readonly Mock<ICharaService> mockCharaService;
 
     private readonly IDungeonRecordService dungeonRecordService;
 
@@ -35,13 +37,15 @@ public class DungeonRecordServiceTest
         this.mockUserService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
+        this.mockCharaService = new(MockBehavior.Strict);
 
         this.dungeonRecordService = new DungeonRecordService(
             this.mockDungeonRewardService.Object,
             this.mockQuestService.Object,
             this.mockUserService.Object,
             this.mockTutorialService.Object,
-            this.mockLogger.Object
+            this.mockLogger.Object,
+            this.mockCharaService.Object
         );
 
         this.mockTutorialService.Setup(x => x.AddTutorialFlag(1022)).ReturnsAsync(new List<int>());
@@ -218,7 +222,7 @@ public class DungeonRecordServiceTest
                     {
                         take_mana = takeMana,
                         take_player_exp = 400,
-                        take_chara_exp = 1,
+                        take_chara_exp = 0,
                         bonus_factor = 1,
                         mana_bonus_factor = 1,
                         chara_grow_record = new List<AtgenCharaGrowRecord>()

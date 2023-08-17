@@ -866,7 +866,7 @@ public class AtgenCharaUnitSetDetailList
 {
     public int unit_set_no { get; set; }
     public string unit_set_name { get; set; }
-    public ulong dragon_key_id { get; set; }
+    public long dragon_key_id { get; set; }
     public WeaponBodies weapon_body_id { get; set; }
     public AbilityCrests crest_slot_type_1_crest_id_1 { get; set; }
     public AbilityCrests crest_slot_type_1_crest_id_2 { get; set; }
@@ -875,12 +875,12 @@ public class AtgenCharaUnitSetDetailList
     public AbilityCrests crest_slot_type_2_crest_id_2 { get; set; }
     public AbilityCrests crest_slot_type_3_crest_id_1 { get; set; }
     public AbilityCrests crest_slot_type_3_crest_id_2 { get; set; }
-    public ulong talisman_key_id { get; set; }
+    public long talisman_key_id { get; set; }
 
     public AtgenCharaUnitSetDetailList(
         int unit_set_no,
         string unit_set_name,
-        ulong dragon_key_id,
+        long dragon_key_id,
         WeaponBodies weapon_body_id,
         AbilityCrests crest_slot_type_1_crest_id_1,
         AbilityCrests crest_slot_type_1_crest_id_2,
@@ -889,7 +889,7 @@ public class AtgenCharaUnitSetDetailList
         AbilityCrests crest_slot_type_2_crest_id_2,
         AbilityCrests crest_slot_type_3_crest_id_1,
         AbilityCrests crest_slot_type_3_crest_id_2,
-        ulong talisman_key_id
+        long talisman_key_id
     )
     {
         this.unit_set_no = unit_set_no;
@@ -3244,7 +3244,7 @@ public class AtgenRequestAbilityCrestSetData
     public AbilityCrests crest_slot_type_2_crest_id_2 { get; set; }
     public AbilityCrests crest_slot_type_3_crest_id_1 { get; set; }
     public AbilityCrests crest_slot_type_3_crest_id_2 { get; set; }
-    public ulong talisman_key_id { get; set; }
+    public long talisman_key_id { get; set; }
 
     public AtgenRequestAbilityCrestSetData(
         AbilityCrests crest_slot_type_1_crest_id_1,
@@ -3254,7 +3254,7 @@ public class AtgenRequestAbilityCrestSetData
         AbilityCrests crest_slot_type_2_crest_id_2,
         AbilityCrests crest_slot_type_3_crest_id_1,
         AbilityCrests crest_slot_type_3_crest_id_2,
-        ulong talisman_key_id
+        long talisman_key_id
     )
     {
         this.crest_slot_type_1_crest_id_1 = crest_slot_type_1_crest_id_1;
@@ -3273,7 +3273,7 @@ public class AtgenRequestAbilityCrestSetData
 [MessagePackObject(true)]
 public class AtgenRequestCharaUnitSetData
 {
-    public ulong dragon_key_id { get; set; }
+    public long dragon_key_id { get; set; }
     public WeaponBodies weapon_body_id { get; set; }
     public AbilityCrests crest_slot_type_1_crest_id_1 { get; set; }
     public AbilityCrests crest_slot_type_1_crest_id_2 { get; set; }
@@ -3282,10 +3282,10 @@ public class AtgenRequestCharaUnitSetData
     public AbilityCrests crest_slot_type_2_crest_id_2 { get; set; }
     public AbilityCrests crest_slot_type_3_crest_id_1 { get; set; }
     public AbilityCrests crest_slot_type_3_crest_id_2 { get; set; }
-    public ulong talisman_key_id { get; set; }
+    public long talisman_key_id { get; set; }
 
     public AtgenRequestCharaUnitSetData(
-        ulong dragon_key_id,
+        long dragon_key_id,
         WeaponBodies weapon_body_id,
         AbilityCrests crest_slot_type_1_crest_id_1,
         AbilityCrests crest_slot_type_1_crest_id_2,
@@ -3294,7 +3294,7 @@ public class AtgenRequestCharaUnitSetData
         AbilityCrests crest_slot_type_2_crest_id_2,
         AbilityCrests crest_slot_type_3_crest_id_1,
         AbilityCrests crest_slot_type_3_crest_id_2,
-        ulong talisman_key_id
+        long talisman_key_id
     )
     {
         this.dragon_key_id = dragon_key_id;
@@ -4814,11 +4814,11 @@ public class CharaList
 [MessagePackObject(true)]
 public class CharaUnitSetList
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public IEnumerable<AtgenCharaUnitSetDetailList> chara_unit_set_detail_list { get; set; }
 
     public CharaUnitSetList(
-        int chara_id,
+        Charas chara_id,
         IEnumerable<AtgenCharaUnitSetDetailList> chara_unit_set_detail_list
     )
     {
