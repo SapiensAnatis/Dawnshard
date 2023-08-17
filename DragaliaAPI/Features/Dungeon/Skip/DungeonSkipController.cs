@@ -247,6 +247,14 @@ public class DungeonSkipController(
                 acc.grow_record.take_player_exp += current.grow_record.take_player_exp;
                 acc.grow_record.take_mana += current.grow_record.take_mana;
 
+                acc.reward_record.quest_bonus_list = acc.reward_record.quest_bonus_list.Concat(
+                    current.reward_record.quest_bonus_list
+                );
+
+                acc.reward_record.player_level_up_fstone += current
+                    .reward_record
+                    .player_level_up_fstone;
+
                 return acc;
             }
         );
