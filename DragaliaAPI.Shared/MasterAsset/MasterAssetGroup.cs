@@ -8,15 +8,16 @@ using System.Text.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset;
 
-public class MasterAssetGroup<TKey, TItem>
+public class MasterAssetGroup<TGroupKey, TKey, TItem>
     where TItem : class
     where TKey : notnull
+    where TGroupKey : notnull
 {
     private const string JsonFolder = "Resources";
 
     private readonly string jsonFilename;
     private readonly Func<TItem, TKey> keySelector;
-    private readonly Lazy<Dictionary<int, InternalKeyedCollection>> internalDictionary;
+    private readonly Lazy<Dictionary<TGroupKey, InternalKeyedCollection>> internalDictionary;
 
     /// <summary>
     /// Gets a <see cref="IEnumerable{TItem}"/> of all the collection's values.
@@ -30,7 +31,7 @@ public class MasterAssetGroup<TKey, TItem>
     /// <param name="key">The key to index with.</param>
     /// <returns>The returned value.</returns>
     /// <exception cref="KeyNotFoundException">The given key was not present in the collection.</exception>
-    public IDictionary<TKey, TItem> Get(int key) => this[key];
+    public IDictionary<TKey, TItem> Get(TGroupKey key) => this[key];
 
     /// <summary>
     /// Get a <typeparam name="TItem"> instance corresponding to the given <typeparam name="TKey"/> key.</typeparam>
@@ -38,7 +39,7 @@ public class MasterAssetGroup<TKey, TItem>
     /// <param name="key">The key to index with.</param>
     /// <returns>The returned value.</returns>
     /// <exception cref="KeyNotFoundException">The given key was not present in the collection.</exception>
-    public IDictionary<TKey, TItem> this[int key] =>
+    public IDictionary<TKey, TItem> this[TGroupKey key] =>
         this.internalDictionary.Value[key].AsImmutableDictionary();
 
     /// <summary>
@@ -47,20 +48,20 @@ public class MasterAssetGroup<TKey, TItem>
     /// <param name="key">The key to index with.</param>
     /// <param name="item">The returned value, if the master data contained it.</param>
     /// <returns>A bool indicating whether the value was successfully retrieved.</returns>
-    public bool TryGetValue(int key, [NotNullWhen(true)] out IEnumerable<TItem>? item)
+    public bool TryGetValue(TGroupKey key, [NotNullWhen(true)] out IDictionary<TKey, TItem>? item)
     {
         bool result = this.internalDictionary.Value.TryGetValue(
             key,
             out InternalKeyedCollection? entry
         );
 
-        item = result ? entry!.AsEnumerable() : null;
+        item = result ? entry!.AsImmutableDictionary() : null;
 
         return result;
     }
 
     /// <summary>
-    /// Creates a new instance of <see cref="MasterAssetGroup{TKey,TItem}"/>.
+    /// Creates a new instance of <see cref="MasterAssetGroup{TGroupKey, TKey,TItem}"/>.
     /// </summary>
     /// <param name="jsonFilename">The filename of the JSON in <see cref="JsonFolder"/>.</param>
     /// <param name="keySelector">A function that returns a unique <typeparamref name="TKey"/> value from a
@@ -72,7 +73,7 @@ public class MasterAssetGroup<TKey, TItem>
         this.internalDictionary = new(DataFactory);
     }
 
-    private Dictionary<int, InternalKeyedCollection> DataFactory()
+    private Dictionary<TGroupKey, InternalKeyedCollection> DataFactory()
     {
         string path = Path.Join(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
@@ -80,14 +81,14 @@ public class MasterAssetGroup<TKey, TItem>
             jsonFilename
         );
 
-        Dictionary<int, IEnumerable<TItem>> items =
-            JsonSerializer.Deserialize<Dictionary<int, IEnumerable<TItem>>>(
+        Dictionary<TGroupKey, IEnumerable<TItem>> items =
+            JsonSerializer.Deserialize<Dictionary<TGroupKey, IEnumerable<TItem>>>(
                 File.ReadAllText(path),
                 MasterAssetJsonOptions.Instance
             )
             ?? throw new JsonException("Deserialized Dictionary<int, IEnumerable<TItem>> was null");
 
-        Dictionary<int, InternalKeyedCollection> dict = items.ToDictionary(
+        Dictionary<TGroupKey, InternalKeyedCollection> dict = items.ToDictionary(
             x => x.Key,
             x =>
             {

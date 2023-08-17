@@ -109,6 +109,7 @@ public class WeaponService : IWeaponService
         await this.weaponRepository.AddSkin((int)weaponBodyId);
 
         this.missionProgressionService.OnWeaponEarned(
+            weaponBodyId,
             weaponData.ElementalType,
             weaponData.Rarity,
             weaponData.WeaponSeriesId
@@ -217,6 +218,9 @@ public class WeaponService : IWeaponService
                     return ResultCode.WeaponBodyBuildupPieceStepError;
                 entity.LimitOverCount = buildup.step;
                 this.missionProgressionService.OnWeaponRefined(
+                    1,
+                    buildup.step,
+                    body.Id,
                     body.ElementalType,
                     body.Rarity,
                     body.WeaponSeriesId

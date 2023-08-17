@@ -164,10 +164,8 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, SpecialMissionGroup> SpecialMissionGroup =
         new("Missions/MissionSpecialGroup.json", x => x.Id);
 
-    public static readonly MasterAssetData<
-        MissionProgressType,
-        MissionProgressionInfo
-    > MissionProgressionInfo = new("Missions/MissionProgressionInfo.json", x => x.Type);
+    public static readonly MasterAssetData<int, MissionProgressionInfo> MissionProgressionInfo =
+        new("Missions/MissionProgressionInfo.json", x => x.Id);
 
     public static readonly MasterAssetData<
         int,
@@ -337,10 +335,10 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, EventTradeGroup> EventTradeGroup =
         new("Event/EventTradeGroup.json", x => x.Id);
 
-    public static readonly MasterAssetGroup<int, BuildEventReward> BuildEventReward =
+    public static readonly MasterAssetGroup<int, int, BuildEventReward> BuildEventReward =
         new("Event/BuildEventReward.json", x => x.Id);
 
-    public static readonly MasterAssetGroup<int, RaidEventReward> RaidEventReward =
+    public static readonly MasterAssetGroup<int, int, RaidEventReward> RaidEventReward =
         new("Event/RaidEventReward.json", x => x.Id);
 
     public static readonly MasterAssetData<int, CombatEventLocation> CombatEventLocation =

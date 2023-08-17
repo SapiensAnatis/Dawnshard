@@ -8,10 +8,8 @@ public record DmodeQuestFloor(
     int Id,
     int FloorNum,
     DungeonTypes DungeonType,
-    [property: JsonConverter(typeof(MasterAssetDateTimeOffsetConverter))]
-        DateTimeOffset ViewStartDate,
-    [property: JsonConverter(typeof(MasterAssetDateTimeOffsetConverter))]
-        DateTimeOffset ViewEndDate,
+    DateTimeOffset ViewStartDate,
+    DateTimeOffset ViewEndDate,
     int BaseEnemyLevel,
     int BaseBossEnemyLevel,
     int DrawDungeonThemeId1,

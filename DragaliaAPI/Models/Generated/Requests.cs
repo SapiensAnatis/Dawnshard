@@ -3131,15 +3131,17 @@ public class PartySetPartySettingRequest
 
     [MaxLength(20)]
     public string party_name { get; set; }
-    public int is_entrust { get; set; }
-    public int entrust_element { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_entrust { get; set; }
+    public UnitElement entrust_element { get; set; }
 
     public PartySetPartySettingRequest(
         int party_no,
         IEnumerable<PartySettingList> request_party_setting_list,
         string party_name,
-        int is_entrust,
-        int entrust_element
+        bool is_entrust,
+        UnitElement entrust_element
     )
     {
         this.party_no = party_no;

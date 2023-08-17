@@ -185,7 +185,7 @@ public class StoryService(
         }
 
         await tutorialService.OnStoryQuestRead(storyId);
-        missionProgressionService.OnQuestCleared(storyId);
+        missionProgressionService.OnQuestStoryCleared(storyId);
 
         await userDataRepository.GiveWyrmite(QuestStoryWyrmite);
         List<AtgenBuildEventRewardEntityList> rewardList =

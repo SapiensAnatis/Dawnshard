@@ -2,20 +2,14 @@
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
-public record MissionInfo(
+public record MissionProgressionInfo(
     int Id,
-    [property: JsonConverter(typeof(JsonStringEnumConverter))] MissionType Type
-);
-
-public record MissionProgressionRequirement(
-    IEnumerable<MissionInfo> Missions,
+    [property: JsonConverter(typeof(JsonStringEnumConverter))] MissionType MissionType,
+    int MissionId,
+    [property: JsonConverter(typeof(JsonStringEnumConverter))] MissionCompleteType CompleteType,
+    bool UseTotalValue,
     int? Parameter = null,
     int? Parameter2 = null,
     int? Parameter3 = null,
     int? Parameter4 = null
-);
-
-public record MissionProgressionInfo(
-    [property: JsonConverter(typeof(JsonStringEnumConverter))] MissionProgressType Type,
-    IEnumerable<MissionProgressionRequirement> Requirements
 );

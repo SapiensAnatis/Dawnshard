@@ -240,7 +240,13 @@ public class WeaponServiceTest
         WeaponBody data = MasterAsset.WeaponBody.Get(WeaponBodies.WindrulersFang);
 
         this.mockMissionProgressionService.Setup(
-            x => x.OnWeaponEarned(UnitElement.Wind, 6, WeaponSeries.PrimalDragon)
+            x =>
+                x.OnWeaponEarned(
+                    WeaponBodies.WindrulersFang,
+                    UnitElement.Wind,
+                    6,
+                    WeaponSeries.PrimalDragon
+                )
         );
 
         this.mockInventoryRepository
@@ -910,11 +916,19 @@ public class WeaponServiceTest
         int step
     )
     {
-        this.mockMissionProgressionService.Setup(
-            x => x.OnWeaponRefined(It.IsAny<UnitElement>(), 6, It.IsAny<WeaponSeries>())
-        );
-
         WeaponBody body = MasterAsset.WeaponBody.Get(WeaponBodies.PrimalHex);
+
+        this.mockMissionProgressionService.Setup(
+            x =>
+                x.OnWeaponRefined(
+                    It.IsAny<int>(),
+                    It.IsAny<int>(),
+                    WeaponBodies.PrimalHex,
+                    body.ElementalType,
+                    body.Rarity,
+                    body.WeaponSeriesId
+                )
+        );
 
         this.mockInventoryRepository
             .Setup(x => x.CheckQuantity(It.IsAny<IEnumerable<KeyValuePair<Materials, int>>>()))
@@ -1006,7 +1020,15 @@ public class WeaponServiceTest
         this.mockWeaponRepository.Setup(x => x.AddSkin(30160203)).Returns(Task.CompletedTask);
 
         this.mockMissionProgressionService.Setup(
-            x => x.OnWeaponRefined(UnitElement.Water, 6, WeaponSeries.Agito)
+            x =>
+                x.OnWeaponRefined(
+                    1,
+                    2,
+                    WeaponBodies.AmenoMurakumo,
+                    UnitElement.Water,
+                    6,
+                    WeaponSeries.Agito
+                )
         );
 
         (

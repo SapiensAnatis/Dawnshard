@@ -44,7 +44,7 @@ public class PartyTest : TestFixture
                     }
                 },
                 "My New Party",
-                0,
+                false,
                 0
             )
         );
@@ -122,7 +122,7 @@ public class PartyTest : TestFixture
                     new(1, Charas.GalaGatov, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 },
                 "My New Party",
-                0,
+                false,
                 0
             );
 
@@ -153,7 +153,7 @@ public class PartyTest : TestFixture
                     new(1, Charas.ThePrince, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 },
                 "My New Party",
-                0,
+                false,
                 0
             );
 
