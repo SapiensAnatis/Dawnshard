@@ -127,9 +127,11 @@ public class RewardService(
         int atk
     )
     {
-        int currentCount = await unitRepository.Talismans.CountAsync();
+        // int currentCount = await unitRepository.Talismans.CountAsync();
 
-        if (currentCount >= TalismanService.TalismanMaxCount)
+        if (
+            false /*TODO: currentCount >= TalismanService.TalismanMaxCount once we get presents working with it*/
+        )
         {
             Entity coinReward = new(EntityTypes.Rupies, 0, TalismanService.TalismanCoinReward);
             await GrantReward(coinReward);

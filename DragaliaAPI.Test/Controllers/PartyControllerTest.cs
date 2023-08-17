@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.PartyPower;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.Logging;
@@ -18,6 +19,7 @@ public class PartyControllerTest
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<IUnitRepository> mockUnitRepository;
     private readonly Mock<ILogger<PartyController>> mockLogger;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
 
     public PartyControllerTest()
     {
@@ -26,6 +28,7 @@ public class PartyControllerTest
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
 
         IMapper mapper = new MapperConfiguration(
             cfg => cfg.AddMaps(typeof(Program).Assembly)
@@ -39,7 +42,8 @@ public class PartyControllerTest
             mapper,
             this.mockLogger.Object,
             new Mock<IPartyPowerService>().Object,
-            new Mock<IPartyPowerRepository>().Object
+            new Mock<IPartyPowerRepository>().Object,
+            this.mockMissionProgressionService.Object
         );
         this.partyController.SetupMockContext();
     }

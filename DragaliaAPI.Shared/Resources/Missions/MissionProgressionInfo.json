@@ -1,363 +1,1444 @@
 [
   {
-    "_Type": "FortLevelup",
-    "_Requirements": [
-      {
-        "_Missions": [
-          {
-            "_Type": "Drill",
-            "_Id": 200700
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10010101
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10020101
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10020102
-          }
-        ]
-      }
-    ]
+    "_comment": "Reach a Facility Level of Lv. 200",
+    "_Id": 1001010105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10010101,
+    "_CompleteType": "FortLevelUp",
+    "_UseTotalValue": 1
   },
   {
-    "_Type": "VoidBattleCleared",
-    "_Requirements": [
-      {
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10030101
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10030201
-          }
-        ]
-      }
-    ]
+    "_comment": "Upgrade the Halidom to Lv. 5",
+    "_Id": 1001020105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10010201,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100101
   },
   {
-    "_Type": "FortPlantUpgraded",
-    "_Requirements": [
-      {
-        "_Parameter": 100101,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10010201
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10020201
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10020202
-          }
-        ]
-      },
-      {
-        "_Parameter": 101401,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10010301
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10020301
-          }
-        ]
-      },
-      {
-        "_Parameter": 101904,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10030501
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10030601
-          }
-        ]
-      },
-      {
-        "_Parameter": 100401,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10080101
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10080201
-          }
-        ]
-      },
-      {
-        "_Parameter": 101901,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10080301
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10080401
-          }
-        ]
-      },
-      {
-        "_Parameter": 100405,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10100101
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10100201
-          }
-        ]
-      },
-      {
-        "_Parameter": 101905,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10100301
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10100401
-          }
-        ]
-      },
-      {
-        "_Parameter": 100507,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10100501
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10100601
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10100701
-          }
-        ]
-      },
-      {
-        "_Parameter": 100403,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10110101
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10110201
-          }
-        ]
-      },
-      {
-        "_Parameter": 101903,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10110301
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10110401
-          }
-        ]
-      }
-    ]
+    "_comment": "Upgrade the Smithy to Lv. 6",
+    "_Id": 1001030105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10010301,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101401
   },
   {
-    "_Type": "FortPlantBuilt",
-    "_Requirements": [
-      {
-        "_Parameter": 101904,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10030401
-          }
-        ]
-      }
-    ]
+    "_comment": "Clear Battle at Myriage Lake: Master Three Times",
+    "_Id": 1001040105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10010401,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 211020104
   },
   {
-    "_Type": "QuestCleared",
-    "_Requirements": [
-      {
-        "_Parameter": 211020104,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10010401
-          },
-          {
-            "_Type": "MainStory",
-            "_Id": 10020401
-          }
-        ]
-      },
-      {
-        "_Parameter": 1000106,
-        "_Missions": [
-          {
-            "_Type": "Drill",
-            "_Id": 100200
-          }
-        ]
-      }
-    ]
+    "_comment": "Earn a Non-Elemental 5★ Core Weapon",
+    "_Id": 1001050105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10010501,
+    "_CompleteType": "WeaponEarned",
+    "_UseTotalValue": 0,
+    "_Parameter2": 99,
+    "_Parameter3": 5,
+    "_Parameter4": 1
   },
   {
-    "_Type": "WyrmprintAugmentBuildup",
-    "_Requirements": [
-      {
-        "_Parameter": 1,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10090301
-          }
-        ]
-      },
-      {
-        "_Parameter": 2,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10090401
-          }
-        ]
-      }
-    ]
+    "_comment": "Reach a Facility Level of Lv. 300",
+    "_Id": 1002010105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10020101,
+    "_CompleteType": "FortLevelUp",
+    "_UseTotalValue": 1
   },
   {
-    "_Type": "CharacterBuildup",
-    "_Requirements": [
-      {
-        "_Parameter": 1,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10090101
-          }
-        ]
-      },
-      {
-        "_Parameter": 2,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10090201
-          }
-        ]
-      }
-    ]
+    "_comment": "Reach a Facility Level of Lv. 400",
+    "_Id": 1002010205,
+    "_MissionType": "MainStory",
+    "_MissionId": 10020102,
+    "_CompleteType": "FortLevelUp",
+    "_UseTotalValue": 1
   },
   {
-    "_Type": "WeaponEarned",
-    "_Requirements": [
-      {
-        "_Parameter": 99,
-        "_Parameter2": 5,
-        "_Parameter3": 1,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10010501
-          }
-        ]
-      },
-      {
-        "_Parameter": 2,
-        "_Parameter2": 5,
-        "_Parameter3": 1,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10020501
-          }
-        ]
-      },
-      {
-        "_Parameter": 4,
-        "_Parameter2": 5,
-        "_Parameter3": 1,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10030301
-          }
-        ]
-      },
-      {
-        "_Parameter": 1,
-        "_Parameter2": 5,
-        "_Parameter3": 5,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10080501
-          }
-        ]
-      },
-      {
-        "_Parameter": 3,
-        "_Parameter2": 5,
-        "_Parameter3": 5,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10110501
-          }
-        ]
-      }
-    ]
+    "_comment": "Upgrade the Halidom to Lv. 6",
+    "_Id": 1002020105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10020201,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100101
   },
   {
-    "_Type": "WeaponRefined",
-    "_Requirements": [
-      {
-        "_Parameter": 1,
-        "_Parameter2": 5,
-        "_Parameter3": 5,
-        "_Missions": [
-          {
-            "_Type": "MainStory",
-            "_Id": 10090501
-          }
-        ]
-      }
-    ]
+    "_comment": "Upgrade the Halidom to Lv. 7",
+    "_Id": 1002020205,
+    "_MissionType": "MainStory",
+    "_MissionId": 10020202,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100101
   },
   {
-    "_Type": "ItemSummon",
-    "_Requirements": [
-      {
-        "_Missions": [
-          {
-            "_Type": "Drill",
-            "_Id": 100100
-          }
-        ]
-      }
-    ]
+    "_comment": "Upgrade the Smithy to Lv. 9",
+    "_Id": 1002030105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10020301,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101401
+  },
+  {
+    "_comment": "Clear Battle at Myriage Lake: Master Five Times",
+    "_Id": 1002040105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10020401,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 211020104
+  },
+  {
+    "_comment": "Earn a Water-Attuned 5★ Core Weapon",
+    "_Id": 1002050105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10020501,
+    "_CompleteType": "WeaponEarned",
+    "_UseTotalValue": 0,
+    "_Parameter2": 2,
+    "_Parameter3": 5,
+    "_Parameter4": 1
+  },
+  {
+    "_comment": "Clear a Void Battle",
+    "_Id": 1003010105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10030101,
+    "_CompleteType": "EventGroupCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 30000
+  },
+  {
+    "_comment": "Clear Two Void Battles",
+    "_Id": 1003020105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10030201,
+    "_CompleteType": "EventGroupCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 30000
+  },
+  {
+    "_comment": "Earn a Light-Attuned 5★ Void Weapon",
+    "_Id": 1003030105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10030301,
+    "_CompleteType": "WeaponEarned",
+    "_UseTotalValue": 0,
+    "_Parameter2": 4,
+    "_Parameter3": 5,
+    "_Parameter4": 2
+  },
+  {
+    "_comment": "Place a Twinkling Slime Statue",
+    "_Id": 1003040105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10030401,
+    "_CompleteType": "FortPlantPlaced",
+    "_UseTotalValue": 1,
+    "_Parameter": 101904
+  },
+  {
+    "_comment": "Upgrade a Twinkling Slime Statue to Lv. 3",
+    "_Id": 1003050105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10030501,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101904
+  },
+  {
+    "_comment": "Upgrade a Twinkling Slime Statue to Lv. 5",
+    "_Id": 1003060105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10030601,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101904
+  },
+  {
+    "_comment": "Upgrade a Flame Altar to Lv. 15",
+    "_Id": 1008010105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10080101,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100401
+  },
+  {
+    "_comment": "Upgrade a Flame Altar to Lv. 20",
+    "_Id": 1008020105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10080201,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100401
+  },
+  {
+    "_comment": "Upgrade a Magma Slime Statue to Lv. 6",
+    "_Id": 1008030105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10080301,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101901
+  },
+  {
+    "_comment": "Upgrade a Magma Slime Statue to Lv. 10",
+    "_Id": 1008040105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10080401,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101901
+  },
+  {
+    "_comment": "Earn a Flame-Attuned 5★ Volcanic Chimera Weapon",
+    "_Id": 1008050105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10080501,
+    "_CompleteType": "WeaponEarned",
+    "_UseTotalValue": 0,
+    "_Parameter2": 1,
+    "_Parameter3": 5,
+    "_Parameter4": 5
+  },
+  {
+    "_comment": "Upgrade an Adventurer Using a Total of 10 HP Augments",
+    "_Id": 1009010105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10090101,
+    "_CompleteType": "CharacterBuildupPlusCount",
+    "_UseTotalValue": 1,
+    "_Parameter3": 1
+  },
+  {
+    "_comment": "Upgrade an Adventurer Using a Total of 10 Strength Augments",
+    "_Id": 1009020105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10090201,
+    "_CompleteType": "CharacterBuildupPlusCount",
+    "_UseTotalValue": 1,
+    "_Parameter3": 2
+  },
+  {
+    "_comment": "Upgrade a Wyrmprint Using a Total of 10 HP Augments",
+    "_Id": 1009030105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10090301,
+    "_CompleteType": "AbilityCrestBuildupPlusCount",
+    "_UseTotalValue": 1,
+    "_Parameter2": 1
+  },
+  {
+    "_comment": "Upgrade a Wyrmprint Using a Total of 10 Strength Augments",
+    "_Id": 1009040105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10090401,
+    "_CompleteType": "AbilityCrestBuildupPlusCount",
+    "_UseTotalValue": 1,
+    "_Parameter2": 2
+  },
+  {
+    "_comment": "Refine a Flame-Attuned 5★ Volcanic Chimera Weapon",
+    "_Id": 1009050105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10090501,
+    "_CompleteType": "WeaponRefined",
+    "_UseTotalValue": 0,
+    "_Parameter2": 1,
+    "_Parameter3": 5,
+    "_Parameter4": 5
+  },
+  {
+    "_comment": "Upgrade a Shadow Altar to Lv. 15",
+    "_Id": 1010010105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10100101,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100405
+  },
+  {
+    "_comment": "Upgrade a Shadow Altar to Lv. 20",
+    "_Id": 1010020105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10100201,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100405
+  },
+  {
+    "_comment": "Upgrade a Poison Slime Statue to Lv. 6",
+    "_Id": 1010030105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10100301,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101905
+  },
+  {
+    "_comment": "Upgrade a Poison Slime Statue to Lv. 10",
+    "_Id": 1010040105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10100401,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101905
+  },
+  {
+    "_comment": "Upgrade a Wand Dojo to Lv. 5",
+    "_Id": 1010050105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10100501,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100507
+  },
+  {
+    "_comment": "Upgrade a Wand Dojo to Lv. 10",
+    "_Id": 1010060105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10100601,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100507
+  },
+  {
+    "_comment": "Upgrade a Wand Dojo to Lv. 15",
+    "_Id": 1010070105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10100701,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100507
+  },
+  {
+    "_comment": "Upgrade a Wind Altar to Lv. 15",
+    "_Id": 1011010105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10110101,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100403
+  },
+  {
+    "_comment": "Upgrade a Wind Altar to Lv. 20",
+    "_Id": 1011020105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10110201,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100403
+  },
+  {
+    "_comment": "Upgrade an Aero Slime Statue to Lv. 6",
+    "_Id": 1011030105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10110301,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101903
+  },
+  {
+    "_comment": "Upgrade an Aero Slime Statue to Lv. 10",
+    "_Id": 1011040105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10110401,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101903
+  },
+  {
+    "_comment": "Earn a Wind-Attuned 5★ Tempest Chimera Weapon",
+    "_Id": 1011050105,
+    "_MissionType": "MainStory",
+    "_MissionId": 10110501,
+    "_CompleteType": "WeaponEarned",
+    "_UseTotalValue": 0,
+    "_Parameter2": 3,
+    "_Parameter3": 5,
+    "_Parameter4": 5
+  },
+  {
+    "_comment": "Perform an Item Summon in the Shop",
+    "_Id": 10010008,
+    "_MissionType": "Drill",
+    "_MissionId": 100100,
+    "_CompleteType": "ItemSummon",
+    "_UseTotalValue": 0
+  },
+  {
+    "_comment": "Clear Ch. 1 2-3 of the Main Campaign",
+    "_Id": 10020008,
+    "_MissionType": "Drill",
+    "_MissionId": 100200,
+    "_CompleteType": "QuestStoryCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 1000106
+  },
+  {
+    "_comment": "View the Wyrmprint Section of the Treasure Trade",
+    "_Id": 10030008,
+    "_MissionType": "Drill",
+    "_MissionId": 100300,
+    "_CompleteType": "AbilityCrestTradeViewed",
+    "_UseTotalValue": 0
+  },
+  {
+    "_comment": "Clear Ch. 1 3-4 of the Main Campaign",
+    "_Id": 10040008,
+    "_MissionType": "Drill",
+    "_MissionId": 100400,
+    "_CompleteType": "QuestStoryCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 1000109
+  },
+  {
+    "_comment": "Unlock 10 Mana Nodes for a Flame-Attuned Adventurer",
+    "_Id": 10050008,
+    "_MissionType": "Drill",
+    "_MissionId": 100500,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 1
+  },
+  {
+    "_comment": "Use the Optimize Feature to Form a Flame-Attuned Team",
+    "_Id": 10060008,
+    "_MissionType": "Drill",
+    "_MissionId": 100600,
+    "_CompleteType": "PartyOptimized",
+    "_UseTotalValue": 0,
+    "_Parameter": 1
+  },
+  {
+    "_comment": "Clear Ch. 1 4-6 of the Main Campaign",
+    "_Id": 10070008,
+    "_MissionType": "Drill",
+    "_MissionId": 100700,
+    "_CompleteType": "QuestStoryCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 1000111
+  },
+  {
+    "_comment": "Upgrade a Rupie Mine to Lv. 2",
+    "_Id": 10080008,
+    "_MissionType": "Drill",
+    "_MissionId": 100800,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100201
+  },
+  {
+    "_comment": "Place a Flame Altar on the Castle Grounds",
+    "_Id": 10090008,
+    "_MissionType": "Drill",
+    "_MissionId": 100900,
+    "_CompleteType": "FortPlantPlaced",
+    "_UseTotalValue": 1,
+    "_Parameter": 100401
+  },
+  {
+    "_comment": "Unlock 10 Mana Nodes for a Wind-Attuned Adventurer",
+    "_Id": 10100008,
+    "_MissionType": "Drill",
+    "_MissionId": 101000,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 3
+  },
+  {
+    "_comment": "Use the Optimize Feature to Form a Wind-Attuned Team",
+    "_Id": 10110008,
+    "_MissionType": "Drill",
+    "_MissionId": 101100,
+    "_CompleteType": "PartyOptimized",
+    "_UseTotalValue": 0,
+    "_Parameter": 3
+  },
+  {
+    "_comment": "Clear Ch. 2 2-1 of the Main Campaign",
+    "_Id": 10120008,
+    "_MissionType": "Drill",
+    "_MissionId": 101200,
+    "_CompleteType": "QuestStoryCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 1000202
+  },
+  {
+    "_comment": "Place a Dragontree on the Castle Grounds",
+    "_Id": 10130008,
+    "_MissionType": "Drill",
+    "_MissionId": 101300,
+    "_CompleteType": "FortPlantPlaced",
+    "_UseTotalValue": 1,
+    "_Parameter": 100301
+  },
+  {
+    "_comment": "Upgrade a Dragontree to Lv. 2",
+    "_Id": 10140008,
+    "_MissionType": "Drill",
+    "_MissionId": 101400,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100301
+  },
+  {
+    "_comment": "Give a Gift to a Dragon",
+    "_Id": 10150008,
+    "_MissionType": "Drill",
+    "_MissionId": 101500,
+    "_CompleteType": "DragonGiftSent",
+    "_UseTotalValue": 0
+  },
+  {
+    "_comment": "Place a Wind Altar on the Castle Grounds",
+    "_Id": 10160008,
+    "_MissionType": "Drill",
+    "_MissionId": 101600,
+    "_CompleteType": "FortPlantPlaced",
+    "_UseTotalValue": 1,
+    "_Parameter": 100403
+  },
+  {
+    "_comment": "Clear Windmaul Ruins",
+    "_Id": 10170008,
+    "_MissionType": "Drill",
+    "_MissionId": 101700,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter2": 20203
+  },
+  {
+    "_comment": "Upgrade a Wind Altar to Lv. 10",
+    "_Id": 10180008,
+    "_MissionType": "Drill",
+    "_MissionId": 101800,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100403
+  },
+  {
+    "_comment": "Clear Ch. 2 5-3 of the Main Campaign",
+    "_Id": 10190008,
+    "_MissionType": "Drill",
+    "_MissionId": 101900,
+    "_CompleteType": "QuestStoryCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 1000208
+  },
+  {
+    "_comment": "Upgrade a Wind-Attuned Dragon to Lv. 5",
+    "_Id": 10200008,
+    "_MissionType": "Drill",
+    "_MissionId": 102000,
+    "_CompleteType": "DragonLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 3
+  },
+  {
+    "_comment": "Clear Ch. 2 6-2 of the Main Campaign",
+    "_Id": 10210008,
+    "_MissionType": "Drill",
+    "_MissionId": 102100,
+    "_CompleteType": "QuestStoryCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 1000210
+  },
+  {
+    "_comment": "Enter an Alliance and Claim Your Check-In Reward",
+    "_Id": 10220008,
+    "_MissionType": "Drill",
+    "_MissionId": 102200,
+    "_CompleteType": "GuildCheckInRewardClaimed",
+    "_UseTotalValue": 0
+  },
+  {
+    "_comment": "Upgrade the Halidom to Lv. 2",
+    "_Id": 10230008,
+    "_MissionType": "Drill",
+    "_MissionId": 102300,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100101
+  },
+  {
+    "_comment": "Upgrade the Smithy to Lv. 2",
+    "_Id": 10240008,
+    "_MissionType": "Drill",
+    "_MissionId": 102400,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101401
+  },
+  {
+    "_comment": "Raise a Water-Attuned Adventurer to Lv. 30",
+    "_Id": 10250008,
+    "_MissionType": "Drill",
+    "_MissionId": 102500,
+    "_CompleteType": "CharacterLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 2
+  },
+  {
+    "_comment": "Unlock 10 Mana Nodes for a Water-Attuned Adventurer",
+    "_Id": 10260008,
+    "_MissionType": "Drill",
+    "_MissionId": 102600,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 2
+  },
+  {
+    "_comment": "Upgrade a Water-Attuned Dragon to Lv. 5",
+    "_Id": 10270008,
+    "_MissionType": "Drill",
+    "_MissionId": 102700,
+    "_CompleteType": "DragonLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 2
+  },
+  {
+    "_comment": "Use the Optimize Feature to Form a Water-Attuned Team",
+    "_Id": 10280008,
+    "_MissionType": "Drill",
+    "_MissionId": 102800,
+    "_CompleteType": "PartyOptimized",
+    "_UseTotalValue": 0,
+    "_Parameter": 2
+  },
+  {
+    "_comment": "Place a Water Altar on the Castle Grounds",
+    "_Id": 10290008,
+    "_MissionType": "Drill",
+    "_MissionId": 102900,
+    "_CompleteType": "FortPlantPlaced",
+    "_UseTotalValue": 1,
+    "_Parameter": 100402
+  },
+  {
+    "_comment": "Clear Waterscour Ruins",
+    "_Id": 10300008,
+    "_MissionType": "Drill",
+    "_MissionId": 103000,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter2": 20202
+  },
+  {
+    "_comment": "Upgrade a Water Altar to Lv. 10",
+    "_Id": 10310008,
+    "_MissionType": "Drill",
+    "_MissionId": 103100,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100402
+  },
+  {
+    "_comment": "Clear Ch. 3 4-4 of the Main Campaign",
+    "_Id": 10320008,
+    "_MissionType": "Drill",
+    "_MissionId": 103200,
+    "_CompleteType": "QuestStoryCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 1000311
+  },
+  {
+    "_comment": "Upgrade a Flame-Attuned Dragon to Lv. 10",
+    "_Id": 10330008,
+    "_MissionType": "Drill",
+    "_MissionId": 103300,
+    "_CompleteType": "DragonLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 1
+  },
+  {
+    "_comment": "Clear Flamehowl Ruins",
+    "_Id": 10340008,
+    "_MissionType": "Drill",
+    "_MissionId": 103400,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter2": 20201
+  },
+  {
+    "_comment": "Upgrade a Flame Altar to Lv. 10",
+    "_Id": 10350008,
+    "_MissionType": "Drill",
+    "_MissionId": 103500,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100401
+  },
+  {
+    "_comment": "Clear a Dragon Trial on Beginner",
+    "_Id": 10360008,
+    "_MissionType": "Drill",
+    "_MissionId": 103600,
+    "_CompleteType": "EventGroupCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 20300,
+    "_Parameter2": 1
+  },
+  {
+    "_comment": "Raise a Shadow-Attuned Adventurer to Lv. 40",
+    "_Id": 10370008,
+    "_MissionType": "Drill",
+    "_MissionId": 103700,
+    "_CompleteType": "CharacterLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 5
+  },
+  {
+    "_comment": "Unlock 10 Mana Nodes for a Shadow-Attuned Adventurer",
+    "_Id": 10380008,
+    "_MissionType": "Drill",
+    "_MissionId": 103800,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 5
+  },
+  {
+    "_comment": "Use the Optimize Feature to Form a Shadow-Attuned Team",
+    "_Id": 10390008,
+    "_MissionType": "Drill",
+    "_MissionId": 103900,
+    "_CompleteType": "PartyOptimized",
+    "_UseTotalValue": 0,
+    "_Parameter": 5
+  },
+  {
+    "_comment": "Place a Shadow Altar on the Castle Grounds",
+    "_Id": 10400008,
+    "_MissionType": "Drill",
+    "_MissionId": 104000,
+    "_CompleteType": "FortPlantPlaced",
+    "_UseTotalValue": 1,
+    "_Parameter": 100405
+  },
+  {
+    "_comment": "Clear Ch. 4 5-4 of the Main Campaign",
+    "_Id": 10410008,
+    "_MissionType": "Drill",
+    "_MissionId": 104100,
+    "_CompleteType": "QuestStoryCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 1000412
+  },
+  {
+    "_comment": "Raise a Light-Attuned Adventurer to Lv. 50",
+    "_Id": 10420008,
+    "_MissionType": "Drill",
+    "_MissionId": 104200,
+    "_CompleteType": "CharacterLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 4
+  },
+  {
+    "_comment": "Unlock 10 Mana Nodes for a Light-Attuned Adventurer",
+    "_Id": 10430008,
+    "_MissionType": "Drill",
+    "_MissionId": 104300,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 4
+  },
+  {
+    "_comment": "Upgrade a Light-Attuned Dragon to Lv. 30",
+    "_Id": 10440008,
+    "_MissionType": "Drill",
+    "_MissionId": 104400,
+    "_CompleteType": "DragonLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 4
+  },
+  {
+    "_comment": "Use the Optimize Feature to Form a Light-Attuned Team",
+    "_Id": 10450008,
+    "_MissionType": "Drill",
+    "_MissionId": 104500,
+    "_CompleteType": "PartyOptimized",
+    "_UseTotalValue": 0,
+    "_Parameter": 4
+  },
+  {
+    "_comment": "Place a Light Altar on the Castle Grounds",
+    "_Id": 10460008,
+    "_MissionType": "Drill",
+    "_MissionId": 104600,
+    "_CompleteType": "FortPlantPlaced",
+    "_UseTotalValue": 1,
+    "_Parameter": 100404
+  },
+  {
+    "_comment": "Clear Lightsunder Ruins",
+    "_Id": 10470008,
+    "_MissionType": "Drill",
+    "_MissionId": 104700,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter2": 20204
+  },
+  {
+    "_comment": "Upgrade a Light Altar to Lv. 10",
+    "_Id": 10480008,
+    "_MissionType": "Drill",
+    "_MissionId": 104800,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100404
+  },
+  {
+    "_comment": "Clear Ch. 5 4-4 of the Main Campaign",
+    "_Id": 10490008,
+    "_MissionType": "Drill",
+    "_MissionId": 104900,
+    "_CompleteType": "QuestStoryCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 1000509
+  },
+  {
+    "_comment": "Upgrade a Shadow-Attuned Dragon to Lv. 30",
+    "_Id": 10500008,
+    "_MissionType": "Drill",
+    "_MissionId": 105000,
+    "_CompleteType": "DragonLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 5
+  },
+  {
+    "_comment": "Clear Shadowsteep Ruins",
+    "_Id": 10510008,
+    "_MissionType": "Drill",
+    "_MissionId": 105100,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter2": 20205
+  },
+  {
+    "_comment": "Upgrade a Shadow Altar to Lv. 10",
+    "_Id": 10520008,
+    "_MissionType": "Drill",
+    "_MissionId": 105200,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100405
+  },
+  {
+    "_comment": "Clear a Dragon Trial on Standard",
+    "_Id": 10530008,
+    "_MissionType": "Drill",
+    "_MissionId": 105300,
+    "_CompleteType": "EventGroupCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 20300,
+    "_Parameter2": 2
+  },
+  {
+    "_comment": "Reach Bond Lv. 10 with a Dragon",
+    "_Id": 10540008,
+    "_MissionType": "Drill",
+    "_MissionId": 105400,
+    "_CompleteType": "DragonBondLevelUp",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Upgrade the Halidom to Lv. 3",
+    "_Id": 10550008,
+    "_MissionType": "Drill",
+    "_MissionId": 105500,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100101
+  },
+  {
+    "_comment": "Upgrade the Smithy to Lv. 3",
+    "_Id": 20010008,
+    "_MissionType": "Drill",
+    "_MissionId": 200100,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101401
+  },
+  {
+    "_comment": "Raise a Flame-Attuned Adventurer to Lv. 70",
+    "_Id": 20020008,
+    "_MissionType": "Drill",
+    "_MissionId": 200200,
+    "_CompleteType": "CharacterLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 1
+  },
+  {
+    "_comment": "Unlock 20 Mana Nodes for a Flame-Attuned Adventurer",
+    "_Id": 20030008,
+    "_MissionType": "Drill",
+    "_MissionId": 200300,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 1
+  },
+  {
+    "_comment": "Clear Ch. 6 3-3 of the Main Campaign",
+    "_Id": 20040008,
+    "_MissionType": "Drill",
+    "_MissionId": 200400,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 100060210
+  },
+  {
+    "_comment": "Raise a Shadow-Attuned Adventurer to Lv. 70",
+    "_Id": 20050008,
+    "_MissionType": "Drill",
+    "_MissionId": 200500,
+    "_CompleteType": "CharacterLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 5
+  },
+  {
+    "_comment": "Unlock 20 Mana Nodes for a Shadow-Attuned Adventurer",
+    "_Id": 20060008,
+    "_MissionType": "Drill",
+    "_MissionId": 200600,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 5
+  },
+  {
+    "_comment": "Reach a Facility Level of Lv. 85",
+    "_Id": 20070008,
+    "_MissionType": "Drill",
+    "_MissionId": 200700,
+    "_CompleteType": "FortLevelUp",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Clear Ch. 6 4-3 of the Main Campaign",
+    "_Id": 20080008,
+    "_MissionType": "Drill",
+    "_MissionId": 200800,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 100060114
+  },
+  {
+    "_comment": "Place a Wind Dracolith on the Castle Grounds",
+    "_Id": 20090008,
+    "_MissionType": "Drill",
+    "_MissionId": 200900,
+    "_CompleteType": "FortPlantPlaced",
+    "_UseTotalValue": 1,
+    "_Parameter": 100603
+  },
+  {
+    "_comment": "Upgrade the Halidom to Lv. 4",
+    "_Id": 20100008,
+    "_MissionType": "Drill",
+    "_MissionId": 201000,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100101
+  },
+  {
+    "_comment": "Place a Sword Dojo on the Castle Grounds",
+    "_Id": 20110008,
+    "_MissionType": "Drill",
+    "_MissionId": 201100,
+    "_CompleteType": "FortPlantPlaced",
+    "_UseTotalValue": 1,
+    "_Parameter": 100501
+  },
+  {
+    "_comment": "Clear The Imperial Onslaught on Beginner",
+    "_Id": 20120008,
+    "_MissionType": "Drill",
+    "_MissionId": 201200,
+    "_CompleteType": "EventGroupCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 21100,
+    "_Parameter2": 1
+  },
+  {
+    "_comment": "Raise a Wind-Attuned Adventurer to Lv. 70",
+    "_Id": 20130008,
+    "_MissionType": "Drill",
+    "_MissionId": 201300,
+    "_CompleteType": "CharacterLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 3
+  },
+  {
+    "_comment": "Unlock 20 Mana Nodes for a Wind-Attuned Adventurer",
+    "_Id": 20140008,
+    "_MissionType": "Drill",
+    "_MissionId": 201400,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 3
+  },
+  {
+    "_comment": "Advance the Main Campaign and Place a Water Dracolith",
+    "_Id": 20150008,
+    "_MissionType": "Drill",
+    "_MissionId": 201500,
+    "_CompleteType": "FortPlantPlaced",
+    "_UseTotalValue": 1,
+    "_Parameter": 100602
+  },
+  {
+    "_comment": "Upgrade the Smithy to Lv. 4",
+    "_Id": 20160008,
+    "_MissionType": "Drill",
+    "_MissionId": 201600,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101401
+  },
+  {
+    "_comment": "Raise a Water-Attuned Adventurer to Lv. 70",
+    "_Id": 20170008,
+    "_MissionType": "Drill",
+    "_MissionId": 201700,
+    "_CompleteType": "CharacterLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 2
+  },
+  {
+    "_comment": "Unlock 20 Mana Nodes for a Water-Attuned Adventurer",
+    "_Id": 20180008,
+    "_MissionType": "Drill",
+    "_MissionId": 201800,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 2
+  },
+  {
+    "_comment": "Raise a Light-Attuned Adventurer to Lv. 70",
+    "_Id": 20190008,
+    "_MissionType": "Drill",
+    "_MissionId": 201900,
+    "_CompleteType": "CharacterLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter2": 4
+  },
+  {
+    "_comment": "Unlock 20 Mana Nodes for a Light-Attuned Adventurer",
+    "_Id": 20200008,
+    "_MissionType": "Drill",
+    "_MissionId": 202000,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 4
+  },
+  {
+    "_comment": "Reach 7,000 Might with a Team",
+    "_Id": 20260008,
+    "_MissionType": "Drill",
+    "_MissionId": 202600,
+    "_CompleteType": "PartyPowerReached",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Clear The Imperial Onslaught on Standard",
+    "_Id": 20270008,
+    "_MissionType": "Drill",
+    "_MissionId": 202700,
+    "_CompleteType": "EventGroupCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 21100,
+    "_Parameter2": 2
+  },
+  {
+    "_comment": "Clear a Dragon Trial on Expert",
+    "_Id": 20280008,
+    "_MissionType": "Drill",
+    "_MissionId": 202800,
+    "_CompleteType": "EventGroupCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 20300,
+    "_Parameter2": 3
+  },
+  {
+    "_comment": "Obtain Midgardsormr from the Treasure Trade",
+    "_Id": 30010008,
+    "_MissionType": "Drill",
+    "_MissionId": 300100,
+    "_CompleteType": "TreasureTrade",
+    "_UseTotalValue": 1,
+    "_Parameter2": 7,
+    "_Parameter3": 20040301
+  },
+  {
+    "_comment": "Upgrade a Dragon to Lv. 50",
+    "_Id": 30020008,
+    "_MissionType": "Drill",
+    "_MissionId": 300200,
+    "_CompleteType": "DragonLevelUp",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Upgrade the Smithy to Lv. 5",
+    "_Id": 30030008,
+    "_MissionType": "Drill",
+    "_MissionId": 300300,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101401
+  },
+  {
+    "_comment": "Unlock 30 Mana Nodes for a Flame-Attuned Adventurer",
+    "_Id": 30040008,
+    "_MissionType": "Drill",
+    "_MissionId": 300400,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 1
+  },
+  {
+    "_comment": "Unlock 30 Mana Nodes for a Water-Attuned Adventurer",
+    "_Id": 30050008,
+    "_MissionType": "Drill",
+    "_MissionId": 300500,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 2
+  },
+  {
+    "_comment": "Unlock 30 Mana Nodes for a Wind-Attuned Adventurer",
+    "_Id": 30060008,
+    "_MissionType": "Drill",
+    "_MissionId": 300600,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 3
+  },
+  {
+    "_comment": "Unlock 30 Mana Nodes for a Light-Attuned Adventurer",
+    "_Id": 30070008,
+    "_MissionType": "Drill",
+    "_MissionId": 300700,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 4
+  },
+  {
+    "_comment": "Unlock 30 Mana Nodes for a Shadow-Attuned Adventurer",
+    "_Id": 30080008,
+    "_MissionType": "Drill",
+    "_MissionId": 300800,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 5
+  },
+  {
+    "_comment": "Raise an Adventurer to Lv. 80",
+    "_Id": 30090008,
+    "_MissionType": "Drill",
+    "_MissionId": 300900,
+    "_CompleteType": "CharacterLevelUp",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Upgrade the Halidom to Lv. 5",
+    "_Id": 30100008,
+    "_MissionType": "Drill",
+    "_MissionId": 301000,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100101
+  },
+  {
+    "_comment": "Unlock 40 Mana Nodes for a Flame-Attuned Adventurer",
+    "_Id": 30110008,
+    "_MissionType": "Drill",
+    "_MissionId": 301100,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 1
+  },
+  {
+    "_comment": "Unlock 40 Mana Nodes for a Water-Attuned Adventurer",
+    "_Id": 30120008,
+    "_MissionType": "Drill",
+    "_MissionId": 301200,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 2
+  },
+  {
+    "_comment": "Unlock 40 Mana Nodes for a Wind-Attuned Adventurer",
+    "_Id": 30130008,
+    "_MissionType": "Drill",
+    "_MissionId": 301300,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 3
+  },
+  {
+    "_comment": "Unlock 40 Mana Nodes for a Light-Attuned Adventurer",
+    "_Id": 30140008,
+    "_MissionType": "Drill",
+    "_MissionId": 301400,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 4
+  },
+  {
+    "_comment": "Unlock 40 Mana Nodes for a Shadow-Attuned Adventurer",
+    "_Id": 30150008,
+    "_MissionType": "Drill",
+    "_MissionId": 301500,
+    "_CompleteType": "CharacterManaNodeUnlock",
+    "_UseTotalValue": 1,
+    "_Parameter2": 5
+  },
+  {
+    "_comment": "Upgrade the Smithy to Lv. 6",
+    "_Id": 30160008,
+    "_MissionType": "Drill",
+    "_MissionId": 301600,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101401
+  },
+  {
+    "_comment": "Upgrade a Wyrmprint's HP & Strength 15 Times",
+    "_Id": 30170008,
+    "_MissionType": "Drill",
+    "_MissionId": 301700,
+    "_CompleteType": "AbilityCrestTotalPlusCountUp",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Upgrade a Dragon to Lv. 80",
+    "_Id": 30180008,
+    "_MissionType": "Drill",
+    "_MissionId": 301800,
+    "_CompleteType": "DragonLevelUp",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Reach 9,000 Might with a Team",
+    "_Id": 30190008,
+    "_MissionType": "Drill",
+    "_MissionId": 301900,
+    "_CompleteType": "PartyPowerReached",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Clear Wandering Shroom Strike",
+    "_Id": 30200008,
+    "_MissionType": "Drill",
+    "_MissionId": 302000,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter2": 300010101
+  },
+  {
+    "_comment": "Reach 13,000 Might with a Team",
+    "_Id": 30210008,
+    "_MissionType": "Drill",
+    "_MissionId": 302100,
+    "_CompleteType": "PartyPowerReached",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Clear Steel Golem Strike",
+    "_Id": 30220008,
+    "_MissionType": "Drill",
+    "_MissionId": 302200,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter2": 300030101
+  },
+  {
+    "_comment": "Reach 15,000 Might with a Team",
+    "_Id": 30230008,
+    "_MissionType": "Drill",
+    "_MissionId": 302300,
+    "_CompleteType": "PartyPowerReached",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Clear The Imperial Onslaught on Expert",
+    "_Id": 30240008,
+    "_MissionType": "Drill",
+    "_MissionId": 302400,
+    "_CompleteType": "EventGroupCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 21100,
+    "_Parameter2": 3
+  },
+  {
+    "_comment": "Advance the Main Campaign and Place a Light Dracolith",
+    "_Id": 30250008,
+    "_MissionType": "Drill",
+    "_MissionId": 302500,
+    "_CompleteType": "FortPlantPlaced",
+    "_UseTotalValue": 1,
+    "_Parameter": 100604
+  },
+  {
+    "_comment": "Reach Bond Lv. 30 with a Dragon",
+    "_Id": 30260008,
+    "_MissionType": "Drill",
+    "_MissionId": 302600,
+    "_CompleteType": "DragonBondLevelUp",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Clear Void Zephyr Strike (Solo)",
+    "_Id": 30270008,
+    "_MissionType": "Drill",
+    "_MissionId": 302700,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter2": 30004,
+    "_Parameter3": 2
+  },
+  {
+    "_comment": "Clear Midgardsormr's Trial on Master",
+    "_Id": 30280008,
+    "_MissionType": "Drill",
+    "_MissionId": 302800,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 203010104
+  },
+  {
+    "_comment": "Obtain Glorious Tempest from the Treasure Trade",
+    "_Id": 30290008,
+    "_MissionType": "Drill",
+    "_MissionId": 302900,
+    "_CompleteType": "TreasureTrade",
+    "_UseTotalValue": 1,
+    "_Parameter2": 39,
+    "_Parameter3": 40050011
+  },
+  {
+    "_comment": "Clear High Midgardsormr's Trial on Standard (Solo)",
+    "_Id": 30300008,
+    "_MissionType": "Drill",
+    "_MissionId": 303000,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 210010101,
+    "_Parameter3": 2
+  },
+  {
+    "_comment": "Upgrade the Halidom to Lv. 6",
+    "_Id": 30310008,
+    "_MissionType": "Drill",
+    "_MissionId": 303100,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100101
+  },
+  {
+    "_comment": "Upgrade the Smithy to Lv. 8",
+    "_Id": 30320008,
+    "_MissionType": "Drill",
+    "_MissionId": 303200,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101401
+  },
+  {
+    "_comment": "Clear Ch. 10 6-3 of the Main Campaign",
+    "_Id": 30330008,
+    "_MissionType": "Drill",
+    "_MissionId": 303300,
+    "_CompleteType": "QuestStoryCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 1001009
+  },
+  {
+    "_comment": "Upgrade the Halidom to Lv. 7",
+    "_Id": 30340008,
+    "_MissionType": "Drill",
+    "_MissionId": 303400,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100101
+  },
+  {
+    "_comment": "Upgrade the Smithy to Lv. 9",
+    "_Id": 30350008,
+    "_MissionType": "Drill",
+    "_MissionId": 303500,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 101401
+  },
+  {
+    "_comment": "Defeat a Manticore in a Void Battle",
+    "_Id": 30360008,
+    "_MissionType": "Drill",
+    "_MissionId": 303600,
+    "_CompleteType": "UnimplementedAutoComplete",
+    "_UseTotalValue": 0
+  },
+  {
+    "_comment": "Upgrade the Halidom to Lv. 8",
+    "_Id": 30370008,
+    "_MissionType": "Drill",
+    "_MissionId": 303700,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100101
+  },
+  {
+    "_comment": "Reach 18,000 Might with a Team",
+    "_Id": 30380008,
+    "_MissionType": "Drill",
+    "_MissionId": 303800,
+    "_CompleteType": "PartyPowerReached",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Defeat a Chimera in a Void Battle (Solo)",
+    "_Id": 30390008,
+    "_MissionType": "Drill",
+    "_MissionId": 303900,
+    "_CompleteType": "UnimplementedAutoComplete",
+    "_UseTotalValue": 0
+  },
+  {
+    "_comment": "Upgrade the Halidom to Lv. 9",
+    "_Id": 30400008,
+    "_MissionType": "Drill",
+    "_MissionId": 304000,
+    "_CompleteType": "FortPlantLevelUp",
+    "_UseTotalValue": 1,
+    "_Parameter": 100101
+  },
+  {
+    "_comment": "Reach 22,000 Might with a Team",
+    "_Id": 30410008,
+    "_MissionType": "Drill",
+    "_MissionId": 304100,
+    "_CompleteType": "PartyPowerReached",
+    "_UseTotalValue": 1
+  },
+  {
+    "_comment": "Clear an Agito Uprising Quest on Standard (Solo)",
+    "_Id": 30420008,
+    "_MissionType": "Drill",
+    "_MissionId": 304200,
+    "_CompleteType": "EventGroupCleared",
+    "_UseTotalValue": 1,
+    "_Parameter": 21900,
+    "_Parameter2": 1,
+    "_Parameter3": 2
   }
 ]

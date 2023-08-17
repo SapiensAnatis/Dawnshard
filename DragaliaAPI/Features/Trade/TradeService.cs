@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Features.Reward;
+﻿using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -15,7 +16,8 @@ public class TradeService(
     ITradeRepository tradeRepository,
     IRewardService rewardService,
     ILogger<TradeService> logger,
-    IPaymentService paymentService
+    IPaymentService paymentService,
+    IMissionProgressionService missionProgressionService
 ) : ITradeService
 {
     public IEnumerable<TreasureTradeList> GetCurrentTreasureTradeList()
@@ -178,6 +180,14 @@ public class TradeService(
                 trade.DestinationEntityQuantity * count,
                 trade.DestinationLimitBreakCount
             )
+        );
+
+        missionProgressionService.OnTreasureTrade(
+            tradeId,
+            trade.DestinationEntityType,
+            trade.DestinationEntityId,
+            count,
+            0
         );
 
         await tradeRepository.AddTrade(tradeType, tradeId, count, DateTimeOffset.UtcNow);

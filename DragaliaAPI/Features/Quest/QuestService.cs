@@ -33,8 +33,6 @@ public class QuestService(
         DbQuest quest = await questRepository.GetQuestDataAsync(questId);
         quest.State = 3;
 
-        missionProgressionService.OnQuestCleared(questId);
-
         bool isBestClearTime = false;
 
         if (0 > quest.BestClearTime || quest.BestClearTime > clearTime)
@@ -68,13 +66,22 @@ public class QuestService(
         IEnumerable<AtgenFirstClearSet> questEventRewards = Enumerable.Empty<AtgenFirstClearSet>();
 
         QuestData questData = MasterAsset.QuestData[questId];
-        if (questData.Gid > 20000) // TODO: replace with IsEventQuest when mission pr is merged
+
+        missionProgressionService.OnQuestCleared(
+            questId,
+            questData.Gid,
+            questData.QuestPlayModeType,
+            1,
+            quest.PlayCount
+        );
+
+        if (questData.IsEventQuest)
         {
             int baseGroupId = MasterAsset.QuestEventGroup[questData.Gid].BaseQuestGroupId;
 
             await questCacheService.SetQuestGroupQuestIdAsync(baseGroupId, questId);
 
-            questEventRewards = await ProcessQuestEventCompletion(baseGroupId, questId);
+            questEventRewards = await ProcessQuestEventCompletion(baseGroupId, questData);
         }
 
         return (quest, isBestClearTime, questEventRewards);
@@ -82,14 +89,10 @@ public class QuestService(
 
     private async Task<IEnumerable<AtgenFirstClearSet>> ProcessQuestEventCompletion(
         int eventGroupId,
-        int questId
+        QuestData questData
     )
     {
         logger.LogTrace("Completing quest for quest group {eventGroupId}", eventGroupId);
-
-        // TODO: Remove when missions pr is merged
-        if (eventGroupId == 30000)
-            missionProgressionService.OnVoidBattleCleared();
 
         DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
         QuestEvent questEventData = MasterAsset.QuestEvent[eventGroupId];
@@ -120,6 +123,15 @@ public class QuestService(
 
         questEvent.WeeklyPlayCount++;
 
+        // NOTE: Do we ever need total here?
+        missionProgressionService.OnEventGroupCleared(
+            eventGroupId,
+            questData.VariationType,
+            questData.QuestPlayModeType,
+            1,
+            1
+        );
+
         int totalBonusCount = questEvent.QuestBonusReserveCount + questEvent.QuestBonusReceiveCount;
         if (
             questEventData.QuestBonusCount == 0 || questEventData.QuestBonusCount <= totalBonusCount
@@ -138,7 +150,7 @@ public class QuestService(
 
         questEvent.QuestBonusReceiveCount++;
 
-        return (await GenerateBonusDrops(questId, 1)).Select(x => x.ToFirstClearSet());
+        return (await GenerateBonusDrops(questData.Id, 1)).Select(x => x.ToFirstClearSet());
     }
 
     public async Task<IEnumerable<Entity>> GenerateBonusDrops(int questId, int count)

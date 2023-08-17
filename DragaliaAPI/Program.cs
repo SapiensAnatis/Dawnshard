@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reflection;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.Missions;
@@ -146,6 +147,7 @@ builder.Services
     .AddScoped<IRewardService, RewardService>()
     .AddScoped<IMissionProgressionService, MissionProgressionService>()
     .AddScoped<IMissionInitialProgressionService, MissionInitialProgressionService>()
+    .AddScoped<IFortMissionProgressionService, FortMissionProgressionService>()
     // Shop Feature
     .AddScoped<IShopRepository, ShopRepository>()
     .AddScoped<IItemSummonService, ItemSummonService>()

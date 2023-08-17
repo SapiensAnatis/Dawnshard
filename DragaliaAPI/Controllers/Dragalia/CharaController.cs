@@ -137,6 +137,8 @@ public class CharaController(
             CharaConstants.GetMaxLevelFor(playerCharData.Rarity) + playerCharData.AdditionalMaxLevel
         );
 
+        CharaData charaData = MasterAsset.CharaData.Get(playerCharData.CharaId);
+
         //TODO: Maybe make this generic for IHasXp
         foreach (AtgenEnemyPiece materialList in materials)
         {
@@ -160,12 +162,14 @@ public class CharaController(
                             playerCharData.AttackPlusCount + materialList.quantity,
                             CharaConstants.MaxAtkEnhance
                         );
-                    for (int i = 0; i < materialList.quantity; i++)
-                    {
-                        // HACK (TODO: We need a mission progression refactor)
-                        missionProgressionService.OnCharacterBuildup(PlusCountType.Atk);
-                    }
 
+                    missionProgressionService.OnCharacterBuildupPlusCount(
+                        playerCharData.CharaId,
+                        charaData.ElementalType,
+                        PlusCountType.Atk,
+                        materialList.quantity,
+                        playerCharData.AttackPlusCount
+                    );
                     break;
                 case Materials.FortifyingCrystal:
                     playerCharData.HpPlusCount = (byte)
@@ -173,12 +177,14 @@ public class CharaController(
                             playerCharData.HpPlusCount + materialList.quantity,
                             CharaConstants.MaxHpEnhance
                         );
-                    for (int i = 0; i < materialList.quantity; i++)
-                    {
-                        // HACK (TODO: We need a mission progression refactor)
-                        missionProgressionService.OnCharacterBuildup(PlusCountType.Hp);
-                    }
 
+                    missionProgressionService.OnCharacterBuildupPlusCount(
+                        playerCharData.CharaId,
+                        charaData.ElementalType,
+                        PlusCountType.Hp,
+                        materialList.quantity,
+                        playerCharData.HpPlusCount
+                    );
                     break;
                 default:
                     throw new DragaliaException(
@@ -194,12 +200,15 @@ public class CharaController(
 
             usedMaterials[(int)materialList.id] += materialList.quantity;
         }
+
         if (
             playerCharData.Level < maxLevel
             && playerCharData.Level < CharaConstants.XpLimits.Count
             && !(playerCharData.Exp < CharaConstants.XpLimits[playerCharData.Level])
         )
         {
+            int levelDifference = 0;
+
             while (
                 playerCharData.Level < maxLevel
                 && playerCharData.Level < CharaConstants.XpLimits.Count
@@ -207,9 +216,19 @@ public class CharaController(
             )
             {
                 playerCharData.Level++;
+                levelDifference++;
             }
 
-            CharaData charaData = MasterAsset.CharaData.Get(playerCharData.CharaId);
+            if (levelDifference > 0)
+            {
+                missionProgressionService.OnCharacterLevelUp(
+                    playerCharData.CharaId,
+                    charaData.ElementalType,
+                    levelDifference,
+                    playerCharData.Level
+                );
+            }
+
             double hpStep;
             double atkStep;
             int hpBase;
@@ -773,6 +792,13 @@ public class CharaController(
         }
 
         nodes.AddRange(manaNodes);
+
+        missionProgressionService.OnCharacterManaNodeUnlock(
+            playerCharData.CharaId,
+            charaData.ElementalType,
+            manaNodes.Count(),
+            nodes.Count
+        );
 
         if (manaNodes.Contains(50))
         {
