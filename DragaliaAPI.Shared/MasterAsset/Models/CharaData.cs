@@ -84,10 +84,20 @@ public record CharaData(
     int ExAbility2Data2,
     int ExAbility2Data3,
     int ExAbility2Data4,
-    int ExAbility2Data5
+    int ExAbility2Data5,
+    EntityTypes EditReleaseEntityType1,
+    int EditReleaseEntityId1,
+    int EditReleaseEntityQuantity1
 )
 {
     public bool HasManaSpiral => this.MaxLimitBreakCount > 4;
+
+    public byte MaxLevel => (byte)(MaxLimitBreakCount * 20);
+
+    public ushort MaxBaseHp => (ushort)(HasManaSpiral ? AddMaxHp1 : MaxHp);
+    public ushort MaxBaseAtk => (ushort)(HasManaSpiral ? AddMaxAtk1 : MaxAtk);
+
+    public ManaNodes MaxManaNodes => HasManaSpiral ? ManaNodes.Circle7 : ManaNodesUtil.MaxManaNodes;
 
     public int MaxAbility1Level =
         Abilities14 != 0
