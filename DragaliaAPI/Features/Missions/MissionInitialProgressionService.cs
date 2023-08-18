@@ -309,7 +309,29 @@ public class MissionInitialProgressionService(
 
     private async Task<int> GetCharacterBuildupCount(MissionProgressionInfo requirement)
     {
-        return (PlusCountType)requirement.Parameter! switch
+        Debug.Assert(requirement.Parameter2 != null, "requirement.Parameter2 != null");
+
+        PlusCountType type = (PlusCountType)requirement.Parameter2;
+
+        if (requirement.Parameter != null)
+        {
+            DbPlayerCharaData? chara = await unitRepository.FindCharaAsync(
+                (Charas)requirement.Parameter
+            );
+
+            return type switch
+                {
+                    PlusCountType.Hp => chara?.HpPlusCount,
+                    PlusCountType.Atk => chara?.AttackPlusCount,
+                    _
+                        => throw new DragaliaException(
+                            ResultCode.CommonInvalidArgument,
+                            $"Invalid PlusCountType for character in mission requirement, parameter: {requirement.Parameter}"
+                        ),
+                } ?? 0;
+        }
+
+        return type switch
         {
             PlusCountType.Hp
                 => await unitRepository.Charas.Select(x => (int?)x.HpPlusCount).MaxAsync() ?? 0,
@@ -325,7 +347,29 @@ public class MissionInitialProgressionService(
 
     private async Task<int> GetWyrmprintBuildupCount(MissionProgressionInfo requirement)
     {
-        return (PlusCountType)requirement.Parameter! switch
+        Debug.Assert(requirement.Parameter2 != null, "requirement.Parameter2 != null");
+
+        PlusCountType type = (PlusCountType)requirement.Parameter2;
+
+        if (requirement.Parameter != null)
+        {
+            DbAbilityCrest? crest = await abilityCrestRepository.FindAsync(
+                (AbilityCrests)requirement.Parameter
+            );
+
+            return type switch
+                {
+                    PlusCountType.Hp => crest?.HpPlusCount,
+                    PlusCountType.Atk => crest?.AttackPlusCount,
+                    _
+                        => throw new DragaliaException(
+                            ResultCode.CommonInvalidArgument,
+                            $"Invalid PlusCountType for wyrmprint in mission requirement, parameter: {requirement.Parameter}"
+                        ),
+                } ?? 0;
+        }
+
+        return type switch
         {
             PlusCountType.Hp
                 => await abilityCrestRepository.AbilityCrests
@@ -345,17 +389,24 @@ public class MissionInitialProgressionService(
 
     private async Task<int> GetWeaponEarnedCount(MissionProgressionInfo requirement)
     {
+        if (requirement.Parameter != null)
+        {
+            return await weaponRepository.FindAsync((WeaponBodies)requirement.Parameter) != null
+                ? 1
+                : 0;
+        }
+
         List<WeaponBodies> validWeaponBodies = MasterAsset.WeaponBody.Enumerable
             .Where(
                 x =>
                     (
-                        requirement.Parameter is null
-                        || x.ElementalType == (UnitElement)requirement.Parameter
+                        requirement.Parameter2 is null
+                        || x.ElementalType == (UnitElement)requirement.Parameter2
                     )
-                    && (requirement.Parameter2 is null || x.Rarity == requirement.Parameter2)
+                    && (requirement.Parameter3 is null || x.Rarity == requirement.Parameter3)
                     && (
-                        requirement.Parameter3 is null
-                        || x.WeaponSeriesId == (WeaponSeries)requirement.Parameter3
+                        requirement.Parameter4 is null
+                        || x.WeaponSeriesId == (WeaponSeries)requirement.Parameter4
                     )
             )
             .Select(x => x.Id)
@@ -368,17 +419,24 @@ public class MissionInitialProgressionService(
 
     private async Task<int> GetWeaponRefinedCount(MissionProgressionInfo requirement)
     {
+        if (requirement.Parameter != null)
+        {
+            return (
+                    await weaponRepository.FindAsync((WeaponBodies)requirement.Parameter)
+                )?.LimitOverCount ?? 0;
+        }
+
         List<WeaponBodies> validWeaponBodies = MasterAsset.WeaponBody.Enumerable
             .Where(
                 x =>
                     (
-                        requirement.Parameter is null
-                        || x.ElementalType == (UnitElement)requirement.Parameter
+                        requirement.Parameter2 is null
+                        || x.ElementalType == (UnitElement)requirement.Parameter2
                     )
-                    && (requirement.Parameter2 is null || x.Rarity == requirement.Parameter2)
+                    && (requirement.Parameter3 is null || x.Rarity == requirement.Parameter3)
                     && (
-                        requirement.Parameter3 is null
-                        || x.WeaponSeriesId == (WeaponSeries)requirement.Parameter3
+                        requirement.Parameter4 is null
+                        || x.WeaponSeriesId == (WeaponSeries)requirement.Parameter4
                     )
             )
             .Select(x => x.Id)
@@ -391,27 +449,25 @@ public class MissionInitialProgressionService(
 
     private async Task<int> GetQuestGroupClearedCount(MissionProgressionInfo requirement)
     {
-        List<int> validQuests = MasterAsset.QuestData.Enumerable
+        Debug.Assert(requirement.Parameter != null, "requirement.Parameter != null");
+
+        HashSet<int> eventGroupPool = MasterAsset.QuestEventGroup.Enumerable
+            .Where(x => x.BaseQuestGroupId == requirement.Parameter)
+            .Select(x => x.Id)
+            .ToHashSet();
+
+        List<int> questPool = MasterAsset.QuestData.Enumerable
+            .Where(x => eventGroupPool.Contains(x.Gid))
             .Where(
                 x =>
-                    x.Gid == requirement.Parameter
-                    || (
-                        MasterAsset.QuestEventGroup.TryGetValue(
-                            x.Gid,
-                            out QuestEventGroup? eventGroup
-                        )
-                        && eventGroup.BaseQuestGroupId == requirement.Parameter
-                        && (
-                            requirement.Parameter2 == null
-                            || x.VariationType == (VariationTypes)requirement.Parameter2
-                        )
-                    )
+                    requirement.Parameter2 == null
+                    || x.QuestPlayModeType == (QuestPlayModeTypes)requirement.Parameter2
             )
             .Select(x => x.Id)
             .ToList();
 
         return await questRepository.Quests
-                .Where(x => validQuests.Contains(x.QuestId))
+                .Where(x => questPool.Contains(x.QuestId))
                 .SumAsync(x => (int?)x.PlayCount) ?? 0;
     }
 }
