@@ -1242,7 +1242,7 @@
     "_MissionId": 302000,
     "_CompleteType": "QuestCleared",
     "_UseTotalValue": 0,
-    "_Parameter2": 300010101
+    "_Parameter2": 301010101
   },
   {
     "_comment": "Reach 13,000 Might with a Team",
@@ -1259,7 +1259,7 @@
     "_MissionId": 302200,
     "_CompleteType": "QuestCleared",
     "_UseTotalValue": 0,
-    "_Parameter2": 300030101
+    "_Parameter2": 301030101
   },
   {
     "_comment": "Reach 15,000 Might with a Team",
@@ -1303,7 +1303,7 @@
     "_MissionId": 302700,
     "_CompleteType": "QuestCleared",
     "_UseTotalValue": 0,
-    "_Parameter2": 30004,
+    "_Parameter2": 30104,
     "_Parameter3": 2
   },
   {
