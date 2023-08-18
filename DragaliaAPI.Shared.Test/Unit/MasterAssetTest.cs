@@ -95,7 +95,10 @@ public class MasterAssetTest
                     ExAbility2Data2: 400000736,
                     ExAbility2Data3: 400000737,
                     ExAbility2Data4: 400000738,
-                    ExAbility2Data5: 400000740
+                    ExAbility2Data5: 400000740,
+                    EditReleaseEntityType1: EntityTypes.Material,
+                    EditReleaseEntityId1: 201019011,
+                    EditReleaseEntityQuantity1: 5
                 )
             );
     }
@@ -242,6 +245,7 @@ public class MasterAssetTest
                 new QuestData(
                     Id: 100010101,
                     Gid: 10001,
+                    GroupType: QuestGroupType.MainStory,
                     QuestPlayModeType: QuestPlayModeTypes.Normal,
                     LimitedElementalType: 0,
                     LimitedElementalType2: 0,

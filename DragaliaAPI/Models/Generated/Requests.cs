@@ -454,12 +454,14 @@ public class CharaBuildupManaRequest
 {
     public Charas chara_id { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }
-    public CharaUpgradeMaterialTypes is_use_grow_material { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_use_grow_material { get; set; }
 
     public CharaBuildupManaRequest(
         Charas chara_id,
         IEnumerable<int> mana_circle_piece_id_list,
-        CharaUpgradeMaterialTypes is_use_grow_material
+        bool is_use_grow_material
     )
     {
         this.chara_id = chara_id;
@@ -501,9 +503,9 @@ public class CharaBuildupRequest
 [MessagePackObject(true)]
 public class CharaGetCharaUnitSetRequest
 {
-    public IEnumerable<int> chara_id_list { get; set; }
+    public IEnumerable<Charas> chara_id_list { get; set; }
 
-    public CharaGetCharaUnitSetRequest(IEnumerable<int> chara_id_list)
+    public CharaGetCharaUnitSetRequest(IEnumerable<Charas> chara_id_list)
     {
         this.chara_id_list = chara_id_list;
     }
@@ -520,13 +522,15 @@ public class CharaLimitBreakAndBuildupManaRequest
     public Charas chara_id { get; set; }
     public int next_limit_break_count { get; set; }
     public IEnumerable<int> mana_circle_piece_id_list { get; set; }
-    public CharaUpgradeMaterialTypes is_use_grow_material { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_use_grow_material { get; set; }
 
     public CharaLimitBreakAndBuildupManaRequest(
         Charas chara_id,
         int next_limit_break_count,
         IEnumerable<int> mana_circle_piece_id_list,
-        CharaUpgradeMaterialTypes is_use_grow_material
+        bool is_use_grow_material
     )
     {
         this.chara_id = chara_id;
@@ -543,12 +547,14 @@ public class CharaLimitBreakRequest
 {
     public Charas chara_id { get; set; }
     public int next_limit_break_count { get; set; }
-    public int is_use_grow_material { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_use_grow_material { get; set; }
 
     public CharaLimitBreakRequest(
         Charas chara_id,
         int next_limit_break_count,
-        int is_use_grow_material
+        bool is_use_grow_material
     )
     {
         this.chara_id = chara_id;
@@ -3131,15 +3137,17 @@ public class PartySetPartySettingRequest
 
     [MaxLength(20)]
     public string party_name { get; set; }
-    public int is_entrust { get; set; }
-    public int entrust_element { get; set; }
+
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_entrust { get; set; }
+    public UnitElement entrust_element { get; set; }
 
     public PartySetPartySettingRequest(
         int party_no,
         IEnumerable<PartySettingList> request_party_setting_list,
         string party_name,
-        int is_entrust,
-        int entrust_element
+        bool is_entrust,
+        UnitElement entrust_element
     )
     {
         this.party_no = party_no;

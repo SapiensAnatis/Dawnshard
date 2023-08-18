@@ -3,6 +3,7 @@ using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;
@@ -15,38 +16,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Services.Game;
 
-public class DragonService : IDragonService
+public class DragonService(
+    IUserDataRepository userDataRepository,
+    IUnitRepository unitRepository,
+    IInventoryRepository inventoryRepository,
+    IUpdateDataService updateDataService,
+    IStoryRepository storyRepository,
+    ILogger<DragonService> logger,
+    IPaymentService paymentService,
+    IRewardService rewardService,
+    IMissionProgressionService missionProgressionService
+) : IDragonService
 {
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IUnitRepository unitRepository;
-    private readonly IInventoryRepository inventoryRepository;
-    private readonly IStoryRepository storyRepository;
-    private readonly ILogger<DragonService> logger;
-    private readonly IUpdateDataService updateDataService;
-    private readonly IPaymentService paymentService;
-    private readonly IRewardService rewardService;
-
-    public DragonService(
-        IUserDataRepository userDataRepository,
-        IUnitRepository unitRepository,
-        IInventoryRepository inventoryRepository,
-        IUpdateDataService updateDataService,
-        IStoryRepository storyRepository,
-        ILogger<DragonService> logger,
-        IPaymentService paymentService,
-        IRewardService rewardService
-    )
-    {
-        this.userDataRepository = userDataRepository;
-        this.unitRepository = unitRepository;
-        this.inventoryRepository = inventoryRepository;
-        this.storyRepository = storyRepository;
-        this.logger = logger;
-        this.updateDataService = updateDataService;
-        this.paymentService = paymentService;
-        this.rewardService = rewardService;
-    }
-
     public async Task<DragonGetContactDataData> DoDragonGetContactData(
         DragonGetContactDataRequest request
     )
@@ -115,6 +96,9 @@ public class DragonService : IDragonService
                     )
             );
             List<RewardReliabilityList> returnGifts = new List<RewardReliabilityList>();
+
+            int levelDifference = 0;
+
             while (
                 !(
                     dragonReliability.Level == DragonConstants.maxRelLevel
@@ -122,6 +106,7 @@ public class DragonService : IDragonService
                 )
             )
             {
+                levelDifference++;
                 dragonReliability.Level++;
                 if (dragonReliability.Level / 5 > levelRewardIndex)
                 {
@@ -142,6 +127,17 @@ public class DragonService : IDragonService
                     levelRewardIndex++;
                 }
             }
+
+            if (levelDifference > 0)
+            {
+                missionProgressionService.OnDragonBondLevelUp(
+                    dragonData.Id,
+                    dragonData.ElementalType,
+                    levelDifference,
+                    dragonReliability.Level
+                );
+            }
+
             levelGifts.Add(
                 new Tuple<DragonGifts, List<RewardReliabilityList>>(
                     enumerator.Current.Item1,
@@ -451,7 +447,16 @@ public class DragonService : IDragonService
                         ?? Enumerable.Empty<RewardReliabilityList>()
                 }
             );
+
+            missionProgressionService.OnDragonGiftSent(
+                request.dragon_id,
+                gift,
+                dragonData.ElementalType,
+                1,
+                0
+            );
         }
+
         logger.LogDebug("GiftRewardList: {@list}", rewardObjList);
 
         foreach (DbPlayerDragonGift gift in gifts.Values)
@@ -534,6 +539,14 @@ public class DragonService : IDragonService
 
         gift.Quantity -= request.quantity;
 
+        missionProgressionService.OnDragonGiftSent(
+            request.dragon_id,
+            request.dragon_gift_id,
+            dragonData.ElementalType,
+            request.quantity,
+            0
+        );
+
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         logger.LogDebug(
@@ -558,7 +571,7 @@ public class DragonService : IDragonService
             .Select(x => x.id)
             .Cast<Materials>();
 
-        Dictionary<Materials, DbPlayerMaterial> dbMats = await this.inventoryRepository.Materials
+        Dictionary<Materials, DbPlayerMaterial> dbMats = await inventoryRepository.Materials
             .Where(
                 dbMat =>
                     matIds.Contains(dbMat.MaterialId)
@@ -627,9 +640,11 @@ public class DragonService : IDragonService
         Dictionary<int, int> usedMaterials
     )
     {
+        DragonData dragonData = MasterAsset.DragonData.Get(playerDragonData.DragonId);
+
         //TODO: For now we'll trust the client to not allow leveling up/enhancing beyond allowed limits
         byte maxLevel = DragonConstants.GetMaxLevelFor(
-            MasterAsset.DragonData.Get(playerDragonData.DragonId).Rarity,
+            dragonData.Rarity,
             playerDragonData.LimitBreakCount
         );
         int gainedHpAugs = 0;
@@ -694,13 +709,27 @@ public class DragonService : IDragonService
                 gainedAtkAugs += dragonSacrifice.AttackPlusCount;
             }
         }
+
+        int levelDifference = 0;
+
         while (
             playerDragonData.Level < maxLevel
             && playerDragonData.Level < DragonConstants.XpLimits.Length
             && !(playerDragonData.Exp < DragonConstants.XpLimits[playerDragonData.Level])
         )
         {
+            levelDifference++;
             playerDragonData.Level++;
+        }
+
+        if (levelDifference > 0)
+        {
+            missionProgressionService.OnDragonLevelUp(
+                playerDragonData.DragonId,
+                dragonData.ElementalType,
+                levelDifference,
+                playerDragonData.Level
+            );
         }
 
         int gainedDragonHpAugs = Math.Min(
@@ -736,7 +765,7 @@ public class DragonService : IDragonService
         DragonResetPlusCountRequest request
     )
     {
-        DbPlayerDragonData playerDragonData = await this.unitRepository.Dragons.FirstAsync(
+        DbPlayerDragonData playerDragonData = await unitRepository.Dragons.FirstAsync(
             dragon => (ulong)dragon.DragonKeyId == request.dragon_key_id
         );
 
@@ -762,23 +791,21 @@ public class DragonService : IDragonService
                 );
         }
 
-        await this.paymentService.ProcessPayment(
+        await paymentService.ProcessPayment(
             PaymentTypes.Coin,
             expectedPrice: DragonConstants.AugmentResetCost * plusCount
         );
-        await this.rewardService.GrantReward(
-            new Entity(EntityTypes.Material, (int)material, plusCount)
-        );
+        await rewardService.GrantReward(new Entity(EntityTypes.Material, (int)material, plusCount));
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return new DragonResetPlusCountData(updateDataList, this.rewardService.GetEntityResult());
+        return new DragonResetPlusCountData(updateDataList, rewardService.GetEntityResult());
     }
 
     public async Task<DragonLimitBreakData> DoDragonLimitBreak(DragonLimitBreakRequest request)
     {
         DbPlayerDragonData playerDragonData =
-            await this.unitRepository.Dragons
+            await unitRepository.Dragons
                 .Where(x => x.DragonKeyId == (long)request.base_dragon_key_id)
                 .FirstAsync()
             ?? throw new DragaliaException(
@@ -888,7 +915,7 @@ public class DragonService : IDragonService
     public async Task<DragonSetLockData> DoDragonSetLock(DragonSetLockRequest request)
     {
         (
-            await this.unitRepository.Dragons.SingleOrDefaultAsync(
+            await unitRepository.Dragons.SingleOrDefaultAsync(
                 dragon => (ulong)dragon.DragonKeyId == request.dragon_key_id
             )
             ?? throw new DragaliaException(
@@ -924,7 +951,7 @@ public class DragonService : IDragonService
             );
         }
 
-        this.logger.LogInformation(
+        logger.LogInformation(
             "Requested sale of {count} dragons: {@list}",
             selectedPlayerDragons.Count,
             selectedPlayerDragons
@@ -933,7 +960,7 @@ public class DragonService : IDragonService
         //DbPlayerCurrency rupies = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Rupies) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Rupies);
         //DbPlayerCurrency dew = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Dew) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Dew);
         DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
-        this.logger.LogDebug(
+        logger.LogDebug(
             "Pre-sale: rupies {rupies}, eldwater {eldwater}",
             userData.Coin,
             userData.DewPoint
@@ -949,7 +976,7 @@ public class DragonService : IDragonService
                 MasterAsset.DragonData.Get(dd.DragonId).SellDewPoint * (dd.LimitBreakCount + 1);
         }
 
-        this.logger.LogDebug(
+        logger.LogDebug(
             "Post-sale: rupies {rupies}, eldwater {eldwater}",
             userData.Coin,
             userData.DewPoint

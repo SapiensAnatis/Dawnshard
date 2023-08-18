@@ -522,13 +522,6 @@ public enum Materials
     Zest = 2081501
 }
 
-public enum CharaUpgradeMaterialTypes
-{
-    Standard = 0,
-    GrowthMaterial = 1,
-    Omnicite = 2
-}
-
 public enum UpgradeEnhanceTypes
 {
     AtkPlus = 0,
@@ -603,18 +596,6 @@ public static class UpgradeMaterials
         { UnitElement.Wind, Materials.TempestOrb },
         { UnitElement.Light, Materials.ResplendenceOrb },
         { UnitElement.Dark, Materials.AbaddonOrb }
-    };
-
-    public static readonly Dictionary<UnitElement, Materials> tomes = new Dictionary<
-        UnitElement,
-        Materials
-    >()
-    {
-        { UnitElement.Water, Materials.WaterTome },
-        { UnitElement.Fire, Materials.FlameTome },
-        { UnitElement.Wind, Materials.WindTome },
-        { UnitElement.Light, Materials.LightTome },
-        { UnitElement.Dark, Materials.ShadowTome }
     };
 
     /*
