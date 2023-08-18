@@ -151,6 +151,10 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Coin = 100_000_000;
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.DewPoint = 100_000_000;
         apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.ManaPoint = 100_000_000;
+        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Level = 250;
+        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Exp = 28253490;
+        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.StaminaSingle = 999;
+        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.QuestSkipPoint = 300;
 
         apiContext.PlayerDmodeInfos.Add(
             new DbPlayerDmodeInfo

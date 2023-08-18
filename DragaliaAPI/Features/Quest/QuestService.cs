@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
@@ -28,7 +28,7 @@ public class QuestService(
         DbQuest Quest,
         bool BestClearTime,
         IEnumerable<AtgenFirstClearSet> Bonus
-    )> ProcessQuestCompletion(int questId, float clearTime)
+    )> ProcessQuestCompletion(int questId, float clearTime, int playCount)
     {
         DbQuest quest = await questRepository.GetQuestDataAsync(questId);
         quest.State = 3;
@@ -41,7 +41,7 @@ public class QuestService(
             isBestClearTime = true;
         }
 
-        quest.PlayCount++;
+        quest.PlayCount += playCount;
 
         if (resetHelper.LastDailyReset > quest.LastDailyResetTime)
         {
@@ -51,7 +51,7 @@ public class QuestService(
             quest.LastDailyResetTime = dateTimeProvider.UtcNow;
         }
 
-        quest.DailyPlayCount++;
+        quest.DailyPlayCount += playCount;
 
         if (resetHelper.LastWeeklyReset > quest.LastWeeklyResetTime)
         {
@@ -61,7 +61,7 @@ public class QuestService(
             quest.LastWeeklyResetTime = dateTimeProvider.UtcNow;
         }
 
-        quest.WeeklyPlayCount++;
+        quest.WeeklyPlayCount += playCount;
 
         IEnumerable<AtgenFirstClearSet> questEventRewards = Enumerable.Empty<AtgenFirstClearSet>();
 
@@ -81,7 +81,11 @@ public class QuestService(
 
             await questCacheService.SetQuestGroupQuestIdAsync(baseGroupId, questId);
 
-            questEventRewards = await ProcessQuestEventCompletion(baseGroupId, questData);
+            questEventRewards = await ProcessQuestEventCompletion(
+                baseGroupId,
+                questData,
+                playCount
+            );
         }
 
         return (quest, isBestClearTime, questEventRewards);
@@ -89,7 +93,8 @@ public class QuestService(
 
     private async Task<IEnumerable<AtgenFirstClearSet>> ProcessQuestEventCompletion(
         int eventGroupId,
-        QuestData questData
+        QuestData questData,
+        int playCount
     )
     {
         logger.LogTrace("Completing quest for quest group {eventGroupId}", eventGroupId);
@@ -108,7 +113,7 @@ public class QuestService(
             questEvent.LastDailyResetTime = dateTimeProvider.UtcNow;
         }
 
-        questEvent.DailyPlayCount++;
+        questEvent.DailyPlayCount += playCount;
 
         if (resetHelper.LastWeeklyReset > questEvent.LastWeeklyResetTime)
         {
@@ -121,36 +126,40 @@ public class QuestService(
             questEvent.LastWeeklyResetTime = dateTimeProvider.UtcNow;
         }
 
-        questEvent.WeeklyPlayCount++;
+        questEvent.WeeklyPlayCount += playCount;
 
         // NOTE: Do we ever need total here?
         missionProgressionService.OnEventGroupCleared(
             eventGroupId,
             questData.VariationType,
             questData.QuestPlayModeType,
-            1,
+            playCount,
             1
         );
 
         int totalBonusCount = questEvent.QuestBonusReserveCount + questEvent.QuestBonusReceiveCount;
-        if (
-            questEventData.QuestBonusCount == 0 || questEventData.QuestBonusCount <= totalBonusCount
-        )
+        int remainingBonusCount = questEventData.QuestBonusCount - totalBonusCount;
+
+        if (questEventData.QuestBonusCount == 0 || remainingBonusCount <= 0)
         {
             return Enumerable.Empty<AtgenFirstClearSet>();
         }
 
+        int bonusesToReceive = Math.Min(playCount, remainingBonusCount);
+
         if (questEventData.QuestBonusReceiveType != QuestBonusReceiveType.AutoReceive)
         {
-            questEvent.QuestBonusReserveCount++;
+            questEvent.QuestBonusReserveCount += bonusesToReceive;
             questEvent.QuestBonusReserveTime = dateTimeProvider.UtcNow;
 
             return Enumerable.Empty<AtgenFirstClearSet>();
         }
 
-        questEvent.QuestBonusReceiveCount++;
+        questEvent.QuestBonusReceiveCount += bonusesToReceive;
 
-        return (await GenerateBonusDrops(questData.Id, 1)).Select(x => x.ToFirstClearSet());
+        return (await GenerateBonusDrops(questData.Id, bonusesToReceive)).Select(
+            x => x.ToFirstClearSet()
+        );
     }
 
     public async Task<IEnumerable<Entity>> GenerateBonusDrops(int questId, int count)
