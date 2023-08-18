@@ -20,7 +20,7 @@ public class MissionMutations(
 ) : MutationBase(apiContext, playerIdentityService)
 {
     [GraphQLMutation("Reset a mission to its initial progress")]
-    public Expression<Func<ApiContext, DbPlayerMission>> ResetMissionProgress(
+    public async Task<Expression<Func<ApiContext, DbPlayerMission>>> ResetMissionProgress(
         ApiContext db,
         MissionMutationArgs args
     )
@@ -28,19 +28,18 @@ public class MissionMutations(
         DbPlayer player = GetPlayer(args.ViewerId);
 
         DbPlayerMission mission =
-            db.PlayerMissions.Find(player.AccountId, args.MissionType, args.MissionId)
+            await db.PlayerMissions.FindAsync(player.AccountId, args.MissionType, args.MissionId)
             ?? throw new InvalidOperationException("Mission not found");
 
-        Task task = missionInitialProgressionService.GetInitialMissionProgress(mission);
-        task.Wait();
+        await missionInitialProgressionService.GetInitialMissionProgress(mission);
 
-        db.SaveChanges();
+        await db.SaveChangesAsync();
 
         return ctx => ctx.PlayerMissions.Find(player.AccountId, args.MissionType, args.MissionId)!;
     }
 
     [GraphQLMutation("Completes a mission")]
-    public Expression<Func<ApiContext, DbPlayerMission>> CompleteMission(
+    public async Task<Expression<Func<ApiContext, DbPlayerMission>>> CompleteMission(
         ApiContext db,
         MissionMutationArgs args
     )
@@ -48,7 +47,7 @@ public class MissionMutations(
         DbPlayer player = GetPlayer(args.ViewerId);
 
         DbPlayerMission mission =
-            db.PlayerMissions.Find(player.AccountId, args.MissionType, args.MissionId)
+            await db.PlayerMissions.FindAsync(player.AccountId, args.MissionType, args.MissionId)
             ?? throw new InvalidOperationException("Mission not found");
 
         if (mission.State != MissionState.InProgress)
@@ -59,13 +58,13 @@ public class MissionMutations(
         mission.Progress = complete;
         mission.State = MissionState.Completed;
 
-        db.SaveChanges();
+        await db.SaveChangesAsync();
 
         return ctx => ctx.PlayerMissions.Find(player.AccountId, args.MissionType, args.MissionId)!;
     }
 
     [GraphQLMutation("Starts a mission")]
-    public Expression<Func<ApiContext, DbPlayerMission>> StartMission(
+    public async Task<Expression<Func<ApiContext, DbPlayerMission>>> StartMission(
         ApiContext db,
         MissionMutationArgs args
     )
@@ -79,7 +78,7 @@ public class MissionMutations(
 
         DbPlayer player = GetPlayer(args.ViewerId);
 
-        DbPlayerMission? mission = db.PlayerMissions.Find(
+        DbPlayerMission? mission = await db.PlayerMissions.FindAsync(
             player.AccountId,
             args.MissionType,
             args.MissionId
@@ -88,10 +87,9 @@ public class MissionMutations(
         if (mission != null)
             throw new InvalidOperationException("Mission is already started");
 
-        Task task = missionService.StartMission(args.MissionType, args.MissionId);
-        task.Wait();
+        await missionService.StartMission(args.MissionType, args.MissionId);
 
-        db.SaveChanges();
+        await db.SaveChangesAsync();
 
         return ctx => ctx.PlayerMissions.Find(player.AccountId, args.MissionType, args.MissionId)!;
     }
