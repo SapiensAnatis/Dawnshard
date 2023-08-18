@@ -81,7 +81,11 @@ public class QuestService(
 
             await questCacheService.SetQuestGroupQuestIdAsync(baseGroupId, questId);
 
-            questEventRewards = await ProcessQuestEventCompletion(baseGroupId, questData, playCount);
+            questEventRewards = await ProcessQuestEventCompletion(
+                baseGroupId,
+                questData,
+                playCount
+            );
         }
 
         return (quest, isBestClearTime, questEventRewards);
