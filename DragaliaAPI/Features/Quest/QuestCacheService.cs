@@ -14,11 +14,10 @@ public class QuestCacheService(
 
     public async Task SetQuestGroupQuestIdAsync(int questGroupId, int questId)
     {
-        await distributedCache.SetStringAsync(
-            Schema.QuestEventId(playerIdentityService.AccountId, questGroupId),
-            questId.ToString(),
-            QuestEntryCacheOptions
-        );
+        string key = Schema.QuestEventId(playerIdentityService.AccountId, questGroupId);
+        logger.LogDebug("Setting quest id key: {key}", key);
+
+        await distributedCache.SetStringAsync(key, questId.ToString(), QuestEntryCacheOptions);
     }
 
     public async Task<int?> GetQuestGroupQuestIdAsync(int questGroupId)
