@@ -75,7 +75,18 @@ public class UserService(
 
         int currentStamina = await GetAndUpdateStamina(type);
         if (amount > currentStamina)
-            throw new DragaliaException(ResultCode.QuestStaminaMultiShort, "Not enough stamina");
+        {
+            ResultCode code = type switch
+            {
+                StaminaType.Single => ResultCode.QuestStaminaSingleShort,
+                StaminaType.Multi => ResultCode.QuestStaminaMultiShort,
+                _ => throw new UnreachableException()
+            };
+
+            logger.LogError("Player did not have enough Stamina ({currentAmount})", currentStamina);
+
+            throw new DragaliaException(code, "Not enough stamina");
+        }
 
         DbPlayerUserData data = await userDataRepository.GetUserDataAsync();
 
