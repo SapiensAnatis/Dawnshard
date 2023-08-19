@@ -54,19 +54,47 @@ public class MissionInitialProgressionService(
                 ),
             MissionCompleteType.FortLevelUp
                 => await fortMissionProgressionService.GetTotalFortLevel(),
-            MissionCompleteType.QuestCleared => await GetQuestClearedCount(progressionInfo),
+            MissionCompleteType.QuestCleared
+                => await GetQuestClearedCount(
+                    progressionInfo.Parameter,
+                    progressionInfo.Parameter2,
+                    (QuestPlayModeTypes?)progressionInfo.Parameter3
+                ),
             MissionCompleteType.QuestStoryCleared
                 => await storyRepository.HasReadQuestStory(progressionInfo.Parameter!.Value)
                     ? 1
                     : 0,
             MissionCompleteType.EventGroupCleared
-                => await GetQuestGroupClearedCount(progressionInfo),
-            MissionCompleteType.WeaponEarned => await GetWeaponEarnedCount(progressionInfo),
-            MissionCompleteType.WeaponRefined => await GetWeaponRefinedCount(progressionInfo),
+                => await GetQuestGroupClearedCount(
+                    progressionInfo.Parameter,
+                    (VariationTypes?)progressionInfo.Parameter2,
+                    (QuestPlayModeTypes?)progressionInfo.Parameter3
+                ),
+            MissionCompleteType.WeaponEarned
+                => await GetWeaponEarnedCount(
+                    (WeaponBodies?)progressionInfo.Parameter,
+                    (UnitElement?)progressionInfo.Parameter2,
+                    progressionInfo.Parameter3,
+                    (WeaponSeries?)progressionInfo.Parameter4
+                ),
+            MissionCompleteType.WeaponRefined
+                => await GetWeaponRefinedCount(
+                    (WeaponBodies?)progressionInfo.Parameter,
+                    (UnitElement?)progressionInfo.Parameter2,
+                    progressionInfo.Parameter3,
+                    (WeaponSeries?)progressionInfo.Parameter4
+                ),
             MissionCompleteType.AbilityCrestBuildupPlusCount
-                => await GetWyrmprintBuildupCount(progressionInfo),
+                => await GetWyrmprintBuildupCount(
+                    (AbilityCrests?)progressionInfo.Parameter,
+                    (PlusCountType?)progressionInfo.Parameter2
+                ),
             MissionCompleteType.CharacterBuildupPlusCount
-                => await GetCharacterBuildupCount(progressionInfo),
+                => await GetCharacterBuildupCount(
+                    (Charas?)progressionInfo.Parameter,
+                    (UnitElement?)progressionInfo.Parameter2,
+                    (PlusCountType?)progressionInfo.Parameter3
+                ),
             MissionCompleteType.PlayerLevelUp
                 => (await userDataRepository.GetUserDataAsync()).Level,
             MissionCompleteType.AbilityCrestTotalPlusCountUp
@@ -93,12 +121,32 @@ public class MissionInitialProgressionService(
                         .Select(x => (int?)x.BuildupCount)
                         .ToListAsync()
                 ).Sum() ?? 0,
-            MissionCompleteType.CharacterLevelUp => await GetCharacterMaxLevel(progressionInfo),
+            MissionCompleteType.CharacterLevelUp
+                => await GetCharacterMaxLevel(
+                    (Charas?)progressionInfo.Parameter,
+                    (UnitElement?)progressionInfo.Parameter2
+                ),
             MissionCompleteType.CharacterManaNodeUnlock
-                => await GetCharacterManaNodeCount(progressionInfo),
-            MissionCompleteType.DragonLevelUp => await GetDragonMaxLevel(progressionInfo),
-            MissionCompleteType.TreasureTrade => await GetTreasureTradeCount(progressionInfo),
-            MissionCompleteType.DragonBondLevelUp => await GetDragonBondLevel(progressionInfo),
+                => await GetCharacterManaNodeCount(
+                    (Charas?)progressionInfo.Parameter,
+                    (UnitElement?)progressionInfo.Parameter2
+                ),
+            MissionCompleteType.DragonLevelUp
+                => await GetDragonMaxLevel(
+                    (Dragons?)progressionInfo.Parameter,
+                    (UnitElement?)progressionInfo.Parameter2
+                ),
+            MissionCompleteType.TreasureTrade
+                => await GetTreasureTradeCount(
+                    progressionInfo.Parameter,
+                    (EntityTypes?)progressionInfo.Parameter2,
+                    progressionInfo.Parameter3
+                ),
+            MissionCompleteType.DragonBondLevelUp
+                => await GetDragonBondLevel(
+                    (Dragons?)progressionInfo.Parameter,
+                    (UnitElement?)progressionInfo.Parameter2
+                ),
             MissionCompleteType.PartyPowerReached
                 => await partyPowerRepository.GetMaxPartyPowerAsync(),
             MissionCompleteType.DragonGiftSent => 0, // Unsure about this
@@ -142,14 +190,10 @@ public class MissionInitialProgressionService(
         }
     }
 
-    private async Task<int> GetTreasureTradeCount(MissionProgressionInfo requirement)
+    private async Task<int> GetTreasureTradeCount(int? tradeId, EntityTypes? type, int? id)
     {
         List<int> trades = await tradeRepository.Trades
-            .Where(
-                x =>
-                    x.Type == TradeType.Treasure
-                    && (requirement.Parameter == null || x.Id == requirement.Parameter)
-            )
+            .Where(x => x.Type == TradeType.Treasure && (tradeId == null || x.Id == tradeId))
             .Select(x => x.Id)
             .ToListAsync();
 
@@ -157,36 +201,26 @@ public class MissionInitialProgressionService(
             .Select(x => MasterAsset.TreasureTrade[x])
             .Count(
                 x =>
-                    (
-                        requirement.Parameter2 == null
-                        || x.DestinationEntityType == (EntityTypes)requirement.Parameter2
-                    )
-                    && (
-                        requirement.Parameter3 == null
-                        || x.DestinationEntityId == requirement.Parameter3
-                    )
+                    (type == null || x.DestinationEntityType == type)
+                    && (id == null || x.DestinationEntityId == id)
             );
     }
 
-    private async Task<int> GetCharacterMaxLevel(MissionProgressionInfo requirement)
+    private async Task<int> GetCharacterMaxLevel(Charas? charaId, UnitElement? element)
     {
-        if (requirement.Parameter != null)
+        if (charaId != null)
         {
-            return (await unitRepository.FindCharaAsync((Charas)requirement.Parameter))?.Level ?? 0;
+            return (await unitRepository.FindCharaAsync(charaId.Value))?.Level ?? 0;
         }
 
-        if (requirement.Parameter2 != null)
+        if (element != null)
         {
             return (
                     await unitRepository.Charas
                         .Select(x => new { x.CharaId, x.Level })
                         .ToListAsync()
                 )
-                    .Where(
-                        x =>
-                            MasterAsset.CharaData[x.CharaId].ElementalType
-                            == (UnitElement)requirement.Parameter2
-                    )
+                    .Where(x => MasterAsset.CharaData[x.CharaId].ElementalType == element)
                     .Select(x => (int?)x.Level)
                     .Max() ?? 0;
         }
@@ -194,23 +228,17 @@ public class MissionInitialProgressionService(
         return await unitRepository.Charas.MaxAsync(x => x.Level);
     }
 
-    private async Task<int> GetCharacterManaNodeCount(MissionProgressionInfo requirement)
+    private async Task<int> GetCharacterManaNodeCount(Charas? charaId, UnitElement? element)
     {
-        if (requirement.Parameter != null)
+        if (charaId != null)
         {
-            return (
-                    await unitRepository.FindCharaAsync((Charas)requirement.Parameter)
-                )?.ManaNodeUnlockCount ?? 0;
+            return (await unitRepository.FindCharaAsync(charaId.Value))?.ManaNodeUnlockCount ?? 0;
         }
 
-        if (requirement.Parameter2 != null)
+        if (element != null)
         {
             return (await unitRepository.Charas.ToListAsync())
-                    .Where(
-                        x =>
-                            MasterAsset.CharaData[x.CharaId].ElementalType
-                            == (UnitElement)requirement.Parameter2
-                    )
+                    .Where(x => MasterAsset.CharaData[x.CharaId].ElementalType == element)
                     .Select(x => (int?)x.ManaNodeUnlockCount)
                     .Max() ?? 0;
         }
@@ -220,59 +248,49 @@ public class MissionInitialProgressionService(
                 .Max() ?? 0;
     }
 
-    private async Task<int> GetDragonMaxLevel(MissionProgressionInfo requirement)
+    private async Task<int> GetDragonMaxLevel(Dragons? dragonId, UnitElement? element)
     {
-        if (requirement.Parameter != null)
+        if (dragonId != null)
         {
-            return (
-                    await unitRepository.Dragons.SingleOrDefaultAsync(
-                        x => x.DragonId == (Dragons)requirement.Parameter
-                    )
-                )?.Level ?? 0;
+            return await unitRepository.Dragons
+                    .Where(x => x.DragonId == dragonId)
+                    .Select(x => (int?)x.Level)
+                    .MaxAsync() ?? 0;
         }
 
-        if (requirement.Parameter2 != null)
+        if (element != null)
         {
             return (
                     await unitRepository.Dragons
                         .Select(x => new { x.DragonId, x.Level })
                         .ToListAsync()
                 )
-                    .Where(
-                        x =>
-                            MasterAsset.DragonData[x.DragonId].ElementalType
-                            == (UnitElement)requirement.Parameter2
-                    )
+                    .Where(x => MasterAsset.DragonData[x.DragonId].ElementalType == element)
                     .Select(x => (int?)x.Level)
                     .Max() ?? 0;
         }
 
-        return await unitRepository.Dragons.MaxAsync(x => x.Level);
+        return await unitRepository.Dragons.MaxAsync(x => (int?)x.Level) ?? 0;
     }
 
-    private async Task<int> GetDragonBondLevel(MissionProgressionInfo requirement)
+    private async Task<int> GetDragonBondLevel(Dragons? dragonId, UnitElement? element)
     {
-        if (requirement.Parameter != null)
+        if (dragonId != null)
         {
-            return (
-                    await unitRepository.DragonReliabilities.SingleOrDefaultAsync(
-                        x => x.DragonId == (Dragons)requirement.Parameter
-                    )
-                )?.Level ?? 0;
+            DbPlayerDragonReliability? reliability =
+                await unitRepository.FindDragonReliabilityAsync(dragonId.Value);
+
+            return reliability?.Level ?? 0;
         }
 
-        if (requirement.Parameter2 != null)
+        if (element != null)
         {
             return (
                     await unitRepository.DragonReliabilities
                         .Select(x => new { x.DragonId, x.Level })
                         .ToListAsync()
                 )
-                    .Where(
-                        x =>
-                            MasterAsset.DragonData[x.DragonId].ElementalType
-                            == (UnitElement)requirement.Parameter2
-                    )
+                    .Where(x => MasterAsset.DragonData[x.DragonId].ElementalType == element)
                     .Select(x => (int?)x.Level)
                     .Max() ?? 0;
         }
@@ -280,24 +298,23 @@ public class MissionInitialProgressionService(
         return await unitRepository.DragonReliabilities.MaxAsync(x => (int?)x.Level) ?? 0;
     }
 
-    private async Task<int> GetQuestClearedCount(MissionProgressionInfo requirement)
+    private async Task<int> GetQuestClearedCount(
+        int? questId,
+        int? questGroupId,
+        QuestPlayModeTypes? playMode
+    )
     {
-        if (requirement.Parameter != null)
+        if (questId != null)
         {
             return await questRepository.Quests
-                .Where(x => x.QuestId == requirement.Parameter)
+                .Where(x => x.QuestId == questId)
                 .Select(x => x.PlayCount)
                 .FirstOrDefaultAsync();
         }
 
         List<int> validQuests = MasterAsset.QuestData.Enumerable
             .Where(
-                x =>
-                    x.Gid == requirement.Parameter2
-                    && (
-                        requirement.Parameter3 == null
-                        || x.QuestPlayModeType == (QuestPlayModeTypes)requirement.Parameter3
-                    )
+                x => x.Gid == questGroupId && (playMode == null || x.QuestPlayModeType == playMode)
             )
             .Select(x => x.Id)
             .ToList();
@@ -307,66 +324,83 @@ public class MissionInitialProgressionService(
                 .SumAsync(x => (int?)x.PlayCount) ?? 0;
     }
 
-    private async Task<int> GetCharacterBuildupCount(MissionProgressionInfo requirement)
+    private async Task<int> GetCharacterBuildupCount(
+        Charas? charaId,
+        UnitElement? element,
+        PlusCountType? type
+    )
     {
-        Debug.Assert(requirement.Parameter2 != null, "requirement.Parameter2 != null");
+        Debug.Assert(type != null, "type != null");
 
-        PlusCountType type = (PlusCountType)requirement.Parameter2;
-
-        if (requirement.Parameter != null)
+        if (charaId != null)
         {
-            DbPlayerCharaData? chara = await unitRepository.FindCharaAsync(
-                (Charas)requirement.Parameter
-            );
+            DbPlayerCharaData? chara = await unitRepository.FindCharaAsync(charaId.Value);
+
+            if (chara == null)
+                return 0;
 
             return type switch
-                {
-                    PlusCountType.Hp => chara?.HpPlusCount,
-                    PlusCountType.Atk => chara?.AttackPlusCount,
-                    _
-                        => throw new DragaliaException(
-                            ResultCode.CommonInvalidArgument,
-                            $"Invalid PlusCountType for character in mission requirement, parameter: {requirement.Parameter}"
-                        ),
-                } ?? 0;
+            {
+                PlusCountType.Hp => chara.HpPlusCount,
+                PlusCountType.Atk => chara.AttackPlusCount,
+                _
+                    => throw new DragaliaException(
+                        ResultCode.CommonInvalidArgument,
+                        $"Invalid PlusCountType for character in mission requirement, parameter: {type}"
+                    )
+            };
+        }
+
+        IQueryable<DbPlayerCharaData> charaQuery;
+
+        if (element != null)
+        {
+            HashSet<Charas> validCharas = MasterAsset.CharaData.Enumerable
+                .Where(x => x.ElementalType == element)
+                .Select(x => x.Id)
+                .ToHashSet();
+
+            charaQuery = unitRepository.Charas.Where(x => validCharas.Contains(x.CharaId));
+        }
+        else
+        {
+            charaQuery = unitRepository.Charas;
         }
 
         return type switch
         {
-            PlusCountType.Hp
-                => await unitRepository.Charas.Select(x => (int?)x.HpPlusCount).MaxAsync() ?? 0,
+            PlusCountType.Hp => await charaQuery.Select(x => (int?)x.HpPlusCount).MaxAsync() ?? 0,
             PlusCountType.Atk
-                => await unitRepository.Charas.Select(x => (int?)x.AttackPlusCount).MaxAsync() ?? 0,
+                => await charaQuery.Select(x => (int?)x.AttackPlusCount).MaxAsync() ?? 0,
             _
                 => throw new DragaliaException(
                     ResultCode.CommonInvalidArgument,
-                    $"Invalid PlusCountType for character in mission requirement, parameter: {requirement.Parameter}"
-                ),
+                    $"Invalid PlusCountType for character in mission requirement, parameter: {type}"
+                )
         };
     }
 
-    private async Task<int> GetWyrmprintBuildupCount(MissionProgressionInfo requirement)
+    private async Task<int> GetWyrmprintBuildupCount(AbilityCrests? crestId, PlusCountType? type)
     {
-        Debug.Assert(requirement.Parameter2 != null, "requirement.Parameter2 != null");
+        Debug.Assert(type != null, "type != null");
 
-        PlusCountType type = (PlusCountType)requirement.Parameter2;
-
-        if (requirement.Parameter != null)
+        if (crestId != null)
         {
-            DbAbilityCrest? crest = await abilityCrestRepository.FindAsync(
-                (AbilityCrests)requirement.Parameter
-            );
+            DbAbilityCrest? crest = await abilityCrestRepository.FindAsync(crestId.Value);
+
+            if (crest == null)
+                return 0;
 
             return type switch
-                {
-                    PlusCountType.Hp => crest?.HpPlusCount,
-                    PlusCountType.Atk => crest?.AttackPlusCount,
-                    _
-                        => throw new DragaliaException(
-                            ResultCode.CommonInvalidArgument,
-                            $"Invalid PlusCountType for wyrmprint in mission requirement, parameter: {requirement.Parameter}"
-                        ),
-                } ?? 0;
+            {
+                PlusCountType.Hp => crest.HpPlusCount,
+                PlusCountType.Atk => crest.AttackPlusCount,
+                _
+                    => throw new DragaliaException(
+                        ResultCode.CommonInvalidArgument,
+                        $"Invalid PlusCountType for wyrmprint in mission requirement, parameter: {type}"
+                    ),
+            };
         }
 
         return type switch
@@ -382,32 +416,29 @@ public class MissionInitialProgressionService(
             _
                 => throw new DragaliaException(
                     ResultCode.CommonInvalidArgument,
-                    $"Invalid PlusCountType for wyrmprint in mission requirement, parameter: {requirement.Parameter}"
-                ),
+                    $"Invalid PlusCountType for wyrmprint in mission requirement, parameter: {type}"
+                )
         };
     }
 
-    private async Task<int> GetWeaponEarnedCount(MissionProgressionInfo requirement)
+    private async Task<int> GetWeaponEarnedCount(
+        WeaponBodies? bodyId,
+        UnitElement? element,
+        int? rarity,
+        WeaponSeries? series
+    )
     {
-        if (requirement.Parameter != null)
+        if (bodyId != null)
         {
-            return await weaponRepository.FindAsync((WeaponBodies)requirement.Parameter) != null
-                ? 1
-                : 0;
+            return await weaponRepository.FindAsync(bodyId.Value) != null ? 1 : 0;
         }
 
         List<WeaponBodies> validWeaponBodies = MasterAsset.WeaponBody.Enumerable
             .Where(
                 x =>
-                    (
-                        requirement.Parameter2 is null
-                        || x.ElementalType == (UnitElement)requirement.Parameter2
-                    )
-                    && (requirement.Parameter3 is null || x.Rarity == requirement.Parameter3)
-                    && (
-                        requirement.Parameter4 is null
-                        || x.WeaponSeriesId == (WeaponSeries)requirement.Parameter4
-                    )
+                    (element is null || x.ElementalType == element)
+                    && (rarity is null || x.Rarity == rarity)
+                    && (series is null || x.WeaponSeriesId == series)
             )
             .Select(x => x.Id)
             .ToList();
@@ -417,27 +448,24 @@ public class MissionInitialProgressionService(
         );
     }
 
-    private async Task<int> GetWeaponRefinedCount(MissionProgressionInfo requirement)
+    private async Task<int> GetWeaponRefinedCount(
+        WeaponBodies? bodyId,
+        UnitElement? element,
+        int? rarity,
+        WeaponSeries? series
+    )
     {
-        if (requirement.Parameter != null)
+        if (bodyId != null)
         {
-            return (
-                    await weaponRepository.FindAsync((WeaponBodies)requirement.Parameter)
-                )?.LimitOverCount ?? 0;
+            return (await weaponRepository.FindAsync(bodyId.Value))?.LimitOverCount ?? 0;
         }
 
         List<WeaponBodies> validWeaponBodies = MasterAsset.WeaponBody.Enumerable
             .Where(
                 x =>
-                    (
-                        requirement.Parameter2 is null
-                        || x.ElementalType == (UnitElement)requirement.Parameter2
-                    )
-                    && (requirement.Parameter3 is null || x.Rarity == requirement.Parameter3)
-                    && (
-                        requirement.Parameter4 is null
-                        || x.WeaponSeriesId == (WeaponSeries)requirement.Parameter4
-                    )
+                    (element is null || x.ElementalType == element)
+                    && (rarity is null || x.Rarity == rarity)
+                    && (series is null || x.WeaponSeriesId == series)
             )
             .Select(x => x.Id)
             .ToList();
@@ -447,12 +475,16 @@ public class MissionInitialProgressionService(
                 .SumAsync(x => (int?)x.LimitOverCount) ?? 0;
     }
 
-    private async Task<int> GetQuestGroupClearedCount(MissionProgressionInfo requirement)
+    private async Task<int> GetQuestGroupClearedCount(
+        int? groupId,
+        VariationTypes? type,
+        QuestPlayModeTypes? playMode
+    )
     {
-        Debug.Assert(requirement.Parameter != null, "requirement.Parameter != null");
+        Debug.Assert(groupId != null, "groupId != null");
 
         HashSet<int> eventGroupPool = MasterAsset.QuestEventGroup.Enumerable
-            .Where(x => x.BaseQuestGroupId == requirement.Parameter)
+            .Where(x => x.BaseQuestGroupId == groupId)
             .Select(x => x.Id)
             .ToHashSet();
 
@@ -460,8 +492,8 @@ public class MissionInitialProgressionService(
             .Where(x => eventGroupPool.Contains(x.Gid))
             .Where(
                 x =>
-                    requirement.Parameter2 == null
-                    || x.QuestPlayModeType == (QuestPlayModeTypes)requirement.Parameter2
+                    (type == null || x.VariationType == type)
+                    && (playMode == null || x.QuestPlayModeType == playMode)
             )
             .Select(x => x.Id)
             .ToList();
