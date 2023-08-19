@@ -309,9 +309,9 @@ public class MissionInitialProgressionService(
 
     private async Task<int> GetCharacterBuildupCount(MissionProgressionInfo requirement)
     {
-        Debug.Assert(requirement.Parameter2 != null, "requirement.Parameter2 != null");
+        Debug.Assert(requirement.Parameter3 != null, "requirement.Parameter3 != null");
 
-        PlusCountType type = (PlusCountType)requirement.Parameter2;
+        PlusCountType type = (PlusCountType)requirement.Parameter3;
 
         if (requirement.Parameter != null)
         {
