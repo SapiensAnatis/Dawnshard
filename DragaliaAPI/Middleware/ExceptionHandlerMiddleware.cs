@@ -56,7 +56,7 @@ public class ExceptionHandlerMiddleware(RequestDelegate next)
 
             logger.LogDebug("Issuing ID token refresh request.");
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            context.Response.Headers.Add("Is-Required-Refresh-Id-Token", "true");
+            // TODO: Disabled for now to force a "DecryptError" on the client context.Response.Headers.Add("Is-Required-Refresh-Id-Token", "true");
         }
         catch (Exception ex)
             when (serializeException && context.RequestAborted.IsCancellationRequested)
