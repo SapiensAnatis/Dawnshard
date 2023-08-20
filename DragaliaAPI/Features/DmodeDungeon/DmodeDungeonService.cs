@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Extensions;
@@ -388,10 +389,18 @@ public class DmodeDungeonService(
 
         if (floor.FloorNum > 1)
         {
-            floorData.dmode_unit_info.level = floor.BaseEnemyLevel;
-            floorData.dmode_unit_info.exp = MasterAsset.DmodeCharaLevel[
-                1000 + floor.BaseEnemyLevel
-            ].TotalExp;
+            int baseExp = MasterAsset.DmodeCharaLevel[1000 + floor.BaseEnemyLevel].TotalExp;
+
+            double expMultiplier = GetExperienceMultiplier(ingameData);
+
+            int totalExp = (int)Math.Ceiling(baseExp * expMultiplier);
+
+            floorData.dmode_unit_info.exp = totalExp;
+            floorData.dmode_unit_info.level =
+                MasterAsset.DmodeCharaLevel.Enumerable
+                    .Skip(floor.BaseEnemyLevel)
+                    .Last(x => totalExp >= x.NecessaryExp)
+                    ?.Level ?? floor.BaseEnemyLevel;
 
             List<AtgenDmodeHoldDragonList> holdDragonList = new();
 
@@ -443,6 +452,27 @@ public class DmodeDungeonService(
         return floorData;
     }
 
+    private static double GetExperienceMultiplier(DmodeIngameData ingameData)
+    {
+        double expMultiplier = 1d;
+
+        DmodeServitorPassiveList? expPassive =
+            ingameData.dmode_servitor_passive_list.SingleOrDefault(
+                x => x.passive_no == DmodeServitorPassiveType.Exp
+            );
+
+        if (expPassive != null)
+        {
+            DmodeServitorPassiveLevel level = DmodeHelper.PassiveLevels[
+                DmodeServitorPassiveType.Exp
+            ][expPassive.passive_level];
+
+            expMultiplier += level.UpValue / 100;
+        }
+
+        return expMultiplier;
+    }
+
     private async Task<DmodeFloorData> GenerateSubsequentFloor(
         DmodePlayRecord playRecord,
         DmodeIngameData ingameData
@@ -460,21 +490,7 @@ public class DmodeDungeonService(
             previousFloor.dmode_dungeon_odds.dmode_odds_info.dmode_enemy.ToArray();
         int[] enemyKilledStatus = playRecord.dmode_treasure_record.enemy.ToArray();
 
-        double expMultiplier = 1d;
-
-        DmodeServitorPassiveList? expPassive =
-            ingameData.dmode_servitor_passive_list.SingleOrDefault(
-                x => x.passive_no == DmodeServitorPassiveType.Exp
-            );
-
-        if (expPassive != null)
-        {
-            DmodeServitorPassiveLevel level = DmodeHelper.PassiveLevels[
-                DmodeServitorPassiveType.Exp
-            ][expPassive.passive_level];
-
-            expMultiplier += level.UpValue / 100;
-        }
+        double expMultiplier = GetExperienceMultiplier(ingameData);
 
         // First, process enemy kills and rewards
         for (int i = 0; i < Math.Min(enemyKilledStatus.Length, enemies.Length); i++)
@@ -1006,9 +1022,12 @@ public class DmodeDungeonService(
     {
         int maxEnemyCount = areaInfo.EnemyThemes.Length;
 
-        int enemyCount = isSelectedEntity
-            ? maxEnemyCount
-            : rdm.Next((int)Math.Ceiling(maxEnemyCount * 0.8d), maxEnemyCount); // Ceiling so 1 * 0.8 = 1 for boss stages
+        // TODO: Fix for low menace spawn rate, this is only temporary
+        int enemyCount = maxEnemyCount;
+
+        // int enemyCount = isSelectedEntity
+        //    ? maxEnemyCount
+        //    : rdm.Next((int)Math.Ceiling(maxEnemyCount * 0.8d), maxEnemyCount); // Ceiling so 1 * 0.8 = 1 for boss stages
 
         List<AtgenDmodeEnemy> dmodeEnemies = new();
 
