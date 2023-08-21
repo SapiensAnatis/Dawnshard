@@ -13,7 +13,7 @@ namespace DragaliaAPI.Integration.Test.Features.GraphQL;
 
 public class GraphQlTest : GraphQlTestFixture
 {
-    private const string Endpoint = "/savefile/graphql";
+    private const string Endpoint = "savefile/graphql";
 
     public GraphQlTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)

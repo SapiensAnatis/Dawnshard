@@ -14,7 +14,7 @@ public class GraphQlTestFixture : TestFixture
     )
         : base(factory, outputHelper)
     {
-        Uri endpoint = new Uri(this.Client.BaseAddress!, "/savefile/graphql");
+        Uri endpoint = new Uri(this.Client.BaseAddress!, "savefile/graphql");
 
         this.GraphQlHttpClient = new(
             new GraphQLHttpClientOptions { EndPoint = endpoint },

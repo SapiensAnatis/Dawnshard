@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.GraphQL;
@@ -10,6 +12,8 @@ using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using DragaliaAPI;
+using DragaliaAPI.Models;
+using MessagePack;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using MudBlazor.Services;
@@ -32,7 +36,6 @@ builder.Services
     .Configure<ItemSummonConfig>(config)
     .Configure<DragonfruitConfig>(config);
 
-builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
 
@@ -108,26 +111,52 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
     app.MigrateDatabase();
 
 app.UseStaticFiles();
-
 app.UseSerilogRequestLogging();
-
-app.UsePathBase("/2.19.0_20220714193707"); // Latest Android app version
-app.UsePathBase("/2.19.0_20220719103923"); // Latest iOS app version
-
-app.UseMiddleware<ExceptionHandlerMiddleware>();
-app.UseMiddleware<NotFoundHandlerMiddleware>();
-
-app.UseRouting();
 app.UseAuthentication();
-app.UseAuthorization();
-
-app.UseMiddleware<DailyResetMiddleware>();
-
-app.MapControllers();
 app.UseResponseCompression();
 
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+ImmutableArray<string> apiRoutePrefixes = new[]
+{
+    "/api",
+    "/2.19.0_20220714193707",
+    "/2.19.0_20220719103923"
+}.ToImmutableArray();
+
+app.MapWhen(
+    ctx => apiRoutePrefixes.Any(prefix => ctx.Request.Path.StartsWithSegments(prefix)),
+    applicationBuilder =>
+    {
+        foreach (string prefix in apiRoutePrefixes)
+            applicationBuilder.UsePathBase(prefix);
+
+        applicationBuilder.UseRouting();
+        applicationBuilder.UseMiddleware<NotFoundHandlerMiddleware>();
+        applicationBuilder.UseMiddleware<ExceptionHandlerMiddleware>();
+        applicationBuilder.UseMiddleware<DailyResetMiddleware>();
+        applicationBuilder.UseAuthorization();
+        applicationBuilder.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+    }
+);
+
+app.MapWhen(
+    ctx => !apiRoutePrefixes.Any(prefix => ctx.Request.Path.StartsWithSegments(prefix)),
+    applicationBuilder =>
+    {
+        applicationBuilder.UseRouting();
+#pragma warning disable ASP0001
+        applicationBuilder.UseAuthorization();
+#pragma warning restore ASP0001
+        applicationBuilder.UseEndpoints(endpoints =>
+        {
+            endpoints.MapBlazorHub();
+            endpoints.MapRazorPages();
+            endpoints.MapFallbackToPage("/_Host");
+        });
+    }
+);
 
 app.MapHealthChecks("/health");
 

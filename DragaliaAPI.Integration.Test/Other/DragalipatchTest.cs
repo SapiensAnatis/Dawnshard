@@ -15,7 +15,7 @@ public class DragalipatchTest : TestFixture
     [Fact]
     public async Task Config_ReturnsExpectedJson()
     {
-        HttpResponseMessage response = await this.Client.GetAsync("/dragalipatch/config");
+        HttpResponseMessage response = await this.Client.GetAsync("dragalipatch/config");
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
