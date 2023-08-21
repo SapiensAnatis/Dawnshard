@@ -52,9 +52,10 @@ public class CharaNodeHpResolver : IValueResolver<CharaList, DbPlayerCharaData, 
     {
         CharaData adventurer = MasterAsset.CharaData.Get(source.chara_id);
 
-        return (ushort)(
-            source.hp - CharaUtils.CalculateBaseHp(adventurer, source.level, source.rarity)
-        );
+        int nodeHp =
+            source.hp - CharaUtils.CalculateBaseHp(adventurer, source.level, source.rarity);
+
+        return (ushort)Math.Clamp(nodeHp, ushort.MinValue, ushort.MaxValue);
     }
 }
 
@@ -69,8 +70,9 @@ public class CharaNodeAtkResolver : IValueResolver<CharaList, DbPlayerCharaData,
     {
         CharaData adventurer = MasterAsset.CharaData.Get(source.chara_id);
 
-        return (ushort)(
-            source.attack - CharaUtils.CalculateBaseAttack(adventurer, source.level, source.rarity)
-        );
+        int nodeAtk =
+            source.attack - CharaUtils.CalculateBaseAttack(adventurer, source.level, source.rarity);
+
+        return (ushort)Math.Clamp(nodeAtk, ushort.MinValue, ushort.MaxValue);
     }
 }
