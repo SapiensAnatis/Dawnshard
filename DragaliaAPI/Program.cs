@@ -16,6 +16,8 @@ using DragaliaAPI.Models;
 using MessagePack;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using MudBlazor.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -158,7 +160,8 @@ app.MapWhen(
     }
 );
 
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health"); // Kubernetes readiness check
+app.MapGet("/ping", () => Results.Ok()); // Kubernetes liveness check
 
 app.Run();
 
