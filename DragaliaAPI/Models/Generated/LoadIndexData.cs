@@ -6,8 +6,8 @@ namespace DragaliaAPI.Models.Generated;
 [MessagePackObject(true)]
 public class LoadIndexData
 {
-    [JsonPropertyName("$savefile_origin")]
-    public string SavefileOrigin { get; } = "dawnshard";
+    [JsonPropertyName("origin")]
+    public string Origin { get; } = "dawnshard";
 
     [JsonRequired]
     public UserData? user_data { get; set; }
