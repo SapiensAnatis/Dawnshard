@@ -24,12 +24,12 @@
         QueryBuilder qb =
             new()
                 {
-                    { "client_id", Constants.ClientId },
+                    { "client_id", Options.CurrentValue.ClientId },
                     { "redirect_uri", redirect },
                     { "response_type", "session_token_code" },
                     { "scope", "user user.birthday openid" },
                     { "language", "en-US" },
-                    { "session_token_code_challenge", HashString(Constants.ChallengeString) },
+                    { "session_token_code_challenge", HashString(Options.CurrentValue.ChallengeString) },
                     { "session_token_code_challenge_method", "S256" }
                 };
 

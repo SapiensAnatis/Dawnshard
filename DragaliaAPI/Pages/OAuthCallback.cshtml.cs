@@ -22,17 +22,12 @@ using Npgsql.Internal.TypeHandlers.NetworkHandlers;
 
 namespace DragaliaAPI.Blazor.Pages;
 
-public class OAuthCallbackModel : PageModel
+public class OAuthCallbackModel(
+    IOptionsMonitor<BaasOptions> options,
+    ApiContext apiContext,
+    ILogger<OAuthCallbackModel> logger
+) : PageModel
 {
-    private readonly IOptionsMonitor<BaasOptions> options;
-    private readonly ApiContext apiContext;
-
-    public OAuthCallbackModel(IOptionsMonitor<BaasOptions> options, ApiContext apiContext)
-    {
-        this.options = options;
-        this.apiContext = apiContext;
-    }
-
     public async Task<IActionResult> OnGet()
     {
         if (
@@ -49,11 +44,17 @@ public class OAuthCallbackModel : PageModel
         if (sessionTokenCode is null)
             return this.Unauthorized();
 
-        ClaimsPrincipal principal = await this.Authenticate(sessionTokenCode);
+        AuthenticateResult result = await this.Authenticate(sessionTokenCode);
+
+        if (!result.Succeeded)
+        {
+            logger.LogInformation("Authenticate result failure.");
+            return Unauthorized();
+        }
 
         await this.HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
-            principal
+            result.Principal
         );
 
         if (
@@ -69,17 +70,17 @@ public class OAuthCallbackModel : PageModel
         return this.LocalRedirect($"~/{originalPage}");
     }
 
-    private async Task<ClaimsPrincipal> Authenticate(string sessionTokenCode)
+    private async Task<AuthenticateResult> Authenticate(string sessionTokenCode)
     {
         using HttpClient httpClient = new();
-        httpClient.BaseAddress = this.options.CurrentValue.BaasUrlParsed;
+        httpClient.BaseAddress = options.CurrentValue.BaasUrlParsed;
 
         Dictionary<string, string> sessionTokenParameters =
             new()
             {
-                { "client_id", Constants.ClientId },
+                { "client_id", options.CurrentValue.ClientId },
                 { "session_token_code", sessionTokenCode },
-                { "session_token_code_verifier", Constants.ChallengeString }
+                { "session_token_code_verifier", options.CurrentValue.ChallengeString }
             };
 
         HttpResponseMessage sessionTokenResponse = await httpClient.PostAsync(
@@ -108,7 +109,14 @@ public class OAuthCallbackModel : PageModel
         );
 
         HttpResponseMessage userIdResponse = await httpClient.GetAsync("/gameplay/v1/user");
-        userIdResponse.EnsureSuccessStatusCode();
+        if (!userIdResponse.IsSuccessStatusCode)
+        {
+            logger.LogInformation(
+                "/gameplay/v1/user returned non-success status {status}",
+                userIdResponse.StatusCode
+            );
+            return AuthenticateResult.Fail("Failed to get user.");
+        }
 
         UserIdResponse userId =
             await userIdResponse.Content.ReadFromJsonAsync<UserIdResponse>()
@@ -119,16 +127,20 @@ public class OAuthCallbackModel : PageModel
         identity.AddClaim(new Claim(CustomClaimType.AccountId, userId.UserId));
 
         // TODO: handle users without a save
-        (string playerName, long viewerId) = await this.apiContext.PlayerUserData
+        var playerInfo = await apiContext.PlayerUserData
             .Where(x => x.DeviceAccountId == userId.UserId)
-            .Select(x => new ValueTuple<string, long>(x.Name, x.ViewerId))
-            .FirstAsync();
+            .Select(x => new { x.Name, x.ViewerId })
+            .FirstOrDefaultAsync();
+
+        if (playerInfo is null)
+            return AuthenticateResult.Fail("Player did not have a savefile.");
 
         identity.AddClaim(new Claim(CustomClaimType.AccountId, userId.UserId));
-        identity.AddClaim(new Claim(CustomClaimType.PlayerName, playerName));
-        identity.AddClaim(new Claim(CustomClaimType.ViewerId, viewerId.ToString()));
+        identity.AddClaim(new Claim(CustomClaimType.PlayerName, playerInfo.Name));
+        identity.AddClaim(new Claim(CustomClaimType.ViewerId, playerInfo.ViewerId.ToString()));
 
-        return new ClaimsPrincipal(identity);
+        AuthenticationTicket ticket = new(new ClaimsPrincipal(identity), "BaaS");
+        return AuthenticateResult.Success(ticket);
     }
 }
 
