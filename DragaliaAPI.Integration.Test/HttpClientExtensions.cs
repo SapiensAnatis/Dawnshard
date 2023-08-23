@@ -27,7 +27,7 @@ public static class HttpClientExtensions
     {
         HttpContent content = CreateMsgpackContent(request);
 
-        HttpResponseMessage response = await client.PostAsync(endpoint, content);
+        HttpResponseMessage response = await client.PostAsync(endpoint.TrimStart('/'), content);
 
         response.EnsureSuccessStatusCode();
 

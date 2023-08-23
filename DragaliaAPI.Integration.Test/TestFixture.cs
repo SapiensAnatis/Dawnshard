@@ -32,7 +32,12 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
                         logging.AddXUnit(outputHelper);
                     })
             )
-            .CreateClient();
+            .CreateClient(
+                new WebApplicationFactoryClientOptions()
+                {
+                    BaseAddress = new Uri("http://localhost/api/", UriKind.Absolute),
+                }
+            );
 
         this.Client.DefaultRequestHeaders.Add("SID", SessionId);
 

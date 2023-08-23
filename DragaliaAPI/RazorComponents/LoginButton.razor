@@ -1,0 +1,47 @@
+﻿@using DragaliaAPI.Blazor.Authentication;
+@using DragaliaAPI.Models.Options;
+@using Microsoft.AspNetCore.Http.Extensions;
+@using System.Security.Cryptography;
+@using System.Text;
+@using Microsoft.Extensions.Options;
+
+@inject IOptionsMonitor<BaasOptions> Options;
+@inject NavigationManager Navigation;
+
+<MudButton OnClick="OnClickLogin" Variant="Variant.Text" Color="Color.Inherit">Login</MudButton>
+
+@code {
+    [CascadingParameter(Name = "HttpRequestState")]
+    protected HttpRequestState? HttpRequestState { get; set; }
+
+    public void OnClickLogin()
+    {
+        ArgumentNullException.ThrowIfNull(HttpRequestState);
+
+        string currentPage = Navigation.ToBaseRelativePath(Navigation.Uri);
+        string redirect = HttpRequestState.HostUri + $"/OAuthCallback?{Constants.QueryParams.OriginalPage}={currentPage}";
+
+        QueryBuilder qb =
+            new()
+                {
+                    { "client_id", Options.CurrentValue.ClientId },
+                    { "redirect_uri", redirect },
+                    { "response_type", "session_token_code" },
+                    { "scope", "user user.birthday openid" },
+                    { "language", "en-US" },
+                    { "session_token_code_challenge", HashString(Options.CurrentValue.ChallengeString) },
+                    { "session_token_code_challenge_method", "S256" }
+                };
+
+        Navigation.NavigateTo(new Uri(this.Options.CurrentValue.BaasUrlParsed, "/custom/thirdparty/auth") + qb.ToString());
+    }
+
+    public static string HashString(string data)
+    {
+        var hashed = SHA256.HashData(Encoding.UTF8.GetBytes(data));
+        return UrlSafeB64(hashed);
+    }
+
+    public static string UrlSafeB64(byte[] input) =>
+        Convert.ToBase64String(input).Replace("+", "-").Replace("/", "_").Replace("=", "");
+}

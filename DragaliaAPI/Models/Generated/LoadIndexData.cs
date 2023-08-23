@@ -6,6 +6,9 @@ namespace DragaliaAPI.Models.Generated;
 [MessagePackObject(true)]
 public class LoadIndexData
 {
+    [JsonPropertyName("origin")]
+    public string Origin { get; } = "dawnshard";
+
     [JsonRequired]
     public UserData? user_data { get; set; }
     public PartyPowerData? party_power_data { get; set; }
