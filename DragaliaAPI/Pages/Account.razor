@@ -5,11 +5,13 @@
 @using DragaliaAPI.Models;
 @using DragaliaAPI.Services;
 @using System.Text.Json;
+@using DragaliaAPI.Blazor.Authentication
 
-@inject ILoadService loadService;
-@inject IUserDataRepository userDataRepository;
-@inject IJSRuntime js;
-@inject ILogger<Account> logger;
+@inject ILoadService LoadService;
+@inject AuthenticationStateProvider StateProvider
+@inject IUserDataRepository UserDataRepository;
+@inject IJSRuntime JsRuntime;
+@inject ILogger<Account> Logger;
 
 <script>
     window.downloadFileFromStream = async (fileName, contentStreamReference) => {
@@ -69,10 +71,10 @@
 
     private async Task OnClickExportSave()
     {
-        logger.LogInformation("Exporting save...");
+        Logger.LogInformation("Exporting save...");
 
         this.Loading = true;
-        LoadIndexData savefile = await this.loadService.BuildIndexData();
+        LoadIndexData savefile = await this.LoadService.BuildIndexData();
         DragaliaResponse<LoadIndexData> response = new(savefile);
 
         string filename = "savedata.txt";
@@ -81,13 +83,14 @@
 
         using var streamRef = new DotNetStreamReference(savefileStream);
 
-        await js.InvokeVoidAsync("downloadFileFromStream", filename, streamRef);
+        await JsRuntime.InvokeVoidAsync("downloadFileFromStream", filename, streamRef);
         this.Loading = false;
     }
 
 
     protected override async Task OnInitializedAsync()
     {
-        this.UserData = await userDataRepository.GetUserDataAsync();
+        if ((await this.StateProvider.GetAuthenticationStateAsync()).User.Identity?.IsAuthenticated ?? false)
+            this.UserData = await UserDataRepository.GetUserDataAsync();
     }
 }

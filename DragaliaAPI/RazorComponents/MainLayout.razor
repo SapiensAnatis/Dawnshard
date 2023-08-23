@@ -1,8 +1,8 @@
 ﻿@using DragaliaAPI.Blazor.Authentication;
 @using DragaliaAPI.Shared.PlayerDetails;
 
-@inject IBlazorIdentityService blazorIdentityService;
-@inject NavigationManager navigationManager;
+@inject IBlazorIdentityService BlazorIdentityService;
+@inject NavigationManager NavigationManager;
 
 @inherits LayoutComponentBase
 
@@ -37,7 +37,7 @@
                     <MudToggleIconButton Edge=Edge.End Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.AccountCircle" ToggledColor="Color.Inherit" @bind-Toggled="@popoverOpen" />
                     <MudPopover Open="@popoverOpen" Paper=true  Class="pt-2 pl-3 pr-3" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
                         <div class="d-flex flex-column">
-                            <MudText Typo="Typo.subtitle1" >Hello, @blazorIdentityService.UserDataName</MudText>
+                            <MudText Typo="Typo.subtitle1" >Hello, @BlazorIdentityService.UserDataName</MudText>
                             <MudList Clickable="true" Dense="true">
                                 <MudListItem Icon="@Icons.Material.Filled.Settings" IconSize="Size.Small" Href="/account">Account Management</MudListItem>
                                 <MudListItem Icon="@Icons.Material.Filled.Logout" IconSize="Size.Small" OnClick=OnClickLogout>Logout</MudListItem>
@@ -66,9 +66,8 @@
 
 
 @code {
-    public bool popoverOpen = false;
-
-    public bool navDrawerOpen = false;
+    private bool popoverOpen = false;
+    private bool navDrawerOpen = false;
 
     [CascadingParameter(Name = "HttpRequestState")]
     protected HttpRequestState? HttpRequestState { get; set; }
@@ -79,18 +78,19 @@
 
     MudTheme theme = new()
         {
-            Palette = new()
+            PaletteDark = new PaletteDark()
+            { 
+                AppbarBackground = Colors.DeepPurple.Darken3
+            },
+            Palette = new PaletteLight()
             {
-
-                Primary = Colors.Blue.Darken1,
-                Secondary = Colors.Blue.Lighten1,
-                AppbarBackground = Colors.Blue.Darken2
+                AppbarBackground = Colors.Teal.Default
             }
         };
 
     public void OnClickLogout()
     {
-        navigationManager.NavigateTo("/logout", forceLoad: true);
+        NavigationManager.NavigateTo("/logout", forceLoad: true);
     }
  
 }
