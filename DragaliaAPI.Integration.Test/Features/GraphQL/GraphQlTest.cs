@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Presents;
 using GraphQL;
 using GraphQL.Client.Http;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ namespace DragaliaAPI.Integration.Test.Features.GraphQL;
 
 public class GraphQlTest : GraphQlTestFixture
 {
-    private const string Endpoint = "/savefile/graphql";
+    private const string Endpoint = "savefile/graphql";
 
     public GraphQlTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)

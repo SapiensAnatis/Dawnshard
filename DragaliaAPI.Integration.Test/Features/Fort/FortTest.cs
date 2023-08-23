@@ -4,7 +4,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Integration.Test.Dragalia;
+namespace DragaliaAPI.Integration.Test.Features.Fort;
 
 public class FortTest : TestFixture
 {
@@ -12,6 +12,14 @@ public class FortTest : TestFixture
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();
+
+        this.ApiContext.PlayerFortBuilds
+            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .ExecuteUpdate(x => x.SetProperty(y => y.BuildStartDate, DateTimeOffset.UnixEpoch));
+
+        this.ApiContext.PlayerFortBuilds
+            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .ExecuteUpdate(x => x.SetProperty(y => y.BuildEndDate, DateTimeOffset.UnixEpoch));
     }
 
     [Fact]
@@ -87,6 +95,10 @@ public class FortTest : TestFixture
     [Fact]
     public async Task AddCarpenter_ReturnsValidResult()
     {
+        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData
+            .AsNoTracking()
+            .First(x => x.DeviceAccountId == DeviceAccountId);
+
         FortAddCarpenterData response = (
             await this.Client.PostMsgpack<FortAddCarpenterData>(
                 "/fort/add_carpenter",
@@ -95,7 +107,7 @@ public class FortTest : TestFixture
         ).data;
 
         response.fort_detail.carpenter_num.Should().Be(3);
-        response.update_data_list.user_data.crystal.Should().Be(1199750);
+        response.update_data_list.user_data.crystal.Should().Be(oldUserData.Crystal - 250);
     }
 
     [Fact]

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Shop;
 

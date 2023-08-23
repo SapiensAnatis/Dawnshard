@@ -1,4 +1,4 @@
-namespace DragaliaAPI.Features.Present;
+namespace DragaliaAPI.Shared.Features.Presents;
 
 /// <summary>
 /// Present message IDs. Not an exhaustive list.

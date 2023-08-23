@@ -1,0 +1,15 @@
+﻿@page "/"
+@namespace DragaliaAPI.Blazor.Pages
+@using DragaliaAPI.Blazor.Authentication;
+@using Microsoft.Extensions.Primitives;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+
+    HttpRequestState httpRequestState = new() { 
+        HostUri = $"{this.Request.Scheme}://{this.Request.Host.Value}", 
+        HideAppBar = this.Request.Query.TryGetValue("hideappbar", out StringValues hide) && hide.Any(x => x == "true")
+    };
+}
+
+<component type="typeof(App)" render-mode="ServerPrerendered" param-HttpRequestState="httpRequestState" />

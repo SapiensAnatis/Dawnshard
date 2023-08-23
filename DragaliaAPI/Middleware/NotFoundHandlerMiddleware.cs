@@ -10,9 +10,6 @@ public class NotFoundHandlerMiddleware
     private readonly ILogger<NotFoundHandlerMiddleware> logger;
     private readonly RequestDelegate next;
 
-    private const string AndroidPathBase = "/2.19.0_20220714193707";
-    private const string IosPathBase = "/2.19.0_20220719103923";
-
     private const ResultCode NotFoundCode = ResultCode.CommonTimeout; // Shows error 'Failed to connect to the server'
 
     public NotFoundHandlerMiddleware(RequestDelegate next, ILoggerFactory logger)
@@ -25,13 +22,7 @@ public class NotFoundHandlerMiddleware
     {
         await next(context);
 
-        if (
-            context.Response.StatusCode == (int)HttpStatusCode.NotFound
-            && (
-                context.Request.PathBase == IosPathBase
-                || context.Request.PathBase == AndroidPathBase
-            )
-        )
+        if (context.Response.StatusCode == (int)HttpStatusCode.NotFound)
         {
             this.logger.LogInformation("HTTP 404 on {RequestPath}", context.Request.Path);
             context.Response.StatusCode = (int)HttpStatusCode.OK;

@@ -14,4 +14,9 @@ public static class CustomClaimType
     /// Viewer ID; publically facing 'friend request' ID
     /// </summary>
     public const string ViewerId = "ViewerId";
+
+    /// <summary>
+    /// Player name from user_data.
+    /// </summary>
+    public const string PlayerName = "PlayerName";
 }

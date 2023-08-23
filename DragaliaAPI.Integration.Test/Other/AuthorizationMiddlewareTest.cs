@@ -4,7 +4,7 @@ namespace DragaliaAPI.Integration.Test.Other;
 
 public class AuthorizationMiddlewareTest : TestFixture
 {
-    private const string Endpoint = "/test";
+    private const string Endpoint = "test";
 
     public AuthorizationMiddlewareTest(
         CustomWebApplicationFactory<Program> factory,

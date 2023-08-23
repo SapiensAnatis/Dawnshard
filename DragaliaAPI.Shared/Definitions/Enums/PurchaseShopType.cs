@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Features.Shop;
+﻿namespace DragaliaAPI.Shared.Definitions.Enums;
 
 public enum PurchaseShopType
 {
