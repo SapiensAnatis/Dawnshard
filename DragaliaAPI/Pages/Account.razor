@@ -6,6 +6,7 @@
 @using DragaliaAPI.Services;
 @using System.Text.Json;
 @using DragaliaAPI.Blazor.Authentication
+@using DragaliaAPI.Shared.Json;
 
 @inject ILoadService LoadService;
 @inject AuthenticationStateProvider StateProvider
@@ -73,13 +74,18 @@
     {
         Logger.LogInformation("Exporting save...");
 
+        JsonSerializerOptions options = new(ApiJsonOptions.Instance);
+        options.Converters.Add(new BoolIntJsonConverter());
+        options.WriteIndented = true;
+        options.IncludeFields = false;
+
         this.Loading = true;
         LoadIndexData savefile = await this.LoadService.BuildIndexData();
         DragaliaResponse<LoadIndexData> response = new(savefile);
 
         string filename = "savedata.txt";
 
-        var savefileStream = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(response));
+        var savefileStream = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(response, options));
 
         using var streamRef = new DotNetStreamReference(savefileStream);
 
