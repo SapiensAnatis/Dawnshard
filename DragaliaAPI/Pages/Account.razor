@@ -48,13 +48,13 @@
             <MudText Typo="Typo.h5" GutterBottom=true Class="mt-1">Save export</MudText>
             <MudText Typo="Typo.body1" GutterBottom=true>Press the button below to download your save file. This can then be edited or imported onto another server.</MudText>
 
-            <MudContainer Class="d-flex flex-column">
+            <MudStack Class="pa-7">
                 <MudButton OnClick="OnClickExportSave" Disabled=this.Loading Class="p-3" FullWidth=true Variant="Variant.Outlined">Export save</MudButton>
                 @if (this.Loading)
                 {
-                    <MudProgressLinear Indeterminate="true" Class="ma-3" />
+                    <MudProgressLinear Indeterminate="true" Class="my-2" />
                 }
-            </MudContainer>
+            </MudStack>
                    
 
             <MudAlert Class="ma-2" Icon="@Icons.Material.Filled.CloudUpload" Severity="Severity.Normal">You can upload saves to be imported at <MudLink Typo="Typo.body2" Href="https://baas.lukefz.xyz/"><b>https://baas.lukefz.xyz/</b></MudLink>.</MudAlert>

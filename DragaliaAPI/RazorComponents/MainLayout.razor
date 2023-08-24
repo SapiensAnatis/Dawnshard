@@ -56,7 +56,7 @@
     <MudDrawer @bind-Open=navDrawerOpen Elevation="2" ClipMode="DrawerClipMode.Always" DisableOverlay=true>
         <NavMenu/>
     </MudDrawer>
-    <MudMainContent>
+    <MudMainContent Style="@MainContentClass">
         <MudContainer MaxWidth="MaxWidth.Large" Class="@MainContainerClass">
             @Body
         </MudContainer>
@@ -75,6 +75,7 @@
     private bool HideAppBar => this.HttpRequestState?.HideAppBar ?? false;
 
     private string MainContainerClass => this.HideAppBar ? "" : "my-8 pt-1";
+    private string MainContentClass => this.HideAppBar ? "padding-top: 1rem;" : "";
 
     MudTheme theme = new()
         {
