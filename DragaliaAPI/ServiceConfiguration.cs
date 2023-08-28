@@ -25,11 +25,13 @@ using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Helpers;
+using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Services.Photon;
+using DragaliaAPI.Shared.PlayerDetails;
 
 namespace DragaliaAPI;
 
@@ -61,7 +63,8 @@ public static class ServiceConfiguration
             .AddScoped<ILoadService, LoadService>()
             .AddScoped<IStampService, StampService>()
             .AddScoped<IStampRepository, StampRepository>()
-            .AddScoped<ISavefileUpdateService, SavefileUpdateService>();
+            .AddScoped<ISavefileUpdateService, SavefileUpdateService>()
+            .AddTransient<PlayerIdentityLoggingMiddleware>();
 
         services
             // Mission Feature
