@@ -113,7 +113,6 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
     app.MigrateDatabase();
 
 app.UseStaticFiles();
-app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseResponseCompression();
 
@@ -132,10 +131,12 @@ app.MapWhen(
             applicationBuilder.UsePathBase(prefix);
 
         applicationBuilder.UseRouting();
+        applicationBuilder.UseAuthorization();
+        applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
+        applicationBuilder.UseSerilogRequestLogging();
         applicationBuilder.UseMiddleware<NotFoundHandlerMiddleware>();
         applicationBuilder.UseMiddleware<ExceptionHandlerMiddleware>();
         applicationBuilder.UseMiddleware<DailyResetMiddleware>();
-        applicationBuilder.UseAuthorization();
         applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
