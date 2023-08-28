@@ -121,6 +121,7 @@
     {
         this.darkMode = value;
         await this.JsRuntime.InvokeVoidAsync("blazorExtensions.writeCookie", new object[] { nameof(darkMode), value});
+        this.StateHasChanged();
     }
 
     protected override void OnInitialized()
