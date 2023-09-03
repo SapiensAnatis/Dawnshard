@@ -13,6 +13,14 @@ namespace DragaliaAPI.Integration.Test.Features;
 
 public class QuestBonusTest : TestFixture
 {
+    /*
+     * Use this query on the SQLite DB to find quest event IDs
+     * SELECT q._Id as QuestId, qe._Id as EventId, t._Text as QuestName FROM QuestData q
+     * JOIN QuestEventGroup qeg ON q._Gid = qeg._Id
+     * JOIN QuestEvent qe ON qe._Id = qeg._BaseQuestGroupId
+     * JOIN TextLabel t ON _QuestViewName = t._Id
+     */
+
     public QuestBonusTest(
         CustomWebApplicationFactory<Program> factory,
         ITestOutputHelper outputHelper
@@ -26,7 +34,7 @@ public class QuestBonusTest : TestFixture
     public async Task QuestBonus_CanClaimWeeklyAgitoBonus()
     {
         int questId = 219041102; // Ayaha and Otoha's Wrath: Expert (Solo)
-        int questEventId = 21900; // QuestData._Gid -> QuestEventGroup._BaseQuestGroupId -> QuestEvent._Id
+        int questEventId = 21900;
 
         DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
 
@@ -163,7 +171,7 @@ public class QuestBonusTest : TestFixture
     public async Task QuestBonus_AllClaimedLastWeek_CanReceiveAgain()
     {
         int questId = 225030101; // Ciella's Wrath: Legend (Co-op)
-        int questEventId = 22500; // QuestData._Gid -> QuestEventGroup._BaseQuestGroupId -> QuestEvent._Id
+        int questEventId = 22500;
 
         await this.AddToDatabase(
             new DbQuestEvent()
@@ -214,6 +222,66 @@ public class QuestBonusTest : TestFixture
 
         bonusResponse.data.receive_quest_bonus.quest_bonus_entity_list.Should().NotBeEmpty();
         bonusResponse.data.update_data_list.material_list.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public async Task QuestBonus_NotClaiming_SetsReserveCountToZero()
+    {
+        int questId = 210020104; // High Mercury's Trial: Master
+        int questEventId = 21000;
+
+        DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
+
+        response.data.update_data_list.quest_event_list
+            .Should()
+            .ContainEquivalentOf(
+                new QuestEventList()
+                {
+                    quest_event_id = questEventId,
+                    quest_bonus_receive_count = 0,
+                    quest_bonus_reserve_count = 1,
+                    quest_bonus_reserve_time = response.data.ingame_result_data.end_time,
+                    quest_bonus_stack_count = 0,
+                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch,
+                    last_daily_reset_time = response.data.ingame_result_data.end_time,
+                    last_weekly_reset_time = response.data.ingame_result_data.end_time,
+                    daily_play_count = 1,
+                    weekly_play_count = 1
+                }
+            );
+
+        DragaliaResponse<DungeonReceiveQuestBonusData> bonusResponse =
+            await this.Client.PostMsgpack<DungeonReceiveQuestBonusData>(
+                "/dungeon/receive_quest_bonus",
+                new DungeonReceiveQuestBonusRequest()
+                {
+                    quest_event_id = questEventId,
+                    is_receive = false,
+                    receive_bonus_count = 0
+                }
+            );
+
+        bonusResponse.data.receive_quest_bonus.target_quest_id.Should().Be(questId);
+        bonusResponse.data.receive_quest_bonus.receive_bonus_count.Should().Be(0);
+
+        bonusResponse.data.update_data_list.material_list.Should().BeNullOrEmpty();
+        bonusResponse.data.update_data_list.quest_event_list
+            .Should()
+            .ContainEquivalentOf(
+                new QuestEventList()
+                {
+                    quest_event_id = questEventId,
+                    quest_bonus_receive_count = 0,
+                    quest_bonus_reserve_count = 0,
+                    quest_bonus_reserve_time = DateTimeOffset.UnixEpoch,
+                    quest_bonus_stack_count = 0,
+                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch,
+                    last_daily_reset_time = response.data.ingame_result_data.end_time,
+                    last_weekly_reset_time = response.data.ingame_result_data.end_time,
+                    daily_play_count = 1,
+                    weekly_play_count = 1
+                }
+            );
     }
 
     private async Task<DragaliaResponse<DungeonRecordRecordData>> CompleteQuest(int questId)

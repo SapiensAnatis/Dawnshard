@@ -9,15 +9,12 @@ public class QuestCacheService(
     ILogger<QuestCacheService> logger
 ) : IQuestCacheService
 {
-    private static readonly DistributedCacheEntryOptions QuestEntryCacheOptions =
-        new() { AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1) };
-
     public async Task SetQuestGroupQuestIdAsync(int questGroupId, int questId)
     {
         string key = Schema.QuestEventId(playerIdentityService.AccountId, questGroupId);
         logger.LogDebug("Setting quest id key: {key}", key);
 
-        await distributedCache.SetStringAsync(key, questId.ToString(), QuestEntryCacheOptions);
+        await distributedCache.SetStringAsync(key, questId.ToString());
     }
 
     public async Task<int?> GetQuestGroupQuestIdAsync(int questGroupId)
