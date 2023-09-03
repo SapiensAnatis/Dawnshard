@@ -14,10 +14,7 @@ public class DungeonSkipTest : TestFixture
 {
     private const string Endpoint = "/dungeon_skip";
 
-    public DungeonSkipTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public DungeonSkipTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();

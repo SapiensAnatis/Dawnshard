@@ -7,7 +7,7 @@ public class StampTest : TestFixture
 {
     private const string Controller = "/stamp";
 
-    public StampTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public StampTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

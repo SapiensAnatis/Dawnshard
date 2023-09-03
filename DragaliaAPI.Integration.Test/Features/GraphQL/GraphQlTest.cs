@@ -15,7 +15,7 @@ public class GraphQlTest : GraphQlTestFixture
 {
     private const string Endpoint = "savefile/graphql";
 
-    public GraphQlTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public GraphQlTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");
@@ -40,9 +40,9 @@ public class GraphQlTest : GraphQlTestFixture
         GraphQLResponse<Response> response = await this.GraphQlHttpClient.SendQueryAsync<Response>(
             new GraphQLRequest
             {
-                Query = """
+                Query = $$"""
                 query {
-                    player(viewerId: 1) {
+                    player(viewerId: {{ViewerId}}) {
                         charaList {
                             charaId
                         }
@@ -73,9 +73,9 @@ public class GraphQlTest : GraphQlTestFixture
         GraphQLResponse<object> response = await this.GraphQlHttpClient.SendQueryAsync<object>(
             new GraphQLRequest
             {
-                Query = """
+                Query = $$"""
                 mutation {
-                    resetCharacter(viewerId: 1, charaId: ThePrince) {
+                    resetCharacter(viewerId: {{ViewerId}}, charaId: ThePrince) {
                         level
                     }
                 }
@@ -103,9 +103,9 @@ public class GraphQlTest : GraphQlTestFixture
             await this.GraphQlHttpClient.SendQueryAsync<JsonDocument>(
                 new GraphQLRequest
                 {
-                    Query = """
+                    Query = $$"""
                     mutation {
-                        givePresent(viewerId: 1, entityType: Dragon, entityId: 20050525) {
+                        givePresent(viewerId: {{ViewerId}}, entityType: Dragon, entityId: 20050525) {
                             presentId
                         }
                     }
@@ -145,9 +145,9 @@ public class GraphQlTest : GraphQlTestFixture
             await this.GraphQlHttpClient.SendQueryAsync<JsonDocument>(
                 new GraphQLRequest
                 {
-                    Query = """
+                    Query = $$"""
                     mutation {
-                        updateTutorialStatus(viewerId: 1, newStatus: 60999) {
+                        updateTutorialStatus(viewerId: {{ViewerId}}, newStatus: 60999) {
                             tutorialStatus
                         }
                     }

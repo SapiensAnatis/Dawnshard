@@ -13,10 +13,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// </summary>
 public class AbilityCrestTest : TestFixture
 {
-    public AbilityCrestTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public AbilityCrestTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

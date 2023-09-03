@@ -16,12 +16,9 @@ using Microsoft.Extensions.Logging;
 namespace DragaliaAPI.Integration.Test;
 
 [Collection("DragaliaIntegration")]
-public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
+public class TestFixture : IClassFixture<CustomWebApplicationFactory>
 {
-    protected TestFixture(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    protected TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
     {
         this.Client = factory
             .WithWebHostBuilder(
@@ -50,6 +47,10 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
         this.MockDateTimeProvider = factory.MockDateTimeProvider;
 
         this.MockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(() => DateTimeOffset.UtcNow);
+
+        this.ViewerId = this.ApiContext.PlayerUserData
+            .First(x => x.DeviceAccountId == DeviceAccountId)
+            .ViewerId;
     }
 
     protected Mock<IBaasApi> MockBaasApi { get; }
@@ -64,6 +65,8 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
     /// The device account ID which links to the seeded savefiles <see cref="SeedDatabase"/>
     /// </summary>
     public const string DeviceAccountId = "logged_in_id";
+
+    protected long ViewerId { get; private set; }
 
     public const string SessionId = "session_id";
 
@@ -109,14 +112,6 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
         this.MockBaasApi.Setup(x => x.GetSavefile(It.IsAny<string>())).ReturnsAsync(GetSavefile());
     }
 
-    private static LoadIndexData GetSavefile() =>
-        JsonSerializer
-            .Deserialize<DragaliaResponse<LoadIndexData>>(
-                File.ReadAllText(Path.Join("Data", "endgame_savefile.json")),
-                ApiJsonOptions.Instance
-            )!
-            .data;
-
     protected void ImportSave()
     {
         if (
@@ -136,4 +131,30 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory<Program>>
         using IDisposable ctx = playerIdentityService.StartUserImpersonation(DeviceAccountId);
         savefileService.Import(GetSavefile()).Wait();
     }
+
+    protected long GetDragonKeyId(Dragons dragon)
+    {
+        return this.ApiContext.PlayerDragonData
+            .Where(x => x.DragonId == dragon)
+            .Select(x => x.DragonKeyId)
+            .DefaultIfEmpty()
+            .First();
+    }
+
+    protected long GetTalismanKeyId(Talismans talisman)
+    {
+        return this.ApiContext.PlayerTalismans
+            .Where(x => x.TalismanId == talisman)
+            .Select(x => x.TalismanKeyId)
+            .DefaultIfEmpty()
+            .First();
+    }
+
+    private static LoadIndexData GetSavefile() =>
+        JsonSerializer
+            .Deserialize<DragaliaResponse<LoadIndexData>>(
+                File.ReadAllText(Path.Join("Data", "endgame_savefile.json")),
+                ApiJsonOptions.Instance
+            )!
+            .data;
 }

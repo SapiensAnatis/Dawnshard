@@ -14,10 +14,7 @@ namespace DragaliaAPI.Integration.Test.Other;
 
 public class HeroParamTest : TestFixture
 {
-    public HeroParamTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public HeroParamTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]
@@ -25,7 +22,7 @@ public class HeroParamTest : TestFixture
     {
         this.ImportSave();
 
-        HttpResponseMessage httpResponse = await this.Client.GetAsync("heroparam/1/1");
+        HttpResponseMessage httpResponse = await this.Client.GetAsync($"heroparam/{ViewerId}/1");
 
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
