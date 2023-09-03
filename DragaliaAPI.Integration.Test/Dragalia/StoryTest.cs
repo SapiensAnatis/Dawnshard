@@ -7,7 +7,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 
 public class StoryTest : TestFixture
 {
-    public StoryTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public StoryTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();

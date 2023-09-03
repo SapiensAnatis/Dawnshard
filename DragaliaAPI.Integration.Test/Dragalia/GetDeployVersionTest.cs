@@ -5,10 +5,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 
 public class GetDeployVersionTest : TestFixture
 {
-    public GetDeployVersionTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public GetDeployVersionTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

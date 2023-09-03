@@ -13,10 +13,7 @@ namespace DragaliaAPI.Integration.Test.Other;
 /// </summary>
 public class SavefileImportTest : TestFixture
 {
-    public SavefileImportTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public SavefileImportTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");

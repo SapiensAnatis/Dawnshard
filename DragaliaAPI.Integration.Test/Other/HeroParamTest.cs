@@ -14,10 +14,7 @@ namespace DragaliaAPI.Integration.Test.Other;
 
 public class HeroParamTest : TestFixture
 {
-    public HeroParamTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public HeroParamTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

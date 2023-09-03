@@ -7,7 +7,7 @@ namespace DragaliaAPI.Integration.Test.Features.Shop;
 
 public class ShopTest : TestFixture
 {
-    public ShopTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public ShopTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

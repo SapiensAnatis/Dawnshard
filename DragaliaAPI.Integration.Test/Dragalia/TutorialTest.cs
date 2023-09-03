@@ -15,10 +15,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// </summary>
 public class TutorialTest : TestFixture
 {
-    public TutorialTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public TutorialTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();

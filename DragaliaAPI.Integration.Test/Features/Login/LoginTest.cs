@@ -10,7 +10,7 @@ namespace DragaliaAPI.Integration.Test.Features.Login;
 
 public class LoginTest : TestFixture
 {
-    public LoginTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public LoginTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         this.ResetLastLoginTime();
