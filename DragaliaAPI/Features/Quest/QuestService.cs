@@ -200,6 +200,13 @@ public class QuestService(
     {
         DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
 
+        int questId =
+            await questCacheService.GetQuestGroupQuestIdAsync(eventGroupId)
+            ?? throw new DragaliaException(
+                ResultCode.CommonDbError,
+                $"Could not find latest quest clear id for group {eventGroupId} in cache."
+            );
+
         if (!isReceive)
         {
             questEvent.QuestBonusReserveCount = 0;
@@ -207,15 +214,8 @@ public class QuestService(
 
             await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
 
-            return new AtgenReceiveQuestBonus();
+            return new AtgenReceiveQuestBonus() { target_quest_id = questId };
         }
-
-        int questId =
-            await questCacheService.GetQuestGroupQuestIdAsync(eventGroupId)
-            ?? throw new DragaliaException(
-                ResultCode.CommonDbError,
-                $"Could not find latest quest clear id for group {eventGroupId} in cache."
-            );
 
         if (count > questEvent.QuestBonusReserveCount + questEvent.QuestBonusStackCount)
         {
