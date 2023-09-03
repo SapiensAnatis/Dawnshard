@@ -198,14 +198,17 @@ public class QuestService(
         int count
     )
     {
+        DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
+
         if (!isReceive)
         {
+            questEvent.QuestBonusReserveCount = 0;
+            questEvent.QuestBonusReserveTime = DateTimeOffset.UnixEpoch;
+
             await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
 
             return new AtgenReceiveQuestBonus();
         }
-
-        DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
 
         int questId =
             await questCacheService.GetQuestGroupQuestIdAsync(eventGroupId)
