@@ -20,6 +20,8 @@ public class FortTest : TestFixture
         this.ApiContext.PlayerFortBuilds
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ExecuteUpdate(x => x.SetProperty(y => y.BuildEndDate, DateTimeOffset.UnixEpoch));
+
+        this.ApiContext.ChangeTracker.Clear();
     }
 
     [Fact]
@@ -56,21 +58,6 @@ public class FortTest : TestFixture
         ).data.build_list
             .Should()
             .ContainEquivalentOf(
-                new BuildList()
-                {
-                    plant_id = FortPlants.TheHalidom,
-                    level = 1,
-                    fort_plant_detail_id = 10010101,
-                    position_x = 16, // Default Halidom position
-                    position_z = 17,
-                    // last_income_time is not checked here, as it changes based on the amount of time used to run the tests
-                    is_new = false,
-                    build_start_date = DateTimeOffset.UnixEpoch,
-                    build_end_date = DateTimeOffset.UnixEpoch,
-                },
-                opts => opts.Excluding(x => x.build_id).Excluding(x => x.last_income_time)
-            )
-            .And.ContainEquivalentOf(
                 new BuildList()
                 {
                     plant_id = FortPlants.AxeDojo,
@@ -274,6 +261,52 @@ public class FortTest : TestFixture
     }
 
     [Fact]
+    public async Task LevelupAtOnce_Halidom_ReturnsNewFortLevel()
+    {
+        DbFortBuild halidom = await this.ApiContext.PlayerFortBuilds.SingleAsync(
+            x => x.PlantId == FortPlants.TheHalidom
+        );
+
+        halidom.BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1287924543);
+        halidom.BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1388924543);
+        halidom.Level = 10;
+
+        int rows = await this.ApiContext.SaveChangesAsync();
+
+        FortLevelupAtOnceData response = (
+            await this.Client.PostMsgpack<FortLevelupAtOnceData>(
+                "/fort/levelup_at_once",
+                new FortLevelupAtOnceRequest(halidom.BuildId, PaymentTypes.Wyrmite)
+            )
+        ).data;
+
+        response.current_fort_level.Should().Be(11);
+    }
+
+    [Fact]
+    public async Task LevelupAtOnce_Smithy_ReturnsNewFortCraftLevel()
+    {
+        DbFortBuild smithy = await this.ApiContext.PlayerFortBuilds.SingleAsync(
+            x => x.PlantId == FortPlants.Smithy
+        );
+
+        smithy.BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1287924543);
+        smithy.BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1388924543);
+        smithy.Level = 1;
+
+        await this.ApiContext.SaveChangesAsync();
+
+        FortLevelupAtOnceData response = (
+            await this.Client.PostMsgpack<FortLevelupAtOnceData>(
+                "/fort/levelup_at_once",
+                new FortLevelupAtOnceRequest(smithy.BuildId, PaymentTypes.Wyrmite)
+            )
+        ).data;
+
+        response.current_fort_craft_level.Should().Be(2);
+    }
+
+    [Fact]
     public async Task LevelUpCancel_ReturnsValidResult()
     {
         DbFortBuild build = this.ApiContext.PlayerFortBuilds
@@ -343,6 +376,52 @@ public class FortTest : TestFixture
         );
         result.build_start_date.Should().Be(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().Be(DateTimeOffset.UnixEpoch);
+    }
+
+    [Fact]
+    public async Task LevelupEnd_Smithy_ReturnsNewFortCraftLevel()
+    {
+        DbFortBuild smithy = await this.ApiContext.PlayerFortBuilds.SingleAsync(
+            x => x.PlantId == FortPlants.Smithy
+        );
+
+        smithy.BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1287924543);
+        smithy.BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1388924543);
+        smithy.Level = 1;
+
+        await this.ApiContext.SaveChangesAsync();
+
+        FortLevelupEndData response = (
+            await this.Client.PostMsgpack<FortLevelupEndData>(
+                "/fort/levelup_end",
+                new FortLevelupEndRequest(smithy.BuildId)
+            )
+        ).data;
+
+        response.current_fort_craft_level.Should().Be(2);
+    }
+
+    [Fact]
+    public async Task LevelupEnd_Halidom_ReturnsNewFortLevel()
+    {
+        DbFortBuild halidom = await this.ApiContext.PlayerFortBuilds.SingleAsync(
+            x => x.PlantId == FortPlants.TheHalidom
+        );
+
+        halidom.BuildStartDate = DateTimeOffset.FromUnixTimeSeconds(1287924543);
+        halidom.BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1388924543);
+        halidom.Level = 10;
+
+        await this.ApiContext.SaveChangesAsync();
+
+        FortLevelupEndData response = (
+            await this.Client.PostMsgpack<FortLevelupEndData>(
+                "/fort/levelup_end",
+                new FortLevelupEndRequest(halidom.BuildId)
+            )
+        ).data;
+
+        response.current_fort_level.Should().Be(11);
     }
 
     [Fact]

@@ -283,15 +283,7 @@ public class FortControllerTest
         mockFortService
             .Setup(x => x.LevelupAtOnce(PaymentTypes.HalidomHustleHammer, 8))
             .Returns(Task.CompletedTask);
-        mockFortService
-            .Setup(x => x.GetBuildList())
-            .ReturnsAsync(
-                new List<BuildList>()
-                {
-                    new() { plant_id = FortPlants.Smithy, level = 2, },
-                    new() { plant_id = FortPlants.TheHalidom, level = 3, }
-                }
-            );
+        mockFortService.Setup(x => x.GetCoreLevels()).ReturnsAsync((3, 2));
 
         mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
@@ -367,15 +359,7 @@ public class FortControllerTest
 
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
         mockFortService.Setup(x => x.EndLevelup(8)).Returns(Task.CompletedTask);
-        mockFortService
-            .Setup(x => x.GetBuildList())
-            .ReturnsAsync(
-                new List<BuildList>()
-                {
-                    new() { plant_id = FortPlants.Smithy, level = 2, },
-                    new() { plant_id = FortPlants.TheHalidom, level = 3, }
-                }
-            );
+        mockFortService.Setup(x => x.GetCoreLevels()).ReturnsAsync((3, 2));
 
         mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 
@@ -392,72 +376,6 @@ public class FortControllerTest
         data.fort_bonus_list.Should().BeEquivalentTo(bonusList);
         data.fort_detail.Should().BeEquivalentTo(detail);
         data.update_data_list.Should().BeEquivalentTo(updateDataList);
-
-        mockFortService.VerifyAll();
-        mockBonusService.VerifyAll();
-        mockUpdateDataService.VerifyAll();
-    }
-
-    [Fact]
-    public async Task LevelupEnd_NoSmithy_UsesDefaultValues()
-    {
-        UpdateDataList updateDataList = new() { build_list = new List<BuildList>() };
-        FortBonusList bonusList = new() { all_bonus = new(2, 3) };
-        FortDetail detail = new() { working_carpenter_num = 4 };
-
-        mockFortService
-            .Setup(x => x.GetRupieProduction())
-            .ReturnsAsync(new AtgenProductionRp(0, 0));
-
-        mockFortService
-            .Setup(x => x.GetDragonfruitProduction())
-            .ReturnsAsync(new AtgenProductionRp(0, 0));
-
-        mockFortService
-            .Setup(x => x.GetStaminaProduction())
-            .ReturnsAsync(new AtgenProductionRp(0, 0));
-
-        mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
-        mockFortService.Setup(x => x.EndLevelup(8)).Returns(Task.CompletedTask);
-        mockFortService
-            .Setup(x => x.GetBuildList())
-            .ReturnsAsync(
-                new List<BuildList>()
-                {
-                    new() { plant_id = FortPlants.TheHalidom, level = 3, }
-                }
-            );
-
-        mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
-
-        mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
-
-        FortLevelupEndData data = (
-            await fortController.LevelupEnd(new FortLevelupEndRequest() { build_id = 8 })
-        ).GetData<FortLevelupEndData>()!;
-
-        data.result.Should().Be(1);
-        data.build_id.Should().Be(8);
-        data.current_fort_level.Should().Be(3);
-        data.current_fort_craft_level.Should().Be(0);
-        data.fort_bonus_list.Should().BeEquivalentTo(bonusList);
-        data.fort_detail.Should().BeEquivalentTo(detail);
-        data.update_data_list.Should().BeEquivalentTo(updateDataList);
-
-        mockFortService.VerifyAll();
-        mockBonusService.VerifyAll();
-        mockUpdateDataService.VerifyAll();
-    }
-
-    [Fact]
-    public async Task LevelupEnd_NoHalidom_ThrowsInvalidOperationException()
-    {
-        mockFortService.Setup(x => x.GetBuildList()).ReturnsAsync(new List<BuildList>() { });
-
-        await fortController
-            .Invoking(x => x.LevelupEnd(new FortLevelupEndRequest() { build_id = 8 }))
-            .Should()
-            .ThrowExactlyAsync<InvalidOperationException>();
 
         mockFortService.VerifyAll();
         mockBonusService.VerifyAll();

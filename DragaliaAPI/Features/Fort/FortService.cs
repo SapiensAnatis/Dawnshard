@@ -602,4 +602,20 @@ public class FortService(
             detail.StaminaMax
         );
     }
+
+    public async Task<(int HalidomLevel, int SmithyLevel)> GetCoreLevels()
+    {
+        IEnumerable<(FortPlants PlantId, int Level)> queryResult = await fortRepository.Builds
+            .Where(x => x.PlantId == FortPlants.TheHalidom || x.PlantId == FortPlants.Smithy)
+            .Select(x => new ValueTuple<FortPlants, int>(x.PlantId, x.Level))
+            .ToListAsync();
+
+        // We will get level = 0 if FirstOrDefault does not find a match.
+        int halidomLevel = queryResult
+            .FirstOrDefault(x => x.PlantId == FortPlants.TheHalidom)
+            .Level;
+        int smithyLevel = queryResult.FirstOrDefault(x => x.PlantId == FortPlants.Smithy).Level;
+
+        return (halidomLevel, smithyLevel);
+    }
 }
