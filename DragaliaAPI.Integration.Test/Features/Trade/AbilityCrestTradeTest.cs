@@ -9,10 +9,7 @@ namespace DragaliaAPI.Integration.Test.Features.Trade;
 /// </summary>
 public class AbilityCrestTradeTest : TestFixture
 {
-    public AbilityCrestTradeTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper output
-    )
+    public AbilityCrestTradeTest(CustomWebApplicationFactory factory, ITestOutputHelper output)
         : base(factory, output) { }
 
     [Theory]

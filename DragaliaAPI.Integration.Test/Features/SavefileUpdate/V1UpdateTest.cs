@@ -8,10 +8,7 @@ namespace DragaliaAPI.Integration.Test.Features.SavefileUpdate;
 
 public class V1UpdateTest : SavefileUpdateTestFixture
 {
-    public V1UpdateTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public V1UpdateTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         this.ApiContext.PlayerFortBuilds.ExecuteDelete();

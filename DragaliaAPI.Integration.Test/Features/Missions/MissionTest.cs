@@ -5,7 +5,7 @@ namespace DragaliaAPI.Integration.Test.Features.Missions;
 
 public class MissionTest : TestFixture
 {
-    public MissionTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public MissionTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

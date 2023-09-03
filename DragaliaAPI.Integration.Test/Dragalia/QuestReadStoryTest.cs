@@ -7,10 +7,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 
 public class QuestReadStoryTest : TestFixture
 {
-    public QuestReadStoryTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public QuestReadStoryTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

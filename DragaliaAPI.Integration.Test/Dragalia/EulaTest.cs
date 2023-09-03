@@ -8,7 +8,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// </summary>
 public class EulaTest : TestFixture
 {
-    public EulaTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public EulaTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

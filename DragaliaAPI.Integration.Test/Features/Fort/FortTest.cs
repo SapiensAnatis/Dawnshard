@@ -8,7 +8,7 @@ namespace DragaliaAPI.Integration.Test.Features.Fort;
 
 public class FortTest : TestFixture
 {
-    public FortTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public FortTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();

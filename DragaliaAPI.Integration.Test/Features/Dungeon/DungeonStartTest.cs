@@ -11,10 +11,7 @@ namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 /// </summary>
 public class DungeonStartTest : TestFixture
 {
-    public DungeonStartTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public DungeonStartTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         ImportSave();

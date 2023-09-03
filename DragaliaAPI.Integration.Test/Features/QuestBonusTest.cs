@@ -21,10 +21,7 @@ public class QuestBonusTest : TestFixture
      * JOIN TextLabel t ON _QuestViewName = t._Id
      */
 
-    public QuestBonusTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public QuestBonusTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();

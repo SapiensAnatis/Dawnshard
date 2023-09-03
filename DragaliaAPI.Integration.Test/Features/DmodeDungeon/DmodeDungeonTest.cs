@@ -14,10 +14,7 @@ namespace DragaliaAPI.Integration.Test.Features.DmodeDungeon;
 
 public class DmodeDungeonTest : TestFixture
 {
-    public DmodeDungeonTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public DmodeDungeonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

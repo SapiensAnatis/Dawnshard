@@ -7,10 +7,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// </summary>
 public class RedoableSummonTest : TestFixture
 {
-    public RedoableSummonTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public RedoableSummonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

@@ -8,10 +8,7 @@ namespace DragaliaAPI.Integration.Test.Other;
 
 public class DeleteSavefileTest : TestFixture
 {
-    public DeleteSavefileTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public DeleteSavefileTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");

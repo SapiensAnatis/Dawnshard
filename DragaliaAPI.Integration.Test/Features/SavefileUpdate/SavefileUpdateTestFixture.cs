@@ -9,7 +9,7 @@ public abstract class SavefileUpdateTestFixture : TestFixture
     protected int MaxVersion { get; }
 
     public SavefileUpdateTestFixture(
-        CustomWebApplicationFactory<Program> factory,
+        CustomWebApplicationFactory factory,
         ITestOutputHelper outputHelper
     )
         : base(factory, outputHelper)

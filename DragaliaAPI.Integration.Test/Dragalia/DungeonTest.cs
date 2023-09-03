@@ -5,7 +5,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 
 public class DungeonTest : TestFixture
 {
-    public DungeonTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public DungeonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

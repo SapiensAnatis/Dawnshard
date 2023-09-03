@@ -8,10 +8,7 @@ namespace DragaliaAPI.Integration.Test.Features.Event;
 
 public class RaidEventTest : TestFixture
 {
-    public RaidEventTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public RaidEventTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         _ = Client

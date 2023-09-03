@@ -16,7 +16,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// </summary>
 public class DragonTest : TestFixture
 {
-    public DragonTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public DragonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     public record DragonBuildUpTestCase(

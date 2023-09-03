@@ -17,7 +17,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// </summary>
 public class CharaTest : TestFixture
 {
-    public CharaTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public CharaTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         this.AddCharacter(Charas.Naveed);

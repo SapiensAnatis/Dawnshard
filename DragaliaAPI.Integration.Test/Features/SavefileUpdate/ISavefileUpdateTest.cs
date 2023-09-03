@@ -8,10 +8,7 @@ public class ISavefileUpdateTest : TestFixture
 {
     private readonly IEnumerable<ISavefileUpdate> updates;
 
-    public ISavefileUpdateTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public ISavefileUpdateTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         updates = this.Services.GetServices<ISavefileUpdate>();

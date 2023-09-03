@@ -13,7 +13,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// </summary>
 public class PartyTest : TestFixture
 {
-    public PartyTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public PartyTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

@@ -6,10 +6,7 @@ namespace DragaliaAPI.Integration.Test.Other;
 
 public class DragalipatchTest : TestFixture
 {
-    public DragalipatchTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public DragalipatchTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

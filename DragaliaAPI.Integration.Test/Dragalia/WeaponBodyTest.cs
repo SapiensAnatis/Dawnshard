@@ -12,10 +12,7 @@ public class WeaponBodyTest : TestFixture
 {
     private const string EndpointGroup = "/weapon_body";
 
-    public WeaponBodyTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public WeaponBodyTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 5);

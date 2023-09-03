@@ -8,10 +8,7 @@ namespace DragaliaAPI.Integration.Test.Features.Event;
 
 public class CombatEventTest : TestFixture
 {
-    public CombatEventTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public CombatEventTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         _ = Client

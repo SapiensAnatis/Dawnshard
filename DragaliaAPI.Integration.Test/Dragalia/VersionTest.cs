@@ -8,7 +8,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// </summary>
 public class VersionTest : TestFixture
 {
-    public VersionTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public VersionTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Theory]

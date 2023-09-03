@@ -8,7 +8,7 @@ namespace DragaliaAPI.Integration.Test.Features.Item;
 
 public class ItemTest : TestFixture
 {
-    public ItemTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public ItemTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         ApiContext.PlayerUseItems.Where(x => x.DeviceAccountId == DeviceAccountId).ExecuteDelete();
