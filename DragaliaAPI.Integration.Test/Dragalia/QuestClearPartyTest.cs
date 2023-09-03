@@ -41,7 +41,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
     {
         this.ImportSave();
 
-        await this.AddRangeToDatabase(multiDbEntities);
+        await this.AddRangeToDatabase(MultiDbEntities);
 
         DragaliaResponse<QuestGetQuestClearPartyMultiData> response =
             await this.Client.PostMsgpack<QuestGetQuestClearPartyMultiData>(
@@ -51,7 +51,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
 
         response.data.quest_multi_clear_party_setting_list
             .Should()
-            .BeEquivalentTo(multiPartySettingLists);
+            .BeEquivalentTo(MultiPartySettingLists);
         response.data.lost_unit_list.Should().BeEmpty();
     }
 
@@ -65,7 +65,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             new QuestSetQuestClearPartyRequest()
             {
                 quest_id = questId,
-                request_party_setting_list = multiPartySettingLists
+                request_party_setting_list = MultiPartySettingLists
             }
         );
 
@@ -83,9 +83,9 @@ public class QuestClearPartyTest : TestFixture, IDisposable
     {
         this.ImportSave();
 
-        int questId = missingItemDbEntities[0].QuestId;
+        int questId = MissingItemDbEntities[0].QuestId;
 
-        await this.AddRangeToDatabase(missingItemDbEntities);
+        await this.AddRangeToDatabase(MissingItemDbEntities);
 
         DragaliaResponse<QuestGetQuestClearPartyData> response =
             await this.Client.PostMsgpack<QuestGetQuestClearPartyData>(
@@ -187,7 +187,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 new QuestSetQuestClearPartyRequest()
                 {
                     quest_id = 4,
-                    request_party_setting_list = multiPartySettingLists
+                    request_party_setting_list = MultiPartySettingLists
                 }
             );
 
@@ -197,7 +197,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             .Where(x => x.QuestId == 4 && x.DeviceAccountId == DeviceAccountId && x.IsMulti == true)
             .ToListAsync();
 
-        storedList.Should().BeEquivalentTo(multiDbEntities, opts => opts.Excluding(x => x.QuestId));
+        storedList.Should().BeEquivalentTo(MultiDbEntities, opts => opts.Excluding(x => x.QuestId));
         storedList.Should().AllSatisfy(x => x.QuestId.Should().Be(4));
     }
 
@@ -220,7 +220,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 EquipCrestSlotType2CrestId2 = AbilityCrests.TotheExtreme,
                 EquipCrestSlotType3CrestId1 = AbilityCrests.CrownofLightSerpentsBoon,
                 EquipCrestSlotType3CrestId2 = AbilityCrests.TutelarysDestinyWolfsBoon,
-                EquipTalismanKeyId = 1,
+                EquipTalismanKeyId = GetTalismanKeyId(Talismans.GalaMym),
                 EquipWeaponSkinId = 30129901,
                 EditSkill1CharaId = Charas.Empty,
                 EditSkill2CharaId = Charas.GalaMym,
@@ -243,7 +243,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 EquipCrestSlotType2CrestId2 = AbilityCrests.LuckoftheDraw,
                 EquipCrestSlotType3CrestId1 = AbilityCrests.RavenousFireCrownsBoon,
                 EquipCrestSlotType3CrestId2 = AbilityCrests.PromisedPietyStaffsBoon,
-                EquipTalismanKeyId = 2,
+                EquipTalismanKeyId = GetTalismanKeyId(Talismans.GalaMym),
                 EquipWeaponSkinId = 30129901,
                 EditSkill1CharaId = Charas.TemplarHope,
                 EditSkill2CharaId = Charas.Zena,
@@ -268,7 +268,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 equip_crest_slot_type_2_crest_id_2 = AbilityCrests.TotheExtreme,
                 equip_crest_slot_type_3_crest_id_1 = AbilityCrests.CrownofLightSerpentsBoon,
                 equip_crest_slot_type_3_crest_id_2 = AbilityCrests.TutelarysDestinyWolfsBoon,
-                equip_talisman_key_id = 1,
+                equip_talisman_key_id = (ulong)GetTalismanKeyId(Talismans.GalaMym),
                 equip_weapon_skin_id = 30129901,
                 edit_skill_1_chara_id = Charas.Empty,
                 edit_skill_2_chara_id = Charas.GalaMym,
@@ -286,14 +286,14 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 equip_crest_slot_type_2_crest_id_2 = AbilityCrests.LuckoftheDraw,
                 equip_crest_slot_type_3_crest_id_1 = AbilityCrests.RavenousFireCrownsBoon,
                 equip_crest_slot_type_3_crest_id_2 = AbilityCrests.PromisedPietyStaffsBoon,
-                equip_talisman_key_id = 2,
+                equip_talisman_key_id = (ulong)GetTalismanKeyId(Talismans.GalaMym),
                 equip_weapon_skin_id = 30129901,
                 edit_skill_1_chara_id = Charas.TemplarHope,
                 edit_skill_2_chara_id = Charas.Zena,
             }
         };
 
-    private List<DbQuestClearPartyUnit> multiDbEntities =>
+    private List<DbQuestClearPartyUnit> MultiDbEntities =>
         new()
         {
             new()
@@ -312,7 +312,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 EquipCrestSlotType2CrestId2 = AbilityCrests.DragonsNest,
                 EquipCrestSlotType3CrestId1 = AbilityCrests.TutelarysDestinyWolfsBoon,
                 EquipCrestSlotType3CrestId2 = AbilityCrests.CrownofLightSerpentsBoon,
-                EquipTalismanKeyId = 3,
+                EquipTalismanKeyId = GetTalismanKeyId(Talismans.GalaMym),
                 EquipWeaponSkinId = 0,
                 EditSkill1CharaId = Charas.Empty,
                 EditSkill2CharaId = Charas.GalaMym,
@@ -326,7 +326,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 QuestId = 2,
                 UnitNo = 2,
                 CharaId = Charas.GalaLeif,
-                EquipDragonKeyId = 4,
+                EquipDragonKeyId = GetDragonKeyId(Dragons.Phoenix),
                 EquipWeaponBodyId = WeaponBodies.PrimalTempest,
                 EquipCrestSlotType1CrestId1 = AbilityCrests.AdventureinthePast,
                 EquipCrestSlotType1CrestId2 = AbilityCrests.PrimalCrisis,
@@ -335,7 +335,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 EquipCrestSlotType2CrestId2 = AbilityCrests.ThePlaguebringer,
                 EquipCrestSlotType3CrestId1 = AbilityCrests.AKnightsDreamAxesBoon,
                 EquipCrestSlotType3CrestId2 = AbilityCrests.CrownofLightSerpentsBoon,
-                EquipTalismanKeyId = 4,
+                EquipTalismanKeyId = GetTalismanKeyId(Talismans.GalaMym),
                 EquipWeaponSkinId = 0,
                 EditSkill1CharaId = Charas.ShaWujing,
                 EditSkill2CharaId = Charas.Ranzal,
@@ -344,14 +344,14 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             }
         };
 
-    private readonly List<PartySettingList> multiPartySettingLists =
+    private List<PartySettingList> MultiPartySettingLists =>
         new()
         {
             new()
             {
                 unit_no = 1,
                 chara_id = Charas.GalaNotte,
-                equip_dragon_key_id = 3,
+                equip_dragon_key_id = (ulong)GetDragonKeyId(Dragons.Leviathan),
                 equip_weapon_body_id = WeaponBodies.WindrulersFang,
                 equip_crest_slot_type_1_crest_id_1 = AbilityCrests.BondsBetweenWorlds,
                 equip_crest_slot_type_1_crest_id_2 = AbilityCrests.AManUnchanging,
@@ -360,7 +360,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 equip_crest_slot_type_2_crest_id_2 = AbilityCrests.DragonsNest,
                 equip_crest_slot_type_3_crest_id_1 = AbilityCrests.TutelarysDestinyWolfsBoon,
                 equip_crest_slot_type_3_crest_id_2 = AbilityCrests.CrownofLightSerpentsBoon,
-                equip_talisman_key_id = 3,
+                equip_talisman_key_id = (ulong)GetTalismanKeyId(Talismans.GalaMym),
                 equip_weapon_skin_id = 0,
                 edit_skill_1_chara_id = Charas.Empty,
                 edit_skill_2_chara_id = Charas.GalaMym,
@@ -369,7 +369,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             {
                 unit_no = 2,
                 chara_id = Charas.GalaLeif,
-                equip_dragon_key_id = 4,
+                equip_dragon_key_id = (ulong)GetDragonKeyId(Dragons.Phoenix),
                 equip_weapon_body_id = WeaponBodies.PrimalTempest,
                 equip_crest_slot_type_1_crest_id_1 = AbilityCrests.AdventureinthePast,
                 equip_crest_slot_type_1_crest_id_2 = AbilityCrests.PrimalCrisis,
@@ -378,14 +378,14 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 equip_crest_slot_type_2_crest_id_2 = AbilityCrests.ThePlaguebringer,
                 equip_crest_slot_type_3_crest_id_1 = AbilityCrests.AKnightsDreamAxesBoon,
                 equip_crest_slot_type_3_crest_id_2 = AbilityCrests.CrownofLightSerpentsBoon,
-                equip_talisman_key_id = 4,
+                equip_talisman_key_id = (ulong)GetTalismanKeyId(Talismans.GalaMym),
                 equip_weapon_skin_id = 0,
                 edit_skill_1_chara_id = Charas.ShaWujing,
                 edit_skill_2_chara_id = Charas.Ranzal,
             }
         };
 
-    private List<DbQuestClearPartyUnit> missingItemDbEntities =
+    private List<DbQuestClearPartyUnit> MissingItemDbEntities =>
         new()
         {
             new()

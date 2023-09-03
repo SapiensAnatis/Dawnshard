@@ -22,7 +22,7 @@ public class HeroParamTest : TestFixture
     {
         this.ImportSave();
 
-        HttpResponseMessage httpResponse = await this.Client.GetAsync("heroparam/1/1");
+        HttpResponseMessage httpResponse = await this.Client.GetAsync($"heroparam/{ViewerId}/1");
 
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 

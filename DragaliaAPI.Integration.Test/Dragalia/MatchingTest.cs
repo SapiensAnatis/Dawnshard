@@ -37,7 +37,7 @@ public class MatchingTest : TestFixture
                             new()
                             {
                                 ActorNr = 1,
-                                ViewerId = 1,
+                                ViewerId = ViewerId,
                                 PartyNoList = new List<int>() { 1 }
                             }
                         },
@@ -77,7 +77,7 @@ public class MatchingTest : TestFixture
                             status = RoomStatuses.Available,
                             entry_type = 1,
                             entry_guild_id = 0,
-                            host_viewer_id = ViewerId,
+                            host_viewer_id = (ulong)ViewerId,
                             host_name = "Euden",
                             host_level = 250,
                             leader_chara_id = Charas.ThePrince,
@@ -87,7 +87,7 @@ public class MatchingTest : TestFixture
                             quest_type = QuestTypes.Dungeon,
                             room_member_list = new List<AtgenRoomMemberList>()
                             {
-                                new() { viewer_id = 1, }
+                                new() { viewer_id = (ulong)ViewerId, }
                             },
                             start_entry_time = DateTimeOffset.FromUnixTimeSeconds(1662160789),
                             entry_conditions = new()
@@ -123,7 +123,7 @@ public class MatchingTest : TestFixture
                             new()
                             {
                                 ActorNr = 1,
-                                ViewerId = 1,
+                                ViewerId = ViewerId,
                                 PartyNoList = new List<int>() { 1 }
                             }
                         },
@@ -167,7 +167,7 @@ public class MatchingTest : TestFixture
                             status = RoomStatuses.Available,
                             entry_type = 1,
                             entry_guild_id = 0,
-                            host_viewer_id = ViewerId,
+                            host_viewer_id = (ulong)ViewerId,
                             host_name = "Euden",
                             host_level = 250,
                             leader_chara_id = Charas.ThePrince,
@@ -177,7 +177,7 @@ public class MatchingTest : TestFixture
                             quest_type = QuestTypes.Dungeon,
                             room_member_list = new List<AtgenRoomMemberList>()
                             {
-                                new() { viewer_id = 1, }
+                                new() { viewer_id = (ulong)ViewerId, }
                             },
                             start_entry_time = DateTimeOffset.FromUnixTimeSeconds(1662160789),
                             entry_conditions = new()
@@ -211,7 +211,7 @@ public class MatchingTest : TestFixture
                         new()
                         {
                             ActorNr = 1,
-                            ViewerId = 1,
+                            ViewerId = ViewerId,
                             PartyNoList = new List<int>() { 1 }
                         }
                     },
@@ -248,7 +248,7 @@ public class MatchingTest : TestFixture
                         status = RoomStatuses.Available,
                         entry_type = 1,
                         entry_guild_id = 0,
-                        host_viewer_id = ViewerId,
+                        host_viewer_id = (ulong)ViewerId,
                         host_name = "Euden",
                         host_level = 250,
                         leader_chara_id = Charas.ThePrince,
@@ -258,7 +258,7 @@ public class MatchingTest : TestFixture
                         quest_type = QuestTypes.Dungeon,
                         room_member_list = new List<AtgenRoomMemberList>()
                         {
-                            new() { viewer_id = 1, }
+                            new() { viewer_id = (ulong)ViewerId, }
                         },
                         start_entry_time = DateTimeOffset.FromUnixTimeSeconds(1662160789),
                         entry_conditions = new()

@@ -48,10 +48,9 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
 
         this.MockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(() => DateTimeOffset.UtcNow);
 
-        this.ViewerId = (ulong)
-            this.ApiContext.PlayerUserData
-                .First(x => x.DeviceAccountId == DeviceAccountId)
-                .ViewerId;
+        this.ViewerId = this.ApiContext.PlayerUserData
+            .First(x => x.DeviceAccountId == DeviceAccountId)
+            .ViewerId;
     }
 
     protected Mock<IBaasApi> MockBaasApi { get; }
@@ -67,7 +66,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
     /// </summary>
     public const string DeviceAccountId = "logged_in_id";
 
-    protected ulong ViewerId { get; private set; }
+    protected long ViewerId { get; private set; }
 
     public const string SessionId = "session_id";
 
@@ -138,6 +137,15 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
         return this.ApiContext.PlayerDragonData
             .Where(x => x.DragonId == dragon)
             .Select(x => x.DragonKeyId)
+            .DefaultIfEmpty()
+            .First();
+    }
+
+    protected long GetTalismanKeyId(Talismans talisman)
+    {
+        return this.ApiContext.PlayerTalismans
+            .Where(x => x.TalismanId == talisman)
+            .Select(x => x.TalismanKeyId)
             .DefaultIfEmpty()
             .First();
     }
