@@ -133,14 +133,13 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
         savefileService.Import(GetSavefile()).Wait();
     }
 
-    protected ulong GetDragonKeyId(Dragons dragon)
+    protected long GetDragonKeyId(Dragons dragon)
     {
-        return (ulong)
-            this.ApiContext.PlayerDragonData
-                .Where(x => x.DragonId == dragon)
-                .Select(x => x.DragonKeyId)
-                .DefaultIfEmpty()
-                .First();
+        return this.ApiContext.PlayerDragonData
+            .Where(x => x.DragonId == dragon)
+            .Select(x => x.DragonKeyId)
+            .DefaultIfEmpty()
+            .First();
     }
 
     private static LoadIndexData GetSavefile() =>
