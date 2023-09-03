@@ -7,10 +7,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 
 public class CastleStoryTest : TestFixture
 {
-    public CastleStoryTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public CastleStoryTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyIgnoreOwnerOptions();

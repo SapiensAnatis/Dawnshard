@@ -12,7 +12,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// </summary>
 public class SummonTest : TestFixture
 {
-    public SummonTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public SummonTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

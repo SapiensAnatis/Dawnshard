@@ -13,10 +13,7 @@ public class MatchingTest : TestFixture
 {
     private const string EndpointGroup = "/matching";
 
-    public MatchingTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public MatchingTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         this.MockPhotonStateApi.Reset();
@@ -80,7 +77,7 @@ public class MatchingTest : TestFixture
                             status = RoomStatuses.Available,
                             entry_type = 1,
                             entry_guild_id = 0,
-                            host_viewer_id = 1,
+                            host_viewer_id = ViewerId,
                             host_name = "Euden",
                             host_level = 250,
                             leader_chara_id = Charas.ThePrince,
@@ -170,7 +167,7 @@ public class MatchingTest : TestFixture
                             status = RoomStatuses.Available,
                             entry_type = 1,
                             entry_guild_id = 0,
-                            host_viewer_id = 1,
+                            host_viewer_id = ViewerId,
                             host_name = "Euden",
                             host_level = 250,
                             leader_chara_id = Charas.ThePrince,
@@ -251,7 +248,7 @@ public class MatchingTest : TestFixture
                         status = RoomStatuses.Available,
                         entry_type = 1,
                         entry_guild_id = 0,
-                        host_viewer_id = 1,
+                        host_viewer_id = ViewerId,
                         host_name = "Euden",
                         host_level = 250,
                         leader_chara_id = Charas.ThePrince,

@@ -15,7 +15,7 @@ public class GraphQlTest : GraphQlTestFixture
 {
     private const string Endpoint = "savefile/graphql";
 
-    public GraphQlTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public GraphQlTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         Environment.SetEnvironmentVariable("DEVELOPER_TOKEN", "supersecrettoken");

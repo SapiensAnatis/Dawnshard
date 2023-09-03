@@ -11,10 +11,7 @@ namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 
 public class DungeonRecordTest : TestFixture
 {
-    public DungeonRecordTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public DungeonRecordTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions(2);

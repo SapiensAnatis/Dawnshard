@@ -1,3 +1,4 @@
+using Castle.Components.DictionaryAdapter.Xml;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -16,23 +17,40 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
+using Respawn;
+using Respawn.Graph;
 
 namespace DragaliaAPI.Integration.Test;
 
-public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>
-    where TStartup : class
+public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    public CustomWebApplicationFactory()
-    {
-        this.SeedDatabase(this.Services);
-        this.SeedCache(this.Services);
-    }
+    private static readonly NpgsqlConnectionStringBuilder ConnectionStringBuilder =
+        new()
+        {
+            Host = TestContainers.PostgresHost,
+            Port = TestContainers.PostgresPort,
+            Username = TestContainers.PostgresUser,
+            Password = TestContainers.PostgresPassword,
+            Database = TestContainers.PostgresDatabase,
+            IncludeErrorDetail = true,
+        };
 
     public Mock<IBaasApi> MockBaasApi { get; } = new();
 
     public Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
 
     public Mock<IDateTimeProvider> MockDateTimeProvider { get; } = new();
+
+    async Task IAsyncLifetime.InitializeAsync()
+    {
+        await this.SeedDatabase();
+        await this.SeedCache();
+    }
+
+    Task IAsyncLifetime.DisposeAsync()
+    {
+        return Task.CompletedTask;
+    }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -43,21 +61,11 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             services.AddScoped(x => this.MockDateTimeProvider.Object);
             services.Configure<LoginOptions>(x => x.UseBaasLogin = true);
 
-            NpgsqlConnectionStringBuilder connectionStringBuilder =
-                new()
-                {
-                    Host = TestContainers.PostgresHost,
-                    Port = TestContainers.PostgresPort,
-                    Username = TestContainers.PostgresUser,
-                    Password = TestContainers.PostgresPassword,
-                    IncludeErrorDetail = true,
-                };
-
             services.RemoveAll<DbContextOptions<ApiContext>>();
             services.RemoveAll<IDistributedCache>();
 
             services.AddDbContext<ApiContext>(
-                opts => opts.UseNpgsql(connectionStringBuilder.ConnectionString)
+                opts => opts.UseNpgsql(ConnectionStringBuilder.ConnectionString)
             );
             services.AddStackExchangeRedisCache(options =>
             {
@@ -78,7 +86,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
     /// <summary>
     /// Seed the cache with a valid session, so that controllers can lookup database entries.
     /// </summary>
-    private void SeedCache(IServiceProvider provider)
+    private async Task SeedCache()
     {
         IDistributedCache cache = this.Services.GetRequiredService<IDistributedCache>();
 
@@ -90,25 +98,45 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 12,
                 DateTimeOffset.MaxValue
             );
-        cache.SetString(":session:session_id:session_id", JsonSerializer.Serialize(session));
-        cache.SetString(":session_id:device_account_id:logged_in_id", TestFixture.SessionId);
+        await cache.SetStringAsync(
+            ":session:session_id:session_id",
+            JsonSerializer.Serialize(session)
+        );
+        await cache.SetStringAsync(
+            ":session_id:device_account_id:logged_in_id",
+            TestFixture.SessionId
+        );
     }
 
-    private void SeedDatabase(IServiceProvider provider)
+    private async Task SeedDatabase()
     {
-        ISavefileService savefileService = provider.GetRequiredService<ISavefileService>();
-        IPlayerIdentityService playerIdentityService =
-            provider.GetRequiredService<IPlayerIdentityService>();
-        ApiContext apiContext = provider.GetRequiredService<ApiContext>();
+        ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
+        await apiContext.Database.MigrateAsync();
 
-        apiContext.Database.EnsureDeleted();
-        apiContext.Database.EnsureCreated();
+        await using NpgsqlConnection connection = new(ConnectionStringBuilder.ConnectionString);
+        await connection.OpenAsync();
+
+        Respawner respawner = await Respawner.CreateAsync(
+            connection,
+            new RespawnerOptions()
+            {
+                DbAdapter = DbAdapter.Postgres,
+                SchemasToInclude = new[] { "public" },
+                TablesToIgnore = new Table[] { new("__EFMigrationsHistory") },
+            }
+        );
+
+        await respawner.ResetAsync(connection);
+
+        ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
+        IPlayerIdentityService playerIdentityService =
+            this.Services.GetRequiredService<IPlayerIdentityService>();
 
         using IDisposable ctx = playerIdentityService.StartUserImpersonation(
             TestFixture.DeviceAccountId
         );
 
-        savefileService.Create().Wait();
+        await savefileService.Create();
 
         apiContext.PlayerMaterials.AddRange(
             Enum.GetValues<Materials>()
@@ -136,8 +164,8 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
                 )
         );
 
-        IFortRepository fortRepository = provider.GetRequiredService<IFortRepository>();
-        fortRepository.InitializeFort().Wait();
+        IFortRepository fortRepository = this.Services.GetRequiredService<IFortRepository>();
+        await fortRepository.InitializeFort();
 
         apiContext.PlayerFortBuilds.Add(
             new DbFortBuild()
@@ -148,13 +176,17 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             }
         );
 
-        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Coin = 100_000_000;
-        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.DewPoint = 100_000_000;
-        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.ManaPoint = 100_000_000;
-        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Level = 250;
-        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.Exp = 28253490;
-        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.StaminaSingle = 999;
-        apiContext.PlayerUserData.Find(TestFixture.DeviceAccountId)!.QuestSkipPoint = 300;
+        DbPlayerUserData userData = (
+            await apiContext.PlayerUserData.FindAsync(TestFixture.DeviceAccountId)
+        )!;
+
+        userData.Coin = 100_000_000;
+        userData.DewPoint = 100_000_000;
+        userData.ManaPoint = 100_000_000;
+        userData.Level = 250;
+        userData.Exp = 28253490;
+        userData.StaminaSingle = 999;
+        userData.QuestSkipPoint = 300;
 
         apiContext.PlayerDmodeInfos.Add(
             new DbPlayerDmodeInfo
@@ -173,6 +205,6 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             new DbPlayerDmodeExpedition { DeviceAccountId = TestFixture.DeviceAccountId }
         );
 
-        apiContext.SaveChanges();
+        await apiContext.SaveChangesAsync();
     }
 }

@@ -12,7 +12,7 @@ public class PresentTest : TestFixture
 {
     private const string Controller = "/present";
 
-    public PresentTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public PresentTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 3);

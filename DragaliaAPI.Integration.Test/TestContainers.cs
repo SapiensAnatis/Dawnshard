@@ -1,6 +1,7 @@
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using Serilog;
+using Testcontainers.PostgreSql;
 
 namespace DragaliaAPI.Integration.Test;
 
@@ -11,6 +12,7 @@ static class TestContainers
 
     public static string PostgresUser { get; private set; }
     public static string PostgresPassword { get; private set; }
+    public static string PostgresDatabase { get; private set; }
     public static string PostgresHost { get; private set; }
     public static int PostgresPort { get; private set; }
 
@@ -28,6 +30,7 @@ static class TestContainers
         {
             PostgresUser = "testing";
             PostgresPassword = "aVerystrong(!)password123";
+            PostgresDatabase = "testing";
 
             CreateContainers(out IContainer postgresContainer, out IContainer redisContainer);
 
@@ -41,6 +44,7 @@ static class TestContainers
         {
             PostgresUser = Environment.GetEnvironmentVariable("POSTGRES_USER")!;
             PostgresPassword = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")!;
+            PostgresDatabase = PostgresUser;
             PostgresHost = "localhost";
             PostgresPort = PostgresContainerPort;
 
@@ -54,16 +58,10 @@ static class TestContainers
         out IContainer redisContainer
     )
     {
-        postgresContainer = new ContainerBuilder()
-            .WithImage("postgres")
-            .WithEnvironment(
-                new Dictionary<string, string>()
-                {
-                    { "POSTGRES_USER", PostgresUser },
-                    { "POSTGRES_PASSWORD", PostgresPassword }
-                }
-            )
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilCommandIsCompleted("pg_isready"))
+        postgresContainer = new PostgreSqlBuilder()
+            .WithDatabase(PostgresDatabase)
+            .WithUsername(PostgresUser)
+            .WithPassword(PostgresPassword)
             .WithPortBinding(PostgresContainerPort, true)
             .Build();
 

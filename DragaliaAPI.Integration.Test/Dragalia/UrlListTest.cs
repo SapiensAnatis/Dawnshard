@@ -5,7 +5,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 
 public class UrlListTest : TestFixture
 {
-    public UrlListTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public UrlListTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

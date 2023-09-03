@@ -10,7 +10,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 
 public class UpdateTest : TestFixture
 {
-    public UpdateTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public UpdateTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]
