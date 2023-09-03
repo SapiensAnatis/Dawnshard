@@ -32,4 +32,5 @@ public interface IFortService
     Task<AtgenProductionRp> GetRupieProduction();
     Task<AtgenProductionRp> GetDragonfruitProduction();
     Task<AtgenProductionRp> GetStaminaProduction();
+    Task<(int HalidomLevel, int SmithyLevel)> GetCoreLevels();
 }
