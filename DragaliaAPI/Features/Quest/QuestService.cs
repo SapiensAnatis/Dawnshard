@@ -229,9 +229,9 @@ public class QuestService(
                 $"Could not find latest quest clear id for group {eventGroupId} in cache."
             );
 
-        if (questEvent.QuestBonusReserveCount > 0)
+        if (questEvent.QuestBonusReserveCount <= count)
         {
-            questEvent.QuestBonusReserveCount--;
+            questEvent.QuestBonusReserveCount -= count;
             questEvent.QuestBonusReserveTime = DateTimeOffset.UnixEpoch;
         }
         else
@@ -242,7 +242,7 @@ public class QuestService(
             );
         }
 
-        questEvent.QuestBonusReceiveCount++;
+        questEvent.QuestBonusReceiveCount += count;
 
         // TODO: bonus factor?
         IEnumerable<AtgenBuildEventRewardEntityList> bonusRewards = (
@@ -272,11 +272,12 @@ public class QuestService(
                     };
 
                 while (
-                    dateTimeProvider.UtcNow >= lastReset + resetInterval
-                    && questEventData.QuestBonusStackCountMax - 1 > questEvent.QuestBonusStackCount
+                    questEvent.QuestBonusStackTime <= lastReset
+                    && questEvent.QuestBonusStackCount <= questEventData.QuestBonusStackCountMax
                 )
                 {
                     questEvent.QuestBonusStackCount++;
+                    questEvent.QuestBonusStackTime += TimeSpan.FromDays(1);
                 }
 
                 questEvent.QuestBonusStackTime = dateTimeProvider.UtcNow;
