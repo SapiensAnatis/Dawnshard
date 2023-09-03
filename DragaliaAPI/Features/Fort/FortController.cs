@@ -3,7 +3,6 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Fort;
@@ -172,17 +171,12 @@ public class FortController : DragaliaControllerBase
     public async Task<DragaliaResult> LevelupAtOnce(FortLevelupAtOnceRequest request)
     {
         FortBonusList bonusList = await bonusService.GetBonusList();
-        IEnumerable<BuildList> builds = await fortService.GetBuildList();
-
-        BuildList halidom =
-            builds.FirstOrDefault(x => x.plant_id == FortPlants.TheHalidom)
-            ?? throw new InvalidOperationException("Missing Halidom building!");
-
-        BuildList? smithy = builds.FirstOrDefault(x => x.plant_id == FortPlants.Smithy);
 
         await fortService.LevelupAtOnce(request.payment_type, request.build_id);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+
+        (int HalidomLevel, int SmithyLevel) levels = await this.fortService.GetCoreLevels();
         FortDetail fortDetail = await fortService.GetFortDetail();
 
         FortLevelupAtOnceData data =
@@ -190,8 +184,8 @@ public class FortController : DragaliaControllerBase
             {
                 result = 1,
                 build_id = request.build_id,
-                current_fort_level = halidom.level,
-                current_fort_craft_level = smithy?.level ?? 0,
+                current_fort_level = levels.HalidomLevel,
+                current_fort_craft_level = levels.SmithyLevel,
                 fort_bonus_list = bonusList,
                 production_rp = await this.fortService.GetRupieProduction(),
                 production_st = await this.fortService.GetStaminaProduction(),
@@ -224,19 +218,13 @@ public class FortController : DragaliaControllerBase
     [HttpPost("levelup_end")]
     public async Task<DragaliaResult> LevelupEnd(FortLevelupEndRequest request)
     {
-        IEnumerable<BuildList> builds = await fortService.GetBuildList();
-
-        BuildList halidom =
-            builds.FirstOrDefault(x => x.plant_id == FortPlants.TheHalidom)
-            ?? throw new InvalidOperationException("Missing Halidom building!");
-
-        BuildList? smithy = builds.FirstOrDefault(x => x.plant_id == FortPlants.Smithy);
-
         FortBonusList bonusList = await bonusService.GetBonusList();
 
         await fortService.EndLevelup(request.build_id);
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+
+        (int HalidomLevel, int SmithyLevel) levels = await this.fortService.GetCoreLevels();
         FortDetail fortDetail = await fortService.GetFortDetail();
 
         FortLevelupEndData data =
@@ -244,8 +232,8 @@ public class FortController : DragaliaControllerBase
             {
                 result = 1,
                 build_id = request.build_id,
-                current_fort_level = halidom.level,
-                current_fort_craft_level = smithy?.level ?? 0,
+                current_fort_level = levels.HalidomLevel,
+                current_fort_craft_level = levels.SmithyLevel,
                 fort_bonus_list = bonusList,
                 production_rp = await this.fortService.GetRupieProduction(),
                 production_st = await this.fortService.GetStaminaProduction(),
