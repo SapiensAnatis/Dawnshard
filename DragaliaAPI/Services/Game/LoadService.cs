@@ -107,7 +107,8 @@ public class LoadService(
                 summon_ticket_list = (await ticketRepository.GetTicketsAsync()).Select(
                     mapper.Map<SummonTicketList>
                 ),
-                quest_bonus_stack_base_time = 1617775200 // 7. April 2017
+                quest_bonus_stack_base_time = 1617775200, // 7. April 2017
+                album_dragon_list = Enumerable.Empty<AlbumDragonData>()
             };
 
         logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);
