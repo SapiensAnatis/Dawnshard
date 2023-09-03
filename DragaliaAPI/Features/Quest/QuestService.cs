@@ -198,13 +198,6 @@ public class QuestService(
         int count
     )
     {
-        if (!isReceive)
-        {
-            await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
-
-            return new AtgenReceiveQuestBonus();
-        }
-
         DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
 
         int questId =
@@ -213,6 +206,16 @@ public class QuestService(
                 ResultCode.CommonDbError,
                 $"Could not find latest quest clear id for group {eventGroupId} in cache."
             );
+
+        if (!isReceive)
+        {
+            questEvent.QuestBonusReserveCount = 0;
+            questEvent.QuestBonusReserveTime = DateTimeOffset.UnixEpoch;
+
+            await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
+
+            return new AtgenReceiveQuestBonus() { target_quest_id = questId };
+        }
 
         if (count > questEvent.QuestBonusReserveCount + questEvent.QuestBonusStackCount)
         {
