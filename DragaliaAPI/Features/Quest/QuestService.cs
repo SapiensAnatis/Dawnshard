@@ -137,7 +137,7 @@ public class QuestService(
             1
         );
 
-        if (questEvent.QuestBonusCount == 0) 
+        if (questEventData.QuestBonusCount == 0)
         {
             return Enumerable.Empty<AtgenFirstClearSet>();
         }
@@ -151,6 +151,7 @@ public class QuestService(
             {
                 questEvent.QuestBonusStackCount--;
                 questEvent.QuestBonusStackTime = dateTimeProvider.UtcNow;
+                remainingBonusCount++;
             }
             else
             {
@@ -177,8 +178,6 @@ public class QuestService(
 
     public async Task<IEnumerable<Entity>> GenerateBonusDrops(int questId, int count)
     {
-        // TODO: Drop gen
-
         List<Entity> drops = new();
 
         if (
@@ -218,23 +217,10 @@ public class QuestService(
             questEvent.QuestBonusReserveCount = 0;
             questEvent.QuestBonusReserveTime = DateTimeOffset.UnixEpoch;
 
-            QuestEvent questEventData = MasterAsset.QuestEvent[eventGroupId];
-
-            if (
-                questEventData.QuestBonusStackCountMax > 0
-                && questEventData.QuestBonusStackCountMax - 1 > questEvent.QuestBonusStackCount
-            )
-            {
-                questEvent.QuestBonusStackCount++;
-                questEvent.QuestBonusStackTime = dateTimeProvider.UtcNow;
-            }
-
             await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
 
             return new AtgenReceiveQuestBonus();
         }
-
-        Debug.Assert(count == 1, "Tried to claim more than one bonus at a time");
 
         int questId =
             await questCacheService.GetQuestGroupQuestIdAsync(eventGroupId)
