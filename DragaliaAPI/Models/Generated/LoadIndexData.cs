@@ -51,7 +51,6 @@ public class LoadIndexData
     public IEnumerable<QuestCarryList>? quest_carry_list { get; set; }
     public IEnumerable<QuestEntryConditionList>? quest_entry_condition_list { get; set; }
 
-    [JsonIgnore]
     public FortBonusList? fort_bonus_list { get; set; }
 
     public IEnumerable<BuildList>? build_list { get; set; } = new List<BuildList>();
