@@ -8378,6 +8378,7 @@ public class SettingSupport
 [MessagePackObject(true)]
 public class ShopNotice
 {
+    [JsonConverter(typeof(BoolIntJsonConverter))]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool is_shop_notification { get; set; }
 
