@@ -894,7 +894,7 @@
     "_MissionId": 200400,
     "_CompleteType": "QuestCleared",
     "_UseTotalValue": 0,
-    "_Parameter": 100060210
+    "_Parameter": 100060110
   },
   {
     "_comment": "Raise a Shadow-Attuned Adventurer to Lv. 70",
