@@ -388,10 +388,10 @@ public class DmodeDungeonService(
 
         if (floor.FloorNum > 1)
         {
-            floorData.dmode_unit_info.level = floor.BaseEnemyLevel;
-            floorData.dmode_unit_info.exp = MasterAsset.DmodeCharaLevel[
-                1000 + floor.BaseEnemyLevel
-            ].TotalExp;
+            int newLevel = floor.BaseEnemyLevel + 5;
+
+            floorData.dmode_unit_info.level = newLevel;
+            floorData.dmode_unit_info.exp = MasterAsset.DmodeCharaLevel[1000 + newLevel].TotalExp;
 
             List<AtgenDmodeHoldDragonList> holdDragonList = new();
 
@@ -460,21 +460,7 @@ public class DmodeDungeonService(
             previousFloor.dmode_dungeon_odds.dmode_odds_info.dmode_enemy.ToArray();
         int[] enemyKilledStatus = playRecord.dmode_treasure_record.enemy.ToArray();
 
-        double expMultiplier = 1d;
-
-        DmodeServitorPassiveList? expPassive =
-            ingameData.dmode_servitor_passive_list.SingleOrDefault(
-                x => x.passive_no == DmodeServitorPassiveType.Exp
-            );
-
-        if (expPassive != null)
-        {
-            DmodeServitorPassiveLevel level = DmodeHelper.PassiveLevels[
-                DmodeServitorPassiveType.Exp
-            ][expPassive.passive_level];
-
-            expMultiplier += level.UpValue / 100;
-        }
+        double expMultiplier = GetExpMultiplier(ingameData);
 
         // First, process enemy kills and rewards
         for (int i = 0; i < Math.Min(enemyKilledStatus.Length, enemies.Length); i++)
@@ -1006,9 +992,11 @@ public class DmodeDungeonService(
     {
         int maxEnemyCount = areaInfo.EnemyThemes.Length;
 
-        int enemyCount = isSelectedEntity
-            ? maxEnemyCount
-            : rdm.Next((int)Math.Ceiling(maxEnemyCount * 0.8d), maxEnemyCount); // Ceiling so 1 * 0.8 = 1 for boss stages
+        // TODO: selectively include enemy groups / menaces
+        // int enemyCount = isSelectedEntity
+        //     ? maxEnemyCount
+        //     : rdm.Next((int)Math.Ceiling(maxEnemyCount * 0.8d), maxEnemyCount); // Ceiling so 1 * 0.8 = 1 for boss stages
+        int enemyCount = maxEnemyCount;
 
         List<AtgenDmodeEnemy> dmodeEnemies = new();
 
@@ -1166,5 +1154,26 @@ public class DmodeDungeonService(
         int minRarity = GetMinRarity(floorNum);
 
         return Math.Clamp(rarity, minRarity, maxRarity);
+    }
+
+    private double GetExpMultiplier(DmodeIngameData ingameData)
+    {
+        double expMultiplier = 1d;
+
+        DmodeServitorPassiveList? expPassive =
+            ingameData.dmode_servitor_passive_list.SingleOrDefault(
+                x => x.passive_no == DmodeServitorPassiveType.Exp
+            );
+
+        if (expPassive != null)
+        {
+            DmodeServitorPassiveLevel level = DmodeHelper.PassiveLevels[
+                DmodeServitorPassiveType.Exp
+            ][expPassive.passive_level];
+
+            expMultiplier += level.UpValue / 100;
+        }
+
+        return expMultiplier;
     }
 }
