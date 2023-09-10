@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MudBlazor.Services;
+using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore.Diagnostics.Internal;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -163,6 +165,20 @@ app.MapWhen(
 
 app.MapHealthChecks("/health"); // Kubernetes readiness check
 app.MapGet("/ping", () => Results.Ok()); // Kubernetes liveness check
+app.MapGet(
+    "/dragalipatch/config",
+    (
+        [FromServices] IOptionsMonitor<LoginOptions> loginOptions,
+        [FromServices] IOptionsMonitor<DragalipatchOptions> patchOptions
+    ) =>
+        new DragalipatchResponse()
+        {
+            Mode = patchOptions.CurrentValue.Mode,
+            ConeshellKey = patchOptions.CurrentValue.ConeshellKey,
+            CdnUrl = patchOptions.CurrentValue.CdnUrl,
+            UseUnifiedLogin = loginOptions.CurrentValue.UseBaasLogin
+        }
+);
 
 app.Run();
 
