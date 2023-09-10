@@ -1,13 +1,16 @@
 ﻿using System.Net.Http.Json;
 using DragaliaAPI.Models;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Other;
 
 public class DragalipatchTest : TestFixture
 {
     public DragalipatchTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        // Don't use /api prefix
+        this.Client.BaseAddress = new Uri("http://localhost/");
+    }
 
     [Fact]
     public async Task Config_ReturnsExpectedJson()
