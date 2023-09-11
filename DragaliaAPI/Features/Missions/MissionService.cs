@@ -148,7 +148,11 @@ public class MissionService : IMissionService
                 break;
             default:
                 await this.rewardService.GrantReward(
-                    new(missionInfo.EntityType, missionInfo.EntityId, missionInfo.EntityQuantity)
+                    new Entity(
+                        missionInfo.EntityType,
+                        missionInfo.EntityId,
+                        missionInfo.EntityQuantity
+                    )
                 );
                 break;
         }
@@ -188,7 +192,11 @@ public class MissionService : IMissionService
                     )
                 );
                 await this.rewardService.GrantReward(
-                    new(group.UnlockEntityType1, group.UnlockEntityId1, group.UnlockEntityQuantity1)
+                    new Entity(
+                        group.UnlockEntityType1,
+                        group.UnlockEntityId1,
+                        group.UnlockEntityQuantity1
+                    )
                 );
             }
         }

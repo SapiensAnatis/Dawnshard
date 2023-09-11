@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -15,7 +16,9 @@ public class DungeonRecordController(
     IDungeonRecordDamageService dungeonRecordDamageService,
     IDungeonRecordHelperService dungeonRecordHelperService,
     IDungeonService dungeonService,
-    IUpdateDataService updateDataService
+    ITimeAttackService timeAttackService,
+    IUpdateDataService updateDataService,
+    ILogger<DungeonRecordController> logger
 ) : DragaliaControllerBase
 {
     [HttpPost("record")]
@@ -57,6 +60,11 @@ public class DungeonRecordController(
     [Authorize(AuthenticationSchemes = nameof(PhotonAuthenticationHandler))]
     public async Task<DragaliaResult> RecordMulti(DungeonRecordRecordMultiRequest request)
     {
+        logger.LogDebug(
+            "Received record_multi request with connecting_viewer_id_list: {@viewerIdList}",
+            request.connecting_viewer_id_list
+        );
+
         DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
 
         IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(
@@ -84,6 +92,19 @@ public class DungeonRecordController(
             response.event_damage_ranking = await dungeonRecordDamageService.GetEventDamageRanking(
                 request.play_record,
                 session.QuestData.Gid
+            );
+        }
+
+        if (
+            timeAttackService.GetIsRankedQuest(session.QuestData.Id)
+#if !DEBUG
+            && request.connecting_viewer_id_list.Count() == 4
+#endif
+        )
+        {
+            await timeAttackService.RegisterRankedClear(
+                session.QuestData.Id,
+                request.play_record.time
             );
         }
 

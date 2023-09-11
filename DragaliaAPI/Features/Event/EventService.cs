@@ -1,6 +1,8 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -17,7 +19,8 @@ public class EventService(
     ILogger<EventService> logger,
     IEventRepository eventRepository,
     IRewardService rewardService,
-    IQuestRepository questRepository
+    IQuestRepository questRepository,
+    IDateTimeProvider dateTime
 ) : IEventService
 {
     public async Task<bool> GetCustomEventFlag(int eventId)
@@ -259,6 +262,25 @@ public class EventService(
                 eventRepository.CreateEventReward(eventId, locationId);
             }
         }
+    }
+
+    public bool TryGetQuestEvent(int questId, [NotNullWhen(true)] out QuestEvent? questEvent)
+    {
+        questEvent = null;
+
+        if (!MasterAsset.QuestData.TryGetValue(questId, out QuestData? questData))
+            return false;
+
+        if (!MasterAsset.QuestEventGroup.TryGetValue(questData.Gid, out QuestEventGroup? qeGroup))
+            return false;
+
+        if (dateTime.UtcNow < qeGroup.ViewStartDate || dateTime.UtcNow > qeGroup.ViewEndDate)
+            return false;
+
+        if (!MasterAsset.QuestEvent.TryGetValue(questData.Gid, out questEvent))
+            return false;
+
+        return true;
     }
 
     private async Task<DbPlayerEventData> GetEventData(int eventId)

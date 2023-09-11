@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Mvc;
 using MudBlazor.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore.Diagnostics.Internal;
+using DragaliaAPI.Features.TimeAttack;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +39,8 @@ builder.Services
     .Configure<RedisOptions>(config.GetRequiredSection("Redis"))
     .Configure<PhotonOptions>(config.GetRequiredSection(nameof(PhotonOptions)))
     .Configure<ItemSummonConfig>(config)
-    .Configure<DragonfruitConfig>(config);
+    .Configure<DragonfruitConfig>(config)
+    .Configure<TimeAttackOptions>(config.GetRequiredSection(nameof(TimeAttackOptions)));
 
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();

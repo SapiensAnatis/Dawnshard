@@ -452,4 +452,20 @@ public static class MasterAsset
         new("QuestSchedule/QuestScheduleInfo.json", x => x.Id);
 
     #endregion
+
+    #region Time Attack
+
+    /// <summary>
+    /// Contains information about the last two ranked quests in each Time Attack event.
+    /// </summary>
+    public static readonly MasterAssetData<int, RankingData> RankingData =
+        new("TimeAttack/RankingData.json", x => x.QuestId);
+
+    /// <summary>
+    /// Contains information about the initial non-ranked rewards for clearing Time Attack quests.
+    /// </summary>
+    public static readonly MasterAssetData<int, RankingTierReward> RankingTierReward =
+        new("TimeAttack/RankingTierReward.json", x => x.Id);
+
+    #endregion
 }

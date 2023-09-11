@@ -1,0 +1,77 @@
+﻿@page "/timeattack/rankings"
+
+@using System.Collections.Immutable;
+@using DragaliaAPI.Database;
+@using Microsoft.EntityFrameworkCore;
+
+@inject ApiContext ApiContext
+
+<PageTitle>Time Attack Rankings</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom=true>Time Attack Rankings</MudText>
+<MudDivider Class="mb-4" />
+
+<MudStack AlignItems="AlignItems.Start" Spacing="2" Class="mt-2">
+    <MudSelect T="QuestSelectItem" 
+        @bind-Value="@selection" 
+        ToStringFunc="@QuestSelectItem.Converter"
+        Label="Select a quest"
+        Variant="Variant.Outlined" 
+        AnchorOrigin="Origin.BottomCenter"
+    >
+        @foreach (QuestSelectItem item in this.selectItems)
+        {
+            <MudSelectItem Value="item" />
+        }
+    </MudSelect>
+    
+    @if (this.selection is not null)
+    {
+        <MudDivider Class="my-10" />
+        <RankingTable QuestId="@this.selection.Id"/>
+    }
+</MudStack>
+
+@code {
+
+    private QuestSelectItem? selection;
+    private IEnumerable<QuestSelectItem> selectItems = Enumerable.Empty<QuestSelectItem>();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        this.selectItems = (
+            await this.ApiContext.TimeAttackClears
+                .Select(x => x.QuestId)
+                .Distinct()
+                .ToListAsync()
+        ).Select(x => new QuestSelectItem(x));
+    }
+
+    private class QuestSelectItem
+    {
+        public QuestSelectItem(int id)
+        {
+            this.Id = id;
+            this.Name = QuestNames.GetValueOrDefault(id, id.ToString());
+        }
+
+        public int Id { get; }
+
+        public string Name { get; }
+
+        public static string Converter(QuestSelectItem? item) => item?.Name ?? string.Empty;
+
+        public override bool Equals(object? obj) =>
+            obj is QuestSelectItem questSelectItem && questSelectItem.Id == this.Id;
+
+        public override int GetHashCode() => this.Id;
+
+        private static readonly ImmutableDictionary<int, string> QuestNames =
+        ImmutableDictionary.Create<int, string>()
+                .Add(227010104, "Volk's Wrath: Solo (Ranked)")
+                .Add(227010105, "Volk's Wrath: Co-Op (Ranked)");
+    }
+}

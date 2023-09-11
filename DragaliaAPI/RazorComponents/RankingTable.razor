@@ -1,0 +1,169 @@
+﻿@inject IDbContextFactory<ApiContext> ApiContextFactory
+@inject IBlazorIdentityService BlazorIdentityService
+
+@using DragaliaAPI.Blazor.Authentication;
+@using DragaliaAPI.Database;
+@using Microsoft.EntityFrameworkCore;
+@using MudBlazor;
+@using MudBlazor.Components;
+@using System.Collections.Immutable;
+
+
+<MudTable 
+    ServerData="@(new Func<TableState, Task<TableData<Clear>>>(ServerReload))"
+    Style="width: 100%"
+    Class="@this.Class"
+    Elevation="@this.Elevation"
+    @ref=table
+    >
+    <ToolBarContent>
+        <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Style="width: 100%">
+            <MudText Typo="Typo.h6">All clears</MudText>
+            <MudSpacer/>
+            @if (EnableSearch) 
+            {
+                <MudTextField 
+                    T="string"
+                    ValueChanged="@(s=>OnSearch(s))"
+                    Placeholder="Search players"
+                    Adornment="Adornment.Start"
+                    AdornmentIcon="@Icons.Material.Filled.Search"
+                    IconSize="Size.Medium"
+                    Style="margin-top: 0 !important; align-self: end" />
+            }
+        </MudStack>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Rank</MudTh>
+        <MudTh>Players</MudTh>
+        <MudTh>Time</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Rank">@context.Rank</MudTd>
+        <MudTd DataLabel="Players">@context.FormattedNames</MudTd>
+        <MudTd DataLabel="Time">@context.FormattedTime</MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No matching records found</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private string? searchString;
+    private MudTable<Clear>? table;
+
+    private int? questId;
+
+    [Parameter]
+    public int? QuestId { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public int Elevation { get; set; }
+
+    [Parameter]
+    public bool EnableSearch { get; set; } = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await using ApiContext context = await this.ApiContextFactory.CreateDbContextAsync();
+
+        if (this.table is not null)
+            await this.table.ReloadServerData();
+    }
+
+    private async Task<TableData<Clear>> ServerReload(TableState state)
+    {
+        await using ApiContext context = await this.ApiContextFactory.CreateDbContextAsync();
+
+        if (this.QuestId is null)
+            return new TableData<Clear>() { Items = Enumerable.Empty<Clear>(), TotalItems = 0 };
+
+        IQueryable<DbTimeAttackClear> clearQuery = context.TimeAttackClears
+            .Include(x => x.Players)
+            .ThenInclude(x => x!.Player.UserData)
+            .Where(x => x.QuestId == this.QuestId)
+            .OrderBy(x => x.Time);
+
+
+        // We must do searching and paging after loading the entire result set, so that our rank numbers are accurate
+        List<DbTimeAttackClear> queryResults = await clearQuery.ToListAsync();
+        IEnumerable<Clear> filteredEnumerable = queryResults
+            .DistinctBy(x => x.PlayersHash)
+            .Select(
+                (x, index) => new Clear(x, index)
+            );
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            filteredEnumerable = filteredEnumerable.Where(
+                x =>
+                    x.Names.Any(
+                        y =>
+                            y.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+                    )
+            );
+        }
+
+        List<Clear> filteredList = filteredEnumerable.ToList();
+        IEnumerable<Clear> pagedEnumerable = filteredList.Skip(state.PageSize * state.Page).Take(state.PageSize);
+
+        return new TableData<Clear>() { Items = pagedEnumerable, TotalItems = filteredList.Count };
+    }
+
+    /*
+    private async Task<Clear?> GetOwnClear(ApiContext context)
+    {
+        if (!this.BlazorIdentityService.IsAuthenticated)
+            return null;
+
+        DbTimeAttackClear? ownClear = await context.TimeAttackClears
+            .Include(x => x.Players)
+            .Where(
+                x => x.Players.Any(
+                    y => y.DeviceAccountId == this.BlazorIdentityService.AccountId
+                ) && x.QuestId == this.QuestId
+            )
+            .OrderBy(x => x.Time)
+            .FirstOrDefaultAsync();
+
+        if (ownClear is null)
+            return null;
+
+        int ownIndex = await context.TimeAttackClears
+            .CountAsync(x => x.Time < ownClear.Time && x.QuestId == this.QuestId);
+
+        return new Clear(ownClear, ownIndex);
+    }
+    */
+
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table?.ReloadServerData();
+    }
+
+    private record Clear(int Rank, IEnumerable<string> Names, float Time)
+    {
+        public string FormattedNames => string.Join(", ", this.Names.Order());
+
+        public string FormattedTime => TimeSpan.FromSeconds(this.Time).ToString(@"mm\:ss\.f");
+
+        public Clear(DbTimeAttackClear dbClear, int index) 
+            : this(
+                index + 1,
+                dbClear.Players.Select(y => y.Player?.UserData?.Name ?? "null").ToList(), 
+                dbClear.Time
+            )
+        { }
+    }
+}

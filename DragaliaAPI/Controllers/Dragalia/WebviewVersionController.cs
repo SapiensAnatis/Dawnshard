@@ -1,6 +1,9 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Features.TimeAttack;
+using DragaliaAPI.Models.Generated;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -13,25 +16,22 @@ public class WebviewVersionController : DragaliaControllerBase
     [HttpPost("url_list")]
     public DragaliaResult UrlList()
     {
-        string baseAddress = this.HttpContext.Request.Host.ToString();
+        AtgenWebviewUrlList timeAttackRanking =
+            new("time_attack_ranking", this.GetUrl("timeattack/rankings/webview"));
 
-        // Use this URL instead if using mitmproxy and developing locally
-        // (replacing it with <host local IP>:<container port> as needed)
-        // baseAddress = "dd-api.lukefz.xyz";
-
-        return Ok(
+        return this.Ok(
             new WebviewVersionUrlListData(
                 new List<AtgenWebviewUrlList>()
                 {
+                    new("information", this.GetUrl("news")),
+                    timeAttackRanking,
                     new("ability_crest_advice", PlaceholderUrl),
                     new("battle_royal_how_to", PlaceholderUrl),
                     new("comic", PlaceholderUrl),
                     new("plotsynopsis", PlaceholderUrl),
-                    new("time_attack_ranking", PlaceholderUrl),
                     new("faq", PlaceholderUrl),
                     new("help_comic", PlaceholderUrl),
                     new("help", PlaceholderUrl),
-                    new("information", $"https://{baseAddress}/news?hideappbar=true"),
                     new("inquiry_attention", PlaceholderUrl),
                     new("dragon_battle_info", PlaceholderUrl),
                     new("quest_info", PlaceholderUrl),
@@ -45,5 +45,23 @@ public class WebviewVersionController : DragaliaControllerBase
                 }
             )
         );
+    }
+
+    private string GetUrl(string relativePath, Dictionary<string, object?>? queryParams = null)
+    {
+        string url = $"https://{this.HttpContext.Request.Host.Host}/{relativePath}";
+        url = QueryHelpers.AddQueryString(url, "hideappbar", "true");
+
+        if (queryParams != null)
+        {
+            url = QueryHelpers.AddQueryString(
+                url,
+                queryParams.Select(
+                    x => new KeyValuePair<string, string?>(x.Key, x.Value?.ToString())
+                )
+            );
+        }
+
+        return url;
     }
 }

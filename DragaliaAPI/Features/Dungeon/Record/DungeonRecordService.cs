@@ -1,11 +1,14 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Chara;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
@@ -14,8 +17,8 @@ public class DungeonRecordService(
     IQuestService questService,
     IUserService userService,
     ITutorialService tutorialService,
-    ILogger<DungeonRecordService> logger,
-    ICharaService charaService
+    ICharaService charaService,
+    ILogger<DungeonRecordService> logger
 ) : IDungeonRecordService
 {
     public async Task<IngameResultData> GenerateIngameResultData(
@@ -59,7 +62,6 @@ public class DungeonRecordService(
             session.PlayCount
         );
 
-        await this.ProcessGrowth(ingameResultData.grow_record, session);
         await this.ProcessStaminaConsumption(session);
         await this.ProcessExperience(
             ingameResultData.grow_record,
@@ -100,15 +102,6 @@ public class DungeonRecordService(
         ingameResultData.reward_record.drop_all.AddRange(eventDrops);
 
         return ingameResultData;
-    }
-
-    private Task ProcessGrowth(GrowRecord growRecord, DungeonSession session)
-    {
-        // TODO: actual implementation. Extract out into a service at that time
-        growRecord.bonus_factor = 1;
-        growRecord.mana_bonus_factor = 1;
-
-        return Task.CompletedTask;
     }
 
     private async Task ProcessStaminaConsumption(DungeonSession session)

@@ -27,17 +27,19 @@
     {
         <MudAppBar Elevation="0">
             <MudBreakpointProvider>
-            <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
-                <MudText Typo="Typo.h5" Class="m1-3">Dawnshard</MudText>
-                <div class="pl-3 d-flex flex-row" style="width: 10%">
-                    <NavMenu />
-                </div>
-            </MudHidden>
-            <MudHidden Breakpoint="Breakpoint.SmAndDown" Invert="true">
-                <MudToggleIconButton Edge=Edge.Start @bind-Toggled=navDrawerOpen Icon=@Icons.Material.Filled.Menu ToggledIcon=@Icons.Material.Filled.Menu Color="Color.Inherit" ToggledColor="Color.Inherit" />
-                <MudText Typo="Typo.h5" Class="m1-3">Dawnshard</MudText>
-            </MudHidden>
+                <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
+                    <MudDrawer Elevation="2" Open=true ClipMode="DrawerClipMode.Always" DisableOverlay=true>
+                        <NavMenu />
+                    </MudDrawer>
+                </MudHidden>
+                <MudHidden Breakpoint="Breakpoint.SmAndDown" Invert="true">
+                    <MudToggleIconButton Edge=Edge.Start @bind-Toggled=navDrawerOpen Icon=@Icons.Material.Filled.Menu ToggledIcon=@Icons.Material.Filled.Menu Color="Color.Inherit" ToggledColor="Color.Inherit" />
+                    <MudDrawer @bind-Open=navDrawerOpen Elevation="2" ClipMode="DrawerClipMode.Always" DisableOverlay=true>
+                        <NavMenu />
+                    </MudDrawer>
+                </MudHidden>
             </MudBreakpointProvider>
+            <MudText Typo="Typo.h5" Class="m1-3">Dawnshard</MudText>
             <MudSpacer />
             <MudStack Row=true Spacing="4">
                 <AuthorizeView>
@@ -65,9 +67,7 @@
            
         </MudAppBar>    
     }
-    <MudDrawer @bind-Open=navDrawerOpen Elevation="2" ClipMode="DrawerClipMode.Always" DisableOverlay=true>
-        <NavMenu />
-    </MudDrawer>
+
     <MudMainContent Style="@MainContentClass">
         <MudContainer MaxWidth="MaxWidth.Large" Class="@MainContainerClass">
             @Body

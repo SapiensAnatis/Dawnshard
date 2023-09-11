@@ -1,0 +1,29 @@
+﻿@page "/timeattack/rankings/webview"
+@using System.Collections.Immutable;
+@using Microsoft.Extensions.Primitives;
+
+@layout WebviewLayout
+
+<MudTabs @bind-ActivePanelIndex=@activePanel Centered=true>
+    <MudTabPanel Text="Solo">
+        <RankingWebviewTab QuestId="SoloId" ViewerId="ViewerId"/>
+    </MudTabPanel>
+    <MudTabPanel Text="Co-op">
+        <RankingWebviewTab QuestId="CoopId" ViewerId="ViewerId" />
+    </MudTabPanel>
+</MudTabs>
+
+@code {
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "quest_id")]
+    public int SoloId { get; set; }
+
+    public int CoopId => this.SoloId + 1;
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "viewer_id")]
+    public long ViewerId { get; set; }
+
+    private int activePanel;
+}

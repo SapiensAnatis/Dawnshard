@@ -8,6 +8,7 @@ namespace DragaliaAPI.Blazor.Authentication;
 public class BlazorIdentityService : IBlazorIdentityService
 {
     private readonly AuthenticationStateProvider authenticationStateProvider;
+    private AuthenticationState? lastState;
 
     private string? accountId;
     private string? userIdName;
@@ -33,6 +34,8 @@ public class BlazorIdentityService : IBlazorIdentityService
 
     private void InitializeIdentity(AuthenticationState state)
     {
+        this.lastState = state;
+
         this.accountId = state.User.Claims
             .FirstOrDefault(x => x.Type == CustomClaimType.AccountId)
             ?.Value;
@@ -57,6 +60,8 @@ public class BlazorIdentityService : IBlazorIdentityService
 
     public string UserDataName =>
         this.userIdName ?? throw new InvalidOperationException("User was not authenticated!");
+
+    public bool IsAuthenticated => this.lastState?.User.Identity?.IsAuthenticated ?? false;
 
     public IDisposable StartUserImpersonation(string account, long? viewer = null)
     {

@@ -11,5 +11,7 @@ namespace DragaliaAPI.Photon.Plugin.Models
         public int MinGoToIngameState { get; set; }
 
         public int StartActorCount { get; set; }
+
+        public bool IsSoloPlay { get; set; }
     }
 }
