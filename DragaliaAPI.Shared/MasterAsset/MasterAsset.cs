@@ -27,6 +27,9 @@ public static class MasterAsset
     public static readonly MasterAssetData<Charas, CharaData> CharaData =
         new("CharaData.json", x => x.Id);
 
+    public static readonly MasterAssetData<int, SummonData> SummonData =
+        new("SummonData.json", x => x.Id);
+
     /// <summary>
     /// Contains information about dragons.
     /// </summary>
