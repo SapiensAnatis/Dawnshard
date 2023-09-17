@@ -7,7 +7,7 @@ volumes:
 services:
   dragaliaapi:
     image: dragaliaapi
-    container_name: dragaliaapi
+    container_name: dragaliaapi2
     hostname: dragaliaapi
     build:
       context: .
@@ -15,12 +15,14 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:80
     ports:
-      - "80:80"
+      - "8084:80"
       - "5000:80"
     links:
       - postgres
     env_file:
       - .env
+    volumes:
+      - "./DragaliaAPI:/Dawnshard/DragaliaAPI"
 
   photonstatemanager:
     hostname: photonstatemanager

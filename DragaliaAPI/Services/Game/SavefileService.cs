@@ -164,7 +164,7 @@ public class SavefileService : ISavefileService
                             {
                                 dest.ViewerId = oldViewerId ?? default;
                                 dest.DeviceAccountId = deviceAccountId;
-                                dest.Crystal += 1_200_000;
+                                dest.Crystal += 10_000;
                                 dest.LastSaveImportTime = DateTimeOffset.UtcNow;
                                 dest.LastLoginTime = DateTimeOffset.UnixEpoch;
                                 dest.ActiveMemoryEventId = 0;
@@ -686,7 +686,7 @@ public class SavefileService : ISavefileService
 #if DEBUG
                 TutorialStatus = 10151,
 #endif
-                Crystal = 1_200_000 };
+                Crystal = 10_000 };
 
         apiContext.PlayerUserData.Add(userData);
         await this.AddDefaultParties(deviceAccountId);
