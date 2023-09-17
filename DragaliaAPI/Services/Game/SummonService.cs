@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using AutoMapper;
+using System.Linq;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Extensions;
@@ -106,43 +107,26 @@ public class SummonService : ISummonService
     public List<int> GetSummonData(int bannerId)
     {
     // Rufen Sie die Banner-spezifischen Daten mithilfe von MasterAsset.SummonData ab
-    List<SummonData> bannerSummonData = MasterAsset.SummonData
-        .Enumerable
-        .Where(x => x.Id == bannerId)
-        .ToList();
+    var bannerSummonData = MasterAsset.SummonData[bannerId];
 
     // Erstellen Sie eine Liste für die ausgewählten Charaktere
     List<int> selectedCharaIds = new List<int>();
 
-    // Wählen Sie Charaktere basierend auf PickupUnitId1-4 aus SummonData aus
-    foreach (var summonData in bannerSummonData)
+    // Hinzufügen der Charakter-IDs aus den PickupUnitId-Feldern in bannerSummonData
+    selectedCharaIds.AddRange(new[]
     {
-        if (summonData.PickupUnitId1 != 0)
-        {
-            selectedCharaIds.Add(summonData.PickupUnitId1);
-        }
+        (bannerSummonData.PickupUnitType1 == 1) ? bannerSummonData.PickupUnitId1 : 0,
+        (bannerSummonData.PickupUnitType2 == 1) ? bannerSummonData.PickupUnitId2 : 0,
+        (bannerSummonData.PickupUnitType3 == 1) ? bannerSummonData.PickupUnitId3 : 0,
+        (bannerSummonData.PickupUnitType4 == 1) ? bannerSummonData.PickupUnitId4 : 0
+    }.Where(id => id != 0));
 
-        if (summonData.PickupUnitId2 != 0)
-        {
-            selectedCharaIds.Add(summonData.PickupUnitId2);
-        }
-
-        if (summonData.PickupUnitId3 != 0)
-        {
-            selectedCharaIds.Add(summonData.PickupUnitId3);
-        }
-
-        if (summonData.PickupUnitId4 != 0)
-        {
-            selectedCharaIds.Add(summonData.PickupUnitId4);
-        }
-    }
 
     // Wählen Sie Charaktere mit 3 oder 4 Sternen aus CharaData aus
     var selectedCharacters = MasterAsset.CharaData
         .Enumerable
         .Where(chara => chara.Rarity == 3 || chara.Rarity == 4)
-        .Select(chara => chara.Id)
+        .Select(chara => (int)chara.Id)
         .ToList();
 
     // Fügen Sie die IDs aus selectedCharacters zu selectedCharaIds hinzu
@@ -179,9 +163,12 @@ public class SummonService : ISummonService
             {
                 // Zufällig einen Charakter aus den ausgewählten IDs auswählen
                 int randomCharaId = selectedCharaIds[random.Next(selectedCharaIds.Count)];
+                Charas charaEnum = (Charas)Enum.Parse(typeof(Charas), randomCharaId.ToString());
                 int rarity = MasterAsset.CharaData
                             .Enumerable
-                            .Where(x => x.Id == bannerId);
+                            .Where(x => x.Id == charaEnum)
+                            .Select(x => x.Rarity)
+                            .FirstOrDefault();
 
                 resultList.Add(new(EntityTypes.Chara, randomCharaId, rarity));
             }
