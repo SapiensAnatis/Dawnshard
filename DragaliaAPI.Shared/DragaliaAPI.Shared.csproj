@@ -183,6 +183,9 @@
 		<None Update="Resources\TimeAttack\RankingTierReward.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+        <None Update="Resources\SummonData.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
 		<None Update="Resources\Trade\AbilityCrestTrade.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

@@ -100,14 +100,15 @@ public class SummonService : ISummonService
         return this.GenerateSummonResult(
             numSummons,
             10,
-            0.0f /*,new(new(), new(), 6.0d, 80.0d) */
+            0.0f /*,new(new(), new(), 6.0d, 80.0d) */,
+            1020067
         );
     }
 
     public List<int> GetSummonData(int bannerId)
     {
     // Rufen Sie die Banner-spezifischen Daten mithilfe von MasterAsset.SummonData ab
-    var bannerSummonData = MasterAsset.SummonData[bannerId];
+    var bannerSummonData = MasterAsset.SummonData.Get(bannerId);
 
     // Erstellen Sie eine Liste für die ausgewählten Charaktere
     List<int> selectedCharaIds = new List<int>();
@@ -139,13 +140,13 @@ public class SummonService : ISummonService
     public List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(
         int numSummons,
         int summonsUntilNextPity,
-        float pity /*,
-        BannerSummonInfo bannerInfo */
+        float pity,
+        int bannerId
     )
     {
         List<AtgenRedoableSummonResultUnitList> resultList = new();
 
-        List<int> selectedCharaIds = GetSummonData(1020001);
+        List<int> selectedCharaIds = GetSummonData(bannerId);
 
         for (int i = 0; i < numSummons; i++)
         {
@@ -161,16 +162,21 @@ public class SummonService : ISummonService
             }
             else
             {
-                // Zufällig einen Charakter aus den ausgewählten IDs auswählen
-                int randomCharaId = selectedCharaIds[random.Next(selectedCharaIds.Count)];
-                Charas charaEnum = (Charas)Enum.Parse(typeof(Charas), randomCharaId.ToString());
-                int rarity = MasterAsset.CharaData
-                            .Enumerable
-                            .Where(x => x.Id == charaEnum)
-                            .Select(x => x.Rarity)
-                            .FirstOrDefault();
+                Charas charaEnum;
 
-                resultList.Add(new(EntityTypes.Chara, randomCharaId, rarity));
+                do
+                {
+                    int randomCharaId = selectedCharaIds[random.Next(selectedCharaIds.Count)];
+                    charaEnum = (Charas)Enum.Parse(typeof(Charas), randomCharaId.ToString());
+                } while (MasterAsset.CharaData[charaEnum].Availability == CharaAvailabilities.Story);
+
+                int rarity = MasterAsset.CharaData
+                             .Enumerable
+                             .Where(x => x.Id == charaEnum)
+                             .Select(x => x.Rarity)
+                             .FirstOrDefault();
+
+                resultList.Add(new(EntityTypes.Chara, (int)charaEnum, rarity));
             }
         }
 
