@@ -20,7 +20,7 @@ public record SummonData(
     int PickupUnitId1,
     int PickupResourceId1,
     int PickupUnitType2,
-    int _PickupUnitId2,
+    int PickupUnitId2,
     int PickupResourceId2,
     int PickupUnitType3,
     int PickupUnitId3,
