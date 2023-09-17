@@ -84,7 +84,7 @@ public class SummonController(
                 new List<SummonList>()
                 {
                     new(
-                        summon_id: 1020203,
+                        summon_id: 1020067,
                         summon_type: 0,
                         summon_group_id: (int)BannerTypes.Normal,
                         single_crystal: 120,
@@ -225,10 +225,12 @@ public class SummonController(
     [Route("request")]
     public async Task<DragaliaResult> RequestSummon(SummonRequestRequest summonRequest)
     {
+        int bannerId = 1020067;
+         
         //TODO Fetch real data by bannerId
         SummonList bannerData =
             new(
-                1020203,
+                bannerId,
                 0,
                 (int)BannerTypes.Normal,
                 120,
