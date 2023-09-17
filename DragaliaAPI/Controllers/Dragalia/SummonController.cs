@@ -225,7 +225,7 @@ public class SummonController(
     [Route("request")]
     public async Task<DragaliaResult> RequestSummon(SummonRequestRequest summonRequest)
     {
-        int bannerId = 1020067;
+        int bannerId = summonRequest.summon_id;
          
         //TODO Fetch real data by bannerId
         SummonList bannerData =
