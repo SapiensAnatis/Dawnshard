@@ -103,6 +103,55 @@ public class SummonService : ISummonService
         );
     }
 
+    public List<int> GetSummonData(int bannerId)
+    {
+    // Rufen Sie die Banner-spezifischen Daten mithilfe von MasterAsset.SummonData ab
+    List<SummonData> bannerSummonData = MasterAsset.SummonData
+        .Enumerable
+        .Where(x => x.Id == bannerId)
+        .ToList();
+
+    // Erstellen Sie eine Liste für die ausgewählten Charaktere
+    List<int> selectedCharaIds = new List<int>();
+
+    // Wählen Sie Charaktere basierend auf PickupUnitId1-4 aus SummonData aus
+    foreach (var summonData in bannerSummonData)
+    {
+        if (summonData.PickupUnitId1 != 0)
+        {
+            selectedCharaIds.Add(summonData.PickupUnitId1);
+        }
+
+        if (summonData.PickupUnitId2 != 0)
+        {
+            selectedCharaIds.Add(summonData.PickupUnitId2);
+        }
+
+        if (summonData.PickupUnitId3 != 0)
+        {
+            selectedCharaIds.Add(summonData.PickupUnitId3);
+        }
+
+        if (summonData.PickupUnitId4 != 0)
+        {
+            selectedCharaIds.Add(summonData.PickupUnitId4);
+        }
+    }
+
+    // Wählen Sie Charaktere mit 3 oder 4 Sternen aus CharaData aus
+    var selectedCharacters = MasterAsset.CharaData
+        .Enumerable
+        .Where(chara => chara.Rarity == 3 || chara.Rarity == 4)
+        .Select(chara => chara.Id)
+        .ToList();
+
+    // Fügen Sie die IDs aus selectedCharacters zu selectedCharaIds hinzu
+    selectedCharaIds.AddRange(selectedCharacters);
+
+    // Geben Sie die IDs der ausgewählten Charaktere zurück
+    return selectedCharaIds;
+    }
+
     public List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(
         int numSummons,
         int summonsUntilNextPity,
@@ -111,6 +160,8 @@ public class SummonService : ISummonService
     )
     {
         List<AtgenRedoableSummonResultUnitList> resultList = new();
+
+        List<int> selectedCharaIds = GetSummonData(1020001);
 
         for (int i = 0; i < numSummons; i++)
         {
@@ -126,16 +177,13 @@ public class SummonService : ISummonService
             }
             else
             {
-                Charas id = random.NextEnum<Charas>();
-                while (
-                    id == 0 || MasterAsset.CharaData[id].Availability == CharaAvailabilities.Story
-                )
-                {
-                    id = random.NextEnum<Charas>();
-                }
+                // Zufällig einen Charakter aus den ausgewählten IDs auswählen
+                int randomCharaId = selectedCharaIds[random.Next(selectedCharaIds.Count)];
+                int rarity = MasterAsset.CharaData
+                            .Enumerable
+                            .Where(x => x.Id == bannerId);
 
-                int rarity = MasterAsset.CharaData.Get(id).Rarity;
-                resultList.Add(new(EntityTypes.Chara, (int)id, rarity));
+                resultList.Add(new(EntityTypes.Chara, randomCharaId, rarity));
             }
         }
 

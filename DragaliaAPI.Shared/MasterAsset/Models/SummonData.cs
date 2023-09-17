@@ -1,0 +1,32 @@
+namespace DragaliaAPI.Shared.MasterAsset.Models;
+
+public record SummonData(
+    int Id,
+    int Priority,
+    int SummonType,
+    string SummonViewName,
+    int MaxSummonQuantity,
+    string CommenceDate,
+    string CompleteDate,
+    int SummonPointId,
+    int ExchangeSummonPoint,
+    int GuaranteedEntityType,
+    int IsPickupGuaranteed,
+    int EncounterStoryId,
+    string SummonBgm,
+    int PickupNum,
+    int IsViewCover,
+    int PickupUnitType1,
+    int PickupUnitId1,
+    int PickupResourceId1,
+    int PickupUnitType2,
+    int _PickupUnitId2,
+    int PickupResourceId2,
+    int PickupUnitType3,
+    int PickupUnitId3,
+    int PickupResourceId3,
+    int PickupUnitType4,
+    int PickupUnitId4,
+    int PickupResourceId4,
+    string MeetingStoryBanner
+);
