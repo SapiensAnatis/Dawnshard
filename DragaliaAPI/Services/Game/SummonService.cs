@@ -134,7 +134,7 @@ public class SummonService : ISummonService
     // Fügen Sie die Einheiten-IDs aus DragonData zu selectedUnitsDict hinzu
     foreach (var dragon in MasterAsset.DragonData.Enumerable)
     {
-        if (dragon.Rarity == 3 || dragon.Rarity == 4)
+        if (dragon.Rarity == 3 || dragon.Rarity == 4 || dragon.Rarity == 5)
         {
             selectedUnitDict[(int)dragon.Id] = 2; // Hier setzen wir den Typ für Drachen auf 2
         }
