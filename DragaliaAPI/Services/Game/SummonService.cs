@@ -105,36 +105,43 @@ public class SummonService : ISummonService
         );
     }
 
-    public List<int> GetSummonData(int bannerId)
+    public Dictionary<int, int> GetSummonData(int bannerId)
     {
     // Rufen Sie die Banner-spezifischen Daten mithilfe von MasterAsset.SummonData ab
     var bannerSummonData = MasterAsset.SummonData.Get(bannerId);
 
-    // Erstellen Sie eine Liste für die ausgewählten Charaktere
-    List<int> selectedCharaIds = new List<int>();
-
     // Hinzufügen der Charakter-IDs aus den PickupUnitId-Feldern in bannerSummonData
-    selectedCharaIds.AddRange(new[]
+    Dictionary<int, int> selectedUnitDict = new Dictionary<int, int>
     {
-        (bannerSummonData.PickupUnitType1 == 1) ? bannerSummonData.PickupUnitId1 : 0,
-        (bannerSummonData.PickupUnitType2 == 1) ? bannerSummonData.PickupUnitId2 : 0,
-        (bannerSummonData.PickupUnitType3 == 1) ? bannerSummonData.PickupUnitId3 : 0,
-        (bannerSummonData.PickupUnitType4 == 1) ? bannerSummonData.PickupUnitId4 : 0
-    }.Where(id => id != 0));
+        { bannerSummonData.PickupUnitId1, bannerSummonData.PickupUnitType1 },
+        { bannerSummonData.PickupUnitId2, bannerSummonData.PickupUnitType2 },
+        { bannerSummonData.PickupUnitId3, bannerSummonData.PickupUnitType3 },
+        { bannerSummonData.PickupUnitId4, bannerSummonData.PickupUnitType4 }
+    }
+    .Where(entry => entry.Value == 1 || entry.Value == 2 && entry.Key != 0)
+    .ToDictionary(entry => entry.Key, entry => entry.Value);
 
 
-    // Wählen Sie Charaktere mit 3 oder 4 Sternen aus CharaData aus
-    var selectedCharacters = MasterAsset.CharaData
-        .Enumerable
-        .Where(chara => chara.Rarity == 3 || chara.Rarity == 4)
-        .Select(chara => (int)chara.Id)
-        .ToList();
+    // Fügen Sie die Charakter-IDs aus CharaData zu selectedCharaDict hinzu
+    foreach (var chara in MasterAsset.CharaData.Enumerable)
+    {
+        if (chara.Rarity == 3 || chara.Rarity == 4)
+        {
+            selectedUnitDict[(int)chara.Id] = 1; // Hier setzen wir den Typ für Charaktere auf 1
+        }
+    }
 
-    // Fügen Sie die IDs aus selectedCharacters zu selectedCharaIds hinzu
-    selectedCharaIds.AddRange(selectedCharacters);
+    // Fügen Sie die Einheiten-IDs aus DragonData zu selectedUnitsDict hinzu
+    foreach (var dragon in MasterAsset.DragonData.Enumerable)
+    {
+        if (dragon.Rarity == 3 || dragon.Rarity == 4)
+        {
+            selectedUnitDict[(int)dragon.Id] = 2; // Hier setzen wir den Typ für Drachen auf 2
+        }
+    }
 
     // Geben Sie die IDs der ausgewählten Charaktere zurück
-    return selectedCharaIds;
+    return selectedUnitDict;
     }
 
     public List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(
@@ -146,35 +153,39 @@ public class SummonService : ISummonService
     {
         List<AtgenRedoableSummonResultUnitList> resultList = new();
 
-        List<int> selectedCharaIds = GetSummonData(bannerId);
+        Dictionary<int, int> selectedUnitsDict = GetSummonData(bannerId);
 
         for (int i = 0; i < numSummons; i++)
         {
             bool isDragon = random.NextSingle() > 0.5;
             if (isDragon)
             {
-                Dragons id = random.NextEnum<Dragons>();
-                while (id == 0 || DragonConstants.unsummonableDragons.Contains(id))
-                    id = random.NextEnum<Dragons>();
+                List<int> dragonIds = selectedUnitsDict
+                    .Where(entry => entry.Value == 2 && !DragonConstants.unsummonableDragons.Contains((Dragons)entry.Key))
+                    .Select(entry => entry.Key)
+                    .ToList();
+
+                int randomDragonId = dragonIds[random.Next(dragonIds.Count)];
+                Dragons id = (Dragons)Enum.Parse(typeof(Dragons), randomDragonId.ToString());
 
                 int rarity = MasterAsset.DragonData.Get(id).Rarity;
                 resultList.Add(new(EntityTypes.Dragon, (int)id, rarity));
             }
             else
             {
-                Charas charaEnum;
+                List<int> charaIds = selectedUnitsDict
+                    .Where(entry => entry.Value == 1 && MasterAsset.CharaData[(Charas)entry.Key].Availability != CharaAvailabilities.Story)
+                    .Select(entry => entry.Key)
+                    .ToList();
 
-                do
-                {
-                    int randomCharaId = selectedCharaIds[random.Next(selectedCharaIds.Count)];
-                    charaEnum = (Charas)Enum.Parse(typeof(Charas), randomCharaId.ToString());
-                } while (MasterAsset.CharaData[charaEnum].Availability == CharaAvailabilities.Story);
+                int randomCharaId = charaIds[random.Next(charaIds.Count)];
+                Charas charaEnum = (Charas)Enum.Parse(typeof(Charas), randomCharaId.ToString());
 
                 int rarity = MasterAsset.CharaData
-                             .Enumerable
-                             .Where(x => x.Id == charaEnum)
-                             .Select(x => x.Rarity)
-                             .FirstOrDefault();
+                            .Enumerable
+                            .Where(x => x.Id == charaEnum)
+                            .Select(x => x.Rarity)
+                            .FirstOrDefault();
 
                 resultList.Add(new(EntityTypes.Chara, (int)charaEnum, rarity));
             }
