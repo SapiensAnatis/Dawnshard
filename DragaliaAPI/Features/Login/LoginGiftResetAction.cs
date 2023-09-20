@@ -18,6 +18,15 @@ public class LoginGiftResetAction : IDailyResetAction
         this.presentService.AddPresent(
             new Present.Present(
                 PresentMessage.DragaliaLostTeam,
+                EntityTypes.Wyrmite,
+                (int)PaymentTypes.Wyrmite,
+                1000
+            )
+        );
+        
+        this.presentService.AddPresent(
+            new Present.Present(
+                PresentMessage.DragaliaLostTeam,
                 EntityTypes.Material,
                 (int)Materials.ChampionsTestament,
                 5
