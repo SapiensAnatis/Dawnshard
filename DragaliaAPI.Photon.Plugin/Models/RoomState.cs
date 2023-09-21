@@ -13,5 +13,12 @@ namespace DragaliaAPI.Photon.Plugin.Models
         public int StartActorCount { get; set; }
 
         public bool IsSoloPlay { get; set; }
+
+        public RoomState() { }
+
+        public RoomState(RoomState oldState)
+        {
+            this.IsSoloPlay = oldState.IsSoloPlay;
+        }
     }
 }

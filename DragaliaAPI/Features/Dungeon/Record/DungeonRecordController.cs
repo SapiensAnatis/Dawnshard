@@ -82,19 +82,6 @@ public class DungeonRecordController(
         ingameResultData.helper_detail_list = helperDetailList;
         ingameResultData.play_type = QuestPlayType.Multi;
 
-        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
-
-        DungeonRecordRecordData response =
-            new() { ingame_result_data = ingameResultData, update_data_list = updateDataList, };
-
-        if (session.QuestData.IsSumUpTotalDamage)
-        {
-            response.event_damage_ranking = await dungeonRecordDamageService.GetEventDamageRanking(
-                request.play_record,
-                session.QuestData.Gid
-            );
-        }
-
         if (
             timeAttackService.GetIsRankedQuest(session.QuestData.Id)
 #if !DEBUG
@@ -105,6 +92,19 @@ public class DungeonRecordController(
             await timeAttackService.RegisterRankedClear(
                 session.QuestData.Id,
                 request.play_record.time
+            );
+        }
+
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
+
+        DungeonRecordRecordData response =
+            new() { ingame_result_data = ingameResultData, update_data_list = updateDataList, };
+
+        if (session.QuestData.IsSumUpTotalDamage)
+        {
+            response.event_damage_ranking = await dungeonRecordDamageService.GetEventDamageRanking(
+                request.play_record,
+                session.QuestData.Gid
             );
         }
 

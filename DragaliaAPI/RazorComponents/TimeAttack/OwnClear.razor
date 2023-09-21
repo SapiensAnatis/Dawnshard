@@ -1,20 +1,27 @@
-﻿@using DragaliaAPI.Blazor.Authentication;
+﻿@inject IDbContextFactory<ApiContext> ContextFactory;
+
 @using DragaliaAPI.Database;
 @using Microsoft.EntityFrameworkCore;
 
-@inject IDbContextFactory<ApiContext> ContextFactory;
-@inject IBlazorIdentityService BlazorIdentityService;
+<MudPaper Elevation="@Elevation">
+    @if (this.loading)
+    {
+    } 
+    else
+    {
+        <MudStack Row=true Spacing="5" Class="px-4 py-2">
+            <div>
+                <MudText Typo="Typo.h6">Your best time</MudText>
+                <MudText GutterBottom=true>@this.OwnClearTime</MudText>
+            </div>
+            <div>
+                <MudText Typo="Typo.h6">Your rank</MudText>
+                <MudText GutterBottom=true>@this.ownRank</MudText>
+            </div>
+        </MudStack>
+    }
+</MudPaper>
 
-<MudStack Spacing="3" Class="mt-2">
-    <MudContainer>
-        <MudText Typo="Typo.h6">Your best time</MudText>
-        <MudText>@TimeSpan.FromSeconds(this.ownClear?.Time ?? 0).ToString(@"mm\:ss\.f")</MudText>
-
-        <MudText Typo="Typo.h6">Your rank</MudText>
-        <MudText>@this.ownRank</MudText>
-    </MudContainer>
-    <RankingTable QuestId="@QuestId" Elevation="0" EnableSearch=false />
-</MudStack>
 @code {
     [Parameter]
     public int QuestId { get; set; }
@@ -22,11 +29,17 @@
     [Parameter]
     public long ViewerId { get; set; }
 
+    [Parameter]
+    public int Elevation { get; set; }
+
     private DbTimeAttackClear? ownClear;
     private int? ownRank;
+    private bool loading;
 
     protected override async Task OnParametersSetAsync()
     {
+        this.loading = true;
+
         await using ApiContext context = await this.ContextFactory.CreateDbContextAsync();
 
         IQueryable<DbTimeAttackClear> clears = context.TimeAttackClears.Where(x => x.QuestId == this.QuestId);
@@ -43,8 +56,18 @@
             .FirstOrDefaultAsync();
 
         if (this.ownClear is null)
+        {
+            this.loading = false;
             return;
+        }
 
         this.ownRank = await clears.CountAsync(x => x.Time < ownClear.Time) + 1;
+
+        this.loading = false;
     }
+
+    private string OwnClearTime => 
+        this.ownClear is null ? 
+            "N/A" : 
+            TimeSpan.FromSeconds(this.ownClear.Time).ToString(@"mm\:ss\.f");
 }

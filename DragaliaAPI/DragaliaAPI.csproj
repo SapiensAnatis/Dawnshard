@@ -86,6 +86,7 @@
 
 	<ItemGroup>
 		<Folder Include="logs\" />
+		<Folder Include="wwwroot\img\icon\" />
 	</ItemGroup>
 
 </Project>

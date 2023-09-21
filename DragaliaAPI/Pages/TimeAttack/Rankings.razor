@@ -1,17 +1,20 @@
 ﻿@page "/timeattack/rankings"
 
 @using System.Collections.Immutable;
+@using DragaliaAPI.Blazor.Authentication;
 @using DragaliaAPI.Database;
+@using DragaliaAPI.RazorComponents.TimeAttack
 @using Microsoft.EntityFrameworkCore;
 
-@inject ApiContext ApiContext
+@inject IDbContextFactory<ApiContext> ContextFactory;
+@inject IBlazorIdentityService BlazorIdentityService;
 
 <PageTitle>Time Attack Rankings</PageTitle>
 
 <MudText Typo="Typo.h4" GutterBottom=true>Time Attack Rankings</MudText>
 <MudDivider Class="mb-4" />
 
-<MudStack AlignItems="AlignItems.Start" Spacing="2" Class="mt-2">
+<MudStack AlignItems="AlignItems.Start" Spacing="5" Class="mt-2">
     <MudSelect T="QuestSelectItem" 
         @bind-Value="@selection" 
         ToStringFunc="@QuestSelectItem.Converter"
@@ -27,8 +30,12 @@
     
     @if (this.selection is not null)
     {
-        <MudDivider Class="my-10" />
-        <RankingTable QuestId="@this.selection.Id"/>
+        <AuthorizeView>
+            <Authorized>
+                <OwnClear QuestId="@this.selection.Id" ViewerId="@(this.BlazorIdentityService.ViewerId ?? 0)"/>
+            </Authorized>
+        </AuthorizeView>
+        <RankingTable Elevation=1 QuestId="@this.selection.Id"/>
     }
 </MudStack>
 
@@ -42,8 +49,10 @@
         if (!firstRender)
             return;
 
+        await using ApiContext context = await this.ContextFactory.CreateDbContextAsync();
+
         this.selectItems = (
-            await this.ApiContext.TimeAttackClears
+            await context.TimeAttackClears
                 .Select(x => x.QuestId)
                 .Distinct()
                 .ToListAsync()
@@ -71,7 +80,7 @@
 
         private static readonly ImmutableDictionary<int, string> QuestNames =
         ImmutableDictionary.Create<int, string>()
-                .Add(227010104, "Volk's Wrath: Solo (Ranked)")
-                .Add(227010105, "Volk's Wrath: Co-Op (Ranked)");
+                .Add(227010104, "Volk's Wrath: Legend (Solo)")
+                .Add(227010105, "Volk's Wrath: Legend (Co-op)");
     }
 }

@@ -395,7 +395,7 @@ namespace DragaliaAPI.Photon.Plugin
                 this.SetRoomVisibility(info, true);
             }
 
-            this.roomState = new RoomState();
+            this.roomState = new RoomState(this.roomState);
         }
 
         /// <summary>
@@ -408,7 +408,7 @@ namespace DragaliaAPI.Photon.Plugin
 
             if (info.ActorNr == 1)
             {
-                this.roomState = new RoomState();
+                this.roomState = new RoomState(this.roomState);
                 this.RaiseEvent(Event.GameSucceed, new { });
                 this.SetRoomId(info, this.GenerateRoomId());
                 this.SetRoomVisibility(info, true);
