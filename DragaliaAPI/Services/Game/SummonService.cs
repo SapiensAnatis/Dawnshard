@@ -178,7 +178,7 @@ public class SummonService : ISummonService
                         entry.Value.Item1 == 2 && // Prüfen, ob es sich um Drachen handelt
                         entry.Value.Item2 == rarity && // Prüfen, ob die Seltenheit übereinstimmt
                         (
-                            entry.Value.Item3 >= random.NextDouble() || // Wahrscheinlichkeit für "promote units"
+                            (entry.Value.Item3 <= random.NextDouble()) || // Wahrscheinlichkeit für "promote units"
                             (entry.Value.Item3 == 0.1f) // Wahrscheinlichkeit für andere Einheiten
                         ) && 
                         !DragonConstants.unsummonableDragons.Contains((Dragons)entry.Key)) // Prüfen, ob sie nicht ausgeschlossen sind
@@ -198,7 +198,7 @@ public class SummonService : ISummonService
                         entry.Value.Item1 == 1 && 
                         entry.Value.Item2 == rarity && 
                         (
-                            entry.Value.Item3 >= random.NextDouble() || // Wahrscheinlichkeit für "promote units"
+                            (entry.Value.Item3 <= random.NextDouble()) || // Wahrscheinlichkeit für "promote units"
                             (entry.Value.Item3 == 0.1f) // Wahrscheinlichkeit für andere Einheiten
                         ) &&
                         MasterAsset.CharaData[(Charas)entry.Key].Availability != CharaAvailabilities.Story)
