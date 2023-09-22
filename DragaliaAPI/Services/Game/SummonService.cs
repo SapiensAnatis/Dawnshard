@@ -181,7 +181,7 @@ public class SummonService : ISummonService
                             (entry.Value.Item3 <= promo_check)) || // Wahrscheinlichkeit für "promote units"
                             (entry.Value.Item3 > promo_check) // Wahrscheinlichkeit für andere Einheiten
                         ) && 
-                        !DragonConstants.unsummonableDragons.Contains((Dragons)entry.Key)) // Prüfen, ob sie nicht ausgeschlossen sind
+                        !DragonConstants.unsummonableDragons.Contains((Dragons)entry.Key) // Prüfen, ob sie nicht ausgeschlossen sind
                     .Select(entry => entry.Key)
                     .ToList();
 
