@@ -1,0 +1,75 @@
+version: '3.8'
+
+volumes:
+  pgdata:
+  #logs:
+
+services:
+  dragaliaapi:
+    image: dragaliaapi
+    container_name: dragaliaapi2
+    hostname: dragaliaapi
+    build:
+      context: .
+      dockerfile: DragaliaAPI/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "8084:80"
+      - "5000:80"
+    links:
+      - postgres
+    env_file:
+      - .env
+    volumes:
+      - "./DragaliaAPI:/Dawnshard/DragaliaAPI"
+    deploy:
+      replicas: 2 # Anzahl der Instanzen die gleichzeitig laufen sollen
+      update_config: # Die Konfiguration für das Update
+        order: start-first  # Die Reihenfolge in der die Instanzen geupdated werden sollen    
+        failure_action: rollback # Was soll passieren wenn ein Update fehlschlägt
+
+      rollback_config: # Die Konfiguration für das Rollback
+        parallelism: 1 # Wie viele Instanzen sollen gleichzeitig zurückgerollt werden
+        order: start-first # Die Reihenfolge in der die Instanzen zurückgerollt werden sollen
+
+      restart_policy: # Die Konfiguration für den Restart
+        condition: on-failure # Unter welchen Bedingungen soll ein Restart durchgeführt werden
+
+  photonstatemanager:
+    hostname: photonstatemanager
+    image: ${DOCKER_REGISTRY-}photonstatemanager
+    build:
+        context: .
+        dockerfile: DragaliaAPI.Photon.StateManager/Dockerfile
+    ports:
+      - "5001:80"
+    env_file:
+      - .env
+
+  postgres:
+    hostname: postgres
+    image: postgres:latest
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    hostname: redis
+    image: redis/redis-stack
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+
+  #seq:
+  #  image: datalust/seq:latest
+  #  ports:
+  #    - 5340:80
+  #    - 5341:5341
+  #  environment:
+  #    ACCEPT_EULA: "Y"
+  #  volumes:
+  #    - logs:/data
