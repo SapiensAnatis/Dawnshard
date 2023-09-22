@@ -198,7 +198,7 @@ public class SummonService : ISummonService
                         entry.Value.Item1 == 1 && 
                         entry.Value.Item2 == rarity && 
                         (
-                            (entry.Value.Item3 <= promo_check)) || // Wahrscheinlichkeit für "promote units"
+                            (entry.Value.Item3 <= promo_check) || // Wahrscheinlichkeit für "promote units"
                             (entry.Value.Item3 > promo_check) // Wahrscheinlichkeit für andere Einheiten
                         ) && 
                         MasterAsset.CharaData[(Charas)entry.Key].Availability != CharaAvailabilities.Story)
