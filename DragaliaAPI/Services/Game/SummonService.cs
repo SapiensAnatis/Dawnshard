@@ -169,6 +169,7 @@ public class SummonService : ISummonService
         int bannerId
     )
     {
+        logger.LogDebug("Check bannerId: {@bannerId}", bannerId);
         List<AtgenRedoableSummonResultUnitList> resultList = new();
 
         Dictionary<int, Tuple<int, int>> selectedUnitsDict = GetSummonData(bannerId);

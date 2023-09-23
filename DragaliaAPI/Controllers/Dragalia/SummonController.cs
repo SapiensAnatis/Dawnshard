@@ -29,8 +29,6 @@ public class SummonController(
     IPaymentService paymentService
 ) : DragaliaControllerBase
 {
-    private readonly<SummonController> ILogger logger;
-
     // Repeated from RedoableSummonController, but no point putting this in a shared location
     // as it's all bullshit anyway
     private static class Data
@@ -257,8 +255,6 @@ public class SummonController(
     public async Task<DragaliaResult> RequestSummon(SummonRequestRequest summonRequest)
     {
         int bannerId = summonRequest.summon_id;
-
-        logger.LogDebug("Check bannerId: {@bannerId}", bannerId);
          
         //TODO Fetch real data by bannerId
         SummonList bannerData =
