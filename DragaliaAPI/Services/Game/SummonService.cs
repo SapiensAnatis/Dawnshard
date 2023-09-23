@@ -162,7 +162,7 @@ public class SummonService : ISummonService
         {
             bool isDragon = random.NextSingle() > 0.5;
             int rarity = (random.Next(2) == 0) ? 3 : 4;;
-            float promo_check = random.NextSingle();
+            float promo_check = random.NextDouble();
 
             // Set the fixed percentage chance for a 5-star unit (e.g., 5%)
             float fiveStarChance = 0.05f;
@@ -178,10 +178,10 @@ public class SummonService : ISummonService
                         entry.Value.Item1 == 2 && // Prüfen, ob es sich um Drachen handelt
                         entry.Value.Item2 == rarity && // Prüfen, ob die Seltenheit übereinstimmt
                         (
-                            (entry.Value.Item3 <= promo_check) || // Wahrscheinlichkeit für "promote units"
+                            (entry.Value.Item3 <= promo_check)) || // Wahrscheinlichkeit für "promote units"
                             (entry.Value.Item3 > promo_check) // Wahrscheinlichkeit für andere Einheiten
                         ) && 
-                        !DragonConstants.unsummonableDragons.Contains((Dragons)entry.Key)) // Prüfen, ob sie nicht ausgeschlossen sind
+                        !DragonConstants.unsummonableDragons.Contains((Dragons)entry.Key) // Prüfen, ob sie nicht ausgeschlossen sind
                     .Select(entry => entry.Key)
                     .ToList();
 
