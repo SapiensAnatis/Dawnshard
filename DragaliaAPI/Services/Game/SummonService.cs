@@ -217,9 +217,6 @@ public class SummonService : ISummonService
                 resultList.Add(new(EntityTypes.Chara, (int)charaEnum, charaRarity));
             }
         }
-
-        logger.LogDebug("Generated summon result: {@summonResult}", resultList);
-
         return resultList;
     }
 

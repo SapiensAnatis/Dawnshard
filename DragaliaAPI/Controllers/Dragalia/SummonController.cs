@@ -255,6 +255,8 @@ public class SummonController(
     public async Task<DragaliaResult> RequestSummon(SummonRequestRequest summonRequest)
     {
         int bannerId = summonRequest.summon_id;
+
+        logger.LogDebug("Check bannerId: {@bannerId}", bannerId);
          
         //TODO Fetch real data by bannerId
         SummonList bannerData =
