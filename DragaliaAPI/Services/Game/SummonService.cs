@@ -117,6 +117,7 @@ public class SummonService : ISummonService
         // Wenn bannerId gleich 1020203 ist, erstellen Sie die Liste aus der gesamten Charas-Enum-Liste.
         selectedUnitDict = Enum.GetValues(typeof(Charas))
             .Cast<Charas>()
+            .Where(chara => (int)chara != 0)
             .ToDictionary(chara => (int)chara, chara => Tuple.Create(1, 5)); // Hier haben alle Charaktere den Typ 1
 
         logger.LogDebug("Generated bannerSummonData: {@summData}", selectedUnitDict);
