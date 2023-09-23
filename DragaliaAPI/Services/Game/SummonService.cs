@@ -125,10 +125,9 @@ public class SummonService : ISummonService
     // Fügen Sie die Charakter-IDs aus CharaData zu selectedCharaDict hinzu
     foreach (var chara in MasterAsset.CharaData.Enumerable)
     {
-        string charaIdString = chara.Id.ToString();
-        if (chara.Rarity == 3 || chara.Rarity == 4 || chara.Rarity == 5 && !charaIdString.StartsWith("19"))
+        if (chara.Rarity == 3 || chara.Rarity == 4 || chara.Rarity == 5)
         {
-            selectedUnitDict[(int)chara.Id] = Tuple.Create(1, chara.Rarity, 0.1f); // Hier setzen wir den Typ für Charaktere auf 1
+            selectedUnitDict[(int)chara.Id] = Tuple.Create(1, chara.Rarity, 0.1f);; // Hier setzen wir den Typ für Charaktere auf 1
         }
     }
 
@@ -140,7 +139,7 @@ public class SummonService : ISummonService
         
         if (dragon.Rarity == 3 || dragon.Rarity == 4 || dragon.Rarity == 5 && !dragonIdString.StartsWith("29"))
         {
-            selectedUnitDict[(int)dragon.Id] = Tuple.Create(2, dragon.Rarity, 0.1f); // Hier setzen wir den Typ für Drachen auf 2
+            selectedUnitDict[(int)dragon.Id] = Tuple.Create(2, dragon.Rarity, 0.1f);; // Hier setzen wir den Typ für Drachen auf 2
         }
     }
 
