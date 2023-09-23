@@ -176,7 +176,11 @@ public class SummonService : ISummonService
                 List<int> dragonIds = selectedUnitsDict
                     .Where(entry => 
                         entry.Value.Item1 == 2 && // Prüfen, ob es sich um Drachen handelt
-                        entry.Value.Item2 == rarity && 
+                        entry.Value.Item2 == rarity && // Prüfen, ob die Seltenheit übereinstimmt
+                        (
+                            (entry.Value.Item3 <= promo_check) || // Wahrscheinlichkeit für "promote units"
+                            (entry.Value.Item3 > promo_check) // Wahrscheinlichkeit für andere Einheiten
+                        ) && 
                         !DragonConstants.unsummonableDragons.Contains((Dragons)entry.Key)) // Prüfen, ob sie nicht ausgeschlossen sind
                     .Select(entry => entry.Key)
                     .ToList();
@@ -193,6 +197,10 @@ public class SummonService : ISummonService
                     .Where(entry => 
                         entry.Value.Item1 == 1 && 
                         entry.Value.Item2 == rarity && 
+                        (
+                            (entry.Value.Item3 <= promo_check) || // Wahrscheinlichkeit für "promote units"
+                            (entry.Value.Item3 > promo_check) // Wahrscheinlichkeit für andere Einheiten
+                        ) && 
                         MasterAsset.CharaData[(Charas)entry.Key].Availability != CharaAvailabilities.Story)
                     .Select(entry => entry.Key)
                     .ToList();
