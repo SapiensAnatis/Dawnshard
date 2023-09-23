@@ -10,5 +10,5 @@ public interface ISummonService
         IEnumerable<AtgenRedoableSummonResultUnitList> baseRewardList
     );
 
-    List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(int numSummons);
+    List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(int numSummons, int bannerId);
 }
