@@ -105,21 +105,33 @@ public class SummonService : ISummonService
         );
     }
 
-    public Dictionary<int, int> GetSummonData(int bannerId)
+    public Dictionary<int, Tuple<int, int>> GetSummonData(int bannerId)
     {
+    
+    Dictionary<int, Tuple<int, int>> selectedUnitDict;
     // Rufen Sie die Banner-spezifischen Daten mithilfe von MasterAsset.SummonData ab
     var bannerSummonData = MasterAsset.SummonData.Get(bannerId);
 
-    // Hinzufügen der Charakter-IDs aus den PickupUnitId-Feldern in bannerSummonData
-    Dictionary<int, int> selectedUnitDict = new Dictionary<int, int>
+    if (bannerId == 1020203)
     {
-        { bannerSummonData.PickupUnitId1, bannerSummonData.PickupUnitType1 },
-        { bannerSummonData.PickupUnitId2, bannerSummonData.PickupUnitType2 },
-        { bannerSummonData.PickupUnitId3, bannerSummonData.PickupUnitType3 },
-        { bannerSummonData.PickupUnitId4, bannerSummonData.PickupUnitType4 }
+        // Wenn bannerId gleich 1020203 ist, erstellen Sie die Liste aus der gesamten Charas-Enum-Liste.
+        selectedUnitDict = Enum.GetValues(typeof(Charas))
+            .Cast<Charas>()
+            .ToDictionary(chara => (int)chara, chara => Tuple.Create(1, 5)); // Hier haben alle Charaktere den Typ 1
     }
-    .Where(entry => entry.Value == 1 || entry.Value == 2 && entry.Key != 0)
-    .ToDictionary(entry => entry.Key, entry => entry.Value);
+    else
+    {
+        // Hinzufügen der Charakter-IDs aus den PickupUnitId-Feldern in bannerSummonData
+        selectedUnitDict = new Dictionary<int, Tuple<int, int>>
+        {
+            { bannerSummonData.PickupUnitId1, Tuple.Create(bannerSummonData.PickupUnitType1, 5) },
+            { bannerSummonData.PickupUnitId2, Tuple.Create(bannerSummonData.PickupUnitType2, 5) },
+            { bannerSummonData.PickupUnitId3, Tuple.Create(bannerSummonData.PickupUnitType3, 5) },
+            { bannerSummonData.PickupUnitId4, Tuple.Create(bannerSummonData.PickupUnitType4, 5) }
+        }
+        .Where(entry => entry.Value.Item1 == 1 || entry.Value.Item1 == 2 && entry.Key != 0)
+        .ToDictionary(entry => entry.Key, entry => entry.Value);
+    }
 
 
     // Fügen Sie die Charakter-IDs aus CharaData zu selectedCharaDict hinzu
@@ -127,7 +139,7 @@ public class SummonService : ISummonService
     {
         if (chara.Rarity == 3 || chara.Rarity == 4)
         {
-            selectedUnitDict[(int)chara.Id] = 1; // Hier setzen wir den Typ für Charaktere auf 1
+            selectedUnitDict[(int)chara.Id] = Tuple.Create(1, chara.Rarity); // Hier setzen wir den Typ für Charaktere auf 1
         }
     }
 
@@ -139,7 +151,7 @@ public class SummonService : ISummonService
         
         if (dragon.Rarity == 3 || dragon.Rarity == 4 || dragon.Rarity == 5 && !dragonIdString.StartsWith("29"))
         {
-            selectedUnitDict[(int)dragon.Id] = 2; // Hier setzen wir den Typ für Drachen auf 2
+            selectedUnitDict[(int)dragon.Id] = Tuple.Create(2, dragon.Rarity); // Hier setzen wir den Typ für Drachen auf 2
         }
     }
 
@@ -156,41 +168,50 @@ public class SummonService : ISummonService
     {
         List<AtgenRedoableSummonResultUnitList> resultList = new();
 
-        Dictionary<int, int> selectedUnitsDict = GetSummonData(bannerId);
+        Dictionary<int, Tuple<int, int>> selectedUnitsDict = GetSummonData(bannerId);
 
         for (int i = 0; i < numSummons; i++)
         {
             bool isDragon = random.NextSingle() > 0.5;
+            int rarity = (random.Next(2) == 0) ? 3 : 4;
+
+            float fiveStarChance = 0.06f;
+
+            if (random.NextSingle() <= fiveStarChance)
+            {
+                rarity = 5; // 5-star unit
+            }
+
             if (isDragon)
             {
                 List<int> dragonIds = selectedUnitsDict
-                    .Where(entry => entry.Value == 2 && !DragonConstants.unsummonableDragons.Contains((Dragons)entry.Key))
+                    .Where(entry => entry.Value.Item1 == 2 && entry.Value.Item2 == rarity && !DragonConstants.unsummonableDragons.Contains((Dragons)entry.Key))
                     .Select(entry => entry.Key)
                     .ToList();
 
                 int randomDragonId = dragonIds[random.Next(dragonIds.Count)];
                 Dragons id = (Dragons)Enum.Parse(typeof(Dragons), randomDragonId.ToString());
 
-                int rarity = MasterAsset.DragonData.Get(id).Rarity;
-                resultList.Add(new(EntityTypes.Dragon, (int)id, rarity));
+                int dragonRarity = MasterAsset.DragonData.Get(id).Rarity; // Verwenden Sie 'dragonRarity' hier
+                resultList.Add(new(EntityTypes.Dragon, (int)id, dragonRarity));
             }
             else
             {
                 List<int> charaIds = selectedUnitsDict
-                    .Where(entry => entry.Value == 1 && MasterAsset.CharaData[(Charas)entry.Key].Availability != CharaAvailabilities.Story)
+                    .Where(entry => entry.Value.Item1 == 1 && entry.Value.Item2 == rarity && MasterAsset.CharaData[(Charas)entry.Key].Availability != CharaAvailabilities.Story)
                     .Select(entry => entry.Key)
                     .ToList();
 
                 int randomCharaId = charaIds[random.Next(charaIds.Count)];
                 Charas charaEnum = (Charas)Enum.Parse(typeof(Charas), randomCharaId.ToString());
 
-                int rarity = MasterAsset.CharaData
-                            .Enumerable
-                            .Where(x => x.Id == charaEnum)
-                            .Select(x => x.Rarity)
-                            .FirstOrDefault();
+                int charaRarity = MasterAsset.CharaData
+                        .Enumerable
+                        .Where(x => x.Id == charaEnum)
+                        .Select(x => x.Rarity)
+                        .FirstOrDefault();
 
-                resultList.Add(new(EntityTypes.Chara, (int)charaEnum, rarity));
+                resultList.Add(new(EntityTypes.Chara, (int)charaEnum, charaRarity));
             }
         }
 
