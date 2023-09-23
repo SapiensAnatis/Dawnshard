@@ -109,7 +109,7 @@ public class RedoableSummonController : DragaliaControllerBase
     public async Task<DragaliaResult> PreExec([FromHeader(Name = "SID")] string sessionId)
     {
         IEnumerable<AtgenRedoableSummonResultUnitList> summonResult = summonService
-            .GenerateSummonResult(50)
+            .GenerateSummonResult(50, 1020203)
             .Cast<AtgenRedoableSummonResultUnitList>();
         /*
         int testtype = 23;
