@@ -95,13 +95,13 @@ public class SummonService : ISummonService
          return pool;
      }*/
 
-    public List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(int numSummons)
+    public List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(int numSummons, int bannerId)
     {
         return this.GenerateSummonResult(
             numSummons,
             10,
             0.0f /*,new(new(), new(), 6.0d, 80.0d) */,
-            1020203
+            bannerId
         );
     }
 
@@ -119,8 +119,6 @@ public class SummonService : ISummonService
             .Cast<Charas>()
             .Where(chara => (int)chara != 0)
             .ToDictionary(chara => (int)chara, chara => Tuple.Create(1, 5)); // Hier haben alle Charaktere den Typ 1
-
-        logger.LogDebug("Generated bannerSummonData: {@summData}", selectedUnitDict);
     }
     else
     {
@@ -169,7 +167,6 @@ public class SummonService : ISummonService
         int bannerId
     )
     {
-        logger.LogDebug("Check bannerId: {@bannerId}", bannerId);
         List<AtgenRedoableSummonResultUnitList> resultList = new();
 
         Dictionary<int, Tuple<int, int>> selectedUnitsDict = GetSummonData(bannerId);

@@ -345,7 +345,8 @@ public class SummonController(
         );
 
         List<AtgenRedoableSummonResultUnitList> summonResult = summonService.GenerateSummonResult(
-            numSummons
+            numSummons,
+            bannerId
         );
 
         List<AtgenResultUnitList> returnedResult = new();
