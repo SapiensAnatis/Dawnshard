@@ -29,8 +29,6 @@ public class SummonController(
     IPaymentService paymentService
 ) : DragaliaControllerBase
 {
-    private readonly<SummonController> ILogger logger;
-
     // Repeated from RedoableSummonController, but no point putting this in a shared location
     // as it's all bullshit anyway
     private static class Data
