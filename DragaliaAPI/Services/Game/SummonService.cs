@@ -118,6 +118,8 @@ public class SummonService : ISummonService
         selectedUnitDict = Enum.GetValues(typeof(Charas))
             .Cast<Charas>()
             .ToDictionary(chara => (int)chara, chara => Tuple.Create(1, 5)); // Hier haben alle Charaktere den Typ 1
+
+        logger.LogDebug("Generated bannerSummonData: {@summData}", selectedUnitDict);
     }
     else
     {
