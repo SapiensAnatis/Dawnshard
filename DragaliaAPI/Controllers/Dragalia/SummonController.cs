@@ -111,7 +111,7 @@ public class SummonController(
                         status: 0
                     )
                 },
-                new List<SummonList>()
+                /*new List<SummonList>()
                 {
                     new(
                         summon_id: 1020067,
@@ -140,7 +140,7 @@ public class SummonController(
                         consecution_campaign_count_rest: 0,
                         status: 0
                     )
-                },
+                },*/
                 new List<SummonList>()
                 {
                     new(
