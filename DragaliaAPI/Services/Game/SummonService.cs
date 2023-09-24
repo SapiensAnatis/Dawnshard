@@ -130,7 +130,7 @@ public class SummonService : ISummonService
             { bannerSummonData.PickupUnitId3, Tuple.Create(bannerSummonData.PickupUnitType3, 5) },
             { bannerSummonData.PickupUnitId4, Tuple.Create(bannerSummonData.PickupUnitType4, 5) }
         }
-        .Where(entry => (entry.Value.Item1 == 1 || entry.Value.Item1 == 2) && entry.Key != 0 && entry.Value.Item1 != 0)
+        .Where(entry => (entry.Value.Item1 == 1 || entry.Value.Item1 == 2) && entry.Key != 0)
         .ToDictionary(entry => entry.Key, entry => entry.Value);
     }
 
