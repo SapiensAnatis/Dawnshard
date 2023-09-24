@@ -141,7 +141,36 @@ public class SummonController(
                         status: 0
                     )
                 },
-                new List<SummonList>(),
+                new List<SummonList>()
+                {
+                    new(
+                        summon_id: 1020122,
+                        summon_type: 0,
+                        summon_group_id: (int)BannerTypes.Normal,
+                        single_crystal: 120,
+                        single_diamond: 120,
+                        multi_crystal: 1200,
+                        multi_diamond: 1200,
+                        limited_crystal: 5,
+                        limited_diamond: 30,
+                        summon_point_id: 1,
+                        add_summon_point: 2,
+                        exchange_summon_point: 300,
+                        add_summon_point_stone: 1,
+                        complete_date: int.MaxValue,
+                        commence_date: 0,
+                        daily_count: 0,
+                        daily_limit: 1,
+                        total_count: 0,
+                        total_limit: 0,
+                        campaign_type: (int)SummonCampaignTypes.Normal,
+                        free_count_rest: 0,
+                        is_beginner_campaign: 1,
+                        beginner_campaign_count_rest: 1,
+                        consecution_campaign_count_rest: 0,
+                        status: 0
+                    )
+                },
                 new List<SummonList>(),
                 new List<SummonList>(),
                 new List<SummonList>(),
