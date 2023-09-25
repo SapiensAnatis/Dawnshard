@@ -85,7 +85,7 @@ public class SummonController(
                 {
                     new(
                         summon_id: 1020203,
-                        summon_type: 1,
+                        summon_type: 0,
                         summon_group_id: (int)BannerTypes.Normal,
                         single_crystal: 120,
                         single_diamond: 120,
@@ -115,7 +115,7 @@ public class SummonController(
                 {
                     new(
                         summon_id: 1020122,
-                        summon_type: 2,
+                        summon_type: 0,
                         summon_group_id: (int)BannerTypes.Normal,
                         single_crystal: 120,
                         single_diamond: 120,
