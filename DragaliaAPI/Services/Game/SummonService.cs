@@ -108,56 +108,56 @@ public class SummonService : ISummonService
     public Dictionary<int, Tuple<int, int>> GetSummonData(int bannerId)
     {
     
-    Dictionary<int, Tuple<int, int>> selectedUnitDict;
-    // Rufen Sie die Banner-spezifischen Daten mithilfe von MasterAsset.SummonData ab
-    var bannerSummonData = MasterAsset.SummonData.Get(bannerId);
+        Dictionary<int, Tuple<int, int>> selectedUnitDict;
+        // Rufen Sie die Banner-spezifischen Daten mithilfe von MasterAsset.SummonData ab
+        var bannerSummonData = MasterAsset.SummonData.Get(bannerId);
 
-    if (bannerId == 1020203)
-    {
-        // Wenn bannerId gleich 1020203 ist, erstellen Sie die Liste aus der gesamten Charas-Enum-Liste.
-        selectedUnitDict = Enum.GetValues(typeof(Charas))
-            .Cast<Charas>()
-            .Where(chara => (int)chara != 0)
-            .ToDictionary(chara => (int)chara, chara => Tuple.Create(1, 5)); // Hier haben alle Charaktere den Typ 1
-    }
-    else
-    {
-        // Hinzufügen der Charakter-IDs aus den PickupUnitId-Feldern in bannerSummonData
-        selectedUnitDict = new Dictionary<int, Tuple<int, int>>
+        if (bannerId == 1020203)
         {
-            { bannerSummonData.PickupUnitId1, Tuple.Create(bannerSummonData.PickupUnitType1, 5) },
-            { bannerSummonData.PickupUnitId2, Tuple.Create(bannerSummonData.PickupUnitType2, 5) },
-            { bannerSummonData.PickupUnitId3, Tuple.Create(bannerSummonData.PickupUnitType3, 5) },
-            { bannerSummonData.PickupUnitId4, Tuple.Create(bannerSummonData.PickupUnitType4, 5) }
+            // Wenn bannerId gleich 1020203 ist, erstellen Sie die Liste aus der gesamten Charas-Enum-Liste.
+            selectedUnitDict = Enum.GetValues(typeof(Charas))
+                .Cast<Charas>()
+                .Where(chara => (int)chara != 0)
+                .ToDictionary(chara => (int)chara, chara => Tuple.Create(1, 5)); // Hier haben alle Charaktere den Typ 1
         }
-        .Where(entry => (entry.Value.Item1 == 1 || entry.Value.Item1 == 2) && entry.Key != 0)
-        .ToDictionary(entry => entry.Key, entry => entry.Value);
-    }
-
-
-    // Fügen Sie die Charakter-IDs aus CharaData zu selectedCharaDict hinzu
-    foreach (var chara in MasterAsset.CharaData.Enumerable)
-    {
-        if (chara.Rarity == 3 || chara.Rarity == 4)
+        else
         {
-            selectedUnitDict[(int)chara.Id] = Tuple.Create(1, chara.Rarity); // Hier setzen wir den Typ für Charaktere auf 1
+            void AddToDict(int unitId, int unitType) {
+            if (unitId != 0 && (unitType == 1 || unitType == 2) && !selectedUnitDict.ContainsKey(unitId)) {
+                selectedUnitDict[unitId] = Tuple.Create(unitType, 5);
+            }
         }
-    }
 
-    // Fügen Sie die Einheiten-IDs aus DragonData zu selectedUnitsDict hinzu
+            AddToDict(bannerSummonData.PickupUnitId1, bannerSummonData.PickupUnitType1);
+            AddToDict(bannerSummonData.PickupUnitId2, bannerSummonData.PickupUnitType2);
+            AddToDict(bannerSummonData.PickupUnitId3, bannerSummonData.PickupUnitType3);
+            AddToDict(bannerSummonData.PickupUnitId4, bannerSummonData.PickupUnitType4);
+        }
 
-    foreach (var dragon in MasterAsset.DragonData.Enumerable)
-    {
-        string dragonIdString = dragon.Id.ToString();
-        
-        if (dragon.Rarity == 3 || dragon.Rarity == 4 || dragon.Rarity == 5 && !dragonIdString.StartsWith("29"))
+
+        // Fügen Sie die Charakter-IDs aus CharaData zu selectedCharaDict hinzu
+        foreach (var chara in MasterAsset.CharaData.Enumerable)
         {
-            selectedUnitDict[(int)dragon.Id] = Tuple.Create(2, dragon.Rarity); // Hier setzen wir den Typ für Drachen auf 2
+            if (chara.Rarity == 3 || chara.Rarity == 4)
+            {
+                selectedUnitDict[(int)chara.Id] = Tuple.Create(1, chara.Rarity); // Hier setzen wir den Typ für Charaktere auf 1
+            }
         }
-    }
 
-    // Geben Sie die IDs der ausgewählten Charaktere zurück
-    return selectedUnitDict;
+        // Fügen Sie die Einheiten-IDs aus DragonData zu selectedUnitsDict hinzu
+
+        foreach (var dragon in MasterAsset.DragonData.Enumerable)
+        {
+            string dragonIdString = dragon.Id.ToString();
+            
+            if (dragon.Rarity == 3 || dragon.Rarity == 4 || dragon.Rarity == 5 && !dragonIdString.StartsWith("29"))
+            {
+                selectedUnitDict[(int)dragon.Id] = Tuple.Create(2, dragon.Rarity); // Hier setzen wir den Typ für Drachen auf 2
+            }
+        }
+
+        // Geben Sie die IDs der ausgewählten Charaktere zurück
+        return selectedUnitDict;
     }
 
     public List<AtgenRedoableSummonResultUnitList> GenerateSummonResult(
