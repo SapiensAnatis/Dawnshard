@@ -108,7 +108,7 @@ public class SummonService : ISummonService
     public Dictionary<int, Tuple<int, int>> GetSummonData(int bannerId)
     {
     
-        Dictionary<int, Tuple<int, int>> selectedUnitDict;
+        Dictionary<int, Tuple<int, int>> selectedUnitDict = new Dictionary<int, Tuple<int, int>>();
         // Rufen Sie die Banner-spezifischen Daten mithilfe von MasterAsset.SummonData ab
         var bannerSummonData = MasterAsset.SummonData.Get(bannerId);
 
