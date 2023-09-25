@@ -150,7 +150,7 @@ public class SummonService : ISummonService
         {
             string dragonIdString = dragon.Id.ToString();
             
-            if (dragon.Rarity == 3 || dragon.Rarity == 4 || dragon.Rarity == 5 && !dragonIdString.StartsWith("29"))
+            if (dragon.Rarity == 3 || dragon.Rarity == 4 || dragon.Rarity == 5 && !dragon.IsPlayable == 0)
             {
                 selectedUnitDict[(int)dragon.Id] = Tuple.Create(2, dragon.Rarity); // Hier setzen wir den Typ für Drachen auf 2
             }
