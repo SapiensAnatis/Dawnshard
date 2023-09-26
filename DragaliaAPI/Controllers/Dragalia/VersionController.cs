@@ -9,7 +9,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class VersionController : DragaliaControllerBase
 {
     private const string AndroidResourceVersion = "y2XM6giU6zz56wCm";
-    private const string IosResourceVersion = "GltFZJrb102fEvGz";
+    private const string IosResourceVersion = "aQxSGYu9KQ6FQh7X";
 
     [HttpPost]
     [Route("get_resource_version")]
