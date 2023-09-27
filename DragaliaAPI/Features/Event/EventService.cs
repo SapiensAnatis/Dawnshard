@@ -338,15 +338,7 @@ public class EventService(
     {
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
-        if (new[] { 
-            CombatEventItemType.EventPoint, 
-            CombatEventItemType.ExchangeItem, 
-            CombatEventItemType.QuestUnlock, 
-            CombatEventItemType.StoryUnlock, 
-            CombatEventItemType.AdventItem 
-            }
-            .All(type => itemDict[(int)type] == 0))
-        {
+        if (await eventRepository.GetEventDataAsync(eventId) == null) {
             return null;
         }
 
