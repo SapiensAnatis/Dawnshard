@@ -345,7 +345,7 @@ public class EventService(
             CombatEventItemType.StoryUnlock, 
             CombatEventItemType.AdventItem 
             }
-            .Any(type => itemDict[(int)type] == 0))
+            .All(type => itemDict[(int)type] == 0))
         {
             return null;
         }
