@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Linq;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
@@ -336,6 +337,18 @@ public class EventService(
     public async Task<CombatEventUserList> GetCombatEventUserData(int eventId)
     {
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
+
+        if (new[] { 
+            CombatEventItemType.EventPoint, 
+            CombatEventItemType.ExchangeItem, 
+            CombatEventItemType.QuestUnlock, 
+            CombatEventItemType.StoryUnlock, 
+            CombatEventItemType.AdventItem 
+            }
+            .Any(type => itemDict[(int)type] == 0))
+        {
+            return null;
+        }
 
         return new CombatEventUserList(
             eventId,
