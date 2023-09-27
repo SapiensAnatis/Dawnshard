@@ -5,6 +5,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace DragaliaAPI.Features.Event;
 
@@ -22,6 +23,7 @@ public class CombatEventController(
         CombatEventGetEventDataData resp = new();
 
         resp.combat_event_user_data = await eventService.GetCombatEventUserData(request.event_id);
+        Console.WriteLine(resp.combat_event_user_data);
         resp.event_reward_list = await eventService.GetEventRewardList<BuildEventRewardList>(
             request.event_id
         );
