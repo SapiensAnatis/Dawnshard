@@ -94,6 +94,17 @@ builder.Services
         opts.SlidingExpiration = true;
     });
 
+builder.Services.AddAuthorization(opts =>
+{
+    opts.AddPolicy(
+        "Photon",
+        builder =>
+            builder
+                .RequireAuthenticatedUser()
+                .AddAuthenticationSchemes(nameof(PhotonAuthenticationHandler))
+    );
+});
+
 builder.Services
     .AddResponseCompression()
     .ConfigureDatabaseServices(builder.Configuration.GetConnectionString("PostgresHost"))

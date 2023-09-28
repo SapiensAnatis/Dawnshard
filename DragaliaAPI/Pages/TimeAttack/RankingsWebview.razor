@@ -1,11 +1,10 @@
 ﻿@page "/timeattack/rankings/webview"
-@using System.Collections.Immutable;
+
 @using DragaliaAPI.RazorComponents.TimeAttack
-@using Microsoft.Extensions.Primitives;
 
 @layout WebviewLayout
 
-<MudTabs @bind-ActivePanelIndex=@activePanel Centered=true>
+<MudTabs Centered=true PanelClass="pa-2">
     <MudTabPanel Text="Solo">
         <RankingWebviewTab QuestId="SoloId" ViewerId="ViewerId"/>
     </MudTabPanel>
@@ -25,6 +24,4 @@
     [Parameter]
     [SupplyParameterFromQuery(Name = "viewer_id")]
     public long ViewerId { get; set; }
-
-    private int activePanel;
 }

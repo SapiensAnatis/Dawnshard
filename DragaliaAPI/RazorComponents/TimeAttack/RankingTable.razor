@@ -119,32 +119,6 @@
         return new TableData<Clear>() { Items = pagedEnumerable, TotalItems = filteredList.Count };
     }
 
-    /*
-    private async Task<Clear?> GetOwnClear(ApiContext context)
-    {
-        if (!this.BlazorIdentityService.IsAuthenticated)
-            return null;
-
-        DbTimeAttackClear? ownClear = await context.TimeAttackClears
-            .Include(x => x.Players)
-            .Where(
-                x => x.Players.Any(
-                    y => y.DeviceAccountId == this.BlazorIdentityService.AccountId
-                ) && x.QuestId == this.QuestId
-            )
-            .OrderBy(x => x.Time)
-            .FirstOrDefaultAsync();
-
-        if (ownClear is null)
-            return null;
-
-        int ownIndex = await context.TimeAttackClears
-            .CountAsync(x => x.Time < ownClear.Time && x.QuestId == this.QuestId);
-
-        return new Clear(ownClear, ownIndex);
-    }
-    */
-
 
     private void OnSearch(string text)
     {

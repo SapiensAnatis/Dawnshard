@@ -22,7 +22,7 @@
         Variant="Variant.Outlined" 
         AnchorOrigin="Origin.BottomCenter"
     >
-        @foreach (QuestSelectItem item in this.selectItems)
+        @foreach (QuestSelectItem item in SelectItems)
         {
             <MudSelectItem Value="item" />
         }
@@ -41,30 +41,19 @@
 
 @code {
 
+    private static IEnumerable<QuestSelectItem> SelectItems = ImmutableArray.Create<QuestSelectItem>(
+        new QuestSelectItem(227010104, "Volk's Wrath: Legend (Solo)"),
+        new QuestSelectItem(227010105, "Volk's Wrath: Legend (Co-op)")
+    );
+
     private QuestSelectItem? selection;
-    private IEnumerable<QuestSelectItem> selectItems = Enumerable.Empty<QuestSelectItem>();
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-            return;
-
-        await using ApiContext context = await this.ContextFactory.CreateDbContextAsync();
-
-        this.selectItems = (
-            await context.TimeAttackClears
-                .Select(x => x.QuestId)
-                .Distinct()
-                .ToListAsync()
-        ).Select(x => new QuestSelectItem(x));
-    }
 
     private class QuestSelectItem
     {
-        public QuestSelectItem(int id)
+        public QuestSelectItem(int id, string name)
         {
             this.Id = id;
-            this.Name = QuestNames.GetValueOrDefault(id, id.ToString());
+            this.Name = name;
         }
 
         public int Id { get; }
@@ -77,10 +66,5 @@
             obj is QuestSelectItem questSelectItem && questSelectItem.Id == this.Id;
 
         public override int GetHashCode() => this.Id;
-
-        private static readonly ImmutableDictionary<int, string> QuestNames =
-        ImmutableDictionary.Create<int, string>()
-                .Add(227010104, "Volk's Wrath: Legend (Solo)")
-                .Add(227010105, "Volk's Wrath: Legend (Co-op)");
     }
 }

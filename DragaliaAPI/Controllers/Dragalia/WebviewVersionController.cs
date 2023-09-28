@@ -19,12 +19,16 @@ public class WebviewVersionController : DragaliaControllerBase
         AtgenWebviewUrlList timeAttackRanking =
             new("time_attack_ranking", this.GetUrl("timeattack/rankings/webview"));
 
+        AtgenWebviewUrlList timeAttackReward =
+            new("time_attack_reward", this.GetUrl("timeattack/rewards/webview"));
+
         return this.Ok(
             new WebviewVersionUrlListData(
                 new List<AtgenWebviewUrlList>()
                 {
                     new("information", this.GetUrl("news")),
                     timeAttackRanking,
+                    timeAttackReward,
                     new("ability_crest_advice", PlaceholderUrl),
                     new("battle_royal_how_to", PlaceholderUrl),
                     new("comic", PlaceholderUrl),

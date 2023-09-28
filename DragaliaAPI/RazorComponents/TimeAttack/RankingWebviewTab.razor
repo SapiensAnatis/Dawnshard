@@ -5,7 +5,7 @@
 @inject IDbContextFactory<ApiContext> ContextFactory;
 @inject IBlazorIdentityService BlazorIdentityService;
 
-<MudStack Spacing="3" Class="mt-2">
+<MudStack Spacing="3">
     <OwnClear Elevation="0" QuestId="@QuestId" ViewerId="@ViewerId"/>
     <RankingTable QuestId="@QuestId" Elevation="0" EnableSearch=false />
 </MudStack>

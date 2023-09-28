@@ -16,13 +16,17 @@
             </div>
             <div>
                 <MudText Typo="Typo.h6">Your rank</MudText>
-                <MudText GutterBottom=true>@this.ownRank</MudText>
+                <MudText GutterBottom=true>@this.OwnRank</MudText>
             </div>
         </MudStack>
     }
 </MudPaper>
 
 @code {
+    private DbTimeAttackClear? ownClear;
+    private int? ownRank;
+    private bool loading;
+
     [Parameter]
     public int QuestId { get; set; }
 
@@ -32,12 +36,21 @@
     [Parameter]
     public int Elevation { get; set; }
 
-    private DbTimeAttackClear? ownClear;
-    private int? ownRank;
-    private bool loading;
+    private string OwnClearTime =>
+    this.ownClear is null ?
+        "N/A" :
+        TimeSpan.FromSeconds(this.ownClear.Time).ToString(@"mm\:ss\.f");
+
+    private string OwnRank =>
+        this.ownRank is null ?
+            "N/A" :
+            this.ownRank.Value.ToString();
 
     protected override async Task OnParametersSetAsync()
     {
+        this.ownClear = null;
+        this.ownRank = null;
+
         this.loading = true;
 
         await using ApiContext context = await this.ContextFactory.CreateDbContextAsync();
@@ -66,8 +79,5 @@
         this.loading = false;
     }
 
-    private string OwnClearTime => 
-        this.ownClear is null ? 
-            "N/A" : 
-            TimeSpan.FromSeconds(this.ownClear.Time).ToString(@"mm\:ss\.f");
+
 }

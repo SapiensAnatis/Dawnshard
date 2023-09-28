@@ -199,21 +199,6 @@ namespace DragaliaAPI.Photon.Plugin
                 );
             }
 
-            if (
-                this.roomState.MinGoToIngameState > 0
-                && this.PluginHost.GameProperties.TryGetInt(
-                    GamePropertyKeys.QuestId,
-                    out int questId
-                )
-                && QuestHelper.GetIsRanked(questId)
-            )
-            {
-                this.RaiseEvent(
-                    Event.RoomBroken,
-                    new RoomBroken() { Reason = RoomBroken.RoomBrokenType.FailedToRegisterRanking }
-                );
-            }
-
             if (!this.actorState.Remove(info.ActorNr))
             {
                 this.logger.WarnFormat(
