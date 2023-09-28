@@ -84,14 +84,6 @@ public class DungeonRecordController(
         ingameResultData.helper_detail_list = helperDetailList;
         ingameResultData.play_type = QuestPlayType.Multi;
 
-        if (this.ShouldRegisterRankedClear(session.QuestData.Id, request))
-        {
-            await timeAttackService.RegisterRankedClear(
-                session.QuestData.Id,
-                request.play_record.time
-            );
-        }
-
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         DungeonRecordRecordData response =
@@ -108,37 +100,16 @@ public class DungeonRecordController(
         return Ok(response);
     }
 
-    private bool ShouldRegisterRankedClear(int questId, DungeonRecordRecordMultiRequest request)
+    [HttpPost("record_time_attack")]
+    [Authorize(
+        AuthenticationSchemes = nameof(PhotonAuthenticationHandler),
+        Roles = PhotonAuthenticationHandler.Role
+    )]
+    public async Task<DragaliaResult> RecordTimeAttack(DungeonRecordRecordMultiRequest request)
     {
-        if (!timeAttackService.GetIsRankedQuest(questId))
-        {
-            logger.LogDebug(
-                "Not registering clear: quest {id} was not a time attack quest",
-                questId
-            );
+        await timeAttackService.RegisterRankedClear(request.play_record.time);
+        await updateDataService.SaveChangesAsync();
 
-            return false;
-        }
-
-#if !ALLOW_SUB4_CLEARS || !DEBUG
-        if (request.connecting_viewer_id_list.Count() < 4)
-        {
-            logger.LogDebug(
-                "Not registering clear: connecting_viewer_id_list had {numPlayers} players",
-                request.connecting_viewer_id_list
-            );
-
-            return false;
-        }
-#endif
-
-        if (!this.HttpContext.User.IsInRole(PhotonAuthenticationHandler.Role))
-        {
-            logger.LogDebug("Not registering clear: user was not in Photon role");
-
-            return false;
-        }
-
-        return true;
+        return this.Ok(new ResultCodeData(ResultCode.Success));
     }
 }

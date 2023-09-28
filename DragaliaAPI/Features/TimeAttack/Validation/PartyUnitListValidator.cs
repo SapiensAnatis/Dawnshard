@@ -9,7 +9,9 @@ public class PartyUnitListValidator : AbstractValidator<PartyUnitList>
     public PartyUnitListValidator(int questId)
     {
         When(
-            x => x.edit_skill_1_chara_data != null && x.edit_skill_2_chara_data != null,
+            x =>
+                x.edit_skill_1_chara_data is not null and not { chara_id: Charas.Empty }
+                && x.edit_skill_2_chara_data is not null and not { chara_id: Charas.Empty },
             () =>
                 RuleFor(x => new { x.edit_skill_1_chara_data, x.edit_skill_2_chara_data })
                     .Must(

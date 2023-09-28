@@ -21,7 +21,8 @@ public class DragonListValidator : AbstractValidator<DragonList>
         )
         {
             RuleFor(x => MasterAsset.DragonData.GetValueOrDefault(x.dragon_id))
-                .Must(x => x?.ElementalType == questData.LimitedElementalType);
+                .Must(x => x?.ElementalType == questData.LimitedElementalType)
+                .WithMessage("Element lock violation");
         }
     }
 }

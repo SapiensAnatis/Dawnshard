@@ -192,7 +192,7 @@
     ],
     "talisman_data": {
       "talisman_key_id": 21,
-      "talisman_id": 50950101,
+      "talisman_id": "GalaLeonidas",
       "talisman_ability_id_1": 340000049,
       "talisman_ability_id_2": 340000133,
       "talisman_ability_id_3": 0,
@@ -203,11 +203,11 @@
       "gettime": "2021-12-30T00:55:01+00:00"
     },
     "edit_skill_1_chara_data": {
-      "chara_id": 10250504,
+      "chara_id": "GalaZethia",
       "edit_skill_level": 3
     },
     "edit_skill_2_chara_data": {
-      "chara_id": 10250203,
+      "chara_id": "GalaMascula",
       "edit_skill_level": 2
     },
     "game_weapon_passive_ability_list": [],
@@ -406,7 +406,7 @@
     ],
     "talisman_data": {
       "talisman_key_id": 1,
-      "talisman_id": 50550101,
+      "talisman_id": "GalaMym",
       "talisman_ability_id_1": 340000029,
       "talisman_ability_id_2": 340000077,
       "talisman_ability_id_3": 0,
@@ -417,11 +417,11 @@
       "gettime": "2021-12-27T10:29:11+00:00"
     },
     "edit_skill_1_chara_data": {
-      "chara_id": 0,
+      "chara_id": "Empty",
       "edit_skill_level": 0
     },
     "edit_skill_2_chara_data": {
-      "chara_id": 0,
+      "chara_id": "Empty",
       "edit_skill_level": 0
     },
     "game_weapon_passive_ability_list": [],

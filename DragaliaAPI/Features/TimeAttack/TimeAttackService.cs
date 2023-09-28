@@ -13,6 +13,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using FluentValidation.Results;
+using Microsoft.CodeAnalysis.Completion;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -30,12 +31,6 @@ public class TimeAttackService(
     ILogger<TimeAttackService> logger
 ) : ITimeAttackService
 {
-    public bool GetIsTimeAttackQuest(int questId)
-    {
-        return eventService.TryGetQuestEvent(questId, out QuestEvent? questEvent)
-            && questEvent.QuestEventType == QuestEventType.TimeAttack;
-    }
-
     public bool GetIsRankedQuest(int questId)
     {
         return MasterAsset.RankingData.TryGetValue(questId, out _);
@@ -67,9 +62,9 @@ public class TimeAttackService(
         return true;
     }
 
-    public async Task RegisterRankedClear(int questId, float clearTime)
+    public async Task RegisterRankedClear(float clearTime)
     {
-        if (await timeAttackCacheService.Get(questId) is not { } entry)
+        if (await timeAttackCacheService.Get() is not { } entry)
         {
             logger.LogWarning("Unable to retrieve cache entry for time attack clear");
             return;
@@ -91,7 +86,7 @@ public class TimeAttackService(
             new DbTimeAttackClear()
             {
                 RoomName = roomName,
-                QuestId = questId,
+                QuestId = entry.QuestId,
                 Time = clearTime,
                 Players = new()
                 {
@@ -109,7 +104,7 @@ public class TimeAttackService(
         logger.LogDebug(
             "Registered time attack clear for room {room} and quest {questId}",
             roomName,
-            questId
+            entry.QuestId
         );
     }
 

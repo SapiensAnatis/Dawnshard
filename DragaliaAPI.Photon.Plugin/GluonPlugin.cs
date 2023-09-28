@@ -87,6 +87,8 @@ namespace DragaliaAPI.Photon.Plugin
                 this.roomState.IsSoloPlay = true;
             }
 
+            this.roomState.QuestId = info.Request.GameProperties.GetInt(GamePropertyKeys.QuestId);
+
             int roomId = this.GenerateRoomId();
             info.Request.GameProperties.Add(GamePropertyKeys.RoomId, roomId);
 
@@ -791,6 +793,42 @@ namespace DragaliaAPI.Photon.Plugin
                 ClearQuestRequestCallback,
                 callAsync: false
             );
+
+            if (this.ShouldRegisterTimeAttack())
+            {
+                logger.Info("Registering time attack clear");
+
+                this.PostApiRequest(
+                    this.config.TimeAttackEndpoint,
+                    evt.RecordMultiRequest,
+                    info,
+                    LogIfFailedCallback,
+                    callAsync: true
+                );
+            }
+        }
+
+        private bool ShouldRegisterTimeAttack()
+        {
+            if (!QuestHelper.GetIsRanked(this.roomState.QuestId))
+            {
+                logger.InfoFormat(
+                    "Not registering TA clear -- quest {0} is not ranked",
+                    this.roomState.QuestId
+                );
+                return false;
+            }
+
+            if (!this.roomState.IsSoloPlay && this.PluginHost.GameActors.Count() < 4)
+            {
+                logger.InfoFormat(
+                    "Not registering TA clear -- game actor count {0} < 4",
+                    this.PluginHost.GameActors.Count()
+                );
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>

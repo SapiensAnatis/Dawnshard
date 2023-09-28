@@ -164,5 +164,7 @@ public class DungeonRecordService(
         }
 
         growRecord.chara_grow_record = charaGrowRecord;
+        growRecord.bonus_factor = 1;
+        growRecord.mana_bonus_factor = 1;
     }
 }

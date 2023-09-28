@@ -23,7 +23,7 @@ public class DungeonStartController(
     ILogger<DungeonStartController> logger
 ) : DragaliaControllerBase
 {
-    private const ResultCode FailedValidationCode = ResultCode.CommonDataValidationError;
+    private const ResultCode FailedValidationCode = ResultCode.CommonInvalidArgument;
 
     [HttpPost("start")]
     public async Task<DragaliaResult> Start(DungeonStartStartRequest request)

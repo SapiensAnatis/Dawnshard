@@ -17,14 +17,14 @@ public class TimeAttackCacheService(
 
         TimeAttackCacheEntry entry = new(questId, partyInfo);
 
-        await cache.SetStringAsync(Key(questId), JsonSerializer.Serialize(entry));
+        await cache.SetStringAsync(this.Key, JsonSerializer.Serialize(entry));
     }
 
-    public async Task<TimeAttackCacheEntry?> Get(int questId)
+    public async Task<TimeAttackCacheEntry?> Get()
     {
-        logger.LogDebug("Getting time attack cache entry for quest id {id}", questId);
+        logger.LogDebug("Getting time attack cache entry");
 
-        string? json = await cache.GetStringAsync(Key(questId));
+        string? json = await cache.GetStringAsync(this.Key);
 
         if (json is null)
             return null;
@@ -32,5 +32,5 @@ public class TimeAttackCacheService(
         return JsonSerializer.Deserialize<TimeAttackCacheEntry>(json);
     }
 
-    private string Key(int questId) => $":timeattack:{playerIdentityService.AccountId}:{questId}";
+    private string Key => $":timeattack:{playerIdentityService.AccountId}";
 }

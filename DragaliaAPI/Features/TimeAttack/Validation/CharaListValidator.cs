@@ -23,7 +23,8 @@ public class CharaListValidator : AbstractValidator<CharaList>
         )
         {
             RuleFor(x => MasterAsset.CharaData.GetValueOrDefault(x.chara_id))
-                .Must(x => x?.ElementalType == questData.LimitedElementalType);
+                .Must(x => x?.ElementalType == questData.LimitedElementalType)
+                .WithMessage("Element lock violation");
         }
     }
 }
