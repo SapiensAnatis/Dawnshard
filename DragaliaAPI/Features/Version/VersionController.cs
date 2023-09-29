@@ -1,24 +1,24 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Models.Generated;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
-namespace DragaliaAPI.Controllers.Dragalia;
+namespace DragaliaAPI.Features.Version;
 
 [Route("version")]
 [AllowAnonymous]
-public class VersionController : DragaliaControllerBase
+public class VersionController(IOptionsMonitor<ResourceVersionOptions> options)
+    : DragaliaControllerBase
 {
-    private const string AndroidResourceVersion = "y2XM6giU6zz56wCm";
-    private const string IosResourceVersion = "b1HyoeTFegeTexC0";
-
     [HttpPost]
     [Route("get_resource_version")]
     public DragaliaResult GetResourceVersion(VersionGetResourceVersionRequest request)
     {
         string resourceVersion = request.platform switch
         {
-            1 => IosResourceVersion,
-            2 => AndroidResourceVersion,
+            1 => options.CurrentValue.Ios,
+            2 => options.CurrentValue.Android,
             _ => throw new BadHttpRequestException("Invalid platform identifier")
         };
 
