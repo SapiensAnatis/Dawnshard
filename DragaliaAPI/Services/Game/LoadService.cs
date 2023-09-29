@@ -9,6 +9,7 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.Trade;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -28,7 +29,8 @@ public class LoadService(
     ITradeService tradeService,
     IShopRepository shopRepository,
     IUserService userService,
-    ITicketRepository ticketRepository
+    ITicketRepository ticketRepository,
+    IDateTimeProvider dateTimeProvider
 ) : ILoadService
 {
     public async Task<LoadIndexData> BuildIndexData()
@@ -85,7 +87,7 @@ public class LoadService(
                 present_notice = await presentService.GetPresentNotice(),
                 guild_notice = new(0, 0, 0, 0, 0),
                 //fort_plant_list = buildSummary,
-                server_time = DateTimeOffset.UtcNow,
+                server_time = dateTimeProvider.UtcNow,
                 stamina_multi_system_max = userService.StaminaMultiMax,
                 stamina_multi_user_max = 12,
                 quest_skip_point_system_max = userService.QuestSkipPointMax,

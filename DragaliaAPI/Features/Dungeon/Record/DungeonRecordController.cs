@@ -98,9 +98,12 @@ public class DungeonRecordController(
         AuthenticationSchemes = nameof(PhotonAuthenticationHandler),
         Roles = PhotonAuthenticationHandler.Role
     )]
-    public async Task<DragaliaResult> RecordTimeAttack(DungeonRecordRecordMultiRequest request)
+    public async Task<DragaliaResult> RecordTimeAttack(
+        [FromHeader(Name = "RoomName")] string roomName,
+        [FromBody] DungeonRecordRecordMultiRequest request
+    )
     {
-        await timeAttackService.RegisterRankedClear(request.play_record.time);
+        await timeAttackService.RegisterRankedClear(roomName, request.play_record.time);
         await updateDataService.SaveChangesAsync();
 
         return this.Ok(new ResultCodeData(ResultCode.Success));

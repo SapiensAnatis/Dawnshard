@@ -142,7 +142,8 @@ namespace DragaliaAPI.Photon.Plugin
                 CustomHeaders = new Dictionary<string, string>()
                 {
                     { "Auth-ViewerId", actor.GetViewerId().ToString() },
-                    { "Authorization", $"Bearer {this.config.BearerToken}" }
+                    { "Authorization", $"Bearer {this.config.BearerToken}" },
+                    { "RoomName", this.PluginHost.GameId }
                 }
             };
 

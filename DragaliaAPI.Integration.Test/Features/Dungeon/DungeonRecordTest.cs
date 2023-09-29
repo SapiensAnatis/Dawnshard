@@ -301,6 +301,8 @@ public class DungeonRecordTest : TestFixture
         int questId = 227010104; // Volk's Wrath TA Solo
         string roomName = Guid.NewGuid().ToString();
 
+        this.Client.DefaultRequestHeaders.Add("RoomName", roomName);
+
         await this.AddToDatabase(
             new DbQuest()
             {
