@@ -1,5 +1,6 @@
 ﻿@inject IDbContextFactory<ApiContext> ApiContextFactory
 @inject IBlazorIdentityService BlazorIdentityService
+@inject ILogger<RankingTable> Logger
 
 @using DragaliaAPI.Blazor.Authentication;
 @using DragaliaAPI.Database;
@@ -7,6 +8,7 @@
 @using MudBlazor;
 @using MudBlazor.Components;
 @using System.Collections.Immutable;
+@using System.Diagnostics;
 
 
 <MudTable 
@@ -56,7 +58,7 @@
 
 @code {
     private string? searchString;
-    private MudTable<Clear>? table;
+    private MudTable<Clear>? table = new() { };
 
     private int? questId;
 
@@ -74,14 +76,15 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        await using ApiContext context = await this.ApiContextFactory.CreateDbContextAsync();
-
         if (this.table is not null)
             await this.table.ReloadServerData();
     }
 
     private async Task<TableData<Clear>> ServerReload(TableState state)
     {
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        Logger.LogDebug("Fetching data for quest {quest}", this.QuestId);
+
         await using ApiContext context = await this.ApiContextFactory.CreateDbContextAsync();
 
         if (this.QuestId is null)
@@ -115,6 +118,9 @@
 
         List<Clear> filteredList = filteredEnumerable.ToList();
         IEnumerable<Clear> pagedEnumerable = filteredList.Skip(state.PageSize * state.Page).Take(state.PageSize);
+
+        stopwatch.Stop();
+        Logger.LogDebug("Fetched data in {t} ms", stopwatch.ElapsedMilliseconds);
 
         return new TableData<Clear>() { Items = pagedEnumerable, TotalItems = filteredList.Count };
     }

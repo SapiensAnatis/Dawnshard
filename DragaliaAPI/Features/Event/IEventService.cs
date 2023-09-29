@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.MasterAsset.Models;
+﻿using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Features.Event;
 
@@ -37,7 +35,6 @@ public interface IEventService
     Task<ExRushEventUserList> GetExRushEventUserData(int eventId);
     Task<MazeEventUserList> GetMazeEventUserData(int eventId);
     Task<SimpleEventUserList> GetSimpleEventUserData(int eventId);
-    bool TryGetQuestEvent(int questId, [NotNullWhen(true)] out QuestEvent? questEvent);
 
     #endregion
 }

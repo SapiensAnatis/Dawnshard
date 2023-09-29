@@ -249,7 +249,7 @@ namespace DragaliaAPI.Photon.Plugin
                 true
             );
 
-            if (this.roomState.MinGoToIngameState >= 0)
+            if (this.roomState.MinGoToIngameState > 0)
             {
                 int newMinGoToIngameState = this.PluginHost.GameActors
                     .Where(x => x.ActorNr != info.ActorNr)
@@ -628,8 +628,6 @@ namespace DragaliaAPI.Photon.Plugin
                 elements = actorData,
                 brInitData = null
             };
-
-            this.logger.DebugFormat("Set GoToIngameInfo: {0}", JsonConvert.SerializeObject(data));
 
             byte[] msgpack = MessagePackSerializer.Serialize(data, MessagePackOptions);
 

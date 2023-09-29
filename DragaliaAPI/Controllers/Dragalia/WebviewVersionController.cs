@@ -51,20 +51,10 @@ public class WebviewVersionController : DragaliaControllerBase
         );
     }
 
-    private string GetUrl(string relativePath, Dictionary<string, object?>? queryParams = null)
+    private string GetUrl(string relativePath)
     {
         string url = $"https://{this.HttpContext.Request.Host.Host}/{relativePath}";
         url = QueryHelpers.AddQueryString(url, "hideappbar", "true");
-
-        if (queryParams != null)
-        {
-            url = QueryHelpers.AddQueryString(
-                url,
-                queryParams.Select(
-                    x => new KeyValuePair<string, string?>(x.Key, x.Value?.ToString())
-                )
-            );
-        }
 
         return url;
     }

@@ -126,6 +126,7 @@ public class TimeAttackService(
 
         IEnumerable<RankingTierReward> rewardsToReceive = this.GetRewards()
             .Where(x => x.QuestId == questId)
+            .Where(x => x.ClearTimeUpper > bestClearTime)
             .ExceptBy(receivedRewards, x => x.Id)
             .ToList();
 

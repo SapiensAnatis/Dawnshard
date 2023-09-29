@@ -264,25 +264,6 @@ public class EventService(
         }
     }
 
-    public bool TryGetQuestEvent(int questId, [NotNullWhen(true)] out QuestEvent? questEvent)
-    {
-        questEvent = null;
-
-        if (!MasterAsset.QuestData.TryGetValue(questId, out QuestData? questData))
-            return false;
-
-        if (!MasterAsset.QuestEventGroup.TryGetValue(questData.Gid, out QuestEventGroup? qeGroup))
-            return false;
-
-        if (dateTime.UtcNow < qeGroup.ViewStartDate || dateTime.UtcNow > qeGroup.ViewEndDate)
-            return false;
-
-        if (!MasterAsset.QuestEvent.TryGetValue(questData.Gid, out questEvent))
-            return false;
-
-        return true;
-    }
-
     private async Task<DbPlayerEventData> GetEventData(int eventId)
     {
         return await eventRepository.GetEventDataAsync(eventId)
