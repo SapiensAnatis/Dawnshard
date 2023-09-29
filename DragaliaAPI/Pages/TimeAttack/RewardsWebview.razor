@@ -1,0 +1,16 @@
+﻿@page "/timeattack/rewards/webview"
+
+@using DragaliaAPI.RazorComponents.TimeAttack
+
+@layout WebviewLayout
+
+
+<MudTabs PanelClass="px-2 py-4" Centered=true>
+    <MudTabPanel Text="Solo">
+        <SoloRewardTab />
+    </MudTabPanel>
+
+    <MudTabPanel Text="Co-op">
+        <CoopRewardTab />ory
+    </MudTabPanel>
+</MudTabs>

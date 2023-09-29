@@ -13,6 +13,8 @@ public class PhotonStateApi : IPhotonStateApi
 
     private readonly HttpClient client;
 
+    private readonly Dictionary<long, ApiGame> cachedGames = new();
+
     public PhotonStateApi(HttpClient client)
     {
         this.client = client;
@@ -75,8 +77,12 @@ public class PhotonStateApi : IPhotonStateApi
 
     public async Task<ApiGame?> GetGameByViewerId(long viewerId)
     {
-        Uri endpoint = new($"{ByViewerIdEndpoint}/{viewerId}", UriKind.Relative);
+        if (this.cachedGames.TryGetValue(viewerId, out ApiGame? game))
+        {
+            return game;
+        }
 
+        Uri endpoint = new($"{ByViewerIdEndpoint}/{viewerId}", UriKind.Relative);
         HttpResponseMessage response = await this.client.GetAsync(endpoint);
 
         try
@@ -88,6 +94,12 @@ public class PhotonStateApi : IPhotonStateApi
             return null;
         }
 
-        return await response.Content.ReadFromJsonAsync<ApiGame>();
+        ApiGame apiGame =
+            await response.Content.ReadFromJsonAsync<ApiGame>()
+            ?? throw new JsonException("Deserialization failure");
+
+        this.cachedGames[viewerId] = apiGame;
+
+        return apiGame;
     }
 }

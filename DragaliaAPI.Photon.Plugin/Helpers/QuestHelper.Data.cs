@@ -5,16 +5,35 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
     /// <summary>
     /// QuestHelper data.
     /// </summary>
-    /// <remarks>
-    /// RaidQuestIds query:
-    /// <code>
-    /// SELECT q._Id || ', // ' || t._Text FROM "QuestData" q
-    /// JOIN "TextLabel" t on q._QuestViewName = t._Id
-    /// WHERE q._DungeonType = 2 or q._DungeonType = 18 -- DungeonTypes.Raid or DungeonTypes.RaidSixteen
-    /// </code>
-    /// </remarks>
+
     public partial class QuestHelper
     {
+        /// <summary>
+        /// All raid quest IDs.
+        /// </summary>
+        /// <remarks>
+        /// Query used:
+        /// <code>
+        /// SELECT q._Id || ', // ' || t._Text FROM "QuestData" q
+        /// JOIN "TextLabel" t on q._QuestViewName = t._Id
+        /// WHERE q._DungeonType = 2 or q._DungeonType = 18 -- DungeonTypes.Raid or DungeonTypes.RaidSixteen
+        /// </code>
+        /// </remarks>
+        private static readonly ImmutableHashSet<int> RaidQuestIds;
+
+        /// <summary>
+        /// All ranked time attack quest IDs.
+        /// </summary>
+        /// <remarks>
+        /// Query used:
+        /// <code>
+        /// SELECT q._Id || ', // ' || t._Text FROM "QuestData" q
+        /// JOIN "TextLabel" t on q._QuestViewName = t._Id
+        /// JOIN "RankingData" r on r._QuestId = q._Id
+        /// </code>
+        /// </remarks>
+        private static readonly ImmutableHashSet<int> RankedQuestIds;
+
         static QuestHelper()
         {
             RaidQuestIds = new int[]
@@ -432,6 +451,37 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
                 320240102, // Surtr's Trial (Light): Expert
                 320240103, // Surtr's Trial (Light): Master
                 204390501, // Satan Clash: Nightmare
+            }.ToImmutableHashSet();
+
+            RankedQuestIds = new int[]
+            {
+                210010103, // High Midgardsormr's Trial: Expert
+                210020103, // High Mercury's Trial: Expert
+                210030103, // High Brunhilda's Trial: Expert
+                210040103, // High Jupiter's Trial: Expert
+                210050103, // High Zodiark's Trial: Expert
+                227010104, // Volk's Wrath: Master
+                227010105, // Volk's Wrath: Master
+                227020104, // Kai Yan's Wrath: Master
+                227020105, // Kai Yan's Wrath: Master
+                227030104, // Tartarus's Wrath: Master
+                227030105, // Tartarus's Wrath: Master
+                227040105, // Ciella's Wrath (Ranked)
+                227040106, // Ciella's Wrath (Ranked)
+                227050105, // Ayaha & Otoha's Wrath (Ranked)
+                227050106, // Ayaha & Otoha's Wrath (Ranked)
+                227060105, // Lilith's Encroaching Shadow (Ranked)
+                227060106, // Lilith's Encroaching Shadow (Ranked)
+                227070105, // Jaldabaoth's Piercing Gale (Ranked)
+                227070106, // Jaldabaoth's Piercing Gale (Ranked)
+                227080105, // Asura's Blinding Light (Ranked)
+                227080106, // Asura's Blinding Light (Ranked)
+                227090105, // Iblis's Surging Cascade (Ranked)
+                227090106, // Iblis's Surging Cascade (Ranked)
+                227100105, // Surtr's Devouring Flame (Ranked)
+                227100106, // Surtr's Devouring Flame (Ranked)
+                227110105, // Iblis's Surging Cascade (Ranked)
+                227110106, // Iblis's Surging Cascade (Ranked)
             }.ToImmutableHashSet();
         }
     }

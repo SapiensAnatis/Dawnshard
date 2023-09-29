@@ -33,6 +33,8 @@ public class BlazorIdentityService : IBlazorIdentityService
 
     private void InitializeIdentity(AuthenticationState state)
     {
+        this.IsAuthenticated = state.User.Identity?.IsAuthenticated ?? false;
+
         this.accountId = state.User.Claims
             .FirstOrDefault(x => x.Type == CustomClaimType.AccountId)
             ?.Value;
@@ -48,6 +50,8 @@ public class BlazorIdentityService : IBlazorIdentityService
         if (int.TryParse(viewerIdString, out int viewerId))
             this.viewerId = viewerId;
     }
+
+    public bool IsAuthenticated { get; private set; }
 
     public string AccountId =>
         this.accountId ?? throw new InvalidOperationException("User was not authenticated!");

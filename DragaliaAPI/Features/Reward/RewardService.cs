@@ -44,6 +44,28 @@ public class RewardService(
 
         logger.LogTrace("Granting reward {@rewardEntity}", entity);
 
+        RewardGrantResult result = await GrantRewardInternal(entity);
+
+        if (result == RewardGrantResult.Added)
+            newEntities.Add(entity);
+
+        return result;
+    }
+
+    public async Task GrantRewards(IEnumerable<Entity> entities)
+    {
+        logger.LogTrace("Granting {n} rewards", entities.Count());
+
+        foreach (Entity entity in entities)
+        {
+            RewardGrantResult result = await GrantRewardInternal(entity);
+            if (result == RewardGrantResult.Added)
+                newEntities.Add(entity);
+        }
+    }
+
+    private async Task<RewardGrantResult> GrantRewardInternal(Entity entity)
+    {
         switch (entity.Type)
         {
             case EntityTypes.Chara:
@@ -114,7 +136,6 @@ public class RewardService(
                 return RewardGrantResult.FailError;
         }
 
-        newEntities.Add(entity);
         return RewardGrantResult.Added;
     }
 

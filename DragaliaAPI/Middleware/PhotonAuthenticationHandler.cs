@@ -14,6 +14,8 @@ namespace DragaliaAPI.Middleware;
 
 public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
+    public const string Role = "Photon";
+
     private readonly IUserDataRepository userDataRepository;
 
     public PhotonAuthenticationHandler(
@@ -80,6 +82,7 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
         ClaimsIdentity identity = new(Scheme.Name);
         identity.AddClaim(new Claim(CustomClaimType.ViewerId, viewerId.ToString()));
         identity.AddClaim(new Claim(CustomClaimType.AccountId, accountId));
+        identity.AddClaim(new Claim(ClaimTypes.Role, Role));
 
         ClaimsPrincipal principal = new(identity);
         AuthenticationTicket ticket = new(principal, Scheme.Name);

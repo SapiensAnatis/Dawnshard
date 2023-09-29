@@ -23,6 +23,7 @@ using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.Tickets;
+using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Middleware;
@@ -111,6 +112,9 @@ public static class ServiceConfiguration
             .AddScoped<IEventRepository, EventRepository>()
             .AddScoped<IEventService, EventService>()
             .AddScoped<IEventDropService, EventDropService>()
+            .AddScoped<ITimeAttackService, TimeAttackService>()
+            .AddScoped<ITimeAttackRepository, TimeAttackRepository>()
+            .AddScoped<ITimeAttackCacheService, TimeAttackCacheService>()
             // Clear party feature
             .AddScoped<IClearPartyRepository, ClearPartyRepository>()
             .AddScoped<IClearPartyService, ClearPartyService>()

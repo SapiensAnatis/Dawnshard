@@ -13,6 +13,8 @@ namespace DragaliaAPI.Photon.Plugin.Models
 
         public Uri DungeonRecordMultiEndpoint { get; }
 
+        public Uri TimeAttackEndpoint { get; }
+
         public int ReplayTimeoutSeconds { get; }
 
         public string BearerToken { get; }
@@ -24,6 +26,11 @@ namespace DragaliaAPI.Photon.Plugin.Models
 
             this.DungeonRecordMultiEndpoint = config.GetUri(
                 nameof(this.DungeonRecordMultiEndpoint),
+                UriKind.Relative
+            );
+
+            this.TimeAttackEndpoint = config.GetUri(
+                nameof(this.TimeAttackEndpoint),
                 UriKind.Relative
             );
 

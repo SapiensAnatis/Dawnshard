@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Net.Http.Headers;
+using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -288,5 +290,89 @@ public class DungeonRecordTest : TestFixture
             );
 
         response.data_headers.result_code.Should().Be(ResultCode.Success);
+    }
+
+    [Fact]
+    public async Task RecordTimeAttack_RegistersClear()
+    {
+        this.ImportSave();
+        this.SetupPhotonAuthentication();
+
+        int questId = 227010104; // Volk's Wrath TA Solo
+        string roomName = Guid.NewGuid().ToString();
+
+        await this.AddToDatabase(
+            new DbQuest()
+            {
+                QuestId = questId,
+                State = 0,
+                DeviceAccountId = DeviceAccountId
+            }
+        );
+
+        this.MockPhotonStateApi
+            .Setup(x => x.GetGameByViewerId(this.ViewerId))
+            .ReturnsAsync(new Photon.Shared.Models.ApiGame() { Name = roomName });
+
+        DungeonStartStartMultiData startResponse = (
+            await this.Client.PostMsgpack<DungeonStartStartMultiData>(
+                "/dungeon_start/start_multi",
+                new DungeonStartStartMultiRequest()
+                {
+                    party_no_list = new int[] { 4 }, // Flame team
+                    quest_id = questId
+                }
+            )
+        ).data;
+
+        string dungeonKey = startResponse.ingame_data.dungeon_key;
+        float clearTime = 10.4f;
+
+        await this.Client.PostMsgpack(
+            "/dungeon_record/record_time_attack",
+            new DungeonRecordRecordMultiRequest()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord
+                {
+                    time = clearTime,
+                    treasure_record = new List<AtgenTreasureRecord>(),
+                    live_unit_no_list = new List<int>(),
+                    damage_record = new List<AtgenDamageRecord>(),
+                    dragon_damage_record = new List<AtgenDamageRecord>(),
+                    battle_royal_record = new AtgenBattleRoyalRecord(),
+                    wave = 3
+                }
+            }
+        );
+
+        this.ApiContext.TimeAttackClears.Should().ContainSingle(x => x.RoomName == roomName);
+
+        DbTimeAttackClear? recordedClear = await this.ApiContext.TimeAttackClears
+            .Include(x => x.Players)
+            .ThenInclude(x => x.Units)
+            .FirstAsync(x => x.RoomName == roomName);
+
+        recordedClear.RoomName.Should().Be(roomName);
+        recordedClear.Time.Should().Be(clearTime);
+        recordedClear.QuestId.Should().Be(questId);
+        recordedClear.Players.Should().ContainSingle(x => x.DeviceAccountId == DeviceAccountId);
+
+        DbTimeAttackPlayer player = recordedClear.Players.First(
+            x => x.DeviceAccountId == DeviceAccountId
+        );
+
+        player.PartyInfo.Should().NotBeNullOrEmpty();
+        player.Units.Should().HaveCount(4);
+    }
+
+    private void SetupPhotonAuthentication()
+    {
+        Environment.SetEnvironmentVariable("PHOTON_TOKEN", "supersecrettoken");
+        this.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+            "Bearer",
+            "supersecrettoken"
+        );
+        this.Client.DefaultRequestHeaders.Add("Auth-ViewerId", this.ViewerId.ToString());
     }
 }

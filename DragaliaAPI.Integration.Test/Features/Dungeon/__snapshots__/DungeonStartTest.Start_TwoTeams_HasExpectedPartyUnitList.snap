@@ -192,7 +192,7 @@
     ],
     "talisman_data": {
       "talisman_key_id": 35,
-      "talisman_id": 50950403,
+      "talisman_id": "HalloweenLaxi",
       "talisman_ability_id_1": 340000050,
       "talisman_ability_id_2": 340000056,
       "talisman_ability_id_3": 0,
@@ -203,11 +203,11 @@
       "gettime": "2021-12-31T02:56:30+00:00"
     },
     "edit_skill_1_chara_data": {
-      "chara_id": 10550404,
+      "chara_id": "Sharena",
       "edit_skill_level": 3
     },
     "edit_skill_2_chara_data": {
-      "chara_id": 10950401,
+      "chara_id": "Ilia",
       "edit_skill_level": 3
     },
     "game_weapon_passive_ability_list": [
@@ -430,7 +430,7 @@
     ],
     "talisman_data": {
       "talisman_key_id": 126,
-      "talisman_id": 50950403,
+      "talisman_id": "HalloweenLaxi",
       "talisman_ability_id_1": 340000009,
       "talisman_ability_id_2": 340000076,
       "talisman_ability_id_3": 0,
@@ -441,11 +441,11 @@
       "gettime": "2022-01-18T18:57:35+00:00"
     },
     "edit_skill_1_chara_data": {
-      "chara_id": 10840501,
+      "chara_id": "Cleo",
       "edit_skill_level": 4
     },
     "edit_skill_2_chara_data": {
-      "chara_id": 10440301,
+      "chara_id": "Ranzal",
       "edit_skill_level": 4
     },
     "game_weapon_passive_ability_list": [
@@ -674,7 +674,7 @@
     ],
     "talisman_data": {
       "talisman_key_id": 26,
-      "talisman_id": 50250402,
+      "talisman_id": "GalaLuca",
       "talisman_ability_id_1": 340000069,
       "talisman_ability_id_2": 340000108,
       "talisman_ability_id_3": 0,
@@ -685,11 +685,11 @@
       "gettime": "2021-12-30T10:10:51+00:00"
     },
     "edit_skill_1_chara_data": {
-      "chara_id": 10350402,
+      "chara_id": "Mitsuhide",
       "edit_skill_level": 3
     },
     "edit_skill_2_chara_data": {
-      "chara_id": 10950403,
+      "chara_id": "HalloweenLaxi",
       "edit_skill_level": 3
     },
     "game_weapon_passive_ability_list": [],
@@ -888,7 +888,7 @@
     ],
     "talisman_data": {
       "talisman_key_id": 65,
-      "talisman_id": 50150404,
+      "talisman_id": "Pecorine",
       "talisman_ability_id_1": 340000029,
       "talisman_ability_id_2": 340000056,
       "talisman_ability_id_3": 0,
@@ -899,11 +899,11 @@
       "gettime": "2022-01-08T20:49:41+00:00"
     },
     "edit_skill_1_chara_data": {
-      "chara_id": 10840501,
+      "chara_id": "Cleo",
       "edit_skill_level": 4
     },
     "edit_skill_2_chara_data": {
-      "chara_id": 10440301,
+      "chara_id": "Ranzal",
       "edit_skill_level": 4
     },
     "game_weapon_passive_ability_list": [],
@@ -1117,7 +1117,7 @@
     ],
     "talisman_data": {
       "talisman_key_id": 49,
-      "talisman_id": 50450203,
+      "talisman_id": "Lazry",
       "talisman_ability_id_1": 340000118,
       "talisman_ability_id_2": 340000107,
       "talisman_ability_id_3": 0,
@@ -1128,11 +1128,11 @@
       "gettime": "2022-01-02T18:57:44+00:00"
     },
     "edit_skill_1_chara_data": {
-      "chara_id": 10840102,
+      "chara_id": "HalloweenLowen",
       "edit_skill_level": 3
     },
     "edit_skill_2_chara_data": {
-      "chara_id": 10850402,
+      "chara_id": "GalaZena",
       "edit_skill_level": 4
     },
     "game_weapon_passive_ability_list": [],
@@ -1351,7 +1351,7 @@
     ],
     "talisman_data": {
       "talisman_key_id": 133,
-      "talisman_id": 50750204,
+      "talisman_id": "GalaEmile",
       "talisman_ability_id_1": 340000099,
       "talisman_ability_id_2": 340000128,
       "talisman_ability_id_3": 0,
@@ -1362,11 +1362,11 @@
       "gettime": "2022-01-31T13:12:18+00:00"
     },
     "edit_skill_1_chara_data": {
-      "chara_id": 10840501,
+      "chara_id": "Cleo",
       "edit_skill_level": 4
     },
     "edit_skill_2_chara_data": {
-      "chara_id": 10440301,
+      "chara_id": "Ranzal",
       "edit_skill_level": 4
     },
     "game_weapon_passive_ability_list": [],
@@ -1565,7 +1565,7 @@
     ],
     "talisman_data": {
       "talisman_key_id": 68,
-      "talisman_id": 50650203,
+      "talisman_id": "Pinon",
       "talisman_ability_id_1": 340000119,
       "talisman_ability_id_2": 340000089,
       "talisman_ability_id_3": 0,
@@ -1576,11 +1576,11 @@
       "gettime": "2022-01-09T01:01:54+00:00"
     },
     "edit_skill_1_chara_data": {
-      "chara_id": 10840501,
+      "chara_id": "Cleo",
       "edit_skill_level": 4
     },
     "edit_skill_2_chara_data": {
-      "chara_id": 10440301,
+      "chara_id": "Ranzal",
       "edit_skill_level": 4
     },
     "game_weapon_passive_ability_list": [],
@@ -1779,7 +1779,7 @@
     ],
     "talisman_data": {
       "talisman_key_id": 36,
-      "talisman_id": 50250201,
+      "talisman_id": "Valerio",
       "talisman_ability_id_1": 340000008,
       "talisman_ability_id_2": 340000036,
       "talisman_ability_id_3": 0,
@@ -1790,11 +1790,11 @@
       "gettime": "2022-01-01T03:52:09+00:00"
     },
     "edit_skill_1_chara_data": {
-      "chara_id": 10840501,
+      "chara_id": "Cleo",
       "edit_skill_level": 4
     },
     "edit_skill_2_chara_data": {
-      "chara_id": 10440301,
+      "chara_id": "Ranzal",
       "edit_skill_level": 4
     },
     "game_weapon_passive_ability_list": [

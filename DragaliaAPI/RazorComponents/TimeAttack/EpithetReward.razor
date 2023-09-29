@@ -1,0 +1,32 @@
+﻿<MudGrid Spacing="2" Justify="Justify.Center">
+    <MudItem xs="4" md="2">
+        <MudChip Style="width: 10rem" Color="@this.Color" Icon="@this.ChipIcon">
+            <MudText Typo="Typo.body1">@this.ChipText</MudText>
+        </MudChip>
+    </MudItem>
+    <MudItem xs="8" md="10">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Style="height: 100%">
+            <MudImage Height="30" Src="@this.ImageSrc" />
+            <MudText Typo="Typo.body1">@this.ChildContent</MudText>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter]
+    public int Rarity { get; set; }
+
+    [Parameter]
+    public Color Color { get; set; }
+
+    [Parameter]
+    public string? ChipIcon { get; set; }
+
+    [Parameter]
+    public string? ChipText { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private string ImageSrc => $"img/icon/Icon_Profile_Noframe_{this.Rarity:00}.png";
+}

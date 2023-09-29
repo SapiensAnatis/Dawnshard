@@ -61,17 +61,13 @@ namespace DragaliaAPI.Photon.Plugin
             // Not 0 to allow for any outgoing GameLeave Redis requests to complete
             info.Request.EmptyRoomLiveTime = 500;
 
-            info.Request.ActorProperties.InitializeViewerId();
-
-            int roomId = this.GenerateRoomId();
-            info.Request.GameProperties.Add(GamePropertyKeys.RoomId, roomId);
-
 #if DEBUG
             this.logger.DebugFormat(
                 "Room properties: {0}",
                 JsonConvert.SerializeObject(info.Request.GameProperties)
             );
 #endif
+            info.Request.ActorProperties.InitializeViewerId();
 
             // https://doc.photonengine.com/server/current/plugins/plugins-faq#how_to_get_the_actor_number_in_plugin_callbacks_
             // This is only invalid if the room is recreated from an inactive state, which Dragalia doesn't do (hopefully!)
@@ -79,6 +75,22 @@ namespace DragaliaAPI.Photon.Plugin
             this.actorState[actorNr] = new ActorState();
 
             info.Continue();
+
+            if (
+                info.Request.GameProperties.TryGetValue(
+                    GamePropertyKeys.IsSoloPlayWithPhoton,
+                    out object isSoloPlay
+                ) && isSoloPlay is true
+            )
+            {
+                this.logger.Info("Room is in solo play mode");
+                this.roomState.IsSoloPlay = true;
+            }
+
+            this.roomState.QuestId = info.Request.GameProperties.GetInt(GamePropertyKeys.QuestId);
+
+            int roomId = this.GenerateRoomId();
+            info.Request.GameProperties.Add(GamePropertyKeys.RoomId, roomId);
 
             this.logger.InfoFormat(
                 "Viewer ID {0} created room {1} with room ID {2}",
@@ -168,7 +180,9 @@ namespace DragaliaAPI.Photon.Plugin
                 actor == null
                 || !actor.Properties.TryGetValue("DeactivationTime", out object deactivationTime)
             )
+            {
                 deactivationTime = "null";
+            }
 
             this.logger.DebugFormat(
                 "Leave info -- Actor: {0}, Details: {1}, IsInactive {2}, DeactivationTime: {3}",
@@ -368,7 +382,7 @@ namespace DragaliaAPI.Photon.Plugin
                 this.SetRoomVisibility(info, true);
             }
 
-            this.roomState = new RoomState();
+            this.roomState = new RoomState(this.roomState);
         }
 
         /// <summary>
@@ -381,7 +395,7 @@ namespace DragaliaAPI.Photon.Plugin
 
             if (info.ActorNr == 1)
             {
-                this.roomState = new RoomState();
+                this.roomState = new RoomState(this.roomState);
                 this.RaiseEvent(Event.GameSucceed, new { });
                 this.SetRoomId(info, this.GenerateRoomId());
                 this.SetRoomVisibility(info, true);
@@ -433,6 +447,11 @@ namespace DragaliaAPI.Photon.Plugin
                 {
                     this.roomState.MinGoToIngameState = value;
                     this.OnSetGoToIngameState(info);
+                }
+                else if (value == 0 && this.roomState.IsSoloPlay)
+                {
+                    this.SetGoToIngameInfo();
+                    this.RaiseEvent(Event.StartQuest, new Dictionary<string, object>() { });
                 }
             }
 
@@ -685,7 +704,8 @@ namespace DragaliaAPI.Photon.Plugin
             PartyEvent evt = new PartyEvent()
             {
                 MemberCountTable = memberCountTable,
-                ReBattleCount = this.config.ReplayTimeoutSeconds
+                ReBattleCount = this.config.ReplayTimeoutSeconds,
+                RankingType = 1,
             };
 
             this.RaiseEvent(Event.Party, evt);
@@ -771,6 +791,42 @@ namespace DragaliaAPI.Photon.Plugin
                 ClearQuestRequestCallback,
                 callAsync: false
             );
+
+            if (this.ShouldRegisterTimeAttack())
+            {
+                logger.Info("Registering time attack clear");
+
+                this.PostApiRequest(
+                    this.config.TimeAttackEndpoint,
+                    evt.RecordMultiRequest,
+                    info,
+                    LogIfFailedCallback,
+                    callAsync: true
+                );
+            }
+        }
+
+        private bool ShouldRegisterTimeAttack()
+        {
+            if (!QuestHelper.GetIsRanked(this.roomState.QuestId))
+            {
+                logger.InfoFormat(
+                    "Not registering TA clear -- quest {0} is not ranked",
+                    this.roomState.QuestId
+                );
+                return false;
+            }
+
+            if (!this.roomState.IsSoloPlay && this.PluginHost.GameActors.Count() < 4)
+            {
+                logger.InfoFormat(
+                    "Not registering TA clear -- game actor count {0} < 4",
+                    this.PluginHost.GameActors.Count()
+                );
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -798,13 +854,13 @@ namespace DragaliaAPI.Photon.Plugin
         /// <returns>The number of units they own.</returns>
         private Dictionary<int, int> GetMemberCountTable()
         {
-            if (
+            bool isRaid =
                 this.PluginHost.GameProperties.TryGetInt(GamePropertyKeys.QuestId, out int questId)
-                && QuestHelper.GetIsRaid(questId)
-            )
+                && QuestHelper.GetIsRaid(questId);
+
+            if (isRaid || this.roomState.IsSoloPlay)
             {
-                logger.InfoFormat("GetMemberCountTable: Quest {0} is a raid", questId);
-                // Everyone uses all of their units in a raid
+                // Use all available units
                 return this.PluginHost.GameActors.ToDictionary(
                     x => x.ActorNr,
                     x => this.actorState[x.ActorNr].HeroParamCount

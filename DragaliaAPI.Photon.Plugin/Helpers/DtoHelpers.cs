@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using DragaliaAPI.Photon.Plugin.Constants;
 using DragaliaAPI.Photon.Plugin.Models;
 using DragaliaAPI.Photon.Shared.Enums;

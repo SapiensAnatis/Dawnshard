@@ -15,6 +15,13 @@ public interface IRewardService
     /// </returns>
     Task<RewardGrantResult> GrantReward(Entity entity);
 
+    /// <summary>
+    /// Grant a list of rewards to the player.
+    /// </summary>
+    /// <param name="entities">The rewards to grant.</param>
+    /// <returns>The task.</returns>
+    Task GrantRewards(IEnumerable<Entity> entities);
+
     Task<(RewardGrantResult Result, DbTalisman? Talisman)> GrantTalisman(
         Talismans id,
         int abilityId1,

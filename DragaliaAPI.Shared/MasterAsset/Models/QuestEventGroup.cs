@@ -1,7 +1,11 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models;
+﻿using DragaliaAPI.Shared.Definitions.Enums;
+
+namespace DragaliaAPI.Shared.MasterAsset.Models;
 
 public record QuestEventGroup(
     int Id,
-    int BaseQuestGroupId
-// Much more we do not care about
+    int BaseQuestGroupId,
+    DateTimeOffset ViewStartDate,
+    DateTimeOffset ViewEndDate,
+    QuestGroupIntervalType QuestGroupIntervalType
 );

@@ -5641,10 +5641,10 @@ public class EarnEventUserList
 [MessagePackObject(true)]
 public class EditSkillCharaData
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int edit_skill_level { get; set; }
 
-    public EditSkillCharaData(int chara_id, int edit_skill_level)
+    public EditSkillCharaData(Charas chara_id, int edit_skill_level)
     {
         this.chara_id = chara_id;
         this.edit_skill_level = edit_skill_level;
@@ -8802,7 +8802,7 @@ public class SummonTicketList
 public class TalismanList
 {
     public ulong talisman_key_id { get; set; }
-    public int talisman_id { get; set; }
+    public Talismans talisman_id { get; set; }
     public int talisman_ability_id_1 { get; set; }
     public int talisman_ability_id_2 { get; set; }
     public int talisman_ability_id_3 { get; set; }
@@ -8820,7 +8820,7 @@ public class TalismanList
 
     public TalismanList(
         ulong talisman_key_id,
-        int talisman_id,
+        Talismans talisman_id,
         int talisman_ability_id_1,
         int talisman_ability_id_2,
         int talisman_ability_id_3,
