@@ -4,7 +4,7 @@ using Xunit.Abstractions;
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.VersionController"/>
+/// Tests <see cref="DragaliaAPI.Features.Version.VersionController"/>
 /// </summary>
 public class VersionTest : TestFixture
 {
