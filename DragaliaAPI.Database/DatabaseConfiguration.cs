@@ -29,10 +29,8 @@ public static class DatabaseConfiguration
                 options =>
                     options
                         .UseNpgsql(connectionString)
-#if DEBUG
                         .EnableSensitiveDataLogging()
                         .EnableDetailedErrors(),
-#endif
                 optionsLifetime: ServiceLifetime.Singleton
             )
             .AddDbContextFactory<ApiContext>(options => options.UseNpgsql(connectionString))
