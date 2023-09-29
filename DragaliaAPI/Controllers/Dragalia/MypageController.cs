@@ -6,6 +6,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.AspNetCore.Mvc;
 using MessagePack.Resolvers;
 using MessagePack;
+using DragaliaAPI.Helpers;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -16,7 +17,9 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class MypageController(
     IMissionService missionService,
     IShopRepository shopRepository,
-    IUpdateDataService updateDataService
+    IDateTimeProvider dateTimeProvider,
+    IUpdateDataService updateDataService,
+    ILogger<MypageController> logger
 ) : DragaliaControllerBase
 {
     [Route("info")]
@@ -27,6 +30,7 @@ public class MypageController(
 
         resp.user_summon_list = new List<UserSummonList>();
         resp.quest_event_schedule_list = new List<QuestEventScheduleList>();
+
         resp.quest_schedule_detail_list = MasterAsset.QuestScheduleInfo.Enumerable.Select(
             x =>
                 new QuestScheduleDetailList(
@@ -39,6 +43,7 @@ public class MypageController(
                     x.EndDate
                 )
         );
+
         resp.is_shop_notification = await shopRepository.GetDailySummonCountAsync() == 0;
         resp.update_data_list = await updateDataService.SaveChangesAsync();
         resp.update_data_list.mission_notice = await missionService.GetMissionNotice(null);

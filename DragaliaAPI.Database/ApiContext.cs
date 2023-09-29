@@ -1,5 +1,6 @@
 using System.Reflection;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database;
@@ -78,18 +79,6 @@ public class ApiContext : DbContext
                 .Property(x => x.ViewerId)
                 .HasDefaultValueSql("last_insert_rowid()");
         }
-
-        /*
-        
-        Stop players from adding more than 1 character of the same ID to a party,
-        but EF Core doesn't like this and the client probably stops you anyway?
-
-        modelBuilder
-            .Entity<DbPartyUnit>()
-            .HasIndex(e => new { e.Party.PartyNo, e.CharaId })
-            .IsUnique();
-        
-         */
     }
 
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -187,4 +176,12 @@ public class ApiContext : DbContext
     public DbSet<DbQuestEvent> QuestEvents { get; set; }
 
     public DbSet<DbPartyPower> PartyPowers { get; set; }
+
+    public DbSet<DbTimeAttackClear> TimeAttackClears { get; set; }
+
+    public DbSet<DbTimeAttackPlayer> TimeAttackPlayers { get; set; }
+
+    public DbSet<DbTimeAttackClearUnit> TimeAttackClearUnits { get; set; }
+
+    public DbSet<DbReceivedRankingTierReward> ReceivedRankingTierRewards { get; set; }
 }

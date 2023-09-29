@@ -48,10 +48,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Features\Dungeon\__snapshots__\" />
       <Folder Include="Features\Missions\" />
       <Folder Include="Features\Dmode\" />
       <Folder Include="Features\Item\" />
       <Folder Include="Features\Shop\" />
+      <Folder Include="Other\__snapshots__\" />
     </ItemGroup>
     
 

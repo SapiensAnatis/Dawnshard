@@ -42,6 +42,17 @@ public class MasterAssetData<TKey, TItem>
     public TItem Get(TKey key) => this[key];
 
     /// <summary>
+    /// Try to get a <typeparamref name="TItem"/>, returning <see langword="null"/> if not found.
+    /// </summary>
+    /// <param name="key">The key to index with.</param>
+    /// <returns>The returned value.</returns>
+    public TItem? GetValueOrDefault(TKey key)
+    {
+        this.TryGetValue(key, out TItem? value);
+        return value;
+    }
+
+    /// <summary>
     /// Get a <typeparam name="TItem"> instance corresponding to the given <typeparam name="TKey"/> key.</typeparam>
     /// </summary>
     /// <param name="key">The key to index with.</param>

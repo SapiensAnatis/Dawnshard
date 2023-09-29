@@ -7,6 +7,7 @@ using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -25,8 +26,8 @@ public class DungeonRecordServiceTest
     private readonly Mock<IQuestService> mockQuestService;
     private readonly Mock<IUserService> mockUserService;
     private readonly Mock<ITutorialService> mockTutorialService;
-    private readonly Mock<ILogger<DungeonRecordService>> mockLogger;
     private readonly Mock<ICharaService> mockCharaService;
+    private readonly Mock<ILogger<DungeonRecordService>> mockLogger;
 
     private readonly IDungeonRecordService dungeonRecordService;
 
@@ -44,8 +45,8 @@ public class DungeonRecordServiceTest
             this.mockQuestService.Object,
             this.mockUserService.Object,
             this.mockTutorialService.Object,
-            this.mockLogger.Object,
-            this.mockCharaService.Object
+            this.mockCharaService.Object,
+            this.mockLogger.Object
         );
 
         this.mockTutorialService.Setup(x => x.AddTutorialFlag(1022)).ReturnsAsync(new List<int>());

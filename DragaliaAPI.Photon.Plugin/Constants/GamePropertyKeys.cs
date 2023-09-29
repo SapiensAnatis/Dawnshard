@@ -22,5 +22,7 @@ namespace DragaliaAPI.Photon.Plugin.Constants
         public const string MatchingType = "MatchingType";
 
         public const string GoToIngameInfo = "GoToIngameInfo";
+
+        public const string IsSoloPlayWithPhoton = "IsSoloPlayWithPhoton";
     }
 }

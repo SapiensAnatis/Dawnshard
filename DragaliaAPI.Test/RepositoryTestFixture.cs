@@ -20,15 +20,18 @@ public class RepositoryTestFixture : IDisposable
 
     public const string DeviceAccountId = "id";
 
+    private readonly string DbName = $"DbTestFixture-{Guid.NewGuid()}";
+
     public RepositoryTestFixture()
     {
         DbContextOptions<ApiContext> options = new DbContextOptionsBuilder<ApiContext>()
-            .UseInMemoryDatabase($"DbTestFixture")
+            .UseInMemoryDatabase(DbName)
             .EnableSensitiveDataLogging()
             .ConfigureWarnings(config => config.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
         this.ApiContext = new ApiContext(options);
+
         // Unused for creating saves
         Mock<ILogger<SavefileService>> mockLogger = new(MockBehavior.Loose);
         Mock<IDistributedCache> mockCache = new(MockBehavior.Loose);
