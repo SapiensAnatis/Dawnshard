@@ -54,7 +54,8 @@ public class RewardService(
 
     public async Task GrantRewards(IEnumerable<Entity> entities)
     {
-        logger.LogTrace("Granting {n} rewards", entities.Count());
+        entities = entities.ToList();
+        logger.LogTrace("Granting rewards: {@rewards}", entities);
 
         foreach (Entity entity in entities)
         {
