@@ -55,7 +55,9 @@
 
         await using ApiContext context = await this.ContextFactory.CreateDbContextAsync();
 
-        IQueryable<DbTimeAttackClear> clears = context.TimeAttackClears.Where(x => x.QuestId == this.QuestId);
+        IQueryable<DbTimeAttackClear> clears = context.TimeAttackClears
+            .Where(x => x.QuestId == this.QuestId)
+            .OrderBy(x => x.Time);
 
         this.ownClear = await clears
             .Include(x => x.Players)
@@ -65,7 +67,6 @@
                     y => y.Player!.UserData!.ViewerId == this.ViewerId
                 )
             )
-            .OrderBy(x => x.Time)
             .FirstOrDefaultAsync();
 
         if (this.ownClear is null)
@@ -74,7 +75,10 @@
             return;
         }
 
-        this.ownRank = await clears.CountAsync(x => x.Time < ownClear.Time) + 1;
+        this.ownRank =
+           (await clears.Where(x => x.Time < ownClear.Time).ToListAsync())
+               .DistinctBy(x => x.PlayersHash)
+               .Count() + 1;
 
         this.loading = false;
     }
