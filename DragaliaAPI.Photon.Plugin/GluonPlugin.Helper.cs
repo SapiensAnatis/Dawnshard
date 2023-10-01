@@ -74,6 +74,20 @@ namespace DragaliaAPI.Photon.Plugin
         {
             HttpRequestCallback callback = this.LogIfFailedCallback;
 
+            Uri baseUri;
+            string bearerToken;
+
+            if (this.roomState.IsUseSecondaryServer)
+            {
+                baseUri = this.config.SecondaryStateManagerUrl;
+                bearerToken = this.config.SecondaryBearerToken;
+            }
+            else
+            {
+                baseUri = this.config.StateManagerUrl;
+                bearerToken = this.config.BearerToken;
+            }
+
             MemoryStream stream = new MemoryStream();
             string json = JsonConvert.SerializeObject(
                 forwardRequest,
@@ -86,25 +100,25 @@ namespace DragaliaAPI.Photon.Plugin
             byte[] data = Encoding.UTF8.GetBytes(json);
             stream.Write(data, 0, data.Length);
 
-            string url = new Uri(this.config.StateManagerUrl, endpoint).AbsoluteUri;
+            Uri requestUri = new Uri(baseUri, endpoint);
 
             HttpRequest request = new HttpRequest
             {
-                Url = url,
+                Url = requestUri.AbsoluteUri,
                 Method = "POST",
                 Accept = "application/json",
                 ContentType = "application/json",
                 Callback = callback,
                 CustomHeaders = new Dictionary<string, string>()
                 {
-                    { "Authorization", $"Bearer {this.config.BearerToken}" }
+                    { "Authorization", $"Bearer {bearerToken}" }
                 },
                 DataStream = stream,
                 Async = callAsync
             };
 
             this.PluginHost.LogDebug(
-                string.Format("PostStateManagerRequest: {0} - {1}", url, json)
+                string.Format("PostStateManagerRequest: {0} - {1}", requestUri.AbsolutePath, json)
             );
 
             this.PluginHost.HttpRequest(request, info);
@@ -128,7 +142,21 @@ namespace DragaliaAPI.Photon.Plugin
         {
             IActor actor = this.PluginHost.GameActors.First(x => x.ActorNr == info.ActorNr);
 
-            Uri requestUri = new Uri(this.config.ApiServerUrl, endpoint);
+            Uri baseUri;
+            string bearerToken;
+
+            if (this.roomState.IsUseSecondaryServer)
+            {
+                baseUri = this.config.SecondaryApiServerUrl;
+                bearerToken = this.config.SecondaryBearerToken;
+            }
+            else
+            {
+                baseUri = this.config.ApiServerUrl;
+                bearerToken = this.config.BearerToken;
+            }
+
+            Uri requestUri = new Uri(baseUri, endpoint);
 
             HttpRequest req = new HttpRequest()
             {
@@ -143,7 +171,7 @@ namespace DragaliaAPI.Photon.Plugin
                 CustomHeaders = new Dictionary<string, string>()
                 {
                     { "Auth-ViewerId", actor.GetViewerId().ToString() },
-                    { "Authorization", $"Bearer {this.config.BearerToken}" },
+                    { "Authorization", $"Bearer {bearerToken}" },
                     { "RoomName", this.PluginHost.GameId },
                     {
                         "RoomId",
