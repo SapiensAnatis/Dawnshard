@@ -1,19 +1,14 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.TimeAttack.Validation;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Photon.Shared.Models;
-using DragaliaAPI.Services.Api;
-using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using FluentValidation.Results;
-using Microsoft.CodeAnalysis.Completion;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -23,8 +18,6 @@ public class TimeAttackService(
     ITimeAttackCacheService timeAttackCacheService,
     ITimeAttackRepository timeAttackRepository,
     IOptionsMonitor<TimeAttackOptions> options,
-    IEventService eventService,
-    IMatchingService matchingService,
     IQuestRepository questRepository,
     IRewardService rewardService,
     IPlayerIdentityService playerIdentityService,
@@ -62,19 +55,11 @@ public class TimeAttackService(
         return true;
     }
 
-    public async Task RegisterRankedClear(float clearTime)
+    public async Task RegisterRankedClear(string roomName, float clearTime)
     {
         if (await timeAttackCacheService.Get() is not { } entry)
         {
             logger.LogWarning("Unable to retrieve cache entry for time attack clear");
-            return;
-        }
-
-        string? roomName = await matchingService.GetRoomName();
-
-        if (roomName is null)
-        {
-            logger.LogWarning("Failed to retrieve room for time attack clear");
             return;
         }
 
@@ -129,8 +114,6 @@ public class TimeAttackService(
             .Where(x => x.ClearTimeUpper > bestClearTime)
             .ExceptBy(receivedRewards, x => x.Id)
             .ToList();
-
-        logger.LogDebug("Granting rewards: {@rewards}", rewardsToReceive);
 
         await rewardService.GrantRewards(
             rewardsToReceive.Select(
