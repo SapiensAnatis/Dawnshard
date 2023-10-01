@@ -18,7 +18,7 @@ public class TalismanValidator : AbstractValidator<TalismanList>
         );
 
         When(
-            x => x.talisman_ability_id_1 != 0,
+            x => x.talisman_ability_id_2 != 0,
             () => RuleFor(x => x.talisman_ability_id_2).ExclusiveBetween(340000000, 350000000)
         );
 
