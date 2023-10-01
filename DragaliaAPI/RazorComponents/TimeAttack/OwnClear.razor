@@ -76,7 +76,7 @@
         }
 
         this.ownRank =
-           (await clears.Where(x => x.Time < ownClear.Time).ToListAsync())
+           (await clears.Include(x => x.Players).Where(x => x.Time < ownClear.Time).ToListAsync())
                .DistinctBy(x => x.PlayersHash)
                .Count() + 1;
 
