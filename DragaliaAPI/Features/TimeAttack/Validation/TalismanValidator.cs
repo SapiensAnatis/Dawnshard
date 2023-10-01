@@ -7,8 +7,8 @@ public class TalismanValidator : AbstractValidator<TalismanList>
 {
     public TalismanValidator()
     {
-        RuleFor(x => x.additional_attack).InclusiveBetween(0, 50);
-        RuleFor(x => x.additional_hp).InclusiveBetween(0, 50);
+        RuleFor(x => x.additional_attack).InclusiveBetween(0, 100);
+        RuleFor(x => x.additional_hp).InclusiveBetween(0, 100);
 
         RuleFor(x => x.talisman_id).IsInEnum();
 
