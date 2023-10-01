@@ -330,8 +330,8 @@ public class PartyInfoValidatorTest
                         talisman_data = new()
                         {
                             talisman_id = Talismans.GalaLuca,
-                            additional_attack = 51,
-                            additional_hp = 51
+                            additional_attack = 101,
+                            additional_hp = 101
                         }
                     }
                 }
