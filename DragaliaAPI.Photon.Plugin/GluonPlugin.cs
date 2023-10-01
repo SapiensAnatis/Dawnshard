@@ -701,11 +701,13 @@ namespace DragaliaAPI.Photon.Plugin
             foreach (IActor actor in this.PluginHost.GameActors)
                 this.actorState[actor.ActorNr].MemberCount = memberCountTable[actor.ActorNr];
 
+            int rankingType = QuestHelper.GetIsRanked(this.roomState.QuestId) ? 1 : 0;
+
             PartyEvent evt = new PartyEvent()
             {
                 MemberCountTable = memberCountTable,
                 ReBattleCount = this.config.ReplayTimeoutSeconds,
-                RankingType = 1,
+                RankingType = rankingType,
             };
 
             this.RaiseEvent(Event.Party, evt);
