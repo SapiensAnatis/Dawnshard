@@ -121,11 +121,11 @@ public class SummonTest : TestFixture
             await this.Client.PostMsgpack<SummonRequestData>(
                 "summon/request",
                 new SummonRequestRequest(
-                    1,
+                    1020203,
                     SummonExecTypes.Single,
                     1,
                     PaymentTypes.Wyrmite,
-                    new PaymentTarget(userData.Crystal, 120) // TODO: Change when banners are implemented otherwise this test breaks
+                    new PaymentTarget(userData.Crystal, 120)
                 )
             )
         ).data;
