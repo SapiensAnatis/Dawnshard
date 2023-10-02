@@ -6,7 +6,6 @@ namespace DragaliaAPI.Features.SavefileUpdate;
 
 public class V12Update(
     IWallRepository wallRepository,
-    IWallService wallService,
     IStoryRepository storyRepository
 ) : ISavefileUpdate
 {

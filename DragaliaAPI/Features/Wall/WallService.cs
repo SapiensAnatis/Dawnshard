@@ -119,7 +119,7 @@ public class WallService(
         {
             QuestWallMonthlyReward reward = MasterAsset.QuestWallMonthlyReward.Get(level);
             rewardList.Add(
-                new()
+                new AtgenBuildEventRewardEntityList()
                 {
                     entity_type = reward.RewardEntityType,
                     entity_id = reward.RewardEntityId,

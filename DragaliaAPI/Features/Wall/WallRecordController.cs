@@ -76,8 +76,8 @@ public class WallRecordController : DragaliaControllerBase
             new()
             {
                 reward_entity_list = new[] { GoldCrystals.ToBuildEventRewardEntityList() },
-                take_coin = 500,
-                take_mana = 120
+                take_coin = Rupies.Quantity,
+                take_mana = Mana.Quantity
             };
 
         AtgenPlayWallDetail playWallDetail =
@@ -91,20 +91,13 @@ public class WallRecordController : DragaliaControllerBase
         // Grant Rewards
         await rewardService.GrantReward(GoldCrystals);
 
-        await rewardService.GrantReward(new Entity(EntityTypes.Rupies, 1, 500));
+        await rewardService.GrantReward(Rupies);
 
-        await rewardService.GrantReward(new Entity(EntityTypes.Mana, 0, 120));
+        await rewardService.GrantReward(Mana);
 
         if (toGrantFirstClearWyrmite)
         {
-            presentService.AddPresent(
-                new Present.Present(
-                    PresentMessage.FirstClear,
-                    Wyrmites.Type,
-                    Wyrmites.Id,
-                    Wyrmites.Quantity
-                )
-            );
+            presentService.AddPresent(WyrmitesPresent);
         }
 
         IEnumerable<AtgenBuildEventRewardEntityList> wallClearRewardList = toGrantFirstClearWyrmite
@@ -128,7 +121,19 @@ public class WallRecordController : DragaliaControllerBase
         return Ok(data);
     }
 
-    private readonly Entity GoldCrystals = new(EntityTypes.Material, (int)Materials.GoldCrystal, 3);
+    public static readonly Entity GoldCrystals = new(EntityTypes.Material, (int)Materials.GoldCrystal, 3);
 
-    private readonly Entity Wyrmites = new(EntityTypes.Wyrmite, 0, 10);
+    public static readonly Entity Rupies = new(EntityTypes.Rupies, 1, 500);
+
+    public static readonly Entity Mana = new(EntityTypes.Mana, 0, 120);
+
+    public static readonly Entity Wyrmites = new(EntityTypes.Wyrmite, 0, 10);
+
+    public static readonly Present.Present WyrmitesPresent = new(
+                    PresentMessage.FirstClear,
+                    Wyrmites.Type,
+                    Wyrmites.Id,
+                    Wyrmites.Quantity
+                );
+
 }

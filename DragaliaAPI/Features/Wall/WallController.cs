@@ -18,15 +18,13 @@ public class WallController : DragaliaControllerBase
     private readonly IClearPartyService clearPartyService;
     private readonly IDungeonService dungeonService;
     private readonly IWallService wallService;
-    private readonly ILogger<WallController> logger;
 
     public WallController(
         IUpdateDataService updateDataService,
         IRewardService rewardService,
         IClearPartyService clearPartyService,
         IDungeonService dungeonService,
-        IWallService wallService,
-        ILogger<WallController> logger
+        IWallService wallService
     )
     {
         this.updateDataService = updateDataService;
@@ -34,7 +32,6 @@ public class WallController : DragaliaControllerBase
         this.clearPartyService = clearPartyService;
         this.dungeonService = dungeonService;
         this.wallService = wallService;
-        this.logger = logger;
     }
 
     // Called when failing a MG quest
