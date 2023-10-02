@@ -4,12 +4,12 @@ using DragaliaAPI.Services.Game;
 
 namespace DragaliaAPI.Features.SavefileUpdate;
 
-public class V12Update(
+public class V13Update(
     IWallRepository wallRepository,
     IStoryRepository storyRepository
 ) : ISavefileUpdate
 {
-    public int SavefileVersion => 12;
+    public int SavefileVersion => 13;
 
     public async Task Apply()
     {
