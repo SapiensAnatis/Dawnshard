@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -12,11 +13,11 @@ using Microsoft.Extensions.DependencyInjection;
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
-/// Tests <see cref="Controllers.Dragalia.CharaController"/>
+/// Tests <see cref="CharaController"/>
 /// </summary>
 public class CharaTest : TestFixture
 {
-    public CharaTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public CharaTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         this.AddCharacter(Charas.Naveed);
@@ -138,7 +139,7 @@ public class CharaTest : TestFixture
                 new CharaBuildupManaRequest(
                     Charas.Celliera,
                     new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-                    CharaUpgradeMaterialTypes.Standard
+                    false
                 )
             )
         ).data;
@@ -177,11 +178,7 @@ public class CharaTest : TestFixture
         CharaLimitBreakData response = (
             await this.Client.PostMsgpack<CharaLimitBreakData>(
                 "chara/limit_break",
-                new CharaLimitBreakRequest(
-                    Charas.Celliera,
-                    1,
-                    (int)CharaUpgradeMaterialTypes.Standard
-                )
+                new CharaLimitBreakRequest(Charas.Celliera, 1, false)
             )
         ).data;
 
@@ -229,7 +226,7 @@ public class CharaTest : TestFixture
                     Charas.Celliera,
                     2,
                     new List<int>() { 21, 22, 24, 25, 28 },
-                    (int)CharaUpgradeMaterialTypes.Standard
+                    false
                 )
             )
         ).data;
@@ -290,7 +287,7 @@ public class CharaTest : TestFixture
                     Charas.Delphi,
                     4,
                     Enumerable.Range(1, 50),
-                    (int)CharaUpgradeMaterialTypes.Standard
+                    false
                 )
             )
         ).data;
@@ -329,17 +326,13 @@ public class CharaTest : TestFixture
 
         await this.Client.PostMsgpack<CharaLimitBreakData>(
             "chara/limit_break",
-            new CharaLimitBreakRequest(Charas.Delphi, 5, 0)
+            new CharaLimitBreakRequest(Charas.Delphi, 5, false)
         );
 
         CharaBuildupManaData postSpiralResponse = (
             await this.Client.PostMsgpack<CharaBuildupManaData>(
                 "chara/buildup_mana",
-                new CharaBuildupManaRequest(
-                    Charas.Delphi,
-                    Enumerable.Range(51, 20),
-                    (int)CharaUpgradeMaterialTypes.Standard
-                )
+                new CharaBuildupManaRequest(Charas.Delphi, Enumerable.Range(51, 20), false)
             )
         ).data;
 
@@ -463,11 +456,7 @@ public class CharaTest : TestFixture
         {
             await this.Client.PostMsgpack<CharaBuildupManaData>(
                 "chara/buildup_mana",
-                new CharaBuildupManaRequest(
-                    id,
-                    Enumerable.Range(1, manaNodes),
-                    (int)CharaUpgradeMaterialTypes.Standard
-                )
+                new CharaBuildupManaRequest(id, Enumerable.Range(1, manaNodes), false)
             );
         }
         else
@@ -478,7 +467,7 @@ public class CharaTest : TestFixture
                     id,
                     limitBreak,
                     Enumerable.Range(1, manaNodes),
-                    CharaUpgradeMaterialTypes.Standard
+                    false
                 )
             );
         }
@@ -552,11 +541,7 @@ public class CharaTest : TestFixture
         {
             await this.Client.PostMsgpack<CharaBuildupManaData>(
                 "chara/buildup_mana",
-                new CharaBuildupManaRequest(
-                    id,
-                    Enumerable.Range(1, manaNodes),
-                    (int)CharaUpgradeMaterialTypes.Standard
-                )
+                new CharaBuildupManaRequest(id, Enumerable.Range(1, manaNodes), false)
             );
         }
         else
@@ -567,7 +552,7 @@ public class CharaTest : TestFixture
                     id,
                     limitBreak,
                     Enumerable.Range(1, manaNodes),
-                    CharaUpgradeMaterialTypes.Standard
+                    false
                 )
             );
         }
@@ -630,7 +615,7 @@ public class CharaTest : TestFixture
         CharaGetCharaUnitSetData response = (
             await this.Client.PostMsgpack<CharaGetCharaUnitSetData>(
                 "chara/get_chara_unit_set",
-                new CharaGetCharaUnitSetRequest(new List<int>() { (int)Charas.Celliera })
+                new CharaGetCharaUnitSetRequest(new List<Charas>() { Charas.Celliera })
             )
         ).data;
 

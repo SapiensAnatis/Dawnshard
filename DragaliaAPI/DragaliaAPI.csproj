@@ -16,6 +16,7 @@
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 		<PackageReference Include="EntityGraphQL" Version="4.3.0" />
 		<PackageReference Include="EntityGraphQL.AspNet" Version="4.3.0" />
+		<PackageReference Include="FluentValidation" Version="11.7.1" />
 		<PackageReference Include="MessagePack" Version="2.5.108" />
 		<PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="2.5.108" />
 		<PackageReference Include="MessagePackAnalyzer" Version="2.5.108">
@@ -38,6 +39,7 @@
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.29.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" />
+		<PackageReference Include="MudBlazor" Version="6.9.0" />
 		<PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
 		<PackageReference Include="Serilog.Expressions" Version="3.4.2-dev-00119" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.5.0-dev-00383" />
@@ -59,13 +61,9 @@
 
 	
 	<ItemGroup>
-		<Compile Remove="Pages\Components\**" />
 		<Content Remove="bin\**" />
-		<Content Remove="Pages\Components\**" />
 		<EmbeddedResource Remove="bin\**" />
-		<EmbeddedResource Remove="Pages\Components\**" />
 		<None Remove="bin\**" />
-		<None Remove="Pages\Components\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -88,13 +86,7 @@
 
 	<ItemGroup>
 		<Folder Include="logs\" />
+		<Folder Include="wwwroot\img\icon\" />
 	</ItemGroup>
-
-	<ProjectExtensions>
-		<VisualStudio>
-			<UserProperties resources_4news_1json__JsonSchema="news.schema.json" />
-		</VisualStudio>
-	</ProjectExtensions>
-
 
 </Project>

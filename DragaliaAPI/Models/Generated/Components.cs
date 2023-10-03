@@ -10,6 +10,7 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.Json;
 using MessagePack;
 
@@ -866,7 +867,7 @@ public class AtgenCharaUnitSetDetailList
 {
     public int unit_set_no { get; set; }
     public string unit_set_name { get; set; }
-    public ulong dragon_key_id { get; set; }
+    public long dragon_key_id { get; set; }
     public WeaponBodies weapon_body_id { get; set; }
     public AbilityCrests crest_slot_type_1_crest_id_1 { get; set; }
     public AbilityCrests crest_slot_type_1_crest_id_2 { get; set; }
@@ -875,12 +876,12 @@ public class AtgenCharaUnitSetDetailList
     public AbilityCrests crest_slot_type_2_crest_id_2 { get; set; }
     public AbilityCrests crest_slot_type_3_crest_id_1 { get; set; }
     public AbilityCrests crest_slot_type_3_crest_id_2 { get; set; }
-    public ulong talisman_key_id { get; set; }
+    public long talisman_key_id { get; set; }
 
     public AtgenCharaUnitSetDetailList(
         int unit_set_no,
         string unit_set_name,
-        ulong dragon_key_id,
+        long dragon_key_id,
         WeaponBodies weapon_body_id,
         AbilityCrests crest_slot_type_1_crest_id_1,
         AbilityCrests crest_slot_type_1_crest_id_2,
@@ -889,7 +890,7 @@ public class AtgenCharaUnitSetDetailList
         AbilityCrests crest_slot_type_2_crest_id_2,
         AbilityCrests crest_slot_type_3_crest_id_1,
         AbilityCrests crest_slot_type_3_crest_id_2,
-        ulong talisman_key_id
+        long talisman_key_id
     )
     {
         this.unit_set_no = unit_set_no;
@@ -3244,7 +3245,7 @@ public class AtgenRequestAbilityCrestSetData
     public AbilityCrests crest_slot_type_2_crest_id_2 { get; set; }
     public AbilityCrests crest_slot_type_3_crest_id_1 { get; set; }
     public AbilityCrests crest_slot_type_3_crest_id_2 { get; set; }
-    public ulong talisman_key_id { get; set; }
+    public long talisman_key_id { get; set; }
 
     public AtgenRequestAbilityCrestSetData(
         AbilityCrests crest_slot_type_1_crest_id_1,
@@ -3254,7 +3255,7 @@ public class AtgenRequestAbilityCrestSetData
         AbilityCrests crest_slot_type_2_crest_id_2,
         AbilityCrests crest_slot_type_3_crest_id_1,
         AbilityCrests crest_slot_type_3_crest_id_2,
-        ulong talisman_key_id
+        long talisman_key_id
     )
     {
         this.crest_slot_type_1_crest_id_1 = crest_slot_type_1_crest_id_1;
@@ -3273,7 +3274,7 @@ public class AtgenRequestAbilityCrestSetData
 [MessagePackObject(true)]
 public class AtgenRequestCharaUnitSetData
 {
-    public ulong dragon_key_id { get; set; }
+    public long dragon_key_id { get; set; }
     public WeaponBodies weapon_body_id { get; set; }
     public AbilityCrests crest_slot_type_1_crest_id_1 { get; set; }
     public AbilityCrests crest_slot_type_1_crest_id_2 { get; set; }
@@ -3282,10 +3283,10 @@ public class AtgenRequestCharaUnitSetData
     public AbilityCrests crest_slot_type_2_crest_id_2 { get; set; }
     public AbilityCrests crest_slot_type_3_crest_id_1 { get; set; }
     public AbilityCrests crest_slot_type_3_crest_id_2 { get; set; }
-    public ulong talisman_key_id { get; set; }
+    public long talisman_key_id { get; set; }
 
     public AtgenRequestCharaUnitSetData(
-        ulong dragon_key_id,
+        long dragon_key_id,
         WeaponBodies weapon_body_id,
         AbilityCrests crest_slot_type_1_crest_id_1,
         AbilityCrests crest_slot_type_1_crest_id_2,
@@ -3294,7 +3295,7 @@ public class AtgenRequestCharaUnitSetData
         AbilityCrests crest_slot_type_2_crest_id_2,
         AbilityCrests crest_slot_type_3_crest_id_1,
         AbilityCrests crest_slot_type_3_crest_id_2,
-        ulong talisman_key_id
+        long talisman_key_id
     )
     {
         this.dragon_key_id = dragon_key_id;
@@ -4814,11 +4815,11 @@ public class CharaList
 [MessagePackObject(true)]
 public class CharaUnitSetList
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public IEnumerable<AtgenCharaUnitSetDetailList> chara_unit_set_detail_list { get; set; }
 
     public CharaUnitSetList(
-        int chara_id,
+        Charas chara_id,
         IEnumerable<AtgenCharaUnitSetDetailList> chara_unit_set_detail_list
     )
     {
@@ -5640,10 +5641,10 @@ public class EarnEventUserList
 [MessagePackObject(true)]
 public class EditSkillCharaData
 {
-    public int chara_id { get; set; }
+    public Charas chara_id { get; set; }
     public int edit_skill_level { get; set; }
 
-    public EditSkillCharaData(int chara_id, int edit_skill_level)
+    public EditSkillCharaData(Charas chara_id, int edit_skill_level)
     {
         this.chara_id = chara_id;
         this.edit_skill_level = edit_skill_level;
@@ -7782,11 +7783,11 @@ public class QuestEventList
     public int weekly_play_count { get; set; }
     public int quest_bonus_receive_count { get; set; }
     public int quest_bonus_stack_count { get; set; }
-    public int quest_bonus_stack_time { get; set; }
+    public DateTimeOffset quest_bonus_stack_time { get; set; }
     public int quest_bonus_reserve_count { get; set; }
-    public int quest_bonus_reserve_time { get; set; }
-    public int last_daily_reset_time { get; set; }
-    public int last_weekly_reset_time { get; set; }
+    public DateTimeOffset quest_bonus_reserve_time { get; set; }
+    public DateTimeOffset last_daily_reset_time { get; set; }
+    public DateTimeOffset last_weekly_reset_time { get; set; }
 
     public QuestEventList(
         int quest_event_id,
@@ -7794,11 +7795,11 @@ public class QuestEventList
         int weekly_play_count,
         int quest_bonus_receive_count,
         int quest_bonus_stack_count,
-        int quest_bonus_stack_time,
+        DateTimeOffset quest_bonus_stack_time,
         int quest_bonus_reserve_count,
-        int quest_bonus_reserve_time,
-        int last_daily_reset_time,
-        int last_weekly_reset_time
+        DateTimeOffset quest_bonus_reserve_time,
+        DateTimeOffset last_daily_reset_time,
+        DateTimeOffset last_weekly_reset_time
     )
     {
         this.quest_event_id = quest_event_id;
@@ -7823,7 +7824,7 @@ public class QuestEventScheduleList
     public int event_schedule_type { get; set; }
     public DateTimeOffset start_date { get; set; }
     public DateTimeOffset end_date { get; set; }
-    public int interval_type { get; set; }
+    public QuestGroupIntervalType interval_type { get; set; }
     public string fever_time_start_1 { get; set; }
     public string fever_time_end_1 { get; set; }
     public string fever_time_start_2 { get; set; }
@@ -7836,7 +7837,7 @@ public class QuestEventScheduleList
         int event_schedule_type,
         DateTimeOffset start_date,
         DateTimeOffset end_date,
-        int interval_type,
+        QuestGroupIntervalType interval_type,
         string fever_time_start_1,
         string fever_time_end_1,
         string fever_time_start_2,
@@ -7872,8 +7873,8 @@ public class QuestList
     public int daily_play_count { get; set; }
     public int weekly_play_count { get; set; }
     public int play_count { get; set; }
-    public int last_daily_reset_time { get; set; }
-    public int last_weekly_reset_time { get; set; }
+    public DateTimeOffset last_daily_reset_time { get; set; }
+    public DateTimeOffset last_weekly_reset_time { get; set; }
     public int is_appear { get; set; }
     public float best_clear_time { get; set; }
 
@@ -7886,8 +7887,8 @@ public class QuestList
         int daily_play_count,
         int weekly_play_count,
         int play_count,
-        int last_daily_reset_time,
-        int last_weekly_reset_time,
+        DateTimeOffset last_daily_reset_time,
+        DateTimeOffset last_weekly_reset_time,
         int is_appear,
         float best_clear_time
     )
@@ -7916,7 +7917,7 @@ public class QuestScheduleDetailList
     public int schedule_group_id { get; set; }
     public int drop_bonus_percent { get; set; }
     public int limit_shop_goods_type { get; set; }
-    public int interval_type { get; set; }
+    public QuestGroupIntervalType interval_type { get; set; }
 
     [JsonConverter(typeof(DateTimeUnixJsonConverter))]
     public DateTimeOffset start_date { get; set; }
@@ -7929,7 +7930,7 @@ public class QuestScheduleDetailList
         int schedule_group_id,
         int drop_bonus_percent,
         int limit_shop_goods_type,
-        int interval_type,
+        QuestGroupIntervalType interval_type,
         DateTimeOffset start_date,
         DateTimeOffset end_date
     )
@@ -8377,6 +8378,7 @@ public class SettingSupport
 [MessagePackObject(true)]
 public class ShopNotice
 {
+    [JsonConverter(typeof(BoolIntJsonConverter))]
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool is_shop_notification { get; set; }
 
@@ -8800,7 +8802,7 @@ public class SummonTicketList
 public class TalismanList
 {
     public ulong talisman_key_id { get; set; }
-    public int talisman_id { get; set; }
+    public Talismans talisman_id { get; set; }
     public int talisman_ability_id_1 { get; set; }
     public int talisman_ability_id_2 { get; set; }
     public int talisman_ability_id_3 { get; set; }
@@ -8818,7 +8820,7 @@ public class TalismanList
 
     public TalismanList(
         ulong talisman_key_id,
-        int talisman_id,
+        Talismans talisman_id,
         int talisman_ability_id_1,
         int talisman_ability_id_2,
         int talisman_ability_id_3,

@@ -1,25 +1,23 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Extensions;
-using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Chara;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Player;
-using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
-using PhotonPlayer = DragaliaAPI.Photon.Shared.Models.Player;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
 public class DungeonRecordService(
     IDungeonRecordRewardService dungeonRecordRewardService,
-    IQuestRepository questRepository,
-    IMissionProgressionService missionProgressionService,
+    IQuestService questService,
     IUserService userService,
     ITutorialService tutorialService,
+    ICharaService charaService,
     ILogger<DungeonRecordService> logger
 ) : IDungeonRecordService
 {
@@ -50,17 +48,22 @@ public class DungeonRecordService(
                 current_play_count = 1,
                 reborn_count = playRecord.reborn_count,
                 total_play_damage = playRecord.total_play_damage,
+                clear_time = playRecord.time,
                 is_clear = true,
             };
 
-        DbQuest questData = await questRepository.GetQuestDataAsync(session.QuestData.Id);
-        questData.State = 3;
+        (
+            DbQuest questData,
+            ingameResultData.is_best_clear_time,
+            ingameResultData.reward_record.quest_bonus_list
+        ) = await questService.ProcessQuestCompletion(
+            session.QuestData.Id,
+            playRecord.time,
+            session.PlayCount
+        );
 
-        this.ProcessClearTime(ingameResultData, playRecord.time, questData);
-        this.ProcessMissionProgression(session);
-        await this.ProcessGrowth(ingameResultData.grow_record, session);
         await this.ProcessStaminaConsumption(session);
-        await this.ProcessPlayerLevel(
+        await this.ProcessExperience(
             ingameResultData.grow_record,
             ingameResultData.reward_record,
             session
@@ -101,42 +104,6 @@ public class DungeonRecordService(
         return ingameResultData;
     }
 
-    private void ProcessClearTime(IngameResultData resultData, float clearTime, DbQuest questEntity)
-    {
-        bool isBestClearTime = false;
-
-        if (questEntity.BestClearTime < 0 || questEntity.BestClearTime > clearTime)
-        {
-            isBestClearTime = true;
-            questEntity.BestClearTime = clearTime;
-        }
-
-        resultData.clear_time = clearTime;
-        resultData.is_best_clear_time = isBestClearTime;
-    }
-
-    private Task ProcessGrowth(GrowRecord growRecord, DungeonSession session)
-    {
-        // TODO: actual implementation. Extract out into a service at that time
-        growRecord.take_player_exp = 1;
-        growRecord.take_chara_exp = 1;
-        growRecord.bonus_factor = 1;
-        growRecord.mana_bonus_factor = 1;
-        growRecord.chara_grow_record = session.Party.Select(
-            x => new AtgenCharaGrowRecord() { chara_id = x.chara_id, take_exp = 1 }
-        );
-
-        return Task.CompletedTask;
-    }
-
-    private void ProcessMissionProgression(DungeonSession session)
-    {
-        if (session.QuestData.IsPartOfVoidBattleGroups)
-            missionProgressionService.OnVoidBattleCleared();
-
-        missionProgressionService.OnQuestCleared(session.QuestData.Id);
-    }
-
     private async Task ProcessStaminaConsumption(DungeonSession session)
     {
         StaminaType type = StaminaType.None;
@@ -154,11 +121,13 @@ public class DungeonRecordService(
             amount = session.QuestData.PayStaminaSingle;
         }
 
+        amount *= session.PlayCount;
+
         if (type != StaminaType.None && amount != 0)
             await userService.RemoveStamina(type, amount);
     }
 
-    private async Task ProcessPlayerLevel(
+    private async Task ProcessExperience(
         GrowRecord growRecord,
         RewardRecord rewardRecord,
         DungeonSession session
@@ -172,9 +141,30 @@ public class DungeonRecordService(
                     ? session.QuestData.PayStaminaMulti * 100
                     : 150;
 
+        experience *= session.PlayCount;
+
         PlayerLevelResult playerLevelResult = await userService.AddExperience(experience); // TODO: Exp boost
 
         rewardRecord.player_level_up_fstone = playerLevelResult.RewardedWyrmite;
         growRecord.take_player_exp = experience;
+
+        int experiencePerChara = experience * 2;
+
+        List<AtgenCharaGrowRecord> charaGrowRecord = new();
+
+        foreach (PartySettingList chara in session.Party)
+        {
+            if (chara.chara_id == 0)
+                continue;
+
+            await charaService.LevelUpChara(chara.chara_id, experiencePerChara);
+
+            charaGrowRecord.Add(new AtgenCharaGrowRecord(chara.chara_id, experiencePerChara));
+            growRecord.take_chara_exp += experiencePerChara;
+        }
+
+        growRecord.chara_grow_record = charaGrowRecord;
+        growRecord.bonus_factor = 1;
+        growRecord.mana_bonus_factor = 1;
     }
 }

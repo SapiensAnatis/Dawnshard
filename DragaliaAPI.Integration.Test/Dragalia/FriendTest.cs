@@ -11,7 +11,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// </summary>
 public class FriendTest : TestFixture
 {
-    public FriendTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public FriendTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();

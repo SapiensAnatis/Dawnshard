@@ -1,5 +1,8 @@
 ﻿using DragaliaAPI.Models.Generated;
 
+// ReSharper disable InconsistentNaming
+#pragma warning disable IDE1006
+
 namespace DragaliaAPI.Features.Missions;
 
 public interface INormalMissionEndpointResponse

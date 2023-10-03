@@ -2,9 +2,11 @@
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.AspNetCore.Mvc;
 using MessagePack.Resolvers;
 using MessagePack;
+using DragaliaAPI.Helpers;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -12,35 +14,14 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [Consumes("application/octet-stream")]
 [Produces("application/octet-stream")]
 [ApiController]
-public class MypageController : DragaliaControllerBase
+public class MypageController(
+    IMissionService missionService,
+    IShopRepository shopRepository,
+    IDateTimeProvider dateTimeProvider,
+    IUpdateDataService updateDataService,
+    ILogger<MypageController> logger
+) : DragaliaControllerBase
 {
-    private readonly IMissionService missionService;
-    private readonly IShopRepository shopRepository;
-    private readonly IUpdateDataService updateDataService;
-
-    public MypageController(
-        IMissionService missionService,
-        IShopRepository shopRepository,
-        IUpdateDataService updateDataService
-    )
-    {
-        this.missionService = missionService;
-        this.shopRepository = shopRepository;
-        this.updateDataService = updateDataService;
-    }
-
-    private static readonly List<QuestScheduleDetailList> AvailableQuestSchedule; // Used for unlocking void battles
-
-    static MypageController()
-    {
-        string questScheduleJson = System.IO.File.ReadAllText(
-            "Resources/mypage_info_quest_schedule.json"
-        );
-        AvailableQuestSchedule =
-            JsonSerializer.Deserialize<List<QuestScheduleDetailList>>(questScheduleJson)
-            ?? new List<QuestScheduleDetailList>();
-    }
-
     [Route("info")]
     [HttpPost]
     public async Task<DragaliaResult> Info()
@@ -49,10 +30,23 @@ public class MypageController : DragaliaControllerBase
 
         resp.user_summon_list = new List<UserSummonList>();
         resp.quest_event_schedule_list = new List<QuestEventScheduleList>();
-        resp.quest_schedule_detail_list = AvailableQuestSchedule;
-        resp.is_shop_notification = await this.shopRepository.GetDailySummonCountAsync() == 0;
-        resp.update_data_list = await this.updateDataService.SaveChangesAsync();
-        resp.update_data_list.mission_notice = await this.missionService.GetMissionNotice(null);
+
+        resp.quest_schedule_detail_list = MasterAsset.QuestScheduleInfo.Enumerable.Select(
+            x =>
+                new QuestScheduleDetailList(
+                    x.Id,
+                    x.ScheduleGroupId,
+                    x.DropBonusCount,
+                    0,
+                    x.IntervalType,
+                    x.StartDate,
+                    x.EndDate
+                )
+        );
+
+        resp.is_shop_notification = await shopRepository.GetDailySummonCountAsync() == 0;
+        resp.update_data_list = await updateDataService.SaveChangesAsync();
+        resp.update_data_list.mission_notice = await missionService.GetMissionNotice(null);
 
         return Ok(resp);
     }

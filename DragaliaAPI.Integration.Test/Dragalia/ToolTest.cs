@@ -10,7 +10,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// </summary>
 public class ToolTest : TestFixture
 {
-    public ToolTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public ToolTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         this.Client.DefaultRequestHeaders.Remove("SID");
@@ -45,7 +45,7 @@ public class ToolTest : TestFixture
             )
         ).data;
 
-        response.viewer_id.Should().Be(1);
+        response.viewer_id.Should().Be((ulong)ViewerId);
     }
 
     /*[Fact]
@@ -106,7 +106,7 @@ public class ToolTest : TestFixture
             )
         ).data;
 
-        response.viewer_id.Should().Be(1);
+        response.viewer_id.Should().Be((ulong)ViewerId);
         Guid.TryParse(response.session_id, out _).Should().BeTrue();
     }
 
@@ -129,9 +129,9 @@ public class ToolTest : TestFixture
             await this.Client.PostMsgpack<ToolAuthData>("/tool/auth", data)
         ).data;
 
-        response.viewer_id.Should().Be(1);
+        response.viewer_id.Should().Be((ulong)ViewerId);
         Guid.TryParse(response.session_id, out _).Should().BeTrue();
-        response2.viewer_id.Should().Be(1);
+        response2.viewer_id.Should().Be((ulong)ViewerId);
         Guid.TryParse(response2.session_id, out _).Should().BeTrue();
         response.session_id.Should().Be(response2.session_id);
     }

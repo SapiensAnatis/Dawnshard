@@ -11,6 +11,8 @@ public class QuestMapProfile : Profile
     {
         this.CreateMap<DbQuest, QuestList>().ReverseMap();
 
+        this.CreateMap<DbQuestEvent, QuestEventList>().ReverseMap();
+
         this.CreateMap<DbPlayerStoryState, QuestStoryList>()
             .ForMember(x => x.quest_story_id, o => o.MapFrom(nameof(DbPlayerStoryState.StoryId)));
 

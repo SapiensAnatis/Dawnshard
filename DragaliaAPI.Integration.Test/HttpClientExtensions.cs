@@ -3,6 +3,7 @@ using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using MessagePack;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DragaliaAPI.Integration.Test;
 
@@ -27,7 +28,7 @@ public static class HttpClientExtensions
     {
         HttpContent content = CreateMsgpackContent(request);
 
-        HttpResponseMessage response = await client.PostAsync(endpoint, content);
+        HttpResponseMessage response = await client.PostAsync(endpoint.TrimStart('/'), content);
 
         response.EnsureSuccessStatusCode();
 
@@ -41,6 +42,13 @@ public static class HttpClientExtensions
 
         return deserialized;
     }
+
+    public static async Task PostMsgpack(
+        this HttpClient client,
+        string endpoint,
+        object request,
+        bool ensureSuccessHeader = true
+    ) => await client.PostMsgpack<object>(endpoint, request, ensureSuccessHeader);
 
     /// <summary>
     /// Post a msgpack request, but do not attempt to deserialize it.

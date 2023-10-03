@@ -74,6 +74,8 @@ public class HeroParamService : IHeroParamService
             .BuildDetailedPartyUnit(partyRepository.GetPartyUnits(partySlot), partySlot)
             .ToListAsync();
 
+        this.logger.LogDebug("Retrieved {n} party units", detailedPartyUnits.Count);
+
         foreach (DbDetailedPartyUnit unit in detailedPartyUnits)
         {
             if (unit.WeaponBodyData is not null)

@@ -1,0 +1,27 @@
+﻿@page "/timeattack/rankings/webview"
+
+@using DragaliaAPI.RazorComponents.TimeAttack
+
+@layout WebviewLayout
+
+<MudTabs Centered=true PanelClass="pa-2">
+    <MudTabPanel Text="Solo">
+        <RankingWebviewTab QuestId="SoloId" ViewerId="ViewerId"/>
+    </MudTabPanel>
+    <MudTabPanel Text="Co-op">
+        <RankingWebviewTab QuestId="CoopId" ViewerId="ViewerId" />
+    </MudTabPanel>
+</MudTabs>
+
+@code {
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "quest_id")]
+    public int SoloId { get; set; }
+
+    public int CoopId => this.SoloId + 1;
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "viewer_id")]
+    public long ViewerId { get; set; }
+}

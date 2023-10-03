@@ -5,7 +5,7 @@ namespace DragaliaAPI.Integration.Test.Features.Missions;
 
 public class MissionTest : TestFixture
 {
-    public MissionTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public MissionTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]
@@ -64,7 +64,7 @@ public class MissionTest : TestFixture
         resp.data.update_data_list.mission_notice.drill_mission_notice.is_update.Should().Be(1);
         resp.data.update_data_list.mission_notice.drill_mission_notice.completed_mission_count
             .Should()
-            .Be(1);
+            .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
         resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list
             .Should()
             .Contain(100200);

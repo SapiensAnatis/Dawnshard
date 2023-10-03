@@ -1,0 +1,23 @@
+<MudPaper Class="pa-3" Height="100%">
+    <MudStack AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" Style="height: 100%">
+        <MudContainer Class="pl-2">
+            <MudText Typo="Typo.h6">@Question</MudText>
+            <MudText Typo="Typo.body2">@Answer</MudText>
+        </MudContainer>
+        @Action
+    </MudStack>
+</MudPaper>
+
+@code {
+    [Parameter]
+    public RenderFragment? Question { get; set; }
+    
+    [Parameter]
+    public RenderFragment? Answer { get; set; }
+    
+    [Parameter]
+    public RenderFragment? Action { get; set; }
+
+    [Parameter]
+    public string? Height { get; set; } = "250px";
+}

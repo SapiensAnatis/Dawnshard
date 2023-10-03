@@ -1,0 +1,53 @@
+﻿@page "/news"
+@using System.Text.Json;
+
+<PageTitle>News</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom=true>News and updates</MudText>
+<MudDivider Class="ma-4" />
+
+<MudStack>
+    @foreach(NewsItem item in this.newsItems) {
+        <MudCard>
+            <MudCardHeader Style="margin-bottom: -1rem">
+                <MudStack Spacing="-1">
+                    <MudText Typo="Typo.h6" Color="Color.Primary">
+                        @item.Headline
+                    </MudText>
+                    <MudText Typo="Typo.caption">
+                        @item.Date
+                    </MudText>
+                </MudStack>
+            </MudCardHeader>
+            <MudCardContent>
+                @item.DescriptionFragment
+            </MudCardContent>
+        </MudCard>
+    }
+</MudStack>
+
+@code {
+
+    private IEnumerable<NewsItem> newsItems = Enumerable.Empty<NewsItem>();
+
+    private const string filename = "news.json";
+    private const string folder = "Resources";
+
+    protected override void OnInitialized()
+    {
+        this.newsItems = JsonSerializer
+            .Deserialize<List<NewsItem>>(
+                System.IO.File.ReadAllText(Path.Join(folder, filename)),
+                new JsonSerializerOptions(JsonSerializerDefaults.Web)
+            )
+            ?.OrderByDescending(x => x.Timestamp) ?? throw new JsonException("Deserialization failure");
+    }
+
+    public record NewsItem(string Headline, string Description, long Timestamp)
+    {
+        public string Date =>
+            $"{DateTimeOffset.FromUnixTimeSeconds(this.Timestamp):dd/MM/yyyy HH:mm} UTC";
+
+        public RenderFragment DescriptionFragment => (builder) => builder.AddMarkupContent(0, this.Description);
+    }
+}

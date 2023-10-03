@@ -1,6 +1,8 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -17,7 +19,8 @@ public class EventService(
     ILogger<EventService> logger,
     IEventRepository eventRepository,
     IRewardService rewardService,
-    IQuestRepository questRepository
+    IQuestRepository questRepository,
+    IDateTimeProvider dateTime
 ) : IEventService
 {
     public async Task<bool> GetCustomEventFlag(int eventId)

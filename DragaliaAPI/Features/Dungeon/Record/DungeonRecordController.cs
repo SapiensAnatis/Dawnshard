@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -15,7 +16,9 @@ public class DungeonRecordController(
     IDungeonRecordDamageService dungeonRecordDamageService,
     IDungeonRecordHelperService dungeonRecordHelperService,
     IDungeonService dungeonService,
-    IUpdateDataService updateDataService
+    ITimeAttackService timeAttackService,
+    IUpdateDataService updateDataService,
+    ILogger<DungeonRecordController> logger
 ) : DragaliaControllerBase
 {
     [HttpPost("record")]
@@ -88,5 +91,21 @@ public class DungeonRecordController(
         }
 
         return Ok(response);
+    }
+
+    [HttpPost("record_time_attack")]
+    [Authorize(
+        AuthenticationSchemes = nameof(PhotonAuthenticationHandler),
+        Roles = PhotonAuthenticationHandler.Role
+    )]
+    public async Task<DragaliaResult> RecordTimeAttack(
+        [FromHeader(Name = "RoomName")] string roomName,
+        [FromBody] DungeonRecordRecordMultiRequest request
+    )
+    {
+        await timeAttackService.RegisterRankedClear(roomName, request.play_record.time);
+        await updateDataService.SaveChangesAsync();
+
+        return this.Ok(new ResultCodeData(ResultCode.Success));
     }
 }

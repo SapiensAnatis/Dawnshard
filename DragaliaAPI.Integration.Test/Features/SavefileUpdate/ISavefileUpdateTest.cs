@@ -8,10 +8,7 @@ public class ISavefileUpdateTest : TestFixture
 {
     private readonly IEnumerable<ISavefileUpdate> updates;
 
-    public ISavefileUpdateTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public ISavefileUpdateTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         updates = this.Services.GetServices<ISavefileUpdate>();
@@ -21,7 +18,7 @@ public class ISavefileUpdateTest : TestFixture
     public void ISavefileUpdate_HasExpectedCount()
     {
         // Update this test when adding a new update.
-        this.updates.Should().HaveCount(11);
+        this.updates.Should().HaveCount(12);
     }
 
     [Fact]

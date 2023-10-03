@@ -29,11 +29,11 @@ public static class DatabaseConfiguration
                 options =>
                     options
                         .UseNpgsql(connectionString)
-#if DEBUG
                         .EnableSensitiveDataLogging()
-                        .EnableDetailedErrors()
-#endif
+                        .EnableDetailedErrors(),
+                optionsLifetime: ServiceLifetime.Singleton
             )
+            .AddDbContextFactory<ApiContext>(options => options.UseNpgsql(connectionString))
 #pragma warning disable CS0618 // Type or member is obsolete
             .AddScoped<IDeviceAccountRepository, DeviceAccountRepository>()
 #pragma warning restore CS0618 // Type or member is obsolete

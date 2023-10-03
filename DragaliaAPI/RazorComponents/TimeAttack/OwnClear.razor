@@ -1,0 +1,87 @@
+﻿@inject IDbContextFactory<ApiContext> ContextFactory;
+
+@using DragaliaAPI.Database;
+@using Microsoft.EntityFrameworkCore;
+
+<MudPaper Elevation="@Elevation">
+    @if (this.loading)
+    {
+    } 
+    else
+    {
+        <MudStack Row=true Spacing="5" Class="px-4 py-2">
+            <div>
+                <MudText Typo="Typo.h6">Your best time</MudText>
+                <MudText GutterBottom=true>@this.OwnClearTime</MudText>
+            </div>
+            <div>
+                <MudText Typo="Typo.h6">Your rank</MudText>
+                <MudText GutterBottom=true>@this.OwnRank</MudText>
+            </div>
+        </MudStack>
+    }
+</MudPaper>
+
+@code {
+    private DbTimeAttackClear? ownClear;
+    private int? ownRank;
+    private bool loading;
+
+    [Parameter]
+    public int QuestId { get; set; }
+
+    [Parameter]
+    public long ViewerId { get; set; }
+
+    [Parameter]
+    public int Elevation { get; set; }
+
+    private string OwnClearTime =>
+    this.ownClear is null ?
+        "N/A" :
+        TimeSpan.FromSeconds(this.ownClear.Time).ToString(@"mm\:ss\.f");
+
+    private string OwnRank =>
+        this.ownRank is null ?
+            "N/A" :
+            this.ownRank.Value.ToString();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        this.ownClear = null;
+        this.ownRank = null;
+
+        this.loading = true;
+
+        await using ApiContext context = await this.ContextFactory.CreateDbContextAsync();
+
+        IQueryable<DbTimeAttackClear> clears = context.TimeAttackClears
+            .Where(x => x.QuestId == this.QuestId)
+            .OrderBy(x => x.Time);
+
+        this.ownClear = await clears
+            .Include(x => x.Players)
+            .ThenInclude(x => x!.Player!.UserData)
+            .Where(
+                x => x.Players.Any(
+                    y => y.Player!.UserData!.ViewerId == this.ViewerId
+                )
+            )
+            .FirstOrDefaultAsync();
+
+        if (this.ownClear is null)
+        {
+            this.loading = false;
+            return;
+        }
+
+        this.ownRank =
+           (await clears.Include(x => x.Players).Where(x => x.Time < ownClear.Time).ToListAsync())
+               .DistinctBy(x => x.PlayersHash)
+               .Count() + 1;
+
+        this.loading = false;
+    }
+
+
+}

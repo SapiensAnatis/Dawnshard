@@ -1,0 +1,13 @@
+﻿using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.MasterAsset.Models;
+
+namespace DragaliaAPI.Features.TimeAttack;
+
+public interface ITimeAttackService
+{
+    bool GetIsRankedQuest(int questId);
+    IEnumerable<RankingTierReward> GetRewards();
+    Task<IEnumerable<RankingTierReward>> ReceiveTierReward(int questId);
+    Task RegisterRankedClear(string roomName, float clearTime);
+    Task<bool> SetupRankedClear(int questId, PartyInfo partyInfo);
+}

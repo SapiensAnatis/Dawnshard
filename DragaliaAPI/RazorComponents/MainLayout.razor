@@ -1,0 +1,124 @@
+﻿@using DragaliaAPI.Blazor.Authentication;
+@using DragaliaAPI.Shared.PlayerDetails;
+
+@inject IBlazorIdentityService BlazorIdentityService;
+@inject IJSRuntime JsRuntime;
+@inject NavigationManager NavigationManager;
+
+@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="theme" @ref=provider IsDarkMode="@darkMode" IsDarkModeChanged="OnIsDarkModeChanged"/>
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    @if (this.HttpRequestState?.HideAppBar ?? false == true)
+    {
+    }
+    else 
+    {
+        <MudAppBar Elevation="0">
+            <MudBreakpointProvider>
+                <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
+                    <MudDrawer Elevation="2" Open=true ClipMode="DrawerClipMode.Always" DisableOverlay=true>
+                        <NavMenu />
+                    </MudDrawer>
+                </MudHidden>
+                <MudHidden Breakpoint="Breakpoint.SmAndDown" Invert="true">
+                    <MudToggleIconButton Edge=Edge.Start @bind-Toggled=navDrawerOpen Icon=@Icons.Material.Filled.Menu ToggledIcon=@Icons.Material.Filled.Menu Color="Color.Inherit" ToggledColor="Color.Inherit" />
+                    <MudDrawer @bind-Open=navDrawerOpen Elevation="2" ClipMode="DrawerClipMode.Always" DisableOverlay=true>
+                        <NavMenu />
+                    </MudDrawer>
+                </MudHidden>
+            </MudBreakpointProvider>
+            <MudText Typo="Typo.h5" Class="m1-3">Dawnshard</MudText>
+            <MudSpacer />
+            <MudStack Row=true Spacing="4">
+                <AuthorizeView>
+                    <Authorized>
+                        <div>
+                            <MudToggleIconButton Edge=Edge.End Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.AccountCircle" ToggledColor="Color.Inherit" @bind-Toggled="@popoverOpen" />
+                            <MudPopover Open="@popoverOpen" Paper=true Class="pt-2 pl-3 pr-3" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+                                <div class="d-flex flex-column">
+                                    <MudText Typo="Typo.subtitle1">Hello, @BlazorIdentityService.UserDataName</MudText>
+                                    <MudList Clickable="true" Dense="true">
+                                        <MudListItem Icon="@Icons.Material.Filled.Settings" IconSize="Size.Small" Href="/account">Account Management</MudListItem>
+                                        <MudListItem Icon="@Icons.Material.Filled.Logout" IconSize="Size.Small" OnClick=OnClickLogout>Logout</MudListItem>
+                                    </MudList>
+                                </div>
+                                <MudOverlay @bind-Visible="@popoverOpen" AutoClose=true ZIndex="-1"></MudOverlay>
+                            </MudPopover>
+                        </div>
+                    </Authorized>
+                    <NotAuthorized>
+                        <LoginButton />
+                    </NotAuthorized>
+                </AuthorizeView>
+                <MudToggleIconButton @bind-Toggled="@darkMode" Icon="@Icons.Material.Filled.LightMode" ToggledIcon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" ToggledColor="Color.Inherit" />
+            </MudStack>
+           
+        </MudAppBar>    
+    }
+
+    <MudMainContent Style="@MainContentClass">
+        <MudContainer MaxWidth="MaxWidth.Large" Class="@MainContainerClass">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+
+
+@code {
+    private bool popoverOpen = false;
+    private bool navDrawerOpen = false;
+    private bool darkMode = false;
+
+    private MudThemeProvider? provider;
+
+    [CascadingParameter(Name = "HttpRequestState")]
+    protected HttpRequestState? HttpRequestState { get; set; }
+
+    private bool HideAppBar => this.HttpRequestState?.HideAppBar ?? false;
+
+    private string MainContainerClass => this.HideAppBar ? "" : "my-8 pt-1";
+    private string MainContentClass => this.HideAppBar ? "padding-top: 1rem;" : "";
+
+    private MudTheme theme = new()
+        {
+            PaletteDark = new PaletteDark()
+            {
+                Surface = Colors.Grey.Darken3,
+                Background = Colors.Grey.Darken4,
+                AppbarBackground = Colors.Teal.Darken3,
+                Primary = Colors.Teal.Lighten1,
+                Secondary = Colors.Pink.Accent2,
+                Tertiary = Colors.DeepPurple.Darken1,
+            },
+            Palette = new PaletteLight()
+            {
+                AppbarBackground = Colors.Teal.Default,
+                Primary = Colors.Teal.Accent4,
+                Secondary = Colors.Pink.Accent2,
+                Tertiary = Colors.DeepPurple.Lighten1,
+            }
+        };
+
+    private void OnClickLogout()
+    {
+        NavigationManager.NavigateTo("/logout", forceLoad: true);
+    }
+
+    private async void OnIsDarkModeChanged(bool value)
+    {
+        this.darkMode = value;
+        await this.JsRuntime.InvokeVoidAsync("blazorExtensions.writeCookie", new object[] { nameof(darkMode), value});
+        this.StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        if (this.HttpRequestState?.IsDarkMode is not null)
+            this.darkMode = this.HttpRequestState.IsDarkMode.Value;
+    }
+}

@@ -9,6 +9,7 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.Trade;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
@@ -30,7 +31,8 @@ public class LoadService(
     IShopRepository shopRepository,
     IUserService userService,
     ITicketRepository ticketRepository,
-    IWallService wallService
+    IWallService wallService,
+    IDateTimeProvider dateTimeProvider
 ) : ILoadService
 {
     public async Task<LoadIndexData> BuildIndexData()
@@ -75,6 +77,7 @@ public class LoadService(
                     .Where(x => x.StoryType == StoryTypes.Castle)
                     .Select(mapper.Map<CastleStoryList>),
                 quest_list = savefile.QuestList.Select(mapper.Map<QuestList>),
+                quest_event_list = savefile.QuestEvents.Select(mapper.Map<QuestEventList>),
                 material_list = savefile.MaterialList.Select(mapper.Map<MaterialList>),
                 weapon_skin_list = savefile.WeaponSkinList.Select(mapper.Map<WeaponSkinList>),
                 weapon_passive_ability_list = savefile.WeaponPassiveAbilityList.Select(
@@ -86,7 +89,7 @@ public class LoadService(
                 present_notice = await presentService.GetPresentNotice(),
                 guild_notice = new(0, 0, 0, 0, 0),
                 //fort_plant_list = buildSummary,
-                server_time = DateTimeOffset.UtcNow,
+                server_time = dateTimeProvider.UtcNow,
                 stamina_multi_system_max = userService.StaminaMultiMax,
                 stamina_multi_user_max = 12,
                 quest_skip_point_system_max = userService.QuestSkipPointMax,
@@ -108,6 +111,8 @@ public class LoadService(
                 summon_ticket_list = (await ticketRepository.GetTicketsAsync()).Select(
                     mapper.Map<SummonTicketList>
                 ),
+                quest_bonus_stack_base_time = 1617775200, // 7. April 2017
+                album_dragon_list = Enumerable.Empty<AlbumDragonData>(),
                 quest_wall_list = await wallService.GetQuestWallList()
             };
 

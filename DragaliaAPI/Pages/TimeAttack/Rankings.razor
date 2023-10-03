@@ -1,0 +1,70 @@
+﻿@page "/timeattack/rankings"
+
+@using System.Collections.Immutable;
+@using DragaliaAPI.Blazor.Authentication;
+@using DragaliaAPI.Database;
+@using DragaliaAPI.RazorComponents.TimeAttack
+@using Microsoft.EntityFrameworkCore;
+
+@inject IDbContextFactory<ApiContext> ContextFactory;
+@inject IBlazorIdentityService BlazorIdentityService;
+
+<PageTitle>Time Attack Rankings</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom=true>Time Attack Rankings</MudText>
+<MudDivider Class="mb-4" />
+
+<MudStack AlignItems="AlignItems.Start" Spacing="5" Class="mt-2">
+    <MudSelect T="QuestSelectItem" 
+        @bind-Value="@selection" 
+        ToStringFunc="@QuestSelectItem.Converter"
+        Label="Select a quest"
+        Variant="Variant.Outlined" 
+        AnchorOrigin="Origin.BottomCenter"
+    >
+        @foreach (QuestSelectItem item in SelectItems)
+        {
+            <MudSelectItem Value="item" />
+        }
+    </MudSelect>
+    
+    @if (this.selection is not null)
+    {
+        <AuthorizeView>
+            <Authorized>
+                <OwnClear QuestId="@this.selection.Id" ViewerId="@(this.BlazorIdentityService.ViewerId ?? 0)"/>
+            </Authorized>
+        </AuthorizeView>
+        <RankingTable Elevation=1 QuestId="@this.selection.Id"/>
+    }
+</MudStack>
+
+@code {
+
+    private static IEnumerable<QuestSelectItem> SelectItems = ImmutableArray.Create<QuestSelectItem>(
+        new QuestSelectItem(227010104, "Volk's Wrath: Legend (Solo)"),
+        new QuestSelectItem(227010105, "Volk's Wrath: Legend (Co-op)")
+    );
+
+    private QuestSelectItem? selection;
+
+    private class QuestSelectItem
+    {
+        public QuestSelectItem(int id, string name)
+        {
+            this.Id = id;
+            this.Name = name;
+        }
+
+        public int Id { get; }
+
+        public string Name { get; }
+
+        public static string Converter(QuestSelectItem? item) => item?.Name ?? string.Empty;
+
+        public override bool Equals(object? obj) =>
+            obj is QuestSelectItem questSelectItem && questSelectItem.Id == this.Id;
+
+        public override int GetHashCode() => this.Id;
+    }
+}

@@ -8,13 +8,10 @@ public class GraphQlTestFixture : TestFixture
 {
     public GraphQLHttpClient GraphQlHttpClient { get; init; }
 
-    public GraphQlTestFixture(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public GraphQlTestFixture(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        Uri endpoint = new Uri(this.Client.BaseAddress!, "/savefile/graphql");
+        Uri endpoint = new Uri(this.Client.BaseAddress!, "savefile/graphql");
 
         this.GraphQlHttpClient = new(
             new GraphQLHttpClientOptions { EndPoint = endpoint },

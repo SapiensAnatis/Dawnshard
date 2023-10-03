@@ -14,6 +14,8 @@ namespace DragaliaAPI.Middleware;
 
 public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
+    public const string Role = "Photon";
+
     private readonly IUserDataRepository userDataRepository;
 
     public PhotonAuthenticationHandler(
@@ -30,14 +32,14 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        AuthenticationHeaderValue authenticationHeader;
-        try
+        if (
+            !AuthenticationHeaderValue.TryParse(
+                this.Request.Headers.Authorization,
+                out AuthenticationHeaderValue? authenticationHeader
+            )
+        )
         {
-            authenticationHeader = AuthenticationHeaderValue.Parse(Request.Headers.Authorization);
-        }
-        catch (Exception ex)
-        {
-            Logger.LogDebug("Failed to parse Authorization header: {reason}", ex.Message);
+            Logger.LogDebug("Failed to parse Authorization header.");
             return AuthenticateResult.NoResult();
         }
 
@@ -80,6 +82,7 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
         ClaimsIdentity identity = new(Scheme.Name);
         identity.AddClaim(new Claim(CustomClaimType.ViewerId, viewerId.ToString()));
         identity.AddClaim(new Claim(CustomClaimType.AccountId, accountId));
+        identity.AddClaim(new Claim(ClaimTypes.Role, Role));
 
         ClaimsPrincipal principal = new(identity);
         AuthenticationTicket ticket = new(principal, Scheme.Name);

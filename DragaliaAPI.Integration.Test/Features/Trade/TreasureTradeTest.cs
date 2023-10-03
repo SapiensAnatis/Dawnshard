@@ -11,10 +11,7 @@ namespace DragaliaAPI.Integration.Test.Features.Trade;
 
 public class TreasureTradeTest : TestFixture
 {
-    public TreasureTradeTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public TreasureTradeTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper) { }
 
     [Fact]

@@ -3,6 +3,7 @@ using DragaliaAPI.Features.Present;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Features.Presents;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Present;
@@ -11,7 +12,7 @@ public class PresentTest : TestFixture
 {
     private const string Controller = "/present";
 
-    public PresentTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public PresentTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 3);

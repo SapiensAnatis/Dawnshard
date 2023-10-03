@@ -1,10 +1,13 @@
 using Castle.Core.Logging;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -20,10 +23,10 @@ namespace DragaliaAPI.Test.Features.Dungeon.Record;
 public class DungeonRecordServiceTest
 {
     private readonly Mock<IDungeonRecordRewardService> mockDungeonRewardService;
-    private readonly Mock<IQuestRepository> mockQuestRepository;
-    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<IQuestService> mockQuestService;
     private readonly Mock<IUserService> mockUserService;
     private readonly Mock<ITutorialService> mockTutorialService;
+    private readonly Mock<ICharaService> mockCharaService;
     private readonly Mock<ILogger<DungeonRecordService>> mockLogger;
 
     private readonly IDungeonRecordService dungeonRecordService;
@@ -31,18 +34,18 @@ public class DungeonRecordServiceTest
     public DungeonRecordServiceTest()
     {
         this.mockDungeonRewardService = new(MockBehavior.Strict);
-        this.mockQuestRepository = new(MockBehavior.Strict);
-        this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockQuestService = new(MockBehavior.Strict);
         this.mockUserService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
+        this.mockCharaService = new(MockBehavior.Strict);
 
         this.dungeonRecordService = new DungeonRecordService(
             this.mockDungeonRewardService.Object,
-            this.mockQuestRepository.Object,
-            this.mockMissionProgressionService.Object,
+            this.mockQuestService.Object,
             this.mockUserService.Object,
             this.mockTutorialService.Object,
+            this.mockCharaService.Object,
             this.mockLogger.Object
         );
 
@@ -152,11 +155,9 @@ public class DungeonRecordServiceTest
         int takeAccumulatePoint = 30;
         int takeBoostAccumulatePoint = 40;
 
-        this.mockQuestRepository
-            .Setup(x => x.GetQuestDataAsync(lSurtrSoloId))
-            .ReturnsAsync(mockQuest);
-
-        this.mockMissionProgressionService.Setup(x => x.OnQuestCleared(lSurtrSoloId));
+        this.mockQuestService
+            .Setup(x => x.ProcessQuestCompletion(lSurtrSoloId, 10f, 1))
+            .ReturnsAsync((mockQuest, true, new List<AtgenFirstClearSet>()));
 
         this.mockUserService
             .Setup(x => x.RemoveStamina(StaminaType.Single, 40))
@@ -222,7 +223,7 @@ public class DungeonRecordServiceTest
                     {
                         take_mana = takeMana,
                         take_player_exp = 400,
-                        take_chara_exp = 1,
+                        take_chara_exp = 0,
                         bonus_factor = 1,
                         mana_bonus_factor = 1,
                         chara_grow_record = new List<AtgenCharaGrowRecord>()
@@ -234,11 +235,8 @@ public class DungeonRecordServiceTest
                 }
             );
 
-        mockQuest.State.Should().Be(3);
-
         this.mockDungeonRewardService.VerifyAll();
-        this.mockQuestRepository.VerifyAll();
-        this.mockMissionProgressionService.VerifyAll();
+        this.mockQuestService.VerifyAll();
         this.mockUserService.VerifyAll();
         this.mockTutorialService.VerifyAll();
         this.mockLogger.VerifyAll();

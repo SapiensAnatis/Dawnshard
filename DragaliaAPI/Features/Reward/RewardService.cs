@@ -44,6 +44,29 @@ public class RewardService(
 
         logger.LogTrace("Granting reward {@rewardEntity}", entity);
 
+        RewardGrantResult result = await GrantRewardInternal(entity);
+
+        if (result == RewardGrantResult.Added)
+            newEntities.Add(entity);
+
+        return result;
+    }
+
+    public async Task GrantRewards(IEnumerable<Entity> entities)
+    {
+        entities = entities.ToList();
+        logger.LogTrace("Granting rewards: {@rewards}", entities);
+
+        foreach (Entity entity in entities)
+        {
+            RewardGrantResult result = await GrantRewardInternal(entity);
+            if (result == RewardGrantResult.Added)
+                newEntities.Add(entity);
+        }
+    }
+
+    private async Task<RewardGrantResult> GrantRewardInternal(Entity entity)
+    {
         switch (entity.Type)
         {
             case EntityTypes.Chara:
@@ -114,7 +137,6 @@ public class RewardService(
                 return RewardGrantResult.FailError;
         }
 
-        newEntities.Add(entity);
         return RewardGrantResult.Added;
     }
 
@@ -127,9 +149,11 @@ public class RewardService(
         int atk
     )
     {
-        int currentCount = await unitRepository.Talismans.CountAsync();
+        // int currentCount = await unitRepository.Talismans.CountAsync();
 
-        if (currentCount >= TalismanService.TalismanMaxCount)
+        if (
+            false /*TODO: currentCount >= TalismanService.TalismanMaxCount once we get presents working with it*/
+        )
         {
             Entity coinReward = new(EntityTypes.Rupies, 0, TalismanService.TalismanCoinReward);
             await GrantReward(coinReward);

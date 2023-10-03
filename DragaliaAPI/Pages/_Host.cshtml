@@ -1,0 +1,45 @@
+﻿@page "/"
+@namespace DragaliaAPI.Blazor.Pages
+@using DragaliaAPI.Blazor.Authentication;
+@using Microsoft.Extensions.Primitives;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+
+    string darkModeCookie = this.Request.Cookies.FirstOrDefault(x => x.Key == "darkMode").Value;
+    bool? isDarkMode = null;
+
+    if (bool.TryParse(darkModeCookie, out bool darkModeParsed))
+        isDarkMode = darkModeParsed;
+
+    HttpRequestState httpRequestState = new() 
+    {
+        HostUri = $"{this.Request.Scheme}://{this.Request.Host.Value}",
+        HideAppBar = this.Request.Query.TryGetValue("hideappbar", out StringValues hide) && hide.Any(x => x == "true"),
+        IsDarkMode = isDarkMode,
+    };
+}
+
+<component type="typeof(App)" render-mode="ServerPrerendered" param-HttpRequestState="httpRequestState" />
+
+<script>
+    window.downloadFileFromStream = async (fileName, contentStreamReference) => {
+        const arrayBuffer = await contentStreamReference.arrayBuffer();
+        const blob = new Blob([arrayBuffer]);
+        const url = URL.createObjectURL(blob);
+        const anchorElement = document.createElement('a');
+        anchorElement.href = url;
+        anchorElement.download = fileName ?? '';
+        anchorElement.click();
+        anchorElement.remove();
+        URL.revokeObjectURL(url);
+    }
+</script>
+
+<script>
+    window.blazorExtensions = {
+        writeCookie: function (name, value) {
+            document.cookie = `${name}=${value}; SameSite=Lax`;
+        }
+    }
+</script>

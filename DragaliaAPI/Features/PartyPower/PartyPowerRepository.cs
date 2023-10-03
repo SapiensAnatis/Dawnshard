@@ -1,12 +1,14 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Shared.PlayerDetails;
 
 namespace DragaliaAPI.Features.PartyPower;
 
 public class PartyPowerRepository(
     ApiContext apiContext,
-    IPlayerIdentityService playerIdentityService
+    IPlayerIdentityService playerIdentityService,
+    IMissionProgressionService missionProgressionService
 ) : IPartyPowerRepository
 {
     public async Task<DbPartyPower> GetPartyPowerAsync()
@@ -27,6 +29,9 @@ public class PartyPowerRepository(
     {
         DbPartyPower dbPower = await GetPartyPowerAsync();
         if (power > dbPower.MaxPartyPower)
+        {
             dbPower.MaxPartyPower = power;
+            missionProgressionService.OnPartyPowerReached(power);
+        }
     }
 }

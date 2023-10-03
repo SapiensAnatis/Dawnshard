@@ -237,11 +237,10 @@ public class UnitRepository : IUnitRepository
 
     public async Task<DbSetUnit?> GetCharaSetData(Charas charaId, int setNo)
     {
-        return await apiContext.PlayerSetUnits.FirstOrDefaultAsync(
-            x =>
-                x.DeviceAccountId == this.playerIdentityService.AccountId
-                && x.CharaId == charaId
-                && x.UnitSetNo == setNo
+        return await apiContext.PlayerSetUnits.FindAsync(
+            playerIdentityService.AccountId,
+            charaId,
+            setNo
         );
     }
 

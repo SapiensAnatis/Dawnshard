@@ -8,6 +8,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
+using DragaliaAPI.Shared.MasterAsset.Models.QuestSchedule;
 using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
@@ -164,10 +165,8 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, SpecialMissionGroup> SpecialMissionGroup =
         new("Missions/MissionSpecialGroup.json", x => x.Id);
 
-    public static readonly MasterAssetData<
-        MissionProgressType,
-        MissionProgressionInfo
-    > MissionProgressionInfo = new("Missions/MissionProgressionInfo.json", x => x.Type);
+    public static readonly MasterAssetData<int, MissionProgressionInfo> MissionProgressionInfo =
+        new("Missions/MissionProgressionInfo.json", x => x.Id);
 
     public static readonly MasterAssetData<
         int,
@@ -297,8 +296,20 @@ public static class MasterAsset
     /// <summary>
     /// Contains information about rewards from quests.
     /// </summary>
+    /// <remarks>
+    /// Generated from parsing wiki Cargo data.
+    /// </remarks>
     public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
         new("QuestDrops/QuestDrops.json", x => x.QuestId);
+
+    /// <summary>
+    /// Contains information about bonus rewards from quests.
+    /// </summary>
+    /// <remarks>
+    /// Generated from parsing wiki Cargo data.
+    /// </remarks>
+    public static readonly MasterAssetData<int, QuestBonusReward> QuestBonusRewards =
+        new("QuestDrops/QuestBonusRewards.json", x => x.QuestId);
 
     #endregion
 
@@ -325,10 +336,10 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, EventTradeGroup> EventTradeGroup =
         new("Event/EventTradeGroup.json", x => x.Id);
 
-    public static readonly MasterAssetGroup<int, BuildEventReward> BuildEventReward =
+    public static readonly MasterAssetGroup<int, int, BuildEventReward> BuildEventReward =
         new("Event/BuildEventReward.json", x => x.Id);
 
-    public static readonly MasterAssetGroup<int, RaidEventReward> RaidEventReward =
+    public static readonly MasterAssetGroup<int, int, RaidEventReward> RaidEventReward =
         new("Event/RaidEventReward.json", x => x.Id);
 
     public static readonly MasterAssetData<int, CombatEventLocation> CombatEventLocation =
@@ -433,6 +444,29 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, UserLevel> UserLevel =
         new("User/UserLevel.json", x => x.Id);
+
+    #endregion
+
+    #region Quest Schedule
+
+    public static readonly MasterAssetData<int, QuestScheduleInfo> QuestScheduleInfo =
+        new("QuestSchedule/QuestScheduleInfo.json", x => x.Id);
+
+    #endregion
+
+    #region Time Attack
+
+    /// <summary>
+    /// Contains information about the last two ranked quests in each Time Attack event.
+    /// </summary>
+    public static readonly MasterAssetData<int, RankingData> RankingData =
+        new("TimeAttack/RankingData.json", x => x.QuestId);
+
+    /// <summary>
+    /// Contains information about the initial non-ranked rewards for clearing Time Attack quests.
+    /// </summary>
+    public static readonly MasterAssetData<int, RankingTierReward> RankingTierReward =
+        new("TimeAttack/RankingTierReward.json", x => x.Id);
 
     #endregion
 

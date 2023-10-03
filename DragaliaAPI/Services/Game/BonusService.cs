@@ -1,4 +1,4 @@
-﻿// #define CHEATS
+﻿//#define CHEATS
 #if CHEATS && DEBUG
 #define CHEATING
 #endif

@@ -483,6 +483,18 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
+            this.apiContext.QuestEvents.AddRange(
+                savefile.quest_event_list.MapWithDeviceAccount<DbQuestEvent>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbQuestEvent step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             this.apiContext.PlayerQuestWalls.AddRange(
                 savefile.quest_wall_list.MapWithDeviceAccount<DbPlayerQuestWall>(
                     mapper,
@@ -624,6 +636,9 @@ public class SavefileService : ISavefileService
         this.apiContext.Emblems.RemoveRange(
             this.apiContext.Emblems.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.QuestEvents.RemoveRange(
+            this.apiContext.QuestEvents.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
         this.apiContext.PartyPowers.RemoveRange(
             this.apiContext.PartyPowers.Where(x => x.DeviceAccountId == deviceAccountId)
         );
@@ -660,6 +675,7 @@ public class SavefileService : ISavefileService
             .Include(x => x.WeaponSkinList)
             .Include(x => x.WeaponPassiveAbilityList)
             .Include(x => x.EquippedStampList)
+            .Include(x => x.QuestEvents)
             .Include(x => x.PartyPower)
             .Include(x => x.QuestWalls)
             .AsSplitQuery();

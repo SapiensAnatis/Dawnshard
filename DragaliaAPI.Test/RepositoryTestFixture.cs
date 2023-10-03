@@ -1,18 +1,15 @@
 ﻿using AutoMapper;
-using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.SavefileUpdate;
-using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
-using DragaliaAPI.Test;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using Moq;
 
-namespace DragaliaAPI.Database.Test;
+namespace DragaliaAPI.Test;
 
 [Collection(nameof(RepositoryTestFixture))]
 public class RepositoryTestFixture : IDisposable
@@ -23,15 +20,18 @@ public class RepositoryTestFixture : IDisposable
 
     public const string DeviceAccountId = "id";
 
+    private readonly string DbName = $"DbTestFixture-{Guid.NewGuid()}";
+
     public RepositoryTestFixture()
     {
         DbContextOptions<ApiContext> options = new DbContextOptionsBuilder<ApiContext>()
-            .UseInMemoryDatabase($"DbTestFixture")
+            .UseInMemoryDatabase(DbName)
             .EnableSensitiveDataLogging()
             .ConfigureWarnings(config => config.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
         this.ApiContext = new ApiContext(options);
+
         // Unused for creating saves
         Mock<ILogger<SavefileService>> mockLogger = new(MockBehavior.Loose);
         Mock<IDistributedCache> mockCache = new(MockBehavior.Loose);

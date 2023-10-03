@@ -1,0 +1,17 @@
+﻿<MudContainer Class="width: 20% d-flex pa-2" Elevation="0">
+    <MudAvatar Class="mr-4">
+        <MudImage Width="40" Height="40" Src="@ImageSrc"></MudImage>
+    </MudAvatar>
+    <MudText Typo="Typo.body1" Class="align-self-center"><b>@Name</b>, @ChildContent</MudText>
+</MudContainer>
+
+@code {
+    [Parameter]
+    public string? ImageSrc { get; set; }
+
+    [Parameter]
+    public string? Name { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

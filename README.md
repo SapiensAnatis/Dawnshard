@@ -22,7 +22,7 @@ The application is deployed as three services: the main ASP.NET service which is
 
 ### Locally
 
-The recommended way to self-host is using `docker-compose` which handles setting up the database and Redis. Docker images are published to [the GitHub container registry](https://github.com/SapiensAnatis/Dawnshard/pkgs/container/dragalia-api). Sample `docker-compose.yaml` files coming soon.
+The recommended way to self-host (for personal use or development) is using `docker-compose` -- please see the [self-hosting guide](https://github.com/SapiensAnatis/Dawnshard/wiki/Self-hosting-guide) in the wiki for more information.
 
 If you don't want to use Docker, see the [no-docker branch](https://github.com/sapiensAnatis/dragaliaAPI/tree/no-docker) which uses an SQLite DB and an in-memory IDistributedCache for session management. Please note that this version is not regularly updated and no guarantees are made that it functions correctly. It also cannot support co-op as this requires Redis.
 

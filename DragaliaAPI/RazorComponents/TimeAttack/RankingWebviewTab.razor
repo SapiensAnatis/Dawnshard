@@ -1,0 +1,19 @@
+﻿@using DragaliaAPI.Blazor.Authentication;
+@using DragaliaAPI.Database;
+@using Microsoft.EntityFrameworkCore;
+
+@inject IDbContextFactory<ApiContext> ContextFactory;
+@inject IBlazorIdentityService BlazorIdentityService;
+
+<MudStack Spacing="3">
+    <OwnClear Elevation="0" QuestId="@QuestId" ViewerId="@ViewerId"/>
+    <RankingTable QuestId="@QuestId" Elevation="0" EnableSearch=false />
+</MudStack>
+
+@code {
+    [Parameter]
+    public int QuestId { get; set; }
+
+    [Parameter]
+    public long ViewerId { get; set; }
+}

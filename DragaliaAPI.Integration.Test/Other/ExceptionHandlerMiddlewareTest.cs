@@ -7,10 +7,10 @@ namespace DragaliaAPI.Integration.Test.Other;
 
 public class ExceptionHandlerMiddlewareTest : TestFixture
 {
-    public const string Controller = "/test";
+    public const string Controller = "test";
 
     public ExceptionHandlerMiddlewareTest(
-        CustomWebApplicationFactory<Program> factory,
+        CustomWebApplicationFactory factory,
         ITestOutputHelper outputHelper
     )
         : base(factory, outputHelper) { }

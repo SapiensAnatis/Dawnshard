@@ -1,0 +1,37 @@
+﻿@page "/timeattack/rewards"
+
+@using DragaliaAPI.Blazor.Authentication;
+@using DragaliaAPI.RazorComponents.TimeAttack
+
+@inject IBlazorIdentityService BlazorIdentityService;
+
+<!-- This page is mostly static because there's no data to pull the epithets from. --->
+
+<PageTitle>Time Attack Rewards</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom=true>Time Attack Rewards</MudText>
+<MudDivider Class="mb-4" />
+
+<MudTabs PanelClass="pa-6">
+    <MudTabPanel Text="Solo">
+        <AuthorizeView>
+            <Authorized>
+                <OwnClear ViewerId="@(this.BlazorIdentityService.ViewerId ?? 0)" QuestId="227010104" />
+            </Authorized>
+        </AuthorizeView>
+        <SoloRewardTab/>
+    </MudTabPanel>
+
+    <MudTabPanel Text="Co-op">
+        <AuthorizeView>
+            <Authorized>
+                <OwnClear ViewerId="@(this.BlazorIdentityService.ViewerId ?? 0)" QuestId="227010105" />
+            </Authorized>
+        </AuthorizeView>
+        <CoopRewardTab />
+    </MudTabPanel>
+</MudTabs>
+
+@code {
+
+}

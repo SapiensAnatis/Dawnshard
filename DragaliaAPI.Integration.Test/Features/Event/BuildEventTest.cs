@@ -9,10 +9,7 @@ namespace DragaliaAPI.Integration.Test.Features.Event;
 
 public class BuildEventTest : TestFixture
 {
-    public BuildEventTest(
-        CustomWebApplicationFactory<Program> factory,
-        ITestOutputHelper outputHelper
-    )
+    public BuildEventTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         _ = Client

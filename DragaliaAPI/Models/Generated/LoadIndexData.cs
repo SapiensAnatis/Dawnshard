@@ -1,110 +1,142 @@
 ﻿using System.Text.Json.Serialization;
 using MessagePack;
 
+// ReSharper disable InconsistentNaming
+
 namespace DragaliaAPI.Models.Generated;
 
 [MessagePackObject(true)]
 public class LoadIndexData
 {
-    [JsonRequired]
-    public UserData? user_data { get; set; }
-    public PartyPowerData? party_power_data { get; set; }
+    [JsonPropertyName("origin")]
+    public string Origin => "dawnshard";
 
     [JsonRequired]
-    public IEnumerable<PartyList>? party_list { get; set; }
+    public required UserData user_data { get; set; }
 
-    public IEnumerable<CharaList>? chara_list { get; set; }
+    public PartyPowerData party_power_data { get; set; } = new();
 
-    public IEnumerable<DragonList>? dragon_list { get; set; }
+    [JsonRequired]
+    public IEnumerable<PartyList> party_list { get; set; } = Enumerable.Empty<PartyList>();
 
-    public IEnumerable<QuestList>? quest_list { get; set; }
-    public IEnumerable<QuestEventList>? quest_event_list { get; set; }
+    public IEnumerable<CharaList> chara_list { get; set; } = Enumerable.Empty<CharaList>();
 
-    public IEnumerable<MaterialList>? material_list { get; set; }
-    public IEnumerable<AstralItemList>? astral_item_list { get; set; }
-    public IEnumerable<WeaponList>? weapon_list { get; set; }
-    public IEnumerable<AlbumWeaponList>? album_weapon_list { get; set; }
-    public IEnumerable<AmuletList>? amulet_list { get; set; }
-    public IEnumerable<WeaponSkinList>? weapon_skin_list { get; set; }
+    public IEnumerable<DragonList> dragon_list { get; set; } = Enumerable.Empty<DragonList>();
 
-    public IEnumerable<WeaponBodyList>? weapon_body_list { get; set; }
-    public IEnumerable<WeaponPassiveAbilityList>? weapon_passive_ability_list { get; set; }
+    public IEnumerable<QuestList> quest_list { get; set; } = Enumerable.Empty<QuestList>();
+    public IEnumerable<QuestEventList> quest_event_list { get; set; } =
+        Enumerable.Empty<QuestEventList>();
 
-    public IEnumerable<AbilityCrestList>? ability_crest_list { get; set; }
+    public IEnumerable<MaterialList> material_list { get; set; } = Enumerable.Empty<MaterialList>();
+    public IEnumerable<AstralItemList> astral_item_list { get; set; } =
+        Enumerable.Empty<AstralItemList>();
 
-    public IEnumerable<TalismanList>? talisman_list { get; set; } = new List<TalismanList>();
+    [Obsolete("weapon_body_list is used post-2.0")]
+    public IEnumerable<WeaponList> weapon_list { get; set; } = Enumerable.Empty<WeaponList>();
+    public IEnumerable<AlbumWeaponList>? album_weapon_list { get; set; } =
+        Enumerable.Empty<AlbumWeaponList>();
 
-    public IEnumerable<DragonReliabilityList>? dragon_reliability_list { get; set; }
-    public IEnumerable<DragonGiftList>? dragon_gift_list { get; set; }
-    public IEnumerable<AlbumDragonData>? album_dragon_list { get; set; }
-    public IEnumerable<EquipStampList>? equip_stamp_list { get; set; }
-    public IEnumerable<UnitStoryList>? unit_story_list { get; set; }
+    [Obsolete("ability_crest_list is used post-2.0")]
+    public IEnumerable<AmuletList> amulet_list { get; set; } = Enumerable.Empty<AmuletList>();
+    public IEnumerable<WeaponSkinList> weapon_skin_list { get; set; } =
+        Enumerable.Empty<WeaponSkinList>();
 
-    public IEnumerable<CastleStoryList>? castle_story_list { get; set; }
+    public IEnumerable<WeaponBodyList> weapon_body_list { get; set; } =
+        Enumerable.Empty<WeaponBodyList>();
+    public IEnumerable<WeaponPassiveAbilityList> weapon_passive_ability_list { get; set; } =
+        Enumerable.Empty<WeaponPassiveAbilityList>();
 
-    public IEnumerable<QuestStoryList>? quest_story_list { get; set; } = new List<QuestStoryList>();
-    public IEnumerable<QuestTreasureList>? quest_treasure_list { get; set; }
-    public IEnumerable<QuestWallList>? quest_wall_list { get; set; }
-    public IEnumerable<QuestCarryList>? quest_carry_list { get; set; }
-    public IEnumerable<QuestEntryConditionList>? quest_entry_condition_list { get; set; }
+    public IEnumerable<AbilityCrestList> ability_crest_list { get; set; } =
+        Enumerable.Empty<AbilityCrestList>();
 
-    [JsonIgnore]
-    public FortBonusList? fort_bonus_list { get; set; }
+    public IEnumerable<TalismanList> talisman_list { get; set; } = Enumerable.Empty<TalismanList>();
 
-    public IEnumerable<BuildList>? build_list { get; set; } = new List<BuildList>();
-    public IEnumerable<CraftList>? craft_list { get; set; }
-    public IEnumerable<UserSummonList>? user_summon_list { get; set; }
-    public IEnumerable<SummonTicketList>? summon_ticket_list { get; set; }
-    public IEnumerable<SummonPointList>? summon_point_list { get; set; }
-    public IEnumerable<LotteryTicketList>? lottery_ticket_list { get; set; }
-    public IEnumerable<ExchangeTicketList>? exchange_ticket_list { get; set; }
-    public IEnumerable<GatherItemList>? gather_item_list { get; set; }
-    public IEnumerable<FortPlantList>? fort_plant_list { get; set; }
+    public IEnumerable<DragonReliabilityList> dragon_reliability_list { get; set; } =
+        Enumerable.Empty<DragonReliabilityList>();
+    public IEnumerable<DragonGiftList> dragon_gift_list { get; set; } =
+        Enumerable.Empty<DragonGiftList>();
+    public IEnumerable<AlbumDragonData> album_dragon_list { get; set; } =
+        Enumerable.Empty<AlbumDragonData>();
+    public IEnumerable<EquipStampList> equip_stamp_list { get; set; } =
+        Enumerable.Empty<EquipStampList>();
+    public IEnumerable<UnitStoryList> unit_story_list { get; set; } =
+        Enumerable.Empty<UnitStoryList>();
+
+    public IEnumerable<CastleStoryList> castle_story_list { get; set; } =
+        Enumerable.Empty<CastleStoryList>();
+
+    public IEnumerable<QuestStoryList> quest_story_list { get; set; } =
+        Enumerable.Empty<QuestStoryList>();
+    public IEnumerable<QuestTreasureList> quest_treasure_list { get; set; } =
+        Enumerable.Empty<QuestTreasureList>();
+    public IEnumerable<QuestWallList> quest_wall_list { get; set; } =
+        Enumerable.Empty<QuestWallList>();
+    public IEnumerable<QuestCarryList> quest_carry_list { get; set; } =
+        Enumerable.Empty<QuestCarryList>();
+    public IEnumerable<QuestEntryConditionList> quest_entry_condition_list { get; set; } =
+        Enumerable.Empty<QuestEntryConditionList>();
+
+    public required FortBonusList fort_bonus_list { get; set; }
+
+    public IEnumerable<BuildList> build_list { get; set; } = Enumerable.Empty<BuildList>();
+    public IEnumerable<CraftList> craft_list { get; set; } = Enumerable.Empty<CraftList>();
+    public IEnumerable<UserSummonList> user_summon_list { get; set; } =
+        Enumerable.Empty<UserSummonList>();
+
+    public IEnumerable<SummonTicketList> summon_ticket_list { get; set; } =
+        Enumerable.Empty<SummonTicketList>();
+    public IEnumerable<SummonPointList> summon_point_list { get; set; } =
+        Enumerable.Empty<SummonPointList>();
+    public IEnumerable<LotteryTicketList> lottery_ticket_list { get; set; } =
+        Enumerable.Empty<LotteryTicketList>();
+    public IEnumerable<ExchangeTicketList> exchange_ticket_list { get; set; } =
+        Enumerable.Empty<ExchangeTicketList>();
+    public IEnumerable<GatherItemList> gather_item_list { get; set; } =
+        Enumerable.Empty<GatherItemList>();
+    public IEnumerable<FortPlantList> fort_plant_list { get; set; } =
+        Enumerable.Empty<FortPlantList>();
 
     [JsonIgnore] // This is sometimes [] which fucks up the parsing and it isn't even added yet
-    public UserGuildData? user_guild_data { get; set; }
+    public UserGuildData? user_guild_data { get; set; } = new();
 
     [JsonIgnore] // This is sometimes [] which fucks up the parsing and it isn't even added yet
-    public GuildData? guild_data { get; set; }
+    public GuildData? guild_data { get; set; } = new();
 
-    [JsonIgnore]
-    public PresentNotice? present_notice { get; set; }
+    public PresentNotice present_notice { get; set; } = new();
 
-    [JsonIgnore]
-    public FriendNotice? friend_notice { get; set; }
+    public FriendNotice friend_notice { get; set; } = new();
 
-    [JsonIgnore]
-    public MissionNotice? mission_notice { get; set; }
+    public MissionNotice mission_notice { get; set; } = new();
 
-    [JsonIgnore]
-    public GuildNotice? guild_notice { get; set; }
+    public GuildNotice guild_notice { get; set; } = new();
 
-    [JsonIgnore]
-    public ShopNotice? shop_notice { get; set; }
+    public ShopNotice shop_notice { get; set; } = new();
 
-    [JsonIgnore]
-    public AlbumPassiveNotice? album_passive_notice { get; set; }
-    public IEnumerable<FunctionalMaintenanceList>? functional_maintenance_list { get; set; }
-    public IEnumerable<TreasureTradeList>? treasure_trade_all_list { get; set; }
-    public IEnumerable<UserTreasureTradeList>? user_treasure_trade_list { get; set; }
-    public IEnumerable<ShopPurchaseList>? special_shop_purchase { get; set; }
+    public AlbumPassiveNotice album_passive_notice { get; set; } = new();
+    public IEnumerable<FunctionalMaintenanceList> functional_maintenance_list { get; set; } =
+        Enumerable.Empty<FunctionalMaintenanceList>();
+    public IEnumerable<TreasureTradeList> treasure_trade_all_list { get; set; } =
+        Enumerable.Empty<TreasureTradeList>();
+    public IEnumerable<UserTreasureTradeList> user_treasure_trade_list { get; set; } =
+        Enumerable.Empty<UserTreasureTradeList>();
+    public IEnumerable<ShopPurchaseList> special_shop_purchase { get; set; } =
+        Enumerable.Empty<ShopPurchaseList>();
     public int stamina_single_recover_second { get; set; }
     public int stamina_multi_user_max { get; set; }
     public int stamina_multi_system_max { get; set; }
     public int quest_skip_point_system_max { get; set; }
     public int quest_skip_point_use_limit_max { get; set; }
     public int spec_upgrade_time { get; set; }
-    public DateTimeOffset server_time { get; set; }
+    public DateTimeOffset server_time { get; set; } = DateTimeOffset.UnixEpoch;
     public int quest_bonus_stack_base_time { get; set; }
-    public IEnumerable<AtgenQuestBonus>? quest_bonus { get; set; }
+    public IEnumerable<AtgenQuestBonus> quest_bonus { get; set; } =
+        Enumerable.Empty<AtgenQuestBonus>();
 
     [JsonIgnore]
     public AtgenMultiServer? multi_server { get; set; }
 
-    [JsonIgnore]
-    public AtgenWalkerData? walker_data { get; set; }
+    public AtgenWalkerData? walker_data { get; set; } = new();
 
-    [JsonConstructor]
     public LoadIndexData(
         UserData user_data,
         PartyPowerData party_power_data,
@@ -178,9 +210,13 @@ public class LoadIndexData
         this.quest_event_list = quest_event_list;
         this.material_list = material_list;
         this.astral_item_list = astral_item_list;
+#pragma warning disable CS0618 // Type or member is obsolete
         this.weapon_list = weapon_list;
+#pragma warning restore CS0618 // Type or member is obsolete
         this.album_weapon_list = album_weapon_list;
+#pragma warning disable CS0618 // Type or member is obsolete
         this.amulet_list = amulet_list;
+#pragma warning restore CS0618 // Type or member is obsolete
         this.weapon_skin_list = weapon_skin_list;
         this.weapon_body_list = weapon_body_list;
         this.weapon_passive_ability_list = weapon_passive_ability_list;
@@ -232,5 +268,6 @@ public class LoadIndexData
         this.walker_data = walker_data;
     }
 
+    [JsonConstructor]
     public LoadIndexData() { }
 }

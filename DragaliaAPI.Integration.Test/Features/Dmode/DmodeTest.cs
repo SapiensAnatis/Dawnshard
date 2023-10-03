@@ -9,7 +9,7 @@ namespace DragaliaAPI.Integration.Test.Features.Dmode;
 
 public class DmodeTest : TestFixture
 {
-    public DmodeTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+    public DmodeTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions();
