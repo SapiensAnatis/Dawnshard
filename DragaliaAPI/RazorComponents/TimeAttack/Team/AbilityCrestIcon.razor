@@ -7,8 +7,9 @@
 
 @inject IOptionsMonitor<BlazorOptions> Options;
 
-<MudTooltip tabindex="0" RootStyle="width: 50px;" ShowOnFocus=true Text="@this.Text" Placement="Placement.Bottom" Arrow=true>
-    <MudImage Fluid=true Src="@this.ImageSrc" />
+
+<MudTooltip tabindex="0" RootStyle="width: 50px;" style="max-width: 7.5rem" ShowOnFocus=true Text="@this.text" Placement="Placement.Bottom" Arrow=true>
+    <MudImage Fluid=true Src="@this.imageSrc" />
 </MudTooltip>
 
 @code 
@@ -16,19 +17,25 @@
     [Parameter]
     public AbilityCrests Crest { get; set; }
 
-    private string? Text => TextLabelHelper.GetText(this.Crest);
+    private string text = string.Empty;
+    private string imageSrc = string.Empty;
 
-    private string ImageSrc
+    protected override void OnParametersSet()
     {
-        get
+
+        string src; 
+
+        if (MasterAsset.AbilityCrest.TryGetValue(this.Crest, out AbilityCrest? crestData)) 
         {
-            if (!MasterAsset.AbilityCrest.TryGetValue(this.Crest, out AbilityCrest? crestData))
-                return string.Empty;
-
             int imageNum = crestData.IsHideChangeImage ? 1 : 2; // TODO: Support different images from unbinds
-
-            string src = $"icon/amulet/m/{crestData.BaseId}_{imageNum:00}.webp";
-            return this.Options.CurrentValue.GetImageSrc(src);
+            src = $"icon/amulet/m/{crestData.BaseId}_{imageNum:00}.webp";
+        } 
+        else
+        {
+            src = "icon/others/Icon_Blank_07_A.webp";
         }
+            
+        this.imageSrc = this.Options.CurrentValue.GetImageSrc(src);
+        this.text = TextLabelHelper.GetText(this.Crest) ?? this.Crest.ToString();
     }
 }

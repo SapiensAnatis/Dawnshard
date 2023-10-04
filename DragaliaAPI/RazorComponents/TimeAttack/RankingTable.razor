@@ -52,7 +52,7 @@
             <MudStack Row=true AlignItems="AlignItems.Center">
                 <TeamOverview Units="@context.Units"/>
                 <MudSpacer/>
-                <MudToggleIconButton Icon="@Icons.Material.Outlined.ExpandMore" ToggledIcon="@Icons.Material.Outlined.ExpandLess" ToggledChanged="@((toggled) => OnShowDetailsPressed(context.Rank, toggled))"/>
+                <MudToggleIconButton Icon="@Icons.Material.Outlined.ExpandMore"  ToggledIcon="@Icons.Material.Outlined.ExpandLess" ToggledChanged="@((toggled) => OnShowDetailsPressed(context.Rank, toggled))"/>
             </MudStack>
         </MudTd>
     </RowTemplate>
@@ -60,7 +60,7 @@
         @if (context.ShowDetails)
         {
             <MudTr>
-                <td class="pa-5" colspan="4">
+                <td class="pa-3" colspan="4">
                     <MudText Typo="Typo.body1" GutterBottom=true>Team composition</MudText>
                     <TeamDetails Units="@context.Units"/>
                 </td>

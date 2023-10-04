@@ -7,27 +7,36 @@
 
 @inject IOptionsMonitor<BlazorOptions> Options;
 
-<MudTooltip tabindex="0" RootStyle="width: 50px" ShowOnFocus=true Text="@this.Text" Placement="Placement.Bottom" Arrow=true>
-    <MudImage Style="width: 100%; height: auto" Src="@this.ImageSrc" />
+<MudTooltip tabindex="0" RootStyle="@this.style" ShowOnFocus=true Text="@this.text" Placement="Placement.Bottom" Arrow=true>
+    <MudImage Style="width: 100%; height: auto" Src="@this.imageSrc" />
 </MudTooltip>
 
 
 @code 
 {
     [Parameter]
-    public Charas Chara { get; set; } 
+    public Charas Chara { get; set; }
 
-    private string? Text => TextLabelHelper.GetText(this.Chara);
+    [Parameter]
+    public int MaxWidth { get; set; } = 50;
 
-    private string ImageSrc
+    [Parameter]
+    public int MinWidth { get; set; } = 45;
+
+    private string text = string.Empty;
+    private string imageSrc = string.Empty;
+    private string style = string.Empty;
+
+    protected override void OnParametersSet()
     {
-        get
-        {
-            if (!MasterAsset.CharaData.TryGetValue(this.Chara, out CharaData? charaData))
-                return string.Empty;
+        if (!MasterAsset.CharaData.TryGetValue(this.Chara, out CharaData? charaData))
+            return;
 
-            string src = $"icon/chara/m/{charaData.BaseId}_{charaData.VariationId:00}_r05.webp"; // TODO: Support non-5* rarities
-            return this.Options.CurrentValue.GetImageSrc(src);
-        }
+        string src = $"icon/chara/m/{charaData.BaseId}_{charaData.VariationId:00}_r05.webp"; // TODO: Support non-5* rarities
+
+        this.imageSrc = this.Options.CurrentValue.GetImageSrc(src);
+        this.text = TextLabelHelper.GetText(this.Chara) ?? string.Empty;
+
+        this.style = $"max-width: {this.MaxWidth}px; min-width: {this.MinWidth}px";
     }
 }

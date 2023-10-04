@@ -7,8 +7,8 @@
 
 @inject IOptionsMonitor<BlazorOptions> Options;
 
-<MudTooltip tabindex="0" RootStyle="max-width: min(50px, 100%);" ShowOnFocus=true Text="@this.Text" Placement="Placement.Bottom" Arrow=true>
-    <MudImage Fluid=true Src="@this.ImageSrc" />
+<MudTooltip tabindex="0" RootStyle="max-width: min(50px, 100%);" ShowOnFocus=true Text="@this.text" Placement="Placement.Bottom" Arrow=true>
+    <MudImage Fluid=true Src="@this.imageSrc" />
 </MudTooltip>
 
 
@@ -17,17 +17,19 @@
     [Parameter]
     public Dragons Dragon { get; set; }
 
-    private string? Text => TextLabelHelper.GetText(this.Dragon);
+    private string text = string.Empty;
+    private string imageSrc = string.Empty;
 
-    private string ImageSrc
+    protected override void OnParametersSet()
     {
-        get
-        {
-            if (!MasterAsset.DragonData.TryGetValue(this.Dragon, out DragonData? dragonData))
-                return string.Empty;
+        string src;
 
-            string src = $"icon/dragon/m/{dragonData.BaseId}_{dragonData.VariationId:00}.webp"; // TODO: Support non-5* rarities
-            return this.Options.CurrentValue.GetImageSrc(src);
-        }
+        if (MasterAsset.DragonData.TryGetValue(this.Dragon, out DragonData? dragonData)) 
+            src = $"icon/dragon/m/{dragonData.BaseId}_{dragonData.VariationId:00}.webp"; // TODO: Support non-5* rarities
+        else
+            src = "icon/others/Icon_Blank_04.webp";
+
+        this.imageSrc = this.Options.CurrentValue.GetImageSrc(src);
+        this.text = TextLabelHelper.GetText(this.Dragon) ?? this.Dragon.ToString();
     }
 }

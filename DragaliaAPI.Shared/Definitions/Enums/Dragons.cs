@@ -192,7 +192,7 @@ public enum Dragons
     [TextLabel("Nimis")]
     Nimis = 20050210,
 
-    [TextLabel("Gaibhne &amp; Creidhne")]
+    [TextLabel("Gaibhne & Creidhne")]
     GaibhneampCreidhne = 20050211,
 
     [TextLabel("Styx")]

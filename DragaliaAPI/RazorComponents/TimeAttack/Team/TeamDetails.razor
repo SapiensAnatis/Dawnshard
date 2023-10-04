@@ -4,17 +4,18 @@
 <MudStack Spacing="4">
     @foreach (DbTimeAttackClearUnit unit in this.Units)
      {
-       <MudGrid Justify="Justify.FlexStart" Spacing="0" Style="max-width: 800px">
+       <MudGrid Justify="Justify.FlexStart" Spacing="0" Style="max-width: 1100px">
             <MudItem xs="2" sm="2" md="1">
                 <CharaIcon Chara="unit.CharaId"/>
             </MudItem>
 
-            <MudItem xs="10" sm="3" md="2">
+            <MudItem xs="10" sm="3" md="3">
                 <DragonIcon Dragon="unit.EquippedDragonEntityId" />
                 <WeaponIcon Weapon="unit.EquipWeaponBodyId" />
+                <TalismanIcon Talisman="unit.EquippedTalismanEntityId" Ability1="unit.TalismanAbility1" Ability2="unit.TalismanAbility2" />
             </MudItem>
 
-            <MudItem xs="12" sm="4" md="6" lg="5">
+            <MudItem xs="12" sm="4" md="6" lg="4">
                 <AbilityCrestIcon Crest="unit.EquipCrestSlotType1CrestId1"/>
                 <AbilityCrestIcon Crest="unit.EquipCrestSlotType1CrestId2"/>
                 <AbilityCrestIcon Crest="unit.EquipCrestSlotType2CrestId1"/>
