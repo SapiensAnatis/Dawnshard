@@ -57,4 +57,6 @@ public record QuestData(
         }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
 
     public bool IsEventQuest => GroupType == QuestGroupType.Event;
+
+    public bool CanPlayCoOp => this.PayStaminaMulti > 0;
 }
