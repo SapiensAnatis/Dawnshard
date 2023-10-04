@@ -4,11 +4,14 @@
 
 @using DragaliaAPI.Blazor.Authentication;
 @using DragaliaAPI.Database;
+@using DragaliaAPI.Database.Entities;
+@using DragaliaAPI.RazorComponents.TimeAttack.Team
 @using Microsoft.EntityFrameworkCore;
 @using MudBlazor;
 @using MudBlazor.Components;
 @using System.Collections.Immutable;
 @using System.Diagnostics;
+@using System.Diagnostics.CodeAnalysis;
 
 
 <MudTable 
@@ -20,7 +23,7 @@
     >
     <ToolBarContent>
         <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Style="width: 100%">
-            <MudText Typo="Typo.h6">All clears</MudText>
+            <MudText Typo="Typo.h6">Clears</MudText>
             <MudSpacer/>
             @if (EnableSearch) 
             {
@@ -37,14 +40,33 @@
     </ToolBarContent>
     <HeaderContent>
         <MudTh>Rank</MudTh>
-        <MudTh>Players</MudTh>
+        <MudTh>@(this.IsCoop ? "Players" : "Player")</MudTh>
         <MudTh>Time</MudTh>
+        <MudTh>Team</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Rank">@context.Rank</MudTd>
         <MudTd DataLabel="Players">@context.FormattedNames</MudTd>
         <MudTd DataLabel="Time">@context.FormattedTime</MudTd>
+        <MudTd DataLabel="Team">
+            <MudStack Row=true AlignItems="AlignItems.Center">
+                <TeamOverview Units="@context.Units"/>
+                <MudSpacer/>
+                <MudToggleIconButton Icon="@Icons.Material.Outlined.ExpandMore" ToggledIcon="@Icons.Material.Outlined.ExpandLess" ToggledChanged="@((toggled) => OnShowDetailsPressed(context.Rank, toggled))"/>
+            </MudStack>
+        </MudTd>
     </RowTemplate>
+    <ChildRowContent>
+        @if (context.ShowDetails)
+        {
+            <MudTr>
+                <td class="pa-5" colspan="4">
+                    <MudText Typo="Typo.body1" GutterBottom=true>Team composition</MudText>
+                    <TeamDetails Units="@context.Units"/>
+                </td>
+            </MudTr>
+        }
+    </ChildRowContent>
     <NoRecordsContent>
         <MudText>No matching records found</MudText>
     </NoRecordsContent>
@@ -56,9 +78,10 @@
     </PagerContent>
 </MudTable>
 
-@code {
+    @code {
     private string? searchString;
     private MudTable<Clear>? table = new() { };
+    private IEnumerable<Clear> data = Enumerable.Empty<Clear>();
 
     [Parameter]
     public int? QuestId { get; set; }
@@ -71,6 +94,9 @@
 
     [Parameter]
     public bool EnableSearch { get; set; } = true;
+
+    [Parameter]
+    public bool IsCoop { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -90,7 +116,9 @@
 
         IQueryable<DbTimeAttackClear> clearQuery = context.TimeAttackClears
             .Include(x => x.Players)
-            .ThenInclude(x => x!.Player.UserData)
+            .ThenInclude(x => x.Units)
+            .Include(x => x.Players)
+            .ThenInclude(x => x.Player.UserData)
             .Where(x => x.QuestId == this.QuestId)
             .OrderBy(x => x.Time);
 
@@ -100,7 +128,7 @@
         IEnumerable<Clear> filteredEnumerable = queryResults
             .DistinctBy(x => x.PlayersHash)
             .Select(
-                (x, index) => new Clear(x, index)
+                (x, index) => new Clear(x, index, this.IsCoop)
             );
 
         if (!string.IsNullOrEmpty(searchString))
@@ -120,6 +148,7 @@
         stopwatch.Stop();
         Logger.LogDebug("Fetched data in {t} ms", stopwatch.ElapsedMilliseconds);
 
+        this.data = pagedEnumerable;
         return new TableData<Clear>() { Items = pagedEnumerable, TotalItems = filteredList.Count };
     }
 
@@ -130,18 +159,54 @@
         table?.ReloadServerData();
     }
 
-    private record Clear(int Rank, IEnumerable<string> Names, float Time)
+    private class Clear
     {
+        public int Rank { get; init; }
+
+        public required IEnumerable<string> Names { get; init; }
+
+        public required DbTimeAttackClearUnit[] Units { get; init; }
+
+        public float Time { get; init; }
+
         public string FormattedNames => string.Join(", ", this.Names.Order());
 
         public string FormattedTime => TimeSpan.FromSeconds(this.Time).ToString(@"mm\:ss\.f");
 
-        public Clear(DbTimeAttackClear dbClear, int index) 
-            : this(
-                index + 1,
-                dbClear.Players.Select(y => y.Player?.UserData?.Name ?? "null").ToList(), 
-                dbClear.Time
-            )
-        { }
+        public bool ShowDetails { get; set; }
+
+        [SetsRequiredMembers]
+        public Clear(DbTimeAttackClear dbClear, int index, bool isCoop) 
+        {
+            this.Rank = index + 1;
+            this.Names = dbClear.Players.Select(y => y.Player?.UserData?.Name ?? "null").ToList();
+            this.Time = dbClear.Time;
+
+            if (isCoop) 
+            {
+                this.Units = dbClear.Players
+                    .Select(x => x.Units.FirstOrDefault())
+                    .Where(x => x is not null)
+                    .Select(x => x!)
+                    .OrderBy(x => x.UnitNo)
+                    .ToArray();
+            }
+            else
+            {
+                this.Units = dbClear.Players
+                    .SelectMany(x => x.Units)
+                    .OrderBy(x => x.UnitNo)
+                    .ToArray();
+            }
+        }
+    }
+
+    private void OnShowDetailsPressed(int rank, bool toggled)
+    {
+        Clear? clear = this.data.FirstOrDefault(x => x.Rank == rank);
+        if (clear is not null)
+        {
+            clear.ShowDetails = toggled;
+        }
     }
 }

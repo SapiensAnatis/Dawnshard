@@ -1,0 +1,34 @@
+﻿@using DragaliaAPI.Features.Blazor;
+@using DragaliaAPI.Shared.Definitions.Enums;
+@using DragaliaAPI.Shared.Features.TextLabel;
+@using DragaliaAPI.Shared.MasterAsset;
+@using DragaliaAPI.Shared.MasterAsset.Models;
+@using Microsoft.Extensions.Options;
+
+@inject IOptionsMonitor<BlazorOptions> Options;
+
+<MudTooltip tabindex="0" RootStyle="width: 50px;" ShowOnFocus=true Text="@this.Text" Placement="Placement.Bottom" Arrow=true>
+    <MudImage Fluid=true Src="@this.ImageSrc" />
+</MudTooltip>
+
+@code 
+{
+    [Parameter]
+    public AbilityCrests Crest { get; set; }
+
+    private string? Text => TextLabelHelper.GetText(this.Crest);
+
+    private string ImageSrc
+    {
+        get
+        {
+            if (!MasterAsset.AbilityCrest.TryGetValue(this.Crest, out AbilityCrest? crestData))
+                return string.Empty;
+
+            int imageNum = crestData.IsHideChangeImage ? 1 : 2; // TODO: Support different images from unbinds
+
+            string src = $"icon/amulet/m/{crestData.BaseId}_{imageNum:00}.webp";
+            return this.Options.CurrentValue.GetImageSrc(src);
+        }
+    }
+}

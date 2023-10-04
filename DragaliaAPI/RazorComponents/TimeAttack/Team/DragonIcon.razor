@@ -1,0 +1,33 @@
+﻿@using DragaliaAPI.Features.Blazor;
+@using DragaliaAPI.Shared.Definitions.Enums;
+@using DragaliaAPI.Shared.Features.TextLabel;
+@using DragaliaAPI.Shared.MasterAsset;
+@using DragaliaAPI.Shared.MasterAsset.Models;
+@using Microsoft.Extensions.Options;
+
+@inject IOptionsMonitor<BlazorOptions> Options;
+
+<MudTooltip tabindex="0" RootStyle="max-width: min(50px, 100%);" ShowOnFocus=true Text="@this.Text" Placement="Placement.Bottom" Arrow=true>
+    <MudImage Fluid=true Src="@this.ImageSrc" />
+</MudTooltip>
+
+
+@code
+{
+    [Parameter]
+    public Dragons Dragon { get; set; }
+
+    private string? Text => TextLabelHelper.GetText(this.Dragon);
+
+    private string ImageSrc
+    {
+        get
+        {
+            if (!MasterAsset.DragonData.TryGetValue(this.Dragon, out DragonData? dragonData))
+                return string.Empty;
+
+            string src = $"icon/dragon/m/{dragonData.BaseId}_{dragonData.VariationId:00}.webp"; // TODO: Support non-5* rarities
+            return this.Options.CurrentValue.GetImageSrc(src);
+        }
+    }
+}
