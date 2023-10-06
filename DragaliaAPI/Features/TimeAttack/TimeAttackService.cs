@@ -55,7 +55,7 @@ public class TimeAttackService(
         return true;
     }
 
-    public async Task RegisterRankedClear(string roomName, float clearTime)
+    public async Task RegisterRankedClear(string gameId, float clearTime)
     {
         if (await timeAttackCacheService.Get() is not { } entry)
         {
@@ -64,20 +64,20 @@ public class TimeAttackService(
         }
 
         List<DbTimeAttackClearUnit> clearUnits = entry.PartyInfo.party_unit_list
-            .Select(x => MapTimeAttackUnit(x, roomName))
+            .Select(x => MapTimeAttackUnit(x, gameId))
             .ToList();
 
         await timeAttackRepository.CreateOrUpdateClear(
             new DbTimeAttackClear()
             {
-                RoomName = roomName,
+                GameId = gameId,
                 QuestId = entry.QuestId,
                 Time = clearTime,
                 Players = new()
                 {
                     new()
                     {
-                        RoomName = roomName,
+                        GameId = gameId,
                         DeviceAccountId = playerIdentityService.AccountId,
                         PartyInfo = JsonSerializer.Serialize(entry.PartyInfo),
                         Units = clearUnits
@@ -88,7 +88,7 @@ public class TimeAttackService(
 
         logger.LogDebug(
             "Registered time attack clear for room {room} and quest {questId}",
-            roomName,
+            gameId,
             entry.QuestId
         );
     }
@@ -148,7 +148,7 @@ public class TimeAttackService(
             {
                 UnitNo = x.position,
                 DeviceAccountId = playerIdentityService.AccountId,
-                RoomName = roomId
+                GameId = roomId
             };
 
         if (x.chara_data is not null)

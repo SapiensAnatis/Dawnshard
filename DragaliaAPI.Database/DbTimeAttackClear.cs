@@ -9,7 +9,7 @@ namespace DragaliaAPI.Database;
 public class DbTimeAttackClear
 {
     [Key]
-    public required string RoomName { get; set; }
+    public required string GameId { get; set; }
 
     public int QuestId { get; set; }
 
