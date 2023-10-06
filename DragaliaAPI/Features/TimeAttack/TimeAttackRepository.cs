@@ -16,7 +16,7 @@ public class TimeAttackRepository(
 
     public async Task CreateOrUpdateClear(DbTimeAttackClear clear)
     {
-        if (await apiContext.TimeAttackClears.FindAsync(clear.RoomName) is { } existingClear)
+        if (await apiContext.TimeAttackClears.FindAsync(clear.GameId) is { } existingClear)
         {
             existingClear.Players.AddRange(clear.Players);
         }

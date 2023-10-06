@@ -28,18 +28,18 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
     [Fact]
     public async Task CreateOrUpdateClear_CreatesNew()
     {
-        string roomName = Guid.NewGuid().ToString();
+        string gameId = Guid.NewGuid().ToString();
 
         DbTimeAttackClear clear =
             new()
             {
-                RoomName = roomName,
+                GameId = gameId,
                 QuestId = 1,
                 Players = new List<DbTimeAttackPlayer>()
                 {
                     new()
                     {
-                        RoomName = roomName,
+                        GameId = gameId,
                         DeviceAccountId = "id",
                         PartyInfo = "{}"
                     }
@@ -55,18 +55,18 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
     [Fact]
     public async Task CreateOrUpdateClear_UpdatesExisting()
     {
-        string roomName = Guid.NewGuid().ToString();
+        string gameId = Guid.NewGuid().ToString();
 
         await this.timeAttackRepository.CreateOrUpdateClear(
             new()
             {
-                RoomName = roomName,
+                GameId = gameId,
                 QuestId = 1,
                 Players = new List<DbTimeAttackPlayer>()
                 {
                     new()
                     {
-                        RoomName = roomName,
+                        GameId = gameId,
                         DeviceAccountId = "id 2",
                         PartyInfo = "{}"
                     }
@@ -79,13 +79,13 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
         await this.timeAttackRepository.CreateOrUpdateClear(
             new()
             {
-                RoomName = roomName,
+                GameId = gameId,
                 QuestId = 1,
                 Players = new List<DbTimeAttackPlayer>()
                 {
                     new()
                     {
-                        RoomName = roomName,
+                        GameId = gameId,
                         DeviceAccountId = "id 3",
                         PartyInfo = "{}"
                     }
@@ -95,22 +95,22 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        this.ApiContext.TimeAttackClears.Should().Contain(x => x.RoomName == roomName);
+        this.ApiContext.TimeAttackClears.Should().Contain(x => x.GameId == gameId);
         this.ApiContext.TimeAttackClears
-            .First(x => x.RoomName == roomName)
+            .First(x => x.GameId == gameId)
             .Players.Should()
             .BeEquivalentTo(
                 new List<DbTimeAttackPlayer>()
                 {
                     new()
                     {
-                        RoomName = roomName,
+                        GameId = gameId,
                         DeviceAccountId = "id 2",
                         PartyInfo = "{}"
                     },
                     new()
                     {
-                        RoomName = roomName,
+                        GameId = gameId,
                         DeviceAccountId = "id 3",
                         PartyInfo = "{}"
                     }

@@ -69,12 +69,15 @@ namespace DragaliaAPI.Photon.Plugin
 #endif
             info.Request.ActorProperties.InitializeViewerId();
 
+            int roomId = this.GenerateRoomId();
+            info.Request.GameProperties.Add(GamePropertyKeys.RoomId, roomId);
+
+            info.Continue();
+
             // https://doc.photonengine.com/server/current/plugins/plugins-faq#how_to_get_the_actor_number_in_plugin_callbacks_
             // This is only invalid if the room is recreated from an inactive state, which Dragalia doesn't do (hopefully!)
             const int actorNr = 1;
             this.actorState[actorNr] = new ActorState();
-
-            info.Continue();
 
             if (
                 info.Request.GameProperties.TryGetValue(
@@ -88,9 +91,6 @@ namespace DragaliaAPI.Photon.Plugin
             }
 
             this.roomState.QuestId = info.Request.GameProperties.GetInt(GamePropertyKeys.QuestId);
-
-            int roomId = this.GenerateRoomId();
-            info.Request.GameProperties.Add(GamePropertyKeys.RoomId, roomId);
 
             this.logger.InfoFormat(
                 "Viewer ID {0} created room {1} with room ID {2}",
@@ -770,18 +770,6 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Event call info.</param>
         private void OnClearQuestRequest(IRaiseEventCallInfo info)
         {
-            // These properties must be set for the client to successfully rejoin the room.
-            this.PluginHost.SetProperties(
-                0,
-                new Hashtable()
-                {
-                    { GamePropertyKeys.GoToIngameInfo, null },
-                    { GamePropertyKeys.RoomId, -1 }
-                },
-                null,
-                true
-            );
-
             this.actorState[info.ActorNr] = new ActorState();
 
             ClearQuestRequest evt = info.DeserializeEvent<ClearQuestRequest>();
@@ -806,6 +794,18 @@ namespace DragaliaAPI.Photon.Plugin
                     callAsync: true
                 );
             }
+
+            // These properties must be set for the client to successfully rejoin the room.
+            this.PluginHost.SetProperties(
+                0,
+                new Hashtable()
+                {
+                    { GamePropertyKeys.GoToIngameInfo, null },
+                    { GamePropertyKeys.RoomId, -1 }
+                },
+                null,
+                true
+            );
         }
 
         private bool ShouldRegisterTimeAttack()

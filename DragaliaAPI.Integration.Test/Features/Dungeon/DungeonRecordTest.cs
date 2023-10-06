@@ -300,8 +300,11 @@ public class DungeonRecordTest : TestFixture
 
         int questId = 227010104; // Volk's Wrath TA Solo
         string roomName = Guid.NewGuid().ToString();
+        string roomId = "1234";
+        string gameId = $"{roomName}_{roomId}";
 
         this.Client.DefaultRequestHeaders.Add("RoomName", roomName);
+        this.Client.DefaultRequestHeaders.Add("RoomId", roomId);
 
         await this.AddToDatabase(
             new DbQuest()
@@ -348,14 +351,13 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.ApiContext.TimeAttackClears.Should().ContainSingle(x => x.RoomName == roomName);
+        this.ApiContext.TimeAttackClears.Should().ContainSingle(x => x.GameId == gameId);
 
         DbTimeAttackClear? recordedClear = await this.ApiContext.TimeAttackClears
             .Include(x => x.Players)
             .ThenInclude(x => x.Units)
-            .FirstAsync(x => x.RoomName == roomName);
+            .FirstAsync(x => x.GameId == gameId);
 
-        recordedClear.RoomName.Should().Be(roomName);
         recordedClear.Time.Should().Be(clearTime);
         recordedClear.QuestId.Should().Be(questId);
         recordedClear.Players.Should().ContainSingle(x => x.DeviceAccountId == DeviceAccountId);
