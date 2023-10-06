@@ -8,6 +8,6 @@ public interface ITimeAttackService
     bool GetIsRankedQuest(int questId);
     IEnumerable<RankingTierReward> GetRewards();
     Task<IEnumerable<RankingTierReward>> ReceiveTierReward(int questId);
-    Task RegisterRankedClear(string roomName, float clearTime);
+    Task RegisterRankedClear(string gameId, float clearTime);
     Task<bool> SetupRankedClear(int questId, PartyInfo partyInfo);
 }
