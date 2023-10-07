@@ -2,6 +2,7 @@ using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
@@ -89,6 +90,32 @@ public class QuestService(
         }
 
         return (quest, isBestClearTime, questEventRewards);
+    }
+
+    public async Task<int> GetQuestStamina(int questId, StaminaType type)
+    {
+        QuestData questData = MasterAsset.QuestData[questId];
+        DbQuest questEntity = await questRepository.GetQuestDataAsync(questId);
+
+        if (questData.GroupType == QuestGroupType.MainStory && questEntity.State < 3)
+        {
+            logger.LogDebug(
+                "Attempting first clear of main story quest {questId}: 0 stamina required",
+                questId
+            );
+
+            return 0;
+        }
+
+        return type switch
+        {
+            StaminaType.Single => questData.PayStaminaSingle,
+            // Want to encourage co-op play.
+            // Also, `type` here is inferred from endpoint e.g. start_multi, but that doesn't work for time attack.
+            StaminaType.Multi
+                => 0,
+            _ => throw new ArgumentOutOfRangeException(nameof(type))
+        };
     }
 
     private async Task<IEnumerable<AtgenFirstClearSet>> ProcessQuestEventCompletion(

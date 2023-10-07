@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Features.Player;
+using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Features.Dungeon;
 
@@ -17,4 +18,5 @@ public interface IDungeonStartService
     );
 
     Task<IngameQuestData> InitiateQuest(int questId);
+    Task<bool> ValidateStamina(int questId, StaminaType staminaType);
 }
