@@ -32,9 +32,9 @@ public class ToolController : DragaliaControllerBase
 
     [HttpPost]
     [Route("signup")]
-    public async Task<DragaliaResult> Signup(ToolSignupRequest request)
+    public async Task<DragaliaResult> Signup([FromHeader(Name = "ID-TOKEN")] string idToken)
     {
-        (long viewerId, _) = await this.authService.DoAuth(request.id_token);
+        (long viewerId, _) = await this.authService.DoAuth(idToken);
 
         return this.Ok(
             new ToolSignupData()
@@ -54,9 +54,12 @@ public class ToolController : DragaliaControllerBase
 
     [HttpPost]
     [Route("auth")]
-    public async Task<DragaliaResult> Auth(ToolAuthRequest request)
+    public async Task<DragaliaResult> Auth([FromHeader(Name = "ID-TOKEN")] string idToken)
     {
-        (long viewerId, string sessionId) = await this.authService.DoAuth(request.id_token);
+        // For some reason, the id_token in the ToolAuthRequest does not update with refreshes,
+        // but the one in the header does.
+
+        (long viewerId, string sessionId) = await this.authService.DoAuth(idToken);
 
         return this.Ok(
             new ToolAuthData()
@@ -69,9 +72,9 @@ public class ToolController : DragaliaControllerBase
     }
 
     [HttpPost("reauth")]
-    public async Task<DragaliaResult> Reauth(ToolReauthRequest request)
+    public async Task<DragaliaResult> Reauth([FromHeader(Name = "ID-TOKEN")] string idToken)
     {
-        (long viewerId, string sessionId) = await this.authService.DoAuth(request.id_token);
+        (long viewerId, string sessionId) = await this.authService.DoAuth(idToken);
 
         return this.Ok(
             new ToolReauthData()

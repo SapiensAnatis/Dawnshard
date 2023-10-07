@@ -66,7 +66,7 @@ public static class HttpClientExtensions
     {
         HttpContent content = CreateMsgpackContent(request);
 
-        return await client.PostAsync(endpoint, content);
+        return await client.PostAsync(endpoint.TrimStart('/'), content);
     }
 
     public static HttpContent CreateMsgpackContent(object content)
