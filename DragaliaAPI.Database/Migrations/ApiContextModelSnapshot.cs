@@ -257,6 +257,30 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("LoginBonuses");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbNewsItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Headline")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("Time")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NewsItems");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbParty", b =>
                 {
                     b.Property<string>("DeviceAccountId")

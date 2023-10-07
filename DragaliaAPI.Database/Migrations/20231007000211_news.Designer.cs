@@ -12,9 +12,9 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20231006174740_time-attack-fix")]
+    [Migration("20231007000211_news")]
 #pragma warning disable CS8981 // The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
-    partial class timeattackfix
+    partial class news
 #pragma warning restore CS8981 // The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
     {
         /// <inheritdoc />
@@ -260,6 +260,30 @@ namespace DragaliaAPI.Database.Migrations
                     b.HasKey("DeviceAccountId", "Id");
 
                     b.ToTable("LoginBonuses");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbNewsItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Headline")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("Time")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NewsItems");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbParty", b =>

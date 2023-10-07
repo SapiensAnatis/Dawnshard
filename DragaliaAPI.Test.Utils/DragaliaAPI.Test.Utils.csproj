@@ -13,9 +13,9 @@
     </ItemGroup>
     
     <ItemGroup>
-      <PackageReference Include="FluentAssertions" Version="6.11.0" />
-      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.30.0" />
-      <PackageReference Include="Moq" Version="4.18.4" />
+      <PackageReference Include="FluentAssertions" Version="6.12.0" />
+      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.0.2" />
+      <PackageReference Include="Moq" Version="4.20.69" />
     </ItemGroup>
 
     <ItemGroup>

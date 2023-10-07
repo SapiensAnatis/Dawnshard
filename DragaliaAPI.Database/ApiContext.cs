@@ -184,4 +184,6 @@ public class ApiContext : DbContext
     public DbSet<DbTimeAttackClearUnit> TimeAttackClearUnits { get; set; }
 
     public DbSet<DbReceivedRankingTierReward> ReceivedRankingTierRewards { get; set; }
+
+    public DbSet<DbNewsItem> NewsItems { get; set; }
 }

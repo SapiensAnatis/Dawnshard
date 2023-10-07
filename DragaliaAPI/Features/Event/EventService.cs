@@ -19,8 +19,7 @@ public class EventService(
     ILogger<EventService> logger,
     IEventRepository eventRepository,
     IRewardService rewardService,
-    IQuestRepository questRepository,
-    IDateTimeProvider dateTime
+    IQuestRepository questRepository
 ) : IEventService
 {
     public async Task<bool> GetCustomEventFlag(int eventId)
@@ -161,7 +160,7 @@ public class EventService(
         return rewardEntities;
     }
 
-    private static Dictionary<int, List<QuestData>> CombatEventQuestLookup =
+    private static readonly Dictionary<int, List<QuestData>> CombatEventQuestLookup =
         MasterAsset.EventData.Enumerable
             .Where(x => x.EventKindType == EventKindType.Combat)
             .Select(x => x.Id)

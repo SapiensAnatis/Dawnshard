@@ -31,7 +31,7 @@ IConfiguration config = builder.Configuration
     .AddJsonFile("dragonfruitOdds.json", optional: false, reloadOnChange: true)
     .Build();
 
-StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
+builder.WebHost.UseStaticWebAssets();
 
 builder.Services
     .Configure<BaasOptions>(config.GetRequiredSection("Baas"))
@@ -115,9 +115,7 @@ builder.Services.ConfigureGraphQlSchema();
 
 WebApplication app = builder.Build();
 
-Log.Logger.Debug("App environment: {@env}", app.Environment);
-
-if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+if (Environment.GetEnvironmentVariable("DISABLE_AUTO_MIGRATION") == null)
     app.MigrateDatabase();
 
 app.UseStaticFiles();
