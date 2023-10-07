@@ -1,0 +1,58 @@
+﻿@using System.Text.Json;
+@using DragaliaAPI.Database.Entities;
+@using DragaliaAPI.Database;
+@using Microsoft.EntityFrameworkCore;
+
+@inject IDbContextFactory<ApiContext> ContextFactory;
+
+<MudStack Style="width: 95%">
+    @foreach(NewsItem item in this.newsItems) {
+        <MudCard>
+            <MudCardHeader Style="margin-bottom: -1rem">
+                <MudStack Spacing="-1">
+                    <MudText Typo="Typo.h6" Color="Color.Primary">
+                        @item.Headline
+                    </MudText>
+                    <MudText Typo="Typo.caption">
+                        @item.Time
+                    </MudText>
+                </MudStack>
+            </MudCardHeader>
+            <MudCardContent>
+                @item.Description
+            </MudCardContent>
+        </MudCard>
+    }
+</MudStack>
+
+@code {
+
+    private IEnumerable<NewsItem> newsItems = Enumerable.Empty<NewsItem>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using ApiContext apiContext = await this.ContextFactory.CreateDbContextAsync();
+
+        this.newsItems = await apiContext.NewsItems
+            .OrderByDescending(x => x.Time)
+            .Select(x => new NewsItem(x))
+            .ToListAsync();
+    }
+
+    private class NewsItem
+    {
+        public NewsItem(DbNewsItem dbNewsItem)
+        {
+            this.Headline = dbNewsItem.Headline;
+            this.Time = $"{dbNewsItem.Time:dd/MM/yyyy HH:mm} UTC";
+            this.Description = new((builder) => builder.AddMarkupContent(0, dbNewsItem.Description));
+        }
+
+        public string Headline { get; }
+
+        public string Time { get; }
+
+        public RenderFragment Description { get; }
+    }
+}
