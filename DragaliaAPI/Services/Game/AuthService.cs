@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
@@ -217,10 +218,14 @@ public class AuthService : IAuthService
             return false;
         }
 
-        if (!token.Payload.TryGetValue("sav:ts", out object? saveTimestampObj))
+        string? saveTimestampStr = token.Claims.FirstOrDefault(x => x.Type == "sav:ts")?.Value;
+        if (saveTimestampStr == null)
             return false;
 
-        DateTimeOffset saveDateTime = DateTimeOffset.FromUnixTimeSeconds((long)saveTimestampObj);
+        DateTimeOffset saveDateTime = DateTimeOffset.FromUnixTimeSeconds(
+            long.Parse(saveTimestampStr)
+        );
+
         DateTimeOffset lastImportTime = userData?.LastSaveImportTime ?? DateTimeOffset.MinValue;
         if (lastImportTime >= saveDateTime)
         {

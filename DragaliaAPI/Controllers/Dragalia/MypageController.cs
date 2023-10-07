@@ -16,7 +16,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [ApiController]
 public class MypageController(
     IMissionService missionService,
-    IShopRepository shopRepository
+    IShopRepository shopRepository,
     IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
