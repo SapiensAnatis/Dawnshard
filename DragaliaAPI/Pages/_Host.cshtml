@@ -6,7 +6,7 @@
 @{
     Layout = "_Layout";
 
-    string darkModeCookie = this.Request.Cookies.FirstOrDefault(x => x.Key == "darkMode").Value;
+    string? darkModeCookie = this.Request.Cookies.FirstOrDefault(x => x.Key == "darkMode").Value;
     bool? isDarkMode = null;
 
     if (bool.TryParse(darkModeCookie, out bool darkModeParsed))
@@ -15,7 +15,6 @@
     HttpRequestState httpRequestState = new() 
     {
         HostUri = $"{this.Request.Scheme}://{this.Request.Host.Value}",
-        HideAppBar = this.Request.Query.TryGetValue("hideappbar", out StringValues hide) && hide.Any(x => x == "true"),
         IsDarkMode = isDarkMode,
     };
 }

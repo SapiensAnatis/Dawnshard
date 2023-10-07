@@ -17,8 +17,7 @@ public class DungeonRecordController(
     IDungeonRecordHelperService dungeonRecordHelperService,
     IDungeonService dungeonService,
     ITimeAttackService timeAttackService,
-    IUpdateDataService updateDataService,
-    ILogger<DungeonRecordController> logger
+    IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
     [HttpPost("record")]

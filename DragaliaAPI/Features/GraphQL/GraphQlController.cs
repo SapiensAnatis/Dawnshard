@@ -25,7 +25,6 @@ public class GraphQlController : ControllerBase
     {
         QueryResult results = await this.schemaProvider.ExecuteRequestAsync(
             query,
-            this.apiContext,
             HttpContext.RequestServices,
             null
         );

@@ -1,0 +1,23 @@
+﻿
+@page "/news/webview"
+@using DragaliaAPI.RazorComponents.News
+@layout WebviewLayout
+
+
+<div>
+    <MudStack AlignItems="AlignItems.Center" Spacing="5">
+        <MudText class="title" Typo="Typo.h1">Welcome to Dawnshard</MudText>
+        <MudStack Row=true>
+            <MudIconButton Variant="Variant.Filled" Icon="@Icons.Custom.Brands.Discord" Href="https://discord.gg/j9zSttjjWj"/>
+            <MudIconButton Variant="Variant.Filled" Icon="@Icons.Custom.Brands.GitHub" Href="https://github.com/SapiensAnatis/Dawnshard" />
+            <MudIconButton Variant="Variant.Filled" Icon="@CustomIcons.Patreon" Href="https://www.patreon.com/dawnshard" />
+            <MudIconButton Variant="Variant.Filled" Icon="@CustomIcons.BuyMeACoffee" Href="https://www.buymeacoffee.com/dawnshard" />
+        </MudStack>
+        <NewsComponent/>
+    </MudStack>
+</div>
+
+
+@code {
+
+}

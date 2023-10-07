@@ -10,27 +10,27 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="coverlet.msbuild" Version="3.2.0">
+        <PackageReference Include="coverlet.msbuild" Version="6.0.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GraphQL.Client" Version="6.0.0" />
-        <PackageReference Include="GraphQL.Client.Serializer.SystemTextJson" Version="6.0.0" />
+        <PackageReference Include="GraphQL.Client" Version="6.0.1" />
+        <PackageReference Include="GraphQL.Client.Serializer.SystemTextJson" Version="6.0.1" />
         <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.5" />
-        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.5" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
-        <PackageReference Include="Moq" Version="4.18.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.11" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+        <PackageReference Include="Moq" Version="4.20.69" />
         <PackageReference Include="Respawn" Version="6.1.0" />
         <PackageReference Include="Snapshooter.Xunit" Version="0.13.0" />
-        <PackageReference Include="Testcontainers" Version="3.0.0" />
-        <PackageReference Include="Testcontainers.PostgreSql" Version="3.0.0" />
-        <PackageReference Include="xunit" Version="2.4.2" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+        <PackageReference Include="Testcontainers" Version="3.5.0" />
+        <PackageReference Include="Testcontainers.PostgreSql" Version="3.5.0" />
+        <PackageReference Include="xunit" Version="2.5.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="3.1.2">
+        <PackageReference Include="coverlet.collector" Version="6.0.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
