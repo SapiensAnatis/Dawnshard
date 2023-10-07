@@ -175,23 +175,13 @@ namespace DragaliaAPI.Photon.Plugin
                 x => x.ActorNr == info.ActorNr
             );
 
-#if DEBUG
-            if (
-                actor == null
-                || !actor.Properties.TryGetValue("DeactivationTime", out object deactivationTime)
-            )
-            {
-                deactivationTime = "null";
-            }
+            base.OnLeave(info);
 
-            this.logger.DebugFormat(
-                "Leave info -- Actor: {0}, Details: {1}, IsInactive {2}, DeactivationTime: {3}",
-                info.ActorNr,
-                info.Details,
-                info.IsInactive,
-                deactivationTime
-            );
-#endif
+            if (info.ActorNr == -1)
+            {
+                // Actor was never really in the room, server disconnect, etc.
+                return;
+            }
 
             if (info.ActorNr == 1)
             {
@@ -208,8 +198,6 @@ namespace DragaliaAPI.Photon.Plugin
                     info.ActorNr
                 );
             }
-
-            base.OnLeave(info);
 
             // It is not critical to update the Redis state, so don't crash the room if we can't find
             // the actor or certain properties attached to them.
@@ -682,12 +670,20 @@ namespace DragaliaAPI.Photon.Plugin
         {
             this.LogIfFailedCallback(response, userState);
 
+            if (response.Status != HttpRequestQueueResult.Success)
+                return;
+
             List<HeroParamData> responseObject = JsonConvert.DeserializeObject<List<HeroParamData>>(
                 response.ResponseText
             );
 
             foreach (HeroParamData data in responseObject)
-                this.actorState[data.ActorNr].HeroParamData = data;
+            {
+                if (this.actorState.ContainsKey(data.ActorNr))
+                {
+                    this.actorState[data.ActorNr].HeroParamData = data;
+                }
+            }
         }
 
         /// <summary>
@@ -839,6 +835,9 @@ namespace DragaliaAPI.Photon.Plugin
         private void ClearQuestRequestCallback(IHttpResponse response, object userState)
         {
             this.LogIfFailedCallback(response, userState);
+
+            if (response.Status != HttpRequestQueueResult.Success)
+                return;
 
             HttpRequestUserState typedUserState = (HttpRequestUserState)userState;
 
