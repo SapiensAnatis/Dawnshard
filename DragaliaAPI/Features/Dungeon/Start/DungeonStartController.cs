@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.TimeAttack.Validation;
 using DragaliaAPI.Models;
@@ -28,6 +29,9 @@ public class DungeonStartController(
     [HttpPost("start")]
     public async Task<DragaliaResult> Start(DungeonStartStartRequest request)
     {
+        if (!await dungeonStartService.ValidateStamina(request.quest_id, StaminaType.Single))
+            return this.Code(ResultCode.QuestStaminaSingleShort);
+
         IngameData ingameData = await dungeonStartService.GetIngameData(
             request.quest_id,
             request.party_no_list,
@@ -42,6 +46,9 @@ public class DungeonStartController(
     [HttpPost("start_multi")]
     public async Task<DragaliaResult> StartMulti(DungeonStartStartMultiRequest request)
     {
+        if (!await dungeonStartService.ValidateStamina(request.quest_id, StaminaType.Multi))
+            return this.Code(ResultCode.QuestStaminaMultiShort);
+
         IngameData ingameData = await dungeonStartService.GetIngameData(
             request.quest_id,
             request.party_no_list
@@ -77,6 +84,9 @@ public class DungeonStartController(
     [HttpPost("start_assign_unit")]
     public async Task<DragaliaResult> StartAssignUnit(DungeonStartStartAssignUnitRequest request)
     {
+        if (!await dungeonStartService.ValidateStamina(request.quest_id, StaminaType.Single))
+            return this.Code(ResultCode.QuestStaminaSingleShort);
+
         IngameData ingameData = await dungeonStartService.GetIngameData(
             request.quest_id,
             request.request_party_setting_list,
@@ -96,6 +106,9 @@ public class DungeonStartController(
         DungeonStartStartMultiAssignUnitRequest request
     )
     {
+        if (!await dungeonStartService.ValidateStamina(request.quest_id, StaminaType.Multi))
+            return this.Code(ResultCode.QuestStaminaMultiShort);
+
         IngameData ingameData = await dungeonStartService.GetIngameData(
             request.quest_id,
             request.request_party_setting_list
