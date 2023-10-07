@@ -184,6 +184,10 @@ public class DungeonRecordServiceTest
                 )
             );
 
+        this.mockQuestService
+            .Setup(x => x.GetQuestStamina(lSurtrSoloId, StaminaType.Single))
+            .ReturnsAsync(40);
+
         IngameResultData ingameResultData =
             await this.dungeonRecordService.GenerateIngameResultData(
                 "dungeonKey",
@@ -240,5 +244,6 @@ public class DungeonRecordServiceTest
         this.mockUserService.VerifyAll();
         this.mockTutorialService.VerifyAll();
         this.mockLogger.VerifyAll();
+        this.mockQuestService.VerifyAll();
     }
 }
