@@ -14,7 +14,6 @@ namespace DragaliaAPI.Features.GraphQL;
 public class MissionMutations(
     IMissionService missionService,
     IMissionInitialProgressionService missionInitialProgressionService,
-    ILogger<MissionMutations> logger,
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService
 ) : MutationBase(apiContext, playerIdentityService)

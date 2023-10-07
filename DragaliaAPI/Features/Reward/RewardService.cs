@@ -151,6 +151,7 @@ public class RewardService(
     {
         // int currentCount = await unitRepository.Talismans.CountAsync();
 
+#if false
         if (
             false /*TODO: currentCount >= TalismanService.TalismanMaxCount once we get presents working with it*/
         )
@@ -164,6 +165,7 @@ public class RewardService(
 
             return (RewardGrantResult.Converted, null);
         }
+#endif
 
         DbTalisman talisman = unitRepository.AddTalisman(
             id,

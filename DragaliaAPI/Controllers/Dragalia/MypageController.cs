@@ -16,10 +16,8 @@ namespace DragaliaAPI.Controllers.Dragalia;
 [ApiController]
 public class MypageController(
     IMissionService missionService,
-    IShopRepository shopRepository,
-    IDateTimeProvider dateTimeProvider,
-    IUpdateDataService updateDataService,
-    ILogger<MypageController> logger
+    IShopRepository shopRepository
+    IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
     [Route("info")]

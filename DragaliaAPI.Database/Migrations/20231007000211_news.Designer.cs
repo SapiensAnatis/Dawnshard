@@ -13,7 +13,9 @@ namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
     [Migration("20231007000211_news")]
+#pragma warning disable CS8981 // The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
     partial class news
+#pragma warning restore CS8981 // The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
