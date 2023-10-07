@@ -9,7 +9,8 @@ namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("webview_version")]
 [AllowAnonymous]
-public class WebviewVersionController : DragaliaControllerBase
+public class WebviewVersionController(IWebHostEnvironment webHostEnvironment)
+    : DragaliaControllerBase
 {
     private const string PlaceholderUrl = "localhost";
 
@@ -55,7 +56,7 @@ public class WebviewVersionController : DragaliaControllerBase
 
     private string GetUrl(string relativePath)
     {
-        string protocol = $"http{(this.HttpContext.Request.IsHttps ? "s" : "")}";
+        string protocol = webHostEnvironment.IsDevelopment() ? "http" : "https";
         string url = $"{protocol}://{this.HttpContext.Request.Host.Host}/{relativePath}";
         return url;
     }
