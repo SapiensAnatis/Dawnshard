@@ -11,7 +11,6 @@ using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
-using DragaliaAPI;
 using DragaliaAPI.Models;
 using MessagePack;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -23,6 +22,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore.Diagnostics.Internal;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Version;
+using DragaliaAPI.Configuration;
+using Microsoft.JSInterop;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +62,8 @@ builder.Host.UseSerilog(
             .Configuration(context.Configuration)
             .ReadFrom.Services(services)
             .Enrich.FromLogContext()
+            // Blazor keeps throwing these errors from MudBlazor internals; there is nothing we can do about them
+            .Filter.ByExcluding(evt => evt.Exception is JSDisconnectedException)
 );
 
 // Add services to the container.
