@@ -106,19 +106,8 @@ public class DungeonRecordService(
 
     private async Task ProcessStaminaConsumption(DungeonSession session)
     {
-        StaminaType type = StaminaType.None;
-        type = session.IsMulti ? StaminaType.Multi : StaminaType.Single;
-
-        int amount;
-        if (type == StaminaType.Multi)
-        {
-            // TODO/NOTE: We do not deduct wings because of the low amount of players playing coop at this point
-            amount = 0;
-        }
-        else
-        {
-            amount = await questService.GetQuestStamina(session.QuestData.Id, type);
-        }
+        StaminaType type = session.IsMulti ? StaminaType.Multi : StaminaType.Single;
+        int amount = await questService.GetQuestStamina(session.QuestData.Id, type);
 
         amount *= session.PlayCount;
 
