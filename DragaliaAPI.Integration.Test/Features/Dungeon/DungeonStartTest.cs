@@ -16,6 +16,13 @@ public class DungeonStartTest : TestFixture
         : base(factory, outputHelper)
     {
         ImportSave();
+
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.StaminaSingle, e => 100)
+        );
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.StaminaMulti, e => 100)
+        );
     }
 
     [Fact]
@@ -197,7 +204,7 @@ public class DungeonStartTest : TestFixture
             p => p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow)
         );
 
-        await this.ApiContext.PlayerQuests.ExecuteDeleteAsync();
+        await this.ApiContext.PlayerQuests.Where(x => x.QuestId == 100260101).ExecuteDeleteAsync();
 
         (
             await Client.PostMsgpack<DungeonStartStartData>(
