@@ -766,6 +766,23 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Event call info.</param>
         private void OnClearQuestRequest(IRaiseEventCallInfo info)
         {
+            // These properties must be set for the client to successfully rejoin the room.
+            int roomId = this.PluginHost.GameProperties.GetInt(GamePropertyKeys.RoomId);
+
+            if (roomId > 0)
+            {
+                this.PluginHost.SetProperties(
+                    0,
+                    new Hashtable()
+                    {
+                        { GamePropertyKeys.GoToIngameInfo, null },
+                        { GamePropertyKeys.RoomId, -GenerateRoomId() }
+                    },
+                    null,
+                    true
+                );
+            }
+
             this.actorState[info.ActorNr] = new ActorState();
 
             ClearQuestRequest evt = info.DeserializeEvent<ClearQuestRequest>();
@@ -790,18 +807,6 @@ namespace DragaliaAPI.Photon.Plugin
                     callAsync: true
                 );
             }
-
-            // These properties must be set for the client to successfully rejoin the room.
-            this.PluginHost.SetProperties(
-                0,
-                new Hashtable()
-                {
-                    { GamePropertyKeys.GoToIngameInfo, null },
-                    { GamePropertyKeys.RoomId, -1 }
-                },
-                null,
-                true
-            );
         }
 
         private bool ShouldRegisterTimeAttack()
