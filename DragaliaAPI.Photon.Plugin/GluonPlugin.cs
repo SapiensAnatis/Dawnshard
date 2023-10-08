@@ -41,6 +41,7 @@ namespace DragaliaAPI.Photon.Plugin
         )
         {
             this.logger = host.CreateLogger(this.Name);
+
             this.config = new PluginConfiguration(config);
             this.rdm = new Random();
 
@@ -194,8 +195,9 @@ namespace DragaliaAPI.Photon.Plugin
             if (!this.actorState.Remove(info.ActorNr))
             {
                 this.logger.WarnFormat(
-                    "Failed to remove actor nr {0} from actor state",
-                    info.ActorNr
+                    "Failed to remove actor nr {0} from actor state. Leave reason: {1}",
+                    info.ActorNr,
+                    info.Reason
                 );
             }
 
@@ -575,7 +577,15 @@ namespace DragaliaAPI.Photon.Plugin
         {
             foreach (IActor actor in this.PluginHost.GameActors)
             {
-                ActorState actorState = this.actorState[actor.ActorNr];
+                if (!this.actorState.TryGetValue(actor.ActorNr, out ActorState actorState))
+                {
+                    this.logger.InfoFormat(
+                        "Skipping actor {0} chara data -- not in actor state",
+                        actor.ActorNr
+                    );
+
+                    continue;
+                }
 
                 foreach (
                     IEnumerable<HeroParam> heroParams in actorState.HeroParamData.HeroParamLists
@@ -874,12 +884,12 @@ namespace DragaliaAPI.Photon.Plugin
             }
 
             return BuildMemberCountTable(
-                this.PluginHost.GameActors.Select(
-                    x =>
-                        new ValueTuple<int, int>(
-                            x.ActorNr,
-                            this.actorState[x.ActorNr].HeroParamCount
-                        )
+                this.PluginHost.GameActors.Join(
+                    this.actorState,
+                    actor => actor.ActorNr,
+                    state => state.Key,
+                    (actor, state) =>
+                        new ValueTuple<int, int>(actor.ActorNr, state.Value.HeroParamCount)
                 )
             );
             ;
