@@ -24,6 +24,7 @@ public class DungeonRecordTest : TestFixture
         this.ApiContext.PlayerUserData.ExecuteUpdate(
             p => p.SetProperty(e => e.StaminaMulti, e => 100)
         );
+        this.ApiContext.PlayerQuests.ExecuteDelete();
     }
 
     [Fact]
