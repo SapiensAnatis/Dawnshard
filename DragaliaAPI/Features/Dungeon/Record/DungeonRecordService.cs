@@ -1,14 +1,11 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Chara;
-using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
-using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
@@ -52,6 +49,8 @@ public class DungeonRecordService(
                 is_clear = true,
             };
 
+        await this.ProcessStaminaConsumption(session);
+
         (
             DbQuest questData,
             ingameResultData.is_best_clear_time,
@@ -62,7 +61,6 @@ public class DungeonRecordService(
             session.PlayCount
         );
 
-        await this.ProcessStaminaConsumption(session);
         await this.ProcessExperience(
             ingameResultData.grow_record,
             ingameResultData.reward_record,
