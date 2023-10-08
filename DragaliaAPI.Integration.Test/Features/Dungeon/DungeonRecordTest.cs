@@ -17,6 +17,13 @@ public class DungeonRecordTest : TestFixture
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions(2);
+
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.StaminaSingle, e => 100)
+        );
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.StaminaMulti, e => 100)
+        );
     }
 
     [Fact]
@@ -368,6 +375,116 @@ public class DungeonRecordTest : TestFixture
 
         player.PartyInfo.Should().NotBeNullOrEmpty();
         player.Units.Should().HaveCount(4);
+    }
+
+    [Fact]
+    public async Task Record_InsufficientStamina_ReturnsError()
+    {
+        int questId = 100020203;
+        await AddToDatabase(
+            new DbQuest()
+            {
+                QuestId = questId,
+                State = 3,
+                DeviceAccountId = DeviceAccountId
+            }
+        );
+
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.StaminaSingle, e => 0)
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>() { }
+            };
+
+        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+
+        (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record = new List<AtgenTreasureRecord>()
+                        {
+                            new()
+                            {
+                                area_idx = 1,
+                                enemy = new List<int>() { 1, 0 }
+                            }
+                        },
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord()
+                    }
+                },
+                ensureSuccessHeader: false
+            )
+        ).data_headers.result_code.Should().Be(ResultCode.QuestStaminaSingleShort);
+    }
+
+    [Fact]
+    public async Task Record_InsufficientStamina_FirstClear_ReturnsSuccess()
+    {
+        int questId = 100020301;
+        await AddToDatabase(
+            new DbQuest()
+            {
+                QuestId = questId,
+                State = 0,
+                DeviceAccountId = DeviceAccountId
+            }
+        );
+
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.StaminaSingle, e => 0)
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>() { }
+            };
+
+        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+
+        (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record = new List<AtgenTreasureRecord>()
+                        {
+                            new()
+                            {
+                                area_idx = 1,
+                                enemy = new List<int>() { 1, 0 }
+                            }
+                        },
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord()
+                    }
+                },
+                ensureSuccessHeader: false
+            )
+        ).data_headers.result_code.Should().Be(ResultCode.Success);
     }
 
     private void SetupPhotonAuthentication()
