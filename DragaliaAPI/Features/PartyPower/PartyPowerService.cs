@@ -494,21 +494,18 @@ public class PartyPowerService(
 
     private static int GetExAbilityPower(ref DbPlayerCharaData dbChara, ref CharaData charaData)
     {
-        if (dbChara.ExAbilityLevel == 0)
+        int ability1Id = charaData.ExAbility[dbChara.ExAbilityLevel - 1];
+        if (!MasterAsset.ExAbilityData.TryGetValue(ability1Id, out ExAbilityData? exAbilityData1))
             return 0;
 
-        int power = MasterAsset.ExAbilityData[
-            charaData.ExAbility[dbChara.ExAbilityLevel - 1]
-        ].PartyPowerWeight;
-
-        if (dbChara.ExAbility2Level == 0)
-            return power;
+        int power = exAbilityData1.PartyPowerWeight;
 
         // yes this is intentionally AbilityData
-        return power
-            + MasterAsset.AbilityData[
-                charaData.ExAbility2[dbChara.ExAbility2Level - 1]
-            ].PartyPowerWeight;
+        int ability2Id = charaData.ExAbility2[dbChara.ExAbility2Level - 1];
+        if (!MasterAsset.AbilityData.TryGetValue(ability2Id, out AbilityData? exAbilityData2))
+            return power;
+
+        return power + exAbilityData2.PartyPowerWeight;
     }
 
     private static int GetUnionAbilityPower(IEnumerable<DbAbilityCrest> crests)
