@@ -37,7 +37,9 @@ public class FortService(
 
     public async Task<IEnumerable<BuildList>> GetBuildList()
     {
-        return (await fortRepository.Builds.ToListAsync()).Select(mapper.Map<BuildList>);
+        return (await fortRepository.Builds.AsNoTracking().ToListAsync()).Select(
+            mapper.Map<BuildList>
+        );
     }
 
     public async Task<FortDetail> AddCarpenter(PaymentTypes paymentType)
