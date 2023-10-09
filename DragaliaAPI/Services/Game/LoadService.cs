@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shop;
@@ -36,7 +38,7 @@ public class LoadService(
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        DbPlayer savefile = await savefileService.Load().AsNoTracking().FirstAsync();
+        DbPlayer savefile = await savefileService.Load().SingleAsync();
 
         logger.LogInformation("{time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
 
