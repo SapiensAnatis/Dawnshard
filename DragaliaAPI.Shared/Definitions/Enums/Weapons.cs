@@ -406,7 +406,7 @@ public enum WeaponBodies
     MegaAxe = 30459904,
 
     [TextLabel("Mjölnir")]
-    Mjölnir = 30460101,
+    Mjoelnir = 30460101,
 
     [TextLabel("Noble Crimson Heat")]
     NobleCrimsonHeat = 30460104,
@@ -616,7 +616,7 @@ public enum WeaponBodies
     MegaBow = 30659905,
 
     [TextLabel("Ýdalir")]
-    Ýdalir = 30660101,
+    Ydalir = 30660101,
 
     [TextLabel("Valkyrie's Hellfire")]
     ValkyriesHellfire = 30660104,
@@ -721,7 +721,7 @@ public enum WeaponBodies
     MegaWand = 30759904,
 
     [TextLabel("Brísingr")]
-    Brísingr = 30760101,
+    Brisingr = 30760101,
 
     [TextLabel("Hellblaze")]
     Hellblaze = 30760104,

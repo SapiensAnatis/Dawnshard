@@ -1038,7 +1038,7 @@
     },
     "crest_slot_type_1_crest_list": [
       {
-        "ability_crest_id": "WilyWarriorsFlashAndHeat",
+        "ability_crest_id": "WilyWarriorsFlashHeat",
         "buildup_count": 50,
         "limit_break_count": 4,
         "equipable_count": 1,

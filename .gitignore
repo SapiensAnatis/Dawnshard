@@ -408,4 +408,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Snapshooter
+__mismatch__/
+
+#sln startup
 DragaliaAPI.sln.startup.json

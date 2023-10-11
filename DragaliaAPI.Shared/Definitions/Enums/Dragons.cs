@@ -193,7 +193,7 @@ public enum Dragons
     Nimis = 20050210,
 
     [TextLabel("Gaibhne & Creidhne")]
-    GaibhneampCreidhne = 20050211,
+    GaibhneCreidhne = 20050211,
 
     [TextLabel("Styx")]
     Styx = 20050212,
@@ -394,7 +394,7 @@ public enum Dragons
     Giovanni = 20050521,
 
     [TextLabel("Arsène")]
-    Arsène = 20050522,
+    Arsene = 20050522,
 
     [TextLabel("High Chthonius")]
     HighChthonius = 20050523,
