@@ -42,10 +42,7 @@ public class TradeRepository : ITradeRepository
 
         DateTimeOffset actualTime = time ?? DateTimeOffset.UnixEpoch;
 
-        DbPlayerTrade? existing = await this.apiContext.PlayerTrades.FindAsync(
-            this.playerIdentityService.AccountId,
-            id
-        );
+        DbPlayerTrade? existing = await this.FindTrade(id);
 
         if (existing == null)
         {
@@ -68,4 +65,7 @@ public class TradeRepository : ITradeRepository
 
         return false;
     }
+
+    public async Task<DbPlayerTrade?> FindTrade(int id) =>
+        await this.apiContext.PlayerTrades.FindAsync(this.playerIdentityService.AccountId, id);
 }

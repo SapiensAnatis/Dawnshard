@@ -1,12 +1,16 @@
 ﻿using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Missions;
 
 public class MissionTest : TestFixture
 {
     public MissionTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        this.ApiContext.PlayerMissions.ExecuteDeleteAsync();
+    }
 
     [Fact]
     public async Task UnlockDrillMissionGroup_ValidRequest_UnlocksGroup()
@@ -78,5 +82,29 @@ public class MissionTest : TestFixture
         rewardResp.data_headers.result_code.Should().Be(ResultCode.Success);
         rewardResp.data.entity_result.converted_entity_list.Should().NotBeNull();
         rewardResp.data.drill_mission_list.Should().HaveCount(55);
+    }
+
+    [Fact]
+    public async Task DrillMission_TreasureTrade_CompletesMission()
+    {
+        await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupData>(
+            "mission/unlock_drill_mission_group",
+            new MissionUnlockDrillMissionGroupRequest(3)
+        );
+
+        DragaliaResponse<TreasureTradeTradeData> resp =
+            await this.Client.PostMsgpack<TreasureTradeTradeData>(
+                "/treasure_trade/trade",
+                new TreasureTradeTradeRequest() { treasure_trade_id = 10020101, trade_count = 1 }
+            );
+
+        resp.data_headers.result_code.Should().Be(ResultCode.Success);
+        resp.data.update_data_list.mission_notice.drill_mission_notice.is_update.Should().Be(1);
+        resp.data.update_data_list.mission_notice.drill_mission_notice.completed_mission_count
+            .Should()
+            .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
+        resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list
+            .Should()
+            .Contain(300100);
     }
 }

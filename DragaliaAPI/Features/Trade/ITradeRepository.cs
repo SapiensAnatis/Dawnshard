@@ -11,4 +11,5 @@ public interface ITradeRepository
     Task<IEnumerable<DbPlayerTrade>> GetTradesByTypeAsync(TradeType type);
 
     Task<bool> AddTrade(TradeType type, int id, int count, DateTimeOffset? time = null);
+    Task<DbPlayerTrade?> FindTrade(int id);
 }

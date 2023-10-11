@@ -182,15 +182,17 @@ public class TradeService(
             )
         );
 
+        await tradeRepository.AddTrade(tradeType, tradeId, count, DateTimeOffset.UtcNow);
+
+        int totalCount = (await tradeRepository.FindTrade(tradeId))?.Count ?? 0;
+
         missionProgressionService.OnTreasureTrade(
             tradeId,
             trade.DestinationEntityType,
             trade.DestinationEntityId,
             count,
-            0
+            totalCount
         );
-
-        await tradeRepository.AddTrade(tradeType, tradeId, count, DateTimeOffset.UtcNow);
     }
 
     public async Task DoAbilityCrestTrade(int id, int count)
