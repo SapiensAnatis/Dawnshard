@@ -1,12 +1,16 @@
 ﻿using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Missions;
 
 public class MissionTest : TestFixture
 {
     public MissionTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        this.ApiContext.PlayerMissions.ExecuteDeleteAsync();
+    }
 
     [Fact]
     public async Task UnlockDrillMissionGroup_ValidRequest_UnlocksGroup()
