@@ -21,7 +21,8 @@ public record WeaponPassiveAbility(
     Materials UnlockMaterialId4,
     int UnlockMaterialQuantity4,
     Materials UnlockMaterialId5,
-    int UnlockMaterialQuantity5
+    int UnlockMaterialQuantity5,
+    int AbilityId
 )
 {
     public Dictionary<Materials, int> MaterialMap { get; } =

@@ -45,8 +45,11 @@ public class WeaponRepository : IWeaponRepository
     {
         WeaponBody data = MasterAsset.WeaponBody.Get(id);
 
+        int astralBaneAbilityId = 596;
+
         IEnumerable<int> searchIds = MasterAsset.WeaponPassiveAbility.Enumerable
             .Where(x => x.WeaponType == data.WeaponType && x.ElementalType == data.ElementalType)
+            .Where(x => x.AbilityId != astralBaneAbilityId) // Sending astral abilities in the list breaks scorch res. Don't ask me why.
             .Select(x => x.Id);
 
         return this.apiContext.PlayerPassiveAbilities.Where(
@@ -112,10 +115,17 @@ public class WeaponRepository : IWeaponRepository
 
     public async Task AddPassiveAbility(WeaponBodies id, WeaponPassiveAbility passiveAbility)
     {
-        this.logger.LogDebug(
-            "Unlocking passive ability no {no}",
-            passiveAbility.WeaponPassiveAbilityNo
-        );
+        this.logger.LogDebug("Unlocking passive ability {@ability}", passiveAbility);
+
+        if (
+            await this.WeaponPassiveAbilities.AnyAsync(
+                x => x.WeaponPassiveAbilityId == passiveAbility.Id
+            )
+        )
+        {
+            this.logger.LogDebug("Passive was already owned.");
+            return;
+        }
 
         DbWeaponBody? entity = await this.FindAsync(id);
         ArgumentNullException.ThrowIfNull(entity);
