@@ -490,7 +490,8 @@ public class MasterAssetTest
                     UnlockMaterialId4: Materials.UnearthlyLantern,
                     UnlockMaterialQuantity4: 1,
                     UnlockMaterialId5: Materials.BlazeOrb,
-                    UnlockMaterialQuantity5: 8
+                    UnlockMaterialQuantity5: 8,
+                    AbilityId: 389
                 )
             );
     }
