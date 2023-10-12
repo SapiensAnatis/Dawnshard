@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Collections.Immutable;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -14,6 +15,14 @@ public class WeaponRepository : IWeaponRepository
     private readonly ApiContext apiContext;
     private readonly IPlayerIdentityService playerIdentityService;
     private readonly ILogger<WeaponRepository> logger;
+
+    private static readonly ImmutableArray<int> AstralsBaneAbilityIds = ImmutableArray.Create(
+        595,
+        596,
+        597,
+        598,
+        599
+    );
 
     public WeaponRepository(
         ApiContext apiContext,
@@ -47,6 +56,7 @@ public class WeaponRepository : IWeaponRepository
 
         IEnumerable<int> searchIds = MasterAsset.WeaponPassiveAbility.Enumerable
             .Where(x => x.WeaponType == data.WeaponType && x.ElementalType == data.ElementalType)
+            .ExceptBy(AstralsBaneAbilityIds, x => x.AbilityId) // Sending astral abilities in the list breaks scorch res. Don't ask me why.
             .Select(x => x.Id);
 
         return this.apiContext.PlayerPassiveAbilities.Where(
@@ -112,10 +122,17 @@ public class WeaponRepository : IWeaponRepository
 
     public async Task AddPassiveAbility(WeaponBodies id, WeaponPassiveAbility passiveAbility)
     {
-        this.logger.LogDebug(
-            "Unlocking passive ability no {no}",
-            passiveAbility.WeaponPassiveAbilityNo
-        );
+        this.logger.LogDebug("Unlocking passive ability {@ability}", passiveAbility);
+
+        if (
+            await this.WeaponPassiveAbilities.AnyAsync(
+                x => x.WeaponPassiveAbilityId == passiveAbility.Id
+            )
+        )
+        {
+            this.logger.LogDebug("Passive was already owned.");
+            return;
+        }
 
         DbWeaponBody? entity = await this.FindAsync(id);
         ArgumentNullException.ThrowIfNull(entity);
