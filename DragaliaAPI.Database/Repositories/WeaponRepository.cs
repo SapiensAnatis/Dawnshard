@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Collections.Immutable;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -14,6 +15,14 @@ public class WeaponRepository : IWeaponRepository
     private readonly ApiContext apiContext;
     private readonly IPlayerIdentityService playerIdentityService;
     private readonly ILogger<WeaponRepository> logger;
+
+    private static readonly ImmutableArray<int> AstralsBaneAbilityIds = ImmutableArray.Create(
+        595,
+        596,
+        597,
+        598,
+        599
+    );
 
     public WeaponRepository(
         ApiContext apiContext,
@@ -45,11 +54,9 @@ public class WeaponRepository : IWeaponRepository
     {
         WeaponBody data = MasterAsset.WeaponBody.Get(id);
 
-        int astralBaneAbilityId = 596;
-
         IEnumerable<int> searchIds = MasterAsset.WeaponPassiveAbility.Enumerable
             .Where(x => x.WeaponType == data.WeaponType && x.ElementalType == data.ElementalType)
-            .Where(x => x.AbilityId != astralBaneAbilityId) // Sending astral abilities in the list breaks scorch res. Don't ask me why.
+            .ExceptBy(AstralsBaneAbilityIds, x => x.AbilityId) // Sending astral abilities in the list breaks scorch res. Don't ask me why.
             .Select(x => x.Id);
 
         return this.apiContext.PlayerPassiveAbilities.Where(

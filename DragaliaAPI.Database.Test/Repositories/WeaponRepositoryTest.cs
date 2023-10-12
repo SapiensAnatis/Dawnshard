@@ -57,6 +57,23 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
     }
 
     [Fact]
+    public async Task GetPassiveAbilities_FiltersOutAstralBane()
+    {
+        await this.fixture.AddRangeToDatabase(
+            new List<DbWeaponPassiveAbility>()
+            {
+                new() { DeviceAccountId = "id", WeaponPassiveAbilityId = 1010107 },
+                new() { DeviceAccountId = "id", WeaponPassiveAbilityId = 1010108 }
+            }
+        );
+
+        this.weaponRepository
+            .GetPassiveAbilities(WeaponBodies.Nothung)
+            .Should()
+            .NotContain(x => x.WeaponPassiveAbilityId == 1010108);
+    }
+
+    [Fact]
     public async Task Add_AddsToDatabase()
     {
         await this.weaponRepository.Add(WeaponBodies.Arondight);
@@ -162,6 +179,28 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
                     WeaponPassiveAbilityId = passiveId
                 }
             );
+    }
+
+    [Fact]
+    public async Task AddPassiveAbility_AbilityOwned_DoesNotThrow()
+    {
+        await this.fixture.AddToDatabase(
+            new DbWeaponBody()
+            {
+                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                WeaponBodyId = WeaponBodies.RoaringWeald
+            }
+        );
+
+        int passiveId = MasterAsset.WeaponBody
+            .Get(WeaponBodies.RoaringWeald)
+            .GetPassiveAbilityId(1);
+        WeaponPassiveAbility passiveAbility = MasterAsset.WeaponPassiveAbility.Get(passiveId);
+
+        await this.weaponRepository
+            .Invoking(x => x.AddPassiveAbility(WeaponBodies.RoaringWeald, passiveAbility))
+            .Should()
+            .NotThrowAsync();
     }
 
     [Fact]

@@ -82,7 +82,7 @@
     },
     "dragon_data": {
       "dragon_id": "GalaElysium",
-      "dragon_key_id": 116,
+      "dragon_key_id": 421,
       "level": 100,
       "exp": 1240020,
       "is_lock": false,
@@ -191,7 +191,7 @@
       }
     ],
     "talisman_data": {
-      "talisman_key_id": 35,
+      "talisman_key_id": 499,
       "talisman_id": "HalloweenLaxi",
       "talisman_ability_id_1": 340000050,
       "talisman_ability_id_2": 340000056,
@@ -320,7 +320,7 @@
     },
     "dragon_data": {
       "dragon_id": "GalaChronosNyx",
-      "dragon_key_id": 110,
+      "dragon_key_id": 415,
       "level": 100,
       "exp": 1240020,
       "is_lock": false,
@@ -429,7 +429,7 @@
       }
     ],
     "talisman_data": {
-      "talisman_key_id": 126,
+      "talisman_key_id": 590,
       "talisman_id": "HalloweenLaxi",
       "talisman_ability_id_1": 340000009,
       "talisman_ability_id_2": 340000076,
@@ -451,9 +451,6 @@
     "game_weapon_passive_ability_list": [
       {
         "weapon_passive_ability_id": 1010405
-      },
-      {
-        "weapon_passive_ability_id": 1010408
       },
       {
         "weapon_passive_ability_id": 1010409
@@ -564,7 +561,7 @@
     },
     "dragon_data": {
       "dragon_id": "JeanneDArc",
-      "dragon_key_id": 36,
+      "dragon_key_id": 341,
       "level": 120,
       "exp": 3365620,
       "is_lock": true,
@@ -673,7 +670,7 @@
       }
     ],
     "talisman_data": {
-      "talisman_key_id": 26,
+      "talisman_key_id": 490,
       "talisman_id": "GalaLuca",
       "talisman_ability_id_1": 340000069,
       "talisman_ability_id_2": 340000108,
@@ -778,7 +775,7 @@
     },
     "dragon_data": {
       "dragon_id": "Cupid",
-      "dragon_key_id": 66,
+      "dragon_key_id": 371,
       "level": 120,
       "exp": 3365620,
       "is_lock": true,
@@ -887,7 +884,7 @@
       }
     ],
     "talisman_data": {
-      "talisman_key_id": 65,
+      "talisman_key_id": 529,
       "talisman_id": "Pecorine",
       "talisman_ability_id_1": 340000029,
       "talisman_ability_id_2": 340000056,
@@ -1007,7 +1004,7 @@
     },
     "dragon_data": {
       "dragon_id": "GaibhneCreidhne",
-      "dragon_key_id": 89,
+      "dragon_key_id": 394,
       "level": 100,
       "exp": 1240020,
       "is_lock": true,
@@ -1116,7 +1113,7 @@
       }
     ],
     "talisman_data": {
-      "talisman_key_id": 49,
+      "talisman_key_id": 513,
       "talisman_id": "Lazry",
       "talisman_ability_id_1": 340000118,
       "talisman_ability_id_2": 340000107,
@@ -1241,7 +1238,7 @@
     },
     "dragon_data": {
       "dragon_id": "GalaBeastCiella",
-      "dragon_key_id": 113,
+      "dragon_key_id": 418,
       "level": 100,
       "exp": 1240020,
       "is_lock": true,
@@ -1350,7 +1347,7 @@
       }
     ],
     "talisman_data": {
-      "talisman_key_id": 133,
+      "talisman_key_id": 597,
       "talisman_id": "GalaEmile",
       "talisman_ability_id_1": 340000099,
       "talisman_ability_id_2": 340000128,
@@ -1455,7 +1452,7 @@
     },
     "dragon_data": {
       "dragon_id": "Leviathan",
-      "dragon_key_id": 3,
+      "dragon_key_id": 308,
       "level": 120,
       "exp": 3365620,
       "is_lock": true,
@@ -1564,7 +1561,7 @@
       }
     ],
     "talisman_data": {
-      "talisman_key_id": 68,
+      "talisman_key_id": 532,
       "talisman_id": "Pinon",
       "talisman_ability_id_1": 340000119,
       "talisman_ability_id_2": 340000089,
@@ -1669,7 +1666,7 @@
     },
     "dragon_data": {
       "dragon_id": "GalaRebornPoseidon",
-      "dragon_key_id": 91,
+      "dragon_key_id": 396,
       "level": 100,
       "exp": 1240020,
       "is_lock": true,
@@ -1778,7 +1775,7 @@
       }
     ],
     "talisman_data": {
-      "talisman_key_id": 36,
+      "talisman_key_id": 500,
       "talisman_id": "Valerio",
       "talisman_ability_id_1": 340000008,
       "talisman_ability_id_2": 340000036,
