@@ -14,7 +14,7 @@ namespace DragaliaAPI.Photon.Shared.Models
     {
         public int ActorNr { get; set; }
 
-        public int ViewerId { get; set; }
+        public long ViewerId { get; set; }
 
         public int[] PartySlots { get; set; }
     }

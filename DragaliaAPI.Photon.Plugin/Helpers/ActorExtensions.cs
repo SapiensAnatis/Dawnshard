@@ -7,14 +7,23 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
 {
     public static class ActorExtensions
     {
-        public static bool TryGetViewerId(this IActor actor, out int viewerId)
+        public static bool TryGetViewerId(this IActor actor, out long viewerId)
         {
-            return actor.Properties.TryGetInt(ActorPropertyKeys.PlayerId, out viewerId);
+            viewerId = 0;
+
+            if (!actor.Properties.TryGetValue(ActorPropertyKeys.PlayerId, out object viewerIdObj))
+                return false;
+
+            if (!(viewerIdObj is string playerIdString))
+                return false;
+
+            viewerId = long.Parse(playerIdString);
+            return true;
         }
 
-        public static int GetViewerId(this IActor actor)
+        public static long GetViewerId(this IActor actor)
         {
-            if (!actor.TryGetViewerId(out int viewerId))
+            if (!actor.TryGetViewerId(out long viewerId))
             {
                 throw new InvalidOperationException(
                     $"Failed to get viewer ID for actor {actor.ActorNr}"

@@ -16,12 +16,15 @@ namespace DragaliaAPI.Photon.Plugin.Models
 
         public bool IsSoloPlay { get; set; }
 
+        public bool IsUseSecondaryServer { get; set; }
+
         public RoomState() { }
 
         public RoomState(RoomState oldState)
         {
             this.QuestId = oldState.QuestId;
             this.IsSoloPlay = oldState.IsSoloPlay;
+            this.IsUseSecondaryServer = oldState.IsUseSecondaryServer;
         }
     }
 }

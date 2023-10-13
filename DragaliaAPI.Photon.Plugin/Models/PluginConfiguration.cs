@@ -19,6 +19,16 @@ namespace DragaliaAPI.Photon.Plugin.Models
 
         public string BearerToken { get; }
 
+        public bool EnableSecondaryServer { get; }
+
+        public long SecondaryViewerIdCriterion { get; }
+
+        public Uri SecondaryApiServerUrl { get; }
+
+        public Uri SecondaryStateManagerUrl { get; }
+
+        public string SecondaryBearerToken { get; }
+
         public PluginConfiguration(IDictionary<string, string> config)
         {
             this.ApiServerUrl = config.GetUri(nameof(this.ApiServerUrl), UriKind.Absolute);
@@ -36,6 +46,34 @@ namespace DragaliaAPI.Photon.Plugin.Models
 
             this.BearerToken = config[nameof(BearerToken)];
             this.ReplayTimeoutSeconds = config.GetInt(nameof(ReplayTimeoutSeconds));
+
+            if (
+                !config.TryGetValue(
+                    nameof(EnableSecondaryServer),
+                    out string enableMultiServerString
+                )
+                || !bool.TryParse(enableMultiServerString, out bool enableMultiServer)
+                || !enableMultiServer
+            )
+            {
+                return;
+            }
+
+            this.EnableSecondaryServer = enableMultiServer;
+
+            this.SecondaryViewerIdCriterion = config.GetLong(nameof(SecondaryViewerIdCriterion));
+
+            this.SecondaryApiServerUrl = config.GetUri(
+                nameof(SecondaryApiServerUrl),
+                UriKind.Absolute
+            );
+
+            this.SecondaryStateManagerUrl = config.GetUri(
+                nameof(SecondaryStateManagerUrl),
+                UriKind.Absolute
+            );
+
+            this.SecondaryBearerToken = config[nameof(SecondaryBearerToken)];
         }
     }
 }

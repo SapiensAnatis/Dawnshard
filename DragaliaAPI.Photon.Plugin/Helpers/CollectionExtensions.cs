@@ -21,6 +21,19 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
             return int.Parse(value);
         }
 
+        public static long GetLong(this IDictionary<string, string> dictionary, string key)
+        {
+            if (!dictionary.TryGetValue(key, out string value))
+            {
+                throw new ArgumentException(
+                    $"Dictionary did not contain required key {key}",
+                    nameof(dictionary)
+                );
+            }
+
+            return long.Parse(value);
+        }
+
         public static Uri GetUri(
             this IDictionary<string, string> dictionary,
             string key,
@@ -41,6 +54,19 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
         public static int GetInt(this Hashtable hashtable, string key)
         {
             if (!hashtable.TryGetInt(key, out int value))
+            {
+                throw new ArgumentException(
+                    $"Hashtable did not contain required integer value for key {key}",
+                    nameof(key)
+                );
+            }
+
+            return value;
+        }
+
+        public static long GetLong(this Hashtable hashtable, string key)
+        {
+            if (!hashtable.TryGetLong(key, out long value))
             {
                 throw new ArgumentException(
                     $"Hashtable did not contain required integer value for key {key}",
@@ -77,6 +103,27 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
             else if (objValue is string stringValue)
             {
                 value = int.Parse(stringValue);
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool TryGetLong(this Hashtable hashtable, string key, out long value)
+        {
+            value = default;
+
+            if (!hashtable.TryGetValue(key, out object objValue))
+                return false;
+
+            if (objValue is long longValue)
+            {
+                value = longValue;
+                return true;
+            }
+            else if (objValue is string stringValue)
+            {
+                value = long.Parse(stringValue);
                 return true;
             }
 

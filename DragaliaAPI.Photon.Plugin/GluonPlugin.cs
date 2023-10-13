@@ -80,6 +80,21 @@ namespace DragaliaAPI.Photon.Plugin
             const int actorNr = 1;
             this.actorState[actorNr] = new ActorState();
 
+            long viewerId = info.Request.ActorProperties.GetLong(ActorPropertyKeys.PlayerId);
+
+            if (
+                this.config.EnableSecondaryServer
+                && viewerId >= this.config.SecondaryViewerIdCriterion
+            )
+            {
+                this.logger.Info("Using secondary server config");
+                this.roomState.IsUseSecondaryServer = true;
+            }
+            else
+            {
+                this.logger.Info("Using primary server config");
+            }
+
             if (
                 info.Request.GameProperties.TryGetValue(
                     GamePropertyKeys.IsSoloPlayWithPhoton,
@@ -124,6 +139,8 @@ namespace DragaliaAPI.Photon.Plugin
                 x => x.ActorNr != info.ActorNr
             );
 
+            long viewerId = info.Request.ActorProperties.GetLong(ActorPropertyKeys.PlayerId);
+
             if (currentActorCount >= 4)
             {
                 this.logger.WarnFormat(
@@ -143,7 +160,39 @@ namespace DragaliaAPI.Photon.Plugin
                 return;
             }
 
+            if (
+                this.roomState.IsUseSecondaryServer
+                && viewerId < this.config.SecondaryViewerIdCriterion
+            )
+            {
+                this.logger.InfoFormat(
+                    "Rejecting join request -- viewer id {0} below secondary criteria {1}",
+                    viewerId,
+                    this.config.SecondaryViewerIdCriterion
+                );
+
+                info.Fail();
+                return;
+            }
+
+            if (
+                !this.roomState.IsUseSecondaryServer
+                && viewerId > this.config.SecondaryViewerIdCriterion
+            )
+            {
+                this.logger.InfoFormat(
+                    "Rejecting join request -- viewer id {0} exceeds secondary criteria {1}",
+                    viewerId,
+                    this.config.SecondaryViewerIdCriterion
+                );
+
+                info.Fail();
+                return;
+            }
+
             info.Request.ActorProperties.InitializeViewerId();
+            info.Continue();
+
             this.actorState[info.ActorNr] = new ActorState();
 
             this.logger.InfoFormat(
@@ -161,8 +210,6 @@ namespace DragaliaAPI.Photon.Plugin
                 },
                 info
             );
-
-            info.Continue();
         }
 
         /// <summary>
@@ -212,7 +259,7 @@ namespace DragaliaAPI.Photon.Plugin
                 return;
             }
 
-            if (!actor.TryGetViewerId(out int viewerId))
+            if (!actor.TryGetViewerId(out long viewerId))
             {
                 this.logger.WarnFormat(
                     "OnLeave: failed to acquire viewer ID of actor {0}",
@@ -653,7 +700,13 @@ namespace DragaliaAPI.Photon.Plugin
                     }
             );
 
-            Uri requestUri = new Uri(this.config.ApiServerUrl, $"heroparam/batch");
+            Uri baseUri = this.roomState.IsUseSecondaryServer
+                ? this.config.SecondaryApiServerUrl
+                : this.config.ApiServerUrl;
+
+            Uri requestUri = new Uri(baseUri, "heroparam/batch");
+
+            this.logger.DebugFormat("RequestHeroParam - {0}", requestUri.AbsoluteUri);
 
             HttpRequest req = new HttpRequest()
             {
