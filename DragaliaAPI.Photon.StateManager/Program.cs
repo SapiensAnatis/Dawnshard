@@ -15,7 +15,7 @@ Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
 
 if (Environment.GetEnvironmentVariable("ENABLE_HTTPS") != null)
 {
-    X509Certificate2 certificate = new("cert.pem");
+    X509Certificate2 certificate = X509Certificate2.CreateFromPemFile("cert.pem", "cert.key");
 
     builder.WebHost.ConfigureKestrel(
         serverOptions =>
