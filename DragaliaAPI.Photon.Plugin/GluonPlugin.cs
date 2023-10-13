@@ -700,7 +700,13 @@ namespace DragaliaAPI.Photon.Plugin
                     }
             );
 
-            Uri requestUri = new Uri(this.config.ApiServerUrl, $"heroparam/batch");
+            Uri baseUri = this.roomState.IsUseSecondaryServer
+                ? this.config.SecondaryApiServerUrl
+                : this.config.ApiServerUrl;
+
+            Uri requestUri = new Uri(baseUri, "heroparam/batch");
+
+            this.logger.DebugFormat("RequestHeroParam - {0}", requestUri.AbsoluteUri);
 
             HttpRequest req = new HttpRequest()
             {

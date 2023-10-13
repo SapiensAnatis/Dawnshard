@@ -408,3 +408,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+DragaliaAPI.sln.startup.json

@@ -117,8 +117,10 @@ namespace DragaliaAPI.Photon.Plugin
                 Async = callAsync
             };
 
-            this.PluginHost.LogDebug(
-                string.Format("PostStateManagerRequest: {0} - {1}", requestUri.AbsolutePath, json)
+            this.logger.DebugFormat(
+                "PostStateManagerRequest: {0} - {1}",
+                requestUri.AbsoluteUri,
+                json
             );
 
             this.PluginHost.HttpRequest(request, info);
@@ -157,6 +159,8 @@ namespace DragaliaAPI.Photon.Plugin
             }
 
             Uri requestUri = new Uri(baseUri, endpoint);
+
+            this.logger.DebugFormat("PostApiRequest: {0}", requestUri.AbsoluteUri);
 
             HttpRequest req = new HttpRequest()
             {

@@ -14,10 +14,10 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
             if (!actor.Properties.TryGetValue(ActorPropertyKeys.PlayerId, out object viewerIdObj))
                 return false;
 
-            if (!(viewerIdObj is long viewerIdLong))
+            if (!(viewerIdObj is string playerIdString))
                 return false;
 
-            viewerId = viewerIdLong;
+            viewerId = long.Parse(playerIdString);
             return true;
         }
 
