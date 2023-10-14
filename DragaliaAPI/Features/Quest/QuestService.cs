@@ -260,11 +260,8 @@ public class QuestService(
             count = questEvent.QuestBonusReserveCount;
         }
 
-        questEvent.QuestBonusReserveCount -= count;
-        questEvent.QuestBonusReserveTime =
-            questEvent.QuestBonusReserveCount == 0
-                ? DateTimeOffset.UnixEpoch
-                : dateTimeProvider.UtcNow;
+        questEvent.QuestBonusReserveCount = 0;
+        questEvent.QuestBonusReserveTime = DateTimeOffset.UnixEpoch;
 
         questEvent.QuestBonusReceiveCount += count;
 
