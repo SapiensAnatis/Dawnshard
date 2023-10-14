@@ -7,13 +7,7 @@
 
 @inherits LayoutComponentBase
 
-<script>
-    window.blazorExtensions = {
-        writeCookie: function (name, value) {
-            document.cookie = `${name}=${value}; SameSite=Lax`;
-        }
-    }
-</script>
+
 
 <MudThemeProvider Theme="theme" @ref=provider IsDarkMode="@darkMode" IsDarkModeChanged="OnIsDarkModeChanged"/>
 <MudDialogProvider />

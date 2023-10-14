@@ -17,6 +17,7 @@ using MudBlazor.Services;
 using Microsoft.Extensions.Options;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Version;
+using DragaliaAPI.Features.Blazor;
 using Microsoft.JSInterop;
 using DragaliaAPI;
 
@@ -38,7 +39,8 @@ builder.Services
     .Configure<ItemSummonConfig>(config)
     .Configure<DragonfruitConfig>(config)
     .Configure<TimeAttackOptions>(config.GetRequiredSection(nameof(TimeAttackOptions)))
-    .Configure<ResourceVersionOptions>(config.GetRequiredSection(nameof(ResourceVersionOptions)));
+    .Configure<ResourceVersionOptions>(config.GetRequiredSection(nameof(ResourceVersionOptions)))
+    .Configure<BlazorOptions>(config.GetRequiredSection(nameof(BlazorOptions)));
 
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();

@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+﻿using System.Text.Json.Serialization;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -21,7 +22,9 @@ public record AbilityCrest(
     int MaxAtk,
     int BaseHp,
     int MaxHp,
-    int UnionAbilityGroupId
+    int UnionAbilityGroupId,
+    int BaseId,
+    bool IsHideChangeImage
 )
 {
     public int GetBuildupGroupId(BuildupPieceTypes type, int step) =>

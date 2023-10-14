@@ -341,7 +341,9 @@ public class AbilityCrestServiceTest
                 0,
                 0,
                 0,
-                0
+                0,
+                0,
+                false
             );
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
@@ -752,7 +754,9 @@ public class AbilityCrestServiceTest
                 0,
                 0,
                 0,
-                0
+                0,
+                0,
+                false
             );
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()

@@ -82,6 +82,12 @@ public static class MasterAsset
         new("WeaponBodyRarity.json", x => x.Id);
 
     /// <summary>
+    /// Contains information about weapons.
+    /// </summary>
+    public static readonly MasterAssetData<int, WeaponSkin> WeaponSkin =
+        new("WeaponSkin.json", x => x.Id);
+
+    /// <summary>
     /// Contains information about the materials required to unbind ability crests.
     /// </summary>
     public static readonly MasterAssetData<int, AbilityCrestBuildupGroup> AbilityCrestBuildupGroup =
@@ -125,6 +131,9 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, UnionAbility> UnionAbility =
         new("UnionAbility.json", x => x.Id);
+
+    public static readonly MasterAssetData<int, SkillData> SkillData =
+        new("SkillData.json", x => x.Id);
 
     #region Missions
 

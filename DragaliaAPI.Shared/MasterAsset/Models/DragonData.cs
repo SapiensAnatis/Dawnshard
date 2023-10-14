@@ -36,7 +36,9 @@ public record DragonData(
     DragonLimitBreakTypes LimitBreakId,
     int FavoriteType,
     int SellCoin,
-    int SellDewPoint
+    int SellDewPoint,
+    int BaseId,
+    int VariationId
 )
 {
     public readonly int[][] Abilities =

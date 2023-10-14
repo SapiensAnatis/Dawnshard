@@ -1,0 +1,27 @@
+﻿@using DragaliaAPI.Features.Blazor;
+@using DragaliaAPI.Shared.Definitions.Enums;
+@using DragaliaAPI.Shared.MasterAsset;
+@using DragaliaAPI.Shared.MasterAsset.Models;
+@using Microsoft.Extensions.Options;
+
+@inject IOptionsMonitor<BlazorOptions> Options;
+
+<MudImage Style="width: 100%; height: auto" Src="@this.ImageSrc" />
+
+@code
+{
+    [Parameter]
+    public int Skill { get; set; }
+
+    private string ImageSrc
+    {
+        get
+        {
+            if (!MasterAsset.SkillData.TryGetValue(this.Skill, out SkillData? skillData))
+                return string.Empty;
+
+            string src = $"icon/skill/m/{skillData.SkillLv4IconName}.webp"; // TODO: Support non-maxed skills
+            return this.Options.CurrentValue.GetImageSrc(src);
+        }
+    }
+}
