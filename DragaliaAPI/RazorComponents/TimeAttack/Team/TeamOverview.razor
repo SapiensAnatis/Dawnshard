@@ -1,0 +1,15 @@
+﻿@using DragaliaAPI.Database.Entities;
+
+
+<MudStack Row=true Spacing="1">
+    @foreach (DbTimeAttackClearUnit unit in this.Units) 
+    {
+        <CharaIcon Chara="unit.CharaId"/>
+    }
+</MudStack>
+
+@code 
+{
+    [Parameter]
+    public IEnumerable<DbTimeAttackClearUnit> Units { get; set; } = Enumerable.Empty<DbTimeAttackClearUnit>();
+}
