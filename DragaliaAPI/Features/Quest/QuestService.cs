@@ -227,21 +227,18 @@ public class QuestService(
     {
         DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
 
-        int questId =
-            await questCacheService.GetQuestGroupQuestIdAsync(eventGroupId)
-            ?? throw new DragaliaException(
-                ResultCode.CommonDbError,
-                $"Could not find latest quest clear id for group {eventGroupId} in cache."
-            );
+        int? questId = await questCacheService.GetQuestGroupQuestIdAsync(eventGroupId);
 
-        if (!isReceive)
+        if (!isReceive || questId == null)
         {
+            logger.LogInformation("Cancelling receipt of quest bonus");
+
             questEvent.QuestBonusReserveCount = 0;
             questEvent.QuestBonusReserveTime = DateTimeOffset.UnixEpoch;
 
             await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
 
-            return new AtgenReceiveQuestBonus() { target_quest_id = questId };
+            return new AtgenReceiveQuestBonus() { target_quest_id = questId ?? 0 };
         }
 
         if (count > questEvent.QuestBonusReserveCount + questEvent.QuestBonusStackCount)
@@ -263,23 +260,20 @@ public class QuestService(
             count = questEvent.QuestBonusReserveCount;
         }
 
-        questEvent.QuestBonusReserveCount -= count;
-        questEvent.QuestBonusReserveTime =
-            questEvent.QuestBonusReserveCount == 0
-                ? DateTimeOffset.UnixEpoch
-                : dateTimeProvider.UtcNow;
+        questEvent.QuestBonusReserveCount = 0;
+        questEvent.QuestBonusReserveTime = DateTimeOffset.UnixEpoch;
 
         questEvent.QuestBonusReceiveCount += count;
 
         // TODO: bonus factor?
         IEnumerable<AtgenBuildEventRewardEntityList> bonusRewards = (
-            await GenerateBonusDrops(questId, count)
+            await GenerateBonusDrops(questId.Value, count)
         ).Select(x => x.ToBuildEventRewardEntityList());
 
         // Remove at the end so it doesn't get messed up when erroring
         await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
 
-        return new AtgenReceiveQuestBonus(questId, count, 1, bonusRewards);
+        return new AtgenReceiveQuestBonus(questId.Value, count, 1, bonusRewards);
     }
 
     private void ResetQuestEventBonus(DbQuestEvent questEvent, QuestEvent questEventData)
