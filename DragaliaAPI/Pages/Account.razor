@@ -5,13 +5,13 @@
 @using DragaliaAPI.Models;
 @using DragaliaAPI.Services;
 @using System.Text.Json;
-@using DragaliaAPI.Blazor.Authentication
 @using DragaliaAPI.Shared.Json;
 
 @inject ILoadService LoadService;
 @inject AuthenticationStateProvider StateProvider
 @inject IUserDataRepository UserDataRepository;
 @inject IJSRuntime JsRuntime;
+@inject ISnackbar Snackbar;
 @inject ILogger<Account> Logger;
 
 
@@ -42,9 +42,15 @@
                 }
             </MudStack>
                    
-
-            <MudAlert Class="ma-2" Icon="@Icons.Material.Filled.CloudUpload" Severity="Severity.Normal">You can upload saves to be imported at <MudLink Typo="Typo.body2" Href="https://baas.lukefz.xyz/"><b>https://baas.lukefz.xyz/</b></MudLink>.</MudAlert>
-            <MudAlert Class="ma-2" Severity="Severity.Normal" Icon="@Icons.Material.Outlined.Edit">For a user-friendly way to edit your save file, check out sockperson's save editor at <MudLink Typo="Typo.body2" Href="https://github.com/sockperson/DragaliaSaveEditor"><b>https://github.com/sockperson/DragaliaSaveEditor</b></MudLink>.</MudAlert>
+        <MudAlert Class="ma-2" Icon="@Icons.Material.Filled.CloudUpload" Severity="Severity.Normal">
+            You can upload saves to be imported at <MudLink Typo="Typo.body2" Href="https://baas.lukefz.xyz/"><b>https://baas.lukefz.xyz/</b></MudLink>.
+        </MudAlert>
+        <MudAlert Class="ma-2" Severity="Severity.Normal" Icon="@Icons.Material.Outlined.Edit">
+            For a user-friendly way to edit your save file, check out sockperson's save editor at 
+            <MudLink Typo="Typo.body2" Href="https://github.com/sockperson/DragaliaSaveEditor">
+                <b>https://github.com/sockperson/DragaliaSaveEditor</b>
+            </MudLink>.
+        </MudAlert>
     </Authorized>
     <NotAuthorized>
         <Login/>
@@ -60,23 +66,34 @@
     {
         Logger.LogInformation("Exporting save...");
 
-        JsonSerializerOptions options = new(ApiJsonOptions.Instance);
-        options.Converters.Add(new BoolIntJsonConverter());
-        options.WriteIndented = true;
-        options.IncludeFields = false;
+        try
+        {
+            JsonSerializerOptions options = new(ApiJsonOptions.Instance);
+            options.Converters.Add(new BoolIntJsonConverter());
+            options.WriteIndented = true;
+            options.IncludeFields = false;
 
-        this.Loading = true;
-        LoadIndexData savefile = await this.LoadService.BuildIndexData();
-        DragaliaResponse<LoadIndexData> response = new(savefile);
+            this.Loading = true;
+            LoadIndexData savefile = await this.LoadService.BuildIndexData();
+            DragaliaResponse<LoadIndexData> response = new(savefile);
 
-        string filename = "savedata.txt";
+            string filename = "savedata.txt";
 
-        var savefileStream = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(response, options));
+            var savefileStream = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(response, options));
 
-        using var streamRef = new DotNetStreamReference(savefileStream);
+            using var streamRef = new DotNetStreamReference(savefileStream);
 
-        await JsRuntime.InvokeVoidAsync("downloadFileFromStream", filename, streamRef);
-        this.Loading = false;
+            await JsRuntime.InvokeVoidAsync("downloadFileFromStream", filename, streamRef);
+
+            this.Loading = false;
+            this.Snackbar.Add("Successfully exported savefile", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            this.Loading = false;
+            this.Logger.LogError(ex, "Failed to export save");
+            this.Snackbar.Add("Failed to export savefile", Severity.Error);
+        }
     }
 
 

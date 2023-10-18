@@ -49,7 +49,7 @@ public class OAuthCallbackModel(
         if (!result.Succeeded)
         {
             logger.LogInformation("Authenticate result failure.");
-            return Unauthorized();
+            return this.StatusCode(401, $"Authentication failure: {result.Failure?.Message}");
         }
 
         await this.HttpContext.SignInAsync(
@@ -126,14 +126,15 @@ public class OAuthCallbackModel(
 
         identity.AddClaim(new Claim(CustomClaimType.AccountId, userId.UserId));
 
-        // TODO: handle users without a save
         var playerInfo = await apiContext.PlayerUserData
             .Where(x => x.DeviceAccountId == userId.UserId)
             .Select(x => new { x.Name, x.ViewerId })
             .FirstOrDefaultAsync();
 
         if (playerInfo is null)
-            return AuthenticateResult.Fail("Player did not have a savefile.");
+            return AuthenticateResult.Fail(
+                "Account did not have an associated Dawnshard save file."
+            );
 
         identity.AddClaim(new Claim(CustomClaimType.AccountId, userId.UserId));
         identity.AddClaim(new Claim(CustomClaimType.PlayerName, playerInfo.Name));

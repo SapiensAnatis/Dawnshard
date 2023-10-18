@@ -40,7 +40,7 @@
                                 <MudText Typo="Typo.subtitle1">Hello, @BlazorIdentityService.UserDataName</MudText>
                                 <MudList Clickable="true" Dense="true">
                                     <MudListItem Icon="@Icons.Material.Filled.Settings" IconSize="Size.Small" Href="/account">Account Management</MudListItem>
-                                    <MudListItem Icon="@Icons.Material.Filled.Logout" IconSize="Size.Small" OnClick=OnClickLogout>Logout</MudListItem>
+                                    <MudListItem Icon="@Icons.Material.Filled.Logout" IconSize="Size.Small" OnClick="@OnClickLogout">Logout</MudListItem>
                                 </MudList>
                             </div>
                             <MudOverlay @bind-Visible="@popoverOpen" AutoClose=true ZIndex="-1"></MudOverlay>
@@ -64,9 +64,9 @@
 
 
 @code {
-    private bool popoverOpen = false;
-    private bool navDrawerOpen = false;
-    private bool darkMode = false;
+    private bool popoverOpen;
+    private bool navDrawerOpen;
+    private bool darkMode;
 
     private MudThemeProvider? provider;
 
