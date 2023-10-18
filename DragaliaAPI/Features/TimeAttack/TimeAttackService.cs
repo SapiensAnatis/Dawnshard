@@ -24,10 +24,9 @@ public class TimeAttackService(
     ILogger<TimeAttackService> logger
 ) : ITimeAttackService
 {
-    public bool GetIsRankedQuest(int questId)
-    {
-        return MasterAsset.RankingData.TryGetValue(questId, out _);
-    }
+    public bool GetIsRankedQuest(int questId) =>
+        MasterAsset.RankingData.TryGetValue(questId, out RankingData? rankingData)
+        && rankingData.GroupId == options.CurrentValue.GroupId;
 
     public IEnumerable<RankingTierReward> GetRewards()
     {
