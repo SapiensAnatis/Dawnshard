@@ -20,6 +20,7 @@ using DragaliaAPI.Features.Version;
 using DragaliaAPI.Features.Blazor;
 using Microsoft.JSInterop;
 using DragaliaAPI;
+using MudBlazor;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +44,13 @@ builder.Services
     .Configure<BlazorOptions>(config.GetRequiredSection(nameof(BlazorOptions)));
 
 builder.Services.AddServerSideBlazor();
-builder.Services.AddMudServices();
+builder.Services.AddMudServices(options =>
+{
+    options.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
+    options.SnackbarConfiguration.VisibleStateDuration = 5000;
+    options.SnackbarConfiguration.ShowTransitionDuration = 500;
+    options.SnackbarConfiguration.HideTransitionDuration = 500;
+});
 
 // Ensure item summon weightings add to 100%
 builder.Services.AddOptions<ItemSummonConfig>().Validate(x => x.Odds.Sum(y => y.Rate) == 100_000);
@@ -158,6 +165,7 @@ app.MapWhen(
 #pragma warning disable ASP0001
         applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
+        applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
         applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints.MapBlazorHub();
