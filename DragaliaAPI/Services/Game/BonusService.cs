@@ -30,12 +30,14 @@ public class BonusService(
     {
         IEnumerable<int> buildIds = (
             await fortRepository.Builds
+                .AsNoTracking()
                 .Where(x => x.Level != 0)
                 .Select(x => new { x.PlantId, x.Level })
                 .ToListAsync()
         ).Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level));
 
         IEnumerable<WeaponBodies> weaponIds = await weaponRepository.WeaponBodies
+            .AsNoTracking()
             .Where(x => x.FortPassiveCharaWeaponBuildupCount != 0)
             .Select(x => x.WeaponBodyId)
             .ToListAsync();
