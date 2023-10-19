@@ -11,6 +11,7 @@ using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
+using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Test.Features.Dungeon;
@@ -29,6 +30,8 @@ public class DungeonRepositoryTest : RepositoryTestFixture
             this.ApiContext,
             this.mockPlayerIdentityService.Object
         );
+
+        CommonAssertionOptions.ApplyIgnoreOwnerOptions();
     }
 
     [Fact]
