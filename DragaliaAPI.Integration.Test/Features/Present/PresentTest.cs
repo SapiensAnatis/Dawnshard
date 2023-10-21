@@ -256,6 +256,13 @@ public class PresentTest : TestFixture
                     DeviceAccountId = DeviceAccountId,
                     EntityType = EntityTypes.Rupies,
                     EntityQuantity = 100_000,
+                },
+                new()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    EntityType = EntityTypes.Title,
+                    EntityId = (int)Emblems.SupremeBogfish,
+                    EntityQuantity = 1,
                 }
             };
 
