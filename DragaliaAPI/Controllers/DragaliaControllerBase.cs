@@ -9,6 +9,7 @@ namespace DragaliaAPI.Controllers;
 
 [ApiController]
 [SerializeException]
+[ServiceFilter(typeof(ResourceVersionActionFilter))]
 [Authorize(AuthenticationSchemes = SchemeName.Session)]
 [Consumes("application/octet-stream")]
 [Produces("application/x-msgpack")]

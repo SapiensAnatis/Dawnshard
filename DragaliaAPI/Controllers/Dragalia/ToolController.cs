@@ -21,6 +21,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 /// </summary>
 [Route("tool")]
 [AllowAnonymous]
+[BypassResourceVersionCheck]
 public class ToolController : DragaliaControllerBase
 {
     private readonly IAuthService authService;
