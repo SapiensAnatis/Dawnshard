@@ -26,7 +26,7 @@ public class GraphQlController : ControllerBase
         QueryResult results = await this.schemaProvider.ExecuteRequestAsync(
             query,
             HttpContext.RequestServices,
-            null
+            this.User
         );
 
         return results.HasErrors() ? this.BadRequest(results) : this.Ok(results);

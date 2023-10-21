@@ -18,6 +18,7 @@ using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Stamp;
@@ -147,6 +148,7 @@ public static class ServiceConfiguration
 
         services.AddAllOfType<ISavefileUpdate>();
         services.AddAllOfType<IDailyResetAction>();
+        services.AddAllOfType<IRewardHandler>();
 
         services.AddHttpClient<IBaasApi, BaasApi>();
 

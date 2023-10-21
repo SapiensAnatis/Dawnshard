@@ -6,6 +6,7 @@ using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Models.Generated;
@@ -16,16 +17,8 @@ namespace DragaliaAPI.Features.Reward;
 
 public class RewardService(
     ILogger<RewardService> logger,
-    IInventoryRepository inventoryRepository,
-    IUserDataRepository userDataRepository,
-    IAbilityCrestRepository abilityCrestRepository,
     IUnitRepository unitRepository,
-    IFortRepository fortRepository,
-    IEventRepository eventRepository,
-    IDmodeRepository dmodeRepository,
-    IItemRepository itemRepository,
-    IUserService userService,
-    ITicketRepository ticketRepository
+    IEnumerable<IRewardHandler> rewardHandlers
 ) : IRewardService
 {
     private readonly List<Entity> discardedEntities = new();
@@ -46,9 +39,6 @@ public class RewardService(
 
         RewardGrantResult result = await GrantRewardInternal(entity);
 
-        if (result == RewardGrantResult.Added)
-            newEntities.Add(entity);
-
         return result;
     }
 
@@ -60,84 +50,56 @@ public class RewardService(
         foreach (Entity entity in entities)
         {
             RewardGrantResult result = await GrantRewardInternal(entity);
-            if (result == RewardGrantResult.Added)
-                newEntities.Add(entity);
         }
     }
 
     private async Task<RewardGrantResult> GrantRewardInternal(Entity entity)
     {
-        switch (entity.Type)
+        IRewardHandler? handler = rewardHandlers.SingleOrDefault(
+            x => x.SupportedTypes.Contains(entity.Type)
+        );
+
+        if (handler is null)
         {
-            case EntityTypes.Chara:
-                return await RewardCharacter(entity);
-            case EntityTypes.Item:
-                await itemRepository.AddItemQuantityAsync((UseItem)entity.Id, entity.Quantity);
-                break;
-            case EntityTypes.Dragon:
-                for (int i = 0; i < entity.Quantity; i++)
-                    await unitRepository.AddDragons((Dragons)entity.Id);
-                break;
-            case EntityTypes.Dew:
-                await userDataRepository.UpdateDewpoint(entity.Quantity);
-                break;
-            case EntityTypes.HustleHammer:
-                (await userDataRepository.UserData.SingleAsync()).BuildTimePoint += entity.Quantity;
-                break;
-            case EntityTypes.Rupies:
-                await userDataRepository.UpdateCoin(entity.Quantity);
-                break;
-            case EntityTypes.SkipTicket:
-                await userService.AddQuestSkipPoint(entity.Quantity);
-                break;
-            case EntityTypes.Wyrmite:
-                await userDataRepository.GiveWyrmite(entity.Quantity);
-                break;
-            case EntityTypes.Wyrmprint:
-                return await RewardAbilityCrest(entity);
-            case EntityTypes.Material:
-                (
-                    await inventoryRepository.GetMaterial((Materials)entity.Id)
-                    ?? inventoryRepository.AddMaterial((Materials)entity.Id)
-                ).Quantity += entity.Quantity;
-                break;
-            case EntityTypes.Mana:
-                (await userDataRepository.UserData.SingleAsync()).ManaPoint += entity.Quantity;
-                break;
-            case EntityTypes.FortPlant:
-                await fortRepository.AddToStorage((FortPlants)entity.Id, quantity: entity.Quantity);
-                break;
-            case EntityTypes.BuildEventItem:
-            case EntityTypes.Clb01EventItem:
-            case EntityTypes.CollectEventItem:
-            case EntityTypes.RaidEventItem:
-            case EntityTypes.MazeEventItem:
-            case EntityTypes.ExRushEventItem:
-            case EntityTypes.SimpleEventItem:
-            case EntityTypes.ExHunterEventItem:
-            case EntityTypes.BattleRoyalEventItem:
-            case EntityTypes.EarnEventItem:
-            case EntityTypes.CombatEventItem:
-                await eventRepository.AddItemQuantityAsync(entity.Id, entity.Quantity);
-                break;
-            case EntityTypes.DmodePoint:
-                DbPlayerDmodeInfo info = await dmodeRepository.GetInfoAsync();
-                if (entity.Id == (int)DmodePoint.Point1)
-                    info.Point1Quantity += entity.Quantity;
-                else if (entity.Id == (int)DmodePoint.Point2)
-                    info.Point2Quantity += entity.Quantity;
-                else
-                    throw new UnreachableException("Invalid dmode point id");
-                break;
-            case EntityTypes.SummonTicket:
-                ticketRepository.AddTicket((SummonTickets)entity.Id, entity.Quantity);
-                break;
-            default:
-                logger.LogWarning("Tried to reward unsupported entity {@entity}", entity);
-                return RewardGrantResult.FailError;
+            logger.LogError("Failed to find reward handler for entity {@entity}", entity);
+            return RewardGrantResult.FailError;
         }
 
-        return RewardGrantResult.Added;
+        GrantReturn grantReturn = await handler.Grant(entity);
+
+        switch (grantReturn.Result)
+        {
+            case RewardGrantResult.Added:
+                this.newEntities.Add(entity);
+                break;
+            case RewardGrantResult.Converted:
+                ArgumentNullException.ThrowIfNull(grantReturn.ConvertedEntity);
+                this.convertedEntities.Add(
+                    new ConvertedEntity(entity, grantReturn.ConvertedEntity)
+                );
+                break;
+            case RewardGrantResult.Discarded:
+                this.discardedEntities.Add(entity);
+                break;
+            case RewardGrantResult.GiftBoxDiscarded:
+                this.presentLimitEntities.Add(entity);
+                break;
+            case RewardGrantResult.GiftBox:
+                this.presentEntites.Add(entity);
+                break;
+            case RewardGrantResult.Limit:
+                break;
+            case RewardGrantResult.FailError:
+                logger.LogError("Granting of entity {@entity} failed.", entity);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(
+                    string.Empty,
+                    "RewardGrantResult out of range"
+                );
+        }
+
+        return grantReturn.Result;
     }
 
     public async Task<(RewardGrantResult Result, DbTalisman? Talisman)> GrantTalisman(
@@ -177,64 +139,6 @@ public class RewardService(
         return (RewardGrantResult.Added, talisman);
     }
 
-    private async Task<RewardGrantResult> RewardCharacter(Entity entity)
-    {
-        if (entity.Type != EntityTypes.Chara)
-            throw new ArgumentException("Entity was not a character", nameof(entity));
-
-        Charas chara = (Charas)entity.Id;
-
-        if (await unitRepository.FindCharaAsync(chara) is not null)
-        {
-            // Is it the correct behaviour to discard gifted characters?
-            // Not sure -- never had characters in my gift box
-            logger.LogDebug("Discarded character entity: {@entity}.", entity);
-            discardedEntities.Add(entity);
-            return RewardGrantResult.Discarded;
-        }
-
-        // TODO: Support EntityLevel/LimitBreak/etc here
-
-        logger.LogDebug("Granted new character entity: {@entity}", entity);
-        await unitRepository.AddCharas(chara);
-        newEntities.Add(entity);
-        return RewardGrantResult.Added;
-    }
-
-    private async Task<RewardGrantResult> RewardAbilityCrest(Entity entity)
-    {
-        if (entity.Type != EntityTypes.Wyrmprint)
-            throw new ArgumentException("Entity was not a wyrmprint", nameof(entity));
-
-        AbilityCrests crest = (AbilityCrests)entity.Id;
-
-        if (await abilityCrestRepository.FindAsync(crest) is not null)
-        {
-            Entity dewEntity = new(EntityTypes.Dew, Id: 0, Quantity: 4000);
-            logger.LogDebug(
-                "Converted ability crest entity: {@entity} to {@dewEntity}.",
-                entity,
-                dewEntity
-            );
-
-            await userDataRepository.UpdateDewpoint(dewEntity.Quantity);
-
-            convertedEntities.Add(new ConvertedEntity(entity, dewEntity));
-            return RewardGrantResult.Converted;
-        }
-
-        logger.LogDebug("Granted new ability crest entity: {@entity}", entity);
-        await abilityCrestRepository.Add(
-            crest,
-            entity.LimitBreakCount,
-            entity.BuildupCount,
-            entity.EquipableCount
-        );
-
-        newEntities.Add(entity);
-        return RewardGrantResult.Added;
-    }
-
     public EntityResult GetEntityResult()
     {
         return new()
@@ -244,8 +148,12 @@ public class RewardService(
             over_discard_entity_list = discardedEntities.Select(
                 x => x.ToBuildEventRewardEntityList()
             ),
-            over_present_entity_list = Enumerable.Empty<AtgenBuildEventRewardEntityList>(),
-            over_present_limit_entity_list = Enumerable.Empty<AtgenBuildEventRewardEntityList>()
+            over_present_entity_list = this.presentEntites.Select(
+                x => x.ToBuildEventRewardEntityList()
+            ),
+            over_present_limit_entity_list = this.presentLimitEntities.Select(
+                x => x.ToBuildEventRewardEntityList()
+            ),
         };
     }
 }

@@ -55,10 +55,10 @@ public class UpdateController(
                     );
                     break;
                 case "emblem":
-                    foreach (
-                        DbEmblem emblem in await emblemRepository.Emblems
-                            .Where(x => target.target_id_list.Contains((long)x.EmblemId))
-                            .ToListAsync()
+                    await foreach (
+                        DbEmblem emblem in emblemRepository.Emblems
+                            .Where(x => x.IsNew)
+                            .AsAsyncEnumerable()
                     )
                     {
                         emblem.IsNew = false;
