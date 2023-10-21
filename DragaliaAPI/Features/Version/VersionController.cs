@@ -8,20 +8,15 @@ namespace DragaliaAPI.Features.Version;
 
 [Route("version")]
 [AllowAnonymous]
-public class VersionController(IOptionsMonitor<ResourceVersionOptions> options)
+[BypassResourceVersionCheck]
+public class VersionController(IResourceVersionService resourceVersionService)
     : DragaliaControllerBase
 {
     [HttpPost]
     [Route("get_resource_version")]
     public DragaliaResult GetResourceVersion(VersionGetResourceVersionRequest request)
     {
-        string resourceVersion = request.platform switch
-        {
-            1 => options.CurrentValue.Ios,
-            2 => options.CurrentValue.Android,
-            _ => throw new BadHttpRequestException("Invalid platform identifier")
-        };
-
+        string resourceVersion = resourceVersionService.GetResourceVersion(request.platform);
         return this.Ok(new VersionGetResourceVersionData(resourceVersion));
     }
 }

@@ -6,6 +6,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("eula")]
 [AllowAnonymous]
+[BypassResourceVersionCheck]
 public class EulaController : DragaliaControllerBase
 {
     private static readonly List<AtgenVersionHash> AllEulaVersions =
