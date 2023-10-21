@@ -70,7 +70,7 @@ public enum WeaponBodies
     ChimeratechSirius = 30150414,
 
     [TextLabel("Dáinsleif")]
-    Dáinsleif = 30150501,
+    Dainsleif = 30150501,
 
     [TextLabel("Abyssbringer")]
     Abyssbringer = 30150502,
@@ -319,7 +319,7 @@ public enum WeaponBodies
     WindrulersFang = 30360304,
 
     [TextLabel("Claíomh Solais")]
-    ClaíomhSolais = 30360401,
+    ClaiomhSolais = 30360401,
 
     [TextLabel("Fulminator's Fang")]
     FulminatorsFang = 30360404,

@@ -144,7 +144,11 @@ public class SavefileService : ISavefileService
             );
 
             this.apiContext.Players.Add(
-                new DbPlayer { AccountId = this.playerIdentityService.AccountId }
+                new DbPlayer
+                {
+                    AccountId = this.playerIdentityService.AccountId,
+                    SavefileVersion = this.maxSavefileVersion
+                }
             );
 
             this.logger.LogDebug(

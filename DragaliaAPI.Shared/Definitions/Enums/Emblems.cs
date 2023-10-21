@@ -1290,5 +1290,13 @@ public enum Emblems
     WyrmboundWarrior = 10240503,
     XandersFavoriteVassal = 40003020,
     YearningQueen = 10750103,
-    ZephyrZapper = 50000803
+    ZephyrZapper = 50000803,
+    MottoHayaku = 51090107,
+    SupremeBogfish = 51090108,
+    BerserkSkipperTier1 = 51090109,
+    BerserkSkipperTier2 = 51090110,
+    BerserkSkipperTier3 = 51090111,
+    SociallyDistancedTier1 = 51090112,
+    SociallyDistancedTier2 = 51090113,
+    SociallyDistancedTier3 = 51090114
 }

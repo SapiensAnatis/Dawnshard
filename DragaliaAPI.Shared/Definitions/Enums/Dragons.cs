@@ -313,7 +313,7 @@ public enum Dragons
     GalaThor = 20050412,
 
     [TextLabel("Lumière Pandora")]
-    LumièrePandora = 20050413,
+    LumierePandora = 20050413,
 
     [TextLabel("Gala Reborn Jeanne")]
     GalaRebornJeanne = 20050414,
@@ -322,7 +322,7 @@ public enum Dragons
     Raphael = 20050415,
 
     [TextLabel("Summer Cat Sìth")]
-    SummerCatSìth = 20050416,
+    SummerCatSith = 20050416,
 
     [TextLabel("Mini Jupi")]
     MiniJupi = 20050417,
@@ -385,7 +385,7 @@ public enum Dragons
     Azazel = 20050518,
 
     [TextLabel("Gala Cat Sìth")]
-    GalaCatSìth = 20050519,
+    GalaCatSith = 20050519,
 
     [TextLabel("Ramiel")]
     Ramiel = 20050520,
