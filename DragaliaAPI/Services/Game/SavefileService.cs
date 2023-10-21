@@ -499,17 +499,6 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            if (savefile.user_data.emblem_id != Emblems.DragonbloodPrince)
-            {
-                this.apiContext.Emblems.Add(
-                    new()
-                    {
-                        EmblemId = savefile.user_data.emblem_id,
-                        DeviceAccountId = deviceAccountId
-                    }
-                );
-            }
-
             this.logger.LogInformation(
                 "Mapping completed after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
