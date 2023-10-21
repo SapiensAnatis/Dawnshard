@@ -6,7 +6,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("deploy")]
 [AllowAnonymous]
-[ApiController]
+[BypassResourceVersionCheck]
 public class DeployController : DragaliaControllerBase
 {
     private const string DeployHash = "13bb2827ce9e6a66015ac2808112e3442740e862";

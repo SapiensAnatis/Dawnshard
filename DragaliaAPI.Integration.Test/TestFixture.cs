@@ -37,6 +37,8 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
             );
 
         this.Client.DefaultRequestHeaders.Add("SID", SessionId);
+        this.Client.DefaultRequestHeaders.Add("Platform", "2");
+        this.Client.DefaultRequestHeaders.Add("Res-Ver", "y2XM6giU6zz56wCm");
 
         this.Services = factory.Services.CreateScope().ServiceProvider;
         this.Mapper = factory.Services.GetRequiredService<IMapper>();

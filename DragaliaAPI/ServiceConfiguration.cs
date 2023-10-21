@@ -26,6 +26,7 @@ using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Trade;
+using DragaliaAPI.Features.Version;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
@@ -142,7 +143,8 @@ public static class ServiceConfiguration
             .AddScoped<IPartyPowerService, PartyPowerService>()
             .AddScoped<IPartyPowerRepository, PartyPowerRepository>()
             // Chara feature
-            .AddScoped<ICharaService, CharaService>();
+            .AddScoped<ICharaService, CharaService>()
+            .AddScoped<IResourceVersionService, ResourceVersionService>();
 
         services.AddScoped<IBlazorIdentityService, BlazorIdentityService>();
 
@@ -162,6 +164,8 @@ public static class ServiceConfiguration
             client.BaseAddress = new(options.StateManagerUrl);
         });
         services.AddScoped<IMatchingService, MatchingService>();
+
+        services.AddScoped<ResourceVersionActionFilter>();
 
         return services;
     }
