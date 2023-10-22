@@ -25,16 +25,13 @@ public class MissionMutations(
     )
     {
         DbPlayer player = GetPlayer(args.ViewerId);
-
-        DbPlayerMission mission =
-            await db.PlayerMissions.FindAsync(player.AccountId, args.MissionType, args.MissionId)
-            ?? throw new InvalidOperationException("Mission not found");
+        DbPlayerMission mission = GetMission(db, player, args);
 
         await missionInitialProgressionService.GetInitialMissionProgress(mission);
 
         await db.SaveChangesAsync();
 
-        return ctx => ctx.PlayerMissions.Find(player.AccountId, args.MissionType, args.MissionId)!;
+        return this.GetMissionExpression(player, args);
     }
 
     [GraphQLMutation("Completes a mission")]
@@ -44,10 +41,7 @@ public class MissionMutations(
     )
     {
         DbPlayer player = GetPlayer(args.ViewerId);
-
-        DbPlayerMission mission =
-            await db.PlayerMissions.FindAsync(player.AccountId, args.MissionType, args.MissionId)
-            ?? throw new InvalidOperationException("Mission not found");
+        DbPlayerMission mission = GetMission(db, player, args);
 
         if (mission.State != MissionState.InProgress)
             throw new InvalidOperationException("Mission was already completed");
@@ -59,7 +53,7 @@ public class MissionMutations(
 
         await db.SaveChangesAsync();
 
-        return ctx => ctx.PlayerMissions.Find(player.AccountId, args.MissionType, args.MissionId)!;
+        return this.GetMissionExpression(player, args);
     }
 
     [GraphQLMutation("Starts a mission")]
@@ -76,12 +70,7 @@ public class MissionMutations(
         }
 
         DbPlayer player = GetPlayer(args.ViewerId);
-
-        DbPlayerMission? mission = await db.PlayerMissions.FindAsync(
-            player.AccountId,
-            args.MissionType,
-            args.MissionId
-        );
+        DbPlayerMission mission = GetMission(db, player, args);
 
         if (mission != null)
             throw new InvalidOperationException("Mission is already started");
@@ -90,7 +79,7 @@ public class MissionMutations(
 
         await db.SaveChangesAsync();
 
-        return ctx => ctx.PlayerMissions.Find(player.AccountId, args.MissionType, args.MissionId)!;
+        return this.GetMissionExpression(player, args);
     }
 
     [GraphQLArguments]
@@ -99,4 +88,21 @@ public class MissionMutations(
         [property: JsonConverter(typeof(JsonStringEnumConverter))] MissionType MissionType,
         int MissionId
     );
+
+    private Expression<Func<ApiContext, DbPlayerMission>> GetMissionExpression(
+        DbPlayer player,
+        MissionMutationArgs args
+    ) => context => GetMission(context, player, args);
+
+    private DbPlayerMission GetMission(
+        ApiContext context,
+        DbPlayer player,
+        MissionMutationArgs args
+    ) =>
+        context.PlayerMissions.FirstOrDefault(
+            x =>
+                x.Id == args.MissionId
+                && x.Type == args.MissionType
+                && x.DeviceAccountId == player.AccountId
+        ) ?? throw new InvalidOperationException("No mission found.");
 }
