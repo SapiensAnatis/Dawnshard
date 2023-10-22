@@ -1216,7 +1216,7 @@
     "_Id": 30170008,
     "_MissionType": "Drill",
     "_MissionId": 301700,
-    "_CompleteType": "AbilityCrestTotalPlusCountUp",
+    "_CompleteType": "AbilityCrestLevelUp",
     "_UseTotalValue": 1
   },
   {

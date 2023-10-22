@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models;
+﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using Microsoft.EntityFrameworkCore;
 
@@ -106,5 +107,51 @@ public class MissionTest : TestFixture
         resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list
             .Should()
             .Contain(300100);
+    }
+
+    [Fact]
+    public async Task DrillMission_WyrmprintBuildup_CompletesMission()
+    {
+        await this.AddToDatabase(
+            new DbAbilityCrest()
+            {
+                DeviceAccountId = DeviceAccountId,
+                AbilityCrestId = AbilityCrests.Aromatherapy,
+                LimitBreakCount = 4,
+            }
+        );
+
+        await this.Client.PostMsgpack<MissionUnlockDrillMissionGroupData>(
+            "mission/unlock_drill_mission_group",
+            new MissionUnlockDrillMissionGroupRequest(3)
+        );
+
+        DragaliaResponse<AbilityCrestBuildupPieceData> resp =
+            await this.Client.PostMsgpack<AbilityCrestBuildupPieceData>(
+                "/ability_crest/buildup_piece",
+                new AbilityCrestBuildupPieceRequest()
+                {
+                    ability_crest_id = AbilityCrests.Aromatherapy,
+                    buildup_ability_crest_piece_list = Enumerable
+                        .Range(2, 15)
+                        .Select(
+                            x =>
+                                new AtgenBuildupAbilityCrestPieceList()
+                                {
+                                    buildup_piece_type = BuildupPieceTypes.Stats,
+                                    step = x
+                                }
+                        )
+                }
+            );
+
+        resp.data_headers.result_code.Should().Be(ResultCode.Success);
+        resp.data.update_data_list.mission_notice.drill_mission_notice.is_update.Should().Be(1);
+        resp.data.update_data_list.mission_notice.drill_mission_notice.completed_mission_count
+            .Should()
+            .BeGreaterThan(1);
+        resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list
+            .Should()
+            .Contain(301700);
     }
 }
