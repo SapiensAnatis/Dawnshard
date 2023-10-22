@@ -17,6 +17,7 @@ public class DungeonRecordRewardServiceTest
 {
     private readonly Mock<IQuestCompletionService> mockQuestCompletionService;
     private readonly Mock<IRewardService> mockRewardService;
+    private readonly Mock<IAbilityCrestService> mockAbilityCrestService;
     private readonly Mock<IAbilityCrestMultiplierService> mockAbilityCrestMultiplierService;
     private readonly Mock<IEventDropService> mockEventDropService;
     private readonly Mock<ILogger<DungeonRecordRewardService>> mockLogger;
@@ -27,6 +28,7 @@ public class DungeonRecordRewardServiceTest
     {
         this.mockQuestCompletionService = new(MockBehavior.Strict);
         this.mockRewardService = new(MockBehavior.Strict);
+        this.mockAbilityCrestService = new(MockBehavior.Strict);
         this.mockAbilityCrestMultiplierService = new(MockBehavior.Strict);
         this.mockEventDropService = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
@@ -34,6 +36,7 @@ public class DungeonRecordRewardServiceTest
         this.dungeonRecordRewardService = new DungeonRecordRewardService(
             this.mockQuestCompletionService.Object,
             this.mockRewardService.Object,
+            this.mockAbilityCrestService.Object,
             this.mockAbilityCrestMultiplierService.Object,
             this.mockEventDropService.Object,
             this.mockLogger.Object

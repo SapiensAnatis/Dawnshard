@@ -32,6 +32,20 @@ public class QuestEnemyService : IQuestEnemyService
         }.ToImmutableDictionary();
     private const int MaterialPertubation = 3;
 
+    
+    private static readonly ImmutableDictionary<AbilityCrestsRarities, double> BaseCrestQuantities =
+        new Dictionary<AbilityCrestsRarities, double>()
+        {
+            // Determine drop rates of wyrmprints
+            { AbilityCrestsRarities.SinisterDominion, 1 }, // Dominion prints
+            { AbilityCrestsRarities.Common, 1 }, // 2 star
+            { AbilityCrestsRarities.Uncommon, 1 }, // 3 star 
+            { AbilityCrestsRarities.Rare, 1 }, // 4 star
+            { AbilityCrestsRarities.VeryRare, 1 } // 5 star
+        }.ToImmutableDictionary();
+
+    private const int CrestPertubation = 3;
+
     public QuestEnemyService(IQuestDropService dropService, ILogger<QuestEnemyService> logger)
     {
         this.dropService = dropService;
@@ -41,7 +55,9 @@ public class QuestEnemyService : IQuestEnemyService
     public IEnumerable<AtgenEnemy> BuildQuestEnemyList(int questId, int areaNum)
     {
         List<AtgenEnemy> enemyList = this.GetEnemyList(questId, areaNum).ToList();
-        IEnumerable<Materials> possibleDrops = this.dropService.GetDrops(questId);
+        IEnumerable<Materials> possibleMaterialDrops;
+        IEnumerable<AbilityCrests> possibleCrestDrops;
+        (possibleMaterialDrops, possibleCrestDrops) = this.dropService.GetDrops(questId);
         QuestData questData = MasterAsset.QuestData[questId];
 
         if (
@@ -63,7 +79,8 @@ public class QuestEnemyService : IQuestEnemyService
         {
             enemy.enemy_drop_list = GenerateEnemyDrop(
                 enemy,
-                possibleDrops,
+                possibleMaterialDrops,
+                possibleCrestDrops,
                 questMultiplier,
                 difficultyMultiplier
             );
@@ -74,7 +91,8 @@ public class QuestEnemyService : IQuestEnemyService
 
     private IEnumerable<EnemyDropList> GenerateEnemyDrop(
         AtgenEnemy enemy,
-        IEnumerable<Materials> possibleDrops,
+        IEnumerable<Materials> possibleMaterialDrops,
+        IEnumerable<AbilityCrests> possibleCrestDrops,
         QuestGroupMultiplier dropMultiplier,
         double difficultyMultiplier
     )
@@ -108,23 +126,32 @@ public class QuestEnemyService : IQuestEnemyService
                     coinPower
                 ),
                 drop_list = GenerateMaterialDrops(
-                    possibleDrops,
+                    possibleMaterialDrops,
                     toughnessMultiplier * difficultyMultiplier,
                     dropMultiplier
                 )
+                /*
+                crest_drops = GenerateCrestDrops(
+                    possibleCrestDrops,
+                    toughnessMultiplier * difficultyMultiplier,
+                    dropMultiplier
+                )
+
+                drop_list.AddRange(crest_drops);
+                */
             }
         };
     }
 
     private static IEnumerable<AtgenDropList> GenerateMaterialDrops(
-        IEnumerable<Materials> possibleDrops,
+        IEnumerable<Materials> possibleMaterialDrops,
         double baseMultiplier,
         QuestGroupMultiplier questMultiplier
     )
     {
         const double multiplierPower = 1.5;
 
-        foreach (Materials material in possibleDrops)
+        foreach (Materials material in possibleMaterialDrops)
         {
             // Fairly confident this will be defined
             MaterialData materialData = MasterAsset.MaterialData[material];
@@ -150,6 +177,47 @@ public class QuestEnemyService : IQuestEnemyService
                 type = EntityTypes.Material
             };
         }
+    }
+
+    private static IEnumerable<AtgenDropList> GenerateCrestDrops(
+        IEnumerable<AbilityCrests> possibleCrestDrops,
+        double baseMultiplier,
+        QuestGroupMultiplier questMultiplier
+    )
+    {
+        const double multiplierPower = 1.5;
+
+        foreach (AbilityCrests crest in possibleCrestDrops)
+        {
+            // Fairly confident this will be defined
+            AbilityCrest crestData = MasterAsset.AbilityCrest[crest];
+
+            int randomizedQuantity = CalculateQuantity(
+                BaseCrestQuantities[crestData.Rarity],
+                CrestPertubation,
+                baseMultiplier,
+                multiplierPower
+            );
+
+            
+            randomizedQuantity = (int)(
+                randomizedQuantity * questMultiplier.CrestMultiplier[crestData.Rarity]
+            );
+
+            if (randomizedQuantity <= 0)
+                continue;
+
+            yield return new()
+            {
+                id = (int)crest,
+                quantity = randomizedQuantity,
+                type = EntityTypes.Wyrmprint
+            };
+
+            
+        }
+
+        //return Enumerable.Empty<AtgenDropList>()
     }
 
     private static int CalculateQuantity(

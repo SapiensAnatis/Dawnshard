@@ -6,14 +6,14 @@ namespace DragaliaAPI.Features.Dungeon;
 
 public class QuestDropService(ILogger<QuestEnemyService> logger) : IQuestDropService
 {
-    public IEnumerable<Materials> GetDrops(int questId)
+    public (IEnumerable<Materials>, IEnumerable<AbilityCrests>) GetDrops(int questId)
     {
         if (!MasterAsset.QuestDrops.TryGetValue(questId, out QuestDropInfo? questDropInfo))
         {
             logger.LogWarning("Unable to retrieve drop list for quest id {quest}", questId);
-            return Enumerable.Empty<Materials>();
+            return (Enumerable.Empty<Materials>(), Enumerable.Empty<AbilityCrests>());
         }
 
-        return questDropInfo.Material;
+        return (questDropInfo.Material, questDropInfo.AbilityCrests);
     }
 }

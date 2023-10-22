@@ -4,12 +4,14 @@ using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Services.Game;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
 public class DungeonRecordRewardService(
     IQuestCompletionService questCompletionService,
     IRewardService rewardService,
+    IAbilityCrestService abilityCrestService,
     IAbilityCrestMultiplierService abilityCrestMultiplierService,
     IEventDropService eventDropService,
     ILogger<DungeonRecordRewardService> logger
@@ -94,11 +96,23 @@ public class DungeonRecordRewardService(
 
                 foreach (AtgenDropList dropList in enemyDropList.drop_list)
                 {
-                    Entity reward = new(dropList.type, dropList.id, dropList.quantity);
+                    if (dropList.type == EntityTypes.Wyrmprint) {
+                        Entity reward = new(dropList.type, dropList.id, dropList.quantity);
 
-                    drops.Add(reward.ToDropAll());
+                        drops.Add(reward.ToDropAll());
 
-                    await rewardService.GrantReward(reward);
+                        for(int i = 0; i < dropList.quantity; i++) {
+                            await abilityCrestService.AddOrRefund(dropList.id);
+                        }
+                    }
+                    else {
+                        Entity reward = new(dropList.type, dropList.id, dropList.quantity);
+
+                        drops.Add(reward.ToDropAll());
+
+                        await rewardService.GrantReward(reward);
+                    }
+                    
                 }
             }
         }
