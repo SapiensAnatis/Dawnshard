@@ -40,6 +40,9 @@
     window.blazorExtensions = {
         writeCookie: function (name, value) {
             document.cookie = `${name}=${value}; SameSite=Lax`;
+        },
+        scrollToTop: function () {
+             document.documentElement.scrollTop = 0;
         }
     }
 </script>
