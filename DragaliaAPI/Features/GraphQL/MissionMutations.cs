@@ -15,13 +15,14 @@ public class MissionMutations(
     IMissionService missionService,
     IMissionInitialProgressionService missionInitialProgressionService,
     ApiContext apiContext,
-    IPlayerIdentityService playerIdentityService
+    IPlayerIdentityService playerIdentityService,
+    ILogger<MissionMutations> logger
 ) : MutationBase(apiContext, playerIdentityService)
 {
     [GraphQLMutation("Reset a mission to its initial progress")]
     public async Task<Expression<Func<ApiContext, DbPlayerMission>>> ResetMissionProgress(
         ApiContext db,
-        MissionMutationArgs args
+        MissionPlayerMutationArgs args
     )
     {
         DbPlayer player = GetPlayer(args.ViewerId);
@@ -37,7 +38,7 @@ public class MissionMutations(
     [GraphQLMutation("Completes a mission")]
     public async Task<Expression<Func<ApiContext, DbPlayerMission>>> CompleteMission(
         ApiContext db,
-        MissionMutationArgs args
+        MissionPlayerMutationArgs args
     )
     {
         DbPlayer player = GetPlayer(args.ViewerId);
@@ -59,7 +60,7 @@ public class MissionMutations(
     [GraphQLMutation("Starts a mission")]
     public async Task<Expression<Func<ApiContext, DbPlayerMission>>> StartMission(
         ApiContext db,
-        MissionMutationArgs args
+        MissionPlayerMutationArgs args
     )
     {
         if (args.MissionType is MissionType.Drill or MissionType.MainStory)
@@ -82,12 +83,57 @@ public class MissionMutations(
         return this.GetMissionExpression(player, args);
     }
 
+    [GraphQLMutation("Reset a mission's progress for all players")]
+    public async Task<Expression<Func<ApiContext, IEnumerable<DbPlayerMission>>>> ResetAllProgress(
+        ApiContext db,
+        MissionMutationArgs args
+    )
+    {
+        List<DbPlayerMission> affectedMissions = await db.PlayerMissions
+            .Where(
+                x =>
+                    x.Id == args.MissionId
+                    && x.Type == args.MissionType
+                    && x.State == MissionState.InProgress
+            )
+            .ToListAsync();
+
+        string[] players = affectedMissions.Select(x => x.DeviceAccountId).ToArray();
+
+        foreach (DbPlayerMission mission in affectedMissions)
+        {
+            logger.LogInformation(
+                "Recalculating progress for player {accountId}",
+                mission.DeviceAccountId
+            );
+
+            using IDisposable ctx = playerIdentityService.StartUserImpersonation(
+                mission.DeviceAccountId
+            );
+
+            await missionInitialProgressionService.GetInitialMissionProgress(mission);
+        }
+
+        await db.SaveChangesAsync();
+
+        return context =>
+            context.PlayerMissions.Where(
+                x =>
+                    players.Contains(x.DeviceAccountId)
+                    && x.Id == args.MissionId
+                    && x.Type == args.MissionType
+            );
+    }
+
     [GraphQLArguments]
     public record MissionMutationArgs(
-        long ViewerId,
         [property: JsonConverter(typeof(JsonStringEnumConverter))] MissionType MissionType,
         int MissionId
     );
+
+    [GraphQLArguments]
+    public record MissionPlayerMutationArgs(long ViewerId, MissionType MissionType, int MissionId)
+        : MissionMutationArgs(MissionType, MissionId);
 
     private Expression<Func<ApiContext, DbPlayerMission>> GetMissionExpression(
         DbPlayer player,
