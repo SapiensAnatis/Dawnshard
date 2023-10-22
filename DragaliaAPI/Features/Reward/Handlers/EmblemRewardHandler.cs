@@ -13,7 +13,10 @@ public class EmblemRewardHandler(IEmblemRepository repository) : IRewardHandler
     {
         Emblems emblem = (Emblems)entity.Id;
         if (await repository.HasEmblem(emblem))
-            return new(RewardGrantResult.Converted);
+        {
+            // TODO: load EmblemData.json and give correct entity
+            return new(RewardGrantResult.Discarded);
+        }
 
         repository.AddEmblem(emblem);
         return new(RewardGrantResult.Added);
