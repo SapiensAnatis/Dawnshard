@@ -27,7 +27,7 @@
             </MudCard>
         }
     </MudStack>
-    <MudPagination @bind-Selected="@this.Selected" Count="@this.numPages" ControlButtonClicked="@this.OnControlButtonClickedAsync"/>
+    <MudPagination @bind-Selected="@this.Selected" Count="@this.numPages"/>
 </MudStack>
 
 @code {
@@ -46,12 +46,10 @@
         {
             this.visibleNewsItems = allNewsItems.Skip(PageSize * (value - 1)).Take(PageSize);
             this.selected = value;
+            
+            // Fire-and-forget
+            this.JsRuntime.InvokeVoidAsync("window.blazorExtensions.scrollToTop");
         }
-    }
-
-    private async Task OnControlButtonClickedAsync()
-    {
-        await JsRuntime.InvokeVoidAsync("window.blazorExtensions.scrollToTop");
     }
 
     protected override async Task OnInitializedAsync()
