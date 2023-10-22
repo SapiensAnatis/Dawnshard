@@ -197,13 +197,28 @@ public class MissionInitialProgressionService(
             .Select(x => x.Id)
             .ToListAsync();
 
-        return trades
+        int treasureTradeCount = trades
             .Select(x => MasterAsset.TreasureTrade[x])
             .Count(
                 x =>
                     (type == null || x.DestinationEntityType == type)
                     && (id == null || x.DestinationEntityId == id)
             );
+
+        if (treasureTradeCount == 0 && type == EntityTypes.Wyrmprint)
+        {
+            /*
+             * Workaround: if a player imports an old pre-2.0 save, they will not have the trade
+             * for missions like 'Obtain a Glorious Tempest from Treasure Trade', but will then
+             * be unable to complete the mission because the trade shows as locked if the print
+             * is owned. (These trades were reworked and given new IDs in 2.0).
+            */
+            treasureTradeCount += await abilityCrestRepository.AbilityCrests.CountAsync(
+                x => x.AbilityCrestId == (AbilityCrests?)id
+            );
+        }
+
+        return treasureTradeCount;
     }
 
     private async Task<int> GetCharacterMaxLevel(Charas? charaId, UnitElement? element)
