@@ -4,40 +4,68 @@
 @using Microsoft.EntityFrameworkCore;
 
 @inject IDbContextFactory<ApiContext> ContextFactory;
+@inject IJSRuntime JsRuntime;
 
-<MudStack Style="width: 95%">
-    @foreach(NewsItem item in this.newsItems) {
-        <MudCard>
-            <MudCardHeader Style="margin-bottom: -1rem">
-                <MudStack Spacing="-1">
-                    <MudText Typo="Typo.h6" Color="Color.Primary">
-                        @item.Headline
-                    </MudText>
-                    <MudText Typo="Typo.caption">
-                        @item.Time
-                    </MudText>
-                </MudStack>
-            </MudCardHeader>
-            <MudCardContent>
-                @item.Description
-            </MudCardContent>
-        </MudCard>
-    }
+<MudStack Spacing="4" Class="mb-2" AlignItems="AlignItems.Center">
+    <MudStack Style="width: 95%; min-height: 70vh;">
+        @foreach (NewsItem item in this.visibleNewsItems)
+        {
+            <MudCard>
+                <MudCardHeader Style="margin-bottom: -1rem">
+                    <MudStack Spacing="-1">
+                        <MudText Typo="Typo.h6" Color="Color.Primary">
+                            @item.Headline
+                        </MudText>
+                        <MudText Typo="Typo.caption">
+                            @item.Time
+                        </MudText>
+                    </MudStack>
+                </MudCardHeader>
+                <MudCardContent>
+                    @item.Description
+                </MudCardContent>
+            </MudCard>
+        }
+    </MudStack>
+    <MudPagination @bind-Selected="@this.Selected" Count="@this.numPages" ControlButtonClicked="@this.OnControlButtonClickedAsync"/>
 </MudStack>
 
 @code {
 
-    private IEnumerable<NewsItem> newsItems = Enumerable.Empty<NewsItem>();
+    private const int PageSize = 4;
+    
+    private List<NewsItem> allNewsItems = new();
+    private IEnumerable<NewsItem> visibleNewsItems = Enumerable.Empty<NewsItem>();
+    private int numPages = 1;
+    private int selected = 1;
 
+    private int Selected
+    {
+        get => this.selected;
+        set
+        {
+            this.visibleNewsItems = allNewsItems.Skip(PageSize * (value - 1)).Take(PageSize);
+            this.selected = value;
+        }
+    }
+
+    private async Task OnControlButtonClickedAsync()
+    {
+        await JsRuntime.InvokeVoidAsync("window.blazorExtensions.scrollToTop");
+    }
 
     protected override async Task OnInitializedAsync()
     {
         await using ApiContext apiContext = await this.ContextFactory.CreateDbContextAsync();
 
-        this.newsItems = await apiContext.NewsItems
+        this.allNewsItems = await apiContext.NewsItems
             .OrderByDescending(x => x.Time)
             .Select(x => new NewsItem(x))
             .ToListAsync();
+
+        this.numPages = (int)Math.Ceiling((double)this.allNewsItems.Count / PageSize);
+
+        this.visibleNewsItems = this.allNewsItems.Take(PageSize);
     }
 
     private class NewsItem
