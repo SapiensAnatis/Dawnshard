@@ -78,6 +78,9 @@ public class TutorialService : ITutorialService
                 await UpdateTutorialStatus(30102);
                 await AddTutorialFlag(1005);
                 break;
+            case TutorialStoryIds.ImperialOnslaught:
+                await UpdateTutorialStatus(60999);
+                break;
             case TutorialStoryIds.Ch9Done:
                 await AddTutorialFlag(1010);
                 break;
@@ -131,10 +134,11 @@ public class TutorialService : ITutorialService
         public const int Halidom = 1000111;
         public const int Smithy = 1000210;
         public const int DragonTrials = 1000311;
+        public const int ImperialOnslaught = 1000607;
         public const int Ch9Done = 1000909;
         public const int Ch10Done = 1001009;
         public const int Sindom = 1001610;
-        public const int Ch16Done = 1001613;
+        public const int Ch16Done = 1001613; 
     }
 
     internal static class TutorialStatusIds
