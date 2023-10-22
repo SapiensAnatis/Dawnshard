@@ -32,7 +32,6 @@ public class QuestEnemyService : IQuestEnemyService
         }.ToImmutableDictionary();
     private const int MaterialPertubation = 3;
 
-    
     private static readonly ImmutableDictionary<AbilityCrestsRarities, double> BaseCrestQuantities =
         new Dictionary<AbilityCrestsRarities, double>()
         {

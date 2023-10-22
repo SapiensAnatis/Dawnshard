@@ -96,7 +96,8 @@ public class DungeonRecordRewardService(
 
                 foreach (AtgenDropList dropList in enemyDropList.drop_list)
                 {
-                    if (dropList.type == EntityTypes.Wyrmprint) {
+                    if (dropList.type == EntityTypes.Wyrmprint)
+                    {
                         Entity reward = new(dropList.type, dropList.id, dropList.quantity);
 
                         drops.Add(reward.ToDropAll());

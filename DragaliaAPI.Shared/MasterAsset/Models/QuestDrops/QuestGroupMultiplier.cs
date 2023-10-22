@@ -30,7 +30,7 @@ public record QuestGroupMultiplier(int GroupId)
         {
             { AbilityCrestsRarities.SinisterDominion, 1 }, // Dominion prints
             { AbilityCrestsRarities.Common, 1 }, // 2 star
-            { AbilityCrestsRarities.Uncommon, 1 }, // 3 star 
+            { AbilityCrestsRarities.Uncommon, 1 }, // 3 star
             { AbilityCrestsRarities.Rare, 1 }, // 4 star
             { AbilityCrestsRarities.VeryRare, 1 } // 5 star
         };
