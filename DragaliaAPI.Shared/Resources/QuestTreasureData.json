@@ -250,5 +250,320 @@
         "_EntityType": 0,
         "_EntityId": 0,
         "_EntityQuantity": 0
+    },
+    {
+        "_Id": 112101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 117001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 112201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 116001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 112301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 122001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 113101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 123001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 113201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 122001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 113301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 123001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 114101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 116001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 114201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 117001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 114301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 116001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 115101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 115201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 115301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 116101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 116201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 116301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 117101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 117201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 117301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 118101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 118201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 118301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 119101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 119201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 119301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 120101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 120201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 120301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 121101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 121201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 121301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 122101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 122201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 122301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 123101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 123201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 123301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 124101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 124201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 124301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 125101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 125201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 125301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 126101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 126201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 126301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 0,
+        "_EntityQuantity": 10
     }
 ]
