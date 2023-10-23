@@ -5,6 +5,8 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Quest;
@@ -19,6 +21,8 @@ public class QuestController : DragaliaControllerBase
     private readonly IUpdateDataService updateDataService;
     private readonly IClearPartyService clearPartyService;
     private readonly ILogger<QuestController> logger;
+    private readonly IInventoryRepository inventoryRepository;
+    private readonly IUserDataRepository userDataRepository;
 
     public QuestController(
         IStoryService storyService,
@@ -105,6 +109,32 @@ public class QuestController : DragaliaControllerBase
                 lost_unit_list = lostUnitList
             }
         );
+    }
+
+    [HttpPost("get_quest_open_treasure")]
+    public async Task<DragaliaResult> GetQuestOpenTreasure(
+        QuestOpenTreasureRequest request
+    )
+    {
+
+        QuestTreasureData questTreasureData = MasterAsset.QuestTreasureData[request.quest_treasure_id];
+
+        EntityResult entityResult = StoryService.GetEntityResult(rewardList);;
+
+        await this.userDataRepository.updateCoin(questTreasureData.Rupies);
+        (await userDataRepository.UserData.SingleAsync()).ManaPoint += questTreasureData.Mana;
+
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+
+        return Ok(
+            new QuestOpenTreasureData()
+            {
+                update_data_list = updateDataList;
+                add_max_dragon_quantity = questRewardService.AddMaxDragonStorage;
+                add_max_weapon_quantity = 0;
+                add_max_amulet_quantity = 0;
+            }
+        )
     }
 
     [HttpPost("set_quest_clear_party")]

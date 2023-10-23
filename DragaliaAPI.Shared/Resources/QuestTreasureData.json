@@ -1,0 +1,50 @@
+[
+    {
+        "_Id": 102101,
+        "_Mana": 2000,
+        "_Rupies": 0,
+        "_AddMaxDragonStorage": 0,
+        "_ItemId": 0,
+        "_ItemQuantity": 0
+    },
+    {
+        "_Id": 102102,
+        "_Mana": 0,
+        "_Rupies": 0,
+        "_Add_MaxDragonStorage": 0,
+        "_ItemId": 0,
+        "_ItemQuantity": 0
+    },
+    {
+        "_Id": 102201,
+        "_Mana": 0,
+        "_Rupies": 0,
+        "_AddMaxDragonStorage": 5,
+        "_ItemId": 0,
+        "_ItemQuantity": 0
+    },
+    {
+        "_Id": 102202,
+        "_Mana": 0,
+        "_Rupies": 20000,
+        "_Add_MaxDragonStorage": 0,
+        "_ItemId": 0,
+        "_ItemQuantity": 0
+    },
+    {
+        "_Id": 102301,
+        "_Mana": 0,
+        "_Rupies": 0,
+        "_AddMaxDragonStorage": 5,
+        "_ItemId": 0,
+        "_ItemQuantity": 0
+    },
+    {
+        "_Id": 102302,
+        "_Mana": 0,
+        "_Rupies": 0,
+        "_Add_MaxDragonStorage": 5,
+        "_ItemId": 0,
+        "_ItemQuantity": 0
+    }
+]
