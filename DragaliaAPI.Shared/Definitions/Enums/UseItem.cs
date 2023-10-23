@@ -5,7 +5,7 @@ public enum UseItem
     None,
     Honey = 100601,
     QualityHoney,
-    ExquisiteHoney,
+    ExquisiteHoney = 100603,
     EnergyTank,
     YuletideRoast = 100606,
     WellDoneSteak,

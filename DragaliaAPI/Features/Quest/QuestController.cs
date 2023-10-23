@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
@@ -23,6 +24,7 @@ public class QuestController : DragaliaControllerBase
     private readonly ILogger<QuestController> logger;
     private readonly IInventoryRepository inventoryRepository;
     private readonly IUserDataRepository userDataRepository;
+    private readonly ITicketRepository ticketRepository;
 
     public QuestController(
         IStoryService storyService,
@@ -30,7 +32,10 @@ public class QuestController : DragaliaControllerBase
         IQuestDropService questRewardService,
         IUpdateDataService updateDataService,
         IClearPartyService clearPartyService,
-        ILogger<QuestController> logger
+        ILogger<QuestController> logger,
+        IInventoryRepository inventoryRepository,
+        IUserDataRepository userDataRepository,
+        ITicketRepository ticketRepository
     )
     {
         this.storyService = storyService;
@@ -39,6 +44,9 @@ public class QuestController : DragaliaControllerBase
         this.updateDataService = updateDataService;
         this.clearPartyService = clearPartyService;
         this.logger = logger;
+        this.inventoryRepository = inventoryRepository;
+        this.userDataRepository = userDataRepository;
+        this.ticketRepository = ticketRepository;
     }
 
     [HttpPost]
@@ -119,22 +127,49 @@ public class QuestController : DragaliaControllerBase
 
         QuestTreasureData questTreasureData = MasterAsset.QuestTreasureData[request.quest_treasure_id];
 
-        EntityResult entityResult = StoryService.GetEntityResult(rewardList);;
+        switch (questTreasureData.EntityType) {
+            case EntityTypes.None:
+                break;
+            case EntityTypes.Rupies:
+                await this.userDataRepository.updateCoin(questTreasureData.EntityQuantity);
+                break;
+            case EntityTypes.Mana:
+                (await userDataRepository.UserData.SingleAsync()).ManaPoint += questTreasureData.EntityQuantity;
+                break;
+            case EntityTypes.Material:
+                (
+                    await inventoryRepository.GetMaterial((Materials)questTreasureData.EntityId)
+                    ?? inventoryRepository.AddMaterial((Materials)questTreasureData.EntityId)
+                ).Quantity += questTreasureData.EntityQuantity;
+                break;
+            case EntityTypes.SummonTicket:
+                ticketRepository.AddTicket((SummonTickets)questTreasureData.EntityId, questTreasureData.EntityQuantity);
+                break;
+            default:
+                break;
+        }
 
-        await this.userDataRepository.updateCoin(questTreasureData.Rupies);
-        (await userDataRepository.UserData.SingleAsync()).ManaPoint += questTreasureData.Mana;
+        IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list; 
+        quest_treasure_reward_list = new AtgenBuildEventRewardEntityList(questTreasureData.EntityType, questTreasureData.EntityId, questTreasureData.EntityQuantity)
+
+        IEnumerable<AtgenDuplicateEntityList> duplicate_entity_list = new List<AtgenDuplicateEntityList>();
+        
+        EntityResult entityResult = questRewardService.GetEntityResult();
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
         return Ok(
             new QuestOpenTreasureData()
             {
-                update_data_list = updateDataList;
-                add_max_dragon_quantity = questRewardService.AddMaxDragonStorage;
-                add_max_weapon_quantity = 0;
-                add_max_amulet_quantity = 0;
+                update_data_list = updateDataList,
+                entity_result = entityResult,
+                quest_treasure_reward_list = quest_treasure_reward_list,
+                duplicate_entity_list = duplicate_entity_list,
+                add_max_dragon_quantity = questRewardService.AddMaxDragonStorage,
+                add_max_weapon_quantity = 0,
+                add_max_amulet_quantity = 0
             }
-        )
+        );
     }
 
     [HttpPost("set_quest_clear_party")]
