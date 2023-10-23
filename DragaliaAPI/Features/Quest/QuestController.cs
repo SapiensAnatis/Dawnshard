@@ -124,7 +124,7 @@ public class QuestController : DragaliaControllerBase
             new Entity(
                 questTreasureData.EntityType,
                 questTreasureData.EntityId,
-                questTreasureData.Quantity
+                questTreasureData.EntityQuantity
             )
         );
 
