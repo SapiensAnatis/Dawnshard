@@ -1,10 +1,7 @@
 ﻿using DragaliaAPI.Controllers;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
-using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Item;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
@@ -26,10 +23,6 @@ public class QuestController : DragaliaControllerBase
     private readonly IClearPartyService clearPartyService;
     private readonly IRewardService rewardService;
     private readonly ILogger<QuestController> logger;
-    private readonly IInventoryRepository inventoryRepository;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly ITicketRepository ticketRepository;
-    private readonly IItemRepository itemRepository;
 
     public QuestController(
         IStoryService storyService,
@@ -38,11 +31,7 @@ public class QuestController : DragaliaControllerBase
         IUpdateDataService updateDataService,
         IClearPartyService clearPartyService,
         IRewardService rewardService,
-        IItemRepository itemRepository,
-        ILogger<QuestController> logger,
-        IInventoryRepository inventoryRepository,
-        IUserDataRepository userDataRepository,
-        ITicketRepository ticketRepository
+        ILogger<QuestController> logger
     )
     {
         this.storyService = storyService;
@@ -51,11 +40,7 @@ public class QuestController : DragaliaControllerBase
         this.updateDataService = updateDataService;
         this.clearPartyService = clearPartyService;
         this.rewardService = rewardService;
-        this.itemRepository = itemRepository;
         this.logger = logger;
-        this.inventoryRepository = inventoryRepository;
-        this.userDataRepository = userDataRepository;
-        this.ticketRepository = ticketRepository;
     }
 
     [HttpPost]
