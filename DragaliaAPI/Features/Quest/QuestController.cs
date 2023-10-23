@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Tickets;
@@ -120,9 +121,7 @@ public class QuestController : DragaliaControllerBase
     }
 
     [HttpPost("get_quest_open_treasure")]
-    public async Task<DragaliaResult> GetQuestOpenTreasure(
-        QuestOpenTreasureRequest request
-    )
+    public async Task<DragaliaResult> GetQuestOpenTreasure(QuestOpenTreasureRequest request)
     {
 
         QuestTreasureData questTreasureData = MasterAsset.QuestTreasureData[request.quest_treasure_id];
