@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Tickets;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
