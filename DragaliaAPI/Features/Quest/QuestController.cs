@@ -154,7 +154,7 @@ public class QuestController : DragaliaControllerBase
                 break;
         }
 
-        IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list; 
+        IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list;
         quest_treasure_reward_list = new AtgenBuildEventRewardEntityList(
             questTreasureData.EntityType,
             questTreasureData.EntityId,
