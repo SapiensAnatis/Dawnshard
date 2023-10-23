@@ -124,6 +124,8 @@ public class MissionController : DragaliaControllerBase
             x => new DrillMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
         );
 
+        response.drill_mission_group_list = await this.missionService.GetCompletedDrillGroups();
+
         response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
         response.entity_result = new()
         {

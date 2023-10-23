@@ -25,4 +25,5 @@ public interface IMissionService
     Task<CurrentMainStoryMission> GetCurrentMainStoryMission();
     Task<MissionNotice> GetMissionNotice(ILookup<MissionType, DbPlayerMission>? updatedLookup);
     Task<IEnumerable<QuestEntryConditionList>> GetEntryConditions();
+    Task<IEnumerable<DrillMissionGroupList>> GetCompletedDrillGroups();
 }
