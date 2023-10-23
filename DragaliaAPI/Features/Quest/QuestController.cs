@@ -127,7 +127,8 @@ public class QuestController : DragaliaControllerBase
             request.quest_treasure_id
         ];
 
-        switch (questTreasureData.EntityType) {
+        switch (questTreasureData.EntityType)
+        {
             case EntityTypes.None:
                 break;
             case EntityTypes.Rupies:
