@@ -22,6 +22,7 @@ public class QuestController : DragaliaControllerBase
     private readonly IQuestDropService questRewardService;
     private readonly IUpdateDataService updateDataService;
     private readonly IClearPartyService clearPartyService;
+    private readonly IRewardService rewardService;
     private readonly ILogger<QuestController> logger;
     private readonly IInventoryRepository inventoryRepository;
     private readonly IUserDataRepository userDataRepository;
@@ -33,6 +34,7 @@ public class QuestController : DragaliaControllerBase
         IQuestDropService questRewardService,
         IUpdateDataService updateDataService,
         IClearPartyService clearPartyService,
+        IRewardService rewardService,
         ILogger<QuestController> logger,
         IInventoryRepository inventoryRepository,
         IUserDataRepository userDataRepository,
@@ -163,7 +165,7 @@ public class QuestController : DragaliaControllerBase
 
         IEnumerable<AtgenDuplicateEntityList> duplicate_entity_list =
             new List<AtgenDuplicateEntityList>();
-        EntityResult entityResult = questRewardService.GetEntityResult();
+        EntityResult entityResult = rewardService.GetEntityResult();
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
 
@@ -174,7 +176,7 @@ public class QuestController : DragaliaControllerBase
                 entity_result = entityResult,
                 quest_treasure_reward_list = quest_treasure_reward_list,
                 duplicate_entity_list = duplicate_entity_list,
-                add_max_dragon_quantity = questRewardService.AddMaxDragonStorage,
+                add_max_dragon_quantity = questTreasureData.AddMaxDragonStorage,
                 add_max_weapon_quantity = 0,
                 add_max_amulet_quantity = 0
             }
