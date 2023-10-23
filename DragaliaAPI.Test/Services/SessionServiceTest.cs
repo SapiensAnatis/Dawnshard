@@ -5,6 +5,7 @@ using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -18,6 +19,7 @@ public class SessionServiceTest
     private readonly Mock<ILogger<SessionService>> mockLogger;
     private readonly Mock<IOptionsMonitor<RedisOptions>> mockOptions;
     private readonly Mock<IDateTimeProvider> mockDateTimeProvider;
+    private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly SessionService sessionService;
 
     [Obsolete(ObsoleteReasons.BaaS)]
@@ -33,6 +35,7 @@ public class SessionServiceTest
         this.mockLogger = new(MockBehavior.Loose);
         this.mockOptions = new(MockBehavior.Strict);
         this.mockDateTimeProvider = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService = new(MockBehavior.Strict);
 
         IOptions<MemoryDistributedCacheOptions> opts = Options.Create(
             new MemoryDistributedCacheOptions()
@@ -44,10 +47,11 @@ public class SessionServiceTest
             .Returns(new RedisOptions() { SessionExpiryTimeMinutes = 1 });
 
         sessionService = new(
-            testCache,
-            mockOptions.Object,
-            mockLogger.Object,
-            mockDateTimeProvider.Object
+            this.testCache,
+            this.mockOptions.Object,
+            this.mockLogger.Object,
+            this.mockDateTimeProvider.Object,
+            this.mockPlayerIdentityService.Object
         );
 
         this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UnixEpoch);
