@@ -135,41 +135,13 @@ public class QuestController : DragaliaControllerBase
             request.quest_treasure_id
         ];
 
-        switch (questTreasureData.EntityType)
-        {
-            case EntityTypes.None:
-                break;
-            case EntityTypes.Rupies:
-                await rewardService.GrantReward(
-                    new Entity(EntityTypes.Rupies, Quantity: questTreasureData.EntityQuantity)
-                );
-                break;
-            case EntityTypes.Mana:
-                await rewardService.GrantReward(
-                    new Entity(EntityTypes.Mana, Quantity: questTreasureData.EntityQuantity)
-                );
-                break;
-            case EntityTypes.Material:
-                (
-                    await inventoryRepository.GetMaterial((Materials)questTreasureData.EntityId)
-                    ?? inventoryRepository.AddMaterial((Materials)questTreasureData.EntityId)
-                ).Quantity += questTreasureData.EntityQuantity;
-                break;
-            case EntityTypes.SummonTicket:
-                ticketRepository.AddTicket(
-                    (SummonTickets)questTreasureData.EntityId,
-                    questTreasureData.EntityQuantity
-                );
-                break;
-            case EntityTypes.Item:
-                await itemRepository.AddItemQuantityAsync(
-                    (UseItem)questTreasureData.EntityId,
-                    questTreasureData.EntityQuantity
-                );
-                break;
-            default:
-                break;
-        }
+        await rewardService.GrantReward(
+            new Entity(
+                questTreasureData.EntityType,
+                questTreasureData.EntityId,
+                questTreasureData.Quantity
+            )
+        );
 
         List<AtgenBuildEventRewardEntityList> rewards = new();
 
