@@ -237,6 +237,10 @@ public class MissionControllerTest
             .Setup(x => x.TryRedeemDrillMissionGroups(It.IsAny<IEnumerable<int>>()))
             .ReturnsAsync(new List<AtgenBuildEventRewardEntityList>());
 
+        this.mockMissionService
+            .Setup(x => x.GetCompletedDrillGroups())
+            .ReturnsAsync(new List<DrillMissionGroupList>() { new(1) });
+
         this.mockUpdateDataService
             .Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
