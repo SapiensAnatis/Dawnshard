@@ -17,7 +17,7 @@ namespace DragaliaAPI.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -1866,25 +1866,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("TimeAttackPlayers");
                 });
 
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbUserImpersonation", b =>
-                {
-                    b.Property<string>("DeviceAccountId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ImpersonatedDeviceAccountId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<long>("ImpersonatedViewerId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("DeviceAccountId");
-
-                    b.HasIndex("ImpersonatedDeviceAccountId");
-
-                    b.ToTable("UserImpersonations");
-                });
-
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponBody", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -2471,25 +2452,6 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Clear");
 
                     b.Navigation("Player");
-                });
-
-            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbUserImpersonation", b =>
-                {
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
-                        .WithMany()
-                        .HasForeignKey("DeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "ImpersonatedPlayer")
-                        .WithMany()
-                        .HasForeignKey("ImpersonatedDeviceAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ImpersonatedPlayer");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbWeaponBody", b =>
