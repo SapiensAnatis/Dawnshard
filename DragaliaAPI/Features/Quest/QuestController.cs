@@ -136,7 +136,9 @@ public class QuestController : DragaliaControllerBase
             case EntityTypes.None:
                 break;
             case EntityTypes.Rupies:
-                await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: questTreasureData.EntityQuantity));
+                await rewardService.GrantReward(
+                    new Entity(EntityTypes.Rupies, Quantity: questTreasureData.EntityQuantity)
+                );
                 break;
             case EntityTypes.Mana:
                 await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: questTreasureData.EntityQuantity));
