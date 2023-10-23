@@ -8,13 +8,18 @@ using Microsoft.Extensions.Options;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Middleware;
 
 public class SessionAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
     private readonly ISessionService sessionService;
+    private readonly IWebHostEnvironment webHostEnvironment;
+    private readonly ApiContext apiContext;
 
     private const string SessionExpired = "Session-Expired";
     private const string True = "true";
@@ -26,11 +31,15 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         ILoggerFactory logger,
         UrlEncoder encoder,
         ISystemClock clock,
-        ISessionService sessionService
+        ISessionService sessionService,
+        IWebHostEnvironment webHostEnvironment,
+        ApiContext apiContext
     )
         : base(options, logger, encoder, clock)
     {
         this.sessionService = sessionService;
+        this.webHostEnvironment = webHostEnvironment;
+        this.apiContext = apiContext;
     }
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -47,13 +56,15 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
             return AuthenticateResult.Fail("Invalid SID header: value was null");
 
         List<Claim> claims = new();
+        string deviceAccountId;
+        string viewerId;
 
         try
         {
             Session session = await this.sessionService.LoadSessionSessionId(sid);
 
-            claims.Add(new(CustomClaimType.AccountId, session.DeviceAccountId));
-            claims.Add(new(CustomClaimType.ViewerId, session.ViewerId.ToString()));
+            deviceAccountId = session.DeviceAccountId;
+            viewerId = session.ViewerId.ToString();
 
             this.Context.Items[LastLoginTime] = session.LoginTime;
         }
@@ -61,6 +72,28 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         {
             return AuthenticateResult.Fail($"Failed to look up SID {sid}");
         }
+
+        if (this.webHostEnvironment.IsDevelopment())
+        {
+            DbUserImpersonation? userImpersonation =
+                await this.apiContext.UserImpersonations.FirstOrDefaultAsync(
+                    x => x.DeviceAccountId == deviceAccountId
+                );
+
+            if (userImpersonation != null)
+            {
+                this.Logger.LogInformation(
+                    "User impersonation activated: {@impersonation}",
+                    userImpersonation
+                );
+
+                deviceAccountId = userImpersonation.ImpersonatedDeviceAccountId;
+                viewerId = userImpersonation.ImpersonatedViewerId.ToString();
+            }
+        }
+
+        claims.Add(new(CustomClaimType.AccountId, deviceAccountId));
+        claims.Add(new(CustomClaimType.ViewerId, viewerId));
 
         ClaimsIdentity identity = new(claims, this.Scheme.Name);
         ClaimsPrincipal principal = new(identity);
