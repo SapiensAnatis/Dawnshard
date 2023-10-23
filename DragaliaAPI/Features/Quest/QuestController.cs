@@ -124,7 +124,9 @@ public class QuestController : DragaliaControllerBase
     public async Task<DragaliaResult> GetQuestOpenTreasure(QuestOpenTreasureRequest request)
     {
 
-        QuestTreasureData questTreasureData = MasterAsset.QuestTreasureData[request.quest_treasure_id];
+        QuestTreasureData questTreasureData = MasterAsset.QuestTreasureData[
+            request.quest_treasure_id
+        ];
 
         switch (questTreasureData.EntityType) {
             case EntityTypes.None:
