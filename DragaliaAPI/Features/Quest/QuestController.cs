@@ -163,7 +163,7 @@ public class QuestController : DragaliaControllerBase
                 questTreasureData.EntityType,
                 questTreasureData.EntityId,
                 questTreasureData.EntityQuantity
-            );
+            ).AsEnumerable();
 
         IEnumerable<AtgenDuplicateEntityList> duplicate_entity_list =
             new List<AtgenDuplicateEntityList>();
