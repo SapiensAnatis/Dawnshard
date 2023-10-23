@@ -184,6 +184,8 @@ public class MissionService : IMissionService
                 completedGroups.Remove(stateGrouping.GroupId ?? 0);
         }
 
+        this.logger.LogDebug("Returning completed drill groups: {groups}", completedGroups);
+
         return completedGroups.Select(x => new DrillMissionGroupList(x));
     }
 
