@@ -4,6 +4,7 @@ using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 
@@ -34,6 +35,7 @@ public class SessionService : ISessionService
     private readonly IOptionsMonitor<RedisOptions> options;
     private readonly ILogger<SessionService> logger;
     private readonly IDateTimeProvider dateTimeProvider;
+    private readonly IPlayerIdentityService playerIdentityService;
 
     private DistributedCacheEntryOptions CacheOptions =>
         new()
@@ -45,13 +47,15 @@ public class SessionService : ISessionService
         IDistributedCache cache,
         IOptionsMonitor<RedisOptions> options,
         ILogger<SessionService> logger,
-        IDateTimeProvider dateTimeProvider
+        IDateTimeProvider dateTimeProvider,
+        IPlayerIdentityService playerIdentityService
     )
     {
         this.cache = cache;
         this.options = options;
         this.logger = logger;
         this.dateTimeProvider = dateTimeProvider;
+        this.playerIdentityService = playerIdentityService;
     }
 
     private static class Schema
@@ -63,6 +67,9 @@ public class SessionService : ISessionService
 
         public static string SessionId_DeviceAccountId(string deviceAccountId) =>
             $":session:device_account_id:{deviceAccountId}";
+
+        public static string ImpersonatedSession_DeviceAccountId(string deviceAccountId) =>
+            $":impersonated_session:device_account_id:{deviceAccountId}";
     }
 
     [Obsolete(ObsoleteReasons.BaaS)]
@@ -185,6 +192,27 @@ public class SessionService : ISessionService
 
     public async Task<Session> LoadSessionSessionId(string sessionId) =>
         await this.LoadSession(Schema.Session_SessionId(sessionId));
+
+    public async Task StartUserImpersonation(string targetAccountId, long targetViewerId)
+    {
+        Session session = new(string.Empty, string.Empty, targetAccountId, targetViewerId);
+
+        // Set permanent key
+        // We can use the identity service here as this is called from GraphQL mutations which
+        // set the context via the other kind of user impersonation.
+        await this.cache.SetStringAsync(
+            Schema.ImpersonatedSession_DeviceAccountId(this.playerIdentityService.AccountId),
+            JsonSerializer.Serialize(session)
+        );
+    }
+
+    public async Task ClearUserImpersonation() =>
+        await this.cache.RemoveAsync(
+            Schema.ImpersonatedSession_DeviceAccountId(this.playerIdentityService.AccountId)
+        );
+
+    public async Task<Session?> LoadImpersonationSession(string deviceAccountId) =>
+        await this.TryLoadSession(Schema.ImpersonatedSession_DeviceAccountId(deviceAccountId));
 
     private async Task<Session> LoadSession(string key) =>
         await this.TryLoadSession(key) ?? throw new SessionException(key);

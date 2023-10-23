@@ -52,4 +52,7 @@ public interface ISessionService
     /// <returns>The session object.</returns>
     /// <exception cref="Exceptions.SessionException">A matching key was not found in the cache.</exception>
     Task<Session> LoadSessionIdToken(string idToken);
+    Task StartUserImpersonation(string targetAccountId, long targetViewerId);
+    Task ClearUserImpersonation();
+    Task<Session?> LoadImpersonationSession(string deviceAccountId);
 }
