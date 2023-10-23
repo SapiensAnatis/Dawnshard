@@ -153,6 +153,9 @@ public class QuestController : DragaliaControllerBase
                     questTreasureData.EntityQuantity
                 );
                 break;
+            case EntityTypes.Item:
+                await itemRepository.AddItemQuantityAsync((UseItem)questTreasureData.EntityId, questTreasureData.EntityQuantity);
+                break;
             default:
                 break;
         }

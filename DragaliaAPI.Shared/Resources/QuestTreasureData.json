@@ -40,5 +40,54 @@
         "_EntityType": 0,
         "_EntityId": 0,
         "_EntityQuantity": 0
+    },
+    {
+        "_Id": 104101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 101001003,
+        "_EntityQuantity": 5
+    },
+    {
+        "_Id": 104102,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 18,
+        "_EntityId": 0,
+        "_EntityQuantity": 3000
+    },
+    {
+        "_Id": 104201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 17,
+        "_EntityId": 10101,
+        "_EntityQuantity": 1
+    },
+    {
+        "_Id": 104202,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 2,
+        "_EntityId": 100603,
+        "_EntityQuantity": 1
+    },
+    {
+        "_Id": 104301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 116001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 104302,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 117001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 0,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 0,
+        "_EntityId": 0,
+        "_EntityQuantity": 0
     }
 ]
