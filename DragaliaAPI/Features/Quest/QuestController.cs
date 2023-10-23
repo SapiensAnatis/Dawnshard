@@ -145,7 +145,10 @@ public class QuestController : DragaliaControllerBase
                 ).Quantity += questTreasureData.EntityQuantity;
                 break;
             case EntityTypes.SummonTicket:
-                ticketRepository.AddTicket((SummonTickets)questTreasureData.EntityId, questTreasureData.EntityQuantity);
+                ticketRepository.AddTicket(
+                    (SummonTickets)questTreasureData.EntityId,
+                    questTreasureData.EntityQuantity
+                );
                 break;
             default:
                 break;
