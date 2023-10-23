@@ -47,6 +47,7 @@ public class QuestController : DragaliaControllerBase
         this.questRewardService = questRewardService;
         this.updateDataService = updateDataService;
         this.clearPartyService = clearPartyService;
+        this.rewardService = rewardService;
         this.logger = logger;
         this.inventoryRepository = inventoryRepository;
         this.userDataRepository = userDataRepository;
