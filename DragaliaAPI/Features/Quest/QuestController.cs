@@ -136,11 +136,10 @@ public class QuestController : DragaliaControllerBase
             case EntityTypes.None:
                 break;
             case EntityTypes.Rupies:
-                await this.userDataRepository.updateCoin((long)questTreasureData.EntityQuantity);
+                await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: questTreasureData.EntityQuantity));
                 break;
             case EntityTypes.Mana:
-                (await this.userDataRepository.UserData.SingleAsync()).ManaPoint +=
-                    questTreasureData.EntityQuantity;
+                await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: questTreasureData.EntityQuantity));
                 break;
             case EntityTypes.Material:
                 (
