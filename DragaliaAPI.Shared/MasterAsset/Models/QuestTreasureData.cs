@@ -1,4 +1,4 @@
-using DragaliaAPI.Shared.Definitions;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 public record QuestTreasureData(
     int Id,
