@@ -163,7 +163,6 @@ public class QuestController : DragaliaControllerBase
 
         IEnumerable<AtgenDuplicateEntityList> duplicate_entity_list =
             new List<AtgenDuplicateEntityList>();
-        
         EntityResult entityResult = questRewardService.GetEntityResult();
 
         UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
