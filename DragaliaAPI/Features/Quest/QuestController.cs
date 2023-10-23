@@ -161,7 +161,8 @@ public class QuestController : DragaliaControllerBase
             questTreasureData.EntityQuantity
         );
 
-        IEnumerable<AtgenDuplicateEntityList> duplicate_entity_list = new List<AtgenDuplicateEntityList>();
+        IEnumerable<AtgenDuplicateEntityList> duplicate_entity_list =
+            new List<AtgenDuplicateEntityList>();
         
         EntityResult entityResult = questRewardService.GetEntityResult();
 
