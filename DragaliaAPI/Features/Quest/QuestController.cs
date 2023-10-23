@@ -141,7 +141,9 @@ public class QuestController : DragaliaControllerBase
                 );
                 break;
             case EntityTypes.Mana:
-                await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: questTreasureData.EntityQuantity));
+                await rewardService.GrantReward(
+                    new Entity(EntityTypes.Mana, Quantity: questTreasureData.EntityQuantity)
+                );
                 break;
             case EntityTypes.Material:
                 (
@@ -156,7 +158,10 @@ public class QuestController : DragaliaControllerBase
                 );
                 break;
             case EntityTypes.Item:
-                await itemRepository.AddItemQuantityAsync((UseItem)questTreasureData.EntityId, questTreasureData.EntityQuantity);
+                await itemRepository.AddItemQuantityAsync(
+                    (UseItem)questTreasureData.EntityId,
+                    questTreasureData.EntityQuantity
+                );
                 break;
             default:
                 break;
@@ -164,13 +169,18 @@ public class QuestController : DragaliaControllerBase
 
         List<AtgenBuildEventRewardEntityList> rewards = new();
 
-        rewards.Add(
-            new AtgenBuildEventRewardEntityList(
-                questTreasureData.EntityType,
-                questTreasureData.EntityId,
-                questTreasureData.EntityQuantity
-            )
-        );
+        if (questTreasureData.EntityType != EntityTypes.None)
+        {
+            // find entity type for dragon storage
+            rewards.Add(
+                new AtgenBuildEventRewardEntityList(
+                    questTreasureData.EntityType,
+                    questTreasureData.EntityId,
+                    questTreasureData.EntityQuantity
+                )
+            );
+        }
+        
 
         IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list = rewards;
 
