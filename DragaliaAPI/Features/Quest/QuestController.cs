@@ -150,7 +150,7 @@ public class QuestController : DragaliaControllerBase
         }
 
         IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list; 
-        quest_treasure_reward_list = new AtgenBuildEventRewardEntityList(questTreasureData.EntityType, questTreasureData.EntityId, questTreasureData.EntityQuantity)
+        quest_treasure_reward_list = new AtgenBuildEventRewardEntityList(questTreasureData.EntityType, questTreasureData.EntityId, questTreasureData.EntityQuantity);
 
         IEnumerable<AtgenDuplicateEntityList> duplicate_entity_list = new List<AtgenDuplicateEntityList>();
         
