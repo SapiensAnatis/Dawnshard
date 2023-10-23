@@ -208,5 +208,26 @@
         "_EntityType": 8,
         "_EntityId": 116001001,
         "_EntityQuantity": 10
+    },
+    {
+        "_Id": 110101,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 116001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 110201,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 117001001,
+        "_EntityQuantity": 10
+    },
+    {
+        "_Id": 110301,
+        "_Add_MaxDragonStorage": 0,
+        "_EntityType": 8,
+        "_EntityId": 117001001,
+        "_EntityQuantity": 10
     }
 ]

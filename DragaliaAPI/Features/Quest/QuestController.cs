@@ -180,7 +180,6 @@ public class QuestController : DragaliaControllerBase
                 )
             );
         }
-        
 
         IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list = rewards;
 
