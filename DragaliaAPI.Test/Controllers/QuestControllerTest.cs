@@ -25,9 +25,7 @@ public class QuestControllerTest
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly Mock<ILogger<QuestController>> mockLogger;
-
     private readonly ApiContext apiContext;
-
     private readonly QuestController questController;
 
     public QuestControllerTest()
@@ -41,7 +39,13 @@ public class QuestControllerTest
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
         //this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
-        this.apiContext = new(MockBehavior.Loose);
+        DbContextOptions<ApiContext> options = new DbContextOptionsBuilder<ApiContext>()
+            .UseInMemoryDatabase(DbName)
+            .EnableSensitiveDataLogging()
+            .ConfigureWarnings(config => config.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+            .Options;
+
+        this.apiContext = new ApiContext(options);
         this.mockLogger = new(MockBehavior.Loose);
 
         this.questController = new(
@@ -53,7 +57,7 @@ public class QuestControllerTest
             this.mockRewardService.Object,
             this.mockUserDataRepository.Object,
             this.mockPlayerIdentityService.Object,
-            this.apiContext.Object,
+            this.apiContext,
             this.mockLogger.Object
         );
     }
