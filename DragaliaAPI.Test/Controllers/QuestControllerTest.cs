@@ -25,6 +25,8 @@ public class QuestControllerTest
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly Mock<ILogger<QuestController>> mockLogger;
 
+    private readonly ApiContext apiContext;
+
     private readonly QuestController questController;
 
     public QuestControllerTest()
@@ -48,7 +50,7 @@ public class QuestControllerTest
             this.mockRewardService.Object,
             this.mockUserDataRepository.Object,
             this.mockPlayerIdentityService.Object,
-            this.ApiContext,
+            this.apiContext,
             this.mockLogger.Object
         );
     }
