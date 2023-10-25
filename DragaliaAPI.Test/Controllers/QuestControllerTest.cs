@@ -163,7 +163,7 @@ public class QuestControllerTest
                         It.Is<Entity>(
                             e =>
                                 e.Type == EntityTypes.Item
-                                && e.Id == (int)UseItems.Honey
+                                && e.Id == (int)UseItem.Honey
                                 && e.Quantity == 1
                         )
                     )
@@ -176,7 +176,7 @@ public class QuestControllerTest
                     x.GrantReward(
                         It.Is<Entity>(
                             e =>
-                                e.Type == EntityTypes.Item
+                                e.Type == EntityTypes.Material
                                 && e.Id == (int)Materials.AmplifyingCrystal
                                 && e.Quantity == 10
                         )
@@ -190,7 +190,7 @@ public class QuestControllerTest
                     x.GrantReward(
                         It.Is<Entity>(
                             e =>
-                                e.Type == EntityTypes.Item
+                                e.Type == EntityTypes.SummonTicket
                                 && e.Id == (int)SummonTickets.SingleSummon
                                 && e.Quantity == 3
                         )
