@@ -5,11 +5,13 @@ using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Quest;
@@ -25,6 +27,8 @@ public class QuestController : DragaliaControllerBase
     private readonly IClearPartyService clearPartyService;
     private readonly IRewardService rewardService;
     private readonly IUserDataRepository userDataRepository;
+    private readonly IPlayerIdentityService playerIdentityService;
+    private readonly ApiContext apiContext;
     private readonly ILogger<QuestController> logger;
 
     public QuestController(
@@ -35,6 +39,8 @@ public class QuestController : DragaliaControllerBase
         IClearPartyService clearPartyService,
         IRewardService rewardService,
         IUserDataRepository userDataRepository,
+        IPlayerIdentityService playerIdentityService,
+        ApiContext apiContext,
         ILogger<QuestController> logger
     )
     {
@@ -45,6 +51,8 @@ public class QuestController : DragaliaControllerBase
         this.clearPartyService = clearPartyService;
         this.rewardService = rewardService;
         this.userDataRepository = userDataRepository;
+        this.playerIdentityService = playerIdentityService;
+        this.apiContext = apiContext;
         this.logger = logger;
     }
 
@@ -152,6 +160,14 @@ public class QuestController : DragaliaControllerBase
             DbPlayerUserData userData = await userDataRepository.GetUserDataAsync();
             userData.MaxDragonQuantity += questTreasureData.AddMaxDragonStorage;
         }
+
+        apiContext.QuestTreasureList.Add(
+            new DbQuestTreasureList()
+            {
+                DeviceAccountId = this.playerIdentityService.AccountId,
+                QuestTreasureId = questTreasureData.Id
+            }
+        )
 
         IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list = rewards;
 
