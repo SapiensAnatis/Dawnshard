@@ -39,6 +39,8 @@ public class QuestControllerTest
         this.mockRewardService = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
+        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+        this.apiContext = apiContext;
         this.mockLogger = new(MockBehavior.Loose);
 
         this.questController = new(
