@@ -2,6 +2,7 @@ using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.PlayerDetails;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Quest;
@@ -40,7 +41,7 @@ public class QuestControllerTest
         this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
         //this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
-        this.apiContext = apiContext;
+        this.apiContext = new(MockBehavior.Loose);
         this.mockLogger = new(MockBehavior.Loose);
 
         this.questController = new(
@@ -52,7 +53,7 @@ public class QuestControllerTest
             this.mockRewardService.Object,
             this.mockUserDataRepository.Object,
             this.mockPlayerIdentityService.Object,
-            this.apiContext,
+            this.apiContext.Object,
             this.mockLogger.Object
         );
     }
@@ -132,7 +133,7 @@ public class QuestControllerTest
     }
 
     [Fact]
-    public async Task OpenTreasure_RewardsCorrect()
+    public Task OpenTreasure_RewardsCorrect()
     {
         this.mockRewardService
             .Setup(
@@ -155,7 +156,12 @@ public class QuestControllerTest
             .Setup(
                 x =>
                     x.GrantReward(
-                        It.Is<Entity>(e => e.Type == EntityTypes.Item && e.entity_id == (int)UseItems.Honey && e.Quantity == 1)
+                        It.Is<Entity>(
+                            e =>
+                                e.Type == EntityTypes.Item &&
+                                e.Id == (int)UseItems.Honey &&
+                                e.Quantity == 1
+                        )
                     )
             )
             .ReturnsAsync(RewardGrantResult.Added);
@@ -164,7 +170,12 @@ public class QuestControllerTest
             .Setup(
                 x =>
                     x.GrantReward(
-                        It.Is<Entity>(e => e.Type == EntityTypes.Item && e.entity_id == (int)Materials.AmplifyingCrystal && e.Quantity == 10)
+                        It.Is<Entity>(
+                            e =>
+                                e.Type == EntityTypes.Item &&
+                                e.Id == (int)Materials.AmplifyingCrystal &&
+                                e.Quantity == 10
+                        )
                     )
             )
             .ReturnsAsync(RewardGrantResult.Added);
@@ -173,7 +184,11 @@ public class QuestControllerTest
             .Setup(
                 x =>
                     x.GrantReward(
-                        It.Is<Entity>(e => e.Type == EntityTypes.Item && e.entity_id == (int)SummonTickets.SingleSummon && e.Quantity == 3)
+                        It.Is<Entity>(e =>
+                            e.Type == EntityTypes.Item &&
+                            e.Id == (int)SummonTickets.SingleSummon &&
+                            e.Quantity == 3
+                        )
                     )
             )
             .ReturnsAsync(RewardGrantResult.Added);
