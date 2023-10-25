@@ -97,7 +97,9 @@ public class UpdateDataService(
                 talisman_list = ConvertEntities<TalismanList, DbTalisman>(entities),
                 summon_ticket_list = ConvertEntities<SummonTicketList, DbSummonTicket>(entities),
                 quest_event_list = ConvertEntities<QuestEventList, DbQuestEvent>(entities),
-                quest_treasure_list = ConvertEntities<QuestTreasureList, DbQuestTreasureList>(entities),
+                quest_treasure_list = ConvertEntities<QuestTreasureList, DbQuestTreasureList>(
+                    entities
+                ),
                 party_power_data = ConvertEntities<PartyPowerData, DbPartyPower>(entities)?.Single()
             };
 
