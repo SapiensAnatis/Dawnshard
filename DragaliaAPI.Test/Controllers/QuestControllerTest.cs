@@ -1,6 +1,7 @@
 using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Features.ClearParty;
