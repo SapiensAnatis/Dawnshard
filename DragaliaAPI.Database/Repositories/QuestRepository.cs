@@ -28,7 +28,7 @@ public class QuestRepository : IQuestRepository
         );
 
     public IQueryable<DbQuestTreasureList> QuestTreasureList =>
-        this.apiContext.QuestTreasureList(
+        this.apiContext.QuestTreasureList.Where(
             x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
