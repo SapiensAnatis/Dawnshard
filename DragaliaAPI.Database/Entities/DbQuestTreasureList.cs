@@ -5,7 +5,6 @@ namespace DragaliaAPI.Database.Entities;
 
 [Index(nameof(DeviceAccountId))]
 [PrimaryKey(nameof(DeviceAccountId), nameof(QuestTreasureId))]
-
 public class DbQuestTreasureList : IDbHasAccountId
 {
     /// <inheritdoc />
