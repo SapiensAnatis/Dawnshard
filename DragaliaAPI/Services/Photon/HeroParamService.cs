@@ -190,39 +190,39 @@ public class HeroParamService : IHeroParamService
     {
         CharaData charaData = MasterAsset.CharaData[unit.CharaData.CharaId];
 
-        AtgenParamBonus paramBonus = fortBonusList.param_bonus.First(
-            x => x.weapon_type == charaData.WeaponType
-        );
+        AtgenParamBonus paramBonus = fortBonusList
+            .param_bonus
+            .First(x => x.weapon_type == charaData.WeaponType);
         result.relativeAtkFort += paramBonus.attack / 100;
         result.relativeHpFort += paramBonus.hp / 100;
 
-        AtgenElementBonus elementBonus = fortBonusList.element_bonus.First(
-            x => x.elemental_type == charaData.ElementalType
-        );
+        AtgenElementBonus elementBonus = fortBonusList
+            .element_bonus
+            .First(x => x.elemental_type == charaData.ElementalType);
         result.relativeAtkFort += elementBonus.attack / 100;
         result.relativeHpFort += elementBonus.hp / 100;
 
-        AtgenParamBonus paramBonusByWeapon = fortBonusList.param_bonus_by_weapon.First(
-            x => x.weapon_type == charaData.WeaponType
-        );
+        AtgenParamBonus paramBonusByWeapon = fortBonusList
+            .param_bonus_by_weapon
+            .First(x => x.weapon_type == charaData.WeaponType);
         result.relativeAtkFort += paramBonusByWeapon.attack / 100;
         result.relativeHpFort += paramBonusByWeapon.hp / 100;
 
-        AtgenElementBonus charaAlbumBonus = fortBonusList.chara_bonus_by_album.First(
-            x => x.elemental_type == charaData.ElementalType
-        );
+        AtgenElementBonus charaAlbumBonus = fortBonusList
+            .chara_bonus_by_album
+            .First(x => x.elemental_type == charaData.ElementalType);
         result.relativeAtkAlbum += charaAlbumBonus.attack / 100;
         result.relativeHpAlbum += charaAlbumBonus.hp / 100;
 
         if (unit.DragonData is not null)
         {
             DragonData dragonData = MasterAsset.DragonData[unit.DragonData.DragonId];
-            AtgenDragonBonus dragonBonus = fortBonusList.dragon_bonus.First(
-                x => x.elemental_type == dragonData.ElementalType
-            );
-            AtgenElementBonus dragonAlbumBonus = fortBonusList.dragon_bonus_by_album.First(
-                x => x.elemental_type == dragonData.ElementalType
-            );
+            AtgenDragonBonus dragonBonus = fortBonusList
+                .dragon_bonus
+                .First(x => x.elemental_type == dragonData.ElementalType);
+            AtgenElementBonus dragonAlbumBonus = fortBonusList
+                .dragon_bonus_by_album
+                .First(x => x.elemental_type == dragonData.ElementalType);
 
             result.dragonRelativeAtkFort += dragonBonus.attack / 100;
             result.dragonRelativeHpFort += dragonBonus.hp / 100;

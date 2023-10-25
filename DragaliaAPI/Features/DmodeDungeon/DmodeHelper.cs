@@ -11,7 +11,9 @@ public static class DmodeHelper
     public static readonly ImmutableDictionary<
         DmodeServitorPassiveType,
         ImmutableDictionary<int, DmodeServitorPassiveLevel>
-    > PassiveLevels = MasterAsset.DmodeServitorPassiveLevel.Enumerable
+    > PassiveLevels = MasterAsset
+        .DmodeServitorPassiveLevel
+        .Enumerable
         .ToLookup(x => x.PassiveNum)
         .ToImmutableDictionary(x => x.Key, x => x.ToImmutableDictionary(y => y.Level, y => y));
 

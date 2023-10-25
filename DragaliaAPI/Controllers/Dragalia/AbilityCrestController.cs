@@ -1,14 +1,14 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using AutoMapper;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
-using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DragaliaAPI.Models;
-using AutoMapper;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -64,10 +64,9 @@ public class AbilityCrestController : DragaliaControllerBase
     public async Task<DragaliaResult> BuildupPiece(AbilityCrestBuildupPieceRequest request)
     {
         if (
-            !MasterAsset.AbilityCrest.TryGetValue(
-                request.ability_crest_id,
-                out AbilityCrest? abilityCrest
-            )
+            !MasterAsset
+                .AbilityCrest
+                .TryGetValue(request.ability_crest_id, out AbilityCrest? abilityCrest)
         )
         {
             this.logger.LogError(
@@ -78,7 +77,8 @@ public class AbilityCrestController : DragaliaControllerBase
         }
 
         foreach (
-            AtgenBuildupAbilityCrestPieceList buildupPiece in request.buildup_ability_crest_piece_list
+            AtgenBuildupAbilityCrestPieceList buildupPiece in request
+                .buildup_ability_crest_piece_list
                 .OrderBy(x => x.buildup_piece_type)
                 .ThenBy(x => x.step)
         )
@@ -104,10 +104,9 @@ public class AbilityCrestController : DragaliaControllerBase
     public async Task<DragaliaResult> BuildupPlusCount(AbilityCrestBuildupPlusCountRequest request)
     {
         if (
-            !MasterAsset.AbilityCrest.TryGetValue(
-                request.ability_crest_id,
-                out AbilityCrest? abilityCrest
-            )
+            !MasterAsset
+                .AbilityCrest
+                .TryGetValue(request.ability_crest_id, out AbilityCrest? abilityCrest)
         )
         {
             this.logger.LogError(
@@ -163,7 +162,8 @@ public class AbilityCrestController : DragaliaControllerBase
         AbilityCrestGetAbilityCrestSetListRequest request
     )
     {
-        List<DbAbilityCrestSet> dbAbilityCrestSets = await abilityCrestRepository.AbilityCrestSets
+        List<DbAbilityCrestSet> dbAbilityCrestSets = await abilityCrestRepository
+            .AbilityCrestSets
             .OrderBy(x => x.AbilityCrestSetNo)
             .ToListAsync();
 

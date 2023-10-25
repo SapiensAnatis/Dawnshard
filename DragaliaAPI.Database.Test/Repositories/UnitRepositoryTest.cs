@@ -84,7 +84,9 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task CheckHasCharas_OwnedList_ReturnsTrue()
     {
-        IEnumerable<Charas> idList = await fixture.ApiContext.PlayerCharaData
+        IEnumerable<Charas> idList = await fixture
+            .ApiContext
+            .PlayerCharaData
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .Select(x => x.CharaId)
             .ToListAsync();
@@ -96,7 +98,9 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     public async Task CheckHasCharas_NotAllOwnedList_ReturnsFalse()
     {
         IEnumerable<Charas> idList = (
-            await fixture.ApiContext.PlayerCharaData
+            await fixture
+                .ApiContext
+                .PlayerCharaData
                 .Where(x => x.DeviceAccountId == DeviceAccountId)
                 .Select(x => x.CharaId)
                 .ToListAsync()
@@ -150,7 +154,9 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync();
 
         (
-            await this.fixture.ApiContext.PlayerCharaData
+            await this.fixture
+                .ApiContext
+                .PlayerCharaData
                 .Where(x => x.DeviceAccountId == DeviceAccountId)
                 .Select(x => x.CharaId)
                 .ToListAsync()
@@ -202,7 +208,9 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync();
 
         (
-            await this.fixture.ApiContext.PlayerDragonData
+            await this.fixture
+                .ApiContext
+                .PlayerDragonData
                 .Where(x => x.DeviceAccountId == DeviceAccountId)
                 .Select(x => x.DragonId)
                 .ToListAsync()
@@ -219,7 +227,9 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             );
 
         (
-            await this.fixture.ApiContext.PlayerDragonReliability
+            await this.fixture
+                .ApiContext
+                .PlayerDragonReliability
                 .Where(x => x.DeviceAccountId == DeviceAccountId)
                 .Select(x => x.DragonId)
                 .ToListAsync()

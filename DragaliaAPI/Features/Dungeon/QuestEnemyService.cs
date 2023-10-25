@@ -85,7 +85,9 @@ public class QuestEnemyService : IQuestEnemyService
             if (enemy.enemy_drop_list.Count == 0)
                 continue;
 
-            enemy.enemy_drop_list[0].drop_list = enemy.enemy_drop_list[0].drop_list
+            enemy.enemy_drop_list[0].drop_list = enemy
+                .enemy_drop_list[0]
+                .drop_list
                 .GroupBy(x => new { x.id, x.type })
                 .Select(
                     group =>

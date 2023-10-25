@@ -20,7 +20,8 @@ public class LoginBonusRepository(
 
     private DbLoginBonus Add(int id)
     {
-        return apiContext.LoginBonuses
+        return apiContext
+            .LoginBonuses
             .Add(
                 new DbLoginBonus()
                 {

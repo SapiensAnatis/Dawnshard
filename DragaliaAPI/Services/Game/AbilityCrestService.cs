@@ -103,10 +103,9 @@ public class AbilityCrestService : IAbilityCrestService
         int buildupId = abilityCrest.GetBuildupGroupId(buildup.buildup_piece_type, buildup.step);
 
         if (
-            !MasterAsset.AbilityCrestBuildupGroup.TryGetValue(
-                buildupId,
-                out AbilityCrestBuildupGroup? buildupInfo
-            )
+            !MasterAsset
+                .AbilityCrestBuildupGroup
+                .TryGetValue(buildupId, out AbilityCrestBuildupGroup? buildupInfo)
         )
         {
             this.logger.LogWarning("BuildupGroupId {id} invalid", buildupId);
@@ -164,10 +163,9 @@ public class AbilityCrestService : IAbilityCrestService
         int levelId = abilityCrest.GetBuildupLevelId(buildup.step);
 
         if (
-            !MasterAsset.AbilityCrestBuildupLevel.TryGetValue(
-                levelId,
-                out AbilityCrestBuildupLevel? levelInfo
-            )
+            !MasterAsset
+                .AbilityCrestBuildupLevel
+                .TryGetValue(levelId, out AbilityCrestBuildupLevel? levelInfo)
         )
         {
             this.logger.LogWarning("BuildupLevelId {id} invalid", levelId);

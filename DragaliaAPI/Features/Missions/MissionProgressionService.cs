@@ -277,22 +277,24 @@ public class MissionProgressionService(
 
         while (this.eventQueue.TryDequeue(out MissionEvent? evt))
         {
-            List<(MissionType Type, int Id)> affectedMissions =
-                MasterAsset.MissionProgressionInfo.Enumerable
-                    .Where(x => x.CompleteType == evt.Type)
-                    .Where(
-                        x =>
-                            (x.Parameter is null || x.Parameter == evt.Parameter)
-                            && (x.Parameter2 is null || x.Parameter2 == evt.Parameter2)
-                            && (x.Parameter3 is null || x.Parameter3 == evt.Parameter3)
-                            && (x.Parameter4 is null || x.Parameter4 == evt.Parameter4)
-                    )
-                    .Select(x => (x.MissionType, x.MissionId))
-                    .ToList();
+            List<(MissionType Type, int Id)> affectedMissions = MasterAsset
+                .MissionProgressionInfo
+                .Enumerable
+                .Where(x => x.CompleteType == evt.Type)
+                .Where(
+                    x =>
+                        (x.Parameter is null || x.Parameter == evt.Parameter)
+                        && (x.Parameter2 is null || x.Parameter2 == evt.Parameter2)
+                        && (x.Parameter3 is null || x.Parameter3 == evt.Parameter3)
+                        && (x.Parameter4 is null || x.Parameter4 == evt.Parameter4)
+                )
+                .Select(x => (x.MissionType, x.MissionId))
+                .ToList();
 
             if (affectedMissions.Any())
             {
-                missionList ??= await missionRepository.Missions
+                missionList ??= await missionRepository
+                    .Missions
                     .Where(x => x.State == MissionState.InProgress)
                     .ToListAsync();
 
@@ -306,8 +308,10 @@ public class MissionProgressionService(
                 {
                     Mission mission = Mission.From(progressingMission.Type, progressingMission.Id);
 
-                    MissionProgressionInfo progressionInfo =
-                        MasterAsset.MissionProgressionInfo.Enumerable.Single(
+                    MissionProgressionInfo progressionInfo = MasterAsset
+                        .MissionProgressionInfo
+                        .Enumerable
+                        .Single(
                             x =>
                                 x.MissionType == progressingMission.Type
                                 && x.MissionId == progressingMission.Id

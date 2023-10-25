@@ -47,7 +47,11 @@ public class DmodeDungeonTest : TestFixture
             );
 
         floorResponse.data.dmode_floor_data.dmode_area_info.floor_num.Should().Be(1);
-        floorResponse.data.dmode_floor_data.dmode_dungeon_odds.dmode_dungeon_item_list
+        floorResponse
+            .data
+            .dmode_floor_data
+            .dmode_dungeon_odds
+            .dmode_dungeon_item_list
             .Should()
             .OnlyHaveUniqueItems(item => item.item_no);
     }
@@ -57,7 +61,8 @@ public class DmodeDungeonTest : TestFixture
     {
         this.AddCharacter(Charas.Shingen);
 
-        DbPlayerDmodeInfo oldInfo = this.ApiContext.PlayerDmodeInfos
+        DbPlayerDmodeInfo oldInfo = this.ApiContext
+            .PlayerDmodeInfos
             .AsNoTracking()
             .First(x => x.DeviceAccountId == DeviceAccountId);
 
@@ -90,23 +95,41 @@ public class DmodeDungeonTest : TestFixture
             );
 
         floorResponse.data.dmode_floor_data.dmode_area_info.floor_num.Should().Be(30);
-        floorResponse.data.dmode_floor_data.dmode_dungeon_odds.dmode_dungeon_item_list
+        floorResponse
+            .data
+            .dmode_floor_data
+            .dmode_dungeon_odds
+            .dmode_dungeon_item_list
             .Should()
             .OnlyHaveUniqueItems(item => item.item_no);
-        floorResponse.data.dmode_floor_data.dmode_unit_info.dmode_hold_dragon_list
+        floorResponse
+            .data
+            .dmode_floor_data
+            .dmode_unit_info
+            .dmode_hold_dragon_list
             .Should()
             .NotBeEmpty();
-        floorResponse.data.dmode_floor_data.dmode_dungeon_odds.dmode_dungeon_item_list
+        floorResponse
+            .data
+            .dmode_floor_data
+            .dmode_dungeon_odds
+            .dmode_dungeon_item_list
             .Should()
             .Contain(x => x.item_state == DmodeDungeonItemState.EquipWeapon);
-        floorResponse.data.dmode_floor_data.dmode_dungeon_odds.dmode_dungeon_item_list
+        floorResponse
+            .data
+            .dmode_floor_data
+            .dmode_dungeon_odds
+            .dmode_dungeon_item_list
             .Should()
             .Contain(x => x.item_state == DmodeDungeonItemState.EquipCrest);
 
-        this.ApiContext.PlayerDmodeInfos
+        this.ApiContext
+            .PlayerDmodeInfos
             .AsNoTracking()
             .First(x => x.DeviceAccountId == DeviceAccountId)
-            .FloorSkipCount.Should()
+            .FloorSkipCount
+            .Should()
             .Be(oldInfo.FloorSkipCount + 1);
     }
 
@@ -115,7 +138,8 @@ public class DmodeDungeonTest : TestFixture
     {
         this.AddCharacter(Charas.Shingen);
 
-        DbPlayerDmodeInfo oldInfo = this.ApiContext.PlayerDmodeInfos
+        DbPlayerDmodeInfo oldInfo = this.ApiContext
+            .PlayerDmodeInfos
             .AsNoTracking()
             .First(x => x.DeviceAccountId == DeviceAccountId);
 
@@ -139,10 +163,12 @@ public class DmodeDungeonTest : TestFixture
             new DmodeDungeonUserHaltRequest() { }
         );
 
-        this.ApiContext.PlayerDmodeDungeons
+        this.ApiContext
+            .PlayerDmodeDungeons
             .AsNoTracking()
             .First(x => x.DeviceAccountId == DeviceAccountId)
-            .State.Should()
+            .State
+            .Should()
             .Be(DungeonState.Halting);
 
         await this.Client.PostMsgpack<DmodeDungeonRestartData>(
@@ -152,17 +178,20 @@ public class DmodeDungeonTest : TestFixture
 
         (await this.GetDungeonState()).Should().Be(DungeonState.RestartEnd);
 
-        this.ApiContext.PlayerDmodeInfos
+        this.ApiContext
+            .PlayerDmodeInfos
             .AsNoTracking()
             .First(x => x.DeviceAccountId == DeviceAccountId)
-            .RecoveryCount.Should()
+            .RecoveryCount
+            .Should()
             .Be(oldInfo.RecoveryCount + 1);
     }
 
     private async Task<DungeonState> GetDungeonState()
     {
         return (
-            await this.ApiContext.PlayerDmodeDungeons
+            await this.ApiContext
+                .PlayerDmodeDungeons
                 .AsNoTracking()
                 .FirstAsync(x => x.DeviceAccountId == DeviceAccountId)
         ).State;

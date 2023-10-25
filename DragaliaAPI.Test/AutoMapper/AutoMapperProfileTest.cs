@@ -8,7 +8,8 @@ public class AutoMapperProfileTest
     {
         public AutoMapperTheoryData()
         {
-            IEnumerable<Type> types = typeof(Program).Assembly
+            IEnumerable<Type> types = typeof(Program)
+                .Assembly
                 .GetTypes()
                 .Where(x => x.IsSubclassOf(typeof(Profile)));
 

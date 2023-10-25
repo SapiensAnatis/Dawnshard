@@ -17,8 +17,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-using Microsoft.IdentityModel.Tokens;
-using Npgsql.Internal.TypeHandlers.NetworkHandlers;
 
 namespace DragaliaAPI.Blazor.Pages;
 
@@ -31,10 +29,10 @@ public class OAuthCallbackModel(
     public async Task<IActionResult> OnGet()
     {
         if (
-            !this.HttpContext.Request.Query.TryGetValue(
-                "session_token_code",
-                out StringValues sessionTokenCodeValues
-            )
+            !this.HttpContext
+                .Request
+                .Query
+                .TryGetValue("session_token_code", out StringValues sessionTokenCodeValues)
         )
         {
             return this.Unauthorized();
@@ -58,10 +56,11 @@ public class OAuthCallbackModel(
         );
 
         if (
-            !this.HttpContext.Request.Query.TryGetValue(
-                Constants.QueryParams.OriginalPage,
-                out StringValues queryValues
-            ) || queryValues.FirstOrDefault() is not string originalPage
+            !this.HttpContext
+                .Request
+                .Query
+                .TryGetValue(Constants.QueryParams.OriginalPage, out StringValues queryValues)
+            || queryValues.FirstOrDefault() is not string originalPage
         )
         {
             return this.LocalRedirect("~/");
@@ -126,7 +125,8 @@ public class OAuthCallbackModel(
 
         identity.AddClaim(new Claim(CustomClaimType.AccountId, userId.UserId));
 
-        var playerInfo = await apiContext.PlayerUserData
+        var playerInfo = await apiContext
+            .PlayerUserData
             .Where(x => x.DeviceAccountId == userId.UserId)
             .Select(x => new { x.Name, x.ViewerId })
             .FirstOrDefaultAsync();

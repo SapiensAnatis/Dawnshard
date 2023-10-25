@@ -10,29 +10,29 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
     : IDmodeRepository
 {
     public IQueryable<DbPlayerDmodeInfo> Info =>
-        apiContext.PlayerDmodeInfos.Where(
-            x => x.DeviceAccountId == playerIdentityService.AccountId
-        );
+        apiContext
+            .PlayerDmodeInfos
+            .Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerDmodeChara> Charas =>
-        apiContext.PlayerDmodeCharas.Where(
-            x => x.DeviceAccountId == playerIdentityService.AccountId
-        );
+        apiContext
+            .PlayerDmodeCharas
+            .Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerDmodeDungeon> Dungeon =>
-        apiContext.PlayerDmodeDungeons.Where(
-            x => x.DeviceAccountId == playerIdentityService.AccountId
-        );
+        apiContext
+            .PlayerDmodeDungeons
+            .Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerDmodeServitorPassive> ServitorPassives =>
-        apiContext.PlayerDmodeServitorPassives.Where(
-            x => x.DeviceAccountId == playerIdentityService.AccountId
-        );
+        apiContext
+            .PlayerDmodeServitorPassives
+            .Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerDmodeExpedition> Expedition =>
-        apiContext.PlayerDmodeExpeditions.Where(
-            x => x.DeviceAccountId == playerIdentityService.AccountId
-        );
+        apiContext
+            .PlayerDmodeExpeditions
+            .Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
 
     public async Task<DbPlayerDmodeInfo> GetInfoAsync()
     {
@@ -65,17 +65,17 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public void InitializeForPlayer()
     {
-        apiContext.PlayerDmodeInfos.Add(
-            new DbPlayerDmodeInfo { DeviceAccountId = playerIdentityService.AccountId }
-        );
+        apiContext
+            .PlayerDmodeInfos
+            .Add(new DbPlayerDmodeInfo { DeviceAccountId = playerIdentityService.AccountId });
 
-        apiContext.PlayerDmodeDungeons.Add(
-            new DbPlayerDmodeDungeon { DeviceAccountId = playerIdentityService.AccountId }
-        );
+        apiContext
+            .PlayerDmodeDungeons
+            .Add(new DbPlayerDmodeDungeon { DeviceAccountId = playerIdentityService.AccountId });
 
-        apiContext.PlayerDmodeExpeditions.Add(
-            new DbPlayerDmodeExpedition { DeviceAccountId = playerIdentityService.AccountId }
-        );
+        apiContext
+            .PlayerDmodeExpeditions
+            .Add(new DbPlayerDmodeExpedition { DeviceAccountId = playerIdentityService.AccountId });
     }
 
     public DbPlayerDmodeChara AddChara(Charas charaId)
@@ -91,7 +91,8 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
         int level = 1
     )
     {
-        return apiContext.PlayerDmodeServitorPassives
+        return apiContext
+            .PlayerDmodeServitorPassives
             .Add(
                 new DbPlayerDmodeServitorPassive
                 {

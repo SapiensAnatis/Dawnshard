@@ -32,7 +32,8 @@ public class ImpersionationMutations : MutationBase
     )
     {
         DbPlayer player = this.GetPlayer(viewerId);
-        string targetAccountId = this.apiContext.Players
+        string targetAccountId = this.apiContext
+            .Players
             .Include(x => x.UserData)
             .Where(x => x.UserData!.ViewerId == targetViewerId)
             .Select(x => x.AccountId)

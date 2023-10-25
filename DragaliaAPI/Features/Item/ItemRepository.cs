@@ -25,7 +25,8 @@ public class ItemRepository(ApiContext apiContext, IPlayerIdentityService player
 
         DbPlayerUseItem item =
             await GetItem(id)
-            ?? apiContext.PlayerUseItems
+            ?? apiContext
+                .PlayerUseItems
                 .Add(
                     new DbPlayerUseItem
                     {

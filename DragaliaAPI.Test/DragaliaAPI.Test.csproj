@@ -1,67 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <PackageReference Include="coverlet.msbuild">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="FluentAssertions"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing"/>
+        <PackageReference Include="Microsoft.AspNetCore.TestHost"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="MockQueryable.Moq"/>
+        <PackageReference Include="Moq"/>
+        <PackageReference Include="Moq.EntityFrameworkCore"/>
+        <PackageReference Include="xunit"/>
+        <PackageReference Include="xunit.runner.visualstudio">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="NSubstitute"/>
+        <PackageReference Include="NSubstitute.Analyzers.CSharp">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
-		<UserSecretsId>268b9782-58c6-4dc3-9e8f-fefbf22e3b6b</UserSecretsId>
-		<IsPackable>false</IsPackable>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-	</PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\DragaliaAPI.Database.Test\DragaliaAPI.Database.Test.csproj"/>
+        <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj"/>
+        <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="coverlet.msbuild" Version="6.0.0">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="FluentAssertions" Version="6.12.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.11" />
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="7.0.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.11">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-		<PackageReference Include="MockQueryable.Moq" Version="7.0.0" />
-		<PackageReference Include="Moq" Version="4.20.69" />
-		<PackageReference Include="Moq.EntityFrameworkCore" Version="7.0.0.2" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
-		<PackageReference Include="xunit" Version="2.5.1" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.1">
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="coverlet.collector" Version="6.0.0">
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="NSubstitute" Version="5.1.0" />
-		<PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.16">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
+    <ItemGroup>
+        <EditorConfigFiles Remove="C:\Users\jay0\Documents\Programming\dragalia\DragaliaAPI\DragaliaAPI.Test\.editorconfig"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\DragaliaAPI.Database.Test\DragaliaAPI.Database.Test.csproj" />
-		<ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
-		<ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EditorConfigFiles Remove="C:\Users\jay0\Documents\Programming\dragalia\DragaliaAPI\DragaliaAPI.Test\.editorconfig" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="Data\endgame_savefile.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
+    <ItemGroup>
+        <None Update="Data\endgame_savefile.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
 </Project>

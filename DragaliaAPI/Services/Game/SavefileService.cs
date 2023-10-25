@@ -120,7 +120,8 @@ public class SavefileService : ISavefileService
 
         // Preserve the existing viewer ID if there is one.
         // Could reassign, but this makes it easier for people to remember their ID.
-        long? oldViewerId = await this.apiContext.PlayerUserData
+        long? oldViewerId = await this.apiContext
+            .PlayerUserData
             .Where(x => x.DeviceAccountId == deviceAccountId)
             .Select(x => x.ViewerId)
             .Cast<long?>()
@@ -134,8 +135,9 @@ public class SavefileService : ISavefileService
         try
         {
             this.apiContext.ChangeTracker.AutoDetectChangesEnabled = false;
-            await using IDbContextTransaction transaction =
-                await this.apiContext.Database.BeginTransactionAsync();
+            await using IDbContextTransaction transaction = await this.apiContext
+                .Database
+                .BeginTransactionAsync();
 
             this.Delete();
 
@@ -144,13 +146,15 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.Players.Add(
-                new DbPlayer
-                {
-                    AccountId = this.playerIdentityService.AccountId,
-                    SavefileVersion = 0,
-                }
-            );
+            this.apiContext
+                .Players
+                .Add(
+                    new DbPlayer
+                    {
+                        AccountId = this.playerIdentityService.AccountId,
+                        SavefileVersion = 0,
+                    }
+                );
 
             this.logger.LogDebug(
                 "Mapping DbPlayer step done after {t} ms",
@@ -160,44 +164,51 @@ public class SavefileService : ISavefileService
             // This has JsonRequired so this should never be triggered
             ArgumentNullException.ThrowIfNull(savefile.user_data);
 
-            apiContext.PlayerUserData.Add(
-                this.mapper.Map<DbPlayerUserData>(
-                    savefile.user_data,
-                    opts =>
-                        opts.AfterMap(
-                            (_, dest) =>
-                            {
-                                dest.ViewerId = oldViewerId ?? default;
-                                dest.DeviceAccountId = deviceAccountId;
-                                dest.Crystal += 1_200_000;
-                                dest.LastSaveImportTime = DateTimeOffset.UtcNow;
-                                dest.LastLoginTime = DateTimeOffset.UnixEpoch;
-                                dest.ActiveMemoryEventId = 0;
-                            }
-                        )
-                )
-            );
+            apiContext
+                .PlayerUserData
+                .Add(
+                    this.mapper.Map<DbPlayerUserData>(
+                        savefile.user_data,
+                        opts =>
+                            opts.AfterMap(
+                                (_, dest) =>
+                                {
+                                    dest.ViewerId = oldViewerId ?? default;
+                                    dest.DeviceAccountId = deviceAccountId;
+                                    dest.Crystal += 1_200_000;
+                                    dest.LastSaveImportTime = DateTimeOffset.UtcNow;
+                                    dest.LastLoginTime = DateTimeOffset.UnixEpoch;
+                                    dest.ActiveMemoryEventId = 0;
+                                }
+                            )
+                    )
+                );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerUserData step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerCharaData.AddRange(
-                savefile.chara_list.MapWithDeviceAccount<DbPlayerCharaData>(mapper, deviceAccountId)
-            );
+            this.apiContext
+                .PlayerCharaData
+                .AddRange(
+                    savefile
+                        .chara_list
+                        .MapWithDeviceAccount<DbPlayerCharaData>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerCharaData step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerDragonReliability.AddRange(
-                savefile.dragon_reliability_list.MapWithDeviceAccount<DbPlayerDragonReliability>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerDragonReliability
+                .AddRange(
+                    savefile
+                        .dragon_reliability_list
+                        .MapWithDeviceAccount<DbPlayerDragonReliability>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerDragonReliability step done after {t} ms",
@@ -260,7 +271,8 @@ public class SavefileService : ISavefileService
             if (savefile.party_list is not null)
             {
                 // Update key ids in parties
-                List<DbParty> parties = savefile.party_list
+                List<DbParty> parties = savefile
+                    .party_list
                     .MapWithDeviceAccount<DbParty>(mapper, deviceAccountId)
                     .ToList();
 
@@ -296,162 +308,178 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerAbilityCrests.AddRange(
-                savefile.ability_crest_list.MapWithDeviceAccount<DbAbilityCrest>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerAbilityCrests
+                .AddRange(
+                    savefile
+                        .ability_crest_list
+                        .MapWithDeviceAccount<DbAbilityCrest>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbAbilityCrest step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerWeapons.AddRange(
-                savefile.weapon_body_list.MapWithDeviceAccount<DbWeaponBody>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerWeapons
+                .AddRange(
+                    savefile
+                        .weapon_body_list
+                        .MapWithDeviceAccount<DbWeaponBody>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbWeaponBody step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerQuests.AddRange(
-                savefile.quest_list.MapWithDeviceAccount<DbQuest>(mapper, deviceAccountId)
-            );
+            this.apiContext
+                .PlayerQuests
+                .AddRange(
+                    savefile.quest_list.MapWithDeviceAccount<DbQuest>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbQuest step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerStoryState.AddRange(
-                savefile.quest_story_list.MapWithDeviceAccount<DbPlayerStoryState>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerStoryState
+                .AddRange(
+                    savefile
+                        .quest_story_list
+                        .MapWithDeviceAccount<DbPlayerStoryState>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerStoryState (QuestStoryList) step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerStoryState.AddRange(
-                savefile.unit_story_list.MapWithDeviceAccount<DbPlayerStoryState>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerStoryState
+                .AddRange(
+                    savefile
+                        .unit_story_list
+                        .MapWithDeviceAccount<DbPlayerStoryState>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerStoryState (UnitStoryList) step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerStoryState.AddRange(
-                savefile.castle_story_list.MapWithDeviceAccount<DbPlayerStoryState>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerStoryState
+                .AddRange(
+                    savefile
+                        .castle_story_list
+                        .MapWithDeviceAccount<DbPlayerStoryState>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerStoryState (CastleStoryList) step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerMaterials.AddRange(
-                savefile.material_list.MapWithDeviceAccount<DbPlayerMaterial>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerMaterials
+                .AddRange(
+                    savefile
+                        .material_list
+                        .MapWithDeviceAccount<DbPlayerMaterial>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerMaterial step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerFortBuilds.AddRange(
-                savefile.build_list.MapWithDeviceAccount<DbFortBuild>(mapper, deviceAccountId)
-            );
+            this.apiContext
+                .PlayerFortBuilds
+                .AddRange(
+                    savefile.build_list.MapWithDeviceAccount<DbFortBuild>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbFortBuild step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerWeaponSkins.AddRange(
-                savefile.weapon_skin_list.MapWithDeviceAccount<DbWeaponSkin>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerWeaponSkins
+                .AddRange(
+                    savefile
+                        .weapon_skin_list
+                        .MapWithDeviceAccount<DbWeaponSkin>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbWeaponSkin step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerPassiveAbilities.AddRange(
-                savefile.weapon_passive_ability_list.MapWithDeviceAccount<DbWeaponPassiveAbility>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerPassiveAbilities
+                .AddRange(
+                    savefile
+                        .weapon_passive_ability_list
+                        .MapWithDeviceAccount<DbWeaponPassiveAbility>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbWeaponPassibeAbility step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerDragonGifts.AddRange(
-                savefile.dragon_gift_list.MapWithDeviceAccount<DbPlayerDragonGift>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerDragonGifts
+                .AddRange(
+                    savefile
+                        .dragon_gift_list
+                        .MapWithDeviceAccount<DbPlayerDragonGift>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerDragonGift step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.EquippedStamps.AddRange(
-                savefile.equip_stamp_list.MapWithDeviceAccount<DbEquippedStamp>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .EquippedStamps
+                .AddRange(
+                    savefile
+                        .equip_stamp_list
+                        .MapWithDeviceAccount<DbEquippedStamp>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbEquippedStamp step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerTrades.AddRange(
-                savefile.user_treasure_trade_list.MapWithDeviceAccount<DbPlayerTrade>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerTrades
+                .AddRange(
+                    savefile
+                        .user_treasure_trade_list
+                        .MapWithDeviceAccount<DbPlayerTrade>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerTrade step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerSummonTickets.AddRange(
-                savefile.summon_ticket_list.MapWithDeviceAccount<DbSummonTicket>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerSummonTickets
+                .AddRange(
+                    savefile
+                        .summon_ticket_list
+                        .MapWithDeviceAccount<DbSummonTicket>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbSummonTicket step done after {t} ms",
@@ -460,21 +488,22 @@ public class SavefileService : ISavefileService
 
             if (
                 savefile.user_data.emblem_id != Emblems.DragonbloodPrince
-                && await this.apiContext.Emblems.FindAsync(
-                    deviceAccountId,
-                    savefile.user_data.emblem_id
-                ) == null
+                && await this.apiContext
+                    .Emblems
+                    .FindAsync(deviceAccountId, savefile.user_data.emblem_id) == null
             )
             {
-                this.apiContext.Emblems.Add(
-                    new DbEmblem
-                    {
-                        DeviceAccountId = deviceAccountId,
-                        EmblemId = savefile.user_data.emblem_id,
-                        GetTime = DateTimeOffset.UnixEpoch,
-                        IsNew = false
-                    }
-                );
+                this.apiContext
+                    .Emblems
+                    .Add(
+                        new DbEmblem
+                        {
+                            DeviceAccountId = deviceAccountId,
+                            EmblemId = savefile.user_data.emblem_id,
+                            GetTime = DateTimeOffset.UnixEpoch,
+                            IsNew = false
+                        }
+                    );
             }
 
             this.logger.LogDebug(
@@ -482,36 +511,39 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            apiContext.PartyPowers.Add(
-                savefile.party_power_data.MapWithDeviceAccount<DbPartyPower>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            apiContext
+                .PartyPowers
+                .Add(
+                    savefile
+                        .party_power_data
+                        .MapWithDeviceAccount<DbPartyPower>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbPartyPower step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.QuestEvents.AddRange(
-                savefile.quest_event_list.MapWithDeviceAccount<DbQuestEvent>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .QuestEvents
+                .AddRange(
+                    savefile
+                        .quest_event_list
+                        .MapWithDeviceAccount<DbQuestEvent>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbQuestEvent step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.QuestTreasureList.AddRange(
-                savefile.quest_treasure_list.MapWithDeviceAccount<DbQuestTreasureList>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .QuestTreasureList
+                .AddRange(
+                    savefile
+                        .quest_treasure_list
+                        .MapWithDeviceAccount<DbQuestTreasureList>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbQuestTreasureList step done after {t} ms",
@@ -562,81 +594,133 @@ public class SavefileService : ISavefileService
 
         string deviceAccountId = this.playerIdentityService.AccountId;
 
-        this.apiContext.Players.RemoveRange(
-            this.apiContext.Players.Where(x => x.AccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerUserData.RemoveRange(
-            this.apiContext.PlayerUserData.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerCharaData.RemoveRange(
-            this.apiContext.PlayerCharaData.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerDragonReliability.RemoveRange(
-            this.apiContext.PlayerDragonReliability.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerDragonData.RemoveRange(
-            this.apiContext.PlayerDragonData.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerAbilityCrests.RemoveRange(
-            this.apiContext.PlayerAbilityCrests.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerStoryState.RemoveRange(
-            this.apiContext.PlayerStoryState.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerQuests.RemoveRange(
-            this.apiContext.PlayerQuests.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerParties.RemoveRange(
-            this.apiContext.PlayerParties.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerPartyUnits.RemoveRange(
-            this.apiContext.PlayerPartyUnits.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerWeapons.RemoveRange(
-            this.apiContext.PlayerWeapons.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerMaterials.RemoveRange(
-            this.apiContext.PlayerMaterials.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerTalismans.RemoveRange(
-            this.apiContext.PlayerTalismans.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerFortBuilds.RemoveRange(
-            this.apiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerWeaponSkins.RemoveRange(
-            this.apiContext.PlayerWeaponSkins.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerPassiveAbilities.RemoveRange(
-            this.apiContext.PlayerPassiveAbilities.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerDragonGifts.RemoveRange(
-            this.apiContext.PlayerDragonGifts.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerMissions.RemoveRange(
-            this.apiContext.PlayerMissions.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.EquippedStamps.RemoveRange(
-            this.apiContext.EquippedStamps.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerShopInfos.RemoveRange(
-            this.apiContext.PlayerShopInfos.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerTrades.RemoveRange(
-            this.apiContext.PlayerTrades.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerEventData.RemoveRange(
-            this.apiContext.PlayerEventData.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerEventItems.RemoveRange(
-            this.apiContext.PlayerEventItems.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerEventRewards.RemoveRange(
-            this.apiContext.PlayerEventRewards.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerEventPassives.RemoveRange(
-            this.apiContext.PlayerEventPassives.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
+        this.apiContext
+            .Players
+            .RemoveRange(this.apiContext.Players.Where(x => x.AccountId == deviceAccountId));
+        this.apiContext
+            .PlayerUserData
+            .RemoveRange(
+                this.apiContext.PlayerUserData.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerCharaData
+            .RemoveRange(
+                this.apiContext.PlayerCharaData.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerDragonReliability
+            .RemoveRange(
+                this.apiContext
+                    .PlayerDragonReliability
+                    .Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerDragonData
+            .RemoveRange(
+                this.apiContext.PlayerDragonData.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerAbilityCrests
+            .RemoveRange(
+                this.apiContext.PlayerAbilityCrests.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerStoryState
+            .RemoveRange(
+                this.apiContext.PlayerStoryState.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerQuests
+            .RemoveRange(
+                this.apiContext.PlayerQuests.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerParties
+            .RemoveRange(
+                this.apiContext.PlayerParties.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerPartyUnits
+            .RemoveRange(
+                this.apiContext.PlayerPartyUnits.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerWeapons
+            .RemoveRange(
+                this.apiContext.PlayerWeapons.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerMaterials
+            .RemoveRange(
+                this.apiContext.PlayerMaterials.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerTalismans
+            .RemoveRange(
+                this.apiContext.PlayerTalismans.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerFortBuilds
+            .RemoveRange(
+                this.apiContext.PlayerFortBuilds.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerWeaponSkins
+            .RemoveRange(
+                this.apiContext.PlayerWeaponSkins.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerPassiveAbilities
+            .RemoveRange(
+                this.apiContext
+                    .PlayerPassiveAbilities
+                    .Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerDragonGifts
+            .RemoveRange(
+                this.apiContext.PlayerDragonGifts.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerMissions
+            .RemoveRange(
+                this.apiContext.PlayerMissions.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .EquippedStamps
+            .RemoveRange(
+                this.apiContext.EquippedStamps.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerShopInfos
+            .RemoveRange(
+                this.apiContext.PlayerShopInfos.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerTrades
+            .RemoveRange(
+                this.apiContext.PlayerTrades.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerEventData
+            .RemoveRange(
+                this.apiContext.PlayerEventData.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerEventItems
+            .RemoveRange(
+                this.apiContext.PlayerEventItems.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerEventRewards
+            .RemoveRange(
+                this.apiContext.PlayerEventRewards.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerEventPassives
+            .RemoveRange(
+                this.apiContext.PlayerEventPassives.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
         // this.apiContext.PlayerDmodeInfos.RemoveRange(
         //     this.apiContext.PlayerDmodeInfos.Where(x => x.DeviceAccountId == deviceAccountId)
         // );
@@ -654,12 +738,16 @@ public class SavefileService : ISavefileService
         // this.apiContext.PlayerDmodeExpeditions.RemoveRange(
         //     this.apiContext.PlayerDmodeExpeditions.Where(x => x.DeviceAccountId == deviceAccountId)
         // );
-        this.apiContext.PlayerUseItems.RemoveRange(
-            this.apiContext.PlayerUseItems.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerSummonTickets.RemoveRange(
-            this.apiContext.PlayerSummonTickets.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
+        this.apiContext
+            .PlayerUseItems
+            .RemoveRange(
+                this.apiContext.PlayerUseItems.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerSummonTickets
+            .RemoveRange(
+                this.apiContext.PlayerSummonTickets.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
         // this.apiContext.Emblems.RemoveRange(
         //     this.apiContext.Emblems.Where(x => x.DeviceAccountId == deviceAccountId)
         // );
@@ -685,7 +773,8 @@ public class SavefileService : ISavefileService
 
     public IQueryable<DbPlayer> Load()
     {
-        return this.apiContext.Players
+        return this.apiContext
+            .Players
             .Where(x => x.AccountId == this.playerIdentityService.AccountId)
             .Include(x => x.UserData)
             .Include(x => x.AbilityCrestList)
@@ -718,15 +807,16 @@ public class SavefileService : ISavefileService
 
         this.logger.LogInformation("Creating new savefile for account ID {id}", deviceAccountId);
 
-        await using IDbContextTransaction transaction =
-            await this.apiContext.Database.BeginTransactionAsync();
+        await using IDbContextTransaction transaction = await this.apiContext
+            .Database
+            .BeginTransactionAsync();
 
         this.Delete();
         await this.apiContext.SaveChangesAsync();
 
-        this.apiContext.Players.Add(
-            new() { AccountId = deviceAccountId, SavefileVersion = this.maxSavefileVersion }
-        );
+        this.apiContext
+            .Players
+            .Add(new() { AccountId = deviceAccountId, SavefileVersion = this.maxSavefileVersion });
 
         DbPlayerUserData userData =
             new(deviceAccountId) {
@@ -749,50 +839,52 @@ public class SavefileService : ISavefileService
 
     private async Task AddDefaultParties(string deviceAccountId)
     {
-        await this.apiContext.PlayerParties.AddRangeAsync(
-            Enumerable
-                .Range(1, DefaultSavefileData.PartySlotCount)
-                .Select(
-                    x =>
-                        new DbParty()
-                        {
-                            DeviceAccountId = deviceAccountId,
-                            PartyName = "Default",
-                            PartyNo = x,
-                            Units = new List<DbPartyUnit>()
+        await this.apiContext
+            .PlayerParties
+            .AddRangeAsync(
+                Enumerable
+                    .Range(1, DefaultSavefileData.PartySlotCount)
+                    .Select(
+                        x =>
+                            new DbParty()
                             {
-                                new()
+                                DeviceAccountId = deviceAccountId,
+                                PartyName = "Default",
+                                PartyNo = x,
+                                Units = new List<DbPartyUnit>()
                                 {
-                                    DeviceAccountId = deviceAccountId,
-                                    PartyNo = x,
-                                    UnitNo = 1,
-                                    CharaId = Charas.ThePrince
-                                },
-                                new()
-                                {
-                                    DeviceAccountId = deviceAccountId,
-                                    PartyNo = x,
-                                    UnitNo = 2,
-                                    CharaId = Charas.Empty
-                                },
-                                new()
-                                {
-                                    DeviceAccountId = deviceAccountId,
-                                    PartyNo = x,
-                                    UnitNo = 3,
-                                    CharaId = Charas.Empty
-                                },
-                                new()
-                                {
-                                    DeviceAccountId = deviceAccountId,
-                                    PartyNo = x,
-                                    UnitNo = 4,
-                                    CharaId = Charas.Empty
+                                    new()
+                                    {
+                                        DeviceAccountId = deviceAccountId,
+                                        PartyNo = x,
+                                        UnitNo = 1,
+                                        CharaId = Charas.ThePrince
+                                    },
+                                    new()
+                                    {
+                                        DeviceAccountId = deviceAccountId,
+                                        PartyNo = x,
+                                        UnitNo = 2,
+                                        CharaId = Charas.Empty
+                                    },
+                                    new()
+                                    {
+                                        DeviceAccountId = deviceAccountId,
+                                        PartyNo = x,
+                                        UnitNo = 3,
+                                        CharaId = Charas.Empty
+                                    },
+                                    new()
+                                    {
+                                        DeviceAccountId = deviceAccountId,
+                                        PartyNo = x,
+                                        UnitNo = 4,
+                                        CharaId = Charas.Empty
+                                    }
                                 }
                             }
-                        }
-                )
-        );
+                    )
+            );
     }
 
     private async Task AddDefaultCharacters(string deviceAccountId)
@@ -802,44 +894,52 @@ public class SavefileService : ISavefileService
 
     private void AddDefaultEquippedStamps()
     {
-        this.apiContext.EquippedStamps.AddRange(
-            Enumerable
-                .Range(1, StampService.EquipListSize)
-                .Select(
-                    x =>
-                        new DbEquippedStamp()
-                        {
-                            DeviceAccountId = this.playerIdentityService.AccountId,
-                            StampId = 0,
-                            Slot = x
-                        }
-                )
-        );
+        this.apiContext
+            .EquippedStamps
+            .AddRange(
+                Enumerable
+                    .Range(1, StampService.EquipListSize)
+                    .Select(
+                        x =>
+                            new DbEquippedStamp()
+                            {
+                                DeviceAccountId = this.playerIdentityService.AccountId,
+                                StampId = 0,
+                                Slot = x
+                            }
+                    )
+            );
     }
 
     private void AddShopInfo()
     {
-        this.apiContext.PlayerShopInfos.Add(
-            new DbPlayerShopInfo() { DeviceAccountId = this.playerIdentityService.AccountId, }
-        );
+        this.apiContext
+            .PlayerShopInfos
+            .Add(
+                new DbPlayerShopInfo() { DeviceAccountId = this.playerIdentityService.AccountId, }
+            );
     }
 
     private void AddDefaultEmblem()
     {
-        this.apiContext.Emblems.Add(
-            new DbEmblem
-            {
-                DeviceAccountId = playerIdentityService.AccountId,
-                EmblemId = DefaultSavefileData.DefaultEmblem,
-                GetTime = DateTimeOffset.UnixEpoch,
-                IsNew = false
-            }
-        );
+        this.apiContext
+            .Emblems
+            .Add(
+                new DbEmblem
+                {
+                    DeviceAccountId = playerIdentityService.AccountId,
+                    EmblemId = DefaultSavefileData.DefaultEmblem,
+                    GetTime = DateTimeOffset.UnixEpoch,
+                    IsNew = false
+                }
+            );
     }
 
     internal static class DefaultSavefileData
     {
-        public static readonly ImmutableList<Charas> Characters = MasterAsset.CharaData.Enumerable
+        public static readonly ImmutableList<Charas> Characters = MasterAsset
+            .CharaData
+            .Enumerable
             .Where(x => x.Rarity == 3 && x.IsPlayable)
             .Select(x => x.Id)
             .Append(Charas.ThePrince)

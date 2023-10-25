@@ -81,9 +81,9 @@ public class BaasApi : IBaasApi
         }
 
         return (
-                await savefileResponse.Content.ReadFromJsonAsync<DragaliaResponse<LoadIndexData>>(
-                    ApiJsonOptions.Instance
-                )
+                await savefileResponse
+                    .Content
+                    .ReadFromJsonAsync<DragaliaResponse<LoadIndexData>>(ApiJsonOptions.Instance)
             )?.data ?? throw new JsonException("Deserialized savefile was null");
     }
 }

@@ -49,7 +49,9 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 new QuestGetQuestClearPartyRequest() { quest_id = 2 }
             );
 
-        response.data.quest_multi_clear_party_setting_list
+        response
+            .data
+            .quest_multi_clear_party_setting_list
             .Should()
             .BeEquivalentTo(MultiPartySettingLists);
         response.data.lost_unit_list.Should().BeEmpty();
@@ -93,7 +95,9 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 new QuestGetQuestClearPartyRequest() { quest_id = questId }
             );
 
-        response.data.lost_unit_list
+        response
+            .data
+            .lost_unit_list
             .Should()
             .BeEquivalentTo(
                 new List<AtgenLostUnitList>()
@@ -166,7 +170,8 @@ public class QuestClearPartyTest : TestFixture, IDisposable
 
         response.data.result.Should().Be(1);
 
-        List<DbQuestClearPartyUnit> storedList = await this.ApiContext.QuestClearPartyUnits
+        List<DbQuestClearPartyUnit> storedList = await this.ApiContext
+            .QuestClearPartyUnits
             .Where(
                 x => x.QuestId == 3 && x.DeviceAccountId == DeviceAccountId && x.IsMulti == false
             )
@@ -193,7 +198,8 @@ public class QuestClearPartyTest : TestFixture, IDisposable
 
         response.data.result.Should().Be(1);
 
-        List<DbQuestClearPartyUnit> storedList = await this.ApiContext.QuestClearPartyUnits
+        List<DbQuestClearPartyUnit> storedList = await this.ApiContext
+            .QuestClearPartyUnits
             .Where(x => x.QuestId == 4 && x.DeviceAccountId == DeviceAccountId && x.IsMulti == true)
             .ToListAsync();
 

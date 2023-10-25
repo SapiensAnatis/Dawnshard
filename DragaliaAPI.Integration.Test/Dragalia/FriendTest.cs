@@ -27,7 +27,9 @@ public class FriendTest : TestFixture
             )
         ).data;
 
-        response.support_user_data_detail.user_support_data
+        response
+            .support_user_data_detail
+            .user_support_data
             .Should()
             .BeEquivalentTo(
                 new UserSupportList()
@@ -178,7 +180,9 @@ public class FriendTest : TestFixture
             )
         ).data;
 
-        response.support_user_data_detail.user_support_data
+        response
+            .support_user_data_detail
+            .user_support_data
             .Should()
             .BeEquivalentTo(HelperService.StubData.SupportListData.support_user_list.First());
 

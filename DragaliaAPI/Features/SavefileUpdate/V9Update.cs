@@ -29,7 +29,8 @@ public class V9Update(
     public async Task Apply()
     {
         IEnumerable<(Charas Id, SortedSet<int> ManaNodes)> charaManaData = (
-            await unitRepository.Charas
+            await unitRepository
+                .Charas
                 /* .Where(x => x.Rarity == 3) // A 3-star character could have been upgraded */
                 .Where(x => x.CharaId != Charas.ThePrince && x.CharaId != Charas.MegaMan) // No stories
                 .Select(x => new { x.CharaId, x.ManaNodeUnlockCount })
@@ -110,14 +111,16 @@ public class V9Update(
 
     private void AddStory(int storyId)
     {
-        apiContext.PlayerStoryState.Add(
-            new DbPlayerStoryState()
-            {
-                DeviceAccountId = playerIdentityService.AccountId,
-                StoryId = storyId,
-                State = 0,
-                StoryType = StoryTypes.Chara
-            }
-        );
+        apiContext
+            .PlayerStoryState
+            .Add(
+                new DbPlayerStoryState()
+                {
+                    DeviceAccountId = playerIdentityService.AccountId,
+                    StoryId = storyId,
+                    State = 0,
+                    StoryType = StoryTypes.Chara
+                }
+            );
     }
 }

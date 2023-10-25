@@ -55,10 +55,12 @@ public class TreasureTradeTest : TestFixture
             )
         ).data;
 
-        response.user_treasure_trade_list
+        response
+            .user_treasure_trade_list
             .Should()
             .HaveCount(1)
-            .And.ContainEquivalentOf(new UserTreasureTradeList(1000, 1, DateTimeOffset.UnixEpoch));
+            .And
+            .ContainEquivalentOf(new UserTreasureTradeList(1000, 1, DateTimeOffset.UnixEpoch));
         response.treasure_trade_all_list.Should().NotBeEmpty();
         response.treasure_trade_list.Should().BeNullOrEmpty();
     }
@@ -89,15 +91,18 @@ public class TreasureTradeTest : TestFixture
             )
         ).data;
 
-        response.user_treasure_trade_list
+        response
+            .user_treasure_trade_list
             .Should()
             .HaveCount(1)
-            .And.Contain(x => x.treasure_trade_id == 10010101 && x.trade_count == 1);
+            .And
+            .Contain(x => x.treasure_trade_id == 10010101 && x.trade_count == 1);
         response.treasure_trade_all_list.Should().NotBeEmpty();
         response.treasure_trade_list.Should().BeNullOrEmpty();
         response.update_data_list.Should().NotBeNull();
 
-        int newMatQuantity = this.ApiContext.PlayerMaterials
+        int newMatQuantity = this.ApiContext
+            .PlayerMaterials
             .AsNoTracking()
             .Where(
                 x => x.DeviceAccountId == DeviceAccountId && x.MaterialId == Materials.DamascusIngot
@@ -118,14 +123,18 @@ public class TreasureTradeTest : TestFixture
             )
         ).data;
 
-        response.user_treasure_trade_list
+        response
+            .user_treasure_trade_list
             .Should()
             .HaveCount(1)
-            .And.Contain(x => x.treasure_trade_id == 10124101 && x.trade_count == 1);
+            .And
+            .Contain(x => x.treasure_trade_id == 10124101 && x.trade_count == 1);
         response.treasure_trade_all_list.Should().NotBeEmpty();
         response.treasure_trade_list.Should().BeNullOrEmpty();
         response.update_data_list.Should().NotBeNull();
-        response.update_data_list.weapon_skin_list
+        response
+            .update_data_list
+            .weapon_skin_list
             .Should()
             .Contain(x => x.weapon_skin_id == 30159921);
     }

@@ -1,12 +1,12 @@
 ﻿using DragaliaAPI.Database.Entities;
-using Microsoft.AspNetCore.Mvc;
-using DragaliaAPI.Services;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Emblem;
+using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Features.Fort;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Controllers.Dragalia;
@@ -56,7 +56,8 @@ public class UpdateController(
                     break;
                 case "emblem":
                     await foreach (
-                        DbEmblem emblem in emblemRepository.Emblems
+                        DbEmblem emblem in emblemRepository
+                            .Emblems
                             .Where(x => x.IsNew)
                             .AsAsyncEnumerable()
                     )

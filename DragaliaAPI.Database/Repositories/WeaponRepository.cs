@@ -36,47 +36,53 @@ public class WeaponRepository : IWeaponRepository
     }
 
     public IQueryable<DbWeaponBody> WeaponBodies =>
-        this.apiContext.PlayerWeapons.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerWeapons
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbWeaponSkin> WeaponSkins =>
-        this.apiContext.PlayerWeaponSkins.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerWeaponSkins
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbWeaponPassiveAbility> WeaponPassiveAbilities =>
-        this.apiContext.PlayerPassiveAbilities.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerPassiveAbilities
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(WeaponBodies id)
     {
         WeaponBody data = MasterAsset.WeaponBody.Get(id);
 
-        IEnumerable<int> searchIds = MasterAsset.WeaponPassiveAbility.Enumerable
+        IEnumerable<int> searchIds = MasterAsset
+            .WeaponPassiveAbility
+            .Enumerable
             .Where(x => x.WeaponType == data.WeaponType && x.ElementalType == data.ElementalType)
             .ExceptBy(AstralsBaneAbilityIds, x => x.AbilityId) // Sending astral abilities in the list breaks scorch res. Don't ask me why.
             .Select(x => x.Id);
 
-        return this.apiContext.PlayerPassiveAbilities.Where(
-            x =>
-                x.DeviceAccountId == this.playerIdentityService.AccountId
-                && searchIds.Contains(x.WeaponPassiveAbilityId)
-        );
+        return this.apiContext
+            .PlayerPassiveAbilities
+            .Where(
+                x =>
+                    x.DeviceAccountId == this.playerIdentityService.AccountId
+                    && searchIds.Contains(x.WeaponPassiveAbilityId)
+            );
     }
 
     public async Task Add(WeaponBodies weaponBodyId)
     {
         this.logger.LogDebug("Adding weapon {weapon}", weaponBodyId);
 
-        await this.apiContext.PlayerWeapons.AddAsync(
-            new DbWeaponBody()
-            {
-                DeviceAccountId = this.playerIdentityService.AccountId,
-                WeaponBodyId = weaponBodyId
-            }
-        );
+        await this.apiContext
+            .PlayerWeapons
+            .AddAsync(
+                new DbWeaponBody()
+                {
+                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    WeaponBodyId = weaponBodyId
+                }
+            );
     }
 
     public async Task AddSkin(int weaponSkinId)
@@ -84,10 +90,9 @@ public class WeaponRepository : IWeaponRepository
         this.logger.LogDebug("Adding weapon skin {skin}", weaponSkinId);
 
         if (
-            await this.apiContext.PlayerWeaponSkins.FindAsync(
-                this.playerIdentityService.AccountId,
-                weaponSkinId
-            )
+            await this.apiContext
+                .PlayerWeaponSkins
+                .FindAsync(this.playerIdentityService.AccountId, weaponSkinId)
             is not null
         )
         {
@@ -95,14 +100,16 @@ public class WeaponRepository : IWeaponRepository
             return;
         }
 
-        await this.apiContext.PlayerWeaponSkins.AddAsync(
-            new DbWeaponSkin()
-            {
-                DeviceAccountId = this.playerIdentityService.AccountId,
-                WeaponSkinId = weaponSkinId,
-                GetTime = DateTimeOffset.UtcNow
-            }
-        );
+        await this.apiContext
+            .PlayerWeaponSkins
+            .AddAsync(
+                new DbWeaponSkin()
+                {
+                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    WeaponSkinId = weaponSkinId,
+                    GetTime = DateTimeOffset.UtcNow
+                }
+            );
     }
 
     public async Task<bool> CheckOwnsWeapons(params WeaponBodies[] weaponIds)
@@ -141,12 +148,14 @@ public class WeaponRepository : IWeaponRepository
         passiveList[passiveAbility.WeaponPassiveAbilityNo - 1] = 1;
         entity.UnlockWeaponPassiveAbilityNoList = passiveList;
 
-        await this.apiContext.PlayerPassiveAbilities.AddAsync(
-            new()
-            {
-                DeviceAccountId = this.playerIdentityService.AccountId,
-                WeaponPassiveAbilityId = passiveAbility.Id
-            }
-        );
+        await this.apiContext
+            .PlayerPassiveAbilities
+            .AddAsync(
+                new()
+                {
+                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    WeaponPassiveAbilityId = passiveAbility.Id
+                }
+            );
     }
 }

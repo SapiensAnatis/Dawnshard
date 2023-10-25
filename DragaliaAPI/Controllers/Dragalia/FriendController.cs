@@ -1,8 +1,8 @@
 ﻿using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
-using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
+using DragaliaAPI.Shared.Definitions.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
@@ -45,13 +45,15 @@ public class FriendController : DragaliaControllerBase
         QuestGetSupportUserListData helperList = await this.helperService.GetHelpers();
 
         UserSupportList helperInfo =
-            helperList.support_user_list
+            helperList
+                .support_user_list
                 .Where(helper => helper.viewer_id == request.support_viewer_id)
                 .FirstOrDefault()
             ?? HelperService.StubData.SupportListData.support_user_list.First();
 
         AtgenSupportUserDetailList helperDetail =
-            helperList.support_user_detail_list
+            helperList
+                .support_user_detail_list
                 .Where(helper => helper.viewer_id == request.support_viewer_id)
                 .FirstOrDefault()
             ?? new()

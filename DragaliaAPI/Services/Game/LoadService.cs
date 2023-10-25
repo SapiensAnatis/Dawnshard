@@ -55,35 +55,39 @@ public class LoadService(
                 user_data = mapper.Map<UserData>(savefile.UserData),
                 chara_list = savefile.CharaList.Select(mapper.Map<CharaList>),
                 dragon_list = savefile.DragonList.Select(mapper.Map<DragonList>),
-                dragon_reliability_list = savefile.DragonReliabilityList.Select(
-                    mapper.Map<DragonReliabilityList>
-                ),
+                dragon_reliability_list = savefile
+                    .DragonReliabilityList
+                    .Select(mapper.Map<DragonReliabilityList>),
                 ability_crest_list = savefile.AbilityCrestList.Select(mapper.Map<AbilityCrestList>),
-                dragon_gift_list = savefile.DragonGiftList
+                dragon_gift_list = savefile
+                    .DragonGiftList
                     .Where(x => x.DragonGiftId > DragonGifts.GoldenChalice)
                     .Select(mapper.Map<DragonGiftList>),
                 talisman_list = savefile.TalismanList.Select(mapper.Map<TalismanList>),
                 weapon_body_list = savefile.WeaponBodyList.Select(mapper.Map<WeaponBodyList>),
                 party_list = savefile.PartyList.Select(mapper.Map<PartyList>),
-                quest_story_list = savefile.StoryStates
+                quest_story_list = savefile
+                    .StoryStates
                     .Where(x => x.StoryType == StoryTypes.Quest)
                     .Select(mapper.Map<QuestStoryList>),
-                unit_story_list = savefile.StoryStates
+                unit_story_list = savefile
+                    .StoryStates
                     .Where(x => x.StoryType == StoryTypes.Chara || x.StoryType == StoryTypes.Dragon)
                     .Select(mapper.Map<UnitStoryList>),
-                castle_story_list = savefile.StoryStates
+                castle_story_list = savefile
+                    .StoryStates
                     .Where(x => x.StoryType == StoryTypes.Castle)
                     .Select(mapper.Map<CastleStoryList>),
                 quest_list = savefile.QuestList.Select(mapper.Map<QuestList>),
                 quest_event_list = savefile.QuestEvents.Select(mapper.Map<QuestEventList>),
-                quest_treasure_list = savefile.QuestTreasureList.Select(
-                    mapper.Map<QuestTreasureList>
-                ),
+                quest_treasure_list = savefile
+                    .QuestTreasureList
+                    .Select(mapper.Map<QuestTreasureList>),
                 material_list = savefile.MaterialList.Select(mapper.Map<MaterialList>),
                 weapon_skin_list = savefile.WeaponSkinList.Select(mapper.Map<WeaponSkinList>),
-                weapon_passive_ability_list = savefile.WeaponPassiveAbilityList.Select(
-                    mapper.Map<WeaponPassiveAbilityList>
-                ),
+                weapon_passive_ability_list = savefile
+                    .WeaponPassiveAbilityList
+                    .Select(mapper.Map<WeaponPassiveAbilityList>),
                 fort_bonus_list = bonusList,
                 party_power_data = mapper.Map<PartyPowerData>(savefile.PartyPower),
                 friend_notice = new(0, 0),
@@ -102,7 +106,8 @@ public class LoadService(
                     app_id = string.Empty
                 },
                 mission_notice = await missionService.GetMissionNotice(null),
-                equip_stamp_list = savefile.EquippedStampList
+                equip_stamp_list = savefile
+                    .EquippedStampList
                     .Select(mapper.Map<DbEquippedStamp, EquipStampList>)
                     .OrderBy(x => x.slot),
                 quest_entry_condition_list = await missionService.GetEntryConditions(),

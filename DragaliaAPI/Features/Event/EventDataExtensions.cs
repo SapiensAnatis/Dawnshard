@@ -34,43 +34,63 @@ internal static class EventDataExtensions
         return data.EventKindType switch
         {
             EventKindType.Build
-                => MasterAsset.BuildEventItem.Enumerable
+                => MasterAsset
+                    .BuildEventItem
+                    .Enumerable
                     .Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Raid
-                => MasterAsset.RaidEventItem.Enumerable
+                => MasterAsset
+                    .RaidEventItem
+                    .Enumerable
                     .Where(x => x.RaidEventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Combat
-                => MasterAsset.CombatEventItem.Enumerable
+                => MasterAsset
+                    .CombatEventItem
+                    .Enumerable
                     .Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.BattleRoyal
-                => MasterAsset.BattleRoyalEventItem.Enumerable
+                => MasterAsset
+                    .BattleRoyalEventItem
+                    .Enumerable
                     .Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Clb01
-                => MasterAsset.Clb01EventItem.Enumerable
+                => MasterAsset
+                    .Clb01EventItem
+                    .Enumerable
                     .Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Collect
-                => MasterAsset.CollectEventItem.Enumerable
+                => MasterAsset
+                    .CollectEventItem
+                    .Enumerable
                     .Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Earn
-                => MasterAsset.EarnEventItem.Enumerable
+                => MasterAsset
+                    .EarnEventItem
+                    .Enumerable
                     .Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.ExHunter
-                => MasterAsset.ExHunterEventItem.Enumerable
+                => MasterAsset
+                    .ExHunterEventItem
+                    .Enumerable
                     .Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.ExRush
-                => MasterAsset.ExRushEventItem.Enumerable
+                => MasterAsset
+                    .ExRushEventItem
+                    .Enumerable
                     .Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Simple
-                => MasterAsset.SimpleEventItem.Enumerable
+                => MasterAsset
+                    .SimpleEventItem
+                    .Enumerable
                     .Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             _ => Enumerable.Empty<int>(),
@@ -85,13 +105,17 @@ internal static class EventDataExtensions
         {
             EventKindType.Raid
             or EventKindType.ExHunter
-                => MasterAsset.RaidEventReward[eventId].Values
+                => MasterAsset
+                    .RaidEventReward[eventId]
+                    .Values
                     .Cast<IEventReward>()
                     .ToDictionary(x => x.Id, x => x),
 
             // BuildEventReward is the default
             _
-                => MasterAsset.BuildEventReward[eventId].Values
+                => MasterAsset
+                    .BuildEventReward[eventId]
+                    .Values
                     .Cast<IEventReward>()
                     .ToDictionary(x => x.Id, x => x)
         };
@@ -101,7 +125,9 @@ internal static class EventDataExtensions
     {
         int eventId = data.Id;
 
-        return MasterAsset.EventPassive.Enumerable
+        return MasterAsset
+            .EventPassive
+            .Enumerable
             .Where(x => x.EventId == eventId)
             .Select(x => x.Id);
     }

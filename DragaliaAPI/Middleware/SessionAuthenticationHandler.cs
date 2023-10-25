@@ -1,17 +1,17 @@
-﻿using DragaliaAPI.Controllers;
-using DragaliaAPI.Models;
-using DragaliaAPI.Services;
-using Microsoft.Extensions.Primitives;
-using DragaliaAPI.Services.Exceptions;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Options;
+﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using DragaliaAPI.Controllers;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models;
+using DragaliaAPI.Services;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 
 namespace DragaliaAPI.Middleware;
 

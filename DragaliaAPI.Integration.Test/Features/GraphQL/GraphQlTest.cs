@@ -27,7 +27,8 @@ public class GraphQlTest : GraphQlTestFixture
     {
         this.Client.DefaultRequestHeaders.Clear();
 
-        (await this.Client.PostAsync(Endpoint, new StringContent(string.Empty))).StatusCode
+        (await this.Client.PostAsync(Endpoint, new StringContent(string.Empty)))
+            .StatusCode
             .Should()
             .Be(HttpStatusCode.Unauthorized);
     }
@@ -62,7 +63,8 @@ public class GraphQlTest : GraphQlTestFixture
     public async Task Mutation_ResetCharacter_ResetsCharacter()
     {
         (
-            await this.ApiContext.PlayerCharaData
+            await this.ApiContext
+                .PlayerCharaData
                 .AsNoTracking()
                 .SingleAsync(
                     x => x.DeviceAccountId == DeviceAccountId && x.CharaId == Charas.ThePrince
@@ -86,12 +88,14 @@ public class GraphQlTest : GraphQlTestFixture
         response.Errors.Should().BeNullOrEmpty();
 
         (
-            await this.ApiContext.PlayerCharaData
+            await this.ApiContext
+                .PlayerCharaData
                 .AsNoTracking()
                 .SingleAsync(
                     x => x.DeviceAccountId == DeviceAccountId && x.CharaId == Charas.ThePrince
                 )
-        ).Level
+        )
+            .Level
             .Should()
             .Be(1);
     }
@@ -115,7 +119,9 @@ public class GraphQlTest : GraphQlTestFixture
 
         response.Errors.Should().BeNullOrEmpty();
 
-        int presentId = response.Data.RootElement
+        int presentId = response
+            .Data
+            .RootElement
             .GetProperty("givePresent")
             .GetProperty("presentId")
             .GetInt32();
@@ -158,10 +164,12 @@ public class GraphQlTest : GraphQlTestFixture
         response.Errors.Should().BeNullOrEmpty();
 
         (
-            await this.ApiContext.PlayerUserData
+            await this.ApiContext
+                .PlayerUserData
                 .AsNoTracking()
                 .FirstAsync(x => x.DeviceAccountId == DeviceAccountId)
-        ).TutorialStatus
+        )
+            .TutorialStatus
             .Should()
             .Be(60999);
     }

@@ -69,7 +69,8 @@ public class PaymentServiceTest
 
         await this.paymentService.ProcessPayment(type, new PaymentTarget(total, cost), cost);
 
-        userData.BuildTimePoint
+        userData
+            .BuildTimePoint
             .Should()
             .Be(type == PaymentTypes.HalidomHustleHammer ? total - cost : 0);
         userData.Coin.Should().Be(type == PaymentTypes.Coin ? total - cost : 0);
@@ -104,7 +105,8 @@ public class PaymentServiceTest
 
         await this.paymentService.ProcessPayment(type, null, cost);
 
-        userData.BuildTimePoint
+        userData
+            .BuildTimePoint
             .Should()
             .Be(type == PaymentTypes.HalidomHustleHammer ? total - cost : 0);
         userData.Coin.Should().Be(type == PaymentTypes.Coin ? total - cost : 0);

@@ -112,7 +112,8 @@ public class GameListTest : TestFixture
         (await response.Content.ReadFromJsonAsync<IEnumerable<ApiGame>>())
             .Should()
             .HaveCount(1)
-            .And.BeEquivalentTo(new List<ApiGame>() { new(games[0]) });
+            .And
+            .BeEquivalentTo(new List<ApiGame>() { new(games[0]) });
     }
 
     [Fact]
@@ -181,6 +182,7 @@ public class GameListTest : TestFixture
         (await response.Content.ReadFromJsonAsync<IEnumerable<ApiGame>>())
             .Should()
             .HaveCount(1)
-            .And.BeEquivalentTo(new List<ApiGame>() { new(games[1]) });
+            .And
+            .BeEquivalentTo(new List<ApiGame>() { new(games[1]) });
     }
 }
