@@ -126,8 +126,8 @@ public class QuestController : DragaliaControllerBase
         );
     }
 
-    [HttpPost("quest_open_treasure")]
-    public async Task<DragaliaResult> QuestOpenTreasure(QuestOpenTreasureRequest request)
+    [HttpPost("open_treasure")]
+    public async Task<DragaliaResult> OpenTreasure(QuestOpenTreasureRequest request)
     {
         QuestTreasureData questTreasureData = MasterAsset.QuestTreasureData[
             request.quest_treasure_id
