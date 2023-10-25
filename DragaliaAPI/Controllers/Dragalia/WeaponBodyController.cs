@@ -79,7 +79,12 @@ public class WeaponBodyController : DragaliaControllerBase
 
             if (buildupResult != ResultCode.Success)
             {
-                this.logger.LogError("buildup_piece request {request} was invalid", request);
+                this.logger.LogError(
+                    "buildup_piece request {@request} was invalid: {result}",
+                    request,
+                    buildupResult
+                );
+
                 return this.Code(buildupResult);
             }
         }
