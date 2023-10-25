@@ -5,6 +5,7 @@ using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
