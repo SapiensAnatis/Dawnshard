@@ -8,6 +8,7 @@ using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Test.Utils;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
@@ -186,6 +187,15 @@ public class QuestControllerTest
                     )
             )
             .ReturnsAsync(RewardGrantResult.Added);
+
+        DbPlayerUserData userData =
+            new()
+            {
+                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                MaxDragonQuantity = 200
+            };
+
+        this.mockUserDataRepository.SetupUserData(userData);
 
         this.mockRewardService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
