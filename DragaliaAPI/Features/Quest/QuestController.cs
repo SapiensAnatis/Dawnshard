@@ -5,6 +5,7 @@ using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -140,6 +141,12 @@ public class QuestController : DragaliaControllerBase
                     questTreasureData.EntityQuantity
                 )
             );
+        }
+
+        if (questRewardService.AddMaxDragonStorage != 0)
+        {
+            DbPlayerUserData userData = await userDataRepository.GetUserDataAsync();
+            userData.MaxDragonQuantity += questRewardService.AddMaxDragonStorage;
         }
 
         IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list = rewards;
