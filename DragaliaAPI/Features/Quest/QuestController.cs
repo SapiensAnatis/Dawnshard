@@ -6,6 +6,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -23,6 +24,7 @@ public class QuestController : DragaliaControllerBase
     private readonly IUpdateDataService updateDataService;
     private readonly IClearPartyService clearPartyService;
     private readonly IRewardService rewardService;
+    private readonly IUserDataRepository userDataRepository;
     private readonly ILogger<QuestController> logger;
 
     public QuestController(
@@ -32,6 +34,7 @@ public class QuestController : DragaliaControllerBase
         IUpdateDataService updateDataService,
         IClearPartyService clearPartyService,
         IRewardService rewardService,
+        IUserDataRepository userDataRepository,
         ILogger<QuestController> logger
     )
     {
@@ -41,6 +44,7 @@ public class QuestController : DragaliaControllerBase
         this.updateDataService = updateDataService;
         this.clearPartyService = clearPartyService;
         this.rewardService = rewardService;
+        this.userDataRepository = userDataRepository;
         this.logger = logger;
     }
 
@@ -143,10 +147,10 @@ public class QuestController : DragaliaControllerBase
             );
         }
 
-        if (questRewardService.AddMaxDragonStorage != 0)
+        if (questTreasureData.AddMaxDragonStorage != 0)
         {
             DbPlayerUserData userData = await userDataRepository.GetUserDataAsync();
-            userData.MaxDragonQuantity += questRewardService.AddMaxDragonStorage;
+            userData.MaxDragonQuantity += questTreasureData.AddMaxDragonStorage;
         }
 
         IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list = rewards;
