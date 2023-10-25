@@ -139,11 +139,8 @@ public class QuestControllerTest
     }
 
     [Fact]
-    public async Task OpenTreasure_RewardsCorrect()
-    {
-
-        this.mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
-
+    public Task OpenTreasure_RewardsCorrect()
+    {   
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
 
         this.mockRewardService
@@ -167,12 +164,7 @@ public class QuestControllerTest
             .Setup(
                 x =>
                     x.GrantReward(
-                        It.Is<Entity>(
-                            e =>
-                                e.Type == EntityTypes.Item
-                                && e.Id == (int)UseItem.Honey
-                                && e.Quantity == 1
-                        )
+                        new Entity(EntityTypes.Item, (int)UseItem.Honey, 1, null, null, null)
                     )
             )
             .ReturnsAsync(RewardGrantResult.Added);
@@ -181,12 +173,7 @@ public class QuestControllerTest
             .Setup(
                 x =>
                     x.GrantReward(
-                        It.Is<Entity>(
-                            e =>
-                                e.Type == EntityTypes.Material
-                                && e.Id == (int)Materials.AmplifyingCrystal
-                                && e.Quantity == 10
-                        )
+                        new Entity(EntityTypes.Material, (int)Materials.AmplifyingCrystal, 10, null, null, null)
                     )
             )
             .ReturnsAsync(RewardGrantResult.Added);
@@ -195,12 +182,7 @@ public class QuestControllerTest
             .Setup(
                 x =>
                     x.GrantReward(
-                        It.Is<Entity>(
-                            e =>
-                                e.Type == EntityTypes.SummonTicket
-                                && e.Id == (int)SummonTickets.SingleSummon
-                                && e.Quantity == 3
-                        )
+                        new Entity(EntityTypes.SummonTicket, (int)SummonTickets.SingleSummon, 3, null, null, null)
                     )
             )
             .ReturnsAsync(RewardGrantResult.Added);
