@@ -167,7 +167,7 @@ public class QuestController : DragaliaControllerBase
                 DeviceAccountId = this.playerIdentityService.AccountId,
                 QuestTreasureId = questTreasureData.Id
             }
-        )
+        );
 
         IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list = rewards;
 
