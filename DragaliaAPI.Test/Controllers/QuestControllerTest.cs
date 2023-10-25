@@ -130,4 +130,54 @@ public class QuestControllerTest
         this.mockStoryService.VerifyAll();
         this.mockUpdateDataService.VerifyAll();
     }
+
+    [Fact]
+    public async Task OpenTreasure_RewardsCorrect()
+    {
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        It.Is<Entity>(e => e.Type == EntityTypes.Mana && e.Quantity == 40)
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        It.Is<Entity>(e => e.Type == EntityTypes.Rupies && e.Quantity == 40)
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
+
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        It.Is<Entity>(e => e.Type == EntityTypes.Item && e.entity_id == (int)UseItems.Honey && e.Quantity == 1)
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
+
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        It.Is<Entity>(e => e.Type == EntityTypes.Item && e.entity_id == (int)Materials.AmplifyingCrystal && e.Quantity == 10)
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
+
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        It.Is<Entity>(e => e.Type == EntityTypes.Item && e.entity_id == (int)SummonTickets.SingleSummon && e.Quantity == 3)
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
+
+        this.mockRewardService.VerifyAll();
+    }
 }
