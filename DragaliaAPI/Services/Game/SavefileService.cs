@@ -460,8 +460,8 @@ public class SavefileService : ISavefileService
 
             if (
                 savefile.user_data.emblem_id != Emblems.DragonbloodPrince
-                && this.apiContext.Emblems.Local.FindEntry(
-                    nameof(DbEmblem.EmblemId),
+                && await this.apiContext.Emblems.FindAsync(
+                    deviceAccountId,
                     savefile.user_data.emblem_id
                 ) == null
             )
