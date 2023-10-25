@@ -11,6 +11,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Test.Controllers;
 
@@ -26,6 +27,7 @@ public class QuestControllerTest
     private readonly Mock<IPlayerIdentityService> mockPlayerIdentityService;
     private readonly Mock<ILogger<QuestController>> mockLogger;
     private readonly ApiContext apiContext;
+    private readonly string DbName = $"DbTestFixture-{Guid.NewGuid()}";
     private readonly QuestController questController;
 
     public QuestControllerTest()
