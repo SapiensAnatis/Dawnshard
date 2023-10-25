@@ -27,6 +27,11 @@ public class QuestRepository : IQuestRepository
             x => x.DeviceAccountId == this.playerIdentityService.AccountId
         );
 
+    public IQueryable<DbQuestTreasureList> QuestTreasureList =>
+        this.apiContext.QuestTreasureList(
+            x => x.DeviceAccountId == this.playerIdentityService.AccountId
+        );
+
     private async Task<DbQuest?> FindQuestAsync(int questId)
     {
         return await apiContext.PlayerQuests.FindAsync(playerIdentityService.AccountId, questId);
