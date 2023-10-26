@@ -149,7 +149,7 @@ public class QuestControllerTest
             .Setup(
                 x =>
                     x.GrantReward(
-                        It.Is<Entity>(e => e.Type == EntityTypes.Mana && e.Quantity == 40)
+                        It.IsAny<Entity>(e => e.Type == EntityTypes.Mana && e.Quantity == 40)
                     )
             )
             .ReturnsAsync(RewardGrantResult.Added);
@@ -157,16 +157,7 @@ public class QuestControllerTest
             .Setup(
                 x =>
                     x.GrantReward(
-                        It.Is<Entity>(e => e.Type == EntityTypes.Rupies && e.Quantity == 40)
-                    )
-            )
-            .ReturnsAsync(RewardGrantResult.Added);
-
-        this.mockRewardService
-            .Setup(
-                x =>
-                    x.GrantReward(
-                        new Entity(EntityTypes.Item, (int)UseItem.Honey, 1, null, null, null)
+                        It.IsAny<Entity>(e => e.Type == EntityTypes.Rupies && e.Quantity == 40)
                     )
             )
             .ReturnsAsync(RewardGrantResult.Added);
@@ -175,7 +166,12 @@ public class QuestControllerTest
             .Setup(
                 x =>
                     x.GrantReward(
-                        new Entity(EntityTypes.Material, (int)Materials.AmplifyingCrystal, 10, null, null, null)
+                        It.IsAny<Entity>(
+                            e =>
+                                e.Type == EntityTypes.Item
+                                && e.Id == (int)UseItem.Honey
+                                && e.Quantity == 1
+                        )
                     )
             )
             .ReturnsAsync(RewardGrantResult.Added);
@@ -184,7 +180,26 @@ public class QuestControllerTest
             .Setup(
                 x =>
                     x.GrantReward(
-                        new Entity(EntityTypes.SummonTicket, (int)SummonTickets.SingleSummon, 3, null, null, null)
+                        It.IsAny<Entity>(
+                            e =>
+                                e.Type == EntityTypes.Material
+                                && e.Id == (int)Materials.AmplifyingCrystal
+                                && e.Quantity == 10
+                        )
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
+
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        It.IsAny<Entity>(
+                            e =>
+                                e.Type == EntityTypes.SummonTicket
+                                && e.Id == (int)SummonTickets.SingleSummon
+                                && e.Quantity == 3
+                        )
                     )
             )
             .ReturnsAsync(RewardGrantResult.Added);
