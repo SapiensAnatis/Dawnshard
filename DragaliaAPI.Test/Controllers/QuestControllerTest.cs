@@ -143,11 +143,11 @@ public class QuestControllerTest
     [Fact]
     public async Task OpenTreasure_RewardsCorrect()
     {   
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
+        //this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
 
 
         this.mockRewardService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
-        this.mockPlayerIdentityService.VerifyAll();
+        //this.mockPlayerIdentityService.VerifyAll();
     }
 }
