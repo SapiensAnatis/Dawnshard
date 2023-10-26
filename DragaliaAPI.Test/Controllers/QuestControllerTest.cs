@@ -145,65 +145,6 @@ public class QuestControllerTest
     {   
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
 
-        this.mockRewardService
-            .Setup(
-                x =>
-                    x.GrantReward(
-                        It.IsAny<Entity>(e => e.Type == EntityTypes.Mana && e.Quantity == 40)
-                    )
-            )
-            .ReturnsAsync(RewardGrantResult.Added);
-        this.mockRewardService
-            .Setup(
-                x =>
-                    x.GrantReward(
-                        It.IsAny<Entity>(e => e.Type == EntityTypes.Rupies && e.Quantity == 40)
-                    )
-            )
-            .ReturnsAsync(RewardGrantResult.Added);
-
-        this.mockRewardService
-            .Setup(
-                x =>
-                    x.GrantReward(
-                        It.IsAny<Entity>(
-                            e =>
-                                e.Type == EntityTypes.Item
-                                && e.Id == (int)UseItem.Honey
-                                && e.Quantity == 1
-                        )
-                    )
-            )
-            .ReturnsAsync(RewardGrantResult.Added);
-
-        this.mockRewardService
-            .Setup(
-                x =>
-                    x.GrantReward(
-                        It.IsAny<Entity>(
-                            e =>
-                                e.Type == EntityTypes.Material
-                                && e.Id == (int)Materials.AmplifyingCrystal
-                                && e.Quantity == 10
-                        )
-                    )
-            )
-            .ReturnsAsync(RewardGrantResult.Added);
-
-        this.mockRewardService
-            .Setup(
-                x =>
-                    x.GrantReward(
-                        It.IsAny<Entity>(
-                            e =>
-                                e.Type == EntityTypes.SummonTicket
-                                && e.Id == (int)SummonTickets.SingleSummon
-                                && e.Quantity == 3
-                        )
-                    )
-            )
-            .ReturnsAsync(RewardGrantResult.Added);
-
         DbPlayerUserData userData =
             new()
             {
@@ -212,6 +153,9 @@ public class QuestControllerTest
             };
 
         this.mockUserDataRepository.SetupUserData(userData);
+
+        EntityResult entityResult = new();
+        mockRewardService.Setup(x => x.GetEntityResult()).Returns(entityResult);
 
         this.mockRewardService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
