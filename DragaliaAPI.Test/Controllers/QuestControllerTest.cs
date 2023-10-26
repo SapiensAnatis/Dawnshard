@@ -145,14 +145,6 @@ public class QuestControllerTest
     {   
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
 
-        DbPlayerUserData userData =
-            new()
-            {
-                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
-                MaxDragonQuantity = 200
-            };
-
-        this.mockUserDataRepository.SetupUserData(userData);
 
         this.mockRewardService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
