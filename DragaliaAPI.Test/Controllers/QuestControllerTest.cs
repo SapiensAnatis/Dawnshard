@@ -17,6 +17,8 @@ namespace DragaliaAPI.Test.Controllers;
 
 public class QuestControllerTest
 {
+    private readonly Mock<IStoryService> mockStoryService;
+    private readonly Mock<IHelperService> mockHelperService;
     private readonly Mock<IQuestDropService> mockQuestRewardService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<IClearPartyService> mockClearPartyService;
