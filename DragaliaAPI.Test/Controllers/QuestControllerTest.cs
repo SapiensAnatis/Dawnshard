@@ -154,9 +154,6 @@ public class QuestControllerTest
 
         this.mockUserDataRepository.SetupUserData(userData);
 
-        EntityResult entityResult = new();
-        mockRewardService.Setup(x => x.GetEntityResult()).Returns(entityResult);
-
         this.mockRewardService.VerifyAll();
         this.mockUserDataRepository.VerifyAll();
         this.mockPlayerIdentityService.VerifyAll();
