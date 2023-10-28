@@ -62,7 +62,7 @@ public class RewardService(
         if (handler is null)
         {
             logger.LogError("Failed to find reward handler for entity {@entity}", entity);
-            return RewardGrantResult.FailError;
+            throw new InvalidOperationException("Failed to grant reward");
         }
 
         GrantReturn grantReturn = await handler.Grant(entity);
@@ -91,6 +91,7 @@ public class RewardService(
                 break;
             case RewardGrantResult.FailError:
                 logger.LogError("Granting of entity {@entity} failed.", entity);
+                throw new InvalidOperationException("Failed to grant reward");
                 break;
             default:
                 throw new ArgumentOutOfRangeException(
