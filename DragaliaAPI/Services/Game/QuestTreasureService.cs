@@ -13,7 +13,7 @@ public class QuestTreasureService(
     IRewardService rewardService,
     IUserDataRepository userDataRepository,
     IPlayerIdentityService playerIdentityService,
-    ApiContext apiContext,
+    ApiContext apiContext
 ) : IQuestTreasureService
 {
     public async Task<QuestOpenTreasureData> DoOpenTreasure(QuestOpenTreasureRequest request)
