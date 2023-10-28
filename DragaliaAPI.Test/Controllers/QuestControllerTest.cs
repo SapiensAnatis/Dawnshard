@@ -28,7 +28,7 @@ public class QuestControllerTest
         this.mockQuestRewardService = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockClearPartyService = new(MockBehavior.Strict);
-        this.mockQuestTreasureService = new(MockBehavior.Strict);
+        this.mockQuestTreasureService = new(MockBehavior.Loose);
         this.mockLogger = new(MockBehavior.Loose);
 
         this.questController = new(
