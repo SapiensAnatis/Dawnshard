@@ -2,10 +2,12 @@ using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Models.Generated;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Services.Game;
 
@@ -52,7 +54,7 @@ public class QuestTreasureService(
         apiContext.QuestTreasureList.Add(
             new DbQuestTreasureList()
             {
-                DeviceAccountId = this.playerIdentityService.AccountId,
+                DeviceAccountId = playerIdentityService.AccountId,
                 QuestTreasureId = questTreasureData.Id
             }
         );
@@ -63,7 +65,7 @@ public class QuestTreasureService(
             new List<AtgenDuplicateEntityList>();
         EntityResult entityResult = rewardService.GetEntityResult();
 
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+        UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         return Ok(
             new QuestOpenTreasureData()
