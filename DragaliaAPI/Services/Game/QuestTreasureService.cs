@@ -68,17 +68,15 @@ public class QuestTreasureService(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return this.Ok(
-            new QuestOpenTreasureData()
-            {
-                update_data_list = updateDataList,
-                entity_result = entityResult,
-                quest_treasure_reward_list = quest_treasure_reward_list,
-                duplicate_entity_list = duplicate_entity_list,
-                add_max_dragon_quantity = questTreasureData.AddMaxDragonStorage,
-                add_max_weapon_quantity = 0,
-                add_max_amulet_quantity = 0
-            }
-        );
+        return new QuestOpenTreasureData()
+        {
+            update_data_list = updateDataList,
+            entity_result = entityResult,
+            quest_treasure_reward_list = quest_treasure_reward_list,
+            duplicate_entity_list = duplicate_entity_list,
+            add_max_dragon_quantity = questTreasureData.AddMaxDragonStorage,
+            add_max_weapon_quantity = 0,
+            add_max_amulet_quantity = 0
+        };
     }
 }

@@ -121,12 +121,9 @@ public class QuestControllerTest
     {
         (
             await this.questController.OpenTreasure(
-                new QuestOpenTreasureRequest()
-                {
-                    quest_treasure_id = 126201
-                }
-            ))
-                .GetData<QuestOpenTreasureData>()
+                new QuestOpenTreasureRequest() { quest_treasure_id = 126201 }
+            )
+                ).GetData<QuestOpenTreasureData>()
                 .Should()
                 .BeEquivalentTo(
                     update_data_list = new(),
