@@ -112,4 +112,26 @@ public class TreasureTradeTest : TestFixture
 
         newMatQuantity.Should().Be(preTradeAmount + 1);
     }
+
+    [Fact]
+    public async Task Trade_WeaponSkin_Trades()
+    {
+        TreasureTradeTradeData response = (
+            await Client.PostMsgpack<TreasureTradeTradeData>(
+                "treasure_trade/trade",
+                new TreasureTradeTradeRequest(1012, 10124101, null, 1)
+            )
+        ).data;
+
+        response.user_treasure_trade_list
+            .Should()
+            .HaveCount(1)
+            .And.Contain(x => x.treasure_trade_id == 10124101 && x.trade_count == 1);
+        response.treasure_trade_all_list.Should().NotBeEmpty();
+        response.treasure_trade_list.Should().BeNullOrEmpty();
+        response.update_data_list.Should().NotBeNull();
+        response.update_data_list.weapon_skin_list
+            .Should()
+            .Contain(x => x.weapon_skin_id == 30159921);
+    }
 }
