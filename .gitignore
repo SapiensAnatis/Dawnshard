@@ -415,3 +415,4 @@ __mismatch__/
 
 #sln startup
 DragaliaAPI.sln.startup.json
+global.json
