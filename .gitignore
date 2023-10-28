@@ -7,6 +7,7 @@ appsettings.Development.json
 test_coverage.json
 .run
 PhotonServer
+global.json
 
 # CMake
 cmake-build-*/
@@ -414,3 +415,4 @@ __mismatch__/
 
 #sln startup
 DragaliaAPI.sln.startup.json
+global.json
