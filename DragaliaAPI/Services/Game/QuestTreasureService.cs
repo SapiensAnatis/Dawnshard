@@ -15,6 +15,7 @@ public class QuestTreasureService(
     IRewardService rewardService,
     IUserDataRepository userDataRepository,
     IPlayerIdentityService playerIdentityService,
+    IUpdateDataService updateDataService,
     ApiContext apiContext
 ) : IQuestTreasureService
 {
@@ -67,7 +68,7 @@ public class QuestTreasureService(
 
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
-        return Ok(
+        return this.Ok(
             new QuestOpenTreasureData()
             {
                 update_data_list = updateDataList,

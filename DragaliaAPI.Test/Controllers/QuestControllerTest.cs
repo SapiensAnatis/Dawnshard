@@ -119,29 +119,35 @@ public class QuestControllerTest
     [Fact]
     public async Task OpenTreasure_ProducesExpectedResponse()
     {
-        (await this.questController.OpenTreasure(new QuestOpenTreasureRequest() { quest_treasure_id = 126201}))
-            .GetData<QuestOpenTreasureData>()
-            .Should()
-            .BeEquivalentTo(
-                update_data_list = new(),
-                entity_result = new()
+        (
+            await this.questController.OpenTreasure(
+                new QuestOpenTreasureRequest()
                 {
-                    converted_entity_list = new()
-                },
-                quest_treasure_reward_list = new List<AtgenBuildEventRewardEntityList>()
-                {
-                    new()
+                    quest_treasure_id = 126201
+                }
+            ))
+                .GetData<QuestOpenTreasureData>()
+                .Should()
+                .BeEquivalentTo(
+                    update_data_list = new(),
+                    entity_result = new()
                     {
-                        entity_type = EntityTypes.Material,
-                        entity_id = (int)Materials.AmplifyingGemstone,
-                        entity_quantity = 10
-                    }
-                },
-                duplicate_entity_list = new(),
-                add_max_dragon_quantity = 0,
-                add_max_weapon_quantity = 0,
-                add_max_amulet_quantity = 0
+                        converted_entity_list = new()
+                    },
+                    quest_treasure_reward_list = new List<AtgenBuildEventRewardEntityList>()
+                    {
+                        new()
+                        {
+                            entity_type = EntityTypes.Material,
+                            entity_id = (int)Materials.AmplifyingGemstone,
+                            entity_quantity = 10
+                        }
+                    },
+                    duplicate_entity_list = new(),
+                    add_max_dragon_quantity = 0,
+                    add_max_weapon_quantity = 0,
+                    add_max_amulet_quantity = 0
                 
-            );
+                );
     }
 }
