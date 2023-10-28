@@ -43,16 +43,15 @@ public class WallController : DragaliaControllerBase
         DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
 
         return Ok(
-            new DungeonFailData()
+            new WallFailData()
             {
                 result = 1,
                 fail_helper_list = new List<UserSupportList>(),
                 fail_helper_detail_list = new List<AtgenHelperDetailList>(),
                 fail_quest_detail = new()
-                { //stub
-                    quest_id = session.QuestData.Id,
-                    wall_id = 0,
-                    wall_level = 0,
+                {
+                    wall_id = session.WallId,
+                    wall_level = session.WallLevel,
                     is_host = true,
                 }
             }
@@ -80,7 +79,7 @@ public class WallController : DragaliaControllerBase
     public async Task<DragaliaResult> GetWallClearParty(WallGetWallClearPartyRequest request)
     {
         (IEnumerable<PartySettingList> clearParty, IEnumerable<AtgenLostUnitList> lostUnitList) =
-            await this.clearPartyService.GetQuestClearParty(0, false);
+            await this.clearPartyService.GetQuestClearParty(request.wall_id, false);
 
         await this.updateDataService.SaveChangesAsync(); // Updated lost entities
 
@@ -134,8 +133,16 @@ public class WallController : DragaliaControllerBase
     // Called upon clearing a MG quest and then clicking on the Next button
     // what does this actually do?
     [HttpPost("set_wall_clear_party")]
-    public async Task<DragaliaResult> SetWallClearParty()
+    public async Task<DragaliaResult> SetWallClearParty(WallSetWallClearPartyRequest request)
     {
+        await this.clearPartyService.SetQuestClearParty(
+            request.wall_id,
+            false,
+            request.request_party_setting_list
+        );
+
+        await this.updateDataService.SaveChangesAsync();
+
         WallSetWallClearPartyData data = new() { result = 1 };
 
         return Ok(data);

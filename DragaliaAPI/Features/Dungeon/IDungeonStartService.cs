@@ -19,4 +19,6 @@ public interface IDungeonStartService
     );
 
     Task<IngameQuestData> InitiateQuest(int questId);
+    Task<IngameData> GetWallIngameData(WallStartStartAssignUnitRequest request);
+    Task<IngameData> GetWallIngameData(WallStartStartRequest request);
 }

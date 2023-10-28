@@ -40,18 +40,28 @@ public class DungeonStartService(
             .GetPartyUnits(partyNoList)
             .AsNoTracking();
 
-        IEnumerable<PartySettingList> party = ProcessUnitList(
+        List<PartySettingList> party = ProcessUnitList(
             await partyQuery.ToListAsync(),
             partyNoList.First()
         );
 
-        IngameData result = await InitializeIngameData(questId, party, supportViewerId);
+        IngameData result = await InitializeIngameData(questId, supportViewerId);
 
         List<DbDetailedPartyUnit> detailedPartyUnits = await dungeonRepository
             .BuildDetailedPartyUnit(partyQuery, partyNoList.First())
             .ToListAsync();
 
+        QuestData questInfo = MasterAsset.QuestData.Get(questId);
+
         result.party_info.party_unit_list = await ProcessDetailedUnitList(detailedPartyUnits);
+        result.dungeon_key = await dungeonService.StartDungeon(
+            new()
+            {
+                QuestData = questInfo,
+                Party = party.Where(x => x.chara_id != 0),
+                SupportViewerId = supportViewerId
+            }
+        );
 
         return result;
     }
@@ -62,7 +72,7 @@ public class DungeonStartService(
         ulong? supportViewerId = null
     )
     {
-        IngameData result = await InitializeIngameData(questId, party, supportViewerId);
+        IngameData result = await InitializeIngameData(questId, supportViewerId);
 
         List<DbDetailedPartyUnit> detailedPartyUnits = new();
 
@@ -80,7 +90,80 @@ public class DungeonStartService(
             );
         }
 
+        QuestData questInfo = MasterAsset.QuestData.Get(questId);
+
         result.party_info.party_unit_list = await ProcessDetailedUnitList(detailedPartyUnits);
+        result.dungeon_key = await dungeonService.StartDungeon(
+            new()
+            {
+                QuestData = questInfo,
+                Party = party.Where(x => x.chara_id != 0),
+                SupportViewerId = supportViewerId
+            }
+        );
+
+        return result;
+    }
+
+    public async Task<IngameData> GetWallIngameData(WallStartStartRequest request)
+    {
+        IQueryable<DbPartyUnit> partyQuery = partyRepository
+            .GetPartyUnits(request.party_no)
+            .AsNoTracking();
+
+        List<PartySettingList> party = ProcessUnitList(
+            await partyQuery.ToListAsync(),
+            request.party_no
+        );
+
+        IngameData result = await InitializeIngameData(0, request.support_viewer_id);
+
+        List<DbDetailedPartyUnit> detailedPartyUnits = await dungeonRepository
+            .BuildDetailedPartyUnit(partyQuery, request.party_no)
+            .ToListAsync();
+
+        result.party_info.party_unit_list = await ProcessDetailedUnitList(detailedPartyUnits);
+        result.dungeon_key = await dungeonService.StartDungeon(
+            new()
+            {
+                Party = party.Where(x => x.chara_id != 0),
+                WallId = request.wall_id,
+                WallLevel = request.wall_level
+            }
+        );
+
+        return result;
+    }
+
+    public async Task<IngameData> GetWallIngameData(WallStartStartAssignUnitRequest request)
+    {
+        IngameData result = await InitializeIngameData(0, request.support_viewer_id);
+
+        List<DbDetailedPartyUnit> detailedPartyUnits = new();
+
+        foreach (
+            IQueryable<DbDetailedPartyUnit> detailQuery in dungeonRepository.BuildDetailedPartyUnit(
+                request.request_party_setting_list
+            )
+        )
+        {
+            detailedPartyUnits.Add(
+                await detailQuery.AsNoTracking().SingleOrDefaultAsync()
+                    ?? throw new InvalidOperationException(
+                        "Detailed party query returned no results"
+                    )
+            );
+        }
+
+        result.party_info.party_unit_list = await ProcessDetailedUnitList(detailedPartyUnits);
+        result.dungeon_key = await dungeonService.StartDungeon(
+            new()
+            {
+                Party = request.request_party_setting_list.Where(x => x.chara_id != 0),
+                WallId = request.wall_id,
+                WallLevel = request.wall_level
+            }
+        );
 
         return result;
     }
@@ -183,10 +266,7 @@ public class DungeonStartService(
         return units;
     }
 
-    private IEnumerable<PartySettingList> ProcessUnitList(
-        List<DbPartyUnit> partyUnits,
-        int firstPartyNo
-    )
+    private List<PartySettingList> ProcessUnitList(List<DbPartyUnit> partyUnits, int firstPartyNo)
     {
         foreach (DbPartyUnit unit in partyUnits)
         {
@@ -194,14 +274,10 @@ public class DungeonStartService(
                 unit.UnitNo += 4;
         }
 
-        return partyUnits.Select(mapper.Map<PartySettingList>).OrderBy(x => x.unit_no);
+        return partyUnits.Select(mapper.Map<PartySettingList>).OrderBy(x => x.unit_no).ToList();
     }
 
-    private async Task<IngameData> InitializeIngameData(
-        int questId,
-        IEnumerable<PartySettingList> party,
-        ulong? supportViewerId = null
-    )
+    private async Task<IngameData> InitializeIngameData(int questId, ulong? supportViewerId = null)
     {
         IngameData result =
             new()
@@ -232,15 +308,6 @@ public class DungeonStartService(
         result.dungeon_type = questInfo.DungeonType;
         result.reborn_limit = questInfo.RebornLimit;
         result.continue_limit = questInfo.ContinueLimit;
-
-        result.dungeon_key = await dungeonService.StartDungeon(
-            new()
-            {
-                QuestData = questInfo,
-                Party = party.Where(x => x.chara_id != 0),
-                SupportViewerId = supportViewerId
-            }
-        );
 
         result.party_info.fort_bonus_list = await bonusService.GetBonusList();
         result.party_info.event_boost = await bonusService.GetEventBoost(questInfo.Gid);

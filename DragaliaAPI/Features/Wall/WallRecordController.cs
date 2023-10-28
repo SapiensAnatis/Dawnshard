@@ -48,17 +48,15 @@ public class WallRecordController : DragaliaControllerBase
     {
         DungeonSession dungeonSession = await dungeonService.FinishDungeon(request.dungeon_key);
 
-        DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(request.wall_id);
-
-        int previousLevel = questWall.WallLevel;
+        int previousLevel = dungeonSession.WallLevel;
 
         // Don't grant first clear wyrmite if you are re-clearing the last level
         bool toGrantFirstClearWyrmite = previousLevel != WallService.MaximumQuestWallLevel;
 
         logger.LogInformation(
-            "[wall_record/record] Cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}",
+            "Cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}",
             request.wall_id,
-            questWall.WallLevel
+            dungeonSession.WallLevel
         );
 
         // Level up completed wall quest
@@ -122,7 +120,8 @@ public class WallRecordController : DragaliaControllerBase
         return Ok(data);
     }
 
-    public static readonly Entity GoldCrystals = new(EntityTypes.Material, (int)Materials.GoldCrystal, 3);
+    public static readonly Entity GoldCrystals =
+        new(EntityTypes.Material, (int)Materials.GoldCrystal, 3);
 
     public static readonly Entity Rupies = new(EntityTypes.Rupies, 1, 500);
 
@@ -130,11 +129,6 @@ public class WallRecordController : DragaliaControllerBase
 
     public static readonly Entity Wyrmites = new(EntityTypes.Wyrmite, 0, 10);
 
-    public static readonly Present.Present WyrmitesPresent = new(
-                    PresentMessage.FirstClear,
-                    Wyrmites.Type,
-                    Wyrmites.Id,
-                    Wyrmites.Quantity
-                );
-
+    public static readonly Present.Present WyrmitesPresent =
+        new(PresentMessage.FirstClear, Wyrmites.Type, Wyrmites.Id, Wyrmites.Quantity);
 }
