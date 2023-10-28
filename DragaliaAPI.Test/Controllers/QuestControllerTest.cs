@@ -146,5 +146,53 @@ public class QuestControllerTest
                     add_max_amulet_quantity = 0
                 }
             );
+
+        (
+            await this.questController.OpenTreasure(
+                new QuestOpenTreasureRequest() { quest_treasure_id = 102201 }
+            )
+        )
+            .GetData<QuestOpenTreasureData>()
+            .Should()
+            .BeEquivalentTo(
+                new QuestOpenTreasureData()
+                {
+                    update_data_list = new(),
+                    entity_result = new EntityResult(),
+                    quest_treasure_reward_list = new List<AtgenBuildEventRewardEntityList>(),
+                    duplicate_entity_list = new List<AtgenDuplicateEntityList>(),
+                    add_max_dragon_quantity = 5,
+                    add_max_weapon_quantity = 0,
+                    add_max_amulet_quantity = 0
+                }
+            );
+
+        (
+            await this.questController.OpenTreasure(
+                new QuestOpenTreasureRequest() { quest_treasure_id = 104102 }
+            )
+        )
+            .GetData<QuestOpenTreasureData>()
+            .Should()
+            .BeEquivalentTo(
+                new QuestOpenTreasureData()
+                {
+                    update_data_list = new(),
+                    entity_result = new EntityResult(),
+                    quest_treasure_reward_list = new List<AtgenBuildEventRewardEntityList>()
+                    {
+                        new()
+                        {
+                            entity_type = EntityTypes.Mana,
+                            entity_id = 0,
+                            entity_quantity = 3000
+                        }
+                    },
+                    duplicate_entity_list = new List<AtgenDuplicateEntityList>(),
+                    add_max_dragon_quantity = 0,
+                    add_max_weapon_quantity = 0,
+                    add_max_amulet_quantity = 0
+                }
+            );
     }
 }
