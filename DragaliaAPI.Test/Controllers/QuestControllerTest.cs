@@ -144,6 +144,10 @@ public class QuestControllerTest
                 }
             );
 
+        this.mockUpdateDataService
+            .Setup(x => x.SaveChangesAsync())
+            .ReturnsAsync(new UpdateDataList());
+
         (
             await this.questController.OpenTreasure(
                 new QuestOpenTreasureRequest() { quest_treasure_id = 126201 }
@@ -221,5 +225,6 @@ public class QuestControllerTest
             );
 
         this.mockQuestTreasureService.VerifyAll();
+        this.mockUpdateDataService.VerifyAll();
     }
 }
