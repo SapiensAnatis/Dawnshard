@@ -28,7 +28,7 @@ public class QuestControllerTest
         this.mockQuestRewardService = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockClearPartyService = new(MockBehavior.Strict);
-        this.mockQuestTreasureService = new(MockBehavior.Loose);
+        this.mockQuestTreasureService = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
 
         this.questController = new(
@@ -119,6 +119,30 @@ public class QuestControllerTest
     [Fact]
     public async Task OpenTreasure_ProducesExpectedResponse()
     {
+
+        this.mockQuestTreasureService
+            .Setup(x => x.DoOpenTreasure(new QuestOpenTreasureRequest() { quest_treasure_id = 104101 }))
+            .ReturnsAsync(
+                new QuestOpenTreasureData()
+                {
+                    update_data_list = new(),
+                    entity_result = new EntityResult(),
+                    quest_treasure_reward_list = new List<AtgenBuildEventRewardEntityList>()
+                    {
+                        new()
+                        {
+                            entity_type = EntityTypes.Material,
+                            entity_id = (int)Materials.GoldCrystal,
+                            entity_quantity = 5
+                        }
+                    },
+                    duplicate_entity_list = new List<AtgenDuplicateEntityList>(),
+                    add_max_dragon_quantity = 0,
+                    add_max_weapon_quantity = 0,
+                    add_max_amulet_quantity = 0
+                }
+            )
+
         (
             await this.questController.OpenTreasure(
                 new QuestOpenTreasureRequest() { quest_treasure_id = 126201 }
