@@ -122,29 +122,32 @@ public class QuestControllerTest
         (
             await this.questController.OpenTreasure(
                 new QuestOpenTreasureRequest() { quest_treasure_id = 126201 }
+                )
             )
-                ).GetData<QuestOpenTreasureData>()
+                .GetData<QuestOpenTreasureData>()
                 .Should()
                 .BeEquivalentTo(
-                    update_data_list = new(),
-                    entity_result = new()
+                    new QuestOpenTreasureData()
                     {
-                        converted_entity_list = new()
-                    },
-                    quest_treasure_reward_list = new List<AtgenBuildEventRewardEntityList>()
-                    {
-                        new()
+                        update_data_list = new(),
+                        entity_result = new()
                         {
-                            entity_type = EntityTypes.Material,
-                            entity_id = (int)Materials.AmplifyingGemstone,
-                            entity_quantity = 10
-                        }
-                    },
-                    duplicate_entity_list = new(),
-                    add_max_dragon_quantity = 0,
-                    add_max_weapon_quantity = 0,
-                    add_max_amulet_quantity = 0
-                
+                            converted_entity_list = new()
+                        },
+                        quest_treasure_reward_list = new List<AtgenBuildEventRewardEntityList>()
+                        {
+                            new()
+                            {
+                                entity_type = EntityTypes.Material,
+                                entity_id = (int)Materials.AmplifyingGemstone,
+                                entity_quantity = 10
+                            }
+                        },
+                        duplicate_entity_list = new(),
+                        add_max_dragon_quantity = 0,
+                        add_max_weapon_quantity = 0,
+                        add_max_amulet_quantity = 0
+                    }
                 );
     }
 }
