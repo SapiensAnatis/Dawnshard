@@ -119,7 +119,6 @@ public class QuestControllerTest
     [Fact]
     public async Task OpenTreasure_ProducesExpectedResponse()
     {
-
         this.mockQuestTreasureService
             .Setup(x => x.DoOpenTreasure(new QuestOpenTreasureRequest() { quest_treasure_id = 104101 }))
             .ReturnsAsync(
@@ -141,7 +140,7 @@ public class QuestControllerTest
                     add_max_weapon_quantity = 0,
                     add_max_amulet_quantity = 0
                 }
-            )
+            );
 
         (
             await this.questController.OpenTreasure(
