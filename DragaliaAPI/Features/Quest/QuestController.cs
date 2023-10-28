@@ -1,17 +1,10 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dungeon;
-using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
-using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
-using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Quest;
@@ -25,10 +18,7 @@ public class QuestController : DragaliaControllerBase
     private readonly IQuestDropService questRewardService;
     private readonly IUpdateDataService updateDataService;
     private readonly IClearPartyService clearPartyService;
-    private readonly IRewardService rewardService;
-    private readonly IUserDataRepository userDataRepository;
-    private readonly IPlayerIdentityService playerIdentityService;
-    private readonly ApiContext apiContext;
+    private readonly IQuestTreasureService questTreasureService;
     private readonly ILogger<QuestController> logger;
 
     public QuestController(
@@ -37,10 +27,7 @@ public class QuestController : DragaliaControllerBase
         IQuestDropService questRewardService,
         IUpdateDataService updateDataService,
         IClearPartyService clearPartyService,
-        IRewardService rewardService,
-        IUserDataRepository userDataRepository,
-        IPlayerIdentityService playerIdentityService,
-        ApiContext apiContext,
+        IQuestTreasureService questTreasureService,
         ILogger<QuestController> logger
     )
     {
@@ -49,10 +36,7 @@ public class QuestController : DragaliaControllerBase
         this.questRewardService = questRewardService;
         this.updateDataService = updateDataService;
         this.clearPartyService = clearPartyService;
-        this.rewardService = rewardService;
-        this.userDataRepository = userDataRepository;
-        this.playerIdentityService = playerIdentityService;
-        this.apiContext = apiContext;
+        this.questTreasureService = questTreasureService
         this.logger = logger;
     }
 
@@ -129,66 +113,7 @@ public class QuestController : DragaliaControllerBase
     [HttpPost("open_treasure")]
     public async Task<DragaliaResult> OpenTreasure(QuestOpenTreasureRequest request)
     {
-        QuestTreasureData questTreasureData = MasterAsset.QuestTreasureData[
-            request.quest_treasure_id
-        ];
-
-        await rewardService.GrantReward(
-            new Entity(
-                questTreasureData.EntityType,
-                questTreasureData.EntityId,
-                questTreasureData.EntityQuantity
-            )
-        );
-
-        List<AtgenBuildEventRewardEntityList> rewards = new();
-
-        if (questTreasureData.EntityType != EntityTypes.None)
-        {
-            // find entity type for dragon storage
-            rewards.Add(
-                new AtgenBuildEventRewardEntityList(
-                    questTreasureData.EntityType,
-                    questTreasureData.EntityId,
-                    questTreasureData.EntityQuantity
-                )
-            );
-        }
-
-        if (questTreasureData.AddMaxDragonStorage != 0)
-        {
-            DbPlayerUserData userData = await userDataRepository.GetUserDataAsync();
-            userData.MaxDragonQuantity += questTreasureData.AddMaxDragonStorage;
-        }
-
-        apiContext.QuestTreasureList.Add(
-            new DbQuestTreasureList()
-            {
-                DeviceAccountId = this.playerIdentityService.AccountId,
-                QuestTreasureId = questTreasureData.Id
-            }
-        );
-
-        IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list = rewards;
-
-        IEnumerable<AtgenDuplicateEntityList> duplicate_entity_list =
-            new List<AtgenDuplicateEntityList>();
-        EntityResult entityResult = rewardService.GetEntityResult();
-
-        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
-
-        return Ok(
-            new QuestOpenTreasureData()
-            {
-                update_data_list = updateDataList,
-                entity_result = entityResult,
-                quest_treasure_reward_list = quest_treasure_reward_list,
-                duplicate_entity_list = duplicate_entity_list,
-                add_max_dragon_quantity = questTreasureData.AddMaxDragonStorage,
-                add_max_weapon_quantity = 0,
-                add_max_amulet_quantity = 0
-            }
-        );
+        return await this.questTreasureService.DoOpenTreasure(request);
     }
 
     [HttpPost("set_quest_clear_party")]
