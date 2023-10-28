@@ -130,10 +130,7 @@ public class QuestControllerTest
                 new QuestOpenTreasureData()
                 {
                     update_data_list = new(),
-                    entity_result = new()
-                    {
-                        converted_entity_list = new List<ConvertedEntity>()
-                    },
+                    entity_result = new EntityResult(),
                     quest_treasure_reward_list = new List<AtgenBuildEventRewardEntityList>()
                     {
                         new()
