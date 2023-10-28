@@ -220,6 +220,6 @@ public class QuestControllerTest
                 }
             );
 
-        this.mockQuestTreasureService.VerifyAll()
+        this.mockQuestTreasureService.VerifyAll();
     }
 }
