@@ -12,15 +12,14 @@ namespace DragaliaAPI.Integration.Test.Features.Trade;
 public class TreasureTradeTest : TestFixture
 {
     public TreasureTradeTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+        this.ApiContext.PlayerTrades.ExecuteDelete();
+    }
 
     [Fact]
     public async Task GetListAll_NoTrades_ReturnsEmpty()
     {
-        this.ApiContext.PlayerTrades.RemoveRange(
-            this.ApiContext.PlayerTrades.Where(x => x.DeviceAccountId == DeviceAccountId)
-        );
-
         await this.ApiContext.SaveChangesAsync();
 
         TreasureTradeGetListAllData response = (
@@ -38,10 +37,6 @@ public class TreasureTradeTest : TestFixture
     [Fact]
     public async Task GetListAll_WithTrades_ReturnsTrades()
     {
-        this.ApiContext.PlayerTrades.RemoveRange(
-            this.ApiContext.PlayerTrades.Where(x => x.DeviceAccountId == DeviceAccountId)
-        );
-
         await this.AddToDatabase(
             new DbPlayerTrade()
             {
