@@ -120,8 +120,8 @@ public class QuestControllerTest
     public async Task OpenTreasure_ProducesExpectedResponse()
     {
         this.mockQuestTreasureService
-            .Setup(x => x.DoOpenTreasure(
-                new QuestOpenTreasureRequest() { quest_treasure_id = 104101 })
+            .Setup(
+                x => x.DoOpenTreasure(new QuestOpenTreasureRequest() { quest_treasure_id = 104101 })
             )
             .ReturnsAsync(
                 new QuestOpenTreasureData()
