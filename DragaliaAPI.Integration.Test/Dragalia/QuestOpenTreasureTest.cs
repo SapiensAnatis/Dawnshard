@@ -7,6 +7,9 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 
 public class QuestOpenTreasureTest : TestFixture
 {
+    public QuestOpenTreasureTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
+        : base(factory, outputHelper) { }
+
     [Fact]
     public async Task OpenTreasure_ReturnCorrectResponse()
     {
