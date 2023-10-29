@@ -223,6 +223,9 @@ public class MissionProgressionService(
         EnqueueEvent(MissionCompleteType.TreasureTrade, count, total, tradeId, (int)type, id);
     }
 
+    public void OnEventParticipation(int eventId) =>
+        EnqueueEvent(MissionCompleteType.EventParticipation, 1, 1, eventId);
+
     public void EnqueueEvent(
         MissionCompleteType type,
         int value = 1,

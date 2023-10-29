@@ -69,6 +69,7 @@ public interface IMissionProgressionService
     void OnGuildCheckInRewardClaimed();
     void OnPartyPowerReached(int might);
     void OnTreasureTrade(int tradeId, EntityTypes type, int id, int count, int total);
+    void OnEventParticipation(int eventId);
 
     void EnqueueEvent(
         MissionCompleteType type,

@@ -26,4 +26,5 @@ public interface IMissionService
     Task<MissionNotice> GetMissionNotice(ILookup<MissionType, DbPlayerMission>? updatedLookup);
     Task<IEnumerable<QuestEntryConditionList>> GetEntryConditions();
     Task<IEnumerable<DrillMissionGroupList>> GetCompletedDrillGroups();
+    Task<IEnumerable<DbPlayerMission>> UnlockMemoryEventMissions(int eventId);
 }

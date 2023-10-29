@@ -139,6 +139,11 @@ public enum MissionCompleteType
     TreasureTrade,
 
     /// <summary>
+    /// int eventId
+    /// </summary>
+    EventParticipation,
+
+    /// <summary>
     /// None
     /// </summary>
     UnimplementedAutoComplete = 99999, // Auto-completes upon receiving

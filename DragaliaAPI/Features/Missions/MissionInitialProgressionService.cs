@@ -154,6 +154,7 @@ public class MissionInitialProgressionService(
             MissionCompleteType.AccountLinked => 0,
             MissionCompleteType.PartyOptimized => 0,
             MissionCompleteType.AbilityCrestTradeViewed => 0,
+            MissionCompleteType.EventParticipation => 0,
             MissionCompleteType.GuildCheckInRewardClaimed => amountToComplete, // TODO
             MissionCompleteType.UnimplementedAutoComplete => amountToComplete,
             _

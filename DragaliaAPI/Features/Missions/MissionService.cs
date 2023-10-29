@@ -113,6 +113,38 @@ public class MissionService : IMissionService
         return dbMissions;
     }
 
+    public async Task<IEnumerable<DbPlayerMission>> UnlockMemoryEventMissions(int eventId)
+    {
+        IEnumerable<MemoryEventMission> missions = MasterAsset.MemoryEventMission.Enumerable
+            .Where(x => x.EventId == eventId)
+            .ToList();
+
+        if (
+            await this.missionRepository.Missions.AnyAsync(
+                x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent
+            )
+        )
+            return await this.missionRepository.Missions
+                .Where(x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent)
+                .ToListAsync();
+
+        logger.LogInformation(
+            "Unlocking memory event mission group {eventId} ({groupMissionIds})",
+            eventId,
+            missions.Select(x => x.Id)
+        );
+
+        List<DbPlayerMission> dbMissions = new();
+        foreach (MemoryEventMission mission in missions)
+        {
+            dbMissions.Add(
+                await StartMission(MissionType.MemoryEvent, mission.Id, groupId: mission.EventId)
+            );
+        }
+
+        return dbMissions;
+    }
+
     public async Task RedeemMission(MissionType type, int id)
     {
         logger.LogInformation("Redeeming mission {missionId}", id);

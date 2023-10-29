@@ -1280,5 +1280,13 @@
     "_Parameter": 21900,
     "_Parameter2": 1,
     "_Parameter3": 2
+  },
+  {
+    "_Id": 1022010106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10220101,
+    "_CompleteType": "EventParticipation",
+    "_UseTotalValue": 1,
+    "_Parameter": 20845
   }
 ]
