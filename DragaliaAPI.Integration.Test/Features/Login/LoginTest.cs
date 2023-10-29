@@ -270,6 +270,60 @@ public class LoginTest : TestFixture
     }
 
     [Fact]
+    public async Task LoginIndex_DragonGift_GrantsReward()
+    {
+        await this.AddToDatabase(
+            new DbLoginBonus()
+            {
+                DeviceAccountId = DeviceAccountId,
+                Id = 17,
+                CurrentDay = 7,
+            }
+        );
+
+        int oldCloverQuantity = await this.ApiContext.PlayerDragonGifts
+            .AsNoTracking()
+            .Where(
+                x =>
+                    x.DragonGiftId == DragonGifts.FourLeafClover
+                    && x.DeviceAccountId == DeviceAccountId
+            )
+            .Select(x => x.Quantity)
+            .FirstAsync();
+
+        LoginIndexData response = (
+            await this.Client.PostMsgpack<LoginIndexData>(
+                "login/index",
+                new LoginIndexRequest() { jws_result = string.Empty }
+            )
+        ).data;
+
+        response.login_bonus_list
+            .Should()
+            .ContainEquivalentOf(
+                new AtgenLoginBonusList()
+                {
+                    entity_id = 30001,
+                    entity_quantity = 3,
+                    entity_type = EntityTypes.DragonGift,
+                    entity_level = 0,
+                    entity_limit_break_count = 0,
+                    login_bonus_id = 17,
+                    reward_day = 8,
+                    total_login_day = 8
+                }
+            );
+
+        response.update_data_list.dragon_gift_list
+            .Should()
+            .Contain(
+                x =>
+                    x.dragon_gift_id == DragonGifts.FourLeafClover
+                    && x.quantity == oldCloverQuantity + 3
+            );
+    }
+
+    [Fact]
     public async Task LoginVerifyJws_ReturnsOK()
     {
         ResultCodeData response = (
