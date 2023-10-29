@@ -2,13 +2,19 @@ using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 namespace DragaliaAPI.MissionDesigner.Models;
 
-public abstract record Mission
+public abstract class Mission
 {
-    public int Id => int.Parse($"{this.MissionId}{(int)this.Type:00}");
+    private MissionType? type;
+
+    protected int Id => int.Parse($"{this.MissionId}{(int)this.Type:00}");
 
     public required int MissionId { get; init; }
 
-    public required MissionType Type { get; init; }
+    public MissionType Type
+    {
+        get => this.type ?? throw new InvalidOperationException("Type was not initialized");
+        set => this.type = value;
+    }
 
     public abstract MissionCompleteType CompleteType { get; }
 

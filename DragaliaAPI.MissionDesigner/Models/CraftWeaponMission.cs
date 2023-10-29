@@ -3,7 +3,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 namespace DragaliaAPI.MissionDesigner.Models;
 
-public record CraftWeaponMission : Mission
+public class CraftWeaponMission : Mission
 {
     public required WeaponBodies WeaponBody { get; init; }
 
@@ -21,7 +21,7 @@ public record CraftWeaponMission : Mission
             this.Type,
             this.MissionId,
             this.CompleteType,
-            false,
+            true,
             (int)this.WeaponBody,
             (int)this.Element,
             this.Rarity,

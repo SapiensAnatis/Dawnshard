@@ -3,7 +3,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 
 namespace DragaliaAPI.MissionDesigner.Models;
 
-public record FortPlantLevelUpMission : Mission
+public class FortPlantLevelUpMission : Mission
 {
     public required int RequiredHalidomLevel { get; init; }
 
