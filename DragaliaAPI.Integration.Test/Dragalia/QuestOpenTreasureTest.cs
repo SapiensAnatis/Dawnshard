@@ -10,7 +10,8 @@ public class QuestOpenTreasureTest : TestFixture
     public QuestOpenTreasureTest(
         CustomWebApplicationFactory factory,
         ITestOutputHelper outputHelper
-    ) : base(factory, outputHelper) { }
+    )
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task OpenTreasure_ReturnCorrectResponse()
@@ -25,13 +26,12 @@ public class QuestOpenTreasureTest : TestFixture
         response.update_data_list.user_data.Should().NotBeNull();
         response.update_data_list.quest_treasure_list
             .Should()
-            .ContainEquivalentOf(new QuestTreasureList() { quest_treasure_id = 104101});
+            .ContainEquivalentOf(new QuestTreasureList() { quest_treasure_id = 104101 });
     }
 
     [Fact]
     public async Task OpenTreasure_UpdatesDatabase()
     {
-
         QuestOpenTreasureData response = (
             await this.Client.PostMsgpack<QuestOpenTreasureData>(
                 "/quest/open_treasure",
