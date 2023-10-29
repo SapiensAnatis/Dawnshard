@@ -175,19 +175,17 @@ public class InventoryRepository : IInventoryRepository
         return true;
     }
 
-    public DbPlayerDragonGift AddDragonGift(DragonGifts giftId)
-    {
-        return apiContext.PlayerDragonGifts
+    public DbPlayerDragonGift AddDragonGift(DragonGifts giftId, int quantity) =>
+        apiContext.PlayerDragonGifts
             .Add(
                 new DbPlayerDragonGift()
                 {
                     DeviceAccountId = this.playerIdentityService.AccountId,
                     DragonGiftId = giftId,
-                    Quantity = 0
+                    Quantity = quantity
                 }
             )
             .Entity;
-    }
 
     public async Task<DbPlayerDragonGift?> GetDragonGift(DragonGifts giftId)
     {
@@ -213,8 +211,7 @@ public class InventoryRepository : IInventoryRepository
             }
             else
             {
-                dbGift = AddDragonGift(gift);
-                dbGift.Quantity = 1;
+                this.AddDragonGift(gift, 1);
             }
         }
     }
