@@ -10,12 +10,12 @@ public class QuestOpenTreasureTest : TestFixture
     [Fact]
     public async Task OpenTreasure_ReturnCorrectResponse()
     {
-        QuestOpenTreasureData response = {
+        QuestOpenTreasureData response = (
             await this.Client.PostMsgpack<QuestOpenTreasureData>(
                 "/quest/open_treasure",
                 new QuestOpenTreasureRequest() { quest_treasure_id = 104101 }
             )
-        }.data;
+        ).data;
 
         response.update_data_list.user_data.Should().NotBeNull();
         response.update_data_list.quest_treasure_list
@@ -27,12 +27,12 @@ public class QuestOpenTreasureTest : TestFixture
     public async Task OpenTreasure_UpdatesDatabase()
     {
 
-        QuestOpenTreasureData response = {
+        QuestOpenTreasureData response = (
             await this.Client.PostMsgpack<QuestOpenTreasureData>(
                 "/quest/open_treasure",
                 new QuestOpenTreasureRequest() { quest_treasure_id = 126201 }
             )
-        }.data;
+        ).data;
 
         List<DbQuestTreasureList> questTreasureList = await this.ApiContext.QuestTreasureList
             .Where(x => x.DeviceAccountId == DeviceAccountId)
