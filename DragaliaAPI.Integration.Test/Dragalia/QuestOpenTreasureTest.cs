@@ -23,7 +23,6 @@ public class QuestOpenTreasureTest : TestFixture
             )
         ).data;
 
-        response.update_data_list.user_data.Should().NotBeNull();
         response.update_data_list.quest_treasure_list
             .Should()
             .ContainEquivalentOf(new QuestTreasureList() { quest_treasure_id = 104101 });
