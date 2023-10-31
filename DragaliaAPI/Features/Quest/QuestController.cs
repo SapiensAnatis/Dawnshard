@@ -18,6 +18,7 @@ public class QuestController : DragaliaControllerBase
     private readonly IQuestDropService questRewardService;
     private readonly IUpdateDataService updateDataService;
     private readonly IClearPartyService clearPartyService;
+    private readonly IQuestTreasureService questTreasureService;
     private readonly ILogger<QuestController> logger;
 
     public QuestController(
@@ -26,6 +27,7 @@ public class QuestController : DragaliaControllerBase
         IQuestDropService questRewardService,
         IUpdateDataService updateDataService,
         IClearPartyService clearPartyService,
+        IQuestTreasureService questTreasureService,
         ILogger<QuestController> logger
     )
     {
@@ -34,6 +36,7 @@ public class QuestController : DragaliaControllerBase
         this.questRewardService = questRewardService;
         this.updateDataService = updateDataService;
         this.clearPartyService = clearPartyService;
+        this.questTreasureService = questTreasureService;
         this.logger = logger;
     }
 
@@ -106,6 +109,14 @@ public class QuestController : DragaliaControllerBase
             }
         );
     }
+
+    /*
+    [HttpPost("open_treasure")]
+    public async Task<DragaliaResult> OpenTreasure(QuestOpenTreasureRequest request)
+    {
+        QuestOpenTreasureData response = await this.questTreasureService.DoOpenTreasure(request);
+        return Ok(response);
+    } */
 
     [HttpPost("set_quest_clear_party")]
     public async Task<DragaliaResult> SetQuestClearParty(QuestSetQuestClearPartyRequest request)
