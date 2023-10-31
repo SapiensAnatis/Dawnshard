@@ -110,12 +110,13 @@ public class QuestController : DragaliaControllerBase
         );
     }
 
+    /*
     [HttpPost("open_treasure")]
     public async Task<DragaliaResult> OpenTreasure(QuestOpenTreasureRequest request)
     {
         QuestOpenTreasureData response = await this.questTreasureService.DoOpenTreasure(request);
         return Ok(response);
-    }
+    } */
 
     [HttpPost("set_quest_clear_party")]
     public async Task<DragaliaResult> SetQuestClearParty(QuestSetQuestClearPartyRequest request)
