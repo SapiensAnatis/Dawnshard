@@ -654,6 +654,9 @@ public class SavefileService : ISavefileService
         this.apiContext.QuestEvents.RemoveRange(
             this.apiContext.QuestEvents.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.QuestTreasureList.RemoveRange(
+            this.apiContext.QuestTreasureList.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
         this.apiContext.PartyPowers.RemoveRange(
             this.apiContext.PartyPowers.Where(x => x.DeviceAccountId == deviceAccountId)
         );
