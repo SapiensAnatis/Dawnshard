@@ -59,7 +59,7 @@ public static class DatabaseConfiguration
                 Host = host ?? "postgres",
                 Username = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? "postgres",
                 Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD"),
-                Database = Environment.GetEnvironmentVariable("POSTGRES_DATABASE"),
+                Database = Environment.GetEnvironmentVariable("POSTGRES_DB"),
                 LogParameters = true,
                 IncludeErrorDetail = true,
             };
@@ -75,6 +75,15 @@ public static class DatabaseConfiguration
             .CreateScope();
 
         ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
+        ILogger logger = scope.ServiceProvider
+            .GetRequiredService<ILoggerFactory>()
+            .CreateLogger("DatabaseConfiguration");
+
+        logger.LogInformation(
+            "Connecting to database using username {username} and database {database}",
+            Environment.GetEnvironmentVariable("POSTGRES_PASSWORD"),
+            Environment.GetEnvironmentVariable("POSTGRES_DB")
+        );
 
         if (!context.Database.IsRelational())
             return;
