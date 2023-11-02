@@ -139,6 +139,7 @@ public static class ServiceConfiguration
             // Quest feature
             .AddScoped<IQuestService, QuestService>()
             .AddScoped<IQuestCacheService, QuestCacheService>()
+            .AddScoped<IQuestTreasureService, QuestTreasureService>()
             // Party power feature
             .AddScoped<IPartyPowerService, PartyPowerService>()
             .AddScoped<IPartyPowerRepository, PartyPowerRepository>()

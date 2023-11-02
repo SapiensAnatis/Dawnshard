@@ -74,6 +74,9 @@ public class LoadService(
                     .Select(mapper.Map<CastleStoryList>),
                 quest_list = savefile.QuestList.Select(mapper.Map<QuestList>),
                 quest_event_list = savefile.QuestEvents.Select(mapper.Map<QuestEventList>),
+                quest_treasure_list = savefile.QuestTreasureList.Select(
+                    mapper.Map<QuestTreasureList>
+                ),
                 material_list = savefile.MaterialList.Select(mapper.Map<MaterialList>),
                 weapon_skin_list = savefile.WeaponSkinList.Select(mapper.Map<WeaponSkinList>),
                 weapon_passive_ability_list = savefile.WeaponPassiveAbilityList.Select(

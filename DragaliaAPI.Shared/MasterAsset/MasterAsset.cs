@@ -117,6 +117,9 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, QuestEvent> QuestEvent =
         new("QuestEvent.json", x => x.Id);
 
+    public static readonly MasterAssetData<int, QuestTreasureData> QuestTreasureData =
+        new("QuestTreasureData.json", x => x.Id);
+
     public static readonly MasterAssetData<UseItem, UseItemData> UseItem =
         new("UseItem.json", x => x.Id);
 

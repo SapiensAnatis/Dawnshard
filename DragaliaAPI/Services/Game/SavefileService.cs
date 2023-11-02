@@ -506,6 +506,18 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
+            this.apiContext.QuestTreasureList.AddRange(
+                savefile.quest_treasure_list.MapWithDeviceAccount<DbQuestTreasureList>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbQuestTreasureList step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             this.logger.LogInformation(
                 "Mapping completed after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
@@ -642,6 +654,9 @@ public class SavefileService : ISavefileService
         this.apiContext.QuestEvents.RemoveRange(
             this.apiContext.QuestEvents.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.QuestTreasureList.RemoveRange(
+            this.apiContext.QuestTreasureList.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
         this.apiContext.PartyPowers.RemoveRange(
             this.apiContext.PartyPowers.Where(x => x.DeviceAccountId == deviceAccountId)
         );
@@ -677,6 +692,7 @@ public class SavefileService : ISavefileService
             .Include(x => x.EquippedStampList)
             .Include(x => x.QuestEvents)
             .Include(x => x.PartyPower)
+            .Include(x => x.QuestTreasureList)
             .AsSplitQuery();
     }
 
