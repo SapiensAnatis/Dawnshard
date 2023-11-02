@@ -501,6 +501,13 @@ public class SavefileService : ISavefileService
                 )
             );
 
+            this.apiContext.QuestTreasureList.AddRange(
+                savefile.quest_treasure_list.MapWithDeviceAccount<DbQuestEvent>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
             this.logger.LogDebug(
                 "Mapping DbQuestEvent step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
