@@ -25,18 +25,18 @@ public class QuestTreasureService(
             request.quest_treasure_id
         ];
 
-        await rewardService.GrantReward(
-            new Entity(
-                questTreasureData.EntityType,
-                questTreasureData.EntityId,
-                questTreasureData.EntityQuantity
-            )
-        );
-
         List<AtgenBuildEventRewardEntityList> rewards = new();
 
         if (questTreasureData.EntityType != EntityTypes.None)
         {
+            await rewardService.GrantReward(
+                new Entity(
+                    questTreasureData.EntityType,
+                    questTreasureData.EntityId,
+                    questTreasureData.EntityQuantity
+                )
+            );
+
             rewards.Add(
                 new AtgenBuildEventRewardEntityList(
                     questTreasureData.EntityType,
