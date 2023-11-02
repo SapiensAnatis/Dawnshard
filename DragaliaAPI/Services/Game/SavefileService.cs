@@ -502,7 +502,7 @@ public class SavefileService : ISavefileService
             );
 
             this.apiContext.QuestTreasureList.AddRange(
-                savefile.quest_treasure_list.MapWithDeviceAccount<DbQuestEvent>(
+                savefile.quest_treasure_list.MapWithDeviceAccount<DbQuestTreasureList>(
                     mapper,
                     deviceAccountId
                 )
