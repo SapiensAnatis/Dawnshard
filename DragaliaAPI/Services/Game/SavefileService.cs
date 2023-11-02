@@ -501,6 +501,11 @@ public class SavefileService : ISavefileService
                 )
             );
 
+            this.logger.LogDebug(
+                "Mapping DbQuestEvent step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             this.apiContext.QuestTreasureList.AddRange(
                 savefile.quest_treasure_list.MapWithDeviceAccount<DbQuestTreasureList>(
                     mapper,
@@ -509,7 +514,7 @@ public class SavefileService : ISavefileService
             );
 
             this.logger.LogDebug(
-                "Mapping DbQuestEvent step done after {t} ms",
+                "Mapping DbQuestTreasureList step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
@@ -684,6 +689,7 @@ public class SavefileService : ISavefileService
             .Include(x => x.EquippedStampList)
             .Include(x => x.QuestEvents)
             .Include(x => x.PartyPower)
+            .Include(x => x.QuestTreasureList)
             .AsSplitQuery();
     }
 
