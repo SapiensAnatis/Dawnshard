@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
+using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

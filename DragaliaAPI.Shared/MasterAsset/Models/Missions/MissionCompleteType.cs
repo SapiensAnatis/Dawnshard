@@ -25,7 +25,7 @@ public enum MissionCompleteType
 
     // Quest
     /// <summary>
-    /// int questId, int questGroupId, QuestPlayModeTypes playMode
+    /// int questId, int questGroupId, QuestPlayModeTypes playMode, string AreaName01
     /// </summary>
     QuestCleared,
 
