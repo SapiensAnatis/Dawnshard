@@ -1,4 +1,4 @@
-namespace DragaliaAPI.MissionDesigner.Models;
+namespace DragaliaAPI.MissionDesigner.Models.EventMission;
 
 public class EventParticipationMission : Mission
 {

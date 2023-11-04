@@ -1,4 +1,4 @@
-namespace DragaliaAPI.MissionDesigner.Models;
+namespace DragaliaAPI.MissionDesigner.Models.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class MissionListAttribute : Attribute

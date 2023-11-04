@@ -2,6 +2,7 @@
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.MasterAsset.Models.Event;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 

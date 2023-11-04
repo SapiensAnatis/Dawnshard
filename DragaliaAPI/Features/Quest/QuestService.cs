@@ -10,6 +10,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Extensions;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 
@@ -29,8 +30,11 @@ public class QuestService(
         DbQuest Quest,
         bool BestClearTime,
         IEnumerable<AtgenFirstClearSet> Bonus
-    )> ProcessQuestCompletion(int questId, float clearTime, int playCount)
+    )> ProcessQuestCompletion(DungeonSession session, float clearTime)
     {
+        int questId = session.QuestData.Id;
+        int playCount = session.PlayCount;
+
         DbQuest quest = await questRepository.GetQuestDataAsync(questId);
         quest.State = 3;
 
@@ -42,7 +46,7 @@ public class QuestService(
             isBestClearTime = true;
         }
 
-        quest.PlayCount += playCount;
+        quest.PlayCount += session.PlayCount;
 
         if (resetHelper.LastDailyReset > quest.LastDailyResetTime)
         {
@@ -87,6 +91,12 @@ public class QuestService(
                 questData,
                 playCount
             );
+
+            if (questData.IsEventBossBattle())
+                missionProgressionService.OnEventBossBattleCleared(questData.Gid);
+
+            foreach (AbilityCrests crest in session.Party.SelectMany(x => x.GetAbilityCrestList()))
+                missionProgressionService.OnEventQuestClearedWithCrest(questData.Gid, crest);
         }
 
         return (quest, isBestClearTime, questEventRewards);

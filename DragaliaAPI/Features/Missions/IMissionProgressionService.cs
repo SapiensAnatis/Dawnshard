@@ -70,6 +70,7 @@ public interface IMissionProgressionService
     void OnPartyPowerReached(int might);
     void OnTreasureTrade(int tradeId, EntityTypes type, int id, int count, int total);
     void OnEventParticipation(int eventId);
+    void OnEventBossBattleCleared(int eventId);
 
     void EnqueueEvent(
         MissionCompleteType type,
@@ -82,4 +83,6 @@ public interface IMissionProgressionService
     );
 
     Task ProcessMissionEvents();
+    void OnEventQuestClearedWithCrest(int eventId, AbilityCrests crest);
+    void OnEventPointCollected(int eventId, int quantity);
 }

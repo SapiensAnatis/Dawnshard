@@ -11,6 +11,5 @@
     <ItemGroup>
       <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
     </ItemGroup>
-
-
+    
 </Project>

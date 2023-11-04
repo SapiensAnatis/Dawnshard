@@ -226,6 +226,28 @@ public class MissionProgressionService(
     public void OnEventParticipation(int eventId) =>
         EnqueueEvent(MissionCompleteType.EventParticipation, 1, 1, eventId);
 
+    public void OnEventBossBattleCleared(int eventId) =>
+        EnqueueEvent(MissionCompleteType.EventBossBattleClear, 1, 1, eventId);
+
+    public void OnEventQuestClearedWithCrest(int eventId, AbilityCrests crest) =>
+        EnqueueEvent(MissionCompleteType.EventQuestClearWithCrest, 1, 1, eventId, (int)crest);
+
+    public void OnEventPointCollected(int eventId, int quantity) =>
+        EnqueueEvent(MissionCompleteType.EventPointCollection, quantity, quantity, eventId);
+
+    public void OnEventChallengeBattleCleared(int eventId, int questId, bool fullClear) =>
+        EnqueueEvent(
+            MissionCompleteType.EventChallengeBattleClear,
+            1,
+            1,
+            eventId,
+            questId,
+            fullClear ? 1 : 0
+        );
+
+    public void OnEventTrialCleared(int eventId, int questId) =>
+        EnqueueEvent(MissionCompleteType.EventTrialClear, 1, 1, eventId, questId);
+
     public void EnqueueEvent(
         MissionCompleteType type,
         int value = 1,

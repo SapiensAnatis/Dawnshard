@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using DragaliaAPI.MissionDesigner.Missions;
 using DragaliaAPI.MissionDesigner.Models;
+using DragaliaAPI.MissionDesigner.Models.Attributes;
 using DragaliaAPI.Shared.Json;
 
 List<MissionProgressionInfo> missions = new();
