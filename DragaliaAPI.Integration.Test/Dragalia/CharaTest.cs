@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Chara;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -38,6 +39,7 @@ public class CharaTest : TestFixture
         this.AddCharacter(Charas.GalaZethia);
         this.AddCharacter(Charas.Vida);
         this.AddCharacter(Charas.Delphi);
+        this.AddCharacter(Charas.GalaAudric);
     }
 
     [Fact]
@@ -155,6 +157,32 @@ public class CharaTest : TestFixture
         response.update_data_list.user_data.mana_point
             .Should()
             .Be(manaPointNum - 350 - 450 - 650 - 350 - 450 - 350 - 500 - 450 - 350 - 650);
+    }
+
+    [Fact]
+    public async Task CharaBuildupMana_AllStoriesUnlocked_DoesNotThrow()
+    {
+        foreach (int storyId in MasterAsset.CharaStories[(int)Charas.GalaAudric].storyIds)
+        {
+            await this.AddToDatabase(
+                new DbPlayerStoryState()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    StoryId = storyId,
+                    State = StoryState.Read,
+                    StoryType = StoryTypes.Chara
+                }
+            );
+        }
+
+        DragaliaResponse<CharaBuildupManaData> response = (
+            await this.Client.PostMsgpack<CharaBuildupManaData>(
+                "chara/buildup_mana",
+                new CharaBuildupManaRequest(Charas.GalaAudric, new List<int>() { 5 }, false)
+            )
+        );
+
+        response.data_headers.result_code.Should().Be(ResultCode.Success);
     }
 
     [Fact]
