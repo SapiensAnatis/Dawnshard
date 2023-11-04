@@ -209,7 +209,7 @@ public class DragonService(
 
                     if (nextStoryId != default)
                     {
-                        await storyRepository.GetOrCreateStory(StoryTypes.Chara, nextStoryId);
+                        await storyRepository.GetOrCreateStory(StoryTypes.Dragon, nextStoryId);
                         reward.is_release_story = 1;
                     }
                     else
