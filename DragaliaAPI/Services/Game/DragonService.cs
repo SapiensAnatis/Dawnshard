@@ -204,18 +204,22 @@ public class DragonService(
                     int nextStoryUnlockIndex = await storyRepository.Stories
                         .Where(x => dragonStories.Contains(x.StoryId))
                         .CountAsync();
-                    if (nextStoryUnlockIndex > dragonStories.Length - 1)
+
+                    int nextStoryId = dragonStories.ElementAtOrDefault(nextStoryUnlockIndex);
+
+                    if (nextStoryId != default)
                     {
-                        throw new DragaliaException(
-                            ResultCode.StoryCountNotEnough,
-                            "Too many story unlocks"
+                        await storyRepository.GetOrCreateStory(StoryTypes.Chara, nextStoryId);
+                        reward.is_release_story = 1;
+                    }
+                    else
+                    {
+                        logger.LogWarning(
+                            "Failed to unlock next story for dragon: index {index} was out of range",
+                            nextStoryUnlockIndex
                         );
                     }
-                    await storyRepository.GetOrCreateStory(
-                        StoryTypes.Dragon,
-                        dragonStories[nextStoryUnlockIndex]
-                    );
-                    reward.is_release_story = 1;
+
                     return reward;
                 }
                 if (levelIndex == 6)
