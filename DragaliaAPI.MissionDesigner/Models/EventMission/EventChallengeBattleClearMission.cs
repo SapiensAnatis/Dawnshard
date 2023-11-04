@@ -1,8 +1,9 @@
 namespace DragaliaAPI.MissionDesigner.Models.EventMission;
 
-public class EventParticipationMission : Mission
+public class EventChallengeBattleClearMission : Mission
 {
-    public override MissionCompleteType CompleteType => MissionCompleteType.EventParticipation;
+    public override MissionCompleteType CompleteType =>
+        MissionCompleteType.EventChallengeBattleClear;
 
     public required int EventId { get; init; }
 

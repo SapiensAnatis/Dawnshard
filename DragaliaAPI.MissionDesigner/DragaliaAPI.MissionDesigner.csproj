@@ -11,5 +11,9 @@
     <ItemGroup>
       <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="JetBrains.Annotations" Version="2023.3.0-eap4" />
+    </ItemGroup>
     
 </Project>

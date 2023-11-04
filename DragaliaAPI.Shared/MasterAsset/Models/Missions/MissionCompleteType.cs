@@ -25,7 +25,7 @@ public enum MissionCompleteType
 
     // Quest
     /// <summary>
-    /// int questId, int questGroupId, QuestPlayModeTypes playMode, string AreaName01
+    /// int questId, int questGroupId, QuestPlayModeTypes playMode
     /// </summary>
     QuestCleared,
 
@@ -159,9 +159,14 @@ public enum MissionCompleteType
     EventPointCollection,
 
     /// <summary>
-    /// int eventId, int questId, bool fullClear
+    /// int eventId
     /// </summary>
     EventChallengeBattleClear,
+
+    /// <summary>
+    /// int eventId, int questId
+    /// </summary>
+    EventChallengeBattleFullClear,
 
     /// <summary>
     /// int eventId, int questId

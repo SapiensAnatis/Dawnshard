@@ -1393,5 +1393,98 @@
     "_CompleteType": "EventBossBattleClear",
     "_UseTotalValue": 1,
     "_Parameter": 20845
+  },
+  {
+    "_Id": 1022080106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10220801,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 1,
+    "_Parameter": 20845
+  },
+  {
+    "_Id": 1022080206,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10220802,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 1,
+    "_Parameter": 20845
+  },
+  {
+    "_Id": 1022080306,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10220803,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 1,
+    "_Parameter": 20845
+  },
+  {
+    "_Id": 1022080406,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10220804,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 1,
+    "_Parameter": 20845
+  },
+  {
+    "_Id": 1022080506,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10220805,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 1,
+    "_Parameter": 20845
+  },
+  {
+    "_Id": 1022080606,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10220806,
+    "_CompleteType": "EventChallengeBattleClear",
+    "_UseTotalValue": 1,
+    "_Parameter": 20845
+  },
+  {
+    "_Id": 1022090106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10220901,
+    "_CompleteType": "EventChallengeBattleFullClear",
+    "_UseTotalValue": 1,
+    "_Parameter": 20845,
+    "_Parameter2": 208450501
+  },
+  {
+    "_Id": 1022100106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10221001,
+    "_CompleteType": "EventChallengeBattleFullClear",
+    "_UseTotalValue": 1,
+    "_Parameter": 20845,
+    "_Parameter2": 208450502
+  },
+  {
+    "_Id": 1022110106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10221101,
+    "_CompleteType": "EventTrialClear",
+    "_UseTotalValue": 0,
+    "_Parameter": 20845,
+    "_Parameter2": 208450701
+  },
+  {
+    "_Id": 1022120106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10221201,
+    "_CompleteType": "EventTrialClear",
+    "_UseTotalValue": 0,
+    "_Parameter": 20845,
+    "_Parameter2": 208450702
+  },
+  {
+    "_Id": 1022130106,
+    "_MissionType": "MemoryEvent",
+    "_MissionId": 10221301,
+    "_CompleteType": "EventChallengeBattleFullClear",
+    "_UseTotalValue": 1,
+    "_Parameter": 20845,
+    "_Parameter2": 208450502
   }
 ]

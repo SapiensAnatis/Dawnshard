@@ -42,7 +42,7 @@ public class UpdateDataService(
             .Select(x => x.Entity)
             .ToList();
 
-        int rows = await apiContext.SaveChangesAsync();
+        await apiContext.SaveChangesAsync();
 
         return await MapUpdateDataList(entities);
     }

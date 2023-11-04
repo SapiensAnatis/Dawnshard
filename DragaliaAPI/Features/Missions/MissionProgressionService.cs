@@ -235,15 +235,11 @@ public class MissionProgressionService(
     public void OnEventPointCollected(int eventId, int quantity) =>
         EnqueueEvent(MissionCompleteType.EventPointCollection, quantity, quantity, eventId);
 
-    public void OnEventChallengeBattleCleared(int eventId, int questId, bool fullClear) =>
-        EnqueueEvent(
-            MissionCompleteType.EventChallengeBattleClear,
-            1,
-            1,
-            eventId,
-            questId,
-            fullClear ? 1 : 0
-        );
+    public void OnEventChallengeBattleCleared(int eventId) =>
+        EnqueueEvent(MissionCompleteType.EventChallengeBattleClear, 1, 1, eventId);
+
+    public void OnEventChallengeBattleFullyCleared(int eventId, int questId) =>
+        EnqueueEvent(MissionCompleteType.EventChallengeBattleFullClear, 1, 1, eventId, questId);
 
     public void OnEventTrialCleared(int eventId, int questId) =>
         EnqueueEvent(MissionCompleteType.EventTrialClear, 1, 1, eventId, questId);
@@ -337,7 +333,7 @@ public class MissionProgressionService(
                     else
                     {
                         logger.LogDebug(
-                            "Progressed {missionType} mission {missionId} ({currentCount}/{totalCount}",
+                            "Progressed {missionType} mission {missionId} ({currentCount}/{totalCount})",
                             progressingMission.Type,
                             progressingMission.Id,
                             progressingMission.Progress,

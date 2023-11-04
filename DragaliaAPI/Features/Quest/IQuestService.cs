@@ -12,7 +12,7 @@ public interface IQuestService
         DbQuest Quest,
         bool BestClearTime,
         IEnumerable<AtgenFirstClearSet> Bonus
-    )> ProcessQuestCompletion(DungeonSession session, float clearTime);
+    )> ProcessQuestCompletion(DungeonSession session, PlayRecord playRecord);
 
     Task<AtgenReceiveQuestBonus> ReceiveQuestBonus(int eventGroupId, bool isReceive, int count);
 }

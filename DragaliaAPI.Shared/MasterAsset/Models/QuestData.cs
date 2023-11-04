@@ -57,6 +57,54 @@ public record QuestData(
             new(this.Scene06, this.AreaName06),
         }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
 
+    public bool IsEventBossBattle
+    {
+        get
+        {
+            int idSuffix = this.Id % 1000;
+
+            return this.EventKindType switch
+            {
+                EventKindType.Build => idSuffix is 301 or 302 or 303,
+                EventKindType.Raid => idSuffix is 201 or 202 or 203,
+                _ => false
+            };
+        }
+    }
+
+    public bool IsEventChallengeBattle
+    {
+        get
+        {
+            int idSuffix = this.Id % 1000;
+
+            return this.EventKindType switch
+            {
+                EventKindType.Build => idSuffix is 501 or 502,
+                _ => false
+            };
+        }
+    }
+
+    public bool IsEventTrial
+    {
+        get
+        {
+            int idSuffix = this.Id % 1000;
+
+            return this.EventKindType switch
+            {
+                EventKindType.Build => idSuffix is 701 or 702,
+                _ => false
+            };
+        }
+    }
+
+    public EventKindType EventKindType =>
+        MasterAsset.EventData.TryGetValue(this.Gid, out EventData? eventData)
+            ? eventData.EventKindType
+            : EventKindType.None;
+
     public bool IsEventQuest => GroupType == QuestGroupType.Event;
 
     public bool CanPlayCoOp => this.PayStaminaMulti > 0;

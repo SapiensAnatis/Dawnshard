@@ -13,6 +13,7 @@ public interface IMissionProgressionService
         int count,
         int total
     );
+
     void OnEventGroupCleared(
         int eventGroupId,
         VariationTypes type,
@@ -23,13 +24,14 @@ public interface IMissionProgressionService
 
     void OnQuestStoryCleared(int id);
 
-    void OnWeaponEarned(WeaponBodies weapon, UnitElement element, int stars, WeaponSeries series);
+    void OnWeaponEarned(WeaponBodies weapon, UnitElement element, int rarity, WeaponSeries series);
+
     void OnWeaponRefined(
         int count,
         int total,
         WeaponBodies weapon,
         UnitElement element,
-        int stars,
+        int rarity,
         WeaponSeries series
     );
 
@@ -50,10 +52,11 @@ public interface IMissionProgressionService
         int count,
         int total
     );
+
     void OnCharacterLevelUp(Charas chara, UnitElement element, int count, int totalLevel);
     void OnCharacterManaNodeUnlock(Charas chara, UnitElement element, int count, int total);
-
     void OnDragonLevelUp(Dragons dragon, UnitElement element, int count, int total);
+
     void OnDragonGiftSent(
         Dragons dragon,
         DragonGifts gift,
@@ -61,8 +64,8 @@ public interface IMissionProgressionService
         int count,
         int total
     );
-    void OnDragonBondLevelUp(Dragons dragon, UnitElement element, int count, int total);
 
+    void OnDragonBondLevelUp(Dragons dragon, UnitElement element, int count, int total);
     void OnItemSummon();
     void OnPartyOptimized(UnitElement element);
     void OnAbilityCrestTradeViewed();
@@ -71,6 +74,11 @@ public interface IMissionProgressionService
     void OnTreasureTrade(int tradeId, EntityTypes type, int id, int count, int total);
     void OnEventParticipation(int eventId);
     void OnEventBossBattleCleared(int eventId);
+    void OnEventQuestClearedWithCrest(int eventId, AbilityCrests crest);
+    void OnEventPointCollected(int eventId, int quantity);
+    void OnEventChallengeBattleCleared(int eventId);
+    void OnEventChallengeBattleFullyCleared(int eventId, int questId);
+    void OnEventTrialCleared(int eventId, int questId);
 
     void EnqueueEvent(
         MissionCompleteType type,
@@ -83,6 +91,4 @@ public interface IMissionProgressionService
     );
 
     Task ProcessMissionEvents();
-    void OnEventQuestClearedWithCrest(int eventId, AbilityCrests crest);
-    void OnEventPointCollected(int eventId, int quantity);
 }

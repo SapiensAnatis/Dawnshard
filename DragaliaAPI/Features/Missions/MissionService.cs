@@ -39,10 +39,6 @@ public class MissionService : IMissionService
     {
         logger.LogInformation("Starting mission {missionId} ({missionType})", id, type);
 
-        int missionProgressionId = MasterAssetUtils.GetMissionProgressionId(id, type);
-        if (!MasterAsset.MissionProgressionInfo.TryGetValue(missionProgressionId, out _))
-            this.logger.LogInformation("No progression info found for mission, aborting start.");
-
         DbPlayerMission mission = await missionRepository.AddMissionAsync(
             type,
             id,

@@ -28,6 +28,10 @@ foreach (Type type in types)
         listProperty.GetCustomAttributes(typeof(MissionListAttribute)).First();
 
     List<Mission> list = (List<Mission>)listProperty.GetValue(null, null)!;
+
+    if (list.DistinctBy(x => x.MissionId).Count() != list.Count)
+        throw new InvalidOperationException("List had duplicate mission IDs");
+
     foreach (Mission mission in list)
     {
         mission.Type = attribute.Type;
@@ -44,7 +48,5 @@ JsonSerializerOptions options =
     };
 
 string json = JsonSerializer.Serialize(missions, options);
-File.WriteAllText(
-    "/home/jay/RiderProjects/DragaliaAPI/DragaliaAPI.Shared/Resources/Missions/MissionProgressionInfo.json",
-    json
-);
+
+File.WriteAllText("MissionProgressionInfo.json", json);

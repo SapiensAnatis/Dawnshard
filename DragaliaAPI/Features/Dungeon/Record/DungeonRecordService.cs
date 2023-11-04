@@ -56,7 +56,7 @@ public class DungeonRecordService(
             DbQuest questData,
             ingameResultData.is_best_clear_time,
             ingameResultData.reward_record.quest_bonus_list
-        ) = await questService.ProcessQuestCompletion(session, playRecord.time);
+        ) = await questService.ProcessQuestCompletion(session, playRecord);
 
         await this.ProcessExperience(
             ingameResultData.grow_record,

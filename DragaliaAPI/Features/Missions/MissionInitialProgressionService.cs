@@ -3,6 +3,7 @@ using System.Linq;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Models;
@@ -11,6 +12,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
+using HotChocolate.Language;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Missions;
@@ -25,7 +27,8 @@ public class MissionInitialProgressionService(
     IStoryRepository storyRepository,
     IUserDataRepository userDataRepository,
     ITradeRepository tradeRepository,
-    IPartyPowerRepository partyPowerRepository
+    IPartyPowerRepository partyPowerRepository,
+    IEventRepository eventRepository
 ) : IMissionInitialProgressionService
 {
     public async Task GetInitialMissionProgress(DbPlayerMission mission)
@@ -154,8 +157,15 @@ public class MissionInitialProgressionService(
             MissionCompleteType.AccountLinked => 0,
             MissionCompleteType.PartyOptimized => 0,
             MissionCompleteType.AbilityCrestTradeViewed => 0,
-            MissionCompleteType.EventParticipation => 0,
             MissionCompleteType.GuildCheckInRewardClaimed => amountToComplete, // TODO
+            MissionCompleteType.EventParticipation
+                => await this.GetEventParticipationProgress(progressionInfo.Parameter),
+            MissionCompleteType.EventBossBattleClear => 0,
+            MissionCompleteType.EventQuestClearWithCrest => 0,
+            MissionCompleteType.EventPointCollection => 0,
+            MissionCompleteType.EventChallengeBattleClear => 0,
+            MissionCompleteType.EventChallengeBattleFullClear => 0,
+            MissionCompleteType.EventTrialClear => 0,
             MissionCompleteType.UnimplementedAutoComplete => amountToComplete,
             _
                 => throw new UnreachableException(
@@ -517,5 +527,11 @@ public class MissionInitialProgressionService(
         return await questRepository.Quests
                 .Where(x => questPool.Contains(x.QuestId))
                 .SumAsync(x => (int?)x.PlayCount) ?? 0;
+    }
+
+    private async Task<int> GetEventParticipationProgress(int? eventId)
+    {
+        ArgumentNullException.ThrowIfNull(eventId);
+        return await eventRepository.GetEventDataAsync(eventId.Value) != null ? 1 : 0;
     }
 }

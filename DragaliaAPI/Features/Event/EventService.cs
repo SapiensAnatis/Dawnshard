@@ -185,8 +185,6 @@ public class EventService(
             firstEventEnter = true;
         }
 
-        missionProgressionService.OnEventParticipation(eventId);
-
         EventData data = MasterAsset.EventData[eventId];
 
         IEnumerable<int> items = await eventRepository.Items

@@ -1,4 +1,6 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
+﻿using System.Runtime.CompilerServices;
+
+namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
 public record QuestScoreMissionData(
     int Id,
@@ -28,4 +30,6 @@ public record QuestScoreMissionData(
         BaseScore9,
         BaseScore10
     };
+
+    public int WaveCount => this.Scores.Count(x => x != 0);
 };
