@@ -22,8 +22,7 @@ public class EventService(
     IEventRepository eventRepository,
     IRewardService rewardService,
     IQuestRepository questRepository,
-    IMissionService missionService,
-    IMissionProgressionService missionProgressionService
+    IMissionService missionService
 ) : IEventService
 {
     public async Task<bool> GetCustomEventFlag(int eventId)

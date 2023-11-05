@@ -132,10 +132,13 @@ public class DungeonRecordRewardService(
             pointMultiplier
         );
 
-        missionProgressionService.OnEventPointCollected(
-            session.QuestData.Gid,
-            totalPoints + boostedPoints
-        );
+        if (totalPoints + boostedPoints > 0)
+        {
+            missionProgressionService.OnEventPointCollected(
+                session.QuestData.Gid,
+                totalPoints + boostedPoints
+            );
+        }
 
         IEnumerable<AtgenEventPassiveUpList> passiveUpList =
             await eventDropService.ProcessEventPassiveDrops(session.QuestData);

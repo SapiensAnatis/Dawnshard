@@ -171,7 +171,7 @@ public class MissionService : IMissionService
                 await this.rewardService.GrantReward(
                     new(
                         extendedRewardMission.EntityType,
-                        extendedRewardMission.Id,
+                        extendedRewardMission.EntityId,
                         extendedRewardMission.EntityQuantity,
                         extendedRewardMission.EntityLimitBreakCount,
                         extendedRewardMission.EntityBuildupCount,

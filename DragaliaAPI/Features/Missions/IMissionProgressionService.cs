@@ -76,8 +76,7 @@ public interface IMissionProgressionService
     void OnEventBossBattleCleared(int eventId);
     void OnEventQuestClearedWithCrest(int eventId, AbilityCrests crest);
     void OnEventPointCollected(int eventId, int quantity);
-    void OnEventChallengeBattleCleared(int eventId);
-    void OnEventChallengeBattleFullyCleared(int eventId, int questId);
+    void OnEventChallengeBattleCleared(int eventId, int questId, bool fullClear);
     void OnEventTrialCleared(int eventId, int questId);
 
     void EnqueueEvent(

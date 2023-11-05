@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
@@ -329,18 +328,14 @@ public class QuestService(
         }
         else if (questData.IsEventChallengeBattle)
         {
-            missionProgressionService.OnEventChallengeBattleCleared(questData.Gid);
-
             int questScoreMissionId = MasterAsset.QuestRewardData[questData.Id].QuestScoreMissionId;
             int waveCount = MasterAsset.QuestScoreMissionData[questScoreMissionId].WaveCount;
 
-            if (playRecord.wave >= waveCount)
-            {
-                missionProgressionService.OnEventChallengeBattleFullyCleared(
-                    questData.Gid,
-                    questData.Id
-                );
-            }
+            missionProgressionService.OnEventChallengeBattleCleared(
+                questData.Gid,
+                questData.Id,
+                playRecord.wave >= waveCount
+            );
         }
         else if (questData.IsEventTrial)
         {

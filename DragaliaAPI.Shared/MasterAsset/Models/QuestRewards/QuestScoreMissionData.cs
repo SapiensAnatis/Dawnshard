@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
+﻿namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
 public record QuestScoreMissionData(
     int Id,

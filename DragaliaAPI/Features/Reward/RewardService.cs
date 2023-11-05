@@ -39,6 +39,8 @@ public class RewardService(
 
         RewardGrantResult result = await GrantRewardInternal(entity);
 
+        logger.LogTrace("Result: {result}", result);
+
         return result;
     }
 

@@ -62,18 +62,20 @@ public static class TollOfTheDeep
             // Clear 25 Challenge Battles
             new EventChallengeBattleClearMission() { MissionId = 10220806, EventId = EventId },
             // Completely Clear a Challenge Battle on Expert
-            new EventChallengeBattleFullClearMission()
+            new EventChallengeBattleClearMission()
             {
                 MissionId = 10220901,
                 EventId = EventId,
-                QuestId = 208450501
+                QuestId = 208450501,
+                FullClear = true,
             },
             // Completely Clear a Challenge Battle on Master
-            new EventChallengeBattleFullClearMission()
+            new EventChallengeBattleClearMission()
             {
                 MissionId = 10221001,
                 EventId = EventId,
-                QuestId = 208450502
+                QuestId = 208450502,
+                FullClear = true,
             },
             // Clear a "Toll of the Deep" Trial on Standard
             new EventTrialClearMission()
@@ -91,11 +93,12 @@ public static class TollOfTheDeep
             },
             // Earn the "Light of the Deep" Epithet
             // Earned from 'Completely Clear a Challenge Battle On Master'
-            new EventChallengeBattleFullClearMission()
+            new EventChallengeBattleClearMission()
             {
                 MissionId = 10221301,
                 EventId = EventId,
-                QuestId = 208450502
+                QuestId = 208450502,
+                FullClear = true,
             },
         };
 }

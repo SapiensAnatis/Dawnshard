@@ -164,7 +164,6 @@ public class MissionInitialProgressionService(
             MissionCompleteType.EventQuestClearWithCrest => 0,
             MissionCompleteType.EventPointCollection => 0,
             MissionCompleteType.EventChallengeBattleClear => 0,
-            MissionCompleteType.EventChallengeBattleFullClear => 0,
             MissionCompleteType.EventTrialClear => 0,
             MissionCompleteType.UnimplementedAutoComplete => amountToComplete,
             _
