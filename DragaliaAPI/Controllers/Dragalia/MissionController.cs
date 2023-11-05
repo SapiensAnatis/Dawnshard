@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -16,16 +17,19 @@ public class MissionController : DragaliaControllerBase
 {
     private readonly IMissionService missionService;
     private readonly IMissionRepository missionRepository;
+    private readonly IUserDataRepository userDataRepository;
     private readonly IUpdateDataService updateDataService;
 
     public MissionController(
         IMissionService missionService,
         IMissionRepository missionRepository,
+        IUserDataRepository userDataRepository,
         IUpdateDataService updateDataService
     )
     {
         this.missionService = missionService;
         this.missionRepository = missionRepository;
+        this.userDataRepository = userDataRepository;
         this.updateDataService = updateDataService;
     }
 
@@ -301,9 +305,7 @@ public class MissionController : DragaliaControllerBase
             x => new BeginnerMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
         );
         //response.daily_mission_list = allMissions[MissionType.Daily].Select(x => new DailyMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start));
-        response.memory_event_mission_list = allMissions[MissionType.MemoryEvent].Select(
-            x => new MemoryEventMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
-        );
+
         response.main_story_mission_list = allMissions[MissionType.MainStory].Select(
             x => new MainStoryMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
         );
@@ -316,6 +318,17 @@ public class MissionController : DragaliaControllerBase
         response.special_mission_list = allMissions[MissionType.Special].Select(
             x => new SpecialMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
         );
+
+        int activeEventId = await this.userDataRepository.UserData
+            .Select(x => x.ActiveMemoryEventId)
+            .FirstAsync();
+
+        response.memory_event_mission_list = allMissions[MissionType.MemoryEvent]
+            .Where(x => x.GroupId == activeEventId)
+            .Select(
+                x => new MemoryEventMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+            );
+
         return response;
     }
 }

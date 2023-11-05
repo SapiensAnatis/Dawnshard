@@ -28,4 +28,6 @@ public record QuestScoreMissionData(
         BaseScore9,
         BaseScore10
     };
+
+    public int WaveCount => this.Scores.Count(x => x != 0);
 };

@@ -17,6 +17,7 @@
 		<PackageReference Include="EntityGraphQL" Version="5.0.1" />
 		<PackageReference Include="EntityGraphQL.AspNet" Version="5.0.1" />
 		<PackageReference Include="FluentValidation" Version="11.7.1" />
+		<PackageReference Include="JetBrains.Annotations" Version="2023.3.0-eap4" />
 		<PackageReference Include="MessagePack" Version="2.5.129" />
 		<PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="2.5.129" />
 		<PackageReference Include="MessagePackAnalyzer" Version="2.5.129">

@@ -139,6 +139,36 @@ public enum MissionCompleteType
     TreasureTrade,
 
     /// <summary>
+    /// int eventId
+    /// </summary>
+    EventParticipation,
+
+    /// <summary>
+    /// int eventId
+    /// </summary>
+    EventBossBattleClear,
+
+    /// <summary>
+    /// int eventId, AbilityCrests crestId
+    /// </summary>
+    EventQuestClearWithCrest,
+
+    /// <summary>
+    /// int eventId
+    /// </summary>
+    EventPointCollection,
+
+    /// <summary>
+    /// int eventId, int questId, bool fullClear
+    /// </summary>
+    EventChallengeBattleClear,
+
+    /// <summary>
+    /// int eventId, int questId
+    /// </summary>
+    EventTrialClear,
+
+    /// <summary>
     /// None
     /// </summary>
     UnimplementedAutoComplete = 99999, // Auto-completes upon receiving

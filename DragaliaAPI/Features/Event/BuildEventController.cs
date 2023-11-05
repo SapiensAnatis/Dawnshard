@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Models.Generated;
@@ -13,7 +14,8 @@ public class BuildEventController(
     IUpdateDataService updateDataService,
     IRewardService rewardService,
     IEventService eventService,
-    ITradeService tradeService
+    ITradeService tradeService,
+    IMissionProgressionService missionProgressionService
 ) : DragaliaControllerBase
 {
     [HttpPost("get_event_data")]
@@ -46,9 +48,9 @@ public class BuildEventController(
     [HttpPost("entry")]
     public async Task<DragaliaResult> Entry(BuildEventEntryRequest request)
     {
-        BuildEventEntryData resp = new();
+        missionProgressionService.OnEventParticipation(request.event_id);
 
-        // TODO: Complete first event mission once thats implemented
+        BuildEventEntryData resp = new();
 
         resp.is_receivable_event_daily_bonus = await eventService.GetCustomEventFlag(
             request.event_id

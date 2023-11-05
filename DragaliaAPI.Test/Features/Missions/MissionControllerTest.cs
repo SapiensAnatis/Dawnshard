@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Models;
@@ -18,17 +19,20 @@ public class MissionControllerTest
     private readonly MissionController missionController;
     private readonly Mock<IMissionService> mockMissionService;
     private readonly Mock<IMissionRepository> mockMissionRepository;
+    private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
 
     public MissionControllerTest()
     {
         this.mockMissionService = new(MockBehavior.Strict);
         this.mockMissionRepository = new(MockBehavior.Strict);
+        this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
 
         this.missionController = new MissionController(
             this.mockMissionService.Object,
             this.mockMissionRepository.Object,
+            this.mockUserDataRepository.Object,
             this.mockUpdateDataService.Object
         );
 
@@ -60,6 +64,17 @@ public class MissionControllerTest
         this.mockMissionRepository
             .Setup(x => x.GetAllMissionsPerTypeAsync())
             .ReturnsAsync(Enumerable.Empty<DbPlayerMission>().ToLookup(x => x.Type));
+
+        this.mockUserDataRepository
+            .SetupGet(x => x.UserData)
+            .Returns(
+                new List<DbPlayerUserData>()
+                {
+                    new() { DeviceAccountId = "id", ActiveMemoryEventId = 20816 }
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
         ActionResult<DragaliaResponse<object>> resp = await this.missionController.GetMissionList();
 

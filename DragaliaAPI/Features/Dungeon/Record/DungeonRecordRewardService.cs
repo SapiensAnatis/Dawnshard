@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -12,6 +13,7 @@ public class DungeonRecordRewardService(
     IRewardService rewardService,
     IAbilityCrestMultiplierService abilityCrestMultiplierService,
     IEventDropService eventDropService,
+    IMissionProgressionService missionProgressionService,
     ILogger<DungeonRecordRewardService> logger
 ) : IDungeonRecordRewardService
 {
@@ -129,6 +131,14 @@ public class DungeonRecordRewardService(
             playRecord!,
             pointMultiplier
         );
+
+        if (totalPoints + boostedPoints > 0)
+        {
+            missionProgressionService.OnEventPointCollected(
+                session.QuestData.Gid,
+                totalPoints + boostedPoints
+            );
+        }
 
         IEnumerable<AtgenEventPassiveUpList> passiveUpList =
             await eventDropService.ProcessEventPassiveDrops(session.QuestData);

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
@@ -29,20 +28,23 @@ public class QuestService(
         DbQuest Quest,
         bool BestClearTime,
         IEnumerable<AtgenFirstClearSet> Bonus
-    )> ProcessQuestCompletion(int questId, float clearTime, int playCount)
+    )> ProcessQuestCompletion(DungeonSession session, PlayRecord playRecord)
     {
+        int questId = session.QuestData.Id;
+        int playCount = session.PlayCount;
+
         DbQuest quest = await questRepository.GetQuestDataAsync(questId);
         quest.State = 3;
 
         bool isBestClearTime = false;
 
-        if (0 > quest.BestClearTime || quest.BestClearTime > clearTime)
+        if (0 > quest.BestClearTime || quest.BestClearTime > playRecord.time)
         {
-            quest.BestClearTime = clearTime;
+            quest.BestClearTime = playRecord.time;
             isBestClearTime = true;
         }
 
-        quest.PlayCount += playCount;
+        quest.PlayCount += session.PlayCount;
 
         if (resetHelper.LastDailyReset > quest.LastDailyResetTime)
         {
@@ -87,6 +89,8 @@ public class QuestService(
                 questData,
                 playCount
             );
+
+            this.ProcessEventQuestMissionProgression(questData, session, playRecord);
         }
 
         return (quest, isBestClearTime, questEventRewards);
@@ -297,6 +301,45 @@ public class QuestService(
 
             questEvent.QuestBonusReserveCount = 0;
             questEvent.QuestBonusReserveTime = dateTimeProvider.UtcNow;
+        }
+    }
+
+    private void ProcessEventQuestMissionProgression(
+        QuestData questData,
+        DungeonSession session,
+        PlayRecord playRecord
+    )
+    {
+        if (questData.EventKindType is EventKindType.Build or EventKindType.Clb01)
+        {
+            foreach (
+                AbilityCrests crest in session.Party
+                    .SelectMany(x => x.GetAbilityCrestList())
+                    .Distinct()
+            )
+            {
+                missionProgressionService.OnEventQuestClearedWithCrest(questData.Gid, crest);
+            }
+        }
+
+        if (questData.IsEventBossBattle)
+        {
+            missionProgressionService.OnEventBossBattleCleared(questData.Gid);
+        }
+        else if (questData.IsEventChallengeBattle)
+        {
+            int questScoreMissionId = MasterAsset.QuestRewardData[questData.Id].QuestScoreMissionId;
+            int waveCount = MasterAsset.QuestScoreMissionData[questScoreMissionId].WaveCount;
+
+            missionProgressionService.OnEventChallengeBattleCleared(
+                questData.Gid,
+                questData.Id,
+                playRecord.wave >= waveCount
+            );
+        }
+        else if (questData.IsEventTrial)
+        {
+            missionProgressionService.OnEventTrialCleared(questData.Gid, questData.Id);
         }
     }
 }
