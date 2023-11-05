@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Player;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Features.Quest;
@@ -11,7 +12,7 @@ public interface IQuestService
         DbQuest Quest,
         bool BestClearTime,
         IEnumerable<AtgenFirstClearSet> Bonus
-    )> ProcessQuestCompletion(int questId, float clearTime, int playCount);
+    )> ProcessQuestCompletion(DungeonSession session, PlayRecord playRecord);
 
     Task<AtgenReceiveQuestBonus> ReceiveQuestBonus(int eventGroupId, bool isReceive, int count);
 }

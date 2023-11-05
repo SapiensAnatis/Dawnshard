@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Chara;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Models;
@@ -55,11 +56,7 @@ public class DungeonRecordService(
             DbQuest questData,
             ingameResultData.is_best_clear_time,
             ingameResultData.reward_record.quest_bonus_list
-        ) = await questService.ProcessQuestCompletion(
-            session.QuestData.Id,
-            playRecord.time,
-            session.PlayCount
-        );
+        ) = await questService.ProcessQuestCompletion(session, playRecord);
 
         await this.ProcessExperience(
             ingameResultData.grow_record,

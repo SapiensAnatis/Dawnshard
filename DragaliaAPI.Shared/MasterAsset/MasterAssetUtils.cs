@@ -1,5 +1,7 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
+using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
 namespace DragaliaAPI.Shared.MasterAsset;
 
@@ -24,4 +26,7 @@ public static class MasterAssetUtils
             .Where(x => x.AssetGroup == id)
             .OrderBy(x => x.Level)
             .First();
+
+    public static int GetMissionProgressionId(int missionId, MissionType type) =>
+        int.Parse($"{missionId}{(int)type:00}");
 }

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
@@ -11,6 +12,7 @@ using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Event;
@@ -19,7 +21,8 @@ public class EventService(
     ILogger<EventService> logger,
     IEventRepository eventRepository,
     IRewardService rewardService,
-    IQuestRepository questRepository
+    IQuestRepository questRepository,
+    IMissionService missionService
 ) : IEventService
 {
     public async Task<bool> GetCustomEventFlag(int eventId)
@@ -177,6 +180,7 @@ public class EventService(
         {
             logger.LogInformation("Creating event data for event {eventId}", eventId);
             eventRepository.CreateEventData(eventId);
+            await missionService.UnlockMemoryEventMissions(eventId);
             firstEventEnter = true;
         }
 

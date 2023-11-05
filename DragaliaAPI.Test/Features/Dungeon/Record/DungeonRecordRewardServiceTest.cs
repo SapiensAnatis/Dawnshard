@@ -2,6 +2,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -19,6 +20,7 @@ public class DungeonRecordRewardServiceTest
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IAbilityCrestMultiplierService> mockAbilityCrestMultiplierService;
     private readonly Mock<IEventDropService> mockEventDropService;
+    private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
     private readonly Mock<ILogger<DungeonRecordRewardService>> mockLogger;
 
     private readonly IDungeonRecordRewardService dungeonRecordRewardService;
@@ -29,6 +31,7 @@ public class DungeonRecordRewardServiceTest
         this.mockRewardService = new(MockBehavior.Strict);
         this.mockAbilityCrestMultiplierService = new(MockBehavior.Strict);
         this.mockEventDropService = new(MockBehavior.Strict);
+        this.mockMissionProgressionService = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
 
         this.dungeonRecordRewardService = new DungeonRecordRewardService(
@@ -36,6 +39,7 @@ public class DungeonRecordRewardServiceTest
             this.mockRewardService.Object,
             this.mockAbilityCrestMultiplierService.Object,
             this.mockEventDropService.Object,
+            this.mockMissionProgressionService.Object,
             this.mockLogger.Object
         );
     }
@@ -305,6 +309,10 @@ public class DungeonRecordRewardServiceTest
             )
             .ReturnsAsync(eventDrops);
 
+        this.mockMissionProgressionService.Setup(
+            x => x.OnEventPointCollected(session.QuestData.Gid, points + boostedPoints)
+        );
+
         (await this.dungeonRecordRewardService.ProcessEventRewards(playRecord, session))
             .Should()
             .BeEquivalentTo(
@@ -320,5 +328,6 @@ public class DungeonRecordRewardServiceTest
         this.mockAbilityCrestMultiplierService.VerifyAll();
         this.mockQuestCompletionService.VerifyAll();
         this.mockEventDropService.VerifyAll();
+        this.mockMissionProgressionService.VerifyAll();
     }
 }
