@@ -1,6 +1,9 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models.Results;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Missions;
@@ -153,5 +156,36 @@ public class MissionTest : TestFixture
         resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list
             .Should()
             .Contain(301700);
+    }
+
+    [Fact]
+    public async Task ReceiveReward_Wyrmprint_DoesNotGive0Copies()
+    {
+        await this.AddToDatabase(
+            new DbPlayerMission()
+            {
+                Id = 10220101,
+                Type = MissionType.MemoryEvent,
+                DeviceAccountId = DeviceAccountId,
+                Progress = 1,
+                State = MissionState.Completed,
+            }
+        );
+
+        MissionReceiveMemoryEventRewardData response = (
+            await this.Client.PostMsgpack<MissionReceiveMemoryEventRewardData>(
+                "mission/receive_memory_event_reward",
+                new MissionReceiveMemoryEventRewardRequest()
+                {
+                    memory_event_mission_id_list = new[] { 10220101 }, // Participate in the Event (Toll of the Deep)
+                }
+            )
+        ).data;
+
+        response.update_data_list.ability_crest_list
+            .Should()
+            .Contain(
+                x => x.ability_crest_id == AbilityCrests.HavingaSummerBall && x.equipable_count == 1
+            );
     }
 }
