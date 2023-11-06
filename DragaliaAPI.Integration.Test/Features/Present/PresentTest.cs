@@ -412,7 +412,7 @@ public class PresentTest : TestFixture
             .Should()
             .ContainSingle()
             .And.Contain(x => x.ability_crest_id == AbilityCrests.DearDiary);
-        response.data.update_data_list.user_data.dew_point.Should().Be(oldUserData.DewPoint + 4000); // placeholder value
+        response.data.update_data_list.user_data.dew_point.Should().Be(oldUserData.DewPoint + 3000);
 
         response.data.converted_entity_list
             .Should()
@@ -425,7 +425,7 @@ public class PresentTest : TestFixture
                     before_entity_quantity = 1,
                     after_entity_type = EntityTypes.Dew,
                     after_entity_id = 0,
-                    after_entity_quantity = 4000,
+                    after_entity_quantity = 3000,
                 }
             );
     }
