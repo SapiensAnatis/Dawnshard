@@ -4069,7 +4069,7 @@ public class MissionReceiveAlbumRewardData : INormalMissionEndpointResponse
     public EntityResult entity_result { get; set; }
     public IEnumerable<int> not_received_mission_id_list { get; set; }
     public IEnumerable<int> need_entry_event_id_list { get; set; }
-    public IEnumerable<ConvertedEntityList> converted_entity_list { get; set; } = Enumerable.Empty<ConvertedEntityList>();
+    public IEnumerable<ConvertedEntityList> converted_entity_list { get; set; }
 
     public MissionReceiveAlbumRewardData(
         IEnumerable<NormalMissionList> normal_mission_list,
@@ -4309,7 +4309,7 @@ public class MissionReceiveMemoryEventRewardData : INormalMissionEndpointRespons
     public EntityResult entity_result { get; set; }
     public IEnumerable<int> not_received_mission_id_list { get; set; }
     public IEnumerable<int> need_entry_event_id_list { get; set; }
-    public IEnumerable<ConvertedEntityList> converted_entity_list { get; set; } = Enumerable.Empty<ConvertedEntityList>();
+    public IEnumerable<ConvertedEntityList> converted_entity_list { get; set; }
 
     public MissionReceiveMemoryEventRewardData(
         IEnumerable<NormalMissionList> normal_mission_list,

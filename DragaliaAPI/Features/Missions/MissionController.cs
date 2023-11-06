@@ -134,6 +134,7 @@ public class MissionController : DragaliaControllerBase
 
         response.drill_mission_group_list = await this.missionService.GetCompletedDrillGroups();
         response.entity_result = this.rewardService.GetEntityResult();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -152,6 +153,7 @@ public class MissionController : DragaliaControllerBase
             await BuildNormalResponse<MissionReceiveMainStoryRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
         response.entity_result = this.rewardService.GetEntityResult();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -170,6 +172,7 @@ public class MissionController : DragaliaControllerBase
             await BuildNormalResponse<MissionReceivePeriodRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
         response.entity_result = this.rewardService.GetEntityResult();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -188,6 +191,7 @@ public class MissionController : DragaliaControllerBase
             await BuildNormalResponse<MissionReceiveNormalRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
         response.entity_result = this.rewardService.GetEntityResult();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -203,6 +207,7 @@ public class MissionController : DragaliaControllerBase
             await BuildNormalResponse<MissionReceiveAlbumRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
         response.entity_result = this.rewardService.GetEntityResult();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -221,6 +226,7 @@ public class MissionController : DragaliaControllerBase
             await BuildNormalResponse<MissionReceiveMemoryEventRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
         response.entity_result = this.rewardService.GetEntityResult();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -239,6 +245,7 @@ public class MissionController : DragaliaControllerBase
             await BuildNormalResponse<MissionReceiveBeginnerRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
         response.entity_result = this.rewardService.GetEntityResult();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
@@ -257,6 +264,7 @@ public class MissionController : DragaliaControllerBase
             await BuildNormalResponse<MissionReceiveSpecialRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
         response.entity_result = this.rewardService.GetEntityResult();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
 
         return response;
     }
