@@ -40,7 +40,6 @@ public class GenericRewardHandler(
             EntityTypes.Rupies,
             EntityTypes.SkipTicket,
             EntityTypes.Wyrmite,
-            EntityTypes.Wyrmprint,
             EntityTypes.Material,
             EntityTypes.Mana,
             EntityTypes.FortPlant,
@@ -87,8 +86,6 @@ public class GenericRewardHandler(
             case EntityTypes.Wyrmite:
                 await userDataRepository.GiveWyrmite(entity.Quantity);
                 break;
-            case EntityTypes.Wyrmprint:
-                return await RewardAbilityCrest(entity);
             case EntityTypes.Material:
                 (
                     await inventoryRepository.GetMaterial((Materials)entity.Id)
@@ -153,38 +150,6 @@ public class GenericRewardHandler(
 
         logger.LogDebug("Granted new character entity: {@entity}", entity);
         await unitRepository.AddCharas(chara);
-        return new(RewardGrantResult.Added);
-    }
-
-    private async Task<GrantReturn> RewardAbilityCrest(Entity entity)
-    {
-        if (entity.Type != EntityTypes.Wyrmprint)
-            throw new ArgumentException("Entity was not a wyrmprint", nameof(entity));
-
-        AbilityCrests crest = (AbilityCrests)entity.Id;
-
-        if (await abilityCrestRepository.FindAsync(crest) is not null)
-        {
-            Entity dewEntity = new(EntityTypes.Dew, Id: 0, Quantity: 4000);
-            logger.LogDebug(
-                "Converted ability crest entity: {@entity} to {@dewEntity}.",
-                entity,
-                dewEntity
-            );
-
-            await userDataRepository.UpdateDewpoint(dewEntity.Quantity);
-
-            return new(RewardGrantResult.Converted, dewEntity);
-        }
-
-        logger.LogDebug("Granted new ability crest entity: {@entity}", entity);
-        await abilityCrestRepository.Add(
-            crest,
-            entity.LimitBreakCount,
-            entity.BuildupCount,
-            entity.EquipableCount
-        );
-
         return new(RewardGrantResult.Added);
     }
 }

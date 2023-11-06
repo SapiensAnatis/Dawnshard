@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
@@ -18,35 +19,38 @@ public class MissionController : DragaliaControllerBase
     private readonly IMissionService missionService;
     private readonly IMissionRepository missionRepository;
     private readonly IUserDataRepository userDataRepository;
+    private readonly IRewardService rewardService;
     private readonly IUpdateDataService updateDataService;
 
     public MissionController(
         IMissionService missionService,
         IMissionRepository missionRepository,
         IUserDataRepository userDataRepository,
+        IRewardService rewardService,
         IUpdateDataService updateDataService
     )
     {
         this.missionService = missionService;
         this.missionRepository = missionRepository;
         this.userDataRepository = userDataRepository;
+        this.rewardService = rewardService;
         this.updateDataService = updateDataService;
     }
 
     [HttpPost("get_mission_list")]
-    public async Task<DragaliaResult> GetMissionList()
+    public async Task<DragaliaResult<MissionGetMissionListData>> GetMissionList()
     {
-        MissionGetMissionListData response = new();
+        MissionGetMissionListData response = await BuildNormalResponse<MissionGetMissionListData>();
+
         response.mission_notice = await this.missionService.GetMissionNotice(null);
         response.current_main_story_mission =
             await this.missionService.GetCurrentMainStoryMission();
 
-        await BuildNormalResponse(response);
-        return Ok(response);
+        return response;
     }
 
     [HttpPost("get_drill_mission_list")]
-    public async Task<DragaliaResult> GetDrillMissionList()
+    public async Task<DragaliaResult<MissionGetDrillMissionListData>> GetDrillMissionList()
     {
         MissionGetDrillMissionListData response = new();
         response.mission_notice = await this.missionService.GetMissionNotice(null);
@@ -59,11 +63,11 @@ public class MissionController : DragaliaControllerBase
             x => new DrillMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
         );
 
-        return Ok(response);
+        return response;
     }
 
     [HttpPost("unlock_drill_mission_group")]
-    public async Task<DragaliaResult> UnlockDrillMissionGroup(
+    public async Task<DragaliaResult<MissionUnlockDrillMissionGroupData>> UnlockDrillMissionGroup(
         MissionUnlockDrillMissionGroupRequest request
     )
     {
@@ -78,11 +82,11 @@ public class MissionController : DragaliaControllerBase
 
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
 
-        return Ok(response);
+        return response;
     }
 
     [HttpPost("unlock_main_story_group")]
-    public async Task<DragaliaResult> UnlockMainStoryMissionGroup(
+    public async Task<DragaliaResult<MissionUnlockMainStoryGroupData>> UnlockMainStoryMissionGroup(
         MissionUnlockMainStoryGroupRequest request
     )
     {
@@ -101,11 +105,11 @@ public class MissionController : DragaliaControllerBase
 
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
 
-        return Ok(response);
+        return response;
     }
 
     [HttpPost("receive_drill_reward")]
-    public async Task<DragaliaResult> ReceiveDrillStoryReward(
+    public async Task<DragaliaResult<MissionReceiveDrillRewardData>> ReceiveDrillStoryReward(
         MissionReceiveDrillRewardRequest request
     )
     {
@@ -129,205 +133,187 @@ public class MissionController : DragaliaControllerBase
         );
 
         response.drill_mission_group_list = await this.missionService.GetCompletedDrillGroups();
-
+        response.entity_result = this.rewardService.GetEntityResult();
         response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
-        response.entity_result = new()
-        {
-            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
-        };
 
-        return Ok(response);
+        return response;
     }
 
     [HttpPost("receive_main_story_reward")]
-    public async Task<DragaliaResult> ReceiveMainStoryReward(
+    public async Task<DragaliaResult<MissionReceiveMainStoryRewardData>> ReceiveMainStoryReward(
         MissionReceiveMainStoryRewardRequest request
     )
     {
-        MissionReceiveMainStoryRewardData response = new();
-
         await this.missionService.RedeemMissions(
             MissionType.MainStory,
             request.main_story_mission_id_list
         );
 
-        await BuildNormalResponse(response);
+        MissionReceiveMainStoryRewardData response =
+            await BuildNormalResponse<MissionReceiveMainStoryRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.entity_result = this.rewardService.GetEntityResult();
         response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
-        response.entity_result = new()
-        {
-            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
-        };
 
-        return Ok(response);
+        return response;
     }
 
     [HttpPost("receive_period_reward")]
-    public async Task<DragaliaResult> ReceivePeriodReward(MissionReceivePeriodRewardRequest request)
+    public async Task<DragaliaResult<MissionReceivePeriodRewardData>> ReceivePeriodReward(
+        MissionReceivePeriodRewardRequest request
+    )
     {
-        MissionReceivePeriodRewardData response = new();
-
         await this.missionService.RedeemMissions(
             MissionType.Period,
             request.period_mission_id_list
         );
 
-        await BuildNormalResponse(response);
+        MissionReceivePeriodRewardData response =
+            await BuildNormalResponse<MissionReceivePeriodRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.entity_result = this.rewardService.GetEntityResult();
         response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
-        response.entity_result = new()
-        {
-            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
-        };
 
-        return Ok(response);
+        return response;
     }
 
     [HttpPost("receive_normal_reward")]
-    public async Task<DragaliaResult> ReceiveNormalReward(MissionReceiveNormalRewardRequest request)
+    public async Task<DragaliaResult<MissionReceiveNormalRewardData>> ReceiveNormalReward(
+        MissionReceiveNormalRewardRequest request
+    )
     {
-        MissionReceiveNormalRewardData response = new();
-
         await this.missionService.RedeemMissions(
             MissionType.Normal,
             request.normal_mission_id_list
         );
 
-        await BuildNormalResponse(response);
+        MissionReceiveNormalRewardData response =
+            await BuildNormalResponse<MissionReceiveNormalRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.entity_result = this.rewardService.GetEntityResult();
         response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
-        response.entity_result = new()
-        {
-            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
-        };
 
-        return Ok(response);
+        return response;
     }
 
     [HttpPost("receive_album_reward")]
-    public async Task<DragaliaResult> ReceiveAlbumReward(MissionReceiveAlbumRewardRequest request)
+    public async Task<DragaliaResult<MissionReceiveAlbumRewardData>> ReceiveAlbumReward(
+        MissionReceiveAlbumRewardRequest request
+    )
     {
-        MissionReceiveAlbumRewardData response = new();
-
         await this.missionService.RedeemMissions(MissionType.Album, request.album_mission_id_list);
 
-        await BuildNormalResponse(response);
+        MissionReceiveAlbumRewardData response =
+            await BuildNormalResponse<MissionReceiveAlbumRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.entity_result = this.rewardService.GetEntityResult();
         response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
-        response.entity_result = new()
-        {
-            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
-        };
 
-        return Ok(response);
+        return response;
     }
 
     [HttpPost("receive_memory_event_reward")]
-    public async Task<DragaliaResult> ReceiveNormalReward(
+    public async Task<DragaliaResult<MissionReceiveMemoryEventRewardData>> ReceiveNormalReward(
         MissionReceiveMemoryEventRewardRequest request
     )
     {
-        MissionReceiveMemoryEventRewardData response = new();
-
         await this.missionService.RedeemMissions(
             MissionType.MemoryEvent,
             request.memory_event_mission_id_list
         );
 
-        await BuildNormalResponse(response);
+        MissionReceiveMemoryEventRewardData response =
+            await BuildNormalResponse<MissionReceiveMemoryEventRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.entity_result = this.rewardService.GetEntityResult();
         response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
-        response.entity_result = new()
-        {
-            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
-        };
 
-        return Ok(response);
+        return response;
     }
 
     [HttpPost("receive_beginner_reward")]
-    public async Task<DragaliaResult> ReceiveBeginnerReward(
+    public async Task<DragaliaResult<MissionReceiveBeginnerRewardData>> ReceiveBeginnerReward(
         MissionReceiveBeginnerRewardRequest request
     )
     {
-        MissionReceiveBeginnerRewardData response = new();
-
         await this.missionService.RedeemMissions(
             MissionType.Beginner,
             request.beginner_mission_id_list
         );
 
-        await BuildNormalResponse(response);
+        MissionReceiveBeginnerRewardData response =
+            await BuildNormalResponse<MissionReceiveBeginnerRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.entity_result = this.rewardService.GetEntityResult();
         response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
-        response.entity_result = new()
-        {
-            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
-        };
 
-        return Ok(response);
+        return response;
     }
 
     [HttpPost("receive_special_reward")]
-    public async Task<DragaliaResult> ReceiveBeginnerReward(
+    public async Task<DragaliaResult<MissionReceiveSpecialRewardData>> ReceiveBeginnerReward(
         MissionReceiveSpecialRewardRequest request
     )
     {
-        MissionReceiveSpecialRewardData response = new();
-
         await this.missionService.RedeemMissions(
             MissionType.Special,
             request.special_mission_id_list
         );
 
-        await BuildNormalResponse(response);
+        MissionReceiveSpecialRewardData response =
+            await BuildNormalResponse<MissionReceiveSpecialRewardData>();
         response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.entity_result = this.rewardService.GetEntityResult();
         response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
-        response.entity_result = new()
-        {
-            converted_entity_list = Enumerable.Empty<ConvertedEntityList>()
-        };
 
-        return Ok(response);
+        return response;
     }
 
-    private async Task<INormalMissionEndpointResponse> BuildNormalResponse(
-        INormalMissionEndpointResponse response
-    )
+    private async Task<TResponse> BuildNormalResponse<TResponse>()
+        where TResponse : INormalMissionEndpointResponse, new()
     {
         ILookup<MissionType, DbPlayerMission> allMissions =
             await this.missionRepository.GetAllMissionsPerTypeAsync();
-
-        response.album_mission_list = allMissions[MissionType.Album].Select(
-            x => new AlbumMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
-        );
-        response.beginner_mission_list = allMissions[MissionType.Beginner].Select(
-            x => new BeginnerMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
-        );
-        //response.daily_mission_list = allMissions[MissionType.Daily].Select(x => new DailyMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start));
-
-        response.main_story_mission_list = allMissions[MissionType.MainStory].Select(
-            x => new MainStoryMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
-        );
-        response.normal_mission_list = allMissions[MissionType.Normal].Select(
-            x => new NormalMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
-        );
-        response.period_mission_list = allMissions[MissionType.Period].Select(
-            x => new PeriodMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
-        );
-        response.special_mission_list = allMissions[MissionType.Special].Select(
-            x => new SpecialMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
-        );
 
         int activeEventId = await this.userDataRepository.UserData
             .Select(x => x.ActiveMemoryEventId)
             .FirstAsync();
 
-        response.memory_event_mission_list = allMissions[MissionType.MemoryEvent]
-            .Where(x => x.GroupId == activeEventId)
-            .Select(
-                x => new MemoryEventMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
-            );
+        TResponse response =
+            new()
+            {
+                album_mission_list = allMissions[MissionType.Album].Select(
+                    x => new AlbumMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+                ),
+                beginner_mission_list = allMissions[MissionType.Beginner].Select(
+                    x => new BeginnerMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+                ),
+                //response.daily_mission_list = allMissions[MissionType.Daily].Select(x => new DailyMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start));
+                main_story_mission_list = allMissions[MissionType.MainStory].Select(
+                    x => new MainStoryMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+                ),
+                normal_mission_list = allMissions[MissionType.Normal].Select(
+                    x => new NormalMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+                ),
+                period_mission_list = allMissions[MissionType.Period].Select(
+                    x => new PeriodMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+                ),
+                special_mission_list = allMissions[MissionType.Special].Select(
+                    x => new SpecialMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+                ),
+                memory_event_mission_list = allMissions[MissionType.MemoryEvent]
+                    .Where(x => x.GroupId == activeEventId)
+                    .Select(
+                        x =>
+                            new MemoryEventMissionList(
+                                x.Id,
+                                x.Progress,
+                                (int)x.State,
+                                x.End,
+                                x.Start
+                            )
+                    ),
+            };
 
         return response;
     }
