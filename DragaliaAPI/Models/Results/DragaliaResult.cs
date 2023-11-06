@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace DragaliaAPI.Models.Results;
 
 public class DragaliaResult<TValue> : IConvertToActionResult
+    where TValue : class
 {
     public DragaliaResult(TValue value)
     {
@@ -23,16 +24,18 @@ public class DragaliaResult<TValue> : IConvertToActionResult
 
     public static implicit operator DragaliaResult<TValue>(ActionResult result) => new(result);
 
-    IActionResult IConvertToActionResult.Convert()
+    public IActionResult Convert()
     {
         if (this.Result != null)
         {
             return this.Result;
         }
 
-        return new ObjectResult(this.Value)
+        ArgumentNullException.ThrowIfNull(this.Value);
+
+        return new ObjectResult(new DragaliaResponse<TValue>(this.Value))
         {
-            DeclaredType = typeof(TValue),
+            DeclaredType = typeof(DragaliaResponse<TValue>),
             StatusCode = StatusCodes.Status200OK
         };
     }
