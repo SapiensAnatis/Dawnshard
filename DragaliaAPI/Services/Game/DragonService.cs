@@ -401,7 +401,7 @@ public class DragonService(
         if (dragonReliability == null)
         {
             throw new DragaliaException(
-                Models.ResultCode.EntityNotFoundError,
+                ResultCode.EntityNotFoundError,
                 $"DragonReliability {request.dragon_id} not found"
             );
         }
@@ -494,7 +494,7 @@ public class DragonService(
         if (gift == null || gift.Quantity < request.quantity)
         {
             throw new DragaliaException(
-                Models.ResultCode.CommonMaterialShort,
+                ResultCode.CommonMaterialShort,
                 $"Insufficient gift quantity for: {request.dragon_gift_id}"
             );
         }
@@ -506,7 +506,7 @@ public class DragonService(
         if (dragonReliability == null)
         {
             throw new DragaliaException(
-                Models.ResultCode.EntityNotFoundError,
+                ResultCode.EntityNotFoundError,
                 $"No such dragon in inventory: {request.dragon_id}"
             );
         }
@@ -942,7 +942,7 @@ public class DragonService(
         if (selectedPlayerDragons.Count < request.dragon_key_id_list.Count())
         {
             throw new DragaliaException(
-                Models.ResultCode.DragonSellNotFound,
+                ResultCode.DragonSellNotFound,
                 "Could not find all received dragonKeyIds to sell"
             );
         }
@@ -950,7 +950,7 @@ public class DragonService(
         if (selectedPlayerDragons.Where(x => x.DragonId == Dragons.Puppy).Any())
         {
             throw new DragaliaException(
-                Models.ResultCode.DragonSellLocked,
+                ResultCode.DragonSellLocked,
                 "Invalid sale attempt of the puppy"
             );
         }

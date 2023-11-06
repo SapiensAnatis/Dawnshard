@@ -48,7 +48,7 @@ public static class UnitTestUtils
     /// <typeparam name="T">The type of response.data which the cast should yield.</typeparam>
     /// <param name="response">The ActionResult response from the controller</param>
     /// <returns>The inner data.</returns>
-    public static T? GetData<T>(this ActionResult<DragaliaResponse<object>> response)
+    public static T? GetData<T>(this DragaliaResult response)
         where T : class
     {
         DragaliaResponse<object>? innerResponse =

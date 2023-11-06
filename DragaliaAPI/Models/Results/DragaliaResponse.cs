@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using MessagePack;
 
-namespace DragaliaAPI.Models;
+namespace DragaliaAPI.Models.Results;
 
 [MessagePackObject(keyAsPropertyName: true)]
 public class DragaliaResponse<TData>

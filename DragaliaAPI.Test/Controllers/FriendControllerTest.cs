@@ -45,10 +45,9 @@ public class FriendControllerTest
                 }
             );
 
-        ActionResult<DragaliaResponse<object>> response =
-            await this.friendController.GetSupportCharaDetail(
-                new FriendGetSupportCharaDetailRequest() { support_viewer_id = 1000 }
-            );
+        DragaliaResult response = await this.friendController.GetSupportCharaDetail(
+            new FriendGetSupportCharaDetailRequest() { support_viewer_id = 1000 }
+        );
 
         FriendGetSupportCharaDetailData? data = response.GetData<FriendGetSupportCharaDetailData>();
         data.Should().NotBeNull();
@@ -78,10 +77,9 @@ public class FriendControllerTest
                 }
             );
 
-        ActionResult<DragaliaResponse<object>> response =
-            await this.friendController.GetSupportCharaDetail(
-                new FriendGetSupportCharaDetailRequest() { support_viewer_id = 0 }
-            );
+        DragaliaResult response = await this.friendController.GetSupportCharaDetail(
+            new FriendGetSupportCharaDetailRequest() { support_viewer_id = 0 }
+        );
 
         FriendGetSupportCharaDetailData? data = response.GetData<FriendGetSupportCharaDetailData>();
         data.Should().NotBeNull();

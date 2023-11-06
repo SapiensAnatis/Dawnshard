@@ -32,7 +32,7 @@ public class MatchingController : DragaliaControllerBase
         if (data is null)
         {
             this.logger.LogDebug("Could not find room with id {id}", request.room_id);
-            return this.Code(Models.ResultCode.MatchingRoomIdNotFound);
+            return this.Code(ResultCode.MatchingRoomIdNotFound);
         }
 
         this.logger.LogDebug("Found room with id {id}: {@room}", request.room_id, data);
