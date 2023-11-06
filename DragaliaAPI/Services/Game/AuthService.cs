@@ -183,7 +183,7 @@ public class AuthService : IAuthService
                     validationResult
                 );
                 throw new DragaliaException(
-                    Models.ResultCode.IdTokenError,
+                    ResultCode.IdTokenError,
                     "Failed to validate BaaS token!",
                     validationResult.Exception
                 );

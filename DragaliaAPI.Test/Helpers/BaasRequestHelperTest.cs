@@ -137,7 +137,7 @@ public class BaasRequestHelperTest
             .Invoking(x => x.GetKeys())
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
-            .Where(x => x.Code == Models.ResultCode.CommonAuthError);
+            .Where(x => x.Code == ResultCode.CommonAuthError);
 
         this.mockOptions.VerifyAll();
         this.mockHttpMessageHandler.VerifyAll();
@@ -198,6 +198,6 @@ public class BaasRequestHelperTest
             .Invoking(x => x.GetSavefile("token"))
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
-            .Where(x => x.Code == Models.ResultCode.TransitionLinkedDataNotFound);
+            .Where(x => x.Code == ResultCode.TransitionLinkedDataNotFound);
     }
 }
