@@ -168,14 +168,19 @@ public class MissionService : IMissionService
             case MissionType.Period:
                 IExtendedRewardMission extendedRewardMission = (IExtendedRewardMission)
                     missionInfo.MasterAssetMission;
+
+                // These fields are always 0 (invalid) for everything but the FEH wyrmprints
+                int buildupCount = Math.Max(extendedRewardMission.EntityBuildupCount, 1);
+                int equipableCount = Math.Max(extendedRewardMission.EntityEquipableCount, 1);
+
                 await this.rewardService.GrantReward(
                     new(
                         extendedRewardMission.EntityType,
                         extendedRewardMission.EntityId,
                         extendedRewardMission.EntityQuantity,
                         extendedRewardMission.EntityLimitBreakCount,
-                        extendedRewardMission.EntityBuildupCount,
-                        extendedRewardMission.EntityEquipableCount
+                        buildupCount,
+                        equipableCount
                     )
                 );
                 break;
