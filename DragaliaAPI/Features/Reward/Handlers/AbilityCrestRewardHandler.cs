@@ -10,7 +10,6 @@ namespace DragaliaAPI.Features.Reward.Handlers;
 [UsedImplicitly]
 public class AbilityCrestRewardHandler(
     IAbilityCrestRepository abilityCrestRepository,
-    IUserDataRepository userDataRepository,
     ILogger<AbilityCrestRewardHandler> logger
 ) : IRewardHandler
 {

@@ -57,16 +57,7 @@ public class RewardService(
 
     private async Task<RewardGrantResult> GrantRewardInternal(Entity entity)
     {
-        IRewardHandler? handler = rewardHandlers.SingleOrDefault(
-            x => x.SupportedTypes.Contains(entity.Type)
-        );
-
-        if (handler is null)
-        {
-            logger.LogError("Failed to find reward handler for entity {@entity}", entity);
-            throw new InvalidOperationException("Failed to grant reward");
-        }
-
+        IRewardHandler handler = this.GetHandler(entity.Type);
         GrantReturn grantReturn = await handler.Grant(entity);
 
         switch (grantReturn.Result)
@@ -76,9 +67,13 @@ public class RewardService(
                 break;
             case RewardGrantResult.Converted:
                 ArgumentNullException.ThrowIfNull(grantReturn.ConvertedEntity);
+
                 this.convertedEntities.Add(
                     new ConvertedEntity(entity, grantReturn.ConvertedEntity)
                 );
+                await this.GetHandler(grantReturn.ConvertedEntity.Type)
+                    .Grant(grantReturn.ConvertedEntity);
+
                 break;
             case RewardGrantResult.Discarded:
                 this.discardedEntities.Add(entity);
@@ -103,6 +98,21 @@ public class RewardService(
         }
 
         return grantReturn.Result;
+    }
+
+    private IRewardHandler GetHandler(EntityTypes type)
+    {
+        IRewardHandler? handler = rewardHandlers.SingleOrDefault(
+            x => x.SupportedTypes.Contains(type)
+        );
+
+        if (handler is null)
+        {
+            logger.LogError("Failed to find reward handler for entity type {type}", type);
+            throw new InvalidOperationException("Failed to grant reward");
+        }
+
+        return handler;
     }
 
     public async Task<(RewardGrantResult Result, DbTalisman? Talisman)> GrantTalisman(
