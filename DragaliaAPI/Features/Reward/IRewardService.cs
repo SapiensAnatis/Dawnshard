@@ -32,4 +32,5 @@ public interface IRewardService
     );
 
     EntityResult GetEntityResult();
+    IEnumerable<ConvertedEntity> GetConvertedEntityList();
 }

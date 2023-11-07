@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Immutable;
+using System.Diagnostics;
+using System.Linq;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dmode;
@@ -49,10 +51,17 @@ public class RewardService(
         entities = entities.ToList();
         logger.LogTrace("Granting rewards: {@rewards}", entities);
 
+        if (!entities.TryGetNonEnumeratedCount(out int count))
+            count = 0;
+
+        List<RewardGrantResult> results = new(count);
         foreach (Entity entity in entities)
         {
             RewardGrantResult result = await GrantRewardInternal(entity);
+            results.Add(result);
         }
+
+        logger.LogTrace("Results: {@results}", results);
     }
 
     private async Task<RewardGrantResult> GrantRewardInternal(Entity entity)
@@ -169,4 +178,6 @@ public class RewardService(
             ),
         };
     }
+
+    public IEnumerable<ConvertedEntity> GetConvertedEntityList() => this.convertedEntities.ToList();
 }

@@ -13,7 +13,6 @@ public class QuestControllerTest
 {
     private readonly Mock<IStoryService> mockStoryService;
     private readonly Mock<IHelperService> mockHelperService;
-    private readonly Mock<IQuestDropService> mockQuestRewardService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
     private readonly Mock<IClearPartyService> mockClearPartyService;
     private readonly Mock<IQuestTreasureService> mockQuestTreasureService;
@@ -25,7 +24,6 @@ public class QuestControllerTest
     {
         this.mockStoryService = new(MockBehavior.Strict);
         this.mockHelperService = new(MockBehavior.Strict);
-        this.mockQuestRewardService = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
         this.mockClearPartyService = new(MockBehavior.Strict);
         this.mockQuestTreasureService = new(MockBehavior.Strict);
@@ -34,7 +32,6 @@ public class QuestControllerTest
         this.questController = new(
             this.mockStoryService.Object,
             this.mockHelperService.Object,
-            this.mockQuestRewardService.Object,
             this.mockUpdateDataService.Object,
             this.mockClearPartyService.Object,
             this.mockQuestTreasureService.Object,
