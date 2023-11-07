@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
@@ -60,6 +61,7 @@ public class DungeonRecordRewardService(
     {
         int manaDrop = 0;
         int coinDrop = 0;
+        List<Entity> entities = new();
         List<AtgenDropAll> drops = new();
 
         foreach (
@@ -85,10 +87,11 @@ public class DungeonRecordRewardService(
             IEnumerable<int> enemyRecord = record.enemy ?? Enumerable.Repeat(1, enemyList.Count());
 
             foreach (
-                EnemyDropList enemyDropList in enemyList
+                EnemyDropList? enemyDropList in enemyList
                     .Zip(enemyRecord)
                     .Where(x => x.Second == 1)
-                    .SelectMany(x => x.First.enemy_drop_list)
+                    .Select(x => x.First.enemy_drop_list.ElementAtOrDefault(0))
+                    .NotNull()
             )
             {
                 manaDrop += enemyDropList.mana;
@@ -98,15 +101,17 @@ public class DungeonRecordRewardService(
                 {
                     Entity reward = new(dropList.type, dropList.id, dropList.quantity);
 
+                    entities.Add(reward);
                     drops.Add(reward.ToDropAll());
-
-                    await rewardService.GrantReward(reward);
                 }
             }
         }
 
+        await rewardService.GrantRewards(entities);
         await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
         await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
+
+        drops = drops.Merge().ToList();
 
         return (drops, manaDrop, coinDrop);
     }
@@ -165,4 +170,22 @@ public class DungeonRecordRewardService(
         IEnumerable<AtgenEventPassiveUpList> PassiveUpList,
         IEnumerable<AtgenDropAll> EventDrops
     );
+}
+
+file static class Extensions
+{
+    public static IEnumerable<AtgenDropAll> Merge(this IEnumerable<AtgenDropAll> source) =>
+        source
+            .GroupBy(x => new { x.id, x.type })
+            .Select(
+                group =>
+                    group.Aggregate(
+                        new AtgenDropAll { type = group.Key.type, id = group.Key.id, },
+                        (acc, current) =>
+                        {
+                            acc.quantity += current.quantity;
+                            return acc;
+                        }
+                    )
+            );
 }

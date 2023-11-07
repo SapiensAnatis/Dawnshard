@@ -1984,7 +1984,7 @@ public class AtgenEnemy
     [MessagePackFormatter(typeof(BoolToIntFormatter))]
     public bool is_rare { get; set; }
     public int param_id { get; set; }
-    public IEnumerable<EnemyDropList> enemy_drop_list { get; set; }
+    public List<EnemyDropList> enemy_drop_list { get; set; }
 
     public AtgenEnemy(
         int piece,
@@ -1992,7 +1992,7 @@ public class AtgenEnemy
         bool is_pop,
         bool is_rare,
         int param_id,
-        IEnumerable<EnemyDropList> enemy_drop_list
+        List<EnemyDropList> enemy_drop_list
     )
     {
         this.piece = piece;
@@ -5709,9 +5709,9 @@ public class EnemyDropList
 {
     public int coin { get; set; }
     public int mana { get; set; }
-    public IEnumerable<AtgenDropList> drop_list { get; set; } = Enumerable.Empty<AtgenDropList>();
+    public List<AtgenDropList> drop_list { get; set; } = new();
 
-    public EnemyDropList(int coin, int mana, IEnumerable<AtgenDropList> drop_list)
+    public EnemyDropList(int coin, int mana, List<AtgenDropList> drop_list)
     {
         this.coin = coin;
         this.mana = mana;

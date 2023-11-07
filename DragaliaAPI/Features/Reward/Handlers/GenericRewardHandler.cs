@@ -20,7 +20,6 @@ public class GenericRewardHandler(
     ILogger<RewardService> logger,
     IInventoryRepository inventoryRepository,
     IUserDataRepository userDataRepository,
-    IAbilityCrestRepository abilityCrestRepository,
     IUnitRepository unitRepository,
     IFortRepository fortRepository,
     IEventRepository eventRepository,
