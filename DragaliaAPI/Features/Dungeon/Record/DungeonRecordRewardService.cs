@@ -87,7 +87,7 @@ public class DungeonRecordRewardService(
             IEnumerable<int> enemyRecord = record.enemy ?? Enumerable.Repeat(1, enemyList.Count());
 
             foreach (
-                EnemyDropList? enemyDropList in enemyList
+                EnemyDropList enemyDropList in enemyList
                     .Zip(enemyRecord)
                     .Where(x => x.Second == 1)
                     .SelectMany(x => x.First.enemy_drop_list)

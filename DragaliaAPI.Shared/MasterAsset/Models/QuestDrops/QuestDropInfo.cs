@@ -13,7 +13,7 @@ public record DropEntity(
 )
 {
     /// <summary>
-    /// Gets an weight for FluentRandomPicker.
+    /// Gets a weight for FluentRandomPicker.
     /// </summary>
     /// <remarks>
     /// Loses any decimal points after 10e-4.
