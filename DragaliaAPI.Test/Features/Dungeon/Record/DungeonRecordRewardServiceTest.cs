@@ -209,18 +209,8 @@ public class DungeonRecordRewardServiceTest
             };
 
         this.mockRewardService
-            .Setup(x => x.GrantReward(It.Is<Entity>(e => e.Type == EntityTypes.Dew)))
-            .ReturnsAsync(RewardGrantResult.Added);
-        this.mockRewardService
-            .Setup(x => x.GrantReward(It.Is<Entity>(e => e.Type == EntityTypes.HustleHammer)))
-            .ReturnsAsync(RewardGrantResult.Added);
-        this.mockRewardService
-            .Setup(x => x.GrantReward(It.Is<Entity>(e => e.Type == EntityTypes.Wyrmite)))
-            .ReturnsAsync(RewardGrantResult.Added);
-        this.mockRewardService
-            .Setup(x => x.GrantReward(It.Is<Entity>(e => e.Type == EntityTypes.FafnirMedal)))
-            .ReturnsAsync(RewardGrantResult.Added);
-
+            .Setup(x => x.GrantRewards(It.IsAny<List<Entity>>()))
+            .Returns(Task.CompletedTask);
         this.mockRewardService
             .Setup(
                 x =>

@@ -101,7 +101,6 @@ public static class ServiceConfiguration
             .AddScoped<IDungeonService, DungeonService>()
             .AddScoped<IDungeonStartService, DungeonStartService>()
             .AddScoped<IDungeonRepository, DungeonRepository>()
-            .AddScoped<IQuestDropService, QuestDropService>()
             .AddScoped<IQuestEnemyService, QuestEnemyService>()
             .AddScoped<IOddsInfoService, OddsInfoService>()
             .AddScoped<IDungeonRecordService, DungeonRecordService>()

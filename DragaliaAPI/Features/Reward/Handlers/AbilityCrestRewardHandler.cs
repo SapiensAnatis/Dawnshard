@@ -30,7 +30,7 @@ public class AbilityCrestRewardHandler(
                 new(
                     crestData.DuplicateEntityType,
                     Id: (int)crestData.DuplicateEntityId,
-                    Quantity: crestData.DuplicateEntityQuantity
+                    Quantity: crestData.DuplicateEntityQuantity * entity.Quantity
                 );
 
             logger.LogDebug(

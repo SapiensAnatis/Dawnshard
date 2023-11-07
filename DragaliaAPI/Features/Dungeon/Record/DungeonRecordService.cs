@@ -3,6 +3,7 @@ using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -16,6 +17,7 @@ public class DungeonRecordService(
     IUserService userService,
     ITutorialService tutorialService,
     ICharaService charaService,
+    IRewardService rewardService,
     ILogger<DungeonRecordService> logger
 ) : IDungeonRecordService
 {
@@ -96,6 +98,12 @@ public class DungeonRecordService(
         ingameResultData.event_passive_up_list = eventPassiveUpLists;
         ingameResultData.reward_record.drop_all.AddRange(eventDrops);
 
+        ingameResultData.converted_entity_list = rewardService
+            .GetConvertedEntityList()
+            .Select(x => x.ToConvertedEntityList())
+            .Merge()
+            .ToList();
+
         return ingameResultData;
     }
 
@@ -150,4 +158,40 @@ public class DungeonRecordService(
         growRecord.bonus_factor = 1;
         growRecord.mana_bonus_factor = 1;
     }
+}
+
+file static class Extensions
+{
+    public static IEnumerable<ConvertedEntityList> Merge(
+        this IEnumerable<ConvertedEntityList> source
+    ) =>
+        source
+            .GroupBy(
+                x =>
+                    new
+                    {
+                        x.before_entity_id,
+                        x.before_entity_type,
+                        x.after_entity_id,
+                        x.after_entity_type
+                    }
+            )
+            .Select(
+                group =>
+                    group.Aggregate(
+                        new ConvertedEntityList
+                        {
+                            before_entity_id = group.Key.before_entity_id,
+                            before_entity_type = group.Key.before_entity_type,
+                            after_entity_id = group.Key.after_entity_id,
+                            after_entity_type = group.Key.after_entity_type
+                        },
+                        (acc, current) =>
+                        {
+                            acc.before_entity_quantity += current.before_entity_quantity;
+                            acc.after_entity_quantity += current.after_entity_quantity;
+                            return acc;
+                        }
+                    )
+            );
 }
