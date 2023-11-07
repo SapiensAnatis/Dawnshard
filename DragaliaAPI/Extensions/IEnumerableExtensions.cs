@@ -17,17 +17,6 @@ public static class IEnumerableExtensions
         return element is not null;
     }
 
-    public static IEnumerable<TElement> NotNull<TElement>(this IEnumerable<TElement?> enumerable)
-    {
-        foreach (TElement? element in enumerable)
-        {
-            if (element is not null)
-            {
-                yield return element;
-            }
-        }
-    }
-
     /// <summary>
     /// Repeats the input <paramref name="enumerable"/> after itself <paramref name="count"/> times.
     /// </summary>

@@ -90,8 +90,7 @@ public class DungeonRecordRewardService(
                 EnemyDropList? enemyDropList in enemyList
                     .Zip(enemyRecord)
                     .Where(x => x.Second == 1)
-                    .Select(x => x.First.enemy_drop_list.ElementAtOrDefault(0))
-                    .NotNull()
+                    .SelectMany(x => x.First.enemy_drop_list)
             )
             {
                 manaDrop += enemyDropList.mana;
