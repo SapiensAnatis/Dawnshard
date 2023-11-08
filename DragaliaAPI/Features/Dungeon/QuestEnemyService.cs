@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Dungeon.Start;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
@@ -102,8 +103,19 @@ public class QuestEnemyService : IQuestEnemyService
         return enemyList;
     }
 
-    private static IPick<AtgenEnemy> GetEnemyPicker(AtgenEnemy[] enemyList) =>
-        GetPicker(
+    private static IPick<AtgenEnemy> GetEnemyPicker(AtgenEnemy[] enemyList)
+    {
+        AtgenEnemy? boss = enemyList.FirstOrDefault(
+            x => MasterAsset.EnemyParam[x.param_id].Tough >= Toughness.Boss
+        );
+
+        if (boss != null)
+        {
+            // Do not assign drops to minions
+            enemyList = new[] { boss };
+        }
+
+        return GetPicker(
             enemyList,
             enemy =>
             {
@@ -113,6 +125,7 @@ public class QuestEnemyService : IQuestEnemyService
                 return 1;
             }
         );
+    }
 
     private static IPick<DropEntity> GetDropPicker(QuestDropInfo questDropInfo) =>
         GetPicker(questDropInfo.Drops, entity => entity.Weight);
