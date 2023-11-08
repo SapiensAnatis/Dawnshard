@@ -34,10 +34,17 @@ public class QuestEnemyService : IQuestEnemyService
             return enemyList;
         }
 
+        int areaCount = MasterAsset.QuestData[questId].AreaInfo.Count();
+        int totalQuantity = (int)Math.Round(questDropInfo.Drops.Sum(x => x.Quantity) / areaCount);
+
+        int totalRupies = AddVariance(questDropInfo.Rupies) / areaCount;
+        int rupieSlice = totalRupies / totalQuantity;
+
+        int totalMana = AddVariance(questDropInfo.Mana) / areaCount;
+        int manaSlice = totalMana / totalQuantity;
+
         IPick<DropEntity> dropPicker = GetDropPicker(questDropInfo);
         IPick<AtgenEnemy> enemyPicker = GetEnemyPicker(enemyList);
-
-        int totalQuantity = (int)Math.Round(questDropInfo.Drops.Sum(x => x.Quantity));
 
         for (int i = 0; i < totalQuantity; i++)
         {
@@ -50,12 +57,15 @@ public class QuestEnemyService : IQuestEnemyService
                 enemy.enemy_drop_list.Add(
                     new EnemyDropList()
                     {
-                        coin = 10_000, // TODO: Randomly generate coin and mana drops too
-                        mana = 10_000,
+                        coin = 0,
+                        mana = 0,
                         drop_list = new List<AtgenDropList>()
                     }
                 );
             }
+
+            enemy.enemy_drop_list[0].coin += rupieSlice;
+            enemy.enemy_drop_list[0].mana += manaSlice;
 
             enemy.enemy_drop_list[0].drop_list.Add(
                 new AtgenDropList()
@@ -115,6 +125,13 @@ public class QuestEnemyService : IQuestEnemyService
             > 1 => Out.Of().PrioritizedElements(elements).WithWeightSelector(weight),
             _ => throw new ArgumentException("Invalid value count", nameof(elements)),
         };
+
+    private static int AddVariance(int value)
+    {
+        double range = value * 0.05;
+        double variance = range * (Random.Shared.NextDouble() - 0.5);
+        return (int)Math.Round(value + variance);
+    }
 
     private AtgenEnemy[] GetEnemyList(int questId, int areaNum)
     {
