@@ -209,18 +209,23 @@ public class StoryServiceTest
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(type, storyId))
             .ReturnsAsync(
-                new DbPlayerStoryState() { DeviceAccountId = string.Empty, State = StoryState.Unlocked }
+                new DbPlayerStoryState()
+                {
+                    DeviceAccountId = string.Empty,
+                    State = StoryState.Unlocked
+                }
             );
 
         this.mockRewardService
-            .Setup(x => x.GrantReward(new Entity(EntityTypes.Title, expectedEmblemId, 1, null, null, null)))
-            .ReturnsAsync(
-                RewardGrantResult.Added
-            );
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        new Entity(EntityTypes.Title, expectedEmblemId, 1, null, null, null)
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
 
-        this.mockUserDataRepository
-            .Setup(x => x.GiveWyrmite(10))
-            .Returns(Task.CompletedTask);
+        this.mockUserDataRepository.Setup(x => x.GiveWyrmite(10)).Returns(Task.CompletedTask);
 
         (await this.storyService.ReadStory(type, storyId))
             .Should()
@@ -228,7 +233,12 @@ public class StoryServiceTest
                 new List<AtgenBuildEventRewardEntityList>()
                 {
                     new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 10 },
-                    new() { entity_type = EntityTypes.Title, entity_id = expectedEmblemId, entity_quantity = 1 }
+                    new()
+                    {
+                        entity_type = EntityTypes.Title,
+                        entity_id = expectedEmblemId,
+                        entity_quantity = 1
+                    }
                 }
             );
 
