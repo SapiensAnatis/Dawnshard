@@ -1,10 +1,12 @@
 ﻿using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.Dungeon.Start;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 using FluentRandomPicker;
 using FluentRandomPicker.FluentInterfaces.General;
+using JetBrains.Annotations;
 
 namespace DragaliaAPI.Features.Dungeon;
 
@@ -24,6 +26,11 @@ public class QuestEnemyService : IQuestEnemyService
         if (!MasterAsset.QuestDrops.TryGetValue(questId, out QuestDropInfo? questDropInfo))
         {
             this.logger.LogWarning("Failed to get drop data for quest id {questId}", questId);
+            return enemyList;
+        }
+
+        if (questDropInfo.Drops.Length == 0 || enemyList.Length == 0)
+        {
             return enemyList;
         }
 
@@ -85,29 +92,29 @@ public class QuestEnemyService : IQuestEnemyService
         return enemyList;
     }
 
-    private static IPick<AtgenEnemy> GetEnemyPicker(AtgenEnemy[] enemyList)
-    {
-        IPick<AtgenEnemy> randomBuilder = Out.Of()
-            .PrioritizedElements(enemyList)
-            .WithWeightSelector(x =>
+    private static IPick<AtgenEnemy> GetEnemyPicker(AtgenEnemy[] enemyList) =>
+        GetPicker(
+            enemyList,
+            enemy =>
             {
-                if (MasterAsset.EnemyParam.TryGetValue(x.param_id, out EnemyParam? param))
+                if (MasterAsset.EnemyParam.TryGetValue(enemy.param_id, out EnemyParam? param))
                     return (int)param.Tough + 1;
 
                 return 1;
-            });
+            }
+        );
 
-        return randomBuilder;
-    }
+    private static IPick<DropEntity> GetDropPicker(QuestDropInfo questDropInfo) =>
+        GetPicker(questDropInfo.Drops, entity => entity.Weight);
 
-    private static IPick<DropEntity> GetDropPicker(QuestDropInfo questDropInfo)
-    {
-        IPick<DropEntity> randomBuilder = Out.Of()
-            .PrioritizedElements(questDropInfo.Drops)
-            .WithWeightSelector(x => x.Weight);
-
-        return randomBuilder;
-    }
+    private static IPick<T> GetPicker<T>(T[] elements, Func<T, int> weight) =>
+        // Workaround for FluentRandomPicker throwing when passing in single-element collections
+        elements.Length switch
+        {
+            1 => new SingleValuePicker<T>(elements[0]),
+            > 1 => Out.Of().PrioritizedElements(elements).WithWeightSelector(weight),
+            _ => throw new ArgumentException("Invalid value count", nameof(elements)),
+        };
 
     private AtgenEnemy[] GetEnemyList(int questId, int areaNum)
     {

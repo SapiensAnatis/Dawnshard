@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 
-public record QuestDropInfo(int QuestId, [NoEnumeration] IEnumerable<DropEntity> Drops);
+public record QuestDropInfo(int QuestId, DropEntity[] Drops);
 
 public record DropEntity(
     int Id,
