@@ -257,7 +257,7 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\QuestDrops\QuestDrops.json">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Resources\QuestDrops\QuestEnemies.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
