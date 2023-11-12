@@ -6,10 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.SavefileUpdate;
 
-public class V14Update(
-    IStoryRepository storyRepository,
-    IRewardService rewardService
-) : ISavefileUpdate
+public class V14Update(IStoryRepository storyRepository, IRewardService rewardService)
+    : ISavefileUpdate
 {
     public int SavefileVersion => 14;
 
