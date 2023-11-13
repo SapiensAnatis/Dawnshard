@@ -55,7 +55,7 @@ public class WallRepository : IWallRepository
 
     public async Task<bool> IsInitialized()
     {
-        return await this.QuestWalls.CountAsync() > 0;
+        return await this.QuestWalls.AnyAsync();
     }
 
     public async Task<DbPlayerQuestWall> GetQuestWall(int wallId)

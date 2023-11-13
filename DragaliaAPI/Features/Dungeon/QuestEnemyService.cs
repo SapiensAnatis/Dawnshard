@@ -221,40 +221,16 @@ public class QuestEnemyService : IQuestEnemyService
     private IEnumerable<AtgenEnemy> GetWallEnemyList(int wallId, int wallLevel)
     {
         QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(wallId, wallLevel);
-        AreaInfo areaInfo = questWallDetail.AreaInfo.First();
-        logger.LogInformation("areaInfo: {@areaInfo}", areaInfo);
-
-        string assetName = $"{areaInfo.ScenePath}/{areaInfo.AreaName}".ToLowerInvariant();
-
-        if (!MasterAsset.QuestEnemies.TryGetValue(assetName, out QuestEnemies? enemies))
-        {
-            this.logger.LogWarning(
-                "Unable to retrieve enemy list for wall quest with wallId {wallId}, wallLevel {wallLevel}",
-                wallId,
-                wallLevel
-            );
-            return Enumerable.Empty<AtgenEnemy>();
-        }
-
-        if (!enemies.Enemies.TryGetValue(VariationTypes.Normal, out IEnumerable<int>? enemyList))
-        {
-            this.logger.LogWarning(
-                "Unable to retrieve enemy list for variation type {type}",
-                VariationTypes.Normal
-            );
-            return Enumerable.Empty<AtgenEnemy>();
-        }
-
-        return enemyList.Select(
-            (x, idx) =>
-                new AtgenEnemy()
-                {
-                    enemy_idx = idx,
-                    is_pop = true,
-                    is_rare = false,
-                    param_id = questWallDetail.BossEnemyParamId,
-                    enemy_drop_list = new List<EnemyDropList>() { }
-                }
-        );
+        return new List<AtgenEnemy>()
+        { 
+            new AtgenEnemy()
+            {
+                enemy_idx = 0,
+                is_pop = true,
+                is_rare = false,
+                param_id = questWallDetail.BossEnemyParamId,
+                enemy_drop_list = new List<EnemyDropList>()
+            }
+        };
     }
 }
