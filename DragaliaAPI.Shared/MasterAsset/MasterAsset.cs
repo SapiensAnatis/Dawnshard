@@ -301,9 +301,6 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, EnemyParam> EnemyParam =
         new("QuestDrops/EnemyParam.json", x => x.Id);
 
-    public static readonly MasterAssetData<int, QuestGroupMultiplier> QuestGroupMultiplier =
-        new("QuestDrops/QuestGroupMultipliers.json", x => x.GroupId);
-
     /// <summary>
     /// Contains information about rewards from quests.
     /// </summary>
