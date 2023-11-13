@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DragaliaAPI.Shared.Definitions.Enums;
+
 public enum QuestWallTypes
 {
     Flame = 216010001,

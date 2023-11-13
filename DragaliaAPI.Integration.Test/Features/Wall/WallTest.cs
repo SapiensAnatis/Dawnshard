@@ -46,11 +46,7 @@ public class WallTest : TestFixture
         WallFailData response = (
             await Client.PostMsgpack<WallFailData>(
                 "/wall/fail",
-                new WallFailRequest()
-                {
-                    dungeon_key = key,
-                    fail_state = 0
-                }
+                new WallFailRequest() { dungeon_key = key, fail_state = 0 }
             )
         ).data;
 
@@ -64,7 +60,6 @@ public class WallTest : TestFixture
                     is_host = true
                 }
             );
-
     }
 
     [Fact]
@@ -109,7 +104,7 @@ public class WallTest : TestFixture
         WallGetMonthlyRewardData response = (
             await this.Client.PostMsgpack<WallGetMonthlyRewardData>(
                 "wall/get_monthly_reward",
-                new WallGetMonthlyRewardData() {}
+                new WallGetMonthlyRewardData() { }
             )
         ).data;
 
@@ -124,7 +119,6 @@ public class WallTest : TestFixture
                     reward_status = RewardStatus.Received
                 }
             );
-
     }
 
     [Fact]

@@ -27,8 +27,9 @@ public class WallRecordTest : TestFixture
 
         DbPlayerMaterial oldPlayerGoldCrystals = this.ApiContext.PlayerMaterials
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId && 
-            x.MaterialId == Materials.GoldCrystal);
+            .First(
+                x => x.DeviceAccountId == DeviceAccountId && x.MaterialId == Materials.GoldCrystal
+            );
 
         int wallId = 216010001;
         int wallLevel = 20;
@@ -78,11 +79,7 @@ public class WallRecordTest : TestFixture
         WallRecordRecordData response = (
             await Client.PostMsgpack<WallRecordRecordData>(
                 "/wall_record/record",
-                new WallRecordRecordRequest()
-                {
-                    wall_id = wallId,
-                    dungeon_key = key
-                }
+                new WallRecordRecordRequest() { wall_id = wallId, dungeon_key = key }
             )
         ).data;
 
@@ -92,9 +89,7 @@ public class WallRecordTest : TestFixture
             .Should()
             .Be(oldUserData.ManaPoint + expectedMana);
 
-        response.update_data_list.material_list
-            .Should()
-            .ContainEquivalentOf(expectedGoldCrystals);
+        response.update_data_list.material_list.Should().ContainEquivalentOf(expectedGoldCrystals);
 
         response.play_wall_detail
             .Should()
@@ -107,16 +102,17 @@ public class WallRecordTest : TestFixture
                 }
             );
 
-        response.wall_clear_reward_list
-            .Should();
+        response.wall_clear_reward_list.Should();
 
         response.wall_drop_reward
             .Should()
             .BeEquivalentTo(
                 new AtgenWallDropReward()
                 {
-                    reward_entity_list = new[] {
-                        new AtgenBuildEventRewardEntityList() { 
+                    reward_entity_list = new[]
+                    {
+                        new AtgenBuildEventRewardEntityList()
+                        {
                             entity_type = EntityTypes.Material,
                             entity_id = (int)Materials.GoldCrystal,
                             entity_quantity = expectedGoldCrystalsAmount
@@ -137,6 +133,5 @@ public class WallRecordTest : TestFixture
                     helper_detail_list = new List<AtgenHelperDetailList>()
                 }
             );
-
     }
 }

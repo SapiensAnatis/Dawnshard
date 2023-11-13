@@ -59,28 +59,22 @@ public class WallRecordControllerTest
         List<PartySettingList> party = new();
         int wallId = WallService.FlameWallId;
 
-        DungeonSession session =
-            new() { QuestData = MasterAsset.QuestData[0], Party = party, };
+        DungeonSession session = new() { QuestData = MasterAsset.QuestData[0], Party = party, };
 
-        DbPlayerQuestWall playerQuestWall = new()
-        {
-            DeviceAccountId = "cool account",
-            IsStartNextLevel = true,
-            WallId = wallId,
-            WallLevel = 1
-        };
+        DbPlayerQuestWall playerQuestWall =
+            new()
+            {
+                DeviceAccountId = "cool account",
+                IsStartNextLevel = true,
+                WallId = wallId,
+                WallLevel = 1
+            };
 
-        mockDungeonService
-            .Setup(x => x.FinishDungeon(dungeonKey))
-            .ReturnsAsync(session);
+        mockDungeonService.Setup(x => x.FinishDungeon(dungeonKey)).ReturnsAsync(session);
 
-        mockWallRepository
-            .Setup(x => x.GetQuestWall(wallId))
-            .ReturnsAsync(playerQuestWall);
+        mockWallRepository.Setup(x => x.GetQuestWall(wallId)).ReturnsAsync(playerQuestWall);
 
-        mockWallService
-            .Setup(x => x.LevelupQuestWall(wallId))
-            .Returns(Task.CompletedTask);
+        mockWallService.Setup(x => x.LevelupQuestWall(wallId)).Returns(Task.CompletedTask);
 
         mockRewardService
             .Setup(x => x.GrantReward(WallRecordController.GoldCrystals))
@@ -94,8 +88,7 @@ public class WallRecordControllerTest
             .Setup(x => x.GrantReward(WallRecordController.Mana))
             .ReturnsAsync(RewardGrantResult.Added);
 
-        mockPresentService
-            .Setup(x => x.AddPresent(WallRecordController.WyrmitesPresent));
+        mockPresentService.Setup(x => x.AddPresent(WallRecordController.WyrmitesPresent));
 
         mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
 
@@ -105,27 +98,32 @@ public class WallRecordControllerTest
             await wallRecordController.Record(new WallRecordRecordRequest(wallId, dungeonKey))
         ).GetData<WallRecordRecordData>()!;
 
-        AtgenPlayWallDetail dataPlayWallDetail = new()
-        {
-            wall_id = wallId,
-            after_wall_level = 2,
-            before_wall_level = 1
-        };
+        AtgenPlayWallDetail dataPlayWallDetail =
+            new()
+            {
+                wall_id = wallId,
+                after_wall_level = 2,
+                before_wall_level = 1
+            };
 
         AtgenWallDropReward dataWallDropReward =
             new()
             {
-                reward_entity_list = new[] { WallRecordController.GoldCrystals.ToBuildEventRewardEntityList() },
+                reward_entity_list = new[]
+                {
+                    WallRecordController.GoldCrystals.ToBuildEventRewardEntityList()
+                },
                 take_coin = WallRecordController.Rupies.Quantity,
                 take_mana = WallRecordController.Mana.Quantity
             };
 
-        IEnumerable<AtgenBuildEventRewardEntityList> dataWallClearRewardList =
-            new[] { WallRecordController.Wyrmites.ToBuildEventRewardEntityList() };
+        IEnumerable<AtgenBuildEventRewardEntityList> dataWallClearRewardList = new[]
+        {
+            WallRecordController.Wyrmites.ToBuildEventRewardEntityList()
+        };
 
         data.play_wall_detail.Should().BeEquivalentTo(dataPlayWallDetail);
         data.wall_clear_reward_list.Should().BeEquivalentTo(dataWallClearRewardList);
         data.wall_drop_reward.Should().BeEquivalentTo(dataWallDropReward);
     }
-    
 }

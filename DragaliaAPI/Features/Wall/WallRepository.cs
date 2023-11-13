@@ -32,7 +32,8 @@ public class WallRepository : IWallRepository
 
     public async Task InitializeWall()
     {
-        if (await IsInitialized()) {
+        if (await IsInitialized())
+        {
             return;
         }
 

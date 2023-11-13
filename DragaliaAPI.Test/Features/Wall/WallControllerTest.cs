@@ -62,16 +62,16 @@ public class WallControllerTest
             .Setup(x => x.GetUserWallRewardList(totalLevel, rewardStatus))
             .Returns(userRewardList);
 
-        mockWallService
-            .Setup(x => x.GetTotalWallLevel())
-            .ReturnsAsync(totalLevel);
+        mockWallService.Setup(x => x.GetTotalWallLevel()).ReturnsAsync(totalLevel);
 
-        WallGetMonthlyRewardData data = (await wallController.GetMonthlyReward()).GetData<WallGetMonthlyRewardData>()!;
+        WallGetMonthlyRewardData data = (
+            await wallController.GetMonthlyReward()
+        ).GetData<WallGetMonthlyRewardData>()!;
 
         data.user_wall_reward_list.Should().BeEquivalentTo(userRewardList);
 
         mockWallService.VerifyAll();
-     }
+    }
 
     [Fact]
     public async Task ReceiveMonthlyReward_ReturnsRewards()
@@ -97,32 +97,33 @@ public class WallControllerTest
                 quest_group_id = WallService.WallQuestGroupId,
                 is_receive_reward = RewardStatus.Received
             };
-        IEnumerable<AtgenMonthlyWallReceiveList> monthlyWallReceiveListList = new[] { monthlyWallReceiveList };
-
-        List<AtgenBuildEventRewardEntityList> buildEventRewardEntityList = new()
+        IEnumerable<AtgenMonthlyWallReceiveList> monthlyWallReceiveListList = new[]
         {
-            new AtgenBuildEventRewardEntityList()
-            {
-                entity_type = EntityTypes.Mana,
-                entity_id = 0,
-                entity_quantity = 2500
-            },
-
-            new AtgenBuildEventRewardEntityList()
-            {
-                entity_type = EntityTypes.Rupies,
-                entity_id = 0,
-                entity_quantity = 10000
-            }
+            monthlyWallReceiveList
         };
+
+        List<AtgenBuildEventRewardEntityList> buildEventRewardEntityList =
+            new()
+            {
+                new AtgenBuildEventRewardEntityList()
+                {
+                    entity_type = EntityTypes.Mana,
+                    entity_id = 0,
+                    entity_quantity = 2500
+                },
+                new AtgenBuildEventRewardEntityList()
+                {
+                    entity_type = EntityTypes.Rupies,
+                    entity_id = 0,
+                    entity_quantity = 10000
+                }
+            };
 
         mockWallService
             .Setup(x => x.GetUserWallRewardList(totalLevel, rewardStatus))
             .Returns(userRewardList);
 
-        mockWallService
-            .Setup(x => x.GetTotalWallLevel())
-            .ReturnsAsync(totalLevel);
+        mockWallService.Setup(x => x.GetTotalWallLevel()).ReturnsAsync(totalLevel);
 
         mockWallService
             .Setup(x => x.GetMonthlyRewardEntityList(totalLevel))

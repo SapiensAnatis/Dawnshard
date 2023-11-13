@@ -46,19 +46,11 @@ public class WallStartTest : TestFixture
             )
         ).data;
 
-        response.odds_info.enemy.First().param_id
-            .Should()
-            .Be(expectedWallBossParamId);
+        response.odds_info.enemy.First().param_id.Should().Be(expectedWallBossParamId);
 
         response.ingame_wall_data
             .Should()
-            .BeEquivalentTo(
-                new IngameWallData() {
-                    wall_id = wallId,
-                    wall_level = wallLevel
-                }
-            );   
-
+            .BeEquivalentTo(new IngameWallData() { wall_id = wallId, wall_level = wallLevel });
     }
 
     [Fact]
@@ -94,18 +86,10 @@ public class WallStartTest : TestFixture
             )
         ).data;
 
-        response.odds_info.enemy.First().param_id
-            .Should()
-            .Be(expectedWallBossParamId);
+        response.odds_info.enemy.First().param_id.Should().Be(expectedWallBossParamId);
 
         response.ingame_wall_data
             .Should()
-            .BeEquivalentTo(
-                new IngameWallData()
-                {
-                    wall_id = wallId,
-                    wall_level = wallLevel
-                }
-            );
+            .BeEquivalentTo(new IngameWallData() { wall_id = wallId, wall_level = wallLevel });
     }
 }
