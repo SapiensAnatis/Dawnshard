@@ -195,6 +195,56 @@ public class StoryServiceTest
         this.mockStoryRepository.VerifyAll();
     }
 
+    [Theory]
+    [InlineData(StoryTypes.Chara, 100001085, 10150403)]
+    [InlineData(StoryTypes.Chara, 100001145, 10150306)]
+    [InlineData(StoryTypes.Chara, 100010045, 10550101)]
+    [InlineData(StoryTypes.Chara, 100007075, 10350303)]
+    public async Task TaskReadUnitStory_ExpectEmblemReward(
+        StoryTypes type,
+        int storyId,
+        int expectedEmblemId
+    )
+    {
+        this.mockStoryRepository
+            .Setup(x => x.GetOrCreateStory(type, storyId))
+            .ReturnsAsync(
+                new DbPlayerStoryState()
+                {
+                    DeviceAccountId = string.Empty,
+                    State = StoryState.Unlocked
+                }
+            );
+
+        this.mockRewardService
+            .Setup(
+                x =>
+                    x.GrantReward(
+                        new Entity(EntityTypes.Title, expectedEmblemId, 1, null, null, null)
+                    )
+            )
+            .ReturnsAsync(RewardGrantResult.Added);
+
+        this.mockUserDataRepository.Setup(x => x.GiveWyrmite(10)).Returns(Task.CompletedTask);
+
+        (await this.storyService.ReadStory(type, storyId))
+            .Should()
+            .BeEquivalentTo(
+                new List<AtgenBuildEventRewardEntityList>()
+                {
+                    new() { entity_type = EntityTypes.Wyrmite, entity_quantity = 10 },
+                    new()
+                    {
+                        entity_type = EntityTypes.Title,
+                        entity_id = expectedEmblemId,
+                        entity_quantity = 1
+                    }
+                }
+            );
+
+        this.mockStoryRepository.VerifyAll();
+    }
+
     [Fact]
     public async Task ReadQuestStory_Read_ReturnsNoRewards()
     {
