@@ -62,7 +62,6 @@ public class DungeonRecordRewardService(
         int manaDrop = 0;
         int coinDrop = 0;
         List<Entity> entities = new();
-        List<AtgenDropAll> drops = new();
 
         foreach (
             AtgenTreasureRecord record in playRecord?.treasure_record
@@ -96,21 +95,18 @@ public class DungeonRecordRewardService(
                 manaDrop += enemyDropList.mana;
                 coinDrop += enemyDropList.coin;
 
-                foreach (AtgenDropList dropList in enemyDropList.drop_list)
-                {
-                    Entity reward = new(dropList.type, dropList.id, dropList.quantity);
-
-                    entities.Add(reward);
-                    drops.Add(reward.ToDropAll());
-                }
+                entities.AddRange(
+                    enemyDropList.drop_list.Select(x => new Entity(x.type, x.id, x.quantity))
+                );
             }
         }
+
+        entities = entities.Merge().ToList();
+        List<AtgenDropAll> drops = entities.Select(x => x.ToDropAll()).ToList();
 
         await rewardService.GrantRewards(entities);
         await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
         await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
-
-        drops = drops.Merge().ToList();
 
         return (drops, manaDrop, coinDrop);
     }
@@ -173,18 +169,14 @@ public class DungeonRecordRewardService(
 
 file static class Extensions
 {
-    public static IEnumerable<AtgenDropAll> Merge(this IEnumerable<AtgenDropAll> source) =>
+    public static IEnumerable<Entity> Merge(this IEnumerable<Entity> source) =>
         source
-            .GroupBy(x => new { x.id, x.type })
+            .GroupBy(x => new { x.Id, x.Type })
             .Select(
                 group =>
                     group.Aggregate(
-                        new AtgenDropAll { type = group.Key.type, id = group.Key.id, },
-                        (acc, current) =>
-                        {
-                            acc.quantity += current.quantity;
-                            return acc;
-                        }
+                        new Entity(group.Key.Type, group.Key.Id, 0),
+                        (acc, current) => acc with { Quantity = acc.Quantity + current.Quantity }
                     )
             );
 }
