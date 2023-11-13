@@ -252,7 +252,7 @@ public class QuestEnemyService : IQuestEnemyService
                     enemy_idx = idx,
                     is_pop = true,
                     is_rare = false,
-                    param_id = x,
+                    param_id = questWallDetail.BossEnemyParamId,
                     enemy_drop_list = new List<EnemyDropList>() { }
                 }
         );

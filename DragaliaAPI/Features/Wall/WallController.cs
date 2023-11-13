@@ -34,9 +34,6 @@ public class WallController : DragaliaControllerBase
         this.wallService = wallService;
     }
 
-    // Called when failing a MG quest
-    // should return the ID and level of the failed quest in the response...
-    // but not sure how to get that from the dungeon key in the request currently
     [HttpPost("fail")]
     public async Task<DragaliaResult> Fail(WallFailRequest request)
     {
