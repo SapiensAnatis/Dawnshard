@@ -36,6 +36,7 @@ public class WallRecordTest : TestFixture
 
         int expectedMana = 120;
         int expectedCoin = 500;
+        int expectedWyrmites = 10;
         int expectedGoldCrystalsAmount = 3;
 
         MaterialList expectedGoldCrystals =
@@ -54,15 +55,6 @@ public class WallRecordTest : TestFixture
                     WallId = wallId,
                     WallLevel = wallLevel
                 }
-            }
-        );
-
-        await AddToDatabase(
-            new DbQuest()
-            {
-                QuestId = 0,
-                State = 0,
-                DeviceAccountId = DeviceAccountId
             }
         );
 
@@ -102,7 +94,16 @@ public class WallRecordTest : TestFixture
                 }
             );
 
-        response.wall_clear_reward_list.Should();
+        response.wall_clear_reward_list
+            .Should()
+            .ContainEquivalentOf(
+                new AtgenBuildEventRewardEntityList()
+                {
+                    entity_type = EntityTypes.Wyrmite,
+                    entity_id = 0,
+                    entity_quantity = expectedWyrmites
+                }
+            );
 
         response.wall_drop_reward
             .Should()
@@ -131,6 +132,55 @@ public class WallRecordTest : TestFixture
                     quest_party_setting_list = mockSession.Party,
                     helper_list = new List<UserSupportList>(),
                     helper_detail_list = new List<AtgenHelperDetailList>()
+                }
+            );
+    }
+
+    [Fact]
+    public async Task Record_MaxLevelDoesntDropWyrmites()
+    {
+        int wallId = 216010001;
+        int wallLevel = 80;
+
+        int notExpectedWyrmites = 10;
+
+        await this.AddRangeToDatabase(
+            new List<DbPlayerQuestWall>()
+            {
+                new()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    WallId = wallId,
+                    WallLevel = wallLevel
+                }
+            }
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                WallId = wallId,
+                WallLevel = wallLevel
+            };
+
+        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+
+        WallRecordRecordData response = (
+            await Client.PostMsgpack<WallRecordRecordData>(
+                "/wall_record/record",
+                new WallRecordRecordRequest() { wall_id = wallId, dungeon_key = key }
+            )
+        ).data;
+
+        response.wall_clear_reward_list
+            .Should()
+            .NotContainEquivalentOf(
+                new AtgenBuildEventRewardEntityList()
+                {
+                    entity_type = EntityTypes.Wyrmite,
+                    entity_id = 0,
+                    entity_quantity = notExpectedWyrmites
                 }
             );
     }
