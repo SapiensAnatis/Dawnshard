@@ -63,7 +63,7 @@ public class WallRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
                 WallId = wallId,
-                WallLevel = wallLevel + 1 // Client passes (db wall level + 1) 
+                WallLevel = wallLevel + 1 // Client passes (db wall level + 1)
             };
 
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
@@ -196,5 +196,4 @@ public class WallRecordTest : TestFixture
                 }
             );
     }
-
 }

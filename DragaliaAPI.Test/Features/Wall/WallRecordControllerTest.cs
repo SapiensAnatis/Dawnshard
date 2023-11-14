@@ -60,13 +60,13 @@ public class WallRecordControllerTest
         int wallId = WallService.FlameWallId;
         int wallLevel = 1;
 
-        DungeonSession session = 
-            new() 
-            { 
-                QuestData = MasterAsset.QuestData[0], 
+        DungeonSession session =
+            new()
+            {
+                QuestData = MasterAsset.QuestData[0],
                 Party = party,
                 WallId = wallId,
-                WallLevel = wallLevel + 1 // Client passes (db wall level + 1) 
+                WallLevel = wallLevel + 1 // Client passes (db wall level + 1)
             };
 
         DbPlayerQuestWall playerQuestWall =

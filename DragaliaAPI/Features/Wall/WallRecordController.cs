@@ -87,7 +87,7 @@ public class WallRecordController : DragaliaControllerBase
                 before_wall_level = previousLevel,
                 after_wall_level = finishedLevel
             };
-    
+
         // Grant Rewards
         await rewardService.GrantReward(GoldCrystals);
 
