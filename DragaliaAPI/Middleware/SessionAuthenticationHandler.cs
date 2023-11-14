@@ -1,17 +1,17 @@
-﻿using DragaliaAPI.Controllers;
-using DragaliaAPI.Models;
-using DragaliaAPI.Services;
-using Microsoft.Extensions.Primitives;
-using DragaliaAPI.Services.Exceptions;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Options;
+﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using DragaliaAPI.Controllers;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Models;
+using DragaliaAPI.Services;
+using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 
 namespace DragaliaAPI.Middleware;
 
@@ -30,12 +30,11 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
-        ISystemClock clock,
         ISessionService sessionService,
         IWebHostEnvironment webHostEnvironment,
         ApiContext apiContext
     )
-        : base(options, logger, encoder, clock)
+        : base(options, logger, encoder)
     {
         this.sessionService = sessionService;
         this.webHostEnvironment = webHostEnvironment;

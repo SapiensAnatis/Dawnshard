@@ -54,7 +54,8 @@ public class DungeonTest : TestFixture
             )
         ).data;
 
-        response.fail_quest_detail
+        response
+            .fail_quest_detail
             .Should()
             .BeEquivalentTo(
                 new AtgenFailQuestDetail()

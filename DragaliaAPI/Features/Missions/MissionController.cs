@@ -275,7 +275,8 @@ public class MissionController : DragaliaControllerBase
         ILookup<MissionType, DbPlayerMission> allMissions =
             await this.missionRepository.GetAllMissionsPerTypeAsync();
 
-        int activeEventId = await this.userDataRepository.UserData
+        int activeEventId = await this.userDataRepository
+            .UserData
             .Select(x => x.ActiveMemoryEventId)
             .FirstAsync();
 

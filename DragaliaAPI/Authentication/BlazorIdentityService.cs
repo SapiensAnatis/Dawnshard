@@ -40,15 +40,21 @@ public class BlazorIdentityService : IBlazorIdentityService
         if (!this.IsAuthenticated)
             return;
 
-        this.accountId = state.User.Claims
+        this.accountId = state
+            .User
+            .Claims
             .FirstOrDefault(x => x.Type == CustomClaimType.AccountId)
             ?.Value;
 
-        this.userIdName = state.User.Claims
+        this.userIdName = state
+            .User
+            .Claims
             .FirstOrDefault(x => x.Type == CustomClaimType.PlayerName)
             ?.Value;
 
-        string? viewerIdString = state.User.Claims
+        string? viewerIdString = state
+            .User
+            .Claims
             .FirstOrDefault(x => x.Type == CustomClaimType.ViewerId)
             ?.Value;
 

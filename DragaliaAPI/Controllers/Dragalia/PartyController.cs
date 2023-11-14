@@ -1,8 +1,8 @@
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -113,7 +113,8 @@ public class PartyController(
             return true;
 
         // TODO: can make this single query instead of 8 (this method is called in a loop)
-        IEnumerable<Charas> ownedCharaIds = await unitRepository.Charas
+        IEnumerable<Charas> ownedCharaIds = await unitRepository
+            .Charas
             .Select(x => x.CharaId)
             .ToListAsync();
 
@@ -138,7 +139,8 @@ public class PartyController(
         if (keyId == 0)
             return true;
 
-        IEnumerable<long> ownedDragonKeyIds = await unitRepository.Dragons
+        IEnumerable<long> ownedDragonKeyIds = await unitRepository
+            .Dragons
             .Select(x => x.DragonKeyId)
             .ToListAsync();
 

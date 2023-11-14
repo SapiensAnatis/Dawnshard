@@ -477,7 +477,8 @@ public class FortServiceTest
 
         build.Level.Should().Be(20);
         build.BuildStartDate.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
-        build.BuildEndDate
+        build
+            .BuildEndDate
             .Should()
             .BeCloseTo(
                 DateTimeOffset.UtcNow + TimeSpan.FromSeconds(21600),

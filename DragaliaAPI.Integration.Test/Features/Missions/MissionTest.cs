@@ -26,10 +26,12 @@ public class MissionTest : TestFixture
             );
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data.drill_mission_list
+        resp.data
+            .drill_mission_list
             .Should()
             .HaveCount(55)
-            .And.ContainEquivalentOf(
+            .And
+            .ContainEquivalentOf(
                 new DrillMissionList(
                     100100,
                     0,
@@ -70,10 +72,18 @@ public class MissionTest : TestFixture
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
         resp.data.update_data_list.mission_notice.drill_mission_notice.is_update.Should().Be(1);
-        resp.data.update_data_list.mission_notice.drill_mission_notice.completed_mission_count
+        resp.data
+            .update_data_list
+            .mission_notice
+            .drill_mission_notice
+            .completed_mission_count
             .Should()
             .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
-        resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list
+        resp.data
+            .update_data_list
+            .mission_notice
+            .drill_mission_notice
+            .new_complete_mission_id_list
             .Should()
             .Contain(100200);
 
@@ -104,10 +114,18 @@ public class MissionTest : TestFixture
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
         resp.data.update_data_list.mission_notice.drill_mission_notice.is_update.Should().Be(1);
-        resp.data.update_data_list.mission_notice.drill_mission_notice.completed_mission_count
+        resp.data
+            .update_data_list
+            .mission_notice
+            .drill_mission_notice
+            .completed_mission_count
             .Should()
             .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
-        resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list
+        resp.data
+            .update_data_list
+            .mission_notice
+            .drill_mission_notice
+            .new_complete_mission_id_list
             .Should()
             .Contain(300100);
     }
@@ -150,10 +168,18 @@ public class MissionTest : TestFixture
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
         resp.data.update_data_list.mission_notice.drill_mission_notice.is_update.Should().Be(1);
-        resp.data.update_data_list.mission_notice.drill_mission_notice.completed_mission_count
+        resp.data
+            .update_data_list
+            .mission_notice
+            .drill_mission_notice
+            .completed_mission_count
             .Should()
             .BeGreaterThan(1);
-        resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list
+        resp.data
+            .update_data_list
+            .mission_notice
+            .drill_mission_notice
+            .new_complete_mission_id_list
             .Should()
             .Contain(301700);
     }
@@ -182,7 +208,9 @@ public class MissionTest : TestFixture
             )
         ).data;
 
-        response.update_data_list.ability_crest_list
+        response
+            .update_data_list
+            .ability_crest_list
             .Should()
             .Contain(
                 x => x.ability_crest_id == AbilityCrests.HavingaSummerBall && x.equipable_count == 1

@@ -117,12 +117,14 @@ public class MissionMutations(
         await db.SaveChangesAsync();
 
         return context =>
-            context.PlayerMissions.Where(
-                x =>
-                    players.Contains(x.DeviceAccountId)
-                    && x.Id == args.MissionId
-                    && x.Type == args.MissionType
-            );
+            context
+                .PlayerMissions
+                .Where(
+                    x =>
+                        players.Contains(x.DeviceAccountId)
+                        && x.Id == args.MissionId
+                        && x.Type == args.MissionType
+                );
     }
 
     [GraphQLArguments]
@@ -145,10 +147,12 @@ public class MissionMutations(
         DbPlayer player,
         MissionMutationArgs args
     ) =>
-        context.PlayerMissions.FirstOrDefault(
-            x =>
-                x.Id == args.MissionId
-                && x.Type == args.MissionType
-                && x.DeviceAccountId == player.AccountId
-        ) ?? throw new InvalidOperationException("No mission found.");
+        context
+            .PlayerMissions
+            .FirstOrDefault(
+                x =>
+                    x.Id == args.MissionId
+                    && x.Type == args.MissionType
+                    && x.DeviceAccountId == player.AccountId
+            ) ?? throw new InvalidOperationException("No mission found.");
 }

@@ -39,15 +39,17 @@ public class Clb01EventTest : TestFixture
     [Fact]
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
-        DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
-            x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
-        );
+        DbPlayerEventItem pointItem = await ApiContext
+            .PlayerEventItems
+            .SingleAsync(
+                x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
+            );
 
         pointItem.Quantity += 20;
 
-        ApiContext.PlayerEventRewards.RemoveRange(
-            ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId)
-        );
+        ApiContext
+            .PlayerEventRewards
+            .RemoveRange(ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId));
 
         await ApiContext.SaveChangesAsync();
 
@@ -57,10 +59,13 @@ public class Clb01EventTest : TestFixture
                 new Clb01EventReceiveClb01PointRewardRequest(EventId)
             );
 
-        evtResp.data.clb_01_event_reward_entity_list
+        evtResp
+            .data
+            .clb_01_event_reward_entity_list
             .Should()
             .HaveCount(1)
-            .And.ContainEquivalentOf(
+            .And
+            .ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList(EntityTypes.Material, 101001003, 5)
             );
         evtResp.data.clb_01_event_reward_list.Should().HaveCount(1);

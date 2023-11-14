@@ -21,7 +21,8 @@ public class V13Update(
 
     public async Task Apply()
     {
-        int[] startedEventIds = await eventRepository.EventData
+        int[] startedEventIds = await eventRepository
+            .EventData
             .Select(x => x.EventId)
             .Distinct()
             .ToArrayAsync();

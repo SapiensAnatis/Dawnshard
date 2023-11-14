@@ -5,9 +5,8 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-
-using MaterialsEnum = DragaliaAPI.Shared.Definitions.Enums.Materials;
 using DragonGiftsEnum = DragaliaAPI.Shared.Definitions.Enums.DragonGifts;
+using MaterialsEnum = DragaliaAPI.Shared.Definitions.Enums.Materials;
 
 namespace DragaliaAPI.Database.Repositories;
 
@@ -29,23 +28,24 @@ public class InventoryRepository : IInventoryRepository
     }
 
     public IQueryable<DbPlayerCurrency> Currencies =>
-        this.apiContext.PlayerWallet.Where(
-            wallet => wallet.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerWallet
+            .Where(wallet => wallet.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerMaterial> Materials =>
-        this.apiContext.PlayerMaterials.Where(
-            storage => storage.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerMaterials
+            .Where(storage => storage.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerDragonGift> DragonGifts =>
-        this.apiContext.PlayerDragonGifts.Where(
-            gifts => gifts.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerDragonGifts
+            .Where(gifts => gifts.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public DbPlayerCurrency AddCurrency(CurrencyTypes type)
     {
-        return apiContext.PlayerWallet
+        return apiContext
+            .PlayerWallet
             .Add(
                 new DbPlayerCurrency()
                 {
@@ -59,15 +59,15 @@ public class InventoryRepository : IInventoryRepository
 
     public async Task<DbPlayerCurrency?> GetCurrency(CurrencyTypes type)
     {
-        return await this.apiContext.PlayerWallet.FindAsync(
-            this.playerIdentityService.AccountId,
-            type
-        );
+        return await this.apiContext
+            .PlayerWallet
+            .FindAsync(this.playerIdentityService.AccountId, type);
     }
 
     public DbPlayerMaterial AddMaterial(Materials type)
     {
-        return apiContext.PlayerMaterials
+        return apiContext
+            .PlayerMaterials
             .Add(
                 new DbPlayerMaterial()
                 {
@@ -99,10 +99,9 @@ public class InventoryRepository : IInventoryRepository
 
     private async Task<DbPlayerMaterial> FindAsync(Materials item)
     {
-        return await this.apiContext.PlayerMaterials.FindAsync(
-                this.playerIdentityService.AccountId,
-                item
-            )
+        return await this.apiContext
+                .PlayerMaterials
+                .FindAsync(this.playerIdentityService.AccountId, item)
             ?? (
                 await this.apiContext.AddAsync(
                     new DbPlayerMaterial()
@@ -141,10 +140,9 @@ public class InventoryRepository : IInventoryRepository
 
     public async Task<DbPlayerMaterial?> GetMaterial(Materials materialId)
     {
-        return await this.apiContext.PlayerMaterials.FindAsync(
-            this.playerIdentityService.AccountId,
-            materialId
-        );
+        return await this.apiContext
+            .PlayerMaterials
+            .FindAsync(this.playerIdentityService.AccountId, materialId);
     }
 
     public async Task<bool> CheckQuantity(Materials materialId, int quantity) =>
@@ -176,7 +174,8 @@ public class InventoryRepository : IInventoryRepository
     }
 
     public DbPlayerDragonGift AddDragonGift(DragonGifts giftId, int quantity) =>
-        apiContext.PlayerDragonGifts
+        apiContext
+            .PlayerDragonGifts
             .Add(
                 new DbPlayerDragonGift()
                 {
@@ -189,10 +188,9 @@ public class InventoryRepository : IInventoryRepository
 
     public async Task<DbPlayerDragonGift?> GetDragonGift(DragonGifts giftId)
     {
-        return await this.apiContext.PlayerDragonGifts.FindAsync(
-            this.playerIdentityService.AccountId,
-            giftId
-        );
+        return await this.apiContext
+            .PlayerDragonGifts
+            .FindAsync(this.playerIdentityService.AccountId, giftId);
     }
 
     public async Task RefreshPurchasableDragonGiftCounts()

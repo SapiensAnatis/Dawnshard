@@ -55,9 +55,11 @@ public class WeaponBodyControllerTest
             )
         ).GetData<WeaponBodyCraftData>()!;
 
-        data.update_data_list.weapon_body_list
+        data.update_data_list
+            .weapon_body_list
             .First()
-            .weapon_body_id.Should()
+            .weapon_body_id
+            .Should()
             .Be(WeaponBodies.Areadbhar);
 
         this.mockUpdateDataService.VerifyAll();

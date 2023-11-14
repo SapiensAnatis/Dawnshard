@@ -43,7 +43,9 @@ public class VersionTest : TestFixture
                 new FortGetDataRequest(),
                 ensureSuccessHeader: false
             )
-        ).data_headers.result_code
+        )
+            .data_headers
+            .result_code
             .Should()
             .Be(ResultCode.CommonResourceVersionError);
     }
@@ -60,7 +62,9 @@ public class VersionTest : TestFixture
                 new FortGetDataRequest(),
                 ensureSuccessHeader: false
             )
-        ).data_headers.result_code
+        )
+            .data_headers
+            .result_code
             .Should()
             .Be(ResultCode.Success);
     }

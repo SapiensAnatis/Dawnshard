@@ -75,7 +75,8 @@ public static class DatabaseConfiguration
             .CreateScope();
 
         ApiContext context = scope.ServiceProvider.GetRequiredService<ApiContext>();
-        ILogger logger = scope.ServiceProvider
+        ILogger logger = scope
+            .ServiceProvider
             .GetRequiredService<ILoggerFactory>()
             .CreateLogger("DatabaseConfiguration");
 

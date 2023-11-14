@@ -22,10 +22,9 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
-        ISystemClock clock,
         IUserDataRepository userDataRepository
     )
-        : base(options, logger, encoder, clock)
+        : base(options, logger, encoder)
     {
         this.userDataRepository = userDataRepository;
     }

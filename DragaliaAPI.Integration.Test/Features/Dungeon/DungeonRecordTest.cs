@@ -20,12 +20,12 @@ public class DungeonRecordTest : TestFixture
     {
         CommonAssertionOptions.ApplyTimeOptions(2);
 
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.StaminaSingle, e => 100)
-        );
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.StaminaMulti, e => 100)
-        );
+        this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaSingle, e => 100));
+        this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaMulti, e => 100));
 
         this.ApiContext.PlayerQuests.ExecuteDelete();
         this.ApiContext.PlayerMissions.ExecuteDelete();
@@ -49,7 +49,8 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        DbPlayerUserData oldUserData = await ApiContext.PlayerUserData
+        DbPlayerUserData oldUserData = await ApiContext
+            .PlayerUserData
             .AsNoTracking()
             .SingleAsync(x => x.DeviceAccountId == DeviceAccountId);
 
@@ -142,7 +143,10 @@ public class DungeonRecordTest : TestFixture
         response.ingame_result_data.dungeon_key.Should().Be(key);
         response.ingame_result_data.quest_id.Should().Be(227100106);
 
-        response.ingame_result_data.reward_record.drop_all
+        response
+            .ingame_result_data
+            .reward_record
+            .drop_all
             .Should()
             .BeEquivalentTo(
                 new List<AtgenDropAll>()
@@ -160,15 +164,22 @@ public class DungeonRecordTest : TestFixture
 
         response.ingame_result_data.grow_record.take_player_exp.Should().NotBe(0);
 
-        response.update_data_list.user_data.coin
+        response
+            .update_data_list
+            .user_data
+            .coin
             .Should()
             .BeInRange(oldUserData.Coin + 10, oldUserData.Coin + 10 + 1000); // +1000 because of temp. quest event group reward
         response.update_data_list.user_data.mana_point.Should().Be(oldUserData.ManaPoint + 10);
 
-        response.update_data_list.material_list
+        response
+            .update_data_list
+            .material_list
             .Should()
             .Contain(x => x.material_id == Materials.Squishums);
-        response.update_data_list.quest_list
+        response
+            .update_data_list
+            .quest_list
             .Should()
             .ContainEquivalentOf(
                 new QuestList()
@@ -313,11 +324,17 @@ public class DungeonRecordTest : TestFixture
             )
         ).data;
 
-        response.update_data_list.mission_notice.memory_event_mission_notice.new_complete_mission_id_list
+        response
+            .update_data_list
+            .mission_notice
+            .memory_event_mission_notice
+            .new_complete_mission_id_list
             .Should()
             .Contain(10220201) // Clear a Boss Battle
-            .And.Contain(10220401) // Clear a "Toll of the Deep" Quest with Having a Summer Ball Equipped
-            .And.Contain(10220501); // Collect 100 Oceanic Resonance in One Go
+            .And
+            .Contain(10220401) // Clear a "Toll of the Deep" Quest with Having a Summer Ball Equipped
+            .And
+            .Contain(10220501); // Collect 100 Oceanic Resonance in One Go
     }
 
     [Fact]
@@ -364,10 +381,15 @@ public class DungeonRecordTest : TestFixture
             )
         ).data;
 
-        response.update_data_list.mission_notice.memory_event_mission_notice.new_complete_mission_id_list
+        response
+            .update_data_list
+            .mission_notice
+            .memory_event_mission_notice
+            .new_complete_mission_id_list
             .Should()
             .Contain(10221001) // Completely Clear a Challenge Battle on Master
-            .And.Contain(10221301); // Earn the "Light of the Deep" Epithet
+            .And
+            .Contain(10221301); // Earn the "Light of the Deep" Epithet
 
         // Clear Three Challenge Battles
         this.ApiContext.PlayerMissions.First(x => x.Id == 10220801).Progress.Should().Be(1);
@@ -417,7 +439,11 @@ public class DungeonRecordTest : TestFixture
             )
         ).data;
 
-        response.update_data_list.mission_notice.memory_event_mission_notice.new_complete_mission_id_list
+        response
+            .update_data_list
+            .mission_notice
+            .memory_event_mission_notice
+            .new_complete_mission_id_list
             .Should()
             .Contain(10221201); // Clear a "Toll of the Deep" Trial on Expert
     }
@@ -523,7 +549,8 @@ public class DungeonRecordTest : TestFixture
 
         this.ApiContext.TimeAttackClears.Should().ContainSingle(x => x.GameId == gameId);
 
-        DbTimeAttackClear? recordedClear = await this.ApiContext.TimeAttackClears
+        DbTimeAttackClear? recordedClear = await this.ApiContext
+            .TimeAttackClears
             .Include(x => x.Players)
             .ThenInclude(x => x.Units)
             .FirstAsync(x => x.GameId == gameId);
@@ -532,9 +559,9 @@ public class DungeonRecordTest : TestFixture
         recordedClear.QuestId.Should().Be(questId);
         recordedClear.Players.Should().ContainSingle(x => x.DeviceAccountId == DeviceAccountId);
 
-        DbTimeAttackPlayer player = recordedClear.Players.First(
-            x => x.DeviceAccountId == DeviceAccountId
-        );
+        DbTimeAttackPlayer player = recordedClear
+            .Players
+            .First(x => x.DeviceAccountId == DeviceAccountId);
 
         player.PartyInfo.Should().NotBeNullOrEmpty();
         player.Units.Should().HaveCount(4);
@@ -553,9 +580,9 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.StaminaSingle, e => 0)
-        );
+        this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaSingle, e => 0));
 
         DungeonSession mockSession =
             new()
@@ -608,9 +635,9 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.StaminaSingle, e => 0)
-        );
+        this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaSingle, e => 0));
 
         DungeonSession mockSession =
             new()

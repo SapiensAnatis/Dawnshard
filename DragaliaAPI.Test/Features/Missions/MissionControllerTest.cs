@@ -136,7 +136,8 @@ public class MissionControllerTest
         response.Should().NotBeNull();
 
         response!.mission_notice.Should().Be(notice);
-        response.drill_mission_list
+        response
+            .drill_mission_list
             .Should()
             .ContainEquivalentOf(
                 new DrillMissionList(500, 0, 0, DateTimeOffset.UnixEpoch, DateTimeOffset.UnixEpoch)
@@ -178,7 +179,8 @@ public class MissionControllerTest
             );
 
         MissionUnlockDrillMissionGroupData? response = resp.Value;
-        response!.drill_mission_list
+        response!
+            .drill_mission_list
             .Should()
             .ContainEquivalentOf(
                 new DrillMissionList(5000, 0, 1, DateTimeOffset.UnixEpoch, DateTimeOffset.UnixEpoch)
@@ -219,7 +221,8 @@ public class MissionControllerTest
             );
 
         MissionUnlockMainStoryGroupData? response = resp.Value;
-        response!.main_story_mission_list
+        response!
+            .main_story_mission_list
             .Should()
             .ContainEquivalentOf(
                 new MainStoryMissionList(
@@ -230,7 +233,8 @@ public class MissionControllerTest
                     DateTimeOffset.UnixEpoch
                 )
             );
-        response.main_story_mission_unlock_bonus_list
+        response
+            .main_story_mission_unlock_bonus_list
             .Should()
             .ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList(EntityTypes.FortPlant, 10, 500)

@@ -1,6 +1,6 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DragaliaAPI.Database.Entities;
 

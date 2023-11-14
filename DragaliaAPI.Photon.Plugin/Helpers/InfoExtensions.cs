@@ -29,9 +29,9 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
 
             return MessagePackSerializer.Deserialize<TEvent>(
                 blob,
-                MessagePackSerializerOptions.Standard.WithCompression(
-                    MessagePackCompression.Lz4Block
-                )
+                MessagePackSerializerOptions
+                    .Standard
+                    .WithCompression(MessagePackCompression.Lz4Block)
             );
         }
     }

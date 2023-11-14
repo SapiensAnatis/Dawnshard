@@ -13,18 +13,20 @@ public class ItemTest : TestFixture
     {
         ApiContext.PlayerUseItems.Where(x => x.DeviceAccountId == DeviceAccountId).ExecuteDelete();
 
-        ApiContext.PlayerUseItems.Add(
-            new DbPlayerUseItem()
-            {
-                DeviceAccountId = DeviceAccountId,
-                ItemId = UseItem.Honey,
-                Quantity = 50
-            }
-        );
+        ApiContext
+            .PlayerUseItems
+            .Add(
+                new DbPlayerUseItem()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    ItemId = UseItem.Honey,
+                    Quantity = 50
+                }
+            );
 
-        DbPlayerUserData userData = ApiContext.PlayerUserData.Single(
-            x => x.DeviceAccountId == DeviceAccountId
-        );
+        DbPlayerUserData userData = ApiContext
+            .PlayerUserData
+            .Single(x => x.DeviceAccountId == DeviceAccountId);
 
         userData.StaminaSingle = 5;
 
@@ -40,10 +42,12 @@ public class ItemTest : TestFixture
             new ItemGetListRequest()
         );
 
-        resp.data.item_list
+        resp.data
+            .item_list
             .Should()
             .HaveCount(1)
-            .And.ContainEquivalentOf(new ItemList(UseItem.Honey, 50));
+            .And
+            .ContainEquivalentOf(new ItemList(UseItem.Honey, 50));
     }
 
     [Fact]
@@ -60,7 +64,9 @@ public class ItemTest : TestFixture
         resp.data.recover_data.recover_stamina_type.Should().Be(UseItemEffect.RecoverStamina);
         resp.data.recover_data.recover_stamina_point.Should().Be(10);
         resp.data.update_data_list.user_data.stamina_single.Should().Be(15);
-        resp.data.update_data_list.item_list
+        resp.data
+            .update_data_list
+            .item_list
             .Should()
             .ContainEquivalentOf(new ItemList(UseItem.Honey, 49));
     }
@@ -79,7 +85,9 @@ public class ItemTest : TestFixture
         resp.data.recover_data.recover_stamina_type.Should().Be(UseItemEffect.RecoverStamina);
         resp.data.recover_data.recover_stamina_point.Should().Be(10 * 5);
         resp.data.update_data_list.user_data.stamina_single.Should().Be(5 + (10 * 5));
-        resp.data.update_data_list.item_list
+        resp.data
+            .update_data_list
+            .item_list
             .Should()
             .ContainEquivalentOf(new ItemList(UseItem.Honey, 45));
     }

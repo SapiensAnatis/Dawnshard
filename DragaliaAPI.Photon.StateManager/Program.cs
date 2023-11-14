@@ -17,44 +17,54 @@ if (Environment.GetEnvironmentVariable("ENABLE_HTTPS") != null)
 {
     X509Certificate2 certificate = X509Certificate2.CreateFromPemFile("cert.pem", "cert.key");
 
-    builder.WebHost.ConfigureKestrel(
-        serverOptions =>
-            serverOptions.ConfigureHttpsDefaults(options => options.ServerCertificate = certificate)
-    );
+    builder
+        .WebHost
+        .ConfigureKestrel(
+            serverOptions =>
+                serverOptions.ConfigureHttpsDefaults(
+                    options => options.ServerCertificate = certificate
+                )
+        );
 }
 
 builder.Services.AddControllers();
 
-builder.Host.UseSerilog(
-    (context, config) =>
-    {
-        config.WriteTo.Console();
+builder
+    .Host
+    .UseSerilog(
+        (context, config) =>
+        {
+            config.WriteTo.Console();
 
-        SeqOptions seqOptions =
-            builder.Configuration.GetSection(nameof(SeqOptions)).Get<SeqOptions>()
-            ?? throw new NullReferenceException("Failed to get seq config!");
+            SeqOptions seqOptions =
+                builder.Configuration.GetSection(nameof(SeqOptions)).Get<SeqOptions>()
+                ?? throw new NullReferenceException("Failed to get seq config!");
 
-        if (seqOptions.Enabled)
-            config.WriteTo.Seq(seqOptions.Url, apiKey: seqOptions.Key);
+            if (seqOptions.Enabled)
+                config.WriteTo.Seq(seqOptions.Url, apiKey: seqOptions.Key);
 
-        config.MinimumLevel.Debug();
-        config.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning);
-        config.Filter.ByExcluding(
-            "EndsWith(RequestPath, '/health') and Coalesce(StatusCode, 200) = 200"
-        );
-        config.Filter.ByExcluding(
-            "EndsWith(RequestPath, '/ping') and Coalesce(StatusCode, 200) = 200"
-        );
-    }
-);
+            config.MinimumLevel.Debug();
+            config.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning);
+            config
+                .Filter
+                .ByExcluding(
+                    "EndsWith(RequestPath, '/health') and Coalesce(StatusCode, 200) = 200"
+                );
+            config
+                .Filter
+                .ByExcluding("EndsWith(RequestPath, '/ping') and Coalesce(StatusCode, 200) = 200");
+        }
+    );
 
-builder.Services
+builder
+    .Services
     .AddOptions<RedisOptions>()
     .BindConfiguration(nameof(RedisOptions))
     .Validate(x => x.KeyExpiryTimeMins > 0)
     .ValidateOnStart();
 
-builder.Services
+builder
+    .Services
     .AddAuthentication()
     .AddScheme<AuthenticationSchemeOptions, PhotonAuthenticationHandler>(
         nameof(PhotonAuthenticationHandler),
@@ -64,18 +74,20 @@ builder.Services
 builder.Services.AddHealthChecks().AddCheck<RedisHealthCheck>("Redis");
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(config =>
-{
-    config.SwaggerDoc(
-        "v1",
-        new()
-        {
-            Version = "v1",
-            Title = "Photon State Manager",
-            Description = "API for storing room state received from Photon webhooks."
-        }
-    );
-});
+builder
+    .Services
+    .AddSwaggerGen(config =>
+    {
+        config.SwaggerDoc(
+            "v1",
+            new()
+            {
+                Version = "v1",
+                Title = "Photon State Manager",
+                Description = "API for storing room state received from Photon webhooks."
+            }
+        );
+    });
 
 Log.Logger.Information("App environment {@env}", builder.Environment);
 

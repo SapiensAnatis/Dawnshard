@@ -40,15 +40,17 @@ public class CombatEventTest : TestFixture
     [Fact]
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
-        DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
-            x => x.EventId == EventId && x.Type == (int)CombatEventItemType.EventPoint
-        );
+        DbPlayerEventItem pointItem = await ApiContext
+            .PlayerEventItems
+            .SingleAsync(
+                x => x.EventId == EventId && x.Type == (int)CombatEventItemType.EventPoint
+            );
 
         pointItem.Quantity += 500;
 
-        ApiContext.PlayerEventRewards.RemoveRange(
-            ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId)
-        );
+        ApiContext
+            .PlayerEventRewards
+            .RemoveRange(ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId));
 
         await ApiContext.SaveChangesAsync();
 
@@ -68,24 +70,28 @@ public class CombatEventTest : TestFixture
     [Fact]
     public async Task ReceiveEventLocationRewards_ReturnsEventLocationRewards()
     {
-        DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
-            x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
-        );
+        DbPlayerEventItem pointItem = await ApiContext
+            .PlayerEventItems
+            .SingleAsync(
+                x => x.EventId == EventId && x.Type == (int)Clb01EventItemType.Clb01EventPoint
+            );
 
         pointItem.Quantity += 500;
 
-        ApiContext.PlayerQuests.RemoveRange(
-            ApiContext.PlayerQuests.Where(x => x.DeviceAccountId == DeviceAccountId)
-        );
+        ApiContext
+            .PlayerQuests
+            .RemoveRange(ApiContext.PlayerQuests.Where(x => x.DeviceAccountId == DeviceAccountId));
 
-        ApiContext.PlayerQuests.Add(
-            new DbQuest
-            {
-                DeviceAccountId = DeviceAccountId,
-                QuestId = 222130103,
-                State = 3
-            }
-        );
+        ApiContext
+            .PlayerQuests
+            .Add(
+                new DbQuest
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    QuestId = 222130103,
+                    State = 3
+                }
+            );
 
         await ApiContext.SaveChangesAsync();
 

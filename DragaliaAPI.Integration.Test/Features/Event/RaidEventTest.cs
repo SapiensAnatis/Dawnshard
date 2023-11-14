@@ -38,15 +38,15 @@ public class RaidEventTest : TestFixture
     [Fact]
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
-        DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
-            x => x.EventId == EventId && x.Type == (int)RaidEventItemType.RaidPoint1
-        );
+        DbPlayerEventItem pointItem = await ApiContext
+            .PlayerEventItems
+            .SingleAsync(x => x.EventId == EventId && x.Type == (int)RaidEventItemType.RaidPoint1);
 
         pointItem.Quantity += 500;
 
-        ApiContext.PlayerEventRewards.RemoveRange(
-            ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId)
-        );
+        ApiContext
+            .PlayerEventRewards
+            .RemoveRange(ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId));
 
         await ApiContext.SaveChangesAsync();
 

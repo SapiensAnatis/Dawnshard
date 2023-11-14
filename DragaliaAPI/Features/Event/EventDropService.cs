@@ -5,9 +5,9 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
-using DragaliaAPI.Shared.MasterAsset.Models.Event;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Event;
 
 namespace DragaliaAPI.Features.Event;
 
@@ -224,7 +224,9 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         DungeonTypes type = quest.DungeonType;
         VariationTypes variation = quest.VariationType;
 
-        Dictionary<RaidEventItemType, int> itemDict = MasterAsset.RaidEventItem.Enumerable
+        Dictionary<RaidEventItemType, int> itemDict = MasterAsset
+            .RaidEventItem
+            .Enumerable
             .Where(x => x.RaidEventId == evt.Id)
             .ToDictionary(x => x.RaidEventItemType, x => x.Id);
 
@@ -305,7 +307,9 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
     {
         // https://dragalialost.wiki/w/Defensive_Events
 
-        Dictionary<CombatEventItemType, int> itemDict = MasterAsset.CombatEventItem.Enumerable
+        Dictionary<CombatEventItemType, int> itemDict = MasterAsset
+            .CombatEventItem
+            .Enumerable
             .Where(x => x.EventId == evt.Id)
             .ToDictionary(x => x.EventItemType, x => x.Id);
 
@@ -341,7 +345,9 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
     {
         // Also https://dragalialost.wiki/w/Defensive_Events
 
-        Dictionary<Clb01EventItemType, int> itemDict = MasterAsset.Clb01EventItem.Enumerable
+        Dictionary<Clb01EventItemType, int> itemDict = MasterAsset
+            .Clb01EventItem
+            .Enumerable
             .Where(x => x.EventId == evt.Id)
             .ToDictionary(x => x.EventItemType, x => x.Id);
 
@@ -380,7 +386,9 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
 
         // The wiki has no explanation for this so this is just guessed
 
-        Dictionary<ExRushEventItemType, int> itemDict = MasterAsset.ExRushEventItem.Enumerable
+        Dictionary<ExRushEventItemType, int> itemDict = MasterAsset
+            .ExRushEventItem
+            .Enumerable
             .Where(x => x.EventId == evt.Id)
             .ToDictionary(x => x.EventItemType, x => x.Id);
 
@@ -415,7 +423,9 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         // Invasion Events have two forms of currency, Guardian's Shields and Guardian's Swords,
         // which can be exchanged in the Event Shop for various rewards.
 
-        Dictionary<EarnEventItemType, int> itemDict = MasterAsset.EarnEventItem.Enumerable
+        Dictionary<EarnEventItemType, int> itemDict = MasterAsset
+            .EarnEventItem
+            .Enumerable
             .Where(x => x.EventId == evt.Id)
             .ToDictionary(x => x.EventItemType, x => x.Id);
 

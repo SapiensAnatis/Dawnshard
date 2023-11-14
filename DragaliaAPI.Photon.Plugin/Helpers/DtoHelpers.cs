@@ -58,9 +58,9 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
 
             RoomEntryCondition deserialized = MessagePackSerializer.Deserialize<RoomEntryCondition>(
                 entryConditionBlob,
-                MessagePackSerializerOptions.Standard.WithCompression(
-                    MessagePackCompression.Lz4Block
-                )
+                MessagePackSerializerOptions
+                    .Standard
+                    .WithCompression(MessagePackCompression.Lz4Block)
             );
 
             return new EntryConditions()

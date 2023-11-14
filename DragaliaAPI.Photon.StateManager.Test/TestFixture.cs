@@ -33,8 +33,9 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IDisposab
 
         Environment.SetEnvironmentVariable("PHOTON_TOKEN", PhotonToken);
 
-        this.RedisConnectionProvider =
-            factory.Services.GetRequiredService<IRedisConnectionProvider>();
+        this.RedisConnectionProvider = factory
+            .Services
+            .GetRequiredService<IRedisConnectionProvider>();
     }
 
     protected HttpClient Client { get; }

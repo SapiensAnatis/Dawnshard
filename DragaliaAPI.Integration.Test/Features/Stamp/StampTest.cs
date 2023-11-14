@@ -70,7 +70,8 @@ public class StampTest : TestFixture
 
         this.ApiContext.ChangeTracker.Clear();
 
-        this.ApiContext.EquippedStamps
+        this.ApiContext
+            .EquippedStamps
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .Should()
             .BeEquivalentTo(

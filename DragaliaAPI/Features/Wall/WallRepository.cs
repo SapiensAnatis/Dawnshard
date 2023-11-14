@@ -1,8 +1,8 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,9 +26,9 @@ public class WallRepository : IWallRepository
     }
 
     public IQueryable<DbPlayerQuestWall> QuestWalls =>
-        this.apiContext.PlayerQuestWalls.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerQuestWalls
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public async Task InitializeWall()
     {
@@ -41,15 +41,17 @@ public class WallRepository : IWallRepository
 
         for (int element = 0; element < 5; element++)
         {
-            await apiContext.PlayerQuestWalls.AddAsync(
-                new DbPlayerQuestWall()
-                {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
-                    WallId = WallService.FlameWallId + element,
-                    WallLevel = 0, // Indicates you have not completed level 1. Goes up to 80 upon completing level 80
-                    IsStartNextLevel = false,
-                }
-            );
+            await apiContext
+                .PlayerQuestWalls
+                .AddAsync(
+                    new DbPlayerQuestWall()
+                    {
+                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        WallId = WallService.FlameWallId + element,
+                        WallLevel = 0, // Indicates you have not completed level 1. Goes up to 80 upon completing level 80
+                        IsStartNextLevel = false,
+                    }
+                );
         }
     }
 

@@ -1,8 +1,8 @@
 ﻿using System.Security.Cryptography;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Test.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Test.Utils;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -38,7 +38,9 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
         await this.abilityCrestRepository.Add(AbilityCrests.ADogsDay);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture.ApiContext.PlayerAbilityCrests
+        this.fixture
+            .ApiContext
+            .PlayerAbilityCrests
             .Single(
                 x =>
                     x.AbilityCrestId == AbilityCrests.ADogsDay
@@ -110,7 +112,9 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
         );
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture.ApiContext.PlayerAbilityCrestSets
+        this.fixture
+            .ApiContext
+            .PlayerAbilityCrestSets
             .Single(
                 x =>
                     x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
@@ -129,7 +133,9 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
         );
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture.ApiContext.PlayerAbilityCrestSets
+        this.fixture
+            .ApiContext
+            .PlayerAbilityCrestSets
             .Single(
                 x =>
                     x.DeviceAccountId == IdentityTestUtils.DeviceAccountId

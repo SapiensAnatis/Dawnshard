@@ -58,7 +58,8 @@ public class V2UpdateTest : SavefileUpdateTestFixture
 
         data.equip_stamp_list.Should().BeEquivalentTo(expectedStampList);
 
-        this.ApiContext.EquippedStamps
+        this.ApiContext
+            .EquippedStamps
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .Should()
             .BeEquivalentTo(
@@ -68,7 +69,8 @@ public class V2UpdateTest : SavefileUpdateTestFixture
                         .WithMapping<DbEquippedStamp>(dto => dto.slot, db => db.Slot)
                         .WithMapping<DbEquippedStamp>(dto => dto.stamp_id, db => db.StampId)
             );
-        (await this.ApiContext.Players.FindAsync(DeviceAccountId))!.SavefileVersion
+        (await this.ApiContext.Players.FindAsync(DeviceAccountId))!
+            .SavefileVersion
             .Should()
             .Be(MaxVersion);
     }

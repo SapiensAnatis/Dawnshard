@@ -1,37 +1,39 @@
 using System.Collections.Immutable;
 using System.Reflection;
+using DragaliaAPI;
 using DragaliaAPI.Database;
+using DragaliaAPI.Features.Blazor;
 using DragaliaAPI.Features.GraphQL;
+using DragaliaAPI.Features.TimeAttack;
+using DragaliaAPI.Features.Version;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Middleware;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Serilog;
-using DragaliaAPI.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using MudBlazor.Services;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using DragaliaAPI.Features.TimeAttack;
-using DragaliaAPI.Features.Version;
-using DragaliaAPI.Features.Blazor;
 using Microsoft.JSInterop;
-using DragaliaAPI;
 using MudBlazor;
+using MudBlazor.Services;
+using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-IConfiguration config = builder.Configuration
+IConfiguration config = builder
+    .Configuration
     .AddJsonFile("itemSummonOdds.json", optional: false, reloadOnChange: true)
     .AddJsonFile("dragonfruitOdds.json", optional: false, reloadOnChange: true)
     .Build();
 
 builder.WebHost.UseStaticWebAssets();
 
-builder.Services
+builder
+    .Services
     .Configure<BaasOptions>(config.GetRequiredSection("Baas"))
     .Configure<LoginOptions>(config.GetRequiredSection("Login"))
     .Configure<DragalipatchOptions>(config.GetRequiredSection("Dragalipatch"))
@@ -44,36 +46,46 @@ builder.Services
     .Configure<BlazorOptions>(config.GetRequiredSection(nameof(BlazorOptions)));
 
 builder.Services.AddServerSideBlazor();
-builder.Services.AddMudServices(options =>
-{
-    options.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
-    options.SnackbarConfiguration.VisibleStateDuration = 5000;
-    options.SnackbarConfiguration.ShowTransitionDuration = 500;
-    options.SnackbarConfiguration.HideTransitionDuration = 500;
-});
+builder
+    .Services
+    .AddMudServices(options =>
+    {
+        options.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
+        options.SnackbarConfiguration.VisibleStateDuration = 5000;
+        options.SnackbarConfiguration.ShowTransitionDuration = 500;
+        options.SnackbarConfiguration.HideTransitionDuration = 500;
+    });
 
 // Ensure item summon weightings add to 100%
 builder.Services.AddOptions<ItemSummonConfig>().Validate(x => x.Odds.Sum(y => y.Rate) == 100_000);
-builder.Services
+builder
+    .Services
     .AddOptions<DragonfruitConfig>()
     .Validate(x => x.FruitOdds.Values.All(y => y.Normal + y.Ripe + y.Succulent == 100));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
-builder.Host.UseSerilog(
-    (context, services, loggerConfig) =>
-        loggerConfig.ReadFrom
-            .Configuration(context.Configuration)
-            .ReadFrom.Services(services)
-            .Enrich.FromLogContext()
-            // Blazor keeps throwing these errors from MudBlazor internals; there is nothing we can do about them
-            .Filter.ByExcluding(evt => evt.Exception is JSDisconnectedException)
-);
+builder
+    .Host
+    .UseSerilog(
+        (context, services, loggerConfig) =>
+            loggerConfig
+                .ReadFrom
+                .Configuration(context.Configuration)
+                .ReadFrom
+                .Services(services)
+                .Enrich
+                .FromLogContext()
+                // Blazor keeps throwing these errors from MudBlazor internals; there is nothing we can do about them
+                .Filter
+                .ByExcluding(evt => evt.Exception is JSDisconnectedException)
+    );
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services
+builder
+    .Services
     .AddMvc()
     .AddMvcOptions(option =>
     {
@@ -83,12 +95,14 @@ builder.Services
     .AddJsonOptions(options => ApiJsonOptions.Action.Invoke(options.JsonSerializerOptions));
 
 builder.Services.AddRazorPages();
-builder.Services
+builder
+    .Services
     .AddHealthChecks()
     .AddDbContextCheck<ApiContext>()
     .AddCheck<RedisHealthCheck>("Redis", failureStatus: HealthStatus.Unhealthy);
 
-builder.Services
+builder
+    .Services
     .AddAuthentication(opts =>
     {
         opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
@@ -105,7 +119,8 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
-builder.Services
+builder
+    .Services
     .AddResponseCompression()
     .ConfigureDatabaseServices(builder.Configuration.GetConnectionString("PostgresHost"))
     .ConfigureSharedServices()

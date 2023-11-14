@@ -111,9 +111,9 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonRequest_SingleSummonWyrmite_ReturnsValidResult()
     {
-        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(
-            x => x.DeviceAccountId == DeviceAccountId
-        );
+        DbPlayerUserData userData = await this.ApiContext
+            .PlayerUserData
+            .SingleAsync(x => x.DeviceAccountId == DeviceAccountId);
 
         await this.ApiContext.Entry(userData).ReloadAsync();
 
@@ -140,9 +140,9 @@ public class SummonTest : TestFixture
     [Fact]
     public async Task SummonRequest_TenSummonWyrmite_ReturnsValidResult()
     {
-        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.SingleAsync(
-            x => x.DeviceAccountId == DeviceAccountId
-        );
+        DbPlayerUserData userData = await this.ApiContext
+            .PlayerUserData
+            .SingleAsync(x => x.DeviceAccountId == DeviceAccountId);
 
         SummonRequestData response = (
             await this.Client.PostMsgpack<SummonRequestData>(
@@ -169,7 +169,8 @@ public class SummonTest : TestFixture
     {
         if (reward.entity_type == EntityTypes.Dragon)
         {
-            List<DbPlayerDragonData> dragonData = await this.ApiContext.PlayerDragonData
+            List<DbPlayerDragonData> dragonData = await this.ApiContext
+                .PlayerDragonData
                 .Where(x => x.DeviceAccountId == DeviceAccountId)
                 .ToListAsync();
 
@@ -177,7 +178,8 @@ public class SummonTest : TestFixture
         }
         else
         {
-            List<DbPlayerCharaData> charaData = await this.ApiContext.PlayerCharaData
+            List<DbPlayerCharaData> charaData = await this.ApiContext
+                .PlayerCharaData
                 .Where(x => x.DeviceAccountId == DeviceAccountId)
                 .ToListAsync();
 

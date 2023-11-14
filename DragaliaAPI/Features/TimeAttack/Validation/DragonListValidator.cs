@@ -1,7 +1,7 @@
 ﻿using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using FluentValidation;
 
 namespace DragaliaAPI.Features.TimeAttack.Validation;

@@ -29,14 +29,16 @@ public class BonusService(
     public async Task<FortBonusList> GetBonusList()
     {
         IEnumerable<int> buildIds = (
-            await fortRepository.Builds
+            await fortRepository
+                .Builds
                 .AsNoTracking()
                 .Where(x => x.Level != 0)
                 .Select(x => new { x.PlantId, x.Level })
                 .ToListAsync()
         ).Select(x => MasterAssetUtils.GetPlantDetailId(x.PlantId, x.Level));
 
-        IEnumerable<WeaponBodies> weaponIds = await weaponRepository.WeaponBodies
+        IEnumerable<WeaponBodies> weaponIds = await weaponRepository
+            .WeaponBodies
             .AsNoTracking()
             .Where(x => x.FortPassiveCharaWeaponBuildupCount != 0)
             .Select(x => x.WeaponBodyId)
@@ -79,7 +81,8 @@ public class BonusService(
             return null;
         }
 
-        int level = await fortRepository.Builds
+        int level = await fortRepository
+            .Builds
             .Where(x => x.PlantId == eventData.EventFortId)
             .Select(x => x.Level)
             .SingleOrDefaultAsync();
@@ -263,94 +266,98 @@ public class BonusService(
     {
         // Source: https://dragalialost.wiki/w/Notte's_Notes#Encyclopedia
         public static readonly ImmutableList<AtgenElementBonus> MaxAlbumCharaBonus =
-            ImmutableList<AtgenElementBonus>.Empty.AddRange(
-                new List<AtgenElementBonus>()
-                {
-                    new()
+            ImmutableList<AtgenElementBonus>
+                .Empty
+                .AddRange(
+                    new List<AtgenElementBonus>()
                     {
-                        elemental_type = UnitElement.Fire,
-                        hp = 14.1f
+                        new()
+                        {
+                            elemental_type = UnitElement.Fire,
+                            hp = 14.1f
 #if CHEATING
-                            * 100
+                                * 100
 #endif
-                        ,
-                        attack = 14.1f
+                            ,
+                            attack = 14.1f
 #if CHEATING
-                            * 100
+                                * 100
 #endif
-                        ,
-                    },
-                    new()
-                    {
-                        elemental_type = UnitElement.Water,
-                        hp = 13.8f,
-                        attack = 13.8f
-                    },
-                    new()
-                    {
-                        elemental_type = UnitElement.Wind,
-                        hp = 13.9f,
-                        attack = 13.9f
-                    },
-                    new()
-                    {
-                        elemental_type = UnitElement.Light,
-                        hp = 14.5f,
-                        attack = 14.5f
-                    },
-                    new()
-                    {
-                        elemental_type = UnitElement.Dark,
-                        hp = 13.3f,
-                        attack = 13.3f
+                            ,
+                        },
+                        new()
+                        {
+                            elemental_type = UnitElement.Water,
+                            hp = 13.8f,
+                            attack = 13.8f
+                        },
+                        new()
+                        {
+                            elemental_type = UnitElement.Wind,
+                            hp = 13.9f,
+                            attack = 13.9f
+                        },
+                        new()
+                        {
+                            elemental_type = UnitElement.Light,
+                            hp = 14.5f,
+                            attack = 14.5f
+                        },
+                        new()
+                        {
+                            elemental_type = UnitElement.Dark,
+                            hp = 13.3f,
+                            attack = 13.3f
+                        }
                     }
-                }
-            );
+                );
 
         // Source: https://dragalialost.wiki/w/Notte's_Notes#Encyclopedia
         public static readonly ImmutableList<AtgenElementBonus> MaxAlbumDragonBonus =
-            ImmutableList<AtgenElementBonus>.Empty.AddRange(
-                new List<AtgenElementBonus>()
-                {
-                    new()
+            ImmutableList<AtgenElementBonus>
+                .Empty
+                .AddRange(
+                    new List<AtgenElementBonus>()
                     {
-                        elemental_type = UnitElement.Fire,
-                        hp = 5.8f
+                        new()
+                        {
+                            elemental_type = UnitElement.Fire,
+                            hp = 5.8f
 #if CHEATING
-                            * 100
+                                * 100
 #endif
-                        ,
-                        attack = 5f
+                            ,
+                            attack = 5f
 #if CHEATING
-                            * 100
+                                * 100
 #endif
-                        ,
-                    },
-                    new()
-                    {
-                        elemental_type = UnitElement.Water,
-                        hp = 5.4f,
-                        attack = 4.6f
-                    },
-                    new()
-                    {
-                        elemental_type = UnitElement.Wind,
-                        hp = 6.3f,
-                        attack = 5.4f
-                    },
-                    new()
-                    {
-                        elemental_type = UnitElement.Light,
-                        hp = 6.0f,
-                        attack = 5.2f
-                    },
-                    new()
-                    {
-                        elemental_type = UnitElement.Dark,
-                        hp = 7.3f,
-                        attack = 6.4f
+                            ,
+                        },
+                        new()
+                        {
+                            elemental_type = UnitElement.Water,
+                            hp = 5.4f,
+                            attack = 4.6f
+                        },
+                        new()
+                        {
+                            elemental_type = UnitElement.Wind,
+                            hp = 6.3f,
+                            attack = 5.4f
+                        },
+                        new()
+                        {
+                            elemental_type = UnitElement.Light,
+                            hp = 6.0f,
+                            attack = 5.2f
+                        },
+                        new()
+                        {
+                            elemental_type = UnitElement.Dark,
+                            hp = 7.3f,
+                            attack = 6.4f
+                        }
                     }
-                }
-            );
+                );
     }
 }

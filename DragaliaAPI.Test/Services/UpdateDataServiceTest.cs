@@ -195,7 +195,8 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         list.unit_story_list
             .Should()
             .ContainEquivalentOf(mapper.Map<UnitStoryList>(charaStoryState))
-            .And.ContainEquivalentOf(mapper.Map<UnitStoryList>(dragonStoryState));
+            .And
+            .ContainEquivalentOf(mapper.Map<UnitStoryList>(dragonStoryState));
 
         AssertOnlyContains<CastleStoryList>(list.castle_story_list, castleStoryState);
 
@@ -289,6 +290,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         member
             .Should()
             .ContainSingle()
-            .And.ContainEquivalentOf(this.mapper.Map<TNetwork>(dbEntity));
+            .And
+            .ContainEquivalentOf(this.mapper.Map<TNetwork>(dbEntity));
     }
 }

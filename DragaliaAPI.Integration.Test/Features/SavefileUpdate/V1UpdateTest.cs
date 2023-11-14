@@ -33,7 +33,8 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         data.build_list.Should().Contain(x => x.plant_id == FortPlants.TheHalidom);
 
-        this.ApiContext.PlayerFortBuilds
+        this.ApiContext
+            .PlayerFortBuilds
             .Should()
             .Contain(
                 x => x.PlantId == FortPlants.TheHalidom && x.DeviceAccountId == DeviceAccountId
@@ -63,7 +64,8 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         data.build_list.Should().Contain(x => x.plant_id == FortPlants.Smithy);
 
-        this.ApiContext.PlayerFortBuilds
+        this.ApiContext
+            .PlayerFortBuilds
             .Should()
             .Contain(x => x.PlantId == FortPlants.Smithy && x.DeviceAccountId == DeviceAccountId);
 
@@ -91,7 +93,8 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         data.build_list.Should().Contain(x => x.plant_id == FortPlants.FlameDracolith);
 
-        this.ApiContext.PlayerFortBuilds
+        this.ApiContext
+            .PlayerFortBuilds
             .Should()
             .Contain(x => x.PlantId == FortPlants.FlameDracolith);
 
@@ -103,9 +106,11 @@ public class V1UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V1Update_NoDojos_TutorialComplete_Adds()
     {
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            u => u.SetProperty(e => e.TutorialStatus, TutorialService.TutorialStatusIds.Dojos)
-        );
+        await this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdateAsync(
+                u => u.SetProperty(e => e.TutorialStatus, TutorialService.TutorialStatusIds.Dojos)
+            );
 
         LoadIndexData data = (
             await this.Client.PostMsgpack<LoadIndexData>("/load/index", new LoadIndexRequest())
@@ -117,9 +122,9 @@ public class V1UpdateTest : SavefileUpdateTestFixture
 
         this.GetSavefileVersion().Should().Be(this.MaxVersion);
 
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            u => u.SetProperty(e => e.TutorialStatus, 0)
-        );
+        await this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdateAsync(u => u.SetProperty(e => e.TutorialStatus, 0));
     }
 
     [Fact]

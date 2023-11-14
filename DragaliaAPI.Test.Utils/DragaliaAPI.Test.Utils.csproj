@@ -1,27 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj" />
-      <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj" />
-      <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj" />
-    </ItemGroup>
     
     <ItemGroup>
-      <PackageReference Include="FluentAssertions" Version="6.12.0" />
-      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.0.2" />
-      <PackageReference Include="Moq" Version="4.20.69" />
+        <ProjectReference Include="..\DragaliaAPI.Database\DragaliaAPI.Database.csproj"/>
+        <ProjectReference Include="..\DragaliaAPI\DragaliaAPI.csproj"/>
+        <ProjectReference Include="..\DragaliaAPI.Shared\DragaliaAPI.Shared.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="RSA_key.pem">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <PackageReference Include="FluentAssertions"/>
+        <PackageReference Include="Microsoft.IdentityModel.Tokens"/>
+        <PackageReference Include="Moq"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="RSA_key.pem">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

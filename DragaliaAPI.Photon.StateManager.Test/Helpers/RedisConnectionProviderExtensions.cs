@@ -13,8 +13,8 @@ public static class RedisConnectionProviderExtensions
     {
         // Go directly to Redis and get the key, as connectionProvider.RedisCollection<T>
         // seems to employ some kind of client-side caching.
-        return await connectionProvider.Connection.JsonGetAsync<RedisGame>(
-            $"{typeof(RedisGame).FullName}:{gameName}"
-        );
+        return await connectionProvider
+            .Connection
+            .JsonGetAsync<RedisGame>($"{typeof(RedisGame).FullName}:{gameName}");
     }
 }

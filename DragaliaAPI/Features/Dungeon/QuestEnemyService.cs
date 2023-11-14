@@ -5,10 +5,10 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
+using DragaliaAPI.Shared.MasterAsset.Models.Wall;
 using FluentRandomPicker;
 using FluentRandomPicker.FluentInterfaces.General;
 using JetBrains.Annotations;
-using DragaliaAPI.Shared.MasterAsset.Models.Wall;
 
 namespace DragaliaAPI.Features.Dungeon;
 
@@ -56,27 +56,32 @@ public class QuestEnemyService : IQuestEnemyService
 
             if (enemy.enemy_drop_list.Count == 0)
             {
-                enemy.enemy_drop_list.Add(
-                    new EnemyDropList()
-                    {
-                        coin = 0,
-                        mana = 0,
-                        drop_list = new List<AtgenDropList>()
-                    }
-                );
+                enemy
+                    .enemy_drop_list
+                    .Add(
+                        new EnemyDropList()
+                        {
+                            coin = 0,
+                            mana = 0,
+                            drop_list = new List<AtgenDropList>()
+                        }
+                    );
             }
 
             enemy.enemy_drop_list[0].coin += rupieSlice;
             enemy.enemy_drop_list[0].mana += manaSlice;
 
-            enemy.enemy_drop_list[0].drop_list.Add(
-                new AtgenDropList()
-                {
-                    id = drop.Id,
-                    type = drop.EntityType,
-                    quantity = 1
-                }
-            );
+            enemy
+                .enemy_drop_list[0]
+                .drop_list
+                .Add(
+                    new AtgenDropList()
+                    {
+                        id = drop.Id,
+                        type = drop.EntityType,
+                        quantity = 1
+                    }
+                );
         }
 
         // Accumulate quantities of the same drops
@@ -85,7 +90,9 @@ public class QuestEnemyService : IQuestEnemyService
             if (enemy.enemy_drop_list.Count == 0)
                 continue;
 
-            enemy.enemy_drop_list[0].drop_list = enemy.enemy_drop_list[0].drop_list
+            enemy.enemy_drop_list[0].drop_list = enemy
+                .enemy_drop_list[0]
+                .drop_list
                 .GroupBy(x => new { x.id, x.type })
                 .Select(
                     group =>

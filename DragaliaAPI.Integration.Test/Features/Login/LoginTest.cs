@@ -27,7 +27,8 @@ public class LoginTest : TestFixture
     [Fact]
     public async Task LoginIndex_LastLoginBeforeReset_ResetsItemSummonCount()
     {
-        await this.ApiContext.PlayerShopInfos
+        await this.ApiContext
+            .PlayerShopInfos
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.DailySummonCount, 5));
 
@@ -41,7 +42,8 @@ public class LoginTest : TestFixture
     [Fact]
     public async Task LoginIndex_LastLoginBeforeReset_ResetsDragonGiftCount()
     {
-        await this.ApiContext.PlayerDragonGifts
+        await this.ApiContext
+            .PlayerDragonGifts
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.Quantity, 0));
 
@@ -167,10 +169,13 @@ public class LoginTest : TestFixture
             new LoginIndexRequest()
         );
 
-        response.data.login_bonus_list
+        response
+            .data
+            .login_bonus_list
             .Should()
             .ContainSingle()
-            .And.ContainEquivalentOf(
+            .And
+            .ContainEquivalentOf(
                 new AtgenLoginBonusList()
                 {
                     login_bonus_id = 17,
@@ -202,10 +207,13 @@ public class LoginTest : TestFixture
             new LoginIndexRequest()
         );
 
-        response.data.login_bonus_list
+        response
+            .data
+            .login_bonus_list
             .Should()
             .ContainSingle()
-            .And.ContainEquivalentOf(
+            .And
+            .ContainEquivalentOf(
                 new AtgenLoginBonusList()
                 {
                     login_bonus_id = 17,
@@ -239,7 +247,9 @@ public class LoginTest : TestFixture
             new LoginIndexRequest()
         );
 
-        response.data.login_bonus_list
+        response
+            .data
+            .login_bonus_list
             .Should()
             .ContainEquivalentOf(
                 new AtgenLoginBonusList()
@@ -254,10 +264,12 @@ public class LoginTest : TestFixture
             );
 
         (
-            await this.ApiContext.LoginBonuses
+            await this.ApiContext
+                .LoginBonuses
                 .AsNoTracking()
                 .FirstAsync(x => x.DeviceAccountId == DeviceAccountId && x.Id == 2)
-        ).IsComplete
+        )
+            .IsComplete
             .Should()
             .BeTrue();
 
@@ -281,7 +293,8 @@ public class LoginTest : TestFixture
             }
         );
 
-        int oldCloverQuantity = await this.ApiContext.PlayerDragonGifts
+        int oldCloverQuantity = await this.ApiContext
+            .PlayerDragonGifts
             .AsNoTracking()
             .Where(
                 x =>
@@ -298,7 +311,8 @@ public class LoginTest : TestFixture
             )
         ).data;
 
-        response.login_bonus_list
+        response
+            .login_bonus_list
             .Should()
             .ContainEquivalentOf(
                 new AtgenLoginBonusList()
@@ -314,7 +328,9 @@ public class LoginTest : TestFixture
                 }
             );
 
-        response.update_data_list.dragon_gift_list
+        response
+            .update_data_list
+            .dragon_gift_list
             .Should()
             .Contain(
                 x =>
@@ -338,19 +354,22 @@ public class LoginTest : TestFixture
 
     private async Task<int> GetSummonCount() =>
         (
-            await this.ApiContext.PlayerShopInfos
+            await this.ApiContext
+                .PlayerShopInfos
                 .AsNoTracking()
                 .FirstAsync(x => x.DeviceAccountId == DeviceAccountId)
         ).DailySummonCount;
 
     private async Task<IEnumerable<DbPlayerDragonGift>> GetDragonGifts() =>
-        await this.ApiContext.PlayerDragonGifts
+        await this.ApiContext
+            .PlayerDragonGifts
             .AsNoTracking()
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ToListAsync();
 
     private void ResetLastLoginTime() =>
-        this.ApiContext.PlayerUserData
+        this.ApiContext
+            .PlayerUserData
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ExecuteUpdate(
                 entity => entity.SetProperty(x => x.LastLoginTime, DateTimeOffset.UnixEpoch)

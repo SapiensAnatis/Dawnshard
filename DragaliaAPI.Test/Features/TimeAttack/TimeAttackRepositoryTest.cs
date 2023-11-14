@@ -96,9 +96,11 @@ public class TimeAttackRepositoryTest : RepositoryTestFixture
         await this.ApiContext.SaveChangesAsync();
 
         this.ApiContext.TimeAttackClears.Should().Contain(x => x.GameId == gameId);
-        this.ApiContext.TimeAttackClears
+        this.ApiContext
+            .TimeAttackClears
             .First(x => x.GameId == gameId)
-            .Players.Should()
+            .Players
+            .Should()
             .BeEquivalentTo(
                 new List<DbTimeAttackPlayer>()
                 {

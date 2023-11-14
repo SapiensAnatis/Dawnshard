@@ -29,73 +29,84 @@ public class DungeonRepository : IDungeonRepository
     {
         return (
             from unit in input
-            from chara in this.apiContext.PlayerCharaData
+            from chara in this.apiContext
+                .PlayerCharaData
                 .Where(x => x.CharaId == unit.CharaId && x.DeviceAccountId == unit.DeviceAccountId)
                 .DefaultIfEmpty()
-            from dragon in this.apiContext.PlayerDragonData
+            from dragon in this.apiContext
+                .PlayerDragonData
                 .Where(
                     x =>
                         x.DragonKeyId == unit.EquipDragonKeyId
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from weapon in this.apiContext.PlayerWeapons
+            from weapon in this.apiContext
+                .PlayerWeapons
                 .Where(
                     x =>
                         x.WeaponBodyId == unit.EquipWeaponBodyId
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests11 in this.apiContext.PlayerAbilityCrests
+            from crests11 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType1CrestId1
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests12 in this.apiContext.PlayerAbilityCrests
+            from crests12 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType1CrestId2
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests13 in this.apiContext.PlayerAbilityCrests
+            from crests13 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType1CrestId3
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests21 in this.apiContext.PlayerAbilityCrests
+            from crests21 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType2CrestId1
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests22 in this.apiContext.PlayerAbilityCrests
+            from crests22 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType2CrestId2
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests31 in this.apiContext.PlayerAbilityCrests
+            from crests31 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType3CrestId1
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests32 in this.apiContext.PlayerAbilityCrests
+            from crests32 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType3CrestId2
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from charaEs1 in this.apiContext.PlayerCharaData
+            from charaEs1 in this.apiContext
+                .PlayerCharaData
                 .Where(
                     x =>
                         x.CharaId == unit.EditSkill1CharaId
@@ -103,7 +114,8 @@ public class DungeonRepository : IDungeonRepository
                         && x.IsUnlockEditSkill
                 )
                 .DefaultIfEmpty()
-            from charaEs2 in this.apiContext.PlayerCharaData
+            from charaEs2 in this.apiContext
+                .PlayerCharaData
                 .Where(
                     x =>
                         x.CharaId == unit.EditSkill2CharaId
@@ -111,14 +123,16 @@ public class DungeonRepository : IDungeonRepository
                         && x.IsUnlockEditSkill
                 )
                 .DefaultIfEmpty()
-            from talisman in this.apiContext.PlayerTalismans
+            from talisman in this.apiContext
+                .PlayerTalismans
                 .Where(
                     x =>
                         x.TalismanKeyId == unit.EquipTalismanKeyId
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from skin in this.apiContext.PlayerWeaponSkins
+            from skin in this.apiContext
+                .PlayerWeaponSkins
                 .Where(
                     x =>
                         x.WeaponSkinId == unit.EquipWeaponSkinId
@@ -175,75 +189,86 @@ public class DungeonRepository : IDungeonRepository
                     chara.DeviceAccountId,
                     chara.CharaId
                 }
-            from dragon in this.apiContext.PlayerDragonData
+            from dragon in this.apiContext
+                .PlayerDragonData
                 .Where(
                     x =>
                         x.DragonKeyId == unit.EquipDragonKeyId
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from dragonReliability in this.apiContext.PlayerDragonReliability
+            from dragonReliability in this.apiContext
+                .PlayerDragonReliability
                 .Where(
                     x => x.DragonId == dragon.DragonId && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from weapon in this.apiContext.PlayerWeapons
+            from weapon in this.apiContext
+                .PlayerWeapons
                 .Where(
                     x =>
                         x.WeaponBodyId == unit.EquipWeaponBodyId
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests11 in this.apiContext.PlayerAbilityCrests
+            from crests11 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType1CrestId1
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests12 in this.apiContext.PlayerAbilityCrests
+            from crests12 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType1CrestId2
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests13 in this.apiContext.PlayerAbilityCrests
+            from crests13 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType1CrestId3
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests21 in this.apiContext.PlayerAbilityCrests
+            from crests21 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType2CrestId1
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests22 in this.apiContext.PlayerAbilityCrests
+            from crests22 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType2CrestId2
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests31 in this.apiContext.PlayerAbilityCrests
+            from crests31 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType3CrestId1
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from crests32 in this.apiContext.PlayerAbilityCrests
+            from crests32 in this.apiContext
+                .PlayerAbilityCrests
                 .Where(
                     x =>
                         x.AbilityCrestId == unit.EquipCrestSlotType3CrestId2
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from charaEs1 in this.apiContext.PlayerCharaData
+            from charaEs1 in this.apiContext
+                .PlayerCharaData
                 .Where(
                     x =>
                         x.CharaId == unit.EditSkill1CharaId
@@ -251,7 +276,8 @@ public class DungeonRepository : IDungeonRepository
                         && x.IsUnlockEditSkill
                 )
                 .DefaultIfEmpty()
-            from charaEs2 in this.apiContext.PlayerCharaData
+            from charaEs2 in this.apiContext
+                .PlayerCharaData
                 .Where(
                     x =>
                         x.CharaId == unit.EditSkill2CharaId
@@ -259,14 +285,16 @@ public class DungeonRepository : IDungeonRepository
                         && x.IsUnlockEditSkill
                 )
                 .DefaultIfEmpty()
-            from talisman in this.apiContext.PlayerTalismans
+            from talisman in this.apiContext
+                .PlayerTalismans
                 .Where(
                     x =>
                         x.TalismanKeyId == unit.EquipTalismanKeyId
                         && x.DeviceAccountId == unit.DeviceAccountId
                 )
                 .DefaultIfEmpty()
-            from skin in this.apiContext.PlayerWeaponSkins
+            from skin in this.apiContext
+                .PlayerWeaponSkins
                 .Where(
                     x =>
                         x.WeaponSkinId == unit.EquipWeaponSkinId
@@ -326,84 +354,96 @@ public class DungeonRepository : IDungeonRepository
         foreach (PartySettingList unit in party)
         {
             IQueryable<DbDetailedPartyUnit> detailQuery = (
-                from chara in this.apiContext.PlayerCharaData
+                from chara in this.apiContext
+                    .PlayerCharaData
                     .Where(
                         x =>
                             x.CharaId == unit.chara_id
                             && x.DeviceAccountId == this.playerIdentityService.AccountId
                     )
                     .DefaultIfEmpty()
-                from dragon in this.apiContext.PlayerDragonData
+                from dragon in this.apiContext
+                    .PlayerDragonData
                     .Where(
                         x =>
                             x.DragonKeyId == (long)unit.equip_dragon_key_id
                             && x.DeviceAccountId == this.playerIdentityService.AccountId
                     )
                     .DefaultIfEmpty()
-                from dragonReliability in this.apiContext.PlayerDragonReliability
+                from dragonReliability in this.apiContext
+                    .PlayerDragonReliability
                     .Where(
                         x =>
                             x.DragonId == dragon.DragonId
                             && x.DeviceAccountId == this.playerIdentityService.AccountId
                     )
                     .DefaultIfEmpty()
-                from weapon in this.apiContext.PlayerWeapons
+                from weapon in this.apiContext
+                    .PlayerWeapons
                     .Where(
                         x =>
                             x.WeaponBodyId == unit.equip_weapon_body_id
                             && x.DeviceAccountId == this.playerIdentityService.AccountId
                     )
                     .DefaultIfEmpty()
-                from crests11 in this.apiContext.PlayerAbilityCrests
+                from crests11 in this.apiContext
+                    .PlayerAbilityCrests
                     .Where(
                         x =>
                             x.AbilityCrestId == unit.equip_crest_slot_type_1_crest_id_1
                             && x.DeviceAccountId == this.playerIdentityService.AccountId
                     )
                     .DefaultIfEmpty()
-                from crests12 in this.apiContext.PlayerAbilityCrests
+                from crests12 in this.apiContext
+                    .PlayerAbilityCrests
                     .Where(
                         x =>
                             x.AbilityCrestId == unit.equip_crest_slot_type_1_crest_id_2
                             && x.DeviceAccountId == this.playerIdentityService.AccountId
                     )
                     .DefaultIfEmpty()
-                from crests13 in this.apiContext.PlayerAbilityCrests
+                from crests13 in this.apiContext
+                    .PlayerAbilityCrests
                     .Where(
                         x =>
                             x.AbilityCrestId == unit.equip_crest_slot_type_1_crest_id_3
                             && x.DeviceAccountId == this.playerIdentityService.AccountId
                     )
                     .DefaultIfEmpty()
-                from crests21 in this.apiContext.PlayerAbilityCrests
+                from crests21 in this.apiContext
+                    .PlayerAbilityCrests
                     .Where(
                         x =>
                             x.AbilityCrestId == unit.equip_crest_slot_type_2_crest_id_1
                             && x.DeviceAccountId == this.playerIdentityService.AccountId
                     )
                     .DefaultIfEmpty()
-                from crests22 in this.apiContext.PlayerAbilityCrests
+                from crests22 in this.apiContext
+                    .PlayerAbilityCrests
                     .Where(
                         x =>
                             x.AbilityCrestId == unit.equip_crest_slot_type_2_crest_id_2
                             && x.DeviceAccountId == this.playerIdentityService.AccountId
                     )
                     .DefaultIfEmpty()
-                from crests31 in this.apiContext.PlayerAbilityCrests
+                from crests31 in this.apiContext
+                    .PlayerAbilityCrests
                     .Where(
                         x =>
                             x.AbilityCrestId == unit.equip_crest_slot_type_3_crest_id_1
                             && x.DeviceAccountId == this.playerIdentityService.AccountId
                     )
                     .DefaultIfEmpty()
-                from crests32 in this.apiContext.PlayerAbilityCrests
+                from crests32 in this.apiContext
+                    .PlayerAbilityCrests
                     .Where(
                         x =>
                             x.AbilityCrestId == unit.equip_crest_slot_type_3_crest_id_2
                             && x.DeviceAccountId == this.playerIdentityService.AccountId
                     )
                     .DefaultIfEmpty()
-                from charaEs1 in this.apiContext.PlayerCharaData
+                from charaEs1 in this.apiContext
+                    .PlayerCharaData
                     .Where(
                         x =>
                             x.CharaId == unit.edit_skill_1_chara_id
@@ -411,7 +451,8 @@ public class DungeonRepository : IDungeonRepository
                             && x.IsUnlockEditSkill
                     )
                     .DefaultIfEmpty()
-                from charaEs2 in this.apiContext.PlayerCharaData
+                from charaEs2 in this.apiContext
+                    .PlayerCharaData
                     .Where(
                         x =>
                             x.CharaId == unit.edit_skill_2_chara_id
@@ -419,14 +460,16 @@ public class DungeonRepository : IDungeonRepository
                             && x.IsUnlockEditSkill
                     )
                     .DefaultIfEmpty()
-                from talisman in this.apiContext.PlayerTalismans
+                from talisman in this.apiContext
+                    .PlayerTalismans
                     .Where(
                         x =>
                             x.TalismanKeyId == (long)unit.equip_talisman_key_id
                             && x.DeviceAccountId == this.playerIdentityService.AccountId
                     )
                     .DefaultIfEmpty()
-                from skin in this.apiContext.PlayerWeaponSkins
+                from skin in this.apiContext
+                    .PlayerWeaponSkins
                     .Where(
                         x =>
                             x.WeaponSkinId == unit.equip_weapon_skin_id

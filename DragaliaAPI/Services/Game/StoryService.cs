@@ -65,9 +65,9 @@ public class StoryService(
         if (
             storyData.UnlockQuestStoryId != default
             && (
-                await storyRepository.QuestStories.FirstOrDefaultAsync(
-                    x => x.StoryId == storyData.UnlockQuestStoryId
-                )
+                await storyRepository
+                    .QuestStories
+                    .FirstOrDefaultAsync(x => x.StoryId == storyData.UnlockQuestStoryId)
             )?.State != StoryState.Read
         )
         {
@@ -78,9 +78,9 @@ public class StoryService(
         if (
             storyData.UnlockTriggerStoryId != default
             && (
-                await storyRepository.UnitStories.FirstOrDefaultAsync(
-                    x => x.StoryId == storyData.UnlockTriggerStoryId
-                )
+                await storyRepository
+                    .UnitStories
+                    .FirstOrDefaultAsync(x => x.StoryId == storyData.UnlockTriggerStoryId)
             )?.State != StoryState.Read
         )
         {
@@ -206,10 +206,9 @@ public class StoryService(
             };
 
         if (
-            MasterAsset.QuestStoryRewardInfo.TryGetValue(
-                storyId,
-                out QuestStoryRewardInfo? rewardInfo
-            )
+            MasterAsset
+                .QuestStoryRewardInfo
+                .TryGetValue(storyId, out QuestStoryRewardInfo? rewardInfo)
         )
         {
             foreach (QuestStoryReward reward in rewardInfo.Rewards)

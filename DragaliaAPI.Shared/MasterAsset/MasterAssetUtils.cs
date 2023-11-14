@@ -34,7 +34,9 @@ public static class MasterAssetUtils
         map.ToDictionary(x => x.Key, x => -x.Value);
 
     public static FortPlantDetail GetInitialFortPlant(FortPlants id) =>
-        MasterAsset.FortPlant.Enumerable
+        MasterAsset
+            .FortPlant
+            .Enumerable
             .Where(x => x.AssetGroup == id)
             .OrderBy(x => x.Level)
             .First();

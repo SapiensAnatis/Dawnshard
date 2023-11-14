@@ -13,7 +13,8 @@ public class V14Update(IStoryRepository storyRepository, IRewardService rewardSe
 
     public async Task Apply()
     {
-        int[] readStoryIdList = await storyRepository.UnitStories
+        int[] readStoryIdList = await storyRepository
+            .UnitStories
             .Where(x => (x.State == StoryState.Read) && x.StoryType == StoryTypes.Chara)
             .Select(x => x.StoryId)
             .ToArrayAsync();

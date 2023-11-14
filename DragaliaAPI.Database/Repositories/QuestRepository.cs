@@ -18,19 +18,19 @@ public class QuestRepository : IQuestRepository
     }
 
     public IQueryable<DbQuest> Quests =>
-        this.apiContext.PlayerQuests.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerQuests
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbQuestEvent> QuestEvents =>
-        this.apiContext.QuestEvents.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .QuestEvents
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbQuestTreasureList> QuestTreasureList =>
-        this.apiContext.QuestTreasureList.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .QuestTreasureList
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     private async Task<DbQuest?> FindQuestAsync(int questId)
     {
@@ -40,7 +40,8 @@ public class QuestRepository : IQuestRepository
     public async Task<DbQuest> GetQuestDataAsync(int questId)
     {
         DbQuest? questData = await FindQuestAsync(questId);
-        questData ??= this.apiContext.PlayerQuests
+        questData ??= this.apiContext
+            .PlayerQuests
             .Add(
                 new DbQuest()
                 {
@@ -54,16 +55,16 @@ public class QuestRepository : IQuestRepository
 
     private async Task<DbQuestEvent?> FindQuestEventAsync(int questEventId)
     {
-        return await apiContext.QuestEvents.FindAsync(
-            playerIdentityService.AccountId,
-            questEventId
-        );
+        return await apiContext
+            .QuestEvents
+            .FindAsync(playerIdentityService.AccountId, questEventId);
     }
 
     public async Task<DbQuestEvent> GetQuestEventAsync(int questEventId)
     {
         return await FindQuestEventAsync(questEventId)
-            ?? apiContext.QuestEvents
+            ?? apiContext
+                .QuestEvents
                 .Add(
                     new DbQuestEvent
                     {

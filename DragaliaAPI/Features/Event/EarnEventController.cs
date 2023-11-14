@@ -29,7 +29,9 @@ public class EarnEventController(
         );
 
         if (
-            MasterAsset.EventTradeGroup.Enumerable
+            MasterAsset
+                .EventTradeGroup
+                .Enumerable
                 .FirstOrDefault(x => x.EventId == request.event_id)
                 ?.Id is
             { } tradeGroupId

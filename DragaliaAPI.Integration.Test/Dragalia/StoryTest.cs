@@ -39,7 +39,8 @@ public class StoryTest : TestFixture
             );
 
         data.update_data_list.user_data.Should().NotBeNull();
-        data.update_data_list.unit_story_list
+        data.update_data_list
+            .unit_story_list
             .Should()
             .BeEquivalentTo(
                 new List<UnitStoryList>()
@@ -86,7 +87,8 @@ public class StoryTest : TestFixture
     [Fact]
     public async Task ReadStory_StoryNotRead_UpdatesDatabase()
     {
-        int oldCrystal = await this.ApiContext.PlayerUserData
+        int oldCrystal = await this.ApiContext
+            .PlayerUserData
             .AsNoTracking()
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .Select(x => x.Crystal)
@@ -99,7 +101,8 @@ public class StoryTest : TestFixture
             )
         ).data;
 
-        int newCrystal = await this.ApiContext.PlayerUserData
+        int newCrystal = await this.ApiContext
+            .PlayerUserData
             .AsNoTracking()
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .Select(x => x.Crystal)
@@ -107,9 +110,9 @@ public class StoryTest : TestFixture
 
         newCrystal.Should().Be(oldCrystal + 25);
 
-        IEnumerable<DbPlayerStoryState> stories = this.ApiContext.PlayerStoryState.Where(
-            x => x.DeviceAccountId == DeviceAccountId
-        );
+        IEnumerable<DbPlayerStoryState> stories = this.ApiContext
+            .PlayerStoryState
+            .Where(x => x.DeviceAccountId == DeviceAccountId);
 
         stories
             .Should()

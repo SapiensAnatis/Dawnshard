@@ -92,7 +92,8 @@ public class DbFortBuildTest
                 LastIncomeDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(incomeOffsetSec)
             };
 
-        entity.LastIncomeTime
+        entity
+            .LastIncomeTime
             .Should()
             .BeCloseTo(TimeSpan.FromSeconds(-incomeOffsetSec), AssertionTolerance);
     }

@@ -77,13 +77,15 @@ public class WeaponBodyTest : TestFixture
     [Fact]
     public async Task Craft_Success_UpdatesDatabase()
     {
-        this.ApiContext.PlayerWeapons.Add(
-            new DbWeaponBody()
-            {
-                DeviceAccountId = DeviceAccountId,
-                WeaponBodyId = WeaponBodies.AbsoluteCrimson
-            }
-        );
+        this.ApiContext
+            .PlayerWeapons
+            .Add(
+                new DbWeaponBody()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    WeaponBodyId = WeaponBodies.AbsoluteCrimson
+                }
+            );
 
         await this.ApiContext.SaveChangesAsync();
 
@@ -97,7 +99,8 @@ public class WeaponBodyTest : TestFixture
             new WeaponBodyCraftRequest() { weapon_body_id = WeaponBodies.PrimalCrimson }
         );
 
-        this.ApiContext.PlayerWeapons
+        this.ApiContext
+            .PlayerWeapons
             .SingleOrDefault(
                 x =>
                     x.DeviceAccountId == DeviceAccountId
@@ -124,10 +127,9 @@ public class WeaponBodyTest : TestFixture
         apiContext.ChangeTracker.Clear();
 
         long oldCoin = this.GetRupies();
-        Dictionary<Materials, int> oldMaterials = testCase.ExpMaterialLoss.ToDictionary(
-            x => x.Key,
-            x => GetMaterialCount(x.Key)
-        );
+        Dictionary<Materials, int> oldMaterials = testCase
+            .ExpMaterialLoss
+            .ToDictionary(x => x.Key, x => GetMaterialCount(x.Key));
 
         WeaponBodyBuildupPieceRequest request =
             new()
@@ -156,15 +158,16 @@ public class WeaponBodyTest : TestFixture
 
         // Check weapon
         DbWeaponBody weaponBody = (
-            await apiContext.PlayerWeapons.FindAsync(
-                DeviceAccountId,
-                testCase.InitialState.WeaponBodyId
-            )
+            await apiContext
+                .PlayerWeapons
+                .FindAsync(DeviceAccountId, testCase.InitialState.WeaponBodyId)
         )!;
         await apiContext.Entry(weaponBody).ReloadAsync();
 
         weaponBody.Should().BeEquivalentTo(testCase.ExpFinalState);
-        response.update_data_list.weapon_body_list
+        response
+            .update_data_list
+            .weapon_body_list
             .Should()
             .BeEquivalentTo(
                 new List<WeaponBodyList>()
@@ -178,7 +181,9 @@ public class WeaponBodyTest : TestFixture
         {
             int expQuantity = oldMaterials[material] - loss;
 
-            response.update_data_list.material_list
+            response
+                .update_data_list
+                .material_list
                 .Should()
                 .ContainEquivalentOf(
                     new MaterialList() { material_id = material, quantity = expQuantity }
@@ -197,7 +202,9 @@ public class WeaponBodyTest : TestFixture
                 ?? new List<DbWeaponPassiveAbility>()
         )
         {
-            response.update_data_list.weapon_passive_ability_list
+            response
+                .update_data_list
+                .weapon_passive_ability_list
                 .Should()
                 .ContainEquivalentOf(this.Mapper.Map<WeaponPassiveAbilityList>(expPassive));
 
@@ -207,14 +214,17 @@ public class WeaponBodyTest : TestFixture
         // Check skins
         foreach (DbWeaponSkin expPassive in testCase.ExpNewSkins ?? new List<DbWeaponSkin>())
         {
-            response.update_data_list.weapon_skin_list
+            response
+                .update_data_list
+                .weapon_skin_list
                 .Should()
                 .ContainEquivalentOf(
                     this.Mapper.Map<WeaponSkinList>(expPassive),
                     opts => opts.Excluding(x => x.gettime)
                 );
 
-            apiContext.PlayerWeaponSkins
+            apiContext
+                .PlayerWeaponSkins
                 .Should()
                 .ContainEquivalentOf(expPassive, opts => opts.Excluding(x => x.GetTime));
         }
@@ -606,7 +616,8 @@ public class WeaponBodyTest : TestFixture
 
     private int GetMaterialCount(Materials id)
     {
-        return this.ApiContext.PlayerMaterials
+        return this.ApiContext
+            .PlayerMaterials
             .Where(x => x.DeviceAccountId == DeviceAccountId && x.MaterialId == id)
             .Select(x => x.Quantity)
             .First();
@@ -614,7 +625,8 @@ public class WeaponBodyTest : TestFixture
 
     private long GetRupies()
     {
-        return this.ApiContext.PlayerUserData
+        return this.ApiContext
+            .PlayerUserData
             .AsNoTracking()
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .Select(x => x.Coin)

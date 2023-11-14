@@ -17,9 +17,11 @@ public class ResourceVersionActionFilter(
     public void OnActionExecuting(ActionExecutingContext context)
     {
         if (
-            context.HttpContext
+            context
+                .HttpContext
                 .GetEndpoint()
-                ?.Metadata.GetMetadata<BypassResourceVersionCheckAttribute>()
+                ?.Metadata
+                .GetMetadata<BypassResourceVersionCheckAttribute>()
             is not null
         )
         {

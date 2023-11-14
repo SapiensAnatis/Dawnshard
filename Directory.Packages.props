@@ -1,0 +1,72 @@
+<Project>
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageVersion Include="AutoMapper" Version="12.0.1" />
+        <PackageVersion Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+        <PackageVersion Include="EntityGraphQL" Version="5.0.1" />
+        <PackageVersion Include="EntityGraphQL.AspNet" Version="5.0.1" />
+        <PackageVersion Include="FluentRandomPicker" Version="3.5.0" />
+        <PackageVersion Include="FluentValidation" Version="11.8.0" />
+        <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
+        <PackageVersion Include="MessagePack" Version="2.6.100-alpha" />
+        <PackageVersion Include="MessagePack.AspNetCoreMvcFormatter" Version="2.6.100-alpha" />
+        <PackageVersion Include="MessagePackAnalyzer" Version="2.6.100-alpha" />
+        <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
+        <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-rtm-ci.20231109T120422" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="7.0.3" />
+        <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
+        <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0-rc.2.23509.1" />
+        <PackageVersion Include="MudBlazor" Version="6.11.0" />
+        <PackageVersion Include="Serilog.Exceptions" Version="8.4.0" />
+        <PackageVersion Include="Serilog.Expressions" Version="4.0.0" />
+        <PackageVersion Include="Serilog.Settings.Configuration" Version="7.0.2-dev-00546" />
+        <PackageVersion Include="Serilog.Sinks.Async" Version="1.5.0" />
+        <PackageVersion Include="Serilog.Sinks.Seq" Version="6.0.0-dev-00266" />
+        <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+        <PackageVersion Include="System.Text.Json" Version="8.0.0" />
+        <PackageVersion Include="Serilog" Version="3.1.1" />
+        <PackageVersion Include="Serilog.AspNetCore" Version="7.0.1-dev-00320" />
+        <PackageVersion Include="Serilog.Sinks.Console" Version="5.0.0" />
+        <PackageVersion Include="Serilog.Sinks.File" Version="5.0.1-dev-00968" />
+        <PackageVersion Include="coverlet.msbuild" Version="6.0.0" />
+        <PackageVersion Include="coverlet.collector" Version="6.0.0" />
+        <PackageVersion Include="FluentAssertions" Version="7.0.0-alpha.2" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0-preview-23503-02" />
+        <PackageVersion Include="MockQueryable.Moq" Version="7.0.0" />
+        <PackageVersion Include="Moq" Version="4.20.69" />
+        <PackageVersion Include="xunit" Version="2.6.1" />
+        <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.3" />
+        <PackageVersion Include="GraphQL.Client" Version="6.0.1" />
+        <PackageVersion Include="GraphQL.Client.Serializer.SystemTextJson" Version="6.0.1" />
+        <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
+        <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
+        <PackageVersion Include="Respawn" Version="6.1.0" />
+        <PackageVersion Include="Snapshooter.Xunit" Version="0.13.0" />
+        <PackageVersion Include="Testcontainers" Version="3.6.0" />
+        <PackageVersion Include="Testcontainers.PostgreSql" Version="3.6.0" />
+        <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="8.0.0" />
+        <PackageVersion Include="Moq.EntityFrameworkCore" Version="7.0.0.2" />
+        <PackageVersion Include="NSubstitute" Version="5.1.0" />
+        <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.16" />
+        <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageVersion Include="Redis.OM" Version="0.5.4" />
+        <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+        <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <PackageVersion Include="Serilog.Extensions.Hosting" Version="7.0.0" />
+    </ItemGroup>
+</Project>

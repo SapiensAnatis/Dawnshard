@@ -53,13 +53,17 @@ public class MissionService : IMissionService
         IEnumerable<DbPlayerMission>
     )> UnlockMainMissionGroup(int groupId)
     {
-        IEnumerable<MainStoryMission> missions = MasterAsset.MainStoryMission.Enumerable
+        IEnumerable<MainStoryMission> missions = MasterAsset
+            .MainStoryMission
+            .Enumerable
             .Where(x => x.MissionMainStoryGroupId == groupId)
             .ToList();
 
-        List<MainStoryMissionGroupReward> rewards = MasterAsset.MainStoryMissionGroupRewards
+        List<MainStoryMissionGroupReward> rewards = MasterAsset
+            .MainStoryMissionGroupRewards
             .Get(groupId)
-            .Rewards.ToList();
+            .Rewards
+            .ToList();
 
         logger.LogInformation(
             "Unlocking main story mission group {groupId} ({groupMissionIds})",
@@ -86,16 +90,19 @@ public class MissionService : IMissionService
 
     public async Task<IEnumerable<DbPlayerMission>> UnlockDrillMissionGroup(int groupId)
     {
-        IEnumerable<DrillMission> missions = MasterAsset.DrillMission.Enumerable
+        IEnumerable<DrillMission> missions = MasterAsset
+            .DrillMission
+            .Enumerable
             .Where(x => x.MissionDrillGroupId == groupId)
             .ToList();
 
         if (
-            await this.missionRepository.Missions.AnyAsync(
-                x => x.GroupId == groupId && x.Type == MissionType.Drill
-            )
+            await this.missionRepository
+                .Missions
+                .AnyAsync(x => x.GroupId == groupId && x.Type == MissionType.Drill)
         )
-            return await this.missionRepository.Missions
+            return await this.missionRepository
+                .Missions
                 .Where(x => x.GroupId == groupId && x.Type == MissionType.Drill)
                 .ToListAsync();
 
@@ -116,16 +123,19 @@ public class MissionService : IMissionService
 
     public async Task<IEnumerable<DbPlayerMission>> UnlockMemoryEventMissions(int eventId)
     {
-        IEnumerable<MemoryEventMission> missions = MasterAsset.MemoryEventMission.Enumerable
+        IEnumerable<MemoryEventMission> missions = MasterAsset
+            .MemoryEventMission
+            .Enumerable
             .Where(x => x.EventId == eventId)
             .ToList();
 
         if (
-            await this.missionRepository.Missions.AnyAsync(
-                x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent
-            )
+            await this.missionRepository
+                .Missions
+                .AnyAsync(x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent)
         )
-            return await this.missionRepository.Missions
+            return await this.missionRepository
+                .Missions
                 .Where(x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent)
                 .ToListAsync();
 

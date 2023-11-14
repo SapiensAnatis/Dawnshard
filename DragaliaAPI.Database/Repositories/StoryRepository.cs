@@ -25,9 +25,9 @@ public class StoryRepository : IStoryRepository
     }
 
     public IQueryable<DbPlayerStoryState> Stories =>
-        this.apiContext.PlayerStoryState.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerStoryState
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerStoryState> UnitStories =>
         this.Stories.Where(
@@ -42,11 +42,9 @@ public class StoryRepository : IStoryRepository
 
     public async Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId)
     {
-        DbPlayerStoryState? state = await apiContext.PlayerStoryState.FindAsync(
-            this.playerIdentityService.AccountId,
-            storyType,
-            storyId
-        );
+        DbPlayerStoryState? state = await apiContext
+            .PlayerStoryState
+            .FindAsync(this.playerIdentityService.AccountId, storyType, storyId);
 
         if (state is null)
         {
@@ -56,7 +54,8 @@ public class StoryRepository : IStoryRepository
                 storyType
             );
 
-            state = apiContext.PlayerStoryState
+            state = apiContext
+                .PlayerStoryState
                 .Add(
                     new DbPlayerStoryState()
                     {

@@ -35,7 +35,8 @@ public class DragonService(
         DragonGifts rotatingGift = DragonConstants.rotatingGifts[
             (int)DateTimeOffset.UtcNow.DayOfWeek
         ];
-        Dictionary<DragonGifts, DbPlayerDragonGift> gifts = await inventoryRepository.DragonGifts
+        Dictionary<DragonGifts, DbPlayerDragonGift> gifts = await inventoryRepository
+            .DragonGifts
             .Where(
                 x =>
                     x.DragonGiftId == DragonGifts.FreshBread
@@ -46,20 +47,21 @@ public class DragonService(
             )
             .OrderBy(x => x.DragonGiftId)
             .ToDictionaryAsync(x => x.DragonGiftId);
-        IEnumerable<AtgenShopGiftList> giftList = gifts.Values.Select(
-            x =>
-                new AtgenShopGiftList()
-                {
-                    dragon_gift_id = (int)x.DragonGiftId,
-                    price = DragonConstants.buyGiftPrices.TryGetValue(
-                        x.DragonGiftId,
-                        out int giftPrice
-                    )
-                        ? giftPrice
-                        : 0,
-                    is_buy = x.Quantity
-                }
-        );
+        IEnumerable<AtgenShopGiftList> giftList = gifts
+            .Values
+            .Select(
+                x =>
+                    new AtgenShopGiftList()
+                    {
+                        dragon_gift_id = (int)x.DragonGiftId,
+                        price = DragonConstants
+                            .buyGiftPrices
+                            .TryGetValue(x.DragonGiftId, out int giftPrice)
+                            ? giftPrice
+                            : 0,
+                        is_buy = x.Quantity
+                    }
+            );
         return new DragonGetContactDataData(giftList);
     }
 
@@ -115,7 +117,8 @@ public class DragonService(
                         dragonData.Rarity,
                         dragonReliability.DragonId == Dragons.Puppy
                             ? Array.Empty<int>()
-                            : MasterAsset.DragonStories
+                            : MasterAsset
+                                .DragonStories
                                 .Get((int)dragonReliability.DragonId)
                                 .storyIds,
                         dragonReliability.DragonId == Dragons.Puppy
@@ -201,7 +204,8 @@ public class DragonService(
             {
                 if (levelIndex == 1 || levelIndex == 3)
                 {
-                    int nextStoryUnlockIndex = await storyRepository.Stories
+                    int nextStoryUnlockIndex = await storyRepository
+                        .Stories
                         .Where(x => dragonStories.Contains(x.StoryId))
                         .CountAsync();
 
@@ -381,7 +385,8 @@ public class DragonService(
         DbPlayerUserData userData = await userDataRepository.UserData.SingleAsync();
         //DbPlayerCurrency rupies = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Rupies) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Rupies);
 
-        int totalCost = request.dragon_gift_id_list
+        int totalCost = request
+            .dragon_gift_id_list
             .Select(x => DragonConstants.buyGiftPrices[x])
             .Sum();
         if (userData.Coin < totalCost)
@@ -390,11 +395,13 @@ public class DragonService(
             throw new DragaliaException(ResultCode.CommonMaterialShort, "Insufficient Rupies");
         }
 
-        Dictionary<DragonGifts, DbPlayerDragonGift> gifts = await inventoryRepository.DragonGifts
+        Dictionary<DragonGifts, DbPlayerDragonGift> gifts = await inventoryRepository
+            .DragonGifts
             .Where(x => request.dragon_gift_id_list.Contains(x.DragonGiftId))
             .ToDictionaryAsync(x => x.DragonGiftId);
 
-        DbPlayerDragonReliability dragonReliability = await unitRepository.DragonReliabilities
+        DbPlayerDragonReliability dragonReliability = await unitRepository
+            .DragonReliabilities
             .Where(x => x.DragonId == request.dragon_id)
             .FirstAsync();
 
@@ -426,9 +433,9 @@ public class DragonService(
         IEnumerable<Tuple<DragonGifts, List<RewardReliabilityList>>> levelGifts =
             await IncreaseDragonReliability(
                 dragonReliability,
-                request.dragon_gift_id_list.Select(
-                    x => new Tuple<DragonGifts, int>((DragonGifts)x, 1)
-                )
+                request
+                    .dragon_gift_id_list
+                    .Select(x => new Tuple<DragonGifts, int>((DragonGifts)x, 1))
             );
 
         List<AtgenDragonGiftRewardList> rewardObjList = new List<AtgenDragonGiftRewardList>();
@@ -487,7 +494,8 @@ public class DragonService(
         DragonSendGiftMultipleRequest request
     )
     {
-        DbPlayerDragonGift? gift = await inventoryRepository.DragonGifts
+        DbPlayerDragonGift? gift = await inventoryRepository
+            .DragonGifts
             .Where(x => x.DragonGiftId == request.dragon_gift_id)
             .FirstOrDefaultAsync();
 
@@ -499,7 +507,8 @@ public class DragonService(
             );
         }
 
-        DbPlayerDragonReliability? dragonReliability = await unitRepository.DragonReliabilities
+        DbPlayerDragonReliability? dragonReliability = await unitRepository
+            .DragonReliabilities
             .Where(x => x.DragonId == request.dragon_id)
             .FirstOrDefaultAsync();
 
@@ -570,12 +579,14 @@ public class DragonService(
 
     public async Task<DragonBuildupData> DoBuildup(DragonBuildupRequest request)
     {
-        IEnumerable<Materials> matIds = request.grow_material_list
+        IEnumerable<Materials> matIds = request
+            .grow_material_list
             .Where(x => x.type == EntityTypes.Material)
             .Select(x => x.id)
             .Cast<Materials>();
 
-        Dictionary<Materials, DbPlayerMaterial> dbMats = await inventoryRepository.Materials
+        Dictionary<Materials, DbPlayerMaterial> dbMats = await inventoryRepository
+            .Materials
             .Where(
                 dbMat =>
                     matIds.Contains(dbMat.MaterialId)
@@ -606,9 +617,9 @@ public class DragonService(
                 );
             }
         }
-        DbPlayerDragonData playerDragonData = await unitRepository.Dragons.FirstAsync(
-            dragon => (ulong)dragon.DragonKeyId == request.base_dragon_key_id
-        );
+        DbPlayerDragonData playerDragonData = await unitRepository
+            .Dragons
+            .FirstAsync(dragon => (ulong)dragon.DragonKeyId == request.base_dragon_key_id);
 
         Dictionary<int, int> usedMaterials = new();
         await DragonLevelUp(request.grow_material_list, playerDragonData, usedMaterials);
@@ -617,7 +628,8 @@ public class DragonService(
             dbMats[(Materials)mat.Key].Quantity -= mat.Value;
         }
         await unitRepository.RemoveDragons(
-            request.grow_material_list
+            request
+                .grow_material_list
                 .Where(x => x.type == EntityTypes.Dragon)
                 .Select(x => (long)x.id)
         );
@@ -627,7 +639,8 @@ public class DragonService(
         return new DragonBuildupData(
             updateDataList,
             new DeleteDataList(
-                request.grow_material_list
+                request
+                    .grow_material_list
                     .Where(x => x.type == EntityTypes.Dragon)
                     .Select(x => new AtgenDeleteDragonList() { dragon_key_id = (ulong)x.id }),
                 new List<AtgenDeleteTalismanList>(),
@@ -706,7 +719,8 @@ public class DragonService(
                         ],
                     DragonConstants.XpLimits[maxLevel - 1]
                 );
-                DbPlayerDragonData dragonSacrifice = await unitRepository.Dragons
+                DbPlayerDragonData dragonSacrifice = await unitRepository
+                    .Dragons
                     .Where(x => x.DragonKeyId == materialList.id)
                     .FirstAsync();
                 gainedHpAugs += dragonSacrifice.HpPlusCount;
@@ -769,9 +783,9 @@ public class DragonService(
         DragonResetPlusCountRequest request
     )
     {
-        DbPlayerDragonData playerDragonData = await unitRepository.Dragons.FirstAsync(
-            dragon => (ulong)dragon.DragonKeyId == request.dragon_key_id
-        );
+        DbPlayerDragonData playerDragonData = await unitRepository
+            .Dragons
+            .FirstAsync(dragon => (ulong)dragon.DragonKeyId == request.dragon_key_id);
 
         Materials material;
         int plusCount;
@@ -809,7 +823,8 @@ public class DragonService(
     public async Task<DragonLimitBreakData> DoDragonLimitBreak(DragonLimitBreakRequest request)
     {
         DbPlayerDragonData playerDragonData =
-            await unitRepository.Dragons
+            await unitRepository
+                .Dragons
                 .Where(x => x.DragonKeyId == (long)request.base_dragon_key_id)
                 .FirstAsync()
             ?? throw new DragaliaException(
@@ -830,16 +845,21 @@ public class DragonService(
 
         logger.LogDebug("Post-LimitBreak Dragon: {@dragon}", playerDragonData);
 
-        IEnumerable<LimitBreakGrowList> deleteDragons = request.limit_break_grow_list.Where(
-            x => (DragonLimitBreakMatTypes)x.limit_break_item_type == DragonLimitBreakMatTypes.Dupe
-        );
+        IEnumerable<LimitBreakGrowList> deleteDragons = request
+            .limit_break_grow_list
+            .Where(
+                x =>
+                    (DragonLimitBreakMatTypes)x.limit_break_item_type
+                    == DragonLimitBreakMatTypes.Dupe
+            );
 
         if (deleteDragons.Any())
         {
             await unitRepository.RemoveDragons(deleteDragons.Select(x => (long)x.target_id));
         }
 
-        int stonesToSpend = request.limit_break_grow_list
+        int stonesToSpend = request
+            .limit_break_grow_list
             .Where(
                 x =>
                     (DragonLimitBreakMatTypes)x.limit_break_item_type
@@ -867,7 +887,8 @@ public class DragonService(
         }
 
         int spheresConsumed =
-            request.limit_break_grow_list
+            request
+                .limit_break_grow_list
                 .Where(
                     x =>
                         (DragonLimitBreakMatTypes)x.limit_break_item_type
@@ -876,7 +897,8 @@ public class DragonService(
                 .Count() * 50;
 
         int lb5SpheresConsumed =
-            request.limit_break_grow_list
+            request
+                .limit_break_grow_list
                 .Where(
                     x =>
                         (DragonLimitBreakMatTypes)x.limit_break_item_type
@@ -919,9 +941,9 @@ public class DragonService(
     public async Task<DragonSetLockData> DoDragonSetLock(DragonSetLockRequest request)
     {
         (
-            await unitRepository.Dragons.SingleOrDefaultAsync(
-                dragon => (ulong)dragon.DragonKeyId == request.dragon_key_id
-            )
+            await unitRepository
+                .Dragons
+                .SingleOrDefaultAsync(dragon => (ulong)dragon.DragonKeyId == request.dragon_key_id)
             ?? throw new DragaliaException(
                 ResultCode.EntityNotFoundError,
                 $"No dragon with KeyId: {request.dragon_key_id}"
@@ -936,7 +958,8 @@ public class DragonService(
 
     public async Task<DragonSellData> DoDragonSell(DragonSellRequest request)
     {
-        List<DbPlayerDragonData> selectedPlayerDragons = await unitRepository.Dragons
+        List<DbPlayerDragonData> selectedPlayerDragons = await unitRepository
+            .Dragons
             .Where(x => request.dragon_key_id_list.Select(x => (long)x).Contains(x.DragonKeyId))
             .ToListAsync();
         if (selectedPlayerDragons.Count < request.dragon_key_id_list.Count())
@@ -993,9 +1016,9 @@ public class DragonService(
         await userDataRepository.SaveChangesAsync();
         return new DragonSellData(
             new DeleteDataList(
-                request.dragon_key_id_list.Select(
-                    x => new AtgenDeleteDragonList() { dragon_key_id = x }
-                ),
+                request
+                    .dragon_key_id_list
+                    .Select(x => new AtgenDeleteDragonList() { dragon_key_id = x }),
                 new List<AtgenDeleteTalismanList>(),
                 new List<AtgenDeleteWeaponList>(),
                 new List<AtgenDeleteAmuletList>()

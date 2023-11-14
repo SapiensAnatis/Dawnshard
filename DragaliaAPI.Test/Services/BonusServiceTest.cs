@@ -43,17 +43,20 @@ public class BonusServiceTest
         // Not deserializing to LoadIndexData directly as fort_bonus_list is [JsonIgnore]'d
         JsonDocument savefile = JsonDocument.Parse(json);
 
-        IEnumerable<BuildList> inputBuildList = savefile.RootElement
+        IEnumerable<BuildList> inputBuildList = savefile
+            .RootElement
             .GetProperty("data")
             .GetProperty("build_list")
             .Deserialize<IEnumerable<BuildList>>(ApiJsonOptions.Instance)!;
 
-        IEnumerable<WeaponBodyList> inputWeaponList = savefile.RootElement
+        IEnumerable<WeaponBodyList> inputWeaponList = savefile
+            .RootElement
             .GetProperty("data")
             .GetProperty("weapon_body_list")
             .Deserialize<IEnumerable<WeaponBodyList>>(ApiJsonOptions.Instance)!;
 
-        FortBonusList expectedBonusList = savefile.RootElement
+        FortBonusList expectedBonusList = savefile
+            .RootElement
             .GetProperty("data")
             .GetProperty("fort_bonus_list")
             .Deserialize<FortBonusList>(ApiJsonOptions.Instance)!;

@@ -21,14 +21,20 @@ public class QuestReadStoryTest : TestFixture
         ).data;
 
         response.update_data_list.user_data.Should().NotBeNull();
-        response.update_data_list.chara_list
+        response
+            .update_data_list
+            .chara_list
             .Should()
             .ContainSingle()
-            .And.Subject.Any(x => x.chara_id == Charas.Ranzal)
+            .And
+            .Subject
+            .Any(x => x.chara_id == Charas.Ranzal)
             .Should()
             .BeTrue();
 
-        response.update_data_list.quest_story_list
+        response
+            .update_data_list
+            .quest_story_list
             .Should()
             .ContainEquivalentOf(new QuestStoryList() { quest_story_id = 1000106, state = 1 });
     }
@@ -43,12 +49,15 @@ public class QuestReadStoryTest : TestFixture
             )
         ).data;
 
-        this.ApiContext.PlayerStoryState
+        this.ApiContext
+            .PlayerStoryState
             .First(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 1001410)
-            .State.Should()
+            .State
+            .Should()
             .Be(StoryState.Read);
 
-        List<DbPlayerStoryState> storyStates = await this.ApiContext.PlayerStoryState
+        List<DbPlayerStoryState> storyStates = await this.ApiContext
+            .PlayerStoryState
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ToListAsync();
 

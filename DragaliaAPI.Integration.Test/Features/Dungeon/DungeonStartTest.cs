@@ -17,12 +17,12 @@ public class DungeonStartTest : TestFixture
     {
         ImportSave();
 
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.StaminaSingle, e => 100)
-        );
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.StaminaMulti, e => 100)
-        );
+        this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaSingle, e => 100));
+        this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdate(p => p.SetProperty(e => e.StaminaMulti, e => 100));
     }
 
     [Fact]
@@ -42,10 +42,16 @@ public class DungeonStartTest : TestFixture
         Snapshot.Match(response.ingame_data.party_info.party_unit_list, SnapshotOptions);
 
         response.ingame_data.party_info.party_unit_list.Should().HaveCount(4);
-        response.ingame_data.party_info.party_unit_list
+        response
+            .ingame_data
+            .party_info
+            .party_unit_list
             .Should()
             .BeInAscendingOrder(x => x.position);
-        response.ingame_data.party_info.party_unit_list
+        response
+            .ingame_data
+            .party_info
+            .party_unit_list
             .Should()
             .OnlyHaveUniqueItems(x => x.position);
     }
@@ -68,10 +74,16 @@ public class DungeonStartTest : TestFixture
         Snapshot.Match(response.ingame_data.party_info.party_unit_list, SnapshotOptions);
 
         response.ingame_data.party_info.party_unit_list.Should().HaveCount(8);
-        response.ingame_data.party_info.party_unit_list
+        response
+            .ingame_data
+            .party_info
+            .party_unit_list
             .Should()
             .BeInAscendingOrder(x => x.position);
-        response.ingame_data.party_info.party_unit_list
+        response
+            .ingame_data
+            .party_info
+            .party_unit_list
             .Should()
             .OnlyHaveUniqueItems(x => x.position);
     }
@@ -90,9 +102,13 @@ public class DungeonStartTest : TestFixture
             )
         ).data;
 
-        response.ingame_data.party_info.party_unit_list
+        response
+            .ingame_data
+            .party_info
+            .party_unit_list
             .First(x => x.chara_data!.chara_id == Charas.GalaMascula)
-            .game_weapon_passive_ability_list.Should()
+            .game_weapon_passive_ability_list
+            .Should()
             .Contain(x => x.weapon_passive_ability_id == 1020211);
     }
 
@@ -153,10 +169,14 @@ public class DungeonStartTest : TestFixture
         Snapshot.Match(response.ingame_data.party_info.party_unit_list.Take(2), SnapshotOptions);
 
         response.ingame_data.party_info.party_unit_list.Should().HaveCount(4);
-        response.ingame_data.party_info.party_unit_list
+        response
+            .ingame_data
+            .party_info
+            .party_unit_list
             .Should()
             .Contain(x => x.chara_data!.chara_id == Charas.GalaLeonidas)
-            .And.Contain(x => x.chara_data!.chara_id == Charas.GalaGatov);
+            .And
+            .Contain(x => x.chara_data!.chara_id == Charas.GalaGatov);
     }
 
     [Theory]
@@ -164,18 +184,22 @@ public class DungeonStartTest : TestFixture
     [InlineData("start_assign_unit")]
     public async Task Start_InsufficientStamina_ReturnsError(string endpoint)
     {
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.StaminaSingle, e => 0)
-        );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.StaminaMulti, e => 0)
-        );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.LastStaminaSingleUpdateTime, e => DateTimeOffset.UtcNow)
-        );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow)
-        );
+        await this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdateAsync(p => p.SetProperty(e => e.StaminaSingle, e => 0));
+        await this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdateAsync(p => p.SetProperty(e => e.StaminaMulti, e => 0));
+        await this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdateAsync(
+                p => p.SetProperty(e => e.LastStaminaSingleUpdateTime, e => DateTimeOffset.UtcNow)
+            );
+        await this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdateAsync(
+                p => p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow)
+            );
 
         (
             await Client.PostMsgpack<DungeonStartStartData>(
@@ -183,7 +207,9 @@ public class DungeonStartTest : TestFixture
                 new DungeonStartStartRequest() { quest_id = 100010104 },
                 ensureSuccessHeader: false
             )
-        ).data_headers.result_code
+        )
+            .data_headers
+            .result_code
             .Should()
             .Be(ResultCode.QuestStaminaSingleShort);
     }
@@ -191,18 +217,22 @@ public class DungeonStartTest : TestFixture
     [Fact]
     public async Task Start_ZeroStamina_FirstClearOfMainStory_Allows()
     {
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.StaminaSingle, e => 0)
-        );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.StaminaMulti, e => 0)
-        );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.LastStaminaSingleUpdateTime, e => DateTimeOffset.UtcNow)
-        );
-        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
-            p => p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow)
-        );
+        await this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdateAsync(p => p.SetProperty(e => e.StaminaSingle, e => 0));
+        await this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdateAsync(p => p.SetProperty(e => e.StaminaMulti, e => 0));
+        await this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdateAsync(
+                p => p.SetProperty(e => e.LastStaminaSingleUpdateTime, e => DateTimeOffset.UtcNow)
+            );
+        await this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdateAsync(
+                p => p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow)
+            );
 
         await this.ApiContext.PlayerQuests.Where(x => x.QuestId == 100260101).ExecuteDeleteAsync();
 

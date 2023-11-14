@@ -32,7 +32,8 @@ public class UpdateDataService(
     {
         await missionProgressionService.ProcessMissionEvents();
 
-        List<IDbHasAccountId> entities = apiContext.ChangeTracker
+        List<IDbHasAccountId> entities = apiContext
+            .ChangeTracker
             .Entries<IDbHasAccountId>()
             .Where(
                 x =>

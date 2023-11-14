@@ -21,11 +21,13 @@ public class WallRecordTest : TestFixture
     [Fact]
     public async Task Record_ReceivesRewards()
     {
-        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData
+        DbPlayerUserData oldUserData = this.ApiContext
+            .PlayerUserData
             .AsNoTracking()
             .First(x => x.DeviceAccountId == DeviceAccountId);
 
-        DbPlayerMaterial oldPlayerGoldCrystals = this.ApiContext.PlayerMaterials
+        DbPlayerMaterial oldPlayerGoldCrystals = this.ApiContext
+            .PlayerMaterials
             .AsNoTracking()
             .First(
                 x => x.DeviceAccountId == DeviceAccountId && x.MaterialId == Materials.GoldCrystal
@@ -77,13 +79,17 @@ public class WallRecordTest : TestFixture
 
         response.update_data_list.user_data.coin.Should().Be(oldUserData.Coin + expectedCoin);
 
-        response.update_data_list.user_data.mana_point
+        response
+            .update_data_list
+            .user_data
+            .mana_point
             .Should()
             .Be(oldUserData.ManaPoint + expectedMana);
 
         response.update_data_list.material_list.Should().ContainEquivalentOf(expectedGoldCrystals);
 
-        response.play_wall_detail
+        response
+            .play_wall_detail
             .Should()
             .BeEquivalentTo(
                 new AtgenPlayWallDetail()
@@ -94,7 +100,8 @@ public class WallRecordTest : TestFixture
                 }
             );
 
-        response.wall_clear_reward_list
+        response
+            .wall_clear_reward_list
             .Should()
             .ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList()
@@ -105,7 +112,8 @@ public class WallRecordTest : TestFixture
                 }
             );
 
-        response.wall_drop_reward
+        response
+            .wall_drop_reward
             .Should()
             .BeEquivalentTo(
                 new AtgenWallDropReward()
@@ -124,7 +132,8 @@ public class WallRecordTest : TestFixture
                 }
             );
 
-        response.wall_unit_info
+        response
+            .wall_unit_info
             .Should()
             .BeEquivalentTo(
                 new AtgenWallUnitInfo()
@@ -173,7 +182,8 @@ public class WallRecordTest : TestFixture
             )
         ).data;
 
-        response.wall_clear_reward_list
+        response
+            .wall_clear_reward_list
             .Should()
             .NotContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList()
@@ -185,7 +195,8 @@ public class WallRecordTest : TestFixture
             );
 
         // Also check if before_wall_level and after_wall_level are correct
-        response.play_wall_detail
+        response
+            .play_wall_detail
             .Should()
             .BeEquivalentTo(
                 new AtgenPlayWallDetail()

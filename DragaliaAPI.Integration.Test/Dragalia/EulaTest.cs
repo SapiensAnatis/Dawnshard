@@ -21,7 +21,8 @@ public class EulaTest : TestFixture
             )
         ).data;
 
-        response.version_hash_list
+        response
+            .version_hash_list
             .Should()
             .BeEquivalentTo(
                 new List<AtgenVersionHash>()

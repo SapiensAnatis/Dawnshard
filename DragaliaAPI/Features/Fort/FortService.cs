@@ -102,7 +102,8 @@ public class FortService(
         coinTotal = normalTotal = ripeTotal = succulentTotal = staminaTotal = 0;
 
         foreach (
-            DbFortBuild build in await fortRepository.Builds
+            DbFortBuild build in await fortRepository
+                .Builds
                 .Where(x => idsToCollect.Contains(x.BuildId))
                 .ToListAsync()
         )
@@ -541,7 +542,8 @@ public class FortService(
     public async Task ClearPlantNewStatuses(IEnumerable<long> buildIds)
     {
         foreach (
-            DbFortBuild build in await fortRepository.Builds
+            DbFortBuild build in await fortRepository
+                .Builds
                 .Where(x => buildIds.Contains(x.BuildId))
                 .ToListAsync()
         )
@@ -556,7 +558,8 @@ public class FortService(
         int max = 0;
 
         foreach (
-            DbFortBuild build in await fortRepository.Builds
+            DbFortBuild build in await fortRepository
+                .Builds
                 .Where(x => x.PlantId == FortPlants.RupieMine)
                 .ToListAsync()
         )
@@ -571,9 +574,9 @@ public class FortService(
 
     public async Task<AtgenProductionRp> GetDragonfruitProduction()
     {
-        DbFortBuild? build = await fortRepository.Builds.SingleOrDefaultAsync(
-            x => x.PlantId == FortPlants.Dragontree
-        );
+        DbFortBuild? build = await fortRepository
+            .Builds
+            .SingleOrDefaultAsync(x => x.PlantId == FortPlants.Dragontree);
         if (build == null)
         {
             return new AtgenProductionRp(0, 0);
@@ -589,9 +592,9 @@ public class FortService(
 
     public async Task<AtgenProductionRp> GetStaminaProduction()
     {
-        DbFortBuild? build = await fortRepository.Builds.SingleOrDefaultAsync(
-            x => x.PlantId == FortPlants.TheHalidom
-        );
+        DbFortBuild? build = await fortRepository
+            .Builds
+            .SingleOrDefaultAsync(x => x.PlantId == FortPlants.TheHalidom);
         if (build == null)
         {
             return new AtgenProductionRp(0, 0);
@@ -607,7 +610,8 @@ public class FortService(
 
     public async Task<(int HalidomLevel, int SmithyLevel)> GetCoreLevels()
     {
-        IEnumerable<(FortPlants PlantId, int Level)> queryResult = await fortRepository.Builds
+        IEnumerable<(FortPlants PlantId, int Level)> queryResult = await fortRepository
+            .Builds
             .Where(x => x.PlantId == FortPlants.TheHalidom || x.PlantId == FortPlants.Smithy)
             .Select(x => new ValueTuple<FortPlants, int>(x.PlantId, x.Level))
             .ToListAsync();

@@ -30,34 +30,34 @@ public class UnitRepository : IUnitRepository
     }
 
     public IQueryable<DbPlayerCharaData> Charas =>
-        this.apiContext.PlayerCharaData.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerCharaData
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerDragonData> Dragons =>
-        this.apiContext.PlayerDragonData.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerDragonData
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbAbilityCrest> AbilityCrests =>
-        this.apiContext.PlayerAbilityCrests.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerAbilityCrests
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbWeaponBody> WeaponBodies =>
-        this.apiContext.PlayerWeapons.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerWeapons
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerDragonReliability> DragonReliabilities =>
-        this.apiContext.PlayerDragonReliability.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerDragonReliability
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbTalisman> Talismans =>
-        this.apiContext.PlayerTalismans.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerTalismans
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public async Task<bool> CheckHasCharas(IEnumerable<Charas> idList)
     {
@@ -68,10 +68,9 @@ public class UnitRepository : IUnitRepository
 
     public async Task<DbPlayerCharaData?> FindCharaAsync(Charas chara)
     {
-        return await this.apiContext.PlayerCharaData.FindAsync(
-            this.playerIdentityService.AccountId,
-            chara
-        );
+        return await this.apiContext
+            .PlayerCharaData
+            .FindAsync(this.playerIdentityService.AccountId, chara);
     }
 
     public async Task<DbPlayerDragonData?> FindDragonAsync(long dragonKeyId)
@@ -81,10 +80,9 @@ public class UnitRepository : IUnitRepository
 
     public async Task<DbPlayerDragonReliability?> FindDragonReliabilityAsync(Dragons dragon)
     {
-        return await apiContext.PlayerDragonReliability.FindAsync(
-            playerIdentityService.AccountId,
-            dragon
-        );
+        return await apiContext
+            .PlayerDragonReliability
+            .FindAsync(playerIdentityService.AccountId, dragon);
     }
 
     public async Task<DbTalisman?> FindTalismanAsync(long talismanKeyId)
@@ -94,10 +92,9 @@ public class UnitRepository : IUnitRepository
 
     public async Task<DbWeaponBody?> FindWeaponBodyAsync(WeaponBodies weaponBody)
     {
-        return await apiContext.PlayerWeapons.FindAsync(
-            playerIdentityService.AccountId,
-            weaponBody
-        );
+        return await apiContext
+            .PlayerWeapons
+            .FindAsync(playerIdentityService.AccountId, weaponBody);
     }
 
     public async Task<bool> CheckHasDragons(IEnumerable<Dragons> idList)
@@ -142,10 +139,9 @@ public class UnitRepository : IUnitRepository
             for (int i = 0; i < newCharas.Count(); i++)
             {
                 if (
-                    MasterAsset.CharaStories.TryGetValue(
-                        (int)newCharas.ElementAt(i),
-                        out StoryData? story
-                    )
+                    MasterAsset
+                        .CharaStories
+                        .TryGetValue((int)newCharas.ElementAt(i), out StoryData? story)
                 )
                 {
                     newCharaStories.Add(
@@ -192,10 +188,9 @@ public class UnitRepository : IUnitRepository
             // Not being in the dragon table doesn't mean a reliability doesn't exist
             // as the dragon could've been sold
             if (
-                await this.apiContext.PlayerDragonReliability.FindAsync(
-                    this.playerIdentityService.AccountId,
-                    id
-                )
+                await this.apiContext
+                    .PlayerDragonReliability
+                    .FindAsync(this.playerIdentityService.AccountId, id)
                 is null
             )
             {
@@ -237,16 +232,15 @@ public class UnitRepository : IUnitRepository
 
     public async Task<DbSetUnit?> GetCharaSetData(Charas charaId, int setNo)
     {
-        return await apiContext.PlayerSetUnits.FindAsync(
-            playerIdentityService.AccountId,
-            charaId,
-            setNo
-        );
+        return await apiContext
+            .PlayerSetUnits
+            .FindAsync(playerIdentityService.AccountId, charaId, setNo);
     }
 
     public DbSetUnit AddCharaSetData(Charas charaId, int setNo)
     {
-        return apiContext.PlayerSetUnits
+        return apiContext
+            .PlayerSetUnits
             .Add(
                 new DbSetUnit()
                 {
@@ -261,16 +255,21 @@ public class UnitRepository : IUnitRepository
 
     public IEnumerable<DbSetUnit> GetCharaSets(Charas charaId)
     {
-        return apiContext.PlayerSetUnits.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId && x.CharaId == charaId
-        );
+        return apiContext
+            .PlayerSetUnits
+            .Where(
+                x =>
+                    x.DeviceAccountId == this.playerIdentityService.AccountId
+                    && x.CharaId == charaId
+            );
     }
 
     public async Task<IDictionary<Charas, IEnumerable<DbSetUnit>>> GetCharaSets(
         IEnumerable<Charas> charaIds
     )
     {
-        return await apiContext.PlayerSetUnits
+        return await apiContext
+            .PlayerSetUnits
             .Where(
                 x =>
                     charaIds.Contains(x.CharaId)
@@ -289,7 +288,8 @@ public class UnitRepository : IUnitRepository
         int additionalAttack
     )
     {
-        return apiContext.PlayerTalismans
+        return apiContext
+            .PlayerTalismans
             .Add(
                 new DbTalisman
                 {

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Immutable;
-using DragaliaAPI.Shared.Json;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
+using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Shared.MasterAsset;
 
@@ -50,10 +50,9 @@ public class MasterAssetGroup<TGroupKey, TKey, TItem>
     /// <returns>A bool indicating whether the value was successfully retrieved.</returns>
     public bool TryGetValue(TGroupKey key, [NotNullWhen(true)] out IDictionary<TKey, TItem>? item)
     {
-        bool result = this.internalDictionary.Value.TryGetValue(
-            key,
-            out InternalKeyedCollection? entry
-        );
+        bool result = this.internalDictionary
+            .Value
+            .TryGetValue(key, out InternalKeyedCollection? entry);
 
         item = result ? entry!.AsImmutableDictionary() : null;
 

@@ -1,11 +1,11 @@
 ﻿using System.Net;
+using System.Net.Http.Json;
+using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.Shared.Requests;
 using DragaliaAPI.Photon.StateManager.Models;
 using DragaliaAPI.Photon.StateManager.Test.Helpers;
-using System.Net.Http.Json;
 using Xunit.Abstractions;
-using DragaliaAPI.Photon.Shared.Enums;
 
 namespace DragaliaAPI.Photon.StateManager.Test.Event;
 

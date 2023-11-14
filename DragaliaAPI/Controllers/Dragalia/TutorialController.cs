@@ -1,8 +1,8 @@
-﻿using DragaliaAPI.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
