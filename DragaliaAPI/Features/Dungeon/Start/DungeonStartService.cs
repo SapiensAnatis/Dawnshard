@@ -3,17 +3,17 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Event;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.MasterAsset.Models;
-using DragaliaAPI.Shared.MasterAsset;
-using Microsoft.EntityFrameworkCore;
-using DragaliaAPI.Shared.PlayerDetails;
-using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Services;
-using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services;
+using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dungeon.Start;
 
@@ -200,9 +200,9 @@ public class DungeonStartService(
 
     public async Task<IngameQuestData> InitiateQuest(int questId)
     {
-        DbQuest? quest = await questRepository.Quests.SingleOrDefaultAsync(
-            x => x.QuestId == questId
-        );
+        DbQuest? quest = await questRepository
+            .Quests
+            .SingleOrDefaultAsync(x => x.QuestId == questId);
 
         if (quest?.State < 3)
         {
@@ -224,14 +224,13 @@ public class DungeonStartService(
     {
         QuestGetSupportUserListData helperList = await helperService.GetHelpers();
 
-        UserSupportList? helperInfo = helperList.support_user_list.FirstOrDefault(
-            helper => helper.viewer_id == supportViewerId
-        );
+        UserSupportList? helperInfo = helperList
+            .support_user_list
+            .FirstOrDefault(helper => helper.viewer_id == supportViewerId);
 
-        AtgenSupportUserDetailList? helperDetails =
-            helperList.support_user_detail_list.FirstOrDefault(
-                helper => helper.viewer_id == supportViewerId
-            );
+        AtgenSupportUserDetailList? helperDetails = helperList
+            .support_user_detail_list
+            .FirstOrDefault(helper => helper.viewer_id == supportViewerId);
 
         if (helperInfo is not null && helperDetails is not null)
             return helperService.BuildHelperData(helperInfo, helperDetails);
@@ -247,15 +246,15 @@ public class DungeonStartService(
         // Post-processing: filter out null crests and load weapon passive data
         foreach (DbDetailedPartyUnit detailedUnit in detailedPartyUnits)
         {
-            detailedUnit.CrestSlotType1CrestList = detailedUnit.CrestSlotType1CrestList.Where(
-                x => x is not null
-            );
-            detailedUnit.CrestSlotType2CrestList = detailedUnit.CrestSlotType2CrestList.Where(
-                x => x is not null
-            );
-            detailedUnit.CrestSlotType3CrestList = detailedUnit.CrestSlotType3CrestList.Where(
-                x => x is not null
-            );
+            detailedUnit.CrestSlotType1CrestList = detailedUnit
+                .CrestSlotType1CrestList
+                .Where(x => x is not null);
+            detailedUnit.CrestSlotType2CrestList = detailedUnit
+                .CrestSlotType2CrestList
+                .Where(x => x is not null);
+            detailedUnit.CrestSlotType3CrestList = detailedUnit
+                .CrestSlotType3CrestList
+                .Where(x => x is not null);
 
             if (detailedUnit.WeaponBodyData is not null)
             {

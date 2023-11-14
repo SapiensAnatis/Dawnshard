@@ -19,14 +19,14 @@ public class ShopRepository : IShopRepository
     }
 
     public IQueryable<DbPlayerShopInfo> ShopInfos =>
-        this.apiContext.PlayerShopInfos.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerShopInfos
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerShopPurchase> Purchases =>
-        this.apiContext.PlayerPurchases.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerPurchases
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public async Task<DbPlayerShopInfo> GetShopInfoAsync()
     {
@@ -36,9 +36,11 @@ public class ShopRepository : IShopRepository
 
     public void InitializeShopInfo()
     {
-        this.apiContext.PlayerShopInfos.Add(
-            new DbPlayerShopInfo() { DeviceAccountId = this.playerIdentityService.AccountId, }
-        );
+        this.apiContext
+            .PlayerShopInfos
+            .Add(
+                new DbPlayerShopInfo() { DeviceAccountId = this.playerIdentityService.AccountId, }
+            );
     }
 
     public async Task<int> GetDailySummonCountAsync()
@@ -71,18 +73,20 @@ public class ShopRepository : IShopRepository
         );
         if (existing == null)
         {
-            this.apiContext.PlayerPurchases.Add(
-                new DbPlayerShopPurchase()
-                {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
-                    ShopType = type.ToPurchaseShopType(),
-                    GoodsId = goodsId,
-                    BuyCount = quantity,
-                    LastBuyTime = buyTime,
-                    EffectStartTime = effectStart,
-                    EffectEndTime = effectEnd
-                }
-            );
+            this.apiContext
+                .PlayerPurchases
+                .Add(
+                    new DbPlayerShopPurchase()
+                    {
+                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        ShopType = type.ToPurchaseShopType(),
+                        GoodsId = goodsId,
+                        BuyCount = quantity,
+                        LastBuyTime = buyTime,
+                        EffectStartTime = effectStart,
+                        EffectEndTime = effectEnd
+                    }
+                );
 
             return true;
         }

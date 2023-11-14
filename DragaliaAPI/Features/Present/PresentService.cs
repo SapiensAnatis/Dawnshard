@@ -25,12 +25,12 @@ public class PresentService : IPresentService
     {
         return new()
         {
-            present_count = await this.presentRepository.Presents.CountAsync(
-                x => x.ReceiveLimitTime == null
-            ),
-            present_limit_count = await this.presentRepository.Presents.CountAsync(
-                x => x.ReceiveLimitTime != null
-            ),
+            present_count = await this.presentRepository
+                .Presents
+                .CountAsync(x => x.ReceiveLimitTime == null),
+            present_limit_count = await this.presentRepository
+                .Presents
+                .CountAsync(x => x.ReceiveLimitTime != null),
         };
     }
 

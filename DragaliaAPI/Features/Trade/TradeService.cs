@@ -24,7 +24,9 @@ public class TradeService(
     {
         DateTimeOffset current = DateTimeOffset.UtcNow;
 
-        return MasterAsset.TreasureTrade.Enumerable
+        return MasterAsset
+            .TreasureTrade
+            .Enumerable
             .Where(x => x.CompleteDate == DateTimeOffset.UnixEpoch || x.CompleteDate > current)
             .Select(
                 trade =>
@@ -42,15 +44,17 @@ public class TradeService(
                         destination_entity_id = trade.DestinationEntityId,
                         destination_entity_quantity = trade.DestinationEntityQuantity,
                         destination_limit_break_count = trade.DestinationLimitBreakCount,
-                        need_trade_entity_list = trade.NeedEntities.Select(
-                            x =>
-                                new AtgenNeedTradeEntityList(
-                                    x.Type,
-                                    x.Id,
-                                    x.Quantity,
-                                    x.LimitBreakCount
-                                )
-                        )
+                        need_trade_entity_list = trade
+                            .NeedEntities
+                            .Select(
+                                x =>
+                                    new AtgenNeedTradeEntityList(
+                                        x.Type,
+                                        x.Id,
+                                        x.Quantity,
+                                        x.LimitBreakCount
+                                    )
+                            )
                     }
             );
     }
@@ -59,7 +63,9 @@ public class TradeService(
     {
         DateTimeOffset current = DateTimeOffset.UtcNow;
 
-        return MasterAsset.AbilityCrestTrade.Enumerable
+        return MasterAsset
+            .AbilityCrestTrade
+            .Enumerable
             .Where(x => x.CompleteDate == DateTimeOffset.UnixEpoch || x.CompleteDate > current)
             .Select(
                 trade =>
@@ -78,7 +84,9 @@ public class TradeService(
 
     public IEnumerable<EventTradeList> GetEventTradeList(int tradeGroupId)
     {
-        return MasterAsset.EventTreasureTrade.Enumerable
+        return MasterAsset
+            .EventTreasureTrade
+            .Enumerable
             .Where(x => x.TradeGroupId == tradeGroupId)
             .Select(
                 x =>
@@ -109,7 +117,8 @@ public class TradeService(
 
     public async Task<IEnumerable<AtgenUserEventTradeList>> GetUserEventTradeList()
     {
-        return await tradeRepository.Trades
+        return await tradeRepository
+            .Trades
             .Where(x => x.Type == TradeType.Event)
             .Select(x => new AtgenUserEventTradeList(x.Id, x.Count))
             .ToListAsync();
@@ -117,7 +126,8 @@ public class TradeService(
 
     public async Task<IEnumerable<UserAbilityCrestTradeList>> GetUserAbilityCrestTradeList()
     {
-        return await tradeRepository.Trades
+        return await tradeRepository
+            .Trades
             .Where(x => x.Type == TradeType.AbilityCrest)
             .Select(x => new UserAbilityCrestTradeList(x.Id, x.Count))
             .ToListAsync();

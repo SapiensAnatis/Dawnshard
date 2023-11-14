@@ -32,10 +32,9 @@ public class QuestCompletionService(
         int questId = session.QuestData.Id;
 
         if (
-            !MasterAsset.QuestScoreMissionRewardInfo.TryGetValue(
-                questId,
-                out QuestScoreMissionRewardInfo? info
-            )
+            !MasterAsset
+                .QuestScoreMissionRewardInfo
+                .TryGetValue(questId, out QuestScoreMissionRewardInfo? info)
         )
         {
             return (missions, 0, 0);
@@ -75,9 +74,9 @@ public class QuestCompletionService(
         double obtainedAmount = baseQuantity * (multiplier / 100.0f);
         int rewardQuantity = (int)Math.Floor(obtainedAmount);
 
-        EventKindType eventType = MasterAsset.EventData[
-            MasterAsset.QuestData[questId].Gid
-        ].EventKindType;
+        EventKindType eventType = MasterAsset
+            .EventData[MasterAsset.QuestData[questId].Gid]
+            .EventKindType;
 
         await rewardService.GrantReward(
             new Entity(eventType.ToItemType(), (int)info.RewardEntityId, rewardQuantity)
@@ -165,14 +164,17 @@ public class QuestCompletionService(
             QuestCompleteType.None => false,
             QuestCompleteType.LimitFall => record.down_count <= completionValue,
             QuestCompleteType.DefeatAllEnemies
-                => record.treasure_record.All(
-                    x =>
-                        x.enemy == null
-                        || !session.EnemyList[x.area_idx]
-                            .Select(y => y.enemy_idx)
-                            .Except(x.enemy)
-                            .Any()
-                ), // (Maybe)TODO
+                => record
+                    .treasure_record
+                    .All(
+                        x =>
+                            x.enemy == null
+                            || !session
+                                .EnemyList[x.area_idx]
+                                .Select(y => y.enemy_idx)
+                                .Except(x.enemy)
+                                .Any()
+                    ), // (Maybe)TODO
             QuestCompleteType.MaxTeamSize => party.Count() <= completionValue,
             QuestCompleteType.AdventurerElementRequired
                 => party.All(
@@ -213,26 +215,32 @@ public class QuestCompletionService(
             QuestCompleteType.MaxDamageTimes => record.damage_count <= completionValue,
             QuestCompleteType.MinShapeshift => record.dragon_transform_count >= completionValue,
             QuestCompleteType.DefeatImperialCommander
-                => record.treasure_record.Any(
-                    x =>
-                        x.enemy.Any(
-                            y => y == 500200001 /* Imperial Commander */
-                        )
-                ),
+                => record
+                    .treasure_record
+                    .Any(
+                        x =>
+                            x.enemy.Any(
+                                y => y == 500200001 /* Imperial Commander */
+                            )
+                    ),
             QuestCompleteType.DefeatMinBandits
-                => record.treasure_record.Sum(
-                    x =>
-                        x.enemy.Count(
-                            y => y == 500210001 /* Bandit */
-                        )
-                ) >= completionValue,
+                => record
+                    .treasure_record
+                    .Sum(
+                        x =>
+                            x.enemy.Count(
+                                y => y == 500210001 /* Bandit */
+                            )
+                    ) >= completionValue,
             QuestCompleteType.DefeatShadowKnight
-                => record.treasure_record.Any(
-                    x =>
-                        x.enemy.Any(
-                            y => y == 500170001 /* Shadow Knight */
-                        )
-                ),
+                => record
+                    .treasure_record
+                    .Any(
+                        x =>
+                            x.enemy.Any(
+                                y => y == 500170001 /* Shadow Knight */
+                            )
+                    ),
             QuestCompleteType.SaveMinHouses => record.visit_private_house >= completionValue,
             QuestCompleteType.MinGateHp => record.protection_damage >= completionValue,
             QuestCompleteType.MinTimeRemaining => record.remaining_time >= completionValue,
@@ -260,12 +268,14 @@ public class QuestCompletionService(
             QuestCompleteType.MaxShapeshift => record.dragon_transform_count <= completionValue,
             QuestCompleteType.NoRevives => record.reborn_count == 0,
             QuestCompleteType.DefeatFormaChrom
-                => record.treasure_record.Any(
-                    x =>
-                        x.enemy.Any(
-                            y => y == 601500002 /* Forma Chrom */
-                        )
-                ),
+                => record
+                    .treasure_record
+                    .Any(
+                        x =>
+                            x.enemy.Any(
+                                y => y == 601500002 /* Forma Chrom */
+                            )
+                    ),
             _
                 => throw new DragaliaException(
                     ResultCode.CommonInvalidArgument,
@@ -282,7 +292,8 @@ public class QuestCompletionService(
     {
         IEnumerable<long> dragonKeyIds = party.Select(x => (long)x.equip_dragon_key_id).ToList();
 
-        IEnumerable<Dragons> dragons = await unitRepository.Dragons
+        IEnumerable<Dragons> dragons = await unitRepository
+            .Dragons
             .Where(x => dragonKeyIds.Contains(x.DragonKeyId))
             .Select(x => x.DragonId)
             .ToListAsync();
@@ -305,7 +316,8 @@ public class QuestCompletionService(
 
         QuestRewardData rewardData = MasterAsset.QuestRewardData[questId];
         foreach (
-            Entity rewardEntity in rewardData.FirstClearEntities
+            Entity rewardEntity in rewardData
+                .FirstClearEntities
                 .Where(x => x.Type != EntityTypes.None)
                 .Select(x => new Entity(x.Type, x.Id, x.Quantity))
         )

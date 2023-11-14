@@ -67,7 +67,8 @@ public class ToolTest : TestFixture
 
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         response.Headers.Should().ContainKey("Is-Required-Refresh-Id-Token");
-        response.Headers
+        response
+            .Headers
             .GetValues("Is-Required-Refresh-Id-Token")
             .Should()
             .BeEquivalentTo(new List<string>() { "true" });

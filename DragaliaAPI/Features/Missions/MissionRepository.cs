@@ -22,9 +22,9 @@ public class MissionRepository : IMissionRepository
     }
 
     public IQueryable<DbPlayerMission> Missions =>
-        this.apiContext.PlayerMissions.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerMissions
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerMission> GetMissionsByType(MissionType type)
     {
@@ -33,11 +33,10 @@ public class MissionRepository : IMissionRepository
 
     public async Task<DbPlayerMission> GetMissionByIdAsync(MissionType type, int id)
     {
-        return await this.apiContext.PlayerMissions.FindAsync(
-                this.playerIdentityService.AccountId,
-                id,
-                type
-            ) ?? throw new DragaliaException(ResultCode.MissionIdNotFound, "Mission not found");
+        return await this.apiContext
+                .PlayerMissions
+                .FindAsync(this.playerIdentityService.AccountId, id, type)
+            ?? throw new DragaliaException(ResultCode.MissionIdNotFound, "Mission not found");
     }
 
     public async Task<ILookup<MissionType, DbPlayerMission>> GetAllMissionsPerTypeAsync()
@@ -54,15 +53,14 @@ public class MissionRepository : IMissionRepository
     )
     {
         if (
-            await this.apiContext.PlayerMissions.FindAsync(
-                this.playerIdentityService.AccountId,
-                id,
-                type
-            ) != null
+            await this.apiContext
+                .PlayerMissions
+                .FindAsync(this.playerIdentityService.AccountId, id, type) != null
         )
             throw new DragaliaException(ResultCode.CommonDbError, "Mission already exists");
 
-        return this.apiContext.PlayerMissions
+        return this.apiContext
+            .PlayerMissions
             .Add(
                 new DbPlayerMission
                 {

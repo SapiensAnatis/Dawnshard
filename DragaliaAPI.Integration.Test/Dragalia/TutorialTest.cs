@@ -33,10 +33,12 @@ public class TutorialTest : TestFixture
             )
         ).data;
 
-        this.ApiContext.PlayerUserData
+        this.ApiContext
+            .PlayerUserData
             .AsNoTracking()
             .First(x => x.DeviceAccountId == "logged_in_id")
-            .TutorialStatus.Should()
+            .TutorialStatus
+            .Should()
             .Be(step);
     }
 
@@ -77,7 +79,8 @@ public class TutorialTest : TestFixture
 
         TutorialFlagUtil
             .ConvertIntToFlagIntList(
-                this.ApiContext.PlayerUserData
+                this.ApiContext
+                    .PlayerUserData
                     .AsNoTracking()
                     .First(x => x.DeviceAccountId == "logged_in_id")
                     .TutorialFlag

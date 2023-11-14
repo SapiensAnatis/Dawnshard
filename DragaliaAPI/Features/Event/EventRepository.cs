@@ -14,19 +14,19 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
         apiContext.PlayerEventData.Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerEventReward> Rewards =>
-        apiContext.PlayerEventRewards.Where(
-            x => x.DeviceAccountId == playerIdentityService.AccountId
-        );
+        apiContext
+            .PlayerEventRewards
+            .Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerEventItem> Items =>
-        apiContext.PlayerEventItems.Where(
-            x => x.DeviceAccountId == playerIdentityService.AccountId
-        );
+        apiContext
+            .PlayerEventItems
+            .Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
 
     public IQueryable<DbPlayerEventPassive> Passives =>
-        apiContext.PlayerEventPassives.Where(
-            x => x.DeviceAccountId == playerIdentityService.AccountId
-        );
+        apiContext
+            .PlayerEventPassives
+            .Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
 
     public async Task<DbPlayerEventData?> GetEventDataAsync(int eventId)
     {
@@ -88,16 +88,15 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public async Task<DbPlayerEventPassive?> GetEventPassiveAsync(int eventId, int passiveId)
     {
-        return await apiContext.PlayerEventPassives.FindAsync(
-            playerIdentityService.AccountId,
-            eventId,
-            passiveId
-        );
+        return await apiContext
+            .PlayerEventPassives
+            .FindAsync(playerIdentityService.AccountId, eventId, passiveId);
     }
 
     public DbPlayerEventData CreateEventData(int eventId, bool customEventFlag = false)
     {
-        return apiContext.PlayerEventData
+        return apiContext
+            .PlayerEventData
             .Add(
                 new DbPlayerEventData
                 {
@@ -111,7 +110,8 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public DbPlayerEventReward CreateEventReward(int eventId, int rewardId)
     {
-        return apiContext.PlayerEventRewards
+        return apiContext
+            .PlayerEventRewards
             .Add(
                 new DbPlayerEventReward
                 {
@@ -135,7 +135,8 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
         foreach ((int itemId, int itemType) in itemIds)
         {
             items.Add(
-                apiContext.PlayerEventItems
+                apiContext
+                    .PlayerEventItems
                     .Add(
                         new DbPlayerEventItem
                         {
@@ -164,7 +165,8 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
         foreach (int passiveId in passiveIds)
         {
             passives.Add(
-                apiContext.PlayerEventPassives
+                apiContext
+                    .PlayerEventPassives
                     .Add(
                         new DbPlayerEventPassive
                         {

@@ -1,10 +1,10 @@
 ﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions;

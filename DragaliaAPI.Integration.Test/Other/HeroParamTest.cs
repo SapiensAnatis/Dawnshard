@@ -26,9 +26,9 @@ public class HeroParamTest : TestFixture
 
         httpResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        List<HeroParam>? heroParams = await httpResponse.Content.ReadFromJsonAsync<
-            List<HeroParam>
-        >();
+        List<HeroParam>? heroParams = await httpResponse
+            .Content
+            .ReadFromJsonAsync<List<HeroParam>>();
         Snapshot.Match(heroParams);
 
         // AI should not have shared skills

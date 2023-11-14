@@ -10,6 +10,6 @@ namespace DragaliaAPI.Photon.Shared.Requests
         /// <summary>
         /// The player sending the request.
         /// </summary>
-        public Player Player { get; set; }
+        public Player? Player { get; set; }
     }
 }

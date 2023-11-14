@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
-using MessagePack;
 using DragaliaAPI.Photon.Shared.Models;
+using MessagePack;
+using Newtonsoft.Json.Linq;
 
 namespace DragaliaAPI.Photon.Plugin.Models.Events
 {

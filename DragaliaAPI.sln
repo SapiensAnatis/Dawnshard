@@ -15,7 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.env = .env
 		.env.default = .env.default
 		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
 		.config\dotnet-tools.json = .config\dotnet-tools.json
+		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -61,7 +64,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".husky", ".husky", "{7D333F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.Photon.Plugin.Test", "DragaliaAPI.Photon.Plugin.Test\DragaliaAPI.Photon.Plugin.Test.csproj", "{64D07506-1978-4981-AF90-B73C4B6AFCE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragaliaAPI.MissionDesigner", "DragaliaAPI.MissionDesigner\DragaliaAPI.MissionDesigner.csproj", "{00908D51-DB79-4A9C-AFBF-501F9981E6F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragaliaAPI.MissionDesigner", "DragaliaAPI.MissionDesigner\DragaliaAPI.MissionDesigner.csproj", "{00908D51-DB79-4A9C-AFBF-501F9981E6F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -23,7 +23,9 @@ public class QuestOpenTreasureTest : TestFixture
             )
         ).data;
 
-        response.update_data_list.quest_treasure_list
+        response
+            .update_data_list
+            .quest_treasure_list
             .Should()
             .ContainEquivalentOf(new QuestTreasureList() { quest_treasure_id = 104101 });
     }
@@ -38,7 +40,8 @@ public class QuestOpenTreasureTest : TestFixture
             )
         ).data;
 
-        List<DbQuestTreasureList> questTreasureList = await this.ApiContext.QuestTreasureList
+        List<DbQuestTreasureList> questTreasureList = await this.ApiContext
+            .QuestTreasureList
             .Where(x => x.DeviceAccountId == DeviceAccountId)
             .ToListAsync();
 

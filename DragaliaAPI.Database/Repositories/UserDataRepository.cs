@@ -29,9 +29,9 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
     }
 
     public IQueryable<DbPlayerUserData> UserData =>
-        this.apiContext.PlayerUserData.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerUserData
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public async Task<DbPlayerUserData> GetUserDataAsync()
     {

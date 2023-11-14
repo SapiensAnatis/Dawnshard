@@ -23,7 +23,8 @@ public class EmblemRepository(
 
     public DbEmblem AddEmblem(Emblems emblem)
     {
-        return apiContext.Emblems
+        return apiContext
+            .Emblems
             .Add(
                 new DbEmblem
                 {

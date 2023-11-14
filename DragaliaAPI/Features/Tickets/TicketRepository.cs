@@ -10,9 +10,9 @@ public class TicketRepository(ApiContext apiContext, IPlayerIdentityService play
     : ITicketRepository
 {
     public IQueryable<DbSummonTicket> Tickets =>
-        apiContext.PlayerSummonTickets.Where(
-            x => x.DeviceAccountId == playerIdentityService.AccountId
-        );
+        apiContext
+            .PlayerSummonTickets
+            .Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
 
     public DbSummonTicket AddTicket(
         SummonTickets ticketId,
@@ -20,7 +20,8 @@ public class TicketRepository(ApiContext apiContext, IPlayerIdentityService play
         DateTimeOffset expirationTime = default
     )
     {
-        return apiContext.PlayerSummonTickets
+        return apiContext
+            .PlayerSummonTickets
             .Add(
                 new DbSummonTicket
                 {

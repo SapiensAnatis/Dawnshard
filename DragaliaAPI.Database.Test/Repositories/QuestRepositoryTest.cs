@@ -39,7 +39,8 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
             }
         );
 
-        this.questRepository.Quests
+        this.questRepository
+            .Quests
             .Should()
             .BeEquivalentTo(
                 new List<DbQuest>()
@@ -47,6 +48,7 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
                     new() { DeviceAccountId = DeviceAccountId, QuestId = 1 },
                 }
             )
-            .And.BeEquivalentTo(this.questRepository.Quests);
+            .And
+            .BeEquivalentTo(this.questRepository.Quests);
     }
 }

@@ -28,7 +28,9 @@ public class CombatEventController(
         resp.user_event_location_reward_list =
             await eventService.GetEventRewardList<UserEventLocationRewardList>(request.event_id);
 
-        resp.event_trade_list = MasterAsset.EventTradeGroup.Enumerable
+        resp.event_trade_list = MasterAsset
+            .EventTradeGroup
+            .Enumerable
             .Where(x => x.EventId == request.event_id)
             .SelectMany(x => tradeService.GetEventTradeList(x.Id));
 

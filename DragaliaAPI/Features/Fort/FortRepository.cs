@@ -1,8 +1,8 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,43 +28,47 @@ public class FortRepository : IFortRepository
     }
 
     public IQueryable<DbFortBuild> Builds =>
-        this.apiContext.PlayerFortBuilds.Where(
-            x => x.DeviceAccountId == this.playerIdentityService.AccountId
-        );
+        this.apiContext
+            .PlayerFortBuilds
+            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
 
     public async Task InitializeFort()
     {
         this.logger.LogInformation("Initializing fort.");
 
         if (
-            !await this.apiContext.PlayerFortDetails.AnyAsync(
-                x => x.DeviceAccountId == this.playerIdentityService.AccountId
-            )
+            !await this.apiContext
+                .PlayerFortDetails
+                .AnyAsync(x => x.DeviceAccountId == this.playerIdentityService.AccountId)
         )
         {
             this.logger.LogDebug("Initializing PlayerFortDetail.");
-            await this.apiContext.PlayerFortDetails.AddAsync(
-                new DbFortDetail()
-                {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
-                    CarpenterNum = DefaultCarpenters
-                }
-            );
+            await this.apiContext
+                .PlayerFortDetails
+                .AddAsync(
+                    new DbFortDetail()
+                    {
+                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        CarpenterNum = DefaultCarpenters
+                    }
+                );
         }
 
         if (!await this.Builds.AnyAsync(x => x.PlantId == FortPlants.TheHalidom))
         {
             this.logger.LogDebug("Initializing Halidom.");
-            await apiContext.PlayerFortBuilds.AddAsync(
-                new DbFortBuild()
-                {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
-                    PlantId = FortPlants.TheHalidom,
-                    PositionX = 16, // Default Halidom position
-                    PositionZ = 17,
-                    LastIncomeDate = DateTimeOffset.UtcNow
-                }
-            );
+            await apiContext
+                .PlayerFortBuilds
+                .AddAsync(
+                    new DbFortBuild()
+                    {
+                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        PlantId = FortPlants.TheHalidom,
+                        PositionX = 16, // Default Halidom position
+                        PositionZ = 17,
+                        LastIncomeDate = DateTimeOffset.UtcNow
+                    }
+                );
         }
     }
 
@@ -75,16 +79,18 @@ public class FortRepository : IFortRepository
         if (!await this.Builds.AnyAsync(x => x.PlantId == FortPlants.Smithy))
         {
             this.logger.LogDebug("Initializing Smithy.");
-            await this.apiContext.PlayerFortBuilds.AddAsync(
-                new DbFortBuild
-                {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
-                    PlantId = FortPlants.Smithy,
-                    PositionX = 21,
-                    PositionZ = 3,
-                    Level = 1
-                }
-            );
+            await this.apiContext
+                .PlayerFortBuilds
+                .AddAsync(
+                    new DbFortBuild
+                    {
+                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        PlantId = FortPlants.Smithy,
+                        PositionX = 21,
+                        PositionZ = 3,
+                        Level = 1
+                    }
+                );
         }
     }
 
@@ -122,22 +128,24 @@ public class FortRepository : IFortRepository
 
     public async Task<DbFortDetail> GetFortDetail()
     {
-        DbFortDetail? details = await this.apiContext.PlayerFortDetails.FindAsync(
-            this.playerIdentityService.AccountId
-        );
+        DbFortDetail? details = await this.apiContext
+            .PlayerFortDetails
+            .FindAsync(this.playerIdentityService.AccountId);
 
         if (details == null)
         {
             this.logger.LogInformation("Could not find details for player, creating anew...");
 
             details = (
-                await this.apiContext.PlayerFortDetails.AddAsync(
-                    new()
-                    {
-                        DeviceAccountId = this.playerIdentityService.AccountId,
-                        CarpenterNum = DefaultCarpenters
-                    }
-                )
+                await this.apiContext
+                    .PlayerFortDetails
+                    .AddAsync(
+                        new()
+                        {
+                            DeviceAccountId = this.playerIdentityService.AccountId,
+                            CarpenterNum = DefaultCarpenters
+                        }
+                    )
             ).Entity;
         }
 
@@ -222,19 +230,21 @@ public class FortRepository : IFortRepository
 
         for (int i = startQuantity; i < quantity; i++)
         {
-            await this.apiContext.PlayerFortBuilds.AddAsync(
-                new DbFortBuild
-                {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
-                    PlantId = plant,
-                    Level = actualLevel,
-                    PositionX = -1,
-                    PositionZ = -1,
-                    BuildStartDate = DateTimeOffset.UnixEpoch,
-                    BuildEndDate = DateTimeOffset.UnixEpoch,
-                    LastIncomeDate = DateTimeOffset.UnixEpoch
-                }
-            );
+            await this.apiContext
+                .PlayerFortBuilds
+                .AddAsync(
+                    new DbFortBuild
+                    {
+                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        PlantId = plant,
+                        Level = actualLevel,
+                        PositionX = -1,
+                        PositionZ = -1,
+                        BuildStartDate = DateTimeOffset.UnixEpoch,
+                        BuildEndDate = DateTimeOffset.UnixEpoch,
+                        LastIncomeDate = DateTimeOffset.UnixEpoch
+                    }
+                );
         }
     }
 

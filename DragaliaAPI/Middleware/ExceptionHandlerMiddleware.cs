@@ -86,8 +86,9 @@ public class ExceptionHandlerMiddleware(RequestDelegate next)
         context.Response.StatusCode = StatusCodes.Status200OK;
         DragaliaResponse<DataHeaders> gameResponse = new(new DataHeaders(code), code);
 
-        await context.Response.Body.WriteAsync(
-            MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
-        );
+        await context
+            .Response
+            .Body
+            .WriteAsync(MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options));
     }
 }

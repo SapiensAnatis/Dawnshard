@@ -26,7 +26,8 @@ public class AbilityCrestMultiplierService(
             y => y.GetAbilityCrestList()
         );
 
-        IEnumerable<DbAbilityCrest> equippedCrests = await abilityCrestRepository.AbilityCrests
+        IEnumerable<DbAbilityCrest> equippedCrests = await abilityCrestRepository
+            .AbilityCrests
             .Where(x => equippedCrestIds.Contains(x.AbilityCrestId))
             .ToListAsync();
 
@@ -92,9 +93,9 @@ public class AbilityCrestMultiplierService(
                 )
             );
 
-            double abilityLimit = MasterAsset.AbilityLimitedGroup[
-                abilities.First().AbilityLimitedGroupId1
-            ].MaxLimitedValue;
+            double abilityLimit = MasterAsset
+                .AbilityLimitedGroup[abilities.First().AbilityLimitedGroupId1]
+                .MaxLimitedValue;
 
             double sum = abilities.Sum(x => x.AbilityType1UpValue);
 
@@ -110,10 +111,9 @@ public class AbilityCrestMultiplierService(
         foreach (DbAbilityCrest crest in crests)
         {
             if (
-                !MasterAsset.AbilityCrest.TryGetValue(
-                    crest.AbilityCrestId,
-                    out AbilityCrest? crestData
-                )
+                !MasterAsset
+                    .AbilityCrest
+                    .TryGetValue(crest.AbilityCrestId, out AbilityCrest? crestData)
             )
             {
                 continue;

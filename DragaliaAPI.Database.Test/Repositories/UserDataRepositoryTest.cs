@@ -48,9 +48,12 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
         await this.userDataRepository.UpdateName("Euden 2");
         await this.userDataRepository.SaveChangesAsync();
 
-        this.fixture.ApiContext.PlayerUserData
+        this.fixture
+            .ApiContext
+            .PlayerUserData
             .Single(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
-            .Name.Should()
+            .Name
+            .Should()
             .Be("Euden 2");
     }
 
@@ -60,9 +63,10 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     public async Task CheckCoin_ReturnsExpectedResult(long checkValue, bool expectedResult)
     {
         DbPlayerUserData userData = (
-            await this.fixture.ApiContext.PlayerUserData.FindAsync(
-                IdentityTestUtils.DeviceAccountId
-            )
+            await this.fixture
+                .ApiContext
+                .PlayerUserData
+                .FindAsync(IdentityTestUtils.DeviceAccountId)
         )!;
         userData.Coin = 200;
         await this.fixture.ApiContext.SaveChangesAsync();
@@ -73,7 +77,9 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task UpdateCoin_UpdatesCoin()
     {
-        long oldCoin = await this.fixture.ApiContext.PlayerUserData
+        long oldCoin = await this.fixture
+            .ApiContext
+            .PlayerUserData
             .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
             .Select(x => x.Coin)
             .SingleAsync();
@@ -81,7 +87,9 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
         await this.userDataRepository.UpdateCoin(2000);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        long newCoin = await this.fixture.ApiContext.PlayerUserData
+        long newCoin = await this.fixture
+            .ApiContext
+            .PlayerUserData
             .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
             .Select(x => x.Coin)
             .SingleAsync();
@@ -92,7 +100,9 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task UpdateDewpoint_UpdatesDewpoint()
     {
-        int oldDewpoint = await this.fixture.ApiContext.PlayerUserData
+        int oldDewpoint = await this.fixture
+            .ApiContext
+            .PlayerUserData
             .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
             .Select(x => x.DewPoint)
             .SingleAsync();
@@ -100,7 +110,9 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
         await this.userDataRepository.UpdateDewpoint(4000);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        int newDewpoint = await this.fixture.ApiContext.PlayerUserData
+        int newDewpoint = await this.fixture
+            .ApiContext
+            .PlayerUserData
             .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
             .Select(x => x.DewPoint)
             .SingleAsync();
@@ -121,7 +133,9 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
 
         exception.Message.Should().Be("Player cannot have negative eldwater");
 
-        int dewpoint = await this.fixture.ApiContext.PlayerUserData
+        int dewpoint = await this.fixture
+            .ApiContext
+            .PlayerUserData
             .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
             .Select(x => x.DewPoint)
             .SingleAsync();
@@ -148,7 +162,9 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
         await this.userDataRepository.SetDewpoint(10001);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        int dewpoint = await this.fixture.ApiContext.PlayerUserData
+        int dewpoint = await this.fixture
+            .ApiContext
+            .PlayerUserData
             .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
             .Select(x => x.DewPoint)
             .SingleAsync();
@@ -159,7 +175,9 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task SetDewpoint_ThrowsExceptionWhenNegative()
     {
-        int oldDewpoint = await this.fixture.ApiContext.PlayerUserData
+        int oldDewpoint = await this.fixture
+            .ApiContext
+            .PlayerUserData
             .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
             .Select(x => x.DewPoint)
             .SingleAsync();
@@ -171,7 +189,9 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
 
         exception.Message.Should().Be("Player cannot have negative eldwater");
 
-        int newDewpoint = await this.fixture.ApiContext.PlayerUserData
+        int newDewpoint = await this.fixture
+            .ApiContext
+            .PlayerUserData
             .Where(x => x.DeviceAccountId == IdentityTestUtils.DeviceAccountId)
             .Select(x => x.DewPoint)
             .SingleAsync();

@@ -29,9 +29,9 @@ public class SavefileUpdateService : ISavefileUpdateService
 
     public async Task UpdateSavefile()
     {
-        DbPlayer? player = await this.context.Players.FindAsync(
-            this.playerIdentityService.AccountId
-        );
+        DbPlayer? player = await this.context
+            .Players
+            .FindAsync(this.playerIdentityService.AccountId);
 
         if (player is null)
         {

@@ -440,9 +440,9 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildup_Unbind_WithoutDedicatedMaterialWithoutMaterialReturnsInvalidResultCode()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.GreatwyrmMidgardsormr
-        );
+        AbilityCrest abilityCrest = MasterAsset
+            .AbilityCrest
+            .Get(AbilityCrests.GreatwyrmMidgardsormr);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -474,9 +474,9 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildup_Copies_WithoutMaterialReturnsInvalidResultCode()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TutelarysDestinyWolfsBoon
-        );
+        AbilityCrest abilityCrest = MasterAsset
+            .AbilityCrest
+            .Get(AbilityCrests.TutelarysDestinyWolfsBoon);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -797,9 +797,9 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildup_Level_WithoutMaterialsReturnsInvalidResultCode()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TheOrdersMessengerOwl
-        );
+        AbilityCrest abilityCrest = MasterAsset
+            .AbilityCrest
+            .Get(AbilityCrests.TheOrdersMessengerOwl);
         AtgenBuildupAbilityCrestPieceList pieceList =
             new()
             {
@@ -1008,9 +1008,9 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildupAugments_InvalidAugmentNumberReturnsInvalidResultCode()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TutelarysDestinyWolfsBoon
-        );
+        AbilityCrest abilityCrest = MasterAsset
+            .AbilityCrest
+            .Get(AbilityCrests.TutelarysDestinyWolfsBoon);
         AtgenPlusCountParamsList augmentParams =
             new() { plus_count = 41, plus_count_type = PlusCountType.Hp };
 
@@ -1022,9 +1022,9 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildupAugments_InvalidAugmentTypeThrowsError()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TutelarysDestinyWolfsBoon
-        );
+        AbilityCrest abilityCrest = MasterAsset
+            .AbilityCrest
+            .Get(AbilityCrests.TutelarysDestinyWolfsBoon);
         AtgenPlusCountParamsList augmentParams = new() { plus_count = 40, plus_count_type = 0 };
 
         try
@@ -1041,9 +1041,9 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildupAugments_AbilityCrestNotFoundInDbThrowsError()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TutelarysDestinyWolfsBoon
-        );
+        AbilityCrest abilityCrest = MasterAsset
+            .AbilityCrest
+            .Get(AbilityCrests.TutelarysDestinyWolfsBoon);
         AtgenPlusCountParamsList augmentParams =
             new() { plus_count = 40, plus_count_type = PlusCountType.Atk };
 
@@ -1067,9 +1067,9 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildupAugments_DecreaseInAugmentsReturnsInvalidResultCode()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TutelarysDestinyWolfsBoon
-        );
+        AbilityCrest abilityCrest = MasterAsset
+            .AbilityCrest
+            .Get(AbilityCrests.TutelarysDestinyWolfsBoon);
         AtgenPlusCountParamsList augmentParams =
             new() { plus_count = 39, plus_count_type = PlusCountType.Hp };
 
@@ -1095,9 +1095,9 @@ public class AbilityCrestServiceTest
     [Fact]
     public async Task TryBuildupAugments_NotEnoughMaterialsReturnsInvalidResultCode()
     {
-        AbilityCrest abilityCrest = MasterAsset.AbilityCrest.Get(
-            AbilityCrests.TutelarysDestinyWolfsBoon
-        );
+        AbilityCrest abilityCrest = MasterAsset
+            .AbilityCrest
+            .Get(AbilityCrests.TutelarysDestinyWolfsBoon);
         AtgenPlusCountParamsList augmentParams =
             new() { plus_count = 38, plus_count_type = PlusCountType.Atk };
 

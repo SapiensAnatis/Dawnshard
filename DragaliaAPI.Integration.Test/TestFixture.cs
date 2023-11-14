@@ -50,7 +50,8 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
 
         this.MockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(() => DateTimeOffset.UtcNow);
 
-        this.ViewerId = this.ApiContext.PlayerUserData
+        this.ViewerId = this.ApiContext
+            .PlayerUserData
             .First(x => x.DeviceAccountId == DeviceAccountId)
             .ViewerId;
     }
@@ -117,7 +118,8 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
     protected void ImportSave()
     {
         if (
-            this.ApiContext.PlayerUserData
+            this.ApiContext
+                .PlayerUserData
                 .AsNoTracking()
                 .First(x => x.DeviceAccountId == DeviceAccountId)
                 .LastSaveImportTime > DateTimeOffset.UnixEpoch
@@ -136,7 +138,8 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
 
     protected long GetDragonKeyId(Dragons dragon)
     {
-        return this.ApiContext.PlayerDragonData
+        return this.ApiContext
+            .PlayerDragonData
             .Where(x => x.DragonId == dragon)
             .Select(x => x.DragonKeyId)
             .DefaultIfEmpty()
@@ -145,7 +148,8 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
 
     protected long GetTalismanKeyId(Talismans talisman)
     {
-        return this.ApiContext.PlayerTalismans
+        return this.ApiContext
+            .PlayerTalismans
             .Where(x => x.TalismanId == talisman)
             .Select(x => x.TalismanKeyId)
             .DefaultIfEmpty()

@@ -138,43 +138,49 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 
         await savefileService.Create();
 
-        apiContext.PlayerMaterials.AddRange(
-            Enum.GetValues<Materials>()
-                .Select(
-                    x =>
-                        new DbPlayerMaterial()
-                        {
-                            DeviceAccountId = TestFixture.DeviceAccountId,
-                            MaterialId = x,
-                            Quantity = 99999999
-                        }
-                )
-        );
+        apiContext
+            .PlayerMaterials
+            .AddRange(
+                Enum.GetValues<Materials>()
+                    .Select(
+                        x =>
+                            new DbPlayerMaterial()
+                            {
+                                DeviceAccountId = TestFixture.DeviceAccountId,
+                                MaterialId = x,
+                                Quantity = 99999999
+                            }
+                    )
+            );
 
-        apiContext.PlayerDragonGifts.AddRange(
-            Enum.GetValues<DragonGifts>()
-                .Select(
-                    x =>
-                        new DbPlayerDragonGift()
-                        {
-                            DeviceAccountId = TestFixture.DeviceAccountId,
-                            DragonGiftId = x,
-                            Quantity = x < DragonGifts.FourLeafClover ? 1 : 999
-                        }
-                )
-        );
+        apiContext
+            .PlayerDragonGifts
+            .AddRange(
+                Enum.GetValues<DragonGifts>()
+                    .Select(
+                        x =>
+                            new DbPlayerDragonGift()
+                            {
+                                DeviceAccountId = TestFixture.DeviceAccountId,
+                                DragonGiftId = x,
+                                Quantity = x < DragonGifts.FourLeafClover ? 1 : 999
+                            }
+                    )
+            );
 
         IFortRepository fortRepository = this.Services.GetRequiredService<IFortRepository>();
         await fortRepository.InitializeFort();
 
-        apiContext.PlayerFortBuilds.Add(
-            new DbFortBuild()
-            {
-                DeviceAccountId = TestFixture.DeviceAccountId,
-                PlantId = FortPlants.Smithy,
-                Level = 9
-            }
-        );
+        apiContext
+            .PlayerFortBuilds
+            .Add(
+                new DbFortBuild()
+                {
+                    DeviceAccountId = TestFixture.DeviceAccountId,
+                    PlantId = FortPlants.Smithy,
+                    Level = 9
+                }
+            );
 
         DbPlayerUserData userData = (
             await apiContext.PlayerUserData.FindAsync(TestFixture.DeviceAccountId)
@@ -188,22 +194,24 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         userData.StaminaSingle = 999;
         userData.QuestSkipPoint = 300;
 
-        apiContext.PlayerDmodeInfos.Add(
-            new DbPlayerDmodeInfo
-            {
-                DeviceAccountId = TestFixture.DeviceAccountId,
-                Point1Quantity = 100_000_000,
-                Point2Quantity = 100_000_000
-            }
-        );
+        apiContext
+            .PlayerDmodeInfos
+            .Add(
+                new DbPlayerDmodeInfo
+                {
+                    DeviceAccountId = TestFixture.DeviceAccountId,
+                    Point1Quantity = 100_000_000,
+                    Point2Quantity = 100_000_000
+                }
+            );
 
-        apiContext.PlayerDmodeDungeons.Add(
-            new DbPlayerDmodeDungeon { DeviceAccountId = TestFixture.DeviceAccountId }
-        );
+        apiContext
+            .PlayerDmodeDungeons
+            .Add(new DbPlayerDmodeDungeon { DeviceAccountId = TestFixture.DeviceAccountId });
 
-        apiContext.PlayerDmodeExpeditions.Add(
-            new DbPlayerDmodeExpedition { DeviceAccountId = TestFixture.DeviceAccountId }
-        );
+        apiContext
+            .PlayerDmodeExpeditions
+            .Add(new DbPlayerDmodeExpedition { DeviceAccountId = TestFixture.DeviceAccountId });
 
         await apiContext.SaveChangesAsync();
     }
