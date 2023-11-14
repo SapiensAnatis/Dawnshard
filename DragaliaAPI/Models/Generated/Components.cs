@@ -2620,9 +2620,9 @@ public class AtgenMissionsClearSet
 public class AtgenMonthlyWallReceiveList
 {
     public int quest_group_id { get; set; }
-    public int is_receive_reward { get; set; }
+    public RewardStatus is_receive_reward { get; set; }
 
-    public AtgenMonthlyWallReceiveList(int quest_group_id, int is_receive_reward)
+    public AtgenMonthlyWallReceiveList(int quest_group_id, RewardStatus is_receive_reward)
     {
         this.quest_group_id = quest_group_id;
         this.is_receive_reward = is_receive_reward;
@@ -4252,14 +4252,14 @@ public class AtgenUserWallRewardList
 {
     public int quest_group_id { get; set; }
     public int sum_wall_level { get; set; }
-    public int last_reward_date { get; set; }
-    public int reward_status { get; set; }
+    public DateTimeOffset last_reward_date { get; set; }
+    public RewardStatus reward_status { get; set; }
 
     public AtgenUserWallRewardList(
         int quest_group_id,
         int sum_wall_level,
-        int last_reward_date,
-        int reward_status
+        DateTimeOffset last_reward_date,
+        RewardStatus reward_status
     )
     {
         this.quest_group_id = quest_group_id;

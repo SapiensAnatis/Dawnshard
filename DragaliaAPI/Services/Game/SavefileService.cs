@@ -518,6 +518,18 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
+            this.apiContext.PlayerQuestWalls.AddRange(
+                savefile.quest_wall_list.MapWithDeviceAccount<DbPlayerQuestWall>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbPlayerQuestWall step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             this.logger.LogInformation(
                 "Mapping completed after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
@@ -660,6 +672,9 @@ public class SavefileService : ISavefileService
         this.apiContext.PartyPowers.RemoveRange(
             this.apiContext.PartyPowers.Where(x => x.DeviceAccountId == deviceAccountId)
         );
+        this.apiContext.PlayerQuestWalls.RemoveRange(
+            this.apiContext.PlayerQuestWalls.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
     }
 
     public async Task Reset()
@@ -693,6 +708,7 @@ public class SavefileService : ISavefileService
             .Include(x => x.QuestEvents)
             .Include(x => x.PartyPower)
             .Include(x => x.QuestTreasureList)
+            .Include(x => x.QuestWalls)
             .AsSplitQuery();
     }
 

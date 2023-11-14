@@ -8,6 +8,7 @@ using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Helpers;
+using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -28,6 +29,7 @@ public class LoadService(
     IShopRepository shopRepository,
     IUserService userService,
     ITicketRepository ticketRepository,
+    IWallService wallService,
     IDateTimeProvider dateTimeProvider
 ) : ILoadService
 {
@@ -111,7 +113,8 @@ public class LoadService(
                     mapper.Map<SummonTicketList>
                 ),
                 quest_bonus_stack_base_time = 1617775200, // 7. April 2017
-                album_dragon_list = Enumerable.Empty<AlbumDragonData>()
+                album_dragon_list = Enumerable.Empty<AlbumDragonData>(),
+                quest_wall_list = await wallService.GetQuestWallList()
             };
 
         logger.LogInformation("{time} ms: Mapping complete", stopwatch.ElapsedMilliseconds);

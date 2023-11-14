@@ -27,6 +27,7 @@ using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Features.Version;
+using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models.Options;
@@ -144,7 +145,11 @@ public static class ServiceConfiguration
             .AddScoped<IPartyPowerRepository, PartyPowerRepository>()
             // Chara feature
             .AddScoped<ICharaService, CharaService>()
-            .AddScoped<IResourceVersionService, ResourceVersionService>();
+            .AddScoped<IResourceVersionService, ResourceVersionService>()
+            .AddScoped<ICharaService, CharaService>()
+            // Wall feature
+            .AddScoped<IWallService, WallService>()
+            .AddScoped<IWallRepository, WallRepository>();
 
         services.AddScoped<IBlazorIdentityService, BlazorIdentityService>();
 
