@@ -30,12 +30,11 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
-        ISystemClock clock,
         ISessionService sessionService,
         IWebHostEnvironment webHostEnvironment,
         ApiContext apiContext
     )
-        : base(options, logger, encoder, clock)
+        : base(options, logger, encoder)
     {
         this.sessionService = sessionService;
         this.webHostEnvironment = webHostEnvironment;
