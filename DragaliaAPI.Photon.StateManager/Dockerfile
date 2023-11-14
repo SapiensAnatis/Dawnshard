@@ -8,6 +8,9 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj", "DragaliaAPI.Photon.StateManager/"]
+COPY ["Directory.Build.props", "."]
+COPY ["Directory.Packages.props", "."]
+COPY ["nuget.config", "."]
 RUN dotnet restore "DragaliaAPI.Photon.StateManager/DragaliaAPI.Photon.StateManager.csproj"
 COPY . .
 WORKDIR "/src/DragaliaAPI.Photon.StateManager"
