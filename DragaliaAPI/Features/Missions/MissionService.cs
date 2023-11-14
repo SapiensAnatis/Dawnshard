@@ -38,6 +38,7 @@ public class MissionService : IMissionService
     public async Task<DbPlayerMission> StartMission(MissionType type, int id, int groupId = 0)
     {
         logger.LogInformation("Starting mission {missionId} ({missionType})", id, type);
+
         DbPlayerMission mission = await missionRepository.AddMissionAsync(
             type,
             id,
@@ -113,6 +114,38 @@ public class MissionService : IMissionService
         return dbMissions;
     }
 
+    public async Task<IEnumerable<DbPlayerMission>> UnlockMemoryEventMissions(int eventId)
+    {
+        IEnumerable<MemoryEventMission> missions = MasterAsset.MemoryEventMission.Enumerable
+            .Where(x => x.EventId == eventId)
+            .ToList();
+
+        if (
+            await this.missionRepository.Missions.AnyAsync(
+                x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent
+            )
+        )
+            return await this.missionRepository.Missions
+                .Where(x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent)
+                .ToListAsync();
+
+        logger.LogInformation(
+            "Unlocking memory event mission group {eventId} ({groupMissionIds})",
+            eventId,
+            missions.Select(x => x.Id)
+        );
+
+        List<DbPlayerMission> dbMissions = new();
+        foreach (MemoryEventMission mission in missions)
+        {
+            dbMissions.Add(
+                await StartMission(MissionType.MemoryEvent, mission.Id, groupId: mission.EventId)
+            );
+        }
+
+        return dbMissions;
+    }
+
     public async Task RedeemMission(MissionType type, int id)
     {
         logger.LogInformation("Redeeming mission {missionId}", id);
@@ -135,14 +168,19 @@ public class MissionService : IMissionService
             case MissionType.Period:
                 IExtendedRewardMission extendedRewardMission = (IExtendedRewardMission)
                     missionInfo.MasterAssetMission;
+
+                // These fields are always 0 (invalid) for everything but the FEH wyrmprints
+                int buildupCount = Math.Max(extendedRewardMission.EntityBuildupCount, 1);
+                int equipableCount = Math.Max(extendedRewardMission.EntityEquipableCount, 1);
+
                 await this.rewardService.GrantReward(
                     new(
                         extendedRewardMission.EntityType,
-                        extendedRewardMission.Id,
+                        extendedRewardMission.EntityId,
                         extendedRewardMission.EntityQuantity,
                         extendedRewardMission.EntityLimitBreakCount,
-                        extendedRewardMission.EntityBuildupCount,
-                        extendedRewardMission.EntityEquipableCount
+                        buildupCount,
+                        equipableCount
                     )
                 );
                 break;
@@ -166,6 +204,27 @@ public class MissionService : IMissionService
         {
             await RedeemMission(type, id);
         }
+    }
+
+    public async Task<IEnumerable<DrillMissionGroupList>> GetCompletedDrillGroups()
+    {
+        List<int> completedGroups = new() { 1, 2, 3 };
+
+        var stateGroupings = await this.missionRepository
+            .GetMissionsByType(MissionType.Drill)
+            .Select(e => new { e.GroupId, e.State })
+            .Distinct()
+            .ToListAsync();
+
+        foreach (var stateGrouping in stateGroupings)
+        {
+            if (stateGrouping.State != MissionState.Claimed)
+                completedGroups.Remove(stateGrouping.GroupId ?? 0);
+        }
+
+        this.logger.LogDebug("Returning completed drill groups: {groups}", completedGroups);
+
+        return completedGroups.Select(x => new DrillMissionGroupList(x));
     }
 
     public async Task<IEnumerable<AtgenBuildEventRewardEntityList>> TryRedeemDrillMissionGroups(
@@ -281,6 +340,24 @@ public class MissionService : IMissionService
         int completedCount = allMissions.Count(x => x.State >= MissionState.Completed);
         int receivableRewardCount = allMissions.Count(x => x.State == MissionState.Completed);
 
+        int currentMissionId = 0;
+
+        if (type == MissionType.Drill)
+        {
+            DbPlayerMission? activeMission = allMissions
+                .OrderBy(x => x.Id)
+                .FirstOrDefault(x => x.State < MissionState.Claimed);
+
+            if (activeMission != null)
+            {
+                currentMissionId = activeMission.Id;
+            }
+            else if (allMissions.Count == 0)
+            {
+                currentMissionId = 100100;
+            }
+        }
+
         return new AtgenNormalMissionNotice
         {
             is_update = 1,
@@ -289,11 +366,7 @@ public class MissionService : IMissionService
             receivable_reward_count = receivableRewardCount,
             new_complete_mission_id_list = newCompletedMissionList,
             pickup_mission_count = type == MissionType.Daily ? allMissions.Count(x => x.Pickup) : 0,
-            current_mission_id =
-                type == MissionType.Drill
-                    ? allMissions.FirstOrDefault(x => x.State == MissionState.InProgress)?.Id
-                        ?? 100100
-                    : 0
+            current_mission_id = currentMissionId
         };
     }
 

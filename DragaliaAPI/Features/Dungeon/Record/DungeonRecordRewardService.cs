@@ -1,5 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Event;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -12,6 +14,7 @@ public class DungeonRecordRewardService(
     IRewardService rewardService,
     IAbilityCrestMultiplierService abilityCrestMultiplierService,
     IEventDropService eventDropService,
+    IMissionProgressionService missionProgressionService,
     ILogger<DungeonRecordRewardService> logger
 ) : IDungeonRecordRewardService
 {
@@ -58,7 +61,7 @@ public class DungeonRecordRewardService(
     {
         int manaDrop = 0;
         int coinDrop = 0;
-        List<AtgenDropAll> drops = new();
+        List<Entity> entities = new();
 
         foreach (
             AtgenTreasureRecord record in playRecord?.treasure_record
@@ -92,17 +95,16 @@ public class DungeonRecordRewardService(
                 manaDrop += enemyDropList.mana;
                 coinDrop += enemyDropList.coin;
 
-                foreach (AtgenDropList dropList in enemyDropList.drop_list)
-                {
-                    Entity reward = new(dropList.type, dropList.id, dropList.quantity);
-
-                    drops.Add(reward.ToDropAll());
-
-                    await rewardService.GrantReward(reward);
-                }
+                entities.AddRange(
+                    enemyDropList.drop_list.Select(x => new Entity(x.type, x.id, x.quantity))
+                );
             }
         }
 
+        entities = entities.Merge().ToList();
+        List<AtgenDropAll> drops = entities.Select(x => x.ToDropAll()).ToList();
+
+        await rewardService.GrantRewards(entities);
         await rewardService.GrantReward(new Entity(EntityTypes.Mana, Quantity: manaDrop));
         await rewardService.GrantReward(new Entity(EntityTypes.Rupies, Quantity: coinDrop));
 
@@ -130,6 +132,14 @@ public class DungeonRecordRewardService(
             pointMultiplier
         );
 
+        if (totalPoints + boostedPoints > 0)
+        {
+            missionProgressionService.OnEventPointCollected(
+                session.QuestData.Gid,
+                totalPoints + boostedPoints
+            );
+        }
+
         IEnumerable<AtgenEventPassiveUpList> passiveUpList =
             await eventDropService.ProcessEventPassiveDrops(session.QuestData);
 
@@ -155,4 +165,18 @@ public class DungeonRecordRewardService(
         IEnumerable<AtgenEventPassiveUpList> PassiveUpList,
         IEnumerable<AtgenDropAll> EventDrops
     );
+}
+
+file static class Extensions
+{
+    public static IEnumerable<Entity> Merge(this IEnumerable<Entity> source) =>
+        source
+            .GroupBy(x => new { x.Id, x.Type })
+            .Select(
+                group =>
+                    group.Aggregate(
+                        new Entity(group.Key.Type, group.Key.Id, 0),
+                        (acc, current) => acc with { Quantity = acc.Quantity + current.Quantity }
+                    )
+            );
 }

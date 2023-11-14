@@ -12,6 +12,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Distributed;
 
@@ -144,7 +145,11 @@ public class SavefileService : ISavefileService
             );
 
             this.apiContext.Players.Add(
-                new DbPlayer { AccountId = this.playerIdentityService.AccountId }
+                new DbPlayer
+                {
+                    AccountId = this.playerIdentityService.AccountId,
+                    SavefileVersion = 0,
+                }
             );
 
             this.logger.LogDebug(
@@ -453,7 +458,13 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            if (savefile.user_data.emblem_id != Emblems.DragonbloodPrince)
+            if (
+                savefile.user_data.emblem_id != Emblems.DragonbloodPrince
+                && await this.apiContext.Emblems.FindAsync(
+                    deviceAccountId,
+                    savefile.user_data.emblem_id
+                ) == null
+            )
             {
                 this.apiContext.Emblems.Add(
                     new DbEmblem
@@ -495,6 +506,18 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
+            this.apiContext.QuestTreasureList.AddRange(
+                savefile.quest_treasure_list.MapWithDeviceAccount<DbQuestTreasureList>(
+                    mapper,
+                    deviceAccountId
+                )
+            );
+
+            this.logger.LogDebug(
+                "Mapping DbQuestTreasureList step done after {t} ms",
+                stopwatch.Elapsed.TotalMilliseconds
+            );
+
             this.apiContext.PlayerQuestWalls.AddRange(
                 savefile.quest_wall_list.MapWithDeviceAccount<DbPlayerQuestWall>(
                     mapper,
@@ -533,6 +556,10 @@ public class SavefileService : ISavefileService
 
     private void Delete()
     {
+        // Options commented out have been excluded from save import deletion process.
+        // They will still be deleted by cascade delete when a player is actually deleted
+        // without being re-added as they are in save imports.
+
         string deviceAccountId = this.playerIdentityService.AccountId;
 
         this.apiContext.Players.RemoveRange(
@@ -610,34 +637,37 @@ public class SavefileService : ISavefileService
         this.apiContext.PlayerEventPassives.RemoveRange(
             this.apiContext.PlayerEventPassives.Where(x => x.DeviceAccountId == deviceAccountId)
         );
-        this.apiContext.PlayerDmodeInfos.RemoveRange(
-            this.apiContext.PlayerDmodeInfos.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerDmodeCharas.RemoveRange(
-            this.apiContext.PlayerDmodeCharas.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerDmodeDungeons.RemoveRange(
-            this.apiContext.PlayerDmodeDungeons.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerDmodeServitorPassives.RemoveRange(
-            this.apiContext.PlayerDmodeServitorPassives.Where(
-                x => x.DeviceAccountId == deviceAccountId
-            )
-        );
-        this.apiContext.PlayerDmodeExpeditions.RemoveRange(
-            this.apiContext.PlayerDmodeExpeditions.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
+        // this.apiContext.PlayerDmodeInfos.RemoveRange(
+        //     this.apiContext.PlayerDmodeInfos.Where(x => x.DeviceAccountId == deviceAccountId)
+        // );
+        // this.apiContext.PlayerDmodeCharas.RemoveRange(
+        //     this.apiContext.PlayerDmodeCharas.Where(x => x.DeviceAccountId == deviceAccountId)
+        // );
+        // this.apiContext.PlayerDmodeDungeons.RemoveRange(
+        //     this.apiContext.PlayerDmodeDungeons.Where(x => x.DeviceAccountId == deviceAccountId)
+        // );
+        // this.apiContext.PlayerDmodeServitorPassives.RemoveRange(
+        //     this.apiContext.PlayerDmodeServitorPassives.Where(
+        //         x => x.DeviceAccountId == deviceAccountId
+        //     )
+        // );
+        // this.apiContext.PlayerDmodeExpeditions.RemoveRange(
+        //     this.apiContext.PlayerDmodeExpeditions.Where(x => x.DeviceAccountId == deviceAccountId)
+        // );
         this.apiContext.PlayerUseItems.RemoveRange(
             this.apiContext.PlayerUseItems.Where(x => x.DeviceAccountId == deviceAccountId)
         );
         this.apiContext.PlayerSummonTickets.RemoveRange(
             this.apiContext.PlayerSummonTickets.Where(x => x.DeviceAccountId == deviceAccountId)
         );
-        this.apiContext.Emblems.RemoveRange(
-            this.apiContext.Emblems.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
+        // this.apiContext.Emblems.RemoveRange(
+        //     this.apiContext.Emblems.Where(x => x.DeviceAccountId == deviceAccountId)
+        // );
         this.apiContext.QuestEvents.RemoveRange(
             this.apiContext.QuestEvents.Where(x => x.DeviceAccountId == deviceAccountId)
+        );
+        this.apiContext.QuestTreasureList.RemoveRange(
+            this.apiContext.QuestTreasureList.Where(x => x.DeviceAccountId == deviceAccountId)
         );
         this.apiContext.PartyPowers.RemoveRange(
             this.apiContext.PartyPowers.Where(x => x.DeviceAccountId == deviceAccountId)
@@ -677,6 +707,7 @@ public class SavefileService : ISavefileService
             .Include(x => x.EquippedStampList)
             .Include(x => x.QuestEvents)
             .Include(x => x.PartyPower)
+            .Include(x => x.QuestTreasureList)
             .Include(x => x.QuestWalls)
             .AsSplitQuery();
     }

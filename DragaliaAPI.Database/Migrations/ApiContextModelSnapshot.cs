@@ -17,14 +17,14 @@ namespace DragaliaAPI.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("DragaliaAPI.Database.DbTimeAttackClear", b =>
                 {
-                    b.Property<string>("RoomName")
+                    b.Property<string>("GameId")
                         .HasColumnType("text");
 
                     b.Property<int>("QuestId")
@@ -33,7 +33,7 @@ namespace DragaliaAPI.Database.Migrations
                     b.Property<float>("Time")
                         .HasColumnType("real");
 
-                    b.HasKey("RoomName");
+                    b.HasKey("GameId");
 
                     b.HasIndex("QuestId");
 
@@ -255,6 +255,30 @@ namespace DragaliaAPI.Database.Migrations
                     b.HasKey("DeviceAccountId", "Id");
 
                     b.ToTable("LoginBonuses");
+                });
+
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbNewsItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Headline")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("Time")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NewsItems");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbParty", b =>
@@ -1625,6 +1649,22 @@ namespace DragaliaAPI.Database.Migrations
                     b.ToTable("QuestEvents");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbQuestTreasureList", b =>
+                {
+                    b.Property<string>("DeviceAccountId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("QuestTreasureId")
+                        .HasColumnType("integer")
+                        .HasColumnName("QuestTreasureId");
+
+                    b.HasKey("DeviceAccountId", "QuestTreasureId");
+
+                    b.HasIndex("DeviceAccountId");
+
+                    b.ToTable("QuestTreasureList");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbReceivedRankingTierReward", b =>
                 {
                     b.Property<string>("DeviceAccountId")
@@ -1776,7 +1816,7 @@ namespace DragaliaAPI.Database.Migrations
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbTimeAttackClearUnit", b =>
                 {
-                    b.Property<string>("RoomName")
+                    b.Property<string>("GameId")
                         .HasColumnType("text");
 
                     b.Property<string>("DeviceAccountId")
@@ -1839,14 +1879,14 @@ namespace DragaliaAPI.Database.Migrations
                     b.Property<int>("TalismanAbility2")
                         .HasColumnType("integer");
 
-                    b.HasKey("RoomName", "DeviceAccountId", "UnitNo");
+                    b.HasKey("GameId", "DeviceAccountId", "UnitNo");
 
                     b.ToTable("TimeAttackClearUnits");
                 });
 
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbTimeAttackPlayer", b =>
                 {
-                    b.Property<string>("RoomName")
+                    b.Property<string>("GameId")
                         .HasColumnType("text");
 
                     b.Property<string>("DeviceAccountId")
@@ -1856,7 +1896,7 @@ namespace DragaliaAPI.Database.Migrations
                         .IsRequired()
                         .HasColumnType("jsonb");
 
-                    b.HasKey("RoomName", "DeviceAccountId");
+                    b.HasKey("GameId", "DeviceAccountId");
 
                     b.HasIndex("DeviceAccountId");
 
@@ -2388,6 +2428,17 @@ namespace DragaliaAPI.Database.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("DragaliaAPI.Database.Entities.DbQuestTreasureList", b =>
+                {
+                    b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Owner")
+                        .WithMany()
+                        .HasForeignKey("DeviceAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("DragaliaAPI.Database.Entities.DbReceivedRankingTierReward", b =>
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbPlayer", "Player")
@@ -2436,7 +2487,7 @@ namespace DragaliaAPI.Database.Migrations
                 {
                     b.HasOne("DragaliaAPI.Database.Entities.DbTimeAttackPlayer", "Player")
                         .WithMany("Units")
-                        .HasForeignKey("RoomName", "DeviceAccountId")
+                        .HasForeignKey("GameId", "DeviceAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2453,7 +2504,7 @@ namespace DragaliaAPI.Database.Migrations
 
                     b.HasOne("DragaliaAPI.Database.DbTimeAttackClear", "Clear")
                         .WithMany("Players")
-                        .HasForeignKey("RoomName")
+                        .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

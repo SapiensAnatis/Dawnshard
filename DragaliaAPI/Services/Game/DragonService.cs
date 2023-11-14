@@ -204,18 +204,22 @@ public class DragonService(
                     int nextStoryUnlockIndex = await storyRepository.Stories
                         .Where(x => dragonStories.Contains(x.StoryId))
                         .CountAsync();
-                    if (nextStoryUnlockIndex > dragonStories.Length - 1)
+
+                    int nextStoryId = dragonStories.ElementAtOrDefault(nextStoryUnlockIndex);
+
+                    if (nextStoryId != default)
                     {
-                        throw new DragaliaException(
-                            ResultCode.StoryCountNotEnough,
-                            "Too many story unlocks"
+                        await storyRepository.GetOrCreateStory(StoryTypes.Dragon, nextStoryId);
+                        reward.is_release_story = 1;
+                    }
+                    else
+                    {
+                        logger.LogWarning(
+                            "Failed to unlock next story for dragon: index {index} was out of range",
+                            nextStoryUnlockIndex
                         );
                     }
-                    await storyRepository.GetOrCreateStory(
-                        StoryTypes.Dragon,
-                        dragonStories[nextStoryUnlockIndex]
-                    );
-                    reward.is_release_story = 1;
+
                     return reward;
                 }
                 if (levelIndex == 6)
@@ -397,7 +401,7 @@ public class DragonService(
         if (dragonReliability == null)
         {
             throw new DragaliaException(
-                Models.ResultCode.EntityNotFoundError,
+                ResultCode.EntityNotFoundError,
                 $"DragonReliability {request.dragon_id} not found"
             );
         }
@@ -490,7 +494,7 @@ public class DragonService(
         if (gift == null || gift.Quantity < request.quantity)
         {
             throw new DragaliaException(
-                Models.ResultCode.CommonMaterialShort,
+                ResultCode.CommonMaterialShort,
                 $"Insufficient gift quantity for: {request.dragon_gift_id}"
             );
         }
@@ -502,7 +506,7 @@ public class DragonService(
         if (dragonReliability == null)
         {
             throw new DragaliaException(
-                Models.ResultCode.EntityNotFoundError,
+                ResultCode.EntityNotFoundError,
                 $"No such dragon in inventory: {request.dragon_id}"
             );
         }
@@ -938,7 +942,7 @@ public class DragonService(
         if (selectedPlayerDragons.Count < request.dragon_key_id_list.Count())
         {
             throw new DragaliaException(
-                Models.ResultCode.DragonSellNotFound,
+                ResultCode.DragonSellNotFound,
                 "Could not find all received dragonKeyIds to sell"
             );
         }
@@ -946,7 +950,7 @@ public class DragonService(
         if (selectedPlayerDragons.Where(x => x.DragonId == Dragons.Puppy).Any())
         {
             throw new DragaliaException(
-                Models.ResultCode.DragonSellLocked,
+                ResultCode.DragonSellLocked,
                 "Invalid sale attempt of the puppy"
             );
         }

@@ -1,8 +1,9 @@
 ﻿using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
-using DragaliaAPI.Models;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -10,6 +11,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Test.Utils;
 using Microsoft.AspNetCore.Mvc;
 using MockQueryable.Moq;
+using NSubstitute;
 
 namespace DragaliaAPI.Test.Features.Missions;
 
@@ -18,17 +20,23 @@ public class MissionControllerTest
     private readonly MissionController missionController;
     private readonly Mock<IMissionService> mockMissionService;
     private readonly Mock<IMissionRepository> mockMissionRepository;
+    private readonly Mock<IUserDataRepository> mockUserDataRepository;
+    private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
 
     public MissionControllerTest()
     {
         this.mockMissionService = new(MockBehavior.Strict);
         this.mockMissionRepository = new(MockBehavior.Strict);
+        this.mockUserDataRepository = new(MockBehavior.Strict);
+        this.mockRewardService = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
 
         this.missionController = new MissionController(
             this.mockMissionService.Object,
             this.mockMissionRepository.Object,
+            this.mockUserDataRepository.Object,
+            this.mockRewardService.Object,
             this.mockUpdateDataService.Object
         );
 
@@ -61,9 +69,21 @@ public class MissionControllerTest
             .Setup(x => x.GetAllMissionsPerTypeAsync())
             .ReturnsAsync(Enumerable.Empty<DbPlayerMission>().ToLookup(x => x.Type));
 
-        ActionResult<DragaliaResponse<object>> resp = await this.missionController.GetMissionList();
+        this.mockUserDataRepository
+            .SetupGet(x => x.UserData)
+            .Returns(
+                new List<DbPlayerUserData>()
+                {
+                    new() { DeviceAccountId = "id", ActiveMemoryEventId = 20816 }
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
 
-        MissionGetMissionListData? response = resp.GetData<MissionGetMissionListData>();
+        DragaliaResult<MissionGetMissionListData> resp =
+            await this.missionController.GetMissionList();
+
+        MissionGetMissionListData? response = resp.Value;
         response.Should().NotBeNull();
 
         response!.mission_notice.Should().Be(notice);
@@ -109,10 +129,10 @@ public class MissionControllerTest
                     .BuildMock()
             );
 
-        ActionResult<DragaliaResponse<object>> resp =
+        DragaliaResult<MissionGetDrillMissionListData> resp =
             await this.missionController.GetDrillMissionList();
 
-        MissionGetDrillMissionListData? response = resp.GetData<MissionGetDrillMissionListData>();
+        MissionGetDrillMissionListData? response = resp.Value;
         response.Should().NotBeNull();
 
         response!.mission_notice.Should().Be(notice);
@@ -152,13 +172,12 @@ public class MissionControllerTest
             .Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
 
-        ActionResult<DragaliaResponse<object>> resp =
+        DragaliaResult<MissionUnlockDrillMissionGroupData> resp =
             await this.missionController.UnlockDrillMissionGroup(
                 new MissionUnlockDrillMissionGroupRequest(100)
             );
 
-        MissionUnlockDrillMissionGroupData? response =
-            resp.GetData<MissionUnlockDrillMissionGroupData>();
+        MissionUnlockDrillMissionGroupData? response = resp.Value;
         response!.drill_mission_list
             .Should()
             .ContainEquivalentOf(
@@ -194,12 +213,12 @@ public class MissionControllerTest
             .Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
 
-        ActionResult<DragaliaResponse<object>> resp =
+        DragaliaResult<MissionUnlockMainStoryGroupData> resp =
             await this.missionController.UnlockMainStoryMissionGroup(
                 new MissionUnlockMainStoryGroupRequest(100)
             );
 
-        MissionUnlockMainStoryGroupData? response = resp.GetData<MissionUnlockMainStoryGroupData>();
+        MissionUnlockMainStoryGroupData? response = resp.Value;
         response!.main_story_mission_list
             .Should()
             .ContainEquivalentOf(
@@ -237,6 +256,10 @@ public class MissionControllerTest
             .Setup(x => x.TryRedeemDrillMissionGroups(It.IsAny<IEnumerable<int>>()))
             .ReturnsAsync(new List<AtgenBuildEventRewardEntityList>());
 
+        this.mockMissionService
+            .Setup(x => x.GetCompletedDrillGroups())
+            .ReturnsAsync(new List<DrillMissionGroupList>() { new(1) });
+
         this.mockUpdateDataService
             .Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
@@ -245,13 +268,16 @@ public class MissionControllerTest
             .Setup(x => x.GetMissionsByType(MissionType.Drill))
             .Returns(Enumerable.Empty<DbPlayerMission>().AsQueryable().BuildMock());
 
-        ActionResult<DragaliaResponse<object>> resp =
+        this.mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());
+
+        DragaliaResult<MissionReceiveDrillRewardData> resp =
             await this.missionController.ReceiveDrillStoryReward(
                 new MissionReceiveDrillRewardRequest(fakeIdList, Enumerable.Empty<int>())
             );
 
-        MissionReceiveDrillRewardData? response = resp.GetData<MissionReceiveDrillRewardData>();
+        MissionReceiveDrillRewardData? response = resp.Value;
 
+        mockRewardService.VerifyAll();
         mockMissionService.VerifyAll();
         mockUpdateDataService.VerifyAll();
         mockMissionRepository.VerifyAll();

@@ -7,61 +7,55 @@
 
 @inherits LayoutComponentBase
 
+
+
 <MudThemeProvider Theme="theme" @ref=provider IsDarkMode="@darkMode" IsDarkModeChanged="OnIsDarkModeChanged"/>
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    @if (this.HttpRequestState?.HideAppBar ?? false == true)
-    {
-    }
-    else 
-    {
-        <MudAppBar Elevation="0">
-            <MudBreakpointProvider>
-                <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
-                    <MudDrawer Elevation="2" Open=true ClipMode="DrawerClipMode.Always" DisableOverlay=true>
-                        <NavMenu />
-                    </MudDrawer>
-                </MudHidden>
-                <MudHidden Breakpoint="Breakpoint.SmAndDown" Invert="true">
-                    <MudToggleIconButton Edge=Edge.Start @bind-Toggled=navDrawerOpen Icon=@Icons.Material.Filled.Menu ToggledIcon=@Icons.Material.Filled.Menu Color="Color.Inherit" ToggledColor="Color.Inherit" />
-                    <MudDrawer @bind-Open=navDrawerOpen Elevation="2" ClipMode="DrawerClipMode.Always" DisableOverlay=true>
-                        <NavMenu />
-                    </MudDrawer>
-                </MudHidden>
-            </MudBreakpointProvider>
-            <MudText Typo="Typo.h5" Class="m1-3">Dawnshard</MudText>
-            <MudSpacer />
-            <MudStack Row=true Spacing="4">
-                <AuthorizeView>
-                    <Authorized>
-                        <div>
-                            <MudToggleIconButton Edge=Edge.End Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.AccountCircle" ToggledColor="Color.Inherit" @bind-Toggled="@popoverOpen" />
-                            <MudPopover Open="@popoverOpen" Paper=true Class="pt-2 pl-3 pr-3" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
-                                <div class="d-flex flex-column">
-                                    <MudText Typo="Typo.subtitle1">Hello, @BlazorIdentityService.UserDataName</MudText>
-                                    <MudList Clickable="true" Dense="true">
-                                        <MudListItem Icon="@Icons.Material.Filled.Settings" IconSize="Size.Small" Href="/account">Account Management</MudListItem>
-                                        <MudListItem Icon="@Icons.Material.Filled.Logout" IconSize="Size.Small" OnClick=OnClickLogout>Logout</MudListItem>
-                                    </MudList>
-                                </div>
-                                <MudOverlay @bind-Visible="@popoverOpen" AutoClose=true ZIndex="-1"></MudOverlay>
-                            </MudPopover>
-                        </div>
-                    </Authorized>
-                    <NotAuthorized>
-                        <LoginButton />
-                    </NotAuthorized>
-                </AuthorizeView>
-                <MudToggleIconButton @bind-Toggled="@darkMode" Icon="@Icons.Material.Filled.LightMode" ToggledIcon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" ToggledColor="Color.Inherit" />
-            </MudStack>
-           
-        </MudAppBar>    
-    }
-
-    <MudMainContent Style="@MainContentClass">
-        <MudContainer MaxWidth="MaxWidth.Large" Class="@MainContainerClass">
+    <MudAppBar Elevation="0">
+        <MudBreakpointProvider>
+            <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
+                <MudDrawer Elevation="2" Open=true ClipMode="DrawerClipMode.Always" DisableOverlay=true>
+                    <NavMenu />
+                </MudDrawer>
+            </MudHidden>
+            <MudHidden Breakpoint="Breakpoint.SmAndDown" Invert="true">
+                <MudToggleIconButton Edge=Edge.Start @bind-Toggled=navDrawerOpen Icon=@Icons.Material.Filled.Menu ToggledIcon=@Icons.Material.Filled.Menu Color="Color.Inherit" ToggledColor="Color.Inherit" />
+                <MudDrawer @bind-Open=navDrawerOpen Elevation="2" ClipMode="DrawerClipMode.Always" DisableOverlay=true>
+                    <NavMenu />
+                </MudDrawer>
+            </MudHidden>
+        </MudBreakpointProvider>
+        <MudText Typo="Typo.h5" Class="m1-3">Dawnshard</MudText>
+        <MudSpacer />
+        <MudStack Row=true Spacing="4">
+            <AuthorizeView>
+                <Authorized>
+                    <div>
+                        <MudToggleIconButton Edge=Edge.End Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" ToggledIcon="@Icons.Material.Filled.AccountCircle" ToggledColor="Color.Inherit" @bind-Toggled="@popoverOpen" />
+                        <MudPopover Open="@popoverOpen" Paper=true Class="pt-2 pl-3 pr-3" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+                            <div class="d-flex flex-column">
+                                <MudText Typo="Typo.subtitle1">Hello, @BlazorIdentityService.UserDataName</MudText>
+                                <MudList Clickable="true" Dense="true">
+                                    <MudListItem Icon="@Icons.Material.Filled.Settings" IconSize="Size.Small" Href="/account">Account Management</MudListItem>
+                                    <MudListItem Icon="@Icons.Material.Filled.Logout" IconSize="Size.Small" OnClick="@OnClickLogout">Logout</MudListItem>
+                                </MudList>
+                            </div>
+                            <MudOverlay @bind-Visible="@popoverOpen" AutoClose=true ZIndex="-1"></MudOverlay>
+                        </MudPopover>
+                    </div>
+                </Authorized>
+                <NotAuthorized>
+                    <LoginButton />
+                </NotAuthorized>
+            </AuthorizeView>
+            <MudToggleIconButton @bind-Toggled="@darkMode" Icon="@Icons.Material.Filled.LightMode" ToggledIcon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" ToggledColor="Color.Inherit" />
+        </MudStack>
+    </MudAppBar>    
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="my-8 pt-1">
             @Body
         </MudContainer>
     </MudMainContent>
@@ -70,26 +64,20 @@
 
 
 @code {
-    private bool popoverOpen = false;
-    private bool navDrawerOpen = false;
-    private bool darkMode = false;
+    private bool popoverOpen;
+    private bool navDrawerOpen;
+    private bool darkMode;
 
     private MudThemeProvider? provider;
 
     [CascadingParameter(Name = "HttpRequestState")]
     protected HttpRequestState? HttpRequestState { get; set; }
 
-    private bool HideAppBar => this.HttpRequestState?.HideAppBar ?? false;
-
-    private string MainContainerClass => this.HideAppBar ? "" : "my-8 pt-1";
-    private string MainContentClass => this.HideAppBar ? "padding-top: 1rem;" : "";
 
     private MudTheme theme = new()
         {
             PaletteDark = new PaletteDark()
             {
-                Surface = Colors.Grey.Darken3,
-                Background = Colors.Grey.Darken4,
                 AppbarBackground = Colors.Teal.Darken3,
                 Primary = Colors.Teal.Lighten1,
                 Secondary = Colors.Pink.Accent2,
@@ -120,5 +108,10 @@
     {
         if (this.HttpRequestState?.IsDarkMode is not null)
             this.darkMode = this.HttpRequestState.IsDarkMode.Value;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await this.BlazorIdentityService.InitializeAsync();
     }
 }

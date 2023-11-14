@@ -36,7 +36,7 @@ public class ExceptionHandlerMiddlewareTest : TestFixture
     [Fact]
     public async Task SecurityTokenExpiredException_ReturnsRefreshRequest_ThenSerializedException()
     {
-        this.Client.DefaultRequestHeaders.Add("DeviceId", "id");
+        this.Client.DefaultRequestHeaders.Add("DeviceId", "id 2");
 
         HttpResponseMessage response = await this.Client.PostMsgpackBasic(
             $"{Controller}/securitytokenexpired",

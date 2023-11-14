@@ -1,0 +1,29 @@
+﻿@using DragaliaAPI.Shared.Definitions.Enums;
+@using DragaliaAPI.Shared.Features.TextLabel;
+@using DragaliaAPI.Shared.MasterAsset;
+@using DragaliaAPI.Shared.MasterAsset.Models;
+
+
+<MudTooltip tabindex="0" RootStyle="width: 50px" ShowOnFocus=true Text="@this.Text" Placement="Placement.Bottom" Arrow=true>
+    <SkillIcon Skill="this.Skill"/>
+</MudTooltip>
+
+
+@code
+{
+    [Parameter]
+    public Charas Chara { get; set; }
+
+    private string? Text => TextLabelHelper.GetText(this.Chara);
+
+    private int Skill
+    {
+        get
+        {
+            if (!MasterAsset.CharaData.TryGetValue(this.Chara, out CharaData? charaData))
+                return 0;
+
+            return charaData.EditSkillId;
+        }
+    }
+}

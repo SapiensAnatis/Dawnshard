@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
+using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +42,7 @@ public class MissionRepository : IMissionRepository
 
     public async Task<ILookup<MissionType, DbPlayerMission>> GetAllMissionsPerTypeAsync()
     {
-        return (await Missions.ToListAsync()).ToLookup(x => x.Type);
+        return (await Missions.ToListAsync()).Where(HasProgressionInfo).ToLookup(x => x.Type);
     }
 
     public async Task<DbPlayerMission> AddMissionAsync(
@@ -75,5 +76,19 @@ public class MissionRepository : IMissionRepository
                 }
             )
             .Entity;
+    }
+
+    private static bool HasProgressionInfo(DbPlayerMission mission)
+    {
+        // Fully complete types
+        if (mission.Type is MissionType.Drill or MissionType.MainStory)
+            return true;
+
+        int missionProgressionId = MasterAssetUtils.GetMissionProgressionId(
+            mission.Id,
+            mission.Type
+        );
+
+        return MasterAsset.MissionProgressionInfo.TryGetValue(missionProgressionId, out _);
     }
 }

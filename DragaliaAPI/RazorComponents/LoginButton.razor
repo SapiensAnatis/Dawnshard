@@ -33,7 +33,14 @@
                     { "session_token_code_challenge_method", "S256" }
                 };
 
-        Navigation.NavigateTo(new Uri(this.Options.CurrentValue.BaasUrlParsed, "/custom/thirdparty/auth") + qb.ToString());
+        try
+        {
+            Navigation.NavigateTo(new Uri(this.Options.CurrentValue.BaasUrlParsed, "/custom/thirdparty/auth") + qb.ToString());
+        } 
+        catch (TaskCanceledException)
+        {
+            // https://github.com/dotnet/aspnetcore/issues/45267
+        }
     }
 
     public static string HashString(string data)

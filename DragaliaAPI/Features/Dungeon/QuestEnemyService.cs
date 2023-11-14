@@ -1,73 +1,104 @@
-﻿using System.Collections.Immutable;
-using DragaliaAPI.Extensions;
+﻿using DragaliaAPI.Extensions;
+using DragaliaAPI.Features.Dungeon.Start;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
+using FluentRandomPicker;
+using FluentRandomPicker.FluentInterfaces.General;
+using JetBrains.Annotations;
 using DragaliaAPI.Shared.MasterAsset.Models.Wall;
 
 namespace DragaliaAPI.Features.Dungeon;
 
 public class QuestEnemyService : IQuestEnemyService
 {
-    private readonly IQuestDropService dropService;
     private readonly ILogger<QuestEnemyService> logger;
 
-    private const int BaseManaQuantity = 10;
-    private const int ManaPertubation = 2;
-
-    private const int BaseRupieQuantity = 50;
-    private const int RupiePertubation = 5;
-
-    private static readonly ImmutableDictionary<MaterialRarities, double> BaseMaterialQuantities =
-        new Dictionary<MaterialRarities, double>()
-        {
-            // These numbers are totally arbitrary and just based on playtesting / what feels right
-            // Bear in mind that common drops will be dropped by a lot more enemies on e.g. campaign maps
-            { MaterialRarities.FacilityEvent, 2 },
-            { MaterialRarities.Common, 0.1 },
-            { MaterialRarities.Uncommon, 0.5 },
-            { MaterialRarities.Rare, 0.1 },
-            { MaterialRarities.VeryRare, 0.01 } // Only used for Adamantite Ingot?
-        }.ToImmutableDictionary();
-    private const int MaterialPertubation = 3;
-
-    public QuestEnemyService(IQuestDropService dropService, ILogger<QuestEnemyService> logger)
+    public QuestEnemyService(ILogger<QuestEnemyService> logger)
     {
-        this.dropService = dropService;
         this.logger = logger;
     }
 
     public IEnumerable<AtgenEnemy> BuildQuestEnemyList(int questId, int areaNum)
     {
-        List<AtgenEnemy> enemyList = this.GetEnemyList(questId, areaNum).ToList();
-        IEnumerable<Materials> possibleDrops = this.dropService.GetDrops(questId);
-        QuestData questData = MasterAsset.QuestData[questId];
+        AtgenEnemy[] enemyList = this.GetEnemyList(questId, areaNum);
 
-        if (
-            !MasterAsset.QuestGroupMultiplier.TryGetValue(
-                questData.Gid,
-                out QuestGroupMultiplier? questMultiplier
-            )
-        )
+        if (!MasterAsset.QuestDrops.TryGetValue(questId, out QuestDropInfo? questDropInfo))
         {
-            questMultiplier = new(questData.Gid);
+            this.logger.LogWarning("Failed to get drop data for quest id {questId}", questId);
+            return enemyList;
         }
 
-        this.logger.LogDebug("Using quest multiplier: {@multiplier}", questMultiplier);
+        if (questDropInfo.Drops.Length == 0 || enemyList.Length == 0)
+        {
+            return enemyList;
+        }
 
-        double difficultyCoeff = Math.Max(questData.Difficulty / 1000, Math.E);
-        double difficultyMultiplier = Math.Log(difficultyCoeff);
+        int areaCount = MasterAsset.QuestData[questId].AreaInfo.Count();
+        int totalQuantity = (int)Math.Round(questDropInfo.Drops.Sum(x => x.Quantity) / areaCount);
 
+        int totalRupies = AddVariance(questDropInfo.Rupies) / areaCount;
+        int rupieSlice = totalRupies / totalQuantity;
+
+        int totalMana = AddVariance(questDropInfo.Mana) / areaCount;
+        int manaSlice = totalMana / totalQuantity;
+
+        IPick<DropEntity> dropPicker = GetDropPicker(questDropInfo);
+        IPick<AtgenEnemy> enemyPicker = GetEnemyPicker(enemyList);
+
+        for (int i = 0; i < totalQuantity; i++)
+        {
+            // TODO: Only give drops to boss enemies for boss quests with minions
+            AtgenEnemy enemy = enemyPicker.PickOne();
+            DropEntity drop = dropPicker.PickOne();
+
+            if (enemy.enemy_drop_list.Count == 0)
+            {
+                enemy.enemy_drop_list.Add(
+                    new EnemyDropList()
+                    {
+                        coin = 0,
+                        mana = 0,
+                        drop_list = new List<AtgenDropList>()
+                    }
+                );
+            }
+
+            enemy.enemy_drop_list[0].coin += rupieSlice;
+            enemy.enemy_drop_list[0].mana += manaSlice;
+
+            enemy.enemy_drop_list[0].drop_list.Add(
+                new AtgenDropList()
+                {
+                    id = drop.Id,
+                    type = drop.EntityType,
+                    quantity = 1
+                }
+            );
+        }
+
+        // Accumulate quantities of the same drops
         foreach (AtgenEnemy enemy in enemyList)
         {
-            enemy.enemy_drop_list = GenerateEnemyDrop(
-                enemy,
-                possibleDrops,
-                questMultiplier,
-                difficultyMultiplier
-            );
+            if (enemy.enemy_drop_list.Count == 0)
+                continue;
+
+            enemy.enemy_drop_list[0].drop_list = enemy.enemy_drop_list[0].drop_list
+                .GroupBy(x => new { x.id, x.type })
+                .Select(
+                    group =>
+                        group.Aggregate(
+                            new AtgenDropList() { id = group.Key.id, type = group.Key.type },
+                            (acc, current) =>
+                            {
+                                acc.quantity += current.quantity;
+                                return acc;
+                            }
+                        )
+                )
+                .ToList();
         }
 
         return enemyList;
@@ -81,96 +112,50 @@ public class QuestEnemyService : IQuestEnemyService
         return enemyList;
     }
 
-    private IEnumerable<EnemyDropList> GenerateEnemyDrop(
-        AtgenEnemy enemy,
-        IEnumerable<Materials> possibleDrops,
-        QuestGroupMultiplier dropMultiplier,
-        double difficultyMultiplier
-    )
+    private static IPick<AtgenEnemy> GetEnemyPicker(AtgenEnemy[] enemyList)
     {
-        const int manaPower = 3;
-        const int coinPower = 4;
-        const int toughnessClamp = 5;
+        AtgenEnemy? boss = enemyList.FirstOrDefault(
+            x => MasterAsset.EnemyParam[x.param_id].Tough >= Toughness.Boss
+        );
 
-        if (!MasterAsset.EnemyParam.TryGetValue(enemy.param_id, out EnemyParam? enemyParam))
+        if (boss != null)
         {
-            this.logger.LogWarning("Failed to get EnemyParam for id {id}", enemy.param_id);
-            return Enumerable.Empty<EnemyDropList>();
+            // Do not assign drops to minions
+            enemyList = new[] { boss };
         }
 
-        int toughnessMultiplier = Math.Min((int)enemyParam.Tough + 1, toughnessClamp) * 2;
-
-        return new List<EnemyDropList>()
-        {
-            new()
+        return GetPicker(
+            enemyList,
+            enemy =>
             {
-                mana = CalculateQuantity(
-                    BaseManaQuantity,
-                    ManaPertubation,
-                    toughnessMultiplier * dropMultiplier.ManaMultiplier,
-                    manaPower
-                ),
-                coin = CalculateQuantity(
-                    BaseRupieQuantity,
-                    RupiePertubation,
-                    toughnessMultiplier * dropMultiplier.RupieMultiplier,
-                    coinPower
-                ),
-                drop_list = GenerateMaterialDrops(
-                    possibleDrops,
-                    toughnessMultiplier * difficultyMultiplier,
-                    dropMultiplier
-                )
+                if (MasterAsset.EnemyParam.TryGetValue(enemy.param_id, out EnemyParam? param))
+                    return (int)param.Tough + 1;
+
+                return 1;
             }
-        };
+        );
     }
 
-    private static IEnumerable<AtgenDropList> GenerateMaterialDrops(
-        IEnumerable<Materials> possibleDrops,
-        double baseMultiplier,
-        QuestGroupMultiplier questMultiplier
-    )
-    {
-        const double multiplierPower = 1.5;
+    private static IPick<DropEntity> GetDropPicker(QuestDropInfo questDropInfo) =>
+        GetPicker(questDropInfo.Drops, entity => entity.Weight);
 
-        foreach (Materials material in possibleDrops)
+    private static IPick<T> GetPicker<T>(T[] elements, Func<T, int> weight) =>
+        // Workaround for FluentRandomPicker throwing when passing in single-element collections
+        elements.Length switch
         {
-            // Fairly confident this will be defined
-            MaterialData materialData = MasterAsset.MaterialData[material];
+            1 => new SingleValuePicker<T>(elements[0]),
+            > 1 => Out.Of().PrioritizedElements(elements).WithWeightSelector(weight),
+            _ => throw new ArgumentException("Invalid value count", nameof(elements)),
+        };
 
-            int randomizedQuantity = CalculateQuantity(
-                BaseMaterialQuantities[materialData.MaterialRarity],
-                MaterialPertubation,
-                baseMultiplier,
-                multiplierPower
-            );
-
-            randomizedQuantity = (int)(
-                randomizedQuantity * questMultiplier.MaterialMultiplier[materialData.MaterialRarity]
-            );
-
-            if (randomizedQuantity <= 0)
-                continue;
-
-            yield return new()
-            {
-                id = (int)material,
-                quantity = randomizedQuantity,
-                type = EntityTypes.Material
-            };
-        }
+    private static int AddVariance(int value)
+    {
+        double range = value * 0.05;
+        double variance = range * (Random.Shared.NextDouble() - 0.5);
+        return (int)Math.Round(value + variance);
     }
 
-    private static int CalculateQuantity(
-        double baseQuantity,
-        int pertubation,
-        double multiplier,
-        double multiplierPower
-    ) =>
-        (int)Math.Ceiling(baseQuantity * Math.Pow(multiplier, multiplierPower))
-        + Random.Shared.Next(-pertubation, pertubation);
-
-    private IEnumerable<AtgenEnemy> GetEnemyList(int questId, int areaNum)
+    private AtgenEnemy[] GetEnemyList(int questId, int areaNum)
     {
         QuestData questData = MasterAsset.QuestData[questId];
         if (!questData.AreaInfo.TryGetElementAt(areaNum, out AreaInfo? areaInfo))
@@ -180,7 +165,7 @@ public class QuestEnemyService : IQuestEnemyService
                 areaNum,
                 questId
             );
-            return Enumerable.Empty<AtgenEnemy>();
+            return Array.Empty<AtgenEnemy>();
         }
 
         string assetName = $"{areaInfo.ScenePath}/{areaInfo.AreaName}".ToLowerInvariant();
@@ -192,7 +177,7 @@ public class QuestEnemyService : IQuestEnemyService
                 questId,
                 assetName
             );
-            return Enumerable.Empty<AtgenEnemy>();
+            return Array.Empty<AtgenEnemy>();
         }
 
         if (!enemies.Enemies.TryGetValue(questData.VariationType, out IEnumerable<int>? enemyList))
@@ -201,20 +186,22 @@ public class QuestEnemyService : IQuestEnemyService
                 "Unable to retrieve enemy list for variation type {type}",
                 questData.VariationType
             );
-            return Enumerable.Empty<AtgenEnemy>();
+            return Array.Empty<AtgenEnemy>();
         }
 
-        return enemyList.Select(
-            (x, idx) =>
-                new AtgenEnemy()
-                {
-                    enemy_idx = idx,
-                    is_pop = true,
-                    is_rare = false,
-                    param_id = x,
-                    enemy_drop_list = new List<EnemyDropList>() { }
-                }
-        );
+        return enemyList
+            .Select(
+                (x, idx) =>
+                    new AtgenEnemy()
+                    {
+                        enemy_idx = idx,
+                        is_pop = true,
+                        is_rare = false,
+                        param_id = x,
+                        enemy_drop_list = new List<EnemyDropList>() { }
+                    }
+            )
+            .ToArray();
     }
 
     // Mercurial Gauntlet

@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
+using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
@@ -367,6 +368,44 @@ public class DragonTest : TestFixture
             .First();
         dragonData.reliability_total_exp.Should().Be(200);
         dragonData.reliability_level.Should().Be(3);
+    }
+
+    [Fact]
+    public async Task DragonSendGift_AllStoriesUnlocked_DoesNotThrow()
+    {
+        await this.AddToDatabase(
+            DbPlayerDragonReliabilityFactory.Create(DeviceAccountId, Dragons.MidgardsormrZero)
+        );
+
+        foreach (int storyId in MasterAsset.DragonStories[(int)Dragons.MidgardsormrZero].storyIds)
+        {
+            await this.AddToDatabase(
+                new DbPlayerStoryState()
+                {
+                    DeviceAccountId = DeviceAccountId,
+                    StoryId = storyId,
+                    State = StoryState.Read,
+                    StoryType = StoryTypes.Dragon
+                }
+            );
+        }
+
+        DragonSendGiftMultipleRequest request =
+            new()
+            {
+                dragon_id = Dragons.MidgardsormrZero,
+                dragon_gift_id = DragonGifts.FourLeafClover,
+                quantity = 100
+            };
+
+        DragaliaResponse<DragonSendGiftMultipleData>? response = (
+            await this.Client.PostMsgpack<DragonSendGiftMultipleData>(
+                "dragon/send_gift_multiple",
+                request
+            )
+        );
+
+        response.data_headers.result_code.Should().Be(ResultCode.Success);
     }
 
     public record DragonLimitBreakTestCase(

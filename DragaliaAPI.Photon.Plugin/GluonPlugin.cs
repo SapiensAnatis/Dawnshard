@@ -41,6 +41,7 @@ namespace DragaliaAPI.Photon.Plugin
         )
         {
             this.logger = host.CreateLogger(this.Name);
+
             this.config = new PluginConfiguration(config);
             this.rdm = new Random();
 
@@ -69,12 +70,30 @@ namespace DragaliaAPI.Photon.Plugin
 #endif
             info.Request.ActorProperties.InitializeViewerId();
 
+            int roomId = this.GenerateRoomId();
+            info.Request.GameProperties.Add(GamePropertyKeys.RoomId, roomId);
+
+            info.Continue();
+
             // https://doc.photonengine.com/server/current/plugins/plugins-faq#how_to_get_the_actor_number_in_plugin_callbacks_
             // This is only invalid if the room is recreated from an inactive state, which Dragalia doesn't do (hopefully!)
             const int actorNr = 1;
             this.actorState[actorNr] = new ActorState();
 
-            info.Continue();
+            long viewerId = info.Request.ActorProperties.GetLong(ActorPropertyKeys.PlayerId);
+
+            if (
+                this.config.EnableSecondaryServer
+                && viewerId >= this.config.SecondaryViewerIdCriterion
+            )
+            {
+                this.logger.Info("Using secondary server config");
+                this.roomState.IsUseSecondaryServer = true;
+            }
+            else
+            {
+                this.logger.Info("Using primary server config");
+            }
 
             if (
                 info.Request.GameProperties.TryGetValue(
@@ -88,9 +107,6 @@ namespace DragaliaAPI.Photon.Plugin
             }
 
             this.roomState.QuestId = info.Request.GameProperties.GetInt(GamePropertyKeys.QuestId);
-
-            int roomId = this.GenerateRoomId();
-            info.Request.GameProperties.Add(GamePropertyKeys.RoomId, roomId);
 
             this.logger.InfoFormat(
                 "Viewer ID {0} created room {1} with room ID {2}",
@@ -123,6 +139,8 @@ namespace DragaliaAPI.Photon.Plugin
                 x => x.ActorNr != info.ActorNr
             );
 
+            long viewerId = info.Request.ActorProperties.GetLong(ActorPropertyKeys.PlayerId);
+
             if (currentActorCount >= 4)
             {
                 this.logger.WarnFormat(
@@ -142,7 +160,39 @@ namespace DragaliaAPI.Photon.Plugin
                 return;
             }
 
+            if (
+                this.roomState.IsUseSecondaryServer
+                && viewerId < this.config.SecondaryViewerIdCriterion
+            )
+            {
+                this.logger.InfoFormat(
+                    "Rejecting join request -- viewer id {0} below secondary criteria {1}",
+                    viewerId,
+                    this.config.SecondaryViewerIdCriterion
+                );
+
+                info.Fail();
+                return;
+            }
+
+            if (
+                !this.roomState.IsUseSecondaryServer
+                && viewerId > this.config.SecondaryViewerIdCriterion
+            )
+            {
+                this.logger.InfoFormat(
+                    "Rejecting join request -- viewer id {0} exceeds secondary criteria {1}",
+                    viewerId,
+                    this.config.SecondaryViewerIdCriterion
+                );
+
+                info.Fail();
+                return;
+            }
+
             info.Request.ActorProperties.InitializeViewerId();
+            info.Continue();
+
             this.actorState[info.ActorNr] = new ActorState();
 
             this.logger.InfoFormat(
@@ -160,8 +210,6 @@ namespace DragaliaAPI.Photon.Plugin
                 },
                 info
             );
-
-            info.Continue();
         }
 
         /// <summary>
@@ -175,23 +223,13 @@ namespace DragaliaAPI.Photon.Plugin
                 x => x.ActorNr == info.ActorNr
             );
 
-#if DEBUG
-            if (
-                actor == null
-                || !actor.Properties.TryGetValue("DeactivationTime", out object deactivationTime)
-            )
-            {
-                deactivationTime = "null";
-            }
+            base.OnLeave(info);
 
-            this.logger.DebugFormat(
-                "Leave info -- Actor: {0}, Details: {1}, IsInactive {2}, DeactivationTime: {3}",
-                info.ActorNr,
-                info.Details,
-                info.IsInactive,
-                deactivationTime
-            );
-#endif
+            if (info.ActorNr == -1)
+            {
+                // Actor was never really in the room, server disconnect, etc.
+                return;
+            }
 
             if (info.ActorNr == 1)
             {
@@ -204,12 +242,11 @@ namespace DragaliaAPI.Photon.Plugin
             if (!this.actorState.Remove(info.ActorNr))
             {
                 this.logger.WarnFormat(
-                    "Failed to remove actor nr {0} from actor state",
-                    info.ActorNr
+                    "Failed to remove actor nr {0} from actor state. Leave reason: {1}",
+                    info.ActorNr,
+                    info.Reason
                 );
             }
-
-            base.OnLeave(info);
 
             // It is not critical to update the Redis state, so don't crash the room if we can't find
             // the actor or certain properties attached to them.
@@ -222,7 +259,7 @@ namespace DragaliaAPI.Photon.Plugin
                 return;
             }
 
-            if (!actor.TryGetViewerId(out int viewerId))
+            if (!actor.TryGetViewerId(out long viewerId))
             {
                 this.logger.WarnFormat(
                     "OnLeave: failed to acquire viewer ID of actor {0}",
@@ -587,7 +624,15 @@ namespace DragaliaAPI.Photon.Plugin
         {
             foreach (IActor actor in this.PluginHost.GameActors)
             {
-                ActorState actorState = this.actorState[actor.ActorNr];
+                if (!this.actorState.TryGetValue(actor.ActorNr, out ActorState actorState))
+                {
+                    this.logger.InfoFormat(
+                        "Skipping actor {0} chara data -- not in actor state",
+                        actor.ActorNr
+                    );
+
+                    continue;
+                }
 
                 foreach (
                     IEnumerable<HeroParam> heroParams in actorState.HeroParamData.HeroParamLists
@@ -655,7 +700,13 @@ namespace DragaliaAPI.Photon.Plugin
                     }
             );
 
-            Uri requestUri = new Uri(this.config.ApiServerUrl, $"heroparam/batch");
+            Uri baseUri = this.roomState.IsUseSecondaryServer
+                ? this.config.SecondaryApiServerUrl
+                : this.config.ApiServerUrl;
+
+            Uri requestUri = new Uri(baseUri, "heroparam/batch");
+
+            this.logger.DebugFormat("RequestHeroParam - {0}", requestUri.AbsoluteUri);
 
             HttpRequest req = new HttpRequest()
             {
@@ -682,12 +733,20 @@ namespace DragaliaAPI.Photon.Plugin
         {
             this.LogIfFailedCallback(response, userState);
 
+            if (response.Status != HttpRequestQueueResult.Success)
+                return;
+
             List<HeroParamData> responseObject = JsonConvert.DeserializeObject<List<HeroParamData>>(
                 response.ResponseText
             );
 
             foreach (HeroParamData data in responseObject)
-                this.actorState[data.ActorNr].HeroParamData = data;
+            {
+                if (this.actorState.ContainsKey(data.ActorNr))
+                {
+                    this.actorState[data.ActorNr].HeroParamData = data;
+                }
+            }
         }
 
         /// <summary>
@@ -771,16 +830,21 @@ namespace DragaliaAPI.Photon.Plugin
         private void OnClearQuestRequest(IRaiseEventCallInfo info)
         {
             // These properties must be set for the client to successfully rejoin the room.
-            this.PluginHost.SetProperties(
-                0,
-                new Hashtable()
-                {
-                    { GamePropertyKeys.GoToIngameInfo, null },
-                    { GamePropertyKeys.RoomId, -1 }
-                },
-                null,
-                true
-            );
+            int roomId = this.PluginHost.GameProperties.GetInt(GamePropertyKeys.RoomId);
+
+            if (roomId > 0)
+            {
+                this.PluginHost.SetProperties(
+                    0,
+                    new Hashtable()
+                    {
+                        { GamePropertyKeys.GoToIngameInfo, null },
+                        { GamePropertyKeys.RoomId, -GenerateRoomId() }
+                    },
+                    null,
+                    true
+                );
+            }
 
             this.actorState[info.ActorNr] = new ActorState();
 
@@ -840,6 +904,9 @@ namespace DragaliaAPI.Photon.Plugin
         {
             this.LogIfFailedCallback(response, userState);
 
+            if (response.Status != HttpRequestQueueResult.Success)
+                return;
+
             HttpRequestUserState typedUserState = (HttpRequestUserState)userState;
 
             this.RaiseEvent(
@@ -870,12 +937,12 @@ namespace DragaliaAPI.Photon.Plugin
             }
 
             return BuildMemberCountTable(
-                this.PluginHost.GameActors.Select(
-                    x =>
-                        new ValueTuple<int, int>(
-                            x.ActorNr,
-                            this.actorState[x.ActorNr].HeroParamCount
-                        )
+                this.PluginHost.GameActors.Join(
+                    this.actorState,
+                    actor => actor.ActorNr,
+                    state => state.Key,
+                    (actor, state) =>
+                        new ValueTuple<int, int>(actor.ActorNr, state.Value.HeroParamCount)
                 )
             );
             ;

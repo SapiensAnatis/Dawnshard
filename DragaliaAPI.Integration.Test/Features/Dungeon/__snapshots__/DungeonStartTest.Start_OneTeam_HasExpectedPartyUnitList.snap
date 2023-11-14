@@ -101,8 +101,8 @@
       "list_view_flag": 1
     },
     "dragon_data": {
-      "dragon_id": "JeanneDArc",
-      "dragon_key_id": 36,
+      "dragon_id": "JeannedArc",
+      "dragon_key_id": 813,
       "level": 120,
       "exp": 3365620,
       "is_lock": true,
@@ -211,7 +211,7 @@
       }
     ],
     "talisman_data": {
-      "talisman_key_id": 26,
+      "talisman_key_id": 1406,
       "talisman_id": "GalaLuca",
       "talisman_ability_id_1": 340000069,
       "talisman_ability_id_2": 340000108,
@@ -316,7 +316,7 @@
     },
     "dragon_data": {
       "dragon_id": "GalaRebornJeanne",
-      "dragon_key_id": 102,
+      "dragon_key_id": 879,
       "level": 100,
       "exp": 1240020,
       "is_lock": true,
@@ -425,7 +425,7 @@
       }
     ],
     "talisman_data": {
-      "talisman_key_id": 126,
+      "talisman_key_id": 1506,
       "talisman_id": "HalloweenLaxi",
       "talisman_ability_id_1": 340000009,
       "talisman_ability_id_2": 340000076,
@@ -534,7 +534,7 @@
     },
     "dragon_data": {
       "dragon_id": "GalaThor",
-      "dragon_key_id": 92,
+      "dragon_key_id": 869,
       "level": 100,
       "exp": 1240020,
       "is_lock": true,
@@ -643,7 +643,7 @@
       }
     ],
     "talisman_data": {
-      "talisman_key_id": 66,
+      "talisman_key_id": 1446,
       "talisman_id": "Pecorine",
       "talisman_ability_id_1": 340000008,
       "talisman_ability_id_2": 340000058,
@@ -761,7 +761,7 @@
     },
     "dragon_data": {
       "dragon_id": "GalaChronosNyx",
-      "dragon_key_id": 110,
+      "dragon_key_id": 887,
       "level": 100,
       "exp": 1240020,
       "is_lock": false,
@@ -870,7 +870,7 @@
       }
     ],
     "talisman_data": {
-      "talisman_key_id": 65,
+      "talisman_key_id": 1445,
       "talisman_id": "Pecorine",
       "talisman_ability_id_1": 340000029,
       "talisman_ability_id_2": 340000056,

@@ -281,6 +281,66 @@ public class QuestBonusTest : TestFixture
             );
     }
 
+    [Fact]
+    public async Task QuestBonus_PartiallyClaiming_SetsReserveCountToZero()
+    {
+        int questId = 233010103; // Primal Midgardsormr's Trial: Master
+        int questEventId = 23300;
+
+        DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
+
+        response.data.update_data_list.quest_event_list
+            .Should()
+            .ContainEquivalentOf(
+                new QuestEventList()
+                {
+                    quest_event_id = questEventId,
+                    quest_bonus_receive_count = 0,
+                    quest_bonus_reserve_count = 1,
+                    quest_bonus_reserve_time = response.data.ingame_result_data.end_time,
+                    quest_bonus_stack_count = 0,
+                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch,
+                    last_daily_reset_time = response.data.ingame_result_data.end_time,
+                    last_weekly_reset_time = response.data.ingame_result_data.end_time,
+                    daily_play_count = 1,
+                    weekly_play_count = 1
+                }
+            );
+
+        DragaliaResponse<DungeonReceiveQuestBonusData> bonusResponse =
+            await this.Client.PostMsgpack<DungeonReceiveQuestBonusData>(
+                "/dungeon/receive_quest_bonus",
+                new DungeonReceiveQuestBonusRequest()
+                {
+                    quest_event_id = questEventId,
+                    is_receive = false,
+                    receive_bonus_count = 1
+                }
+            );
+
+        bonusResponse.data.receive_quest_bonus.target_quest_id.Should().Be(questId);
+        bonusResponse.data.receive_quest_bonus.receive_bonus_count.Should().Be(0);
+
+        bonusResponse.data.update_data_list.material_list.Should().BeNullOrEmpty();
+        bonusResponse.data.update_data_list.quest_event_list
+            .Should()
+            .ContainEquivalentOf(
+                new QuestEventList()
+                {
+                    quest_event_id = questEventId,
+                    quest_bonus_receive_count = 0,
+                    quest_bonus_reserve_count = 0,
+                    quest_bonus_reserve_time = DateTimeOffset.UnixEpoch,
+                    quest_bonus_stack_count = 0,
+                    quest_bonus_stack_time = DateTimeOffset.UnixEpoch,
+                    last_daily_reset_time = response.data.ingame_result_data.end_time,
+                    last_weekly_reset_time = response.data.ingame_result_data.end_time,
+                    daily_play_count = 1,
+                    weekly_play_count = 1
+                }
+            );
+    }
+
     private async Task<DragaliaResponse<DungeonRecordRecordData>> CompleteQuest(int questId)
     {
         DragaliaResponse<DungeonStartStartData> startResponse =

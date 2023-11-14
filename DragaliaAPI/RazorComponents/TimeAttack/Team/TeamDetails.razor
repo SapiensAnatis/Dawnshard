@@ -1,0 +1,50 @@
+﻿@using DragaliaAPI.Database.Entities;
+@using DragaliaAPI.Shared.Definitions.Enums;
+
+<MudStack Spacing="4">
+    @foreach (DbTimeAttackClearUnit unit in this.Units)
+     {
+       <MudGrid Justify="Justify.FlexStart" Spacing="0" Style="max-width: 1100px">
+            <MudItem xs="2" sm="2" md="1">
+                <CharaIcon Chara="unit.CharaId"/>
+            </MudItem>
+
+            <MudItem xs="10" sm="3" md="3">
+                <DragonIcon Dragon="unit.EquippedDragonEntityId" />
+                <WeaponIcon Weapon="unit.EquipWeaponBodyId" />
+                <TalismanIcon Talisman="unit.EquippedTalismanEntityId" Ability1="unit.TalismanAbility1" Ability2="unit.TalismanAbility2" />
+            </MudItem>
+
+            <MudItem xs="12" sm="4" md="6" lg="5">
+                <AbilityCrestIcon Crest="unit.EquipCrestSlotType1CrestId1"/>
+                <AbilityCrestIcon Crest="unit.EquipCrestSlotType1CrestId2"/>
+                <AbilityCrestIcon Crest="unit.EquipCrestSlotType1CrestId3"/>
+                <AbilityCrestIcon Crest="unit.EquipCrestSlotType2CrestId1"/>
+                <AbilityCrestIcon Crest="unit.EquipCrestSlotType2CrestId2"/>
+                <AbilityCrestIcon Crest="unit.EquipCrestSlotType3CrestId1"/>
+                <AbilityCrestIcon Crest="unit.EquipCrestSlotType3CrestId2"/>
+            </MudItem>
+
+            <MudItem xs="6" sm="3" md="2">
+                @if (unit.UnitNo == 1)
+                {
+                    @if (unit.EditSkill1CharaId == 0)
+                    {
+                        <WeaponSkillIcon Weapon="unit.EquipWeaponBodyId" />
+                    }
+                    else
+                    {
+                        <SharedSkillIcon Chara="unit.EditSkill1CharaId" />
+                    }
+                    <SharedSkillIcon Chara="unit.EditSkill2CharaId" />
+                }
+            </MudItem>
+        </MudGrid>
+    }
+</MudStack>
+
+@code
+{
+    [Parameter]
+    public IEnumerable<DbTimeAttackClearUnit> Units { get; set; } = Enumerable.Empty<DbTimeAttackClearUnit>();
+}

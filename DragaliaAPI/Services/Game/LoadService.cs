@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
-using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Shop;
@@ -40,7 +38,7 @@ public class LoadService(
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        DbPlayer savefile = await savefileService.Load().SingleAsync();
+        DbPlayer savefile = await savefileService.Load().AsNoTracking().FirstAsync();
 
         logger.LogInformation("{time} ms: Load query complete", stopwatch.ElapsedMilliseconds);
 
@@ -78,6 +76,9 @@ public class LoadService(
                     .Select(mapper.Map<CastleStoryList>),
                 quest_list = savefile.QuestList.Select(mapper.Map<QuestList>),
                 quest_event_list = savefile.QuestEvents.Select(mapper.Map<QuestEventList>),
+                quest_treasure_list = savefile.QuestTreasureList.Select(
+                    mapper.Map<QuestTreasureList>
+                ),
                 material_list = savefile.MaterialList.Select(mapper.Map<MaterialList>),
                 weapon_skin_list = savefile.WeaponSkinList.Select(mapper.Map<WeaponSkinList>),
                 weapon_passive_ability_list = savefile.WeaponPassiveAbilityList.Select(

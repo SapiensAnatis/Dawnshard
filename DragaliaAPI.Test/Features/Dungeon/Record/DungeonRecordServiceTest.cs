@@ -7,6 +7,7 @@ using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
+using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -27,6 +28,7 @@ public class DungeonRecordServiceTest
     private readonly Mock<IUserService> mockUserService;
     private readonly Mock<ITutorialService> mockTutorialService;
     private readonly Mock<ICharaService> mockCharaService;
+    private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<ILogger<DungeonRecordService>> mockLogger;
 
     private readonly IDungeonRecordService dungeonRecordService;
@@ -37,8 +39,9 @@ public class DungeonRecordServiceTest
         this.mockQuestService = new(MockBehavior.Strict);
         this.mockUserService = new(MockBehavior.Strict);
         this.mockTutorialService = new(MockBehavior.Strict);
-        this.mockLogger = new(MockBehavior.Loose);
         this.mockCharaService = new(MockBehavior.Strict);
+        this.mockRewardService = new(MockBehavior.Strict);
+        this.mockLogger = new(MockBehavior.Loose);
 
         this.dungeonRecordService = new DungeonRecordService(
             this.mockDungeonRewardService.Object,
@@ -46,6 +49,7 @@ public class DungeonRecordServiceTest
             this.mockUserService.Object,
             this.mockTutorialService.Object,
             this.mockCharaService.Object,
+            this.mockRewardService.Object,
             this.mockLogger.Object
         );
 
@@ -156,7 +160,7 @@ public class DungeonRecordServiceTest
         int takeBoostAccumulatePoint = 40;
 
         this.mockQuestService
-            .Setup(x => x.ProcessQuestCompletion(lSurtrSoloId, 10f, 1))
+            .Setup(x => x.ProcessQuestCompletion(session, playRecord))
             .ReturnsAsync((mockQuest, true, new List<AtgenFirstClearSet>()));
 
         this.mockUserService
@@ -183,6 +187,14 @@ public class DungeonRecordServiceTest
                     eventDrops
                 )
             );
+
+        this.mockQuestService
+            .Setup(x => x.GetQuestStamina(lSurtrSoloId, StaminaType.Single))
+            .ReturnsAsync(40);
+
+        this.mockRewardService
+            .Setup(x => x.GetConvertedEntityList())
+            .Returns(new List<ConvertedEntity>());
 
         IngameResultData ingameResultData =
             await this.dungeonRecordService.GenerateIngameResultData(
@@ -232,6 +244,7 @@ public class DungeonRecordServiceTest
                     score_mission_success_list = scoreMissionSuccessLists,
                     is_best_clear_time = true,
                     clear_time = playRecord.time,
+                    converted_entity_list = new List<ConvertedEntityList>()
                 }
             );
 
@@ -240,5 +253,6 @@ public class DungeonRecordServiceTest
         this.mockUserService.VerifyAll();
         this.mockTutorialService.VerifyAll();
         this.mockLogger.VerifyAll();
+        this.mockQuestService.VerifyAll();
     }
 }

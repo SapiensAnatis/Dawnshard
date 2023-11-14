@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[PrimaryKey(nameof(RoomName), nameof(DeviceAccountId))]
+[PrimaryKey(nameof(GameId), nameof(DeviceAccountId))]
 public class DbTimeAttackPlayer
 {
     [ForeignKey(nameof(Clear))]
-    public required string RoomName { get; set; }
+    public required string GameId { get; set; }
 
     [ForeignKey(nameof(Player))]
     public required string DeviceAccountId { get; set; }

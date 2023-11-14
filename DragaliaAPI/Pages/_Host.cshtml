@@ -6,7 +6,7 @@
 @{
     Layout = "_Layout";
 
-    string darkModeCookie = this.Request.Cookies.FirstOrDefault(x => x.Key == "darkMode").Value;
+    string? darkModeCookie = this.Request.Cookies.FirstOrDefault(x => x.Key == "darkMode").Value;
     bool? isDarkMode = null;
 
     if (bool.TryParse(darkModeCookie, out bool darkModeParsed))
@@ -15,12 +15,12 @@
     HttpRequestState httpRequestState = new() 
     {
         HostUri = $"{this.Request.Scheme}://{this.Request.Host.Value}",
-        HideAppBar = this.Request.Query.TryGetValue("hideappbar", out StringValues hide) && hide.Any(x => x == "true"),
         IsDarkMode = isDarkMode,
     };
 }
 
 <component type="typeof(App)" render-mode="ServerPrerendered" param-HttpRequestState="httpRequestState" />
+
 
 <script>
     window.downloadFileFromStream = async (fileName, contentStreamReference) => {
@@ -40,6 +40,9 @@
     window.blazorExtensions = {
         writeCookie: function (name, value) {
             document.cookie = `${name}=${value}; SameSite=Lax`;
+        },
+        scrollToTop: function () {
+             document.documentElement.scrollTop = 0;
         }
     }
 </script>

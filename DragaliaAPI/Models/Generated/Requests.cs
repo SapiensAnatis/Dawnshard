@@ -2,6 +2,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Version;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Shared.Definitions.Enums;
 using MessagePack;
@@ -4177,10 +4178,10 @@ public class UserWithdrawalRequest { }
 [MessagePackObject(true)]
 public class VersionGetResourceVersionRequest
 {
-    public int platform { get; set; }
+    public Platform platform { get; set; }
     public string app_version { get; set; }
 
-    public VersionGetResourceVersionRequest(int platform, string app_version)
+    public VersionGetResourceVersionRequest(Platform platform, string app_version)
     {
         this.platform = platform;
         this.app_version = app_version;

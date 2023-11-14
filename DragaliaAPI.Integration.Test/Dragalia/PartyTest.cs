@@ -112,6 +112,29 @@ public class PartyTest : TestFixture
     }
 
     [Fact]
+    public async Task SetPartySetting_IllegalCharacters_Handles()
+    {
+        Charas storyZethia = (Charas)19900001;
+        this.AddCharacter(storyZethia);
+
+        (
+            await this.Client.PostMsgpack<PartySetPartySettingData>(
+                "/party/set_party_setting",
+                new PartySetPartySettingRequest(
+                    1,
+                    new List<PartySettingList>()
+                    {
+                        new() { unit_no = 1, chara_id = storyZethia, }
+                    },
+                    "My New Party",
+                    false,
+                    0
+                )
+            )
+        ).data_headers.result_code.Should().Be(ResultCode.Success);
+    }
+
+    [Fact]
     public async Task SetPartySetting_InvalidRequest_NotOwnedCharacter_ReturnsResultCode()
     {
         PartySetPartySettingRequest request =

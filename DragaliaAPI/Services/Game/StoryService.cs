@@ -134,25 +134,36 @@ public class StoryService(
     private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadUnitStory(int storyId)
     {
         UnitStory data = MasterAsset.UnitStory[storyId];
-
+        StoryData charaStory;
+        List<AtgenBuildEventRewardEntityList> rewardList = new();
         DbPlayerStoryState story = await storyRepository.GetOrCreateStory(data.Type, storyId);
-
         int wyrmiteReward;
+        int emblemRewardId;
+        Entity emblemRewardEntity;
 
         if (data.Type == StoryTypes.Chara)
+        {
             wyrmiteReward = data.IsFirstEpisode ? CharaStoryWyrmite1 : CharaStoryWyrmite2;
+            charaStory = MasterAsset.CharaStories[data.ReleaseTriggerId];
+            if (data.Id == charaStory.storyIds.Last())
+            {
+                emblemRewardId = data.ReleaseTriggerId;
+                emblemRewardEntity = new Entity(EntityTypes.Title, emblemRewardId, 1);
+                await rewardService.GrantReward(emblemRewardEntity);
+                rewardList.Add(emblemRewardEntity.ToBuildEventRewardEntityList());
+            }
+        }
         else
+        {
             wyrmiteReward = DragonStoryWyrmite;
+        }
 
         await userDataRepository.GiveWyrmite(wyrmiteReward);
         story.State = StoryState.Read;
-
-        // TODO: Add epithets
-
-        return new List<AtgenBuildEventRewardEntityList>()
-        {
+        rewardList.Add(
             new() { entity_type = EntityTypes.Wyrmite, entity_quantity = wyrmiteReward }
-        };
+        );
+        return rewardList;
     }
 
     private async Task<IEnumerable<AtgenBuildEventRewardEntityList>> ReadCastleStory(int storyId)

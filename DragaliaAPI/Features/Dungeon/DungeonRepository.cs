@@ -8,6 +8,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Dungeon;
 
@@ -26,7 +27,8 @@ public class DungeonRepository : IDungeonRepository
         IQueryable<DbQuestClearPartyUnit> input
     )
     {
-        return from unit in input
+        return (
+            from unit in input
             from chara in this.apiContext.PlayerCharaData
                 .Where(x => x.CharaId == unit.CharaId && x.DeviceAccountId == unit.DeviceAccountId)
                 .DefaultIfEmpty()
@@ -156,7 +158,8 @@ public class DungeonRepository : IDungeonRepository
                         ),
                 TalismanData = talisman,
                 WeaponSkinData = skin
-            };
+            }
+        ).AsNoTracking();
     }
 
     public IQueryable<DbDetailedPartyUnit> BuildDetailedPartyUnit(
@@ -164,7 +167,8 @@ public class DungeonRepository : IDungeonRepository
         int firstPartyNo
     )
     {
-        return from unit in input
+        return (
+            from unit in input
             join chara in this.apiContext.PlayerCharaData
                 on new { unit.DeviceAccountId, unit.CharaId } equals new
                 {
@@ -303,7 +307,8 @@ public class DungeonRepository : IDungeonRepository
                         ),
                 TalismanData = talisman,
                 WeaponSkinData = skin
-            };
+            }
+        ).AsNoTracking();
     }
 
     public IEnumerable<IQueryable<DbDetailedPartyUnit>> BuildDetailedPartyUnit(
@@ -320,7 +325,7 @@ public class DungeonRepository : IDungeonRepository
 
         foreach (PartySettingList unit in party)
         {
-            IQueryable<DbDetailedPartyUnit> detailQuery =
+            IQueryable<DbDetailedPartyUnit> detailQuery = (
                 from chara in this.apiContext.PlayerCharaData
                     .Where(
                         x =>
@@ -463,7 +468,8 @@ public class DungeonRepository : IDungeonRepository
                             ),
                     TalismanData = talisman,
                     WeaponSkinData = skin
-                };
+                }
+            ).AsNoTracking();
 
             queries.Add(detailQuery);
         }

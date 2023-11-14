@@ -1,11 +1,13 @@
 ﻿using System.Net.Http.Headers;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +19,21 @@ public class DungeonRecordTest : TestFixture
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions(2);
+
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.StaminaSingle, e => 100)
+        );
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.StaminaMulti, e => 100)
+        );
+
+        this.ApiContext.PlayerQuests.ExecuteDelete();
+        this.ApiContext.PlayerMissions.ExecuteDelete();
+        this.ApiContext.PlayerAbilityCrests.ExecuteDelete();
+        this.ApiContext.PlayerEventData.ExecuteDelete();
+        this.ApiContext.PlayerEventItems.ExecuteDelete();
+        this.ApiContext.PlayerEventPassives.ExecuteDelete();
+        this.ApiContext.PlayerEventRewards.ExecuteDelete();
     }
 
     [Fact]
@@ -173,7 +190,7 @@ public class DungeonRecordTest : TestFixture
     }
 
     [Fact]
-    public async Task Record_Event_UsesMultiplierAndCompletesMissions()
+    public async Task Record_Event_UsesMultiplierAndCompletesScoreMissions()
     {
         int eventId = 20816;
         int questId = 208160502; // Flames of Reflection -- The Path To Mastery: Master
@@ -246,9 +263,15 @@ public class DungeonRecordTest : TestFixture
     }
 
     [Fact]
-    public async Task Record_HandlesNonExistentQuestData()
+    public async Task Record_Event_BossBattle_CompletesMissions()
     {
-        int questId = 219031102;
+        int questId = 208450301; // The Stirring Abyss: Beginner
+        int eventId = 20845; // Toll of the Deep
+
+        await Client.PostMsgpack<MemoryEventActivateData>(
+            "/memory_event/activate",
+            new MemoryEventActivateRequest() { event_id = eventId }
+        );
 
         DungeonSession mockSession =
             new()
@@ -258,9 +281,156 @@ public class DungeonRecordTest : TestFixture
                     new()
                     {
                         chara_id = Charas.ThePrince,
-                        equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SistersDayOut
+                        equip_crest_slot_type_2_crest_id_1 = AbilityCrests.HavingaSummerBall
                     }
                 },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                {
+                    { 1, Enumerable.Empty<AtgenEnemy>() }
+                }
+            };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordData response = (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record = new List<AtgenTreasureRecord>(),
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord(),
+                        wave = 3
+                    }
+                }
+            )
+        ).data;
+
+        response.update_data_list.mission_notice.memory_event_mission_notice.new_complete_mission_id_list
+            .Should()
+            .Contain(10220201) // Clear a Boss Battle
+            .And.Contain(10220401) // Clear a "Toll of the Deep" Quest with Having a Summer Ball Equipped
+            .And.Contain(10220501); // Collect 100 Oceanic Resonance in One Go
+    }
+
+    [Fact]
+    public async Task Record_Event_ChallengeBattle_CompletesMissions()
+    {
+        int questId = 208450502; // Tempestuous Assault: Master
+        int eventId = 20845; // Toll of the Deep
+
+        await Client.PostMsgpack<MemoryEventActivateData>(
+            "/memory_event/activate",
+            new MemoryEventActivateRequest() { event_id = eventId }
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                {
+                    { 1, Enumerable.Empty<AtgenEnemy>() }
+                }
+            };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordData response = (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record = new List<AtgenTreasureRecord>(),
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord(),
+                        wave = 5 // Final wave
+                    }
+                }
+            )
+        ).data;
+
+        response.update_data_list.mission_notice.memory_event_mission_notice.new_complete_mission_id_list
+            .Should()
+            .Contain(10221001) // Completely Clear a Challenge Battle on Master
+            .And.Contain(10221301); // Earn the "Light of the Deep" Epithet
+
+        // Clear Three Challenge Battles
+        this.ApiContext.PlayerMissions.First(x => x.Id == 10220801).Progress.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task Record_Event_Trial_CompletesMissions()
+    {
+        int questId = 208450702; // Wrath of Leviathan: Expert
+        int eventId = 20845; // Toll of the Deep
+
+        await Client.PostMsgpack<MemoryEventActivateData>(
+            "/memory_event/activate",
+            new MemoryEventActivateRequest() { event_id = eventId }
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                {
+                    { 1, Enumerable.Empty<AtgenEnemy>() }
+                }
+            };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordData response = (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record = new List<AtgenTreasureRecord>(),
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord(),
+                        wave = 3
+                    }
+                }
+            )
+        ).data;
+
+        response.update_data_list.mission_notice.memory_event_mission_notice.new_complete_mission_id_list
+            .Should()
+            .Contain(10221201); // Clear a "Toll of the Deep" Trial on Expert
+    }
+
+    [Fact]
+    public async Task Record_HandlesNonExistentQuestData()
+    {
+        int questId = 219031102;
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince, } },
                 QuestData = MasterAsset.QuestData.Get(questId),
                 EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
                 {
@@ -300,8 +470,11 @@ public class DungeonRecordTest : TestFixture
 
         int questId = 227010104; // Volk's Wrath TA Solo
         string roomName = Guid.NewGuid().ToString();
+        string roomId = "1234";
+        string gameId = $"{roomName}_{roomId}";
 
         this.Client.DefaultRequestHeaders.Add("RoomName", roomName);
+        this.Client.DefaultRequestHeaders.Add("RoomId", roomId);
 
         await this.AddToDatabase(
             new DbQuest()
@@ -348,14 +521,13 @@ public class DungeonRecordTest : TestFixture
             }
         );
 
-        this.ApiContext.TimeAttackClears.Should().ContainSingle(x => x.RoomName == roomName);
+        this.ApiContext.TimeAttackClears.Should().ContainSingle(x => x.GameId == gameId);
 
         DbTimeAttackClear? recordedClear = await this.ApiContext.TimeAttackClears
             .Include(x => x.Players)
             .ThenInclude(x => x.Units)
-            .FirstAsync(x => x.RoomName == roomName);
+            .FirstAsync(x => x.GameId == gameId);
 
-        recordedClear.RoomName.Should().Be(roomName);
         recordedClear.Time.Should().Be(clearTime);
         recordedClear.QuestId.Should().Be(questId);
         recordedClear.Players.Should().ContainSingle(x => x.DeviceAccountId == DeviceAccountId);
@@ -367,6 +539,119 @@ public class DungeonRecordTest : TestFixture
         player.PartyInfo.Should().NotBeNullOrEmpty();
         player.Units.Should().HaveCount(4);
     }
+
+    [Fact]
+    public async Task Record_InsufficientStamina_ReturnsError()
+    {
+        int questId = 100020203;
+        await AddToDatabase(
+            new DbQuest()
+            {
+                QuestId = questId,
+                State = 3,
+                DeviceAccountId = DeviceAccountId
+            }
+        );
+
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.StaminaSingle, e => 0)
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>() { }
+            };
+
+        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+
+        (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record = new List<AtgenTreasureRecord>()
+                        {
+                            new()
+                            {
+                                area_idx = 1,
+                                enemy = new List<int>() { 1, 0 }
+                            }
+                        },
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord()
+                    }
+                },
+                ensureSuccessHeader: false
+            )
+        ).data_headers.result_code.Should().Be(ResultCode.QuestStaminaSingleShort);
+    }
+
+    [Fact]
+    public async Task Record_InsufficientStamina_FirstClear_ReturnsSuccess()
+    {
+        int questId = 100020301;
+        await AddToDatabase(
+            new DbQuest()
+            {
+                QuestId = questId,
+                State = 0,
+                DeviceAccountId = DeviceAccountId
+            }
+        );
+
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.StaminaSingle, e => 0)
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>() { }
+            };
+
+        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+
+        (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record = new List<AtgenTreasureRecord>()
+                        {
+                            new()
+                            {
+                                area_idx = 1,
+                                enemy = new List<int>() { 1, 0 }
+                            }
+                        },
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord()
+                    }
+                },
+                ensureSuccessHeader: false
+            )
+        ).data_headers.result_code.Should().Be(ResultCode.Success);
+    }
+
+    private async Task<string> StartDungeon(DungeonSession session) =>
+        await Services.GetRequiredService<IDungeonService>().StartDungeon(session);
 
     private void SetupPhotonAuthentication()
     {

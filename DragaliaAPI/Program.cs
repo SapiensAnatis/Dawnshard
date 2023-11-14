@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.GraphQL;
@@ -11,18 +10,17 @@ using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
-using DragaliaAPI;
 using DragaliaAPI.Models;
-using MessagePack;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MudBlazor.Services;
 using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore.Diagnostics.Internal;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Version;
+using DragaliaAPI.Features.Blazor;
+using Microsoft.JSInterop;
+using DragaliaAPI;
+using MudBlazor;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +29,7 @@ IConfiguration config = builder.Configuration
     .AddJsonFile("dragonfruitOdds.json", optional: false, reloadOnChange: true)
     .Build();
 
-StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
+builder.WebHost.UseStaticWebAssets();
 
 builder.Services
     .Configure<BaasOptions>(config.GetRequiredSection("Baas"))
@@ -42,10 +40,17 @@ builder.Services
     .Configure<ItemSummonConfig>(config)
     .Configure<DragonfruitConfig>(config)
     .Configure<TimeAttackOptions>(config.GetRequiredSection(nameof(TimeAttackOptions)))
-    .Configure<ResourceVersionOptions>(config.GetRequiredSection(nameof(ResourceVersionOptions)));
+    .Configure<ResourceVersionOptions>(config.GetRequiredSection(nameof(ResourceVersionOptions)))
+    .Configure<BlazorOptions>(config.GetRequiredSection(nameof(BlazorOptions)));
 
 builder.Services.AddServerSideBlazor();
-builder.Services.AddMudServices();
+builder.Services.AddMudServices(options =>
+{
+    options.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
+    options.SnackbarConfiguration.VisibleStateDuration = 5000;
+    options.SnackbarConfiguration.ShowTransitionDuration = 500;
+    options.SnackbarConfiguration.HideTransitionDuration = 500;
+});
 
 // Ensure item summon weightings add to 100%
 builder.Services.AddOptions<ItemSummonConfig>().Validate(x => x.Odds.Sum(y => y.Rate) == 100_000);
@@ -61,6 +66,8 @@ builder.Host.UseSerilog(
             .Configuration(context.Configuration)
             .ReadFrom.Services(services)
             .Enrich.FromLogContext()
+            // Blazor keeps throwing these errors from MudBlazor internals; there is nothing we can do about them
+            .Filter.ByExcluding(evt => evt.Exception is JSDisconnectedException)
 );
 
 // Add services to the container.
@@ -115,9 +122,7 @@ builder.Services.ConfigureGraphQlSchema();
 
 WebApplication app = builder.Build();
 
-Log.Logger.Debug("App environment: {@env}", app.Environment);
-
-if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+if (Environment.GetEnvironmentVariable("DISABLE_AUTO_MIGRATION") == null)
     app.MigrateDatabase();
 
 app.UseStaticFiles();
@@ -160,6 +165,7 @@ app.MapWhen(
 #pragma warning disable ASP0001
         applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
+        applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
         applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints.MapBlazorHub();

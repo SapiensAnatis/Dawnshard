@@ -185,5 +185,9 @@ public class ApiContext : DbContext
 
     public DbSet<DbReceivedRankingTierReward> ReceivedRankingTierRewards { get; set; }
 
+    public DbSet<DbNewsItem> NewsItems { get; set; }
+
+    public DbSet<DbQuestTreasureList> QuestTreasureList { get; set; }
+
     public DbSet<DbPlayerQuestWall> PlayerQuestWalls { get; set; }
 }

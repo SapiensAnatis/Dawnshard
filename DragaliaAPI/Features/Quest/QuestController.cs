@@ -5,6 +5,8 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Quest;
@@ -15,25 +17,25 @@ public class QuestController : DragaliaControllerBase
 {
     private readonly IStoryService storyService;
     private readonly IHelperService helperService;
-    private readonly IQuestDropService questRewardService;
     private readonly IUpdateDataService updateDataService;
     private readonly IClearPartyService clearPartyService;
+    private readonly IQuestTreasureService questTreasureService;
     private readonly ILogger<QuestController> logger;
 
     public QuestController(
         IStoryService storyService,
         IHelperService helperService,
-        IQuestDropService questRewardService,
         IUpdateDataService updateDataService,
         IClearPartyService clearPartyService,
+        IQuestTreasureService questTreasureService,
         ILogger<QuestController> logger
     )
     {
         this.storyService = storyService;
         this.helperService = helperService;
-        this.questRewardService = questRewardService;
         this.updateDataService = updateDataService;
         this.clearPartyService = clearPartyService;
+        this.questTreasureService = questTreasureService;
         this.logger = logger;
     }
 
@@ -107,6 +109,13 @@ public class QuestController : DragaliaControllerBase
         );
     }
 
+    [HttpPost("open_treasure")]
+    public async Task<DragaliaResult> OpenTreasure(QuestOpenTreasureRequest request)
+    {
+        QuestOpenTreasureData response = await this.questTreasureService.DoOpenTreasure(request);
+        return Ok(response);
+    }
+
     [HttpPost("set_quest_clear_party")]
     public async Task<DragaliaResult> SetQuestClearParty(QuestSetQuestClearPartyRequest request)
     {
@@ -140,7 +149,9 @@ public class QuestController : DragaliaControllerBase
     [HttpPost("drop_list")]
     public DragaliaResult DropList(QuestDropListRequest request)
     {
-        IEnumerable<Materials> drops = this.questRewardService.GetDrops(request.quest_id);
+        IEnumerable<DropEntity> drops = Enumerable.Empty<DropEntity>();
+        if (MasterAsset.QuestDrops.TryGetValue(request.quest_id, out QuestDropInfo? dropInfo))
+            drops = dropInfo.Drops;
 
         return Ok(
             new QuestDropListData()
@@ -151,8 +162,8 @@ public class QuestController : DragaliaControllerBase
                         x =>
                             new AtgenDuplicateEntityList()
                             {
-                                entity_id = (int)x,
-                                entity_type = EntityTypes.Material
+                                entity_id = x.Id,
+                                entity_type = x.EntityType,
                             }
                     )
                 }

@@ -453,9 +453,6 @@
         "weapon_passive_ability_id": 1010405
       },
       {
-        "weapon_passive_ability_id": 1010408
-      },
-      {
         "weapon_passive_ability_id": 1010409
       }
     ],
@@ -563,7 +560,7 @@
       "list_view_flag": 1
     },
     "dragon_data": {
-      "dragon_id": "JeanneDArc",
+      "dragon_id": "JeannedArc",
       "dragon_key_id": 36,
       "level": 120,
       "exp": 3365620,
@@ -1041,7 +1038,7 @@
     },
     "crest_slot_type_1_crest_list": [
       {
-        "ability_crest_id": "WilyWarriorsFlashAndHeat",
+        "ability_crest_id": "WilyWarriorsFlashHeat",
         "buildup_count": 50,
         "limit_break_count": 4,
         "equipable_count": 1,

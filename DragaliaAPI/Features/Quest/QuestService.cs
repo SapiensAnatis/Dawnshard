@@ -1,7 +1,7 @@
-using System.Diagnostics;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Missions;
+using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
@@ -28,20 +28,23 @@ public class QuestService(
         DbQuest Quest,
         bool BestClearTime,
         IEnumerable<AtgenFirstClearSet> Bonus
-    )> ProcessQuestCompletion(int questId, float clearTime, int playCount)
+    )> ProcessQuestCompletion(DungeonSession session, PlayRecord playRecord)
     {
+        int questId = session.QuestData.Id;
+        int playCount = session.PlayCount;
+
         DbQuest quest = await questRepository.GetQuestDataAsync(questId);
         quest.State = 3;
 
         bool isBestClearTime = false;
 
-        if (0 > quest.BestClearTime || quest.BestClearTime > clearTime)
+        if (0 > quest.BestClearTime || quest.BestClearTime > playRecord.time)
         {
-            quest.BestClearTime = clearTime;
+            quest.BestClearTime = playRecord.time;
             isBestClearTime = true;
         }
 
-        quest.PlayCount += playCount;
+        quest.PlayCount += session.PlayCount;
 
         if (resetHelper.LastDailyReset > quest.LastDailyResetTime)
         {
@@ -86,9 +89,37 @@ public class QuestService(
                 questData,
                 playCount
             );
+
+            this.ProcessEventQuestMissionProgression(questData, session, playRecord);
         }
 
         return (quest, isBestClearTime, questEventRewards);
+    }
+
+    public async Task<int> GetQuestStamina(int questId, StaminaType type)
+    {
+        QuestData questData = MasterAsset.QuestData[questId];
+        DbQuest questEntity = await questRepository.GetQuestDataAsync(questId);
+
+        if (questData.GroupType == QuestGroupType.MainStory && questEntity.State < 3)
+        {
+            logger.LogDebug(
+                "Attempting first clear of main story quest {questId}: 0 stamina required",
+                questId
+            );
+
+            return 0;
+        }
+
+        return type switch
+        {
+            StaminaType.Single => questData.PayStaminaSingle,
+            // Want to encourage co-op play.
+            // Also, `type` here is inferred from endpoint e.g. start_multi, but that doesn't work for time attack.
+            StaminaType.Multi
+                => 0,
+            _ => throw new ArgumentOutOfRangeException(nameof(type))
+        };
     }
 
     private async Task<IEnumerable<AtgenFirstClearSet>> ProcessQuestEventCompletion(
@@ -200,21 +231,18 @@ public class QuestService(
     {
         DbQuestEvent questEvent = await questRepository.GetQuestEventAsync(eventGroupId);
 
-        int questId =
-            await questCacheService.GetQuestGroupQuestIdAsync(eventGroupId)
-            ?? throw new DragaliaException(
-                ResultCode.CommonDbError,
-                $"Could not find latest quest clear id for group {eventGroupId} in cache."
-            );
+        int? questId = await questCacheService.GetQuestGroupQuestIdAsync(eventGroupId);
 
-        if (!isReceive)
+        if (!isReceive || questId == null)
         {
+            logger.LogInformation("Cancelling receipt of quest bonus");
+
             questEvent.QuestBonusReserveCount = 0;
             questEvent.QuestBonusReserveTime = DateTimeOffset.UnixEpoch;
 
             await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
 
-            return new AtgenReceiveQuestBonus() { target_quest_id = questId };
+            return new AtgenReceiveQuestBonus() { target_quest_id = questId ?? 0 };
         }
 
         if (count > questEvent.QuestBonusReserveCount + questEvent.QuestBonusStackCount)
@@ -236,23 +264,20 @@ public class QuestService(
             count = questEvent.QuestBonusReserveCount;
         }
 
-        questEvent.QuestBonusReserveCount -= count;
-        questEvent.QuestBonusReserveTime =
-            questEvent.QuestBonusReserveCount == 0
-                ? DateTimeOffset.UnixEpoch
-                : dateTimeProvider.UtcNow;
+        questEvent.QuestBonusReserveCount = 0;
+        questEvent.QuestBonusReserveTime = DateTimeOffset.UnixEpoch;
 
         questEvent.QuestBonusReceiveCount += count;
 
         // TODO: bonus factor?
         IEnumerable<AtgenBuildEventRewardEntityList> bonusRewards = (
-            await GenerateBonusDrops(questId, count)
+            await GenerateBonusDrops(questId.Value, count)
         ).Select(x => x.ToBuildEventRewardEntityList());
 
         // Remove at the end so it doesn't get messed up when erroring
         await questCacheService.RemoveQuestGroupQuestIdAsync(eventGroupId);
 
-        return new AtgenReceiveQuestBonus(questId, count, 1, bonusRewards);
+        return new AtgenReceiveQuestBonus(questId.Value, count, 1, bonusRewards);
     }
 
     private void ResetQuestEventBonus(DbQuestEvent questEvent, QuestEvent questEventData)
@@ -276,6 +301,45 @@ public class QuestService(
 
             questEvent.QuestBonusReserveCount = 0;
             questEvent.QuestBonusReserveTime = dateTimeProvider.UtcNow;
+        }
+    }
+
+    private void ProcessEventQuestMissionProgression(
+        QuestData questData,
+        DungeonSession session,
+        PlayRecord playRecord
+    )
+    {
+        if (questData.EventKindType is EventKindType.Build or EventKindType.Clb01)
+        {
+            foreach (
+                AbilityCrests crest in session.Party
+                    .SelectMany(x => x.GetAbilityCrestList())
+                    .Distinct()
+            )
+            {
+                missionProgressionService.OnEventQuestClearedWithCrest(questData.Gid, crest);
+            }
+        }
+
+        if (questData.IsEventBossBattle)
+        {
+            missionProgressionService.OnEventBossBattleCleared(questData.Gid);
+        }
+        else if (questData.IsEventChallengeBattle)
+        {
+            int questScoreMissionId = MasterAsset.QuestRewardData[questData.Id].QuestScoreMissionId;
+            int waveCount = MasterAsset.QuestScoreMissionData[questScoreMissionId].WaveCount;
+
+            missionProgressionService.OnEventChallengeBattleCleared(
+                questData.Gid,
+                questData.Id,
+                playRecord.wave >= waveCount
+            );
+        }
+        else if (questData.IsEventTrial)
+        {
+            missionProgressionService.OnEventTrialCleared(questData.Gid, questData.Id);
         }
     }
 }

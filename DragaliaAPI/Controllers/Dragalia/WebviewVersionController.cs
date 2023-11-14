@@ -9,7 +9,8 @@ namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("webview_version")]
 [AllowAnonymous]
-public class WebviewVersionController : DragaliaControllerBase
+public class WebviewVersionController(IWebHostEnvironment webHostEnvironment)
+    : DragaliaControllerBase
 {
     private const string PlaceholderUrl = "localhost";
 
@@ -22,11 +23,13 @@ public class WebviewVersionController : DragaliaControllerBase
         AtgenWebviewUrlList timeAttackReward =
             new("time_attack_reward", this.GetUrl("timeattack/rewards/webview"));
 
+        AtgenWebviewUrlList news = new("information", this.GetUrl("news/webview"));
+
         return this.Ok(
             new WebviewVersionUrlListData(
                 new List<AtgenWebviewUrlList>()
                 {
-                    new("information", this.GetUrl("news")),
+                    news,
                     timeAttackRanking,
                     timeAttackReward,
                     new("ability_crest_advice", PlaceholderUrl),
@@ -53,9 +56,8 @@ public class WebviewVersionController : DragaliaControllerBase
 
     private string GetUrl(string relativePath)
     {
-        string url = $"https://{this.HttpContext.Request.Host.Host}/{relativePath}";
-        url = QueryHelpers.AddQueryString(url, "hideappbar", "true");
-
+        string protocol = webHostEnvironment.IsDevelopment() ? "http" : "https";
+        string url = $"{protocol}://{this.HttpContext.Request.Host.Host}/{relativePath}";
         return url;
     }
 }

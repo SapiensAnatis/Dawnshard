@@ -17,8 +17,7 @@ public class DungeonRecordController(
     IDungeonRecordHelperService dungeonRecordHelperService,
     IDungeonService dungeonService,
     ITimeAttackService timeAttackService,
-    IUpdateDataService updateDataService,
-    ILogger<DungeonRecordController> logger
+    IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
     [HttpPost("record")]
@@ -100,10 +99,13 @@ public class DungeonRecordController(
     )]
     public async Task<DragaliaResult> RecordTimeAttack(
         [FromHeader(Name = "RoomName")] string roomName,
+        [FromHeader(Name = "RoomId")] int roomId,
         [FromBody] DungeonRecordRecordMultiRequest request
     )
     {
-        await timeAttackService.RegisterRankedClear(roomName, request.play_record.time);
+        string gameId = $"{roomName}_{roomId}";
+
+        await timeAttackService.RegisterRankedClear(gameId, request.play_record.time);
         await updateDataService.SaveChangesAsync();
 
         return this.Ok(new ResultCodeData(ResultCode.Success));

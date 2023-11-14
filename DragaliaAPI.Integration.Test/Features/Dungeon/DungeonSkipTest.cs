@@ -27,6 +27,15 @@ public class DungeonSkipTest : TestFixture
         int staminaCost = 8;
         int playCount = 5;
 
+        await this.AddToDatabase(
+            new DbQuest()
+            {
+                DeviceAccountId = DeviceAccountId,
+                QuestId = questId,
+                State = 3
+            }
+        );
+
         DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData
             .AsNoTracking()
             .First(x => x.DeviceAccountId == DeviceAccountId);
@@ -78,6 +87,15 @@ public class DungeonSkipTest : TestFixture
         int questId = 100010301; // Save the Paladyn (Very Hard)
         int staminaCost = 8;
         int playCount = 5;
+
+        await this.AddToDatabase(
+            new DbQuest()
+            {
+                DeviceAccountId = DeviceAccountId,
+                QuestId = questId,
+                State = 3
+            }
+        );
 
         DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData
             .AsNoTracking()

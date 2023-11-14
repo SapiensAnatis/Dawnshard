@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Entities.Scaffold;
+﻿using DragaliaAPI.Features.Player;
 using DragaliaAPI.Models.Generated;
 
 namespace DragaliaAPI.Features.Dungeon;
@@ -19,6 +18,7 @@ public interface IDungeonStartService
     );
 
     Task<IngameQuestData> InitiateQuest(int questId);
+    Task<bool> ValidateStamina(int questId, StaminaType staminaType);
     Task<IngameData> GetWallIngameData(WallStartStartAssignUnitRequest request);
     Task<IngameData> GetWallIngameData(WallStartStartRequest request);
 }

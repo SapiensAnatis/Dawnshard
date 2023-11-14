@@ -18,6 +18,7 @@ using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Features.Stamp;
@@ -25,6 +26,7 @@ using DragaliaAPI.Features.Talisman;
 using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Trade;
+using DragaliaAPI.Features.Version;
 using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Middleware;
@@ -100,7 +102,6 @@ public static class ServiceConfiguration
             .AddScoped<IDungeonService, DungeonService>()
             .AddScoped<IDungeonStartService, DungeonStartService>()
             .AddScoped<IDungeonRepository, DungeonRepository>()
-            .AddScoped<IQuestDropService, QuestDropService>()
             .AddScoped<IQuestEnemyService, QuestEnemyService>()
             .AddScoped<IOddsInfoService, OddsInfoService>()
             .AddScoped<IDungeonRecordService, DungeonRecordService>()
@@ -138,10 +139,13 @@ public static class ServiceConfiguration
             // Quest feature
             .AddScoped<IQuestService, QuestService>()
             .AddScoped<IQuestCacheService, QuestCacheService>()
+            .AddScoped<IQuestTreasureService, QuestTreasureService>()
             // Party power feature
             .AddScoped<IPartyPowerService, PartyPowerService>()
             .AddScoped<IPartyPowerRepository, PartyPowerRepository>()
             // Chara feature
+            .AddScoped<ICharaService, CharaService>()
+            .AddScoped<IResourceVersionService, ResourceVersionService>()
             .AddScoped<ICharaService, CharaService>()
             // Wall feature
             .AddScoped<IWallService, WallService>()
@@ -151,6 +155,7 @@ public static class ServiceConfiguration
 
         services.AddAllOfType<ISavefileUpdate>();
         services.AddAllOfType<IDailyResetAction>();
+        services.AddAllOfType<IRewardHandler>();
 
         services.AddHttpClient<IBaasApi, BaasApi>();
 
@@ -164,6 +169,8 @@ public static class ServiceConfiguration
             client.BaseAddress = new(options.StateManagerUrl);
         });
         services.AddScoped<IMatchingService, MatchingService>();
+
+        services.AddScoped<ResourceVersionActionFilter>();
 
         return services;
     }

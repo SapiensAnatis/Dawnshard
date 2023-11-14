@@ -98,7 +98,9 @@ public class MasterAssetTest
                     ExAbility2Data5: 400000740,
                     EditReleaseEntityType1: EntityTypes.Material,
                     EditReleaseEntityId1: 201019011,
-                    EditReleaseEntityQuantity1: 5
+                    EditReleaseEntityQuantity1: 5,
+                    BaseId: 100032,
+                    VariationId: 4
                 )
             );
     }
@@ -208,7 +210,9 @@ public class MasterAssetTest
                     LimitBreakId: DragonLimitBreakTypes.Normal,
                     LimitBreakMaterialId: 0,
                     DefaultReliabilityLevel: 0,
-                    DmodePassiveAbilityId: 0
+                    DmodePassiveAbilityId: 0,
+                    BaseId: 210173,
+                    VariationId: 1
                 )
             );
     }
@@ -490,7 +494,8 @@ public class MasterAssetTest
                     UnlockMaterialId4: Materials.UnearthlyLantern,
                     UnlockMaterialQuantity4: 1,
                     UnlockMaterialId5: Materials.BlazeOrb,
-                    UnlockMaterialQuantity5: 8
+                    UnlockMaterialQuantity5: 8,
+                    AbilityId: 389
                 )
             );
     }
@@ -730,7 +735,9 @@ public class MasterAssetTest
                     MaxHp: 44,
                     BaseAtk: 5,
                     MaxAtk: 25,
-                    UnionAbilityGroupId: 4
+                    UnionAbilityGroupId: 4,
+                    BaseId: 400192,
+                    IsHideChangeImage: true
                 )
             );
     }

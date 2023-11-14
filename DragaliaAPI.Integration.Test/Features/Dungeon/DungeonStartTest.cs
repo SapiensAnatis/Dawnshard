@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Models;
+using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 using Snapshooter;
@@ -15,6 +16,13 @@ public class DungeonStartTest : TestFixture
         : base(factory, outputHelper)
     {
         ImportSave();
+
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.StaminaSingle, e => 100)
+        );
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.StaminaMulti, e => 100)
+        );
     }
 
     [Fact]
@@ -102,13 +110,13 @@ public class DungeonStartTest : TestFixture
                         unit_no = 1,
                         chara_id = Charas.GalaLeonidas,
                         equip_weapon_body_id = WeaponBodies.Draupnir,
-                        equip_dragon_key_id = GetDragonKeyId(Dragons.Horus),
+                        equip_dragon_key_id = (ulong)GetDragonKeyId(Dragons.Horus),
                         equip_crest_slot_type_1_crest_id_1 = AbilityCrests.PrimalCrisis,
                         equip_crest_slot_type_1_crest_id_2 = AbilityCrests.TheCutieCompetition,
                         equip_crest_slot_type_1_crest_id_3 = AbilityCrests.AnIndelibleDate,
                         equip_crest_slot_type_2_crest_id_1 = AbilityCrests.BeautifulGunman,
                         equip_crest_slot_type_2_crest_id_2 = AbilityCrests.DragonArcanum,
-                        equip_talisman_key_id = GetTalismanKeyId(Talismans.GalaLeonidas),
+                        equip_talisman_key_id = (ulong)GetTalismanKeyId(Talismans.GalaLeonidas),
                         equip_crest_slot_type_3_crest_id_1 = AbilityCrests.AKnightsDreamAxesBoon,
                         equip_crest_slot_type_3_crest_id_2 = AbilityCrests.CrownofLightSerpentsBoon,
                         edit_skill_1_chara_id = Charas.GalaZethia,
@@ -119,13 +127,13 @@ public class DungeonStartTest : TestFixture
                         unit_no = 2,
                         chara_id = Charas.GalaGatov,
                         equip_weapon_body_id = WeaponBodies.Mjoelnir,
-                        equip_dragon_key_id = GetDragonKeyId(Dragons.GalaMars),
+                        equip_dragon_key_id = (ulong)GetDragonKeyId(Dragons.GalaMars),
                         equip_crest_slot_type_1_crest_id_1 = AbilityCrests.TheCutieCompetition,
                         equip_crest_slot_type_1_crest_id_2 = AbilityCrests.KungFuMasters,
                         equip_crest_slot_type_1_crest_id_3 = AbilityCrests.BondsBetweenWorlds,
                         equip_crest_slot_type_2_crest_id_1 = AbilityCrests.DragonArcanum,
                         equip_crest_slot_type_2_crest_id_2 = AbilityCrests.BeautifulNothingness,
-                        equip_talisman_key_id = GetTalismanKeyId(Talismans.GalaMym),
+                        equip_talisman_key_id = (ulong)GetTalismanKeyId(Talismans.GalaMym),
                         equip_crest_slot_type_3_crest_id_1 =
                             AbilityCrests.TutelarysDestinyWolfsBoon,
                         equip_crest_slot_type_3_crest_id_2 =
@@ -151,23 +159,67 @@ public class DungeonStartTest : TestFixture
             .And.Contain(x => x.chara_data!.chara_id == Charas.GalaGatov);
     }
 
+    [Theory]
+    [InlineData("start")]
+    [InlineData("start_assign_unit")]
+    public async Task Start_InsufficientStamina_ReturnsError(string endpoint)
+    {
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            p => p.SetProperty(e => e.StaminaSingle, e => 0)
+        );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            p => p.SetProperty(e => e.StaminaMulti, e => 0)
+        );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            p => p.SetProperty(e => e.LastStaminaSingleUpdateTime, e => DateTimeOffset.UtcNow)
+        );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            p => p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow)
+        );
+
+        (
+            await Client.PostMsgpack<DungeonStartStartData>(
+                $"/dungeon_start/{endpoint}",
+                new DungeonStartStartRequest() { quest_id = 100010104 },
+                ensureSuccessHeader: false
+            )
+        ).data_headers.result_code
+            .Should()
+            .Be(ResultCode.QuestStaminaSingleShort);
+    }
+
+    [Fact]
+    public async Task Start_ZeroStamina_FirstClearOfMainStory_Allows()
+    {
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            p => p.SetProperty(e => e.StaminaSingle, e => 0)
+        );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            p => p.SetProperty(e => e.StaminaMulti, e => 0)
+        );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            p => p.SetProperty(e => e.LastStaminaSingleUpdateTime, e => DateTimeOffset.UtcNow)
+        );
+        await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
+            p => p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow)
+        );
+
+        await this.ApiContext.PlayerQuests.Where(x => x.QuestId == 100260101).ExecuteDeleteAsync();
+
+        (
+            await Client.PostMsgpack<DungeonStartStartData>(
+                $"/dungeon_start/start",
+                new DungeonStartStartRequest()
+                {
+                    quest_id = 100260101,
+                    party_no_list = new List<int>() { 1 },
+                },
+                ensureSuccessHeader: false
+            )
+        ).data_headers.result_code.Should().Be(ResultCode.Success);
+    }
+
     private static readonly Func<MatchOptions, MatchOptions> SnapshotOptions = opts =>
         opts.IgnoreField<long>("$..dragon_data.dragon_key_id")
             .IgnoreField<long>("$..talisman_data.talisman_key_id");
-
-    private ulong GetDragonKeyId(Dragons id)
-    {
-        return (ulong)
-            this.ApiContext.PlayerDragonData
-                .First(x => x.DeviceAccountId == DeviceAccountId && x.DragonId == id)
-                .DragonKeyId;
-    }
-
-    private ulong GetTalismanKeyId(Talismans id)
-    {
-        return (ulong)
-            this.ApiContext.PlayerTalismans
-                .First(x => x.DeviceAccountId == DeviceAccountId && x.TalismanId == id)
-                .TalismanKeyId;
-    }
 }

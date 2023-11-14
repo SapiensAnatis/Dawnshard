@@ -12,6 +12,8 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Services;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Features.Player;
+using DragaliaAPI.Features.Quest;
 
 namespace DragaliaAPI.Features.Dungeon.Start;
 
@@ -21,15 +23,43 @@ public class DungeonStartService(
     IWeaponRepository weaponRepository,
     IDungeonService dungeonService,
     IPlayerIdentityService playerIdentityService,
+    IQuestService questService,
     IQuestRepository questRepository,
     IBonusService bonusService,
     IHelperService helperService,
+    IUserService userService,
     IMapper mapper,
     ILogger<DungeonStartService> logger,
     IPaymentService paymentService,
     IEventService eventService
 ) : IDungeonStartService
 {
+    public async Task<bool> ValidateStamina(int questId, StaminaType staminaType)
+    {
+        if (!MasterAsset.QuestData.TryGetValue(questId, out QuestData? _))
+        {
+            logger.LogInformation("Quest {quest} does not exist", questId);
+            return false;
+        }
+
+        int requiredStamina = await questService.GetQuestStamina(questId, staminaType);
+        int currentStamina = await userService.GetAndUpdateStamina(staminaType);
+
+        if (currentStamina < requiredStamina)
+        {
+            logger.LogInformation(
+                "Player did not have required stamina for quest {quest}: has {currentStamina}, needs {requiredStamina}",
+                questId,
+                currentStamina,
+                requiredStamina
+            );
+
+            return false;
+        }
+
+        return true;
+    }
+
     public async Task<IngameData> GetIngameData(
         int questId,
         IEnumerable<int> partyNoList,
