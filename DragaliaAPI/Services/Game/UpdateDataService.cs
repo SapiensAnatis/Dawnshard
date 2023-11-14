@@ -100,7 +100,8 @@ public class UpdateDataService(
                 quest_treasure_list = ConvertEntities<QuestTreasureList, DbQuestTreasureList>(
                     entities
                 ),
-                party_power_data = ConvertEntities<PartyPowerData, DbPartyPower>(entities)?.Single(),
+                party_power_data = ConvertEntities<PartyPowerData, DbPartyPower>(entities)
+                    ?.Single(),
                 quest_wall_list = ConvertEntities<QuestWallList, DbPlayerQuestWall>(entities)
             };
 

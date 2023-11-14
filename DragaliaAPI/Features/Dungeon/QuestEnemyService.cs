@@ -209,7 +209,7 @@ public class QuestEnemyService : IQuestEnemyService
     {
         QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(wallId, wallLevel);
         return new List<AtgenEnemy>()
-        { 
+        {
             new AtgenEnemy()
             {
                 enemy_idx = 0,
