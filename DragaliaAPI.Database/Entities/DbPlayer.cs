@@ -97,4 +97,7 @@ public class DbPlayer
 
     public virtual ICollection<DbQuestTreasureList> QuestTreasureList { get; set; } =
         new List<DbQuestTreasureList>();
+
+    public virtual ICollection<DbPlayerQuestWall> QuestWalls { get; set; } =
+        new List<DbPlayerQuestWall>();
 }

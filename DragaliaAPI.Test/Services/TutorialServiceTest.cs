@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Fort;
+using DragaliaAPI.Features.Wall;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,7 @@ public class TutorialServiceTest
     private readonly Mock<IAbilityCrestRepository> mockAbilityCrestRepository;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IFortRepository> mockFortRepository;
+    private readonly Mock<IWallRepository> mockWallRepository;
 
     private readonly ITutorialService tutorialService;
 
@@ -25,13 +27,15 @@ public class TutorialServiceTest
         mockAbilityCrestRepository = new(MockBehavior.Strict);
         mockUserDataRepository = new(MockBehavior.Strict);
         mockFortRepository = new(MockBehavior.Strict);
+        mockWallRepository = new(MockBehavior.Strict);
 
         tutorialService = new TutorialService(
             mockLogger.Object,
             mockInventoryRepository.Object,
             mockAbilityCrestRepository.Object,
             mockUserDataRepository.Object,
-            mockFortRepository.Object
+            mockFortRepository.Object,
+            mockWallRepository.Object
         );
     }
 

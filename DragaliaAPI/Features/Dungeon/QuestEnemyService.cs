@@ -8,6 +8,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 using FluentRandomPicker;
 using FluentRandomPicker.FluentInterfaces.General;
 using JetBrains.Annotations;
+using DragaliaAPI.Shared.MasterAsset.Models.Wall;
 
 namespace DragaliaAPI.Features.Dungeon;
 
@@ -103,6 +104,14 @@ public class QuestEnemyService : IQuestEnemyService
         return enemyList;
     }
 
+    // Mercurial Gauntlet
+    public IEnumerable<AtgenEnemy> BuildQuestWallEnemyList(int wallId, int wallLevel)
+    {
+        List<AtgenEnemy> enemyList = this.GetWallEnemyList(wallId, wallLevel).ToList();
+        // should handle enemy drops but eh
+        return enemyList;
+    }
+
     private static IPick<AtgenEnemy> GetEnemyPicker(AtgenEnemy[] enemyList)
     {
         AtgenEnemy? boss = enemyList.FirstOrDefault(
@@ -193,5 +202,22 @@ public class QuestEnemyService : IQuestEnemyService
                     }
             )
             .ToArray();
+    }
+
+    // Mercurial Gauntlet
+    private IEnumerable<AtgenEnemy> GetWallEnemyList(int wallId, int wallLevel)
+    {
+        QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(wallId, wallLevel);
+        return new List<AtgenEnemy>()
+        {
+            new AtgenEnemy()
+            {
+                enemy_idx = 0,
+                is_pop = true,
+                is_rare = false,
+                param_id = questWallDetail.BossEnemyParamId,
+                enemy_drop_list = new List<EnemyDropList>()
+            }
+        };
     }
 }

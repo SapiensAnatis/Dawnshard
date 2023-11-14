@@ -13,6 +13,7 @@ using DragaliaAPI.Shared.MasterAsset.Models.Shop;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.MasterAsset.Models.Trade;
 using DragaliaAPI.Shared.MasterAsset.Models.User;
+using DragaliaAPI.Shared.MasterAsset.Models.Wall;
 
 namespace DragaliaAPI.Shared.MasterAsset;
 
@@ -476,5 +477,19 @@ public static class MasterAsset
     public static readonly MasterAssetData<int, RankingTierReward> RankingTierReward =
         new("TimeAttack/RankingTierReward.json", x => x.Id);
 
+    #endregion
+
+    #region Wall
+    /// <summary>
+    /// Contains information about Mercurial Gauntlet quests.
+    /// </summary>
+    public static readonly MasterAssetData<int, QuestWallDetail> QuestWallDetail =
+        new("Wall/QuestWallDetail.json", x => x.Id);
+
+    /// <summary>
+    /// Contains information about Mercurial Gauntlet monthly rewards.
+    /// </summary>
+    public static readonly MasterAssetData<int, QuestWallMonthlyReward> QuestWallMonthlyReward =
+        new("Wall/QuestWallMonthlyReward.json", x => x.TotalWallLevel);
     #endregion
 }

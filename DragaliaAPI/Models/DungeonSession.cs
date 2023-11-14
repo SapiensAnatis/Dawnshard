@@ -8,7 +8,7 @@ public class DungeonSession
 {
     public required IEnumerable<PartySettingList> Party { get; set; }
 
-    public required QuestData QuestData { get; set; }
+    public QuestData? QuestData { get; set; }
 
     public bool IsHost { get; set; } = true;
 
@@ -21,4 +21,8 @@ public class DungeonSession
     public Dictionary<int, IEnumerable<AtgenEnemy>> EnemyList { get; set; } = new();
 
     public int PlayCount { get; set; } = 1;
+
+    public int WallId { get; set; }
+
+    public int WallLevel { get; set; }
 }
