@@ -46,7 +46,7 @@ public class WallRepository : IWallRepository
                 {
                     DeviceAccountId = this.playerIdentityService.AccountId,
                     WallId = WallService.FlameWallId + element,
-                    WallLevel = 0,
+                    WallLevel = 0,  // Indicates you have not completed level 1. Goes up to 80 upon completing level 80
                     IsStartNextLevel = false,
                 }
             );

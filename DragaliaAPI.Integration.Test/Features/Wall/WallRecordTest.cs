@@ -63,7 +63,7 @@ public class WallRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
                 WallId = wallId,
-                WallLevel = wallLevel
+                WallLevel = wallLevel + 1 // Client passes (db wall level + 1) 
             };
 
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
@@ -183,5 +183,18 @@ public class WallRecordTest : TestFixture
                     entity_quantity = notExpectedWyrmites
                 }
             );
+
+        // Also check if before_wall_level and after_wall_level are correct
+        response.play_wall_detail
+            .Should()
+            .BeEquivalentTo(
+                new AtgenPlayWallDetail()
+                {
+                    wall_id = wallId,
+                    before_wall_level = wallLevel,
+                    after_wall_level = wallLevel
+                }
+            );
     }
+
 }

@@ -47,11 +47,12 @@ public class WallRecordController : DragaliaControllerBase
     public async Task<DragaliaResult> Record(WallRecordRecordRequest request)
     {
         DungeonSession dungeonSession = await dungeonService.FinishDungeon(request.dungeon_key);
+        DbPlayerQuestWall questWall = await wallRepository.GetQuestWall(request.wall_id);
 
-        int previousLevel = dungeonSession.WallLevel;
+        int finishedLevel = dungeonSession.WallLevel; // ex: if you finish level 2, this value should be 2
+        int previousLevel = questWall.WallLevel;
 
-        // Don't grant first clear wyrmite if you are re-clearing the last level
-        bool toGrantFirstClearWyrmite = previousLevel != WallService.MaximumQuestWallLevel;
+        bool isRecompletingMaxLevel = questWall.WallLevel == WallService.MaximumQuestWallLevel;
 
         logger.LogInformation(
             "Cleared wall quest with 'wall_id' {@wall_id} and 'wall_level' {@wall_level}",
@@ -84,9 +85,9 @@ public class WallRecordController : DragaliaControllerBase
             {
                 wall_id = request.wall_id,
                 before_wall_level = previousLevel,
-                after_wall_level = previousLevel + 1
+                after_wall_level = finishedLevel
             };
-
+    
         // Grant Rewards
         await rewardService.GrantReward(GoldCrystals);
 
@@ -94,12 +95,13 @@ public class WallRecordController : DragaliaControllerBase
 
         await rewardService.GrantReward(Mana);
 
-        if (toGrantFirstClearWyrmite)
+        // Don't grant first clear wyrmite if you are re-clearing the last level
+        if (!isRecompletingMaxLevel)
         {
             presentService.AddPresent(WyrmitesPresent);
         }
 
-        IEnumerable<AtgenBuildEventRewardEntityList> wallClearRewardList = toGrantFirstClearWyrmite
+        IEnumerable<AtgenBuildEventRewardEntityList> wallClearRewardList = !isRecompletingMaxLevel
             ? new[] { Wyrmites.ToBuildEventRewardEntityList() }
             : Enumerable.Empty<AtgenBuildEventRewardEntityList>();
 

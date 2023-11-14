@@ -43,7 +43,6 @@ public class WallStartController : DragaliaControllerBase
     {
         // Set flag for having played the next level
         await wallService.SetQuestWallIsStartNextLevel(request.wall_id, true);
-
         QuestWallDetail questWallDetail = MasterAssetUtils.GetQuestWallDetail(
             request.wall_id,
             request.wall_level

@@ -58,8 +58,16 @@ public class WallRecordControllerTest
         string dungeonKey = "key";
         List<PartySettingList> party = new();
         int wallId = WallService.FlameWallId;
+        int wallLevel = 1;
 
-        DungeonSession session = new() { QuestData = MasterAsset.QuestData[0], Party = party, };
+        DungeonSession session = 
+            new() 
+            { 
+                QuestData = MasterAsset.QuestData[0], 
+                Party = party,
+                WallId = wallId,
+                WallLevel = wallLevel + 1 // Client passes (db wall level + 1) 
+            };
 
         DbPlayerQuestWall playerQuestWall =
             new()
@@ -67,7 +75,7 @@ public class WallRecordControllerTest
                 DeviceAccountId = "cool account",
                 IsStartNextLevel = true,
                 WallId = wallId,
-                WallLevel = 1
+                WallLevel = wallLevel
             };
 
         mockDungeonService.Setup(x => x.FinishDungeon(dungeonKey)).ReturnsAsync(session);
@@ -102,8 +110,8 @@ public class WallRecordControllerTest
             new()
             {
                 wall_id = wallId,
-                after_wall_level = 2,
-                before_wall_level = 1
+                after_wall_level = wallLevel + 1,
+                before_wall_level = wallLevel
             };
 
         AtgenWallDropReward dataWallDropReward =
