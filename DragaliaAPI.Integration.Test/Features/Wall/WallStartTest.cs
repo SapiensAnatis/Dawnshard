@@ -48,7 +48,8 @@ public class WallStartTest : TestFixture
 
         response.odds_info.enemy.First().param_id.Should().Be(expectedWallBossParamId);
 
-        response.ingame_wall_data
+        response
+            .ingame_wall_data
             .Should()
             .BeEquivalentTo(new IngameWallData() { wall_id = wallId, wall_level = wallLevel });
     }
@@ -88,7 +89,8 @@ public class WallStartTest : TestFixture
 
         response.odds_info.enemy.First().param_id.Should().Be(expectedWallBossParamId);
 
-        response.ingame_wall_data
+        response
+            .ingame_wall_data
             .Should()
             .BeEquivalentTo(new IngameWallData() { wall_id = wallId, wall_level = wallLevel });
     }

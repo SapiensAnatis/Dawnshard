@@ -550,12 +550,13 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext.PlayerQuestWalls.AddRange(
-                savefile.quest_wall_list.MapWithDeviceAccount<DbPlayerQuestWall>(
-                    mapper,
-                    deviceAccountId
-                )
-            );
+            this.apiContext
+                .PlayerQuestWalls
+                .AddRange(
+                    savefile
+                        .quest_wall_list
+                        .MapWithDeviceAccount<DbPlayerQuestWall>(mapper, deviceAccountId)
+                );
 
             this.logger.LogDebug(
                 "Mapping DbPlayerQuestWall step done after {t} ms",
@@ -751,18 +752,26 @@ public class SavefileService : ISavefileService
         // this.apiContext.Emblems.RemoveRange(
         //     this.apiContext.Emblems.Where(x => x.DeviceAccountId == deviceAccountId)
         // );
-        this.apiContext.QuestEvents.RemoveRange(
-            this.apiContext.QuestEvents.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.QuestTreasureList.RemoveRange(
-            this.apiContext.QuestTreasureList.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PartyPowers.RemoveRange(
-            this.apiContext.PartyPowers.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
-        this.apiContext.PlayerQuestWalls.RemoveRange(
-            this.apiContext.PlayerQuestWalls.Where(x => x.DeviceAccountId == deviceAccountId)
-        );
+        this.apiContext
+            .QuestEvents
+            .RemoveRange(
+                this.apiContext.QuestEvents.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .QuestTreasureList
+            .RemoveRange(
+                this.apiContext.QuestTreasureList.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PartyPowers
+            .RemoveRange(
+                this.apiContext.PartyPowers.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
+        this.apiContext
+            .PlayerQuestWalls
+            .RemoveRange(
+                this.apiContext.PlayerQuestWalls.Where(x => x.DeviceAccountId == deviceAccountId)
+            );
     }
 
     public async Task Reset()

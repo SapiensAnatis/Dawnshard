@@ -1,12 +1,11 @@
-﻿using DragaliaAPI.Controllers;
+﻿using AutoMapper;
+using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.MasterAsset;
-using AutoMapper;
-
-using Microsoft.AspNetCore.Mvc;
 using DragaliaAPI.Shared.MasterAsset.Models.Wall;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Wall;
 
