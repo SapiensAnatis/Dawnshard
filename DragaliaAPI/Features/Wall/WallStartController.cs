@@ -47,7 +47,13 @@ public class WallStartController : DragaliaControllerBase
             request.wall_level
         );
 
-        IngameData ingameData = await this.dungeonStartService.GetWallIngameData(request);
+        IngameData ingameData = await this.dungeonStartService.GetWallIngameData(
+            request.wall_id,
+            request.wall_level,
+            request.party_no,
+            request.support_viewer_id
+        );
+
         ingameData.area_info_list = questWallDetail.AreaInfo.Select(mapper.Map<AreaInfoList>);
 
         IngameWallData ingameWallData =
@@ -81,7 +87,13 @@ public class WallStartController : DragaliaControllerBase
             request.wall_level
         );
 
-        IngameData ingameData = await this.dungeonStartService.GetWallIngameData(request);
+        IngameData ingameData = await this.dungeonStartService.GetWallIngameData(
+            request.wall_id,
+            request.wall_level,
+            request.request_party_setting_list,
+            request.support_viewer_id
+        );
+
         ingameData.area_info_list = questWallDetail.AreaInfo.Select(mapper.Map<AreaInfoList>);
 
         IngameWallData ingameWallData =
