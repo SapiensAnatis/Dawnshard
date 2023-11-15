@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Factories;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.MasterAsset;
 
 namespace DragaliaAPI.Database.Test.Entities;
 

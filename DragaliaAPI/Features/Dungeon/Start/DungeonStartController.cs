@@ -1,13 +1,10 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.TimeAttack;
-using DragaliaAPI.Features.TimeAttack.Validation;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Photon;
 using DragaliaAPI.Shared.Definitions.Enums;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Dungeon.Start;

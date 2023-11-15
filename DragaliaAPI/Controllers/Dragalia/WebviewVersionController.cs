@@ -1,9 +1,6 @@
-﻿using DragaliaAPI.Features.TimeAttack;
-using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Models.Generated;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 

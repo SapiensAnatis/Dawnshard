@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Helpers;
-using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.Caching.Distributed;
 

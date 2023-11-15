@@ -48,7 +48,7 @@ public static class DbPlayerDragonReliabilityFactory
     {
         byte defaultRelLevel = (byte)MasterAsset.DragonData.Get(id).DefaultReliabilityLevel;
         defaultRelLevel = defaultRelLevel == default ? (byte)1 : defaultRelLevel;
-        DbPlayerDragonReliability newReliability = new DbPlayerDragonReliability()
+        DbPlayerDragonReliability newReliability = new DbPlayerDragonReliability
         {
             DeviceAccountId = deviceAccountId,
             DragonId = id,

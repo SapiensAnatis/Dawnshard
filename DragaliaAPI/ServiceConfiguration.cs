@@ -35,7 +35,6 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Services.Photon;
-using DragaliaAPI.Shared.PlayerDetails;
 
 namespace DragaliaAPI;
 

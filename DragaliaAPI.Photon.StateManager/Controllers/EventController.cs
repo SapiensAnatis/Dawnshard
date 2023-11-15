@@ -1,9 +1,7 @@
-using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Photon.Shared.Requests;
 using DragaliaAPI.Photon.StateManager.Authentication;
 using DragaliaAPI.Photon.StateManager.Models;
-using MessagePack.Formatters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -50,7 +48,7 @@ public class EventController : ControllerBase
     /// </summary>
     /// <param name="request">The webhook data.</param>
     /// <returns>A webhook response.</returns>
-    [HttpPost("[action]")]
+    [HttpPost("GameCreate")]
     public async Task<IActionResult> GameCreate(GameCreateRequest request)
     {
         RedisGame newGame = new(request.Game);
@@ -69,7 +67,7 @@ public class EventController : ControllerBase
     /// </summary>
     /// <param name="request">The webhook data.</param>
     /// <returns>A webhook response.</returns>
-    [HttpPost("[action]")]
+    [HttpPost("GameJoin")]
     public async Task<IActionResult> GameJoin(GameModifyRequest request)
     {
         RedisGame? game = await this.Games.FindByIdAsync(request.GameName);
@@ -115,7 +113,7 @@ public class EventController : ControllerBase
     /// </summary>
     /// <param name="request">The webhook data.</param>
     /// <returns>A webhook response.</returns>
-    [HttpPost("[action]")]
+    [HttpPost("GameLeave")]
     public async Task<IActionResult> GameLeave(GameModifyRequest request)
     {
         RedisGame? game = await this.Games.FindByIdAsync(request.GameName);
@@ -162,7 +160,7 @@ public class EventController : ControllerBase
     /// </summary>
     /// <param name="request">The webhook data.</param>
     /// <returns>A webhook response.</returns>
-    [HttpPost("[action]")]
+    [HttpPost("GameClose")]
     public async Task<IActionResult> GameClose(GameModifyRequest request)
     {
         RedisGame? game = await this.Games.FindByIdAsync(request.GameName);
@@ -188,7 +186,7 @@ public class EventController : ControllerBase
     /// </summary>
     /// <param name="request">The webhook data.</param>
     /// <returns>A HTTP response.</returns>
-    [HttpPost("[action]")]
+    [HttpPost("EntryConditions")]
     public async Task<IActionResult> EntryConditions(GameModifyConditionsRequest request)
     {
         RedisGame? game = await this.Games.FindByIdAsync(request.GameName);
@@ -216,7 +214,7 @@ public class EventController : ControllerBase
     /// </summary>
     /// <param name="request">The webhook data.</param>
     /// <returns>A HTTP response.</returns>
-    [HttpPost("[action]")]
+    [HttpPost("MatchingType")]
     public async Task<IActionResult> MatchingType(GameModifyMatchingTypeRequest request)
     {
         RedisGame? game = await this.Games.FindByIdAsync(request.GameName);
@@ -244,7 +242,7 @@ public class EventController : ControllerBase
     /// </summary>
     /// <param name="request">The webhook data.</param>
     /// <returns>A HTTP response.</returns>
-    [HttpPost("[action]")]
+    [HttpPost("RoomId")]
     public async Task<IActionResult> RoomId(GameModifyRoomIdRequest request)
     {
         RedisGame? game = await this.Games.FindByIdAsync(request.GameName);
@@ -267,7 +265,7 @@ public class EventController : ControllerBase
         return this.Ok();
     }
 
-    [HttpPost("[action]")]
+    [HttpPost("Visible")]
     public async Task<IActionResult> Visible(GameModifyVisibleRequest request)
     {
         RedisGame? game = await this.Games.FindByIdAsync(request.GameName);

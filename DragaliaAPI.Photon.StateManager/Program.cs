@@ -139,5 +139,5 @@ app.Run();
 namespace DragaliaAPI.Photon.StateManager
 {
     // Needed for creating test fixture
-    public partial class Program { }
+    public class Program { }
 }

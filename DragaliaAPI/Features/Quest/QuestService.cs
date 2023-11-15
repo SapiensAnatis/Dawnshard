@@ -30,7 +30,7 @@ public class QuestService(
         IEnumerable<AtgenFirstClearSet> Bonus
     )> ProcessQuestCompletion(DungeonSession session, PlayRecord playRecord)
     {
-        int questId = session.QuestData.Id;
+        int questId = session.QuestId;
         int playCount = session.PlayCount;
 
         DbQuest quest = await questRepository.GetQuestDataAsync(questId);

@@ -1,9 +1,5 @@
-﻿using System.Collections.Immutable;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Quest;
-using DragaliaAPI.Models;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;

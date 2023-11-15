@@ -1,7 +1,4 @@
-﻿using DragaliaAPI.Models.Generated;
-using Xunit.Abstractions;
-
-namespace DragaliaAPI.Integration.Test.Dragalia;
+﻿namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.EulaController"/>

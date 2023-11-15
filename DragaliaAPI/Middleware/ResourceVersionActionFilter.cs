@@ -1,11 +1,8 @@
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 
 namespace DragaliaAPI.Middleware;
 

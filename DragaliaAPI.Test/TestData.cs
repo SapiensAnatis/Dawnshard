@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Test;

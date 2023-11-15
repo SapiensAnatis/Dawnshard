@@ -197,7 +197,7 @@ public class DmodeControllerTest
         ).GetData<DmodeReadStoryData>();
 
         resp.Should().NotBeNull();
-        resp.dmode_story_reward_list.Should().BeEquivalentTo(rewards);
+        resp!.dmode_story_reward_list.Should().BeEquivalentTo(rewards);
         resp.duplicate_entity_list.Should().NotBeNull();
         resp.entity_result.Should().BeEquivalentTo(entityResult);
         resp.update_data_list.Should().BeEquivalentTo(updateDataList);
@@ -227,7 +227,7 @@ public class DmodeControllerTest
         ).GetData<DmodeBuildupServitorPassiveData>();
 
         resp.Should().NotBeNull();
-        resp.dmode_servitor_passive_list.Should().BeEquivalentTo(passiveList);
+        resp!.dmode_servitor_passive_list.Should().BeEquivalentTo(passiveList);
         resp.update_data_list.Should().BeEquivalentTo(updateDataList);
 
         mockUpdateDataService.VerifyAll();
@@ -279,7 +279,7 @@ public class DmodeControllerTest
         ).GetData<DmodeExpeditionFinishData>();
 
         resp.Should().NotBeNull();
-        resp.dmode_expedition.Should().BeEquivalentTo(expedition);
+        resp!.dmode_expedition.Should().BeEquivalentTo(expedition);
         resp.dmode_ingame_result.Should().BeEquivalentTo(ingameResult);
         resp.update_data_list.Should().BeEquivalentTo(updateDataList);
 
@@ -311,7 +311,7 @@ public class DmodeControllerTest
         ).GetData<DmodeExpeditionForceFinishData>();
 
         resp.Should().NotBeNull();
-        resp.dmode_expedition.Should().BeEquivalentTo(expedition);
+        resp!.dmode_expedition.Should().BeEquivalentTo(expedition);
         resp.dmode_ingame_result.Should().BeEquivalentTo(ingameResult);
         resp.update_data_list.Should().BeEquivalentTo(updateDataList);
 

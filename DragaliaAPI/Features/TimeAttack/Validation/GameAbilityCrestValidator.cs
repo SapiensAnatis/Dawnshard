@@ -1,7 +1,5 @@
-﻿using System.Security.Permissions;
-using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Models.Generated;
 using FluentValidation;
-using FluentValidation.Validators;
 
 namespace DragaliaAPI.Features.TimeAttack.Validation;
 

@@ -1,7 +1,4 @@
-﻿using DragaliaAPI.Models.Generated;
-using Xunit.Abstractions;
-
-namespace DragaliaAPI.Integration.Test.Dragalia;
+﻿namespace DragaliaAPI.Integration.Test.Dragalia;
 
 public class UrlListTest : TestFixture
 {

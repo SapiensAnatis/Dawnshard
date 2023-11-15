@@ -2,7 +2,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Present;

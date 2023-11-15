@@ -1,5 +1,4 @@
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
 using EntityGraphQL.AspNet;
 using EntityGraphQL.Schema;
 using Microsoft.EntityFrameworkCore;

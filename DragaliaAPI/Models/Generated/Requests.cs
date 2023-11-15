@@ -845,6 +845,7 @@ public class DmodeDungeonFinishRequest
     public DmodeDungeonFinishRequest() { }
 }
 
+#nullable enable
 [MessagePackObject(true)]
 public class DmodeDungeonFloorRequest
 {
@@ -857,6 +858,7 @@ public class DmodeDungeonFloorRequest
 
     public DmodeDungeonFloorRequest() { }
 }
+#nullable disable
 
 [MessagePackObject(true)]
 public class DmodeDungeonFloorSkipRequest { }

@@ -29,7 +29,7 @@ public class QuestCompletionService(
         // TODO: Add Enemy scoring
         List<AtgenScoreMissionSuccessList> missions = new();
 
-        int questId = session.QuestData.Id;
+        int questId = session.QuestId;
 
         if (
             !MasterAsset
@@ -111,7 +111,7 @@ public class QuestCompletionService(
 
         bool[] newState = { currentState[0], currentState[1], currentState[2] };
 
-        QuestRewardData rewardData = MasterAsset.QuestRewardData[session.QuestData.Id];
+        QuestRewardData rewardData = MasterAsset.QuestRewardData[session.QuestId];
         for (int i = 0; i < 3; i++)
         {
             (QuestCompleteType type, int value) = rewardData.Missions[i];

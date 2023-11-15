@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using DragaliaAPI.Models;
 using MessagePack;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Other;
 

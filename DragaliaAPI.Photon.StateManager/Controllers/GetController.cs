@@ -36,7 +36,7 @@ public class GetController : ControllerBase
     /// Get a list of all open games.
     /// </summary>
     /// <returns>A list of games.</returns>
-    [HttpGet("[action]")]
+    [HttpGet("GameList")]
     [ProducesResponseType(typeof(IEnumerable<ApiGame>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ApiGame>>> GameList([FromQuery] int? questId)
     {
@@ -66,7 +66,7 @@ public class GetController : ControllerBase
     /// </summary>
     /// <param name="roomId">The room ID.</param>
     /// <returns>A room with that ID, or a 404 if not found.</returns>
-    [HttpGet("[action]/{roomId}")]
+    [HttpGet("ById/{roomId}")]
     public async Task<ActionResult<ApiGame>> ById(int roomId)
     {
         this.logger.LogDebug("Searching for games with ID {roomId}", roomId);
@@ -88,7 +88,7 @@ public class GetController : ControllerBase
     /// </summary>
     /// <param name="viewerId">The viewer ID.</param>
     /// <returns>True if a host, false if not.</returns>
-    [HttpGet("[action]/{viewerId}")]
+    [HttpGet("IsHost/{viewerId}")]
     public async Task<ActionResult<bool>> IsHost(long viewerId)
     {
         this.logger.LogDebug("Checking whether player {viewerId} is a host in any game", viewerId);
@@ -107,7 +107,7 @@ public class GetController : ControllerBase
     /// </summary>
     /// <param name="viewerId">The viewer ID.</param>
     /// <returns>The room they are in, or 404 if not found.</returns>
-    [HttpGet("[action]/{viewerId}")]
+    [HttpGet("ByViewerId/{viewerId}")]
     public async Task<ActionResult<ApiGame>> ByViewerId(long viewerId)
     {
         this.logger.LogDebug("Searching for game containing player {viewerId}", viewerId);

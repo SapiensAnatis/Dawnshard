@@ -1,13 +1,8 @@
-﻿using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models;
-using DragaliaAPI.Models.Generated;
+﻿using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 

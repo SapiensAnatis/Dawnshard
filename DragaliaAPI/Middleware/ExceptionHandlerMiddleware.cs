@@ -1,11 +1,8 @@
-﻿using System.Net;
-using DragaliaAPI.Controllers;
-using DragaliaAPI.Extensions;
+﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
 using MessagePack;
-using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;

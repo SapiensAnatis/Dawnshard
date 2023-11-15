@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using DragaliaAPI.Photon.Shared.Enums;
-using DragaliaAPI.Shared.Json;
+﻿using DragaliaAPI.Photon.Shared.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Dmode;
 

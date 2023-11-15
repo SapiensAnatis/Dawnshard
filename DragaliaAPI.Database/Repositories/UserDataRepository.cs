@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
-using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

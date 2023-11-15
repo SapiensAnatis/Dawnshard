@@ -1,7 +1,5 @@
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Game;
-using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.SavefileUpdate;

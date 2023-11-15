@@ -29,15 +29,15 @@ public static class DragonConstants
     }
 
     public const byte MinLevel = 1;
-    public static readonly byte[] MinMaxLevel = new byte[] { 20, 30, 40 };
-    public static readonly byte[] MaxLevel = new byte[] { 60, 80, 100 };
+    public static readonly byte[] MinMaxLevel = { 20, 30, 40 };
+    public static readonly byte[] MaxLevel = { 60, 80, 100 };
     public const byte AddMaxLevel = 20;
     public const byte MaxAtkEnhance = 50;
     public const byte MaxHpEnhance = 50;
 
     public const int AugmentResetCost = 20000;
 
-    public static readonly ImmutableArray<int> XpLimits = new int[]
+    public static readonly ImmutableArray<int> XpLimits = new[]
     {
         0,
         240,
@@ -163,7 +163,7 @@ public static class DragonConstants
 
     public const int maxRelLevel = 30;
 
-    public static readonly ImmutableArray<DragonGifts> rotatingGifts = new DragonGifts[]
+    public static readonly ImmutableArray<DragonGifts> rotatingGifts = new[]
     {
         DragonGifts.GoldenChalice,
         DragonGifts.JuicyMeat,
@@ -177,7 +177,7 @@ public static class DragonConstants
     public static readonly ImmutableDictionary<DragonGifts, int> favorVals = new Dictionary<
         DragonGifts,
         int
-    >()
+    >
     {
         { DragonGifts.FreshBread, 100 },
         { DragonGifts.TastyMilk, 300 },
@@ -198,7 +198,7 @@ public static class DragonConstants
     public static readonly ImmutableDictionary<DragonGifts, int> buyGiftPrices = new Dictionary<
         DragonGifts,
         int
-    >()
+    >
     {
         { DragonGifts.FreshBread, 0 },
         { DragonGifts.TastyMilk, 1500 },
@@ -214,7 +214,7 @@ public static class DragonConstants
 
     public const float favMulti = 1.5f;
 
-    public static readonly ImmutableArray<int> bondXpLimits = new int[]
+    public static readonly ImmutableArray<int> bondXpLimits = new[]
     {
         0,
         80,
@@ -248,7 +248,7 @@ public static class DragonConstants
         36300
     }.ToImmutableArray();
 
-    public static readonly ImmutableArray<int> bondXpLimitsPuppy = new int[]
+    public static readonly ImmutableArray<int> bondXpLimitsPuppy = new[]
     {
         0,
         100,
@@ -282,7 +282,7 @@ public static class DragonConstants
         2900
     }.ToImmutableArray();
 
-    public static readonly IImmutableSet<Dragons> unsummonableDragons = new HashSet<Dragons>()
+    public static readonly IImmutableSet<Dragons> unsummonableDragons = new HashSet<Dragons>
     {
         Dragons.BronzeFafnir,
         Dragons.SilverFafnir,

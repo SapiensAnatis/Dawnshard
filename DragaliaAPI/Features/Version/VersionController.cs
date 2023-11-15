@@ -2,7 +2,6 @@
 using DragaliaAPI.Models.Generated;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Version;
 

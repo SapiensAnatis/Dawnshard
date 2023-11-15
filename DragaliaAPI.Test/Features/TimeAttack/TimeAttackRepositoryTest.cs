@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragaliaAPI.Database;
+﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Test;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Shared.PlayerDetails;
 

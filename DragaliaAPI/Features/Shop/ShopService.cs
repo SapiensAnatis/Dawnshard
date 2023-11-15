@@ -3,7 +3,6 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Helpers;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
