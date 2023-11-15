@@ -11,14 +11,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.GraphQL;
 
-public class MissionMutations(
-    IMissionService missionService,
-    IMissionInitialProgressionService missionInitialProgressionService,
-    ApiContext apiContext,
-    IPlayerIdentityService playerIdentityService,
-    ILogger<MissionMutations> logger
-) : MutationBase(apiContext, playerIdentityService)
+public class MissionMutations : MutationBase
 {
+    private readonly IMissionService missionService;
+    private readonly IMissionInitialProgressionService missionInitialProgressionService;
+    private readonly IPlayerIdentityService playerIdentityService;
+    private readonly ILogger<MissionMutations> logger;
+
+    public MissionMutations(IMissionService missionService,
+        IMissionInitialProgressionService missionInitialProgressionService,
+        ApiContext apiContext,
+        IPlayerIdentityService playerIdentityService,
+        ILogger<MissionMutations> logger) : base(apiContext, playerIdentityService)
+    {
+        this.missionService = missionService;
+        this.missionInitialProgressionService = missionInitialProgressionService;
+        this.playerIdentityService = playerIdentityService;
+        this.logger = logger;
+    }
+
     [GraphQLMutation("Reset a mission to its initial progress")]
     public async Task<Expression<Func<ApiContext, DbPlayerMission>>> ResetMissionProgress(
         ApiContext db,
@@ -28,7 +39,7 @@ public class MissionMutations(
         DbPlayer player = GetPlayer(args.ViewerId);
         DbPlayerMission mission = GetMission(db, player, args);
 
-        await missionInitialProgressionService.GetInitialMissionProgress(mission);
+        await this.missionInitialProgressionService.GetInitialMissionProgress(mission);
 
         await db.SaveChangesAsync();
 
@@ -76,7 +87,7 @@ public class MissionMutations(
         if (mission != null)
             throw new InvalidOperationException("Mission is already started");
 
-        await missionService.StartMission(args.MissionType, args.MissionId);
+        await this.missionService.StartMission(args.MissionType, args.MissionId);
 
         await db.SaveChangesAsync();
 
@@ -102,16 +113,16 @@ public class MissionMutations(
 
         foreach (DbPlayerMission mission in affectedMissions)
         {
-            logger.LogInformation(
+            this.logger.LogInformation(
                 "Recalculating progress for player {accountId}",
                 mission.DeviceAccountId
             );
 
-            using IDisposable ctx = playerIdentityService.StartUserImpersonation(
+            using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
                 mission.DeviceAccountId
             );
 
-            await missionInitialProgressionService.GetInitialMissionProgress(mission);
+            await this.missionInitialProgressionService.GetInitialMissionProgress(mission);
         }
 
         await db.SaveChangesAsync();
