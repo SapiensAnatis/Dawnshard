@@ -33,7 +33,7 @@ public class DbAbilityCrest : IDbHasAccountId
     /// <summary>
     /// Gets or sets a value indicating the wyrmprint's unbind status.
     /// </summary>
-    public int LimitBreakCount { get; set; } = 0;
+    public int LimitBreakCount { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating how many copies of the wyrmprint are owned.
@@ -43,24 +43,24 @@ public class DbAbilityCrest : IDbHasAccountId
     /// <summary>
     /// Gets or sets the number of HP augments applied to the wyrmprint.
     /// </summary>
-    public int HpPlusCount { get; set; } = 0;
+    public int HpPlusCount { get; set; }
 
     /// <summary>
     /// Gets or sets the number of strength augments applied to the wyrmprint.
     /// </summary>
-    public int AttackPlusCount { get; set; } = 0;
+    public int AttackPlusCount { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the wyrmprint is locked/favourited.
     /// </summary>
     [TypeConverter(typeof(BooleanConverter))]
-    public bool IsFavorite { get; set; } = false;
+    public bool IsFavorite { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the wyrmprint is new.
     /// </summary>
     [TypeConverter(typeof(BooleanConverter))]
-    public bool IsNew { get; set; } = false;
+    public bool IsNew { get; set; }
 
     /// <summary>
     /// Gets or sets the time at which the wyrmprint was received.

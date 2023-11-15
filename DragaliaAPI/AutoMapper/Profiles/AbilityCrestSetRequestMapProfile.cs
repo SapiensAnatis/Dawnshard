@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services.Game;
 
 namespace DragaliaAPI.AutoMapper.Profiles;
 

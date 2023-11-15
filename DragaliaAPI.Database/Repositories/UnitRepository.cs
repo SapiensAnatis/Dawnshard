@@ -1,10 +1,7 @@
-﻿using System.Diagnostics;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Entities.Scaffold;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Story;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
@@ -145,7 +142,7 @@ public class UnitRepository : IUnitRepository
                 )
                 {
                     newCharaStories.Add(
-                        new DbPlayerStoryState()
+                        new DbPlayerStoryState
                         {
                             DeviceAccountId = this.playerIdentityService.AccountId,
                             StoryType = StoryTypes.Chara,
@@ -242,7 +239,7 @@ public class UnitRepository : IUnitRepository
         return apiContext
             .PlayerSetUnits
             .Add(
-                new DbSetUnit()
+                new DbSetUnit
                 {
                     DeviceAccountId = this.playerIdentityService.AccountId,
                     CharaId = charaId,

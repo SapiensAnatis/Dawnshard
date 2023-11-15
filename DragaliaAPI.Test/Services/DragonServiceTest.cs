@@ -10,9 +10,7 @@ using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Test.Utils;
-using Microsoft.EntityFrameworkCore;
 using MockQueryable.Moq;
 using static DragaliaAPI.Test.UnitTestUtils;
 

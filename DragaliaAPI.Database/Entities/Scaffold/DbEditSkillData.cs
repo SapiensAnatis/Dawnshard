@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragaliaAPI.Shared.Definitions.Enums;
+﻿using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Entities.Scaffold;
 

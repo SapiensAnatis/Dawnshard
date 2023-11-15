@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragaliaAPI.Shared.Features.TextLabel;
+﻿using DragaliaAPI.Shared.Features.TextLabel;
 
 namespace DragaliaAPI.Shared.Definitions.Enums;
 

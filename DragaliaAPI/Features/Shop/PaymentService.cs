@@ -5,7 +5,6 @@ using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Tickets;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;

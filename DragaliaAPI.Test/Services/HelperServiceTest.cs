@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
-using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;

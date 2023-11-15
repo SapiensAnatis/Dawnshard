@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Shared.Definitions.Enums;
-using Newtonsoft.Json;
 
 namespace DragaliaAPI.Models.Options;
 

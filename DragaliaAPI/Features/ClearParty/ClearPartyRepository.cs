@@ -1,9 +1,7 @@
 using System.Diagnostics;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Shared.PlayerDetails;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.ClearParty;
 

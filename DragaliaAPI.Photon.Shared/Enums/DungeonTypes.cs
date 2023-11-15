@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DragaliaAPI.Photon.Shared.Enums
+﻿namespace DragaliaAPI.Photon.Shared.Enums
 {
     public enum DungeonTypes
     {

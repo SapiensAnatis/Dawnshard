@@ -13,7 +13,7 @@ namespace DragaliaAPI.Database.Migrations
 {
     [DbContext(typeof(ApiContext))]
     [Migration("20230809022212_wall")]
-    partial class wall
+    partial class Wall
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

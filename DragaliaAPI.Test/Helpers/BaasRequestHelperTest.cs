@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Api;

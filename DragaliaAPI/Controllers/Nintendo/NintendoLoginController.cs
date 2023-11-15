@@ -1,5 +1,4 @@
-﻿using System.Net;
-using DragaliaAPI.Models.Nintendo;
+﻿using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared;

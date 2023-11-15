@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Photon.Shared.Models;
-using DragaliaAPI.Photon.StateManager.Controllers;
 using Newtonsoft.Json;
 using Redis.OM.Modeling;
 

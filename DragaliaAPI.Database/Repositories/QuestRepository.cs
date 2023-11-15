@@ -1,8 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Shared;
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
 
@@ -43,7 +40,7 @@ public class QuestRepository : IQuestRepository
         questData ??= this.apiContext
             .PlayerQuests
             .Add(
-                new DbQuest()
+                new DbQuest
                 {
                     DeviceAccountId = this.playerIdentityService.AccountId,
                     QuestId = questId

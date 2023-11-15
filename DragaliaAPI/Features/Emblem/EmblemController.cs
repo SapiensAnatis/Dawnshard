@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;

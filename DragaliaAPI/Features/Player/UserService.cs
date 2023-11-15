@@ -2,7 +2,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Helpers;
-using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.User;

@@ -1,28 +1,13 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text.Json;
+﻿using System.Security.Claims;
 using AutoMapper;
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.MessagePack;
-using DragaliaAPI.Middleware;
-using DragaliaAPI.Models;
 using DragaliaAPI.Shared.PlayerDetails;
-using FluentAssertions.Equivalency;
-using MessagePack;
-using MessagePack.Resolvers;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 using MockQueryable.Moq;
 using Moq.Language.Flow;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Test;
 

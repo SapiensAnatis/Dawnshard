@@ -5,9 +5,7 @@ using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Services.Photon;
-using DragaliaAPI.Shared.Definitions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Dungeon;
@@ -28,11 +26,13 @@ public class DungeonController(
     {
         DungeonSession session = await dungeonService.GetDungeon(request.dungeon_key);
 
+        ArgumentNullException.ThrowIfNull(session.QuestData);
+
         OddsInfo oddsInfo = oddsInfoService.GetOddsInfo(session.QuestData.Id, request.area_idx);
 
         await dungeonService.ModifySession(
             request.dungeon_key,
-            session => session.EnemyList[request.area_idx] = oddsInfo.enemy
+            s => s.EnemyList[request.area_idx] = oddsInfo.enemy
         );
 
         return Ok(new DungeonGetAreaOddsData() { odds_info = oddsInfo });
@@ -51,7 +51,7 @@ public class DungeonController(
                 fail_helper_detail_list = new List<AtgenHelperDetailList>(),
                 fail_quest_detail = new()
                 {
-                    quest_id = session.QuestData.Id,
+                    quest_id = session.QuestId,
                     wall_id = 0,
                     wall_level = 0,
                     is_host = true,

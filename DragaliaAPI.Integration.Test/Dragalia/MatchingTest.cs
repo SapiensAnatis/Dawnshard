@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Photon.Shared.Models;
-using DragaliaAPI.Shared.Definitions.Enums;
+﻿using DragaliaAPI.Photon.Shared.Models;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 

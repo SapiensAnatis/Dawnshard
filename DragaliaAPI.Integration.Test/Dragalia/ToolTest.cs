@@ -1,8 +1,4 @@
-﻿using Antlr4.Runtime;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models;
-using DragaliaAPI.Models.Generated;
-using NuGet.Common;
+﻿using DragaliaAPI.Models;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 

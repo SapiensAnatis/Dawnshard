@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DragaliaAPI.Photon.Shared.Models
+﻿namespace DragaliaAPI.Photon.Shared.Models
 {
     public class HeroParamRequest
     {

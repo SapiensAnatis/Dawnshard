@@ -1,19 +1,9 @@
-﻿using System.Collections.Immutable;
-using System.Diagnostics;
-using System.Linq;
-using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
-using DragaliaAPI.Features.Dmode;
-using DragaliaAPI.Features.Event;
-using DragaliaAPI.Features.Fort;
-using DragaliaAPI.Features.Item;
-using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Features.Talisman;
-using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
-using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Reward;
 

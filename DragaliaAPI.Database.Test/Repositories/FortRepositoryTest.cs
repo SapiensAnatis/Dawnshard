@@ -1,14 +1,9 @@
-﻿using System.Runtime.InteropServices;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Fort;
-using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Database.Test.Repositories;
 

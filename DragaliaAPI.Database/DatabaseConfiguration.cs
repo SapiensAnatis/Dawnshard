@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using DragaliaAPI.Database.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -6,8 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DragaliaAPI.Database.Test")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DragaliaAPI.Test")]
+[assembly: InternalsVisibleTo("DragaliaAPI.Database.Test")]
+[assembly: InternalsVisibleTo("DragaliaAPI.Test")]
 
 namespace DragaliaAPI.Database;
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DragaliaAPI.Photon.Shared.Enums;
+﻿using DragaliaAPI.Photon.Shared.Enums;
 
 namespace DragaliaAPI.Photon.Shared.Requests
 {

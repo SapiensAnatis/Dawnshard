@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;

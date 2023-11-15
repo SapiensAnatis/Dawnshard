@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using DragaliaAPI.Shared.Definitions.Enums;
-using JetBrains.Annotations;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 

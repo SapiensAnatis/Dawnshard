@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Features.Trade;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Mvc;

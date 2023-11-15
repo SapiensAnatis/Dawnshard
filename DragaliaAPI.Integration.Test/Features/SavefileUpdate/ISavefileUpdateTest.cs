@@ -1,5 +1,4 @@
 using DragaliaAPI.Features.SavefileUpdate;
-using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DragaliaAPI.Integration.Test.Features.SavefileUpdate;

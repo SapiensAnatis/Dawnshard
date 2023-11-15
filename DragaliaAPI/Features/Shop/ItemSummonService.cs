@@ -1,11 +1,9 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
-using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Shop;

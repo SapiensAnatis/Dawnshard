@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Helpers;
-using DragaliaAPI.Models;
-using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Hosting;

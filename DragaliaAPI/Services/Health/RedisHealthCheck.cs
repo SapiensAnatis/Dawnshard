@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Database;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace DragaliaAPI.Services.Health;

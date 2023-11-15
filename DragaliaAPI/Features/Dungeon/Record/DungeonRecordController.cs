@@ -44,7 +44,7 @@ public class DungeonRecordController(
         DungeonRecordRecordData response =
             new() { ingame_result_data = ingameResultData, update_data_list = updateDataList, };
 
-        if (session.QuestData.IsSumUpTotalDamage)
+        if (session.QuestData?.IsSumUpTotalDamage ?? false)
         {
             response.event_damage_ranking = await dungeonRecordDamageService.GetEventDamageRanking(
                 request.play_record,
@@ -81,7 +81,7 @@ public class DungeonRecordController(
         DungeonRecordRecordData response =
             new() { ingame_result_data = ingameResultData, update_data_list = updateDataList, };
 
-        if (session.QuestData.IsSumUpTotalDamage)
+        if (session.QuestData?.IsSumUpTotalDamage ?? false)
         {
             response.event_damage_ranking = await dungeonRecordDamageService.GetEventDamageRanking(
                 request.play_record,

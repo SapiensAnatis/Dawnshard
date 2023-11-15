@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Models;
-using DragaliaAPI.Services.Exceptions;
+﻿using DragaliaAPI.Services.Exceptions;
 using MessagePack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Database.Repositories;

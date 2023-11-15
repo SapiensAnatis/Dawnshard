@@ -1,9 +1,6 @@
 using System.Net.Http.Headers;
 using DragaliaAPI.MessagePack;
-using DragaliaAPI.Models;
 using MessagePack;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DragaliaAPI.Integration.Test;
 

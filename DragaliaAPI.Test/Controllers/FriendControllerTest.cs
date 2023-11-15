@@ -1,10 +1,7 @@
 ﻿using DragaliaAPI.Controllers.Dragalia;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
-using DragaliaAPI.Shared.Definitions.Enums;
-using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Test.Controllers;
 

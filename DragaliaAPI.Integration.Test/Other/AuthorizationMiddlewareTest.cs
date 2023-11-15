@@ -1,6 +1,4 @@
-﻿using Xunit.Abstractions;
-
-namespace DragaliaAPI.Integration.Test.Other;
+﻿namespace DragaliaAPI.Integration.Test.Other;
 
 public class AuthorizationMiddlewareTest : TestFixture
 {

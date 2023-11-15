@@ -1,12 +1,6 @@
-﻿using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
+﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 

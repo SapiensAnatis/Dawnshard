@@ -2,7 +2,6 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Fort;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;

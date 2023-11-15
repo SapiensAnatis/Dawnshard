@@ -20,7 +20,7 @@ public static class CharaConstants
 
     public const int AugmentResetCost = 20000;
 
-    public static readonly ImmutableList<int> XpLimits = new List<int>()
+    public static readonly ImmutableList<int> XpLimits = new List<int>
     {
         0,
         30,

@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using DragaliaAPI.Controllers;
+﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,15 +16,15 @@ public class TimeAttackController(
 {
     [Route("get_data")]
     [HttpPost]
-    public async Task<DragaliaResult> GetData(TimeAttackRankingGetDataRequest request)
+    public DragaliaResult<TimeAttackRankingGetDataData> GetData(
+        TimeAttackRankingGetDataRequest request
+    )
     {
         IEnumerable<RankingTierRewardList> rewardList = timeAttackService
             .GetRewards()
             .Select(ToRankingTierRewardList);
 
-        return this.Ok(
-            new TimeAttackRankingGetDataData() { ranking_tier_reward_list = rewardList }
-        );
+        return new TimeAttackRankingGetDataData() { ranking_tier_reward_list = rewardList };
     }
 
     [Route("receive_tier_reward")]

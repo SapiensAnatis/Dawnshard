@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using DragaliaAPI.Database;
+﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
 

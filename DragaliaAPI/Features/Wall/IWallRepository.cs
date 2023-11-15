@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Features.Wall;
 

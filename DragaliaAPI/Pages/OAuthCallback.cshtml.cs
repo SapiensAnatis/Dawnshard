@@ -1,14 +1,9 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using DragaliaAPI.Blazor.Authentication;
 using DragaliaAPI.Database;
 using DragaliaAPI.Models.Options;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

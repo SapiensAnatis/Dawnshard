@@ -1,7 +1,6 @@
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
-using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 using DragaliaAPI.Shared.MasterAsset.Models.Wall;
 
 namespace DragaliaAPI.Shared.MasterAsset;

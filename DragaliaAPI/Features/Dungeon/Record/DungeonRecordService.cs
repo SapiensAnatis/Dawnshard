@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Chara;
-using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
 using DragaliaAPI.Features.Reward;
@@ -31,7 +30,7 @@ public class DungeonRecordService(
 
         logger.LogDebug(
             "Processing completion of quest {id}. isHost: {isHost}",
-            session.QuestData.Id,
+            session.QuestId,
             session.IsHost
         );
 
@@ -40,7 +39,7 @@ public class DungeonRecordService(
             {
                 dungeon_key = dungeonKey,
                 play_type = QuestPlayType.Default,
-                quest_id = session.QuestData.Id,
+                quest_id = session.QuestId,
                 is_host = session.IsHost,
                 quest_party_setting_list = session.Party,
                 start_time = session.StartTime,
@@ -110,7 +109,7 @@ public class DungeonRecordService(
     private async Task ProcessStaminaConsumption(DungeonSession session)
     {
         StaminaType type = session.IsMulti ? StaminaType.Multi : StaminaType.Single;
-        int amount = await questService.GetQuestStamina(session.QuestData.Id, type);
+        int amount = await questService.GetQuestStamina(session.QuestId, type);
 
         amount *= session.PlayCount;
 
@@ -124,6 +123,8 @@ public class DungeonRecordService(
         DungeonSession session
     )
     {
+        ArgumentNullException.ThrowIfNull(session.QuestData);
+
         // Constant for quests with no stamina usage, wip?
         int experience =
             session.QuestData.PayStaminaSingle != 0

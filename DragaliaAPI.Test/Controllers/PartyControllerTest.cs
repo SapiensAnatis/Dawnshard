@@ -6,7 +6,6 @@ using DragaliaAPI.Features.PartyPower;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using Microsoft.Extensions.Logging;
-using static DragaliaAPI.Test.UnitTestUtils;
 
 namespace DragaliaAPI.Test.Controllers;
 

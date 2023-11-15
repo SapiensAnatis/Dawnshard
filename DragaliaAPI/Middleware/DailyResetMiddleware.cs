@@ -1,11 +1,8 @@
 ﻿using DragaliaAPI.Helpers;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Exceptions;
 using MessagePack;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Primitives;
 
 namespace DragaliaAPI.Middleware;
 

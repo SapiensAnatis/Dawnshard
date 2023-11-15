@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DragaliaAPI.Photon.Shared.Enums
+﻿namespace DragaliaAPI.Photon.Shared.Enums
 {
     public enum MatchingTypes
     {

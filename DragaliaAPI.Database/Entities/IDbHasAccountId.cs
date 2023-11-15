@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace DragaliaAPI.Database.Entities;
+﻿namespace DragaliaAPI.Database.Entities;
 
 public interface IDbHasAccountId
 {

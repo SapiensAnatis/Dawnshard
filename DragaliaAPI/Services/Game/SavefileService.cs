@@ -7,12 +7,10 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Features.Stamp;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models.Nintendo;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Distributed;
 
