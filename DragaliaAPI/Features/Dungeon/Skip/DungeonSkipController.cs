@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Controllers;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Dungeon.Record;
-using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models;

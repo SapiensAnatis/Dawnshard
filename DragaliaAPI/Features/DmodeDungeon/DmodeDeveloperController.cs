@@ -1,11 +1,9 @@
 ﻿using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Middleware;
-using DragaliaAPI.Models;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.DmodeDungeon;

@@ -1,7 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using DragaliaAPI.Photon.Shared.Enums;
-using DragaliaAPI.Shared.Definitions.Enums;
-using DragaliaAPI.Shared.Json;
+﻿using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models.Wall;
 

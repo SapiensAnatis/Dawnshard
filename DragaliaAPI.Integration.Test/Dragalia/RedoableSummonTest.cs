@@ -1,6 +1,4 @@
-﻿using DragaliaAPI.Models.Generated;
-
-namespace DragaliaAPI.Integration.Test.Dragalia;
+﻿namespace DragaliaAPI.Integration.Test.Dragalia;
 
 /// <summary>
 /// Tests <see cref="Controllers.Dragalia.RedoableSummonController"/>

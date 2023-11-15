@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions;
 using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Models;
@@ -9,6 +8,8 @@ public class DungeonSession
     public required IEnumerable<PartySettingList> Party { get; set; }
 
     public QuestData? QuestData { get; set; }
+
+    public int QuestId => QuestData?.Id ?? 0;
 
     public bool IsHost { get; set; } = true;
 

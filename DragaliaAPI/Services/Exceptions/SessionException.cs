@@ -1,6 +1,4 @@
-﻿using DragaliaAPI.Models;
-
-namespace DragaliaAPI.Services.Exceptions;
+﻿namespace DragaliaAPI.Services.Exceptions;
 
 public class SessionException : DragaliaException
 {

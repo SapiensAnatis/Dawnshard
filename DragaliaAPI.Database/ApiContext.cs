@@ -1,6 +1,5 @@
 using System.Reflection;
 using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Shared.MasterAsset.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database;

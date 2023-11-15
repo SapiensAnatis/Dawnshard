@@ -2,7 +2,6 @@
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Test.Repositories;

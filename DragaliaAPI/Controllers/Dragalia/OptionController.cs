@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Models.Generated;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Controllers.Dragalia;

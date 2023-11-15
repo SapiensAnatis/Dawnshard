@@ -1,9 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using DragaliaAPI.Models;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Integration.Test.Other;

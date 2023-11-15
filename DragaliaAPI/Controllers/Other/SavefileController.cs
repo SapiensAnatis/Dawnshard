@@ -1,6 +1,5 @@
 ﻿using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Middleware;
-using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.PlayerDetails;

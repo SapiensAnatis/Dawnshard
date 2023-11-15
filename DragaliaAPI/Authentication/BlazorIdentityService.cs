@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using DragaliaAPI.Shared.PlayerDetails;
+﻿using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace DragaliaAPI.Blazor.Authentication;

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DragaliaAPI.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class wall : Migration
+    public partial class Wall : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

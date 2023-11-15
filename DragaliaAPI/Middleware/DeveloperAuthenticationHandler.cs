@@ -1,12 +1,8 @@
 ﻿using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using DragaliaAPI.Controllers;
-using DragaliaAPI.Services;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 
 namespace DragaliaAPI.Middleware;
 

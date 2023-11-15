@@ -1,8 +1,4 @@
-﻿using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Services;
-using DragaliaAPI.Services.Game;
-using DragaliaAPI.Shared.Definitions.Enums;
-using Xunit.Abstractions;
+﻿using DragaliaAPI.Services.Game;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 

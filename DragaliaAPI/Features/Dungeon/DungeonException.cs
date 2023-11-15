@@ -1,5 +1,4 @@
-﻿using DragaliaAPI.Models;
-using DragaliaAPI.Services.Exceptions;
+﻿using DragaliaAPI.Services.Exceptions;
 
 namespace DragaliaAPI.Features.Dungeon;
 

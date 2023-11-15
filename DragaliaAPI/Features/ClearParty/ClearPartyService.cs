@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Immutable;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;

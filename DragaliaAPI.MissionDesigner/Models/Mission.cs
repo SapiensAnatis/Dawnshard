@@ -1,5 +1,3 @@
-using DragaliaAPI.Shared.MasterAsset.Models.Missions;
-
 namespace DragaliaAPI.MissionDesigner.Models;
 
 public abstract class Mission

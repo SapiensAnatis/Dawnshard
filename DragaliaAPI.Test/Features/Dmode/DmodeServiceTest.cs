@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Reward;

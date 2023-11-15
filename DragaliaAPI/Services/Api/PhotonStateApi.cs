@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Photon.Shared.Models;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace DragaliaAPI.Services.Api;

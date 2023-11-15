@@ -1,10 +1,5 @@
-﻿using AutoMapper;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
+﻿using DragaliaAPI.Database.Entities;
 using Microsoft.EntityFrameworkCore;
-using Xunit.Abstractions;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 

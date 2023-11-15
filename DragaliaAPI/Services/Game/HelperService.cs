@@ -4,10 +4,8 @@ using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Photon.Shared.Models;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 namespace DragaliaAPI.Services.Game;
 

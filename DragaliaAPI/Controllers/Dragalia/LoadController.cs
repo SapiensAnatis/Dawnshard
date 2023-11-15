@@ -1,16 +1,9 @@
 ﻿//#define TEST
 
-using System.Diagnostics;
-using AutoMapper;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.SavefileUpdate;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services;
-using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 

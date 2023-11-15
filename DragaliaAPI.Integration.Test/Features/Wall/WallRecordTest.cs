@@ -1,10 +1,8 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dungeon;
-using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 
 namespace DragaliaAPI.Integration.Test.Features.Wall;
 

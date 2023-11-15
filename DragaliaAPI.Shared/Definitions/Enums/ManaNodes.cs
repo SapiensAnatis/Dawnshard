@@ -1,8 +1,3 @@
-using System.Collections.Immutable;
-using System.ComponentModel;
-using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
-
 namespace DragaliaAPI.Shared.Definitions.Enums;
 
 [Flags]

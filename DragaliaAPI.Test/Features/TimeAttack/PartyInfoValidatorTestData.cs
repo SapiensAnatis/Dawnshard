@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Json;
 
 namespace DragaliaAPI.Test.Features.TimeAttack;

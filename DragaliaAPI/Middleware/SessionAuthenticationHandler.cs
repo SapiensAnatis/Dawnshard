@@ -1,15 +1,11 @@
 ﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
-using DragaliaAPI.Controllers;
 using DragaliaAPI.Database;
-using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Models;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 
@@ -30,11 +26,12 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
+        ISystemClock clock,
         ISessionService sessionService,
         IWebHostEnvironment webHostEnvironment,
         ApiContext apiContext
     )
-        : base(options, logger, encoder)
+        : base(options, logger, encoder, clock)
     {
         this.sessionService = sessionService;
         this.webHostEnvironment = webHostEnvironment;

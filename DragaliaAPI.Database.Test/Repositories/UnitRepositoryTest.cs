@@ -1,5 +1,4 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Factories;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -7,7 +6,6 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
 using Microsoft.EntityFrameworkCore;
-using MockQueryable.Moq;
 using static DragaliaAPI.Database.Test.DbTestFixture;
 
 namespace DragaliaAPI.Database.Test.Repositories;

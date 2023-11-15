@@ -1,6 +1,4 @@
-﻿using System.Collections.Immutable;
-using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Shared.MasterAsset.Models;
+﻿using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Database.Utils;
 

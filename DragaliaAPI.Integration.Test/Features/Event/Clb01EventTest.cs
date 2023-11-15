@@ -1,7 +1,4 @@
 ﻿using DragaliaAPI.Database.Entities;
-using DragaliaAPI.Models;
-using DragaliaAPI.Models.Generated;
-using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using Microsoft.EntityFrameworkCore;
 
