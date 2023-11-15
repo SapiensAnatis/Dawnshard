@@ -18,11 +18,14 @@ public class MissionMutations : MutationBase
     private readonly IPlayerIdentityService playerIdentityService;
     private readonly ILogger<MissionMutations> logger;
 
-    public MissionMutations(IMissionService missionService,
+    public MissionMutations(
+        IMissionService missionService,
         IMissionInitialProgressionService missionInitialProgressionService,
         ApiContext apiContext,
         IPlayerIdentityService playerIdentityService,
-        ILogger<MissionMutations> logger) : base(apiContext, playerIdentityService)
+        ILogger<MissionMutations> logger
+    )
+        : base(apiContext, playerIdentityService)
     {
         this.missionService = missionService;
         this.missionInitialProgressionService = missionInitialProgressionService;
