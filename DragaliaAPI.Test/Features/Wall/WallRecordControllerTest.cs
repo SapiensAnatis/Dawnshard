@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Castle.Core.Logging;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.ClearParty;
@@ -27,6 +28,7 @@ public class WallRecordControllerTest
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IDungeonService> mockDungeonService;
     private readonly Mock<IPresentService> mockPresentService;
+    private readonly Mock<IDungeonRecordHelperService> mockDungeonRecordHelperService;
     private readonly Mock<ILogger<WallRecordController>> mockLogger;
 
     private readonly WallRecordController wallRecordController;
@@ -39,6 +41,7 @@ public class WallRecordControllerTest
         mockRewardService = new(MockBehavior.Strict);
         mockDungeonService = new(MockBehavior.Strict);
         mockPresentService = new(MockBehavior.Strict);
+        mockDungeonRecordHelperService = new(MockBehavior.Strict);
         mockLogger = new(MockBehavior.Loose);
 
         wallRecordController = new(
@@ -48,6 +51,7 @@ public class WallRecordControllerTest
             mockRewardService.Object,
             mockDungeonService.Object,
             mockPresentService.Object,
+            mockDungeonRecordHelperService.Object,
             mockLogger.Object
         );
     }
@@ -59,6 +63,9 @@ public class WallRecordControllerTest
         List<PartySettingList> party = new();
         int wallId = WallService.FlameWallId;
         int wallLevel = 1;
+        ulong supportViewerId = 1000;
+        List<UserSupportList> helperList = new();
+        List<AtgenHelperDetailList> helperDetailList = new();
 
         DungeonSession session =
             new()
@@ -66,7 +73,8 @@ public class WallRecordControllerTest
                 QuestData = MasterAsset.QuestData[0],
                 Party = party,
                 WallId = wallId,
-                WallLevel = wallLevel + 1 // Client passes (db wall level + 1)
+                WallLevel = wallLevel + 1, // Client passes (db wall level + 1)
+                SupportViewerId = supportViewerId
             };
 
         DbPlayerQuestWall playerQuestWall =
@@ -83,6 +91,10 @@ public class WallRecordControllerTest
         mockWallRepository.Setup(x => x.GetQuestWall(wallId)).ReturnsAsync(playerQuestWall);
 
         mockWallService.Setup(x => x.LevelupQuestWall(wallId)).Returns(Task.CompletedTask);
+
+        mockDungeonRecordHelperService
+            .Setup(x => x.ProcessHelperDataSolo(supportViewerId))
+            .ReturnsAsync((helperList, helperDetailList));
 
         mockRewardService
             .Setup(x => x.GrantReward(WallRecordController.GoldCrystals))
