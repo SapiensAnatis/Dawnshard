@@ -19,6 +19,16 @@ public interface IDungeonStartService
 
     Task<IngameQuestData> InitiateQuest(int questId);
     Task<bool> ValidateStamina(int questId, StaminaType staminaType);
-    Task<IngameData> GetWallIngameData(WallStartStartAssignUnitRequest request);
-    Task<IngameData> GetWallIngameData(WallStartStartRequest request);
+    Task<IngameData> GetWallIngameData(
+        int wallId,
+        int wallLevel,
+        int partyNo,
+        ulong? supportViewerId = null
+    );
+    Task<IngameData> GetWallIngameData(
+        int wallId,
+        int wallLevel,
+        IEnumerable<PartySettingList> party,
+        ulong? supportViewerId = null
+    );
 }

@@ -135,21 +135,21 @@ public class DungeonStartService(
         return result;
     }
 
-    public async Task<IngameData> GetWallIngameData(WallStartStartRequest request)
+    public async Task<IngameData> GetWallIngameData(
+        int wallId,
+        int wallLevel,
+        int partyNo,
+        ulong? supportViewerId = null
+    )
     {
-        IQueryable<DbPartyUnit> partyQuery = partyRepository
-            .GetPartyUnits(request.party_no)
-            .AsNoTracking();
+        IQueryable<DbPartyUnit> partyQuery = partyRepository.GetPartyUnits(partyNo).AsNoTracking();
 
-        List<PartySettingList> party = ProcessUnitList(
-            await partyQuery.ToListAsync(),
-            request.party_no
-        );
+        List<PartySettingList> party = ProcessUnitList(await partyQuery.ToListAsync(), partyNo);
 
-        IngameData result = await InitializeIngameData(0, request.support_viewer_id);
+        IngameData result = await InitializeIngameData(0, supportViewerId);
 
         List<DbDetailedPartyUnit> detailedPartyUnits = await dungeonRepository
-            .BuildDetailedPartyUnit(partyQuery, request.party_no)
+            .BuildDetailedPartyUnit(partyQuery, partyNo)
             .ToListAsync();
 
         result.party_info.party_unit_list = await ProcessDetailedUnitList(detailedPartyUnits);
@@ -157,23 +157,29 @@ public class DungeonStartService(
             new()
             {
                 Party = party.Where(x => x.chara_id != 0),
-                WallId = request.wall_id,
-                WallLevel = request.wall_level
+                WallId = wallId,
+                WallLevel = wallLevel,
+                SupportViewerId = supportViewerId
             }
         );
 
         return result;
     }
 
-    public async Task<IngameData> GetWallIngameData(WallStartStartAssignUnitRequest request)
+    public async Task<IngameData> GetWallIngameData(
+        int wallId,
+        int wallLevel,
+        IEnumerable<PartySettingList> party,
+        ulong? supportViewerId = null
+    )
     {
-        IngameData result = await InitializeIngameData(0, request.support_viewer_id);
+        IngameData result = await InitializeIngameData(0, supportViewerId);
 
         List<DbDetailedPartyUnit> detailedPartyUnits = new();
 
         foreach (
             IQueryable<DbDetailedPartyUnit> detailQuery in dungeonRepository.BuildDetailedPartyUnit(
-                request.request_party_setting_list
+                party
             )
         )
         {
@@ -189,9 +195,10 @@ public class DungeonStartService(
         result.dungeon_key = await dungeonService.StartDungeon(
             new()
             {
-                Party = request.request_party_setting_list.Where(x => x.chara_id != 0),
-                WallId = request.wall_id,
-                WallLevel = request.wall_level
+                Party = party.Where(x => x.chara_id != 0),
+                WallId = wallId,
+                WallLevel = wallLevel,
+                SupportViewerId = supportViewerId
             }
         );
 

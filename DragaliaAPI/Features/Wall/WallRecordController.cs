@@ -1,6 +1,7 @@
 ﻿using DragaliaAPI.Controllers;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
@@ -21,6 +22,7 @@ public class WallRecordController : DragaliaControllerBase
     private readonly IRewardService rewardService;
     private readonly IDungeonService dungeonService;
     private readonly IPresentService presentService;
+    private readonly IDungeonRecordHelperService dungeonRecordHelperService;
     private readonly ILogger<WallRecordController> logger;
 
     public WallRecordController(
@@ -30,6 +32,7 @@ public class WallRecordController : DragaliaControllerBase
         IRewardService rewardService,
         IDungeonService dungeonService,
         IPresentService presentService,
+        IDungeonRecordHelperService dungeonRecordHelperService,
         ILogger<WallRecordController> logger
     )
     {
@@ -39,6 +42,7 @@ public class WallRecordController : DragaliaControllerBase
         this.rewardService = rewardService;
         this.dungeonService = dungeonService;
         this.presentService = presentService;
+        this.dungeonRecordHelperService = dungeonRecordHelperService;
         this.logger = logger;
     }
 
@@ -63,13 +67,19 @@ public class WallRecordController : DragaliaControllerBase
         // Level up completed wall quest
         await wallService.LevelupQuestWall(request.wall_id);
 
+        // Get helper data
+        (
+            IEnumerable<UserSupportList> helperList,
+            IEnumerable<AtgenHelperDetailList> helperDetailList
+        ) = await dungeonRecordHelperService.ProcessHelperDataSolo(dungeonSession.SupportViewerId);
+
         // Response data
         AtgenWallUnitInfo wallUnitInfo =
             new()
             {
                 quest_party_setting_list = dungeonSession.Party,
-                helper_list = new List<UserSupportList>(),
-                helper_detail_list = new List<AtgenHelperDetailList>()
+                helper_list = helperList,
+                helper_detail_list = helperDetailList
             };
 
         AtgenWallDropReward wallDropReward =
