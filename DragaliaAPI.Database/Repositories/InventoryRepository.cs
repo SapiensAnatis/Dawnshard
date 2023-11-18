@@ -72,7 +72,7 @@ public class InventoryRepository : IInventoryRepository
     {
         return await this.apiContext
                 .PlayerMaterials
-                .FindAsync(this.playerIdentityService.AccountId, item)
+                .FindAsync(this.playerIdentityService.ViewerId, item)
             ?? (
                 await this.apiContext.AddAsync(
                     new DbPlayerMaterial()
@@ -113,7 +113,7 @@ public class InventoryRepository : IInventoryRepository
     {
         return await this.apiContext
             .PlayerMaterials
-            .FindAsync(this.playerIdentityService.AccountId, materialId);
+            .FindAsync(this.playerIdentityService.ViewerId, materialId);
     }
 
     public async Task<bool> CheckQuantity(Materials materialId, int quantity) =>
@@ -161,7 +161,7 @@ public class InventoryRepository : IInventoryRepository
     {
         return await this.apiContext
             .PlayerDragonGifts
-            .FindAsync(this.playerIdentityService.AccountId, giftId);
+            .FindAsync(this.playerIdentityService.ViewerId, giftId);
     }
 
     public async Task RefreshPurchasableDragonGiftCounts()

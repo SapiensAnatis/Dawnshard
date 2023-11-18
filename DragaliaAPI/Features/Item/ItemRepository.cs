@@ -13,7 +13,7 @@ public class ItemRepository(ApiContext apiContext, IPlayerIdentityService player
 
     private async Task<DbPlayerUseItem?> GetItem(UseItem item)
     {
-        return await apiContext.PlayerUseItems.FindAsync(playerIdentityService.AccountId, item);
+        return await apiContext.PlayerUseItems.FindAsync(playerIdentityService.ViewerId, item);
     }
 
     public async Task AddItemQuantityAsync(UseItem id, int quantity)
@@ -35,6 +35,6 @@ public class ItemRepository(ApiContext apiContext, IPlayerIdentityService player
 
     public async Task<DbPlayerUseItem?> GetItemAsync(UseItem id)
     {
-        return await apiContext.PlayerUseItems.FindAsync(playerIdentityService.AccountId, id);
+        return await apiContext.PlayerUseItems.FindAsync(playerIdentityService.ViewerId, id);
     }
 }

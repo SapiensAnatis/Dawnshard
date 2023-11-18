@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
@@ -75,7 +76,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
 
     protected void AddCharacter(Charas id)
     {
-        if (this.ApiContext.PlayerCharaData.Find(DeviceAccountId, id) is not null)
+        if (this.ApiContext.PlayerCharaData.Find(ViewerId, id) is not null)
             return;
 
         this.ApiContext.PlayerCharaData.Add(new(this.ViewerId, id));
@@ -83,8 +84,10 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
     }
 
     protected async Task<TEntity> AddToDatabase<TEntity>(TEntity data)
-        where TEntity : class
+        where TEntity : class, IDbPlayerData
     {
+        data.ViewerId = this.ViewerId;
+
         TEntity e = (await this.ApiContext.Set<TEntity>().AddAsync(data)).Entity;
         await this.ApiContext.SaveChangesAsync();
 
@@ -92,14 +95,21 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
     }
 
     protected async Task AddToDatabase<TEntity>(params TEntity[] data)
-        where TEntity : class
+        where TEntity : class, IDbPlayerData
     {
+        foreach (TEntity entity in data)
+            entity.ViewerId = this.ViewerId;
+
         await this.ApiContext.Set<TEntity>().AddRangeAsync(data);
         await this.ApiContext.SaveChangesAsync();
     }
 
     protected async Task AddRangeToDatabase<TEntity>(IEnumerable<TEntity> data)
+        where TEntity : class, IDbPlayerData
     {
+        foreach (TEntity entity in data)
+            entity.ViewerId = this.ViewerId;
+
         await this.ApiContext.AddRangeAsync((IEnumerable<object>)data);
         await this.ApiContext.SaveChangesAsync();
     }
@@ -126,7 +136,11 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
         IPlayerIdentityService playerIdentityService =
             this.Services.GetRequiredService<IPlayerIdentityService>();
 
-        using IDisposable ctx = playerIdentityService.StartUserImpersonation(ViewerId);
+        using IDisposable ctx = playerIdentityService.StartUserImpersonation(
+            ViewerId,
+            DeviceAccountId
+        );
+
         savefileService.Import(GetSavefile()).Wait();
     }
 

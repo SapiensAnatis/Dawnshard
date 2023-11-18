@@ -18,7 +18,7 @@ public class DbFortBuildTest
         DbFortBuild entity =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 PlantId = plantId,
                 Level = level
             };
@@ -32,7 +32,7 @@ public class DbFortBuildTest
         DbFortBuild entity =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 BuildStartDate = DateTimeOffset.UnixEpoch,
                 BuildEndDate = DateTimeOffset.UnixEpoch
             };
@@ -53,7 +53,7 @@ public class DbFortBuildTest
         DbFortBuild entity =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 Level = level,
                 BuildStartDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(startOffsetSec),
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(endOffsetSec)
@@ -72,7 +72,7 @@ public class DbFortBuildTest
         DbFortBuild entity =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(endOffsetSec)
             };
 
@@ -88,7 +88,7 @@ public class DbFortBuildTest
         DbFortBuild entity =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 LastIncomeDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(incomeOffsetSec)
             };
 

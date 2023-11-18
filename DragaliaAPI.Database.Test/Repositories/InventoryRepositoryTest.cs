@@ -34,7 +34,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             await this.fixture
                 .ApiContext
                 .PlayerMaterials
-                .FindAsync(DeviceAccountId, Materials.WaterwyrmsGreatsphere)
+                .FindAsync(ViewerId, Materials.WaterwyrmsGreatsphere)
         )!
             .Quantity
             .Should()
@@ -63,7 +63,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             await this.fixture
                 .ApiContext
                 .PlayerMaterials
-                .FindAsync(DeviceAccountId, Materials.FirestormPrism)
+                .FindAsync(ViewerId, Materials.FirestormPrism)
         )!
             .Quantity
             .Should()
@@ -78,12 +78,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             5
         );
 
-        (
-            await this.fixture
-                .ApiContext
-                .PlayerMaterials
-                .FindAsync(DeviceAccountId, Materials.SunlightOre)
-        )!
+        (await this.fixture.ApiContext.PlayerMaterials.FindAsync(ViewerId, Materials.SunlightOre))!
             .Quantity
             .Should()
             .Be(5);
@@ -92,7 +87,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             await this.fixture
                 .ApiContext
                 .PlayerMaterials
-                .FindAsync(DeviceAccountId, Materials.SunlightStone)
+                .FindAsync(ViewerId, Materials.SunlightStone)
         )!
             .Quantity
             .Should()
@@ -110,7 +105,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
                 {
                     new()
                     {
-                        DeviceAccountId = "other id",
+                        ViewerId = ViewerId + 2,
                         MaterialId = Materials.AbaddonOrb,
                         Quantity = 5
                     },
@@ -151,7 +146,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
                 {
                     new()
                     {
-                        DeviceAccountId = "other id 2",
+                        ViewerId = ViewerId + 4,
                         MaterialId = Materials.AbaddonOrb,
                         Quantity = 5
                     },
@@ -194,7 +189,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
                 opts => opts.Excluding(x => x.Owner)
             )
             .And
-            .AllSatisfy(x => x.DeviceAccountId.Should().Be(DeviceAccountId));
+            .AllSatisfy(x => x.ViewerId.Should().Be(ViewerId));
     }
 
     [Fact]
@@ -228,9 +223,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             .ApiContext
             .PlayerMaterials
             .Single(
-                x =>
-                    x.DeviceAccountId == IdentityTestUtils.ViewerId
-                    && x.MaterialId == Materials.Valor
+                x => x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Valor
             )
             .Quantity
             .Should()
@@ -240,9 +233,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             .ApiContext
             .PlayerMaterials
             .Single(
-                x =>
-                    x.DeviceAccountId == IdentityTestUtils.ViewerId
-                    && x.MaterialId == Materials.Acclaim
+                x => x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Acclaim
             )
             .Quantity
             .Should()

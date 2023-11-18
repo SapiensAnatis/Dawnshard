@@ -34,7 +34,7 @@ public class MissionRepository : IMissionRepository
     {
         return await this.apiContext
                 .PlayerMissions
-                .FindAsync(this.playerIdentityService.AccountId, id, type)
+                .FindAsync(this.playerIdentityService.ViewerId, id, type)
             ?? throw new DragaliaException(ResultCode.MissionIdNotFound, "Mission not found");
     }
 
@@ -54,7 +54,7 @@ public class MissionRepository : IMissionRepository
         if (
             await this.apiContext
                 .PlayerMissions
-                .FindAsync(this.playerIdentityService.AccountId, id, type) != null
+                .FindAsync(this.playerIdentityService.ViewerId, id, type) != null
         )
             throw new DragaliaException(ResultCode.CommonDbError, "Mission already exists");
 

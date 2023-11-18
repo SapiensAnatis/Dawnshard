@@ -129,7 +129,7 @@ public class FortRepository : IFortRepository
     {
         DbFortDetail? details = await this.apiContext
             .PlayerFortDetails
-            .FindAsync(this.playerIdentityService.AccountId);
+            .FindAsync(this.playerIdentityService.ViewerId);
 
         if (details == null)
         {
@@ -175,7 +175,7 @@ public class FortRepository : IFortRepository
     public async Task UpdateFortMaximumCarpenter(int carpenterNum)
     {
         DbFortDetail fortDetail =
-            await apiContext.PlayerFortDetails.FindAsync(this.playerIdentityService.AccountId)
+            await apiContext.PlayerFortDetails.FindAsync(this.playerIdentityService.ViewerId)
             ?? throw new InvalidOperationException("Missing FortDetails!");
 
         fortDetail.CarpenterNum = carpenterNum;

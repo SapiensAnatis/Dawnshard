@@ -67,5 +67,5 @@ public class TradeRepository : ITradeRepository
     }
 
     public async Task<DbPlayerTrade?> FindTrade(int id) =>
-        await this.apiContext.PlayerTrades.FindAsync(this.playerIdentityService.AccountId, id);
+        await this.apiContext.PlayerTrades.FindAsync(this.playerIdentityService.ViewerId, id);
 }

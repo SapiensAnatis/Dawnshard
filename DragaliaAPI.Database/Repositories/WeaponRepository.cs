@@ -90,7 +90,7 @@ public class WeaponRepository : IWeaponRepository
         if (
             await this.apiContext
                 .PlayerWeaponSkins
-                .FindAsync(this.playerIdentityService.AccountId, weaponSkinId)
+                .FindAsync(this.playerIdentityService.ViewerId, weaponSkinId)
             is not null
         )
         {
@@ -123,7 +123,7 @@ public class WeaponRepository : IWeaponRepository
     }
 
     public async Task<DbWeaponBody?> FindAsync(WeaponBodies id) =>
-        await this.apiContext.PlayerWeapons.FindAsync(this.playerIdentityService.AccountId, id);
+        await this.apiContext.PlayerWeapons.FindAsync(this.playerIdentityService.ViewerId, id);
 
     public async Task AddPassiveAbility(WeaponBodies id, WeaponPassiveAbility passiveAbility)
     {

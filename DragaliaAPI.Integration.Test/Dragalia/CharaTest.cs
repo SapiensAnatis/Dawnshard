@@ -66,7 +66,7 @@ public class CharaTest : TestFixture
         using (
             IDisposable ctx = this.Services
                 .GetRequiredService<IPlayerIdentityService>()
-                .StartUserImpersonation(account: DeviceAccountId)
+                .StartUserImpersonation(viewer: ViewerId)
         )
         {
             charaData = await this.Services
@@ -133,7 +133,7 @@ public class CharaTest : TestFixture
         using (
             IDisposable ctx = this.Services
                 .GetRequiredService<IPlayerIdentityService>()
-                .StartUserImpersonation(account: DeviceAccountId)
+                .StartUserImpersonation(viewer: ViewerId)
         )
         {
             manaPointNum = (
@@ -206,7 +206,7 @@ public class CharaTest : TestFixture
         using (
             IDisposable ctx = this.Services
                 .GetRequiredService<IPlayerIdentityService>()
-                .StartUserImpersonation(account: DeviceAccountId)
+                .StartUserImpersonation(viewer: ViewerId)
         )
         {
             IInventoryRepository inventoryRepository =
@@ -250,7 +250,7 @@ public class CharaTest : TestFixture
         using (
             IDisposable ctx = this.Services
                 .GetRequiredService<IPlayerIdentityService>()
-                .StartUserImpersonation(account: DeviceAccountId)
+                .StartUserImpersonation(viewer: ViewerId)
         )
         {
             IInventoryRepository inventoryRepository =

@@ -30,7 +30,7 @@ public class TutorialTest : TestFixture
         this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == "logged_in_id")
+            .First(x => x.ViewerId == this.ViewerId)
             .TutorialStatus
             .Should()
             .Be(step);
@@ -42,7 +42,7 @@ public class TutorialTest : TestFixture
         int step = 20000;
 
         DbPlayerUserData dbUserData = (
-            await this.ApiContext.PlayerUserData.FindAsync(DeviceAccountId)
+            await this.ApiContext.PlayerUserData.FindAsync(this.ViewerId)
         )!;
 
         UserData expUserData = this.Mapper.Map<UserData>(dbUserData);
@@ -76,7 +76,7 @@ public class TutorialTest : TestFixture
                 this.ApiContext
                     .PlayerUserData
                     .AsNoTracking()
-                    .First(x => x.DeviceAccountId == "logged_in_id")
+                    .First(x => x.ViewerId == this.ViewerId)
                     .TutorialFlag
             )
             .Should()

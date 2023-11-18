@@ -21,7 +21,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     {
         this.fixture = fixture;
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
-        this.mockPlayerIdentityService.Setup(x => x.AccountId).Returns(DeviceAccountId);
+        this.mockPlayerIdentityService.Setup(x => x.ViewerId).Returns(ViewerId);
 
         this.unitRepository = new UnitRepository(
             fixture.ApiContext,

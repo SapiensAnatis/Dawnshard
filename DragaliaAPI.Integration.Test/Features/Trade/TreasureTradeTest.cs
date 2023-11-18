@@ -70,7 +70,7 @@ public class TreasureTradeTest : TestFixture
         using (
             IDisposable ctx = this.Services
                 .GetRequiredService<IPlayerIdentityService>()
-                .StartUserImpersonation(account: DeviceAccountId)
+                .StartUserImpersonation(viewer: ViewerId)
         )
         {
             preTradeAmount =

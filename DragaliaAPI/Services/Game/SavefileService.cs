@@ -134,7 +134,6 @@ public class SavefileService : ISavefileService
 
         try
         {
-            this.apiContext.ChangeTracker.AutoDetectChangesEnabled = false;
             await using IDbContextTransaction transaction = await this.apiContext
                 .Database
                 .BeginTransactionAsync();
@@ -402,34 +401,30 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            apiContext.PartyPowers.Add(savefile.party_power_data.Map<DbPartyPower>(mapper));
+            player.PartyPower = savefile.party_power_data.Map<DbPartyPower>(mapper);
 
             this.logger.LogDebug(
                 "Mapping DbPartyPower step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext
-                .QuestEvents
-                .AddRange(savefile.quest_event_list.Map<DbQuestEvent>(mapper));
+            player.QuestEvents = savefile.quest_event_list.Map<DbQuestEvent>(mapper);
 
             this.logger.LogDebug(
                 "Mapping DbQuestEvent step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext
-                .QuestTreasureList
-                .AddRange(savefile.quest_treasure_list.Map<DbQuestTreasureList>(mapper));
+            player.QuestTreasureList = savefile
+                .quest_treasure_list
+                .Map<DbQuestTreasureList>(mapper);
 
             this.logger.LogDebug(
                 "Mapping DbQuestTreasureList step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            this.apiContext
-                .PlayerQuestWalls
-                .AddRange(savefile.quest_wall_list.Map<DbPlayerQuestWall>(mapper));
+            player.QuestWalls = savefile.quest_wall_list.Map<DbPlayerQuestWall>(mapper);
 
             this.logger.LogDebug(
                 "Mapping DbPlayerQuestWall step done after {t} ms",
@@ -454,20 +449,18 @@ public class SavefileService : ISavefileService
         }
         catch
         {
-            this.apiContext.ChangeTracker.AutoDetectChangesEnabled = true;
             this.apiContext.ChangeTracker.Clear();
             throw;
         }
     }
 
-    private void Delete()
+    private void Delete() => this.Delete(this.playerIdentityService.ViewerId);
+
+    private void Delete(long viewerId)
     {
         // Options commented out have been excluded from save import deletion process.
         // They will still be deleted by cascade delete when a player is actually deleted
         // without being re-added as they are in save imports.
-
-        long viewerId = this.playerIdentityService.ViewerId;
-
         this.apiContext
             .Players
             .RemoveRange(this.apiContext.Players.Where(x => x.ViewerId == viewerId));
@@ -620,18 +613,20 @@ public class SavefileService : ISavefileService
             .AsSplitQuery();
     }
 
-    public async Task<long> Create()
+    public async Task<DbPlayer> Create()
     {
         string deviceAccountId = this.playerIdentityService.AccountId;
 
+        return await this.Create(deviceAccountId);
+    }
+
+    public async Task<DbPlayer> Create(string deviceAccountId)
+    {
         this.logger.LogInformation("Creating new savefile for account ID {id}", deviceAccountId);
 
         await using IDbContextTransaction transaction = await this.apiContext
             .Database
             .BeginTransactionAsync();
-
-        this.Delete();
-        await this.apiContext.SaveChangesAsync();
 
         DbPlayer player =
             new()
@@ -642,6 +637,12 @@ public class SavefileService : ISavefileService
             };
 
         this.apiContext.Players.Add(player);
+        await this.apiContext.SaveChangesAsync();
+
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+            player.ViewerId,
+            player.AccountId
+        );
 
         await this.AddDefaultParties(player);
         await this.AddDefaultCharacters();
@@ -653,7 +654,7 @@ public class SavefileService : ISavefileService
 
         await transaction.CommitAsync();
 
-        return player.ViewerId;
+        return player;
     }
 
     private async Task AddDefaultParties(DbPlayer player)

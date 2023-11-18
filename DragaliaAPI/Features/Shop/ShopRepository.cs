@@ -28,7 +28,7 @@ public class ShopRepository : IShopRepository
 
     public async Task<DbPlayerShopInfo> GetShopInfoAsync()
     {
-        return await this.apiContext.PlayerShopInfos.FindAsync(this.playerIdentityService.AccountId)
+        return await this.apiContext.PlayerShopInfos.FindAsync(this.playerIdentityService.ViewerId)
             ?? throw new NullReferenceException("No ShopInfo found");
     }
 

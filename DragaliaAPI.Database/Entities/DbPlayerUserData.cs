@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerUserData")]
+[PrimaryKey(nameof(ViewerId))]
 public class DbPlayerUserData : DbPlayerData
 {
     /// <summary>

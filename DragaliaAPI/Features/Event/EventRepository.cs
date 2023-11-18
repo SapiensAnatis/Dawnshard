@@ -23,7 +23,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public async Task<DbPlayerEventData?> GetEventDataAsync(int eventId)
     {
-        return await apiContext.PlayerEventData.FindAsync(playerIdentityService.AccountId, eventId);
+        return await apiContext.PlayerEventData.FindAsync(playerIdentityService.ViewerId, eventId);
     }
 
     public async Task<IEnumerable<DbPlayerEventReward>> GetEventRewardsAsync(
@@ -54,7 +54,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public async Task<DbPlayerEventItem?> GetEventItemAsync(int itemId)
     {
-        return await apiContext.PlayerEventItems.FindAsync(playerIdentityService.AccountId, itemId);
+        return await apiContext.PlayerEventItems.FindAsync(playerIdentityService.ViewerId, itemId);
     }
 
     public async Task<DbPlayerEventItem> GetEventItemAsync(int eventId, int itemType)
@@ -83,7 +83,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
     {
         return await apiContext
             .PlayerEventPassives
-            .FindAsync(playerIdentityService.AccountId, eventId, passiveId);
+            .FindAsync(playerIdentityService.ViewerId, eventId, passiveId);
     }
 
     public DbPlayerEventData CreateEventData(int eventId, bool customEventFlag = false)

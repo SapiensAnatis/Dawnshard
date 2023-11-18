@@ -213,7 +213,7 @@ public class PartyTest : TestFixture
     public async Task UpdatePartyName_UpdatesDatabase()
     {
         DbParty party =
-            await this.ApiContext.PlayerParties.FindAsync(DeviceAccountId, 1)
+            await this.ApiContext.PlayerParties.FindAsync(ViewerId, 1)
             ?? throw new NullReferenceException();
 
         await this.Client.PostMsgpack<PartyUpdatePartyNameData>(

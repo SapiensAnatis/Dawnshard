@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models;
@@ -11,6 +12,8 @@ using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -32,8 +35,10 @@ public class AuthServiceTest
     private readonly Mock<IOptionsMonitor<BaasOptions>> mockBaasOptions;
     private readonly Mock<IDateTimeProvider> mockDateTimeProvider;
     private readonly Mock<ILogger<AuthService>> mockLogger;
+    private readonly ApiContext apiContext;
 
     private const string AccountId = "account id";
+    private const long ViewerId = 1;
 
     public AuthServiceTest()
     {
@@ -47,6 +52,12 @@ public class AuthServiceTest
         this.mockLogger = new(MockBehavior.Loose);
         this.mockDateTimeProvider = new(MockBehavior.Strict);
 
+        DbContextOptions<ApiContext> options = new DbContextOptionsBuilder<ApiContext>()
+            .UseInMemoryDatabase("apicontext")
+            .Options;
+
+        this.apiContext = new ApiContext(options);
+
         this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UnixEpoch);
 
         this.authService = new(
@@ -55,6 +66,7 @@ public class AuthServiceTest
             this.mockSavefileService.Object,
             this.mockPlayerIdentityService.Object,
             this.mockUserDataRepository.Object,
+            this.apiContext,
             this.mockLoginOptions.Object,
             this.mockBaasOptions.Object,
             this.mockLogger.Object,
@@ -84,10 +96,7 @@ public class AuthServiceTest
         this.mockUserDataRepository
             .SetupGet(x => x.UserData)
             .Returns(
-                new List<DbPlayerUserData>()
-                {
-                    new() { DeviceAccountId = "id", ViewerId = 1 }
-                }
+                new List<DbPlayerUserData>() { new() { ViewerId = 1, } }
                     .AsQueryable()
                     .BuildMock()
             );
@@ -129,10 +138,7 @@ public class AuthServiceTest
         this.mockUserDataRepository
             .SetupGet(x => x.UserData)
             .Returns(
-                new List<DbPlayerUserData>()
-                {
-                    new() { DeviceAccountId = "id", ViewerId = 1 }
-                }
+                new List<DbPlayerUserData>() { new() { ViewerId = 1, } }
                     .AsQueryable()
                     .BuildMock()
             );
@@ -249,9 +255,8 @@ public class AuthServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = AccountId,
+                        ViewerId = ViewerId,
                         Name = "Euden",
-                        ViewerId = 1,
                         LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(15)
                     }
                 }
@@ -323,9 +328,8 @@ public class AuthServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = AccountId,
+                        ViewerId = ViewerId,
                         Name = "Euden",
-                        ViewerId = 1,
                         LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(1)
                     }
                 }
@@ -383,9 +387,8 @@ public class AuthServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = AccountId,
+                        ViewerId = ViewerId,
                         Name = "Euden",
-                        ViewerId = 1,
                         LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(2),
                     }
                 }
@@ -444,9 +447,8 @@ public class AuthServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = AccountId,
+                        ViewerId = ViewerId,
                         Name = "Euden",
-                        ViewerId = 1,
                         LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(2),
                     }
                 }

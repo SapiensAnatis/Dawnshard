@@ -12,6 +12,15 @@ namespace DragaliaAPI.Database.Entities;
 [PrimaryKey(nameof(ViewerId), nameof(AbilityCrestSetNo))]
 public class DbAbilityCrestSet : DbPlayerData
 {
+    public DbAbilityCrestSet() { }
+
+    [SetsRequiredMembers]
+    public DbAbilityCrestSet(long viewerId, int setNo)
+    {
+        this.ViewerId = viewerId;
+        this.AbilityCrestSetNo = setNo;
+    }
+
     /// <summary>
     /// Gets or sets a value that dictates the wyrmprint set number.
     /// </summary>

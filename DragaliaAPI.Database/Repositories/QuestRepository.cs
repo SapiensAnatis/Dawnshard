@@ -27,7 +27,7 @@ public class QuestRepository : IQuestRepository
 
     private async Task<DbQuest?> FindQuestAsync(int questId)
     {
-        return await apiContext.PlayerQuests.FindAsync(playerIdentityService.AccountId, questId);
+        return await apiContext.PlayerQuests.FindAsync(playerIdentityService.ViewerId, questId);
     }
 
     public async Task<DbQuest> GetQuestDataAsync(int questId)
@@ -42,9 +42,7 @@ public class QuestRepository : IQuestRepository
 
     private async Task<DbQuestEvent?> FindQuestEventAsync(int questEventId)
     {
-        return await apiContext
-            .QuestEvents
-            .FindAsync(playerIdentityService.AccountId, questEventId);
+        return await apiContext.QuestEvents.FindAsync(playerIdentityService.ViewerId, questEventId);
     }
 
     public async Task<DbQuestEvent> GetQuestEventAsync(int questEventId)

@@ -43,7 +43,7 @@ public class StoryRepository : IStoryRepository
     {
         DbPlayerStoryState? state = await apiContext
             .PlayerStoryState
-            .FindAsync(this.playerIdentityService.AccountId, storyType, storyId);
+            .FindAsync(this.playerIdentityService.ViewerId, storyType, storyId);
 
         if (state is null)
         {

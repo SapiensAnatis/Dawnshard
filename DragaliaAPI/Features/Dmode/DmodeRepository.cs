@@ -28,19 +28,19 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public async Task<DbPlayerDmodeInfo> GetInfoAsync()
     {
-        return await apiContext.PlayerDmodeInfos.FindAsync(playerIdentityService.AccountId)
+        return await apiContext.PlayerDmodeInfos.FindAsync(playerIdentityService.ViewerId)
             ?? throw new InvalidOperationException("Failed to get player dmode info");
     }
 
     public async Task<DbPlayerDmodeDungeon> GetDungeonAsync()
     {
-        return await apiContext.PlayerDmodeDungeons.FindAsync(playerIdentityService.AccountId)
+        return await apiContext.PlayerDmodeDungeons.FindAsync(playerIdentityService.ViewerId)
             ?? throw new InvalidOperationException("Failed to get player dmode dungeon");
     }
 
     public async Task<DbPlayerDmodeExpedition> GetExpeditionAsync()
     {
-        return await apiContext.PlayerDmodeExpeditions.FindAsync(playerIdentityService.AccountId)
+        return await apiContext.PlayerDmodeExpeditions.FindAsync(playerIdentityService.ViewerId)
             ?? throw new InvalidOperationException("Failed to get player dmode expedition");
     }
 

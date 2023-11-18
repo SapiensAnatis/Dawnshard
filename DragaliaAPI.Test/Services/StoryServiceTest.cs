@@ -57,7 +57,7 @@ public class StoryServiceTest
     {
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(StoryTypes.Chara, 8))
-            .ReturnsAsync(new DbPlayerStoryState() { DeviceAccountId = string.Empty });
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1 });
 
         (await this.storyService.CheckStoryEligibility(StoryTypes.Chara, 8)).Should().BeFalse();
     }
@@ -71,13 +71,7 @@ public class StoryServiceTest
 
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(StoryTypes.Chara, 100004101))
-            .ReturnsAsync(
-                new DbPlayerStoryState()
-                {
-                    DeviceAccountId = string.Empty,
-                    State = StoryState.Unlocked
-                }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
 
         (await this.storyService.CheckStoryEligibility(StoryTypes.Chara, 100004101))
             .Should()
@@ -95,13 +89,7 @@ public class StoryServiceTest
 
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(StoryTypes.Chara, 110013012))
-            .ReturnsAsync(
-                new DbPlayerStoryState()
-                {
-                    DeviceAccountId = string.Empty,
-                    State = StoryState.Unlocked
-                }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
 
         (await this.storyService.CheckStoryEligibility(StoryTypes.Chara, 110013012))
             .Should()
@@ -115,13 +103,7 @@ public class StoryServiceTest
     {
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(StoryTypes.Chara, 110013013))
-            .ReturnsAsync(
-                new DbPlayerStoryState()
-                {
-                    DeviceAccountId = string.Empty,
-                    State = StoryState.Unlocked
-                }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
 
         this.mockStoryRepository
             .SetupGet(x => x.UnitStories)
@@ -130,7 +112,7 @@ public class StoryServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = "whatever",
+                        ViewerId = 1,
                         StoryId = 110013012,
                         State = StoryState.Read,
                         StoryType = StoryTypes.Chara
@@ -184,9 +166,7 @@ public class StoryServiceTest
     {
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(type, storyId))
-            .ReturnsAsync(
-                new DbPlayerStoryState() { DeviceAccountId = string.Empty, State = StoryState.Read }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Read });
 
         (await this.storyService.ReadStory(type, storyId))
             .Should()
@@ -208,13 +188,7 @@ public class StoryServiceTest
     {
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(type, storyId))
-            .ReturnsAsync(
-                new DbPlayerStoryState()
-                {
-                    DeviceAccountId = string.Empty,
-                    State = StoryState.Unlocked
-                }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
 
         this.mockRewardService
             .Setup(
@@ -250,9 +224,7 @@ public class StoryServiceTest
     {
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(StoryTypes.Quest, 1))
-            .ReturnsAsync(
-                new DbPlayerStoryState() { DeviceAccountId = string.Empty, State = StoryState.Read }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Read });
 
         (await this.storyService.ReadStory(StoryTypes.Quest, 1))
             .Should()
@@ -266,13 +238,7 @@ public class StoryServiceTest
     {
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(StoryTypes.Quest, 1000311))
-            .ReturnsAsync(
-                new DbPlayerStoryState()
-                {
-                    DeviceAccountId = string.Empty,
-                    State = StoryState.Unlocked
-                }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
 
         this.mockUserDataRepository.Setup(x => x.GiveWyrmite(25)).Returns(Task.CompletedTask);
         this.mockTutorialService
@@ -314,9 +280,7 @@ public class StoryServiceTest
     {
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(StoryTypes.Castle, 1))
-            .ReturnsAsync(
-                new DbPlayerStoryState() { DeviceAccountId = "", State = StoryState.Read }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Read });
 
         (await this.storyService.CheckStoryEligibility(StoryTypes.Castle, 1)).Should().BeTrue();
     }
@@ -330,9 +294,7 @@ public class StoryServiceTest
     {
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(StoryTypes.Castle, 1))
-            .ReturnsAsync(
-                new DbPlayerStoryState() { DeviceAccountId = "", State = StoryState.Unlocked }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
 
         this.mockInventoryRepository
             .Setup(x => x.CheckQuantity(Materials.LookingGlass, 1))
@@ -348,9 +310,7 @@ public class StoryServiceTest
     {
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(StoryTypes.Castle, 2))
-            .ReturnsAsync(
-                new DbPlayerStoryState() { DeviceAccountId = string.Empty, State = StoryState.Read }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Read });
 
         (await this.storyService.ReadStory(StoryTypes.Castle, 2))
             .Should()
@@ -364,13 +324,7 @@ public class StoryServiceTest
     {
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(StoryTypes.Castle, 2))
-            .ReturnsAsync(
-                new DbPlayerStoryState()
-                {
-                    DeviceAccountId = string.Empty,
-                    State = StoryState.Unlocked
-                }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
 
         this.mockInventoryRepository
             .Setup(x => x.UpdateQuantity(Materials.LookingGlass, -1))
@@ -395,13 +349,7 @@ public class StoryServiceTest
     {
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(StoryTypes.Quest, 1000607))
-            .ReturnsAsync(
-                new DbPlayerStoryState()
-                {
-                    DeviceAccountId = string.Empty,
-                    State = StoryState.Unlocked
-                }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
 
         this.mockMissionProgressionService.Setup(x => x.OnQuestStoryCleared(1000607));
 
@@ -441,13 +389,7 @@ public class StoryServiceTest
 
         this.mockStoryRepository
             .Setup(x => x.GetOrCreateStory(StoryTypes.Quest, storyId))
-            .ReturnsAsync(
-                new DbPlayerStoryState()
-                {
-                    DeviceAccountId = string.Empty,
-                    State = StoryState.Unlocked
-                }
-            );
+            .ReturnsAsync(new DbPlayerStoryState() { ViewerId = 1, State = StoryState.Unlocked });
 
         this.mockMissionProgressionService.Setup(x => x.OnQuestStoryCleared(storyId));
 
@@ -494,7 +436,7 @@ public class StoryServiceTest
             this.Add(
                 new()
                 {
-                    DeviceAccountId = string.Empty,
+                    ViewerId = 1,
                     StoryId = 100004011,
                     StoryType = StoryTypes.Chara,
                     State = StoryState.Unlocked,
@@ -505,7 +447,7 @@ public class StoryServiceTest
             this.Add(
                 new()
                 {
-                    DeviceAccountId = string.Empty,
+                    ViewerId = 1,
                     StoryId = 100004012,
                     StoryType = StoryTypes.Chara,
                     State = StoryState.Unlocked
@@ -516,7 +458,7 @@ public class StoryServiceTest
             this.Add(
                 new()
                 {
-                    DeviceAccountId = string.Empty,
+                    ViewerId = 1,
                     StoryId = 210143011,
                     StoryType = StoryTypes.Dragon,
                     State = StoryState.Unlocked
@@ -527,7 +469,7 @@ public class StoryServiceTest
             this.Add(
                 new()
                 {
-                    DeviceAccountId = string.Empty,
+                    ViewerId = 1,
                     StoryId = 210143011,
                     StoryType = StoryTypes.Dragon,
                     State = StoryState.Unlocked
@@ -538,7 +480,7 @@ public class StoryServiceTest
             this.Add(
                 new()
                 {
-                    DeviceAccountId = string.Empty,
+                    ViewerId = 1,
                     StoryId = 210143012,
                     StoryType = StoryTypes.Dragon,
                     State = StoryState.Unlocked

@@ -111,9 +111,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
         this.fixture
             .ApiContext
             .PlayerAbilityCrestSets
-            .Single(
-                x => x.DeviceAccountId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54
-            )
+            .Single(x => x.ViewerId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54)
             .Should()
             .BeEquivalentTo(new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 54));
 
@@ -130,9 +128,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
         this.fixture
             .ApiContext
             .PlayerAbilityCrestSets
-            .Single(
-                x => x.DeviceAccountId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54
-            )
+            .Single(x => x.ViewerId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54)
             .Should()
             .BeEquivalentTo(
                 new DbAbilityCrestSet()

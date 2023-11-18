@@ -157,7 +157,7 @@ public class FortControllerTest
 
         mockFortService
             .Setup(x => x.CancelBuild(1))
-            .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id", BuildId = 1 });
+            .ReturnsAsync(new DbFortBuild() { ViewerId = 1, BuildId = 1 });
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
@@ -224,7 +224,7 @@ public class FortControllerTest
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 BuildId = 10,
                 BuildStartDate = DateTimeOffset.UtcNow,
                 BuildEndDate = DateTimeOffset.UtcNow,
@@ -320,7 +320,7 @@ public class FortControllerTest
 
         mockFortService
             .Setup(x => x.CancelLevelup(1))
-            .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id", BuildId = 1 });
+            .ReturnsAsync(new DbFortBuild() { ViewerId = 1, BuildId = 1 });
         mockFortService.Setup(x => x.GetFortDetail()).ReturnsAsync(detail);
 
         mockUpdateDataService.Setup(x => x.SaveChangesAsync()).ReturnsAsync(updateDataList);
@@ -390,7 +390,7 @@ public class FortControllerTest
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 BuildId = 10,
                 BuildStartDate = DateTimeOffset.UtcNow,
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromHours(2),
@@ -439,7 +439,7 @@ public class FortControllerTest
 
         mockFortService
             .Setup(x => x.Move(1, 2, 3))
-            .ReturnsAsync(new DbFortBuild() { DeviceAccountId = "id", BuildId = 1 });
+            .ReturnsAsync(new DbFortBuild() { ViewerId = 1, BuildId = 1 });
 
         mockBonusService.Setup(x => x.GetBonusList()).ReturnsAsync(bonusList);
 

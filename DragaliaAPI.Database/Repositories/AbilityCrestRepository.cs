@@ -66,7 +66,7 @@ public class AbilityCrestRepository : IAbilityCrestRepository
     public async Task<DbAbilityCrest?> FindAsync(AbilityCrests abilityCrestId) =>
         await this.apiContext
             .PlayerAbilityCrests
-            .FindAsync(this.playerIdentityService.AccountId, abilityCrestId);
+            .FindAsync(this.playerIdentityService.ViewerId, abilityCrestId);
 
     public async Task AddOrUpdateSet(DbAbilityCrestSet abilityCrestSet)
     {
@@ -92,5 +92,5 @@ public class AbilityCrestRepository : IAbilityCrestRepository
     public async Task<DbAbilityCrestSet?> FindSetAsync(int abilityCrestSetNo) =>
         await this.apiContext
             .PlayerAbilityCrestSets
-            .FindAsync(this.playerIdentityService.AccountId, abilityCrestSetNo);
+            .FindAsync(this.playerIdentityService.ViewerId, abilityCrestSetNo);
 }

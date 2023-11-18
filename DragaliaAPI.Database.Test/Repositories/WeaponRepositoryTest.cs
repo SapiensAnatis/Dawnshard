@@ -35,12 +35,12 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             {
                 new()
                 {
-                    DeviceAccountId = "other id",
+                    ViewerId = 2,
                     WeaponBodyId = Shared.Definitions.Enums.WeaponBodies.SoldiersBrand
                 },
                 new()
                 {
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     WeaponBodyId = Shared.Definitions.Enums.WeaponBodies.AbsoluteAqua
                 }
             }
@@ -48,7 +48,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
 
         (await this.weaponRepository.WeaponBodies.ToListAsync())
             .Should()
-            .AllSatisfy(x => x.DeviceAccountId.Should().Be("id"));
+            .AllSatisfy(x => x.ViewerId.Should().Be(1));
     }
 
     [Fact]
@@ -57,8 +57,8 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddRangeToDatabase(
             new List<DbWeaponPassiveAbility>()
             {
-                new() { DeviceAccountId = "id", WeaponPassiveAbilityId = 1010107 },
-                new() { DeviceAccountId = "id", WeaponPassiveAbilityId = 1010108 }
+                new() { ViewerId = 1, WeaponPassiveAbilityId = 1010107 },
+                new() { ViewerId = 1, WeaponPassiveAbilityId = 1010108 }
             }
         );
 
@@ -80,7 +80,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             .Single(
                 x =>
                     x.WeaponBodyId == WeaponBodies.Arondight
-                    && x.DeviceAccountId == IdentityTestUtils.ViewerId
+                    && x.ViewerId == IdentityTestUtils.ViewerId
             )
             .Should()
             .BeEquivalentTo(

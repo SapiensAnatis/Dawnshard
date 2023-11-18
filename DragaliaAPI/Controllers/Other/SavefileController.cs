@@ -60,20 +60,6 @@ public class SavefileController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("delete/{viewerId:long}")]
-    public async Task<IActionResult> Delete(long viewerId)
-    {
-        string accountId = await LookupAccountId(viewerId);
-        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-            viewerId,
-            accountId
-        );
-
-        await this.savefileService.Reset();
-
-        return this.NoContent();
-    }
-
     private async Task<string> LookupAccountId(long viewerId)
     {
         // Note that unlike in AuthService, a savefile must already exist here, hence no OrDefault

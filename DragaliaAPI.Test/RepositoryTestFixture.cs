@@ -18,8 +18,6 @@ public class RepositoryTestFixture : IDisposable
 
     protected IMapper Mapper { get; init; }
 
-    public const string DeviceAccountId = "id";
-
     public const long ViewerId = 1;
 
     private readonly string DbName = $"DbTestFixture-{Guid.NewGuid()}";

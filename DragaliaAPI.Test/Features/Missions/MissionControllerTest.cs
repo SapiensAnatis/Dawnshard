@@ -72,7 +72,7 @@ public class MissionControllerTest
             .Returns(
                 new List<DbPlayerUserData>()
                 {
-                    new() { DeviceAccountId = "id", ActiveMemoryEventId = 20816 }
+                    new() { ViewerId = 1, ActiveMemoryEventId = 20816 }
                 }
                     .AsQueryable()
                     .BuildMock()

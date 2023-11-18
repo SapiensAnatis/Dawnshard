@@ -37,24 +37,24 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddRangeToDatabase(
             new List<DbFortBuild>()
             {
-                new() { DeviceAccountId = "id", PlantId = FortPlants.TheHungerdome, },
-                new() { DeviceAccountId = "id", PlantId = FortPlants.CircusTent, },
-                new() { DeviceAccountId = "id 2", PlantId = FortPlants.JackOLantern, },
-                new() { DeviceAccountId = "id 3", PlantId = FortPlants.WaterAltar, },
+                new() { ViewerId = 1, PlantId = FortPlants.TheHungerdome, },
+                new() { ViewerId = 1, PlantId = FortPlants.CircusTent, },
+                new() { ViewerId = 2, PlantId = FortPlants.JackOLantern, },
+                new() { ViewerId = 3, PlantId = FortPlants.WaterAltar, },
             }
         );
 
         (await this.fortRepository.Builds.ToListAsync())
             .Should()
-            .AllSatisfy(x => x.DeviceAccountId.Should().Be("id"))
+            .AllSatisfy(x => x.ViewerId.Should().Be(1))
             .And
             .ContainEquivalentOf(
-                new DbFortBuild() { DeviceAccountId = "id", PlantId = FortPlants.TheHungerdome, },
+                new DbFortBuild() { ViewerId = 1, PlantId = FortPlants.TheHungerdome, },
                 opts => opts.Excluding(x => x.Owner).Excluding(x => x.BuildId)
             )
             .And
             .ContainEquivalentOf(
-                new DbFortBuild() { DeviceAccountId = "id", PlantId = FortPlants.CircusTent },
+                new DbFortBuild() { ViewerId = 1, PlantId = FortPlants.CircusTent },
                 opts => opts.Excluding(x => x.Owner).Excluding(x => x.BuildId)
             );
 
@@ -69,7 +69,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddToDatabase(
             new DbFortBuild()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 PlantId = FortPlants.Dragonata,
                 Level = 10
             }
@@ -88,7 +88,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddToDatabase(
             new DbFortBuild()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 PlantId = FortPlants.BroadleafTree,
                 Level = 3
             }
@@ -106,7 +106,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     {
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
 
-        DbFortDetail detail = new DbFortDetail() { DeviceAccountId = "id", CarpenterNum = 2, };
+        DbFortDetail detail = new DbFortDetail() { ViewerId = 1, CarpenterNum = 2, };
         await this.fixture.AddToDatabase(detail);
 
         (await this.fortRepository.GetFortDetail()).Should().BeEquivalentTo(detail);
@@ -117,11 +117,11 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetFortDetail_NotFound_CreatesNew()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("no fort");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(4);
 
         (await this.fortRepository.GetFortDetail())
             .Should()
-            .BeEquivalentTo(new DbFortDetail() { DeviceAccountId = "no fort", CarpenterNum = 2 });
+            .BeEquivalentTo(new DbFortDetail() { ViewerId = 4, CarpenterNum = 2 });
 
         this.mockPlayerIdentityService.VerifyAll();
     }
@@ -129,18 +129,13 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task UpdateFortMaximumCarpenter_UpdatesCarpenterNum()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("carpenter");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(5);
 
-        await this.fixture.AddToDatabase(
-            new DbFortDetail() { DeviceAccountId = "carpenter", CarpenterNum = 2 }
-        );
+        await this.fixture.AddToDatabase(new DbFortDetail() { ViewerId = 5, CarpenterNum = 2 });
 
-        await this.fortRepository.UpdateFortMaximumCarpenter(4);
+        await this.fortRepository.UpdateFortMaximumCarpenter(5);
 
-        (await this.fixture.ApiContext.PlayerFortDetails.FindAsync("carpenter"))!
-            .CarpenterNum
-            .Should()
-            .Be(4);
+        (await this.fixture.ApiContext.PlayerFortDetails.FindAsync(5))!.CarpenterNum.Should().Be(4);
 
         this.mockPlayerIdentityService.VerifyAll();
     }
@@ -153,7 +148,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 PlantId = FortPlants.DaggerDojo,
                 Level = 1,
                 BuildId = 8,
@@ -174,12 +169,12 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetBuilding_NotFound_Throws()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(1);
 
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = "other id",
+                ViewerId = 2,
                 PlantId = FortPlants.DaggerDojo,
                 Level = 1,
                 BuildId = 9,
@@ -203,7 +198,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddBuild_Adds()
     {
-        await this.fortRepository.AddBuild(new() { DeviceAccountId = "some id", BuildId = 12 });
+        await this.fortRepository.AddBuild(new() { ViewerId = 12, BuildId = 12 });
 
         (await this.fixture.ApiContext.PlayerFortBuilds.FindAsync(12L)).Should().NotBeNull();
     }
@@ -214,7 +209,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = "deleted id",
+                ViewerId = 44,
                 PlantId = FortPlants.DaggerDojo,
                 Level = 1,
                 BuildId = 15,
@@ -225,48 +220,48 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         this.fortRepository.DeleteBuild(build);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        (await this.fixture.ApiContext.PlayerFortBuilds.FindAsync(15L)).Should().BeNull();
+        (await this.fixture.ApiContext.PlayerFortBuilds.FindAsync(44L)).Should().BeNull();
     }
 
     [Fact]
     public async Task GetActiveCarpenters_ReturnsActiveCarpenters()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("carpenter");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(12);
 
         await this.fixture.AddRangeToDatabase(
             new List<DbFortBuild>()
             {
                 new()
                 {
-                    DeviceAccountId = "carpenter",
+                    ViewerId = 12,
                     PlantId = FortPlants.PalmTree,
                     BuildStartDate = DateTimeOffset.MinValue,
                     BuildEndDate = DateTimeOffset.MaxValue
                 },
                 new()
                 {
-                    DeviceAccountId = "carpenter",
+                    ViewerId = 12,
                     PlantId = FortPlants.Lectern,
                     BuildStartDate = DateTimeOffset.MinValue,
                     BuildEndDate = DateTimeOffset.MaxValue
                 },
                 new()
                 {
-                    DeviceAccountId = "carpenter",
+                    ViewerId = 12,
                     PlantId = FortPlants.Snowdrake,
                     BuildStartDate = DateTimeOffset.MinValue,
                     BuildEndDate = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(22)
                 },
                 new()
                 {
-                    DeviceAccountId = "carpenter",
+                    ViewerId = 12,
                     PlantId = FortPlants.Wishmill,
                     BuildStartDate = DateTimeOffset.UnixEpoch,
                     BuildEndDate = DateTimeOffset.UnixEpoch
                 },
                 new()
                 {
-                    DeviceAccountId = "some other id",
+                    ViewerId = 13,
                     PlantId = FortPlants.FafnirStatueFlame,
                     BuildStartDate = DateTimeOffset.UnixEpoch,
                     BuildEndDate = DateTimeOffset.MaxValue
@@ -282,7 +277,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task InitializeFort_InitializesFort()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(13);
 
         await this.fortRepository.InitializeFort();
         await this.fixture.ApiContext.SaveChangesAsync();
@@ -291,15 +286,13 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             .ApiContext
             .PlayerFortDetails
             .Should()
-            .ContainEquivalentOf(
-                new DbFortDetail() { DeviceAccountId = "account id", CarpenterNum = 2 }
-            );
+            .ContainEquivalentOf(new DbFortDetail() { ViewerId = 13, CarpenterNum = 2 });
 
         this.fixture
             .ApiContext
             .PlayerFortBuilds
             .Should()
-            .Contain(x => x.PlantId == FortPlants.TheHalidom && x.DeviceAccountId == "account id");
+            .Contain(x => x.PlantId == FortPlants.TheHalidom && x.ViewerId == 13);
 
         this.mockPlayerIdentityService.VerifyAll();
     }
@@ -320,7 +313,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddDojos_AddsDojos()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(80);
 
         await this.fortRepository.AddDojos();
         await this.fixture.ApiContext.SaveChangesAsync();
@@ -347,7 +340,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
                 .Contain(
                     x =>
                         x.PlantId == plant
-                        && x.DeviceAccountId == "account id"
+                        && x.ViewerId == 80
                         && x.PositionX == -1
                         && x.PositionZ == -1
                         && x.Level == 1
@@ -360,7 +353,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddToStorage_IsTotalQuantity_AddsBuilds()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(2);
 
         this.fixture
             .ApiContext
@@ -368,11 +361,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             .AddRange(
                 new List<DbFortBuild>()
                 {
-                    new()
-                    {
-                        DeviceAccountId = "some other id",
-                        PlantId = FortPlants.FlameDracolith,
-                    }
+                    new() { ViewerId = 3, PlantId = FortPlants.FlameDracolith, }
                 }
             );
         await this.fixture.ApiContext.SaveChangesAsync();
@@ -390,18 +379,14 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             .PlayerFortBuilds
             .Should()
             .Contain(
-                x =>
-                    x.DeviceAccountId == "account id"
-                    && x.Level == 4
-                    && x.PositionX == -1
-                    && x.PositionZ == -1
+                x => x.ViewerId == 2 && x.Level == 4 && x.PositionX == -1 && x.PositionZ == -1
             );
     }
 
     [Fact]
     public async Task AddToStorage_IsTotalQuantity_AlreadyOwned_DoesNotAddBuilds()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(4);
 
         this.fixture
             .ApiContext
@@ -409,7 +394,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
             .AddRange(
                 new List<DbFortBuild>()
                 {
-                    new() { DeviceAccountId = "account id", PlantId = FortPlants.WindDracolith, }
+                    new() { ViewerId = 4, PlantId = FortPlants.WindDracolith, }
                 }
             );
         await this.fixture.ApiContext.SaveChangesAsync();

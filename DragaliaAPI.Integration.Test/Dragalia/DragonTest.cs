@@ -32,12 +32,9 @@ public class DragonTest : TestFixture
             #region GarudaDragonSacrifice
             List<DbPlayerDragonData> setupDragons = new List<DbPlayerDragonData>
             {
-                DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Garuda)
+                DbPlayerDragonDataFactory.Create(0, Dragons.Garuda)
             };
-            DbPlayerDragonData dragon = DbPlayerDragonDataFactory.Create(
-                DeviceAccountId,
-                Dragons.Garuda
-            );
+            DbPlayerDragonData dragon = DbPlayerDragonDataFactory.Create(0, Dragons.Garuda);
             dragon.AttackPlusCount = 25;
             dragon.HpPlusCount = 25;
             setupDragons.Add(dragon);
@@ -48,7 +45,7 @@ public class DragonTest : TestFixture
                 new DragonBuildUpTestCase(
                     new List<DbPlayerDragonData>()
                     {
-                        DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Fubuki)
+                        DbPlayerDragonDataFactory.Create(0, Dragons.Fubuki)
                     },
                     EntityTypes.Material,
                     (int)Materials.Dragonfruit,
@@ -67,12 +64,12 @@ public class DragonTest : TestFixture
     {
         ApiContext context = this.Services.GetRequiredService<ApiContext>();
 
-        DbPlayerDragonData dbDragon = context.PlayerDragonData.Add(testCase.SetupDragons[0]).Entity;
+        DbPlayerDragonData dbDragon = await this.AddToDatabase(testCase.SetupDragons[0]);
 
         DbPlayerDragonData dbDragonSacrifice = null!;
         if (testCase.MatType == EntityTypes.Dragon)
         {
-            dbDragonSacrifice = context.PlayerDragonData.Add(testCase.SetupDragons[1]).Entity;
+            dbDragonSacrifice = await this.AddToDatabase(testCase.SetupDragons[1]);
         }
 
         await context.SaveChangesAsync();
@@ -176,9 +173,7 @@ public class DragonTest : TestFixture
         long startCoin = userData.Coin;
 
         int augmentCount = (
-            await context
-                .PlayerMaterials
-                .FindAsync(DeviceAccountId, Materials.AmplifyingDragonscale)
+            await context.PlayerMaterials.FindAsync(ViewerId, Materials.AmplifyingDragonscale)
         )!.Quantity;
 
         DragonResetPlusCountRequest request = new DragonResetPlusCountRequest()
@@ -439,8 +434,8 @@ public class DragonTest : TestFixture
                 new DragonLimitBreakTestCase(
                     new List<DbPlayerDragonData>()
                     {
-                        DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Juggernaut),
-                        DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Juggernaut)
+                        DbPlayerDragonDataFactory.Create(0, Dragons.Juggernaut),
+                        DbPlayerDragonDataFactory.Create(0, Dragons.Juggernaut)
                     },
                     1,
                     DragonLimitBreakMatTypes.Dupe
@@ -452,7 +447,7 @@ public class DragonTest : TestFixture
                 new DragonLimitBreakTestCase(
                     new List<DbPlayerDragonData>()
                     {
-                        DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Midgardsormr)
+                        DbPlayerDragonDataFactory.Create(0, Dragons.Midgardsormr)
                     },
                     1,
                     DragonLimitBreakMatTypes.Stone
@@ -464,7 +459,7 @@ public class DragonTest : TestFixture
                 new DragonLimitBreakTestCase(
                     new List<DbPlayerDragonData>()
                     {
-                        DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Cupid)
+                        DbPlayerDragonDataFactory.Create(0, Dragons.Cupid)
                     },
                     1,
                     DragonLimitBreakMatTypes.Spheres
@@ -476,7 +471,7 @@ public class DragonTest : TestFixture
                 new DragonLimitBreakTestCase(
                     new List<DbPlayerDragonData>()
                     {
-                        DbPlayerDragonDataFactory.Create(ViewerId, Dragons.HighBrunhilda)
+                        DbPlayerDragonDataFactory.Create(0, Dragons.HighBrunhilda)
                     },
                     5,
                     DragonLimitBreakMatTypes.SpheresLB5

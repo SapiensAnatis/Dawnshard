@@ -39,6 +39,6 @@ public class EmblemRepository(
 
     public async Task<bool> HasEmblem(Emblems emblem)
     {
-        return await apiContext.Emblems.FindAsync(playerIdentityService.AccountId, emblem) != null;
+        return await apiContext.Emblems.FindAsync(playerIdentityService.ViewerId, emblem) != null;
     }
 }

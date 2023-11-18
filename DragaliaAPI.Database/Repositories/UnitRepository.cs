@@ -65,7 +65,7 @@ public class UnitRepository : IUnitRepository
     {
         return await this.apiContext
             .PlayerCharaData
-            .FindAsync(this.playerIdentityService.AccountId, chara);
+            .FindAsync(this.playerIdentityService.ViewerId, chara);
     }
 
     public async Task<DbPlayerDragonData?> FindDragonAsync(long dragonKeyId)
@@ -77,7 +77,7 @@ public class UnitRepository : IUnitRepository
     {
         return await apiContext
             .PlayerDragonReliability
-            .FindAsync(playerIdentityService.AccountId, dragon);
+            .FindAsync(playerIdentityService.ViewerId, dragon);
     }
 
     public async Task<DbTalisman?> FindTalismanAsync(long talismanKeyId)
@@ -87,9 +87,7 @@ public class UnitRepository : IUnitRepository
 
     public async Task<DbWeaponBody?> FindWeaponBodyAsync(WeaponBodies weaponBody)
     {
-        return await apiContext
-            .PlayerWeapons
-            .FindAsync(playerIdentityService.AccountId, weaponBody);
+        return await apiContext.PlayerWeapons.FindAsync(playerIdentityService.ViewerId, weaponBody);
     }
 
     public async Task<bool> CheckHasDragons(IEnumerable<Dragons> idList)
@@ -185,7 +183,7 @@ public class UnitRepository : IUnitRepository
             if (
                 await this.apiContext
                     .PlayerDragonReliability
-                    .FindAsync(this.playerIdentityService.AccountId, id)
+                    .FindAsync(this.playerIdentityService.ViewerId, id)
                 is null
             )
             {
@@ -226,7 +224,7 @@ public class UnitRepository : IUnitRepository
     {
         return await apiContext
             .PlayerSetUnits
-            .FindAsync(playerIdentityService.AccountId, charaId, setNo);
+            .FindAsync(playerIdentityService.ViewerId, charaId, setNo);
     }
 
     public DbSetUnit AddCharaSetData(Charas charaId, int setNo)

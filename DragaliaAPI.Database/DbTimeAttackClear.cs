@@ -25,6 +25,5 @@ public class DbTimeAttackClear
     /// </remarks>
     [NotMapped]
     public int PlayersHash =>
-        string.Join(string.Empty, this.Players.Select(x => x.DeviceAccountId).Order())
-            .GetHashCode();
+        string.Join(string.Empty, this.Players.Select(x => x.ViewerId).Order()).GetHashCode();
 }
