@@ -1,22 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[Index(nameof(DeviceAccountId))]
-[PrimaryKey(nameof(DeviceAccountId), nameof(GoodsId))]
-public class DbPlayerShopPurchase : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(GoodsId))]
+public class DbPlayerShopPurchase : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    [Required]
-    public required string DeviceAccountId { get; set; }
-
     public int GoodsId { get; set; }
     public PurchaseShopType ShopType { get; set; }
     public int BuyCount { get; set; }

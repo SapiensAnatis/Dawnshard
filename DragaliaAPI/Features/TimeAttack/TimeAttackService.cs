@@ -134,7 +134,7 @@ public class TimeAttackService(
                 x =>
                     new DbReceivedRankingTierReward()
                     {
-                        DeviceAccountId = playerIdentityService.AccountId,
+                        ViewerId = playerIdentityService.ViewerId,
                         QuestId = questId,
                         RewardId = x.Id
                     }

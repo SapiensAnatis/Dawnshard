@@ -1,19 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[Index(nameof(DeviceAccountId))]
-[PrimaryKey(nameof(DeviceAccountId), nameof(QuestEventId))]
-public class DbQuestEvent : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(QuestEventId))]
+public class DbQuestEvent : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
-
     [Column("QuestEventId")]
     public required int QuestEventId { get; set; }
 

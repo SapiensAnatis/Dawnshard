@@ -1,23 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[Index(nameof(DeviceAccountId))]
-public class DbTalisman : IDbHasAccountId
+public class DbTalisman : DbPlayerData
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long TalismanKeyId { get; set; }
-
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
 
     public required Talismans TalismanId { get; set; }
 

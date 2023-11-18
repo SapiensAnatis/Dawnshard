@@ -30,7 +30,7 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
     public IQueryable<DbPlayerUserData> UserData =>
         this.apiContext
             .PlayerUserData
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public async Task<DbPlayerUserData> GetUserDataAsync()
     {
@@ -45,7 +45,10 @@ public class UserDataRepository : BaseRepository, IUserDataRepository
 
     public IQueryable<DbPlayerUserData> GetViewerData(long viewerId)
     {
-        return this.apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId);
+        return this.apiContext
+            .PlayerUserData
+            .Where(x => x.ViewerId == viewerId)
+            .Include(x => x.Owner);
     }
 
     public IQueryable<DbPlayerUserData> GetMultipleViewerData(IEnumerable<long> viewerIds)

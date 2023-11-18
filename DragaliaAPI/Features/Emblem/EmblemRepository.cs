@@ -14,7 +14,7 @@ public class EmblemRepository(
 ) : IEmblemRepository
 {
     public IQueryable<DbEmblem> Emblems =>
-        apiContext.Emblems.Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
+        apiContext.Emblems.Where(x => x.ViewerId == playerIdentityService.ViewerId);
 
     public async Task<IEnumerable<DbEmblem>> GetEmblemsAsync()
     {
@@ -28,7 +28,7 @@ public class EmblemRepository(
             .Add(
                 new DbEmblem
                 {
-                    DeviceAccountId = playerIdentityService.AccountId,
+                    ViewerId = playerIdentityService.ViewerId,
                     EmblemId = emblem,
                     GetTime = dateTimeProvider.UtcNow,
                     IsNew = true

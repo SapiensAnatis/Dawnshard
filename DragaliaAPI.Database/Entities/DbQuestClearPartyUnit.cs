@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[PrimaryKey(nameof(DeviceAccountId), nameof(QuestId), nameof(IsMulti), nameof(UnitNo))]
-public class DbQuestClearPartyUnit : DbPartyUnitBase, IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(QuestId), nameof(IsMulti), nameof(UnitNo))]
+public class DbQuestClearPartyUnit : DbPartyUnitBase, IDbPlayerData
 {
     public virtual DbPlayer? Owner { get; set; }
 
     [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
+    public required long ViewerId { get; set; }
 
     public required int QuestId { get; set; }
 

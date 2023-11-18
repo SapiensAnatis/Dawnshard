@@ -38,8 +38,8 @@ public class SavefileController : ControllerBase
     {
         string accountId = await LookupAccountId(viewerId);
         using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-            accountId,
-            viewerId
+            viewerId,
+            accountId
         );
 
         await this.savefileService.ThreadSafeImport(loadIndexResponse.data);
@@ -52,8 +52,8 @@ public class SavefileController : ControllerBase
     {
         string accountId = await LookupAccountId(viewerId);
         using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-            accountId,
-            viewerId
+            viewerId,
+            accountId
         );
 
         DragaliaResponse<LoadIndexData> result = new(await loadService.BuildIndexData());
@@ -65,8 +65,8 @@ public class SavefileController : ControllerBase
     {
         string accountId = await LookupAccountId(viewerId);
         using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-            accountId,
-            viewerId
+            viewerId,
+            accountId
         );
 
         await this.savefileService.Reset();
@@ -79,7 +79,7 @@ public class SavefileController : ControllerBase
         // Note that unlike in AuthService, a savefile must already exist here, hence no OrDefault
         return await this.userDataRepository
             .GetViewerData(viewerId)
-            .Select(x => x.DeviceAccountId)
+            .Select(x => x.Owner!.AccountId)
             .SingleAsync();
     }
 }

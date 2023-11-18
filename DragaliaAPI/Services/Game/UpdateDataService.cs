@@ -2,6 +2,7 @@
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
@@ -30,13 +31,13 @@ public class UpdateDataService(
     {
         await missionProgressionService.ProcessMissionEvents();
 
-        List<IDbHasAccountId> entities = apiContext
+        List<IDbPlayerData> entities = apiContext
             .ChangeTracker
-            .Entries<IDbHasAccountId>()
+            .Entries<IDbPlayerData>()
             .Where(
                 x =>
                     (x.State is EntityState.Modified or EntityState.Added)
-                    && x.Entity.DeviceAccountId == playerIdentityService.AccountId
+                    && x.Entity.ViewerId == playerIdentityService.ViewerId
             )
             .Select(x => x.Entity)
             .ToList();
@@ -46,7 +47,7 @@ public class UpdateDataService(
         return await MapUpdateDataList(entities);
     }
 
-    private async Task<UpdateDataList> MapUpdateDataList(List<IDbHasAccountId> entities)
+    private async Task<UpdateDataList> MapUpdateDataList(List<IDbPlayerData> entities)
     {
         UpdateDataList list =
             new()
@@ -263,10 +264,10 @@ public class UpdateDataService(
     }
 
     private List<TNetwork>? ConvertEntities<TNetwork, TDatabase>(
-        IEnumerable<IDbHasAccountId> baseEntries,
+        IEnumerable<IDbPlayerData> baseEntries,
         Func<TDatabase, bool>? filterPredicate = null
     )
-        where TDatabase : IDbHasAccountId
+        where TDatabase : IDbPlayerData
     {
         List<TDatabase> typedEntries = filterPredicate is not null
             ? baseEntries.OfType<TDatabase>().Where(filterPredicate).ToList()

@@ -19,12 +19,12 @@ public class ShopRepository : IShopRepository
     public IQueryable<DbPlayerShopInfo> ShopInfos =>
         this.apiContext
             .PlayerShopInfos
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbPlayerShopPurchase> Purchases =>
         this.apiContext
             .PlayerPurchases
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public async Task<DbPlayerShopInfo> GetShopInfoAsync()
     {
@@ -36,9 +36,7 @@ public class ShopRepository : IShopRepository
     {
         this.apiContext
             .PlayerShopInfos
-            .Add(
-                new DbPlayerShopInfo() { DeviceAccountId = this.playerIdentityService.AccountId, }
-            );
+            .Add(new DbPlayerShopInfo() { ViewerId = this.playerIdentityService.ViewerId, });
     }
 
     public async Task<int> GetDailySummonCountAsync()
@@ -76,7 +74,7 @@ public class ShopRepository : IShopRepository
                 .Add(
                     new DbPlayerShopPurchase()
                     {
-                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        ViewerId = this.playerIdentityService.ViewerId,
                         ShopType = type.ToPurchaseShopType(),
                         GoodsId = goodsId,
                         BuyCount = quantity,

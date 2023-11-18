@@ -16,9 +16,7 @@ public class StampRepository : IStampRepository
     }
 
     public IQueryable<DbEquippedStamp> EquippedStamps =>
-        this.context
-            .EquippedStamps
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+        this.context.EquippedStamps.Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public Task SetEquipStampList(IEnumerable<DbEquippedStamp> newStampList)
     {

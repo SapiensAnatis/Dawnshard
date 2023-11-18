@@ -100,7 +100,7 @@ public class ClearPartyService : IClearPartyService
                         opts.AfterMap(
                             (src, dest) =>
                             {
-                                dest.DeviceAccountId = this.playerIdentityService.AccountId;
+                                dest.ViewerId = this.playerIdentityService.ViewerId;
                                 dest.QuestId = questId;
                                 dest.IsMulti = isMulti;
 

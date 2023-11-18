@@ -76,8 +76,8 @@ public class AuthService : IAuthService
 
         using (
             IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-                deviceAccountId,
-                viewerId
+                viewerId,
+                deviceAccountId
             )
         )
         {
@@ -97,7 +97,9 @@ public class AuthService : IAuthService
             jwt.Subject
         );
 
-        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(jwt.Subject);
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+            account: jwt.Subject
+        );
 
         DbPlayerUserData? userData = await this.userDataRepository.UserData.SingleOrDefaultAsync();
 

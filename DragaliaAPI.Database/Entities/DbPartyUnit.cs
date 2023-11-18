@@ -5,18 +5,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[Index(nameof(DeviceAccountId))]
-public class DbPartyUnit : DbPartyUnitBase
+public class DbPartyUnit : DbPartyUnitBase, IDbPlayerData
 {
     // In theory, a composite primary key of [Party, UnitNo] would work great.
     // However, EF Core doesn't like navigation properties being used as keys.
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
-    [ForeignKey($"{nameof(DeviceAccountId)},{nameof(PartyNo)}")]
+    [ForeignKey($"{nameof(ViewerId)},{nameof(PartyNo)}")]
     public virtual DbParty? Party { get; set; }
 
-    public string DeviceAccountId { get; set; } = string.Empty;
+    public long ViewerId { get; set; }
 
     public int PartyNo { get; set; }
 }

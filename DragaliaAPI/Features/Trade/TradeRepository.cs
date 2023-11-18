@@ -18,9 +18,7 @@ public class TradeRepository : ITradeRepository
     }
 
     public IQueryable<DbPlayerTrade> Trades =>
-        this.apiContext
-            .PlayerTrades
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+        this.apiContext.PlayerTrades.Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public async Task<ILookup<TradeType, DbPlayerTrade>> GetAllTradesAsync()
     {
@@ -51,7 +49,7 @@ public class TradeRepository : ITradeRepository
                 .Add(
                     new DbPlayerTrade
                     {
-                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        ViewerId = this.playerIdentityService.ViewerId,
                         Type = type,
                         Id = id,
                         Count = count,

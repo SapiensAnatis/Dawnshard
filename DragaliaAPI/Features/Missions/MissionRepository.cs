@@ -23,7 +23,7 @@ public class MissionRepository : IMissionRepository
     public IQueryable<DbPlayerMission> Missions =>
         this.apiContext
             .PlayerMissions
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbPlayerMission> GetMissionsByType(MissionType type)
     {
@@ -63,7 +63,7 @@ public class MissionRepository : IMissionRepository
             .Add(
                 new DbPlayerMission
                 {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    ViewerId = this.playerIdentityService.ViewerId,
                     Id = id,
                     Type = type,
                     Start = startTime ?? DateTimeOffset.UnixEpoch,

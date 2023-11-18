@@ -25,12 +25,12 @@ public class AbilityCrestRepository : IAbilityCrestRepository
     public IQueryable<DbAbilityCrest> AbilityCrests =>
         this.apiContext
             .PlayerAbilityCrests
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbAbilityCrestSet> AbilityCrestSets =>
         this.apiContext
             .PlayerAbilityCrestSets
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public async Task Add(
         AbilityCrests abilityCrestId,
@@ -47,10 +47,11 @@ public class AbilityCrestRepository : IAbilityCrestRepository
             return;
         }
 
-        DbAbilityCrest entity = new DbAbilityCrest(
-            this.playerIdentityService.AccountId,
-            abilityCrestId
-        );
+        DbAbilityCrest entity = new DbAbilityCrest()
+        {
+            ViewerId = this.playerIdentityService.ViewerId,
+            AbilityCrestId = abilityCrestId
+        };
 
         if (limitBreakCount is not null)
             entity.LimitBreakCount = limitBreakCount.Value;
@@ -69,7 +70,7 @@ public class AbilityCrestRepository : IAbilityCrestRepository
 
     public async Task AddOrUpdateSet(DbAbilityCrestSet abilityCrestSet)
     {
-        abilityCrestSet.DeviceAccountId = this.playerIdentityService.AccountId;
+        abilityCrestSet.ViewerId = this.playerIdentityService.ViewerId;
         DbAbilityCrestSet? dbAbilityCrestSet = await this.FindSetAsync(
             abilityCrestSet.AbilityCrestSetNo
         );

@@ -9,7 +9,7 @@ public class ItemRepository(ApiContext apiContext, IPlayerIdentityService player
     : IItemRepository
 {
     public IQueryable<DbPlayerUseItem> Items =>
-        apiContext.PlayerUseItems.Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
+        apiContext.PlayerUseItems.Where(x => x.ViewerId == playerIdentityService.ViewerId);
 
     private async Task<DbPlayerUseItem?> GetItem(UseItem item)
     {
@@ -27,13 +27,7 @@ public class ItemRepository(ApiContext apiContext, IPlayerIdentityService player
             await GetItem(id)
             ?? apiContext
                 .PlayerUseItems
-                .Add(
-                    new DbPlayerUseItem
-                    {
-                        DeviceAccountId = playerIdentityService.AccountId,
-                        ItemId = id
-                    }
-                )
+                .Add(new DbPlayerUseItem { ViewerId = playerIdentityService.ViewerId, ItemId = id })
                 .Entity;
 
         item.Quantity += quantity;

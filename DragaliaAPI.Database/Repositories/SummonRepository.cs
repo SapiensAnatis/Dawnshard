@@ -20,7 +20,7 @@ public class SummonRepository : BaseRepository, ISummonRepository
     public IQueryable<DbPlayerSummonHistory> SummonHistory =>
         this.apiContext
             .PlayerSummonHistory
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public async Task<DbPlayerBannerData> GetPlayerBannerData(int bannerId)
     {
@@ -29,7 +29,7 @@ public class SummonRepository : BaseRepository, ISummonRepository
                 .PlayerBannerData
                 .FirstOrDefaultAsync(
                     x =>
-                        x.DeviceAccountId.Equals(this.playerIdentityService.AccountId)
+                        x.ViewerId.Equals(this.playerIdentityService.ViewerId)
                         && x.SummonBannerId == bannerId
                 ) ?? await this.AddPlayerBannerData(bannerId);
         return bannerData;
@@ -38,7 +38,7 @@ public class SummonRepository : BaseRepository, ISummonRepository
     public async Task<DbPlayerBannerData> AddPlayerBannerData(int bannerId)
     {
         DbPlayerBannerData bannerData = DbPlayerBannerDataFactory.Create(
-            this.playerIdentityService.AccountId,
+            this.playerIdentityService.ViewerId,
             bannerId
         );
         bannerData = (await apiContext.PlayerBannerData.AddAsync(bannerData)).Entity;

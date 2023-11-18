@@ -1,21 +1,15 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerBannerData")]
-[Index(nameof(DeviceAccountId))]
-public class DbPlayerBannerData : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(SummonBannerId))]
+public class DbPlayerBannerData : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
-
     [Column("SummonBannerId")]
     [Required]
     public int SummonBannerId { get; set; }

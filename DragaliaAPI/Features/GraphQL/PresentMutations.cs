@@ -39,7 +39,7 @@ public class PresentMutations : MutationBase
         DbPlayerPresent present =
             new()
             {
-                DeviceAccountId = player.AccountId,
+                ViewerId = player.ViewerId,
                 EntityId = args.EntityId,
                 EntityType = args.EntityType,
                 EntityQuantity = args.EntityQuantity ?? 1,

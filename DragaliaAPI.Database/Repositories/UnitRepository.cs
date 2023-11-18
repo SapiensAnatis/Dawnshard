@@ -29,32 +29,30 @@ public class UnitRepository : IUnitRepository
     public IQueryable<DbPlayerCharaData> Charas =>
         this.apiContext
             .PlayerCharaData
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbPlayerDragonData> Dragons =>
         this.apiContext
             .PlayerDragonData
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbAbilityCrest> AbilityCrests =>
         this.apiContext
             .PlayerAbilityCrests
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbWeaponBody> WeaponBodies =>
-        this.apiContext
-            .PlayerWeapons
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+        this.apiContext.PlayerWeapons.Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbPlayerDragonReliability> DragonReliabilities =>
         this.apiContext
             .PlayerDragonReliability
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbTalisman> Talismans =>
         this.apiContext
             .PlayerTalismans
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public async Task<bool> CheckHasCharas(IEnumerable<Charas> idList)
     {
@@ -125,7 +123,7 @@ public class UnitRepository : IUnitRepository
         if (newCharas.Any())
         {
             IEnumerable<DbPlayerCharaData> dbEntries = newCharas.Select(
-                id => new DbPlayerCharaData(this.playerIdentityService.AccountId, id)
+                id => new DbPlayerCharaData(this.playerIdentityService.ViewerId, id)
             );
 
             await apiContext.PlayerCharaData.AddRangeAsync(dbEntries);
@@ -144,7 +142,7 @@ public class UnitRepository : IUnitRepository
                     newCharaStories.Add(
                         new DbPlayerStoryState
                         {
-                            DeviceAccountId = this.playerIdentityService.AccountId,
+                            ViewerId = this.playerIdentityService.ViewerId,
                             StoryType = StoryTypes.Chara,
                             StoryId = story.storyIds[0],
                             State = 0
@@ -177,7 +175,7 @@ public class UnitRepository : IUnitRepository
         IEnumerable<(Dragons id, bool isNew)> newMapping = MarkNewIds(ownedDragons, idList);
 
         IEnumerable<DbPlayerDragonReliability> newReliabilities = newMapping.Select(
-            x => DbPlayerDragonReliabilityFactory.Create(this.playerIdentityService.AccountId, x.id)
+            x => DbPlayerDragonReliabilityFactory.Create(this.playerIdentityService.ViewerId, x.id)
         );
 
         foreach ((Dragons id, _) in newMapping.Where(x => x.isNew))
@@ -192,17 +190,14 @@ public class UnitRepository : IUnitRepository
             )
             {
                 await apiContext.AddAsync(
-                    DbPlayerDragonReliabilityFactory.Create(
-                        this.playerIdentityService.AccountId,
-                        id
-                    )
+                    DbPlayerDragonReliabilityFactory.Create(this.playerIdentityService.ViewerId, id)
                 );
             }
         }
 
         await apiContext.AddRangeAsync(
             idList.Select(
-                id => DbPlayerDragonDataFactory.Create(this.playerIdentityService.AccountId, id)
+                id => DbPlayerDragonDataFactory.Create(this.playerIdentityService.ViewerId, id)
             )
         );
 
@@ -219,7 +214,7 @@ public class UnitRepository : IUnitRepository
         IEnumerable<DbPlayerDragonData> ownedDragons = await Dragons
             .Where(
                 x =>
-                    x.DeviceAccountId == this.playerIdentityService.AccountId
+                    x.ViewerId == this.playerIdentityService.ViewerId
                     && keyIdList.Contains(x.DragonKeyId)
             )
             .ToListAsync();
@@ -241,7 +236,7 @@ public class UnitRepository : IUnitRepository
             .Add(
                 new DbSetUnit
                 {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    ViewerId = this.playerIdentityService.ViewerId,
                     CharaId = charaId,
                     UnitSetNo = setNo,
                     UnitSetName = $"Set {setNo}"
@@ -254,11 +249,7 @@ public class UnitRepository : IUnitRepository
     {
         return apiContext
             .PlayerSetUnits
-            .Where(
-                x =>
-                    x.DeviceAccountId == this.playerIdentityService.AccountId
-                    && x.CharaId == charaId
-            );
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId && x.CharaId == charaId);
     }
 
     public async Task<IDictionary<Charas, IEnumerable<DbSetUnit>>> GetCharaSets(
@@ -270,7 +261,7 @@ public class UnitRepository : IUnitRepository
             .Where(
                 x =>
                     charaIds.Contains(x.CharaId)
-                    && x.DeviceAccountId == this.playerIdentityService.AccountId
+                    && x.ViewerId == this.playerIdentityService.ViewerId
             )
             .GroupBy(x => x.CharaId)
             .ToDictionaryAsync(x => x.Key, x => x.AsEnumerable());
@@ -290,7 +281,7 @@ public class UnitRepository : IUnitRepository
             .Add(
                 new DbTalisman
                 {
-                    DeviceAccountId = playerIdentityService.AccountId,
+                    ViewerId = playerIdentityService.ViewerId,
                     TalismanId = id,
                     TalismanAbilityId1 = abilityId1,
                     TalismanAbilityId2 = abilityId2,
