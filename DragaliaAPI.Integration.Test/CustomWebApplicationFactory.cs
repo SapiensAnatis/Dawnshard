@@ -130,10 +130,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
             this.Services.GetRequiredService<IPlayerIdentityService>();
 
         using IDisposable ctx = playerIdentityService.StartUserImpersonation(
-            TestFixture.DeviceAccountId
+            account: TestFixture.DeviceAccountId
         );
 
-        await savefileService.Create();
+        long newViewerId = await savefileService.Create();
 
         apiContext
             .PlayerMaterials
@@ -143,7 +143,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                         x =>
                             new DbPlayerMaterial()
                             {
-                                DeviceAccountId = TestFixture.DeviceAccountId,
+                                ViewerId = newViewerId,
                                 MaterialId = x,
                                 Quantity = 99999999
                             }
@@ -158,7 +158,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                         x =>
                             new DbPlayerDragonGift()
                             {
-                                DeviceAccountId = TestFixture.DeviceAccountId,
+                                ViewerId = newViewerId,
                                 DragonGiftId = x,
                                 Quantity = x < DragonGifts.FourLeafClover ? 1 : 999
                             }
@@ -173,7 +173,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
             .Add(
                 new DbFortBuild()
                 {
-                    DeviceAccountId = TestFixture.DeviceAccountId,
+                    ViewerId = newViewerId,
                     PlantId = FortPlants.Smithy,
                     Level = 9
                 }
@@ -196,19 +196,17 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
             .Add(
                 new DbPlayerDmodeInfo
                 {
-                    DeviceAccountId = TestFixture.DeviceAccountId,
+                    ViewerId = newViewerId,
                     Point1Quantity = 100_000_000,
                     Point2Quantity = 100_000_000
                 }
             );
 
-        apiContext
-            .PlayerDmodeDungeons
-            .Add(new DbPlayerDmodeDungeon { DeviceAccountId = TestFixture.DeviceAccountId });
+        apiContext.PlayerDmodeDungeons.Add(new DbPlayerDmodeDungeon { ViewerId = newViewerId });
 
         apiContext
             .PlayerDmodeExpeditions
-            .Add(new DbPlayerDmodeExpedition { DeviceAccountId = TestFixture.DeviceAccountId });
+            .Add(new DbPlayerDmodeExpedition { ViewerId = newViewerId });
 
         await apiContext.SaveChangesAsync();
     }

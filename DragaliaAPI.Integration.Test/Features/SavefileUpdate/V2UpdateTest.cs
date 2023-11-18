@@ -59,7 +59,7 @@ public class V2UpdateTest : SavefileUpdateTestFixture
 
         this.ApiContext
             .EquippedStamps
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .Should()
             .BeEquivalentTo(
                 expectedStampList,

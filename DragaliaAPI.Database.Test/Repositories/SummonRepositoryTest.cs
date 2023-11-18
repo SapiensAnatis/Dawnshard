@@ -33,7 +33,7 @@ public class SummonRepositoryTest : IClassFixture<DbTestFixture>
         DbPlayerSummonHistory history =
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 SummonId = 1,
                 SummonExecType = SummonExecTypes.DailyDeal,
                 ExecDate = DateTimeOffset.UtcNow,
@@ -57,7 +57,7 @@ public class SummonRepositoryTest : IClassFixture<DbTestFixture>
                 history,
                 new()
                 {
-                    DeviceAccountId = "id 2",
+                    ViewerId = 2,
                     SummonId = 1,
                     SummonExecType = SummonExecTypes.DailyDeal,
                     ExecDate = DateTimeOffset.UtcNow,
@@ -85,13 +85,13 @@ public class SummonRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetPlayerBannerData_ReturnsOnlyPlayerBannerDataWithRightId()
     {
-        DbPlayerBannerData bannerData = DbPlayerBannerDataFactory.Create(DeviceAccountId, 1);
+        DbPlayerBannerData bannerData = DbPlayerBannerDataFactory.Create(1, 1);
         await this.fixture.AddRangeToDatabase(
             new List<DbPlayerBannerData>()
             {
                 bannerData,
-                DbPlayerBannerDataFactory.Create(DeviceAccountId, 2),
-                DbPlayerBannerDataFactory.Create("id 2", 1)
+                DbPlayerBannerDataFactory.Create(2, 2),
+                DbPlayerBannerDataFactory.Create(3, 1)
             }
         );
 
@@ -104,7 +104,7 @@ public class SummonRepositoryTest : IClassFixture<DbTestFixture>
         (await this.summonRepository.GetPlayerBannerData(10))
             .Should()
             .BeEquivalentTo(
-                DbPlayerBannerDataFactory.Create(DeviceAccountId, 10),
+                DbPlayerBannerDataFactory.Create(ViewerId, 10),
                 options =>
                     options
                         .Excluding(x => x.ConsecutionSummonPointsMinDate)

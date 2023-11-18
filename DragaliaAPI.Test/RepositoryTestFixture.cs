@@ -20,6 +20,8 @@ public class RepositoryTestFixture : IDisposable
 
     public const string DeviceAccountId = "id";
 
+    public const long ViewerId = 1;
+
     private readonly string DbName = $"DbTestFixture-{Guid.NewGuid()}";
 
     public RepositoryTestFixture()

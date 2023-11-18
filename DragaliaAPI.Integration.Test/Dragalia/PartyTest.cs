@@ -20,11 +20,7 @@ public class PartyTest : TestFixture
         this.AddCharacter(Charas.Ilia);
 
         await AddToDatabase(
-            new DbWeaponBody
-            {
-                DeviceAccountId = DeviceAccountId,
-                WeaponBodyId = WeaponBodies.DivineTrigger
-            }
+            new DbWeaponBody { ViewerId = ViewerId, WeaponBodyId = WeaponBodies.DivineTrigger }
         );
 
         await this.Client.PostMsgpack<PartySetPartySettingData>(
@@ -51,7 +47,7 @@ public class PartyTest : TestFixture
         DbParty dbparty = await apiContext
             .PlayerParties
             .Include(x => x.Units)
-            .Where(x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == 1)
+            .Where(x => x.ViewerId == ViewerId && x.PartyNo == 1)
             .SingleAsync();
 
         dbparty
@@ -59,7 +55,7 @@ public class PartyTest : TestFixture
             .BeEquivalentTo(
                 new DbParty()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PartyNo = 1,
                     PartyName = "My New Party",
                 },
@@ -76,7 +72,7 @@ public class PartyTest : TestFixture
                     {
                         UnitNo = 1,
                         PartyNo = 1,
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         CharaId = Charas.Ilia,
                         EquipCrestSlotType1CrestId1 = AbilityCrests.ADragonyuleforIlia,
                         EquipWeaponBodyId = WeaponBodies.DivineTrigger,
@@ -86,7 +82,7 @@ public class PartyTest : TestFixture
                     {
                         UnitNo = 2,
                         PartyNo = 1,
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
@@ -94,7 +90,7 @@ public class PartyTest : TestFixture
                     {
                         UnitNo = 3,
                         PartyNo = 1,
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
@@ -102,7 +98,7 @@ public class PartyTest : TestFixture
                     {
                         UnitNo = 4,
                         PartyNo = 1,
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         CharaId = Charas.Empty,
                         Party = dbparty,
                     },
@@ -207,7 +203,7 @@ public class PartyTest : TestFixture
         ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
         DbPlayerUserData userData = await apiContext
             .PlayerUserData
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .SingleAsync();
 
         userData.MainPartyNo.Should().Be(2);

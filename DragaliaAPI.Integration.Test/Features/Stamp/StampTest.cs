@@ -71,7 +71,7 @@ public class StampTest : TestFixture
 
         this.ApiContext
             .EquippedStamps
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .Should()
             .BeEquivalentTo(
                 requestList,

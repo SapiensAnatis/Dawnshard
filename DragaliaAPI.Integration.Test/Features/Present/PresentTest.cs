@@ -30,14 +30,14 @@ public class PresentTest : TestFixture
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmite,
                     EntityQuantity = 100,
                     MessageId = PresentMessage.Maintenance,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Dew,
                     EntityQuantity = 200,
                     MessageId = PresentMessage.Chapter10Clear
@@ -96,7 +96,7 @@ public class PresentTest : TestFixture
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmite,
                     EntityQuantity = 100,
                     MessageId = PresentMessage.Maintenance,
@@ -104,7 +104,7 @@ public class PresentTest : TestFixture
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Dew,
                     EntityQuantity = 200,
                     MessageId = PresentMessage.Chapter10Clear
@@ -155,7 +155,7 @@ public class PresentTest : TestFixture
                     new DbPlayerPresent()
                     {
                         PresentId = x,
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         EntityType = EntityTypes.Rupies,
                         EntityQuantity = 100_000,
                         CreateTime = DateTimeOffset.UnixEpoch,
@@ -200,69 +200,67 @@ public class PresentTest : TestFixture
         DbPlayerUserData oldUserData = this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId);
+            .First(x => x.ViewerId == ViewerId);
 
         DbPlayerMaterial oldSquishums = this.ApiContext
             .PlayerMaterials
-            .First(
-                x => x.DeviceAccountId == DeviceAccountId && x.MaterialId == Materials.Squishums
-            );
+            .First(x => x.ViewerId == ViewerId && x.MaterialId == Materials.Squishums);
 
         List<DbPlayerPresent> presents =
             new()
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmite,
                     EntityQuantity = 100,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Dew,
                     EntityQuantity = 200,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Chara,
                     EntityId = (int)Charas.Akasha,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmprint,
                     EntityId = (int)AbilityCrests.ADogsDay,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Material,
                     EntityId = (int)Materials.Squishums,
                     EntityQuantity = 100,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Dragon,
                     EntityId = (int)Dragons.Arsene,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.HustleHammer,
                     EntityQuantity = 100,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Rupies,
                     EntityQuantity = 100_000,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Title,
                     EntityId = (int)Emblems.SupremeBogfish,
                     EntityQuantity = 1,
@@ -352,20 +350,20 @@ public class PresentTest : TestFixture
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Dragon,
                     EntityId = (int)Dragons.Raphael,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmite,
                     EntityQuantity = 100,
                     ReceiveLimitTime = DateTimeOffset.UtcNow + TimeSpan.FromDays(1)
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Rupies,
                     EntityQuantity = 100_000,
                 },
@@ -412,20 +410,20 @@ public class PresentTest : TestFixture
         DbPlayerUserData oldUserData = this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId);
+            .First(x => x.ViewerId == ViewerId);
 
         List<DbPlayerPresent> presents =
             new()
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmprint,
                     EntityId = (int)AbilityCrests.DearDiary,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Wyrmprint,
                     EntityId = (int)AbilityCrests.DearDiary,
                 },
@@ -480,13 +478,13 @@ public class PresentTest : TestFixture
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Chara,
                     EntityId = (int)Charas.Addis,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     EntityType = EntityTypes.Chara,
                     EntityId = (int)Charas.Addis,
                 },
@@ -525,7 +523,7 @@ public class PresentTest : TestFixture
                     new DbPlayerPresentHistory()
                     {
                         Id = x,
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         EntityType = EntityTypes.Rupies,
                         EntityQuantity = 100_000,
                         CreateTime = DateTimeOffset.UnixEpoch,

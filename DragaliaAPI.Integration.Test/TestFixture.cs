@@ -47,10 +47,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
 
         this.MockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(() => DateTimeOffset.UtcNow);
 
-        this.ViewerId = this.ApiContext
-            .PlayerUserData
-            .First(x => x.DeviceAccountId == DeviceAccountId)
-            .ViewerId;
+        this.ViewerId = this.ApiContext.Players.First(x => x.AccountId == DeviceAccountId).ViewerId;
     }
 
     protected Mock<IBaasApi> MockBaasApi { get; }
@@ -81,7 +78,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
         if (this.ApiContext.PlayerCharaData.Find(DeviceAccountId, id) is not null)
             return;
 
-        this.ApiContext.PlayerCharaData.Add(new(DeviceAccountId, id));
+        this.ApiContext.PlayerCharaData.Add(new(this.ViewerId, id));
         this.ApiContext.SaveChanges();
     }
 
@@ -118,7 +115,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
             this.ApiContext
                 .PlayerUserData
                 .AsNoTracking()
-                .First(x => x.DeviceAccountId == DeviceAccountId)
+                .First(x => x.ViewerId == ViewerId)
                 .LastSaveImportTime > DateTimeOffset.UnixEpoch
         )
         {
@@ -129,7 +126,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
         IPlayerIdentityService playerIdentityService =
             this.Services.GetRequiredService<IPlayerIdentityService>();
 
-        using IDisposable ctx = playerIdentityService.StartUserImpersonation(DeviceAccountId);
+        using IDisposable ctx = playerIdentityService.StartUserImpersonation(ViewerId);
         savefileService.Import(GetSavefile()).Wait();
     }
 

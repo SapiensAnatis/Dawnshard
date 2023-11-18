@@ -11,7 +11,7 @@ public class ShopTest : TestFixture
     public async Task GetList_NoPurchases_IsEmpty()
     {
         this.ApiContext.RemoveRange(
-            this.ApiContext.PlayerPurchases.Where(x => x.DeviceAccountId == DeviceAccountId)
+            this.ApiContext.PlayerPurchases.Where(x => x.ViewerId == ViewerId)
         );
 
         await this.ApiContext.SaveChangesAsync();

@@ -32,7 +32,7 @@ public class TimeAttackRankingTest : TestFixture
         DbPlayerUserData oldUserData = await this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .FirstAsync(x => x.DeviceAccountId == DeviceAccountId);
+            .FirstAsync(x => x.ViewerId == ViewerId);
 
         int questId = 227010101; // First Volk TA quest
 
@@ -41,7 +41,7 @@ public class TimeAttackRankingTest : TestFixture
             .Add(
                 new DbQuest()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     BestClearTime = 200f,
                     QuestId = questId
                 }

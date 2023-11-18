@@ -29,7 +29,7 @@ public class WallTest : TestFixture
             {
                 QuestId = questId,
                 State = 0,
-                DeviceAccountId = DeviceAccountId
+                ViewerId = ViewerId
             }
         );
 
@@ -71,31 +71,31 @@ public class WallTest : TestFixture
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = 216010001,
                     WallLevel = 1,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = 216010002,
                     WallLevel = 2,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = 216010003,
                     WallLevel = 3,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = 216010004,
                     WallLevel = 4,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = 216010005,
                     WallLevel = 5,
                 }
@@ -129,7 +129,7 @@ public class WallTest : TestFixture
         DbPlayerUserData oldUserData = this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId);
+            .First(x => x.ViewerId == ViewerId);
 
         int expectedMana = 15_000;
         int expectedCoin = 20_000;
@@ -140,31 +140,31 @@ public class WallTest : TestFixture
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = 216010001,
                     WallLevel = 6,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = 216010002,
                     WallLevel = 2,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = 216010003,
                     WallLevel = 3,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = 216010004,
                     WallLevel = 2,
                 },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = 216010005,
                     WallLevel = 1,
                 }

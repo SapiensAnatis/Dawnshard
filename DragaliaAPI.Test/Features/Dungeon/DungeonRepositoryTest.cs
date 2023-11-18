@@ -1,6 +1,12 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Factories;
+using DragaliaAPI.Database.Test;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -18,7 +24,7 @@ public class DungeonRepositoryTest : RepositoryTestFixture
     public DungeonRepositoryTest()
     {
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(ViewerId);
 
         this.dungeonRepository = new DungeonRepository(
             this.ApiContext,
@@ -36,7 +42,7 @@ public class DungeonRepositoryTest : RepositoryTestFixture
 
         IQueryable<DbPartyUnit> unitQuery = this.ApiContext
             .PlayerPartyUnits
-            .Where(x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == partySlot);
+            .Where(x => x.ViewerId == ViewerId && x.PartyNo == partySlot);
 
         IQueryable<DbDetailedPartyUnit> buildQuery = this.dungeonRepository.BuildDetailedPartyUnit(
             unitQuery,
@@ -56,7 +62,7 @@ public class DungeonRepositoryTest : RepositoryTestFixture
         IEnumerable<PartySettingList> party = (
             await this.ApiContext
                 .PlayerPartyUnits
-                .Where(x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == 1)
+                .Where(x => x.ViewerId == ViewerId && x.PartyNo == 1)
                 .ToListAsync()
         ).Select(this.Mapper.Map<PartySettingList>);
 
@@ -70,73 +76,48 @@ public class DungeonRepositoryTest : RepositoryTestFixture
 
     private async Task<DbDetailedPartyUnit> SeedDatabase()
     {
-        DbPlayerCharaData chara = new(DeviceAccountId, Charas.BondforgedPrince);
+        DbPlayerCharaData chara = new(ViewerId, Charas.BondforgedPrince);
 
         DbPlayerCharaData chara1 =
-            new(DeviceAccountId, Charas.GalaMym) { IsUnlockEditSkill = true, Skill1Level = 3 };
+            new(ViewerId, Charas.GalaMym) { IsUnlockEditSkill = true, Skill1Level = 3 };
 
         DbPlayerCharaData chara2 =
-            new(DeviceAccountId, Charas.SummerCleo) { IsUnlockEditSkill = true, Skill2Level = 2 };
+            new(ViewerId, Charas.SummerCleo) { IsUnlockEditSkill = true, Skill2Level = 2 };
 
         DbPlayerDragonData dragon = DbPlayerDragonDataFactory.Create(
-            DeviceAccountId,
+            ViewerId,
             Dragons.MidgardsormrZero
         );
         dragon.DragonKeyId = 400;
 
         DbPlayerDragonReliability reliability = DbPlayerDragonReliabilityFactory.Create(
-            DeviceAccountId,
+            ViewerId,
             Dragons.MidgardsormrZero
         );
         reliability.Level = 15;
 
-        DbWeaponBody weapon =
-            new() { DeviceAccountId = DeviceAccountId, WeaponBodyId = WeaponBodies.Excalibur };
+        DbWeaponBody weapon = new() { ViewerId = ViewerId, WeaponBodyId = WeaponBodies.Excalibur };
 
         List<DbAbilityCrest> crests =
             new()
             {
+                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrests.ADogsDay },
+                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrests.TheRedImpulse },
+                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrests.ThePrinceofDragonyule },
+                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrests.TaikoTandem },
+                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrests.AChoiceBlend },
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
-                    AbilityCrestId = AbilityCrests.ADogsDay
-                },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    AbilityCrestId = AbilityCrests.TheRedImpulse
-                },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    AbilityCrestId = AbilityCrests.ThePrinceofDragonyule
-                },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    AbilityCrestId = AbilityCrests.TaikoTandem
-                },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    AbilityCrestId = AbilityCrests.AChoiceBlend
-                },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     AbilityCrestId = AbilityCrests.CrownofLightSerpentsBoon
                 },
-                new()
-                {
-                    DeviceAccountId = DeviceAccountId,
-                    AbilityCrestId = AbilityCrests.AKingsPrideSwordsBoon
-                }
+                new() { ViewerId = ViewerId, AbilityCrestId = AbilityCrests.AKingsPrideSwordsBoon }
             };
 
         DbTalisman talisman =
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 TalismanId = Talismans.GalaNedrick,
                 TalismanKeyId = 44444
             };
@@ -144,7 +125,7 @@ public class DungeonRepositoryTest : RepositoryTestFixture
         DbPartyUnit unit =
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 UnitNo = 1,
                 PartyNo = 1,
                 CharaId = Charas.BondforgedPrince,
@@ -163,7 +144,7 @@ public class DungeonRepositoryTest : RepositoryTestFixture
                 EditSkill2CharaId = Charas.SummerCleo,
             };
 
-        DbWeaponSkin skin = new() { DeviceAccountId = DeviceAccountId, WeaponSkinId = 1 };
+        DbWeaponSkin skin = new() { ViewerId = ViewerId, WeaponSkinId = 1 };
 
         await this.AddToDatabase(chara);
         await this.AddToDatabase(chara1);
@@ -178,7 +159,7 @@ public class DungeonRepositoryTest : RepositoryTestFixture
         // Set up party
         DbParty party = await this.ApiContext
             .PlayerParties
-            .Where(x => x.DeviceAccountId == DeviceAccountId && x.PartyNo == 1)
+            .Where(x => x.ViewerId == ViewerId && x.PartyNo == 1)
             .FirstAsync();
 
         party.Units = new List<DbPartyUnit>() { unit };
@@ -187,7 +168,7 @@ public class DungeonRepositoryTest : RepositoryTestFixture
 
         return new DbDetailedPartyUnit()
         {
-            DeviceAccountId = DeviceAccountId,
+            ViewerId = ViewerId,
             Position = 1,
             CharaData = chara,
             DragonData = dragon,

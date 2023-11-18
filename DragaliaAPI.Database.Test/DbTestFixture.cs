@@ -16,6 +16,8 @@ public class DbTestFixture : IDisposable
 
     public const string DeviceAccountId = "id";
 
+    public const int ViewerId = 1;
+
     public DbTestFixture()
     {
         DbContextOptions<ApiContext> options = new DbContextOptionsBuilder<ApiContext>()

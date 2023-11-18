@@ -12,7 +12,7 @@ public class UserTest : TestFixture
     {
         DbPlayerUserData dbUserData = this.ApiContext
             .PlayerUserData
-            .Single(x => x.DeviceAccountId == DeviceAccountId);
+            .Single(x => x.ViewerId == ViewerId);
 
         UserData expectedUserData = this.Mapper.Map<UserData>(dbUserData);
 

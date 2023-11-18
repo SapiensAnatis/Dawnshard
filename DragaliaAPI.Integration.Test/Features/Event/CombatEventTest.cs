@@ -78,14 +78,14 @@ public class CombatEventTest : TestFixture
 
         ApiContext
             .PlayerQuests
-            .RemoveRange(ApiContext.PlayerQuests.Where(x => x.DeviceAccountId == DeviceAccountId));
+            .RemoveRange(ApiContext.PlayerQuests.Where(x => x.ViewerId == ViewerId));
 
         ApiContext
             .PlayerQuests
             .Add(
                 new DbQuest
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     QuestId = 222130103,
                     State = 3
                 }

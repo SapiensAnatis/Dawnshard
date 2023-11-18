@@ -35,10 +35,7 @@ public class DeleteSavefileTest : TestFixture
     [Fact]
     public async Task Delete_LoadIndexResponseHasNewSavefile()
     {
-        long viewerId = this.ApiContext
-            .PlayerUserData
-            .Single(x => x.DeviceAccountId == DeviceAccountId)
-            .ViewerId;
+        long viewerId = this.ApiContext.PlayerUserData.Single(x => x.ViewerId == ViewerId).ViewerId;
 
         this.AddCharacter(Charas.Ilia);
         this.AddCharacter(Charas.DragonyuleIlia);

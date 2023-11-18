@@ -56,7 +56,7 @@ public class PaymentServiceTest
         DbPlayerUserData userData =
             new()
             {
-                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                ViewerId = IdentityTestUtils.ViewerId,
                 BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
                 Coin = type == PaymentTypes.Coin ? total : 0,
                 Crystal = type == PaymentTypes.Wyrmite ? total : 0,
@@ -92,7 +92,7 @@ public class PaymentServiceTest
         DbPlayerUserData userData =
             new()
             {
-                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                ViewerId = IdentityTestUtils.ViewerId,
                 BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
                 Coin = type == PaymentTypes.Coin ? total : 0,
                 Crystal = type == PaymentTypes.Wyrmite ? total : 0,
@@ -128,7 +128,7 @@ public class PaymentServiceTest
         DbPlayerUserData userData =
             new()
             {
-                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                ViewerId = IdentityTestUtils.ViewerId,
                 BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
                 Coin = type == PaymentTypes.Coin ? total : 0,
                 Crystal = type == PaymentTypes.Wyrmite ? total : 0,
@@ -160,7 +160,7 @@ public class PaymentServiceTest
         DbPlayerUserData userData =
             new()
             {
-                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                ViewerId = IdentityTestUtils.ViewerId,
                 BuildTimePoint = type == PaymentTypes.HalidomHustleHammer ? total : 0,
                 Coin = type == PaymentTypes.Coin ? total : 0,
                 Crystal = type == PaymentTypes.Wyrmite ? total : 0,
