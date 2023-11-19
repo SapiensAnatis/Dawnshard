@@ -436,6 +436,8 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
+            player.UserData.LastSaveImportTime = DateTimeOffset.UtcNow;
+
             await apiContext.SaveChangesAsync();
             await transaction.CommitAsync();
 
