@@ -39,7 +39,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetAllCharaData_InvalidId_ReturnsEmpty()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("wrong id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(400);
 
         (await this.unitRepository.Charas.ToListAsync()).Should().BeEmpty();
     }
@@ -64,7 +64,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetAllDragonData_InvalidId_ReturnsEmpty()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("wrong id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(400);
 
         (await this.unitRepository.Dragons.ToListAsync()).Should().BeEmpty();
     }

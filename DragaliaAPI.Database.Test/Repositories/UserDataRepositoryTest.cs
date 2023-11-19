@@ -37,7 +37,7 @@ public class UserDataRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetPlayerInfo_InvalidId_ReturnsEmptyQueryable()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("wrong id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(400);
         (await this.userDataRepository.UserData.ToListAsync()).Should().BeEmpty();
     }
 

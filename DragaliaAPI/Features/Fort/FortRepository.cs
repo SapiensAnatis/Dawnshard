@@ -189,9 +189,7 @@ public class FortRepository : IFortRepository
 
         if (fort is null)
         {
-            throw new InvalidOperationException(
-                $"Could not get building {buildId} for account {this.playerIdentityService.AccountId}."
-            );
+            throw new InvalidOperationException($"Could not get building {buildId}");
         }
 
         return fort;

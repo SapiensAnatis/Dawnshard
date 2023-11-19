@@ -8,7 +8,7 @@ public class UnitReverseMapProfile : Profile
 {
     public UnitReverseMapProfile()
     {
-        this.AddGlobalIgnore("DeviceAccount");
+        this.AddGlobalIgnore("ViewerId");
         this.AddGlobalIgnore("Owner");
 
         this.CreateMap<DragonList, DbPlayerDragonData>()

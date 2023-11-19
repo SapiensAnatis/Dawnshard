@@ -260,12 +260,12 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     [Fact]
     public async Task SaveChangesAsync_NoDataFromOtherAccounts()
     {
-        this.ApiContext.PlayerCharaData.Add(new(ViewerId, Charas.GalaZethia));
+        this.ApiContext.PlayerCharaData.Add(new(ViewerId + 1, Charas.GalaZethia));
         this.mockMissionProgressionService
             .Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
 
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id 2");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(ViewerId);
 
         (await this.updateDataService.SaveChangesAsync()).chara_list.Should().BeNull();
     }

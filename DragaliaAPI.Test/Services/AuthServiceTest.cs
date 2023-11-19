@@ -57,6 +57,8 @@ public class AuthServiceTest
             .Options;
 
         this.apiContext = new ApiContext(options);
+        this.apiContext.Database.EnsureDeleted();
+        this.apiContext.Database.EnsureCreated();
 
         this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(DateTimeOffset.UnixEpoch);
 
@@ -118,6 +120,18 @@ public class AuthServiceTest
     [Fact]
     public async Task DoAuth_ValidToken_ReturnsViewerId()
     {
+        this.apiContext
+            .Players
+            .Add(
+                new()
+                {
+                    AccountId = AccountId,
+                    ViewerId = ViewerId,
+                    UserData = new() { Name = "Euden", }
+                }
+            );
+        this.apiContext.SaveChanges();
+
         this.mockBaasOptions
             .Setup(x => x.CurrentValue)
             .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
@@ -135,19 +149,12 @@ public class AuthServiceTest
             )
             .AsString();
 
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>() { new() { ViewerId = 1, } }
-                    .AsQueryable()
-                    .BuildMock()
-            );
         this.mockSessionService
             .Setup(x => x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch))
             .ReturnsAsync("session id");
 
         this.mockPlayerIdentityService
-            .Setup(x => x.StartUserImpersonation(null, AccountId))
+            .Setup(x => x.StartUserImpersonation(ViewerId, AccountId))
             .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
@@ -219,6 +226,22 @@ public class AuthServiceTest
     [Fact]
     public async Task DoAuth_SavefileUploaded_IsNewer_ImportsSave()
     {
+        this.apiContext
+            .Players
+            .Add(
+                new()
+                {
+                    AccountId = AccountId,
+                    ViewerId = ViewerId,
+                    UserData = new()
+                    {
+                        Name = "Euden",
+                        LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(15)
+                    }
+                }
+            );
+        this.apiContext.SaveChanges();
+
         this.mockBaasOptions
             .Setup(x => x.CurrentValue)
             .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
@@ -248,24 +271,8 @@ public class AuthServiceTest
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
         this.mockBaasRequestHelper.Setup(x => x.GetSavefile(token)).ReturnsAsync(importSavefile);
 
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>()
-                {
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        Name = "Euden",
-                        LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(15)
-                    }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
-
         this.mockPlayerIdentityService
-            .Setup(x => x.StartUserImpersonation(null, AccountId))
+            .Setup(x => x.StartUserImpersonation(ViewerId, AccountId))
             .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
@@ -290,6 +297,22 @@ public class AuthServiceTest
     [Fact]
     public async Task DoAuth_SavefileUploaded_IsNewer_SaveInvalid_HandlesException()
     {
+        this.apiContext
+            .Players
+            .Add(
+                new()
+                {
+                    AccountId = AccountId,
+                    ViewerId = ViewerId,
+                    UserData = new()
+                    {
+                        Name = "Euden",
+                        LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(1)
+                    }
+                }
+            );
+        this.apiContext.SaveChanges();
+
         this.mockBaasOptions
             .Setup(x => x.CurrentValue)
             .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
@@ -321,24 +344,8 @@ public class AuthServiceTest
             .Setup(x => x.GetSavefile(token))
             .ThrowsAsync(new JsonException());
 
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>()
-                {
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        Name = "Euden",
-                        LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromSeconds(1)
-                    }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
-
         this.mockPlayerIdentityService
-            .Setup(x => x.StartUserImpersonation(null, AccountId))
+            .Setup(x => x.StartUserImpersonation(ViewerId, AccountId))
             .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);
@@ -359,6 +366,23 @@ public class AuthServiceTest
     [Fact]
     public async Task DoAuth_SavefileUploaded_IsOlder_DoesNotImportSave()
     {
+        this.apiContext
+            .Players
+            .Add(
+                new()
+                {
+                    AccountId = AccountId,
+                    ViewerId = ViewerId,
+                    UserData = new()
+                    {
+                        ViewerId = ViewerId,
+                        Name = "Euden",
+                        LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(2),
+                    }
+                }
+            );
+        this.apiContext.SaveChanges();
+
         this.mockBaasOptions
             .Setup(x => x.CurrentValue)
             .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
@@ -380,28 +404,12 @@ public class AuthServiceTest
 
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
 
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>()
-                {
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        Name = "Euden",
-                        LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(2),
-                    }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
-
         this.mockSessionService
             .Setup(x => x.CreateSession(token, AccountId, 1, DateTimeOffset.UnixEpoch))
             .ReturnsAsync("session id");
 
         this.mockPlayerIdentityService
-            .Setup(x => x.StartUserImpersonation(null, "account id"))
+            .Setup(x => x.StartUserImpersonation(ViewerId, "account id"))
             .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
@@ -419,6 +427,22 @@ public class AuthServiceTest
     [Fact]
     public async Task DoAuth_NoSavefileUploaded_DoesNotImportSave()
     {
+        this.apiContext
+            .Players
+            .Add(
+                new()
+                {
+                    AccountId = AccountId,
+                    ViewerId = ViewerId,
+                    UserData = new()
+                    {
+                        Name = "Euden",
+                        LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(2),
+                    }
+                }
+            );
+        this.apiContext.SaveChanges();
+
         this.mockBaasOptions
             .Setup(x => x.CurrentValue)
             .Returns(new BaasOptions() { TokenAudience = "audience", TokenIssuer = "issuer" });
@@ -440,24 +464,8 @@ public class AuthServiceTest
 
         this.mockBaasRequestHelper.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
 
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>()
-                {
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        Name = "Euden",
-                        LastSaveImportTime = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(2),
-                    }
-                }
-                    .AsQueryable()
-                    .BuildMock()
-            );
-
         this.mockPlayerIdentityService
-            .Setup(x => x.StartUserImpersonation(null, AccountId))
+            .Setup(x => x.StartUserImpersonation(ViewerId, AccountId))
             .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(AccountId);

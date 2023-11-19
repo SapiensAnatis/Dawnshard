@@ -32,7 +32,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task Builds_FiltersByAccountId()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(1);
 
         await this.fixture.AddRangeToDatabase(
             new List<DbFortBuild>()
@@ -64,7 +64,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task CheckPlantLevel_Success_ReturnsTrue()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(1);
 
         await this.fixture.AddToDatabase(
             new DbFortBuild()
@@ -83,7 +83,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task CheckPlantLevel_Fail_ReturnsFalse()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(1);
 
         await this.fixture.AddToDatabase(
             new DbFortBuild()
@@ -104,7 +104,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetFortDetail_ReturnsFortDetail()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(1);
 
         DbFortDetail detail = new DbFortDetail() { ViewerId = 1, CarpenterNum = 2, };
         await this.fixture.AddToDatabase(detail);
@@ -133,9 +133,12 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.AddToDatabase(new DbFortDetail() { ViewerId = 5, CarpenterNum = 2 });
 
-        await this.fortRepository.UpdateFortMaximumCarpenter(5);
+        await this.fortRepository.UpdateFortMaximumCarpenter(4);
 
-        (await this.fixture.ApiContext.PlayerFortDetails.FindAsync(5))!.CarpenterNum.Should().Be(4);
+        (await this.fixture.ApiContext.PlayerFortDetails.FindAsync(5L))!
+            .CarpenterNum
+            .Should()
+            .Be(4);
 
         this.mockPlayerIdentityService.VerifyAll();
     }
@@ -143,7 +146,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetBuilding_GetsBuilding()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(1);
 
         DbFortBuild build =
             new()
@@ -300,7 +303,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task InitializeFort_DataExists_DoesNotThrow()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("account id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(1);
 
         await this.fortRepository.InitializeFort();
         await this.fixture.ApiContext.SaveChangesAsync();

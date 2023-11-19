@@ -369,7 +369,7 @@ public class FortServiceTest
     [Fact]
     public async Task BuildStart_StartsBuilding()
     {
-        mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
+        mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(1);
 
         mockFortRepository
             .Setup(x => x.GetFortDetail())

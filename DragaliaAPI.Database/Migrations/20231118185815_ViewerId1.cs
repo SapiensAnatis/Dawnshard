@@ -20,7 +20,6 @@ namespace DragaliaAPI.Database.Migrations
                 "QuestClearPartyUnits",
                 "PlayerWeaponSkins",
                 "PlayerWeapons",
-                "PlayerUserData",
                 "PlayerUseItems",
                 "PlayerTrades",
                 "PlayerTalismans",
@@ -65,13 +64,30 @@ namespace DragaliaAPI.Database.Migrations
 
             foreach (string table in tables)
             {
+                // Modify the column in-place instead of dropping and renaming, otherwise the ViewerId
+                // column is at the end of the table which deeply annoys me
+
                 migrationBuilder.Sql($"""
-                UPDATE "{table}" t
-                SET "ViewerId" = p."ViewerId"
-                FROM "Players" p
-                WHERE p."AccountId" = t."DeviceAccountId";
-                """
+                    UPDATE "{table}" t
+                    SET "DeviceAccountId" = p."ViewerId"::text
+                    FROM "PlayerUserData" p
+                    WHERE p."DeviceAccountId" = t."DeviceAccountId";
+                    """
                 );
+
+                migrationBuilder.Sql($"""
+                    ALTER TABLE "{table}"
+                    ALTER COLUMN "DeviceAccountId" TYPE bigint
+                    USING "DeviceAccountId"::integer;
+                    """
+                );
+
+                migrationBuilder.Sql($"""
+                    ALTER TABLE "{table}"
+                    RENAME COLUMN "DeviceAccountId" TO "ViewerId";
+                    """
+                );
+
             }
         }
 
@@ -615,63 +631,6 @@ namespace DragaliaAPI.Database.Migrations
                 name: "IX_Emblems_DeviceAccountId",
                 table: "Emblems");
 
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "TimeAttackPlayers",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "TimeAttackClearUnits",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "ReceivedRankingTierRewards",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "QuestTreasureList",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "QuestEvents",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "QuestClearPartyUnits",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerWeaponSkins",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerWeapons",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
             migrationBuilder.AlterColumn<long>(
                 name: "ViewerId",
                 table: "PlayerUserData",
@@ -683,302 +642,22 @@ namespace DragaliaAPI.Database.Migrations
 
             migrationBuilder.AddColumn<long>(
                 name: "ViewerId",
-                table: "PlayerUseItems",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerTrades",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerTalismans",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerSummonTickets",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerSummonHistory",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerStoryState",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerShopInfos",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerSetUnit",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "AccountId",
-                table: "Players",
-                type: "character varying(16)",
-                maxLength: 16,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "text");
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
                 table: "Players",
                 type: "bigint",
                 nullable: false,
                 defaultValue: 0L)
                 .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerQuestWalls",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerQuests",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerPurchases",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerPresentHistory",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerPresent",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerPassiveAbilities",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerPartyUnits",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerMissions",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerMaterial",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerFortDetail",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerFortBuilds",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerEventRewards",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerEventPassives",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerEventItems",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerEventData",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerDragonReliability",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerDragonGift",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerDragonData",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerDmodeServitorPassives",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerDmodeInfos",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerDmodeExpeditions",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerDmodeDungeons",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerDmodeCharas",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerCharaData",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerBannerData",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerAbilityCrestSets",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PlayerAbilityCrests",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PartyPowers",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "PartyData",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "LoginBonuses",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "EquippedStamps",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
-            migrationBuilder.AddColumn<long>(
-                name: "ViewerId",
-                table: "Emblems",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
+            migrationBuilder.Sql($"""
+                UPDATE "Players" t 
+                SET "ViewerId" = p."ViewerId"
+                FROM "PlayerUserData" p
+                WHERE p."DeviceAccountId" = t."AccountId";
+                """);
 
             this.PopulateViewerId(migrationBuilder);
+
+            migrationBuilder.DropColumn("DeviceAccountId", "PlayerUserData");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_TimeAttackPlayers",
@@ -1641,202 +1320,6 @@ namespace DragaliaAPI.Database.Migrations
                 principalTable: "Players",
                 principalColumn: "ViewerId",
                 onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.DropColumn(
-              name: "DeviceAccountId",
-              table: "TimeAttackPlayers");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "TimeAttackClearUnits");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "ReceivedRankingTierRewards");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "QuestTreasureList");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "QuestEvents");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "QuestClearPartyUnits");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerWeaponSkins");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerWeapons");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerUserData");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerUseItems");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerTrades");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerTalismans");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerSummonTickets");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerSummonHistory");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerStoryState");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerShopInfos");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerSetUnit");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerQuestWalls");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerQuests");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerPurchases");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerPresentHistory");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerPresent");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerPassiveAbilities");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerPartyUnits");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerMissions");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerMaterial");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerFortDetail");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerFortBuilds");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerEventRewards");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerEventPassives");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerEventItems");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerEventData");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerDragonReliability");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerDragonGift");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerDragonData");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerDmodeServitorPassives");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerDmodeInfos");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerDmodeExpeditions");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerDmodeDungeons");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerDmodeCharas");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerCharaData");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerBannerData");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerAbilityCrestSets");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PlayerAbilityCrests");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PartyPowers");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "PartyData");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "LoginBonuses");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "EquippedStamps");
-
-            migrationBuilder.DropColumn(
-                name: "DeviceAccountId",
-                table: "Emblems");
 
         }
 
