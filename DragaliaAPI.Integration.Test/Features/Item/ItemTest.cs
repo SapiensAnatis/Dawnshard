@@ -8,22 +8,20 @@ public class ItemTest : TestFixture
     public ItemTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        ApiContext.PlayerUseItems.Where(x => x.DeviceAccountId == DeviceAccountId).ExecuteDelete();
+        ApiContext.PlayerUseItems.Where(x => x.ViewerId == ViewerId).ExecuteDelete();
 
         ApiContext
             .PlayerUseItems
             .Add(
                 new DbPlayerUseItem()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     ItemId = UseItem.Honey,
                     Quantity = 50
                 }
             );
 
-        DbPlayerUserData userData = ApiContext
-            .PlayerUserData
-            .Single(x => x.DeviceAccountId == DeviceAccountId);
+        DbPlayerUserData userData = ApiContext.PlayerUserData.Single(x => x.ViewerId == ViewerId);
 
         userData.StaminaSingle = 5;
 

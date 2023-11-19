@@ -5,11 +5,11 @@ namespace DragaliaAPI.Database.Factories;
 
 public static class DbPlayerDragonDataFactory
 {
-    public static DbPlayerDragonData Create(string deviceAccountId, Dragons id)
+    public static DbPlayerDragonData Create(long viewerId, Dragons id)
     {
         return new()
         {
-            DeviceAccountId = deviceAccountId,
+            ViewerId = viewerId,
             DragonId = id,
             Exp = 0,
             Level = 1,

@@ -1,19 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerDragonGift")]
-[Index(nameof(DeviceAccountId))]
-public class DbPlayerDragonGift : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(DragonGiftId))]
+public class DbPlayerDragonGift : DbPlayerData
 {
-    [Column("DeviceAccountId")]
-    [Required]
-    [ForeignKey(nameof(Owner))]
-    public string DeviceAccountId { get; set; } = null!;
-
     [Column("DragonGiftId")]
     [Required]
     public DragonGifts DragonGiftId { get; set; }
@@ -21,7 +17,4 @@ public class DbPlayerDragonGift : IDbHasAccountId
     [Column("Quantity")]
     [Required]
     public int Quantity { get; set; }
-
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
 }

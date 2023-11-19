@@ -19,7 +19,7 @@ public class ClearPartyRepository : IClearPartyRepository
     public IQueryable<DbQuestClearPartyUnit> QuestClearPartyUnits =>
         this.apiContext
             .QuestClearPartyUnits
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbQuestClearPartyUnit> GetQuestClearParty(int questId, bool isMulti)
     {

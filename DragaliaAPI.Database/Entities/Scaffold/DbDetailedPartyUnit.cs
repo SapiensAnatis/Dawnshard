@@ -6,7 +6,7 @@
 /// </summary>
 public class DbDetailedPartyUnit
 {
-    public required string DeviceAccountId { get; set; }
+    public required long ViewerId { get; set; }
 
     public int PartyNo { get; set; }
 

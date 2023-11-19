@@ -35,12 +35,12 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             {
                 new()
                 {
-                    DeviceAccountId = "other id",
+                    ViewerId = 2,
                     WeaponBodyId = Shared.Definitions.Enums.WeaponBodies.SoldiersBrand
                 },
                 new()
                 {
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     WeaponBodyId = Shared.Definitions.Enums.WeaponBodies.AbsoluteAqua
                 }
             }
@@ -48,7 +48,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
 
         (await this.weaponRepository.WeaponBodies.ToListAsync())
             .Should()
-            .AllSatisfy(x => x.DeviceAccountId.Should().Be("id"));
+            .AllSatisfy(x => x.ViewerId.Should().Be(1));
     }
 
     [Fact]
@@ -57,8 +57,8 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddRangeToDatabase(
             new List<DbWeaponPassiveAbility>()
             {
-                new() { DeviceAccountId = "id", WeaponPassiveAbilityId = 1010107 },
-                new() { DeviceAccountId = "id", WeaponPassiveAbilityId = 1010108 }
+                new() { ViewerId = 1, WeaponPassiveAbilityId = 1010107 },
+                new() { ViewerId = 1, WeaponPassiveAbilityId = 1010108 }
             }
         );
 
@@ -80,13 +80,13 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             .Single(
                 x =>
                     x.WeaponBodyId == WeaponBodies.Arondight
-                    && x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
+                    && x.ViewerId == IdentityTestUtils.ViewerId
             )
             .Should()
             .BeEquivalentTo(
                 new DbWeaponBody()
                 {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    ViewerId = IdentityTestUtils.ViewerId,
                     WeaponBodyId = WeaponBodies.Arondight
                 }
             );
@@ -102,12 +102,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
                 WeaponBodies.Blitzfang,
                 WeaponBodies.Camelot
             }.Select(
-                x =>
-                    new DbWeaponBody()
-                    {
-                        DeviceAccountId = IdentityTestUtils.DeviceAccountId,
-                        WeaponBodyId = x
-                    }
+                x => new DbWeaponBody() { ViewerId = IdentityTestUtils.ViewerId, WeaponBodyId = x }
             )
         );
 
@@ -128,7 +123,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddToDatabase(
             new DbWeaponBody()
             {
-                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                ViewerId = IdentityTestUtils.ViewerId,
                 WeaponBodyId = WeaponBodies.Nothung
             }
         );
@@ -150,7 +145,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddToDatabase(
             new DbWeaponBody()
             {
-                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                ViewerId = IdentityTestUtils.ViewerId,
                 WeaponBodyId = WeaponBodies.InfernoApogee
             }
         );
@@ -178,7 +173,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             .ContainEquivalentOf(
                 new DbWeaponPassiveAbility()
                 {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    ViewerId = IdentityTestUtils.ViewerId,
                     WeaponPassiveAbilityId = passiveId
                 }
             );
@@ -190,7 +185,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddToDatabase(
             new DbWeaponBody()
             {
-                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                ViewerId = IdentityTestUtils.ViewerId,
                 WeaponBodyId = WeaponBodies.RoaringWeald
             }
         );
@@ -220,7 +215,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             .ContainEquivalentOf(
                 new DbWeaponSkin()
                 {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    ViewerId = IdentityTestUtils.ViewerId,
                     WeaponSkinId = 4,
                     IsNew = false,
                     GetTime = DateTimeOffset.UtcNow

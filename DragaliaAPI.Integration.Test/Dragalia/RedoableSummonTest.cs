@@ -64,12 +64,12 @@ public class RedoableSummonTest : TestFixture
 
         IEnumerable<int> dbCharaIds = this.ApiContext
             .PlayerCharaData
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .Select(x => (int)x.CharaId)
             .OrderBy(x => x);
         IEnumerable<int> dbDragonIds = this.ApiContext
             .PlayerDragonData
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .Select(x => (int)x.DragonId)
             .OrderBy(x => x);
 

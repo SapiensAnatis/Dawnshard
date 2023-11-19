@@ -1,16 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[PrimaryKey(nameof(DeviceAccountId), nameof(Id))]
-public class DbLoginBonus : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(Id))]
+public class DbLoginBonus : DbPlayerData
 {
-    public virtual DbPlayer? Owner { get; set; }
-
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
-
     /// <summary>
     /// Gets or sets the ID of the login bonus.
     /// </summary>

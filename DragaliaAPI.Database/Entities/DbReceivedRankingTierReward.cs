@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
@@ -7,16 +8,10 @@ namespace DragaliaAPI.Database.Entities;
 /// Tracks receipt of a <see cref="Shared.MasterAsset.Models.RankingTierReward"/>.
 /// </summary>
 [Index(nameof(QuestId))]
-[Index(nameof(DeviceAccountId))]
-[PrimaryKey(nameof(DeviceAccountId), nameof(RewardId))]
-public class DbReceivedRankingTierReward
+[PrimaryKey(nameof(ViewerId), nameof(RewardId))]
+public class DbReceivedRankingTierReward : DbPlayerData
 {
-    [ForeignKey(nameof(Player))]
-    public required string DeviceAccountId { get; set; }
-
     public int RewardId { get; set; }
 
     public int QuestId { get; set; }
-
-    public DbPlayer? Player { get; set; }
 }

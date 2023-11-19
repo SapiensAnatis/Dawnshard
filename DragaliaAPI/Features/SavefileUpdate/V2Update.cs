@@ -32,7 +32,7 @@ public class V2Update : ISavefileUpdate
                         x =>
                             new DbEquippedStamp()
                             {
-                                DeviceAccountId = this.playerIdentityService.AccountId,
+                                ViewerId = this.playerIdentityService.ViewerId,
                                 StampId = 0,
                                 Slot = x
                             }

@@ -55,7 +55,7 @@ public class DmodeDungeonTest : TestFixture
         DbPlayerDmodeInfo oldInfo = this.ApiContext
             .PlayerDmodeInfos
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId);
+            .First(x => x.ViewerId == ViewerId);
 
         await this.Client.PostMsgpack<DmodeDungeonStartData>(
             "dmode_dungeon/start",
@@ -118,7 +118,7 @@ public class DmodeDungeonTest : TestFixture
         this.ApiContext
             .PlayerDmodeInfos
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId)
+            .First(x => x.ViewerId == ViewerId)
             .FloorSkipCount
             .Should()
             .Be(oldInfo.FloorSkipCount + 1);
@@ -132,7 +132,7 @@ public class DmodeDungeonTest : TestFixture
         DbPlayerDmodeInfo oldInfo = this.ApiContext
             .PlayerDmodeInfos
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId);
+            .First(x => x.ViewerId == ViewerId);
 
         await this.Client.PostMsgpack<DmodeDungeonStartData>(
             "dmode_dungeon/start",
@@ -157,7 +157,7 @@ public class DmodeDungeonTest : TestFixture
         this.ApiContext
             .PlayerDmodeDungeons
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId)
+            .First(x => x.ViewerId == ViewerId)
             .State
             .Should()
             .Be(DungeonState.Halting);
@@ -172,7 +172,7 @@ public class DmodeDungeonTest : TestFixture
         this.ApiContext
             .PlayerDmodeInfos
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId)
+            .First(x => x.ViewerId == ViewerId)
             .RecoveryCount
             .Should()
             .Be(oldInfo.RecoveryCount + 1);
@@ -184,7 +184,7 @@ public class DmodeDungeonTest : TestFixture
             await this.ApiContext
                 .PlayerDmodeDungeons
                 .AsNoTracking()
-                .FirstAsync(x => x.DeviceAccountId == DeviceAccountId)
+                .FirstAsync(x => x.ViewerId == ViewerId)
         ).State;
     }
 }

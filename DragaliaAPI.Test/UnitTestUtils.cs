@@ -17,12 +17,12 @@ public static class UnitTestUtils
     /// Consistent account id to be used in setups for unit tests.
     /// This is also what the user is authenticated as in the mock controller context.
     /// </summary>
-    public const string DeviceAccountId = "id";
+    public const string AccountId = "id";
 
     /// <summary>
     /// Same for ViewerId.
     /// </summary>
-    public const int ViewerId = 1;
+    public const long ViewerId = 1;
 
     public const int TimeComparisonThresholdSec = 1;
 
@@ -56,7 +56,7 @@ public static class UnitTestUtils
                     new ClaimsIdentity(
                         new List<Claim>()
                         {
-                            new Claim(CustomClaimType.AccountId, DeviceAccountId),
+                            new Claim(CustomClaimType.AccountId, AccountId),
                             new Claim(CustomClaimType.ViewerId, ViewerId.ToString())
                         }
                     )

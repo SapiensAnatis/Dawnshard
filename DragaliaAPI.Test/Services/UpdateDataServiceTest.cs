@@ -1,7 +1,9 @@
 ﻿using System.Text.Json;
 using AutoMapper;
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Database.Factories;
+using DragaliaAPI.Database.Test;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
@@ -12,7 +14,10 @@ using DragaliaAPI.Services.Game;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using DragaliaAPI.Test.Utils;
+using FluentAssertions.Execution;
+using Microsoft.EntityFrameworkCore;
 using Xunit.Abstractions;
+using static DragaliaAPI.Test.Utils.IdentityTestUtils;
 
 namespace DragaliaAPI.Test.Services;
 
@@ -57,29 +62,29 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     [Fact]
     public async Task SaveChangesAsync_PopulatesAll()
     {
-        string deviceAccountId = "some_id";
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(deviceAccountId);
+        long viewerId = 2;
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(viewerId);
         this.mockMissionProgressionService
             .Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
 
-        DbPlayerUserData userData = new(deviceAccountId);
+        DbPlayerUserData userData = new() { ViewerId = viewerId };
 
-        DbPlayerCharaData charaData = new(deviceAccountId, Charas.GalaLeonidas);
+        DbPlayerCharaData charaData = new(viewerId, Charas.GalaLeonidas);
 
         DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
-            deviceAccountId,
+            viewerId,
             Dragons.DreadkingRathalos
         );
         DbPlayerDragonReliability reliabilityData = DbPlayerDragonReliabilityFactory.Create(
-            deviceAccountId,
+            viewerId,
             Dragons.DreadkingRathalos
         );
 
         DbParty partyData =
             new()
             {
-                DeviceAccountId = deviceAccountId,
+                ViewerId = viewerId,
                 PartyName = "name",
                 PartyNo = 1,
                 Units = new List<DbPartyUnit>()
@@ -91,7 +96,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         DbPlayerStoryState questStoryState =
             new()
             {
-                DeviceAccountId = deviceAccountId,
+                ViewerId = viewerId,
                 State = StoryState.Read,
                 StoryId = 2,
                 StoryType = StoryTypes.Quest
@@ -99,7 +104,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         DbPlayerStoryState charaStoryState =
             new()
             {
-                DeviceAccountId = deviceAccountId,
+                ViewerId = viewerId,
                 State = StoryState.Read,
                 StoryId = 4,
                 StoryType = StoryTypes.Chara,
@@ -107,7 +112,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         DbPlayerStoryState castleStoryState =
             new()
             {
-                DeviceAccountId = deviceAccountId,
+                ViewerId = viewerId,
                 State = StoryState.Unlocked,
                 StoryId = 6,
                 StoryType = StoryTypes.Castle,
@@ -116,7 +121,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         DbPlayerStoryState dragonStoryState =
             new()
             {
-                DeviceAccountId = deviceAccountId,
+                ViewerId = viewerId,
                 State = StoryState.Unlocked,
                 StoryId = 8,
                 StoryType = StoryTypes.Dragon,
@@ -125,7 +130,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         DbPlayerMaterial materialData =
             new()
             {
-                DeviceAccountId = deviceAccountId,
+                ViewerId = viewerId,
                 MaterialId = Materials.AlmightyOnesMaskFragment,
                 Quantity = 10
             };
@@ -133,7 +138,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         DbQuest questData =
             new()
             {
-                DeviceAccountId = deviceAccountId,
+                ViewerId = viewerId,
                 QuestId = 100010104,
                 IsMissionClear1 = true,
                 IsMissionClear2 = true,
@@ -144,7 +149,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         DbFortBuild buildData =
             new()
             {
-                DeviceAccountId = deviceAccountId,
+                ViewerId = viewerId,
                 BuildId = 4000,
                 Level = 2,
                 PositionX = 3,
@@ -157,7 +162,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
             };
 
         this.ApiContext.AddRange(
-            new List<IDbHasAccountId>()
+            new List<IDbPlayerData>()
             {
                 userData,
                 charaData,
@@ -213,18 +218,18 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     [Fact]
     public async Task SaveChangesAsync_RetrievesIdentityColumns()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(ViewerId);
         this.mockMissionProgressionService
             .Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
 
         // This test is bullshit because in-mem works differently to an actual database in this regard
         this.ApiContext.AddRange(
-            new List<IDbHasAccountId>()
+            new List<IDbPlayerData>()
             {
-                DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.Arsene),
-                DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.GalaBeastVolk),
-                DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.HighZodiark)
+                DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Arsene),
+                DbPlayerDragonDataFactory.Create(ViewerId, Dragons.GalaBeastVolk),
+                DbPlayerDragonDataFactory.Create(ViewerId, Dragons.HighZodiark)
             }
         );
 
@@ -237,7 +242,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     [Fact]
     public async Task SaveChangesAsync_NullIfNoUpdates()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns(DeviceAccountId);
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(ViewerId);
         this.mockMissionProgressionService
             .Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
@@ -255,12 +260,12 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     [Fact]
     public async Task SaveChangesAsync_NoDataFromOtherAccounts()
     {
-        this.ApiContext.PlayerCharaData.Add(new("id 1", Charas.GalaZethia));
+        this.ApiContext.PlayerCharaData.Add(new(ViewerId + 1, Charas.GalaZethia));
         this.mockMissionProgressionService
             .Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
 
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id 2");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(ViewerId);
 
         (await this.updateDataService.SaveChangesAsync()).chara_list.Should().BeNull();
     }
@@ -268,7 +273,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     [Fact]
     public async Task SaveChangesAsync_NullAfterSave()
     {
-        this.ApiContext.PlayerCharaData.Add(new(DeviceAccountId, Charas.HalloweenLowen));
+        this.ApiContext.PlayerCharaData.Add(new(ViewerId, Charas.HalloweenLowen));
         this.mockMissionProgressionService
             .Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
@@ -278,10 +283,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         (await this.updateDataService.SaveChangesAsync()).chara_list.Should().BeNull();
     }
 
-    private void AssertOnlyContains<TNetwork>(
-        IEnumerable<TNetwork> member,
-        IDbHasAccountId dbEntity
-    )
+    private void AssertOnlyContains<TNetwork>(IEnumerable<TNetwork> member, IDbPlayerData dbEntity)
     {
         member
             .Should()

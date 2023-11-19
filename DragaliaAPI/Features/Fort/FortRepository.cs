@@ -29,7 +29,7 @@ public class FortRepository : IFortRepository
     public IQueryable<DbFortBuild> Builds =>
         this.apiContext
             .PlayerFortBuilds
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public async Task InitializeFort()
     {
@@ -38,7 +38,7 @@ public class FortRepository : IFortRepository
         if (
             !await this.apiContext
                 .PlayerFortDetails
-                .AnyAsync(x => x.DeviceAccountId == this.playerIdentityService.AccountId)
+                .AnyAsync(x => x.ViewerId == this.playerIdentityService.ViewerId)
         )
         {
             this.logger.LogDebug("Initializing PlayerFortDetail.");
@@ -47,7 +47,7 @@ public class FortRepository : IFortRepository
                 .AddAsync(
                     new DbFortDetail()
                     {
-                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        ViewerId = this.playerIdentityService.ViewerId,
                         CarpenterNum = DefaultCarpenters
                     }
                 );
@@ -61,7 +61,7 @@ public class FortRepository : IFortRepository
                 .AddAsync(
                     new DbFortBuild()
                     {
-                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        ViewerId = this.playerIdentityService.ViewerId,
                         PlantId = FortPlants.TheHalidom,
                         PositionX = 16, // Default Halidom position
                         PositionZ = 17,
@@ -83,7 +83,7 @@ public class FortRepository : IFortRepository
                 .AddAsync(
                     new DbFortBuild
                     {
-                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        ViewerId = this.playerIdentityService.ViewerId,
                         PlantId = FortPlants.Smithy,
                         PositionX = 21,
                         PositionZ = 3,
@@ -129,7 +129,7 @@ public class FortRepository : IFortRepository
     {
         DbFortDetail? details = await this.apiContext
             .PlayerFortDetails
-            .FindAsync(this.playerIdentityService.AccountId);
+            .FindAsync(this.playerIdentityService.ViewerId);
 
         if (details == null)
         {
@@ -141,7 +141,7 @@ public class FortRepository : IFortRepository
                     .AddAsync(
                         new()
                         {
-                            DeviceAccountId = this.playerIdentityService.AccountId,
+                            ViewerId = this.playerIdentityService.ViewerId,
                             CarpenterNum = DefaultCarpenters
                         }
                     )
@@ -175,7 +175,7 @@ public class FortRepository : IFortRepository
     public async Task UpdateFortMaximumCarpenter(int carpenterNum)
     {
         DbFortDetail fortDetail =
-            await apiContext.PlayerFortDetails.FindAsync(this.playerIdentityService.AccountId)
+            await apiContext.PlayerFortDetails.FindAsync(this.playerIdentityService.ViewerId)
             ?? throw new InvalidOperationException("Missing FortDetails!");
 
         fortDetail.CarpenterNum = carpenterNum;
@@ -189,9 +189,7 @@ public class FortRepository : IFortRepository
 
         if (fort is null)
         {
-            throw new InvalidOperationException(
-                $"Could not get building {buildId} for account {this.playerIdentityService.AccountId}."
-            );
+            throw new InvalidOperationException($"Could not get building {buildId}");
         }
 
         return fort;
@@ -234,7 +232,7 @@ public class FortRepository : IFortRepository
                 .AddAsync(
                     new DbFortBuild
                     {
-                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        ViewerId = this.playerIdentityService.ViewerId,
                         PlantId = plant,
                         Level = actualLevel,
                         PositionX = -1,

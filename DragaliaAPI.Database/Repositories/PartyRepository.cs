@@ -20,7 +20,7 @@ public class PartyRepository : BaseRepository, IPartyRepository
         this.apiContext
             .PlayerParties
             .Include(x => x.Units.OrderBy(x => x.UnitNo))
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbPartyUnit> GetPartyUnits(IEnumerable<int> partySlots)
     {
@@ -28,7 +28,7 @@ public class PartyRepository : BaseRepository, IPartyRepository
             .PlayerPartyUnits
             .Where(
                 x =>
-                    x.DeviceAccountId == this.playerIdentityService.AccountId
+                    x.ViewerId == this.playerIdentityService.ViewerId
                     && partySlots.Contains(x.PartyNo)
             )
             .OrderBy(x => x.PartyNo == partySlots.First())
@@ -53,7 +53,7 @@ public class PartyRepository : BaseRepository, IPartyRepository
             .PlayerParties
             .Where(
                 x =>
-                    x.DeviceAccountId == this.playerIdentityService.AccountId
+                    x.ViewerId == this.playerIdentityService.ViewerId
                     && x.PartyNo == newParty.PartyNo
             )
             .Include(x => x.Units)
@@ -69,11 +69,7 @@ public class PartyRepository : BaseRepository, IPartyRepository
     {
         DbParty existingParty = await apiContext
             .PlayerParties
-            .Where(
-                x =>
-                    x.DeviceAccountId == this.playerIdentityService.AccountId
-                    && x.PartyNo == partyNo
-            )
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId && x.PartyNo == partyNo)
             .Include(x => x.Units) // Need to return full unit list in update_data_list
             .SingleAsync();
 
@@ -91,7 +87,7 @@ public class PartyRepository : BaseRepository, IPartyRepository
                 original.FirstOrDefault(x => x.UnitNo == i)
                     ?? new()
                     {
-                        DeviceAccountId = original.First().DeviceAccountId,
+                        ViewerId = original.First().ViewerId,
                         PartyNo = original.First().PartyNo,
                         UnitNo = i,
                         CharaId = 0

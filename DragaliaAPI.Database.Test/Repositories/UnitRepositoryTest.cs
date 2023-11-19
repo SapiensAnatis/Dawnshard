@@ -21,7 +21,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     {
         this.fixture = fixture;
         this.mockPlayerIdentityService = new(MockBehavior.Strict);
-        this.mockPlayerIdentityService.Setup(x => x.AccountId).Returns(DeviceAccountId);
+        this.mockPlayerIdentityService.Setup(x => x.ViewerId).Returns(ViewerId);
 
         this.unitRepository = new UnitRepository(
             fixture.ApiContext,
@@ -39,7 +39,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetAllCharaData_InvalidId_ReturnsEmpty()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("wrong id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(400);
 
         (await this.unitRepository.Charas.ToListAsync()).Should().BeEmpty();
     }
@@ -47,26 +47,24 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetAllCharaData_ReturnsOnlyDataForGivenId()
     {
-        await this.fixture.AddToDatabase(new DbPlayerCharaData("other id", Charas.Ilia));
+        await this.fixture.AddToDatabase(new DbPlayerCharaData(1, Charas.Ilia));
 
         (await this.unitRepository.Charas.ToListAsync())
             .Should()
-            .AllSatisfy(x => x.DeviceAccountId.Should().Be(DeviceAccountId));
+            .AllSatisfy(x => x.ViewerId.Should().Be(ViewerId));
     }
 
     [Fact]
     public async Task GetAllDragonata_ValidId_ReturnsData()
     {
-        await this.fixture.AddToDatabase(
-            DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.Agni)
-        );
+        await this.fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Agni));
         (await this.unitRepository.Dragons.ToListAsync()).Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task GetAllDragonData_InvalidId_ReturnsEmpty()
     {
-        this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("wrong id");
+        this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(400);
 
         (await this.unitRepository.Dragons.ToListAsync()).Should().BeEmpty();
     }
@@ -76,7 +74,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     {
         (await this.unitRepository.Charas.ToListAsync())
             .Should()
-            .AllSatisfy(x => x.DeviceAccountId.Should().Be(DeviceAccountId));
+            .AllSatisfy(x => x.ViewerId.Should().Be(ViewerId));
     }
 
     [Fact]
@@ -85,7 +83,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         IEnumerable<Charas> idList = await fixture
             .ApiContext
             .PlayerCharaData
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.CharaId)
             .ToListAsync();
 
@@ -99,7 +97,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             await fixture
                 .ApiContext
                 .PlayerCharaData
-                .Where(x => x.DeviceAccountId == DeviceAccountId)
+                .Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.CharaId)
                 .ToListAsync()
         ).Append(Charas.BondforgedZethia);
@@ -111,11 +109,9 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     public async Task CheckHasDragons_OwnedList_ReturnsTrue()
     {
         await fixture.AddToDatabase(
-            DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.AC011Garland)
+            DbPlayerDragonDataFactory.Create(ViewerId, Dragons.AC011Garland)
         );
-        await fixture.AddToDatabase(
-            DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.Ariel)
-        );
+        await fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Ariel));
 
         List<Dragons> idList = new() { Dragons.AC011Garland, Dragons.Ariel };
 
@@ -155,7 +151,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             await this.fixture
                 .ApiContext
                 .PlayerCharaData
-                .Where(x => x.DeviceAccountId == DeviceAccountId)
+                .Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.CharaId)
                 .ToListAsync()
         )
@@ -175,9 +171,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task AddDragons_CorrectlyMarksDuplicates()
     {
-        await fixture.AddToDatabase(
-            DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.Barbatos)
-        );
+        await fixture.AddToDatabase(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Barbatos));
 
         List<Dragons> idList = new() { Dragons.Marishiten, Dragons.Barbatos, Dragons.Marishiten };
 
@@ -194,10 +188,10 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     public async Task AddDragons_UpdatesDatabase()
     {
         await fixture.AddToDatabase(
-            DbPlayerDragonDataFactory.Create(DeviceAccountId, Dragons.KonohanaSakuya)
+            DbPlayerDragonDataFactory.Create(ViewerId, Dragons.KonohanaSakuya)
         );
         await fixture.AddToDatabase(
-            DbPlayerDragonReliabilityFactory.Create(DeviceAccountId, Dragons.KonohanaSakuya)
+            DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.KonohanaSakuya)
         );
 
         List<Dragons> idList = new() { Dragons.KonohanaSakuya, Dragons.Michael, Dragons.Michael };
@@ -209,7 +203,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             await this.fixture
                 .ApiContext
                 .PlayerDragonData
-                .Where(x => x.DeviceAccountId == DeviceAccountId)
+                .Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.DragonId)
                 .ToListAsync()
         )
@@ -228,7 +222,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             await this.fixture
                 .ApiContext
                 .PlayerDragonReliability
-                .Where(x => x.DeviceAccountId == DeviceAccountId)
+                .Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.DragonId)
                 .ToListAsync()
         )

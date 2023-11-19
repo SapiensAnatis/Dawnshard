@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -10,16 +11,9 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerCharaData")]
-[Index(nameof(DeviceAccountId))]
-public class DbPlayerCharaData : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(CharaId))]
+public class DbPlayerCharaData : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
-
     [Column("CharaId")]
     [TypeConverter(typeof(EnumConverter))]
     public required Charas CharaId { get; set; }
@@ -173,7 +167,7 @@ public class DbPlayerCharaData : IDbHasAccountId
     /// </summary>
     /// <param name="deviceAccountId">Primary key.</param>
     [SetsRequiredMembers]
-    public DbPlayerCharaData(string deviceAccountId, Charas id)
+    public DbPlayerCharaData(long viewerId, Charas id)
     {
         CharaData data = MasterAsset.CharaData.Get(id);
 
@@ -199,7 +193,7 @@ public class DbPlayerCharaData : IDbHasAccountId
                 throw new UnreachableException("Invalid rarity!");
         }
 
-        this.DeviceAccountId = deviceAccountId;
+        this.ViewerId = viewerId;
         this.Rarity = rarity;
         this.CharaId = id;
         this.HpBase = rarityHp;

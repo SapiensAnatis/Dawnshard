@@ -168,9 +168,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
 
         List<DbQuestClearPartyUnit> storedList = await this.ApiContext
             .QuestClearPartyUnits
-            .Where(
-                x => x.QuestId == 3 && x.DeviceAccountId == DeviceAccountId && x.IsMulti == false
-            )
+            .Where(x => x.QuestId == 3 && x.ViewerId == ViewerId && x.IsMulti == false)
             .ToListAsync();
 
         storedList.Should().BeEquivalentTo(SoloDbEntities, opts => opts.Excluding(x => x.QuestId));
@@ -196,7 +194,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
 
         List<DbQuestClearPartyUnit> storedList = await this.ApiContext
             .QuestClearPartyUnits
-            .Where(x => x.QuestId == 4 && x.DeviceAccountId == DeviceAccountId && x.IsMulti == true)
+            .Where(x => x.QuestId == 4 && x.ViewerId == ViewerId && x.IsMulti == true)
             .ToListAsync();
 
         storedList.Should().BeEquivalentTo(MultiDbEntities, opts => opts.Excluding(x => x.QuestId));
@@ -208,7 +206,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
         {
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 IsMulti = false,
                 QuestId = 1,
                 UnitNo = 1,
@@ -231,7 +229,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             },
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 IsMulti = false,
                 QuestId = 1,
                 UnitNo = 2,
@@ -300,7 +298,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
         {
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 IsMulti = true,
                 QuestId = 2,
                 UnitNo = 1,
@@ -323,7 +321,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             },
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 IsMulti = true,
                 QuestId = 2,
                 UnitNo = 2,
@@ -392,7 +390,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
         {
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 UnitNo = 1,
                 QuestId = 6,
                 IsMulti = false,
@@ -400,7 +398,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             },
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 UnitNo = 2,
                 QuestId = 6,
                 IsMulti = false,
@@ -409,7 +407,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             },
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 UnitNo = 3,
                 QuestId = 6,
                 IsMulti = false,
@@ -418,7 +416,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             },
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 UnitNo = 4,
                 QuestId = 6,
                 IsMulti = false,
@@ -427,7 +425,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             },
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 UnitNo = 5,
                 QuestId = 6,
                 IsMulti = false,
@@ -437,7 +435,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             },
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 UnitNo = 6,
                 QuestId = 6,
                 IsMulti = false,
@@ -447,7 +445,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             },
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 UnitNo = 7,
                 QuestId = 6,
                 IsMulti = false,

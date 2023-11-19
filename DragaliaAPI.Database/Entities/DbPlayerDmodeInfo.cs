@@ -1,20 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[PrimaryKey(nameof(DeviceAccountId))]
-public class DbPlayerDmodeInfo : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId))]
+public class DbPlayerDmodeInfo : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    [Required]
-    public required string DeviceAccountId { get; set; }
-
     [Column("RecoveryCount")]
     public int RecoveryCount { get; set; }
 

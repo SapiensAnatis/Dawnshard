@@ -10,7 +10,7 @@ public class TradeMapProfile : Profile
 {
     public TradeMapProfile()
     {
-        this.AddGlobalIgnore("DeviceAccount");
+        this.AddGlobalIgnore("ViewerId");
         this.AddGlobalIgnore("Owner");
 
         this.CreateMap<UserTreasureTradeList, DbPlayerTrade>()

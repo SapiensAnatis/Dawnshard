@@ -1,19 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[Index(nameof(DeviceAccountId))]
-[PrimaryKey(nameof(DeviceAccountId), nameof(WallId))]
-public class DbPlayerQuestWall : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(WallId))]
+public class DbPlayerQuestWall : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
-
     public required int WallId { get; set; }
 
     public int WallLevel { get; set; }

@@ -42,7 +42,7 @@ public class PresentService : IPresentService
     public void AddPresent(IEnumerable<Present> presents)
     {
         this.presentRepository.AddPlayerPresents(
-            presents.Select(x => x.ToEntity(this.playerIdentityService.AccountId))
+            presents.Select(x => x.ToEntity(this.playerIdentityService.ViewerId))
         );
     }
 }

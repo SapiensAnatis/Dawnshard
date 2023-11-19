@@ -5,15 +5,9 @@ namespace DragaliaAPI.Database.Repositories;
 
 public interface IInventoryRepository
 {
-    IQueryable<DbPlayerCurrency> Currencies { get; }
-
     IQueryable<DbPlayerMaterial> Materials { get; }
 
     IQueryable<DbPlayerDragonGift> DragonGifts { get; }
-
-    DbPlayerCurrency AddCurrency(CurrencyTypes type);
-
-    Task<DbPlayerCurrency?> GetCurrency(CurrencyTypes type);
 
     DbPlayerMaterial AddMaterial(Materials type);
 

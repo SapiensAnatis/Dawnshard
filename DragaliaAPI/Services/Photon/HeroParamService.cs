@@ -65,10 +65,7 @@ public class HeroParamService : IHeroParamService
             .GetViewerData(viewerId)
             .SingleAsync();
 
-        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-            userData.DeviceAccountId,
-            viewerId
-        );
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(viewerId);
 
         List<DbDetailedPartyUnit> detailedPartyUnits = await this.dungeonRepository
             .BuildDetailedPartyUnit(partyRepository.GetPartyUnits(partySlot), partySlot)

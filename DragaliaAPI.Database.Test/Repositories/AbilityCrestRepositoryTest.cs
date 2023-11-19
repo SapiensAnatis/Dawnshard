@@ -40,13 +40,13 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
             .Single(
                 x =>
                     x.AbilityCrestId == AbilityCrests.ADogsDay
-                    && x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
+                    && x.ViewerId == IdentityTestUtils.ViewerId
             )
             .Should()
             .BeEquivalentTo(
                 new DbAbilityCrest()
                 {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    ViewerId = IdentityTestUtils.ViewerId,
                     AbilityCrestId = AbilityCrests.ADogsDay
                 }
             );
@@ -90,7 +90,7 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
             .BeEquivalentTo(
                 new DbAbilityCrest()
                 {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    ViewerId = IdentityTestUtils.ViewerId,
                     AbilityCrestId = AbilityCrests.FlashofGenius
                 }
             );
@@ -104,25 +104,21 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
     public async Task AddOrUpdateSet_AddsWhenNonexistentAndUpdatesWhenExists()
     {
         await this.abilityCrestRepository.AddOrUpdateSet(
-            new DbAbilityCrestSet(IdentityTestUtils.DeviceAccountId, 54)
+            new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 54)
         );
         await this.fixture.ApiContext.SaveChangesAsync();
 
         this.fixture
             .ApiContext
             .PlayerAbilityCrestSets
-            .Single(
-                x =>
-                    x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
-                    && x.AbilityCrestSetNo == 54
-            )
+            .Single(x => x.ViewerId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54)
             .Should()
-            .BeEquivalentTo(new DbAbilityCrestSet(IdentityTestUtils.DeviceAccountId, 54));
+            .BeEquivalentTo(new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 54));
 
         await this.abilityCrestRepository.AddOrUpdateSet(
             new DbAbilityCrestSet()
             {
-                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                ViewerId = IdentityTestUtils.ViewerId,
                 AbilityCrestSetNo = 54,
                 CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals
             }
@@ -132,16 +128,12 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
         this.fixture
             .ApiContext
             .PlayerAbilityCrestSets
-            .Single(
-                x =>
-                    x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
-                    && x.AbilityCrestSetNo == 54
-            )
+            .Single(x => x.ViewerId == IdentityTestUtils.ViewerId && x.AbilityCrestSetNo == 54)
             .Should()
             .BeEquivalentTo(
                 new DbAbilityCrestSet()
                 {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    ViewerId = IdentityTestUtils.ViewerId,
                     AbilityCrestSetNo = 54,
                     CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals
                 }
@@ -152,13 +144,13 @@ public class AbilityCrestRepositoryTest : IClassFixture<DbTestFixture>
     public async Task FindSetAsync_FindsAbilityCrestSetAsExpected()
     {
         await this.abilityCrestRepository.AddOrUpdateSet(
-            new DbAbilityCrestSet(IdentityTestUtils.DeviceAccountId, 1)
+            new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 1)
         );
         await this.fixture.ApiContext.SaveChangesAsync();
 
         (await this.abilityCrestRepository.FindSetAsync(1))
             .Should()
-            .BeEquivalentTo(new DbAbilityCrestSet(IdentityTestUtils.DeviceAccountId, 1));
+            .BeEquivalentTo(new DbAbilityCrestSet(IdentityTestUtils.ViewerId, 1));
 
         (await this.abilityCrestRepository.FindSetAsync(2)).Should().BeNull();
     }

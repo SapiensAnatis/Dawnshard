@@ -68,7 +68,7 @@ public class DmodeServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                        ViewerId = UnitTestUtils.ViewerId,
                         FloorSkipCount = skipCount,
                         FloorSkipTime = FixedTime,
                         Point1Quantity = point1Quantity,
@@ -127,7 +127,7 @@ public class DmodeServiceTest
         DbPlayerDmodeDungeon dbDungeon =
             new()
             {
-                DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                ViewerId = UnitTestUtils.ViewerId,
                 State = DungeonState.Waiting,
                 CharaId = charaId,
                 Floor = floor,
@@ -187,7 +187,7 @@ public class DmodeServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                        ViewerId = UnitTestUtils.ViewerId,
                         PassiveId = DmodeServitorPassiveType.Exp,
                         Level = 5
                     }
@@ -212,7 +212,7 @@ public class DmodeServiceTest
         DbPlayerDmodeExpedition dbExpedition =
             new()
             {
-                DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                ViewerId = UnitTestUtils.ViewerId,
                 CharaId1 = Charas.ThePrince,
                 CharaId2 = 0,
                 CharaId3 = 0,
@@ -250,7 +250,7 @@ public class DmodeServiceTest
         DbPlayerDmodeChara dbChara =
             new()
             {
-                DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                ViewerId = UnitTestUtils.ViewerId,
                 CharaId = Charas.ThePrince,
                 MaxFloor = 50,
                 MaxScore = 5000,
@@ -290,7 +290,7 @@ public class DmodeServiceTest
         DbPlayerDmodeInfo dbInfo =
             new()
             {
-                DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                ViewerId = UnitTestUtils.ViewerId,
                 RecoveryCount = 0,
                 RecoveryTime = DateTimeOffset.UnixEpoch
             };
@@ -312,7 +312,7 @@ public class DmodeServiceTest
         DbPlayerDmodeInfo dbInfo =
             new()
             {
-                DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                ViewerId = UnitTestUtils.ViewerId,
                 RecoveryCount = 10,
                 RecoveryTime = DateTimeOffset.UnixEpoch
             };
@@ -330,7 +330,7 @@ public class DmodeServiceTest
         DbPlayerDmodeInfo dbInfo =
             new()
             {
-                DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                ViewerId = UnitTestUtils.ViewerId,
                 FloorSkipCount = 0,
                 FloorSkipTime = DateTimeOffset.UnixEpoch
             };
@@ -352,7 +352,7 @@ public class DmodeServiceTest
         DbPlayerDmodeInfo dbInfo =
             new()
             {
-                DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                ViewerId = UnitTestUtils.ViewerId,
                 FloorSkipCount = 3,
                 FloorSkipTime = DateTimeOffset.UnixEpoch
             };
@@ -374,7 +374,7 @@ public class DmodeServiceTest
             {
                 new DbPlayerDmodeServitorPassive
                 {
-                    DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                    ViewerId = UnitTestUtils.ViewerId,
                     PassiveId = DmodeServitorPassiveType.Exp,
                     Level = 1
                 }
@@ -410,7 +410,7 @@ public class DmodeServiceTest
         DbPlayerDmodeServitorPassive expServitor =
             new()
             {
-                DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                ViewerId = UnitTestUtils.ViewerId,
                 PassiveId = DmodeServitorPassiveType.Exp,
                 Level = 0
             };
@@ -448,7 +448,7 @@ public class DmodeServiceTest
             {
                 new DbPlayerDmodeServitorPassive
                 {
-                    DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                    ViewerId = UnitTestUtils.ViewerId,
                     PassiveId = DmodeServitorPassiveType.Exp,
                     Level = 1
                 }
@@ -486,7 +486,7 @@ public class DmodeServiceTest
         DbPlayerDmodeExpedition dbExpedition =
             new()
             {
-                DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                ViewerId = UnitTestUtils.ViewerId,
                 CharaId1 = 0,
                 CharaId2 = 0,
                 CharaId3 = 0,
@@ -520,7 +520,7 @@ public class DmodeServiceTest
         DbPlayerDmodeExpedition dbExpedition =
             new()
             {
-                DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                ViewerId = UnitTestUtils.ViewerId,
                 CharaId1 = Charas.ThePrince,
                 CharaId2 = 0,
                 CharaId3 = 0,
@@ -552,7 +552,7 @@ public class DmodeServiceTest
                     RewardGrantResult.Added,
                     new DbTalisman()
                     {
-                        DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                        ViewerId = UnitTestUtils.ViewerId,
                         TalismanId = Talismans.ThePrince
                     }
                 )
@@ -590,7 +590,7 @@ public class DmodeServiceTest
         DbPlayerDmodeExpedition dbExpedition =
             new()
             {
-                DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                ViewerId = UnitTestUtils.ViewerId,
                 CharaId1 = Charas.ThePrince,
                 CharaId2 = 0,
                 CharaId3 = 0,
@@ -617,7 +617,7 @@ public class DmodeServiceTest
         DbPlayerDmodeExpedition dbExpedition =
             new()
             {
-                DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                ViewerId = UnitTestUtils.ViewerId,
                 CharaId1 = Charas.ThePrince,
                 CharaId2 = 0,
                 CharaId3 = 0,

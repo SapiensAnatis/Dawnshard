@@ -113,7 +113,7 @@ public class FortServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = "id",
+                        ViewerId = 1,
                         BuildId = 4,
                         BuildEndDate = new(2023, 04, 18, 18, 32, 35, TimeSpan.Zero),
                         BuildStartDate = new(2023, 04, 18, 18, 32, 34, TimeSpan.Zero),
@@ -158,9 +158,7 @@ public class FortServiceTest
     {
         mockFortRepository
             .Setup(x => x.GetFortDetail())
-            .ReturnsAsync(
-                new DbFortDetail() { CarpenterNum = existingCarpenters, DeviceAccountId = "id" }
-            );
+            .ReturnsAsync(new DbFortDetail() { CarpenterNum = existingCarpenters, ViewerId = 1 });
         mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(0);
         mockFortRepository
             .Setup(x => x.UpdateFortMaximumCarpenter(existingCarpenters + 1))
@@ -185,7 +183,7 @@ public class FortServiceTest
     {
         mockFortRepository
             .Setup(x => x.GetFortDetail())
-            .ReturnsAsync(new DbFortDetail() { CarpenterNum = 5, DeviceAccountId = "id" });
+            .ReturnsAsync(new DbFortDetail() { CarpenterNum = 5, ViewerId = 1 });
         mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(0);
 
         await fortService
@@ -203,7 +201,7 @@ public class FortServiceTest
     {
         mockFortRepository
             .Setup(x => x.GetFortDetail())
-            .ReturnsAsync(new DbFortDetail() { CarpenterNum = 4, DeviceAccountId = "id" });
+            .ReturnsAsync(new DbFortDetail() { CarpenterNum = 4, ViewerId = 1 });
         mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(0);
 
         await fortService
@@ -219,11 +217,11 @@ public class FortServiceTest
     [Fact]
     public async Task LevelupAtOnce_UpgradesBuilding()
     {
-        DbPlayerUserData userData = new() { DeviceAccountId = "id", BuildTimePoint = 1 };
+        DbPlayerUserData userData = new() { ViewerId = 1, BuildTimePoint = 1 };
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 Level = 2,
                 BuildStartDate = DateTimeOffset.UtcNow,
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(5)
@@ -253,7 +251,7 @@ public class FortServiceTest
             new()
             {
                 BuildId = 1,
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 BuildStartDate = DateTimeOffset.UtcNow,
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(1),
                 Level = 2,
@@ -276,7 +274,7 @@ public class FortServiceTest
             new()
             {
                 BuildId = 1,
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 BuildStartDate = DateTimeOffset.UtcNow,
                 BuildEndDate = DateTimeOffset.UtcNow + TimeSpan.FromDays(1),
                 Level = 0,
@@ -296,7 +294,7 @@ public class FortServiceTest
             new()
             {
                 BuildId = 1,
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 BuildStartDate = DateTimeOffset.UnixEpoch,
                 BuildEndDate = DateTimeOffset.UnixEpoch,
                 Level = 3,
@@ -322,7 +320,7 @@ public class FortServiceTest
             new()
             {
                 BuildId = 1,
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 BuildStartDate = DateTimeOffset.UnixEpoch,
                 BuildEndDate = DateTimeOffset.UtcNow - TimeSpan.FromMinutes(1),
                 Level = 2,
@@ -349,7 +347,7 @@ public class FortServiceTest
             new()
             {
                 BuildId = 1,
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 BuildStartDate = DateTimeOffset.MinValue,
                 BuildEndDate = DateTimeOffset.MaxValue,
                 Level = 2,
@@ -371,11 +369,11 @@ public class FortServiceTest
     [Fact]
     public async Task BuildStart_StartsBuilding()
     {
-        mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("id");
+        mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(1);
 
         mockFortRepository
             .Setup(x => x.GetFortDetail())
-            .ReturnsAsync(new DbFortDetail() { DeviceAccountId = "id", CarpenterNum = 4 });
+            .ReturnsAsync(new DbFortDetail() { ViewerId = 1, CarpenterNum = 4 });
         mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
         mockFortRepository
             .Setup(x => x.AddBuild(It.IsAny<DbFortBuild>()))
@@ -387,7 +385,7 @@ public class FortServiceTest
                         .BeEquivalentTo(
                             new DbFortBuild()
                             {
-                                DeviceAccountId = "id",
+                                ViewerId = 1,
                                 PlantId = FortPlants.BlueFlowers,
                                 Level = 0,
                                 PositionX = 2,
@@ -421,7 +419,7 @@ public class FortServiceTest
     {
         mockFortRepository
             .Setup(x => x.GetFortDetail())
-            .ReturnsAsync(new DbFortDetail() { DeviceAccountId = "id", CarpenterNum = 1 });
+            .ReturnsAsync(new DbFortDetail() { ViewerId = 1, CarpenterNum = 1 });
         mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
 
         await fortService
@@ -441,7 +439,7 @@ public class FortServiceTest
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 Level = 20,
                 PlantId = FortPlants.Dragonata
             };
@@ -452,7 +450,7 @@ public class FortServiceTest
 
         mockFortRepository
             .Setup(x => x.GetFortDetail())
-            .ReturnsAsync(new DbFortDetail() { DeviceAccountId = "id", CarpenterNum = 4 });
+            .ReturnsAsync(new DbFortDetail() { ViewerId = 1, CarpenterNum = 4 });
         mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
         mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
@@ -495,14 +493,14 @@ public class FortServiceTest
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 Level = 20,
                 PlantId = FortPlants.Dragonata
             };
 
         mockFortRepository
             .Setup(x => x.GetFortDetail())
-            .ReturnsAsync(new DbFortDetail() { DeviceAccountId = "id", CarpenterNum = 1 });
+            .ReturnsAsync(new DbFortDetail() { ViewerId = 1, CarpenterNum = 1 });
         mockFortRepository.Setup(x => x.GetActiveCarpenters()).ReturnsAsync(1);
         mockFortRepository.Setup(x => x.GetBuilding(1)).ReturnsAsync(build);
 
@@ -526,7 +524,7 @@ public class FortServiceTest
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 Level = 20,
                 PlantId = FortPlants.Dragonata,
                 PositionX = 2,
@@ -549,7 +547,7 @@ public class FortServiceTest
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = "wyrmite",
+                ViewerId = 1,
                 BuildId = 444,
                 Level = 5,
                 PlantId = FortPlants.Smithy,
@@ -586,7 +584,7 @@ public class FortServiceTest
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = "hustler",
+                ViewerId = 1,
                 BuildId = 445,
                 Level = 5,
                 PlantId = FortPlants.Smithy,

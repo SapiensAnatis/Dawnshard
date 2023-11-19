@@ -37,7 +37,7 @@ public class TreasureTradeTest : TestFixture
         await this.AddToDatabase(
             new DbPlayerTrade()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 Id = 1000,
                 Count = 1,
                 Type = TradeType.Treasure,
@@ -70,7 +70,7 @@ public class TreasureTradeTest : TestFixture
         using (
             IDisposable ctx = this.Services
                 .GetRequiredService<IPlayerIdentityService>()
-                .StartUserImpersonation(DeviceAccountId)
+                .StartUserImpersonation(viewer: ViewerId)
         )
         {
             preTradeAmount =
@@ -101,9 +101,7 @@ public class TreasureTradeTest : TestFixture
         int newMatQuantity = this.ApiContext
             .PlayerMaterials
             .AsNoTracking()
-            .Where(
-                x => x.DeviceAccountId == DeviceAccountId && x.MaterialId == Materials.DamascusIngot
-            )
+            .Where(x => x.ViewerId == ViewerId && x.MaterialId == Materials.DamascusIngot)
             .Select(x => x.Quantity)
             .First();
 

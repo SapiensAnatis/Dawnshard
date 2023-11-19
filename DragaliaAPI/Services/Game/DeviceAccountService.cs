@@ -76,7 +76,7 @@ public class DeviceAccountService : IDeviceAccountService
         string hashedPassword = this.GetHashedPassword(password);
 
         await this.deviceAccountRepository.AddNewDeviceAccount(id, hashedPassword);
-        using (IDisposable ctx = this.playerIdentityService.StartUserImpersonation(id))
+        using (IDisposable ctx = this.playerIdentityService.StartUserImpersonation(account: id))
         {
             await this.savefileService.Create();
         }

@@ -72,7 +72,7 @@ public class WallRecordControllerTest
         DbPlayerQuestWall playerQuestWall =
             new()
             {
-                DeviceAccountId = "cool account",
+                ViewerId = 1,
                 IsStartNextLevel = true,
                 WallId = wallId,
                 WallLevel = wallLevel

@@ -61,9 +61,7 @@ public class GraphQlTest : GraphQlTestFixture
             await this.ApiContext
                 .PlayerCharaData
                 .AsNoTracking()
-                .SingleAsync(
-                    x => x.DeviceAccountId == DeviceAccountId && x.CharaId == Charas.ThePrince
-                )
+                .SingleAsync(x => x.ViewerId == ViewerId && x.CharaId == Charas.ThePrince)
         ).Level = 100;
         await this.ApiContext.SaveChangesAsync();
 
@@ -86,9 +84,7 @@ public class GraphQlTest : GraphQlTestFixture
             await this.ApiContext
                 .PlayerCharaData
                 .AsNoTracking()
-                .SingleAsync(
-                    x => x.DeviceAccountId == DeviceAccountId && x.CharaId == Charas.ThePrince
-                )
+                .SingleAsync(x => x.ViewerId == ViewerId && x.CharaId == Charas.ThePrince)
         )
             .Level
             .Should()
@@ -126,7 +122,7 @@ public class GraphQlTest : GraphQlTestFixture
             .BeEquivalentTo(
                 new DbPlayerPresent()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PresentId = presentId,
                     EntityType = EntityTypes.Dragon,
                     EntityId = (int)Dragons.GalaBahamut,
@@ -162,7 +158,7 @@ public class GraphQlTest : GraphQlTestFixture
             await this.ApiContext
                 .PlayerUserData
                 .AsNoTracking()
-                .FirstAsync(x => x.DeviceAccountId == DeviceAccountId)
+                .FirstAsync(x => x.ViewerId == ViewerId)
         )
             .TutorialStatus
             .Should()
@@ -198,7 +194,7 @@ public class GraphQlTest : GraphQlTestFixture
     //
     //     DbPlayerUserData newUserData = await this.ApiContext.PlayerUserData
     //         .AsNoTracking()
-    //         .FirstAsync(x => x.DeviceAccountId == DeviceAccountId);
+    //         .FirstAsync(x => x.ViewerId == ViewerId);
     //
     //     (newUserData).TutorialFlagList.Should().Contain(1027);
     // }

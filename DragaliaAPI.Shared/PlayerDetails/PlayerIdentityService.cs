@@ -44,32 +44,34 @@ public class PlayerIdentityService : IPlayerIdentityService
 
     private long? viewerId;
 
-    public long? ViewerId
+    public long ViewerId
     {
         get
         {
             if (impersonationContext != null)
             {
-                return impersonationContext.ViewerId;
+                return impersonationContext.ViewerId
+                    ?? throw new InvalidOperationException(
+                        "No ViewerId in current impersonation session"
+                    );
             }
 
             if (this.viewerId == null)
             {
-                string? viewerIdString = this.Context.User.FindFirstValue(CustomClaimType.ViewerId);
+                string viewerIdString =
+                    this.Context.User.FindFirstValue(CustomClaimType.ViewerId)
+                    ?? throw new InvalidOperationException("No ViewerId claim");
 
-                if (viewerIdString != null)
-                {
-                    this.viewerId = long.Parse(viewerIdString);
-                }
+                this.viewerId = int.Parse(viewerIdString);
             }
 
-            return this.viewerId;
+            return this.viewerId.Value;
         }
     }
 
     private ImpersonationContext? impersonationContext;
 
-    public IDisposable StartUserImpersonation(string account, long? viewer = null)
+    public IDisposable StartUserImpersonation(long? viewer = null, string? account = null)
     {
         if (impersonationContext != null)
         {
@@ -78,7 +80,7 @@ public class PlayerIdentityService : IPlayerIdentityService
             );
         }
 
-        impersonationContext = new ImpersonationContext(this, account, viewer);
+        impersonationContext = new ImpersonationContext(this, viewer, account);
 
         logger.LogDebug(
             "Starting user impersonation: {@context}",
@@ -102,16 +104,16 @@ public class PlayerIdentityService : IPlayerIdentityService
 internal class ImpersonationContext : IDisposable
 {
     private readonly PlayerIdentityService playerIdentityService;
-    public readonly string? AccountId;
     public readonly long? ViewerId;
+    public readonly string? AccountId;
 
     private readonly IDisposable? accountIdPropertyScope;
     private readonly IDisposable? viewerIdPropertyScope;
 
     public ImpersonationContext(
         PlayerIdentityService playerIdentityService,
-        string? accountId,
-        long? viewerId
+        long? viewerId,
+        string? accountId
     )
     {
         this.playerIdentityService = playerIdentityService;

@@ -1,13 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
 /// <summary>
 /// Container class for all savefile data to enable foreign keys.
 /// </summary>
+[Index(nameof(AccountId))]
 public class DbPlayer
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public long ViewerId { get; set; }
+
+    [MaxLength(16)]
     public required string AccountId { get; set; }
 
     public int SavefileVersion { get; set; }
@@ -41,9 +48,6 @@ public class DbPlayer
 
     public virtual ICollection<DbPlayerMaterial> MaterialList { get; set; } =
         new List<DbPlayerMaterial>();
-
-    public virtual ICollection<DbPlayerCurrency> Currencies { get; set; } =
-        new List<DbPlayerCurrency>();
 
     public virtual ICollection<DbSetUnit> UnitSets { get; set; } = new List<DbSetUnit>();
 
@@ -100,4 +104,11 @@ public class DbPlayer
 
     public virtual ICollection<DbPlayerQuestWall> QuestWalls { get; set; } =
         new List<DbPlayerQuestWall>();
+
+    public virtual ICollection<DbPlayerTrade> Trades { get; set; } = new List<DbPlayerTrade>();
+
+    public virtual ICollection<DbSummonTicket> SummonTickets { get; set; } =
+        new List<DbSummonTicket>();
+
+    public virtual ICollection<DbEmblem> Emblems { get; set; } = new List<DbEmblem>();
 }

@@ -112,17 +112,17 @@ public class MissionMutations : MutationBase
             )
             .ToListAsync();
 
-        string[] players = affectedMissions.Select(x => x.DeviceAccountId).ToArray();
+        long[] players = affectedMissions.Select(x => x.ViewerId).ToArray();
 
         foreach (DbPlayerMission mission in affectedMissions)
         {
             this.logger.LogInformation(
-                "Recalculating progress for player {accountId}",
-                mission.DeviceAccountId
+                "Recalculating progress for player {viewerId}",
+                mission.ViewerId
             );
 
             using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-                mission.DeviceAccountId
+                viewer: mission.ViewerId
             );
 
             await this.missionInitialProgressionService.GetInitialMissionProgress(mission);
@@ -135,7 +135,7 @@ public class MissionMutations : MutationBase
                 .PlayerMissions
                 .Where(
                     x =>
-                        players.Contains(x.DeviceAccountId)
+                        players.Contains(x.ViewerId)
                         && x.Id == args.MissionId
                         && x.Type == args.MissionType
                 );
@@ -167,6 +167,6 @@ public class MissionMutations : MutationBase
                 x =>
                     x.Id == args.MissionId
                     && x.Type == args.MissionType
-                    && x.DeviceAccountId == player.AccountId
+                    && x.ViewerId == player.ViewerId
             ) ?? throw new InvalidOperationException("No mission found.");
 }

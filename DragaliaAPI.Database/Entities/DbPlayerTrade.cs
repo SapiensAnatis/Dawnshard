@@ -1,23 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[Index(nameof(DeviceAccountId))]
-[Index(nameof(DeviceAccountId), nameof(Type))]
-[PrimaryKey(nameof(DeviceAccountId), nameof(Id))]
-public class DbPlayerTrade : IDbHasAccountId
+[Index(nameof(ViewerId), nameof(Type))]
+[PrimaryKey(nameof(ViewerId), nameof(Id))]
+public class DbPlayerTrade : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    [Required]
-    public required string DeviceAccountId { get; set; }
-
     [Column("TradeType")]
     public required TradeType Type { get; set; }
 

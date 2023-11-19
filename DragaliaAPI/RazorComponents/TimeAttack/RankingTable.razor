@@ -187,14 +187,14 @@
             this.Rank = index + 1;
             this.Time = dbClear.Time;
             this.Names = dbClear.Players
-                .OrderBy(x => x.DeviceAccountId)
+                .OrderBy(x => x.ViewerId)
                 .Select(y => y.Player?.UserData?.Name ?? "null")
                 .ToList();
 
             if (isCoop) 
             {
                 this.Units = dbClear.Players
-                    .OrderBy(x => x.DeviceAccountId)
+                    .OrderBy(x => x.ViewerId)
                     .Select(x => x.Units.OrderBy(x => x.UnitNo).FirstOrDefault())
                     .Where(x => x is not null)
                     .Select(x => x!)

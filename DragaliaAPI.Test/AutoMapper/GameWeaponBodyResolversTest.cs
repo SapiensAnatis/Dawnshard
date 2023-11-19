@@ -36,7 +36,7 @@ public class GameWeaponBodyResolversTest
             .Resolve(
                 new DbWeaponBody()
                 {
-                    DeviceAccountId = "a",
+                    ViewerId = 1,
                     WeaponBodyId = id,
                     LimitOverCount = limitOverCount
                 },
@@ -70,7 +70,7 @@ public class GameWeaponBodyResolversTest
             .Resolve(
                 new DbWeaponBody()
                 {
-                    DeviceAccountId = "a",
+                    ViewerId = 1,
                     WeaponBodyId = id,
                     LimitOverCount = limitOverCount
                 },
@@ -109,7 +109,7 @@ public class GameWeaponBodyResolversTest
             .Resolve(
                 new DbWeaponBody()
                 {
-                    DeviceAccountId = "a",
+                    ViewerId = 1,
                     WeaponBodyId = id,
                     LimitOverCount = limitOverCount,
                     LimitBreakCount = limitBreakCount

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -11,16 +12,9 @@ namespace DragaliaAPI.Database.Entities;
 /// <summary>
 /// Weapon database entity.
 /// </summary>
-[Index(nameof(DeviceAccountId))]
-public class DbWeaponBody : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(WeaponBodyId))]
+public class DbWeaponBody : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
-
     /// <summary>
     /// Gets or sets a value that dictates the weapon's identity.
     /// </summary>
@@ -187,13 +181,5 @@ public class DbWeaponBody : IDbHasAccountId
             result--;
 
         return result;
-    }
-}
-
-internal class DbWeaponBodyConfiguration : IEntityTypeConfiguration<DbWeaponBody>
-{
-    public void Configure(EntityTypeBuilder<DbWeaponBody> builder)
-    {
-        builder.HasKey(e => new { e.DeviceAccountId, e.WeaponBodyId });
     }
 }

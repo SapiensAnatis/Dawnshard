@@ -49,7 +49,7 @@ public class DungeonRecordRewardServiceTest
         DbQuest questEntity =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 QuestId = questId,
                 PlayCount = 0,
                 IsMissionClear1 = false,

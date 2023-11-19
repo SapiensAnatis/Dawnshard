@@ -48,7 +48,7 @@ public class AbilityCrestTradeTest : TestFixture
         return ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.DewPoint)
             .First();
     }

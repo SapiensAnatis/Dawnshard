@@ -23,6 +23,6 @@ public abstract class SavefileUpdateTestFixture : TestFixture
 
     public int GetSavefileVersion()
     {
-        return this.ApiContext.Players.Find(DeviceAccountId)!.SavefileVersion;
+        return this.ApiContext.Players.Find(ViewerId)!.SavefileVersion;
     }
 }

@@ -55,7 +55,7 @@ public class QuestTreasureService(
             .Add(
                 new DbQuestTreasureList()
                 {
-                    DeviceAccountId = playerIdentityService.AccountId,
+                    ViewerId = playerIdentityService.ViewerId,
                     QuestTreasureId = questTreasureData.Id
                 }
             );

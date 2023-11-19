@@ -53,11 +53,7 @@ public class LoginControllerTest
     public async Task Index_LastLoginBeforeReset_CallsDailyResetAction()
     {
         this.mockUserDataRepository.SetupUserData(
-            new DbPlayerUserData()
-            {
-                DeviceAccountId = "id",
-                LastLoginTime = DateTimeOffset.UnixEpoch
-            }
+            new DbPlayerUserData() { ViewerId = 1, LastLoginTime = DateTimeOffset.UnixEpoch }
         );
 
         this.mockResetHelper.SetupGet(x => x.LastDailyReset).Returns(DateTimeOffset.UtcNow);
@@ -85,7 +81,7 @@ public class LoginControllerTest
     public async Task Index_LastLoginAfterReset_DoesNotCallDailyResetAction()
     {
         this.mockUserDataRepository.SetupUserData(
-            new DbPlayerUserData() { DeviceAccountId = "id", LastLoginTime = DateTimeOffset.UtcNow }
+            new DbPlayerUserData() { ViewerId = 1, LastLoginTime = DateTimeOffset.UtcNow }
         );
 
         this.mockResetHelper

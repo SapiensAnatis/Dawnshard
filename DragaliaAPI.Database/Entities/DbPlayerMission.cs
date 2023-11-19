@@ -1,23 +1,16 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[PrimaryKey(nameof(DeviceAccountId), nameof(Id), nameof(Type))]
-public class DbPlayerMission : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(Id), nameof(Type))]
+public class DbPlayerMission : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    [Required]
-    public required string DeviceAccountId { get; set; }
-
     [Column("MissionId")]
     [Required]
     public int Id { get; set; }

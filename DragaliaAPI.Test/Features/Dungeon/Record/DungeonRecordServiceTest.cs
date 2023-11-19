@@ -69,7 +69,7 @@ public class DungeonRecordServiceTest
         DbQuest mockQuest =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 QuestId = lSurtrSoloId,
                 State = 0,
                 BestClearTime = 999

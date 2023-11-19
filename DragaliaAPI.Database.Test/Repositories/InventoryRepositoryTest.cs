@@ -34,7 +34,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             await this.fixture
                 .ApiContext
                 .PlayerMaterials
-                .FindAsync(DeviceAccountId, Materials.WaterwyrmsGreatsphere)
+                .FindAsync(ViewerId, Materials.WaterwyrmsGreatsphere)
         )!
             .Quantity
             .Should()
@@ -49,7 +49,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             .AddAsync(
                 new DbPlayerMaterial()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     MaterialId = Materials.FirestormPrism,
                     Quantity = 0
                 }
@@ -63,7 +63,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             await this.fixture
                 .ApiContext
                 .PlayerMaterials
-                .FindAsync(DeviceAccountId, Materials.FirestormPrism)
+                .FindAsync(ViewerId, Materials.FirestormPrism)
         )!
             .Quantity
             .Should()
@@ -78,12 +78,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             5
         );
 
-        (
-            await this.fixture
-                .ApiContext
-                .PlayerMaterials
-                .FindAsync(DeviceAccountId, Materials.SunlightOre)
-        )!
+        (await this.fixture.ApiContext.PlayerMaterials.FindAsync(ViewerId, Materials.SunlightOre))!
             .Quantity
             .Should()
             .Be(5);
@@ -92,7 +87,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             await this.fixture
                 .ApiContext
                 .PlayerMaterials
-                .FindAsync(DeviceAccountId, Materials.SunlightStone)
+                .FindAsync(ViewerId, Materials.SunlightStone)
         )!
             .Quantity
             .Should()
@@ -110,13 +105,13 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
                 {
                     new()
                     {
-                        DeviceAccountId = "other id",
+                        ViewerId = ViewerId + 2,
                         MaterialId = Materials.AbaddonOrb,
                         Quantity = 5
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         MaterialId = Materials.AbaddonOrb,
                         Quantity = 50,
                     }
@@ -132,7 +127,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             .BeEquivalentTo(
                 new DbPlayerMaterial()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     MaterialId = Materials.AbaddonOrb,
                     Quantity = 50
                 },
@@ -151,19 +146,19 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
                 {
                     new()
                     {
-                        DeviceAccountId = "other id 2",
+                        ViewerId = ViewerId + 4,
                         MaterialId = Materials.AbaddonOrb,
                         Quantity = 5
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         MaterialId = Materials.TsunamiOrb,
                         Quantity = 50,
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         MaterialId = Materials.InfernoOrb,
                         Quantity = 50,
                     }
@@ -177,7 +172,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             .ContainEquivalentOf( // Savefile creation adds materials
                 new DbPlayerMaterial()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     MaterialId = Materials.TsunamiOrb,
                     Quantity = 50
                 },
@@ -187,14 +182,14 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             .ContainEquivalentOf(
                 new DbPlayerMaterial()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     MaterialId = Materials.InfernoOrb,
                     Quantity = 50
                 },
                 opts => opts.Excluding(x => x.Owner)
             )
             .And
-            .AllSatisfy(x => x.DeviceAccountId.Should().Be(DeviceAccountId));
+            .AllSatisfy(x => x.ViewerId.Should().Be(ViewerId));
     }
 
     [Fact]
@@ -205,13 +200,13 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             {
                 new()
                 {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    ViewerId = IdentityTestUtils.ViewerId,
                     MaterialId = Materials.Valor,
                     Quantity = 5
                 },
                 new()
                 {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    ViewerId = IdentityTestUtils.ViewerId,
                     MaterialId = Materials.Acclaim,
                     Quantity = 5
                 }
@@ -228,9 +223,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             .ApiContext
             .PlayerMaterials
             .Single(
-                x =>
-                    x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
-                    && x.MaterialId == Materials.Valor
+                x => x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Valor
             )
             .Quantity
             .Should()
@@ -240,9 +233,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             .ApiContext
             .PlayerMaterials
             .Single(
-                x =>
-                    x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
-                    && x.MaterialId == Materials.Acclaim
+                x => x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Acclaim
             )
             .Quantity
             .Should()
@@ -257,7 +248,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             {
                 new()
                 {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    ViewerId = IdentityTestUtils.ViewerId,
                     MaterialId = Materials.SummerEstelleSkin,
                     Quantity = 5
                 },
@@ -281,7 +272,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             .PlayerMaterials
             .Single(
                 x =>
-                    x.DeviceAccountId == IdentityTestUtils.DeviceAccountId
+                    x.ViewerId == IdentityTestUtils.ViewerId
                     && x.MaterialId == Materials.SummerEstelleSkin
             )
             .Quantity
@@ -295,7 +286,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddToDatabase(
             new DbPlayerMaterial()
             {
-                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                ViewerId = IdentityTestUtils.ViewerId,
                 Quantity = 5,
                 MaterialId = Materials.Dragonfruit
             }
@@ -310,7 +301,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddToDatabase(
             new DbPlayerMaterial()
             {
-                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                ViewerId = IdentityTestUtils.ViewerId,
                 Quantity = 5,
                 MaterialId = Materials.FafnirMedal
             }
@@ -327,13 +318,13 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             {
                 new()
                 {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    ViewerId = IdentityTestUtils.ViewerId,
                     MaterialId = Materials.ValentinesGift,
                     Quantity = 5
                 },
                 new()
                 {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    ViewerId = IdentityTestUtils.ViewerId,
                     MaterialId = Materials.QuantumCog,
                     Quantity = 5
                 }
@@ -361,7 +352,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             {
                 new()
                 {
-                    DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                    ViewerId = IdentityTestUtils.ViewerId,
                     MaterialId = Materials.ValeriosConviction,
                     Quantity = 5
                 }

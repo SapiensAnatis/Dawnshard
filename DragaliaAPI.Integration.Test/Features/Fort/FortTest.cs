@@ -12,12 +12,12 @@ public class FortTest : TestFixture
 
         this.ApiContext
             .PlayerFortBuilds
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdate(x => x.SetProperty(y => y.BuildStartDate, DateTimeOffset.UnixEpoch));
 
         this.ApiContext
             .PlayerFortBuilds
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdate(x => x.SetProperty(y => y.BuildEndDate, DateTimeOffset.UnixEpoch));
 
         this.ApiContext.ChangeTracker.Clear();
@@ -38,7 +38,7 @@ public class FortTest : TestFixture
             .Add(
                 new DbFortBuild()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PlantId = FortPlants.AxeDojo,
                     Level = 10,
                     PositionX = 10,
@@ -83,7 +83,7 @@ public class FortTest : TestFixture
         DbPlayerUserData oldUserData = this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId);
+            .First(x => x.ViewerId == ViewerId);
 
         FortAddCarpenterData response = (
             await this.Client.PostMsgpack<FortAddCarpenterData>(
@@ -104,7 +104,7 @@ public class FortTest : TestFixture
             .Add(
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 0,
                     PositionX = 2,
@@ -142,7 +142,7 @@ public class FortTest : TestFixture
             .Add(
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 0,
                     PositionX = 2,
@@ -172,7 +172,7 @@ public class FortTest : TestFixture
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 PlantId = FortPlants.StaffDojo,
                 Level = 0,
                 PositionX = 2,
@@ -235,7 +235,7 @@ public class FortTest : TestFixture
             .Add(
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 2,
                     PositionX = 2,
@@ -319,7 +319,7 @@ public class FortTest : TestFixture
             .Add(
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 1,
                     PositionX = 2,
@@ -357,7 +357,7 @@ public class FortTest : TestFixture
             .Add(
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 1,
                     PositionX = 2,
@@ -441,7 +441,7 @@ public class FortTest : TestFixture
             .Add(
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 1,
                     PositionX = 2,
@@ -480,7 +480,7 @@ public class FortTest : TestFixture
             .Add(
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PlantId = FortPlants.StaffDojo,
                     Level = 1,
                     PositionX = 2,
@@ -518,13 +518,13 @@ public class FortTest : TestFixture
         long oldCoin = this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId)
+            .First(x => x.ViewerId == ViewerId)
             .Coin;
 
         DbFortBuild rupieMine =
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 PlantId = FortPlants.RupieMine,
                 LastIncomeDate = lastIncome,
                 Level = 10
@@ -532,7 +532,7 @@ public class FortTest : TestFixture
         DbFortBuild dragonTree =
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 PlantId = FortPlants.Dragontree,
                 LastIncomeDate = lastIncome,
                 Level = 13
@@ -543,7 +543,7 @@ public class FortTest : TestFixture
 
         DbFortBuild halidom = this.ApiContext
             .PlayerFortBuilds
-            .First(x => x.PlantId == FortPlants.TheHalidom && x.DeviceAccountId == DeviceAccountId);
+            .First(x => x.PlantId == FortPlants.TheHalidom && x.ViewerId == ViewerId);
         halidom.LastIncomeDate = lastIncome;
 
         await this.ApiContext.SaveChangesAsync();

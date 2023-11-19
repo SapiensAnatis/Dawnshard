@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -8,23 +9,9 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerUserData")]
-[Index(nameof(DeviceAccountId))]
-public class DbPlayerUserData : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId))]
+public class DbPlayerUserData : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    [Key]
-    public required string DeviceAccountId { get; set; }
-
-    /// <summary>
-    /// The player's unique ID, i.e. the one that is used to send friend requests.
-    /// </summary>
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public long ViewerId { get; set; }
-
     /// <summary>
     /// The player's display name.
     /// </summary>
@@ -94,19 +81,4 @@ public class DbPlayerUserData : IDbHasAccountId
     /// The last time at which a savefile for this user was imported from BaaS.
     /// </summary>
     public DateTimeOffset LastSaveImportTime { get; set; }
-
-    /// <summary>
-    /// EF Core / testing constructor method.
-    /// </summary>
-    public DbPlayerUserData() { }
-
-    /// <summary>
-    /// Use this method to construct a new instance manually.
-    /// </summary>
-    /// <param name="deviceAccountId">The unique ID of this user.</param>
-    [SetsRequiredMembers]
-    public DbPlayerUserData(string deviceAccountId)
-    {
-        this.DeviceAccountId = deviceAccountId;
-    }
 }

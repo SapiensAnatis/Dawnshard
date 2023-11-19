@@ -287,7 +287,11 @@ public class AbilityCrestControllerTest
                 .Should()
                 .BeEquivalentTo(
                     mapper.Map<AbilityCrestSetList>(
-                        new DbAbilityCrestSet(IdentityTestUtils.DeviceAccountId, setNo)
+                        new DbAbilityCrestSet()
+                        {
+                            ViewerId = IdentityTestUtils.ViewerId,
+                            AbilityCrestSetNo = setNo
+                        }
                     )
                 );
 
@@ -311,7 +315,7 @@ public class AbilityCrestControllerTest
                 {
                     new DbAbilityCrestSet()
                     {
-                        DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                        ViewerId = IdentityTestUtils.ViewerId,
                         AbilityCrestSetNo = mappedSet,
                         AbilityCrestSetName = "test",
                         CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals,
@@ -346,7 +350,7 @@ public class AbilityCrestControllerTest
                         mapper.Map<AbilityCrestSetList>(
                             new DbAbilityCrestSet()
                             {
-                                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                                ViewerId = IdentityTestUtils.ViewerId,
                                 AbilityCrestSetNo = mappedSet,
                                 AbilityCrestSetName = "test",
                                 CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals,
@@ -367,7 +371,11 @@ public class AbilityCrestControllerTest
                     .Should()
                     .BeEquivalentTo(
                         mapper.Map<AbilityCrestSetList>(
-                            new DbAbilityCrestSet(IdentityTestUtils.DeviceAccountId, setNo)
+                            new DbAbilityCrestSet()
+                            {
+                                ViewerId = IdentityTestUtils.ViewerId,
+                                AbilityCrestSetNo = setNo
+                            }
                         )
                     );
             }
@@ -474,7 +482,13 @@ public class AbilityCrestControllerTest
 
         this.mockAbilityCrestRepository
             .Setup(x => x.FindSetAsync(setNo))
-            .ReturnsAsync(new DbAbilityCrestSet(IdentityTestUtils.DeviceAccountId, setNo));
+            .ReturnsAsync(
+                new DbAbilityCrestSet()
+                {
+                    ViewerId = IdentityTestUtils.ViewerId,
+                    AbilityCrestSetNo = setNo
+                }
+            );
 
         this.mockUpdateDataService
             .Setup(x => x.SaveChangesAsync())

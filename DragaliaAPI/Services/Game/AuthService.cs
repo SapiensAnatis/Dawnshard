@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Helpers;
@@ -24,6 +25,7 @@ public class AuthService : IAuthService
     private readonly ISavefileService savefileService;
     private readonly IPlayerIdentityService playerIdentityService;
     private readonly IUserDataRepository userDataRepository;
+    private readonly ApiContext apiContext;
     private readonly IOptionsMonitor<LoginOptions> loginOptions;
     private readonly IOptionsMonitor<BaasOptions> baasOptions;
     private readonly ILogger<AuthService> logger;
@@ -36,6 +38,7 @@ public class AuthService : IAuthService
         ISavefileService savefileService,
         IPlayerIdentityService playerIdentityService,
         IUserDataRepository userDataRepository,
+        ApiContext apiContext,
         IOptionsMonitor<LoginOptions> loginOptions,
         IOptionsMonitor<BaasOptions> baasOptions,
         ILogger<AuthService> logger,
@@ -47,6 +50,7 @@ public class AuthService : IAuthService
         this.savefileService = savefileService;
         this.playerIdentityService = playerIdentityService;
         this.userDataRepository = userDataRepository;
+        this.apiContext = apiContext;
         this.loginOptions = loginOptions;
         this.baasOptions = baasOptions;
         this.logger = logger;
@@ -76,8 +80,8 @@ public class AuthService : IAuthService
 
         using (
             IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-                deviceAccountId,
-                viewerId
+                viewerId,
+                deviceAccountId
             )
         )
         {
@@ -97,31 +101,35 @@ public class AuthService : IAuthService
             jwt.Subject
         );
 
-        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(jwt.Subject);
+        DbPlayer? player = await this.apiContext
+            .Players
+            .Include(x => x.UserData)
+            .FirstOrDefaultAsync(x => x.AccountId == jwt.Subject);
 
-        DbPlayerUserData? userData = await this.userDataRepository.UserData.SingleOrDefaultAsync();
+        player ??= await this.savefileService.Create(jwt.Subject);
 
-        if (GetPendingSaveImport(jwt, userData))
+        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
+            player.ViewerId,
+            player.AccountId
+        );
+
+        if (GetPendingSaveImport(jwt, player.UserData))
             await this.ImportSave(idToken);
-
-        long viewerId = await this.GetViewerId();
-
-        using IDisposable viewerIdLog = LogContext.PushProperty(CustomClaimType.ViewerId, viewerId);
 
         string sessionId = await this.sessionService.CreateSession(
             idToken,
-            jwt.Subject,
-            viewerId,
+            player.AccountId,
+            player.ViewerId,
             this.dateTimeProvider.UtcNow
         );
 
         this.logger.LogInformation(
             "Authenticated user with viewer ID {id} and issued session ID {sid}",
-            viewerId,
+            player.ViewerId,
             sessionId
         );
 
-        return new(viewerId, sessionId);
+        return new(player.ViewerId, sessionId);
     }
 
     private async Task ImportSave(string idToken)
@@ -190,17 +198,6 @@ public class AuthService : IAuthService
         }
 
         return validationResult;
-    }
-
-    private async Task<long> GetViewerId()
-    {
-        IQueryable<DbPlayerUserData> userDataQuery = this.userDataRepository.UserData;
-        DbPlayerUserData? userData = await userDataQuery.SingleOrDefaultAsync();
-
-        if (userData is null)
-            await this.savefileService.Create();
-
-        return await userDataQuery.Select(x => x.ViewerId).SingleAsync();
     }
 
     private bool GetPendingSaveImport(JwtSecurityToken token, DbPlayerUserData? userData)

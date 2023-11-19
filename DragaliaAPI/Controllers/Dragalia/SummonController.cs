@@ -392,7 +392,7 @@ public class SummonController(
             await summonRepository.AddSummonHistory(
                 new DbPlayerSummonHistory()
                 {
-                    DeviceAccountId = this.DeviceAccountId,
+                    ViewerId = this.ViewerId,
                     SummonId = bannerData.summon_id,
                     SummonExecType = summonRequest.exec_type,
                     ExecDate = summonDate,

@@ -52,8 +52,7 @@ public class StampService : IStampService
                         x,
                         opts =>
                             opts.AfterMap(
-                                (src, dest) =>
-                                    dest.DeviceAccountId = this.playerIdentityService.AccountId
+                                (src, dest) => dest.ViewerId = this.playerIdentityService.ViewerId
                             )
                     )
             )

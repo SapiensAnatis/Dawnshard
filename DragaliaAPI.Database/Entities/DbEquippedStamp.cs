@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
@@ -6,16 +7,9 @@ namespace DragaliaAPI.Database.Entities;
 /// <summary>
 /// Database table for equipped stamps.
 /// </summary>
-[Index(nameof(DeviceAccountId))]
-[PrimaryKey(nameof(DeviceAccountId), nameof(Slot))]
-public class DbEquippedStamp : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(Slot))]
+public class DbEquippedStamp : DbPlayerData
 {
-    public DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
-
     public int StampId { get; set; }
 
     public int Slot { get; set; }

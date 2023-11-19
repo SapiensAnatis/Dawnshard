@@ -97,7 +97,6 @@ public class DungeonRecordHelperService(
             }
 
             using IDisposable impersonationCtx = playerIdentityService.StartUserImpersonation(
-                userData.DeviceAccountId,
                 userData.ViewerId
             );
 

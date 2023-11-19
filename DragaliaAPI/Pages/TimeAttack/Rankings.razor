@@ -32,7 +32,7 @@
     {
         <AuthorizeView>
             <Authorized>
-                <OwnClear QuestId="@this.selection.Id" ViewerId="@(this.BlazorIdentityService.ViewerId ?? 0)"/>
+                <OwnClear QuestId="@this.selection.Id" ViewerId="@(this.BlazorIdentityService.ViewerId)"/>
             </Authorized>
         </AuthorizeView>
         <RankingTable Elevation=1 QuestId="@this.selection.Id"/>

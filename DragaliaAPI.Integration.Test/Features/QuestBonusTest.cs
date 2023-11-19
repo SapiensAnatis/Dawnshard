@@ -133,7 +133,7 @@ public class QuestBonusTest : TestFixture
         await this.AddToDatabase(
             new DbQuestEvent()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 QuestEventId = questEventId,
                 LastWeeklyResetTime = resetTime,
                 LastDailyResetTime = resetTime,
@@ -176,7 +176,7 @@ public class QuestBonusTest : TestFixture
         await this.AddToDatabase(
             new DbQuestEvent()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 QuestEventId = questEventId,
                 LastWeeklyResetTime = DateTimeOffset.UtcNow - TimeSpan.FromDays(7),
                 LastDailyResetTime = DateTimeOffset.UtcNow - TimeSpan.FromDays(7),

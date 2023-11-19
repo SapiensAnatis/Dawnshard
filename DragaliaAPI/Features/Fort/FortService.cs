@@ -382,7 +382,7 @@ public class FortService(
         DbFortBuild build =
             new()
             {
-                DeviceAccountId = playerIdentityService.AccountId,
+                ViewerId = playerIdentityService.ViewerId,
                 PlantId = fortPlantId,
                 Level = 0,
                 PositionX = positionX,

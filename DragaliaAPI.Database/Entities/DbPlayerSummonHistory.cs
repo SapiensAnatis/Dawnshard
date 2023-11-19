@@ -1,24 +1,17 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerSummonHistory")]
-[Index(nameof(DeviceAccountId))]
-public class DbPlayerSummonHistory : IDbHasAccountId
+public class DbPlayerSummonHistory : DbPlayerData
 {
     [Key]
     public long KeyId { get; set; }
-
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
 
     [Column("BannerId")]
     [Required]

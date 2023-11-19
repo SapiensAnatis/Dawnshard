@@ -31,7 +31,7 @@ public class SavefileUpdateService : ISavefileUpdateService
     {
         DbPlayer? player = await this.context
             .Players
-            .FindAsync(this.playerIdentityService.AccountId);
+            .FindAsync(this.playerIdentityService.ViewerId);
 
         if (player is null)
         {

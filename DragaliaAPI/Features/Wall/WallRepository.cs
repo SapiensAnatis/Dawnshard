@@ -25,7 +25,7 @@ public class WallRepository : IWallRepository
     public IQueryable<DbPlayerQuestWall> QuestWalls =>
         this.apiContext
             .PlayerQuestWalls
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public async Task InitializeWall()
     {
@@ -43,7 +43,7 @@ public class WallRepository : IWallRepository
                 .AddAsync(
                     new DbPlayerQuestWall()
                     {
-                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        ViewerId = this.playerIdentityService.ViewerId,
                         WallId = WallService.FlameWallId + element,
                         WallLevel = 0, // Indicates you have not completed level 1. Goes up to 80 upon completing level 80
                         IsStartNextLevel = false,

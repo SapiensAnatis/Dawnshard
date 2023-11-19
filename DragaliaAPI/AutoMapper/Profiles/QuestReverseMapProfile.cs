@@ -9,7 +9,7 @@ public class QuestReverseMapProfile : Profile
 {
     public QuestReverseMapProfile()
     {
-        this.AddGlobalIgnore("DeviceAccount");
+        this.AddGlobalIgnore("ViewerId");
         this.AddGlobalIgnore("Owner");
 
         this.CreateMap<QuestStoryList, DbPlayerStoryState>()

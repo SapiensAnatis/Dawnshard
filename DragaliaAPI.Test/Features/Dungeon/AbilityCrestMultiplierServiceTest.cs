@@ -35,13 +35,13 @@ public class AbilityCrestMultiplierServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = "id",
+                        ViewerId = 1,
                         AbilityCrestId = AbilityCrests.SistersDayOut,
                         LimitBreakCount = 4
                     },
                     new()
                     {
-                        DeviceAccountId = "id",
+                        ViewerId = 1,
                         AbilityCrestId = AbilityCrests.TheDragonSmiths,
                         LimitBreakCount = 4
                     }
@@ -98,13 +98,13 @@ public class AbilityCrestMultiplierServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = "id",
+                        ViewerId = 1,
                         AbilityCrestId = AbilityCrests.SistersDayOut,
                         LimitBreakCount = 4
                     },
                     new()
                     {
-                        DeviceAccountId = "id",
+                        ViewerId = 1,
                         AbilityCrestId = AbilityCrests.TotheExtreme,
                         LimitBreakCount = 4
                     }
@@ -146,13 +146,13 @@ public class AbilityCrestMultiplierServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = "id",
+                        ViewerId = 1,
                         AbilityCrestId = AbilityCrests.SistersDayOut,
                         LimitBreakCount = 4
                     },
                     new()
                     {
-                        DeviceAccountId = "id",
+                        ViewerId = 1,
                         AbilityCrestId = AbilityCrests.TotheExtreme,
                         LimitBreakCount = 4
                     }
@@ -199,13 +199,13 @@ public class AbilityCrestMultiplierServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = "id",
+                        ViewerId = 1,
                         AbilityCrestId = AbilityCrests.SistersDayOut,
                         LimitBreakCount = 0
                     },
                     new()
                     {
-                        DeviceAccountId = "id",
+                        ViewerId = 1,
                         AbilityCrestId = AbilityCrests.TheDragonSmiths,
                         LimitBreakCount = 0
                     },
@@ -247,7 +247,7 @@ public class AbilityCrestMultiplierServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = "id",
+                        ViewerId = 1,
                         AbilityCrestId = AbilityCrests.SistersDayOut,
                         LimitBreakCount = 4
                     }

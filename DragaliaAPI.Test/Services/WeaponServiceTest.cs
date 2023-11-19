@@ -386,7 +386,7 @@ public class WeaponServiceTest
         this.mockUserDataRepository.Setup(x => x.CheckCoin(80_000)).ReturnsAsync(true);
         this.mockWeaponRepository
             .Setup(x => x.FindAsync(WeaponBodies.InfernoApogee))
-            .ReturnsAsync(new DbWeaponBody() { DeviceAccountId = "id", LimitBreakCount = 0, });
+            .ReturnsAsync(new DbWeaponBody() { ViewerId = 1, LimitBreakCount = 0, });
 
         (
             await this.weaponService.TryBuildup(
@@ -426,7 +426,7 @@ public class WeaponServiceTest
             .ReturnsAsync(
                 new DbWeaponBody()
                 {
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     LimitBreakCount = 8,
                     WeaponBodyId = WeaponBodies.InfernoApogee
                 }
@@ -544,7 +544,7 @@ public class WeaponServiceTest
             .ReturnsAsync(true);
         this.mockWeaponRepository
             .Setup(x => x.FindAsync(WeaponBodies.Mjoelnir))
-            .ReturnsAsync(new DbWeaponBody() { DeviceAccountId = "id", BuildupCount = 0 });
+            .ReturnsAsync(new DbWeaponBody() { ViewerId = 1, BuildupCount = 0 });
 
         (
             await this.weaponService.TryBuildup(
@@ -579,7 +579,7 @@ public class WeaponServiceTest
             .ReturnsAsync(true);
         this.mockWeaponRepository
             .Setup(x => x.FindAsync(WeaponBodies.Mjoelnir))
-            .ReturnsAsync(new DbWeaponBody() { DeviceAccountId = "id", BuildupCount = 39 });
+            .ReturnsAsync(new DbWeaponBody() { ViewerId = 1, BuildupCount = 39 });
         this.mockInventoryRepository
             .Setup(
                 x =>
@@ -709,7 +709,7 @@ public class WeaponServiceTest
         this.mockUserDataRepository.Setup(x => x.CheckCoin(5_000_000)).ReturnsAsync(true);
         this.mockWeaponRepository
             .Setup(x => x.FindAsync(WeaponBodies.PrimalHex))
-            .ReturnsAsync(new DbWeaponBody() { DeviceAccountId = "id", LimitBreakCount = 0, });
+            .ReturnsAsync(new DbWeaponBody() { ViewerId = 1, LimitBreakCount = 0, });
 
         (
             await this.weaponService.TryBuildup(
@@ -751,7 +751,7 @@ public class WeaponServiceTest
         DbWeaponBody mockEntity =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 WeaponBodyId = WeaponBodies.PrimalHex,
                 LimitBreakCount = 8
             };
@@ -801,7 +801,7 @@ public class WeaponServiceTest
             .ReturnsAsync(
                 new DbWeaponBody()
                 {
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     LimitBreakCount = 4,
                     WeaponBodyId = WeaponBodies.PrimalHex
                 }
@@ -864,7 +864,7 @@ public class WeaponServiceTest
         DbWeaponBody mockEntity =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 LimitBreakCount = 2,
                 WeaponBodyId = id
             };
@@ -937,7 +937,7 @@ public class WeaponServiceTest
         DbWeaponBody mockEntity =
             new()
             {
-                DeviceAccountId = "id",
+                ViewerId = 1,
                 LimitBreakCount = 8,
                 LimitOverCount = 1,
                 WeaponBodyId = WeaponBodies.PrimalHex
@@ -997,7 +997,7 @@ public class WeaponServiceTest
             .ReturnsAsync(
                 new DbWeaponBody()
                 {
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     LimitBreakCount = 8,
                     LimitOverCount = 1,
                     WeaponBodyId = WeaponBodies.AmenoMurakumo

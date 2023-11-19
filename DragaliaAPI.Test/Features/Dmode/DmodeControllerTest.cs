@@ -79,7 +79,7 @@ public class DmodeControllerTest
                 {
                     new()
                     {
-                        DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                        ViewerId = UnitTestUtils.ViewerId,
                         StoryId = 1000,
                         StoryType = StoryTypes.DungeonMode,
                         State = StoryState.Read
@@ -144,7 +144,7 @@ public class DmodeControllerTest
                 {
                     new()
                     {
-                        DeviceAccountId = UnitTestUtils.DeviceAccountId,
+                        ViewerId = UnitTestUtils.ViewerId,
                         StoryId = 1000,
                         StoryType = StoryTypes.DungeonMode,
                         State = StoryState.Read

@@ -175,7 +175,11 @@ public class AbilityCrestController : DragaliaControllerBase
                     index < dbAbilityCrestSets.Count()
                     && dbAbilityCrestSets[index].AbilityCrestSetNo == x
                         ? dbAbilityCrestSets[index++]
-                        : new DbAbilityCrestSet("", x)
+                        : new DbAbilityCrestSet()
+                        {
+                            ViewerId = this.ViewerId,
+                            AbilityCrestSetNo = x
+                        }
             )
             .Select(mapper.Map<AbilityCrestSetList>)
             .ToArray();
@@ -222,7 +226,6 @@ public class AbilityCrestController : DragaliaControllerBase
             await abilityCrestRepository.AddOrUpdateSet(
                 new DbAbilityCrestSet()
                 {
-                    DeviceAccountId = "",
                     AbilityCrestSetNo = request.ability_crest_set_no,
                     AbilityCrestSetName = request.ability_crest_set_name
                 }

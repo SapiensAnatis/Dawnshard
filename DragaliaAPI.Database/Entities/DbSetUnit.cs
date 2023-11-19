@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerSetUnit")]
-[Index(nameof(DeviceAccountId))]
-public class DbSetUnit : DbUnitBase, IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(CharaId), nameof(UnitSetNo))]
+public class DbSetUnit : DbUnitBase, IDbPlayerData
 {
     /// <inheritdoc />
     public virtual DbPlayer? Owner { get; set; }
 
     [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
+    public long ViewerId { get; set; }
 
     [Required]
     public int UnitSetNo { get; set; }

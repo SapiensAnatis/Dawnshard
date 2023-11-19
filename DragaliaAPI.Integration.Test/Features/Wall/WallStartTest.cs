@@ -27,7 +27,7 @@ public class WallStartTest : TestFixture
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = wallId,
                     WallLevel = wallLevel
                 }
@@ -68,7 +68,7 @@ public class WallStartTest : TestFixture
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = wallId,
                     WallLevel = wallLevel
                 }

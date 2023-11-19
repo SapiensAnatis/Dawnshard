@@ -8,7 +8,7 @@ public class AbilityCrestSetRequestMapProfile : Profile
 {
     public AbilityCrestSetRequestMapProfile()
     {
-        this.AddGlobalIgnore("DeviceAccount");
+        this.AddGlobalIgnore("ViewerId");
         this.AddGlobalIgnore("Owner");
 
         this.CreateMap<AbilityCrestSetAbilityCrestSetRequest, DbAbilityCrestSet>()

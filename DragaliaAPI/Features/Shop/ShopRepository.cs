@@ -19,16 +19,16 @@ public class ShopRepository : IShopRepository
     public IQueryable<DbPlayerShopInfo> ShopInfos =>
         this.apiContext
             .PlayerShopInfos
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbPlayerShopPurchase> Purchases =>
         this.apiContext
             .PlayerPurchases
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public async Task<DbPlayerShopInfo> GetShopInfoAsync()
     {
-        return await this.apiContext.PlayerShopInfos.FindAsync(this.playerIdentityService.AccountId)
+        return await this.apiContext.PlayerShopInfos.FindAsync(this.playerIdentityService.ViewerId)
             ?? throw new NullReferenceException("No ShopInfo found");
     }
 
@@ -36,9 +36,7 @@ public class ShopRepository : IShopRepository
     {
         this.apiContext
             .PlayerShopInfos
-            .Add(
-                new DbPlayerShopInfo() { DeviceAccountId = this.playerIdentityService.AccountId, }
-            );
+            .Add(new DbPlayerShopInfo() { ViewerId = this.playerIdentityService.ViewerId, });
     }
 
     public async Task<int> GetDailySummonCountAsync()
@@ -76,7 +74,7 @@ public class ShopRepository : IShopRepository
                 .Add(
                     new DbPlayerShopPurchase()
                     {
-                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        ViewerId = this.playerIdentityService.ViewerId,
                         ShopType = type.ToPurchaseShopType(),
                         GoodsId = goodsId,
                         BuyCount = quantity,

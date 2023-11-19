@@ -1,21 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerFortDetail")]
-[Index(nameof(DeviceAccountId))]
-public class DbFortDetail : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId))]
+public class DbFortDetail : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [Key]
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
-
     [Column("CarpenterNum")]
     [Required]
     public int CarpenterNum { get; set; }

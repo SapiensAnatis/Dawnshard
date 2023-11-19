@@ -1,20 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[PrimaryKey(nameof(DeviceAccountId))]
-public class DbPlayerShopInfo : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId))]
+public class DbPlayerShopInfo : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    [Required]
-    public required string DeviceAccountId { get; set; }
-
     public DateTimeOffset LastSummonTime { get; set; } = DateTimeOffset.UnixEpoch;
     public int DailySummonCount { get; set; }
 }
