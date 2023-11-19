@@ -13,73 +13,6 @@ public class ApiContext : DbContext
     public ApiContext(DbContextOptions<ApiContext> options)
         : base(options) { }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        // TODO: put this into IEntityTypeConfiguration classes before this method gets huge
-        modelBuilder
-            .Entity<DbPlayerCharaData>()
-            .HasKey(key => new { key.DeviceAccountId, key.CharaId });
-
-        modelBuilder
-            .Entity<DbPlayerDragonReliability>()
-            .HasKey(key => new { key.DeviceAccountId, key.DragonId });
-
-        modelBuilder
-            .Entity<DbPlayerCurrency>()
-            .HasKey(key => new { key.DeviceAccountId, key.CurrencyType });
-
-        modelBuilder
-            .Entity<DbPlayerDragonGift>()
-            .HasKey(key => new { key.DeviceAccountId, key.DragonGiftId });
-
-        modelBuilder
-            .Entity<DbPlayerMaterial>()
-            .HasKey(key => new { key.DeviceAccountId, key.MaterialId });
-
-        modelBuilder
-            .Entity<DbPlayerStoryState>()
-            .HasKey(
-                key =>
-                    new
-                    {
-                        key.DeviceAccountId,
-                        key.StoryType,
-                        key.StoryId
-                    }
-            );
-
-        modelBuilder.Entity<DbParty>().HasKey(e => new { e.DeviceAccountId, e.PartyNo });
-
-        modelBuilder
-            .Entity<DbSetUnit>()
-            .HasKey(
-                key =>
-                    new
-                    {
-                        key.DeviceAccountId,
-                        key.CharaId,
-                        key.UnitSetNo
-                    }
-            );
-
-        modelBuilder
-            .Entity<DbPlayerBannerData>()
-            .HasKey(key => new { key.DeviceAccountId, key.SummonBannerId });
-
-        modelBuilder.Entity<DbQuest>().HasKey(e => new { e.DeviceAccountId, e.QuestId });
-
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-        if (this.Database.IsSqlite())
-        {
-            // SQLite doesn't support identity columns that aren't primary keys
-            modelBuilder
-                .Entity<DbPlayerUserData>()
-                .Property(x => x.ViewerId)
-                .HasDefaultValueSql("last_insert_rowid()");
-        }
-    }
-
 #pragma warning disable CS0618 // Type or member is obsolete
     public DbSet<DbDeviceAccount> DeviceAccounts { get; set; }
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -105,8 +38,6 @@ public class ApiContext : DbContext
     public DbSet<DbParty> PlayerParties { get; set; }
 
     public DbSet<DbPartyUnit> PlayerPartyUnits { get; set; }
-
-    public DbSet<DbPlayerCurrency> PlayerWallet { get; set; }
 
     public DbSet<DbPlayerMaterial> PlayerMaterials { get; set; }
 

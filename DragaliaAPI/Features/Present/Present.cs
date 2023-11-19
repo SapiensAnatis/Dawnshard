@@ -28,11 +28,11 @@ public record Present(
 
     public IEnumerable<int> MessageParamValues { get; init; } = Enumerable.Empty<int>();
 
-    public DbPlayerPresent ToEntity(string deviceAccountId)
+    public DbPlayerPresent ToEntity(long viewerId)
     {
         return new()
         {
-            DeviceAccountId = deviceAccountId,
+            ViewerId = viewerId,
             EntityType = this.EntityType,
             EntityId = this.EntityId,
             EntityQuantity = this.EntityQuantity,

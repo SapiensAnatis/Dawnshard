@@ -36,19 +36,17 @@ public class WeaponRepository : IWeaponRepository
     }
 
     public IQueryable<DbWeaponBody> WeaponBodies =>
-        this.apiContext
-            .PlayerWeapons
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+        this.apiContext.PlayerWeapons.Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbWeaponSkin> WeaponSkins =>
         this.apiContext
             .PlayerWeaponSkins
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbWeaponPassiveAbility> WeaponPassiveAbilities =>
         this.apiContext
             .PlayerPassiveAbilities
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(WeaponBodies id)
     {
@@ -65,7 +63,7 @@ public class WeaponRepository : IWeaponRepository
             .PlayerPassiveAbilities
             .Where(
                 x =>
-                    x.DeviceAccountId == this.playerIdentityService.AccountId
+                    x.ViewerId == this.playerIdentityService.ViewerId
                     && searchIds.Contains(x.WeaponPassiveAbilityId)
             );
     }
@@ -79,7 +77,7 @@ public class WeaponRepository : IWeaponRepository
             .AddAsync(
                 new DbWeaponBody()
                 {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    ViewerId = this.playerIdentityService.ViewerId,
                     WeaponBodyId = weaponBodyId
                 }
             );
@@ -92,7 +90,7 @@ public class WeaponRepository : IWeaponRepository
         if (
             await this.apiContext
                 .PlayerWeaponSkins
-                .FindAsync(this.playerIdentityService.AccountId, weaponSkinId)
+                .FindAsync(this.playerIdentityService.ViewerId, weaponSkinId)
             is not null
         )
         {
@@ -105,7 +103,7 @@ public class WeaponRepository : IWeaponRepository
             .AddAsync(
                 new DbWeaponSkin()
                 {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    ViewerId = this.playerIdentityService.ViewerId,
                     WeaponSkinId = weaponSkinId,
                     GetTime = DateTimeOffset.UtcNow
                 }
@@ -125,7 +123,7 @@ public class WeaponRepository : IWeaponRepository
     }
 
     public async Task<DbWeaponBody?> FindAsync(WeaponBodies id) =>
-        await this.apiContext.PlayerWeapons.FindAsync(this.playerIdentityService.AccountId, id);
+        await this.apiContext.PlayerWeapons.FindAsync(this.playerIdentityService.ViewerId, id);
 
     public async Task AddPassiveAbility(WeaponBodies id, WeaponPassiveAbility passiveAbility)
     {
@@ -153,7 +151,7 @@ public class WeaponRepository : IWeaponRepository
             .AddAsync(
                 new()
                 {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    ViewerId = this.playerIdentityService.ViewerId,
                     WeaponPassiveAbilityId = passiveAbility.Id
                 }
             );

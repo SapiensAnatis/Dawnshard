@@ -53,7 +53,7 @@ public class CastleStoryTest : TestFixture
         this.ApiContext.Add(
             new DbPlayerStoryState()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 State = StoryState.Read,
                 StoryId = 2,
                 StoryType = StoryTypes.Castle
@@ -80,7 +80,7 @@ public class CastleStoryTest : TestFixture
         int oldCrystal = await this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.Crystal)
             .SingleAsync();
 
@@ -94,7 +94,7 @@ public class CastleStoryTest : TestFixture
         int newCrystal = await this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.Crystal)
             .SingleAsync();
 
@@ -102,14 +102,14 @@ public class CastleStoryTest : TestFixture
 
         IEnumerable<DbPlayerStoryState> stories = this.ApiContext
             .PlayerStoryState
-            .Where(x => x.DeviceAccountId == DeviceAccountId);
+            .Where(x => x.ViewerId == ViewerId);
 
         stories
             .Should()
             .ContainEquivalentOf(
                 new DbPlayerStoryState()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     State = StoryState.Read,
                     StoryId = 3,
                     StoryType = StoryTypes.Castle

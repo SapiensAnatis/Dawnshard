@@ -22,14 +22,12 @@ public class WallRecordTest : TestFixture
         DbPlayerUserData oldUserData = this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId);
+            .First(x => x.ViewerId == ViewerId);
 
         DbPlayerMaterial oldPlayerGoldCrystals = this.ApiContext
             .PlayerMaterials
             .AsNoTracking()
-            .First(
-                x => x.DeviceAccountId == DeviceAccountId && x.MaterialId == Materials.GoldCrystal
-            );
+            .First(x => x.ViewerId == ViewerId && x.MaterialId == Materials.GoldCrystal);
 
         int wallId = 216010001;
         int wallLevel = 20;
@@ -51,7 +49,7 @@ public class WallRecordTest : TestFixture
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = wallId,
                     WallLevel = wallLevel
                 }
@@ -156,7 +154,7 @@ public class WallRecordTest : TestFixture
             {
                 new()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     WallId = wallId,
                     WallLevel = wallLevel
                 }

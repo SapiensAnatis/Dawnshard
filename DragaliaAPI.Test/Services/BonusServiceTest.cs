@@ -67,7 +67,7 @@ public class BonusServiceTest
                         x =>
                             new DbFortBuild()
                             {
-                                DeviceAccountId = DeviceAccountId,
+                                ViewerId = ViewerId,
                                 PlantId = x.plant_id,
                                 Level = x.level
                             }
@@ -84,7 +84,7 @@ public class BonusServiceTest
                         x =>
                             new DbWeaponBody()
                             {
-                                DeviceAccountId = DeviceAccountId,
+                                ViewerId = ViewerId,
                                 WeaponBodyId = x.weapon_body_id,
                                 FortPassiveCharaWeaponBuildupCount =
                                     x.fort_passive_chara_weapon_buildup_count
@@ -118,7 +118,7 @@ public class BonusServiceTest
                 {
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         PlantId = FortPlants.ArctosMonument,
                         Level = 10,
                     }

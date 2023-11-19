@@ -72,7 +72,7 @@ public class MissionControllerTest
             .Returns(
                 new List<DbPlayerUserData>()
                 {
-                    new() { DeviceAccountId = "id", ActiveMemoryEventId = 20816 }
+                    new() { ViewerId = 1, ActiveMemoryEventId = 20816 }
                 }
                     .AsQueryable()
                     .BuildMock()
@@ -115,7 +115,7 @@ public class MissionControllerTest
                 {
                     new()
                     {
-                        DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                        ViewerId = IdentityTestUtils.ViewerId,
                         Type = MissionType.Drill,
                         Id = 500,
                         State = MissionState.InProgress,
@@ -157,7 +157,7 @@ public class MissionControllerTest
                 {
                     new()
                     {
-                        DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                        ViewerId = IdentityTestUtils.ViewerId,
                         Id = 5000,
                         State = MissionState.Completed,
                         Type = MissionType.Drill,
@@ -195,7 +195,7 @@ public class MissionControllerTest
         DbPlayerMission fakeMission =
             new()
             {
-                DeviceAccountId = IdentityTestUtils.DeviceAccountId,
+                ViewerId = IdentityTestUtils.ViewerId,
                 Id = 5000,
                 State = MissionState.Completed,
                 Type = MissionType.MainStory,

@@ -29,8 +29,8 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.AddRangeToDatabase(
             new List<DbQuest>()
             {
-                new() { DeviceAccountId = DeviceAccountId, QuestId = 1 },
-                new() { DeviceAccountId = "other id", QuestId = 2 }
+                new() { ViewerId = ViewerId, QuestId = 1 },
+                new() { ViewerId = ViewerId + 1, QuestId = 2 }
             }
         );
 
@@ -40,7 +40,7 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
             .BeEquivalentTo(
                 new List<DbQuest>()
                 {
-                    new() { DeviceAccountId = DeviceAccountId, QuestId = 1 },
+                    new() { ViewerId = ViewerId, QuestId = 1 },
                 }
             )
             .And

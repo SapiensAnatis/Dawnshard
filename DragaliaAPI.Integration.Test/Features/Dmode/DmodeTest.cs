@@ -33,7 +33,7 @@ public class DmodeTest : TestFixture
         int oldWyrmite = this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .Single(x => x.DeviceAccountId == DeviceAccountId)
+            .Single(x => x.ViewerId == ViewerId)
             .Crystal;
 
         DragaliaResponse<DmodeReadStoryData> resp = await Client.PostMsgpack<DmodeReadStoryData>(
@@ -130,7 +130,7 @@ public class DmodeTest : TestFixture
             .ContainEquivalentOf(
                 new DbPlayerDmodeServitorPassive()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PassiveId = DmodeServitorPassiveType.ResistNatural,
                     Level = 2
                 }
@@ -142,7 +142,7 @@ public class DmodeTest : TestFixture
             .ContainEquivalentOf(
                 new DbPlayerDmodeServitorPassive()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PassiveId = DmodeServitorPassiveType.ResistUndead,
                     Level = 10
                 }
@@ -154,7 +154,7 @@ public class DmodeTest : TestFixture
             .ContainEquivalentOf(
                 new DbPlayerDmodeServitorPassive()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     PassiveId = DmodeServitorPassiveType.BurstDamage,
                     Level = 2
                 }

@@ -38,8 +38,8 @@ public class SavefileController : ControllerBase
     {
         string accountId = await LookupAccountId(viewerId);
         using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-            accountId,
-            viewerId
+            viewerId,
+            accountId
         );
 
         await this.savefileService.ThreadSafeImport(loadIndexResponse.data);
@@ -52,26 +52,12 @@ public class SavefileController : ControllerBase
     {
         string accountId = await LookupAccountId(viewerId);
         using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-            accountId,
-            viewerId
+            viewerId,
+            accountId
         );
 
         DragaliaResponse<LoadIndexData> result = new(await loadService.BuildIndexData());
         return Ok(result);
-    }
-
-    [HttpDelete("delete/{viewerId:long}")]
-    public async Task<IActionResult> Delete(long viewerId)
-    {
-        string accountId = await LookupAccountId(viewerId);
-        using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-            accountId,
-            viewerId
-        );
-
-        await this.savefileService.Reset();
-
-        return this.NoContent();
     }
 
     private async Task<string> LookupAccountId(long viewerId)
@@ -79,7 +65,7 @@ public class SavefileController : ControllerBase
         // Note that unlike in AuthService, a savefile must already exist here, hence no OrDefault
         return await this.userDataRepository
             .GetViewerData(viewerId)
-            .Select(x => x.DeviceAccountId)
+            .Select(x => x.Owner!.AccountId)
             .SingleAsync();
     }
 }

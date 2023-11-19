@@ -50,10 +50,7 @@ public class SavefileImportTest : TestFixture
     public async Task Import_LoadIndexReturnsImportedSavefile()
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
-        long viewerId = this.ApiContext
-            .PlayerUserData
-            .Single(x => x.DeviceAccountId == DeviceAccountId)
-            .ViewerId;
+        long viewerId = this.ApiContext.PlayerUserData.Single(x => x.ViewerId == ViewerId).ViewerId;
 
         LoadIndexData savefile = JsonSerializer
             .Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, ApiJsonOptions.Instance)!
@@ -149,24 +146,21 @@ public class SavefileImportTest : TestFixture
     [Fact]
     public async Task Import_PropertiesMappedCorrectly()
     {
-        long viewerId = this.ApiContext
-            .PlayerUserData
-            .Single(x => x.DeviceAccountId == DeviceAccountId)
-            .ViewerId;
+        long viewerId = this.ApiContext.PlayerUserData.Single(x => x.ViewerId == ViewerId).ViewerId;
 
         HttpContent content = PrepareSavefileRequest();
         await this.Client.PostAsync($"savefile/import/{viewerId}", content);
 
         this.ApiContext
             .PlayerStoryState
-            .Single(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 110313011)
+            .Single(x => x.ViewerId == ViewerId && x.StoryId == 110313011)
             .StoryType
             .Should()
             .Be(StoryTypes.Chara);
 
         this.ApiContext
             .PlayerStoryState
-            .Single(x => x.DeviceAccountId == DeviceAccountId && x.StoryId == 210091011)
+            .Single(x => x.ViewerId == ViewerId && x.StoryId == 210091011)
             .StoryType
             .Should()
             .Be(StoryTypes.Dragon);
@@ -175,10 +169,7 @@ public class SavefileImportTest : TestFixture
     [Fact]
     public async Task Import_IsIdempotent()
     {
-        long viewerId = this.ApiContext
-            .PlayerUserData
-            .Single(x => x.DeviceAccountId == DeviceAccountId)
-            .ViewerId;
+        long viewerId = this.ApiContext.PlayerUserData.Single(x => x.ViewerId == ViewerId).ViewerId;
 
         HttpContent content = PrepareSavefileRequest();
 

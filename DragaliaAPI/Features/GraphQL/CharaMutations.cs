@@ -7,6 +7,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using EntityGraphQL.Schema;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DragaliaAPI.Features.GraphQL;
 
@@ -45,18 +46,18 @@ public class CharaMutations : MutationBase
         this.logger.LogInformation("Resetting character {chara}", args.CharaId);
 
         player.CharaList.Remove(charaData);
-        player.CharaList.Add(new DbPlayerCharaData(player.AccountId, args.CharaId));
+        player.CharaList.Add(new DbPlayerCharaData(player.ViewerId, args.CharaId));
         db.SaveChanges();
 
         return (ctx) =>
             ctx.PlayerCharaData.First(
-                x => x.DeviceAccountId == player.AccountId && x.CharaId == args.CharaId
+                x => x.ViewerId == player.ViewerId && x.CharaId == args.CharaId
             );
     }
 
     [GraphQLArguments]
     public record ResetCharacterArgs(
-        long ViewerId,
+        int ViewerId,
         [property: JsonConverter(typeof(JsonStringEnumConverter))] Charas CharaId
     );
 }

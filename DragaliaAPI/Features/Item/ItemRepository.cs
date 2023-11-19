@@ -9,11 +9,11 @@ public class ItemRepository(ApiContext apiContext, IPlayerIdentityService player
     : IItemRepository
 {
     public IQueryable<DbPlayerUseItem> Items =>
-        apiContext.PlayerUseItems.Where(x => x.DeviceAccountId == playerIdentityService.AccountId);
+        apiContext.PlayerUseItems.Where(x => x.ViewerId == playerIdentityService.ViewerId);
 
     private async Task<DbPlayerUseItem?> GetItem(UseItem item)
     {
-        return await apiContext.PlayerUseItems.FindAsync(playerIdentityService.AccountId, item);
+        return await apiContext.PlayerUseItems.FindAsync(playerIdentityService.ViewerId, item);
     }
 
     public async Task AddItemQuantityAsync(UseItem id, int quantity)
@@ -27,13 +27,7 @@ public class ItemRepository(ApiContext apiContext, IPlayerIdentityService player
             await GetItem(id)
             ?? apiContext
                 .PlayerUseItems
-                .Add(
-                    new DbPlayerUseItem
-                    {
-                        DeviceAccountId = playerIdentityService.AccountId,
-                        ItemId = id
-                    }
-                )
+                .Add(new DbPlayerUseItem { ViewerId = playerIdentityService.ViewerId, ItemId = id })
                 .Entity;
 
         item.Quantity += quantity;
@@ -41,6 +35,6 @@ public class ItemRepository(ApiContext apiContext, IPlayerIdentityService player
 
     public async Task<DbPlayerUseItem?> GetItemAsync(UseItem id)
     {
-        return await apiContext.PlayerUseItems.FindAsync(playerIdentityService.AccountId, id);
+        return await apiContext.PlayerUseItems.FindAsync(playerIdentityService.ViewerId, id);
     }
 }

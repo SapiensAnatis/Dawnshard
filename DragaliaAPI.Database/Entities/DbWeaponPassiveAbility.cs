@@ -1,16 +1,11 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[PrimaryKey(nameof(DeviceAccountId), nameof(WeaponPassiveAbilityId))]
-[Index(nameof(DeviceAccountId))]
-public class DbWeaponPassiveAbility : IDbHasAccountId
+[PrimaryKey(nameof(ViewerId), nameof(WeaponPassiveAbilityId))]
+public class DbWeaponPassiveAbility : DbPlayerData
 {
-    public DbPlayer? Owner { get; set; }
-
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
-
     public required int WeaponPassiveAbilityId { get; set; }
 }

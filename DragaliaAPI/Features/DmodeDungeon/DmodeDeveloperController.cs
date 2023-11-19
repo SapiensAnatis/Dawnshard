@@ -23,7 +23,7 @@ public class DmodeDeveloperController(
         if (accountId is null)
             return this.NotFound("Player not found");
 
-        using IDisposable ctx = playerIdentityService.StartUserImpersonation(accountId, viewerId);
+        using IDisposable ctx = playerIdentityService.StartUserImpersonation(viewerId, accountId);
 
         try
         {
@@ -43,7 +43,7 @@ public class DmodeDeveloperController(
         if (accountId is null)
             return this.NotFound("Player not found");
 
-        using IDisposable ctx = playerIdentityService.StartUserImpersonation(accountId, viewerId);
+        using IDisposable ctx = playerIdentityService.StartUserImpersonation(viewerId, accountId);
 
         try
         {
@@ -62,7 +62,7 @@ public class DmodeDeveloperController(
         if (accountId is null)
             return this.NotFound("Player not found");
 
-        using IDisposable ctx = playerIdentityService.StartUserImpersonation(accountId, viewerId);
+        using IDisposable ctx = playerIdentityService.StartUserImpersonation(viewerId, accountId);
         try
         {
             return this.Ok(await dmodeCacheService.LoadIngameInfo());
@@ -77,7 +77,7 @@ public class DmodeDeveloperController(
     {
         return userDataRepository
             .GetViewerData(viewerId)
-            .Select(x => x.DeviceAccountId)
+            .Select(x => x.Owner!.AccountId)
             .SingleOrDefaultAsync();
     }
 }

@@ -23,7 +23,7 @@ public class DungeonSkipTest : TestFixture
         await this.AddToDatabase(
             new DbQuest()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 QuestId = questId,
                 State = 3
             }
@@ -32,7 +32,7 @@ public class DungeonSkipTest : TestFixture
         DbPlayerUserData oldUserData = this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId);
+            .First(x => x.ViewerId == ViewerId);
 
         DragaliaResponse<DungeonSkipStartData> response =
             await this.Client.PostMsgpack<DungeonSkipStartData>(
@@ -110,7 +110,7 @@ public class DungeonSkipTest : TestFixture
         await this.AddToDatabase(
             new DbQuest()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 QuestId = questId,
                 State = 3
             }
@@ -119,7 +119,7 @@ public class DungeonSkipTest : TestFixture
         DbPlayerUserData oldUserData = this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId);
+            .First(x => x.ViewerId == ViewerId);
 
         DragaliaResponse<DungeonSkipStartAssignUnitData> response =
             await this.Client.PostMsgpack<DungeonSkipStartAssignUnitData>(
@@ -204,7 +204,7 @@ public class DungeonSkipTest : TestFixture
         DbPlayerUserData oldUserData = this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId);
+            .First(x => x.ViewerId == ViewerId);
 
         DragaliaResponse<DungeonSkipStartMultipleQuestData> response =
             await this.Client.PostMsgpack<DungeonSkipStartMultipleQuestData>(
@@ -301,7 +301,7 @@ public class DungeonSkipTest : TestFixture
         await this.AddToDatabase(
             new DbQuestEvent()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 QuestEventId = questEventId,
                 LastWeeklyResetTime = resetTime,
                 LastDailyResetTime = resetTime,
@@ -313,7 +313,7 @@ public class DungeonSkipTest : TestFixture
         DbPlayerUserData oldUserData = this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .First(x => x.DeviceAccountId == DeviceAccountId);
+            .First(x => x.ViewerId == ViewerId);
 
         DragaliaResponse<DungeonSkipStartData> response =
             await this.Client.PostMsgpack<DungeonSkipStartData>(

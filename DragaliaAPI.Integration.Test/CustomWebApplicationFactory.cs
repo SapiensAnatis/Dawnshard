@@ -62,7 +62,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
             services.RemoveAll<IDistributedCache>();
 
             services.AddDbContext<ApiContext>(
-                opts => opts.UseNpgsql(ConnectionStringBuilder.ConnectionString)
+                opts =>
+                    opts.UseNpgsql(ConnectionStringBuilder.ConnectionString)
+                        .EnableDetailedErrors()
+                        .EnableSensitiveDataLogging()
             );
             services.AddStackExchangeRedisCache(options =>
             {
@@ -86,13 +89,19 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
     private async Task SeedCache()
     {
         IDistributedCache cache = this.Services.GetRequiredService<IDistributedCache>();
+        ApiContext ctx = this.Services.GetRequiredService<ApiContext>();
+
+        long viewerId = ctx.Players
+            .Where(x => x.AccountId == TestFixture.DeviceAccountId)
+            .Select(x => x.ViewerId)
+            .First();
 
         Session session =
             new(
                 TestFixture.SessionId,
                 "id_token",
                 TestFixture.DeviceAccountId,
-                12,
+                viewerId,
                 DateTimeOffset.MaxValue
             );
         await cache.SetStringAsync(
@@ -129,11 +138,9 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         IPlayerIdentityService playerIdentityService =
             this.Services.GetRequiredService<IPlayerIdentityService>();
 
-        using IDisposable ctx = playerIdentityService.StartUserImpersonation(
-            TestFixture.DeviceAccountId
-        );
+        DbPlayer newPlayer = await savefileService.Create(TestFixture.DeviceAccountId);
 
-        await savefileService.Create();
+        playerIdentityService.StartUserImpersonation(newPlayer.ViewerId, newPlayer.AccountId);
 
         apiContext
             .PlayerMaterials
@@ -143,7 +150,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                         x =>
                             new DbPlayerMaterial()
                             {
-                                DeviceAccountId = TestFixture.DeviceAccountId,
+                                ViewerId = newPlayer.ViewerId,
                                 MaterialId = x,
                                 Quantity = 99999999
                             }
@@ -158,7 +165,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                         x =>
                             new DbPlayerDragonGift()
                             {
-                                DeviceAccountId = TestFixture.DeviceAccountId,
+                                ViewerId = newPlayer.ViewerId,
                                 DragonGiftId = x,
                                 Quantity = x < DragonGifts.FourLeafClover ? 1 : 999
                             }
@@ -173,14 +180,14 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
             .Add(
                 new DbFortBuild()
                 {
-                    DeviceAccountId = TestFixture.DeviceAccountId,
+                    ViewerId = newPlayer.ViewerId,
                     PlantId = FortPlants.Smithy,
                     Level = 9
                 }
             );
 
         DbPlayerUserData userData = (
-            await apiContext.PlayerUserData.FindAsync(TestFixture.DeviceAccountId)
+            await apiContext.PlayerUserData.FindAsync(newPlayer.ViewerId)
         )!;
 
         userData.Coin = 100_000_000;
@@ -196,7 +203,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
             .Add(
                 new DbPlayerDmodeInfo
                 {
-                    DeviceAccountId = TestFixture.DeviceAccountId,
+                    ViewerId = newPlayer.ViewerId,
                     Point1Quantity = 100_000_000,
                     Point2Quantity = 100_000_000
                 }
@@ -204,11 +211,11 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 
         apiContext
             .PlayerDmodeDungeons
-            .Add(new DbPlayerDmodeDungeon { DeviceAccountId = TestFixture.DeviceAccountId });
+            .Add(new DbPlayerDmodeDungeon { ViewerId = newPlayer.ViewerId });
 
         apiContext
             .PlayerDmodeExpeditions
-            .Add(new DbPlayerDmodeExpedition { DeviceAccountId = TestFixture.DeviceAccountId });
+            .Add(new DbPlayerDmodeExpedition { ViewerId = newPlayer.ViewerId });
 
         await apiContext.SaveChangesAsync();
     }

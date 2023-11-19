@@ -133,7 +133,7 @@ public class MissionTest : TestFixture
         await this.AddToDatabase(
             new DbAbilityCrest()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 AbilityCrestId = AbilityCrests.Aromatherapy,
                 LimitBreakCount = 4,
             }
@@ -189,7 +189,7 @@ public class MissionTest : TestFixture
             {
                 Id = 10220101,
                 Type = MissionType.MemoryEvent,
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 Progress = 1,
                 State = MissionState.Completed,
             }

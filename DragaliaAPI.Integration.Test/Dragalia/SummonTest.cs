@@ -43,7 +43,7 @@ public class SummonTest : TestFixture
         DbPlayerSummonHistory historyEntry =
             new()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 SummonId = 1,
                 SummonExecType = SummonExecTypes.DailyDeal,
                 ExecDate = DateTimeOffset.UtcNow,
@@ -109,7 +109,7 @@ public class SummonTest : TestFixture
     {
         DbPlayerUserData userData = await this.ApiContext
             .PlayerUserData
-            .SingleAsync(x => x.DeviceAccountId == DeviceAccountId);
+            .SingleAsync(x => x.ViewerId == ViewerId);
 
         await this.ApiContext.Entry(userData).ReloadAsync();
 
@@ -138,7 +138,7 @@ public class SummonTest : TestFixture
     {
         DbPlayerUserData userData = await this.ApiContext
             .PlayerUserData
-            .SingleAsync(x => x.DeviceAccountId == DeviceAccountId);
+            .SingleAsync(x => x.ViewerId == ViewerId);
 
         SummonRequestData response = (
             await this.Client.PostMsgpack<SummonRequestData>(
@@ -167,7 +167,7 @@ public class SummonTest : TestFixture
         {
             List<DbPlayerDragonData> dragonData = await this.ApiContext
                 .PlayerDragonData
-                .Where(x => x.DeviceAccountId == DeviceAccountId)
+                .Where(x => x.ViewerId == ViewerId)
                 .ToListAsync();
 
             dragonData.Where(x => (int)x.DragonId == reward.id).Should().NotBeEmpty();
@@ -176,7 +176,7 @@ public class SummonTest : TestFixture
         {
             List<DbPlayerCharaData> charaData = await this.ApiContext
                 .PlayerCharaData
-                .Where(x => x.DeviceAccountId == DeviceAccountId)
+                .Where(x => x.ViewerId == ViewerId)
                 .ToListAsync();
 
             charaData.Where(x => (int)x.CharaId == reward.id).Should().NotBeEmpty();

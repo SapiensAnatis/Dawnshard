@@ -25,12 +25,12 @@ public class AbilityCrestRepository : IAbilityCrestRepository
     public IQueryable<DbAbilityCrest> AbilityCrests =>
         this.apiContext
             .PlayerAbilityCrests
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbAbilityCrestSet> AbilityCrestSets =>
         this.apiContext
             .PlayerAbilityCrestSets
-            .Where(x => x.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public async Task Add(
         AbilityCrests abilityCrestId,
@@ -47,10 +47,11 @@ public class AbilityCrestRepository : IAbilityCrestRepository
             return;
         }
 
-        DbAbilityCrest entity = new DbAbilityCrest(
-            this.playerIdentityService.AccountId,
-            abilityCrestId
-        );
+        DbAbilityCrest entity = new DbAbilityCrest()
+        {
+            ViewerId = this.playerIdentityService.ViewerId,
+            AbilityCrestId = abilityCrestId
+        };
 
         if (limitBreakCount is not null)
             entity.LimitBreakCount = limitBreakCount.Value;
@@ -65,11 +66,11 @@ public class AbilityCrestRepository : IAbilityCrestRepository
     public async Task<DbAbilityCrest?> FindAsync(AbilityCrests abilityCrestId) =>
         await this.apiContext
             .PlayerAbilityCrests
-            .FindAsync(this.playerIdentityService.AccountId, abilityCrestId);
+            .FindAsync(this.playerIdentityService.ViewerId, abilityCrestId);
 
     public async Task AddOrUpdateSet(DbAbilityCrestSet abilityCrestSet)
     {
-        abilityCrestSet.DeviceAccountId = this.playerIdentityService.AccountId;
+        abilityCrestSet.ViewerId = this.playerIdentityService.ViewerId;
         DbAbilityCrestSet? dbAbilityCrestSet = await this.FindSetAsync(
             abilityCrestSet.AbilityCrestSetNo
         );
@@ -91,5 +92,5 @@ public class AbilityCrestRepository : IAbilityCrestRepository
     public async Task<DbAbilityCrestSet?> FindSetAsync(int abilityCrestSetNo) =>
         await this.apiContext
             .PlayerAbilityCrestSets
-            .FindAsync(this.playerIdentityService.AccountId, abilityCrestSetNo);
+            .FindAsync(this.playerIdentityService.ViewerId, abilityCrestSetNo);
 }

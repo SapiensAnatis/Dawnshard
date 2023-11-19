@@ -65,13 +65,13 @@ public class BlazorIdentityService : IBlazorIdentityService
     public string AccountId =>
         this.accountId ?? throw new InvalidOperationException("User was not authenticated!");
 
-    public long? ViewerId =>
+    public long ViewerId =>
         this.viewerId ?? throw new InvalidOperationException("User was not authenticated!");
 
     public string UserDataName =>
         this.userIdName ?? throw new InvalidOperationException("User was not authenticated!");
 
-    public IDisposable StartUserImpersonation(string account, long? viewer = null)
+    public IDisposable StartUserImpersonation(long? viewer = null, string? account = null)
     {
         throw new NotImplementedException();
     }

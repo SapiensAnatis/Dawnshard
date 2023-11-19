@@ -58,7 +58,6 @@ public class DragonServiceTest
     {
         SetupReliabilityMock(
             out List<DbPlayerDragonGift> gifts,
-            out DbPlayerCurrency rupies,
             out DbPlayerMaterial garudaEssence,
             out DbPlayerUserData userData,
             out List<DbPlayerDragonReliability> dragonRels,
@@ -82,14 +81,13 @@ public class DragonServiceTest
     {
         SetupReliabilityMock(
             out List<DbPlayerDragonGift> gifts,
-            out DbPlayerCurrency rupies,
             out DbPlayerMaterial garudaEssence,
             out DbPlayerUserData userData,
             out List<DbPlayerDragonReliability> dragonRels,
             out List<DbPlayerStoryState> stories
         );
 
-        dragonRels.Add(DbPlayerDragonReliabilityFactory.Create(DeviceAccountId, Dragons.Garuda));
+        dragonRels.Add(DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.Garuda));
 
         mockMissionProgressionService.Setup(
             x =>
@@ -161,7 +159,6 @@ public class DragonServiceTest
     {
         SetupReliabilityMock(
             out List<DbPlayerDragonGift> gifts,
-            out DbPlayerCurrency rupies,
             out DbPlayerMaterial garudaEssence,
             out DbPlayerUserData userData,
             out List<DbPlayerDragonReliability> dragonRels,
@@ -169,7 +166,7 @@ public class DragonServiceTest
         );
 
         DbPlayerDragonReliability dd = DbPlayerDragonReliabilityFactory.Create(
-            DeviceAccountId,
+            ViewerId,
             Dragons.Garuda
         );
         dd.Level = 30;
@@ -228,14 +225,13 @@ public class DragonServiceTest
     {
         SetupReliabilityMock(
             out List<DbPlayerDragonGift> gifts,
-            out DbPlayerCurrency rupies,
             out DbPlayerMaterial garudaEssence,
             out DbPlayerUserData userData,
             out List<DbPlayerDragonReliability> dragonRels,
             out List<DbPlayerStoryState> stories
         );
 
-        dragonRels.Add(DbPlayerDragonReliabilityFactory.Create(DeviceAccountId, dragon));
+        dragonRels.Add(DbPlayerDragonReliabilityFactory.Create(ViewerId, dragon));
 
         UnitElement element = MasterAsset.DragonData[dragon].ElementalType;
 
@@ -273,10 +269,7 @@ public class DragonServiceTest
     [Fact]
     public async Task DoBuildup_AddsAugments()
     {
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
-            DeviceAccountId,
-            Dragons.Garuda
-        );
+        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Garuda);
         dragonData.DragonKeyId = 1;
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
@@ -287,7 +280,7 @@ public class DragonServiceTest
 
         DbPlayerMaterial mat = new DbPlayerMaterial()
         {
-            DeviceAccountId = DeviceAccountId,
+            ViewerId = ViewerId,
             MaterialId = Materials.AmplifyingDragonscale,
             Quantity = 100
         };
@@ -333,7 +326,7 @@ public class DragonServiceTest
         byte expectedLvl
     )
     {
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(DeviceAccountId, dragon);
+        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(ViewerId, dragon);
         dragonData.DragonKeyId = 1;
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
@@ -350,7 +343,7 @@ public class DragonServiceTest
 
         DbPlayerMaterial mat = new DbPlayerMaterial()
         {
-            DeviceAccountId = DeviceAccountId,
+            ViewerId = ViewerId,
             MaterialId = upgradeMat,
             Quantity = usedQuantity
         };
@@ -389,10 +382,7 @@ public class DragonServiceTest
     [Fact]
     public async Task DoDragonResetPlusCount_ResetsPlusCount()
     {
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
-            DeviceAccountId,
-            Dragons.Garuda
-        );
+        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Garuda);
         dragonData.DragonKeyId = 1;
         dragonData.AttackPlusCount = 50;
 
@@ -404,7 +394,7 @@ public class DragonServiceTest
 
         DbPlayerMaterial mat = new DbPlayerMaterial()
         {
-            DeviceAccountId = DeviceAccountId,
+            ViewerId = ViewerId,
             MaterialId = Materials.AmplifyingDragonscale,
             Quantity = 0
         };
@@ -472,16 +462,13 @@ public class DragonServiceTest
                 : Materials.GarudasEssence;
 
         DbPlayerDragonData dragonDataSacrifice = DbPlayerDragonDataFactory.Create(
-            DeviceAccountId,
+            ViewerId,
             Dragons.Garuda
         );
         dragonDataSacrifice.DragonKeyId = 2;
         dragonDataSacrifice.LimitBreakCount = 0;
 
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
-            DeviceAccountId,
-            Dragons.Garuda
-        );
+        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Garuda);
         dragonData.DragonKeyId = 1;
         dragonData.LimitBreakCount = (byte)(limitBreakNr - 1);
 
@@ -500,7 +487,7 @@ public class DragonServiceTest
 
         DbPlayerMaterial mat = new DbPlayerMaterial()
         {
-            DeviceAccountId = DeviceAccountId,
+            ViewerId = ViewerId,
             MaterialId = targetMat,
             Quantity = 500
         };
@@ -545,10 +532,7 @@ public class DragonServiceTest
     [Fact]
     public async Task DoDragonLock_Locks()
     {
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
-            DeviceAccountId,
-            Dragons.Garuda
-        );
+        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Garuda);
         dragonData.DragonKeyId = 1;
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
@@ -571,7 +555,7 @@ public class DragonServiceTest
     {
         DbPlayerUserData userData = new DbPlayerUserData()
         {
-            DeviceAccountId = DeviceAccountId,
+            ViewerId = ViewerId,
             Coin = 0,
             DewPoint = 0
         };
@@ -582,10 +566,7 @@ public class DragonServiceTest
 
         mockUserDataRepository.SetupGet(x => x.UserData).Returns(userDataList);
 
-        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(
-            DeviceAccountId,
-            Dragons.Garuda
-        );
+        DbPlayerDragonData dragonData = DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Garuda);
         dragonData.DragonKeyId = 1;
 
         List<DbPlayerDragonData> dragonDataList = new List<DbPlayerDragonData>() { dragonData };
@@ -611,7 +592,6 @@ public class DragonServiceTest
 
     private void SetupReliabilityMock(
         out List<DbPlayerDragonGift> dbPlayerDragonGifts,
-        out DbPlayerCurrency userRupies,
         out DbPlayerMaterial garudaEssence,
         out DbPlayerUserData userData,
         out List<DbPlayerDragonReliability> userDragonRels,
@@ -625,7 +605,7 @@ public class DragonServiceTest
             dbPlayerDragonGifts.Add(
                 new DbPlayerDragonGift()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     DragonGiftId = gift,
                     Quantity = quantity
                 }
@@ -636,20 +616,9 @@ public class DragonServiceTest
             .SetupGet(x => x.DragonGifts)
             .Returns(dbPlayerDragonGifts.AsQueryable().BuildMock());
 
-        userRupies = new DbPlayerCurrency()
-        {
-            DeviceAccountId = DeviceAccountId,
-            CurrencyType = CurrencyTypes.Rupies,
-            Quantity = 100000
-        };
-
-        mockInventoryRepository
-            .Setup(x => x.GetCurrency(CurrencyTypes.Rupies))
-            .ReturnsAsync(userRupies);
-
         garudaEssence = new DbPlayerMaterial()
         {
-            DeviceAccountId = DeviceAccountId,
+            ViewerId = ViewerId,
             MaterialId = Materials.GarudasEssence,
             Quantity = 0
         };
@@ -658,7 +627,7 @@ public class DragonServiceTest
             .Setup(x => x.GetMaterial(It.IsAny<Materials>()))
             .ReturnsAsync(garudaEssence);
 
-        userData = new DbPlayerUserData() { DeviceAccountId = DeviceAccountId, Coin = 100000 };
+        userData = new DbPlayerUserData() { ViewerId = ViewerId, Coin = 100000 };
 
         IQueryable<DbPlayerUserData> userDataList = new List<DbPlayerUserData>() { userData }
             .AsQueryable()
@@ -686,7 +655,7 @@ public class DragonServiceTest
             .ReturnsAsync(
                 new DbPlayerStoryState()
                 {
-                    DeviceAccountId = DeviceAccountId,
+                    ViewerId = ViewerId,
                     State = 0,
                     StoryId = MasterAsset.DragonStories.Get((int)Dragons.Garuda).storyIds[0],
                     StoryType = StoryTypes.Dragon

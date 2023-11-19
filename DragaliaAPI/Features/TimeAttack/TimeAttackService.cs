@@ -79,7 +79,7 @@ public class TimeAttackService(
                     new()
                     {
                         GameId = gameId,
-                        DeviceAccountId = playerIdentityService.AccountId,
+                        ViewerId = playerIdentityService.ViewerId,
                         PartyInfo = JsonSerializer.Serialize(entry.PartyInfo),
                         Units = clearUnits
                     },
@@ -134,7 +134,7 @@ public class TimeAttackService(
                 x =>
                     new DbReceivedRankingTierReward()
                     {
-                        DeviceAccountId = playerIdentityService.AccountId,
+                        ViewerId = playerIdentityService.ViewerId,
                         QuestId = questId,
                         RewardId = x.Id
                     }
@@ -150,7 +150,7 @@ public class TimeAttackService(
             new()
             {
                 UnitNo = x.position,
-                DeviceAccountId = playerIdentityService.AccountId,
+                ViewerId = playerIdentityService.ViewerId,
                 GameId = roomId
             };
 

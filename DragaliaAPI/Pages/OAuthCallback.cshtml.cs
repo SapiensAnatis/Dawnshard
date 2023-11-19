@@ -121,9 +121,10 @@ public class OAuthCallbackModel(
         identity.AddClaim(new Claim(CustomClaimType.AccountId, userId.UserId));
 
         var playerInfo = await apiContext
-            .PlayerUserData
-            .Where(x => x.DeviceAccountId == userId.UserId)
-            .Select(x => new { x.Name, x.ViewerId })
+            .Players
+            .Include(x => x.UserData)
+            .Where(x => x.AccountId == userId.UserId)
+            .Select(x => new { x.UserData!.Name, x.ViewerId })
             .FirstOrDefaultAsync();
 
         if (playerInfo is null)

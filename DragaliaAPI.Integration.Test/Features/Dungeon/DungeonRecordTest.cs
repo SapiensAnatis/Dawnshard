@@ -41,14 +41,14 @@ public class DungeonRecordTest : TestFixture
             {
                 QuestId = questId,
                 State = 0,
-                DeviceAccountId = DeviceAccountId
+                ViewerId = ViewerId
             }
         );
 
         DbPlayerUserData oldUserData = await ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .SingleAsync(x => x.DeviceAccountId == DeviceAccountId);
+            .SingleAsync(x => x.ViewerId == ViewerId);
 
         DungeonSession mockSession =
             new()
@@ -207,14 +207,14 @@ public class DungeonRecordTest : TestFixture
             {
                 QuestId = questId,
                 State = 0,
-                DeviceAccountId = DeviceAccountId
+                ViewerId = ViewerId
             }
         );
 
         await AddToDatabase(
             new DbAbilityCrest()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 AbilityCrestId = AbilityCrests.SistersDayOut,
             }
         );
@@ -503,7 +503,7 @@ public class DungeonRecordTest : TestFixture
             {
                 QuestId = questId,
                 State = 0,
-                DeviceAccountId = DeviceAccountId
+                ViewerId = ViewerId
             }
         );
 
@@ -553,11 +553,9 @@ public class DungeonRecordTest : TestFixture
 
         recordedClear.Time.Should().Be(clearTime);
         recordedClear.QuestId.Should().Be(questId);
-        recordedClear.Players.Should().ContainSingle(x => x.DeviceAccountId == DeviceAccountId);
+        recordedClear.Players.Should().ContainSingle(x => x.ViewerId == ViewerId);
 
-        DbTimeAttackPlayer player = recordedClear
-            .Players
-            .First(x => x.DeviceAccountId == DeviceAccountId);
+        DbTimeAttackPlayer player = recordedClear.Players.First(x => x.ViewerId == ViewerId);
 
         player.PartyInfo.Should().NotBeNullOrEmpty();
         player.Units.Should().HaveCount(4);
@@ -572,7 +570,7 @@ public class DungeonRecordTest : TestFixture
             {
                 QuestId = questId,
                 State = 3,
-                DeviceAccountId = DeviceAccountId
+                ViewerId = ViewerId
             }
         );
 
@@ -627,7 +625,7 @@ public class DungeonRecordTest : TestFixture
             {
                 QuestId = questId,
                 State = 0,
-                DeviceAccountId = DeviceAccountId
+                ViewerId = ViewerId
             }
         );
 

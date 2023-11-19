@@ -202,11 +202,7 @@ public class AbilityCrestServiceTest
         this.mockAbilityCrestRepository
             .Setup(x => x.FindAsync(AbilityCrests.ManaFount))
             .ReturnsAsync(
-                new DbAbilityCrest()
-                {
-                    DeviceAccountId = "id",
-                    AbilityCrestId = AbilityCrests.ManaFount
-                }
+                new DbAbilityCrest() { ViewerId = 1, AbilityCrestId = AbilityCrests.ManaFount }
             );
         this.mockUserDataRepository.Setup(x => x.UpdateCoin(50)).Returns(Task.CompletedTask);
 
@@ -231,9 +227,7 @@ public class AbilityCrestServiceTest
     {
         this.mockAbilityCrestRepository
             .Setup(x => x.FindAsync(abilityCrestId))
-            .ReturnsAsync(
-                new DbAbilityCrest() { DeviceAccountId = "id", AbilityCrestId = abilityCrestId }
-            );
+            .ReturnsAsync(new DbAbilityCrest() { ViewerId = 1, AbilityCrestId = abilityCrestId });
         this.mockUserDataRepository
             .Setup(x => x.UpdateDewpoint(dewpoint))
             .Returns(Task.CompletedTask);
@@ -252,7 +246,7 @@ public class AbilityCrestServiceTest
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon
                 }
             );
@@ -622,7 +616,7 @@ public class AbilityCrestServiceTest
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     AbilityCrestId = AbilityCrests.ManaFount,
                     LimitBreakCount = currLevel
                 }
@@ -663,7 +657,7 @@ public class AbilityCrestServiceTest
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     AbilityCrestId = abilityCrestId,
                     LimitBreakCount = step - 1
                 }
@@ -708,7 +702,7 @@ public class AbilityCrestServiceTest
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     AbilityCrestId = abilityCrestId,
                     EquipableCount = 1
                 }
@@ -898,7 +892,7 @@ public class AbilityCrestServiceTest
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     AbilityCrestId = AbilityCrests.ManaFount,
                     BuildupCount = currLevel
                 }
@@ -941,7 +935,7 @@ public class AbilityCrestServiceTest
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     AbilityCrestId = AbilityCrests.ManaFount,
                     LimitBreakCount = limitBreak,
                     BuildupCount = step - 1
@@ -980,7 +974,7 @@ public class AbilityCrestServiceTest
             .ReturnsAsync(
                 new DbAbilityCrest()
                 {
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     AbilityCrestId = abilityCrestId,
                     LimitBreakCount = limitBreak,
                     BuildupCount = step - 1
@@ -1077,7 +1071,7 @@ public class AbilityCrestServiceTest
                 new DbAbilityCrest()
                 {
                     AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     HpPlusCount = 40,
                     AttackPlusCount = 38
                 }
@@ -1105,7 +1099,7 @@ public class AbilityCrestServiceTest
                 new DbAbilityCrest()
                 {
                     AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     HpPlusCount = 40,
                     AttackPlusCount = 31
                 }
@@ -1162,9 +1156,7 @@ public class AbilityCrestServiceTest
 
         this.mockAbilityCrestRepository
             .Setup(x => x.FindAsync(abilityCrestId))
-            .ReturnsAsync(
-                new DbAbilityCrest() { AbilityCrestId = abilityCrestId, DeviceAccountId = "id" }
-            );
+            .ReturnsAsync(new DbAbilityCrest() { AbilityCrestId = abilityCrestId, ViewerId = 1 });
 
         this.mockInventoryRepository
             .Setup(x => x.CheckQuantity(new Dictionary<Materials, int>() { { material, amount } }))
@@ -1214,11 +1206,7 @@ public class AbilityCrestServiceTest
         this.mockAbilityCrestRepository
             .Setup(x => x.FindAsync(AbilityCrests.WorthyRivals))
             .ReturnsAsync(
-                new DbAbilityCrest()
-                {
-                    AbilityCrestId = AbilityCrests.WorthyRivals,
-                    DeviceAccountId = "id"
-                }
+                new DbAbilityCrest() { AbilityCrestId = AbilityCrests.WorthyRivals, ViewerId = 1 }
             );
 
         try
@@ -1243,7 +1231,7 @@ public class AbilityCrestServiceTest
                 new DbAbilityCrest()
                 {
                     AbilityCrestId = AbilityCrests.WorthyRivals,
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     HpPlusCount = 35,
                     AttackPlusCount = 50
                 }
@@ -1280,7 +1268,7 @@ public class AbilityCrestServiceTest
                 new DbAbilityCrest()
                 {
                     AbilityCrestId = abilityCrestId,
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     HpPlusCount = amount,
                     AttackPlusCount = 30
                 }
@@ -1323,7 +1311,7 @@ public class AbilityCrestServiceTest
                 new DbAbilityCrest()
                 {
                     AbilityCrestId = abilityCrestId,
-                    DeviceAccountId = "id",
+                    ViewerId = 1,
                     HpPlusCount = 25,
                     AttackPlusCount = amount
                 }

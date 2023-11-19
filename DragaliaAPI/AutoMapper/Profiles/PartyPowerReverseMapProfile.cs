@@ -8,7 +8,7 @@ public class PartyPowerReverseMapProfile : Profile
 {
     public PartyPowerReverseMapProfile()
     {
-        this.AddGlobalIgnore("DeviceAccount");
+        this.AddGlobalIgnore("ViewerId");
         this.AddGlobalIgnore("Owner");
 
         this.CreateMap<PartyPowerData, DbPartyPower>();

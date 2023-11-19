@@ -26,7 +26,7 @@ public class LoginTest : TestFixture
     {
         await this.ApiContext
             .PlayerShopInfos
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.DailySummonCount, 5));
 
         (await this.GetSummonCount()).Should().Be(5);
@@ -41,7 +41,7 @@ public class LoginTest : TestFixture
     {
         await this.ApiContext
             .PlayerDragonGifts
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.Quantity, 0));
 
         (await this.GetDragonGifts()).Should().AllSatisfy(x => x.Quantity.Should().Be(0));
@@ -55,85 +55,85 @@ public class LoginTest : TestFixture
                 {
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.FreshBread,
                         Quantity = 1
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.TastyMilk,
                         Quantity = 1
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.StrawberryTart,
                         Quantity = 1
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.HeartyStew,
                         Quantity = 1
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.Kaleidoscope,
                         Quantity = 1
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.FloralCirclet,
                         Quantity = 1
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.CompellingBook,
                         Quantity = 1
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.JuicyMeat,
                         Quantity = 1
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.ManaEssence,
                         Quantity = 1
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.GoldenChalice,
                         Quantity = 1
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.FourLeafClover,
                         Quantity = 0
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.DragonyuleCake,
                         Quantity = 0
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.ValentinesCard,
                         Quantity = 0
                     },
                     new()
                     {
-                        DeviceAccountId = DeviceAccountId,
+                        ViewerId = ViewerId,
                         DragonGiftId = DragonGifts.PupGrub,
                         Quantity = 0
                     }
@@ -148,14 +148,14 @@ public class LoginTest : TestFixture
         int oldSkipTickets = (
             await this.ApiContext.PlayerUserData
                 .AsNoTracking()
-                .FirstAsync(x => x.DeviceAccountId == DeviceAccountId)
+                .FirstAsync(x => x.ViewerId == ViewerId)
         ).QuestSkipPoint;
         */
 
         await this.AddToDatabase(
             new DbLoginBonus()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 CurrentDay = 4,
                 Id = 17 // Standard daily login bonus
             }
@@ -193,7 +193,7 @@ public class LoginTest : TestFixture
         await this.AddToDatabase(
             new DbLoginBonus()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 CurrentDay = 10,
                 Id = 17 // Standard daily login bonus
             }
@@ -233,7 +233,7 @@ public class LoginTest : TestFixture
         await this.AddToDatabase(
             new DbLoginBonus()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 CurrentDay = 6,
                 Id = 2 // Launch Celebration Daily Bonus
             }
@@ -264,7 +264,7 @@ public class LoginTest : TestFixture
             await this.ApiContext
                 .LoginBonuses
                 .AsNoTracking()
-                .FirstAsync(x => x.DeviceAccountId == DeviceAccountId && x.Id == 2)
+                .FirstAsync(x => x.ViewerId == ViewerId && x.Id == 2)
         )
             .IsComplete
             .Should()
@@ -284,7 +284,7 @@ public class LoginTest : TestFixture
         await this.AddToDatabase(
             new DbLoginBonus()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 Id = 17,
                 CurrentDay = 7,
             }
@@ -293,11 +293,7 @@ public class LoginTest : TestFixture
         int oldCloverQuantity = await this.ApiContext
             .PlayerDragonGifts
             .AsNoTracking()
-            .Where(
-                x =>
-                    x.DragonGiftId == DragonGifts.FourLeafClover
-                    && x.DeviceAccountId == DeviceAccountId
-            )
+            .Where(x => x.DragonGiftId == DragonGifts.FourLeafClover && x.ViewerId == ViewerId)
             .Select(x => x.Quantity)
             .FirstAsync();
 
@@ -354,20 +350,20 @@ public class LoginTest : TestFixture
             await this.ApiContext
                 .PlayerShopInfos
                 .AsNoTracking()
-                .FirstAsync(x => x.DeviceAccountId == DeviceAccountId)
+                .FirstAsync(x => x.ViewerId == ViewerId)
         ).DailySummonCount;
 
     private async Task<IEnumerable<DbPlayerDragonGift>> GetDragonGifts() =>
         await this.ApiContext
             .PlayerDragonGifts
             .AsNoTracking()
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .ToListAsync();
 
     private void ResetLastLoginTime() =>
         this.ApiContext
             .PlayerUserData
-            .Where(x => x.DeviceAccountId == DeviceAccountId)
+            .Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdate(
                 entity => entity.SetProperty(x => x.LastLoginTime, DateTimeOffset.UnixEpoch)
             );

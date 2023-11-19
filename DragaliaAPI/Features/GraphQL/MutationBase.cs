@@ -32,7 +32,7 @@ public abstract class MutationBase
         if (player is null)
             throw new ArgumentException($"No player found for viewer ID {viewerId}");
 
-        this.identityService.StartUserImpersonation(player.AccountId, viewerId);
+        this.identityService.StartUserImpersonation(viewerId, player.AccountId);
 
         return player;
     }

@@ -1,24 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Entities;
 
-[Index(nameof(DeviceAccountId))]
-public class DbFortBuild : IDbHasAccountId
+[Index(nameof(ViewerId))]
+public class DbFortBuild : DbPlayerData
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long BuildId { get; set; }
-
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
 
     public FortPlants PlantId { get; set; }
 

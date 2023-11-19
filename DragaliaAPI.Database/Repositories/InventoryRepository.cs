@@ -25,42 +25,15 @@ public class InventoryRepository : IInventoryRepository
         this.logger = logger;
     }
 
-    public IQueryable<DbPlayerCurrency> Currencies =>
-        this.apiContext
-            .PlayerWallet
-            .Where(wallet => wallet.DeviceAccountId == this.playerIdentityService.AccountId);
-
     public IQueryable<DbPlayerMaterial> Materials =>
         this.apiContext
             .PlayerMaterials
-            .Where(storage => storage.DeviceAccountId == this.playerIdentityService.AccountId);
+            .Where(storage => storage.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbPlayerDragonGift> DragonGifts =>
         this.apiContext
             .PlayerDragonGifts
-            .Where(gifts => gifts.DeviceAccountId == this.playerIdentityService.AccountId);
-
-    public DbPlayerCurrency AddCurrency(CurrencyTypes type)
-    {
-        return apiContext
-            .PlayerWallet
-            .Add(
-                new DbPlayerCurrency()
-                {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
-                    CurrencyType = type,
-                    Quantity = 0
-                }
-            )
-            .Entity;
-    }
-
-    public async Task<DbPlayerCurrency?> GetCurrency(CurrencyTypes type)
-    {
-        return await this.apiContext
-            .PlayerWallet
-            .FindAsync(this.playerIdentityService.AccountId, type);
-    }
+            .Where(gifts => gifts.ViewerId == this.playerIdentityService.ViewerId);
 
     public DbPlayerMaterial AddMaterial(Materials type)
     {
@@ -69,7 +42,7 @@ public class InventoryRepository : IInventoryRepository
             .Add(
                 new DbPlayerMaterial()
                 {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    ViewerId = this.playerIdentityService.ViewerId,
                     MaterialId = type,
                     Quantity = 0
                 }
@@ -99,12 +72,12 @@ public class InventoryRepository : IInventoryRepository
     {
         return await this.apiContext
                 .PlayerMaterials
-                .FindAsync(this.playerIdentityService.AccountId, item)
+                .FindAsync(this.playerIdentityService.ViewerId, item)
             ?? (
                 await this.apiContext.AddAsync(
                     new DbPlayerMaterial()
                     {
-                        DeviceAccountId = this.playerIdentityService.AccountId,
+                        ViewerId = this.playerIdentityService.ViewerId,
                         MaterialId = item,
                         Quantity = 0
                     }
@@ -140,7 +113,7 @@ public class InventoryRepository : IInventoryRepository
     {
         return await this.apiContext
             .PlayerMaterials
-            .FindAsync(this.playerIdentityService.AccountId, materialId);
+            .FindAsync(this.playerIdentityService.ViewerId, materialId);
     }
 
     public async Task<bool> CheckQuantity(Materials materialId, int quantity) =>
@@ -177,7 +150,7 @@ public class InventoryRepository : IInventoryRepository
             .Add(
                 new DbPlayerDragonGift()
                 {
-                    DeviceAccountId = this.playerIdentityService.AccountId,
+                    ViewerId = this.playerIdentityService.ViewerId,
                     DragonGiftId = giftId,
                     Quantity = quantity
                 }
@@ -188,7 +161,7 @@ public class InventoryRepository : IInventoryRepository
     {
         return await this.apiContext
             .PlayerDragonGifts
-            .FindAsync(this.playerIdentityService.AccountId, giftId);
+            .FindAsync(this.playerIdentityService.ViewerId, giftId);
     }
 
     public async Task RefreshPurchasableDragonGiftCounts()

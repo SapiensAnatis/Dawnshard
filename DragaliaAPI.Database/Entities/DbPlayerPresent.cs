@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DragaliaAPI.Database.Entities.Abstract;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 using Microsoft.EntityFrameworkCore;
@@ -8,16 +9,8 @@ using Microsoft.EntityFrameworkCore;
 namespace DragaliaAPI.Database.Entities;
 
 [Table("PlayerPresent")]
-[Index(nameof(DeviceAccountId))]
-public class DbPlayerPresent : IDbHasAccountId
+public class DbPlayerPresent : DbPlayerData
 {
-    /// <inheritdoc />
-    public virtual DbPlayer? Owner { get; set; }
-
-    /// <inheritdoc />
-    [ForeignKey(nameof(Owner))]
-    public required string DeviceAccountId { get; set; }
-
     [Column("PresentId")]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

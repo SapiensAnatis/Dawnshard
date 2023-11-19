@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Photon.Shared.Models;
@@ -6,6 +7,7 @@ using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DragaliaAPI.Services.Photon;
 
@@ -91,11 +93,7 @@ public class MatchingService : IMatchingService
 
     public async Task<IEnumerable<Player>> GetTeammates()
     {
-        long viewerId =
-            this.playerIdentityService.ViewerId
-            ?? throw new InvalidOperationException(
-                "Attempted to fetch teammates with null ViewerId"
-            );
+        long viewerId = this.playerIdentityService.ViewerId;
 
         ApiGame? game = await this.photonStateApi.GetGameByViewerId(viewerId);
 
@@ -110,9 +108,7 @@ public class MatchingService : IMatchingService
 
     public async Task<string?> GetRoomName()
     {
-        long viewerId =
-            this.playerIdentityService.ViewerId
-            ?? throw new InvalidOperationException("Attempted to fetch game with null ViewerId");
+        long viewerId = this.playerIdentityService.ViewerId;
 
         ApiGame? game = await this.photonStateApi.GetGameByViewerId(viewerId);
 
@@ -127,9 +123,7 @@ public class MatchingService : IMatchingService
 
     public async Task<bool> GetIsHost()
     {
-        long viewerId =
-            this.playerIdentityService.ViewerId
-            ?? throw new InvalidOperationException("Uninitialized ViewerId!");
+        long viewerId = this.playerIdentityService.ViewerId;
 
         bool isHost = await this.photonStateApi.GetIsHost(viewerId);
 
@@ -148,8 +142,7 @@ public class MatchingService : IMatchingService
             hostUserData = await userDataRepository.GetViewerData(game.HostViewerId).FirstAsync();
 
             using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(
-                hostUserData.DeviceAccountId,
-                game.HostViewerId
+                (int)game.HostViewerId
             );
 
             hostCharaData = await partyRepository
@@ -174,12 +167,12 @@ public class MatchingService : IMatchingService
 
             hostUserData = new()
             {
-                DeviceAccountId = string.Empty,
+                ViewerId = 1,
                 Name = "Euden",
                 Level = 1,
             };
 
-            hostCharaData = new(string.Empty, Charas.ThePrince);
+            hostCharaData = new(1, Charas.ThePrince);
         }
 
         return new RoomList()

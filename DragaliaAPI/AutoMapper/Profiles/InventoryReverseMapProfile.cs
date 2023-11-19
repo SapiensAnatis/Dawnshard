@@ -8,7 +8,7 @@ public class InventoryReverseMapProfile : Profile
 {
     public InventoryReverseMapProfile()
     {
-        this.AddGlobalIgnore("DeviceAccount");
+        this.AddGlobalIgnore("ViewerId");
         this.AddGlobalIgnore("Owner");
 
         this.CreateMap<MaterialList, DbPlayerMaterial>();

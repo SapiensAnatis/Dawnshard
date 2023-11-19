@@ -82,10 +82,12 @@ public class DeviceAccountServiceTest
             .Setup(x => x.GetDeviceAccountById("foreign id"))
             .ReturnsAsync((DbDeviceAccount?)null);
         this.mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
-        this.mockSavefileService.Setup(x => x.Create()).Returns(Task.CompletedTask);
+        this.mockSavefileService
+            .Setup(x => x.Create())
+            .ReturnsAsync(new DbPlayer() { AccountId = "foreign id", ViewerId = 1 });
 
         this.mockPlayerIdentityService
-            .Setup(x => x.StartUserImpersonation("foreign id", null))
+            .Setup(x => x.StartUserImpersonation(null, "foreign id"))
             .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
 
         this.mockPlayerIdentityService.SetupGet(x => x.AccountId).Returns("foreign id");
@@ -109,9 +111,11 @@ public class DeviceAccountServiceTest
             .ReturnsAsync((DbDeviceAccount?)null);
         this.mockRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
         this.mockPlayerIdentityService
-            .Setup(x => x.StartUserImpersonation(It.IsAny<string>(), null))
+            .Setup(x => x.StartUserImpersonation(null, It.IsAny<string>()))
             .Returns(new Mock<IDisposable>(MockBehavior.Loose).Object);
-        this.mockSavefileService.Setup(x => x.Create()).Returns(Task.CompletedTask);
+        this.mockSavefileService
+            .Setup(x => x.Create())
+            .ReturnsAsync(new DbPlayer() { AccountId = "foreign id", ViewerId = 1 });
 
         await deviceAccountService.RegisterDeviceAccount();
 

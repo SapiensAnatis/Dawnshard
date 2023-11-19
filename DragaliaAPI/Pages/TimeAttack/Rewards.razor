@@ -16,7 +16,7 @@
     <MudTabPanel Text="Solo">
         <AuthorizeView>
             <Authorized>
-                <OwnClear ViewerId="@(this.BlazorIdentityService.ViewerId ?? 0)" QuestId="227010104" />
+                <OwnClear ViewerId="@(this.BlazorIdentityService.ViewerId)" QuestId="227010104" />
             </Authorized>
         </AuthorizeView>
         <SoloRewardTab/>
@@ -25,7 +25,7 @@
     <MudTabPanel Text="Co-op">
         <AuthorizeView>
             <Authorized>
-                <OwnClear ViewerId="@(this.BlazorIdentityService.ViewerId ?? 0)" QuestId="227010105" />
+                <OwnClear ViewerId="@(this.BlazorIdentityService.ViewerId)" QuestId="227010105" />
             </Authorized>
         </AuthorizeView>
         <CoopRewardTab />

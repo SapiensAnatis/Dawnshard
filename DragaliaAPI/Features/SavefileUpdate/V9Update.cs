@@ -114,7 +114,7 @@ public class V9Update(
             .Add(
                 new DbPlayerStoryState()
                 {
-                    DeviceAccountId = playerIdentityService.AccountId,
+                    ViewerId = playerIdentityService.ViewerId,
                     StoryId = storyId,
                     State = 0,
                     StoryType = StoryTypes.Chara

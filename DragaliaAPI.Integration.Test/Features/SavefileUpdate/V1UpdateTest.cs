@@ -18,7 +18,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         await this.AddToDatabase(
             new DbPlayerStoryState()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 StoryType = StoryTypes.Quest,
                 State = StoryState.Read,
                 StoryId = TutorialService.TutorialStoryIds.Halidom
@@ -34,9 +34,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         this.ApiContext
             .PlayerFortBuilds
             .Should()
-            .Contain(
-                x => x.PlantId == FortPlants.TheHalidom && x.DeviceAccountId == DeviceAccountId
-            );
+            .Contain(x => x.PlantId == FortPlants.TheHalidom && x.ViewerId == ViewerId);
 
         this.GetSavefileVersion().Should().Be(this.MaxVersion);
 
@@ -49,7 +47,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         await this.AddToDatabase(
             new DbPlayerStoryState()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 StoryType = StoryTypes.Quest,
                 State = StoryState.Read,
                 StoryId = TutorialService.TutorialStoryIds.Smithy
@@ -65,7 +63,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         this.ApiContext
             .PlayerFortBuilds
             .Should()
-            .Contain(x => x.PlantId == FortPlants.Smithy && x.DeviceAccountId == DeviceAccountId);
+            .Contain(x => x.PlantId == FortPlants.Smithy && x.ViewerId == ViewerId);
 
         this.GetSavefileVersion().Should().Be(this.MaxVersion);
 
@@ -78,7 +76,7 @@ public class V1UpdateTest : SavefileUpdateTestFixture
         await this.AddToDatabase(
             new DbPlayerStoryState()
             {
-                DeviceAccountId = DeviceAccountId,
+                ViewerId = ViewerId,
                 StoryType = StoryTypes.Quest,
                 State = StoryState.Read,
                 StoryId = 1000808
