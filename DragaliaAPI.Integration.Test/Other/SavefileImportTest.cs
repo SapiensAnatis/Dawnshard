@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using DragaliaAPI.Shared.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Other;
 
@@ -50,7 +51,11 @@ public class SavefileImportTest : TestFixture
     public async Task Import_LoadIndexReturnsImportedSavefile()
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
-        long viewerId = this.ApiContext.PlayerUserData.Single(x => x.ViewerId == ViewerId).ViewerId;
+        long viewerId = this.ApiContext
+            .PlayerUserData
+            .AsNoTracking()
+            .Single(x => x.ViewerId == ViewerId)
+            .ViewerId;
 
         LoadIndexData savefile = JsonSerializer
             .Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, ApiJsonOptions.Instance)!
@@ -64,6 +69,14 @@ public class SavefileImportTest : TestFixture
             content
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        this.ApiContext
+            .PlayerUserData
+            .AsNoTracking()
+            .Single(x => x.ViewerId == ViewerId)
+            .LastSaveImportTime
+            .Should()
+            .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
 
         LoadIndexData storedSavefile = (
             await this.Client.PostMsgpack<LoadIndexData>("load/index", new LoadIndexRequest())
