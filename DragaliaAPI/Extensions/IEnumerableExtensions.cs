@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Extensions;
 
@@ -33,5 +34,21 @@ public static class IEnumerableExtensions
             throw new ArgumentOutOfRangeException(nameof(count));
 
         return Enumerable.Repeat(enumerable, count).SelectMany(x => x);
+    }
+
+    public static async Task<HashSet<TElement>> ToHashSetAsync<TElement>(this IQueryable<TElement> enumerable,
+        IEqualityComparer<TElement>? comparer = null,
+        CancellationToken cancellationToken = default)
+        where TElement : struct
+    {
+        comparer ??= EqualityComparer<TElement>.Default;
+        
+        HashSet<TElement> set = new(comparer);
+        await foreach (TElement element in enumerable.AsAsyncEnumerable().WithCancellation(cancellationToken))
+        {
+            set.Add(element);
+        }
+
+        return set;
     }
 }

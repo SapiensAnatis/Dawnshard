@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Emblem;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -30,8 +31,7 @@ public class V14Update(
         int storyCharacterId;
         int[] characterStoryList;
 
-        HashSet<Emblems> ownedEmblems =
-            new(await emblemRepository.Emblems.Select(x => x.EmblemId).ToListAsync());
+        HashSet<Emblems> ownedEmblems = await emblemRepository.Emblems.Select(x => x.EmblemId).ToHashSetAsync();
 
         foreach (int readStoryId in readStoryIdList)
         {
