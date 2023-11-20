@@ -31,7 +31,10 @@ public class V14Update(
         int storyCharacterId;
         int[] characterStoryList;
 
-        HashSet<Emblems> ownedEmblems = await emblemRepository.Emblems.Select(x => x.EmblemId).ToHashSetAsync();
+        HashSet<Emblems> ownedEmblems = await emblemRepository
+            .Emblems
+            .Select(x => x.EmblemId)
+            .ToHashSetAsync();
 
         foreach (int readStoryId in readStoryIdList)
         {

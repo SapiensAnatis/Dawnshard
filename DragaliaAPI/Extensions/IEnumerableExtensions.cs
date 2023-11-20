@@ -36,15 +36,19 @@ public static class IEnumerableExtensions
         return Enumerable.Repeat(enumerable, count).SelectMany(x => x);
     }
 
-    public static async Task<HashSet<TElement>> ToHashSetAsync<TElement>(this IQueryable<TElement> enumerable,
+    public static async Task<HashSet<TElement>> ToHashSetAsync<TElement>(
+        this IQueryable<TElement> enumerable,
         IEqualityComparer<TElement>? comparer = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
         where TElement : struct
     {
         comparer ??= EqualityComparer<TElement>.Default;
-        
+
         HashSet<TElement> set = new(comparer);
-        await foreach (TElement element in enumerable.AsAsyncEnumerable().WithCancellation(cancellationToken))
+        await foreach (
+            TElement element in enumerable.AsAsyncEnumerable().WithCancellation(cancellationToken)
+        )
         {
             set.Add(element);
         }
