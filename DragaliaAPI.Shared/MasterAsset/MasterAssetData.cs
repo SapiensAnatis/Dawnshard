@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
 using DragaliaAPI.Shared.Json;
+using Serilog;
 
 namespace DragaliaAPI.Shared.MasterAsset;
 
@@ -84,6 +85,8 @@ public class MasterAssetData<TKey, TItem>
 
     private InternalKeyedCollection DataFactory()
     {
+        Log.Verbose("Initializing MasterAsset {name}", this.jsonFilename);
+
         InternalKeyedCollection result = new(this.keySelector);
         string path = Path.Join(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
