@@ -284,13 +284,6 @@ public class EventService(
     {
         Dictionary<int, int> itemDict = await eventRepository.GetEventItemQuantityAsync(eventId);
 
-        EventData data = MasterAsset.EventData[eventId];
-
-        foreach (int itemId in data.GetEventItemTypes().Where(x => !itemDict.ContainsKey(x)))
-        {
-            itemDict[itemId] = 0;
-        }
-
         return itemDict;
     }
 
@@ -358,9 +351,15 @@ public class EventService(
         );
     }
 
-    public async Task<EarnEventUserList> GetEarnEventUserData(int eventId)
+    public async Task<EarnEventUserList?> GetEarnEventUserData(int eventId)
     {
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
+
+        if (itemDict.Count == 0)
+        {
+            // Send client to /entry
+            return null;
+        }
 
         return new EarnEventUserList(
             eventId,

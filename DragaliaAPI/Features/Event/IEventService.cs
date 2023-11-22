@@ -30,7 +30,7 @@ public interface IEventService
     Task<Clb01EventUserList> GetClb01EventUserData(int eventId);
     Task<CollectEventUserList> GetCollectEventUserData(int eventId);
     Task<CombatEventUserList> GetCombatEventUserData(int eventId);
-    Task<EarnEventUserList> GetEarnEventUserData(int eventId);
+    Task<EarnEventUserList?> GetEarnEventUserData(int eventId);
     Task<ExHunterEventUserList> GetExHunterEventUserData(int eventId);
     Task<ExRushEventUserList> GetExRushEventUserData(int eventId);
     Task<MazeEventUserList> GetMazeEventUserData(int eventId);

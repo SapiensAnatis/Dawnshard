@@ -4,7 +4,10 @@ using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models.Enemy;
+using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +20,86 @@ public class QuestCompletionService(
 ) : IQuestCompletionService
 {
     public async Task<(
+        IEnumerable<AtgenScoringEnemyPointList> Enemies,
+        int Points
+    )> CompleteEnemyScoreMissions(DungeonSession session, PlayRecord record)
+    {
+        // TODO: points are too low, ingame shows 5530 but 1300 awarded
+        // the list only has 12 enemies but the client thinks it killed 226
+
+
+        int scoringEnemyGroupId = int.Parse($"{session.QuestGid}01");
+
+        if (IsEarnTicketQuest(session.QuestId))
+            scoringEnemyGroupId++;
+
+        Dictionary<int, QuestScoringEnemy> scoringEnemies = MasterAsset
+            .QuestScoringEnemy
+            .Enumerable
+            .Where(x => x.ScoringEnemyGroupId == scoringEnemyGroupId)
+            .ToDictionary(x => x.EnemyListId, x => x);
+
+        if (scoringEnemies.Count == 0)
+            return (Enumerable.Empty<AtgenScoringEnemyPointList>(), 0);
+
+        // Assume all invasion events are single-area
+        AtgenTreasureRecord treasureRecord = record.treasure_record.First();
+        IEnumerable<AtgenEnemy> enemyList = session
+            .EnemyList
+            .GetValueOrDefault(treasureRecord.area_idx, [ ]);
+
+        logger.LogTrace("treasure_record.enemy: {@enemy}", treasureRecord.enemy);
+        logger.LogTrace(
+            "enemy count: {count}, killed count {killed}",
+            treasureRecord.enemy.Count(),
+            treasureRecord.enemy.Count(x => x == 1)
+        );
+
+        logger.LogTrace("treasure_record.enemy_smash: {@enemySmash}", treasureRecord.enemy_smash);
+        logger.LogTrace("smash sum: {sum}", treasureRecord.enemy_smash.Sum(x => x.count));
+
+        IEnumerable<(int EnemyParam, int Count)> killedParamIds = enemyList
+            .Zip(treasureRecord.enemy_smash)
+            .Select(x => (x.First.param_id, x.Second.count));
+
+        string js = JsonSerializer.Serialize(treasureRecord.enemy_smash);
+
+        int totalPoints = 0;
+        Dictionary<int, AtgenScoringEnemyPointList> results = new();
+
+        foreach ((int paramId, int count) in killedParamIds)
+        {
+            int enemyListId = GetEnemyListId(paramId);
+
+            if (!scoringEnemies.TryGetValue(enemyListId, out QuestScoringEnemy? questScoringEnemy))
+                continue;
+
+            if (!results.TryGetValue(questScoringEnemy.Id, out AtgenScoringEnemyPointList? value))
+            {
+                value = new() { scoring_enemy_id = questScoringEnemy.Id, };
+                results.Add(questScoringEnemy.Id, value);
+            }
+
+            int pointsGained = questScoringEnemy.Point * count;
+
+            totalPoints += pointsGained;
+            value.point += pointsGained;
+            value.smash_count += count;
+        }
+
+        int eventPointsId = int.Parse($"{session.QuestGid}01");
+
+        await rewardService.GrantReward(
+            new Entity(EntityTypes.EarnEventItem, eventPointsId, totalPoints)
+        );
+
+        logger.LogTrace("Total points {points}", totalPoints);
+
+        // missing waves?
+        return (results.Values, totalPoints);
+    }
+
+    public async Task<(
         IEnumerable<AtgenScoreMissionSuccessList> Missions,
         int Points,
         int BoostedPoints
@@ -26,7 +109,6 @@ public class QuestCompletionService(
         double abilityMultiplier
     )
     {
-        // TODO: Add Enemy scoring
         List<AtgenScoreMissionSuccessList> missions = new();
 
         int questId = session.QuestId;
@@ -84,7 +166,7 @@ public class QuestCompletionService(
 
         int boostPoints = 0;
 
-        if (abilityMultiplier != 1)
+        if (abilityMultiplier > 1)
         {
             boostPoints = (int)Math.Floor(rewardQuantity * (abilityMultiplier - 1));
 
@@ -330,4 +412,13 @@ public class QuestCompletionService(
 
         return rewards;
     }
+
+    private static int GetEnemyListId(int enemyParamId)
+    {
+        EnemyParam enemyParam = MasterAsset.EnemyParam[enemyParamId];
+        EnemyData enemyData = MasterAsset.EnemyData[enemyParam.DataId];
+        return enemyData.BookId;
+    }
+
+    private static bool IsEarnTicketQuest(int questId) => questId % 1000 > 400;
 }
