@@ -174,7 +174,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
     }
 
     // Default behavior for other events
-    return quest.VariationType >= VariationTypes.Hard;
+    return quest.VariationType > VariationTypes.Hard;
 }
 
 
