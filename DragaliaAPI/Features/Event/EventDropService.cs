@@ -178,7 +178,7 @@ private bool IsEligibleForT3Drops(QuestData quest, EventData evt)
     }
 
     // Default behavior for other events
-    return quest.VariationType >= VariationTypes.Hard;
+    return quest.VariationType > VariationTypes.Hard;
 }
 
 
