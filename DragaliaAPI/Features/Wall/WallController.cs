@@ -90,6 +90,10 @@ public class WallController : DragaliaControllerBase
     [HttpPost("receive_monthly_reward")]
     public async Task<DragaliaResult> ReceiveMonthlyReward(WallReceiveMonthlyRewardRequest request)
     {
+            if (DateTime.UtcNow.Day != 15)
+    {
+        return Ok(new WallReceiveMonthlyRewardData()); // Return an empty response or handle as needed
+    }
         int totalLevel = await wallService.GetTotalWallLevel();
 
         IEnumerable<AtgenBuildEventRewardEntityList> rewardEntityList =
