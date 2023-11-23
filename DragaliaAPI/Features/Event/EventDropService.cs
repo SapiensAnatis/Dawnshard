@@ -165,10 +165,14 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         return dropList;
     }
 
-    private bool IsEligibleForT3Drops(QuestData quest, EventData evt)
+private bool IsEligibleForT3Drops(QuestData quest, EventData evt)
 {
-    // Check for specific event names
-    if (evt.EventName == "Accursed Archives" || evt.EventName == "Dream Big Under the Big Top")
+    // Defining the event IDs for "Accursed Archives" and "Dream Big Under the Big Top"
+    const int ACCURSED_ARCHIVES_ID = 20831;
+    const int DREAM_BIG_ID = 20820;
+
+    // Checking for specific event IDs
+    if (evt.Id == ACCURSED_ARCHIVES_ID || evt.Id == DREAM_BIG_ID)
     {
         return true;
     }
@@ -176,6 +180,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
     // Default behavior for other events
     return quest.VariationType >= VariationTypes.Hard;
 }
+
 
 
     private IEnumerable<Entity> ProcessBuildEventDrops(
