@@ -165,6 +165,19 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         return dropList;
     }
 
+    private bool IsEligibleForT3Drops(QuestData quest, EventData evt)
+{
+    // Check for specific event names
+    if (evt.EventName == "Accursed Archives" || evt.EventName == "Dream Big Under the Big Top")
+    {
+        return true;
+    }
+
+    // Default behavior for other events
+    return quest.VariationType >= VariationTypes.Hard;
+}
+
+
     private IEnumerable<Entity> ProcessBuildEventDrops(
         QuestData quest,
         EventData evt,
@@ -182,10 +195,12 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         if (type == DungeonTypes.Wave)
         {
             // T3 only drops from Challenge Battle quests
-            int t3Quantity = GenerateDropAmount(
-                10 * record.wave * ((variation - VariationTypes.Hard) / 2d) * buildDropMultiplier
-            );
-            yield return new Entity(evt.ViewEntityType3, evt.ViewEntityId3, t3Quantity);
+            if (IsEligibleForT3Drops(quest, evt))
+            {
+                int t3Quantity = GenerateDropAmount(10 * record.wave * buildDropMultiplier);
+                yield return new Entity(evt.ViewEntityType3, evt.ViewEntityId3, t3Quantity);
+            }
+
         }
 
         // T1 and T2 drop from all quests
