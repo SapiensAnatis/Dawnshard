@@ -2,22 +2,10 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "husky": {
-      "version": "0.6.2",
-      "commands": [
-        "husky"
-      ]
-    },
     "csharpier": {
-      "version": "0.26.1",
+      "version": "0.26.3",
       "commands": [
         "dotnet-csharpier"
-      ]
-    },
-    "dotnet-ef": {
-      "version": "8.0.0-rc.2.23480.1",
-      "commands": [
-        "dotnet-ef"
       ]
     }
   }

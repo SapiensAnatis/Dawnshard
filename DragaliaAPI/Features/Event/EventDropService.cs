@@ -165,28 +165,23 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         return dropList;
     }
 
-private bool IsEligibleForT3Drops(QuestData quest, EventData evt)
-{
-    // Defining the event IDs for "Accursed Archives" and "Dream Big Under the Big Top"
-    const int ACCURSED_ARCHIVES_ID = 20831;
-    const int DREAM_BIG_ID = 20820;
-
-    // Checking for specific event IDs
-    if (evt.Id == ACCURSED_ARCHIVES_ID || evt.Id == DREAM_BIG_ID)
+    private bool IsEligibleForT3Drops(QuestData quest, EventData evt)
     {
-        return true;
+        const int accursedArchivesId = 20831;
+        const int dreamBigId = 20820;
+
+        if (evt.Id == accursedArchivesId || evt.Id == dreamBigId)
+        {
+            return true;
+        }
+
+        return quest.VariationType > VariationTypes.Hard;
     }
 
-    // Default behavior for other events
-    return quest.VariationType > VariationTypes.Hard;
-}
-
-
-
     private IEnumerable<Entity> ProcessBuildEventDrops(
-        QuestData quest,
-        EventData evt,
-        PlayRecord record,
+        questData quest,
+        eventData evt,
+        playRecord record,
         double buildDropMultiplier
     )
     {
@@ -205,7 +200,6 @@ private bool IsEligibleForT3Drops(QuestData quest, EventData evt)
                 int t3Quantity = GenerateDropAmount(10 * record.wave * buildDropMultiplier);
                 yield return new Entity(evt.ViewEntityType3, evt.ViewEntityId3, t3Quantity);
             }
-
         }
 
         // T1 and T2 drop from all quests
