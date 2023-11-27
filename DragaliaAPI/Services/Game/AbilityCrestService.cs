@@ -78,6 +78,12 @@ public class AbilityCrestService : IAbilityCrestService
         AtgenBuildupAbilityCrestPieceList buildup
     )
     {
+        this.logger.LogDebug(
+            "Processing ability crest {abilityCrest} buildup {@buildup}",
+            abilityCrest,
+            buildup
+        );
+
         switch (buildup.buildup_piece_type)
         {
             case BuildupPieceTypes.Unbind
@@ -121,6 +127,12 @@ public class AbilityCrestService : IAbilityCrestService
         }
 
         SetMaterialMapSpecial(abilityCrest.Rarity, buildup, ref materialMap, ref dewpoint);
+
+        this.logger.LogDebug(
+            "Generated material map {@materialMap} and dewpoint {dewpoint}",
+            materialMap,
+            dewpoint
+        );
 
         if (!(await ValidateCost(materialMap) && await ValidateCost(dewpoint)))
         {
@@ -181,6 +193,8 @@ public class AbilityCrestService : IAbilityCrestService
                 levelInfo.UniqueBuildupMaterialCount
             );
         }
+
+        this.logger.LogDebug("Generated material map {@materialMap}", materialMap);
 
         if (!await ValidateCost(materialMap))
         {
