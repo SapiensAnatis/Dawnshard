@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
@@ -14,7 +15,7 @@ public record WeaponBodyBuildupLevel(
     int BuildupMaterialQuantity3
 )
 {
-    public Dictionary<Materials, int> MaterialMap { get; } =
+    public FrozenDictionary<Materials, int> MaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>()
         {
             new(BuildupMaterialId1, BuildupMaterialQuantity1),
@@ -22,5 +23,5 @@ public record WeaponBodyBuildupLevel(
             new(BuildupMaterialId3, BuildupMaterialQuantity3),
         }
             .Where(x => x.Key != Materials.Empty)
-            .ToDictionary(x => x.Key, x => x.Value);
+            .ToFrozenDictionary(x => x.Key, x => x.Value);
 };

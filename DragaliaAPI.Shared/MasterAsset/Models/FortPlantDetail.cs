@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+﻿using System.Collections.Frozen;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -70,7 +71,7 @@ public record FortPlantDetail(
     string Odds
 )
 {
-    public Dictionary<Materials, int> CreateMaterialMap { get; } =
+    public FrozenDictionary<Materials, int> CreateMaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>()
         {
             new(MaterialsId1, MaterialsNum1),
@@ -80,5 +81,5 @@ public record FortPlantDetail(
             new(MaterialsId5, MaterialsNum5),
         }
             .Where(x => x.Key != Materials.Empty)
-            .ToDictionary(x => x.Key, x => x.Value);
+            .ToFrozenDictionary(x => x.Key, x => x.Value);
 }

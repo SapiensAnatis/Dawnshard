@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MockQueryable.Moq;
 using Moq.Language.Flow;
+using Xunit.Abstractions;
 
 namespace DragaliaAPI.Test;
 
@@ -113,4 +114,18 @@ public static class UnitTestUtils
                     .AsQueryable()
                     .BuildMock()
             );
+
+    public static bool IsEquivalent(this object input, object comparison, ITestOutputHelper? output)
+    {
+        try
+        {
+            input.Should().BeEquivalentTo(comparison);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            output?.WriteLine(ex.Message);
+            return false;
+        }
+    }
 }

@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+﻿using System.Collections.Frozen;
+using System.Collections.Immutable;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -91,7 +93,7 @@ public record WeaponBody(
     int MaxAtk3
 )
 {
-    public Dictionary<Materials, int> CreateMaterialMap { get; } =
+    public FrozenDictionary<Materials, int> CreateMaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>()
         {
             new(CreateEntityId1, CreateEntityQuantity1),
@@ -101,7 +103,7 @@ public record WeaponBody(
             new(CreateEntityId5, CreateEntityQuantity5),
         }
             .Where(x => x.Key != Materials.Empty)
-            .ToDictionary(x => x.Key, x => x.Value);
+            .ToFrozenDictionary(x => x.Key, x => x.Value);
 
     /// <summary>
     /// Get the row id in the WeaponBodyBuildupGroup table corresponding to a particular operation and step

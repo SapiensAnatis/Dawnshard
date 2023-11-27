@@ -1,4 +1,6 @@
-﻿using DragaliaAPI.Shared.Definitions.Enums;
+﻿using System.Collections.Frozen;
+using System.Collections.Immutable;
+using DragaliaAPI.Shared.Definitions.Enums;
 
 namespace DragaliaAPI.Shared.MasterAsset.Models;
 
@@ -31,10 +33,10 @@ public record AbilityCrest(
 
     public int GetBuildupLevelId(int level) => int.Parse($"{this.Rarity}010{level:00}");
 
-    public Dictionary<Materials, int> DuplicateMaterialMap { get; } =
+    public FrozenDictionary<Materials, int> DuplicateMaterialMap { get; } =
         new List<KeyValuePair<Materials, int>>() { new(DuplicateEntityId, DuplicateEntityQuantity) }
             .Where(x => x.Key != Materials.Empty)
-            .ToDictionary(x => x.Key, x => x.Value);
+            .ToFrozenDictionary(x => x.Key, x => x.Value);
 
     public IEnumerable<int> GetAbilities(int level)
     {

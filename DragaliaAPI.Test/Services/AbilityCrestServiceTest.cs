@@ -8,11 +8,13 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Test.Utils;
+using Xunit.Abstractions;
 
 namespace DragaliaAPI.Test.Services;
 
 public class AbilityCrestServiceTest
 {
+    private readonly ITestOutputHelper testOutputHelper;
     private readonly Mock<IAbilityCrestRepository> mockAbilityCrestRepository;
     private readonly Mock<IInventoryRepository> mockInventoryRepository;
     private readonly Mock<IUserDataRepository> mockUserDataRepository;
@@ -165,8 +167,9 @@ public class AbilityCrestServiceTest
             new object[] { AbilityCrests.TutelarysDestinyWolfsBoon, Rarity9LevelMap, 4, 30 }
         };
 
-    public AbilityCrestServiceTest()
+    public AbilityCrestServiceTest(ITestOutputHelper testOutputHelper)
     {
+        this.testOutputHelper = testOutputHelper;
         this.mockAbilityCrestRepository = new(MockBehavior.Strict);
         this.mockInventoryRepository = new(MockBehavior.Strict);
         this.mockUserDataRepository = new(MockBehavior.Strict);
@@ -443,15 +446,15 @@ public class AbilityCrestServiceTest
                 step = 2
             };
 
+        Dictionary<Materials, int> expectedMap =
+            new() { { Materials.JadeInsignia, 40 }, { Materials.DyrenellAureus, 5 } };
         this.mockInventoryRepository
             .Setup(
                 x =>
                     x.CheckQuantity(
-                        new Dictionary<Materials, int>()
-                        {
-                            { Materials.JadeInsignia, 40 },
-                            { Materials.DyrenellAureus, 5 }
-                        }
+                        It.Is<IEnumerable<KeyValuePair<Materials, int>>>(
+                            y => y.IsEquivalent(expectedMap, this.testOutputHelper)
+                        )
                     )
             )
             .ReturnsAsync(false);
@@ -650,7 +653,16 @@ public class AbilityCrestServiceTest
                 step = step
             };
 
-        this.mockInventoryRepository.Setup(x => x.CheckQuantity(materialMap)).ReturnsAsync(true);
+        this.mockInventoryRepository
+            .Setup(
+                x =>
+                    x.CheckQuantity(
+                        It.Is<IEnumerable<KeyValuePair<Materials, int>>>(
+                            y => y.IsEquivalent(materialMap, this.testOutputHelper)
+                        )
+                    )
+            )
+            .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckDewpoint(dewpoint)).ReturnsAsync(true);
         this.mockAbilityCrestRepository
             .Setup(x => x.FindAsync(abilityCrestId))
@@ -663,7 +675,14 @@ public class AbilityCrestServiceTest
                 }
             );
         this.mockInventoryRepository
-            .Setup(x => x.UpdateQuantity(materialMap.Invert()))
+            .Setup(
+                x =>
+                    x.UpdateQuantity(
+                        It.Is<IEnumerable<KeyValuePair<Materials, int>>>(
+                            y => y.IsEquivalent(materialMap.Invert(), this.testOutputHelper)
+                        )
+                    )
+            )
             .Returns(Task.CompletedTask);
         this.mockUserDataRepository
             .Setup(x => x.UpdateDewpoint(-dewpoint))
@@ -695,7 +714,16 @@ public class AbilityCrestServiceTest
                 step = 2
             };
 
-        this.mockInventoryRepository.Setup(x => x.CheckQuantity(materialMap)).ReturnsAsync(true);
+        this.mockInventoryRepository
+            .Setup(
+                x =>
+                    x.CheckQuantity(
+                        It.Is<IEnumerable<KeyValuePair<Materials, int>>>(
+                            y => y.IsEquivalent(materialMap, this.testOutputHelper)
+                        )
+                    )
+            )
+            .ReturnsAsync(true);
         this.mockUserDataRepository.Setup(x => x.CheckDewpoint(dewpoint)).ReturnsAsync(true);
         this.mockAbilityCrestRepository
             .Setup(x => x.FindAsync(abilityCrestId))
@@ -708,7 +736,14 @@ public class AbilityCrestServiceTest
                 }
             );
         this.mockInventoryRepository
-            .Setup(x => x.UpdateQuantity(materialMap.Invert()))
+            .Setup(
+                x =>
+                    x.UpdateQuantity(
+                        It.Is<IEnumerable<KeyValuePair<Materials, int>>>(
+                            y => y.IsEquivalent(materialMap.Invert(), this.testOutputHelper)
+                        )
+                    )
+            )
             .Returns(Task.CompletedTask);
         this.mockUserDataRepository
             .Setup(x => x.UpdateDewpoint(-dewpoint))

@@ -29,7 +29,7 @@ public static class MasterAssetUtils
     /// </summary>
     /// <param name="map">The material map.</param>
     /// <returns>The inverted material map.</returns>
-    public static Dictionary<Materials, int> Invert(this Dictionary<Materials, int> map) =>
+    public static Dictionary<Materials, int> Invert(this IDictionary<Materials, int> map) =>
         map.ToDictionary(x => x.Key, x => -x.Value);
 
     public static FortPlantDetail GetInitialFortPlant(FortPlants id) =>
