@@ -157,7 +157,14 @@ public class WeaponServiceTest
             .ReturnsAsync(true);
 
         this.mockInventoryRepository
-            .Setup(x => x.CheckQuantity(weaponData.CreateMaterialMap))
+            .Setup(
+                x =>
+                    x.CheckQuantity(
+                        It.Is<IEnumerable<KeyValuePair<Materials, int>>>(
+                            y => ValidateMaterialMap(weaponData.CreateMaterialMap, y)
+                        )
+                    )
+            )
             .ReturnsAsync(false);
 
         (await this.weaponService.ValidateCraft(WeaponBodies.PrimalCrimson)).Should().BeFalse();
@@ -185,7 +192,14 @@ public class WeaponServiceTest
             .ReturnsAsync(true);
 
         this.mockInventoryRepository
-            .Setup(x => x.CheckQuantity(weaponData.CreateMaterialMap))
+            .Setup(
+                x =>
+                    x.CheckQuantity(
+                        It.Is<IEnumerable<KeyValuePair<Materials, int>>>(
+                            y => ValidateMaterialMap(weaponData.CreateMaterialMap, y)
+                        )
+                    )
+            )
             .ReturnsAsync(true);
 
         this.mockUserDataRepository
@@ -218,7 +232,14 @@ public class WeaponServiceTest
             .ReturnsAsync(true);
 
         this.mockInventoryRepository
-            .Setup(x => x.CheckQuantity(weaponData.CreateMaterialMap))
+            .Setup(
+                x =>
+                    x.CheckQuantity(
+                        It.Is<IEnumerable<KeyValuePair<Materials, int>>>(
+                            y => ValidateMaterialMap(weaponData.CreateMaterialMap, y)
+                        )
+                    )
+            )
             .ReturnsAsync(true);
 
         this.mockUserDataRepository
@@ -1057,21 +1078,16 @@ public class WeaponServiceTest
     /// <param name="input"></param>
     /// <returns></returns>
     private bool ValidateMaterialMap(
-        Dictionary<Materials, int> expected,
+        IDictionary<Materials, int> expected,
         IEnumerable<KeyValuePair<Materials, int>> input
     )
     {
         if (input.Count() != expected.Count())
             return false;
 
-        foreach (
-            (
-                KeyValuePair<Materials, int> inputKv,
-                KeyValuePair<Materials, int> actualKv
-            ) in input.Zip(expected)
-        )
+        foreach ((Materials material, int quantity) in input)
         {
-            if (!(inputKv.Key == actualKv.Key && inputKv.Value == actualKv.Value))
+            if (expected[material] != quantity)
                 return false;
         }
 
