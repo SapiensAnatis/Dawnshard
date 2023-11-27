@@ -111,7 +111,7 @@ public class AbilityCrestService : IAbilityCrestService
             return ResultCode.AbilityCrestBuildupPieceUnablePiece;
         }
 
-        Dictionary<Materials, int> materialMap = buildupInfo.MaterialMap;
+        Dictionary<Materials, int> materialMap = buildupInfo.MaterialMap.ToDictionary();
         int dewpoint = buildupInfo.BuildupDewPoint;
 
         if (buildupInfo.IsUseUniqueMaterial)
@@ -172,7 +172,7 @@ public class AbilityCrestService : IAbilityCrestService
         }
 
         CheckDedicated(buildup);
-        Dictionary<Materials, int> materialMap = levelInfo.MaterialMap;
+        Dictionary<Materials, int> materialMap = levelInfo.MaterialMap.ToDictionary();
 
         if (levelInfo.IsUseUniqueMaterial)
         {

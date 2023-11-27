@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Photon.Shared.Enums;
+﻿using System.Collections.Frozen;
+using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
@@ -609,7 +610,7 @@ public class MasterAssetTest
     [Fact]
     public void AbilityCrestBuildupGroup_MaterialMap_ReturnsExpectedDictionary()
     {
-        Dictionary<Materials, int> map = MasterAsset
+        FrozenDictionary<Materials, int> map = MasterAsset
             .MasterAsset
             .AbilityCrestBuildupGroup
             .Get(6020603)
@@ -677,7 +678,7 @@ public class MasterAssetTest
     [Fact]
     public void AbilityCrestBuildupLevel_MaterialMap_ReturnsExpectedDictionary()
     {
-        Dictionary<Materials, int> map = MasterAsset
+        FrozenDictionary<Materials, int> map = MasterAsset
             .MasterAsset
             .AbilityCrestBuildupLevel
             .Get(901010)
@@ -791,7 +792,7 @@ public class MasterAssetTest
     [Fact]
     public void AbilityCrest_DuplicateMaterialMap_ReturnsExpectedDictionary()
     {
-        Dictionary<Materials, int> map = MasterAsset
+        FrozenDictionary<Materials, int> map = MasterAsset
             .MasterAsset
             .AbilityCrest
             .Get(AbilityCrests.TheGeniusTacticianBowsBoon)

@@ -228,6 +228,66 @@ public class AbilityCrestTest : TestFixture
     }
 
     [Fact]
+    public async Task BuildupPiece_DoesNotMutateGlobalProperty()
+    {
+        /*
+         * This test is in reaction to an issue where the ability crest code permanently added entries
+         * to an AbilityCrestLevel's MaterialMap :)
+         */
+
+        this.ApiContext
+            .PlayerAbilityCrests
+            .Add(
+                new DbAbilityCrest()
+                {
+                    ViewerId = ViewerId,
+                    AbilityCrestId = AbilityCrests.MaskofDeterminationLancesBoon
+                }
+            );
+
+        await this.ApiContext.SaveChangesAsync();
+
+        await this.Client.PostMsgpack<AbilityCrestBuildupPieceData>(
+            "ability_crest/buildup_piece",
+            new AbilityCrestBuildupPieceRequest()
+            {
+                ability_crest_id = AbilityCrests.MaskofDeterminationLancesBoon,
+                buildup_ability_crest_piece_list =
+                [
+                    new()
+                    {
+                        buildup_piece_type = BuildupPieceTypes.Stats,
+                        is_use_dedicated_material = false,
+                        step = 2
+                    },
+                ]
+            }
+        );
+
+        // Reset
+        this.ApiContext
+            .PlayerAbilityCrests
+            .ExecuteUpdate(x => x.SetProperty(y => y.BuildupCount, 1));
+
+        await this.Client.PostMsgpack<AbilityCrestBuildupPieceData>(
+            "ability_crest/buildup_piece",
+            new AbilityCrestBuildupPieceRequest()
+            {
+                ability_crest_id = AbilityCrests.MaskofDeterminationLancesBoon,
+                buildup_ability_crest_piece_list =
+                [
+                    new()
+                    {
+                        buildup_piece_type = BuildupPieceTypes.Stats,
+                        is_use_dedicated_material = false,
+                        step = 2
+                    },
+                ]
+            }
+        );
+    }
+
+    [Fact]
     public async Task BuildupPlusCount_ReturnsErrorWhenAbilityCrestNotFound()
     {
         ResultCodeData data = (
