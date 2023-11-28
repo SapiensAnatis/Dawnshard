@@ -27,15 +27,6 @@ using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-Stopwatch watch = new();
-Console.WriteLine("Loading MasterAsset data.");
-
-watch.Start();
-RuntimeHelpers.RunClassConstructor(typeof(MasterAsset).TypeHandle);
-watch.Stop();
-
-Console.WriteLine($"Loaded MasterAsset in {watch}.");
-
 IConfiguration config = builder
     .Configuration
     .AddJsonFile("itemSummonOdds.json", optional: false, reloadOnChange: true)
@@ -148,6 +139,15 @@ builder.Services.ConfigureGameServices(builder.Configuration);
 builder.Services.ConfigureGraphQlSchema();
 
 WebApplication app = builder.Build();
+
+Stopwatch watch = new();
+app.Logger.LogInformation("Loading MasterAsset data.");
+
+watch.Start();
+RuntimeHelpers.RunClassConstructor(typeof(MasterAsset).TypeHandle);
+watch.Stop();
+
+app.Logger.LogInformation("Loaded MasterAsset in {time}.", watch.Elapsed);
 
 if (Environment.GetEnvironmentVariable("DISABLE_AUTO_MIGRATION") == null)
     app.MigrateDatabase();
