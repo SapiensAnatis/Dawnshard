@@ -1,5 +1,7 @@
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using DragaliaAPI;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.Blazor;
@@ -13,6 +15,7 @@ using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -136,6 +139,15 @@ builder.Services.ConfigureGameServices(builder.Configuration);
 builder.Services.ConfigureGraphQlSchema();
 
 WebApplication app = builder.Build();
+
+Stopwatch watch = new();
+app.Logger.LogInformation("Loading MasterAsset data.");
+
+watch.Start();
+RuntimeHelpers.RunClassConstructor(typeof(MasterAsset).TypeHandle);
+watch.Stop();
+
+app.Logger.LogInformation("Loaded MasterAsset in {time}.", watch.Elapsed);
 
 if (Environment.GetEnvironmentVariable("DISABLE_AUTO_MIGRATION") == null)
     app.MigrateDatabase();
