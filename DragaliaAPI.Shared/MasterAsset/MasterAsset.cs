@@ -25,25 +25,25 @@ public static class MasterAsset
     /// <summary>
     /// Contains information about characters.
     /// </summary>
-    public static MasterAssetData<Charas, CharaData> CharaData { get; } =
+    public static readonly MasterAssetData<Charas, CharaData> CharaData =
         new("CharaData.json", x => x.Id);
 
     /// <summary>
     /// Contains information about dragons.
     /// </summary>
-    public static MasterAssetData<Dragons, DragonData> DragonData { get; } =
+    public static readonly MasterAssetData<Dragons, DragonData> DragonData =
         new("DragonData.json", x => x.Id);
 
-    public static MasterAssetData<int, DragonRarity> DragonRarity { get; } =
+    public static readonly MasterAssetData<int, DragonRarity> DragonRarity =
         new("DragonRarity.json", x => x.Id);
 
     /// <summary>
     /// Contains information about quests.
     /// </summary>
-    public static MasterAssetData<int, QuestData> QuestData { get; } =
+    public static readonly MasterAssetData<int, QuestData> QuestData =
         new("QuestData.json", x => x.Id);
 
-    public static MasterAssetData<Materials, MaterialData> MaterialData { get; } =
+    public static readonly MasterAssetData<Materials, MaterialData> MaterialData =
         new("MaterialData.json", x => x.Id);
 
     /// <summary>
@@ -52,138 +52,138 @@ public static class MasterAsset
     /// <remarks>
     /// To generate keys, use <see cref="MasterAssetUtils.GetPlantDetailId"/>
     /// </remarks>
-    public static MasterAssetData<int, FortPlantDetail> FortPlant { get; } =
+    public static readonly MasterAssetData<int, FortPlantDetail> FortPlant =
         new("FortPlantDetail.json", x => x.Id);
 
     /// <summary>
     /// Contains information about weapons.
     /// </summary>
-    public static MasterAssetData<WeaponBodies, WeaponBody> WeaponBody { get; } =
+    public static readonly MasterAssetData<WeaponBodies, WeaponBody> WeaponBody =
         new("WeaponBody.json", x => x.Id);
 
     /// <summary>
     /// Contains information about miscellaneous weapon upgrade steps, i.e. anything not passive abilities or stat upgrades.
     /// </summary>
-    public static MasterAssetData<int, WeaponBodyBuildupGroup> WeaponBodyBuildupGroup { get; } =
+    public static readonly MasterAssetData<int, WeaponBodyBuildupGroup> WeaponBodyBuildupGroup =
         new("WeaponBodyBuildupGroup.json", x => x.Id);
 
     /// <summary>
     /// Contains information about stat weapon upgrade steps.
     /// </summary>
-    public static MasterAssetData<int, WeaponBodyBuildupLevel> WeaponBodyBuildupLevel { get; } =
+    public static readonly MasterAssetData<int, WeaponBodyBuildupLevel> WeaponBodyBuildupLevel =
         new("WeaponBodyBuildupLevel.json", x => x.Id);
 
     /// <summary>
     /// Contains information about weapon passive ability unlocks.
     /// </summary>
-    public static MasterAssetData<int, WeaponPassiveAbility> WeaponPassiveAbility { get; } =
+    public static readonly MasterAssetData<int, WeaponPassiveAbility> WeaponPassiveAbility =
         new("WeaponPassiveAbility.json", x => x.Id);
 
-    public static MasterAssetData<int, WeaponBodyRarity> WeaponBodyRarity { get; } =
+    public static readonly MasterAssetData<int, WeaponBodyRarity> WeaponBodyRarity =
         new("WeaponBodyRarity.json", x => x.Id);
 
     /// <summary>
     /// Contains information about weapons.
     /// </summary>
-    public static MasterAssetData<int, WeaponSkin> WeaponSkin { get; } =
+    public static readonly MasterAssetData<int, WeaponSkin> WeaponSkin =
         new("WeaponSkin.json", x => x.Id);
 
     /// <summary>
     /// Contains information about the materials required to unbind ability crests.
     /// </summary>
-    public static MasterAssetData<int, AbilityCrestBuildupGroup> AbilityCrestBuildupGroup { get; } =
+    public static readonly MasterAssetData<int, AbilityCrestBuildupGroup> AbilityCrestBuildupGroup =
         new("AbilityCrestBuildupGroup.json", x => x.Id);
 
     /// <summary>
     /// Contains information about the materials required to level up ability crests.
     /// </summary>
-    public static MasterAssetData<int, AbilityCrestBuildupLevel> AbilityCrestBuildupLevel { get; } =
+    public static readonly MasterAssetData<int, AbilityCrestBuildupLevel> AbilityCrestBuildupLevel =
         new("AbilityCrestBuildupLevel.json", x => x.Id);
 
     /// <summary>
     /// Contains information about the level limits of different ability crest rarities.
     /// </summary>
-    public static MasterAssetData<int, AbilityCrestRarity> AbilityCrestRarity { get; } =
+    public static readonly MasterAssetData<int, AbilityCrestRarity> AbilityCrestRarity =
         new("AbilityCrestRarity.json", x => x.Id);
 
     /// <summary>
     /// Contains information about ability crests.
     /// </summary>
-    public static MasterAssetData<AbilityCrests, AbilityCrest> AbilityCrest { get; } =
+    public static readonly MasterAssetData<AbilityCrests, AbilityCrest> AbilityCrest =
         new("AbilityCrest.json", x => x.Id);
 
-    public static MasterAssetData<int, QuestEventGroup> QuestEventGroup { get; } =
+    public static readonly MasterAssetData<int, QuestEventGroup> QuestEventGroup =
         new("QuestEventGroup.json", x => x.Id);
 
-    public static MasterAssetData<int, QuestEvent> QuestEvent { get; } =
+    public static readonly MasterAssetData<int, QuestEvent> QuestEvent =
         new("QuestEvent.json", x => x.Id);
 
-    public static MasterAssetData<int, QuestTreasureData> QuestTreasureData { get; } =
+    public static readonly MasterAssetData<int, QuestTreasureData> QuestTreasureData =
         new("QuestTreasureData.json", x => x.Id);
 
-    public static MasterAssetData<UseItem, UseItemData> UseItem { get; } =
+    public static readonly MasterAssetData<UseItem, UseItemData> UseItem =
         new("UseItem.json", x => x.Id);
 
-    public static MasterAssetData<int, AbilityData> AbilityData { get; } =
+    public static readonly MasterAssetData<int, AbilityData> AbilityData =
         new("AbilityData.json", x => x.Id);
 
-    public static MasterAssetData<int, AbilityLimitedGroup> AbilityLimitedGroup { get; } =
+    public static readonly MasterAssetData<int, AbilityLimitedGroup> AbilityLimitedGroup =
         new("AbilityLimitedGroup.json", x => x.Id);
 
-    public static MasterAssetData<int, ExAbilityData> ExAbilityData { get; } =
+    public static readonly MasterAssetData<int, ExAbilityData> ExAbilityData =
         new("ExAbilityData.json", x => x.Id);
 
-    public static MasterAssetData<int, UnionAbility> UnionAbility { get; } =
+    public static readonly MasterAssetData<int, UnionAbility> UnionAbility =
         new("UnionAbility.json", x => x.Id);
 
-    public static MasterAssetData<int, SkillData> SkillData { get; } =
+    public static readonly MasterAssetData<int, SkillData> SkillData =
         new("SkillData.json", x => x.Id);
 
     #region Missions
 
-    public static MasterAssetData<int, AlbumMission> AlbumMission { get; } =
+    public static readonly MasterAssetData<int, AlbumMission> AlbumMission =
         new("Missions/MissionAlbumData.json", x => x.Id);
 
-    public static MasterAssetData<int, NormalMission> BeginnerMission { get; } =
+    public static readonly MasterAssetData<int, NormalMission> BeginnerMission =
         new("Missions/MissionBeginnerData.json", x => x.Id);
 
-    public static MasterAssetData<int, DailyMission> DailyMission { get; } =
+    public static readonly MasterAssetData<int, DailyMission> DailyMission =
         new("Missions/MissionDailyData.json", x => x.Id);
 
-    public static MasterAssetData<int, DrillMission> DrillMission { get; } =
+    public static readonly MasterAssetData<int, DrillMission> DrillMission =
         new("Missions/MissionDrillData.json", x => x.Id);
 
-    public static MasterAssetData<int, DrillMissionGroup> DrillMissionGroup { get; } =
+    public static readonly MasterAssetData<int, DrillMissionGroup> DrillMissionGroup =
         new("Missions/MissionDrillGroup.json", x => x.Id);
 
-    public static MasterAssetData<int, MainStoryMission> MainStoryMission { get; } =
+    public static readonly MasterAssetData<int, MainStoryMission> MainStoryMission =
         new("Missions/MissionMainStoryData.json", x => x.Id);
 
-    public static MasterAssetData<int, MainStoryMissionGroup> MainStoryMissionGroup { get; } =
+    public static readonly MasterAssetData<int, MainStoryMissionGroup> MainStoryMissionGroup =
         new("Missions/MissionMainStoryGroup.json", x => x.Id);
 
-    public static MasterAssetData<int, MemoryEventMission> MemoryEventMission { get; } =
+    public static readonly MasterAssetData<int, MemoryEventMission> MemoryEventMission =
         new("Missions/MissionMemoryEventData.json", x => x.Id);
 
-    public static MasterAssetData<int, NormalMission> NormalMission { get; } =
+    public static readonly MasterAssetData<int, NormalMission> NormalMission =
         new("Missions/MissionNormalData.json", x => x.Id);
 
-    public static MasterAssetData<int, PeriodMission> PeriodMission { get; } =
+    public static readonly MasterAssetData<int, PeriodMission> PeriodMission =
         new("Missions/MissionPeriodData.json", x => x.Id);
 
-    public static MasterAssetData<int, SpecialMission> SpecialMission { get; } =
+    public static readonly MasterAssetData<int, SpecialMission> SpecialMission =
         new("Missions/MissionSpecialData.json", x => x.Id);
 
-    public static MasterAssetData<int, SpecialMissionGroup> SpecialMissionGroup { get; } =
+    public static readonly MasterAssetData<int, SpecialMissionGroup> SpecialMissionGroup =
         new("Missions/MissionSpecialGroup.json", x => x.Id);
 
-    public static MasterAssetData<int, MissionProgressionInfo> MissionProgressionInfo { get; } =
+    public static readonly MasterAssetData<int, MissionProgressionInfo> MissionProgressionInfo =
         new("Missions/MissionProgressionInfo.json", x => x.Id);
 
-    public static MasterAssetData<
+    public static readonly MasterAssetData<
         int,
         MainStoryMissionGroupRewards
-    > MainStoryMissionGroupRewards { get; } = new("Missions/MainStoryMissionGroupRewards.json", x => x.Id);
+    > MainStoryMissionGroupRewards = new("Missions/MainStoryMissionGroupRewards.json", x => x.Id);
 
     #endregion
 
@@ -192,25 +192,25 @@ public static class MasterAsset
     /// <summary>
     /// Contains information about stickers.
     /// </summary>
-    public static MasterAssetData<int, Stamp> StampData { get; } = new("StampData.json", x => x.Id);
+    public static readonly MasterAssetData<int, Stamp> StampData = new("StampData.json", x => x.Id);
 
     #endregion
 
     #region Shops
 
-    public static MasterAssetData<int, NormalShop> NormalShop { get; } =
+    public static readonly MasterAssetData<int, NormalShop> NormalShop =
         new("Shop/NormalShop.json", x => x.Id);
 
-    public static MasterAssetData<int, SpecialShop> SpecialShop { get; } =
+    public static readonly MasterAssetData<int, SpecialShop> SpecialShop =
         new("Shop/SpecialShop.json", x => x.Id);
 
-    public static MasterAssetData<int, MaterialShop> MaterialShopDaily { get; } =
+    public static readonly MasterAssetData<int, MaterialShop> MaterialShopDaily =
         new("Shop/MaterialShopDaily.json", x => x.Id);
 
-    public static MasterAssetData<int, MaterialShop> MaterialShopWeekly { get; } =
+    public static readonly MasterAssetData<int, MaterialShop> MaterialShopWeekly =
         new("Shop/MaterialShopWeekly.json", x => x.Id);
 
-    public static MasterAssetData<int, MaterialShop> MaterialShopMonthly { get; } =
+    public static readonly MasterAssetData<int, MaterialShop> MaterialShopMonthly =
         new("Shop/MaterialShopMonthly.json", x => x.Id);
 
     #endregion
@@ -220,23 +220,23 @@ public static class MasterAsset
     /// <summary>
     /// Contains information about ability crests in the shop.
     /// </summary>
-    public static MasterAssetData<int, AbilityCrestTrade> AbilityCrestTrade { get; } =
+    public static readonly MasterAssetData<int, AbilityCrestTrade> AbilityCrestTrade =
         new("Trade/AbilityCrestTrade.json", x => x.Id);
 
-    public static MasterAssetData<int, TreasureTrade> TreasureTrade { get; } =
+    public static readonly MasterAssetData<int, TreasureTrade> TreasureTrade =
         new("Trade/TreasureTrade.json", x => x.Id);
 
-    public static MasterAssetData<int, TreasureTrade> EventTreasureTrade { get; } =
+    public static readonly MasterAssetData<int, TreasureTrade> EventTreasureTrade =
         new("Trade/EventTreasureTradeInfo.json", x => x.Id);
 
     #endregion
 
     #region Login Bonus
 
-    public static MasterAssetData<int, LoginBonusData> LoginBonusData { get; } =
+    public static readonly MasterAssetData<int, LoginBonusData> LoginBonusData =
         new("Login/LoginBonusData.json", x => x.Id);
 
-    public static MasterAssetData<int, LoginBonusReward> LoginBonusReward { get; } =
+    public static readonly MasterAssetData<int, LoginBonusReward> LoginBonusReward =
         new("Login/LoginBonusReward.json", x => x.Id);
 
     #endregion
@@ -246,16 +246,16 @@ public static class MasterAsset
     /// <summary>
     /// Contains information about mana circle nodes.
     /// </summary>
-    public static MasterAssetData<int, ManaNode> ManaNode { get; } =
+    public static readonly MasterAssetData<int, ManaNode> ManaNode =
         new("ManaCircle/MC.json", x => x.MC_0);
 
-    public static MasterAssetData<int, ManaPieceMaterial> ManaPieceMaterial { get; } =
+    public static readonly MasterAssetData<int, ManaPieceMaterial> ManaPieceMaterial =
         new("ManaCircle/ManaPieceMaterial.json", x => x.Id);
 
-    public static MasterAssetData<ManaNodeTypes, ManaPieceType> ManaPieceType { get; } =
+    public static readonly MasterAssetData<ManaNodeTypes, ManaPieceType> ManaPieceType =
         new("ManaCircle/ManaPieceType.json", x => x.Id);
 
-    public static MasterAssetData<int, CharaLimitBreak> CharaLimitBreak { get; } =
+    public static readonly MasterAssetData<int, CharaLimitBreak> CharaLimitBreak =
         new("ManaCircle/CharaLimitBreak.json", x => x.Id);
 
     #endregion
@@ -265,25 +265,25 @@ public static class MasterAsset
     /// <summary>
     /// Dragon StoryId Arrays indexed by DragonId
     /// </summary>
-    public static MasterAssetData<int, StoryData> DragonStories { get; } =
+    public static readonly MasterAssetData<int, StoryData> DragonStories =
         new("Story/DragonStories.json", x => x.id);
 
     /// <summary>
     /// Character StoryId Arrays indexed by CharaId
     /// </summary>
-    public static MasterAssetData<int, StoryData> CharaStories { get; } =
+    public static readonly MasterAssetData<int, StoryData> CharaStories =
         new("Story/CharaStories.json", x => x.id);
 
-    public static MasterAssetData<int, UnitStory> UnitStory { get; } =
+    public static readonly MasterAssetData<int, UnitStory> UnitStory =
         new("Story/UnitStory.json", x => x.Id);
 
-    public static MasterAssetData<int, QuestStory> QuestStory { get; } =
+    public static readonly MasterAssetData<int, QuestStory> QuestStory =
         new("Story/QuestStory.json", x => x.Id);
 
-    public static MasterAssetData<int, EventStory> EventStory { get; } =
+    public static readonly MasterAssetData<int, EventStory> EventStory =
         new("Story/EventStory.json", x => x.Id);
 
-    public static MasterAssetData<int, QuestStoryRewardInfo> QuestStoryRewardInfo { get; } =
+    public static readonly MasterAssetData<int, QuestStoryRewardInfo> QuestStoryRewardInfo =
         new("Story/QuestStoryRewardInfo.json", x => x.Id);
 
     #endregion
@@ -293,13 +293,13 @@ public static class MasterAsset
     /// <summary>
     /// Contains information about the <see cref="Models.QuestDrops.EnemyParam"/> IDs in particular quest maps.
     /// </summary>
-    public static MasterAssetData<string, QuestEnemies> QuestEnemies { get; } =
+    public static readonly MasterAssetData<string, QuestEnemies> QuestEnemies =
         new("QuestDrops/QuestEnemies.json", x => x.AreaName);
 
     /// <summary>
     /// Contains information about instances of enemies within a quest.
     /// </summary>
-    public static MasterAssetData<int, EnemyParam> EnemyParam { get; } =
+    public static readonly MasterAssetData<int, EnemyParam> EnemyParam =
         new("QuestDrops/EnemyParam.json", x => x.Id);
 
     /// <summary>
@@ -308,7 +308,7 @@ public static class MasterAsset
     /// <remarks>
     /// Generated from parsing wiki Cargo data.
     /// </remarks>
-    public static MasterAssetData<int, QuestDropInfo> QuestDrops { get; } =
+    public static readonly MasterAssetData<int, QuestDropInfo> QuestDrops =
         new("QuestDrops/QuestDrops.json", x => x.QuestId);
 
     /// <summary>
@@ -317,153 +317,148 @@ public static class MasterAsset
     /// <remarks>
     /// Generated from parsing wiki Cargo data.
     /// </remarks>
-    public static MasterAssetData<int, QuestBonusReward> QuestBonusRewards { get; } =
+    public static readonly MasterAssetData<int, QuestBonusReward> QuestBonusRewards =
         new("QuestDrops/QuestBonusRewards.json", x => x.QuestId);
 
     #endregion
 
     #region Quest Rewards
 
-    public static MasterAssetData<int, QuestRewardData> QuestRewardData { get; } =
+    public static readonly MasterAssetData<int, QuestRewardData> QuestRewardData =
         new("QuestRewards/QuestRewardData.json", x => x.Id);
 
-    public static MasterAssetData<
+    public static readonly MasterAssetData<
         int,
         QuestScoreMissionRewardInfo
-    > QuestScoreMissionRewardInfo
-    { get; } = new("QuestRewards/QuestScoreMissionRewardInfo.json", x => x.Id);
+    > QuestScoreMissionRewardInfo = new("QuestRewards/QuestScoreMissionRewardInfo.json", x => x.Id);
 
-    public static MasterAssetData<int, QuestScoreMissionData> QuestScoreMissionData { get; } =
+    public static readonly MasterAssetData<int, QuestScoreMissionData> QuestScoreMissionData =
         new("QuestRewards/QuestScoreMissionData.json", x => x.Id);
 
     #endregion
 
     #region Events
 
-    public static MasterAssetData<int, EventData> EventData { get; } =
+    public static readonly MasterAssetData<int, EventData> EventData =
         new("Event/EventData.json", x => x.Id);
 
-    public static MasterAssetData<int, EventTradeGroup> EventTradeGroup { get; } =
+    public static readonly MasterAssetData<int, EventTradeGroup> EventTradeGroup =
         new("Event/EventTradeGroup.json", x => x.Id);
 
-    public static MasterAssetGroup<int, int, BuildEventReward> BuildEventReward { get; } =
+    public static readonly MasterAssetGroup<int, int, BuildEventReward> BuildEventReward =
         new("Event/BuildEventReward.json", x => x.Id);
 
-    public static MasterAssetGroup<int, int, RaidEventReward> RaidEventReward { get; } =
+    public static readonly MasterAssetGroup<int, int, RaidEventReward> RaidEventReward =
         new("Event/RaidEventReward.json", x => x.Id);
 
-    public static MasterAssetData<int, CombatEventLocation> CombatEventLocation { get; } =
+    public static readonly MasterAssetData<int, CombatEventLocation> CombatEventLocation =
         new("Event/CombatEventLocation.json", x => x.Id);
 
-    public static MasterAssetData<
+    public static readonly MasterAssetData<
         int,
         CombatEventLocationReward
-    > CombatEventLocationReward
-    { get; } = new("Event/CombatEventLocationReward.json", x => x.Id);
+    > CombatEventLocationReward = new("Event/CombatEventLocationReward.json", x => x.Id);
 
-    public static MasterAssetData<int, EventItem<BuildEventItemType>> BuildEventItem { get; } =
+    public static readonly MasterAssetData<int, EventItem<BuildEventItemType>> BuildEventItem =
         new("Event/BuildEventItem.json", x => x.Id);
 
-    public static MasterAssetData<int, EventItem<CombatEventItemType>> CombatEventItem { get; } =
+    public static readonly MasterAssetData<int, EventItem<CombatEventItemType>> CombatEventItem =
         new("Event/CombatEventItem.json", x => x.Id);
 
-    public static MasterAssetData<int, RaidEventItem> RaidEventItem { get; } =
+    public static readonly MasterAssetData<int, RaidEventItem> RaidEventItem =
         new("Event/RaidEventItem.json", x => x.Id);
 
-    public static MasterAssetData<int, EventItem<SimpleEventItemType>> SimpleEventItem { get; } =
+    public static readonly MasterAssetData<int, EventItem<SimpleEventItemType>> SimpleEventItem =
         new("Event/SimpleEventItem.json", x => x.Id);
 
-    public static MasterAssetData<int, EventItem<ExRushEventItemType>> ExRushEventItem { get; } =
+    public static readonly MasterAssetData<int, EventItem<ExRushEventItemType>> ExRushEventItem =
         new("Event/ExRushEventItem.json", x => x.Id);
 
-    public static MasterAssetData<
+    public static readonly MasterAssetData<
         int,
         EventItem<ExHunterEventItemType>
-    > ExHunterEventItem
-    { get; } = new("Event/ExHunterEventItem.json", x => x.Id);
+    > ExHunterEventItem = new("Event/ExHunterEventItem.json", x => x.Id);
 
-    public static MasterAssetData<int, EventItem<EarnEventItemType>> EarnEventItem { get; } =
+    public static readonly MasterAssetData<int, EventItem<EarnEventItemType>> EarnEventItem =
         new("Event/EarnEventItem.json", x => x.Id);
 
-    public static MasterAssetData<int, EventItem<CollectEventItemType>> CollectEventItem { get; } =
+    public static readonly MasterAssetData<int, EventItem<CollectEventItemType>> CollectEventItem =
         new("Event/CollectEventItem.json", x => x.Id);
 
-    public static MasterAssetData<int, EventItem<Clb01EventItemType>> Clb01EventItem { get; } =
+    public static readonly MasterAssetData<int, EventItem<Clb01EventItemType>> Clb01EventItem =
         new("Event/Clb01EventItem.json", x => x.Id);
 
-    public static MasterAssetData<
+    public static readonly MasterAssetData<
         int,
         EventItem<BattleRoyalEventItemType>
-    > BattleRoyalEventItem
-    { get; } = new("Event/BattleRoyalEventItem.json", x => x.Id);
+    > BattleRoyalEventItem = new("Event/BattleRoyalEventItem.json", x => x.Id);
 
-    public static MasterAssetData<int, EventPassive> EventPassive { get; } =
+    public static readonly MasterAssetData<int, EventPassive> EventPassive =
         new("Event/EventPassive.json", x => x.Id);
 
     #endregion
 
     #region Dmode
 
-    public static MasterAssetData<int, DmodeQuestFloor> DmodeQuestFloor { get; } =
+    public static readonly MasterAssetData<int, DmodeQuestFloor> DmodeQuestFloor =
         new("Dmode/DmodeQuestFloor.json", x => x.Id);
 
-    public static MasterAssetData<int, DmodeDungeonArea> DmodeDungeonArea { get; } =
+    public static readonly MasterAssetData<int, DmodeDungeonArea> DmodeDungeonArea =
         new("Dmode/DmodeDungeonArea.json", x => x.Id);
 
-    public static MasterAssetData<int, DmodeDungeonTheme> DmodeDungeonTheme { get; } =
+    public static readonly MasterAssetData<int, DmodeDungeonTheme> DmodeDungeonTheme =
         new("Dmode/DmodeDungeonTheme.json", x => x.Id);
 
-    public static MasterAssetData<int, DmodeEnemyTheme> DmodeEnemyTheme { get; } =
+    public static readonly MasterAssetData<int, DmodeEnemyTheme> DmodeEnemyTheme =
         new("Dmode/DmodeEnemyTheme.json", x => x.Id);
 
-    public static MasterAssetData<string, DmodeAreaInfo> DmodeAreaInfo { get; } =
+    public static readonly MasterAssetData<string, DmodeAreaInfo> DmodeAreaInfo =
         new("Dmode/DmodeAreaInfo.json", x => x.AreaName);
 
-    public static MasterAssetData<int, DmodeEnemyParam> DmodeEnemyParam { get; } =
+    public static readonly MasterAssetData<int, DmodeEnemyParam> DmodeEnemyParam =
         new("Dmode/DmodeEnemyParam.json", x => x.Id);
 
-    public static MasterAssetData<int, DmodeCharaLevel> DmodeCharaLevel { get; } =
+    public static readonly MasterAssetData<int, DmodeCharaLevel> DmodeCharaLevel =
         new("Dmode/DmodeCharaLevel.json", x => x.Id);
 
-    public static MasterAssetData<int, DmodeWeapon> DmodeWeapon { get; } =
+    public static readonly MasterAssetData<int, DmodeWeapon> DmodeWeapon =
         new("Dmode/DmodeWeapon.json", x => x.Id);
 
-    public static MasterAssetData<int, DmodeAbilityCrest> DmodeAbilityCrest { get; } =
+    public static readonly MasterAssetData<int, DmodeAbilityCrest> DmodeAbilityCrest =
         new("Dmode/DmodeAbilityCrest.json", x => x.Id);
 
-    public static MasterAssetData<int, DmodeStrengthParam> DmodeStrengthParam { get; } =
+    public static readonly MasterAssetData<int, DmodeStrengthParam> DmodeStrengthParam =
         new("Dmode/DmodeStrengthParam.json", x => x.Id);
 
-    public static MasterAssetData<int, DmodeStrengthSkill> DmodeStrengthSkill { get; } =
+    public static readonly MasterAssetData<int, DmodeStrengthSkill> DmodeStrengthSkill =
         new("Dmode/DmodeStrengthSkill.json", x => x.Id);
 
-    public static MasterAssetData<int, DmodeStrengthAbility> DmodeStrengthAbility { get; } =
+    public static readonly MasterAssetData<int, DmodeStrengthAbility> DmodeStrengthAbility =
         new("Dmode/DmodeStrengthAbility.json", x => x.Id);
 
-    public static MasterAssetData<int, DmodeDungeonItemData> DmodeDungeonItemData { get; } =
+    public static readonly MasterAssetData<int, DmodeDungeonItemData> DmodeDungeonItemData =
         new("Dmode/DmodeDungeonItemData.json", x => x.Id);
 
-    public static MasterAssetData<
+    public static readonly MasterAssetData<
         int,
         DmodeServitorPassiveLevel
-    > DmodeServitorPassiveLevel
-    { get; } = new("Dmode/DmodeServitorPassiveLevel.json", x => x.Id);
+    > DmodeServitorPassiveLevel = new("Dmode/DmodeServitorPassiveLevel.json", x => x.Id);
 
-    public static MasterAssetData<int, DmodeExpeditionFloor> DmodeExpeditionFloor { get; } =
+    public static readonly MasterAssetData<int, DmodeExpeditionFloor> DmodeExpeditionFloor =
         new("Dmode/DmodeExpeditionFloor.json", x => x.Id);
 
     #endregion
 
     #region User
 
-    public static MasterAssetData<int, UserLevel> UserLevel { get; } =
+    public static readonly MasterAssetData<int, UserLevel> UserLevel =
         new("User/UserLevel.json", x => x.Id);
 
     #endregion
 
     #region Quest Schedule
 
-    public static MasterAssetData<int, QuestScheduleInfo> QuestScheduleInfo { get; } =
+    public static readonly MasterAssetData<int, QuestScheduleInfo> QuestScheduleInfo =
         new("QuestSchedule/QuestScheduleInfo.json", x => x.Id);
 
     #endregion
@@ -473,13 +468,13 @@ public static class MasterAsset
     /// <summary>
     /// Contains information about the last two ranked quests in each Time Attack event.
     /// </summary>
-    public static MasterAssetData<int, RankingData> RankingData { get; } =
+    public static readonly MasterAssetData<int, RankingData> RankingData =
         new("TimeAttack/RankingData.json", x => x.QuestId);
 
     /// <summary>
     /// Contains information about the initial non-ranked rewards for clearing Time Attack quests.
     /// </summary>
-    public static MasterAssetData<int, RankingTierReward> RankingTierReward { get; } =
+    public static readonly MasterAssetData<int, RankingTierReward> RankingTierReward =
         new("TimeAttack/RankingTierReward.json", x => x.Id);
 
     #endregion
@@ -488,13 +483,13 @@ public static class MasterAsset
     /// <summary>
     /// Contains information about Mercurial Gauntlet quests.
     /// </summary>
-    public static MasterAssetData<int, QuestWallDetail> QuestWallDetail { get; } =
+    public static readonly MasterAssetData<int, QuestWallDetail> QuestWallDetail =
         new("Wall/QuestWallDetail.json", x => x.Id);
 
     /// <summary>
     /// Contains information about Mercurial Gauntlet monthly rewards.
     /// </summary>
-    public static MasterAssetData<int, QuestWallMonthlyReward> QuestWallMonthlyReward { get; } =
+    public static readonly MasterAssetData<int, QuestWallMonthlyReward> QuestWallMonthlyReward =
         new("Wall/QuestWallMonthlyReward.json", x => x.TotalWallLevel);
     #endregion
 }
