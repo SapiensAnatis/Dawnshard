@@ -183,7 +183,7 @@ public static class MasterAsset
     public static MasterAssetData<
         int,
         MainStoryMissionGroupRewards
-    > MainStoryMissionGroupRewards = new("Missions/MainStoryMissionGroupRewards.json", x => x.Id);
+    > MainStoryMissionGroupRewards { get; } = new("Missions/MainStoryMissionGroupRewards.json", x => x.Id);
 
     #endregion
 
@@ -192,7 +192,7 @@ public static class MasterAsset
     /// <summary>
     /// Contains information about stickers.
     /// </summary>
-    public static MasterAssetData<int, Stamp> StampData = new("StampData.json", x => x.Id);
+    public static MasterAssetData<int, Stamp> StampData { get; } = new("StampData.json", x => x.Id);
 
     #endregion
 
@@ -330,7 +330,8 @@ public static class MasterAsset
     public static MasterAssetData<
         int,
         QuestScoreMissionRewardInfo
-    > QuestScoreMissionRewardInfo = new("QuestRewards/QuestScoreMissionRewardInfo.json", x => x.Id);
+    > QuestScoreMissionRewardInfo
+    { get; } = new("QuestRewards/QuestScoreMissionRewardInfo.json", x => x.Id);
 
     public static MasterAssetData<int, QuestScoreMissionData> QuestScoreMissionData { get; } =
         new("QuestRewards/QuestScoreMissionData.json", x => x.Id);
@@ -357,7 +358,8 @@ public static class MasterAsset
     public static MasterAssetData<
         int,
         CombatEventLocationReward
-    > CombatEventLocationReward = new("Event/CombatEventLocationReward.json", x => x.Id);
+    > CombatEventLocationReward
+    { get; } = new("Event/CombatEventLocationReward.json", x => x.Id);
 
     public static MasterAssetData<int, EventItem<BuildEventItemType>> BuildEventItem { get; } =
         new("Event/BuildEventItem.json", x => x.Id);
@@ -377,7 +379,8 @@ public static class MasterAsset
     public static MasterAssetData<
         int,
         EventItem<ExHunterEventItemType>
-    > ExHunterEventItem = new("Event/ExHunterEventItem.json", x => x.Id);
+    > ExHunterEventItem
+    { get; } = new("Event/ExHunterEventItem.json", x => x.Id);
 
     public static MasterAssetData<int, EventItem<EarnEventItemType>> EarnEventItem { get; } =
         new("Event/EarnEventItem.json", x => x.Id);
@@ -391,7 +394,8 @@ public static class MasterAsset
     public static MasterAssetData<
         int,
         EventItem<BattleRoyalEventItemType>
-    > BattleRoyalEventItem = new("Event/BattleRoyalEventItem.json", x => x.Id);
+    > BattleRoyalEventItem
+    { get; } = new("Event/BattleRoyalEventItem.json", x => x.Id);
 
     public static MasterAssetData<int, EventPassive> EventPassive { get; } =
         new("Event/EventPassive.json", x => x.Id);
@@ -442,7 +446,8 @@ public static class MasterAsset
     public static MasterAssetData<
         int,
         DmodeServitorPassiveLevel
-    > DmodeServitorPassiveLevel = new("Dmode/DmodeServitorPassiveLevel.json", x => x.Id);
+    > DmodeServitorPassiveLevel
+    { get; } = new("Dmode/DmodeServitorPassiveLevel.json", x => x.Id);
 
     public static MasterAssetData<int, DmodeExpeditionFloor> DmodeExpeditionFloor { get; } =
         new("Dmode/DmodeExpeditionFloor.json", x => x.Id);
