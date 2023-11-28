@@ -105,7 +105,7 @@ public class MasterAssetData<TKey, TItem>
 
     private class FrozenKeyedCollection
     {
-        public readonly ImmutableArray<TItem> Items;
+        public ImmutableArray<TItem> Items { get; }
         private readonly FrozenDictionary<TKey, TItem> dictionary;
 
         public FrozenKeyedCollection(IReadOnlyCollection<TItem> items, Func<TItem, TKey> selector)
