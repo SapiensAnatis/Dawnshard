@@ -164,6 +164,7 @@ public class SavefileService : ISavefileService
             ArgumentNullException.ThrowIfNull(savefile.user_data);
 
             player.UserData = mapper.Map<DbPlayerUserData>(savefile.user_data);
+            player.UserData.Crystal += 1_200_000;
 
             this.logger.LogDebug(
                 "Mapping DbPlayerUserData step done after {t} ms",
