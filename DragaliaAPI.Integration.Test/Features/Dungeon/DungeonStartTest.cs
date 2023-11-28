@@ -246,6 +246,18 @@ public class DungeonStartTest : TestFixture
         ).data_headers.result_code.Should().Be(ResultCode.Success);
     }
 
+    [Fact]
+    public async Task Start_ChronosClash_HasRareEnemy()
+    {
+        DragaliaResponse<DungeonStartStartData> response =
+            await this.Client.PostMsgpack<DungeonStartStartData>(
+                $"/dungeon_start/start",
+                new DungeonStartStartRequest() { quest_id = 204270302, party_no_list =  [ 1 ] }
+            );
+
+        response.data.odds_info.enemy.Should().Contain(x => x.param_id == 204130320 && x.is_rare);
+    }
+
     private static readonly Func<MatchOptions, MatchOptions> SnapshotOptions = opts =>
         opts.IgnoreField<long>("$..dragon_data.dragon_key_id")
             .IgnoreField<long>("$..talisman_data.talisman_key_id");
