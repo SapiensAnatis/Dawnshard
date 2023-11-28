@@ -152,6 +152,13 @@ public class DungeonStartController(
             session => session.EnemyList[0] = oddsInfo.enemy
         );
 
+        if (questId == 204270302)
+        {
+            // Chronos Clash issue workaround: setting the is_rare flag will force him to spawn
+            // https://github.com/SapiensAnatis/Dawnshard/issues/515
+            oddsInfo.enemy.First().is_rare = true;
+        }
+
         return new()
         {
             ingame_data = ingameData,
