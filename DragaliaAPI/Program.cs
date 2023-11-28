@@ -1,5 +1,7 @@
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using DragaliaAPI;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.Blazor;
@@ -13,6 +15,7 @@ using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Health;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -23,6 +26,15 @@ using MudBlazor.Services;
 using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+Stopwatch watch = new();
+Console.WriteLine("Loading MasterAsset data.");
+
+watch.Start();
+RuntimeHelpers.RunClassConstructor(typeof(MasterAsset).TypeHandle);
+watch.Stop();
+
+Console.WriteLine($"Loaded MasterAsset in {watch}.");
 
 IConfiguration config = builder
     .Configuration
