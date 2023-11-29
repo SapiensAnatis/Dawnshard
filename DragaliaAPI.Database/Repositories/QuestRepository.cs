@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.PlayerDetails;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database.Repositories;
 
@@ -58,5 +59,13 @@ public class QuestRepository : IQuestRepository
                     }
                 )
                 .Entity;
+    }
+
+    public async Task DeleteQuests(IEnumerable<int> questIds)
+    {
+        List<DbQuest> questEntities = await this.Quests
+            .Where(x => questIds.Contains(x.QuestId))
+            .ToListAsync();
+        this.apiContext.PlayerQuests.RemoveRange(questEntities);
     }
 }

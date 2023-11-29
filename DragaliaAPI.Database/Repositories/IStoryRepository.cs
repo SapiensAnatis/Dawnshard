@@ -21,4 +21,5 @@ public interface IStoryRepository
     Task<DbPlayerStoryState> GetOrCreateStory(StoryTypes storyType, int storyId);
 
     Task<bool> HasReadQuestStory(int storyId);
+    Task DeleteQuestStories(int[] storyIds);
 }

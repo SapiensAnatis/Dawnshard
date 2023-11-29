@@ -18,6 +18,7 @@ public class EventService(
     IEventRepository eventRepository,
     IRewardService rewardService,
     IQuestRepository questRepository,
+    IStoryRepository storyRepository,
     IMissionService missionService
 ) : IEventService
 {
@@ -175,16 +176,21 @@ public class EventService(
     public async Task CreateEventData(int eventId)
     {
         bool firstEventEnter = false;
+        EventData data = MasterAsset.EventData[eventId];
 
         if (await eventRepository.GetEventDataAsync(eventId) == null)
         {
             logger.LogInformation("Creating event data for event {eventId}", eventId);
             eventRepository.CreateEventData(eventId);
+
             await missionService.UnlockMemoryEventMissions(eventId);
+            if (!data.IsMemoryEvent)
+            {
+                await this.ResetEventProgress(eventId);
+            }
+
             firstEventEnter = true;
         }
-
-        EventData data = MasterAsset.EventData[eventId];
 
         IEnumerable<int> items = await eventRepository
             .Items
@@ -270,6 +276,28 @@ public class EventService(
                 eventRepository.CreateEventReward(eventId, locationId);
             }
         }
+    }
+
+    private async Task ResetEventProgress(int eventId)
+    {
+        logger.LogInformation("Resetting existing event progress for event {eventId}", eventId);
+
+        int[] questIds = MasterAsset
+            .QuestData
+            .Enumerable
+            .Where(x => x.Gid == eventId)
+            .Select(x => x.Id)
+            .ToArray();
+
+        int[] storyIds = MasterAsset
+            .QuestStory
+            .Enumerable
+            .Where(x => x.GroupId == eventId)
+            .Select(x => x.Id)
+            .ToArray();
+
+        await questRepository.DeleteQuests(questIds);
+        await storyRepository.DeleteQuestStories(storyIds);
     }
 
     private async Task<DbPlayerEventData> GetEventData(int eventId)
