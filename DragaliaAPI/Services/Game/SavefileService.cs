@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
@@ -118,15 +119,6 @@ public class SavefileService : ISavefileService
             RedisOptions
         );
 
-        // Preserve the existing viewer ID if there is one.
-        // Could reassign, but this makes it easier for people to remember their ID.
-        long? oldViewerId = await this.apiContext
-            .Players
-            .Where(x => x.AccountId == deviceAccountId)
-            .Select(x => x.ViewerId)
-            .Cast<long?>()
-            .SingleOrDefaultAsync();
-
         this.logger.LogInformation(
             "Beginning savefile import for account {accountId}",
             this.playerIdentityService.AccountId
@@ -145,15 +137,11 @@ public class SavefileService : ISavefileService
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            DbPlayer player =
-                new()
-                {
-                    AccountId = this.playerIdentityService.AccountId,
-                    SavefileVersion = 0,
-                    ViewerId = oldViewerId ?? default
-                };
+            DbPlayer player = await this.apiContext
+                .Players
+                .FirstAsync(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
-            this.apiContext.Players.Add(player);
+            player.SavefileVersion = 0;
 
             this.logger.LogDebug(
                 "Mapping DbPlayer step done after {t} ms",
@@ -457,14 +445,13 @@ public class SavefileService : ISavefileService
         }
     }
 
-    private Task Delete() => this.Delete(this.playerIdentityService.ViewerId);
-
-    private async Task Delete(long viewerId)
+    private async Task Delete()
     {
+        long viewerId = this.playerIdentityService.ViewerId;
+
         // Options commented out have been excluded from save import deletion process.
         // They will still be deleted by cascade delete when a player is actually deleted
         // without being re-added as they are in save imports.
-        await this.apiContext.Players.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
         await this.apiContext
             .PlayerUserData
             .Where(x => x.ViewerId == viewerId)

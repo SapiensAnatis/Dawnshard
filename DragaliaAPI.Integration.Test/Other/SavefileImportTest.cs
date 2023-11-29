@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Json;
 using Microsoft.EntityFrameworkCore;
 
@@ -177,6 +178,25 @@ public class SavefileImportTest : TestFixture
             .StoryType
             .Should()
             .Be(StoryTypes.Dragon);
+    }
+
+    [Fact]
+    public async Task Import_DoesNotDeleteEmblems()
+    {
+        await this.AddToDatabase(
+            new DbEmblem() { ViewerId = ViewerId, EmblemId = Emblems.IsolationSpeedslayer_1 }
+        );
+
+        this.ApiContext.ChangeTracker.Clear();
+
+        HttpContent content = PrepareSavefileRequest();
+        await this.Client.PostAsync($"savefile/import/{ViewerId}", content);
+
+        this.ApiContext
+            .Emblems
+            .AsNoTracking()
+            .Should()
+            .Contain(x => x.ViewerId == ViewerId && x.EmblemId == Emblems.IsolationSpeedslayer_1);
     }
 
     [Fact]
