@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
@@ -118,15 +119,6 @@ public class SavefileService : ISavefileService
             RedisOptions
         );
 
-        // Preserve the existing viewer ID if there is one.
-        // Could reassign, but this makes it easier for people to remember their ID.
-        long? oldViewerId = await this.apiContext
-            .Players
-            .Where(x => x.AccountId == deviceAccountId)
-            .Select(x => x.ViewerId)
-            .Cast<long?>()
-            .SingleOrDefaultAsync();
-
         this.logger.LogInformation(
             "Beginning savefile import for account {accountId}",
             this.playerIdentityService.AccountId
@@ -138,22 +130,18 @@ public class SavefileService : ISavefileService
                 .Database
                 .BeginTransactionAsync();
 
-            this.Delete();
+            await this.Delete();
 
             this.logger.LogDebug(
                 "Deleting savedata step done after {t} ms",
                 stopwatch.Elapsed.TotalMilliseconds
             );
 
-            DbPlayer player =
-                new()
-                {
-                    AccountId = this.playerIdentityService.AccountId,
-                    SavefileVersion = 0,
-                    ViewerId = oldViewerId ?? default
-                };
+            DbPlayer player = await this.apiContext
+                .Players
+                .FirstAsync(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
-            this.apiContext.Players.Add(player);
+            player.SavefileVersion = 0;
 
             this.logger.LogDebug(
                 "Mapping DbPlayer step done after {t} ms",
@@ -457,90 +445,97 @@ public class SavefileService : ISavefileService
         }
     }
 
-    private void Delete() => this.Delete(this.playerIdentityService.ViewerId);
-
-    private void Delete(long viewerId)
+    private async Task Delete()
     {
+        long viewerId = this.playerIdentityService.ViewerId;
+
         // Options commented out have been excluded from save import deletion process.
         // They will still be deleted by cascade delete when a player is actually deleted
         // without being re-added as they are in save imports.
-        this.apiContext
-            .Players
-            .RemoveRange(this.apiContext.Players.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+        await this.apiContext
             .PlayerUserData
-            .RemoveRange(this.apiContext.PlayerUserData.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerCharaData
-            .RemoveRange(this.apiContext.PlayerCharaData.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerDragonReliability
-            .RemoveRange(
-                this.apiContext.PlayerDragonReliability.Where(x => x.ViewerId == viewerId)
-            );
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerDragonData
-            .RemoveRange(this.apiContext.PlayerDragonData.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerAbilityCrests
-            .RemoveRange(this.apiContext.PlayerAbilityCrests.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerStoryState
-            .RemoveRange(this.apiContext.PlayerStoryState.Where(x => x.ViewerId == viewerId));
-        this.apiContext
-            .PlayerQuests
-            .RemoveRange(this.apiContext.PlayerQuests.Where(x => x.ViewerId == viewerId));
-        this.apiContext
-            .PlayerParties
-            .RemoveRange(this.apiContext.PlayerParties.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext.PlayerQuests.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await this.apiContext.PlayerParties.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerPartyUnits
-            .RemoveRange(this.apiContext.PlayerPartyUnits.Where(x => x.ViewerId == viewerId));
-        this.apiContext
-            .PlayerWeapons
-            .RemoveRange(this.apiContext.PlayerWeapons.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext.PlayerWeapons.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerMaterials
-            .RemoveRange(this.apiContext.PlayerMaterials.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerTalismans
-            .RemoveRange(this.apiContext.PlayerTalismans.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerFortBuilds
-            .RemoveRange(this.apiContext.PlayerFortBuilds.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerWeaponSkins
-            .RemoveRange(this.apiContext.PlayerWeaponSkins.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerPassiveAbilities
-            .RemoveRange(this.apiContext.PlayerPassiveAbilities.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerDragonGifts
-            .RemoveRange(this.apiContext.PlayerDragonGifts.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerMissions
-            .RemoveRange(this.apiContext.PlayerMissions.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .EquippedStamps
-            .RemoveRange(this.apiContext.EquippedStamps.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerShopInfos
-            .RemoveRange(this.apiContext.PlayerShopInfos.Where(x => x.ViewerId == viewerId));
-        this.apiContext
-            .PlayerTrades
-            .RemoveRange(this.apiContext.PlayerTrades.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext.PlayerTrades.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerEventData
-            .RemoveRange(this.apiContext.PlayerEventData.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerEventItems
-            .RemoveRange(this.apiContext.PlayerEventItems.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerEventRewards
-            .RemoveRange(this.apiContext.PlayerEventRewards.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerEventPassives
-            .RemoveRange(this.apiContext.PlayerEventPassives.Where(x => x.ViewerId == viewerId));
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
         // this.apiContext.PlayerDmodeInfos.RemoveRange(
         //     this.apiContext.PlayerDmodeInfos.Where(x => x.ViewerId == viewerId)
         // );
@@ -558,27 +553,27 @@ public class SavefileService : ISavefileService
         // this.apiContext.PlayerDmodeExpeditions.RemoveRange(
         //     this.apiContext.PlayerDmodeExpeditions.Where(x => x.ViewerId == viewerId)
         // );
-        this.apiContext
+        await this.apiContext
             .PlayerUseItems
-            .RemoveRange(this.apiContext.PlayerUseItems.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerSummonTickets
-            .RemoveRange(this.apiContext.PlayerSummonTickets.Where(x => x.ViewerId == viewerId));
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
         // this.apiContext.Emblems.RemoveRange(
         //     this.apiContext.Emblems.Where(x => x.ViewerId == viewerId)
         // );
-        this.apiContext
-            .QuestEvents
-            .RemoveRange(this.apiContext.QuestEvents.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+        await this.apiContext.QuestEvents.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await this.apiContext
             .QuestTreasureList
-            .RemoveRange(this.apiContext.QuestTreasureList.Where(x => x.ViewerId == viewerId));
-        this.apiContext
-            .PartyPowers
-            .RemoveRange(this.apiContext.PartyPowers.Where(x => x.ViewerId == viewerId));
-        this.apiContext
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
+        await this.apiContext.PartyPowers.Where(x => x.ViewerId == viewerId).ExecuteDeleteAsync();
+        await this.apiContext
             .PlayerQuestWalls
-            .RemoveRange(this.apiContext.PlayerQuestWalls.Where(x => x.ViewerId == viewerId));
+            .Where(x => x.ViewerId == viewerId)
+            .ExecuteDeleteAsync();
     }
 
     public async Task Reset()

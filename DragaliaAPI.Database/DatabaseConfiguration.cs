@@ -23,7 +23,6 @@ public static class DatabaseConfiguration
     )
     {
         string connectionString = GetConnectionString(host);
-        // logger.Debug("Connecting to database using host {host}...", host);
 
         services = services
             .AddDbContext<ApiContext>(
@@ -80,12 +79,6 @@ public static class DatabaseConfiguration
             .ServiceProvider
             .GetRequiredService<ILoggerFactory>()
             .CreateLogger("DatabaseConfiguration");
-
-        logger.LogInformation(
-            "Connecting to database using username {username} and database {database}",
-            Environment.GetEnvironmentVariable("POSTGRES_PASSWORD"),
-            Environment.GetEnvironmentVariable("POSTGRES_DB")
-        );
 
         if (!context.Database.IsRelational())
             return;
