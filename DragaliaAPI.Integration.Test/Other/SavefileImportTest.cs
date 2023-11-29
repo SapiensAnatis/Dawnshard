@@ -52,11 +52,6 @@ public class SavefileImportTest : TestFixture
     public async Task Import_LoadIndexReturnsImportedSavefile()
     {
         string savefileJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
-        long viewerId = this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
-            .Single(x => x.ViewerId == ViewerId)
-            .ViewerId;
 
         LoadIndexData savefile = JsonSerializer
             .Deserialize<DragaliaResponse<LoadIndexData>>(savefileJson, ApiJsonOptions.Instance)!
@@ -66,7 +61,7 @@ public class SavefileImportTest : TestFixture
         content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
         HttpResponseMessage importResponse = await this.Client.PostAsync(
-            $"savefile/import/{viewerId}",
+            $"savefile/import/{this.ViewerId}",
             content
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -74,7 +69,7 @@ public class SavefileImportTest : TestFixture
         this.ApiContext
             .PlayerUserData
             .AsNoTracking()
-            .Single(x => x.ViewerId == ViewerId)
+            .Single(x => x.ViewerId == this.ViewerId)
             .LastSaveImportTime
             .Should()
             .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
@@ -100,6 +95,9 @@ public class SavefileImportTest : TestFixture
                     opts.Excluding(x => x.spec_upgrade_time);
                     opts.Excluding(x => x.Name.Contains("last_income_time"));
                     opts.Excluding(x => x.user_data!.last_login_time);
+                    // Inaccurate because notification
+                    opts.Excluding(x => x.present_notice);
+                    opts.Excluding(x => x.shop_notice);
                     // Inaccurate for other reasons
                     opts.Excluding(x => x.user_data!.stamina_single);
                     opts.Excluding(x => x.user_data!.stamina_multi);
@@ -110,10 +108,10 @@ public class SavefileImportTest : TestFixture
                     );
                     opts.Excluding(x => x.user_data!.level);
                     opts.Excluding(x => x.user_data!.crystal);
-                    opts.Excluding(x => x.present_notice);
                     opts.Excluding(x => x.treasure_trade_all_list);
                     opts.Excluding(x => x.multi_server);
                     opts.Excluding(x => x.mission_notice);
+                    opts.Excluding(x => x.user_data!.active_memory_event_id);
 
                     opts.Excluding(x => x.user_data!.fort_open_time);
 
@@ -126,13 +124,9 @@ public class SavefileImportTest : TestFixture
 
                     // Properties with no implementation
                     opts.Excluding(x => x.Name.Contains("album"));
-                    opts.Excluding(x => x.Name.Contains("shop"));
 
-                    opts.Excluding(x => x.quest_event_list);
                     opts.Excluding(x => x.quest_bonus);
                     opts.Excluding(x => x.quest_carry_list);
-                    opts.Excluding(x => x.quest_treasure_list);
-                    opts.Excluding(x => x.quest_wall_list);
                     opts.Excluding(x => x.quest_entry_condition_list);
                     opts.Excluding(x => x.quest_bonus_stack_base_time);
 
@@ -140,8 +134,9 @@ public class SavefileImportTest : TestFixture
                     opts.Excluding(x => x.summon_ticket_list);
                     opts.Excluding(x => x.summon_point_list);
 
+                    opts.Excluding(x => x.special_shop_purchase);
+
                     opts.Excluding(x => x.astral_item_list);
-                    opts.Excluding(x => x.party_power_data);
                     opts.Excluding(x => x.walker_data);
                     opts.Excluding(x => x.exchange_ticket_list);
                     opts.Excluding(x => x.lottery_ticket_list);
@@ -149,8 +144,6 @@ public class SavefileImportTest : TestFixture
 
                     opts.Excluding(x => x.friend_notice);
                     opts.Excluding(x => x.guild_notice);
-
-                    opts.Excluding(x => x.user_data!.active_memory_event_id);
 
                     return opts;
                 }
@@ -160,21 +153,19 @@ public class SavefileImportTest : TestFixture
     [Fact]
     public async Task Import_PropertiesMappedCorrectly()
     {
-        long viewerId = this.ApiContext.PlayerUserData.Single(x => x.ViewerId == ViewerId).ViewerId;
-
         HttpContent content = PrepareSavefileRequest();
-        await this.Client.PostAsync($"savefile/import/{viewerId}", content);
+        await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
 
         this.ApiContext
             .PlayerStoryState
-            .Single(x => x.ViewerId == ViewerId && x.StoryId == 110313011)
+            .Single(x => x.ViewerId == this.ViewerId && x.StoryId == 110313011)
             .StoryType
             .Should()
             .Be(StoryTypes.Chara);
 
         this.ApiContext
             .PlayerStoryState
-            .Single(x => x.ViewerId == ViewerId && x.StoryId == 210091011)
+            .Single(x => x.ViewerId == this.ViewerId && x.StoryId == 210091011)
             .StoryType
             .Should()
             .Be(StoryTypes.Dragon);
@@ -184,19 +175,21 @@ public class SavefileImportTest : TestFixture
     public async Task Import_DoesNotDeleteEmblems()
     {
         await this.AddToDatabase(
-            new DbEmblem() { ViewerId = ViewerId, EmblemId = Emblems.IsolationSpeedslayer_1 }
+            new DbEmblem() { ViewerId = this.ViewerId, EmblemId = Emblems.IsolationSpeedslayer_1 }
         );
 
         this.ApiContext.ChangeTracker.Clear();
 
         HttpContent content = PrepareSavefileRequest();
-        await this.Client.PostAsync($"savefile/import/{ViewerId}", content);
+        await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
 
         this.ApiContext
             .Emblems
             .AsNoTracking()
             .Should()
-            .Contain(x => x.ViewerId == ViewerId && x.EmblemId == Emblems.IsolationSpeedslayer_1);
+            .Contain(
+                x => x.ViewerId == this.ViewerId && x.EmblemId == Emblems.IsolationSpeedslayer_1
+            );
     }
 
     [Fact]
