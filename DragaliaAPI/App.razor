@@ -1,22 +1,67 @@
 ﻿@using DragaliaAPI.Blazor.Authentication
 
-<CascadingValue Name="HttpRequestState" Value="@HttpRequestState">
-    <CascadingAuthenticationState>
-        <Router AppAssembly="@typeof(App).Assembly">
-            <Found Context="routeData">
-                <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" /> 
-            </Found>
-            <NotFound>
-                <PageTitle>Not found</PageTitle>
-                <LayoutView Layout="@typeof(MainLayout)">
-                    <p role="alert">Sorry, there's nothing at this address.</p>
-                </LayoutView>
-            </NotFound>
-        </Router>
-    </CascadingAuthenticationState>
-</CascadingValue>
+@{
+    string? darkModeCookie = this.HttpContext?.Request.Cookies.FirstOrDefault(x => x.Key == "darkMode").Value;
+    bool? isDarkMode = null;
+
+    if (bool.TryParse(darkModeCookie, out bool darkModeParsed))
+        isDarkMode = darkModeParsed;
+
+    HttpRequestState httpRequestState = new() 
+    {
+        HostUri = $"{this.HttpContext?.Request.Scheme}://{this.HttpContext?.Request.Host.Value}",
+        IsDarkMode = isDarkMode,
+    };
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head title="Dawnshard">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <base href="/"/>
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="DragaliaAPI.styles.css"/>
+    <link rel="icon" type="image/png" href="favicon.ico"/>
+    <HeadOutlet @rendermode="InteractiveServer"/>
+</head>
+
+<body>
+    <Routes @rendermode="InteractiveServer" HttpRequestState="@httpRequestState"/>
+    <script src="_framework/blazor.web.js"></script>
+</body>
+
+<script>
+    window.downloadFileFromStream = async (fileName, contentStreamReference) => {
+        const arrayBuffer = await contentStreamReference.arrayBuffer();
+        const blob = new Blob([arrayBuffer]);
+        const url = URL.createObjectURL(blob);
+        const anchorElement = document.createElement('a');
+        anchorElement.href = url;
+        anchorElement.download = fileName ?? '';
+        anchorElement.click();
+        anchorElement.remove();
+        URL.revokeObjectURL(url);
+    }
+</script>
+
+<script>
+    window.blazorExtensions = {
+        writeCookie: function (name, value) {
+            document.cookie = `${name}=${value}; SameSite=Lax`;
+        },
+        scrollToTop: function () {
+             document.documentElement.scrollTop = 0;
+        }
+    }
+</script>
+
+</html>
 
 @code {
-    [Parameter]
-    public HttpRequestState? HttpRequestState { get; set; }
+    [CascadingParameter]
+    public HttpContext? HttpContext { get; set; }
 }

@@ -126,7 +126,8 @@
             .Include(x => x.Players)
             .ThenInclude(x => x.Player.UserData)
             .Where(x => x.QuestId == this.QuestId)
-            .OrderBy(x => x.Time);
+            .OrderBy(x => x.Time)
+            .AsSplitQuery();
 
 
         // We must do searching and paging after loading the entire result set, so that our rank numbers are accurate
