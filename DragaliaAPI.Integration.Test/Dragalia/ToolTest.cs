@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Dragalia;
 
@@ -45,6 +46,41 @@ public class ToolTest : TestFixture
         ).data;
 
         response.viewer_id.Should().Be((ulong)ViewerId);
+    }
+
+    [Fact]
+    public async Task Auth_PendingImport_ImportsSave()
+    {
+        this.ApiContext
+            .PlayerUserData
+            .ExecuteUpdate(p => p.SetProperty(e => e.LastSaveImportTime, DateTimeOffset.UnixEpoch));
+
+        string token = TokenHelper
+            .GetToken(
+                DateTimeOffset.MaxValue,
+                DeviceAccountId,
+                savefileAvailable: true,
+                savefileTime: DateTimeOffset.UtcNow
+            )
+            .AsString();
+        this.Client.DefaultRequestHeaders.Add(IdTokenHeader, token);
+
+        await this.Client.PostMsgpack<ToolAuthData>("tool/auth", new ToolAuthRequest() { });
+
+        this.ApiContext
+            .PlayerUserData
+            .AsNoTracking()
+            .First(x => x.ViewerId == this.ViewerId)
+            .LastSaveImportTime
+            .Should()
+            .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
+
+        this.ApiContext
+            .PlayerCharaData
+            .AsNoTracking()
+            .Where(x => x.ViewerId == this.ViewerId)
+            .Should()
+            .HaveCountGreaterThan(200);
     }
 
     [Fact]
