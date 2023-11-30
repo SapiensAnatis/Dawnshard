@@ -1,6 +1,6 @@
 using FluentRandomPicker.FluentInterfaces.General;
 
-namespace DragaliaAPI.Features.Dungeon.Start;
+namespace DragaliaAPI.Features.Dungeon;
 
 public class SingleValuePicker<T> : IPick<T>
 {

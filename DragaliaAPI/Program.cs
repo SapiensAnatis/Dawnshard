@@ -6,6 +6,7 @@ using DragaliaAPI;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.Blazor;
 using DragaliaAPI.Features.GraphQL;
+using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Features.Version;
 using DragaliaAPI.MessagePack;
@@ -46,7 +47,8 @@ builder
     .Configure<DragonfruitConfig>(config)
     .Configure<TimeAttackOptions>(config.GetRequiredSection(nameof(TimeAttackOptions)))
     .Configure<ResourceVersionOptions>(config.GetRequiredSection(nameof(ResourceVersionOptions)))
-    .Configure<BlazorOptions>(config.GetRequiredSection(nameof(BlazorOptions)));
+    .Configure<BlazorOptions>(config.GetRequiredSection(nameof(BlazorOptions)))
+    .Configure<EventOptions>(config.GetRequiredSection(nameof(EventOptions)));
 
 builder.Services.AddServerSideBlazor();
 builder

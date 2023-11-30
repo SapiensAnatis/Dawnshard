@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ public class EarnEventTest : TestFixture
         this.ApiContext.PlayerEventItems.ExecuteDelete();
         this.ApiContext.PlayerEventRewards.ExecuteDelete();
         this.ApiContext.PlayerEventPassives.ExecuteDelete();
+        this.ApiContext.PlayerMissions.ExecuteDelete();
     }
 
     // One Starry Dragonyule
@@ -58,6 +60,20 @@ public class EarnEventTest : TestFixture
             );
         this.ApiContext.PlayerQuests.Should().NotContain(x => x.QuestId == eventQuestId);
         this.ApiContext.PlayerStoryState.Should().NotContain(x => x.StoryId == eventStoryId);
+
+        this.ApiContext
+            .PlayerMissions
+            .Should()
+            .HaveCount(8 + 25, because: "the event has 8 daily missions and 25 limited missions");
+        this.ApiContext
+            .PlayerMissions
+            .ToList()
+            .Should()
+            .AllSatisfy(x =>
+            {
+                x.GroupId.Should().Be(EventId);
+                x.State.Should().Be(MissionState.InProgress);
+            });
     }
 
     [Fact]

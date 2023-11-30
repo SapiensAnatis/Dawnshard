@@ -8,13 +8,37 @@ public abstract class Mission
 
     public required int MissionId { get; init; }
 
+    public int? ProgressionGroupId { get; init; }
+
     public MissionType Type
     {
         get => this.type ?? throw new InvalidOperationException("Type was not initialized");
         set => this.type = value;
     }
 
-    public abstract MissionCompleteType CompleteType { get; }
+    protected abstract MissionCompleteType CompleteType { get; }
 
-    public abstract MissionProgressionInfo ToMissionProgressionInfo();
+    protected virtual int? Parameter => null;
+
+    protected virtual int? Parameter2 => null;
+
+    protected virtual int? Parameter3 => null;
+
+    protected virtual int? Parameter4 => null;
+
+    protected virtual bool UseTotalValue => false;
+
+    public MissionProgressionInfo ToMissionProgressionInfo() =>
+        new MissionProgressionInfo(
+            this.Id,
+            this.Type,
+            this.MissionId,
+            this.CompleteType,
+            this.UseTotalValue,
+            this.ProgressionGroupId,
+            this.Parameter,
+            this.Parameter2,
+            this.Parameter3,
+            this.Parameter4
+        );
 }
