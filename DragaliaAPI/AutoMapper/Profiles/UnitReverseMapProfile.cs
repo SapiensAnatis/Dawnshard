@@ -28,7 +28,7 @@ public class UnitReverseMapProfile : Profile
             .ForMember(x => x.Exp, opts => opts.MapFrom(src => src.reliability_total_exp));
 
         this.CreateMap<AbilityCrestList, DbAbilityCrest>();
-        
+
         this.CreateMap<WeaponBodyList, DbWeaponBody>();
 
         this.CreateMap<PartyList, DbParty>()
