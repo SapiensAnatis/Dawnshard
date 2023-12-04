@@ -129,6 +129,11 @@ public class WeaponRepository : IWeaponRepository
     {
         this.logger.LogDebug("Unlocking passive ability {@ability}", passiveAbility);
 
+        DbWeaponBody? entity = await this.FindAsync(id);
+        ArgumentNullException.ThrowIfNull(entity);
+
+        entity.UnlockWeaponPassiveAbilityNoList[passiveAbility.WeaponPassiveAbilityNo - 1] = 1;
+
         if (
             await this.WeaponPassiveAbilities.AnyAsync(
                 x => x.WeaponPassiveAbilityId == passiveAbility.Id
@@ -138,13 +143,6 @@ public class WeaponRepository : IWeaponRepository
             this.logger.LogDebug("Passive was already owned.");
             return;
         }
-
-        DbWeaponBody? entity = await this.FindAsync(id);
-        ArgumentNullException.ThrowIfNull(entity);
-
-        List<int> passiveList = entity.UnlockWeaponPassiveAbilityNoList.ToList();
-        passiveList[passiveAbility.WeaponPassiveAbilityNo - 1] = 1;
-        entity.UnlockWeaponPassiveAbilityNoList = passiveList;
 
         await this.apiContext
             .PlayerPassiveAbilities
