@@ -62,20 +62,10 @@ public class DbWeaponBody : DbPlayerData
     [NotMapped]
     public int AdditionalEffectCount { get; }
 
-    public string UnlockWeaponPassiveAbilityNoString { get; private set; } =
-        "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
-
     /// <summary>
     /// Gets or sets a list of passive abilities that are unlocked on the weapon.
     /// </summary>
-    [NotMapped]
-    public IEnumerable<int> UnlockWeaponPassiveAbilityNoList
-    {
-        // I will consider replacing this with a bitmask if we generate a unified helper for them
-        // Currently opposed to having another util class
-        get => this.UnlockWeaponPassiveAbilityNoString.Split(",").Select(int.Parse);
-        set => this.UnlockWeaponPassiveAbilityNoString = string.Join(",", value);
-    }
+    public int[] UnlockWeaponPassiveAbilityNoList { get; set; } = new int[15];
 
     /// <summary>
     /// Gets or sets a value indicating whether the weapon bonus has been unlocked.
