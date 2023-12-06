@@ -488,10 +488,7 @@ public class FortServiceTest
         build
             .BuildEndDate
             .Should()
-            .BeCloseTo(
-                FixedTime + TimeSpan.FromSeconds(21600),
-                TimeSpan.FromSeconds(1)
-            );
+            .BeCloseTo(FixedTime + TimeSpan.FromSeconds(21600), TimeSpan.FromSeconds(1));
 
         mockFortRepository.VerifyAll();
         mockInventoryRepository.VerifyAll();
