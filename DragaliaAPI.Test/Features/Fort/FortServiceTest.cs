@@ -611,7 +611,10 @@ public class FortServiceTest
                     x.ProcessPayment(
                         PaymentTypes.Wyrmite,
                         null,
-                        It.IsInRange(840 - wyrmiteDifference, 842 - wyrmiteDifference, Range.Inclusive)
+                        It.IsInRange(
+                            840 - wyrmiteDifference,
+                            842 - wyrmiteDifference,
+                            Range.Inclusive)
                     )
             )
             .Returns(Task.CompletedTask);
