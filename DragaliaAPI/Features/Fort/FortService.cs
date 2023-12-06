@@ -5,6 +5,7 @@ using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Models.Options;
 using DragaliaAPI.Services.Exceptions;
@@ -28,7 +29,8 @@ public class FortService(
     IPaymentService paymentService,
     IRewardService rewardService,
     IOptionsMonitor<DragonfruitConfig> config,
-    IUserService userService
+    IUserService userService,
+    IDateTimeProvider dateTimeProvider
 ) : IFortService
 {
     public const int MaximumCarpenterNum = 5;
@@ -85,7 +87,7 @@ public class FortService(
     public async Task<FortGetMultiIncomeData> CollectIncome(IEnumerable<long> idsToCollect)
     {
         Random rdm = Random.Shared;
-        DateTimeOffset current = DateTimeOffset.UtcNow;
+        DateTimeOffset current = dateTimeProvider.UtcNow;
 
         FortGetMultiIncomeData resp = new();
 
@@ -284,7 +286,7 @@ public class FortService(
 
         int paymentCost = GetUpgradePaymentCost(
             paymentType,
-            build.BuildStartDate,
+            dateTimeProvider.UtcNow,
             build.BuildEndDate
         );
 
@@ -324,7 +326,7 @@ public class FortService(
 
     public async Task EndBuild(long buildId)
     {
-        DateTimeOffset current = DateTimeOffset.UtcNow;
+        DateTimeOffset current = dateTimeProvider.UtcNow;
 
         logger.LogDebug("Build ended for build {buildId}", buildId);
 
@@ -353,7 +355,7 @@ public class FortService(
 
         if (
             build.BuildStatus is not FortBuildStatus.LevelUp
-            || DateTimeOffset.UtcNow < build.BuildEndDate
+            || dateTimeProvider.UtcNow < build.BuildEndDate
         )
             throw new InvalidOperationException($"This building has not completed levelling up.");
 
@@ -482,7 +484,7 @@ public class FortService(
         else
         {
             DateTimeOffset fortOpenTime = await userDataRepository.GetFortOpenTimeAsync();
-            DateTimeOffset current = DateTimeOffset.UtcNow;
+            DateTimeOffset current = dateTimeProvider.UtcNow;
 
             build.BuildStartDate = current;
 
@@ -514,7 +516,7 @@ public class FortService(
 
     private static int GetUpgradePaymentCost(
         PaymentTypes paymentType,
-        DateTimeOffset buildStartDate,
+        DateTimeOffset currentTime,
         DateTimeOffset buildEndDate
     )
     {
@@ -525,7 +527,7 @@ public class FortService(
         // where the amount required depends on the time left until construction is complete.
         // This amount scales at 1 per 12 minutes, or 5 per hour.
         // https://dragalialost.wiki/w/Facilities
-        return (int)Math.Ceiling((buildEndDate - buildStartDate).TotalMinutes / 12);
+        return (int)Math.Ceiling((buildEndDate - currentTime).TotalMinutes / 12);
     }
 
     public async Task ClearPlantNewStatuses(IEnumerable<FortPlants> plantIds)
