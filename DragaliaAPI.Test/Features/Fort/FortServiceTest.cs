@@ -619,6 +619,5 @@ public class FortServiceTest
         mockFortMissionProgressionService.VerifyAll();
         mockPaymentService.VerifyAll();
         mockDateTimeProvider.VerifyAll();
-        mockDateTimeProvider.VerifyAll();
     }
 }
