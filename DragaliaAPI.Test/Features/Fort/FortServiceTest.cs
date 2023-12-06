@@ -615,7 +615,7 @@ public class FortServiceTest
                             840 - wyrmiteDifference,
                             842 - wyrmiteDifference,
                             Range.Inclusive
-                            )
+                        )
                     )
             )
             .Returns(Task.CompletedTask);
