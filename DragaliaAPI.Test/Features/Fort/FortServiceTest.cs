@@ -589,7 +589,7 @@ public class FortServiceTest
     }
 
     [Fact]
-    public async Task LevelupAtOnce_HustleHammers_ConsumesPayment()
+    public async Task LevelupAtOnce_PartialWyrmite_ConsumesPayment()
     {
         DbFortBuild build =
             new()
@@ -598,11 +598,51 @@ public class FortServiceTest
                 BuildId = 445,
                 Level = 5,
                 PlantId = FortPlants.Smithy,
+                BuildStartDate = FixedTime - TimeSpan.FromDays(1),
+                BuildEndDate = FixedTime + TimeSpan.FromDays(7)
+            };
+
+        const int wyrmiteDifference = 24 * 60 / 12;
+
+        mockFortRepository.Setup(x => x.GetBuilding(445)).ReturnsAsync(build);
+        mockPaymentService
+            .Setup(
+                x =>
+                    x.ProcessPayment(
+                        PaymentTypes.Wyrmite,
+                        null,
+                        It.IsInRange(840 - wyrmiteDifference, 842 - wyrmiteDifference, Range.Inclusive)
+                    )
+            )
+            .Returns(Task.CompletedTask);
+
+        mockFortMissionProgressionService
+            .Setup(x => x.OnFortPlantLevelUp(FortPlants.Smithy, 6))
+            .Returns(Task.CompletedTask);
+
+        await fortService.LevelupAtOnce(PaymentTypes.Wyrmite, 445);
+
+        mockFortMissionProgressionService.VerifyAll();
+        mockPaymentService.VerifyAll();
+        mockPlayerIdentityService.VerifyAll();
+        mockDateTimeProvider.VerifyAll();
+    }
+
+    [Fact]
+    public async Task LevelupAtOnce_HustleHammers_ConsumesPayment()
+    {
+        DbFortBuild build =
+            new()
+            {
+                ViewerId = 1,
+                BuildId = 446,
+                Level = 5,
+                PlantId = FortPlants.Smithy,
                 BuildStartDate = FixedTime,
                 BuildEndDate = FixedTime + TimeSpan.FromDays(7)
             };
 
-        mockFortRepository.Setup(x => x.GetBuilding(445)).ReturnsAsync(build);
+        mockFortRepository.Setup(x => x.GetBuilding(446)).ReturnsAsync(build);
         mockPaymentService
             .Setup(x => x.ProcessPayment(PaymentTypes.HalidomHustleHammer, null, 1))
             .Returns(Task.CompletedTask);
@@ -611,7 +651,7 @@ public class FortServiceTest
             .Setup(x => x.OnFortPlantLevelUp(FortPlants.Smithy, 6))
             .Returns(Task.CompletedTask);
 
-        await fortService.LevelupAtOnce(PaymentTypes.HalidomHustleHammer, 445);
+        await fortService.LevelupAtOnce(PaymentTypes.HalidomHustleHammer, 446);
 
         mockFortMissionProgressionService.VerifyAll();
         mockPaymentService.VerifyAll();
