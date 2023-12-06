@@ -115,7 +115,7 @@ public class DungeonRecordRewardService(
     )
     {
         (double materialMultiplier, double pointMultiplier) =
-            await abilityCrestMultiplierService.GetEventMultiplier(session.Party, session.QuestId);
+            await abilityCrestMultiplierService.GetEventMultiplier(session.Party, session.QuestGid);
 
         (
             IEnumerable<AtgenScoreMissionSuccessList> scoreMissions,

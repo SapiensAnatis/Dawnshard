@@ -216,7 +216,7 @@ public class QuestEnemyService : IQuestEnemyService
                         is_pop = true,
                         is_rare = false,
                         param_id = x.Id,
-                        enemy_drop_list =  [ ]
+                        enemy_drop_list = []
                     }
             )
             .ToArray();

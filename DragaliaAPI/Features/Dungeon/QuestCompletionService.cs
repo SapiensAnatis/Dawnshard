@@ -24,10 +24,6 @@ public class QuestCompletionService(
         int Points
     )> CompleteEnemyScoreMissions(DungeonSession session, PlayRecord record)
     {
-        // TODO: points are too low, ingame shows 5530 but 1300 awarded
-        // the list only has 12 enemies but the client thinks it killed 226
-
-
         int scoringEnemyGroupId = int.Parse($"{session.QuestGid}01");
 
         if (IsEarnTicketQuest(session.QuestId))
@@ -46,23 +42,11 @@ public class QuestCompletionService(
         AtgenTreasureRecord treasureRecord = record.treasure_record.First();
         IEnumerable<AtgenEnemy> enemyList = session
             .EnemyList
-            .GetValueOrDefault(treasureRecord.area_idx, [ ]);
-
-        logger.LogTrace("treasure_record.enemy: {@enemy}", treasureRecord.enemy);
-        logger.LogTrace(
-            "enemy count: {count}, killed count {killed}",
-            treasureRecord.enemy.Count(),
-            treasureRecord.enemy.Count(x => x == 1)
-        );
-
-        logger.LogTrace("treasure_record.enemy_smash: {@enemySmash}", treasureRecord.enemy_smash);
-        logger.LogTrace("smash sum: {sum}", treasureRecord.enemy_smash.Sum(x => x.count));
+            .GetValueOrDefault(treasureRecord.area_idx, []);
 
         IEnumerable<(int EnemyParam, int Count)> killedParamIds = enemyList
             .Zip(treasureRecord.enemy_smash)
             .Select(x => (x.First.param_id, x.Second.count));
-
-        string js = JsonSerializer.Serialize(treasureRecord.enemy_smash);
 
         int totalPoints = 0;
         Dictionary<int, AtgenScoringEnemyPointList> results = new();
@@ -93,9 +77,8 @@ public class QuestCompletionService(
             new Entity(EntityTypes.EarnEventItem, eventPointsId, totalPoints)
         );
 
-        logger.LogTrace("Total points {points}", totalPoints);
+        logger.LogDebug("Calculated enemy scoring {points}", totalPoints);
 
-        // missing waves?
         return (results.Values, totalPoints);
     }
 

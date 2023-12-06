@@ -145,6 +145,16 @@ public class DungeonRecordServiceTest
                 }
             };
 
+        List<AtgenScoringEnemyPointList> enemyScoring =
+        [
+            new()
+            {
+                scoring_enemy_id = 100,
+                point = 1,
+                smash_count = 2
+            }
+        ];
+
         QuestMissionStatus missionStatus =
             new(new bool[] { }, missionsClearSets, missionCompleteSets);
 
@@ -175,6 +185,7 @@ public class DungeonRecordServiceTest
             .ReturnsAsync(
                 new DungeonRecordRewardService.EventRewardData(
                     scoreMissionSuccessLists,
+                    enemyScoring,
                     takeAccumulatePoint,
                     takeBoostAccumulatePoint,
                     passiveUpLists,
@@ -236,6 +247,7 @@ public class DungeonRecordServiceTest
                     },
                     event_passive_up_list = passiveUpLists,
                     score_mission_success_list = scoreMissionSuccessLists,
+                    scoring_enemy_point_list = enemyScoring,
                     is_best_clear_time = true,
                     clear_time = playRecord.time,
                     converted_entity_list = new List<ConvertedEntityList>()
