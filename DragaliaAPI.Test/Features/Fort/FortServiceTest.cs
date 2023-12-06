@@ -599,7 +599,7 @@ public class FortServiceTest
                 Level = 5,
                 PlantId = FortPlants.Smithy,
                 BuildStartDate = FixedTime - TimeSpan.FromDays(1),
-                BuildEndDate = FixedTime + TimeSpan.FromDays(7)
+                BuildEndDate = FixedTime + TimeSpan.FromDays(6)
             };
 
         const int wyrmiteDifference = 24 * 60 / 12;
@@ -614,7 +614,8 @@ public class FortServiceTest
                         It.IsInRange(
                             840 - wyrmiteDifference,
                             842 - wyrmiteDifference,
-                            Range.Inclusive)
+                            Range.Inclusive
+                            )
                     )
             )
             .Returns(Task.CompletedTask);
