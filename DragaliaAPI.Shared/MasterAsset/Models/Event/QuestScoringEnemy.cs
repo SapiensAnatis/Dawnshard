@@ -10,7 +10,7 @@ namespace DragaliaAPI.Shared.MasterAsset.Models.Event;
  * JOIN TextLabel on EnemyList._Name = TextLabel._Id
  * WHERE QuestScoringEnemy._ScoringEnemyGroupId = 2290301;
  *
- * _ScoringEnemyGroupId = {QuestData._Gid}{QuestData._VariationType:00}
+ * _ScoringEnemyGroupId = {QuestData._Gid}{01, or 02 for daily ticket quest}
  */
 
 public record QuestScoringEnemy(int Id, int ScoringEnemyGroupId, int EnemyListId, int Point);
