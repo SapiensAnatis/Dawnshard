@@ -1,15 +1,21 @@
 ﻿using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Models.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Controllers.Dragalia;
 
 [Route("webview_version")]
 [AllowAnonymous]
-public class WebviewVersionController(IWebHostEnvironment webHostEnvironment)
-    : DragaliaControllerBase
+public class WebviewVersionController(
+    IWebHostEnvironment webHostEnvironment,
+    IOptionsMonitor<PhotonOptions> photonOptions
+) : DragaliaControllerBase
 {
     private const string PlaceholderUrl = "localhost";
+    private string photonTestUrl =
+        $"http://{photonOptions.CurrentValue.ServerUrl.Split(':').FirstOrDefault()}";
 
     [HttpPost("url_list")]
     public DragaliaResult UrlList()
@@ -34,7 +40,7 @@ public class WebviewVersionController(IWebHostEnvironment webHostEnvironment)
                     new("comic", PlaceholderUrl),
                     new("plotsynopsis", PlaceholderUrl),
                     new("faq", PlaceholderUrl),
-                    new("help_comic", PlaceholderUrl),
+                    new("help_comic", this.photonTestUrl),
                     new("help", PlaceholderUrl),
                     new("inquiry_attention", PlaceholderUrl),
                     new("dragon_battle_info", PlaceholderUrl),
