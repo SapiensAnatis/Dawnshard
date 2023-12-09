@@ -275,10 +275,21 @@ public class DungeonRecordRewardServiceTest
                 new() { type = EntityTypes.Clb01EventItem, quantity = 100 }
             };
 
+        List<AtgenScoringEnemyPointList> enemyScoring =
+        [
+            new()
+            {
+                scoring_enemy_id = 100,
+                point = 1,
+                smash_count = 2
+            }
+        ];
+
         int materialMultiplier = 2;
         int pointMultiplier = 3;
         int points = 10;
         int boostedPoints = 20;
+        int enemyPoints = 30;
 
         this.mockAbilityCrestMultiplierService
             .Setup(x => x.GetEventMultiplier(session.Party, session.QuestData.Gid))
@@ -287,6 +298,9 @@ public class DungeonRecordRewardServiceTest
         this.mockQuestCompletionService
             .Setup(x => x.CompleteQuestScoreMissions(session, playRecord, pointMultiplier))
             .ReturnsAsync((scoreMissionSuccessLists, points, boostedPoints));
+        this.mockQuestCompletionService
+            .Setup(x => x.CompleteEnemyScoreMissions(session, playRecord))
+            .ReturnsAsync((enemyScoring, enemyPoints));
 
         this.mockEventDropService
             .Setup(x => x.ProcessEventPassiveDrops(session.QuestData))
@@ -306,7 +320,8 @@ public class DungeonRecordRewardServiceTest
             .BeEquivalentTo(
                 new DungeonRecordRewardService.EventRewardData(
                     scoreMissionSuccessLists,
-                    points + boostedPoints,
+                    enemyScoring,
+                    points + boostedPoints + enemyPoints,
                     boostedPoints,
                     passiveUpLists,
                     eventDrops

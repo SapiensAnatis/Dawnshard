@@ -10,6 +10,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Dmode;
+using DragaliaAPI.Shared.MasterAsset.Models.Enemy;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 using Microsoft.EntityFrameworkCore;
 

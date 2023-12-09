@@ -11,6 +11,8 @@ public class DungeonSession
 
     public int QuestId => QuestData?.Id ?? 0;
 
+    public int QuestGid => QuestData?.Gid ?? 0;
+
     public bool IsHost { get; set; } = true;
 
     public bool IsMulti { get; set; }

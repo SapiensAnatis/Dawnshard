@@ -49,6 +49,7 @@ public class EarnEventController(
         EarnEventEntryData resp = new();
 
         // TODO: Complete first event mission once thats implemented
+        await eventService.CreateEventData(request.event_id);
 
         resp.earn_event_user_data = await eventService.GetEarnEventUserData(request.event_id);
         resp.update_data_list = await updateDataService.SaveChangesAsync();

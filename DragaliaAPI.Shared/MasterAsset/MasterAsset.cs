@@ -2,6 +2,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset.Models;
 using DragaliaAPI.Shared.MasterAsset.Models.Dmode;
+using DragaliaAPI.Shared.MasterAsset.Models.Enemy;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
 using DragaliaAPI.Shared.MasterAsset.Models.Login;
 using DragaliaAPI.Shared.MasterAsset.Models.ManaCircle;
@@ -288,19 +289,29 @@ public static class MasterAsset
 
     #endregion
 
-    #region Quest Drops
+    #region Enemy
 
     /// <summary>
-    /// Contains information about the <see cref="Models.QuestDrops.EnemyParam"/> IDs in particular quest maps.
+    /// Contains information about the <see cref="Models.Enemy.EnemyParam"/> IDs in particular quest maps.
     /// </summary>
-    public static readonly MasterAssetData<string, QuestEnemies> QuestEnemies =
-        new("QuestDrops/QuestEnemies.json", x => x.AreaName);
+    public static MasterAssetData<string, QuestEnemies> QuestEnemies { get; } =
+        new("Enemy/QuestEnemies.json", x => x.AreaName);
 
     /// <summary>
     /// Contains information about instances of enemies within a quest.
     /// </summary>
-    public static readonly MasterAssetData<int, EnemyParam> EnemyParam =
-        new("QuestDrops/EnemyParam.json", x => x.Id);
+    public static MasterAssetData<int, EnemyParam> EnemyParam { get; } =
+        new("Enemy/EnemyParam.json", x => x.Id);
+
+    /// <summary>
+    /// Contains information about enemies across all quests.
+    /// </summary>
+    public static MasterAssetData<int, EnemyData> EnemyData { get; } =
+        new("Enemy/EnemyData.json", x => x.Id);
+
+    #endregion
+
+    #region Quest Drops
 
     /// <summary>
     /// Contains information about rewards from quests.
@@ -395,6 +406,9 @@ public static class MasterAsset
 
     public static readonly MasterAssetData<int, EventPassive> EventPassive =
         new("Event/EventPassive.json", x => x.Id);
+
+    public static MasterAssetData<int, QuestScoringEnemy> QuestScoringEnemy { get; } =
+        new("Event/QuestScoringEnemy.json", x => x.Id);
 
     #endregion
 

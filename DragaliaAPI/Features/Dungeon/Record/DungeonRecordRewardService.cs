@@ -42,7 +42,7 @@ public class DungeonRecordRewardService(
         QuestMissionStatus status = await questCompletionService.CompleteQuestMissions(
             session,
             oldMissionStatus,
-            playRecord!
+            playRecord
         );
 
         questData.IsMissionClear1 = status.Missions[0];
@@ -63,7 +63,7 @@ public class DungeonRecordRewardService(
         List<Entity> entities = new();
 
         foreach (
-            AtgenTreasureRecord record in playRecord?.treasure_record
+            AtgenTreasureRecord record in playRecord.treasure_record
                 ?? Enumerable.Empty<AtgenTreasureRecord>()
         )
         {
@@ -115,10 +115,7 @@ public class DungeonRecordRewardService(
     )
     {
         (double materialMultiplier, double pointMultiplier) =
-            await abilityCrestMultiplierService.GetEventMultiplier(
-                session.Party,
-                session.QuestData.Gid
-            );
+            await abilityCrestMultiplierService.GetEventMultiplier(session.Party, session.QuestGid);
 
         (
             IEnumerable<AtgenScoreMissionSuccessList> scoreMissions,
@@ -126,17 +123,22 @@ public class DungeonRecordRewardService(
             int boostedPoints
         ) = await questCompletionService.CompleteQuestScoreMissions(
             session,
-            playRecord!,
+            playRecord,
             pointMultiplier
         );
 
         if (totalPoints + boostedPoints > 0)
         {
             missionProgressionService.OnEventPointCollected(
-                session.QuestData.Gid,
+                session.QuestGid,
                 totalPoints + boostedPoints
             );
         }
+
+        (IEnumerable<AtgenScoringEnemyPointList> enemyScoreMissions, int enemyScore) =
+            await questCompletionService.CompleteEnemyScoreMissions(session, playRecord);
+
+        ArgumentNullException.ThrowIfNull(session.QuestData);
 
         IEnumerable<AtgenEventPassiveUpList> passiveUpList =
             await eventDropService.ProcessEventPassiveDrops(session.QuestData);
@@ -149,7 +151,8 @@ public class DungeonRecordRewardService(
 
         return new EventRewardData(
             ScoreMissions: scoreMissions,
-            TakeAccumulatePoint: totalPoints + boostedPoints,
+            EnemyScoreMissions: enemyScoreMissions,
+            TakeAccumulatePoint: totalPoints + boostedPoints + enemyScore,
             TakeBoostAccumulatePoint: boostedPoints,
             PassiveUpList: passiveUpList,
             EventDrops: eventDrops
@@ -158,6 +161,7 @@ public class DungeonRecordRewardService(
 
     public record EventRewardData(
         IEnumerable<AtgenScoreMissionSuccessList> ScoreMissions,
+        IEnumerable<AtgenScoringEnemyPointList> EnemyScoreMissions,
         int TakeAccumulatePoint,
         int TakeBoostAccumulatePoint,
         IEnumerable<AtgenEventPassiveUpList> PassiveUpList,

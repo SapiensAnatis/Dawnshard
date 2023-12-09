@@ -445,6 +445,95 @@ public class DungeonRecordTest : TestFixture
     }
 
     [Fact]
+    public async Task Record_EarnEvent_GrantsEnemyScore()
+    {
+        int questId = 229031201; // Repelling the Frosty Fiends: Standard (Solo)
+        int eventId = 22903; // One Starry Dragonyule
+        int enemyCount = 31; // Count of enemies returned from /dungeon_start/start
+
+        await Client.PostMsgpack<MemoryEventActivateData>(
+            "/earn_event/entry",
+            new EarnEventEntryRequest() { event_id = eventId }
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                {
+                    {
+                        1,
+
+                        [
+                            new()
+                            {
+                                param_id = 229030211,
+                                enemy_idx = 0, // Meadow Rat (10 points)
+                                enemy_drop_list = []
+                            },
+                            new()
+                            {
+                                param_id = 229030217,
+                                enemy_idx = 1, // Wind Manticore (200 points)
+                                enemy_drop_list = []
+                            },
+                            new()
+                            {
+                                param_id = 229030215,
+                                enemy_idx = 2, // Arrow Raptor (40 points)
+                                enemy_drop_list = []
+                            }
+                        ]
+                    }
+                }
+            };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordData response = (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record =
+                        [
+                            new()
+                            {
+                                area_idx = 1,
+                                enemy_smash =
+                                [
+                                    new() { count = 1 },
+                                    new() { count = 2 },
+                                    new() { count = 3 }
+                                ]
+                            }
+                        ],
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord(),
+                        wave = 3
+                    }
+                }
+            )
+        ).data;
+
+        response
+            .ingame_result_data
+            .reward_record
+            .take_accumulate_point
+            .Should()
+            .Be((10 * 1) + (200 * 2) + (40 * 3));
+        response.ingame_result_data.scoring_enemy_point_list.Should().NotBeEmpty();
+    }
+
+    [Fact]
     public async Task Record_HandlesNonExistentQuestData()
     {
         int questId = 219031102;

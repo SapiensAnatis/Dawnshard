@@ -85,6 +85,7 @@ public class DungeonRecordService(
 
         (
             IEnumerable<AtgenScoreMissionSuccessList> scoreMissionSuccessList,
+            IEnumerable<AtgenScoringEnemyPointList> enemyScoreMissionList,
             int takeAccumulatePoint,
             int takeBoostAccumulatePoint,
             IEnumerable<AtgenEventPassiveUpList> eventPassiveUpLists,
@@ -93,6 +94,7 @@ public class DungeonRecordService(
 
         ingameResultData.score_mission_success_list = scoreMissionSuccessList;
         ingameResultData.reward_record.take_accumulate_point = takeAccumulatePoint;
+        ingameResultData.scoring_enemy_point_list = enemyScoreMissionList;
         ingameResultData.reward_record.take_boost_accumulate_point = takeBoostAccumulatePoint;
         ingameResultData.event_passive_up_list = eventPassiveUpLists;
         ingameResultData.reward_record.drop_all.AddRange(eventDrops);

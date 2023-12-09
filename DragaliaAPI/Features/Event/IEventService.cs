@@ -25,16 +25,16 @@ public interface IEventService
 
     #region User Data Providers
 
-    Task<BuildEventUserList> GetBuildEventUserData(int eventId);
-    Task<RaidEventUserList> GetRaidEventUserData(int eventId);
-    Task<Clb01EventUserList> GetClb01EventUserData(int eventId);
-    Task<CollectEventUserList> GetCollectEventUserData(int eventId);
-    Task<CombatEventUserList> GetCombatEventUserData(int eventId);
-    Task<EarnEventUserList> GetEarnEventUserData(int eventId);
-    Task<ExHunterEventUserList> GetExHunterEventUserData(int eventId);
-    Task<ExRushEventUserList> GetExRushEventUserData(int eventId);
-    Task<MazeEventUserList> GetMazeEventUserData(int eventId);
-    Task<SimpleEventUserList> GetSimpleEventUserData(int eventId);
+    Task<BuildEventUserList?> GetBuildEventUserData(int eventId);
+    Task<RaidEventUserList?> GetRaidEventUserData(int eventId);
+    Task<Clb01EventUserList?> GetClb01EventUserData(int eventId);
+    Task<CollectEventUserList?> GetCollectEventUserData(int eventId);
+    Task<CombatEventUserList?> GetCombatEventUserData(int eventId);
+    Task<EarnEventUserList?> GetEarnEventUserData(int eventId);
+    Task<ExHunterEventUserList?> GetExHunterEventUserData(int eventId);
+    Task<ExRushEventUserList?> GetExRushEventUserData(int eventId);
+    Task<MazeEventUserList?> GetMazeEventUserData(int eventId);
+    Task<SimpleEventUserList?> GetSimpleEventUserData(int eventId);
 
     #endregion
 }
