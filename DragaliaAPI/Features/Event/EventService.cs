@@ -18,6 +18,7 @@ public class EventService(
     IEventRepository eventRepository,
     IRewardService rewardService,
     IQuestRepository questRepository,
+    IStoryRepository storyRepository,
     IMissionService missionService
 ) : IEventService
 {
@@ -175,16 +176,21 @@ public class EventService(
     public async Task CreateEventData(int eventId)
     {
         bool firstEventEnter = false;
+        EventData data = MasterAsset.EventData[eventId];
 
         if (await eventRepository.GetEventDataAsync(eventId) == null)
         {
             logger.LogInformation("Creating event data for event {eventId}", eventId);
             eventRepository.CreateEventData(eventId);
+
             await missionService.UnlockMemoryEventMissions(eventId);
+            if (!data.IsMemoryEvent)
+            {
+                await this.ResetEventProgress(eventId);
+            }
+
             firstEventEnter = true;
         }
-
-        EventData data = MasterAsset.EventData[eventId];
 
         IEnumerable<int> items = await eventRepository
             .Items
@@ -272,6 +278,28 @@ public class EventService(
         }
     }
 
+    private async Task ResetEventProgress(int eventId)
+    {
+        logger.LogInformation("Resetting existing event progress for event {eventId}", eventId);
+
+        int[] questIds = MasterAsset
+            .QuestData
+            .Enumerable
+            .Where(x => x.Gid == eventId)
+            .Select(x => x.Id)
+            .ToArray();
+
+        int[] storyIds = MasterAsset
+            .QuestStory
+            .Enumerable
+            .Where(x => x.GroupId == eventId)
+            .Select(x => x.Id)
+            .ToArray();
+
+        await questRepository.DeleteQuests(questIds);
+        await storyRepository.DeleteQuestStories(storyIds);
+    }
+
     private async Task<DbPlayerEventData> GetEventData(int eventId)
     {
         return await eventRepository.GetEventDataAsync(eventId)
@@ -284,17 +312,10 @@ public class EventService(
     {
         Dictionary<int, int> itemDict = await eventRepository.GetEventItemQuantityAsync(eventId);
 
-        EventData data = MasterAsset.EventData[eventId];
-
-        foreach (int itemId in data.GetEventItemTypes().Where(x => !itemDict.ContainsKey(x)))
-        {
-            itemDict[itemId] = 0;
-        }
-
         return itemDict;
     }
 
-    public async Task<BuildEventUserList> GetBuildEventUserData(int eventId)
+    public async Task<BuildEventUserList?> GetBuildEventUserData(int eventId)
     {
         IEnumerable<DbPlayerEventItem> eventItems = await eventRepository.GetEventItemsAsync(
             eventId
@@ -306,27 +327,36 @@ public class EventService(
         );
     }
 
-    public async Task<RaidEventUserList> GetRaidEventUserData(int eventId)
+    public async Task<RaidEventUserList?> GetRaidEventUserData(int eventId)
     {
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
+
+        if (itemDict.Count == 0)
+        {
+            // Send client to /entry
+            return null;
+        }
 
         return new RaidEventUserList(
             eventId,
-            itemDict[(int)RaidEventItemType.SummonPoint],
-            itemDict[(int)RaidEventItemType.RaidPoint1],
-            itemDict[(int)RaidEventItemType.RaidPoint2],
-            itemDict[(int)RaidEventItemType.RaidPoint3],
-            itemDict[(int)RaidEventItemType.AdventItem1],
-            itemDict[(int)RaidEventItemType.AdventItem2],
-            itemDict[(int)RaidEventItemType.UltimateItem1],
-            itemDict[(int)RaidEventItemType.ExchangeItem1],
-            itemDict[(int)RaidEventItemType.ExchangeItem2]
+            itemDict.GetValueOrDefault((int)RaidEventItemType.SummonPoint, 0),
+            itemDict.GetValueOrDefault((int)RaidEventItemType.RaidPoint1, 0),
+            itemDict.GetValueOrDefault((int)RaidEventItemType.RaidPoint2, 0),
+            itemDict.GetValueOrDefault((int)RaidEventItemType.RaidPoint3, 0),
+            itemDict.GetValueOrDefault((int)RaidEventItemType.AdventItem1, 0),
+            itemDict.GetValueOrDefault((int)RaidEventItemType.AdventItem2, 0),
+            itemDict.GetValueOrDefault((int)RaidEventItemType.UltimateItem1, 0),
+            itemDict.GetValueOrDefault((int)RaidEventItemType.ExchangeItem1, 0),
+            itemDict.GetValueOrDefault((int)RaidEventItemType.ExchangeItem2, 0)
         );
     }
 
-    public async Task<Clb01EventUserList> GetClb01EventUserData(int eventId)
+    public async Task<Clb01EventUserList?> GetClb01EventUserData(int eventId)
     {
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
+
+        if (itemDict.Count == 0)
+            return null;
 
         return new Clb01EventUserList(
             eventId,
@@ -334,9 +364,12 @@ public class EventService(
         );
     }
 
-    public async Task<CollectEventUserList> GetCollectEventUserData(int eventId)
+    public async Task<CollectEventUserList?> GetCollectEventUserData(int eventId)
     {
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
+
+        if (itemDict.Count == 0)
+            return null;
 
         return new CollectEventUserList(
             eventId,
@@ -344,65 +377,80 @@ public class EventService(
         );
     }
 
-    public async Task<CombatEventUserList> GetCombatEventUserData(int eventId)
+    public async Task<CombatEventUserList?> GetCombatEventUserData(int eventId)
     {
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
+
+        if (itemDict.Count == 0)
+            return null;
 
         return new CombatEventUserList(
             eventId,
-            itemDict[(int)CombatEventItemType.EventPoint],
-            itemDict[(int)CombatEventItemType.ExchangeItem],
-            itemDict[(int)CombatEventItemType.QuestUnlock],
-            itemDict[(int)CombatEventItemType.StoryUnlock],
-            itemDict[(int)CombatEventItemType.AdventItem]
+            itemDict.GetValueOrDefault((int)CombatEventItemType.EventPoint, 0),
+            itemDict.GetValueOrDefault((int)CombatEventItemType.ExchangeItem, 0),
+            itemDict.GetValueOrDefault((int)CombatEventItemType.QuestUnlock, 0),
+            itemDict.GetValueOrDefault((int)CombatEventItemType.StoryUnlock, 0),
+            itemDict.GetValueOrDefault((int)CombatEventItemType.AdventItem, 0)
         );
     }
 
-    public async Task<EarnEventUserList> GetEarnEventUserData(int eventId)
+    public async Task<EarnEventUserList?> GetEarnEventUserData(int eventId)
     {
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
+
+        if (itemDict.Count == 0)
+            return null;
 
         return new EarnEventUserList(
             eventId,
-            itemDict[(int)EarnEventItemType.EarnPoint],
-            itemDict[(int)EarnEventItemType.ExchangeItem1],
-            itemDict[(int)EarnEventItemType.ExchangeItem2],
-            itemDict[(int)EarnEventItemType.AdventItem]
+            itemDict.GetValueOrDefault((int)EarnEventItemType.EarnPoint, 0),
+            itemDict.GetValueOrDefault((int)EarnEventItemType.ExchangeItem1, 0),
+            itemDict.GetValueOrDefault((int)EarnEventItemType.ExchangeItem2, 0),
+            itemDict.GetValueOrDefault((int)EarnEventItemType.AdventItem, 0)
         );
     }
 
-    public async Task<ExHunterEventUserList> GetExHunterEventUserData(int eventId)
+    public async Task<ExHunterEventUserList?> GetExHunterEventUserData(int eventId)
     {
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
+
+        if (itemDict.Count == 0)
+            return null;
 
         return new ExHunterEventUserList(
             eventId,
-            itemDict[(int)ExHunterEventItemType.SummonPoint],
-            itemDict[(int)ExHunterEventItemType.ExHunterPoint1],
-            itemDict[(int)ExHunterEventItemType.ExHunterPoint2],
-            itemDict[(int)ExHunterEventItemType.ExHunterPoint3],
-            itemDict[(int)ExHunterEventItemType.AdventItem1],
-            itemDict[(int)ExHunterEventItemType.AdventItem2],
-            itemDict[(int)ExHunterEventItemType.UltimateItem],
-            itemDict[(int)ExHunterEventItemType.ExchangeItem01],
-            itemDict[(int)ExHunterEventItemType.ExchangeItem02]
+            itemDict.GetValueOrDefault((int)ExHunterEventItemType.SummonPoint, 0),
+            itemDict.GetValueOrDefault((int)ExHunterEventItemType.ExHunterPoint1, 0),
+            itemDict.GetValueOrDefault((int)ExHunterEventItemType.ExHunterPoint2, 0),
+            itemDict.GetValueOrDefault((int)ExHunterEventItemType.ExHunterPoint3, 0),
+            itemDict.GetValueOrDefault((int)ExHunterEventItemType.AdventItem1, 0),
+            itemDict.GetValueOrDefault((int)ExHunterEventItemType.AdventItem2, 0),
+            itemDict.GetValueOrDefault((int)ExHunterEventItemType.UltimateItem, 0),
+            itemDict.GetValueOrDefault((int)ExHunterEventItemType.ExchangeItem01, 0),
+            itemDict.GetValueOrDefault((int)ExHunterEventItemType.ExchangeItem02, 0)
         );
     }
 
-    public async Task<ExRushEventUserList> GetExRushEventUserData(int eventId)
+    public async Task<ExRushEventUserList?> GetExRushEventUserData(int eventId)
     {
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
+
+        if (itemDict.Count == 0)
+            return null;
 
         return new ExRushEventUserList(
             eventId,
-            itemDict[(int)ExRushEventItemType.ExRushPoint1],
-            itemDict[(int)ExRushEventItemType.ExRushPoint2]
+            itemDict.GetValueOrDefault((int)ExRushEventItemType.ExRushPoint1, 0),
+            itemDict.GetValueOrDefault((int)ExRushEventItemType.ExRushPoint2, 0)
         );
     }
 
-    public async Task<MazeEventUserList> GetMazeEventUserData(int eventId)
+    public async Task<MazeEventUserList?> GetMazeEventUserData(int eventId)
     {
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
+
+        if (itemDict.Count == 0)
+            return null;
 
         return new MazeEventUserList(
             eventId,
@@ -410,15 +458,18 @@ public class EventService(
         );
     }
 
-    public async Task<SimpleEventUserList> GetSimpleEventUserData(int eventId)
+    public async Task<SimpleEventUserList?> GetSimpleEventUserData(int eventId)
     {
         Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
+        if (itemDict.Count == 0)
+            return null;
+
         return new SimpleEventUserList(
             eventId,
-            itemDict[(int)SimpleEventItemType.ExchangeItem1],
-            itemDict[(int)SimpleEventItemType.ExchangeItem2],
-            itemDict[(int)SimpleEventItemType.ExchangeItem3]
+            itemDict.GetValueOrDefault((int)SimpleEventItemType.ExchangeItem1, 0),
+            itemDict.GetValueOrDefault((int)SimpleEventItemType.ExchangeItem2, 0),
+            itemDict.GetValueOrDefault((int)SimpleEventItemType.ExchangeItem3, 0)
         );
     }
 

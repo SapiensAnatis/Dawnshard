@@ -8,7 +8,14 @@ public class AuthorizationMiddlewareTest : TestFixture
         CustomWebApplicationFactory factory,
         ITestOutputHelper outputHelper
     )
-        : base(factory, outputHelper) { }
+        : base(factory, outputHelper)
+    {
+#if !DEBUG
+        throw new InvalidOperationException(
+            "These tests must be run in a debug build as they use a conditionally compiled controller"
+        );
+#endif
+    }
 
     [Fact]
     public async Task ValidSidHeader_ReturnsExpectedResponse()

@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DragaliaAPI.Shared.MasterAsset;
+using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Enemy;
+using Microsoft.EntityFrameworkCore;
 using Snapshooter;
 using Snapshooter.Xunit;
 
@@ -252,10 +255,31 @@ public class DungeonStartTest : TestFixture
         DragaliaResponse<DungeonStartStartData> response =
             await this.Client.PostMsgpack<DungeonStartStartData>(
                 $"/dungeon_start/start",
-                new DungeonStartStartRequest() { quest_id = 204270302, party_no_list =  [ 1 ] }
+                new DungeonStartStartRequest() { quest_id = 204270302, party_no_list = [1] }
             );
 
         response.data.odds_info.enemy.Should().Contain(x => x.param_id == 204130320 && x.is_rare);
+    }
+
+    [Fact]
+    public async Task Start_EarnEvent_EnemiesDuplicated()
+    {
+        const int earnEventQuestId = 229031201; // Repelling the Frosty Fiends: Standard (Solo)
+
+        DragaliaResponse<DungeonStartStartData> response =
+            await this.Client.PostMsgpack<DungeonStartStartData>(
+                $"/dungeon_start/start",
+                new DungeonStartStartRequest() { quest_id = earnEventQuestId, party_no_list = [1] }
+            );
+
+        response.data.odds_info.enemy.Should().HaveCount(31);
+
+        QuestData questData = MasterAsset.QuestData[earnEventQuestId];
+        IEnumerable<int> enemies = MasterAsset
+            .QuestEnemies[$"{questData.Scene01}/{questData.AreaName01}".ToLowerInvariant()]
+            .Enemies[questData.VariationType];
+
+        response.data.odds_info.enemy.Should().HaveCountGreaterThan(enemies.Count());
     }
 
     private static readonly Func<MatchOptions, MatchOptions> SnapshotOptions = opts =>

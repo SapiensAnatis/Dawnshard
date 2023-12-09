@@ -1,0 +1,282 @@
+[
+    {
+        "_Id": 229010101,
+        "_ScoringEnemyGroupId": 2290101,
+        "_EnemyListId": 100050101,
+        "_Point": 10,
+        "_IconImage": "e0050101"
+    },
+    {
+        "_Id": 229010102,
+        "_ScoringEnemyGroupId": 2290101,
+        "_EnemyListId": 100220101,
+        "_Point": 30,
+        "_IconImage": "e0220101"
+    },
+    {
+        "_Id": 229010103,
+        "_ScoringEnemyGroupId": 2290101,
+        "_EnemyListId": 100130101,
+        "_Point": 10,
+        "_IconImage": "e0130101"
+    },
+    {
+        "_Id": 229010104,
+        "_ScoringEnemyGroupId": 2290101,
+        "_EnemyListId": 100200101,
+        "_Point": 20,
+        "_IconImage": "e0200101"
+    },
+    {
+        "_Id": 229010105,
+        "_ScoringEnemyGroupId": 2290101,
+        "_EnemyListId": 100100101,
+        "_Point": 20,
+        "_IconImage": "e0100101"
+    },
+    {
+        "_Id": 229010106,
+        "_ScoringEnemyGroupId": 2290101,
+        "_EnemyListId": 100010601,
+        "_Point": 900,
+        "_IconImage": "e0010601"
+    },
+    {
+        "_Id": 229010107,
+        "_ScoringEnemyGroupId": 2290101,
+        "_EnemyListId": 200030101,
+        "_Point": 200,
+        "_IconImage": "b0030101"
+    },
+    {
+        "_Id": 229010201,
+        "_ScoringEnemyGroupId": 2290102,
+        "_EnemyListId": 100010601,
+        "_Point": 450,
+        "_IconImage": "e0010601"
+    },
+    {
+        "_Id": 229020101,
+        "_ScoringEnemyGroupId": 2290201,
+        "_EnemyListId": 500370201,
+        "_Point": 10,
+        "_IconImage": "c0370201"
+    },
+    {
+        "_Id": 229020102,
+        "_ScoringEnemyGroupId": 2290201,
+        "_EnemyListId": 100090201,
+        "_Point": 40,
+        "_IconImage": "e0090201"
+    },
+    {
+        "_Id": 229020103,
+        "_ScoringEnemyGroupId": 2290201,
+        "_EnemyListId": 500380201,
+        "_Point": 30,
+        "_IconImage": "c0380201"
+    },
+    {
+        "_Id": 229020104,
+        "_ScoringEnemyGroupId": 2290201,
+        "_EnemyListId": 100020201,
+        "_Point": 20,
+        "_IconImage": "e0020201"
+    },
+    {
+        "_Id": 229020105,
+        "_ScoringEnemyGroupId": 2290201,
+        "_EnemyListId": 100050201,
+        "_Point": 10,
+        "_IconImage": "e0050201"
+    },
+    {
+        "_Id": 229020106,
+        "_ScoringEnemyGroupId": 2290201,
+        "_EnemyListId": 100010601,
+        "_Point": 900,
+        "_IconImage": "e0010601"
+    },
+    {
+        "_Id": 229020107,
+        "_ScoringEnemyGroupId": 2290201,
+        "_EnemyListId": 200070201,
+        "_Point": 200,
+        "_IconImage": "b0070201"
+    },
+    {
+        "_Id": 229020201,
+        "_ScoringEnemyGroupId": 2290202,
+        "_EnemyListId": 100010601,
+        "_Point": 450,
+        "_IconImage": "e0010601"
+    },
+    {
+        "_Id": 229030101,
+        "_ScoringEnemyGroupId": 2290301,
+        "_EnemyListId": 100070301,
+        "_Point": 10,
+        "_IconImage": "e0070301"
+    },
+    {
+        "_Id": 229030102,
+        "_ScoringEnemyGroupId": 2290301,
+        "_EnemyListId": 100040301,
+        "_Point": 40,
+        "_IconImage": "e0040301"
+    },
+    {
+        "_Id": 229030103,
+        "_ScoringEnemyGroupId": 2290301,
+        "_EnemyListId": 100140102,
+        "_Point": 30,
+        "_IconImage": "e0140102"
+    },
+    {
+        "_Id": 229030104,
+        "_ScoringEnemyGroupId": 2290301,
+        "_EnemyListId": 100220301,
+        "_Point": 20,
+        "_IconImage": "e0220301"
+    },
+    {
+        "_Id": 229030105,
+        "_ScoringEnemyGroupId": 2290301,
+        "_EnemyListId": 100050301,
+        "_Point": 10,
+        "_IconImage": "e0050301"
+    },
+    {
+        "_Id": 229030106,
+        "_ScoringEnemyGroupId": 2290301,
+        "_EnemyListId": 100010601,
+        "_Point": 900,
+        "_IconImage": "e0010601"
+    },
+    {
+        "_Id": 229030107,
+        "_ScoringEnemyGroupId": 2290301,
+        "_EnemyListId": 200010301,
+        "_Point": 200,
+        "_IconImage": "b0010301"
+    },
+    {
+        "_Id": 229030201,
+        "_ScoringEnemyGroupId": 2290302,
+        "_EnemyListId": 100010601,
+        "_Point": 450,
+        "_IconImage": "e0010601"
+    },
+    {
+        "_Id": 229040101,
+        "_ScoringEnemyGroupId": 2290401,
+        "_EnemyListId": 100050501,
+        "_Point": 10,
+        "_IconImage": "e0050501"
+    },
+    {
+        "_Id": 229040102,
+        "_ScoringEnemyGroupId": 2290401,
+        "_EnemyListId": 100020501,
+        "_Point": 40,
+        "_IconImage": "e0020501"
+    },
+    {
+        "_Id": 229040103,
+        "_ScoringEnemyGroupId": 2290401,
+        "_EnemyListId": 100200501,
+        "_Point": 30,
+        "_IconImage": "e0200501"
+    },
+    {
+        "_Id": 229040104,
+        "_ScoringEnemyGroupId": 2290401,
+        "_EnemyListId": 100070501,
+        "_Point": 10,
+        "_IconImage": "e0070501"
+    },
+    {
+        "_Id": 229040105,
+        "_ScoringEnemyGroupId": 2290401,
+        "_EnemyListId": 100030501,
+        "_Point": 20,
+        "_IconImage": "e0030501"
+    },
+    {
+        "_Id": 229040106,
+        "_ScoringEnemyGroupId": 2290401,
+        "_EnemyListId": 100010601,
+        "_Point": 900,
+        "_IconImage": "e0010601"
+    },
+    {
+        "_Id": 229040107,
+        "_ScoringEnemyGroupId": 2290401,
+        "_EnemyListId": 200030501,
+        "_Point": 200,
+        "_IconImage": "b0030501"
+    },
+    {
+        "_Id": 229040201,
+        "_ScoringEnemyGroupId": 2290402,
+        "_EnemyListId": 100010601,
+        "_Point": 450,
+        "_IconImage": "e0010601"
+    },
+    {
+        "_Id": 229050101,
+        "_ScoringEnemyGroupId": 2290501,
+        "_EnemyListId": 500010004,
+        "_Point": 10,
+        "_IconImage": "c0010004"
+    },
+    {
+        "_Id": 229050102,
+        "_ScoringEnemyGroupId": 2290501,
+        "_EnemyListId": 500050004,
+        "_Point": 40,
+        "_IconImage": "c0050004"
+    },
+    {
+        "_Id": 229050103,
+        "_ScoringEnemyGroupId": 2290501,
+        "_EnemyListId": 500020004,
+        "_Point": 30,
+        "_IconImage": "c0020004"
+    },
+    {
+        "_Id": 229050104,
+        "_ScoringEnemyGroupId": 2290501,
+        "_EnemyListId": 500040004,
+        "_Point": 20,
+        "_IconImage": "c0040004"
+    },
+    {
+        "_Id": 229050105,
+        "_ScoringEnemyGroupId": 2290501,
+        "_EnemyListId": 500030004,
+        "_Point": 10,
+        "_IconImage": "c0030004"
+    },
+    {
+        "_Id": 229050106,
+        "_ScoringEnemyGroupId": 2290501,
+        "_EnemyListId": 100010601,
+        "_Point": 900,
+        "_IconImage": "e0010601"
+    },
+    {
+        "_Id": 229050107,
+        "_ScoringEnemyGroupId": 2290501,
+        "_EnemyListId": 500200401,
+        "_Point": 200,
+        "_IconImage": "c0200401"
+    },
+    {
+        "_Id": 229050201,
+        "_ScoringEnemyGroupId": 2290502,
+        "_EnemyListId": 100010601,
+        "_Point": 450,
+        "_IconImage": "e0010601"
+    }
+]

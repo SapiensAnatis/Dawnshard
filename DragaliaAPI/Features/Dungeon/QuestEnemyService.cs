@@ -4,6 +4,7 @@ using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Enemy;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestDrops;
 using DragaliaAPI.Shared.MasterAsset.Models.Wall;
 using FluentRandomPicker;
@@ -195,7 +196,18 @@ public class QuestEnemyService : IQuestEnemyService
             return Array.Empty<AtgenEnemy>();
         }
 
-        return enemyList
+        IEnumerable<EnemyParam> enemyParamList = enemyList.Select(x => MasterAsset.EnemyParam[x]);
+
+        if (questData.EventKindType == EventKindType.Earn)
+        {
+            enemyParamList = enemyParamList.SelectMany(
+                x => DuplicateEarnEventEnemies(x, questData.VariationType)
+            );
+        }
+
+        return enemyParamList
+            .OrderBy(x => x.Id)
+            .Where(x => x.Tough != Toughness.RareEnemy)
             .Select(
                 (x, idx) =>
                     new AtgenEnemy()
@@ -203,8 +215,8 @@ public class QuestEnemyService : IQuestEnemyService
                         enemy_idx = idx,
                         is_pop = true,
                         is_rare = false,
-                        param_id = x,
-                        enemy_drop_list = new List<EnemyDropList>() { }
+                        param_id = x.Id,
+                        enemy_drop_list = []
                     }
             )
             .ToArray();
@@ -225,5 +237,30 @@ public class QuestEnemyService : IQuestEnemyService
                 enemy_drop_list = new List<EnemyDropList>()
             }
         };
+    }
+
+    private static IEnumerable<EnemyParam> DuplicateEarnEventEnemies(
+        EnemyParam enemy,
+        VariationTypes variationType
+    )
+    {
+        yield return enemy;
+
+        if (enemy.Tough == Toughness.Normal)
+        {
+            // Duplicate normal enemies by a factor of 3x
+            yield return enemy;
+            yield return enemy;
+
+            // For Hard quests, duplicate 4x
+            if (variationType == VariationTypes.Hard)
+                yield return enemy;
+        }
+
+        // For Very Hard quests, duplicate normal enemies 4x, bosses 2x
+        if (variationType == VariationTypes.VeryHard)
+        {
+            yield return enemy;
+        }
     }
 }

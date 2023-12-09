@@ -72,4 +72,9 @@ public class StoryRepository : IStoryRepository
 
     public async Task<bool> HasReadQuestStory(int storyId) =>
         await this.QuestStories.AnyAsync(x => x.StoryId == storyId && x.State == StoryState.Read);
+
+    public async Task DeleteQuestStories(int[] storyIds) =>
+        this.apiContext.RemoveRange(
+            await this.QuestStories.Where(x => storyIds.Contains(x.StoryId)).ToListAsync()
+        );
 }

@@ -132,9 +132,6 @@
         <None Update="Resources\FortPlantDetail.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="Resources\QuestDrops\EnemyParam.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="Resources\QuestDrops\QuestBonusRewards.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -255,9 +252,6 @@
         <None Update="Resources\QuestDrops\QuestDrops.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Resources\QuestDrops\QuestEnemies.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
         <None Update="Resources\QuestEvent.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -327,10 +321,22 @@
         <None Update="Resources\WeaponSkin.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Resources\Enemy\EnemyParam.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Enemy\QuestEnemies.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Enemy\EnemyData.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Event\QuestScoringEnemy.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="Microsoft.Extensions.Identity.Core"/>
+        <Reference Include="Microsoft.Extensions.Identity.Core" />
     </ItemGroup>
 
 	<ItemGroup>
@@ -652,9 +658,9 @@
 	</ItemGroup>
 
     <ItemGroup>
-        <Folder Include="MasterAsset\Models\Login\"/>
-        <Folder Include="MasterAsset\Models\QuestSchedule\"/>
-        <Folder Include="MasterAsset\Models\User\"/>
+        <Folder Include="MasterAsset\Models\Login\" />
+        <Folder Include="MasterAsset\Models\QuestSchedule\" />
+        <Folder Include="MasterAsset\Models\User\" />
         <Folder Include="Resources\QuestSchedule\"/>
     </ItemGroup>
 
