@@ -206,7 +206,6 @@ public class QuestEnemyService : IQuestEnemyService
         }
 
         return enemyParamList
-            .OrderBy(x => x.Id)
             .Where(x => x.Tough != Toughness.RareEnemy)
             .Select(
                 (x, idx) =>
