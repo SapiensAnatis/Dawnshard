@@ -37,4 +37,5 @@ public interface IEventRepository
     Task RemoveItemQuantityAsync(int itemId, int quantity);
 
     Task AddEventPassiveProgressAsync(int eventId, int passiveId, int progress);
+    Task<bool> HasEventDataAsync(int eventId);
 }

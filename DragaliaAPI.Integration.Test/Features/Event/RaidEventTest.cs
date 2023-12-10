@@ -59,4 +59,23 @@ public class RaidEventTest : TestFixture
         evtResp.data.update_data_list.Should().NotBeNull();
         evtResp.data.update_data_list.raid_event_user_list.Should().HaveCount(1); // Reward is a raid event item so we test this
     }
+
+    [Fact]
+    public async Task Entry_EventHasNoItems_InitializesUserData()
+    {
+        const int fracturedFuturesId = 20427;
+
+        await this.Client.PostMsgpack(
+            "memory_event/activate",
+            new MemoryEventActivateRequest(fracturedFuturesId)
+        );
+
+        DragaliaResponse<RaidEventGetEventDataData> response =
+            await this.Client.PostMsgpack<RaidEventGetEventDataData>(
+                "raid_event/get_event_data",
+                new RaidEventGetEventDataRequest(fracturedFuturesId)
+            );
+
+        response.data.raid_event_user_data.Should().NotBeNull();
+    }
 }
