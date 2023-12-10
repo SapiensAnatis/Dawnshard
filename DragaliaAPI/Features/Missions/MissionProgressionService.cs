@@ -350,6 +350,9 @@ public class MissionProgressionService(
                             )
                         );
                     }
+
+                    if (progressionInfo.MissionType == MissionType.Daily)
+                        missionRepository.AddCompletedDailyMissionAsync(progressionInfo.MissionId);
                 }
                 else
                 {

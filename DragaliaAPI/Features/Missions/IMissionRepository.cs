@@ -6,6 +6,7 @@ namespace DragaliaAPI.Features.Missions;
 public interface IMissionRepository
 {
     IQueryable<DbPlayerMission> Missions { get; }
+    IQueryable<DbCompletedDailyMission> CompletedDailyMissions { get; }
 
     IQueryable<DbPlayerMission> GetMissionsByType(MissionType type);
 
@@ -19,4 +20,6 @@ public interface IMissionRepository
         DateTimeOffset? endTime = null,
         int? groupId = null
     );
+
+    void AddCompletedDailyMissionAsync(int id);
 }

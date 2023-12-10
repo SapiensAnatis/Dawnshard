@@ -10,20 +10,23 @@ using Serilog;
 
 namespace DragaliaAPI.Features.Missions;
 
-public class MissionRepository : IMissionRepository
+public class MissionRepository(
+    ApiContext apiContext,
+    IPlayerIdentityService playerIdentityService,
+    TimeProvider timeProvider
+) : IMissionRepository
 {
-    private readonly ApiContext apiContext;
-    private readonly IPlayerIdentityService playerIdentityService;
-
-    public MissionRepository(ApiContext apiContext, IPlayerIdentityService playerIdentityService)
-    {
-        this.apiContext = apiContext;
-        this.playerIdentityService = playerIdentityService;
-    }
+    private readonly ApiContext apiContext = apiContext;
+    private readonly IPlayerIdentityService playerIdentityService = playerIdentityService;
 
     public IQueryable<DbPlayerMission> Missions =>
         this.apiContext
             .PlayerMissions
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+    public IQueryable<DbCompletedDailyMission> CompletedDailyMissions =>
+        this.apiContext
+            .CompletedDailyMissions
             .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbPlayerMission> GetMissionsByType(MissionType type)
@@ -75,6 +78,18 @@ public class MissionRepository : IMissionRepository
             )
             .Entity;
     }
+
+    public void AddCompletedDailyMissionAsync(int id) =>
+        this.apiContext
+            .CompletedDailyMissions
+            .Add(
+                new DbCompletedDailyMission()
+                {
+                    ViewerId = this.playerIdentityService.ViewerId,
+                    Id = id,
+                    Date = DateOnly.FromDateTime(timeProvider.GetUtcNow().Date)
+                }
+            );
 
     private static bool HasProgressionInfo(DbPlayerMission mission)
     {

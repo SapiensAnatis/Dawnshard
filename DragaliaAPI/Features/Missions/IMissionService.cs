@@ -27,4 +27,7 @@ public interface IMissionService
     Task<IEnumerable<DrillMissionGroupList>> GetCompletedDrillGroups();
     Task<IEnumerable<DbPlayerMission>> UnlockMemoryEventMissions(int eventId);
     Task<IEnumerable<DbPlayerMission>> UnlockEventMissions(int eventId);
+
+    Task<TResponse> BuildNormalResponse<TResponse>()
+        where TResponse : INormalMissionEndpointResponse, new();
 }
