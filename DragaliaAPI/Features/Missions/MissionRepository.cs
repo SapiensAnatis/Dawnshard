@@ -6,6 +6,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace DragaliaAPI.Features.Missions;
 

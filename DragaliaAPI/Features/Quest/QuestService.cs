@@ -322,9 +322,9 @@ public class QuestService(
             }
         }
 
-        if (questData.IsEventBossBattle)
+        if (questData.IsEventRegularBattle)
         {
-            missionProgressionService.OnEventBossBattleCleared(questData.Gid);
+            missionProgressionService.OnEventRegularBattleCleared(questData.Gid);
         }
         else if (questData.IsEventChallengeBattle)
         {

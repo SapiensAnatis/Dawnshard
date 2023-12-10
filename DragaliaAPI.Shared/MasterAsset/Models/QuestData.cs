@@ -57,7 +57,7 @@ public record QuestData(
             new(this.Scene06, this.AreaName06),
         }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
 
-    public bool IsEventBossBattle
+    public bool IsEventRegularBattle
     {
         get
         {
@@ -65,8 +65,9 @@ public record QuestData(
 
             return this.EventKindType switch
             {
-                EventKindType.Build => idSuffix is 301 or 302 or 303,
-                EventKindType.Raid => idSuffix is 201 or 202 or 203,
+                EventKindType.Build => idSuffix is 301 or 302 or 303, // Boss battle
+                EventKindType.Raid => idSuffix is 201 or 202 or 203, // Boss battle
+                EventKindType.Earn => idSuffix is 201 or 202 or 203, // Invasion quest
                 _ => false
             };
         }
@@ -95,6 +96,7 @@ public record QuestData(
             return this.EventKindType switch
             {
                 EventKindType.Build => idSuffix is 701 or 702,
+                EventKindType.Earn => idSuffix is 301 or 302 or 303,
                 _ => false
             };
         }

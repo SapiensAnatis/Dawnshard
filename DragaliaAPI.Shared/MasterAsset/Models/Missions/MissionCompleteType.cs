@@ -146,7 +146,7 @@ public enum MissionCompleteType
     /// <summary>
     /// int eventId
     /// </summary>
-    EventBossBattleClear,
+    EventRegularBattleClear,
 
     /// <summary>
     /// int eventId, AbilityCrests crestId
@@ -167,6 +167,11 @@ public enum MissionCompleteType
     /// int eventId, int questId
     /// </summary>
     EventTrialClear,
+
+    /// <summary>
+    /// int progressionGroupId
+    /// </summary>
+    ProgressionGroupCleared,
 
     /// <summary>
     /// None

@@ -238,7 +238,7 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Resources\Missions\MissionProgressionInfo.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Resources\Missions\MissionSpecialData.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

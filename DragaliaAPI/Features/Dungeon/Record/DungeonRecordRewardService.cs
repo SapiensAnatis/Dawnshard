@@ -138,6 +138,11 @@ public class DungeonRecordRewardService(
         (IEnumerable<AtgenScoringEnemyPointList> enemyScoreMissions, int enemyScore) =
             await questCompletionService.CompleteEnemyScoreMissions(session, playRecord);
 
+        if (enemyScore > 0)
+        {
+            missionProgressionService.OnEventPointCollected(session.QuestGid, enemyScore);
+        }
+
         ArgumentNullException.ThrowIfNull(session.QuestData);
 
         IEnumerable<AtgenEventPassiveUpList> passiveUpList =

@@ -183,10 +183,14 @@ public class EventService(
             logger.LogInformation("Creating event data for event {eventId}", eventId);
             eventRepository.CreateEventData(eventId);
 
-            await missionService.UnlockMemoryEventMissions(eventId);
-            if (!data.IsMemoryEvent)
+            if (data.IsMemoryEvent)
+            {
+                await missionService.UnlockMemoryEventMissions(eventId);
+            }
+            else
             {
                 await this.ResetEventProgress(eventId);
+                await missionService.UnlockEventMissions(eventId);
             }
 
             firstEventEnter = true;

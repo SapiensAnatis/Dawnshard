@@ -48,4 +48,4 @@ JsonSerializerOptions options =
 
 string json = JsonSerializer.Serialize(missions, options);
 
-File.WriteAllText("MissionProgressionInfo.json", json);
+File.WriteAllText(args[1], json);

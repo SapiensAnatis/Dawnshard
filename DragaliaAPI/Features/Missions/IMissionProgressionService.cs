@@ -73,7 +73,7 @@ public interface IMissionProgressionService
     void OnPartyPowerReached(int might);
     void OnTreasureTrade(int tradeId, EntityTypes type, int id, int count, int total);
     void OnEventParticipation(int eventId);
-    void OnEventBossBattleCleared(int eventId);
+    void OnEventRegularBattleCleared(int eventId);
     void OnEventQuestClearedWithCrest(int eventId, AbilityCrests crest);
     void OnEventPointCollected(int eventId, int quantity);
     void OnEventChallengeBattleCleared(int eventId, int questId, bool fullClear);

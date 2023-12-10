@@ -7,12 +7,11 @@ using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Features.Item;
 using DragaliaAPI.Features.Player;
-using DragaliaAPI.Features.Reward.Handlers;
 using DragaliaAPI.Features.Tickets;
 using DragaliaAPI.Shared.Definitions.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace DragaliaAPI.Features.Reward;
+namespace DragaliaAPI.Features.Reward.Handlers;
 
 // TODO: Move types out of this class into their own dedicated handlers.
 
@@ -62,7 +61,7 @@ public class GenericRewardHandler(
         switch (entity.Type)
         {
             case EntityTypes.Chara:
-                return await RewardCharacter(entity);
+                return await this.RewardCharacter(entity);
             case EntityTypes.Item:
                 await itemRepository.AddItemQuantityAsync((UseItem)entity.Id, entity.Quantity);
                 break;
