@@ -333,13 +333,13 @@ public class EventService(
 
     public async Task<RaidEventUserList?> GetRaidEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
-
-        if (itemDict.Count == 0)
+        if (!await eventRepository.HasEventDataAsync(eventId))
         {
             // Send client to /entry
             return null;
         }
+
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new RaidEventUserList(
             eventId,
@@ -357,10 +357,10 @@ public class EventService(
 
     public async Task<Clb01EventUserList?> GetClb01EventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
-
-        if (itemDict.Count == 0)
+        if (!await eventRepository.HasEventDataAsync(eventId))
             return null;
+
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new Clb01EventUserList(
             eventId,
@@ -370,10 +370,10 @@ public class EventService(
 
     public async Task<CollectEventUserList?> GetCollectEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
-
-        if (itemDict.Count == 0)
+        if (!await eventRepository.HasEventDataAsync(eventId))
             return null;
+
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new CollectEventUserList(
             eventId,
@@ -383,10 +383,10 @@ public class EventService(
 
     public async Task<CombatEventUserList?> GetCombatEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
-
-        if (itemDict.Count == 0)
+        if (!await eventRepository.HasEventDataAsync(eventId))
             return null;
+
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new CombatEventUserList(
             eventId,
@@ -400,10 +400,10 @@ public class EventService(
 
     public async Task<EarnEventUserList?> GetEarnEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
-
-        if (itemDict.Count == 0)
+        if (!await eventRepository.HasEventDataAsync(eventId))
             return null;
+
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new EarnEventUserList(
             eventId,
@@ -416,10 +416,10 @@ public class EventService(
 
     public async Task<ExHunterEventUserList?> GetExHunterEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
-
-        if (itemDict.Count == 0)
+        if (!await eventRepository.HasEventDataAsync(eventId))
             return null;
+
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new ExHunterEventUserList(
             eventId,
@@ -437,10 +437,10 @@ public class EventService(
 
     public async Task<ExRushEventUserList?> GetExRushEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
-
-        if (itemDict.Count == 0)
+        if (!await eventRepository.HasEventDataAsync(eventId))
             return null;
+
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new ExRushEventUserList(
             eventId,
@@ -451,10 +451,10 @@ public class EventService(
 
     public async Task<MazeEventUserList?> GetMazeEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
-
-        if (itemDict.Count == 0)
+        if (!await eventRepository.HasEventDataAsync(eventId))
             return null;
+
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new MazeEventUserList(
             eventId,
@@ -464,10 +464,10 @@ public class EventService(
 
     public async Task<SimpleEventUserList?> GetSimpleEventUserData(int eventId)
     {
-        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
-
-        if (itemDict.Count == 0)
+        if (!await eventRepository.HasEventDataAsync(eventId))
             return null;
+
+        Dictionary<int, int> itemDict = await GetEventItemDictionary(eventId);
 
         return new SimpleEventUserList(
             eventId,
