@@ -19,7 +19,7 @@ public static class TollOfTheDeep
             // Participate In The Event
             new EventParticipationMission { MissionId = 10220101, EventId = EventId, },
             // Clear a Boss Battle
-            new EventBossBattleClearMission { MissionId = 10220201, EventId = EventId },
+            new EventRegularBattleClearMission { MissionId = 10220201, EventId = EventId },
             // Clear a "Toll of the Deep" Quest with Having a Summer Ball Equipped
             new EventQuestClearWithCrestMission()
             {
@@ -40,15 +40,15 @@ public static class TollOfTheDeep
             // Collect 7,000 Oceanic Resonance in One Go
             new EventPointCollectionMission() { MissionId = 10220506, EventId = EventId },
             // Clear Five Boss Battles
-            new EventBossBattleClearMission() { MissionId = 10220601, EventId = EventId },
+            new EventRegularBattleClearMission() { MissionId = 10220601, EventId = EventId },
             // Clear 10 Boss Battles
-            new EventBossBattleClearMission() { MissionId = 10220602, EventId = EventId },
+            new EventRegularBattleClearMission() { MissionId = 10220602, EventId = EventId },
             // Clear 15 Boss Battles
-            new EventBossBattleClearMission() { MissionId = 10220603, EventId = EventId },
+            new EventRegularBattleClearMission() { MissionId = 10220603, EventId = EventId },
             // Clear 20 Boss Battles
-            new EventBossBattleClearMission() { MissionId = 10220604, EventId = EventId },
+            new EventRegularBattleClearMission() { MissionId = 10220604, EventId = EventId },
             // Clear 30 Boss Battles
-            new EventBossBattleClearMission() { MissionId = 10220605, EventId = EventId },
+            new EventRegularBattleClearMission() { MissionId = 10220605, EventId = EventId },
             // Clear Three Challenge Battles
             new EventChallengeBattleClearMission() { MissionId = 10220801, EventId = EventId },
             // Clear Six Challenge Battles

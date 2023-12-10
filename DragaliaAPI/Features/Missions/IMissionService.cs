@@ -26,4 +26,5 @@ public interface IMissionService
     Task<IEnumerable<QuestEntryConditionList>> GetEntryConditions();
     Task<IEnumerable<DrillMissionGroupList>> GetCompletedDrillGroups();
     Task<IEnumerable<DbPlayerMission>> UnlockMemoryEventMissions(int eventId);
+    Task<IEnumerable<DbPlayerMission>> UnlockEventMissions(int eventId);
 }

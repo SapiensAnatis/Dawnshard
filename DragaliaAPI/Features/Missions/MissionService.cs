@@ -151,6 +151,39 @@ public class MissionService : IMissionService
         return dbMissions;
     }
 
+    public async Task<IEnumerable<DbPlayerMission>> UnlockEventMissions(int eventId)
+    {
+        List<PeriodMission> periodMissions = MasterAsset
+            .PeriodMission
+            .Enumerable
+            .Where(x => x.QuestGroupId == eventId)
+            .ToList();
+
+        List<DailyMission> dailyMissions = MasterAsset
+            .DailyMission
+            .Enumerable
+            .Where(x => x.QuestGroupId == eventId)
+            .ToList();
+
+        logger.LogInformation("Unlocking event missions for event {eventId}", eventId);
+
+        List<DbPlayerMission> dbMissions = new();
+        foreach (PeriodMission mission in periodMissions)
+        {
+            dbMissions.Add(
+                await StartMission(MissionType.Period, mission.Id, groupId: mission.QuestGroupId)
+            );
+        }
+        foreach (DailyMission mission in dailyMissions)
+        {
+            dbMissions.Add(
+                await StartMission(MissionType.Daily, mission.Id, groupId: mission.QuestGroupId)
+            );
+        }
+
+        return dbMissions;
+    }
+
     public async Task RedeemMission(MissionType type, int id)
     {
         logger.LogInformation("Redeeming mission {missionId}", id);

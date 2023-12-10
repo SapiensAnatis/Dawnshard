@@ -158,11 +158,12 @@ public class MissionInitialProgressionService(
             MissionCompleteType.GuildCheckInRewardClaimed => amountToComplete, // TODO
             MissionCompleteType.EventParticipation
                 => await this.GetEventParticipationProgress(progressionInfo.Parameter),
-            MissionCompleteType.EventBossBattleClear => 0,
+            MissionCompleteType.EventRegularBattleClear => 0,
             MissionCompleteType.EventQuestClearWithCrest => 0,
             MissionCompleteType.EventPointCollection => 0,
             MissionCompleteType.EventChallengeBattleClear => 0,
             MissionCompleteType.EventTrialClear => 0,
+            MissionCompleteType.ProgressionGroupCleared => 0,
             MissionCompleteType.UnimplementedAutoComplete => amountToComplete,
             _
                 => throw new UnreachableException(
