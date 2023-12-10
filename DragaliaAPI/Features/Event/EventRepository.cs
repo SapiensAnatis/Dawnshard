@@ -26,6 +26,9 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
         return await apiContext.PlayerEventData.FindAsync(playerIdentityService.ViewerId, eventId);
     }
 
+    public async Task<bool> HasEventDataAsync(int eventId) =>
+        await this.EventData.Where(x => x.EventId == eventId).AnyAsync();
+
     public async Task<IEnumerable<DbPlayerEventReward>> GetEventRewardsAsync(
         int eventId,
         bool isLocationReward = false
