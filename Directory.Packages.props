@@ -19,7 +19,7 @@
         <PackageVersion Include="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.0" />
         <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
         <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
-        <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-rtm-ci.20231109T120422" />
+        <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
         <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
         <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0" />
         <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
@@ -29,7 +29,7 @@
         <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
         <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="7.0.3" />
         <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
-        <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0-rc.2.23509.1" />
+        <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
         <PackageVersion Include="MudBlazor" Version="6.11.0" />
         <PackageVersion Include="Serilog.Exceptions" Version="8.4.0" />
         <PackageVersion Include="Serilog.Expressions" Version="4.0.0" />
