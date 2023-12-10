@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database;
+﻿using System.Diagnostics;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Services.Exceptions;
@@ -44,7 +45,9 @@ public class MissionRepository(
 
     public async Task<ILookup<MissionType, DbPlayerMission>> GetAllMissionsPerTypeAsync()
     {
-        return (await Missions.ToListAsync()).Where(HasProgressionInfo).ToLookup(x => x.Type);
+        return (await Missions.Where(x => x.Type != MissionType.Daily).ToListAsync())
+            .Where(HasProgressionInfo)
+            .ToLookup(x => x.Type);
     }
 
     public async Task<DbPlayerMission> AddMissionAsync(
@@ -79,17 +82,25 @@ public class MissionRepository(
             .Entity;
     }
 
-    public void AddCompletedDailyMissionAsync(int id) =>
+    public void AddCompletedDailyMission(DbPlayerMission originalMission)
+    {
         this.apiContext
             .CompletedDailyMissions
             .Add(
                 new DbCompletedDailyMission()
                 {
                     ViewerId = this.playerIdentityService.ViewerId,
-                    Id = id,
-                    Date = DateOnly.FromDateTime(timeProvider.GetUtcNow().Date)
+                    Id = originalMission.Id,
+                    Date = DateOnly.FromDateTime(timeProvider.GetUtcNow().Date),
+                    StartDate = originalMission.Start,
+                    EndDate = originalMission.End,
+                    Progress = originalMission.Progress
                 }
             );
+    }
+
+    public void RemoveCompletedDailyMission(DbCompletedDailyMission completedDailyMission) =>
+        this.apiContext.CompletedDailyMissions.Remove(completedDailyMission);
 
     private static bool HasProgressionInfo(DbPlayerMission mission)
     {

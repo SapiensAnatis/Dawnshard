@@ -8,5 +8,11 @@ public class DbCompletedDailyMission : DbPlayerData
 {
     public int Id { get; set; }
 
+    public int Progress { get; set; }
+
     public DateOnly Date { get; set; }
+
+    public DateTimeOffset StartDate { get; set; }
+
+    public DateTimeOffset EndDate { get; set; }
 }

@@ -259,4 +259,20 @@ public class MissionController(
 
         return response;
     }
+
+    [HttpPost("receive_daily_reward")]
+    public async Task<DragaliaResult<MissionReceiveDailyRewardData>> ReceiveDailyReward(
+        MissionReceiveDailyRewardRequest request
+    )
+    {
+        await this.missionService.RedeemDailyMissions(request.mission_params_list);
+
+        MissionReceiveDailyRewardData response =
+            await this.missionService.BuildNormalResponse<MissionReceiveDailyRewardData>();
+        response.update_data_list = await this.updateDataService.SaveChangesAsync();
+        response.entity_result = this.rewardService.GetEntityResult();
+        response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+
+        return response;
+    }
 }

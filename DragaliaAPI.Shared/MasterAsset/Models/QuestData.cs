@@ -67,7 +67,7 @@ public record QuestData(
             {
                 EventKindType.Build => idSuffix is 301 or 302 or 303, // Boss battle
                 EventKindType.Raid => idSuffix is 201 or 202 or 203, // Boss battle
-                EventKindType.Earn => idSuffix is 201 or 202 or 203, // Invasion quest
+                EventKindType.Earn => idSuffix is 201 or 202 or 203 or 401, // Invasion quest
                 _ => false
             };
         }

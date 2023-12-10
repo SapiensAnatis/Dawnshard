@@ -21,5 +21,7 @@ public interface IMissionRepository
         int? groupId = null
     );
 
-    void AddCompletedDailyMissionAsync(int id);
+    void AddCompletedDailyMission(DbPlayerMission originalMission);
+
+    void RemoveCompletedDailyMission(DbCompletedDailyMission completedDailyMission);
 }

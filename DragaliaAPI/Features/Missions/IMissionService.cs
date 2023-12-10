@@ -6,7 +6,8 @@ namespace DragaliaAPI.Features.Missions;
 
 public interface IMissionService
 {
-    Task<DbPlayerMission> StartMission(MissionType type, int id, int groupId = 0);
+    Task<DbPlayerMission> StartMission(MissionType type, int id, int groupId = 0, DateTimeOffset startTime = default,
+        DateTimeOffset endTime = default);
 
     Task<(
         IEnumerable<MainStoryMissionGroupReward>,
@@ -30,4 +31,6 @@ public interface IMissionService
 
     Task<TResponse> BuildNormalResponse<TResponse>()
         where TResponse : INormalMissionEndpointResponse, new();
+
+    Task RedeemDailyMissions(IEnumerable<AtgenMissionParamsList> missions);
 }

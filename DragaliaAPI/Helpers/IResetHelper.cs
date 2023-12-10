@@ -16,4 +16,5 @@ public interface IResetHelper
     /// Gets the last monthly reset (6AM UTC of the 1st of the current month).
     /// </summary>
     DateTimeOffset LastMonthlyReset { get; }
+    
 }
