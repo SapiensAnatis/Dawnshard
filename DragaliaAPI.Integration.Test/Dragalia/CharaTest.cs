@@ -37,6 +37,7 @@ public class CharaTest : TestFixture
         this.AddCharacter(Charas.Vida);
         this.AddCharacter(Charas.Delphi);
         this.AddCharacter(Charas.GalaAudric);
+        this.AddCharacter(Charas.Gauld);
     }
 
     [Fact]
@@ -123,6 +124,40 @@ public class CharaTest : TestFixture
             .quantity
             .Should()
             .Be(matQuantity - 300);
+    }
+
+    [Fact]
+    public async Task CharaBuildup_NotEnoughForLevel_DoesNotLevelUp()
+    {
+        await this.Client.PostMsgpack(
+            "chara/buildup",
+            new CharaBuildupRequest(
+                Charas.Gauld,
+                [new AtgenEnemyPiece() { id = Materials.GoldCrystal, quantity = 10 }]
+            )
+        );
+
+        byte currentLevel = this.ApiContext
+            .PlayerCharaData
+            .AsNoTracking()
+            .First(x => x.CharaId == Charas.Gauld)
+            .Level;
+
+        await this.Client.PostMsgpack(
+            "chara/buildup",
+            new CharaBuildupRequest(
+                Charas.Gauld,
+                [new AtgenEnemyPiece() { id = Materials.BronzeCrystal, quantity = 1 }]
+            )
+        );
+
+        this.ApiContext
+            .PlayerCharaData
+            .AsNoTracking()
+            .First(x => x.CharaId == Charas.Gauld)
+            .Level
+            .Should()
+            .Be(currentLevel);
     }
 
     [Fact]

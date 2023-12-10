@@ -40,7 +40,7 @@ public class CharaService(
 
             while (
                 maxLevel > playerCharaData.Level
-                && playerCharaData.Exp > CharaConstants.XpLimits[playerCharaData.Level - 1]
+                && playerCharaData.Exp >= CharaConstants.XpLimits[playerCharaData.Level]
             )
             {
                 playerCharaData.Level++;
