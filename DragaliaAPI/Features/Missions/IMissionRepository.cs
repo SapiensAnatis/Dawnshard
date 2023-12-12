@@ -24,4 +24,5 @@ public interface IMissionRepository
     void AddCompletedDailyMission(DbPlayerMission originalMission);
 
     void RemoveCompletedDailyMission(DbCompletedDailyMission completedDailyMission);
+    Task ClearDailyMissions();
 }

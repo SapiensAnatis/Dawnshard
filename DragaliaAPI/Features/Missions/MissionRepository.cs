@@ -58,13 +58,6 @@ public class MissionRepository(
         int? groupId = null
     )
     {
-        if (
-            await this.apiContext
-                .PlayerMissions
-                .FindAsync(this.playerIdentityService.ViewerId, id, type) != null
-        )
-            throw new DragaliaException(ResultCode.CommonDbError, "Mission already exists");
-
         return this.apiContext
             .PlayerMissions
             .Add(
@@ -97,6 +90,16 @@ public class MissionRepository(
                     Progress = originalMission.Progress
                 }
             );
+    }
+
+    public async Task ClearDailyMissions()
+    {
+        await foreach (
+            DbPlayerMission mission in this.GetMissionsByType(MissionType.Daily).AsAsyncEnumerable()
+        )
+        {
+            this.apiContext.Remove(mission);
+        }
     }
 
     public void RemoveCompletedDailyMission(DbCompletedDailyMission completedDailyMission) =>

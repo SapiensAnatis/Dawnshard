@@ -267,11 +267,14 @@ public class MissionController(
     {
         await this.missionService.RedeemDailyMissions(request.mission_params_list);
 
+        UpdateDataList updateDataList = await this.updateDataService.SaveChangesAsync();
+
         MissionReceiveDailyRewardData response =
             await this.missionService.BuildNormalResponse<MissionReceiveDailyRewardData>();
-        response.update_data_list = await this.updateDataService.SaveChangesAsync();
+
         response.entity_result = this.rewardService.GetEntityResult();
         response.converted_entity_list = Enumerable.Empty<ConvertedEntityList>();
+        response.update_data_list = updateDataList;
 
         return response;
     }

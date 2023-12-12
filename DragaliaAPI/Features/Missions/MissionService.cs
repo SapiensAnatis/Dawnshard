@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Options;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
@@ -10,6 +11,7 @@ using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Missions;
 
@@ -19,7 +21,8 @@ public class MissionService(
     IRewardService rewardService,
     IMissionInitialProgressionService missionInitialProgressionService,
     IUserDataRepository userDataRepository,
-    IResetHelper resetHelper
+    IResetHelper resetHelper,
+    IOptionsMonitor<EventOptions> eventOptionsMonitor
 ) : IMissionService
 {
     private readonly ILogger<MissionService> logger = logger;
@@ -29,6 +32,7 @@ public class MissionService(
     private readonly IUserDataRepository userDataRepository = userDataRepository;
     private readonly IRewardService rewardService = rewardService;
     private readonly IResetHelper resetHelper = resetHelper;
+    private readonly EventOptions eventOptions = eventOptionsMonitor.CurrentValue;
 
     public async Task<DbPlayerMission> StartMission(
         MissionType type,
@@ -169,6 +173,24 @@ public class MissionService(
 
     public async Task<IEnumerable<DbPlayerMission>> UnlockEventMissions(int eventId)
     {
+        EventRunInformation runInfo =
+            this.eventOptions.EventList.FirstOrDefault(x => x.Id == eventId)
+            ?? throw new DragaliaException(
+                ResultCode.EventOutThePeriod,
+                "Attempted to start missions for an event without any configuration in appsettings.json"
+            );
+
+        if (
+            this.resetHelper.LastDailyReset < runInfo.Start
+            || this.resetHelper.LastDailyReset > runInfo.End
+        )
+        {
+            throw new DragaliaException(
+                ResultCode.EventOutThePeriod,
+                "Attempted to start missions for an event which has either not started or has ended."
+            );
+        }
+
         List<PeriodMission> periodMissions = MasterAsset
             .PeriodMission
             .Enumerable
@@ -183,14 +205,16 @@ public class MissionService(
 
         logger.LogInformation("Unlocking event missions for event {eventId}", eventId);
 
-        List<DbPlayerMission> dbMissions = new();
+        List<DbPlayerMission> dbMissions = new(periodMissions.Count + dailyMissions.Count);
         foreach (PeriodMission mission in periodMissions)
         {
             dbMissions.Add(
                 await this.StartMission(
                     MissionType.Period,
                     mission.Id,
-                    groupId: mission.QuestGroupId
+                    groupId: mission.QuestGroupId,
+                    startTime: runInfo.Start,
+                    endTime: runInfo.End
                 )
             );
         }

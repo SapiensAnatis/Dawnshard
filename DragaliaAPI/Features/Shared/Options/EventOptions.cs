@@ -4,6 +4,5 @@ namespace DragaliaAPI.Features.Shared.Options;
 
 public class EventOptions
 {
-    public FrozenSet<EventRunInformation> EventList { get; init; } =
-        FrozenSet<EventRunInformation>.Empty;
+    public List<EventRunInformation> EventList { get; init; } = [];
 }
