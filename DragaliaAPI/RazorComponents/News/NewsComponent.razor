@@ -27,7 +27,7 @@
             </MudCard>
         }
     </MudStack>
-    <MudPagination @bind-Selected="@this.Selected" Count="@this.numPages"/>
+    <MudPagination @bind-Selected="@this.Selected" Count="@this.numPages" BoundaryCount="1" MiddleCount="2"/>
 </MudStack>
 
 @code {
