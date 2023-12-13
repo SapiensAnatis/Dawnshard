@@ -1,4 +1,5 @@
 using System.Globalization;
+using DragaliaAPI.Extensions;
 
 namespace DragaliaAPI.Helpers;
 

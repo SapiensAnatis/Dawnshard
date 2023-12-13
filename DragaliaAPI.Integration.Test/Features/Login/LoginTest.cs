@@ -1,5 +1,6 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Features.Login;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,13 +13,16 @@ public class LoginTest : TestFixture
     {
         this.ResetLastLoginTime();
         this.ClearLoginBonuses();
+
+        this.ApiContext.PlayerMissions.ExecuteDelete();
+        this.ApiContext.PlayerEventData.ExecuteDelete();
     }
 
     [Fact]
     public void IDailyResetAction_HasExpectedCount()
     {
         // Update this test when adding a new reset action
-        this.Services.GetServices<IDailyResetAction>().Should().HaveCount(4);
+        this.Services.GetServices<IDailyResetAction>().Should().HaveCount(5);
     }
 
     [Fact]
@@ -330,6 +334,137 @@ public class LoginTest : TestFixture
                     x.dragon_gift_id == DragonGifts.FourLeafClover
                     && x.quantity == oldCloverQuantity + 3
             );
+    }
+
+    [Fact]
+    public async Task LoginIndex_AddsNewDailyEndeavours()
+    {
+        int oldMissionId = 1;
+        int starryDragonyuleEventId = 22903;
+
+        await this.AddToDatabase(
+            new DbPlayerMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = oldMissionId,
+                Type = MissionType.Daily
+            }
+        );
+        await this.AddToDatabase(
+            new DbPlayerEventData() { ViewerId = this.ViewerId, EventId = starryDragonyuleEventId }
+        );
+
+        await this.Client.PostMsgpack(
+            "login/index",
+            new LoginIndexRequest() { jws_result = string.Empty }
+        );
+
+        this.ApiContext
+            .PlayerMissions
+            .AsNoTracking()
+            .Should()
+            .NotContain(x => x.Id == oldMissionId);
+
+        this.ApiContext
+            .PlayerMissions
+            .AsNoTracking()
+            .Where(x => x.GroupId == 0)
+            .Should()
+            .BeEquivalentTo(
+                [
+                    new DbPlayerMission() { Id = 15070101 },
+                    new DbPlayerMission() { Id = 15070201 },
+                    new DbPlayerMission() { Id = 15070301 },
+                    new DbPlayerMission() { Id = 15070401 },
+                    new DbPlayerMission() { Id = 15070501 },
+                    new DbPlayerMission() { Id = 15070601 },
+                ],
+                opts => opts.Including(x => x.Id),
+                "these are the standard daily endeavours"
+            );
+
+        this.ApiContext
+            .PlayerMissions
+            .AsNoTracking()
+            .Where(x => x.GroupId == starryDragonyuleEventId)
+            .Should()
+            .BeEquivalentTo(
+                [
+                    new DbPlayerMission() { Id = 11190101 },
+                    new DbPlayerMission() { Id = 11190102 },
+                    new DbPlayerMission() { Id = 11190103 },
+                    new DbPlayerMission() { Id = 11190104 },
+                    new DbPlayerMission() { Id = 11190105 },
+                    new DbPlayerMission() { Id = 11190201 },
+                    new DbPlayerMission() { Id = 11190202 },
+                    new DbPlayerMission() { Id = 11190301 },
+                ],
+                opts => opts.Including(x => x.Id),
+                "these are the event daily endeavours"
+            );
+
+        this.ApiContext
+            .PlayerMissions
+            .AsNoTracking()
+            .ToList()
+            .Should()
+            .AllSatisfy(x =>
+            {
+                x.Type.Should().Be(MissionType.Daily);
+                x.Start.Should().Be(this.LastDailyReset);
+                x.End.Should().Be(this.LastDailyReset.AddDays(1));
+            });
+    }
+
+    [Fact]
+    public async Task LoginIndex_EventNotStarted_DoesAddEventDailyEndeavours()
+    {
+        int oldMissionId = 1;
+        int starryDragonyuleEventId = 22903;
+
+        await this.AddToDatabase(
+            new DbPlayerMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = oldMissionId,
+                Type = MissionType.Daily
+            }
+        );
+
+        await this.Client.PostMsgpack(
+            "login/index",
+            new LoginIndexRequest() { jws_result = string.Empty }
+        );
+
+        this.ApiContext
+            .PlayerMissions
+            .AsNoTracking()
+            .Should()
+            .NotContain(x => x.Id == oldMissionId);
+
+        this.ApiContext
+            .PlayerMissions
+            .AsNoTracking()
+            .Where(x => x.GroupId == 0)
+            .Should()
+            .BeEquivalentTo(
+                [
+                    new DbPlayerMission() { Id = 15070101 },
+                    new DbPlayerMission() { Id = 15070201 },
+                    new DbPlayerMission() { Id = 15070301 },
+                    new DbPlayerMission() { Id = 15070401 },
+                    new DbPlayerMission() { Id = 15070501 },
+                    new DbPlayerMission() { Id = 15070601 },
+                ],
+                opts => opts.Including(x => x.Id),
+                "these are the standard daily endeavours"
+            );
+
+        this.ApiContext
+            .PlayerMissions
+            .AsNoTracking()
+            .Should()
+            .NotContain(x => x.GroupId == starryDragonyuleEventId);
     }
 
     [Fact]

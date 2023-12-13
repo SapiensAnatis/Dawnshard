@@ -48,8 +48,12 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
 
         this.MockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(() => DateTimeOffset.UtcNow);
 
+        this.LastDailyReset = factory.Services.GetRequiredService<IResetHelper>().LastDailyReset;
+
         this.ViewerId = this.ApiContext.Players.First(x => x.AccountId == DeviceAccountId).ViewerId;
     }
+
+    protected DateTimeOffset LastDailyReset { get; }
 
     protected Mock<IBaasApi> MockBaasApi { get; }
 

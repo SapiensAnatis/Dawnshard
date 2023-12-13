@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using DragaliaAPI.Controllers.Dragalia;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Present;
 using DragaliaAPI.MessagePack;
@@ -2586,9 +2587,11 @@ public class AtgenMainStoryMissionStateList
 public class AtgenMissionParamsList
 {
     public int daily_mission_id { get; set; }
-    public int day_no { get; set; }
+    
+    [MessagePackFormatter(typeof(DayNoFormatter))]
+    public DateOnly day_no { get; set; }
 
-    public AtgenMissionParamsList(int daily_mission_id, int day_no)
+    public AtgenMissionParamsList(int daily_mission_id, DateOnly day_no)
     {
         this.daily_mission_id = daily_mission_id;
         this.day_no = day_no;
@@ -4964,8 +4967,11 @@ public class DailyMissionList
 {
     public int daily_mission_id { get; set; }
     public int progress { get; set; }
-    public int state { get; set; }
-    public int day_no { get; set; }
+    public MissionState state { get; set; }
+    
+    [MessagePackFormatter(typeof(DayNoFormatter))]
+    public DateOnly day_no { get; set; }
+    
     public int weekly_mission_id { get; set; }
     public int week_no { get; set; }
     public DateTimeOffset end_date { get; set; }
@@ -4976,8 +4982,8 @@ public class DailyMissionList
     public DailyMissionList(
         int daily_mission_id,
         int progress,
-        int state,
-        int day_no,
+        MissionState state,
+        DateOnly day_no,
         int weekly_mission_id,
         int week_no,
         DateTimeOffset end_date,

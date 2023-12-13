@@ -87,4 +87,12 @@ public class FortMissionProgressionService(
             parameter: (int)plant
         );
     }
+
+    public void OnFortIncomeCollected(EntityTypes type) =>
+        missionProgressionService.EnqueueEvent(
+            MissionCompleteType.FortIncomeCollected,
+            1,
+            1,
+            parameter: (int)type
+        );
 }

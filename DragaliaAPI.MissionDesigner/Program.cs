@@ -19,23 +19,30 @@ IEnumerable<Type> types = Assembly
 foreach (Type type in types)
 {
     Console.WriteLine($"Processing type {type.Name}");
-    PropertyInfo listProperty = type.GetProperties()
-        .First(x => Attribute.IsDefined(x, typeof(MissionListAttribute)));
-    Console.WriteLine($"Found list {type.Name}.{listProperty.Name}");
+    IEnumerable<PropertyInfo> listProperties = type.GetProperties()
+        .Where(x => Attribute.IsDefined(x, typeof(MissionListAttribute)));
 
-    MissionListAttribute attribute = (MissionListAttribute)
-        listProperty.GetCustomAttributes(typeof(MissionListAttribute)).First();
-
-    List<Mission> list = (List<Mission>)listProperty.GetValue(null, null)!;
-
-    if (list.DistinctBy(x => x.MissionId).Count() != list.Count)
-        throw new InvalidOperationException("List had duplicate mission IDs");
-
-    foreach (Mission mission in list)
+    foreach (PropertyInfo listProperty in listProperties)
     {
-        mission.Type = attribute.Type;
-        Console.WriteLine($" -> Processing mission {mission.MissionId}");
-        missions.Add(mission.ToMissionProgressionInfo());
+        Console.WriteLine($"Found list {type.Name}.{listProperty.Name}");
+
+        MissionListAttribute attribute = (MissionListAttribute)
+            listProperty.GetCustomAttributes(typeof(MissionListAttribute)).First();
+
+        List<Mission> list = (List<Mission>)listProperty.GetValue(null, null)!;
+
+        if (list.DistinctBy(x => x.MissionId).Count() != list.Count)
+        {
+            int duplicateId = list.GroupBy(x => x.MissionId).First(x => x.Count() > 1).Key;
+            throw new InvalidOperationException($"List had duplicate mission ID: {duplicateId}");
+        }
+
+        foreach (Mission mission in list)
+        {
+            mission.Type = attribute.Type;
+            Console.WriteLine($" -> Processing mission {mission.MissionId}");
+            missions.Add(mission.ToMissionProgressionInfo());
+        }
     }
 }
 

@@ -21,7 +21,7 @@ public class EarnEventTest : TestFixture
     private const int EventId = 22903;
 
     [Fact]
-    public async Task Entry_CreatesEventData_ClearsExistingProgress()
+    public async Task Entry_CreatesEventData()
     {
         const int eventQuestId = 229031301; // The Angelic Herald: Standard (Solo)
         const int eventStoryId = 2290303; // The Means to Protect
@@ -58,8 +58,6 @@ public class EarnEventTest : TestFixture
                 },
                 opts => opts.Excluding(x => x.Owner)
             );
-        this.ApiContext.PlayerQuests.Should().NotContain(x => x.QuestId == eventQuestId);
-        this.ApiContext.PlayerStoryState.Should().NotContain(x => x.StoryId == eventStoryId);
 
         this.ApiContext
             .PlayerMissions
@@ -72,8 +70,14 @@ public class EarnEventTest : TestFixture
             .AllSatisfy(x =>
             {
                 x.GroupId.Should().Be(EventId);
-                x.State.Should().Be(MissionState.InProgress);
             });
+        this.ApiContext
+            .PlayerMissions
+            .Should()
+            .Contain(
+                x => x.Id == 11650101 && x.State == MissionState.Completed,
+                "this is the event participation mission"
+            );
     }
 
     [Fact]

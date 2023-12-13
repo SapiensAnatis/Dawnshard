@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
@@ -8,6 +9,7 @@ using DragaliaAPI.Shared.Definitions.Enums.EventItemTypes;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Enemy;
 using DragaliaAPI.Shared.MasterAsset.Models.Event;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +17,7 @@ namespace DragaliaAPI.Features.Dungeon;
 
 public class QuestCompletionService(
     IRewardService rewardService,
+    IMissionProgressionService missionProgressionService,
     ILogger<QuestCompletionService> logger,
     IUnitRepository unitRepository
 ) : IQuestCompletionService
@@ -49,6 +52,7 @@ public class QuestCompletionService(
             .Select(x => (x.First.param_id, x.Second.count));
 
         int totalPoints = 0;
+        int totalEnemies = 0;
         Dictionary<int, AtgenScoringEnemyPointList> results = new();
 
         foreach ((int paramId, int count) in killedParamIds)
@@ -67,6 +71,8 @@ public class QuestCompletionService(
             int pointsGained = questScoringEnemy.Point * count;
 
             totalPoints += pointsGained;
+            totalEnemies += count;
+
             value.point += pointsGained;
             value.smash_count += count;
         }
@@ -75,6 +81,13 @@ public class QuestCompletionService(
 
         await rewardService.GrantReward(
             new Entity(EntityTypes.EarnEventItem, eventPointsId, totalPoints)
+        );
+
+        missionProgressionService.EnqueueEvent(
+            MissionCompleteType.EarnEnemiesKilled,
+            totalEnemies,
+            totalEnemies,
+            session.QuestGid
         );
 
         logger.LogDebug("Calculated enemy scoring {points}", totalPoints);

@@ -1,6 +1,6 @@
 namespace DragaliaAPI.MissionDesigner.Models.EventMission;
 
-public class EventPointCollectionMission : Mission
+public class EventPointCollectionRecordMission : Mission
 {
     public required int EventId { get; init; }
 
@@ -12,5 +12,5 @@ public class EventPointCollectionMission : Mission
 
     protected override int? Parameter2 => this.QuestId;
 
-    protected override bool UseTotalValue => false;
+    protected override bool UseTotalValue => true;
 }

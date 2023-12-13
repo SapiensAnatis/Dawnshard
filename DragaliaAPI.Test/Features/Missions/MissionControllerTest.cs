@@ -18,7 +18,6 @@ public class MissionControllerTest
     private readonly MissionController missionController;
     private readonly Mock<IMissionService> mockMissionService;
     private readonly Mock<IMissionRepository> mockMissionRepository;
-    private readonly Mock<IUserDataRepository> mockUserDataRepository;
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IUpdateDataService> mockUpdateDataService;
 
@@ -26,14 +25,12 @@ public class MissionControllerTest
     {
         this.mockMissionService = new(MockBehavior.Strict);
         this.mockMissionRepository = new(MockBehavior.Strict);
-        this.mockUserDataRepository = new(MockBehavior.Strict);
         this.mockRewardService = new(MockBehavior.Strict);
         this.mockUpdateDataService = new(MockBehavior.Strict);
 
         this.missionController = new MissionController(
             this.mockMissionService.Object,
             this.mockMissionRepository.Object,
-            this.mockUserDataRepository.Object,
             this.mockRewardService.Object,
             this.mockUpdateDataService.Object
         );
@@ -62,20 +59,15 @@ public class MissionControllerTest
         this.mockMissionService
             .Setup(x => x.GetCurrentMainStoryMission())
             .ReturnsAsync(mainStoryMission);
-
-        this.mockMissionRepository
-            .Setup(x => x.GetAllMissionsPerTypeAsync())
-            .ReturnsAsync(Enumerable.Empty<DbPlayerMission>().ToLookup(x => x.Type));
-
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
-            .Returns(
-                new List<DbPlayerUserData>()
+        this.mockMissionService
+            .Setup(x => x.BuildNormalResponse<MissionGetMissionListData>())
+            .ReturnsAsync(
+                new MissionGetMissionListData()
                 {
-                    new() { ViewerId = 1, ActiveMemoryEventId = 20816 }
+                    normal_mission_list = [],
+                    mission_notice = notice,
+                    current_main_story_mission = mainStoryMission
                 }
-                    .AsQueryable()
-                    .BuildMock()
             );
 
         DragaliaResult<MissionGetMissionListData> resp =
@@ -90,7 +82,6 @@ public class MissionControllerTest
 
         mockMissionService.VerifyAll();
         mockUpdateDataService.VerifyAll();
-        mockMissionRepository.VerifyAll();
     }
 
     [Fact]

@@ -1,6 +1,8 @@
-﻿using DragaliaAPI.Database;
+﻿using System.Diagnostics;
+using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
@@ -10,20 +12,23 @@ using Serilog;
 
 namespace DragaliaAPI.Features.Missions;
 
-public class MissionRepository : IMissionRepository
+public class MissionRepository(
+    ApiContext apiContext,
+    IPlayerIdentityService playerIdentityService,
+    IResetHelper resetHelper
+) : IMissionRepository
 {
-    private readonly ApiContext apiContext;
-    private readonly IPlayerIdentityService playerIdentityService;
-
-    public MissionRepository(ApiContext apiContext, IPlayerIdentityService playerIdentityService)
-    {
-        this.apiContext = apiContext;
-        this.playerIdentityService = playerIdentityService;
-    }
+    private readonly ApiContext apiContext = apiContext;
+    private readonly IPlayerIdentityService playerIdentityService = playerIdentityService;
 
     public IQueryable<DbPlayerMission> Missions =>
         this.apiContext
             .PlayerMissions
+            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+
+    public IQueryable<DbCompletedDailyMission> CompletedDailyMissions =>
+        this.apiContext
+            .CompletedDailyMissions
             .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbPlayerMission> GetMissionsByType(MissionType type)
@@ -41,7 +46,9 @@ public class MissionRepository : IMissionRepository
 
     public async Task<ILookup<MissionType, DbPlayerMission>> GetAllMissionsPerTypeAsync()
     {
-        return (await Missions.ToListAsync()).Where(HasProgressionInfo).ToLookup(x => x.Type);
+        return (await Missions.Where(x => x.Type != MissionType.Daily).ToListAsync())
+            .Where(HasProgressionInfo)
+            .ToLookup(x => x.Type);
     }
 
     public async Task<DbPlayerMission> AddMissionAsync(
@@ -52,13 +59,6 @@ public class MissionRepository : IMissionRepository
         int? groupId = null
     )
     {
-        if (
-            await this.apiContext
-                .PlayerMissions
-                .FindAsync(this.playerIdentityService.ViewerId, id, type) != null
-        )
-            throw new DragaliaException(ResultCode.CommonDbError, "Mission already exists");
-
         return this.apiContext
             .PlayerMissions
             .Add(
@@ -75,6 +75,36 @@ public class MissionRepository : IMissionRepository
             )
             .Entity;
     }
+
+    public void AddCompletedDailyMission(DbPlayerMission originalMission)
+    {
+        this.apiContext
+            .CompletedDailyMissions
+            .Add(
+                new DbCompletedDailyMission()
+                {
+                    ViewerId = this.playerIdentityService.ViewerId,
+                    Id = originalMission.Id,
+                    Date = DateOnly.FromDateTime(resetHelper.LastDailyReset.UtcDateTime),
+                    StartDate = originalMission.Start,
+                    EndDate = originalMission.End,
+                    Progress = originalMission.Progress
+                }
+            );
+    }
+
+    public async Task ClearDailyMissions()
+    {
+        await foreach (
+            DbPlayerMission mission in this.GetMissionsByType(MissionType.Daily).AsAsyncEnumerable()
+        )
+        {
+            this.apiContext.Remove(mission);
+        }
+    }
+
+    public void RemoveCompletedDailyMission(DbCompletedDailyMission completedDailyMission) =>
+        this.apiContext.CompletedDailyMissions.Remove(completedDailyMission);
 
     private static bool HasProgressionInfo(DbPlayerMission mission)
     {

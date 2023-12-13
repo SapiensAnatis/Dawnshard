@@ -6,7 +6,13 @@ namespace DragaliaAPI.Features.Missions;
 
 public interface IMissionService
 {
-    Task<DbPlayerMission> StartMission(MissionType type, int id, int groupId = 0);
+    Task<DbPlayerMission> StartMission(
+        MissionType type,
+        int id,
+        int groupId = 0,
+        DateTimeOffset? startTime = null,
+        DateTimeOffset? endTime = null
+    );
 
     Task<(
         IEnumerable<MainStoryMissionGroupReward>,
@@ -27,4 +33,9 @@ public interface IMissionService
     Task<IEnumerable<DrillMissionGroupList>> GetCompletedDrillGroups();
     Task<IEnumerable<DbPlayerMission>> UnlockMemoryEventMissions(int eventId);
     Task<IEnumerable<DbPlayerMission>> UnlockEventMissions(int eventId);
+
+    Task<TResponse> BuildNormalResponse<TResponse>()
+        where TResponse : INormalMissionEndpointResponse, new();
+
+    Task RedeemDailyMissions(IEnumerable<AtgenMissionParamsList> missions);
 }

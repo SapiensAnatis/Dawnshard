@@ -1282,6 +1282,179 @@
     "_Parameter3": 2
   },
   {
+    "_Id": 1507010101,
+    "_MissionType": "Daily",
+    "_MissionId": 15070101,
+    "_CompleteType": "ItemSummon",
+    "_UseTotalValue": 0,
+    "_ProgressionGroupId": 15070
+  },
+  {
+    "_Id": 1507020101,
+    "_MissionType": "Daily",
+    "_MissionId": 15070201,
+    "_CompleteType": "FortIncomeCollected",
+    "_UseTotalValue": 0,
+    "_ProgressionGroupId": 15070,
+    "_Parameter": 4
+  },
+  {
+    "_Id": 1507030101,
+    "_MissionType": "Daily",
+    "_MissionId": 15070301,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_ProgressionGroupId": 15070
+  },
+  {
+    "_Id": 1507040101,
+    "_MissionType": "Daily",
+    "_MissionId": 15070401,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_ProgressionGroupId": 15070
+  },
+  {
+    "_Id": 1507050101,
+    "_MissionType": "Daily",
+    "_MissionId": 15070501,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_ProgressionGroupId": 15070
+  },
+  {
+    "_Id": 1507060101,
+    "_MissionType": "Daily",
+    "_MissionId": 15070601,
+    "_CompleteType": "ProgressionGroupCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 15070
+  },
+  {
+    "_Id": 1165010102,
+    "_MissionType": "Period",
+    "_MissionId": 11650101,
+    "_CompleteType": "EventParticipation",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165020102,
+    "_MissionType": "Period",
+    "_MissionId": 11650201,
+    "_CompleteType": "QuestStoryCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 11650201
+  },
+  {
+    "_Id": 1165030102,
+    "_MissionType": "Period",
+    "_MissionId": 11650301,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165030202,
+    "_MissionType": "Period",
+    "_MissionId": 11650302,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165030302,
+    "_MissionType": "Period",
+    "_MissionId": 11650303,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165030402,
+    "_MissionType": "Period",
+    "_MissionId": 11650304,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165030502,
+    "_MissionType": "Period",
+    "_MissionId": 11650305,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165040102,
+    "_MissionType": "Period",
+    "_MissionId": 11650401,
+    "_CompleteType": "EarnEnemiesKilled",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165050102,
+    "_MissionType": "Period",
+    "_MissionId": 11650501,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 229031201
+  },
+  {
+    "_Id": 1165060102,
+    "_MissionType": "Period",
+    "_MissionId": 11650601,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 229031202
+  },
+  {
+    "_Id": 1165070102,
+    "_MissionType": "Period",
+    "_MissionId": 11650701,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_Parameter": 22903,
+    "_Parameter2": 229031203
+  },
+  {
+    "_Id": 1165080102,
+    "_MissionType": "Period",
+    "_MissionId": 11650801,
+    "_CompleteType": "EventTrialClear",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903,
+    "_Parameter2": 229031301
+  },
+  {
+    "_Id": 1165090102,
+    "_MissionType": "Period",
+    "_MissionId": 11650901,
+    "_CompleteType": "EventTrialClear",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903,
+    "_Parameter2": 229031302
+  },
+  {
+    "_Id": 1165000102,
+    "_MissionType": "Period",
+    "_MissionId": 11650001,
+    "_CompleteType": "EventTrialClear",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903,
+    "_Parameter2": 229031303
+  },
+  {
+    "_Id": 1165110102,
+    "_MissionType": "Period",
+    "_MissionId": 11651101,
+    "_CompleteType": "QuestCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 229030401
+  },
+  {
     "_Id": 1119010101,
     "_MissionType": "Daily",
     "_MissionId": 11190101,
@@ -1382,7 +1555,7 @@
     "_MissionType": "MemoryEvent",
     "_MissionId": 10220501,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 20845
   },
   {
@@ -1390,7 +1563,7 @@
     "_MissionType": "MemoryEvent",
     "_MissionId": 10220502,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 20845
   },
   {
@@ -1398,7 +1571,7 @@
     "_MissionType": "MemoryEvent",
     "_MissionId": 10220503,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 20845
   },
   {
@@ -1406,7 +1579,7 @@
     "_MissionType": "MemoryEvent",
     "_MissionId": 10220504,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 20845
   },
   {
@@ -1414,7 +1587,7 @@
     "_MissionType": "MemoryEvent",
     "_MissionId": 10220505,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 20845
   },
   {
@@ -1422,7 +1595,7 @@
     "_MissionType": "MemoryEvent",
     "_MissionId": 10220506,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 20845
   },
   {

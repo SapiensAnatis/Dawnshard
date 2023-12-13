@@ -70,5 +70,5 @@ jobs:
         run: |
           IMAGE=ghcr.io/sapiensanatis/${{ inputs.image-name }}:${{ steps.derive-tag.outputs.tag }}
           
-          docker build . --file ${{ inputs.dockerfile }} --tag ${IMAGE}
+          docker build . --file ${{ inputs.dockerfile }} --tag ${IMAGE} --build-arg CI=true
           docker push ${IMAGE}
