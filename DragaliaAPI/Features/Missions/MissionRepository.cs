@@ -2,6 +2,7 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
@@ -14,7 +15,7 @@ namespace DragaliaAPI.Features.Missions;
 public class MissionRepository(
     ApiContext apiContext,
     IPlayerIdentityService playerIdentityService,
-    TimeProvider timeProvider
+    IResetHelper resetHelper
 ) : IMissionRepository
 {
     private readonly ApiContext apiContext = apiContext;
@@ -84,7 +85,7 @@ public class MissionRepository(
                 {
                     ViewerId = this.playerIdentityService.ViewerId,
                     Id = originalMission.Id,
-                    Date = DateOnly.FromDateTime(timeProvider.GetUtcNow().Date),
+                    Date = DateOnly.FromDateTime(resetHelper.LastDailyReset.UtcDateTime),
                     StartDate = originalMission.Start,
                     EndDate = originalMission.End,
                     Progress = originalMission.Progress

@@ -23,6 +23,11 @@ public enum MissionCompleteType
     /// </summary>
     FortLevelUp,
 
+    /// <summary>
+    /// EntityTypes entityType
+    /// </summary>
+    FortIncomeCollected,
+
     // Quest
     /// <summary>
     /// int questId, int questGroupId, QuestPlayModeTypes playMode

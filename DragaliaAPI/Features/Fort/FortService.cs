@@ -180,6 +180,7 @@ public class FortService(
         if (coinTotal != 0)
         {
             await rewardService.GrantReward(new Entity(EntityTypes.Rupies, 1, coinTotal));
+            fortMissionProgressionService.OnFortIncomeCollected(EntityTypes.Rupies);
         }
 
         if (normalTotal != 0)

@@ -317,7 +317,10 @@ public class MissionService(
 
         foreach (AtgenMissionParamsList claimRequest in missions)
         {
-            if (claimRequest.day_no == DateOnly.FromDateTime(this.resetHelper.LastDailyReset.Date))
+            if (
+                claimRequest.day_no
+                == DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
+            )
             {
                 DbPlayerMission regularMission = regularMissions.First(
                     x => x.Id == claimRequest.daily_mission_id
@@ -613,7 +616,7 @@ public class MissionService(
                         state = x.State,
                         start_date = x.Start,
                         end_date = x.End,
-                        day_no = DateOnly.FromDateTime(this.resetHelper.LastDailyReset.Date)
+                        day_no = DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
                     }
             )
             .ToListAsync();
