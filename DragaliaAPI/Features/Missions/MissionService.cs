@@ -1,43 +1,55 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Reward;
+using DragaliaAPI.Features.Shared.Options;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DragaliaAPI.Features.Missions;
 
-public class MissionService : IMissionService
+public class MissionService(
+    ILogger<MissionService> logger,
+    IMissionRepository missionRepository,
+    IRewardService rewardService,
+    IMissionInitialProgressionService missionInitialProgressionService,
+    IUserDataRepository userDataRepository,
+    IResetHelper resetHelper,
+    IOptionsMonitor<EventOptions> eventOptionsMonitor
+) : IMissionService
 {
-    private readonly ILogger<MissionService> logger;
-    private readonly IMissionRepository missionRepository;
-    private readonly IMissionInitialProgressionService missionInitialProgressionService;
+    private readonly ILogger<MissionService> logger = logger;
+    private readonly IMissionRepository missionRepository = missionRepository;
+    private readonly IMissionInitialProgressionService missionInitialProgressionService =
+        missionInitialProgressionService;
+    private readonly IUserDataRepository userDataRepository = userDataRepository;
+    private readonly IRewardService rewardService = rewardService;
+    private readonly IResetHelper resetHelper = resetHelper;
+    private readonly EventOptions eventOptions = eventOptionsMonitor.CurrentValue;
 
-    private readonly IRewardService rewardService;
-
-    public MissionService(
-        ILogger<MissionService> logger,
-        IMissionRepository missionRepository,
-        IRewardService rewardService,
-        IMissionInitialProgressionService missionInitialProgressionService
+    public async Task<DbPlayerMission> StartMission(
+        MissionType type,
+        int id,
+        int groupId = 0,
+        DateTimeOffset? startTime = null,
+        DateTimeOffset? endTime = null
     )
-    {
-        this.logger = logger;
-        this.missionRepository = missionRepository;
-        this.rewardService = rewardService;
-        this.missionInitialProgressionService = missionInitialProgressionService;
-    }
-
-    public async Task<DbPlayerMission> StartMission(MissionType type, int id, int groupId = 0)
     {
         logger.LogInformation("Starting mission {missionId} ({missionType})", id, type);
 
         DbPlayerMission mission = await missionRepository.AddMissionAsync(
             type,
             id,
-            groupId: groupId
+            groupId: groupId,
+            startTime: startTime,
+            endTime: endTime
         );
         await this.missionInitialProgressionService.GetInitialMissionProgress(mission);
         return mission;
@@ -69,7 +81,9 @@ public class MissionService : IMissionService
         List<DbPlayerMission> dbMissions = new();
         foreach (MainStoryMission mission in missions)
         {
-            dbMissions.Add(await StartMission(MissionType.MainStory, mission.Id, groupId: groupId));
+            dbMissions.Add(
+                await this.StartMission(MissionType.MainStory, mission.Id, groupId: groupId)
+            );
         }
 
         if (rewards.Count > 0)
@@ -110,7 +124,9 @@ public class MissionService : IMissionService
         List<DbPlayerMission> dbMissions = new();
         foreach (DrillMission mission in missions)
         {
-            dbMissions.Add(await StartMission(MissionType.Drill, mission.Id, groupId: groupId));
+            dbMissions.Add(
+                await this.StartMission(MissionType.Drill, mission.Id, groupId: groupId)
+            );
         }
 
         return dbMissions;
@@ -144,7 +160,11 @@ public class MissionService : IMissionService
         foreach (MemoryEventMission mission in missions)
         {
             dbMissions.Add(
-                await StartMission(MissionType.MemoryEvent, mission.Id, groupId: mission.EventId)
+                await this.StartMission(
+                    MissionType.MemoryEvent,
+                    mission.Id,
+                    groupId: mission.EventId
+                )
             );
         }
 
@@ -153,6 +173,24 @@ public class MissionService : IMissionService
 
     public async Task<IEnumerable<DbPlayerMission>> UnlockEventMissions(int eventId)
     {
+        EventRunInformation runInfo =
+            this.eventOptions.EventList.FirstOrDefault(x => x.Id == eventId)
+            ?? throw new DragaliaException(
+                ResultCode.EventOutThePeriod,
+                "Attempted to start missions for an event without any configuration in appsettings.json"
+            );
+
+        if (
+            this.resetHelper.LastDailyReset < runInfo.Start
+            || this.resetHelper.LastDailyReset > runInfo.End
+        )
+        {
+            throw new DragaliaException(
+                ResultCode.EventOutThePeriod,
+                "Attempted to start missions for an event which has either not started or has ended."
+            );
+        }
+
         List<PeriodMission> periodMissions = MasterAsset
             .PeriodMission
             .Enumerable
@@ -167,17 +205,29 @@ public class MissionService : IMissionService
 
         logger.LogInformation("Unlocking event missions for event {eventId}", eventId);
 
-        List<DbPlayerMission> dbMissions = new();
+        List<DbPlayerMission> dbMissions = new(periodMissions.Count + dailyMissions.Count);
         foreach (PeriodMission mission in periodMissions)
         {
             dbMissions.Add(
-                await StartMission(MissionType.Period, mission.Id, groupId: mission.QuestGroupId)
+                await this.StartMission(
+                    MissionType.Period,
+                    mission.Id,
+                    groupId: mission.QuestGroupId,
+                    startTime: runInfo.Start,
+                    endTime: runInfo.End
+                )
             );
         }
         foreach (DailyMission mission in dailyMissions)
         {
             dbMissions.Add(
-                await StartMission(MissionType.Daily, mission.Id, groupId: mission.QuestGroupId)
+                await this.StartMission(
+                    MissionType.Daily,
+                    mission.Id,
+                    groupId: mission.QuestGroupId,
+                    startTime: this.resetHelper.LastDailyReset,
+                    endTime: this.resetHelper.LastDailyReset.AddDays(1)
+                )
             );
         }
 
@@ -197,7 +247,14 @@ public class MissionService : IMissionService
             );
         }
 
-        Mission missionInfo = Mission.From(dbMission.Type, id);
+        await this.GrantMissionReward(type, id);
+
+        dbMission.State = MissionState.Claimed;
+    }
+
+    private async Task GrantMissionReward(MissionType type, int id)
+    {
+        Mission missionInfo = Mission.From(type, id);
 
         switch (missionInfo.Type)
         {
@@ -232,8 +289,6 @@ public class MissionService : IMissionService
                 );
                 break;
         }
-
-        dbMission.State = MissionState.Claimed;
     }
 
     public async Task RedeemMissions(MissionType type, IEnumerable<int> ids)
@@ -241,6 +296,56 @@ public class MissionService : IMissionService
         foreach (int id in ids)
         {
             await RedeemMission(type, id);
+        }
+    }
+
+    public async Task RedeemDailyMissions(IEnumerable<AtgenMissionParamsList> missions)
+    {
+        this.logger.LogDebug("Claiming daily missions: {@missions}", missions);
+
+        int[] ids = missions.Select(x => x.daily_mission_id).ToArray();
+
+        List<DbCompletedDailyMission> completed = await this.missionRepository
+            .CompletedDailyMissions
+            .Where(x => ids.Contains(x.Id))
+            .ToListAsync();
+
+        List<DbPlayerMission> regularMissions = await this.missionRepository
+            .Missions
+            .Where(x => x.Type == MissionType.Daily && ids.Contains(x.Id))
+            .ToListAsync();
+
+        foreach (AtgenMissionParamsList claimRequest in missions)
+        {
+            if (
+                claimRequest.day_no
+                == DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
+            )
+            {
+                DbPlayerMission regularMission = regularMissions.First(
+                    x => x.Id == claimRequest.daily_mission_id
+                );
+
+                regularMission.State = MissionState.Claimed;
+            }
+
+            DbCompletedDailyMission? dbMission = completed.FirstOrDefault(
+                x => x.Id == claimRequest.daily_mission_id && x.Date == claimRequest.day_no
+            );
+
+            if (dbMission is null)
+            {
+                // throw new DragaliaException(
+                //     ResultCode.MissionIdNotFound,
+                //     "Tried to claim non-existent daily mission"
+                // );
+                continue;
+            }
+
+            await this.GrantMissionReward(MissionType.Daily, claimRequest.daily_mission_id);
+
+            completed.Remove(dbMission);
+            missionRepository.RemoveCompletedDailyMission(dbMission);
         }
     }
 
@@ -423,4 +528,96 @@ public class MissionService : IMissionService
             .Distinct()
             .Select(x => new QuestEntryConditionList(x));
     }
+
+    public async Task<TResponse> BuildNormalResponse<TResponse>()
+        where TResponse : INormalMissionEndpointResponse, new()
+    {
+        ILookup<MissionType, DbPlayerMission> allMissions =
+            await this.missionRepository.GetAllMissionsPerTypeAsync();
+
+        int activeEventId = await this.userDataRepository
+            .UserData
+            .Select(x => x.ActiveMemoryEventId)
+            .FirstAsync();
+
+        TResponse response =
+            new()
+            {
+                album_mission_list = allMissions[MissionType.Album].Select(
+                    x => new AlbumMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+                ),
+                beginner_mission_list = allMissions[MissionType.Beginner].Select(
+                    x => new BeginnerMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+                ),
+                main_story_mission_list = allMissions[MissionType.MainStory].Select(
+                    x => new MainStoryMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+                ),
+                normal_mission_list = allMissions[MissionType.Normal].Select(
+                    x => new NormalMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+                ),
+                period_mission_list = allMissions[MissionType.Period].Select(
+                    x => new PeriodMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+                ),
+                special_mission_list = allMissions[MissionType.Special].Select(
+                    x => new SpecialMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
+                ),
+                memory_event_mission_list = allMissions[MissionType.MemoryEvent]
+                    .Where(x => x.GroupId == activeEventId)
+                    .Select(
+                        x =>
+                            new MemoryEventMissionList(
+                                x.Id,
+                                x.Progress,
+                                (int)x.State,
+                                x.End,
+                                x.Start
+                            )
+                    ),
+            };
+
+        List<DailyMissionList> historicalDailyMissions = await this.GetHistoricalDailyMissions();
+        List<DailyMissionList> currentDailyMissions = await this.GetCurrentDailyMissions();
+
+        response.daily_mission_list = currentDailyMissions.UnionBy(
+            historicalDailyMissions,
+            x => new { x.daily_mission_id, x.day_no }
+        );
+
+        return response;
+    }
+
+    private Task<List<DailyMissionList>> GetHistoricalDailyMissions() =>
+        this.missionRepository
+            .CompletedDailyMissions
+            .Select(
+                x =>
+                    new DailyMissionList()
+                    {
+                        daily_mission_id = x.Id,
+                        progress = x.Progress,
+                        state = MissionState.Completed,
+                        start_date = x.StartDate,
+                        end_date = x.EndDate,
+                        day_no = x.Date
+                    }
+            )
+            .ToListAsync();
+
+    private Task<List<DailyMissionList>> GetCurrentDailyMissions() =>
+        this.missionRepository
+            .Missions
+            .Where(x => x.Type == MissionType.Daily)
+            .Select(
+                x =>
+                    new DailyMissionList()
+                    {
+                        daily_mission_id = x.Id,
+                        progress = x.Progress,
+                        state = x.State,
+                        start_date = x.Start,
+                        end_date = x.End,
+                        day_no = DateOnly.FromDateTime(this.resetHelper.LastDailyReset.UtcDateTime)
+                    }
+            )
+            .ToListAsync();
 }

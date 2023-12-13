@@ -23,6 +23,11 @@ public enum MissionCompleteType
     /// </summary>
     FortLevelUp,
 
+    /// <summary>
+    /// EntityTypes entityType
+    /// </summary>
+    FortIncomeCollected,
+
     // Quest
     /// <summary>
     /// int questId, int questGroupId, QuestPlayModeTypes playMode
@@ -154,7 +159,7 @@ public enum MissionCompleteType
     EventQuestClearWithCrest,
 
     /// <summary>
-    /// int eventId
+    /// int eventId, int questId
     /// </summary>
     EventPointCollection,
 
@@ -172,6 +177,11 @@ public enum MissionCompleteType
     /// int progressionGroupId
     /// </summary>
     ProgressionGroupCleared,
+
+    /// <summary>
+    /// int eventId
+    /// </summary>
+    EarnEnemiesKilled,
 
     /// <summary>
     /// None

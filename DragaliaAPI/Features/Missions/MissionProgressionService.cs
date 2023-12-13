@@ -232,8 +232,14 @@ public class MissionProgressionService(
     public void OnEventQuestClearedWithCrest(int eventId, AbilityCrests crest) =>
         EnqueueEvent(MissionCompleteType.EventQuestClearWithCrest, 1, 1, eventId, (int)crest);
 
-    public void OnEventPointCollected(int eventId, int quantity) =>
-        EnqueueEvent(MissionCompleteType.EventPointCollection, quantity, quantity, eventId);
+    public void OnEventPointCollected(int eventId, int questId, int quantity) =>
+        EnqueueEvent(
+            MissionCompleteType.EventPointCollection,
+            quantity,
+            quantity,
+            eventId,
+            questId
+        );
 
     public void OnEventChallengeBattleCleared(int eventId, int questId, bool fullClear) =>
         EnqueueEvent(
@@ -349,6 +355,11 @@ public class MissionProgressionService(
                                 progressionInfo.ProgressionGroupId
                             )
                         );
+                    }
+
+                    if (progressionInfo.MissionType == MissionType.Daily)
+                    {
+                        missionRepository.AddCompletedDailyMission(progressingMission);
                     }
                 }
                 else

@@ -50,8 +50,6 @@ public class BuildEventController(
     [HttpPost("entry")]
     public async Task<DragaliaResult> Entry(BuildEventEntryRequest request)
     {
-        missionProgressionService.OnEventParticipation(request.event_id);
-
         BuildEventEntryData resp = new();
 
         resp.is_receivable_event_daily_bonus = await eventService.GetCustomEventFlag(

@@ -28,17 +28,17 @@ public static class TollOfTheDeep
                 Crest = AbilityCrests.HavingaSummerBall
             },
             // Collect 100 Oceanic Resonance in One Go
-            new EventPointCollectionMission() { MissionId = 10220501, EventId = EventId },
+            new EventPointCollectionRecordMission() { MissionId = 10220501, EventId = EventId },
             // Collect 500 Oceanic Resonance in One Go
-            new EventPointCollectionMission() { MissionId = 10220502, EventId = EventId },
+            new EventPointCollectionRecordMission() { MissionId = 10220502, EventId = EventId },
             // Collect 1,500 Oceanic Resonance in One Go
-            new EventPointCollectionMission() { MissionId = 10220503, EventId = EventId },
+            new EventPointCollectionRecordMission() { MissionId = 10220503, EventId = EventId },
             // Collect 4,000 Oceanic Resonance in One Go
-            new EventPointCollectionMission() { MissionId = 10220504, EventId = EventId },
+            new EventPointCollectionRecordMission() { MissionId = 10220504, EventId = EventId },
             // Collect 6,000 Oceanic Resonance in One Go
-            new EventPointCollectionMission() { MissionId = 10220505, EventId = EventId },
+            new EventPointCollectionRecordMission() { MissionId = 10220505, EventId = EventId },
             // Collect 7,000 Oceanic Resonance in One Go
-            new EventPointCollectionMission() { MissionId = 10220506, EventId = EventId },
+            new EventPointCollectionRecordMission() { MissionId = 10220506, EventId = EventId },
             // Clear Five Boss Battles
             new EventRegularBattleClearMission() { MissionId = 10220601, EventId = EventId },
             // Clear 10 Boss Battles
