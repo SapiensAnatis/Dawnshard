@@ -1339,11 +1339,19 @@
     "_Parameter": 22903
   },
   {
+    "_Id": 1165020102,
+    "_MissionType": "Period",
+    "_MissionId": 11650201,
+    "_CompleteType": "QuestStoryCleared",
+    "_UseTotalValue": 0,
+    "_Parameter": 11650201
+  },
+  {
     "_Id": 1165030102,
     "_MissionType": "Period",
     "_MissionId": 11650301,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 22903
   },
   {
@@ -1351,7 +1359,7 @@
     "_MissionType": "Period",
     "_MissionId": 11650302,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 22903
   },
   {
@@ -1359,7 +1367,7 @@
     "_MissionType": "Period",
     "_MissionId": 11650303,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 22903
   },
   {
@@ -1367,7 +1375,7 @@
     "_MissionType": "Period",
     "_MissionId": 11650304,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 22903
   },
   {
@@ -1375,6 +1383,14 @@
     "_MissionType": "Period",
     "_MissionId": 11650305,
     "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165040102,
+    "_MissionType": "Period",
+    "_MissionId": 11650401,
+    "_CompleteType": "EarnEnemiesKilled",
     "_UseTotalValue": 0,
     "_Parameter": 22903
   },
@@ -1393,6 +1409,15 @@
     "_CompleteType": "QuestCleared",
     "_UseTotalValue": 0,
     "_Parameter": 229031202
+  },
+  {
+    "_Id": 1165070102,
+    "_MissionType": "Period",
+    "_MissionId": 11650701,
+    "_CompleteType": "EventPointCollection",
+    "_UseTotalValue": 1,
+    "_Parameter": 22903,
+    "_Parameter2": 229031303
   },
   {
     "_Id": 1165080102,
@@ -1530,7 +1555,7 @@
     "_MissionType": "MemoryEvent",
     "_MissionId": 10220501,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 20845
   },
   {
@@ -1538,7 +1563,7 @@
     "_MissionType": "MemoryEvent",
     "_MissionId": 10220502,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 20845
   },
   {
@@ -1546,7 +1571,7 @@
     "_MissionType": "MemoryEvent",
     "_MissionId": 10220503,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 20845
   },
   {
@@ -1554,7 +1579,7 @@
     "_MissionType": "MemoryEvent",
     "_MissionId": 10220504,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 20845
   },
   {
@@ -1562,7 +1587,7 @@
     "_MissionType": "MemoryEvent",
     "_MissionId": 10220505,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 20845
   },
   {
@@ -1570,7 +1595,7 @@
     "_MissionType": "MemoryEvent",
     "_MissionId": 10220506,
     "_CompleteType": "EventPointCollection",
-    "_UseTotalValue": 0,
+    "_UseTotalValue": 1,
     "_Parameter": 20845
   },
   {

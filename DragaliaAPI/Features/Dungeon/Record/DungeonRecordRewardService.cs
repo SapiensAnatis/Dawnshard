@@ -131,6 +131,7 @@ public class DungeonRecordRewardService(
         {
             missionProgressionService.OnEventPointCollected(
                 session.QuestGid,
+                session.QuestId,
                 totalPoints + boostedPoints
             );
         }
@@ -140,7 +141,11 @@ public class DungeonRecordRewardService(
 
         if (enemyScore > 0)
         {
-            missionProgressionService.OnEventPointCollected(session.QuestGid, enemyScore);
+            missionProgressionService.OnEventPointCollected(
+                session.QuestGid,
+                session.QuestId,
+                enemyScore
+            );
         }
 
         ArgumentNullException.ThrowIfNull(session.QuestData);

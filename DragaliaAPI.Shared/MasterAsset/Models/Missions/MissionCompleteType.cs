@@ -159,7 +159,7 @@ public enum MissionCompleteType
     EventQuestClearWithCrest,
 
     /// <summary>
-    /// int eventId
+    /// int eventId, int questId
     /// </summary>
     EventPointCollection,
 
@@ -177,6 +177,11 @@ public enum MissionCompleteType
     /// int progressionGroupId
     /// </summary>
     ProgressionGroupCleared,
+
+    /// <summary>
+    /// int eventId
+    /// </summary>
+    EarnEnemiesKilled,
 
     /// <summary>
     /// None

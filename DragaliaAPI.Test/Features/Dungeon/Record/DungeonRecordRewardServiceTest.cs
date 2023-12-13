@@ -312,7 +312,12 @@ public class DungeonRecordRewardServiceTest
             .ReturnsAsync(eventDrops);
 
         this.mockMissionProgressionService.Setup(
-            x => x.OnEventPointCollected(session.QuestData.Gid, points + boostedPoints)
+            x =>
+                x.OnEventPointCollected(
+                    session.QuestData.Gid,
+                    session.QuestId,
+                    points + boostedPoints
+                )
         );
 
         (await this.dungeonRecordRewardService.ProcessEventRewards(playRecord, session))

@@ -32,7 +32,10 @@ foreach (Type type in types)
         List<Mission> list = (List<Mission>)listProperty.GetValue(null, null)!;
 
         if (list.DistinctBy(x => x.MissionId).Count() != list.Count)
-            throw new InvalidOperationException("List had duplicate mission IDs");
+        {
+            int duplicateId = list.GroupBy(x => x.MissionId).First(x => x.Count() > 1).Key;
+            throw new InvalidOperationException($"List had duplicate mission ID: {duplicateId}");
+        }
 
         foreach (Mission mission in list)
         {
