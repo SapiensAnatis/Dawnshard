@@ -99,6 +99,7 @@ builder
     })
     .AddJsonOptions(options => ApiJsonOptions.Action.Invoke(options.JsonSerializerOptions));
 
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddRazorPages();
 builder
     .Services
@@ -194,12 +195,12 @@ app.MapWhen(
 #pragma warning disable ASP0001
         applicationBuilder.UseAuthorization();
 #pragma warning restore ASP0001
+        applicationBuilder.UseAntiforgery();
         applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
         applicationBuilder.UseEndpoints(endpoints =>
         {
-            endpoints.MapBlazorHub();
             endpoints.MapRazorPages();
-            endpoints.MapFallbackToPage("/_Host");
+            endpoints.MapRazorComponents<App>().AddInteractiveServerRenderMode();
         });
     }
 );
