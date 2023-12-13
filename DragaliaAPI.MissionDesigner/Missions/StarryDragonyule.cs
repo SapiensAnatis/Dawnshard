@@ -45,7 +45,7 @@ public static class StarryDragonyule
             {
                 MissionId = 11650701,
                 EventId = EventId,
-                QuestId = 229031303
+                QuestId = 229031203
             },
             // Clear a "One Starry Dragonyule" Trial on Standard
             new EventTrialClearMission()

@@ -18,7 +18,7 @@ public class EventService(
     IEventRepository eventRepository,
     IRewardService rewardService,
     IQuestRepository questRepository,
-    IStoryRepository storyRepository,
+    IMissionProgressionService missionProgressionService,
     IMissionService missionService
 ) : IEventService
 {
@@ -175,6 +175,8 @@ public class EventService(
 
     public async Task CreateEventData(int eventId)
     {
+        missionProgressionService.OnEventParticipation(eventId);
+
         bool firstEventEnter = false;
         EventData data = MasterAsset.EventData[eventId];
 

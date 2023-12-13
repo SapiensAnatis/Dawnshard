@@ -165,6 +165,7 @@ public class MissionInitialProgressionService(
             MissionCompleteType.EventTrialClear => 0,
             MissionCompleteType.ProgressionGroupCleared => 0,
             MissionCompleteType.FortIncomeCollected => 0,
+            MissionCompleteType.EarnEnemiesKilled => 0,
             MissionCompleteType.UnimplementedAutoComplete => amountToComplete,
             _
                 => throw new UnreachableException(

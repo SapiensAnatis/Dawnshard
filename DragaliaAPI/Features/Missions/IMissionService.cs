@@ -6,8 +6,13 @@ namespace DragaliaAPI.Features.Missions;
 
 public interface IMissionService
 {
-    Task<DbPlayerMission> StartMission(MissionType type, int id, int groupId = 0, DateTimeOffset startTime = default,
-        DateTimeOffset endTime = default);
+    Task<DbPlayerMission> StartMission(
+        MissionType type,
+        int id,
+        int groupId = 0,
+        DateTimeOffset? startTime = null,
+        DateTimeOffset? endTime = null
+    );
 
     Task<(
         IEnumerable<MainStoryMissionGroupReward>,

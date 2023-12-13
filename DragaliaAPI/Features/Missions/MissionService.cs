@@ -38,8 +38,8 @@ public class MissionService(
         MissionType type,
         int id,
         int groupId = 0,
-        DateTimeOffset startTime = default,
-        DateTimeOffset endTime = default
+        DateTimeOffset? startTime = null,
+        DateTimeOffset? endTime = null
     )
     {
         logger.LogInformation("Starting mission {missionId} ({missionType})", id, type);

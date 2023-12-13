@@ -1,4 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Fort;
@@ -574,5 +576,45 @@ public class FortTest : TestFixture
 
         response.data.update_data_list.user_data.coin.Should().BeCloseTo(oldCoin + 3098, 10);
         response.data.update_data_list.material_list.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public async Task GetMultiIncome_CompletesMission()
+    {
+        DbFortBuild rupieMine = await this.AddToDatabase(
+            new DbFortBuild()
+            {
+                ViewerId = ViewerId,
+                PlantId = FortPlants.RupieMine,
+                LastIncomeDate = DateTimeOffset.UnixEpoch,
+                Level = 10
+            }
+        );
+
+        await this.AddToDatabase(
+            new DbPlayerMission()
+            {
+                Id = 15070201, // Collect Rupies from a Facility
+                ViewerId = ViewerId,
+                State = MissionState.InProgress,
+                Type = MissionType.Daily,
+                Progress = 0,
+            }
+        );
+
+        DragaliaResponse<FortGetMultiIncomeData> response =
+            await this.Client.PostMsgpack<FortGetMultiIncomeData>(
+                "/fort/get_multi_income",
+                new FortGetMultiIncomeRequest() { build_id_list = new[] { rupieMine.BuildId } }
+            );
+
+        response
+            .data
+            .update_data_list
+            .mission_notice
+            .daily_mission_notice
+            .new_complete_mission_id_list
+            .Should()
+            .Contain(15070201);
     }
 }

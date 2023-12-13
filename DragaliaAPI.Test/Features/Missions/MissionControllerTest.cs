@@ -59,10 +59,16 @@ public class MissionControllerTest
         this.mockMissionService
             .Setup(x => x.GetCurrentMainStoryMission())
             .ReturnsAsync(mainStoryMission);
-
-        this.mockMissionRepository
-            .Setup(x => x.GetAllMissionsPerTypeAsync())
-            .ReturnsAsync(Enumerable.Empty<DbPlayerMission>().ToLookup(x => x.Type));
+        this.mockMissionService
+            .Setup(x => x.BuildNormalResponse<MissionGetMissionListData>())
+            .ReturnsAsync(
+                new MissionGetMissionListData()
+                {
+                    normal_mission_list = [],
+                    mission_notice = notice,
+                    current_main_story_mission = mainStoryMission
+                }
+            );
 
         DragaliaResult<MissionGetMissionListData> resp =
             await this.missionController.GetMissionList();
@@ -76,7 +82,6 @@ public class MissionControllerTest
 
         mockMissionService.VerifyAll();
         mockUpdateDataService.VerifyAll();
-        mockMissionRepository.VerifyAll();
     }
 
     [Fact]

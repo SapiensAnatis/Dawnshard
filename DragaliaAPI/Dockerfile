@@ -7,7 +7,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
-ENV CI=true
+ARG CI
 
 WORKDIR /src
 COPY ["DragaliaAPI/DragaliaAPI.csproj", "DragaliaAPI/"]

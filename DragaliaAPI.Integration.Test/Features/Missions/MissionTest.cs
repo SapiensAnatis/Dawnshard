@@ -10,7 +10,9 @@ public class MissionTest : TestFixture
     public MissionTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
     {
-        this.ApiContext.PlayerMissions.ExecuteDeleteAsync();
+        this.ApiContext.PlayerMissions.ExecuteDelete();
+        this.ApiContext.CompletedDailyMissions.ExecuteDelete();
+        this.ApiContext.ChangeTracker.Clear();
     }
 
     [Fact]
@@ -211,6 +213,175 @@ public class MissionTest : TestFixture
             .Should()
             .Contain(
                 x => x.ability_crest_id == AbilityCrests.HavingaSummerBall && x.equipable_count == 1
+            );
+    }
+
+    [Fact]
+    public async Task ReceiveReward_Daily_ClaimsReward()
+    {
+        int missionId1 = 15070301; // Clear a Quest
+        int missionId2 = 15070401; // Clear Three Quests
+
+        DateOnly today = new(2023, 12, 13);
+        DateOnly yesterday = new(2023, 12, 12);
+
+        await this.AddToDatabase(
+            [
+                new DbCompletedDailyMission()
+                {
+                    ViewerId = this.ViewerId,
+                    Id = missionId1,
+                    Date = today,
+                },
+                new DbCompletedDailyMission()
+                {
+                    ViewerId = this.ViewerId,
+                    Id = missionId2,
+                    Date = today,
+                },
+                new DbCompletedDailyMission()
+                {
+                    ViewerId = this.ViewerId,
+                    Id = missionId1,
+                    Date = yesterday,
+                },
+                new DbCompletedDailyMission()
+                {
+                    ViewerId = this.ViewerId,
+                    Id = missionId2,
+                    Date = yesterday,
+                }
+            ]
+        );
+
+        await this.AddToDatabase(
+            [
+                new DbPlayerMission()
+                {
+                    ViewerId = this.ViewerId,
+                    Id = missionId1,
+                    Type = MissionType.Daily,
+                    State = MissionState.Completed,
+                },
+                new DbPlayerMission()
+                {
+                    ViewerId = this.ViewerId,
+                    Id = missionId2,
+                    Type = MissionType.Daily,
+                    State = MissionState.Completed,
+                }
+            ]
+        );
+
+        DragaliaResponse<MissionReceiveDailyRewardData> response =
+            await this.Client.PostMsgpack<MissionReceiveDailyRewardData>(
+                "mission/receive_daily_reward",
+                new MissionReceiveDailyRewardRequest()
+                {
+                    mission_params_list =
+                    [
+                        new() { daily_mission_id = missionId1, day_no = today, },
+                        new() { daily_mission_id = missionId2, day_no = today, },
+                        new() { daily_mission_id = missionId1, day_no = yesterday, },
+                    ]
+                }
+            );
+
+        response
+            .data
+            .daily_mission_list
+            .Should()
+            .BeEquivalentTo(
+                [
+                    new DailyMissionList()
+                    {
+                        daily_mission_id = missionId1,
+                        day_no = today,
+                        state = MissionState.Claimed,
+                    },
+                    new DailyMissionList()
+                    {
+                        daily_mission_id = missionId2,
+                        day_no = today,
+                        state = MissionState.Claimed,
+                    },
+                    new DailyMissionList()
+                    {
+                        daily_mission_id = missionId2,
+                        day_no = yesterday,
+                        state = MissionState.Completed,
+                    },
+                ],
+                opts =>
+                    opts.Including(x => x.daily_mission_id)
+                        .Including(x => x.day_no)
+                        .Including(x => x.state)
+            );
+    }
+
+    [Fact]
+    public async Task GetDailyMissionList_ReturnsUnionOfTables()
+    {
+        int missionId = 15070301; // Clear a Quest
+        DateOnly today = new(2023, 12, 13);
+        DateOnly yesterday = new(2023, 12, 12);
+
+        await this.AddToDatabase(
+            [
+                new DbCompletedDailyMission()
+                {
+                    ViewerId = this.ViewerId,
+                    Id = missionId,
+                    Date = today,
+                },
+                new DbCompletedDailyMission()
+                {
+                    ViewerId = this.ViewerId,
+                    Id = missionId,
+                    Date = yesterday,
+                },
+            ]
+        );
+
+        await this.AddToDatabase(
+            new DbPlayerMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = missionId,
+                Type = MissionType.Daily,
+                State = MissionState.Completed,
+            }
+        );
+
+        DragaliaResponse<MissionGetMissionListData> response =
+            await this.Client.PostMsgpack<MissionGetMissionListData>(
+                "mission/get_mission_list",
+                new MissionGetMissionListRequest()
+            );
+
+        response
+            .data
+            .daily_mission_list
+            .Should()
+            .BeEquivalentTo(
+                [
+                    new DailyMissionList()
+                    {
+                        daily_mission_id = missionId,
+                        day_no = today,
+                        state = MissionState.Completed
+                    },
+                    new DailyMissionList()
+                    {
+                        daily_mission_id = missionId,
+                        day_no = yesterday,
+                        state = MissionState.Completed
+                    }
+                ],
+                opts =>
+                    opts.Including(x => x.daily_mission_id)
+                        .Including(x => x.day_no)
+                        .Including(x => x.state)
             );
     }
 }
