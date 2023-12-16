@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Database;
@@ -6,7 +7,7 @@ namespace DragaliaAPI.Database;
 /// <summary>
 /// Base database context.
 /// </summary>
-public class ApiContext : DbContext
+public class ApiContext : DbContext, IDataProtectionKeyContext
 {
     public ApiContext(DbContextOptions<ApiContext> options)
         : base(options) { }
@@ -120,4 +121,6 @@ public class ApiContext : DbContext
     public DbSet<DbQuestTreasureList> QuestTreasureList { get; set; }
 
     public DbSet<DbPlayerQuestWall> PlayerQuestWalls { get; set; }
+
+    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 }
