@@ -180,6 +180,8 @@ public class MissionService(
                 "Attempted to start missions for an event without any configuration in appsettings.json"
             );
 
+        this.logger.LogDebug("Starting missions for event with run info {@info}", runInfo);
+
         if (
             this.resetHelper.LastDailyReset < runInfo.Start
             || this.resetHelper.LastDailyReset > runInfo.End
