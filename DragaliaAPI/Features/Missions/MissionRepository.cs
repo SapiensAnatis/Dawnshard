@@ -76,16 +76,23 @@ public class MissionRepository(
             .Entity;
     }
 
-    public void AddCompletedDailyMission(DbPlayerMission originalMission)
+    public async Task AddCompletedDailyMission(DbPlayerMission originalMission)
     {
+        long viewerId = this.playerIdentityService.ViewerId;
+        int id = originalMission.Id;
+        DateOnly date = DateOnly.FromDateTime(resetHelper.LastDailyReset.UtcDateTime);
+
+        if (await this.apiContext.CompletedDailyMissions.FindAsync(viewerId, id, date) != null)
+            return;
+
         this.apiContext
             .CompletedDailyMissions
             .Add(
                 new DbCompletedDailyMission()
                 {
-                    ViewerId = this.playerIdentityService.ViewerId,
-                    Id = originalMission.Id,
-                    Date = DateOnly.FromDateTime(resetHelper.LastDailyReset.UtcDateTime),
+                    ViewerId = viewerId,
+                    Id = id,
+                    Date = date,
                     StartDate = originalMission.Start,
                     EndDate = originalMission.End,
                     Progress = originalMission.Progress
