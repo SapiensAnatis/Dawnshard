@@ -2460,15 +2460,15 @@ public class HelperService : IHelperService
                         {
                             dragon_key_id = 0,
                             dragon_id = Dragons.Ramiel,
-                            level = 100,
-                            hp = 368,
-                            attack = 128,
+                            level = 120,
+                            hp = 388,
+                            attack = 148,
                             skill_1_level = 2,
-                            ability_1_level = 5,
-                            ability_2_level = 5,
+                            ability_1_level = 6,
+                            ability_2_level = 6,
                             hp_plus_count = 50,
                             attack_plus_count = 50,
-                            limit_break_count = 4
+                            limit_break_count = 5
                         },
                         support_weapon_body = new()
                         {
@@ -2493,7 +2493,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.SurfingSiblings,
+                                ability_crest_id = AbilityCrests.TheHeroesArrive,
                                 buildup_count = 50,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
@@ -2523,7 +2523,7 @@ public class HelperService : IHelperService
                         {
                             new()
                             {
-                                ability_crest_id = AbilityCrests.TogetherWeStand,
+                                ability_crest_id = AbilityCrests.BeautifulGunman,
                                 buildup_count = 40,
                                 limit_break_count = 4,
                                 hp_plus_count = 50,
