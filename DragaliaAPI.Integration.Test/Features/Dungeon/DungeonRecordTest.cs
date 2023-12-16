@@ -30,6 +30,7 @@ public class DungeonRecordTest : TestFixture
         this.ApiContext.PlayerEventItems.ExecuteDelete();
         this.ApiContext.PlayerEventPassives.ExecuteDelete();
         this.ApiContext.PlayerEventRewards.ExecuteDelete();
+        this.ApiContext.CompletedDailyMissions.ExecuteDelete();
     }
 
     [Fact]
