@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Models;
@@ -12,6 +13,8 @@ public class DungeonSession
     public int QuestId => QuestData?.Id ?? 0;
 
     public int QuestGid => QuestData?.Gid ?? 0;
+
+    public VariationTypes QuestVariation => QuestData?.VariationType ?? VariationTypes.Normal;
 
     public bool IsHost { get; set; } = true;
 

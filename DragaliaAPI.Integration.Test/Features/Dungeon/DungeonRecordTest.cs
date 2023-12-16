@@ -30,6 +30,7 @@ public class DungeonRecordTest : TestFixture
         this.ApiContext.PlayerEventItems.ExecuteDelete();
         this.ApiContext.PlayerEventPassives.ExecuteDelete();
         this.ApiContext.PlayerEventRewards.ExecuteDelete();
+        this.ApiContext.CompletedDailyMissions.ExecuteDelete();
     }
 
     [Fact]
@@ -392,6 +393,67 @@ public class DungeonRecordTest : TestFixture
     }
 
     [Fact]
+    public async Task Record_Event_ChallengeBattle_Coop_CompletesMissions()
+    {
+        int questId = 229030201; // Repelling the Frosty Fiends: Standard (Co-Op)
+        int eventId = 22903; // One Starry Dragonyule
+
+        await Client.PostMsgpack(
+            "/earn_event/entry",
+            new EarnEventEntryRequest() { event_id = eventId }
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                {
+                    { 1, Enumerable.Empty<AtgenEnemy>() }
+                }
+            };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordData response = (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record =
+                        [
+                            new()
+                            {
+                                area_idx = 0,
+                                enemy = [],
+                                enemy_smash = []
+                            }
+                        ],
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord(),
+                        wave = 2
+                    }
+                }
+            )
+        ).data;
+
+        AtgenNormalMissionNotice? missionNotice = response
+            .update_data_list
+            .mission_notice
+            ?.period_mission_notice;
+
+        missionNotice.Should().NotBeNull();
+        missionNotice!.new_complete_mission_id_list.Should().Contain(11650501); // Clear an Invasion on Standard
+    }
+
+    [Fact]
     public async Task Record_Event_Trial_CompletesMissions()
     {
         int questId = 208450702; // Wrath of Leviathan: Expert
@@ -442,6 +504,68 @@ public class DungeonRecordTest : TestFixture
             .new_complete_mission_id_list
             .Should()
             .Contain(10221201); // Clear a "Toll of the Deep" Trial on Expert
+    }
+
+    [Fact]
+    public async Task Record_Event_Trial_Coop_CompletesMissions()
+    {
+        int questId = 229030303; // The Angelic Herald: Master (Co-Op)
+        int eventId = 22903; // One Starry Dragonyule
+
+        await Client.PostMsgpack<EarnEventEntryData>(
+            "/earn_event/entry",
+            new EarnEventEntryRequest() { event_id = eventId }
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                {
+                    { 1, Enumerable.Empty<AtgenEnemy>() }
+                }
+            };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordData response = (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record =
+                        [
+                            new()
+                            {
+                                area_idx = 0,
+                                drop_obj = [],
+                                enemy = [],
+                                enemy_smash = []
+                            }
+                        ],
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord(),
+                        wave = 3
+                    }
+                }
+            )
+        ).data;
+
+        AtgenNormalMissionNotice? missionNotice = response
+            .update_data_list
+            .mission_notice
+            ?.period_mission_notice;
+
+        missionNotice.Should().NotBeNull();
+        missionNotice!.new_complete_mission_id_list.Should().Contain(11651001); // Clear a "One Starry Dragonyule" Trial on Master
     }
 
     [Fact]

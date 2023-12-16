@@ -131,7 +131,7 @@ public class DungeonRecordRewardService(
         {
             missionProgressionService.OnEventPointCollected(
                 session.QuestGid,
-                session.QuestId,
+                session.QuestVariation,
                 totalPoints + boostedPoints
             );
         }
@@ -143,7 +143,7 @@ public class DungeonRecordRewardService(
         {
             missionProgressionService.OnEventPointCollected(
                 session.QuestGid,
-                session.QuestId,
+                session.QuestVariation,
                 enemyScore
             );
         }

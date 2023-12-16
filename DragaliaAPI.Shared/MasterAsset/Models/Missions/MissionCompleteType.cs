@@ -149,7 +149,7 @@ public enum MissionCompleteType
     EventParticipation,
 
     /// <summary>
-    /// int eventId
+    /// int eventId, VariationTypes variationType
     /// </summary>
     EventRegularBattleClear,
 
