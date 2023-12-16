@@ -18,6 +18,7 @@ using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.MasterAsset;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
@@ -137,6 +138,8 @@ builder
         options.InstanceName = "RedisInstance";
     })
     .AddHttpContextAccessor();
+
+builder.Services.AddDataProtection().PersistKeysToDbContext<ApiContext>();
 
 builder.Services.ConfigureGameServices(builder.Configuration);
 builder.Services.ConfigureGraphQlSchema();
