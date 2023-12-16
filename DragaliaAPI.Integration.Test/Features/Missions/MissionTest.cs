@@ -384,4 +384,41 @@ public class MissionTest : TestFixture
                         .Including(x => x.state)
             );
     }
+
+    [Fact]
+    public async Task ClearDaily_ExistingClearInDb_DoesNotThrow()
+    {
+        int missionId = 15070101; // Perform an Item Summon
+        DateOnly date = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        await this.AddToDatabase(
+            new DbCompletedDailyMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = missionId,
+                Progress = 1,
+                Date = date,
+            }
+        );
+
+        await this.AddToDatabase(
+            new DbPlayerMission()
+            {
+                ViewerId = this.ViewerId,
+                Id = missionId,
+                Type = MissionType.Daily,
+                Progress = 0,
+                State = MissionState.InProgress,
+            }
+        );
+
+        DragaliaResponse<ShopItemSummonExecData> response =
+            await this.Client.PostMsgpack<ShopItemSummonExecData>(
+                "shop/item_summon_exec",
+                new ShopItemSummonExecRequest() { payment_type = PaymentTypes.Wyrmite },
+                ensureSuccessHeader: false
+            );
+
+        response.data_headers.result_code.Should().Be(ResultCode.Success);
+    }
 }

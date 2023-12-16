@@ -365,7 +365,7 @@ public class MissionProgressionService(
 
                     if (progressionInfo.MissionType == MissionType.Daily)
                     {
-                        missionRepository.AddCompletedDailyMission(progressingMission);
+                        await missionRepository.AddCompletedDailyMission(progressingMission);
                     }
                 }
                 else
