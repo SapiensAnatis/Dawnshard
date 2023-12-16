@@ -315,7 +315,7 @@ public class DungeonRecordRewardServiceTest
             x =>
                 x.OnEventPointCollected(
                     session.QuestData.Gid,
-                    session.QuestId,
+                    session.QuestVariation,
                     points + boostedPoints
                 )
         );

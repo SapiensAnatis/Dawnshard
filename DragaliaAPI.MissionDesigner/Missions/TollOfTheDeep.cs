@@ -82,14 +82,14 @@ public static class TollOfTheDeep
             {
                 MissionId = 10221101,
                 EventId = EventId,
-                QuestId = 208450701
+                VariationType = VariationTypes.Hell,
             },
             // Clear a "Toll of the Deep" Trial on Expert
             new EventTrialClearMission()
             {
                 MissionId = 10221201,
                 EventId = EventId,
-                QuestId = 208450702
+                VariationType = VariationTypes.Variation6,
             },
             // Earn the "Light of the Deep" Epithet
             // Earned from 'Completely Clear a Challenge Battle On Master'

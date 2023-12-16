@@ -22,7 +22,7 @@ public static class StarryDragonyule
             new ReadQuestStoryMission()
             {
                 MissionId = 11650201,
-                QuestStoryId = 11650201 // Final story ID; cannot progress with all 5 as _CompleteValue = 1
+                QuestStoryId = 2290306 // Final story ID; cannot progress with all 5 as _CompleteValue = 1
             },
             // Collect 1,000 Heroism in One Invasion
             new EventPointCollectionRecordMission() { MissionId = 11650301, EventId = EventId },
@@ -37,36 +37,46 @@ public static class StarryDragonyule
             // Defeat 1,000 Enemies in Invasions
             new EarnEnemiesKilledMission() { MissionId = 11650401, EventId = EventId },
             // Clear an Invasion on Standard
-            new ClearQuestMission() { MissionId = 11650501, QuestId = 229031201 },
+            new EventRegularBattleClearMission()
+            {
+                MissionId = 11650501,
+                EventId = EventId,
+                VariationType = VariationTypes.Normal
+            },
             // Clear an Invasion on Expert
-            new ClearQuestMission() { MissionId = 11650601, QuestId = 229031202 },
+            new EventRegularBattleClearMission()
+            {
+                MissionId = 11650601,
+                EventId = EventId,
+                VariationType = VariationTypes.Hard
+            },
             // Collect 7,500 Heroism in One Invasion on Master
             new EventPointCollectionRecordMission()
             {
                 MissionId = 11650701,
                 EventId = EventId,
-                QuestId = 229031203
+                VariationType = VariationTypes.VeryHard
             },
             // Clear a "One Starry Dragonyule" Trial on Standard
             new EventTrialClearMission()
             {
                 MissionId = 11650801,
-                QuestId = 229031301,
-                EventId = EventId
+                EventId = EventId,
+                VariationType = VariationTypes.Normal
             },
             // Clear a "One Starry Dragonyule" Trial on Expert
             new EventTrialClearMission()
             {
                 MissionId = 11650901,
                 EventId = EventId,
-                QuestId = 229031302,
+                VariationType = VariationTypes.Hard
             },
             // Clear a "One Starry Dragonyule" Trial on Master
             new EventTrialClearMission()
             {
-                MissionId = 11650001,
+                MissionId = 11651001,
                 EventId = EventId,
-                QuestId = 229031303,
+                VariationType = VariationTypes.VeryHard
             },
             // Clear A Dragonyule Miracle
             new ClearQuestMission() { MissionId = 11651101, QuestId = 229030401, }

@@ -6,9 +6,9 @@ public class EventTrialClearMission : Mission
 
     public required int EventId { get; init; }
 
-    public required int QuestId { get; init; }
+    public required VariationTypes VariationType { get; init; }
 
     protected override int? Parameter => this.EventId;
 
-    protected override int? Parameter2 => this.QuestId;
+    protected override int? Parameter2 => (int)this.VariationType;
 }
