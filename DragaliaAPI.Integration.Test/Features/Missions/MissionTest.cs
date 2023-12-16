@@ -222,8 +222,8 @@ public class MissionTest : TestFixture
         int missionId1 = 15070301; // Clear a Quest
         int missionId2 = 15070401; // Clear Three Quests
 
-        DateOnly today = new(2023, 12, 13);
-        DateOnly yesterday = new(2023, 12, 12);
+        DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+        DateOnly yesterday = today.AddDays(-1);
 
         await this.AddToDatabase(
             [
@@ -323,8 +323,8 @@ public class MissionTest : TestFixture
     public async Task GetDailyMissionList_ReturnsUnionOfTables()
     {
         int missionId = 15070301; // Clear a Quest
-        DateOnly today = new(2023, 12, 13);
-        DateOnly yesterday = new(2023, 12, 12);
+        DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+        DateOnly yesterday = today.AddDays(-1);
 
         await this.AddToDatabase(
             [

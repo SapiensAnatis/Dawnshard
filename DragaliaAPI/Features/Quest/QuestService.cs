@@ -324,7 +324,10 @@ public class QuestService(
 
         if (questData.IsEventRegularBattle)
         {
-            missionProgressionService.OnEventRegularBattleCleared(questData.Gid);
+            missionProgressionService.OnEventRegularBattleCleared(
+                questData.Gid,
+                questData.VariationType
+            );
         }
         else if (questData.IsEventChallengeBattle)
         {
@@ -339,7 +342,7 @@ public class QuestService(
         }
         else if (questData.IsEventTrial)
         {
-            missionProgressionService.OnEventTrialCleared(questData.Gid, questData.Id);
+            missionProgressionService.OnEventTrialCleared(questData.Gid, questData.VariationType);
         }
     }
 }

@@ -7,5 +7,9 @@ public class EventRegularBattleClearMission : Mission
 
     public required int EventId { get; init; }
 
+    public VariationTypes? VariationType { get; init; }
+
     protected override int? Parameter => this.EventId;
+
+    protected override int? Parameter2 => (int?)this.VariationType;
 }
