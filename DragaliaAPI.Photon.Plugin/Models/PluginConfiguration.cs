@@ -29,6 +29,8 @@ namespace DragaliaAPI.Photon.Plugin.Models
 
         public string SecondaryBearerToken { get; }
 
+        public int RandomMatchingStartDelayMs { get; }
+
         public PluginConfiguration(IDictionary<string, string> config)
         {
             this.ApiServerUrl = config.GetUri(nameof(this.ApiServerUrl), UriKind.Absolute);
@@ -74,6 +76,8 @@ namespace DragaliaAPI.Photon.Plugin.Models
             );
 
             this.SecondaryBearerToken = config[nameof(SecondaryBearerToken)];
+
+            this.RandomMatchingStartDelayMs = config.GetInt(nameof(RandomMatchingStartDelayMs));
         }
     }
 }

@@ -18,6 +18,10 @@ namespace DragaliaAPI.Photon.Plugin.Models
 
         public bool IsUseSecondaryServer { get; set; }
 
+        public bool IsRandomMatching { get; set; }
+
+        public object RandomMatchingStartTimer { get; set; }
+
         public RoomState() { }
 
         public RoomState(RoomState oldState)

@@ -2,9 +2,11 @@
 
 	<PropertyGroup>
 		<TargetFramework>net461</TargetFramework>
-		<PlatformTarget>x64</PlatformTarget>
+        <Nullable>disable</Nullable>
+        <LangVersion>7.3</LangVersion>
+        <PlatformTarget>x64</PlatformTarget>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-		<AssemblyVersion>3.0.0</AssemblyVersion>
+        <AssemblyVersion>3.1.0</AssemblyVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
