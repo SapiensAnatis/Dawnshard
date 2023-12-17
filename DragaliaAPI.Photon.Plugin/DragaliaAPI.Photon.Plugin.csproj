@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net461</TargetFramework>
         <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
         <LangVersion>7.3</LangVersion>
         <PlatformTarget>x64</PlatformTarget>
         <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -10,16 +11,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="Models\RoomEntryCondition.cs~RF3a00b1.TMP" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="MessagePack" VersionOverride="2.5.108" />
         <PackageReference Include="Newtonsoft.Json" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
+        <ProjectReference Include="..\DragaliaAPI.Photon.Shared\DragaliaAPI.Photon.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
