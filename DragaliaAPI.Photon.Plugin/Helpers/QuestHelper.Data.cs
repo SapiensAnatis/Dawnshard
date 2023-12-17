@@ -34,6 +34,19 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
         /// </remarks>
         private static readonly ImmutableHashSet<int> RankedQuestIds;
 
+        /// <summary>
+        /// All random matching quest IDs.
+        /// </summary>
+        /// <remarks>
+        /// Query used:
+        /// <code>
+        /// SELECT q._Id || ', // ' || t._Text FROM "QuestData" q
+        /// JOIN "TextLabel" t on q._QuestViewName = t._Id
+        /// WHERE q._QuestPlayModeType = 4 or q._QuestPlayModeType = 5 -- QuestPlayModeTypes.RandomMatching / RandomMatchingSixteen
+        /// </code>
+        /// </remarks>
+        private static readonly ImmutableHashSet<int> RandomMatchingQuestIds;
+
         static QuestHelper()
         {
             RaidQuestIds = new int[]
@@ -482,6 +495,32 @@ namespace DragaliaAPI.Photon.Plugin.Helpers
                 227100106, // Surtr's Devouring Flame (Ranked)
                 227110105, // Iblis's Surging Cascade (Ranked)
                 227110106, // Iblis's Surging Cascade (Ranked)
+            }.ToImmutableHashSet();
+
+            RandomMatchingQuestIds = new[]
+            {
+                204380301, // Asura Clash: Beginner
+                204380302, // Asura Clash: Expert
+                204380401, // Asura Clash EX
+                204390301, // Satan Clash: Beginner
+                204390302, // Satan Clash: Expert
+                204390501, // Satan Clash: Nightmare
+                204400301, // True Bahamut Clash: Beginner
+                204400302, // True Bahamut Clash: Expert
+                229010201, // Repelling the Forest's Aggressors: Standard
+                229010202, // Repelling the Forest's Aggressors: Expert
+                229020201, // Repelling the Forces of Grams: Standard
+                229020202, // Repelling the Forces of Grams: Expert
+                229030201, // Repelling the Frosty Fiends: Standard
+                229030202, // Repelling the Frosty Fiends: Expert
+                229040201, // Repelling the Black Mana Forces: Standard
+                229040202, // Repelling the Black Mana Forces: Expert
+                229050201, // Repelling the Imperial Forces: Standard
+                229050202, // Repelling the Imperial Forces: Expert
+                229060201, // Repelling the Forest's Aggressors: Standard
+                229060202, // Repelling the Forest's Aggressors: Expert
+                229070201, // Repelling the Forces of Grams: Standard
+                229070202, // Repelling the Forces of Grams: Expert
             }.ToImmutableHashSet();
         }
     }

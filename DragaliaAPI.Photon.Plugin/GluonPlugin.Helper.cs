@@ -72,6 +72,16 @@ namespace DragaliaAPI.Photon.Plugin
             bool callAsync = true
         )
         {
+            // We don't ever need to communicate with Redis for rooms that are in random matching mode
+            if (this.roomState.IsRandomMatching)
+            {
+                this.logger.DebugFormat(
+                    "Skipping request to StateManager endpoint {0}; room is in random matching mode",
+                    endpoint
+                );
+                return;
+            }
+
             HttpRequestCallback callback = this.LogIfFailedCallback;
 
             Uri baseUri;
