@@ -107,6 +107,9 @@ namespace DragaliaAPI.Photon.Plugin
             }
 
             this.roomState.QuestId = info.Request.GameProperties.GetInt(GamePropertyKeys.QuestId);
+            this.roomState.IsRandomMatching = QuestHelper.GetIsRandomMatching(
+                this.roomState.QuestId
+            );
 
             this.logger.InfoFormat(
                 "Viewer ID {0} created room {1} with room ID {2}",
@@ -210,6 +213,27 @@ namespace DragaliaAPI.Photon.Plugin
                 },
                 info
             );
+
+            if (this.roomState.IsRandomMatching && this.roomState.RandomMatchingStartTimer == null)
+            {
+                this.logger.InfoFormat(
+                    "Commencing random matching start timer for room {0}",
+                    this.PluginHost.GameId
+                );
+
+                this.roomState.RandomMatchingStartTimer = this.PluginHost.CreateOneTimeTimer(
+                    info,
+                    () =>
+                    {
+                        this.logger.InfoFormat(
+                            "Executing random matching start for room {0}",
+                            this.PluginHost.GameId
+                        );
+                        this.SetGoToIngameInfo();
+                    },
+                    this.config.RandomMatchingStartDelayMs
+                );
+            }
         }
 
         /// <summary>
@@ -302,6 +326,17 @@ namespace DragaliaAPI.Photon.Plugin
                 {
                     this.RaiseEvent(Event.StartQuest, new Dictionary<string, string> { });
                 }
+            }
+
+            if (this.actorState.Count < 2 && this.roomState.RandomMatchingStartTimer != null)
+            {
+                this.logger.InfoFormat(
+                    "Aborting random matching timer of room {0} because room only has 1 player",
+                    this.PluginHost.GameId
+                );
+
+                this.PluginHost.StopTimer(this.roomState.RandomMatchingStartTimer);
+                this.roomState.RandomMatchingStartTimer = null;
             }
         }
 
