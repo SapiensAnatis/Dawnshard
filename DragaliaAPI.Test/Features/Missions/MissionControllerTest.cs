@@ -98,6 +98,9 @@ public class MissionControllerTest
             };
 
         this.mockMissionService.Setup(x => x.GetMissionNotice(null)).ReturnsAsync(notice);
+        this.mockMissionService
+            .Setup(x => x.GetCompletedDrillGroups())
+            .ReturnsAsync([new DrillMissionGroupList(1)]);
 
         this.mockMissionRepository
             .Setup(x => x.GetMissionsByType(MissionType.Drill))
@@ -131,7 +134,7 @@ public class MissionControllerTest
             .ContainEquivalentOf(
                 new DrillMissionList(500, 0, 0, DateTimeOffset.UnixEpoch, DateTimeOffset.UnixEpoch)
             );
-        response.drill_mission_group_list.Should().BeNull();
+        response.drill_mission_group_list.Should().BeEquivalentTo([new DrillMissionGroupList(1)]);
 
         mockMissionService.VerifyAll();
         mockUpdateDataService.VerifyAll();
