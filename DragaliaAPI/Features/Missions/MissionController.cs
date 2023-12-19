@@ -54,6 +54,8 @@ public class MissionController(
             x => new DrillMissionList(x.Id, x.Progress, (int)x.State, x.End, x.Start)
         );
 
+        response.drill_mission_group_list = await this.missionService.GetCompletedDrillGroups();
+
         return response;
     }
 

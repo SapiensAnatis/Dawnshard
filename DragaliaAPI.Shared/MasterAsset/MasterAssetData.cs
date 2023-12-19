@@ -36,6 +36,11 @@ public class MasterAssetData<TKey, TItem>
     public IEnumerable<TItem> Enumerable => this.internalKeyCollection.Items;
 
     /// <summary>
+    /// Gets the number of items in the collection.
+    /// </summary>
+    public int Count => this.internalKeyCollection.Items.Length;
+
+    /// <summary>
     /// Get a <typeparam name="TItem"> instance corresponding to the given <typeparam name="TKey"/> key.</typeparam>
     /// </summary>
     /// <param name="key">The key to index with.</param>
