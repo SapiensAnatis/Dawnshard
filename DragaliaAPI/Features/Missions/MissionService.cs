@@ -353,19 +353,27 @@ public class MissionService(
 
     public async Task<IEnumerable<DrillMissionGroupList>> GetCompletedDrillGroups()
     {
-        List<int> completedGroups = new() { 1, 2, 3 };
+        List<int> completedGroups = [];
 
-        var stateGroupings = await this.missionRepository
+        int currentMission = await this.missionRepository
             .GetMissionsByType(MissionType.Drill)
-            .Select(e => new { e.GroupId, e.State })
-            .Distinct()
-            .ToListAsync();
+            .Where(x => x.State == MissionState.Claimed)
+            .OrderByDescending(x => x.Id)
+            .Select(x => x.Id)
+            .FirstOrDefaultAsync();
 
-        foreach (var stateGrouping in stateGroupings)
-        {
-            if (stateGrouping.State != MissionState.Claimed)
-                completedGroups.Remove(stateGrouping.GroupId ?? 0);
-        }
+        if (currentMission == 0)
+            return [];
+
+        IEnumerable<(int Group, int MaxId)> maxIds = MasterAsset
+            .DrillMission
+            .Enumerable
+            .GroupBy(x => x.MissionDrillGroupId)
+            .Select(group => (group.Key, group.Max(x => x.Id)));
+
+        foreach ((int group, int maxId) in maxIds)
+            if (currentMission >= maxId)
+                completedGroups.Add(group);
 
         this.logger.LogDebug("Returning completed drill groups: {groups}", completedGroups);
 
@@ -500,6 +508,11 @@ public class MissionService(
             else if (allMissions.Count == 0)
             {
                 currentMissionId = 100100;
+            }
+            else if (completedCount < MasterAsset.DrillMission.Count)
+            {
+                // Prevent icon from disappearing while waiting to start the next group
+                receivableRewardCount = 1;
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 
@@ -420,5 +421,127 @@ public class MissionTest : TestFixture
             );
 
         response.data_headers.result_code.Should().Be(ResultCode.Success);
+    }
+
+    [Fact]
+    public async Task GetDrillMissionList_ReturnsCompletedGroups()
+    {
+        DbPlayerMission ToDbMission(DrillMission mission)
+        {
+            return new()
+            {
+                ViewerId = this.ViewerId,
+                Id = mission.Id,
+                State = MissionState.Claimed,
+                Type = MissionType.Drill
+            };
+        }
+
+        MissionGetDrillMissionListData response = (
+            await this.Client.PostMsgpack<MissionGetDrillMissionListData>(
+                "mission/get_drill_mission_list",
+                new MissionGetDrillMissionListRequest()
+            )
+        ).data;
+
+        response.drill_mission_group_list.Should().BeEmpty();
+
+        await this.AddRangeToDatabase(
+            MasterAsset
+                .DrillMission
+                .Enumerable
+                .Where(x => x.MissionDrillGroupId == 1)
+                .Select(ToDbMission)
+        );
+
+        response = (
+            await this.Client.PostMsgpack<MissionGetDrillMissionListData>(
+                "mission/get_drill_mission_list",
+                new MissionGetDrillMissionListRequest()
+            )
+        ).data;
+
+        response.drill_mission_group_list.Should().BeEquivalentTo([new DrillMissionGroupList(1)]);
+
+        await this.AddRangeToDatabase(
+            MasterAsset
+                .DrillMission
+                .Enumerable
+                .Where(x => x.MissionDrillGroupId == 2)
+                .Select(ToDbMission)
+        );
+
+        response = (
+            await this.Client.PostMsgpack<MissionGetDrillMissionListData>(
+                "mission/get_drill_mission_list",
+                new MissionGetDrillMissionListRequest()
+            )
+        ).data;
+
+        response
+            .drill_mission_group_list
+            .Should()
+            .BeEquivalentTo([new DrillMissionGroupList(1), new DrillMissionGroupList(2)]);
+
+        await this.AddRangeToDatabase(
+            MasterAsset
+                .DrillMission
+                .Enumerable
+                .Where(x => x.MissionDrillGroupId == 3)
+                .Select(ToDbMission)
+        );
+
+        response = (
+            await this.Client.PostMsgpack<MissionGetDrillMissionListData>(
+                "mission/get_drill_mission_list",
+                new MissionGetDrillMissionListRequest()
+            )
+        ).data;
+
+        response
+            .drill_mission_group_list
+            .Should()
+            .BeEquivalentTo(
+                [
+                    new DrillMissionGroupList(1),
+                    new DrillMissionGroupList(2),
+                    new DrillMissionGroupList(3)
+                ]
+            );
+    }
+
+    [Fact]
+    public async Task GetMissionList_InBetweenDrillGroups_ReturnsRewardCount1()
+    {
+        await this.AddRangeToDatabase(
+            MasterAsset
+                .DrillMission
+                .Enumerable
+                .Where(x => x.MissionDrillGroupId == 1)
+                .Select(
+                    x =>
+                        new DbPlayerMission()
+                        {
+                            ViewerId = this.ViewerId,
+                            Id = x.Id,
+                            State = MissionState.Claimed,
+                            Type = MissionType.Drill
+                        }
+                )
+        );
+
+        MissionGetMissionListData response = (
+            await this.Client.PostMsgpack<MissionGetMissionListData>(
+                "mission/get_mission_list",
+                new MissionGetMissionListRequest()
+            )
+        ).data;
+
+        response
+            .mission_notice
+            .drill_mission_notice
+            .receivable_reward_count
+            .Should()
+            .Be(1, "because otherwise the drill mission popup disappears");
     }
 }
