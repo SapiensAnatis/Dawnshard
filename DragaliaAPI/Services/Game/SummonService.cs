@@ -118,7 +118,7 @@ public class SummonService : ISummonService
             if (isDragon)
             {
                 Dragons id = random.NextEnum<Dragons>();
-                while (id == 0 || DragonConstants.unsummonableDragons.Contains(id))
+                while (id == 0 || DragonConstants.UnsummonableDragons.Contains(id))
                     id = random.NextEnum<Dragons>();
 
                 int rarity = MasterAsset.DragonData.Get(id).Rarity;

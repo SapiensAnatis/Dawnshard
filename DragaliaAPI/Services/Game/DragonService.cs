@@ -44,20 +44,17 @@ public class DragonService(
             )
             .OrderBy(x => x.DragonGiftId)
             .ToDictionaryAsync(x => x.DragonGiftId);
-        IEnumerable<AtgenShopGiftList> giftList = gifts.Values.Select(
-            x =>
-                new AtgenShopGiftList()
-                {
-                    dragon_gift_id = (int)x.DragonGiftId,
-                    price = DragonConstants.buyGiftPrices.TryGetValue(
-                        x.DragonGiftId,
-                        out int giftPrice
-                    )
-                        ? giftPrice
-                        : 0,
-                    is_buy = x.Quantity
-                }
-        );
+        IEnumerable<AtgenShopGiftList> giftList = gifts
+            .Values.Select(
+                x =>
+                    new AtgenShopGiftList()
+                    {
+                        dragon_gift_id = (int)x.DragonGiftId,
+                        price = DragonConstants.BuyGiftPrices.GetValueOrDefault(x.DragonGiftId, 0),
+                        is_buy = 1
+                    }
+            )
+            .ToList();
         return new DragonGetContactDataData(giftList);
     }
 
@@ -72,22 +69,25 @@ public class DragonService(
             new List<Tuple<DragonGifts, List<RewardReliabilityList>>>();
         int levelRewardIndex = (dragonReliability.Level / 5);
         DragonData dragonData = MasterAsset.DragonData.Get(dragonReliability.DragonId);
-        IEnumerator<Tuple<DragonGifts, int>> enumerator = giftsAndQuantity.GetEnumerator();
+        using IEnumerator<Tuple<DragonGifts, int>> enumerator = giftsAndQuantity.GetEnumerator();
         ImmutableArray<int> bondXpLimits =
             dragonReliability.DragonId == Dragons.Puppy
-                ? DragonConstants.bondXpLimitsPuppy
-                : DragonConstants.bondXpLimits;
+                ? DragonConstants.BondXpLimitsPuppy
+                : DragonConstants.BondXpLimits;
+
+        dragonReliability.LastContactTime = resetHelper.UtcNow;
+
         while (enumerator.MoveNext() && dragonReliability.Exp < bondXpLimits[^1])
         {
             dragonReliability.Exp = Math.Min(
                 bondXpLimits[^1],
                 dragonReliability.Exp
                     + (int)(
-                        DragonConstants.favorVals[enumerator.Current.Item1]
+                        DragonConstants.FavorVals[enumerator.Current.Item1]
                         * (
-                            DragonConstants.rotatingGifts[(int)dragonData.FavoriteType]
+                            DragonConstants.RotatingGifts[(int)dragonData.FavoriteType]
                             == enumerator.Current.Item1
-                                ? DragonConstants.favMulti
+                                ? DragonConstants.FavMulti
                                 : 1
                         )
                         * enumerator.Current.Item2
@@ -99,7 +99,7 @@ public class DragonService(
 
             while (
                 !(
-                    dragonReliability.Level == DragonConstants.maxRelLevel
+                    dragonReliability.Level == DragonConstants.MaxRelLevel
                     || bondXpLimits[dragonReliability.Level] > dragonReliability.Exp
                 )
             )
@@ -131,7 +131,6 @@ public class DragonService(
                 missionProgressionService.OnDragonBondLevelUp(
                     dragonData.Id,
                     dragonData.ElementalType,
-                    levelDifference,
                     dragonReliability.Level
                 );
             }
@@ -146,7 +145,7 @@ public class DragonService(
         return levelGifts;
     }
 
-    private static readonly ImmutableArray<Materials> dragonLevelReward = new Materials[]
+    private static readonly ImmutableArray<Materials> DragonLevelReward = new Materials[]
     {
         Materials.Omnicite,
         Materials.Talonstone,
@@ -156,14 +155,14 @@ public class DragonService(
         Materials.SunlightOre
     }.ToImmutableArray();
 
-    private static readonly int[][] dragonLevelRewardQuantity = new int[][]
+    private static readonly int[][] DragonLevelRewardQuantity = new int[][]
     {
         new int[] { 999999, 3, 999999, 2, 5, 1 },
         new int[] { 999999, 4, 999999, 3, 7, 1 },
         new int[] { 999999, 5, 999999, 4, 10, 1 }
     };
 
-    private static readonly ImmutableArray<Materials> puppyLevelReward = new Materials[]
+    private static readonly ImmutableArray<Materials> PuppyLevelReward = new Materials[]
     {
         Materials.LightOrb,
         Materials.HalfEatenBread,
@@ -173,7 +172,7 @@ public class DragonService(
         Materials.ImitationSquish
     }.ToImmutableArray();
 
-    private static readonly int[] puppyLevelRewardQuantity = new int[] { 1, 21, 28, 34, 40, 1 };
+    private static readonly int[] PuppyLevelRewardQuantity = new int[] { 1, 21, 28, 34, 40, 1 };
 
     private async Task<RewardReliabilityList?> GetRewardDataForLevel(
         int level,
@@ -191,10 +190,10 @@ public class DragonService(
                 levelup_entity_list = new DragonRewardEntityList[1]
             };
             int levelIndex = level / 5;
-            ImmutableArray<Materials> rewardMats = isPuppy ? puppyLevelReward : dragonLevelReward;
+            ImmutableArray<Materials> rewardMats = isPuppy ? PuppyLevelReward : DragonLevelReward;
             int[] rewardQuantity = isPuppy
-                ? puppyLevelRewardQuantity
-                : dragonLevelRewardQuantity[rarity - 3];
+                ? PuppyLevelRewardQuantity
+                : DragonLevelRewardQuantity[rarity - 3];
             if (!isPuppy)
             {
                 if (levelIndex == 1 || levelIndex == 3)
@@ -380,7 +379,7 @@ public class DragonService(
         //DbPlayerCurrency rupies = await inventoryRepository.GetCurrency(deviceAccountId, CurrencyTypes.Rupies) ?? inventoryRepository.AddCurrency(deviceAccountId, CurrencyTypes.Rupies);
 
         int totalCost = request
-            .dragon_gift_id_list.Select(x => DragonConstants.buyGiftPrices[x])
+            .dragon_gift_id_list.Select(x => DragonConstants.BuyGiftPrices[x])
             .Sum();
         if (userData.Coin < totalCost)
         //if (rupies.Quantity < totalCost)
@@ -443,7 +442,7 @@ public class DragonService(
                     return_gift_list = rewards.Where(x => x.Item1 == gift).First().Item2,
                     dragon_gift_id = gift,
                     is_favorite =
-                        DragonConstants.rotatingGifts[(int)dragonData.FavoriteType] == gift,
+                        DragonConstants.RotatingGifts[(int)dragonData.FavoriteType] == gift,
                     reward_reliability_list =
                         levelGifts.FirstOrDefault(x => x.Item1 == gift)?.Item2
                         ?? Enumerable.Empty<RewardReliabilityList>()
