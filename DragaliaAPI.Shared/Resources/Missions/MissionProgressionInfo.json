@@ -1395,6 +1395,86 @@
     "_Parameter": 22903
   },
   {
+    "_Id": 1165040202,
+    "_MissionType": "Period",
+    "_MissionId": 11650402,
+    "_CompleteType": "EarnEnemiesKilled",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165040302,
+    "_MissionType": "Period",
+    "_MissionId": 11650403,
+    "_CompleteType": "EarnEnemiesKilled",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165040402,
+    "_MissionType": "Period",
+    "_MissionId": 11650404,
+    "_CompleteType": "EarnEnemiesKilled",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165040502,
+    "_MissionType": "Period",
+    "_MissionId": 11650405,
+    "_CompleteType": "EarnEnemiesKilled",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165040602,
+    "_MissionType": "Period",
+    "_MissionId": 11650406,
+    "_CompleteType": "EarnEnemiesKilled",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165040702,
+    "_MissionType": "Period",
+    "_MissionId": 11650407,
+    "_CompleteType": "EarnEnemiesKilled",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165040802,
+    "_MissionType": "Period",
+    "_MissionId": 11650408,
+    "_CompleteType": "EarnEnemiesKilled",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165040902,
+    "_MissionType": "Period",
+    "_MissionId": 11650409,
+    "_CompleteType": "EarnEnemiesKilled",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165041002,
+    "_MissionType": "Period",
+    "_MissionId": 11650410,
+    "_CompleteType": "EarnEnemiesKilled",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903
+  },
+  {
+    "_Id": 1165041102,
+    "_MissionType": "Period",
+    "_MissionId": 11650411,
+    "_CompleteType": "EarnEnemiesKilled",
+    "_UseTotalValue": 0,
+    "_Parameter": 22903
+  },
+  {
     "_Id": 1165050102,
     "_MissionType": "Period",
     "_MissionId": 11650501,

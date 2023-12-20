@@ -36,6 +36,26 @@ public static class StarryDragonyule
             new EventPointCollectionRecordMission() { MissionId = 11650305, EventId = EventId },
             // Defeat 1,000 Enemies in Invasions
             new EarnEnemiesKilledMission() { MissionId = 11650401, EventId = EventId },
+            // Defeat 2,000 Enemies in Invasions
+            new EarnEnemiesKilledMission() { MissionId = 11650402, EventId = EventId },
+            // Defeat 5,000 Enemies in Invasions
+            new EarnEnemiesKilledMission() { MissionId = 11650403, EventId = EventId },
+            // Defeat 7,500 Enemies in Invasions
+            new EarnEnemiesKilledMission() { MissionId = 11650404, EventId = EventId },
+            // Defeat 10,000 Enemies in Invasions
+            new EarnEnemiesKilledMission() { MissionId = 11650405, EventId = EventId },
+            // Defeat 12,500 Enemies in Invasions
+            new EarnEnemiesKilledMission() { MissionId = 11650406, EventId = EventId },
+            // Defeat 15,000 Enemies in Invasions
+            new EarnEnemiesKilledMission() { MissionId = 11650407, EventId = EventId },
+            // Defeat 17,500 Enemies in Invasions
+            new EarnEnemiesKilledMission() { MissionId = 11650408, EventId = EventId },
+            // Defeat 20,000 Enemies in Invasions
+            new EarnEnemiesKilledMission() { MissionId = 11650409, EventId = EventId },
+            // Defeat 25,000 Enemies in Invasions
+            new EarnEnemiesKilledMission() { MissionId = 11650410, EventId = EventId },
+            // Defeat 30,000 Enemies in Invasions
+            new EarnEnemiesKilledMission() { MissionId = 11650411, EventId = EventId },
             // Clear an Invasion on Standard
             new EventRegularBattleClearMission()
             {
