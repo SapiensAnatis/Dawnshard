@@ -1,5 +1,6 @@
 ﻿using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Utils;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
@@ -223,7 +224,9 @@ public class MissionTest : TestFixture
         int missionId1 = 15070301; // Clear a Quest
         int missionId2 = 15070401; // Clear Three Quests
 
-        DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+        ResetHelper resetHelper = new(new DateTimeProvider());
+
+        DateOnly today = DateOnly.FromDateTime(resetHelper.LastDailyReset.Date);
         DateOnly yesterday = today.AddDays(-1);
 
         await this.AddToDatabase(
