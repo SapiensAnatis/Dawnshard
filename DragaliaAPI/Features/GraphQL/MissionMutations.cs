@@ -103,13 +103,12 @@ public class MissionMutations : MutationBase
         MissionMutationArgs args
     )
     {
-        List<DbPlayerMission> affectedMissions = await db.PlayerMissions
-            .Where(
-                x =>
-                    x.Id == args.MissionId
-                    && x.Type == args.MissionType
-                    && x.State == MissionState.InProgress
-            )
+        List<DbPlayerMission> affectedMissions = await db.PlayerMissions.Where(
+            x =>
+                x.Id == args.MissionId
+                && x.Type == args.MissionType
+                && x.State == MissionState.InProgress
+        )
             .ToListAsync();
 
         long[] players = affectedMissions.Select(x => x.ViewerId).ToArray();
@@ -131,14 +130,12 @@ public class MissionMutations : MutationBase
         await db.SaveChangesAsync();
 
         return context =>
-            context
-                .PlayerMissions
-                .Where(
-                    x =>
-                        players.Contains(x.ViewerId)
-                        && x.Id == args.MissionId
-                        && x.Type == args.MissionType
-                );
+            context.PlayerMissions.Where(
+                x =>
+                    players.Contains(x.ViewerId)
+                    && x.Id == args.MissionId
+                    && x.Type == args.MissionType
+            );
     }
 
     [GraphQLArguments]
@@ -161,12 +158,10 @@ public class MissionMutations : MutationBase
         DbPlayer player,
         MissionMutationArgs args
     ) =>
-        context
-            .PlayerMissions
-            .FirstOrDefault(
-                x =>
-                    x.Id == args.MissionId
-                    && x.Type == args.MissionType
-                    && x.ViewerId == player.ViewerId
-            ) ?? throw new InvalidOperationException("No mission found.");
+        context.PlayerMissions.FirstOrDefault(
+            x =>
+                x.Id == args.MissionId
+                && x.Type == args.MissionType
+                && x.ViewerId == player.ViewerId
+        ) ?? throw new InvalidOperationException("No mission found.");
 }

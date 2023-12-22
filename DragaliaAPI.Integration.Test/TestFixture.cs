@@ -126,9 +126,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
     protected void ImportSave()
     {
         if (
-            this.ApiContext
-                .PlayerUserData
-                .AsNoTracking()
+            this.ApiContext.PlayerUserData.AsNoTracking()
                 .First(x => x.ViewerId == ViewerId)
                 .LastSaveImportTime > DateTimeOffset.UnixEpoch
         )
@@ -150,9 +148,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
 
     protected long GetDragonKeyId(Dragons dragon)
     {
-        return this.ApiContext
-            .PlayerDragonData
-            .Where(x => x.DragonId == dragon)
+        return this.ApiContext.PlayerDragonData.Where(x => x.DragonId == dragon)
             .Select(x => x.DragonKeyId)
             .DefaultIfEmpty()
             .First();
@@ -160,9 +156,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
 
     protected long GetTalismanKeyId(Talismans talisman)
     {
-        return this.ApiContext
-            .PlayerTalismans
-            .Where(x => x.TalismanId == talisman)
+        return this.ApiContext.PlayerTalismans.Where(x => x.TalismanId == talisman)
             .Select(x => x.TalismanKeyId)
             .DefaultIfEmpty()
             .First();

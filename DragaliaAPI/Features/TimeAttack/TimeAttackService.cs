@@ -30,10 +30,10 @@ public class TimeAttackService(
 
     public IEnumerable<RankingTierReward> GetRewards()
     {
-        IEnumerable<RankingTierReward> applicableRewards = MasterAsset
-            .RankingTierReward
-            .Enumerable
-            .Where(x => x.GroupId == options.CurrentValue.GroupId);
+        IEnumerable<RankingTierReward> applicableRewards =
+            MasterAsset.RankingTierReward.Enumerable.Where(
+                x => x.GroupId == options.CurrentValue.GroupId
+            );
 
         return applicableRewards;
     }
@@ -63,9 +63,7 @@ public class TimeAttackService(
         }
 
         List<DbTimeAttackClearUnit> clearUnits = entry
-            .PartyInfo
-            .party_unit_list
-            .Select(x => MapTimeAttackUnit(x, gameId))
+            .PartyInfo.party_unit_list.Select(x => MapTimeAttackUnit(x, gameId))
             .ToList();
 
         await timeAttackRepository.CreateOrUpdateClear(
@@ -97,8 +95,7 @@ public class TimeAttackService(
     public async Task<IEnumerable<RankingTierReward>> ReceiveTierReward(int questId)
     {
         float bestClearTime = await questRepository
-            .Quests
-            .Where(x => x.QuestId == questId)
+            .Quests.Where(x => x.QuestId == questId)
             .Select(x => x.BestClearTime)
             .FirstOrDefaultAsync();
 
@@ -108,8 +105,7 @@ public class TimeAttackService(
             return Enumerable.Empty<RankingTierReward>();
 
         IEnumerable<int> receivedRewards = await timeAttackRepository
-            .ReceivedRewards
-            .Select(x => x.RewardId)
+            .ReceivedRewards.Select(x => x.RewardId)
             .ToListAsync();
 
         IEnumerable<RankingTierReward> rewardsToReceive = this.GetRewards()
@@ -176,8 +172,9 @@ public class TimeAttackService(
             unit.TalismanAbility2 = x.talisman_data.talisman_ability_id_2;
         }
 
-        List<AbilityCrests> crests = x.crest_slot_type_1_crest_list
-            .Concat(x.crest_slot_type_2_crest_list)
+        List<AbilityCrests> crests = x.crest_slot_type_1_crest_list.Concat(
+            x.crest_slot_type_2_crest_list
+        )
             .Concat(x.crest_slot_type_3_crest_list)
             .Select(x => x.ability_crest_id)
             .ToList();

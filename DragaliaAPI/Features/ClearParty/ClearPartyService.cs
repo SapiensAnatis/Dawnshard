@@ -62,9 +62,8 @@ public class ClearPartyService : IClearPartyService
             return new(mappedPartyList, Enumerable.Empty<AtgenLostUnitList>());
         }
 
-        IEnumerable<DbDetailedPartyUnit> detailedPartyUnits = await this.dungeonRepository
-            .BuildDetailedPartyUnit(clearPartyQuery)
-            .ToListAsync();
+        IEnumerable<DbDetailedPartyUnit> detailedPartyUnits =
+            await this.dungeonRepository.BuildDetailedPartyUnit(clearPartyQuery).ToListAsync();
         IEnumerable<AtgenLostUnitList> lostUnitList = ProcessLostUnitList(
                 clearPartyUnits,
                 detailedPartyUnits
@@ -82,14 +81,14 @@ public class ClearPartyService : IClearPartyService
         IEnumerable<PartySettingList> party
     )
     {
-        Dictionary<long, Dragons> dragons = await this.unitRepository
-            .Dragons
-            .Where(x => party.Select(y => y.equip_dragon_key_id).Contains((ulong)x.DragonKeyId))
+        Dictionary<long, Dragons> dragons = await this.unitRepository.Dragons.Where(
+            x => party.Select(y => y.equip_dragon_key_id).Contains((ulong)x.DragonKeyId)
+        )
             .ToDictionaryAsync(x => x.DragonKeyId, x => x.DragonId);
 
-        Dictionary<long, Talismans> talismans = await this.unitRepository
-            .Talismans
-            .Where(x => party.Select(y => y.equip_talisman_key_id).Contains((ulong)x.TalismanKeyId))
+        Dictionary<long, Talismans> talismans = await this.unitRepository.Talismans.Where(
+            x => party.Select(y => y.equip_talisman_key_id).Contains((ulong)x.TalismanKeyId)
+        )
             .ToDictionaryAsync(x => x.TalismanKeyId, x => x.TalismanId);
 
         IEnumerable<DbQuestClearPartyUnit> dbUnits = party.Select(
@@ -239,9 +238,9 @@ public class ClearPartyService : IClearPartyService
             // it won't be possible to update the crest ID by reference.
 
             if (
-                detailUnit
-                    .CrestSlotType1CrestList
-                    .IsMissingCrest(clearUnit.EquipCrestSlotType1CrestId1)
+                detailUnit.CrestSlotType1CrestList.IsMissingCrest(
+                    clearUnit.EquipCrestSlotType1CrestId1
+                )
             )
             {
                 yield return new AtgenLostUnitList(
@@ -253,9 +252,9 @@ public class ClearPartyService : IClearPartyService
             }
 
             if (
-                detailUnit
-                    .CrestSlotType1CrestList
-                    .IsMissingCrest(clearUnit.EquipCrestSlotType1CrestId2)
+                detailUnit.CrestSlotType1CrestList.IsMissingCrest(
+                    clearUnit.EquipCrestSlotType1CrestId2
+                )
             )
             {
                 yield return new AtgenLostUnitList(
@@ -267,9 +266,9 @@ public class ClearPartyService : IClearPartyService
             }
 
             if (
-                detailUnit
-                    .CrestSlotType1CrestList
-                    .IsMissingCrest(clearUnit.EquipCrestSlotType1CrestId3)
+                detailUnit.CrestSlotType1CrestList.IsMissingCrest(
+                    clearUnit.EquipCrestSlotType1CrestId3
+                )
             )
             {
                 yield return new AtgenLostUnitList(
@@ -281,9 +280,9 @@ public class ClearPartyService : IClearPartyService
             }
 
             if (
-                detailUnit
-                    .CrestSlotType2CrestList
-                    .IsMissingCrest(clearUnit.EquipCrestSlotType2CrestId1)
+                detailUnit.CrestSlotType2CrestList.IsMissingCrest(
+                    clearUnit.EquipCrestSlotType2CrestId1
+                )
             )
             {
                 yield return new AtgenLostUnitList(
@@ -295,9 +294,9 @@ public class ClearPartyService : IClearPartyService
             }
 
             if (
-                detailUnit
-                    .CrestSlotType2CrestList
-                    .IsMissingCrest(clearUnit.EquipCrestSlotType2CrestId2)
+                detailUnit.CrestSlotType2CrestList.IsMissingCrest(
+                    clearUnit.EquipCrestSlotType2CrestId2
+                )
             )
             {
                 yield return new AtgenLostUnitList(
@@ -309,9 +308,9 @@ public class ClearPartyService : IClearPartyService
             }
 
             if (
-                detailUnit
-                    .CrestSlotType3CrestList
-                    .IsMissingCrest(clearUnit.EquipCrestSlotType3CrestId1)
+                detailUnit.CrestSlotType3CrestList.IsMissingCrest(
+                    clearUnit.EquipCrestSlotType3CrestId1
+                )
             )
             {
                 yield return new AtgenLostUnitList(
@@ -323,9 +322,9 @@ public class ClearPartyService : IClearPartyService
             }
 
             if (
-                detailUnit
-                    .CrestSlotType3CrestList
-                    .IsMissingCrest(clearUnit.EquipCrestSlotType3CrestId2)
+                detailUnit.CrestSlotType3CrestList.IsMissingCrest(
+                    clearUnit.EquipCrestSlotType3CrestId2
+                )
             )
             {
                 yield return new AtgenLostUnitList(

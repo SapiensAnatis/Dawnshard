@@ -18,11 +18,7 @@ public class MemoryEventTest : TestFixture
         ).data;
 
         result
-            .update_data_list
-            .mission_notice
-            .memory_event_mission_notice
-            .new_complete_mission_id_list
-            .Should()
+            .update_data_list.mission_notice.memory_event_mission_notice.new_complete_mission_id_list.Should()
             .Contain(10220101); // Participate in the Event
     }
 }

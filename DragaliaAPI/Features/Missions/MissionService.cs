@@ -61,16 +61,12 @@ public class MissionService(
     )> UnlockMainMissionGroup(int groupId)
     {
         IEnumerable<MainStoryMission> missions = MasterAsset
-            .MainStoryMission
-            .Enumerable
-            .Where(x => x.MissionMainStoryGroupId == groupId)
+            .MainStoryMission.Enumerable.Where(x => x.MissionMainStoryGroupId == groupId)
             .ToList();
 
         List<MainStoryMissionGroupReward> rewards = MasterAsset
-            .MainStoryMissionGroupRewards
-            .Get(groupId)
-            .Rewards
-            .ToList();
+            .MainStoryMissionGroupRewards.Get(groupId)
+            .Rewards.ToList();
 
         logger.LogInformation(
             "Unlocking main story mission group {groupId} ({groupMissionIds})",
@@ -100,19 +96,17 @@ public class MissionService(
     public async Task<IEnumerable<DbPlayerMission>> UnlockDrillMissionGroup(int groupId)
     {
         IEnumerable<DrillMission> missions = MasterAsset
-            .DrillMission
-            .Enumerable
-            .Where(x => x.MissionDrillGroupId == groupId)
+            .DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == groupId)
             .ToList();
 
         if (
-            await this.missionRepository
-                .Missions
-                .AnyAsync(x => x.GroupId == groupId && x.Type == MissionType.Drill)
+            await this.missionRepository.Missions.AnyAsync(
+                x => x.GroupId == groupId && x.Type == MissionType.Drill
+            )
         )
-            return await this.missionRepository
-                .Missions
-                .Where(x => x.GroupId == groupId && x.Type == MissionType.Drill)
+            return await this.missionRepository.Missions.Where(
+                x => x.GroupId == groupId && x.Type == MissionType.Drill
+            )
                 .ToListAsync();
 
         logger.LogInformation(
@@ -135,19 +129,17 @@ public class MissionService(
     public async Task<IEnumerable<DbPlayerMission>> UnlockMemoryEventMissions(int eventId)
     {
         IEnumerable<MemoryEventMission> missions = MasterAsset
-            .MemoryEventMission
-            .Enumerable
-            .Where(x => x.EventId == eventId)
+            .MemoryEventMission.Enumerable.Where(x => x.EventId == eventId)
             .ToList();
 
         if (
-            await this.missionRepository
-                .Missions
-                .AnyAsync(x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent)
+            await this.missionRepository.Missions.AnyAsync(
+                x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent
+            )
         )
-            return await this.missionRepository
-                .Missions
-                .Where(x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent)
+            return await this.missionRepository.Missions.Where(
+                x => x.GroupId == eventId && x.Type == MissionType.MemoryEvent
+            )
                 .ToListAsync();
 
         logger.LogInformation(
@@ -194,15 +186,11 @@ public class MissionService(
         }
 
         List<PeriodMission> periodMissions = MasterAsset
-            .PeriodMission
-            .Enumerable
-            .Where(x => x.QuestGroupId == eventId)
+            .PeriodMission.Enumerable.Where(x => x.QuestGroupId == eventId)
             .ToList();
 
         List<DailyMission> dailyMissions = MasterAsset
-            .DailyMission
-            .Enumerable
-            .Where(x => x.QuestGroupId == eventId)
+            .DailyMission.Enumerable.Where(x => x.QuestGroupId == eventId)
             .ToList();
 
         logger.LogInformation("Unlocking event missions for event {eventId}", eventId);
@@ -307,14 +295,13 @@ public class MissionService(
 
         int[] ids = missions.Select(x => x.daily_mission_id).ToArray();
 
-        List<DbCompletedDailyMission> completed = await this.missionRepository
-            .CompletedDailyMissions
-            .Where(x => ids.Contains(x.Id))
-            .ToListAsync();
+        List<DbCompletedDailyMission> completed =
+            await this.missionRepository.CompletedDailyMissions.Where(x => ids.Contains(x.Id))
+                .ToListAsync();
 
-        List<DbPlayerMission> regularMissions = await this.missionRepository
-            .Missions
-            .Where(x => x.Type == MissionType.Daily && ids.Contains(x.Id))
+        List<DbPlayerMission> regularMissions = await this.missionRepository.Missions.Where(
+            x => x.Type == MissionType.Daily && ids.Contains(x.Id)
+        )
             .ToListAsync();
 
         foreach (AtgenMissionParamsList claimRequest in missions)
@@ -355,8 +342,7 @@ public class MissionService(
     {
         List<int> completedGroups = [];
 
-        int currentMission = await this.missionRepository
-            .GetMissionsByType(MissionType.Drill)
+        int currentMission = await this.missionRepository.GetMissionsByType(MissionType.Drill)
             .Where(x => x.State == MissionState.Claimed)
             .OrderByDescending(x => x.Id)
             .Select(x => x.Id)
@@ -366,9 +352,7 @@ public class MissionService(
             return [];
 
         IEnumerable<(int Group, int MaxId)> maxIds = MasterAsset
-            .DrillMission
-            .Enumerable
-            .GroupBy(x => x.MissionDrillGroupId)
+            .DrillMission.Enumerable.GroupBy(x => x.MissionDrillGroupId)
             .Select(group => (group.Key, group.Max(x => x.Id)));
 
         foreach ((int group, int maxId) in maxIds)
@@ -389,8 +373,7 @@ public class MissionService(
         foreach (int groupId in groupIds)
         {
             if (
-                await this.missionRepository
-                    .GetMissionsByType(MissionType.Drill)
+                await this.missionRepository.GetMissionsByType(MissionType.Drill)
                     .CountAsync(x => x.GroupId == groupId && x.State == MissionState.InProgress)
                 == 0
             )
@@ -418,8 +401,9 @@ public class MissionService(
 
     public async Task<CurrentMainStoryMission> GetCurrentMainStoryMission()
     {
-        int? mainStoryMissionGroupId = await this.missionRepository
-            .GetMissionsByType(MissionType.MainStory)
+        int? mainStoryMissionGroupId = await this.missionRepository.GetMissionsByType(
+            MissionType.MainStory
+        )
             .MaxAsync(x => x.GroupId);
 
         if (mainStoryMissionGroupId == null)
@@ -485,8 +469,7 @@ public class MissionService(
         IEnumerable<int> newCompletedMissionList
     )
     {
-        List<DbPlayerMission> allMissions = await this.missionRepository
-            .GetMissionsByType(type)
+        List<DbPlayerMission> allMissions = await this.missionRepository.GetMissionsByType(type)
             .ToListAsync();
 
         int totalCount = allMissions.Count;
@@ -530,8 +513,9 @@ public class MissionService(
 
     public async Task<IEnumerable<QuestEntryConditionList>> GetEntryConditions()
     {
-        List<DbPlayerMission> mainMissions = await this.missionRepository
-            .GetMissionsByType(MissionType.MainStory)
+        List<DbPlayerMission> mainMissions = await this.missionRepository.GetMissionsByType(
+            MissionType.MainStory
+        )
             .ToListAsync();
         ILookup<int, DbPlayerMission> groupedMissions = mainMissions
             .Where(x => x.GroupId is not null)
@@ -550,9 +534,9 @@ public class MissionService(
         ILookup<MissionType, DbPlayerMission> allMissions =
             await this.missionRepository.GetAllMissionsPerTypeAsync();
 
-        int activeEventId = await this.userDataRepository
-            .UserData
-            .Select(x => x.ActiveMemoryEventId)
+        int activeEventId = await this.userDataRepository.UserData.Select(
+            x => x.ActiveMemoryEventId
+        )
             .FirstAsync();
 
         TResponse response =
@@ -602,26 +586,22 @@ public class MissionService(
     }
 
     private Task<List<DailyMissionList>> GetHistoricalDailyMissions() =>
-        this.missionRepository
-            .CompletedDailyMissions
-            .Select(
-                x =>
-                    new DailyMissionList()
-                    {
-                        daily_mission_id = x.Id,
-                        progress = x.Progress,
-                        state = MissionState.Completed,
-                        start_date = x.StartDate,
-                        end_date = x.EndDate,
-                        day_no = x.Date
-                    }
-            )
+        this.missionRepository.CompletedDailyMissions.Select(
+            x =>
+                new DailyMissionList()
+                {
+                    daily_mission_id = x.Id,
+                    progress = x.Progress,
+                    state = MissionState.Completed,
+                    start_date = x.StartDate,
+                    end_date = x.EndDate,
+                    day_no = x.Date
+                }
+        )
             .ToListAsync();
 
     private Task<List<DailyMissionList>> GetCurrentDailyMissions() =>
-        this.missionRepository
-            .Missions
-            .Where(x => x.Type == MissionType.Daily)
+        this.missionRepository.Missions.Where(x => x.Type == MissionType.Daily)
             .Select(
                 x =>
                     new DailyMissionList()

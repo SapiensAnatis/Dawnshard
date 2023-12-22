@@ -61,15 +61,17 @@ public class HeroParamService : IHeroParamService
     {
         this.logger.LogDebug("Fetching HeroParam for slot {partySlots}", partySlot);
 
-        DbPlayerUserData userData = await this.userDataRepository
-            .GetViewerData(viewerId)
+        DbPlayerUserData userData = await this.userDataRepository.GetViewerData(viewerId)
             .SingleAsync();
 
         using IDisposable ctx = this.playerIdentityService.StartUserImpersonation(viewerId);
 
-        List<DbDetailedPartyUnit> detailedPartyUnits = await this.dungeonRepository
-            .BuildDetailedPartyUnit(partyRepository.GetPartyUnits(partySlot), partySlot)
-            .ToListAsync();
+        List<DbDetailedPartyUnit> detailedPartyUnits =
+            await this.dungeonRepository.BuildDetailedPartyUnit(
+                partyRepository.GetPartyUnits(partySlot),
+                partySlot
+            )
+                .ToListAsync();
 
         this.logger.LogDebug("Retrieved {n} party units", detailedPartyUnits.Count);
 
@@ -77,8 +79,9 @@ public class HeroParamService : IHeroParamService
         {
             if (unit.WeaponBodyData is not null)
             {
-                unit.GameWeaponPassiveAbilityList = await this.weaponRepository
-                    .GetPassiveAbilities(unit.WeaponBodyData.WeaponBodyId)
+                unit.GameWeaponPassiveAbilityList = await this.weaponRepository.GetPassiveAbilities(
+                    unit.WeaponBodyData.WeaponBodyId
+                )
                     .ToListAsync();
             }
         }
@@ -136,8 +139,9 @@ public class HeroParamService : IHeroParamService
             result.weaponBodyAbility2Lv = unit.WeaponBodyData.Ability2Level;
             result.weaponBodySkillLv = unit.WeaponBodyData.SkillLevel;
             result.weaponBodySkillNo = unit.WeaponBodyData.SkillNo;
-            result.weaponPassiveAbilityIds = unit.GameWeaponPassiveAbilityList
-                .Select(x => x.WeaponPassiveAbilityId)
+            result.weaponPassiveAbilityIds = unit.GameWeaponPassiveAbilityList.Select(
+                x => x.WeaponPassiveAbilityId
+            )
                 .ToArray();
         }
         else
@@ -187,39 +191,39 @@ public class HeroParamService : IHeroParamService
     {
         CharaData charaData = MasterAsset.CharaData[unit.CharaData.CharaId];
 
-        AtgenParamBonus paramBonus = fortBonusList
-            .param_bonus
-            .First(x => x.weapon_type == charaData.WeaponType);
+        AtgenParamBonus paramBonus = fortBonusList.param_bonus.First(
+            x => x.weapon_type == charaData.WeaponType
+        );
         result.relativeAtkFort += paramBonus.attack / 100;
         result.relativeHpFort += paramBonus.hp / 100;
 
-        AtgenElementBonus elementBonus = fortBonusList
-            .element_bonus
-            .First(x => x.elemental_type == charaData.ElementalType);
+        AtgenElementBonus elementBonus = fortBonusList.element_bonus.First(
+            x => x.elemental_type == charaData.ElementalType
+        );
         result.relativeAtkFort += elementBonus.attack / 100;
         result.relativeHpFort += elementBonus.hp / 100;
 
-        AtgenParamBonus paramBonusByWeapon = fortBonusList
-            .param_bonus_by_weapon
-            .First(x => x.weapon_type == charaData.WeaponType);
+        AtgenParamBonus paramBonusByWeapon = fortBonusList.param_bonus_by_weapon.First(
+            x => x.weapon_type == charaData.WeaponType
+        );
         result.relativeAtkFort += paramBonusByWeapon.attack / 100;
         result.relativeHpFort += paramBonusByWeapon.hp / 100;
 
-        AtgenElementBonus charaAlbumBonus = fortBonusList
-            .chara_bonus_by_album
-            .First(x => x.elemental_type == charaData.ElementalType);
+        AtgenElementBonus charaAlbumBonus = fortBonusList.chara_bonus_by_album.First(
+            x => x.elemental_type == charaData.ElementalType
+        );
         result.relativeAtkAlbum += charaAlbumBonus.attack / 100;
         result.relativeHpAlbum += charaAlbumBonus.hp / 100;
 
         if (unit.DragonData is not null)
         {
             DragonData dragonData = MasterAsset.DragonData[unit.DragonData.DragonId];
-            AtgenDragonBonus dragonBonus = fortBonusList
-                .dragon_bonus
-                .First(x => x.elemental_type == dragonData.ElementalType);
-            AtgenElementBonus dragonAlbumBonus = fortBonusList
-                .dragon_bonus_by_album
-                .First(x => x.elemental_type == dragonData.ElementalType);
+            AtgenDragonBonus dragonBonus = fortBonusList.dragon_bonus.First(
+                x => x.elemental_type == dragonData.ElementalType
+            );
+            AtgenElementBonus dragonAlbumBonus = fortBonusList.dragon_bonus_by_album.First(
+                x => x.elemental_type == dragonData.ElementalType
+            );
 
             result.dragonRelativeAtkFort += dragonBonus.attack / 100;
             result.dragonRelativeHpFort += dragonBonus.hp / 100;

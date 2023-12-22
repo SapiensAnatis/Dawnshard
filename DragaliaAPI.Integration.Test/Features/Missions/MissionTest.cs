@@ -27,12 +27,9 @@ public class MissionTest : TestFixture
             );
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
-        resp.data
-            .drill_mission_list
-            .Should()
+        resp.data.drill_mission_list.Should()
             .HaveCount(55)
-            .And
-            .ContainEquivalentOf(
+            .And.ContainEquivalentOf(
                 new DrillMissionList(
                     100100,
                     0,
@@ -73,19 +70,9 @@ public class MissionTest : TestFixture
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
         resp.data.update_data_list.mission_notice.drill_mission_notice.is_update.Should().Be(1);
-        resp.data
-            .update_data_list
-            .mission_notice
-            .drill_mission_notice
-            .completed_mission_count
-            .Should()
+        resp.data.update_data_list.mission_notice.drill_mission_notice.completed_mission_count.Should()
             .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
-        resp.data
-            .update_data_list
-            .mission_notice
-            .drill_mission_notice
-            .new_complete_mission_id_list
-            .Should()
+        resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list.Should()
             .Contain(100200);
 
         DragaliaResponse<MissionReceiveDrillRewardData> rewardResp =
@@ -115,19 +102,9 @@ public class MissionTest : TestFixture
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
         resp.data.update_data_list.mission_notice.drill_mission_notice.is_update.Should().Be(1);
-        resp.data
-            .update_data_list
-            .mission_notice
-            .drill_mission_notice
-            .completed_mission_count
-            .Should()
+        resp.data.update_data_list.mission_notice.drill_mission_notice.completed_mission_count.Should()
             .BeGreaterThan(1); // One has to be completed because of the above, multiple can be completed due to other factors
-        resp.data
-            .update_data_list
-            .mission_notice
-            .drill_mission_notice
-            .new_complete_mission_id_list
-            .Should()
+        resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list.Should()
             .Contain(300100);
     }
 
@@ -169,19 +146,9 @@ public class MissionTest : TestFixture
 
         resp.data_headers.result_code.Should().Be(ResultCode.Success);
         resp.data.update_data_list.mission_notice.drill_mission_notice.is_update.Should().Be(1);
-        resp.data
-            .update_data_list
-            .mission_notice
-            .drill_mission_notice
-            .completed_mission_count
-            .Should()
+        resp.data.update_data_list.mission_notice.drill_mission_notice.completed_mission_count.Should()
             .BeGreaterThan(1);
-        resp.data
-            .update_data_list
-            .mission_notice
-            .drill_mission_notice
-            .new_complete_mission_id_list
-            .Should()
+        resp.data.update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list.Should()
             .Contain(301700);
     }
 
@@ -210,9 +177,7 @@ public class MissionTest : TestFixture
         ).data;
 
         response
-            .update_data_list
-            .ability_crest_list
-            .Should()
+            .update_data_list.ability_crest_list.Should()
             .Contain(
                 x => x.ability_crest_id == AbilityCrests.HavingaSummerBall && x.equipable_count == 1
             );
@@ -292,9 +257,7 @@ public class MissionTest : TestFixture
             );
 
         response
-            .data
-            .daily_mission_list
-            .Should()
+            .data.daily_mission_list.Should()
             .BeEquivalentTo(
                 [
                     new DailyMissionList()
@@ -364,9 +327,7 @@ public class MissionTest : TestFixture
             );
 
         response
-            .data
-            .daily_mission_list
-            .Should()
+            .data.daily_mission_list.Should()
             .BeEquivalentTo(
                 [
                     new DailyMissionList()
@@ -451,9 +412,7 @@ public class MissionTest : TestFixture
 
         await this.AddRangeToDatabase(
             MasterAsset
-                .DrillMission
-                .Enumerable
-                .Where(x => x.MissionDrillGroupId == 1)
+                .DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == 1)
                 .Select(ToDbMission)
         );
 
@@ -468,9 +427,7 @@ public class MissionTest : TestFixture
 
         await this.AddRangeToDatabase(
             MasterAsset
-                .DrillMission
-                .Enumerable
-                .Where(x => x.MissionDrillGroupId == 2)
+                .DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == 2)
                 .Select(ToDbMission)
         );
 
@@ -482,15 +439,12 @@ public class MissionTest : TestFixture
         ).data;
 
         response
-            .drill_mission_group_list
-            .Should()
+            .drill_mission_group_list.Should()
             .BeEquivalentTo([new DrillMissionGroupList(1), new DrillMissionGroupList(2)]);
 
         await this.AddRangeToDatabase(
             MasterAsset
-                .DrillMission
-                .Enumerable
-                .Where(x => x.MissionDrillGroupId == 3)
+                .DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == 3)
                 .Select(ToDbMission)
         );
 
@@ -502,8 +456,7 @@ public class MissionTest : TestFixture
         ).data;
 
         response
-            .drill_mission_group_list
-            .Should()
+            .drill_mission_group_list.Should()
             .BeEquivalentTo(
                 [
                     new DrillMissionGroupList(1),
@@ -518,9 +471,7 @@ public class MissionTest : TestFixture
     {
         await this.AddRangeToDatabase(
             MasterAsset
-                .DrillMission
-                .Enumerable
-                .Where(x => x.MissionDrillGroupId == 1)
+                .DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == 1)
                 .Select(
                     x =>
                         new DbPlayerMission()
@@ -541,10 +492,7 @@ public class MissionTest : TestFixture
         ).data;
 
         response
-            .mission_notice
-            .drill_mission_notice
-            .receivable_reward_count
-            .Should()
+            .mission_notice.drill_mission_notice.receivable_reward_count.Should()
             .Be(1, "because otherwise the drill mission popup disappears");
     }
 }

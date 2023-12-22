@@ -30,9 +30,9 @@ public class SavefileUpdateService : ISavefileUpdateService
 
     public async Task UpdateSavefile()
     {
-        DbPlayer? player = await this.context
-            .Players
-            .FindAsync(this.playerIdentityService.ViewerId);
+        DbPlayer? player = await this.context.Players.FindAsync(
+            this.playerIdentityService.ViewerId
+        );
 
         if (player is null)
         {

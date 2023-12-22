@@ -44,11 +44,9 @@ public class ExceptionHandlerMiddlewareTest : TestFixture
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         response
-            .Headers
-            .Should()
+            .Headers.Should()
             .ContainKey("Is-Required-Refresh-Id-Token")
-            .WhoseValue
-            .Should()
+            .WhoseValue.Should()
             .Contain("true");
 
         HttpResponseMessage secondResponse = await this.Client.PostMsgpackBasic(

@@ -78,8 +78,7 @@ public class DragonController : DragaliaControllerBase
                 is_favorite = resultData.dragon_gift_reward_list.First().is_favorite,
                 return_gift_list = resultData.dragon_gift_reward_list.First().return_gift_list,
                 reward_reliability_list = resultData
-                    .dragon_gift_reward_list
-                    .First()
+                    .dragon_gift_reward_list.First()
                     .reward_reliability_list,
                 shop_gift_list = resultData.shop_gift_list,
                 update_data_list = resultData.update_data_list

@@ -64,8 +64,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     {
         long viewerId = 2;
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(viewerId);
-        this.mockMissionProgressionService
-            .Setup(x => x.ProcessMissionEvents())
+        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
 
         DbPlayerUserData userData = new() { ViewerId = viewerId };
@@ -193,11 +192,9 @@ public class UpdateDataServiceTest : RepositoryTestFixture
 
         AssertOnlyContains<QuestStoryList>(list.quest_story_list, questStoryState);
 
-        list.unit_story_list
-            .Should()
+        list.unit_story_list.Should()
             .ContainEquivalentOf(mapper.Map<UnitStoryList>(charaStoryState))
-            .And
-            .ContainEquivalentOf(mapper.Map<UnitStoryList>(dragonStoryState));
+            .And.ContainEquivalentOf(mapper.Map<UnitStoryList>(dragonStoryState));
 
         AssertOnlyContains<CastleStoryList>(list.castle_story_list, castleStoryState);
 
@@ -219,8 +216,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     public async Task SaveChangesAsync_RetrievesIdentityColumns()
     {
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(ViewerId);
-        this.mockMissionProgressionService
-            .Setup(x => x.ProcessMissionEvents())
+        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
 
         // This test is bullshit because in-mem works differently to an actual database in this regard
@@ -243,8 +239,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     public async Task SaveChangesAsync_NullIfNoUpdates()
     {
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(ViewerId);
-        this.mockMissionProgressionService
-            .Setup(x => x.ProcessMissionEvents())
+        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
 
         UpdateDataList list = await this.updateDataService.SaveChangesAsync();
@@ -261,8 +256,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     public async Task SaveChangesAsync_NoDataFromOtherAccounts()
     {
         this.ApiContext.PlayerCharaData.Add(new(ViewerId + 1, Charas.GalaZethia));
-        this.mockMissionProgressionService
-            .Setup(x => x.ProcessMissionEvents())
+        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
 
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(ViewerId);
@@ -274,8 +268,7 @@ public class UpdateDataServiceTest : RepositoryTestFixture
     public async Task SaveChangesAsync_NullAfterSave()
     {
         this.ApiContext.PlayerCharaData.Add(new(ViewerId, Charas.HalloweenLowen));
-        this.mockMissionProgressionService
-            .Setup(x => x.ProcessMissionEvents())
+        this.mockMissionProgressionService.Setup(x => x.ProcessMissionEvents())
             .Returns(Task.CompletedTask);
 
         await this.ApiContext.SaveChangesAsync();
@@ -288,7 +281,6 @@ public class UpdateDataServiceTest : RepositoryTestFixture
         member
             .Should()
             .ContainSingle()
-            .And
-            .ContainEquivalentOf(this.mapper.Map<TNetwork>(dbEntity));
+            .And.ContainEquivalentOf(this.mapper.Map<TNetwork>(dbEntity));
     }
 }

@@ -24,8 +24,7 @@ public class EmblemRepository(
     public DbEmblem AddEmblem(Emblems emblem)
     {
         return apiContext
-            .Emblems
-            .Add(
+            .Emblems.Add(
                 new DbEmblem
                 {
                     ViewerId = playerIdentityService.ViewerId,

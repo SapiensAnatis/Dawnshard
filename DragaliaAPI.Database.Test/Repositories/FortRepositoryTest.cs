@@ -47,13 +47,11 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         (await this.fortRepository.Builds.ToListAsync())
             .Should()
             .AllSatisfy(x => x.ViewerId.Should().Be(1))
-            .And
-            .ContainEquivalentOf(
+            .And.ContainEquivalentOf(
                 new DbFortBuild() { ViewerId = 1, PlantId = FortPlants.TheHungerdome, },
                 opts => opts.Excluding(x => x.Owner).Excluding(x => x.BuildId)
             )
-            .And
-            .ContainEquivalentOf(
+            .And.ContainEquivalentOf(
                 new DbFortBuild() { ViewerId = 1, PlantId = FortPlants.CircusTent },
                 opts => opts.Excluding(x => x.Owner).Excluding(x => x.BuildId)
             );
@@ -136,8 +134,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         await this.fortRepository.UpdateFortMaximumCarpenter(4);
 
         (await this.fixture.ApiContext.PlayerFortDetails.FindAsync(5L))!
-            .CarpenterNum
-            .Should()
+            .CarpenterNum.Should()
             .Be(4);
 
         this.mockPlayerIdentityService.VerifyAll();
@@ -191,8 +188,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.AddToDatabase(build);
 
-        await this.fortRepository
-            .Invoking(x => x.GetBuilding(9))
+        await this.fortRepository.Invoking(x => x.GetBuilding(9))
             .Should()
             .ThrowAsync<InvalidOperationException>();
         this.mockPlayerIdentityService.VerifyAll();
@@ -285,16 +281,10 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         await this.fortRepository.InitializeFort();
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture
-            .ApiContext
-            .PlayerFortDetails
-            .Should()
+        this.fixture.ApiContext.PlayerFortDetails.Should()
             .ContainEquivalentOf(new DbFortDetail() { ViewerId = 13, CarpenterNum = 2 });
 
-        this.fixture
-            .ApiContext
-            .PlayerFortBuilds
-            .Should()
+        this.fixture.ApiContext.PlayerFortBuilds.Should()
             .Contain(x => x.PlantId == FortPlants.TheHalidom && x.ViewerId == 13);
 
         this.mockPlayerIdentityService.VerifyAll();
@@ -336,10 +326,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
 
         foreach (FortPlants plant in plants)
         {
-            this.fixture
-                .ApiContext
-                .PlayerFortBuilds
-                .Should()
+            this.fixture.ApiContext.PlayerFortBuilds.Should()
                 .Contain(
                     x =>
                         x.PlantId == plant
@@ -358,15 +345,12 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     {
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(2);
 
-        this.fixture
-            .ApiContext
-            .PlayerFortBuilds
-            .AddRange(
-                new List<DbFortBuild>()
-                {
-                    new() { ViewerId = 3, PlantId = FortPlants.FlameDracolith, }
-                }
-            );
+        this.fixture.ApiContext.PlayerFortBuilds.AddRange(
+            new List<DbFortBuild>()
+            {
+                new() { ViewerId = 3, PlantId = FortPlants.FlameDracolith, }
+            }
+        );
         await this.fixture.ApiContext.SaveChangesAsync();
 
         await this.fortRepository.AddToStorage(
@@ -377,10 +361,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         );
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture
-            .ApiContext
-            .PlayerFortBuilds
-            .Should()
+        this.fixture.ApiContext.PlayerFortBuilds.Should()
             .Contain(
                 x => x.ViewerId == 2 && x.Level == 4 && x.PositionX == -1 && x.PositionZ == -1
             );
@@ -391,15 +372,12 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
     {
         this.mockPlayerIdentityService.SetupGet(x => x.ViewerId).Returns(4);
 
-        this.fixture
-            .ApiContext
-            .PlayerFortBuilds
-            .AddRange(
-                new List<DbFortBuild>()
-                {
-                    new() { ViewerId = 4, PlantId = FortPlants.WindDracolith, }
-                }
-            );
+        this.fixture.ApiContext.PlayerFortBuilds.AddRange(
+            new List<DbFortBuild>()
+            {
+                new() { ViewerId = 4, PlantId = FortPlants.WindDracolith, }
+            }
+        );
         await this.fixture.ApiContext.SaveChangesAsync();
 
         await this.fortRepository.AddToStorage(
@@ -410,10 +388,7 @@ public class FortRepositoryTest : IClassFixture<DbTestFixture>
         );
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture
-            .ApiContext
-            .PlayerFortBuilds
-            .Should()
+        this.fixture.ApiContext.PlayerFortBuilds.Should()
             .ContainSingle(x => x.PlantId == FortPlants.WindDracolith);
     }
 }

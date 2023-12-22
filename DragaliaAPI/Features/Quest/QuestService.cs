@@ -200,9 +200,10 @@ public class QuestService(
         List<Entity> drops = new();
 
         if (
-            !MasterAsset
-                .QuestBonusRewards
-                .TryGetValue(questId, out QuestBonusReward? questBonusReward)
+            !MasterAsset.QuestBonusRewards.TryGetValue(
+                questId,
+                out QuestBonusReward? questBonusReward
+            )
         )
         {
             logger.LogWarning("Failed to retrieve bonus rewards for quest {questId}", questId);
@@ -313,8 +314,7 @@ public class QuestService(
         {
             foreach (
                 AbilityCrests crest in session
-                    .Party
-                    .SelectMany(x => x.GetAbilityCrestList())
+                    .Party.SelectMany(x => x.GetAbilityCrestList())
                     .Distinct()
             )
             {

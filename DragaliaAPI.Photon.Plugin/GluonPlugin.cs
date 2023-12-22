@@ -96,10 +96,10 @@ namespace DragaliaAPI.Photon.Plugin
             }
 
             if (
-                info.Request
-                    .GameProperties
-                    .TryGetValue(GamePropertyKeys.IsSoloPlayWithPhoton, out object isSoloPlay)
-                && isSoloPlay is true
+                info.Request.GameProperties.TryGetValue(
+                    GamePropertyKeys.IsSoloPlayWithPhoton,
+                    out object isSoloPlay
+                ) && isSoloPlay is true
             )
             {
                 this.logger.Info("Room is in solo play mode");
@@ -138,9 +138,9 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Event information.</param>
         public override void OnJoin(IJoinGameCallInfo info)
         {
-            int currentActorCount = this.PluginHost
-                .GameActors
-                .Count(x => x.ActorNr != info.ActorNr);
+            int currentActorCount = this.PluginHost.GameActors.Count(
+                x => x.ActorNr != info.ActorNr
+            );
 
             long viewerId = info.Request.ActorProperties.GetLong(ActorPropertyKeys.PlayerId);
 
@@ -243,9 +243,9 @@ namespace DragaliaAPI.Photon.Plugin
         public override void OnLeave(ILeaveGameCallInfo info)
         {
             // Get actor before continuing
-            IActor actor = this.PluginHost
-                .GameActors
-                .FirstOrDefault(x => x.ActorNr == info.ActorNr);
+            IActor actor = this.PluginHost.GameActors.FirstOrDefault(
+                x => x.ActorNr == info.ActorNr
+            );
 
             base.OnLeave(info);
 
@@ -312,9 +312,9 @@ namespace DragaliaAPI.Photon.Plugin
 
             if (this.roomState.MinGoToIngameState > 0)
             {
-                int newMinGoToIngameState = this.PluginHost
-                    .GameActors
-                    .Where(x => x.ActorNr != info.ActorNr)
+                int newMinGoToIngameState = this.PluginHost.GameActors.Where(
+                    x => x.ActorNr != info.ActorNr
+                )
                     .Select(x => x.Properties.GetIntOrDefault(ActorPropertyKeys.GoToIngameState))
                     .DefaultIfEmpty()
                     .Min();
@@ -482,18 +482,16 @@ namespace DragaliaAPI.Photon.Plugin
         public override void BeforeSetProperties(IBeforeSetPropertiesCallInfo info)
         {
             if (
-                info.Request
-                    .Properties
-                    .TryGetValue(ActorPropertyKeys.GoToIngameState, out object objValue)
-                && objValue is int value
+                info.Request.Properties.TryGetValue(
+                    ActorPropertyKeys.GoToIngameState,
+                    out object objValue
+                ) && objValue is int value
             )
             {
                 // Wait for everyone to reach a particular GoToIngameState value before doing anything.
                 // But let the host set GoToIngameState = 1 unilaterally to signal the game start process.
 
-                int minValue = this.PluginHost
-                    .GameActors
-                    .Where(x => x.ActorNr != info.ActorNr) // Exclude the value which we are in the BeforeSet handler for
+                int minValue = this.PluginHost.GameActors.Where(x => x.ActorNr != info.ActorNr) // Exclude the value which we are in the BeforeSet handler for
                     .Select(x => x.Properties.GetIntOrDefault(ActorPropertyKeys.GoToIngameState))
                     .Concat(new[] { value }) // Fun fact: Enumerable.Append() was added in .NET 4.7.1
                     .Min();
@@ -701,11 +699,9 @@ namespace DragaliaAPI.Photon.Plugin
         /// </summary>
         private void SetGoToIngameInfo()
         {
-            IEnumerable<ActorData> actorData = this.PluginHost
-                .GameActors
-                .Select(
-                    x => new ActorData() { ActorId = x.ActorNr, ViewerId = (ulong)x.GetViewerId() }
-                );
+            IEnumerable<ActorData> actorData = this.PluginHost.GameActors.Select(
+                x => new ActorData() { ActorId = x.ActorNr, ViewerId = (ulong)x.GetViewerId() }
+            );
 
             GoToIngameState data = new GoToIngameState()
             {
@@ -729,17 +725,15 @@ namespace DragaliaAPI.Photon.Plugin
         /// <param name="info">Call info.</param>
         private void RequestHeroParam(ICallInfo info)
         {
-            IEnumerable<ActorInfo> heroParamRequest = this.PluginHost
-                .GameActors
-                .Select(
-                    x =>
-                        new ActorInfo()
-                        {
-                            ActorNr = x.ActorNr,
-                            ViewerId = x.GetViewerId(),
-                            PartySlots = x.GetPartySlots()
-                        }
-                );
+            IEnumerable<ActorInfo> heroParamRequest = this.PluginHost.GameActors.Select(
+                x =>
+                    new ActorInfo()
+                    {
+                        ActorNr = x.ActorNr,
+                        ViewerId = x.GetViewerId(),
+                        PartySlots = x.GetPartySlots()
+                    }
+            );
 
             Uri baseUri = this.roomState.IsUseSecondaryServer
                 ? this.config.SecondaryApiServerUrl
@@ -971,21 +965,20 @@ namespace DragaliaAPI.Photon.Plugin
             if (isRaid || this.roomState.IsSoloPlay)
             {
                 // Use all available units
-                return this.PluginHost
-                    .GameActors
-                    .ToDictionary(x => x.ActorNr, x => this.actorState[x.ActorNr].HeroParamCount);
+                return this.PluginHost.GameActors.ToDictionary(
+                    x => x.ActorNr,
+                    x => this.actorState[x.ActorNr].HeroParamCount
+                );
             }
 
             return BuildMemberCountTable(
-                this.PluginHost
-                    .GameActors
-                    .Join(
-                        this.actorState,
-                        actor => actor.ActorNr,
-                        state => state.Key,
-                        (actor, state) =>
-                            new ValueTuple<int, int>(actor.ActorNr, state.Value.HeroParamCount)
-                    )
+                this.PluginHost.GameActors.Join(
+                    this.actorState,
+                    actor => actor.ActorNr,
+                    state => state.Key,
+                    (actor, state) =>
+                        new ValueTuple<int, int>(actor.ActorNr, state.Value.HeroParamCount)
+                )
             );
             ;
         }

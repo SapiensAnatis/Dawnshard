@@ -28,9 +28,7 @@ public class DailyEndeavourResetAction(
     private readonly ILogger<DailyEndeavourResetAction> logger = logger;
 
     private static readonly FrozenSet<DailyMission> PermanentDailyMissions = MasterAsset
-        .DailyMission
-        .Enumerable
-        .Where(x => x.Id is >= 15070101 and <= 15070601) // https://dragalialost.wiki/w/Endeavors#Daily_Endeavors
+        .DailyMission.Enumerable.Where(x => x.Id is >= 15070101 and <= 15070601) // https://dragalialost.wiki/w/Endeavors#Daily_Endeavors
         .ToFrozenSet();
 
     public async Task Apply()
@@ -52,9 +50,9 @@ public class DailyEndeavourResetAction(
             );
         }
 
-        IEnumerable<EventRunInformation> activeEvents = this.eventOptions
-            .EventList
-            .Where(x => lastDailyReset > x.Start && lastDailyReset < x.End);
+        IEnumerable<EventRunInformation> activeEvents = this.eventOptions.EventList.Where(
+            x => lastDailyReset > x.Start && lastDailyReset < x.End
+        );
 
         foreach (EventRunInformation activeEvent in activeEvents)
         {
@@ -66,10 +64,8 @@ public class DailyEndeavourResetAction(
                 continue;
             }
 
-            IEnumerable<DailyMission> eventDailyMissions = MasterAsset
-                .DailyMission
-                .Enumerable
-                .Where(x => x.QuestGroupId == activeEvent.Id);
+            IEnumerable<DailyMission> eventDailyMissions =
+                MasterAsset.DailyMission.Enumerable.Where(x => x.QuestGroupId == activeEvent.Id);
 
             foreach (DailyMission eventDaily in eventDailyMissions)
             {

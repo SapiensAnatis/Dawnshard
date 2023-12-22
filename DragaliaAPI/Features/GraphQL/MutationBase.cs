@@ -20,9 +20,9 @@ public abstract class MutationBase
         Func<IQueryable<DbPlayer>, IQueryable<DbPlayer>>? include = null
     )
     {
-        IQueryable<DbPlayer> query = this.apiContext
-            .Players
-            .Where(x => x.UserData != null && x.UserData.ViewerId == viewerId);
+        IQueryable<DbPlayer> query = this.apiContext.Players.Where(
+            x => x.UserData != null && x.UserData.ViewerId == viewerId
+        );
 
         if (include is not null)
             query = include.Invoke(query);

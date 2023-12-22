@@ -50,8 +50,7 @@ public class PartyControllerTest
     [Fact]
     public async Task UpdatePartyName_CallsPartyRepository()
     {
-        this.mockPartyRepository
-            .Setup(x => x.UpdatePartyName(1, "Z Team"))
+        this.mockPartyRepository.Setup(x => x.UpdatePartyName(1, "Z Team"))
             .Returns(Task.CompletedTask);
 
         UpdateDataList updateDataList =
