@@ -62,7 +62,7 @@ public class DungeonStartService(
 
     public async Task<IngameData> GetIngameData(
         int questId,
-        IEnumerable<int> partyNoList,
+        IList<int> partyNoList,
         ulong? supportViewerId = null
     )
     {
@@ -98,7 +98,7 @@ public class DungeonStartService(
 
     public async Task<IngameData> GetIngameData(
         int questId,
-        IEnumerable<PartySettingList> party,
+        IList<PartySettingList> party,
         ulong? supportViewerId = null
     )
     {
@@ -169,7 +169,7 @@ public class DungeonStartService(
     public async Task<IngameData> GetWallIngameData(
         int wallId,
         int wallLevel,
-        IEnumerable<PartySettingList> party,
+        IList<PartySettingList> party,
         ulong? supportViewerId = null
     )
     {
@@ -320,7 +320,7 @@ public class DungeonStartService(
             new()
             {
                 quest_id = questId,
-                viewer_id = (ulong?)playerIdentityService.ViewerId ?? 0UL,
+                viewer_id = (ulong)playerIdentityService.ViewerId,
                 play_type = QuestPlayType.Default,
                 party_info = new() { support_data = new() },
                 start_time = DateTimeOffset.UtcNow,

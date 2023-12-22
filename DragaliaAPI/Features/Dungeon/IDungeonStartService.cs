@@ -7,13 +7,13 @@ public interface IDungeonStartService
 {
     Task<IngameData> GetIngameData(
         int questId,
-        IEnumerable<int> partyNoList,
+        IList<int> partyNoList,
         ulong? supportViewerId = null
     );
 
     Task<IngameData> GetIngameData(
         int questId,
-        IEnumerable<PartySettingList> party,
+        IList<PartySettingList> party,
         ulong? supportViewerId = null
     );
 
@@ -28,7 +28,7 @@ public interface IDungeonStartService
     Task<IngameData> GetWallIngameData(
         int wallId,
         int wallLevel,
-        IEnumerable<PartySettingList> party,
+        IList<PartySettingList> party,
         ulong? supportViewerId = null
     );
 }
