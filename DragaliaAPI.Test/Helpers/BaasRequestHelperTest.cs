@@ -26,8 +26,7 @@ public class BaasRequestHelperTest
         this.mockHttpMessageHandler = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
 
-        this.mockOptions
-            .SetupGet(x => x.CurrentValue)
+        this.mockOptions.SetupGet(x => x.CurrentValue)
             .Returns(new BaasOptions() { BaasUrl = "https://www.taylorswift.com/" });
 
         IOptions<MemoryDistributedCacheOptions> opts = Options.Create(
@@ -46,8 +45,7 @@ public class BaasRequestHelperTest
     [Fact]
     public async Task GetKeys_Success_ReturnsSecurityKey()
     {
-        this.mockHttpMessageHandler
-            .Protected()
+        this.mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
                 ItExpr.Is<HttpRequestMessage>(
@@ -121,8 +119,7 @@ public class BaasRequestHelperTest
     [Fact]
     public async Task GetKeys_Fail_Throws()
     {
-        this.mockHttpMessageHandler
-            .Protected()
+        this.mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
                 ItExpr.IsAny<HttpRequestMessage>(),
@@ -132,8 +129,7 @@ public class BaasRequestHelperTest
                 new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.NotFound, }
             );
 
-        await this.baasRequestHelper
-            .Invoking(x => x.GetKeys())
+        await this.baasRequestHelper.Invoking(x => x.GetKeys())
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
             .Where(x => x.Code == ResultCode.CommonAuthError);
@@ -147,8 +143,7 @@ public class BaasRequestHelperTest
     {
         string sampleSaveJson = File.ReadAllText(Path.Join("Data", "endgame_savefile.json"));
 
-        this.mockHttpMessageHandler
-            .Protected()
+        this.mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
                 ItExpr.Is<HttpRequestMessage>(
@@ -182,8 +177,7 @@ public class BaasRequestHelperTest
     [Fact]
     public async Task GetSavefile_Fail_Throws()
     {
-        this.mockHttpMessageHandler
-            .Protected()
+        this.mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
                 ItExpr.IsAny<HttpRequestMessage>(),
@@ -193,8 +187,7 @@ public class BaasRequestHelperTest
                 new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.BadRequest, }
             );
 
-        await this.baasRequestHelper
-            .Invoking(x => x.GetSavefile("token"))
+        await this.baasRequestHelper.Invoking(x => x.GetSavefile("token"))
             .Should()
             .ThrowExactlyAsync<DragaliaException>()
             .Where(x => x.Code == ResultCode.TransitionLinkedDataNotFound);

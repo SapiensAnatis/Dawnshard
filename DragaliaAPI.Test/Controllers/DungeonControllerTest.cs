@@ -63,8 +63,7 @@ public class DungeonControllerTest
                 }
             };
 
-        this.mockDungeonService
-            .Setup(x => x.FinishDungeon("my key"))
+        this.mockDungeonService.Setup(x => x.FinishDungeon("my key"))
             .ReturnsAsync(
                 new DungeonSession()
                 {
@@ -75,8 +74,7 @@ public class DungeonControllerTest
                 }
             );
 
-        this.mockDungeonRecordHelperService
-            .Setup(x => x.ProcessHelperDataSolo(4))
+        this.mockDungeonRecordHelperService.Setup(x => x.ProcessHelperDataSolo(4))
             .ReturnsAsync((userSupportList, supportDetailList));
 
         DungeonFailData? response = (
@@ -125,8 +123,7 @@ public class DungeonControllerTest
                 }
             };
 
-        this.mockDungeonService
-            .Setup(x => x.FinishDungeon("my key"))
+        this.mockDungeonService.Setup(x => x.FinishDungeon("my key"))
             .ReturnsAsync(
                 new DungeonSession()
                 {
@@ -136,8 +133,7 @@ public class DungeonControllerTest
                 }
             );
 
-        this.mockDungeonRecordHelperService
-            .Setup(x => x.ProcessHelperDataMulti())
+        this.mockDungeonRecordHelperService.Setup(x => x.ProcessHelperDataMulti())
             .ReturnsAsync((userSupportList, supportDetailList));
 
         this.mockMatchingService.Setup(x => x.GetIsHost()).ReturnsAsync(false);

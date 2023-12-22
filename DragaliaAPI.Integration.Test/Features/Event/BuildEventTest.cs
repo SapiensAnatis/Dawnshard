@@ -38,17 +38,15 @@ public class BuildEventTest : TestFixture
     [Fact]
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
-        DbPlayerEventItem pointItem = await ApiContext
-            .PlayerEventItems
-            .SingleAsync(
-                x => x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint
-            );
+        DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
+            x => x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint
+        );
 
         pointItem.Quantity += 10;
 
-        ApiContext
-            .PlayerEventRewards
-            .RemoveRange(ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId));
+        ApiContext.PlayerEventRewards.RemoveRange(
+            ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId)
+        );
 
         await ApiContext.SaveChangesAsync();
 
@@ -59,12 +57,11 @@ public class BuildEventTest : TestFixture
             );
 
         evtResp
-            .data
-            .build_event_reward_entity_list
-            .Should()
+            .data.build_event_reward_entity_list.Should()
             .HaveCount(1)
-            .And
-            .ContainEquivalentOf(new AtgenBuildEventRewardEntityList(EntityTypes.Mana, 0, 3000));
+            .And.ContainEquivalentOf(
+                new AtgenBuildEventRewardEntityList(EntityTypes.Mana, 0, 3000)
+            );
         evtResp.data.build_event_reward_list.Should().HaveCount(1);
         evtResp.data.entity_result.Should().NotBeNull();
         evtResp.data.update_data_list.Should().NotBeNull();

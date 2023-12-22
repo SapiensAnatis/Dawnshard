@@ -74,8 +74,7 @@ public class GameLeaveTest : TestFixture
         RedisGame? storedGame = await this.RedisConnectionProvider.GetGame(game.Name);
         storedGame.Should().NotBeNull();
         storedGame!
-            .Players
-            .Should()
+            .Players.Should()
             .BeEquivalentTo(
                 new List<Player>()
                 {

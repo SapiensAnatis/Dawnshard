@@ -42,9 +42,9 @@ public class HelperService : IHelperService
 
     public async Task<UserSupportList?> GetHelper(ulong viewerId)
     {
-        UserSupportList? helper = (await this.GetHelpers())
-            .support_user_list
-            .FirstOrDefault(x => x.viewer_id == viewerId);
+        UserSupportList? helper = (await this.GetHelpers()).support_user_list.FirstOrDefault(
+            x => x.viewer_id == viewerId
+        );
 
         this.logger.LogDebug("Retrieved support list {@helper}", helper);
 
@@ -56,8 +56,10 @@ public class HelperService : IHelperService
         DbPlayerUserData userData = await this.userDataRepository.GetUserDataAsync();
 
         IQueryable<DbPartyUnit> leadUnitQuery = this.partyRepository.GetPartyUnits(partyNo).Take(1);
-        DbDetailedPartyUnit? detailedUnit = await this.dungeonRepository
-            .BuildDetailedPartyUnit(leadUnitQuery, 0)
+        DbDetailedPartyUnit? detailedUnit = await this.dungeonRepository.BuildDetailedPartyUnit(
+            leadUnitQuery,
+            0
+        )
             .FirstAsync();
 
         UserSupportList supportList =
@@ -74,15 +76,12 @@ public class HelperService : IHelperService
 
         this.mapper.Map(detailedUnit, supportList);
 
-        supportList.support_crest_slot_type_1_list = supportList
-            .support_crest_slot_type_1_list
-            .Where(x => x != null);
-        supportList.support_crest_slot_type_2_list = supportList
-            .support_crest_slot_type_2_list
-            .Where(x => x != null);
-        supportList.support_crest_slot_type_3_list = supportList
-            .support_crest_slot_type_3_list
-            .Where(x => x != null);
+        supportList.support_crest_slot_type_1_list =
+            supportList.support_crest_slot_type_1_list.Where(x => x != null);
+        supportList.support_crest_slot_type_2_list =
+            supportList.support_crest_slot_type_2_list.Where(x => x != null);
+        supportList.support_crest_slot_type_3_list =
+            supportList.support_crest_slot_type_3_list.Where(x => x != null);
 
         return supportList;
     }
@@ -100,15 +99,15 @@ public class HelperService : IHelperService
             chara_data = this.mapper.Map<CharaList>(helperInfo.support_chara),
             dragon_data = this.mapper.Map<DragonList>(helperInfo.support_dragon),
             weapon_body_data = this.mapper.Map<GameWeaponBody>(helperInfo.support_weapon_body),
-            crest_slot_type_1_crest_list = helperInfo
-                .support_crest_slot_type_1_list
-                .Select(this.mapper.Map<GameAbilityCrest>),
-            crest_slot_type_2_crest_list = helperInfo
-                .support_crest_slot_type_2_list
-                .Select(this.mapper.Map<GameAbilityCrest>),
-            crest_slot_type_3_crest_list = helperInfo
-                .support_crest_slot_type_3_list
-                .Select(this.mapper.Map<GameAbilityCrest>),
+            crest_slot_type_1_crest_list = helperInfo.support_crest_slot_type_1_list.Select(
+                this.mapper.Map<GameAbilityCrest>
+            ),
+            crest_slot_type_2_crest_list = helperInfo.support_crest_slot_type_2_list.Select(
+                this.mapper.Map<GameAbilityCrest>
+            ),
+            crest_slot_type_3_crest_list = helperInfo.support_crest_slot_type_3_list.Select(
+                this.mapper.Map<GameAbilityCrest>
+            ),
             talisman_data = this.mapper.Map<TalismanList>(helperInfo.support_talisman)
         };
     }

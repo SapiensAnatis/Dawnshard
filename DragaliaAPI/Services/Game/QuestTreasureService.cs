@@ -51,15 +51,13 @@ public class QuestTreasureService(
             userData.MaxDragonQuantity += questTreasureData.AddMaxDragonStorage;
         }
 
-        apiContext
-            .QuestTreasureList
-            .Add(
-                new DbQuestTreasureList()
-                {
-                    ViewerId = playerIdentityService.ViewerId,
-                    QuestTreasureId = questTreasureData.Id
-                }
-            );
+        apiContext.QuestTreasureList.Add(
+            new DbQuestTreasureList()
+            {
+                ViewerId = playerIdentityService.ViewerId,
+                QuestTreasureId = questTreasureData.Id
+            }
+        );
 
         IEnumerable<AtgenBuildEventRewardEntityList> quest_treasure_reward_list = rewards;
 

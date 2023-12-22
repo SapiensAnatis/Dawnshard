@@ -20,32 +20,26 @@ public class TimeAttackRankingTest : TestFixture
                 new TimeAttackRankingGetDataRequest() { }
             )
         )
-            .data
-            .ranking_tier_reward_list
-            .Should()
+            .data.ranking_tier_reward_list.Should()
             .NotBeEmpty();
     }
 
     [Fact]
     public async Task ReceiveTierReward_GrantsRewardsOnce()
     {
-        DbPlayerUserData oldUserData = await this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        DbPlayerUserData oldUserData = await this.ApiContext.PlayerUserData.AsNoTracking()
             .FirstAsync(x => x.ViewerId == ViewerId);
 
         int questId = 227010101; // First Volk TA quest
 
-        this.ApiContext
-            .PlayerQuests
-            .Add(
-                new DbQuest()
-                {
-                    ViewerId = ViewerId,
-                    BestClearTime = 200f,
-                    QuestId = questId
-                }
-            );
+        this.ApiContext.PlayerQuests.Add(
+            new DbQuest()
+            {
+                ViewerId = ViewerId,
+                BestClearTime = 200f,
+                QuestId = questId
+            }
+        );
 
         await this.ApiContext.SaveChangesAsync();
 
@@ -59,8 +53,7 @@ public class TimeAttackRankingTest : TestFixture
         rewardResponse.ranking_tier_reward_list.Should().NotBeEmpty();
 
         rewardResponse
-            .ranking_tier_reward_entity_list
-            .Should()
+            .ranking_tier_reward_entity_list.Should()
             .ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList()
                 {
@@ -71,18 +64,13 @@ public class TimeAttackRankingTest : TestFixture
             );
 
         rewardResponse
-            .entity_result
-            .new_get_entity_list
-            .Should()
+            .entity_result.new_get_entity_list.Should()
             .ContainEquivalentOf(
                 new AtgenDuplicateEntityList() { entity_id = 0, entity_type = EntityTypes.Dew }
             );
 
         rewardResponse
-            .update_data_list
-            .user_data
-            .dew_point
-            .Should()
+            .update_data_list.user_data.dew_point.Should()
             .Be(oldUserData.DewPoint + 7000);
 
         TimeAttackRankingReceiveTierRewardData secondRewardResponse = (

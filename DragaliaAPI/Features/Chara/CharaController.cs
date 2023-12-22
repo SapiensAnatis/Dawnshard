@@ -659,14 +659,12 @@ public class CharaController(
             if (manaNodeInfo.IsReleaseStory)
             {
                 int[] charaStories = MasterAsset
-                    .CharaStories
-                    .Get((int)playerCharData.CharaId)
+                    .CharaStories.Get((int)playerCharData.CharaId)
                     .storyIds;
 
                 int nextStoryUnlockIndex =
                     await storyRepository
-                        .Stories
-                        .Where(x => charaStories.Contains(x.StoryId))
+                        .Stories.Where(x => charaStories.Contains(x.StoryId))
                         .CountAsync() + unlockedStories.Count;
 
                 int nextStoryId = charaStories.ElementAtOrDefault(nextStoryUnlockIndex);
@@ -719,10 +717,8 @@ public class CharaController(
                     expectedPrice: manaNodeInfo.NecessaryManaPoint
                 );
 
-                ManaPieceMaterial? material = MasterAsset
-                    .ManaPieceMaterial
-                    .Enumerable
-                    .FirstOrDefault(
+                ManaPieceMaterial? material =
+                    MasterAsset.ManaPieceMaterial.Enumerable.FirstOrDefault(
                         x =>
                             x.ElementId == charaData.PieceMaterialElementId
                             && x.Step == manaNodeInfo.Step

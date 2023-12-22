@@ -50,9 +50,10 @@ public class MasterAssetGroup<TGroupKey, TKey, TItem>
     /// <returns>A bool indicating whether the value was successfully retrieved.</returns>
     public bool TryGetValue(TGroupKey key, [NotNullWhen(true)] out IDictionary<TKey, TItem>? item)
     {
-        bool result = this.internalDictionary
-            .Value
-            .TryGetValue(key, out InternalKeyedCollection? entry);
+        bool result = this.internalDictionary.Value.TryGetValue(
+            key,
+            out InternalKeyedCollection? entry
+        );
 
         item = result ? entry!.AsImmutableDictionary() : null;
 

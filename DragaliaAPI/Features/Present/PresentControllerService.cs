@@ -71,9 +71,9 @@ public class PresentControllerService(
 
     public async Task<ClaimPresentResult> ReceivePresent(IEnumerable<ulong> ids, bool isLimit)
     {
-        IQueryable<DbPlayerPresent> presentsQuery = presentRepository
-            .Presents
-            .Where(x => ids.Contains((ulong)x.PresentId));
+        IQueryable<DbPlayerPresent> presentsQuery = presentRepository.Presents.Where(
+            x => ids.Contains((ulong)x.PresentId)
+        );
 
         presentsQuery = isLimit
             ? presentsQuery.Where(x => x.ReceiveLimitTime != null)

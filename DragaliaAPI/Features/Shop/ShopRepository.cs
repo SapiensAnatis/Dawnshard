@@ -17,14 +17,14 @@ public class ShopRepository : IShopRepository
     }
 
     public IQueryable<DbPlayerShopInfo> ShopInfos =>
-        this.apiContext
-            .PlayerShopInfos
-            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+        this.apiContext.PlayerShopInfos.Where(
+            x => x.ViewerId == this.playerIdentityService.ViewerId
+        );
 
     public IQueryable<DbPlayerShopPurchase> Purchases =>
-        this.apiContext
-            .PlayerPurchases
-            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+        this.apiContext.PlayerPurchases.Where(
+            x => x.ViewerId == this.playerIdentityService.ViewerId
+        );
 
     public async Task<DbPlayerShopInfo> GetShopInfoAsync()
     {
@@ -34,9 +34,9 @@ public class ShopRepository : IShopRepository
 
     public void InitializeShopInfo()
     {
-        this.apiContext
-            .PlayerShopInfos
-            .Add(new DbPlayerShopInfo() { ViewerId = this.playerIdentityService.ViewerId, });
+        this.apiContext.PlayerShopInfos.Add(
+            new DbPlayerShopInfo() { ViewerId = this.playerIdentityService.ViewerId, }
+        );
     }
 
     public async Task<int> GetDailySummonCountAsync()
@@ -48,8 +48,9 @@ public class ShopRepository : IShopRepository
     {
         DateTimeOffset current = DateTimeOffset.UtcNow;
 
-        await this.Purchases
-            .Where(x => x.EffectEndTime != DateTimeOffset.UnixEpoch && current >= x.EffectEndTime)
+        await this.Purchases.Where(
+            x => x.EffectEndTime != DateTimeOffset.UnixEpoch && current >= x.EffectEndTime
+        )
             .ExecuteDeleteAsync();
     }
 
@@ -69,20 +70,18 @@ public class ShopRepository : IShopRepository
         );
         if (existing == null)
         {
-            this.apiContext
-                .PlayerPurchases
-                .Add(
-                    new DbPlayerShopPurchase()
-                    {
-                        ViewerId = this.playerIdentityService.ViewerId,
-                        ShopType = type.ToPurchaseShopType(),
-                        GoodsId = goodsId,
-                        BuyCount = quantity,
-                        LastBuyTime = buyTime,
-                        EffectStartTime = effectStart,
-                        EffectEndTime = effectEnd
-                    }
-                );
+            this.apiContext.PlayerPurchases.Add(
+                new DbPlayerShopPurchase()
+                {
+                    ViewerId = this.playerIdentityService.ViewerId,
+                    ShopType = type.ToPurchaseShopType(),
+                    GoodsId = goodsId,
+                    BuyCount = quantity,
+                    LastBuyTime = buyTime,
+                    EffectStartTime = effectStart,
+                    EffectEndTime = effectEnd
+                }
+            );
 
             return true;
         }

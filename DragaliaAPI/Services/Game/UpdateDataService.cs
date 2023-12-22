@@ -32,8 +32,7 @@ public class UpdateDataService(
         await missionProgressionService.ProcessMissionEvents();
 
         List<IDbPlayerData> entities = apiContext
-            .ChangeTracker
-            .Entries<IDbPlayerData>()
+            .ChangeTracker.Entries<IDbPlayerData>()
             .Where(
                 x =>
                     (x.State is EntityState.Modified or EntityState.Added)

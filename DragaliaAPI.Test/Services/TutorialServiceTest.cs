@@ -42,8 +42,7 @@ public class TutorialServiceTest
     [Fact]
     public async Task UpdateTutorialStatus_UpdatesTutorialStatus()
     {
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
+        this.mockUserDataRepository.SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>
                 {
@@ -61,8 +60,7 @@ public class TutorialServiceTest
     [Fact]
     public async Task UpdateTutorialStatus_LowerStatus_DoesNotUpdateTutorialStatus()
     {
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
+        this.mockUserDataRepository.SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>
                 {
@@ -80,8 +78,7 @@ public class TutorialServiceTest
     [Fact]
     public async Task UpdateTutorialStatus_DojoStatus_AddsDojos()
     {
-        this.mockUserDataRepository
-            .SetupGet(x => x.UserData)
+        this.mockUserDataRepository.SetupGet(x => x.UserData)
             .Returns(
                 new List<DbPlayerUserData>
                 {

@@ -68,8 +68,7 @@ public class PaymentServiceTest
         await this.paymentService.ProcessPayment(type, new PaymentTarget(total, cost), cost);
 
         userData
-            .BuildTimePoint
-            .Should()
+            .BuildTimePoint.Should()
             .Be(type == PaymentTypes.HalidomHustleHammer ? total - cost : 0);
         userData.Coin.Should().Be(type == PaymentTypes.Coin ? total - cost : 0);
         userData.Crystal.Should().Be(type == PaymentTypes.Wyrmite ? total - cost : 0);
@@ -104,8 +103,7 @@ public class PaymentServiceTest
         await this.paymentService.ProcessPayment(type, null, cost);
 
         userData
-            .BuildTimePoint
-            .Should()
+            .BuildTimePoint.Should()
             .Be(type == PaymentTypes.HalidomHustleHammer ? total - cost : 0);
         userData.Coin.Should().Be(type == PaymentTypes.Coin ? total - cost : 0);
         userData.Crystal.Should().Be(type == PaymentTypes.Wyrmite ? total - cost : 0);
@@ -137,8 +135,9 @@ public class PaymentServiceTest
 
         this.mockUserDataRepository.SetupUserData(userData);
 
-        await this.paymentService
-            .Invoking(x => x.ProcessPayment(type, new PaymentTarget(total, cost)))
+        await this.paymentService.Invoking(
+            x => x.ProcessPayment(type, new PaymentTarget(total, cost))
+        )
             .Should()
             .ThrowAsync<DragaliaException>()
             .Where(x => x.Code == ResultCode.CommonMaterialShort);
@@ -169,8 +168,7 @@ public class PaymentServiceTest
 
         this.mockUserDataRepository.SetupUserData(userData);
 
-        await this.paymentService
-            .Invoking(x => x.ProcessPayment(type, null, cost))
+        await this.paymentService.Invoking(x => x.ProcessPayment(type, null, cost))
             .Should()
             .ThrowAsync<DragaliaException>()
             .Where(x => x.Code == ResultCode.CommonMaterialShort);

@@ -93,8 +93,7 @@ public class DbFortBuildTest
             };
 
         entity
-            .LastIncomeTime
-            .Should()
+            .LastIncomeTime.Should()
             .BeCloseTo(TimeSpan.FromSeconds(-incomeOffsetSec), AssertionTolerance);
     }
 }

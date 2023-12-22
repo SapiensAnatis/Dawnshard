@@ -27,12 +27,9 @@ public class TutorialTest : TestFixture
             )
         ).data;
 
-        this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == this.ViewerId)
-            .TutorialStatus
-            .Should()
+            .TutorialStatus.Should()
             .Be(step);
     }
 
@@ -73,9 +70,7 @@ public class TutorialTest : TestFixture
 
         TutorialFlagUtil
             .ConvertIntToFlagIntList(
-                this.ApiContext
-                    .PlayerUserData
-                    .AsNoTracking()
+                this.ApiContext.PlayerUserData.AsNoTracking()
                     .First(x => x.ViewerId == this.ViewerId)
                     .TutorialFlag
             )

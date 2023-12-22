@@ -56,16 +56,14 @@ public class QuestEnemyService : IQuestEnemyService
 
             if (enemy.enemy_drop_list.Count == 0)
             {
-                enemy
-                    .enemy_drop_list
-                    .Add(
-                        new EnemyDropList()
-                        {
-                            coin = 0,
-                            mana = 0,
-                            drop_list = new List<AtgenDropList>()
-                        }
-                    );
+                enemy.enemy_drop_list.Add(
+                    new EnemyDropList()
+                    {
+                        coin = 0,
+                        mana = 0,
+                        drop_list = new List<AtgenDropList>()
+                    }
+                );
             }
 
             enemy.enemy_drop_list[0].coin += rupieSlice;
@@ -73,8 +71,7 @@ public class QuestEnemyService : IQuestEnemyService
 
             enemy
                 .enemy_drop_list[0]
-                .drop_list
-                .Add(
+                .drop_list.Add(
                     new AtgenDropList()
                     {
                         id = drop.Id,
@@ -92,8 +89,7 @@ public class QuestEnemyService : IQuestEnemyService
 
             enemy.enemy_drop_list[0].drop_list = enemy
                 .enemy_drop_list[0]
-                .drop_list
-                .GroupBy(x => new { x.id, x.type })
+                .drop_list.GroupBy(x => new { x.id, x.type })
                 .Select(
                     group =>
                         group.Aggregate(

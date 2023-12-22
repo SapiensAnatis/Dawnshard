@@ -15,8 +15,7 @@ public class MatchingTest : TestFixture
     [Fact]
     public async Task GetRoomList_ReturnsRoomList()
     {
-        this.MockPhotonStateApi
-            .Setup(x => x.GetAllGames())
+        this.MockPhotonStateApi.Setup(x => x.GetAllGames())
             .ReturnsAsync(
                 new List<ApiGame>()
                 {
@@ -101,8 +100,7 @@ public class MatchingTest : TestFixture
     [Fact]
     public async Task GetRoomListByQuestId_ReturnsRoomList()
     {
-        this.MockPhotonStateApi
-            .Setup(x => x.GetByQuestId(204550501))
+        this.MockPhotonStateApi.Setup(x => x.GetByQuestId(204550501))
             .ReturnsAsync(
                 new List<ApiGame>()
                 {
@@ -191,8 +189,7 @@ public class MatchingTest : TestFixture
     [Fact]
     public async Task GetRoomName_ReturnsRoom()
     {
-        this.MockPhotonStateApi
-            .Setup(x => x.GetGameById(911948))
+        this.MockPhotonStateApi.Setup(x => x.GetGameById(911948))
             .ReturnsAsync(
                 new ApiGame()
                 {
@@ -275,8 +272,7 @@ public class MatchingTest : TestFixture
     [Fact]
     public async Task GetRoomName_UnrecognizedViewerId_UsesDefault()
     {
-        this.MockPhotonStateApi
-            .Setup(x => x.GetGameById(911948))
+        this.MockPhotonStateApi.Setup(x => x.GetGameById(911948))
             .ReturnsAsync(
                 new ApiGame()
                 {

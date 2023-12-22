@@ -69,9 +69,7 @@ public class StampTest : TestFixture
 
         this.ApiContext.ChangeTracker.Clear();
 
-        this.ApiContext
-            .EquippedStamps
-            .Where(x => x.ViewerId == ViewerId)
+        this.ApiContext.EquippedStamps.Where(x => x.ViewerId == ViewerId)
             .Should()
             .BeEquivalentTo(
                 requestList,

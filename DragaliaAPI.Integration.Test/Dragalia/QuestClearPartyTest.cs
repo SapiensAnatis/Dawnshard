@@ -46,9 +46,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             );
 
         response
-            .data
-            .quest_multi_clear_party_setting_list
-            .Should()
+            .data.quest_multi_clear_party_setting_list.Should()
             .BeEquivalentTo(MultiPartySettingLists);
         response.data.lost_unit_list.Should().BeEmpty();
     }
@@ -92,9 +90,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
             );
 
         response
-            .data
-            .lost_unit_list
-            .Should()
+            .data.lost_unit_list.Should()
             .BeEquivalentTo(
                 new List<AtgenLostUnitList>()
                 {
@@ -166,9 +162,9 @@ public class QuestClearPartyTest : TestFixture, IDisposable
 
         response.data.result.Should().Be(1);
 
-        List<DbQuestClearPartyUnit> storedList = await this.ApiContext
-            .QuestClearPartyUnits
-            .Where(x => x.QuestId == 3 && x.ViewerId == ViewerId && x.IsMulti == false)
+        List<DbQuestClearPartyUnit> storedList = await this.ApiContext.QuestClearPartyUnits.Where(
+            x => x.QuestId == 3 && x.ViewerId == ViewerId && x.IsMulti == false
+        )
             .ToListAsync();
 
         storedList.Should().BeEquivalentTo(SoloDbEntities, opts => opts.Excluding(x => x.QuestId));
@@ -192,9 +188,9 @@ public class QuestClearPartyTest : TestFixture, IDisposable
 
         response.data.result.Should().Be(1);
 
-        List<DbQuestClearPartyUnit> storedList = await this.ApiContext
-            .QuestClearPartyUnits
-            .Where(x => x.QuestId == 4 && x.ViewerId == ViewerId && x.IsMulti == true)
+        List<DbQuestClearPartyUnit> storedList = await this.ApiContext.QuestClearPartyUnits.Where(
+            x => x.QuestId == 4 && x.ViewerId == ViewerId && x.IsMulti == true
+        )
             .ToListAsync();
 
         storedList.Should().BeEquivalentTo(MultiDbEntities, opts => opts.Excluding(x => x.QuestId));

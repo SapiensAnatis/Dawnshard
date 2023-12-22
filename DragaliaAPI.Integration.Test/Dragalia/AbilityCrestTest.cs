@@ -14,15 +14,13 @@ public class AbilityCrestTest : TestFixture
     [Fact]
     public async Task SetFavorite_SetsCorrespondingAbilityCrestToFavorite()
     {
-        this.ApiContext
-            .PlayerAbilityCrests
-            .Add(
-                new DbAbilityCrest()
-                {
-                    ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrests.FromWhenceHeComes
-                }
-            );
+        this.ApiContext.PlayerAbilityCrests.Add(
+            new DbAbilityCrest()
+            {
+                ViewerId = ViewerId,
+                AbilityCrestId = AbilityCrests.FromWhenceHeComes
+            }
+        );
 
         await this.ApiContext.SaveChangesAsync();
 
@@ -40,9 +38,10 @@ public class AbilityCrestTest : TestFixture
         data.update_data_list.ability_crest_list.Single().is_favorite.Should().BeTrue();
 
         DbAbilityCrest ability_crest = (
-            await this.ApiContext
-                .PlayerAbilityCrests
-                .FindAsync(ViewerId, AbilityCrests.FromWhenceHeComes)
+            await this.ApiContext.PlayerAbilityCrests.FindAsync(
+                ViewerId,
+                AbilityCrests.FromWhenceHeComes
+            )
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
@@ -98,15 +97,13 @@ public class AbilityCrestTest : TestFixture
     {
         int oldGoldenKey = this.GetMaterial(Materials.GoldenKey);
 
-        this.ApiContext
-            .PlayerAbilityCrests
-            .Add(
-                new DbAbilityCrest()
-                {
-                    ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrests.HappyNewYear
-                }
-            );
+        this.ApiContext.PlayerAbilityCrests.Add(
+            new DbAbilityCrest()
+            {
+                ViewerId = ViewerId,
+                AbilityCrestId = AbilityCrests.HappyNewYear
+            }
+        );
 
         await this.ApiContext.SaveChangesAsync();
 
@@ -137,9 +134,10 @@ public class AbilityCrestTest : TestFixture
         ).data;
 
         DbAbilityCrest ability_crest = (
-            await this.ApiContext
-                .PlayerAbilityCrests
-                .FindAsync(ViewerId, AbilityCrests.HappyNewYear)
+            await this.ApiContext.PlayerAbilityCrests.FindAsync(
+                ViewerId,
+                AbilityCrests.HappyNewYear
+            )
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
@@ -151,15 +149,13 @@ public class AbilityCrestTest : TestFixture
     [Fact]
     public async Task BuildupPiece_SuccessDecreasesMaterialsAndUpdatesDatabase()
     {
-        this.ApiContext
-            .PlayerAbilityCrests
-            .Add(
-                new DbAbilityCrest()
-                {
-                    ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrests.WorthyRivals
-                }
-            );
+        this.ApiContext.PlayerAbilityCrests.Add(
+            new DbAbilityCrest()
+            {
+                ViewerId = ViewerId,
+                AbilityCrestId = AbilityCrests.WorthyRivals
+            }
+        );
 
         await this.ApiContext.SaveChangesAsync();
 
@@ -215,9 +211,10 @@ public class AbilityCrestTest : TestFixture
         this.GetMaterial(Materials.ConsecratedWater).Should().Be(oldConsecratedWater - 10);
 
         DbAbilityCrest ability_crest = (
-            await this.ApiContext
-                .PlayerAbilityCrests
-                .FindAsync(ViewerId, AbilityCrests.WorthyRivals)
+            await this.ApiContext.PlayerAbilityCrests.FindAsync(
+                ViewerId,
+                AbilityCrests.WorthyRivals
+            )
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
@@ -235,15 +232,13 @@ public class AbilityCrestTest : TestFixture
          * to an AbilityCrestLevel's MaterialMap :)
          */
 
-        this.ApiContext
-            .PlayerAbilityCrests
-            .Add(
-                new DbAbilityCrest()
-                {
-                    ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrests.MaskofDeterminationLancesBoon
-                }
-            );
+        this.ApiContext.PlayerAbilityCrests.Add(
+            new DbAbilityCrest()
+            {
+                ViewerId = ViewerId,
+                AbilityCrestId = AbilityCrests.MaskofDeterminationLancesBoon
+            }
+        );
 
         await this.ApiContext.SaveChangesAsync();
 
@@ -265,9 +260,9 @@ public class AbilityCrestTest : TestFixture
         );
 
         // Reset
-        this.ApiContext
-            .PlayerAbilityCrests
-            .ExecuteUpdate(x => x.SetProperty(y => y.BuildupCount, 1));
+        this.ApiContext.PlayerAbilityCrests.ExecuteUpdate(
+            x => x.SetProperty(y => y.BuildupCount, 1)
+        );
 
         await this.Client.PostMsgpack<AbilityCrestBuildupPieceData>(
             "ability_crest/buildup_piece",
@@ -314,16 +309,14 @@ public class AbilityCrestTest : TestFixture
         int oldFortifyingGem = this.GetMaterial(Materials.FortifyingGemstone);
         int oldAmplifyingGem = this.GetMaterial(Materials.AmplifyingGemstone);
 
-        this.ApiContext
-            .PlayerAbilityCrests
-            .Add(
-                new DbAbilityCrest()
-                {
-                    ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrests.TwinfoldBonds,
-                    AttackPlusCount = 26
-                }
-            );
+        this.ApiContext.PlayerAbilityCrests.Add(
+            new DbAbilityCrest()
+            {
+                ViewerId = ViewerId,
+                AbilityCrestId = AbilityCrests.TwinfoldBonds,
+                AttackPlusCount = 26
+            }
+        );
 
         await this.ApiContext.SaveChangesAsync();
 
@@ -344,9 +337,10 @@ public class AbilityCrestTest : TestFixture
         ).data;
 
         DbAbilityCrest ability_crest = (
-            await this.ApiContext
-                .PlayerAbilityCrests
-                .FindAsync(ViewerId, AbilityCrests.TwinfoldBonds)
+            await this.ApiContext.PlayerAbilityCrests.FindAsync(
+                ViewerId,
+                AbilityCrests.TwinfoldBonds
+            )
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
@@ -363,16 +357,14 @@ public class AbilityCrestTest : TestFixture
         int oldFortifyingGem = this.GetMaterial(Materials.FortifyingGemstone);
         int oldAmplifyingGem = this.GetMaterial(Materials.AmplifyingGemstone);
 
-        this.ApiContext
-            .PlayerAbilityCrests
-            .Add(
-                new DbAbilityCrest()
-                {
-                    ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrests.EndlessWaltz,
-                    AttackPlusCount = 26
-                }
-            );
+        this.ApiContext.PlayerAbilityCrests.Add(
+            new DbAbilityCrest()
+            {
+                ViewerId = ViewerId,
+                AbilityCrestId = AbilityCrests.EndlessWaltz,
+                AttackPlusCount = 26
+            }
+        );
 
         await this.ApiContext.SaveChangesAsync();
 
@@ -390,9 +382,10 @@ public class AbilityCrestTest : TestFixture
         );
 
         DbAbilityCrest ability_crest = (
-            await this.ApiContext
-                .PlayerAbilityCrests
-                .FindAsync(ViewerId, AbilityCrests.EndlessWaltz)
+            await this.ApiContext.PlayerAbilityCrests.FindAsync(
+                ViewerId,
+                AbilityCrests.EndlessWaltz
+            )
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
@@ -429,16 +422,14 @@ public class AbilityCrestTest : TestFixture
     {
         long oldCoin = this.GetCoin();
 
-        this.ApiContext
-            .PlayerAbilityCrests
-            .Add(
-                new DbAbilityCrest()
-                {
-                    ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
-                    HpPlusCount = 40
-                }
-            );
+        this.ApiContext.PlayerAbilityCrests.Add(
+            new DbAbilityCrest()
+            {
+                ViewerId = ViewerId,
+                AbilityCrestId = AbilityCrests.TutelarysDestinyWolfsBoon,
+                HpPlusCount = 40
+            }
+        );
 
         await this.ApiContext.SaveChangesAsync();
 
@@ -455,9 +446,10 @@ public class AbilityCrestTest : TestFixture
         ).data;
 
         DbAbilityCrest ability_crest = (
-            await this.ApiContext
-                .PlayerAbilityCrests
-                .FindAsync(ViewerId, AbilityCrests.TutelarysDestinyWolfsBoon)
+            await this.ApiContext.PlayerAbilityCrests.FindAsync(
+                ViewerId,
+                AbilityCrests.TutelarysDestinyWolfsBoon
+            )
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
@@ -474,17 +466,15 @@ public class AbilityCrestTest : TestFixture
         int oldFortifyingGemstone = this.GetMaterial(Materials.FortifyingGemstone);
         int oldAmplifyingGemstone = this.GetMaterial(Materials.AmplifyingGemstone);
 
-        this.ApiContext
-            .PlayerAbilityCrests
-            .Add(
-                new DbAbilityCrest()
-                {
-                    ViewerId = ViewerId,
-                    AbilityCrestId = AbilityCrests.TheGeniusTacticianBowsBoon,
-                    HpPlusCount = 40,
-                    AttackPlusCount = 1
-                }
-            );
+        this.ApiContext.PlayerAbilityCrests.Add(
+            new DbAbilityCrest()
+            {
+                ViewerId = ViewerId,
+                AbilityCrestId = AbilityCrests.TheGeniusTacticianBowsBoon,
+                HpPlusCount = 40,
+                AttackPlusCount = 1
+            }
+        );
 
         await this.ApiContext.SaveChangesAsync();
 
@@ -502,9 +492,10 @@ public class AbilityCrestTest : TestFixture
         );
 
         DbAbilityCrest ability_crest = (
-            await this.ApiContext
-                .PlayerAbilityCrests
-                .FindAsync(ViewerId, AbilityCrests.TheGeniusTacticianBowsBoon)
+            await this.ApiContext.PlayerAbilityCrests.FindAsync(
+                ViewerId,
+                AbilityCrests.TheGeniusTacticianBowsBoon
+            )
         )!;
         await this.ApiContext.Entry(ability_crest).ReloadAsync();
 
@@ -524,17 +515,15 @@ public class AbilityCrestTest : TestFixture
         }
 
         int setNo = 54;
-        this.ApiContext
-            .PlayerAbilityCrestSets
-            .Add(
-                new DbAbilityCrestSet()
-                {
-                    ViewerId = ViewerId,
-                    AbilityCrestSetNo = setNo,
-                    AbilityCrestSetName = "test",
-                    CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals
-                }
-            );
+        this.ApiContext.PlayerAbilityCrestSets.Add(
+            new DbAbilityCrestSet()
+            {
+                ViewerId = ViewerId,
+                AbilityCrestSetNo = setNo,
+                AbilityCrestSetName = "test",
+                CrestSlotType1CrestId1 = AbilityCrests.WorthyRivals
+            }
+        );
 
         await this.ApiContext.SaveChangesAsync();
 
@@ -618,9 +607,8 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        DbAbilityCrestSet? dbAbilityCrestSet = await this.ApiContext
-            .PlayerAbilityCrestSets
-            .FindAsync(ViewerId, setNo);
+        DbAbilityCrestSet? dbAbilityCrestSet =
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo);
         dbAbilityCrestSet.Should().NotBeNull();
         dbAbilityCrestSet!.TalismanKeyId.Should().Be(1);
     }
@@ -673,9 +661,8 @@ public class AbilityCrestTest : TestFixture
 
         await this.ApiContext.SaveChangesAsync();
 
-        DbAbilityCrestSet? dbAbilityCrestSet = await this.ApiContext
-            .PlayerAbilityCrestSets
-            .FindAsync(ViewerId, setNo);
+        DbAbilityCrestSet? dbAbilityCrestSet =
+            await this.ApiContext.PlayerAbilityCrestSets.FindAsync(ViewerId, setNo);
         dbAbilityCrestSet.Should().NotBeNull();
         dbAbilityCrestSet!.AbilityCrestSetName.Should().Be("test");
     }
@@ -708,9 +695,7 @@ public class AbilityCrestTest : TestFixture
 
     private int GetDewpoint()
     {
-        return this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        return this.ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.DewPoint)
             .First();
@@ -718,9 +703,7 @@ public class AbilityCrestTest : TestFixture
 
     private long GetCoin()
     {
-        return this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        return this.ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.Coin)
             .First();
@@ -728,9 +711,7 @@ public class AbilityCrestTest : TestFixture
 
     private int GetMaterial(Materials materialId)
     {
-        return this.ApiContext
-            .PlayerMaterials
-            .AsNoTracking()
+        return this.ApiContext.PlayerMaterials.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId && x.MaterialId == materialId)
             .Select(x => x.Quantity)
             .First();

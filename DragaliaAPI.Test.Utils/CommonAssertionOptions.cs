@@ -12,8 +12,7 @@ public static class CommonAssertionOptions
                 options
                     .Using<DateTimeOffset>(
                         ctx =>
-                            ctx.Subject
-                                .Should()
+                            ctx.Subject.Should()
                                 .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(toleranceSec))
                     )
                     .WhenTypeIs<DateTimeOffset>()
@@ -24,8 +23,7 @@ public static class CommonAssertionOptions
                 options
                     .Using<TimeSpan>(
                         ctx =>
-                            ctx.Subject
-                                .Should()
+                            ctx.Subject.Should()
                                 .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(toleranceSec))
                     )
                     .WhenTypeIs<TimeSpan>()

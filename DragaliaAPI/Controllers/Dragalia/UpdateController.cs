@@ -56,8 +56,7 @@ public class UpdateController(
                 case "emblem":
                     await foreach (
                         DbEmblem emblem in emblemRepository
-                            .Emblems
-                            .Where(x => x.IsNew)
+                            .Emblems.Where(x => x.IsNew)
                             .AsAsyncEnumerable()
                     )
                     {

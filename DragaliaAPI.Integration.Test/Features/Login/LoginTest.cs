@@ -28,9 +28,7 @@ public class LoginTest : TestFixture
     [Fact]
     public async Task LoginIndex_LastLoginBeforeReset_ResetsItemSummonCount()
     {
-        await this.ApiContext
-            .PlayerShopInfos
-            .Where(x => x.ViewerId == ViewerId)
+        await this.ApiContext.PlayerShopInfos.Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.DailySummonCount, 5));
 
         (await this.GetSummonCount()).Should().Be(5);
@@ -43,9 +41,7 @@ public class LoginTest : TestFixture
     [Fact]
     public async Task LoginIndex_LastLoginBeforeReset_ResetsDragonGiftCount()
     {
-        await this.ApiContext
-            .PlayerDragonGifts
-            .Where(x => x.ViewerId == ViewerId)
+        await this.ApiContext.PlayerDragonGifts.Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdateAsync(entity => entity.SetProperty(x => x.Quantity, 0));
 
         (await this.GetDragonGifts()).Should().AllSatisfy(x => x.Quantity.Should().Be(0));
@@ -171,12 +167,9 @@ public class LoginTest : TestFixture
         );
 
         response
-            .data
-            .login_bonus_list
-            .Should()
+            .data.login_bonus_list.Should()
             .ContainSingle()
-            .And
-            .ContainEquivalentOf(
+            .And.ContainEquivalentOf(
                 new AtgenLoginBonusList()
                 {
                     login_bonus_id = 17,
@@ -209,12 +202,9 @@ public class LoginTest : TestFixture
         );
 
         response
-            .data
-            .login_bonus_list
-            .Should()
+            .data.login_bonus_list.Should()
             .ContainSingle()
-            .And
-            .ContainEquivalentOf(
+            .And.ContainEquivalentOf(
                 new AtgenLoginBonusList()
                 {
                     login_bonus_id = 17,
@@ -230,8 +220,7 @@ public class LoginTest : TestFixture
     [Fact]
     public async Task LoginIndex_LoginBonusLastDay_IsLoopFalse_SetsIsComplete()
     {
-        this.MockDateTimeProvider
-            .SetupGet(x => x.UtcNow)
+        this.MockDateTimeProvider.SetupGet(x => x.UtcNow)
             .Returns(DateTime.Parse("2018/09/28").ToUniversalTime());
 
         await this.AddToDatabase(
@@ -249,9 +238,7 @@ public class LoginTest : TestFixture
         );
 
         response
-            .data
-            .login_bonus_list
-            .Should()
+            .data.login_bonus_list.Should()
             .ContainEquivalentOf(
                 new AtgenLoginBonusList()
                 {
@@ -265,13 +252,10 @@ public class LoginTest : TestFixture
             );
 
         (
-            await this.ApiContext
-                .LoginBonuses
-                .AsNoTracking()
+            await this.ApiContext.LoginBonuses.AsNoTracking()
                 .FirstAsync(x => x.ViewerId == ViewerId && x.Id == 2)
         )
-            .IsComplete
-            .Should()
+            .IsComplete.Should()
             .BeTrue();
 
         this.ResetLastLoginTime();
@@ -294,9 +278,7 @@ public class LoginTest : TestFixture
             }
         );
 
-        int oldCloverQuantity = await this.ApiContext
-            .PlayerDragonGifts
-            .AsNoTracking()
+        int oldCloverQuantity = await this.ApiContext.PlayerDragonGifts.AsNoTracking()
             .Where(x => x.DragonGiftId == DragonGifts.FourLeafClover && x.ViewerId == ViewerId)
             .Select(x => x.Quantity)
             .FirstAsync();
@@ -309,8 +291,7 @@ public class LoginTest : TestFixture
         ).data;
 
         response
-            .login_bonus_list
-            .Should()
+            .login_bonus_list.Should()
             .ContainEquivalentOf(
                 new AtgenLoginBonusList()
                 {
@@ -326,9 +307,7 @@ public class LoginTest : TestFixture
             );
 
         response
-            .update_data_list
-            .dragon_gift_list
-            .Should()
+            .update_data_list.dragon_gift_list.Should()
             .Contain(
                 x =>
                     x.dragon_gift_id == DragonGifts.FourLeafClover
@@ -359,15 +338,11 @@ public class LoginTest : TestFixture
             new LoginIndexRequest() { jws_result = string.Empty }
         );
 
-        this.ApiContext
-            .PlayerMissions
-            .AsNoTracking()
+        this.ApiContext.PlayerMissions.AsNoTracking()
             .Should()
             .NotContain(x => x.Id == oldMissionId);
 
-        this.ApiContext
-            .PlayerMissions
-            .AsNoTracking()
+        this.ApiContext.PlayerMissions.AsNoTracking()
             .Where(x => x.GroupId == 0)
             .Should()
             .BeEquivalentTo(
@@ -383,9 +358,7 @@ public class LoginTest : TestFixture
                 "these are the standard daily endeavours"
             );
 
-        this.ApiContext
-            .PlayerMissions
-            .AsNoTracking()
+        this.ApiContext.PlayerMissions.AsNoTracking()
             .Where(x => x.GroupId == starryDragonyuleEventId)
             .Should()
             .BeEquivalentTo(
@@ -403,9 +376,7 @@ public class LoginTest : TestFixture
                 "these are the event daily endeavours"
             );
 
-        this.ApiContext
-            .PlayerMissions
-            .AsNoTracking()
+        this.ApiContext.PlayerMissions.AsNoTracking()
             .ToList()
             .Should()
             .AllSatisfy(x =>
@@ -436,15 +407,11 @@ public class LoginTest : TestFixture
             new LoginIndexRequest() { jws_result = string.Empty }
         );
 
-        this.ApiContext
-            .PlayerMissions
-            .AsNoTracking()
+        this.ApiContext.PlayerMissions.AsNoTracking()
             .Should()
             .NotContain(x => x.Id == oldMissionId);
 
-        this.ApiContext
-            .PlayerMissions
-            .AsNoTracking()
+        this.ApiContext.PlayerMissions.AsNoTracking()
             .Where(x => x.GroupId == 0)
             .Should()
             .BeEquivalentTo(
@@ -460,9 +427,7 @@ public class LoginTest : TestFixture
                 "these are the standard daily endeavours"
             );
 
-        this.ApiContext
-            .PlayerMissions
-            .AsNoTracking()
+        this.ApiContext.PlayerMissions.AsNoTracking()
             .Should()
             .NotContain(x => x.GroupId == starryDragonyuleEventId);
     }
@@ -482,23 +447,17 @@ public class LoginTest : TestFixture
 
     private async Task<int> GetSummonCount() =>
         (
-            await this.ApiContext
-                .PlayerShopInfos
-                .AsNoTracking()
+            await this.ApiContext.PlayerShopInfos.AsNoTracking()
                 .FirstAsync(x => x.ViewerId == ViewerId)
         ).DailySummonCount;
 
     private async Task<IEnumerable<DbPlayerDragonGift>> GetDragonGifts() =>
-        await this.ApiContext
-            .PlayerDragonGifts
-            .AsNoTracking()
+        await this.ApiContext.PlayerDragonGifts.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .ToListAsync();
 
     private void ResetLastLoginTime() =>
-        this.ApiContext
-            .PlayerUserData
-            .Where(x => x.ViewerId == ViewerId)
+        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
             .ExecuteUpdate(
                 entity => entity.SetProperty(x => x.LastLoginTime, DateTimeOffset.UnixEpoch)
             );

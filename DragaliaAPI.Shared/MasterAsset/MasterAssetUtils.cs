@@ -34,9 +34,7 @@ public static class MasterAssetUtils
 
     public static FortPlantDetail GetInitialFortPlant(FortPlants id) =>
         MasterAsset
-            .FortPlant
-            .Enumerable
-            .Where(x => x.AssetGroup == id)
+            .FortPlant.Enumerable.Where(x => x.AssetGroup == id)
             .OrderBy(x => x.Level)
             .First();
 

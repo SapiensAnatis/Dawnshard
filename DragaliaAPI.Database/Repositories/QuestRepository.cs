@@ -22,9 +22,9 @@ public class QuestRepository : IQuestRepository
         this.apiContext.QuestEvents.Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbQuestTreasureList> QuestTreasureList =>
-        this.apiContext
-            .QuestTreasureList
-            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+        this.apiContext.QuestTreasureList.Where(
+            x => x.ViewerId == this.playerIdentityService.ViewerId
+        );
 
     private async Task<DbQuest?> FindQuestAsync(int questId)
     {
@@ -34,10 +34,9 @@ public class QuestRepository : IQuestRepository
     public async Task<DbQuest> GetQuestDataAsync(int questId)
     {
         DbQuest? questData = await FindQuestAsync(questId);
-        questData ??= this.apiContext
-            .PlayerQuests
-            .Add(new DbQuest { ViewerId = this.playerIdentityService.ViewerId, QuestId = questId })
-            .Entity;
+        questData ??= this.apiContext.PlayerQuests.Add(
+            new DbQuest { ViewerId = this.playerIdentityService.ViewerId, QuestId = questId }
+        ).Entity;
         return questData;
     }
 
@@ -50,8 +49,7 @@ public class QuestRepository : IQuestRepository
     {
         return await FindQuestEventAsync(questEventId)
             ?? apiContext
-                .QuestEvents
-                .Add(
+                .QuestEvents.Add(
                     new DbQuestEvent
                     {
                         ViewerId = playerIdentityService.ViewerId,
@@ -63,8 +61,7 @@ public class QuestRepository : IQuestRepository
 
     public async Task DeleteQuests(IEnumerable<int> questIds)
     {
-        List<DbQuest> questEntities = await this.Quests
-            .Where(x => questIds.Contains(x.QuestId))
+        List<DbQuest> questEntities = await this.Quests.Where(x => questIds.Contains(x.QuestId))
             .ToListAsync();
         this.apiContext.PlayerQuests.RemoveRange(questEntities);
     }

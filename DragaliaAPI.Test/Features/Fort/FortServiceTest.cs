@@ -53,8 +53,7 @@ public class FortServiceTest
         this.mockUserService = new(MockBehavior.Strict);
         this.mockDateTimeProvider = new(MockBehavior.Strict);
 
-        this.mockConfig
-            .SetupGet(x => x.CurrentValue)
+        this.mockConfig.SetupGet(x => x.CurrentValue)
             .Returns(
                 new DragonfruitConfig
                 {
@@ -486,8 +485,7 @@ public class FortServiceTest
         build.Level.Should().Be(20);
         build.BuildStartDate.Should().BeCloseTo(FixedTime, TimeSpan.FromSeconds(1));
         build
-            .BuildEndDate
-            .Should()
+            .BuildEndDate.Should()
             .BeCloseTo(FixedTime + TimeSpan.FromSeconds(21600), TimeSpan.FromSeconds(1));
 
         mockFortRepository.VerifyAll();

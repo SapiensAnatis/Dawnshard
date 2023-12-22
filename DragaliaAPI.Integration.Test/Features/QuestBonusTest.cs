@@ -27,10 +27,7 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
 
         response
-            .data
-            .update_data_list
-            .quest_event_list
-            .Should()
+            .data.update_data_list.quest_event_list.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
@@ -63,10 +60,7 @@ public class QuestBonusTest : TestFixture
         bonusResponse.data.receive_quest_bonus.bonus_factor.Should().Be(1);
 
         bonusResponse
-            .data
-            .receive_quest_bonus
-            .quest_bonus_entity_list
-            .Should()
+            .data.receive_quest_bonus.quest_bonus_entity_list.Should()
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
@@ -101,10 +95,7 @@ public class QuestBonusTest : TestFixture
 
         bonusResponse.data.update_data_list.material_list.Should().NotBeEmpty();
         bonusResponse
-            .data
-            .update_data_list
-            .quest_event_list
-            .Should()
+            .data.update_data_list.quest_event_list.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
@@ -146,10 +137,7 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
 
         response
-            .data
-            .update_data_list
-            .quest_event_list
-            .Should()
+            .data.update_data_list.quest_event_list.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
@@ -188,10 +176,7 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
 
         response
-            .data
-            .update_data_list
-            .quest_event_list
-            .Should()
+            .data.update_data_list.quest_event_list.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
@@ -236,10 +221,7 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
 
         response
-            .data
-            .update_data_list
-            .quest_event_list
-            .Should()
+            .data.update_data_list.quest_event_list.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
@@ -272,10 +254,7 @@ public class QuestBonusTest : TestFixture
 
         bonusResponse.data.update_data_list.material_list.Should().BeNullOrEmpty();
         bonusResponse
-            .data
-            .update_data_list
-            .quest_event_list
-            .Should()
+            .data.update_data_list.quest_event_list.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
@@ -302,10 +281,7 @@ public class QuestBonusTest : TestFixture
         DragaliaResponse<DungeonRecordRecordData> response = await this.CompleteQuest(questId);
 
         response
-            .data
-            .update_data_list
-            .quest_event_list
-            .Should()
+            .data.update_data_list.quest_event_list.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
@@ -338,10 +314,7 @@ public class QuestBonusTest : TestFixture
 
         bonusResponse.data.update_data_list.material_list.Should().BeNullOrEmpty();
         bonusResponse
-            .data
-            .update_data_list
-            .quest_event_list
-            .Should()
+            .data.update_data_list.quest_event_list.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {
