@@ -19,8 +19,7 @@ public class V14Update(
     public async Task Apply()
     {
         int[] readStoryIdList = await storyRepository
-            .UnitStories
-            .Where(
+            .UnitStories.Where(
                 x =>
                     (x.State == StoryState.Read)
                     && x.StoryType == StoryTypes.Chara
@@ -32,8 +31,7 @@ public class V14Update(
         int[] characterStoryList;
 
         HashSet<Emblems> ownedEmblems = await emblemRepository
-            .Emblems
-            .Select(x => x.EmblemId)
+            .Emblems.Select(x => x.EmblemId)
             .ToHashSetAsync();
 
         foreach (int readStoryId in readStoryIdList)

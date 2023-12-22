@@ -46,9 +46,7 @@ public class EarnEventTest : TestFixture
             new EarnEventEntryRequest(EventId)
         );
 
-        this.ApiContext
-            .PlayerEventData
-            .Should()
+        this.ApiContext.PlayerEventData.Should()
             .ContainEquivalentOf(
                 new DbPlayerEventData()
                 {
@@ -59,21 +57,15 @@ public class EarnEventTest : TestFixture
                 opts => opts.Excluding(x => x.Owner)
             );
 
-        this.ApiContext
-            .PlayerMissions
-            .Should()
+        this.ApiContext.PlayerMissions.Should()
             .HaveCount(8 + 25, because: "the event has 8 daily missions and 25 limited missions");
-        this.ApiContext
-            .PlayerMissions
-            .ToList()
+        this.ApiContext.PlayerMissions.ToList()
             .Should()
             .AllSatisfy(x =>
             {
                 x.GroupId.Should().Be(EventId);
             });
-        this.ApiContext
-            .PlayerMissions
-            .Should()
+        this.ApiContext.PlayerMissions.Should()
             .Contain(
                 x => x.Id == 11650101 && x.State == MissionState.Completed,
                 "this is the event participation mission"
@@ -90,9 +82,7 @@ public class EarnEventTest : TestFixture
             );
 
         evtData
-            .data
-            .earn_event_user_data
-            .Should()
+            .data.earn_event_user_data.Should()
             .BeNull(because: "this signals the client to call /earn_event/entry");
     }
 
@@ -111,9 +101,7 @@ public class EarnEventTest : TestFixture
             );
 
         evtData
-            .data
-            .earn_event_user_data
-            .Should()
+            .data.earn_event_user_data.Should()
             .BeEquivalentTo(
                 new EarnEventUserList()
                 {
@@ -136,17 +124,15 @@ public class EarnEventTest : TestFixture
             new EarnEventEntryRequest(EventId)
         );
 
-        DbPlayerEventItem pointItem = await ApiContext
-            .PlayerEventItems
-            .SingleAsync(
-                x => x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint
-            );
+        DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
+            x => x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint
+        );
 
         pointItem.Quantity += 10;
 
-        ApiContext
-            .PlayerEventRewards
-            .RemoveRange(ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId));
+        ApiContext.PlayerEventRewards.RemoveRange(
+            ApiContext.PlayerEventRewards.Where(x => x.EventId == EventId)
+        );
 
         await ApiContext.SaveChangesAsync();
 
@@ -157,12 +143,11 @@ public class EarnEventTest : TestFixture
             );
 
         evtResp
-            .data
-            .event_reward_entity_list
-            .Should()
+            .data.event_reward_entity_list.Should()
             .HaveCount(1)
-            .And
-            .ContainEquivalentOf(new AtgenBuildEventRewardEntityList(EntityTypes.Mana, 0, 3000));
+            .And.ContainEquivalentOf(
+                new AtgenBuildEventRewardEntityList(EntityTypes.Mana, 0, 3000)
+            );
         evtResp.data.event_reward_list.Should().HaveCount(1);
         evtResp.data.entity_result.Should().NotBeNull();
         evtResp.data.update_data_list.Should().NotBeNull();

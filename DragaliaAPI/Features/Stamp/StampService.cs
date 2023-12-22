@@ -31,10 +31,9 @@ public class StampService : IStampService
         // TODO: implement database table for earned stickers.
 
         return Task.FromResult(
-            MasterAsset
-                .StampData
-                .Enumerable
-                .Select(x => new StampList() { stamp_id = x.Id, is_new = false })
+            MasterAsset.StampData.Enumerable.Select(
+                x => new StampList() { stamp_id = x.Id, is_new = false }
+            )
         );
     }
 

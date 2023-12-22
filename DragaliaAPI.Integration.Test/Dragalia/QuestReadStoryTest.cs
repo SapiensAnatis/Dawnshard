@@ -20,20 +20,14 @@ public class QuestReadStoryTest : TestFixture
 
         response.update_data_list.user_data.Should().NotBeNull();
         response
-            .update_data_list
-            .chara_list
-            .Should()
+            .update_data_list.chara_list.Should()
             .ContainSingle()
-            .And
-            .Subject
-            .Any(x => x.chara_id == Charas.Ranzal)
+            .And.Subject.Any(x => x.chara_id == Charas.Ranzal)
             .Should()
             .BeTrue();
 
         response
-            .update_data_list
-            .quest_story_list
-            .Should()
+            .update_data_list.quest_story_list.Should()
             .ContainEquivalentOf(new QuestStoryList() { quest_story_id = 1000106, state = 1 });
     }
 
@@ -47,16 +41,13 @@ public class QuestReadStoryTest : TestFixture
             )
         ).data;
 
-        this.ApiContext
-            .PlayerStoryState
-            .First(x => x.ViewerId == ViewerId && x.StoryId == 1001410)
-            .State
-            .Should()
+        this.ApiContext.PlayerStoryState.First(x => x.ViewerId == ViewerId && x.StoryId == 1001410)
+            .State.Should()
             .Be(StoryState.Read);
 
-        List<DbPlayerStoryState> storyStates = await this.ApiContext
-            .PlayerStoryState
-            .Where(x => x.ViewerId == ViewerId)
+        List<DbPlayerStoryState> storyStates = await this.ApiContext.PlayerStoryState.Where(
+            x => x.ViewerId == ViewerId
+        )
             .ToListAsync();
 
         storyStates.Should().Contain(x => x.StoryId == 1001410 && x.State == StoryState.Read);

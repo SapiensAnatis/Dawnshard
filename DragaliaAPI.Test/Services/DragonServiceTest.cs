@@ -132,14 +132,12 @@ public class DragonServiceTest
         gifts
             .Where(x => x.DragonGiftId == DragonGifts.StrawberryTart)
             .First()
-            .Quantity
-            .Should()
+            .Quantity.Should()
             .Be(0);
         gifts
             .Where(x => x.DragonGiftId == DragonGifts.CompellingBook)
             .First()
-            .Quantity
-            .Should()
+            .Quantity.Should()
             .Be(0);
 
         responseData.dragon_gift_reward_list.Count().Should().Be(2);
@@ -197,10 +195,8 @@ public class DragonServiceTest
 
         responseData.dragon_gift_reward_list.Count().Should().Be(1);
         responseData
-            .dragon_gift_reward_list
-            .First(x => x.dragon_gift_id == DragonGifts.FreshBread)
-            .reward_reliability_list
-            .Should()
+            .dragon_gift_reward_list.First(x => x.dragon_gift_id == DragonGifts.FreshBread)
+            .reward_reliability_list.Should()
             .BeEmpty();
 
         dragonRels[0].Exp.Should().Be(36300);

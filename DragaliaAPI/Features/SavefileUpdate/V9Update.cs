@@ -109,16 +109,14 @@ public class V9Update(
 
     private void AddStory(int storyId)
     {
-        apiContext
-            .PlayerStoryState
-            .Add(
-                new DbPlayerStoryState()
-                {
-                    ViewerId = playerIdentityService.ViewerId,
-                    StoryId = storyId,
-                    State = 0,
-                    StoryType = StoryTypes.Chara
-                }
-            );
+        apiContext.PlayerStoryState.Add(
+            new DbPlayerStoryState()
+            {
+                ViewerId = playerIdentityService.ViewerId,
+                StoryId = storyId,
+                State = 0,
+                StoryType = StoryTypes.Chara
+            }
+        );
     }
 }

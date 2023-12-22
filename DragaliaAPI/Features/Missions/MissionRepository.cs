@@ -22,14 +22,14 @@ public class MissionRepository(
     private readonly IPlayerIdentityService playerIdentityService = playerIdentityService;
 
     public IQueryable<DbPlayerMission> Missions =>
-        this.apiContext
-            .PlayerMissions
-            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+        this.apiContext.PlayerMissions.Where(
+            x => x.ViewerId == this.playerIdentityService.ViewerId
+        );
 
     public IQueryable<DbCompletedDailyMission> CompletedDailyMissions =>
-        this.apiContext
-            .CompletedDailyMissions
-            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+        this.apiContext.CompletedDailyMissions.Where(
+            x => x.ViewerId == this.playerIdentityService.ViewerId
+        );
 
     public IQueryable<DbPlayerMission> GetMissionsByType(MissionType type)
     {
@@ -38,10 +38,11 @@ public class MissionRepository(
 
     public async Task<DbPlayerMission> GetMissionByIdAsync(MissionType type, int id)
     {
-        return await this.apiContext
-                .PlayerMissions
-                .FindAsync(this.playerIdentityService.ViewerId, id, type)
-            ?? throw new DragaliaException(ResultCode.MissionIdNotFound, "Mission not found");
+        return await this.apiContext.PlayerMissions.FindAsync(
+                this.playerIdentityService.ViewerId,
+                id,
+                type
+            ) ?? throw new DragaliaException(ResultCode.MissionIdNotFound, "Mission not found");
     }
 
     public async Task<ILookup<MissionType, DbPlayerMission>> GetAllMissionsPerTypeAsync()
@@ -59,21 +60,18 @@ public class MissionRepository(
         int? groupId = null
     )
     {
-        return this.apiContext
-            .PlayerMissions
-            .Add(
-                new DbPlayerMission
-                {
-                    ViewerId = this.playerIdentityService.ViewerId,
-                    Id = id,
-                    Type = type,
-                    Start = startTime ?? DateTimeOffset.UnixEpoch,
-                    End = endTime ?? DateTimeOffset.UnixEpoch,
-                    State = MissionState.InProgress,
-                    GroupId = groupId
-                }
-            )
-            .Entity;
+        return this.apiContext.PlayerMissions.Add(
+            new DbPlayerMission
+            {
+                ViewerId = this.playerIdentityService.ViewerId,
+                Id = id,
+                Type = type,
+                Start = startTime ?? DateTimeOffset.UnixEpoch,
+                End = endTime ?? DateTimeOffset.UnixEpoch,
+                State = MissionState.InProgress,
+                GroupId = groupId
+            }
+        ).Entity;
     }
 
     public async Task AddCompletedDailyMission(DbPlayerMission originalMission)
@@ -85,19 +83,17 @@ public class MissionRepository(
         if (await this.apiContext.CompletedDailyMissions.FindAsync(viewerId, id, date) != null)
             return;
 
-        this.apiContext
-            .CompletedDailyMissions
-            .Add(
-                new DbCompletedDailyMission()
-                {
-                    ViewerId = viewerId,
-                    Id = id,
-                    Date = date,
-                    StartDate = originalMission.Start,
-                    EndDate = originalMission.End,
-                    Progress = originalMission.Progress
-                }
-            );
+        this.apiContext.CompletedDailyMissions.Add(
+            new DbCompletedDailyMission()
+            {
+                ViewerId = viewerId,
+                Id = id,
+                Date = date,
+                StartDate = originalMission.Start,
+                EndDate = originalMission.End,
+                Progress = originalMission.Progress
+            }
+        );
     }
 
     public async Task ClearDailyMissions()

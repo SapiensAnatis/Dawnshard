@@ -19,9 +19,9 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
         apiContext.PlayerDmodeDungeons.Where(x => x.ViewerId == playerIdentityService.ViewerId);
 
     public IQueryable<DbPlayerDmodeServitorPassive> ServitorPassives =>
-        apiContext
-            .PlayerDmodeServitorPassives
-            .Where(x => x.ViewerId == playerIdentityService.ViewerId);
+        apiContext.PlayerDmodeServitorPassives.Where(
+            x => x.ViewerId == playerIdentityService.ViewerId
+        );
 
     public IQueryable<DbPlayerDmodeExpedition> Expedition =>
         apiContext.PlayerDmodeExpeditions.Where(x => x.ViewerId == playerIdentityService.ViewerId);
@@ -57,17 +57,17 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public void InitializeForPlayer()
     {
-        apiContext
-            .PlayerDmodeInfos
-            .Add(new DbPlayerDmodeInfo { ViewerId = playerIdentityService.ViewerId });
+        apiContext.PlayerDmodeInfos.Add(
+            new DbPlayerDmodeInfo { ViewerId = playerIdentityService.ViewerId }
+        );
 
-        apiContext
-            .PlayerDmodeDungeons
-            .Add(new DbPlayerDmodeDungeon { ViewerId = playerIdentityService.ViewerId });
+        apiContext.PlayerDmodeDungeons.Add(
+            new DbPlayerDmodeDungeon { ViewerId = playerIdentityService.ViewerId }
+        );
 
-        apiContext
-            .PlayerDmodeExpeditions
-            .Add(new DbPlayerDmodeExpedition { ViewerId = playerIdentityService.ViewerId });
+        apiContext.PlayerDmodeExpeditions.Add(
+            new DbPlayerDmodeExpedition { ViewerId = playerIdentityService.ViewerId }
+        );
     }
 
     public DbPlayerDmodeChara AddChara(Charas charaId)
@@ -84,8 +84,7 @@ public class DmodeRepository(ApiContext apiContext, IPlayerIdentityService playe
     )
     {
         return apiContext
-            .PlayerDmodeServitorPassives
-            .Add(
+            .PlayerDmodeServitorPassives.Add(
                 new DbPlayerDmodeServitorPassive
                 {
                     ViewerId = playerIdentityService.ViewerId,

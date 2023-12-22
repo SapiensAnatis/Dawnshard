@@ -94,14 +94,10 @@ public class DeviceAccountService : IDeviceAccountService
 
         // Dynamic salt would be better.
         // But security is not a top priority for this application; it is unlikely to be publically hosted for mass use.
-        byte[] saltBytes = Encoding
-            .UTF8
-            .GetBytes(
-                this.configuration.GetValue<string>("HashSalt")
-                    ?? throw new NullReferenceException(
-                        "Could not find salt from configuration file"
-                    )
-            );
+        byte[] saltBytes = Encoding.UTF8.GetBytes(
+            this.configuration.GetValue<string>("HashSalt")
+                ?? throw new NullReferenceException("Could not find salt from configuration file")
+        );
 
         Rfc2898DeriveBytes pkbdf2 = new(passwordBytes, saltBytes, 10000, HashAlgorithmName.SHA256);
         byte[] hashBytes = pkbdf2.GetBytes(20);

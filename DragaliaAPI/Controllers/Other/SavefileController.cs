@@ -63,8 +63,7 @@ public class SavefileController : ControllerBase
     private async Task<string> LookupAccountId(long viewerId)
     {
         // Note that unlike in AuthService, a savefile must already exist here, hence no OrDefault
-        return await this.userDataRepository
-            .GetViewerData(viewerId)
+        return await this.userDataRepository.GetViewerData(viewerId)
             .Select(x => x.Owner!.AccountId)
             .SingleAsync();
     }

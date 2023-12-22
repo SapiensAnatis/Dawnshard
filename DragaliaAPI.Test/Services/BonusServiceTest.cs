@@ -42,25 +42,21 @@ public class BonusServiceTest
         JsonDocument savefile = JsonDocument.Parse(json);
 
         IEnumerable<BuildList> inputBuildList = savefile
-            .RootElement
-            .GetProperty("data")
+            .RootElement.GetProperty("data")
             .GetProperty("build_list")
             .Deserialize<IEnumerable<BuildList>>(ApiJsonOptions.Instance)!;
 
         IEnumerable<WeaponBodyList> inputWeaponList = savefile
-            .RootElement
-            .GetProperty("data")
+            .RootElement.GetProperty("data")
             .GetProperty("weapon_body_list")
             .Deserialize<IEnumerable<WeaponBodyList>>(ApiJsonOptions.Instance)!;
 
         FortBonusList expectedBonusList = savefile
-            .RootElement
-            .GetProperty("data")
+            .RootElement.GetProperty("data")
             .GetProperty("fort_bonus_list")
             .Deserialize<FortBonusList>(ApiJsonOptions.Instance)!;
 
-        this.mockFortRepository
-            .SetupGet(x => x.Builds)
+        this.mockFortRepository.SetupGet(x => x.Builds)
             .Returns(
                 inputBuildList
                     .Select(
@@ -76,8 +72,7 @@ public class BonusServiceTest
                     .BuildMock()
             );
 
-        this.mockWeaponBodyRepository
-            .SetupGet(x => x.WeaponBodies)
+        this.mockWeaponBodyRepository.SetupGet(x => x.WeaponBodies)
             .Returns(
                 inputWeaponList
                     .Select(
@@ -111,8 +106,7 @@ public class BonusServiceTest
     {
         int flamesOfReflectionCompendiumId = 20816;
 
-        this.mockFortRepository
-            .SetupGet(x => x.Builds)
+        this.mockFortRepository.SetupGet(x => x.Builds)
             .Returns(
                 new List<DbFortBuild>()
                 {

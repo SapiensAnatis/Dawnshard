@@ -290,9 +290,7 @@ public class MissionProgressionService(
         while (this.eventQueue.TryDequeue(out MissionEvent? evt))
         {
             List<(MissionType Type, int Id)> affectedMissions = MasterAsset
-                .MissionProgressionInfo
-                .Enumerable
-                .Where(x => x.CompleteType == evt.Type)
+                .MissionProgressionInfo.Enumerable.Where(x => x.CompleteType == evt.Type)
                 .Where(
                     x =>
                         (x.Parameter is null || x.Parameter == evt.Parameter)
@@ -307,8 +305,7 @@ public class MissionProgressionService(
                 continue;
 
             missionList ??= await missionRepository
-                .Missions
-                .Where(x => x.State == MissionState.InProgress)
+                .Missions.Where(x => x.State == MissionState.InProgress)
                 .ToListAsync();
 
             foreach (
@@ -321,10 +318,8 @@ public class MissionProgressionService(
             {
                 Mission mission = Mission.From(progressingMission.Type, progressingMission.Id);
 
-                MissionProgressionInfo progressionInfo = MasterAsset
-                    .MissionProgressionInfo
-                    .Enumerable
-                    .Single(
+                MissionProgressionInfo progressionInfo =
+                    MasterAsset.MissionProgressionInfo.Enumerable.Single(
                         x =>
                             x.MissionType == progressingMission.Type
                             && x.MissionId == progressingMission.Id

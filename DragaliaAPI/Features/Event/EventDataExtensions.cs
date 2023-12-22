@@ -35,63 +35,43 @@ internal static class EventDataExtensions
         {
             EventKindType.Build
                 => MasterAsset
-                    .BuildEventItem
-                    .Enumerable
-                    .Where(x => x.EventId == eventId)
+                    .BuildEventItem.Enumerable.Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Raid
                 => MasterAsset
-                    .RaidEventItem
-                    .Enumerable
-                    .Where(x => x.RaidEventId == eventId)
+                    .RaidEventItem.Enumerable.Where(x => x.RaidEventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Combat
                 => MasterAsset
-                    .CombatEventItem
-                    .Enumerable
-                    .Where(x => x.EventId == eventId)
+                    .CombatEventItem.Enumerable.Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.BattleRoyal
                 => MasterAsset
-                    .BattleRoyalEventItem
-                    .Enumerable
-                    .Where(x => x.EventId == eventId)
+                    .BattleRoyalEventItem.Enumerable.Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Clb01
                 => MasterAsset
-                    .Clb01EventItem
-                    .Enumerable
-                    .Where(x => x.EventId == eventId)
+                    .Clb01EventItem.Enumerable.Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Collect
                 => MasterAsset
-                    .CollectEventItem
-                    .Enumerable
-                    .Where(x => x.EventId == eventId)
+                    .CollectEventItem.Enumerable.Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Earn
                 => MasterAsset
-                    .EarnEventItem
-                    .Enumerable
-                    .Where(x => x.EventId == eventId)
+                    .EarnEventItem.Enumerable.Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.ExHunter
                 => MasterAsset
-                    .ExHunterEventItem
-                    .Enumerable
-                    .Where(x => x.EventId == eventId)
+                    .ExHunterEventItem.Enumerable.Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.ExRush
                 => MasterAsset
-                    .ExRushEventItem
-                    .Enumerable
-                    .Where(x => x.EventId == eventId)
+                    .ExRushEventItem.Enumerable.Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             EventKindType.Simple
                 => MasterAsset
-                    .SimpleEventItem
-                    .Enumerable
-                    .Where(x => x.EventId == eventId)
+                    .SimpleEventItem.Enumerable.Where(x => x.EventId == eventId)
                     .Select(x => x.Id),
             _ => Enumerable.Empty<int>(),
         };
@@ -107,16 +87,14 @@ internal static class EventDataExtensions
             or EventKindType.ExHunter
                 => MasterAsset
                     .RaidEventReward[eventId]
-                    .Values
-                    .Cast<IEventReward>()
+                    .Values.Cast<IEventReward>()
                     .ToDictionary(x => x.Id, x => x),
 
             // BuildEventReward is the default
             _
                 => MasterAsset
                     .BuildEventReward[eventId]
-                    .Values
-                    .Cast<IEventReward>()
+                    .Values.Cast<IEventReward>()
                     .ToDictionary(x => x.Id, x => x)
         };
     }
@@ -126,9 +104,7 @@ internal static class EventDataExtensions
         int eventId = data.Id;
 
         return MasterAsset
-            .EventPassive
-            .Enumerable
-            .Where(x => x.EventId == eventId)
+            .EventPassive.Enumerable.Where(x => x.EventId == eventId)
             .Select(x => x.Id);
     }
 }

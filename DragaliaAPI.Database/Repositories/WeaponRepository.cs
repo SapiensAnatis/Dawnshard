@@ -39,48 +39,44 @@ public class WeaponRepository : IWeaponRepository
         this.apiContext.PlayerWeapons.Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
 
     public IQueryable<DbWeaponSkin> WeaponSkins =>
-        this.apiContext
-            .PlayerWeaponSkins
-            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+        this.apiContext.PlayerWeaponSkins.Where(
+            x => x.ViewerId == this.playerIdentityService.ViewerId
+        );
 
     public IQueryable<DbWeaponPassiveAbility> WeaponPassiveAbilities =>
-        this.apiContext
-            .PlayerPassiveAbilities
-            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+        this.apiContext.PlayerPassiveAbilities.Where(
+            x => x.ViewerId == this.playerIdentityService.ViewerId
+        );
 
     public IQueryable<DbWeaponPassiveAbility> GetPassiveAbilities(WeaponBodies id)
     {
         WeaponBody data = MasterAsset.WeaponBody.Get(id);
 
         IEnumerable<int> searchIds = MasterAsset
-            .WeaponPassiveAbility
-            .Enumerable
-            .Where(x => x.WeaponType == data.WeaponType && x.ElementalType == data.ElementalType)
+            .WeaponPassiveAbility.Enumerable.Where(
+                x => x.WeaponType == data.WeaponType && x.ElementalType == data.ElementalType
+            )
             .ExceptBy(AstralsBaneAbilityIds, x => x.AbilityId) // Sending astral abilities in the list breaks scorch res. Don't ask me why.
             .Select(x => x.Id);
 
-        return this.apiContext
-            .PlayerPassiveAbilities
-            .Where(
-                x =>
-                    x.ViewerId == this.playerIdentityService.ViewerId
-                    && searchIds.Contains(x.WeaponPassiveAbilityId)
-            );
+        return this.apiContext.PlayerPassiveAbilities.Where(
+            x =>
+                x.ViewerId == this.playerIdentityService.ViewerId
+                && searchIds.Contains(x.WeaponPassiveAbilityId)
+        );
     }
 
     public async Task Add(WeaponBodies weaponBodyId)
     {
         this.logger.LogDebug("Adding weapon {weapon}", weaponBodyId);
 
-        await this.apiContext
-            .PlayerWeapons
-            .AddAsync(
-                new DbWeaponBody()
-                {
-                    ViewerId = this.playerIdentityService.ViewerId,
-                    WeaponBodyId = weaponBodyId
-                }
-            );
+        await this.apiContext.PlayerWeapons.AddAsync(
+            new DbWeaponBody()
+            {
+                ViewerId = this.playerIdentityService.ViewerId,
+                WeaponBodyId = weaponBodyId
+            }
+        );
     }
 
     public async Task AddSkin(int weaponSkinId)
@@ -88,9 +84,10 @@ public class WeaponRepository : IWeaponRepository
         this.logger.LogDebug("Adding weapon skin {skin}", weaponSkinId);
 
         if (
-            await this.apiContext
-                .PlayerWeaponSkins
-                .FindAsync(this.playerIdentityService.ViewerId, weaponSkinId)
+            await this.apiContext.PlayerWeaponSkins.FindAsync(
+                this.playerIdentityService.ViewerId,
+                weaponSkinId
+            )
             is not null
         )
         {
@@ -98,16 +95,14 @@ public class WeaponRepository : IWeaponRepository
             return;
         }
 
-        await this.apiContext
-            .PlayerWeaponSkins
-            .AddAsync(
-                new DbWeaponSkin()
-                {
-                    ViewerId = this.playerIdentityService.ViewerId,
-                    WeaponSkinId = weaponSkinId,
-                    GetTime = DateTimeOffset.UtcNow
-                }
-            );
+        await this.apiContext.PlayerWeaponSkins.AddAsync(
+            new DbWeaponSkin()
+            {
+                ViewerId = this.playerIdentityService.ViewerId,
+                WeaponSkinId = weaponSkinId,
+                GetTime = DateTimeOffset.UtcNow
+            }
+        );
     }
 
     public async Task<bool> CheckOwnsWeapons(params WeaponBodies[] weaponIds)
@@ -115,8 +110,7 @@ public class WeaponRepository : IWeaponRepository
         List<WeaponBodies> filtered = weaponIds.Where(x => x != WeaponBodiesEnum.Empty).ToList();
 
         return (
-                await this.WeaponBodies
-                    .Select(x => x.WeaponBodyId)
+                await this.WeaponBodies.Select(x => x.WeaponBodyId)
                     .Where(x => filtered.Contains(x))
                     .CountAsync()
             ) == filtered.Count;
@@ -144,14 +138,12 @@ public class WeaponRepository : IWeaponRepository
             return;
         }
 
-        await this.apiContext
-            .PlayerPassiveAbilities
-            .AddAsync(
-                new()
-                {
-                    ViewerId = this.playerIdentityService.ViewerId,
-                    WeaponPassiveAbilityId = passiveAbility.Id
-                }
-            );
+        await this.apiContext.PlayerPassiveAbilities.AddAsync(
+            new()
+            {
+                ViewerId = this.playerIdentityService.ViewerId,
+                WeaponPassiveAbilityId = passiveAbility.Id
+            }
+        );
     }
 }

@@ -99,9 +99,7 @@ public class DragonTest : TestFixture
         response.update_data_list.Should().NotBeNull();
         response.update_data_list.dragon_list.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .update_data_list
-            .dragon_list
-            .Where(x => (long)x.dragon_key_id == dbDragon.DragonKeyId)
+            .update_data_list.dragon_list.Where(x => (long)x.dragon_key_id == dbDragon.DragonKeyId)
             .First();
         returnDragon.exp.Should().Be(testCase.ExpectedXp);
         returnDragon.level.Should().Be(testCase.ExpectedLvl);
@@ -118,8 +116,7 @@ public class DragonTest : TestFixture
         ApiContext context = this.Services.GetRequiredService<ApiContext>();
 
         DbPlayerDragonData dbDragon = context
-            .PlayerDragonData
-            .Add(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Liger))
+            .PlayerDragonData.Add(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Liger))
             .Entity;
 
         await context.SaveChangesAsync();
@@ -146,9 +143,7 @@ public class DragonTest : TestFixture
         response.update_data_list.Should().NotBeNull();
         response.update_data_list.dragon_list.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .update_data_list
-            .dragon_list
-            .Where(x => (long)x.dragon_key_id == dbDragon.DragonKeyId)
+            .update_data_list.dragon_list.Where(x => (long)x.dragon_key_id == dbDragon.DragonKeyId)
             .First();
         returnDragon.attack_plus_count.Should().Be(25);
     }
@@ -166,8 +161,7 @@ public class DragonTest : TestFixture
 
         context.ChangeTracker.Clear();
         DbPlayerUserData userData = await context
-            .PlayerUserData
-            .Where(x => x.ViewerId == ViewerId)
+            .PlayerUserData.Where(x => x.ViewerId == ViewerId)
             .FirstAsync();
 
         long startCoin = userData.Coin;
@@ -190,20 +184,17 @@ public class DragonTest : TestFixture
         response.update_data_list.Should().NotBeNull();
         response.update_data_list.dragon_list.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .update_data_list
-            .dragon_list
-            .Where(x => (long)x.dragon_key_id == dragon.DragonKeyId)
+            .update_data_list.dragon_list.Where(x => (long)x.dragon_key_id == dragon.DragonKeyId)
             .First();
         returnDragon.attack_plus_count.Should().Be(0);
         response.update_data_list.user_data.Should().NotBeNull();
         response.update_data_list.user_data.coin.Should().Be(startCoin - (20000 * 50));
         response
-            .update_data_list
-            .material_list
-            .Where(x => x.material_id == Materials.AmplifyingDragonscale)
+            .update_data_list.material_list.Where(
+                x => x.material_id == Materials.AmplifyingDragonscale
+            )
             .First()
-            .quantity
-            .Should()
+            .quantity.Should()
             .Be(augmentCount + 50);
     }
 
@@ -227,16 +218,16 @@ public class DragonTest : TestFixture
     [Fact]
     public async Task DragonBuyGiftToSendMultiple_IncreasesReliabilityAndReturnsGifts()
     {
-        this.ApiContext
-            .PlayerDragonReliability
-            .Add(DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.HighChthonius));
+        this.ApiContext.PlayerDragonReliability.Add(
+            DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.HighChthonius)
+        );
 
         await this.ApiContext.SaveChangesAsync();
 
         this.ApiContext.ChangeTracker.Clear();
-        DbPlayerUserData userData = await this.ApiContext
-            .PlayerUserData
-            .Where(x => x.ViewerId == ViewerId)
+        DbPlayerUserData userData = await this.ApiContext.PlayerUserData.Where(
+            x => x.ViewerId == ViewerId
+        )
             .FirstAsync();
 
         long startCoin = userData.Coin;
@@ -260,26 +251,22 @@ public class DragonTest : TestFixture
 
         response.Should().NotBeNull();
         response
-            .shop_gift_list
-            .Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.FreshBread)
+            .shop_gift_list.Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.FreshBread)
             .First()
-            .is_buy
-            .Should()
+            .is_buy.Should()
             .Be(0);
         response
-            .shop_gift_list
-            .Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.TastyMilk)
+            .shop_gift_list.Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.TastyMilk)
             .First()
-            .is_buy
-            .Should()
+            .is_buy.Should()
             .Be(0);
 
         response.dragon_gift_reward_list.Should().NotBeNullOrEmpty();
         response.update_data_list.user_data.coin.Should().Be(startCoin - 1500);
         DragonReliabilityList dragonData = response
-            .update_data_list
-            .dragon_reliability_list
-            .Where(x => x.dragon_id == Dragons.HighChthonius)
+            .update_data_list.dragon_reliability_list.Where(
+                x => x.dragon_id == Dragons.HighChthonius
+            )
             .First();
         dragonData.reliability_total_exp.Should().Be(400);
         dragonData.reliability_level.Should().Be(3);
@@ -307,18 +294,14 @@ public class DragonTest : TestFixture
 
         response.Should().NotBeNull();
         response
-            .shop_gift_list
-            .Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.HeartyStew)
+            .shop_gift_list.Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.HeartyStew)
             .First()
-            .is_buy
-            .Should()
+            .is_buy.Should()
             .Be(0);
 
         response.return_gift_list.Should().NotBeNullOrEmpty();
         DragonReliabilityList dragonData = response
-            .update_data_list
-            .dragon_reliability_list
-            .Where(x => x.dragon_id == Dragons.HighJupiter)
+            .update_data_list.dragon_reliability_list.Where(x => x.dragon_id == Dragons.HighJupiter)
             .First();
         dragonData.reliability_total_exp.Should().Be(1000);
         dragonData.reliability_level.Should().Be(6);
@@ -348,9 +331,7 @@ public class DragonTest : TestFixture
         response.Should().NotBeNull();
         response.return_gift_list.Should().NotBeNullOrEmpty();
         DragonReliabilityList dragonData = response
-            .update_data_list
-            .dragon_reliability_list
-            .Where(x => x.dragon_id == Dragons.HighMercury)
+            .update_data_list.dragon_reliability_list.Where(x => x.dragon_id == Dragons.HighMercury)
             .First();
         dragonData.reliability_total_exp.Should().Be(10000);
         dragonData.reliability_level.Should().Be(18);
@@ -373,9 +354,7 @@ public class DragonTest : TestFixture
 
         response.Should().NotBeNull();
         DragonReliabilityList dragonData = response
-            .update_data_list
-            .dragon_reliability_list
-            .Where(x => x.dragon_id == Dragons.Puppy)
+            .update_data_list.dragon_reliability_list.Where(x => x.dragon_id == Dragons.Puppy)
             .First();
         dragonData.reliability_total_exp.Should().Be(200);
         dragonData.reliability_level.Should().Be(3);
@@ -518,9 +497,7 @@ public class DragonTest : TestFixture
         response.update_data_list.Should().NotBeNull();
         response.update_data_list.dragon_list.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .update_data_list
-            .dragon_list
-            .Where(x => (long)x.dragon_key_id == dbDragon.DragonKeyId)
+            .update_data_list.dragon_list.Where(x => (long)x.dragon_key_id == dbDragon.DragonKeyId)
             .First();
         returnDragon.limit_break_count.Should().Be(testCase.LimitBreakNr);
         if (testCase.LbMatType == DragonLimitBreakMatTypes.Dupe)
@@ -528,9 +505,7 @@ public class DragonTest : TestFixture
             response.delete_data_list.Should().NotBeNull();
             response.delete_data_list.delete_dragon_list.Should().NotBeNullOrEmpty();
             response
-                .delete_data_list
-                .delete_dragon_list
-                .Should()
+                .delete_data_list.delete_dragon_list.Should()
                 .Contain(x => (long)x.dragon_key_id == dbDragonSacrifice!.DragonKeyId);
         }
         else
@@ -560,9 +535,7 @@ public class DragonTest : TestFixture
         response.update_data_list.Should().NotBeNull();
         response.update_data_list.dragon_list.Should().NotBeNullOrEmpty();
         DragonList returnDragon = response
-            .update_data_list
-            .dragon_list
-            .Where(x => (long)x.dragon_key_id == dragon.DragonKeyId)
+            .update_data_list.dragon_list.Where(x => (long)x.dragon_key_id == dragon.DragonKeyId)
             .First();
         returnDragon.is_lock.Should().BeTrue();
     }
@@ -576,9 +549,7 @@ public class DragonTest : TestFixture
 
         DragonData dragonData = MasterAsset.DragonData.Get(Dragons.GaibhneCreidhne);
 
-        DbPlayerUserData uData = await this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        DbPlayerUserData uData = await this.ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .FirstAsync();
 
@@ -599,10 +570,7 @@ public class DragonTest : TestFixture
         response.delete_data_list.delete_dragon_list.Should().NotBeNullOrEmpty();
         response.update_data_list.user_data.coin.Should().Be(startCoin + dragonData.SellCoin);
         response
-            .update_data_list
-            .user_data
-            .dew_point
-            .Should()
+            .update_data_list.user_data.dew_point.Should()
             .Be((int)startDew + dragonData.SellDewPoint);
     }
 
@@ -612,13 +580,11 @@ public class DragonTest : TestFixture
         ApiContext context = this.Services.GetRequiredService<ApiContext>();
 
         DbPlayerDragonData dragonSimurgh = context
-            .PlayerDragonData
-            .Add(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Simurgh))
+            .PlayerDragonData.Add(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Simurgh))
             .Entity;
 
         DbPlayerDragonData dragonStribog = context
-            .PlayerDragonData
-            .Add(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Stribog))
+            .PlayerDragonData.Add(DbPlayerDragonDataFactory.Create(ViewerId, Dragons.Stribog))
             .Entity;
 
         dragonStribog.LimitBreakCount = 4;
@@ -629,8 +595,7 @@ public class DragonTest : TestFixture
 
         context.ChangeTracker.Clear();
         DbPlayerUserData uData = await context
-            .PlayerUserData
-            .Where(x => x.ViewerId == ViewerId)
+            .PlayerUserData.Where(x => x.ViewerId == ViewerId)
             .FirstAsync();
 
         long startCoin = uData.Coin;
@@ -653,16 +618,10 @@ public class DragonTest : TestFixture
         response.delete_data_list.Should().NotBeNull();
         response.delete_data_list.delete_dragon_list.Should().NotBeNullOrEmpty();
         response
-            .update_data_list
-            .user_data
-            .coin
-            .Should()
+            .update_data_list.user_data.coin.Should()
             .Be(startCoin + dragonDataSimurgh.SellCoin + (dragonDataStribog.SellCoin * 5));
         response
-            .update_data_list
-            .user_data
-            .dew_point
-            .Should()
+            .update_data_list.user_data.dew_point.Should()
             .Be(
                 (int)startDew
                     + dragonDataSimurgh.SellDewPoint

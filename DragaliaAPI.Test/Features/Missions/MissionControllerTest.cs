@@ -56,11 +56,9 @@ public class MissionControllerTest
 
         this.mockMissionService.Setup(x => x.GetMissionNotice(null)).ReturnsAsync(notice);
 
-        this.mockMissionService
-            .Setup(x => x.GetCurrentMainStoryMission())
+        this.mockMissionService.Setup(x => x.GetCurrentMainStoryMission())
             .ReturnsAsync(mainStoryMission);
-        this.mockMissionService
-            .Setup(x => x.BuildNormalResponse<MissionGetMissionListData>())
+        this.mockMissionService.Setup(x => x.BuildNormalResponse<MissionGetMissionListData>())
             .ReturnsAsync(
                 new MissionGetMissionListData()
                 {
@@ -98,12 +96,10 @@ public class MissionControllerTest
             };
 
         this.mockMissionService.Setup(x => x.GetMissionNotice(null)).ReturnsAsync(notice);
-        this.mockMissionService
-            .Setup(x => x.GetCompletedDrillGroups())
+        this.mockMissionService.Setup(x => x.GetCompletedDrillGroups())
             .ReturnsAsync([new DrillMissionGroupList(1)]);
 
-        this.mockMissionRepository
-            .Setup(x => x.GetMissionsByType(MissionType.Drill))
+        this.mockMissionRepository.Setup(x => x.GetMissionsByType(MissionType.Drill))
             .Returns(
                 new List<DbPlayerMission>()
                 {
@@ -129,8 +125,7 @@ public class MissionControllerTest
 
         response!.mission_notice.Should().Be(notice);
         response
-            .drill_mission_list
-            .Should()
+            .drill_mission_list.Should()
             .ContainEquivalentOf(
                 new DrillMissionList(500, 0, 0, DateTimeOffset.UnixEpoch, DateTimeOffset.UnixEpoch)
             );
@@ -144,8 +139,7 @@ public class MissionControllerTest
     [Fact]
     public async Task UnlockDrillMissionGroup_UnlocksGroup()
     {
-        this.mockMissionService
-            .Setup(x => x.UnlockDrillMissionGroup(100))
+        this.mockMissionService.Setup(x => x.UnlockDrillMissionGroup(100))
             .ReturnsAsync(
                 new List<DbPlayerMission>()
                 {
@@ -161,8 +155,7 @@ public class MissionControllerTest
                 }
             );
 
-        this.mockUpdateDataService
-            .Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
 
         DragaliaResult<MissionUnlockDrillMissionGroupData> resp =
@@ -172,8 +165,7 @@ public class MissionControllerTest
 
         MissionUnlockDrillMissionGroupData? response = resp.Value;
         response!
-            .drill_mission_list
-            .Should()
+            .drill_mission_list.Should()
             .ContainEquivalentOf(
                 new DrillMissionList(5000, 0, 1, DateTimeOffset.UnixEpoch, DateTimeOffset.UnixEpoch)
             );
@@ -199,12 +191,10 @@ public class MissionControllerTest
 
         MainStoryMissionGroupReward fakeReward = new(EntityTypes.FortPlant, 10, 500);
 
-        this.mockMissionService
-            .Setup(x => x.UnlockMainMissionGroup(100))
+        this.mockMissionService.Setup(x => x.UnlockMainMissionGroup(100))
             .ReturnsAsync((new[] { fakeReward }, new[] { fakeMission }));
 
-        this.mockUpdateDataService
-            .Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
 
         DragaliaResult<MissionUnlockMainStoryGroupData> resp =
@@ -214,8 +204,7 @@ public class MissionControllerTest
 
         MissionUnlockMainStoryGroupData? response = resp.Value;
         response!
-            .main_story_mission_list
-            .Should()
+            .main_story_mission_list.Should()
             .ContainEquivalentOf(
                 new MainStoryMissionList(
                     5000,
@@ -226,8 +215,7 @@ public class MissionControllerTest
                 )
             );
         response
-            .main_story_mission_unlock_bonus_list
-            .Should()
+            .main_story_mission_unlock_bonus_list.Should()
             .ContainEquivalentOf(
                 new AtgenBuildEventRewardEntityList(EntityTypes.FortPlant, 10, 500)
             );
@@ -244,24 +232,21 @@ public class MissionControllerTest
 
         List<int> fakeIdList = new() { 50, 56, 58, 19 };
 
-        this.mockMissionService
-            .Setup(x => x.RedeemMissions(MissionType.Drill, fakeIdList))
+        this.mockMissionService.Setup(x => x.RedeemMissions(MissionType.Drill, fakeIdList))
             .Returns(Task.CompletedTask);
 
-        this.mockMissionService
-            .Setup(x => x.TryRedeemDrillMissionGroups(It.IsAny<IEnumerable<int>>()))
+        this.mockMissionService.Setup(
+            x => x.TryRedeemDrillMissionGroups(It.IsAny<IEnumerable<int>>())
+        )
             .ReturnsAsync(new List<AtgenBuildEventRewardEntityList>());
 
-        this.mockMissionService
-            .Setup(x => x.GetCompletedDrillGroups())
+        this.mockMissionService.Setup(x => x.GetCompletedDrillGroups())
             .ReturnsAsync(new List<DrillMissionGroupList>() { new(1) });
 
-        this.mockUpdateDataService
-            .Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
 
-        this.mockMissionRepository
-            .Setup(x => x.GetMissionsByType(MissionType.Drill))
+        this.mockMissionRepository.Setup(x => x.GetMissionsByType(MissionType.Drill))
             .Returns(Enumerable.Empty<DbPlayerMission>().AsQueryable().BuildMock());
 
         this.mockRewardService.Setup(x => x.GetEntityResult()).Returns(new EntityResult());

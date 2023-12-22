@@ -62,8 +62,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
             }
         );
 
-        this.weaponRepository
-            .GetPassiveAbilities(WeaponBodies.Nothung)
+        this.weaponRepository.GetPassiveAbilities(WeaponBodies.Nothung)
             .Should()
             .NotContain(x => x.WeaponPassiveAbilityId == 1010108);
     }
@@ -74,14 +73,10 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.weaponRepository.Add(WeaponBodies.Arondight);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture
-            .ApiContext
-            .PlayerWeapons
-            .Single(
-                x =>
-                    x.WeaponBodyId == WeaponBodies.Arondight
-                    && x.ViewerId == IdentityTestUtils.ViewerId
-            )
+        this.fixture.ApiContext.PlayerWeapons.Single(
+            x =>
+                x.WeaponBodyId == WeaponBodies.Arondight && x.ViewerId == IdentityTestUtils.ViewerId
+        )
             .Should()
             .BeEquivalentTo(
                 new DbWeaponBody()
@@ -151,25 +146,19 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         );
 
         int passiveId = MasterAsset
-            .WeaponBody
-            .Get(WeaponBodies.InfernoApogee)
+            .WeaponBody.Get(WeaponBodies.InfernoApogee)
             .GetPassiveAbilityId(1);
         WeaponPassiveAbility passiveAbility = MasterAsset.WeaponPassiveAbility.Get(passiveId);
 
         await this.weaponRepository.AddPassiveAbility(WeaponBodies.InfernoApogee, passiveAbility);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture
-            .ApiContext
-            .PlayerWeapons
-            .Single(x => x.WeaponBodyId == WeaponBodies.InfernoApogee)
-            .UnlockWeaponPassiveAbilityNoList
-            .Should()
+        this.fixture.ApiContext.PlayerWeapons.Single(
+            x => x.WeaponBodyId == WeaponBodies.InfernoApogee
+        )
+            .UnlockWeaponPassiveAbilityNoList.Should()
             .BeEquivalentTo(Enumerable.Repeat(0, 14).Prepend(1));
-        this.fixture
-            .ApiContext
-            .PlayerPassiveAbilities
-            .Should()
+        this.fixture.ApiContext.PlayerPassiveAbilities.Should()
             .ContainEquivalentOf(
                 new DbWeaponPassiveAbility()
                 {
@@ -191,13 +180,13 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         );
 
         int passiveId = MasterAsset
-            .WeaponBody
-            .Get(WeaponBodies.RoaringWeald)
+            .WeaponBody.Get(WeaponBodies.RoaringWeald)
             .GetPassiveAbilityId(1);
         WeaponPassiveAbility passiveAbility = MasterAsset.WeaponPassiveAbility.Get(passiveId);
 
-        await this.weaponRepository
-            .Invoking(x => x.AddPassiveAbility(WeaponBodies.RoaringWeald, passiveAbility))
+        await this.weaponRepository.Invoking(
+            x => x.AddPassiveAbility(WeaponBodies.RoaringWeald, passiveAbility)
+        )
             .Should()
             .NotThrowAsync();
     }
@@ -208,10 +197,7 @@ public class WeaponRepositoryTest : IClassFixture<DbTestFixture>
         await this.weaponRepository.AddSkin(4);
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture
-            .ApiContext
-            .PlayerWeaponSkins
-            .Should()
+        this.fixture.ApiContext.PlayerWeaponSkins.Should()
             .ContainEquivalentOf(
                 new DbWeaponSkin()
                 {

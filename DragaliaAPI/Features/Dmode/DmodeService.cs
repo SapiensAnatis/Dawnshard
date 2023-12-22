@@ -109,9 +109,8 @@ public class DmodeService(
 
     public async Task<DmodeExpedition> GetExpedition()
     {
-        DbPlayerDmodeExpedition? expedition = await dmodeRepository
-            .Expedition
-            .SingleOrDefaultAsync();
+        DbPlayerDmodeExpedition? expedition =
+            await dmodeRepository.Expedition.SingleOrDefaultAsync();
 
         if (expedition == null)
         {
@@ -212,9 +211,9 @@ public class DmodeService(
             passive.Level = passiveList.passive_level;
         }
 
-        return currentPassives
-            .Values
-            .Select(x => new DmodeServitorPassiveList(x.PassiveId, x.Level));
+        return currentPassives.Values.Select(
+            x => new DmodeServitorPassiveList(x.PassiveId, x.Level)
+        );
     }
 
     public async Task<DmodeExpedition> StartExpedition(int targetFloor, IEnumerable<Charas> charas)

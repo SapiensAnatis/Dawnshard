@@ -198,8 +198,7 @@ public class DungeonSkipController(
             };
 
         session.EnemyList = questData
-            .AreaInfo
-            .Select((_, index) => oddsInfoService.GetOddsInfo(questData.Id, index))
+            .AreaInfo.Select((_, index) => oddsInfoService.GetOddsInfo(questData.Id, index))
             .ToDictionary(x => x.area_index, x => x.enemy.Repeat(playCount));
 
         PlayRecord playRecord =
@@ -207,18 +206,16 @@ public class DungeonSkipController(
             {
                 is_clear = 1,
                 time = -1,
-                treasure_record = session
-                    .EnemyList
-                    .Select(
-                        x =>
-                            new AtgenTreasureRecord()
-                            {
-                                area_idx = x.Key,
-                                enemy = x.Value.Select(y => 1),
-                                drop_obj = new List<int>(), // TODO
-                                enemy_smash = new List<AtgenEnemySmash>() // TODO
-                            }
-                    )
+                treasure_record = session.EnemyList.Select(
+                    x =>
+                        new AtgenTreasureRecord()
+                        {
+                            area_idx = x.Key,
+                            enemy = x.Value.Select(y => 1),
+                            drop_obj = new List<int>(), // TODO
+                            enemy_smash = new List<AtgenEnemySmash>() // TODO
+                        }
+                )
             };
 
         IngameResultData ingameResultData = await dungeonRecordService.GenerateIngameResultData(
@@ -248,9 +245,9 @@ public class DungeonSkipController(
                 acc.grow_record.take_player_exp += current.grow_record.take_player_exp;
                 acc.grow_record.take_mana += current.grow_record.take_mana;
 
-                acc.reward_record.quest_bonus_list = acc.reward_record
-                    .quest_bonus_list
-                    .Concat(current.reward_record.quest_bonus_list);
+                acc.reward_record.quest_bonus_list = acc.reward_record.quest_bonus_list.Concat(
+                    current.reward_record.quest_bonus_list
+                );
 
                 acc.reward_record.player_level_up_fstone += current
                     .reward_record

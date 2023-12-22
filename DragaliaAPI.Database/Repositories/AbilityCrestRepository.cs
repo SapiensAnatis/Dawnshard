@@ -23,14 +23,14 @@ public class AbilityCrestRepository : IAbilityCrestRepository
     }
 
     public IQueryable<DbAbilityCrest> AbilityCrests =>
-        this.apiContext
-            .PlayerAbilityCrests
-            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+        this.apiContext.PlayerAbilityCrests.Where(
+            x => x.ViewerId == this.playerIdentityService.ViewerId
+        );
 
     public IQueryable<DbAbilityCrestSet> AbilityCrestSets =>
-        this.apiContext
-            .PlayerAbilityCrestSets
-            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+        this.apiContext.PlayerAbilityCrestSets.Where(
+            x => x.ViewerId == this.playerIdentityService.ViewerId
+        );
 
     public async Task Add(
         AbilityCrests abilityCrestId,
@@ -64,9 +64,10 @@ public class AbilityCrestRepository : IAbilityCrestRepository
     }
 
     public async Task<DbAbilityCrest?> FindAsync(AbilityCrests abilityCrestId) =>
-        await this.apiContext
-            .PlayerAbilityCrests
-            .FindAsync(this.playerIdentityService.ViewerId, abilityCrestId);
+        await this.apiContext.PlayerAbilityCrests.FindAsync(
+            this.playerIdentityService.ViewerId,
+            abilityCrestId
+        );
 
     public async Task AddOrUpdateSet(DbAbilityCrestSet abilityCrestSet)
     {
@@ -81,16 +82,14 @@ public class AbilityCrestRepository : IAbilityCrestRepository
         }
         else
         {
-            this.apiContext
-                .PlayerAbilityCrestSets
-                .Entry(dbAbilityCrestSet)
-                .CurrentValues
-                .SetValues(abilityCrestSet);
+            this.apiContext.PlayerAbilityCrestSets.Entry(dbAbilityCrestSet)
+                .CurrentValues.SetValues(abilityCrestSet);
         }
     }
 
     public async Task<DbAbilityCrestSet?> FindSetAsync(int abilityCrestSetNo) =>
-        await this.apiContext
-            .PlayerAbilityCrestSets
-            .FindAsync(this.playerIdentityService.ViewerId, abilityCrestSetNo);
+        await this.apiContext.PlayerAbilityCrestSets.FindAsync(
+            this.playerIdentityService.ViewerId,
+            abilityCrestSetNo
+        );
 }

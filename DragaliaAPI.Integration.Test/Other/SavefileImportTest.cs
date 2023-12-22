@@ -66,12 +66,9 @@ public class SavefileImportTest : TestFixture
         );
         importResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        this.ApiContext.PlayerUserData.AsNoTracking()
             .Single(x => x.ViewerId == this.ViewerId)
-            .LastSaveImportTime
-            .Should()
+            .LastSaveImportTime.Should()
             .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
 
         LoadIndexData storedSavefile = (
@@ -156,18 +153,16 @@ public class SavefileImportTest : TestFixture
         HttpContent content = PrepareSavefileRequest();
         await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
 
-        this.ApiContext
-            .PlayerStoryState
-            .Single(x => x.ViewerId == this.ViewerId && x.StoryId == 110313011)
-            .StoryType
-            .Should()
+        this.ApiContext.PlayerStoryState.Single(
+            x => x.ViewerId == this.ViewerId && x.StoryId == 110313011
+        )
+            .StoryType.Should()
             .Be(StoryTypes.Chara);
 
-        this.ApiContext
-            .PlayerStoryState
-            .Single(x => x.ViewerId == this.ViewerId && x.StoryId == 210091011)
-            .StoryType
-            .Should()
+        this.ApiContext.PlayerStoryState.Single(
+            x => x.ViewerId == this.ViewerId && x.StoryId == 210091011
+        )
+            .StoryType.Should()
             .Be(StoryTypes.Dragon);
     }
 
@@ -183,9 +178,7 @@ public class SavefileImportTest : TestFixture
         HttpContent content = PrepareSavefileRequest();
         await this.Client.PostAsync($"savefile/import/{this.ViewerId}", content);
 
-        this.ApiContext
-            .Emblems
-            .AsNoTracking()
+        this.ApiContext.Emblems.AsNoTracking()
             .Should()
             .Contain(
                 x => x.ViewerId == this.ViewerId && x.EmblemId == Emblems.IsolationSpeedslayer_1

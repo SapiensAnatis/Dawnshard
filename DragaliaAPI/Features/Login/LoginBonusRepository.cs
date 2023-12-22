@@ -21,8 +21,7 @@ public class LoginBonusRepository(
     private DbLoginBonus Add(int id)
     {
         return apiContext
-            .LoginBonuses
-            .Add(
+            .LoginBonuses.Add(
                 new DbLoginBonus()
                 {
                     ViewerId = playerIdentityService.ViewerId,

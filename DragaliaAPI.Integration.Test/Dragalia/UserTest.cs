@@ -10,9 +10,9 @@ public class UserTest : TestFixture
     [Fact]
     public async Task LinkedNAccount_ReturnsExpectedResponse()
     {
-        DbPlayerUserData dbUserData = this.ApiContext
-            .PlayerUserData
-            .Single(x => x.ViewerId == ViewerId);
+        DbPlayerUserData dbUserData = this.ApiContext.PlayerUserData.Single(
+            x => x.ViewerId == ViewerId
+        );
 
         UserData expectedUserData = this.Mapper.Map<UserData>(dbUserData);
 
@@ -22,8 +22,7 @@ public class UserTest : TestFixture
                 new UserLinkedNAccountRequest()
             )
         )
-            .data
-            .Should()
+            .data.Should()
             .BeEquivalentTo(
                 new UserLinkedNAccountData()
                 {
@@ -42,8 +41,7 @@ public class UserTest : TestFixture
                 new UserGetNAccountInfoRequest()
             )
         )
-            .data
-            .Should()
+            .data.Should()
             .BeEquivalentTo(
                 new UserGetNAccountInfoData()
                 {

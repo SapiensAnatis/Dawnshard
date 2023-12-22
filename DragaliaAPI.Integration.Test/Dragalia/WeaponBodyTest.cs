@@ -36,8 +36,7 @@ public class WeaponBodyTest : TestFixture
             .data
             .update_data_list;
 
-        list.weapon_body_list
-            .Should()
+        list.weapon_body_list.Should()
             .BeEquivalentTo(
                 new List<WeaponBodyList>()
                 {
@@ -82,11 +81,9 @@ public class WeaponBodyTest : TestFixture
             new WeaponBodyCraftRequest() { weapon_body_id = WeaponBodies.PrimalCrimson }
         );
 
-        this.ApiContext
-            .PlayerWeapons
-            .SingleOrDefault(
-                x => x.ViewerId == ViewerId && x.WeaponBodyId == WeaponBodies.PrimalCrimson
-            )
+        this.ApiContext.PlayerWeapons.SingleOrDefault(
+            x => x.ViewerId == ViewerId && x.WeaponBodyId == WeaponBodies.PrimalCrimson
+        )
             .Should()
             .NotBeNull();
 
@@ -108,9 +105,10 @@ public class WeaponBodyTest : TestFixture
         apiContext.ChangeTracker.Clear();
 
         long oldCoin = this.GetRupies();
-        Dictionary<Materials, int> oldMaterials = testCase
-            .ExpMaterialLoss
-            .ToDictionary(x => x.Key, x => GetMaterialCount(x.Key));
+        Dictionary<Materials, int> oldMaterials = testCase.ExpMaterialLoss.ToDictionary(
+            x => x.Key,
+            x => GetMaterialCount(x.Key)
+        );
 
         WeaponBodyBuildupPieceRequest request =
             new()
@@ -147,9 +145,7 @@ public class WeaponBodyTest : TestFixture
             .Should()
             .BeEquivalentTo(testCase.ExpFinalState, opts => opts.Excluding(x => x.ViewerId));
         response
-            .update_data_list
-            .weapon_body_list
-            .Should()
+            .update_data_list.weapon_body_list.Should()
             .BeEquivalentTo(
                 new List<WeaponBodyList>()
                 {
@@ -163,9 +159,7 @@ public class WeaponBodyTest : TestFixture
             int expQuantity = oldMaterials[material] - loss;
 
             response
-                .update_data_list
-                .material_list
-                .Should()
+                .update_data_list.material_list.Should()
                 .ContainEquivalentOf(
                     new MaterialList() { material_id = material, quantity = expQuantity }
                 );
@@ -184,14 +178,11 @@ public class WeaponBodyTest : TestFixture
         )
         {
             response
-                .update_data_list
-                .weapon_passive_ability_list
-                .Should()
+                .update_data_list.weapon_passive_ability_list.Should()
                 .ContainEquivalentOf(this.Mapper.Map<WeaponPassiveAbilityList>(expPassive));
 
             apiContext
-                .PlayerPassiveAbilities
-                .Should()
+                .PlayerPassiveAbilities.Should()
                 .ContainEquivalentOf(expPassive, opts => opts.Excluding(x => x.ViewerId));
         }
 
@@ -199,17 +190,14 @@ public class WeaponBodyTest : TestFixture
         foreach (DbWeaponSkin expPassive in testCase.ExpNewSkins ?? new List<DbWeaponSkin>())
         {
             response
-                .update_data_list
-                .weapon_skin_list
-                .Should()
+                .update_data_list.weapon_skin_list.Should()
                 .ContainEquivalentOf(
                     this.Mapper.Map<WeaponSkinList>(expPassive),
                     opts => opts.Excluding(x => x.gettime)
                 );
 
             apiContext
-                .PlayerWeaponSkins
-                .Should()
+                .PlayerWeaponSkins.Should()
                 .ContainEquivalentOf(
                     expPassive,
                     opts => opts.Excluding(x => x.GetTime).Excluding(x => x.ViewerId)
@@ -595,18 +583,16 @@ public class WeaponBodyTest : TestFixture
 
     private int GetMaterialCount(Materials id)
     {
-        return this.ApiContext
-            .PlayerMaterials
-            .Where(x => x.ViewerId == ViewerId && x.MaterialId == id)
+        return this.ApiContext.PlayerMaterials.Where(
+            x => x.ViewerId == ViewerId && x.MaterialId == id
+        )
             .Select(x => x.Quantity)
             .First();
     }
 
     private long GetRupies()
     {
-        return this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        return this.ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.Coin)
             .First();

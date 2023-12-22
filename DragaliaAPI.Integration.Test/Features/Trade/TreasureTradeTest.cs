@@ -53,11 +53,9 @@ public class TreasureTradeTest : TestFixture
         ).data;
 
         response
-            .user_treasure_trade_list
-            .Should()
+            .user_treasure_trade_list.Should()
             .HaveCount(1)
-            .And
-            .ContainEquivalentOf(new UserTreasureTradeList(1000, 1, DateTimeOffset.UnixEpoch));
+            .And.ContainEquivalentOf(new UserTreasureTradeList(1000, 1, DateTimeOffset.UnixEpoch));
         response.treasure_trade_all_list.Should().NotBeEmpty();
         response.treasure_trade_list.Should().BeNullOrEmpty();
     }
@@ -68,15 +66,13 @@ public class TreasureTradeTest : TestFixture
         int preTradeAmount;
 
         using (
-            IDisposable ctx = this.Services
-                .GetRequiredService<IPlayerIdentityService>()
+            IDisposable ctx = this.Services.GetRequiredService<IPlayerIdentityService>()
                 .StartUserImpersonation(viewer: ViewerId)
         )
         {
             preTradeAmount =
                 (
-                    await this.Services
-                        .GetRequiredService<IInventoryRepository>()
+                    await this.Services.GetRequiredService<IInventoryRepository>()
                         .GetMaterial(Materials.DamascusIngot)
                 )?.Quantity ?? 0;
         }
@@ -89,18 +85,14 @@ public class TreasureTradeTest : TestFixture
         ).data;
 
         response
-            .user_treasure_trade_list
-            .Should()
+            .user_treasure_trade_list.Should()
             .HaveCount(1)
-            .And
-            .Contain(x => x.treasure_trade_id == 10010101 && x.trade_count == 1);
+            .And.Contain(x => x.treasure_trade_id == 10010101 && x.trade_count == 1);
         response.treasure_trade_all_list.Should().NotBeEmpty();
         response.treasure_trade_list.Should().BeNullOrEmpty();
         response.update_data_list.Should().NotBeNull();
 
-        int newMatQuantity = this.ApiContext
-            .PlayerMaterials
-            .AsNoTracking()
+        int newMatQuantity = this.ApiContext.PlayerMaterials.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId && x.MaterialId == Materials.DamascusIngot)
             .Select(x => x.Quantity)
             .First();
@@ -119,18 +111,14 @@ public class TreasureTradeTest : TestFixture
         ).data;
 
         response
-            .user_treasure_trade_list
-            .Should()
+            .user_treasure_trade_list.Should()
             .HaveCount(1)
-            .And
-            .Contain(x => x.treasure_trade_id == 10124101 && x.trade_count == 1);
+            .And.Contain(x => x.treasure_trade_id == 10124101 && x.trade_count == 1);
         response.treasure_trade_all_list.Should().NotBeEmpty();
         response.treasure_trade_list.Should().BeNullOrEmpty();
         response.update_data_list.Should().NotBeNull();
         response
-            .update_data_list
-            .weapon_skin_list
-            .Should()
+            .update_data_list.weapon_skin_list.Should()
             .Contain(x => x.weapon_skin_id == 30159921);
     }
 }

@@ -17,14 +17,13 @@ public class ClearPartyRepository : IClearPartyRepository
     }
 
     public IQueryable<DbQuestClearPartyUnit> QuestClearPartyUnits =>
-        this.apiContext
-            .QuestClearPartyUnits
-            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+        this.apiContext.QuestClearPartyUnits.Where(
+            x => x.ViewerId == this.playerIdentityService.ViewerId
+        );
 
     public IQueryable<DbQuestClearPartyUnit> GetQuestClearParty(int questId, bool isMulti)
     {
-        return this.QuestClearPartyUnits
-            .Where(x => x.QuestId == questId && x.IsMulti == isMulti)
+        return this.QuestClearPartyUnits.Where(x => x.QuestId == questId && x.IsMulti == isMulti)
             .OrderBy(x => x.UnitNo);
     }
 

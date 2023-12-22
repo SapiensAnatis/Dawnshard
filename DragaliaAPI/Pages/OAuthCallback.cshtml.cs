@@ -24,10 +24,10 @@ public class OAuthCallbackModel(
     public async Task<IActionResult> OnGet()
     {
         if (
-            !this.HttpContext
-                .Request
-                .Query
-                .TryGetValue("session_token_code", out StringValues sessionTokenCodeValues)
+            !this.HttpContext.Request.Query.TryGetValue(
+                "session_token_code",
+                out StringValues sessionTokenCodeValues
+            )
         )
         {
             return this.Unauthorized();
@@ -51,11 +51,10 @@ public class OAuthCallbackModel(
         );
 
         if (
-            !this.HttpContext
-                .Request
-                .Query
-                .TryGetValue(Constants.QueryParams.OriginalPage, out StringValues queryValues)
-            || queryValues.FirstOrDefault() is not string originalPage
+            !this.HttpContext.Request.Query.TryGetValue(
+                Constants.QueryParams.OriginalPage,
+                out StringValues queryValues
+            ) || queryValues.FirstOrDefault() is not string originalPage
         )
         {
             return this.LocalRedirect("~/");
@@ -121,8 +120,7 @@ public class OAuthCallbackModel(
         identity.AddClaim(new Claim(CustomClaimType.AccountId, userId.UserId));
 
         var playerInfo = await apiContext
-            .Players
-            .Include(x => x.UserData)
+            .Players.Include(x => x.UserData)
             .Where(x => x.AccountId == userId.UserId)
             .Select(x => new { x.UserData!.Name, x.ViewerId })
             .FirstOrDefaultAsync();

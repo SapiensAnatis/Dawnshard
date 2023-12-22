@@ -54,9 +54,9 @@ public class DmodeDungeonService(
         dungeon.IsPlayEnd = false;
         dungeon.QuestTime = 0;
 
-        DbPlayerCharaData chara = await unitRepository
-            .Charas
-            .SingleAsync(x => x.CharaId == charaId);
+        DbPlayerCharaData chara = await unitRepository.Charas.SingleAsync(
+            x => x.CharaId == charaId
+        );
 
         CharaData charaData = MasterAsset.CharaData[charaId];
 
@@ -201,9 +201,11 @@ public class DmodeDungeonService(
             }
         }
 
-        Dictionary<DmodeServitorPassiveType, int> passives = ingameData
-            .dmode_servitor_passive_list
-            .ToDictionary(x => x.passive_no, x => x.passive_level);
+        Dictionary<DmodeServitorPassiveType, int> passives =
+            ingameData.dmode_servitor_passive_list.ToDictionary(
+                x => x.passive_no,
+                x => x.passive_level
+            );
 
         double pointMultiplier1 = isGameOver ? 0.5d : 1d;
         double pointMultiplier2 = isGameOver ? 0.5d : 1d;
@@ -243,9 +245,9 @@ public class DmodeDungeonService(
                 clear_state = isGameOver ? 0 : 1
             };
 
-        DbPlayerDmodeChara chara = await dmodeRepository
-            .Charas
-            .SingleAsync(x => x.CharaId == charaId);
+        DbPlayerDmodeChara chara = await dmodeRepository.Charas.SingleAsync(
+            x => x.CharaId == charaId
+        );
 
         if (ingameResult.floor_num > chara.MaxFloor)
             chara.MaxFloor = ingameResult.floor_num;
@@ -396,15 +398,14 @@ public class DmodeDungeonService(
             int minRarity = GetMinRarity(floor.FloorNum);
 
             DmodeDungeonItemData[] dragonPool = MasterAsset
-                .DmodeDungeonItemData
-                .Enumerable
-                .Where(x => x.DmodeDungeonItemType == DmodeDungeonItemType.Dragon)
+                .DmodeDungeonItemData.Enumerable.Where(
+                    x => x.DmodeDungeonItemType == DmodeDungeonItemType.Dragon
+                )
                 .Where(
                     x =>
-                        floorData
-                            .dmode_dungeon_odds
-                            .dmode_select_dragon_list
-                            .All(y => y.dragon_id != (Dragons)x.Id)
+                        floorData.dmode_dungeon_odds.dmode_select_dragon_list.All(
+                            y => y.dragon_id != (Dragons)x.Id
+                        )
                 )
                 .ToArray();
 
@@ -457,11 +458,8 @@ public class DmodeDungeonService(
 
         int dmodeScore = previousFloor.dmode_area_info.dmode_score;
 
-        AtgenDmodeEnemy[] enemies = previousFloor
-            .dmode_dungeon_odds
-            .dmode_odds_info
-            .dmode_enemy
-            .ToArray();
+        AtgenDmodeEnemy[] enemies =
+            previousFloor.dmode_dungeon_odds.dmode_odds_info.dmode_enemy.ToArray();
         int[] enemyKilledStatus = playRecord.dmode_treasure_record.enemy.ToArray();
 
         double expMultiplier = GetExpMultiplier(ingameData);
@@ -478,12 +476,10 @@ public class DmodeDungeonService(
                 .DmodeEnemyParamGroupId;
 
             if (
-                !MasterAsset
-                    .DmodeEnemyParam
-                    .TryGetValue(
-                        (dmodeEnemyParamGroupId * 1000) + Math.Min(enemy.level, 100),
-                        out DmodeEnemyParam? enemyParam
-                    )
+                !MasterAsset.DmodeEnemyParam.TryGetValue(
+                    (dmodeEnemyParamGroupId * 1000) + Math.Min(enemy.level, 100),
+                    out DmodeEnemyParam? enemyParam
+                )
             )
             {
                 continue;
@@ -506,10 +502,11 @@ public class DmodeDungeonService(
         }
 
         // Now process item list changes
-        Dictionary<int, DmodeDungeonItemList> itemList = previousFloor
-            .dmode_dungeon_odds
-            .dmode_dungeon_item_list
-            .ToDictionary(x => x.item_no, x => x);
+        Dictionary<int, DmodeDungeonItemList> itemList =
+            previousFloor.dmode_dungeon_odds.dmode_dungeon_item_list.ToDictionary(
+                x => x.item_no,
+                x => x
+            );
 
         foreach (
             AtgenDmodeDungeonItemStateList stateChange in playRecord.dmode_dungeon_item_state_list
@@ -538,9 +535,10 @@ public class DmodeDungeonService(
                 optionChange.abnormal_status_invalid_count;
         }
 
-        Dictionary<Dragons, int> dragonDict = unitInfo
-            .dmode_hold_dragon_list
-            .ToDictionary(x => x.dragon_id, x => x.count);
+        Dictionary<Dragons, int> dragonDict = unitInfo.dmode_hold_dragon_list.ToDictionary(
+            x => x.dragon_id,
+            x => x.count
+        );
 
         foreach (AtgenDmodeDragonUseList dragonUse in playRecord.dmode_dragon_use_list)
         {
@@ -550,10 +548,8 @@ public class DmodeDungeonService(
         // Now process dragon selection (if applicable)
         if (playRecord.select_dragon_no != 0)
         {
-            List<AtgenDmodeSelectDragonList> dragonSelection = previousFloor
-                .dmode_dungeon_odds
-                .dmode_select_dragon_list
-                .ToList();
+            List<AtgenDmodeSelectDragonList> dragonSelection =
+                previousFloor.dmode_dungeon_odds.dmode_select_dragon_list.ToList();
             AtgenDmodeSelectDragonList dragon = dragonSelection[playRecord.select_dragon_no - 1];
             if (dragon.is_rare)
             {
@@ -643,9 +639,7 @@ public class DmodeDungeonService(
         }
 
         List<DmodeDungeonArea> areas = MasterAsset
-            .DmodeDungeonArea
-            .Enumerable
-            .Where(x => x.ThemeGroupId == floorTheme)
+            .DmodeDungeonArea.Enumerable.Where(x => x.ThemeGroupId == floorTheme)
             .ToList();
 
         DmodeDungeonArea area = floor.Id is 45 or 50 // Agito bosses
@@ -749,14 +743,14 @@ public class DmodeDungeonService(
         if (theme.BossAppear && dmodeUnitInfo.dmode_hold_dragon_list.Count() < 8)
         {
             List<int> alreadyRolledDragonIds = new();
-            IEnumerable<int> alreadyOwnedDragonIds = dmodeUnitInfo
-                .dmode_hold_dragon_list
-                .Select(x => (int)x.dragon_id);
+            IEnumerable<int> alreadyOwnedDragonIds = dmodeUnitInfo.dmode_hold_dragon_list.Select(
+                x => (int)x.dragon_id
+            );
 
             DmodeDungeonItemData[] dragonPool = MasterAsset
-                .DmodeDungeonItemData
-                .Enumerable
-                .Where(x => x.DmodeDungeonItemType == DmodeDungeonItemType.Dragon)
+                .DmodeDungeonItemData.Enumerable.Where(
+                    x => x.DmodeDungeonItemType == DmodeDungeonItemType.Dragon
+                )
                 .ExceptBy(alreadyOwnedDragonIds, x => x.Id)
                 .ToArray();
 
@@ -828,9 +822,7 @@ public class DmodeDungeonService(
     {
         DmodeDungeonItemData itemData = rdm.Next(
             MasterAsset
-                .DmodeDungeonItemData
-                .Enumerable
-                .Where(
+                .DmodeDungeonItemData.Enumerable.Where(
                     x =>
                         x.DmodeDungeonItemType == DmodeDungeonItemType.Skill
                         && DmodeHelper.AllowedSkillIds.Contains(x.Id)
@@ -848,9 +840,7 @@ public class DmodeDungeonService(
     {
         DmodeWeapon weapon = rdm.Next(
             MasterAsset
-                .DmodeDungeonItemData
-                .Enumerable
-                .Where(
+                .DmodeDungeonItemData.Enumerable.Where(
                     x => x.Rarity == rarity && x.DmodeDungeonItemType == DmodeDungeonItemType.Weapon
                 )
                 .Select(x => MasterAsset.DmodeWeapon[x.Id])
@@ -875,9 +865,7 @@ public class DmodeDungeonService(
     {
         DmodeDungeonItemData itemData = rdm.Next(
             MasterAsset
-                .DmodeDungeonItemData
-                .Enumerable
-                .Where(
+                .DmodeDungeonItemData.Enumerable.Where(
                     x =>
                         x.Rarity == rarity
                         && x.DmodeDungeonItemType == DmodeDungeonItemType.AbilityCrest
@@ -911,9 +899,9 @@ public class DmodeDungeonService(
         {
             DmodeStrengthParam param = rdm.Next(
                 MasterAsset
-                    .DmodeStrengthParam
-                    .Enumerable
-                    .Where(x => x.StrengthParamGroupId == strengthParamGroupId)
+                    .DmodeStrengthParam.Enumerable.Where(
+                        x => x.StrengthParamGroupId == strengthParamGroupId
+                    )
                     .ToArray()
             );
 
@@ -924,9 +912,9 @@ public class DmodeDungeonService(
         {
             DmodeStrengthSkill skill = rdm.Next(
                 MasterAsset
-                    .DmodeStrengthSkill
-                    .Enumerable
-                    .Where(x => x.StrengthSkillGroupId == strengthSkillGroupId && x.SkillId != 0)
+                    .DmodeStrengthSkill.Enumerable.Where(
+                        x => x.StrengthSkillGroupId == strengthSkillGroupId && x.SkillId != 0
+                    )
                     .ToArray()
             );
 
@@ -937,9 +925,7 @@ public class DmodeDungeonService(
         {
             DmodeStrengthAbility ability = rdm.Next(
                 MasterAsset
-                    .DmodeStrengthAbility
-                    .Enumerable
-                    .Where(
+                    .DmodeStrengthAbility.Enumerable.Where(
                         x => x.StrengthAbilityGroupId == strengthAbilityGroupId && x.AbilityId != 0
                     )
                     .ToArray()
@@ -1034,9 +1020,10 @@ public class DmodeDungeonService(
             {
                 int enemyThemeId = areaInfo.EnemyThemes[i];
 
-                int[] enemyParams = MasterAsset
-                    .DmodeEnemyTheme
-                    .TryGetValue(enemyThemeId, out DmodeEnemyTheme? enemyTheme)
+                int[] enemyParams = MasterAsset.DmodeEnemyTheme.TryGetValue(
+                    enemyThemeId,
+                    out DmodeEnemyTheme? enemyTheme
+                )
                     ? enemyTheme.AvailableParams
                     : areaInfo.EnemyParams;
 
@@ -1181,9 +1168,10 @@ public class DmodeDungeonService(
     {
         double expMultiplier = 1d;
 
-        DmodeServitorPassiveList? expPassive = ingameData
-            .dmode_servitor_passive_list
-            .SingleOrDefault(x => x.passive_no == DmodeServitorPassiveType.Exp);
+        DmodeServitorPassiveList? expPassive =
+            ingameData.dmode_servitor_passive_list.SingleOrDefault(
+                x => x.passive_no == DmodeServitorPassiveType.Exp
+            );
 
         if (expPassive != null)
         {

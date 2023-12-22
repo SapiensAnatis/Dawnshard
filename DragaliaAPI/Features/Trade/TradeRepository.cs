@@ -44,18 +44,16 @@ public class TradeRepository : ITradeRepository
 
         if (existing == null)
         {
-            this.apiContext
-                .PlayerTrades
-                .Add(
-                    new DbPlayerTrade
-                    {
-                        ViewerId = this.playerIdentityService.ViewerId,
-                        Type = type,
-                        Id = id,
-                        Count = count,
-                        LastTradeTime = actualTime
-                    }
-                );
+            this.apiContext.PlayerTrades.Add(
+                new DbPlayerTrade
+                {
+                    ViewerId = this.playerIdentityService.ViewerId,
+                    Type = type,
+                    Id = id,
+                    Count = count,
+                    LastTradeTime = actualTime
+                }
+            );
 
             return true;
         }

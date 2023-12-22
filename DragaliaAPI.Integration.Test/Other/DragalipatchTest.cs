@@ -19,9 +19,8 @@ public class DragalipatchTest : TestFixture
 
         response.IsSuccessStatusCode.Should().BeTrue();
 
-        DragalipatchResponse? config = await response
-            .Content
-            .ReadFromJsonAsync<DragalipatchResponse>();
+        DragalipatchResponse? config =
+            await response.Content.ReadFromJsonAsync<DragalipatchResponse>();
 
         config.Should().NotBeNull();
         config

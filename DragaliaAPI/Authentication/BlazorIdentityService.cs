@@ -39,21 +39,15 @@ public class BlazorIdentityService : IBlazorIdentityService
             return;
 
         this.accountId = state
-            .User
-            .Claims
-            .FirstOrDefault(x => x.Type == CustomClaimType.AccountId)
+            .User.Claims.FirstOrDefault(x => x.Type == CustomClaimType.AccountId)
             ?.Value;
 
         this.userIdName = state
-            .User
-            .Claims
-            .FirstOrDefault(x => x.Type == CustomClaimType.PlayerName)
+            .User.Claims.FirstOrDefault(x => x.Type == CustomClaimType.PlayerName)
             ?.Value;
 
         string? viewerIdString = state
-            .User
-            .Claims
-            .FirstOrDefault(x => x.Type == CustomClaimType.ViewerId)
+            .User.Claims.FirstOrDefault(x => x.Type == CustomClaimType.ViewerId)
             ?.Value;
 
         if (int.TryParse(viewerIdString, out int viewerId))

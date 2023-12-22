@@ -45,8 +45,7 @@ public class PartyTest : TestFixture
 
         ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
         DbParty dbparty = await apiContext
-            .PlayerParties
-            .Include(x => x.Units)
+            .PlayerParties.Include(x => x.Units)
             .Where(x => x.ViewerId == ViewerId && x.PartyNo == 1)
             .SingleAsync();
 
@@ -63,8 +62,7 @@ public class PartyTest : TestFixture
             );
 
         dbparty
-            .Units
-            .Should()
+            .Units.Should()
             .BeEquivalentTo(
                 new List<DbPartyUnit>()
                 {
@@ -202,8 +200,7 @@ public class PartyTest : TestFixture
 
         ApiContext apiContext = this.Services.GetRequiredService<ApiContext>();
         DbPlayerUserData userData = await apiContext
-            .PlayerUserData
-            .Where(x => x.ViewerId == ViewerId)
+            .PlayerUserData.Where(x => x.ViewerId == ViewerId)
             .SingleAsync();
 
         userData.MainPartyNo.Should().Be(2);

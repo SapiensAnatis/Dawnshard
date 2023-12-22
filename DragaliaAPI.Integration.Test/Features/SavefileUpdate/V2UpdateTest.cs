@@ -57,9 +57,7 @@ public class V2UpdateTest : SavefileUpdateTestFixture
 
         data.equip_stamp_list.Should().BeEquivalentTo(expectedStampList);
 
-        this.ApiContext
-            .EquippedStamps
-            .Where(x => x.ViewerId == ViewerId)
+        this.ApiContext.EquippedStamps.Where(x => x.ViewerId == ViewerId)
             .Should()
             .BeEquivalentTo(
                 expectedStampList,
@@ -69,8 +67,7 @@ public class V2UpdateTest : SavefileUpdateTestFixture
                         .WithMapping<DbEquippedStamp>(dto => dto.stamp_id, db => db.StampId)
             );
         (await this.ApiContext.Players.FindAsync(ViewerId))!
-            .SavefileVersion
-            .Should()
+            .SavefileVersion.Should()
             .Be(MaxVersion);
     }
 }

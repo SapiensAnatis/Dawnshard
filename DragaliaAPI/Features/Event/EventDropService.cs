@@ -225,9 +225,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         VariationTypes variation = quest.VariationType;
 
         Dictionary<RaidEventItemType, int> itemDict = MasterAsset
-            .RaidEventItem
-            .Enumerable
-            .Where(x => x.RaidEventId == evt.Id)
+            .RaidEventItem.Enumerable.Where(x => x.RaidEventId == evt.Id)
             .ToDictionary(x => x.RaidEventItemType, x => x.Id);
 
         switch (type)
@@ -308,9 +306,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         // https://dragalialost.wiki/w/Defensive_Events
 
         Dictionary<CombatEventItemType, int> itemDict = MasterAsset
-            .CombatEventItem
-            .Enumerable
-            .Where(x => x.EventId == evt.Id)
+            .CombatEventItem.Enumerable.Where(x => x.EventId == evt.Id)
             .ToDictionary(x => x.EventItemType, x => x.Id);
 
         VariationTypes variation = quest.VariationType;
@@ -346,9 +342,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         // Also https://dragalialost.wiki/w/Defensive_Events
 
         Dictionary<Clb01EventItemType, int> itemDict = MasterAsset
-            .Clb01EventItem
-            .Enumerable
-            .Where(x => x.EventId == evt.Id)
+            .Clb01EventItem.Enumerable.Where(x => x.EventId == evt.Id)
             .ToDictionary(x => x.EventItemType, x => x.Id);
 
         DungeonTypes type = quest.DungeonType;
@@ -387,9 +381,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         // The wiki has no explanation for this so this is just guessed
 
         Dictionary<ExRushEventItemType, int> itemDict = MasterAsset
-            .ExRushEventItem
-            .Enumerable
-            .Where(x => x.EventId == evt.Id)
+            .ExRushEventItem.Enumerable.Where(x => x.EventId == evt.Id)
             .ToDictionary(x => x.EventItemType, x => x.Id);
 
         VariationTypes variation = quest.VariationType;
@@ -424,9 +416,7 @@ public class EventDropService(IRewardService rewardService, IEventRepository eve
         // which can be exchanged in the Event Shop for various rewards.
 
         Dictionary<EarnEventItemType, int> itemDict = MasterAsset
-            .EarnEventItem
-            .Enumerable
-            .Where(x => x.EventId == evt.Id)
+            .EarnEventItem.Enumerable.Where(x => x.EventId == evt.Id)
             .ToDictionary(x => x.EventItemType, x => x.Id);
 
         VariationTypes variation = quest.VariationType;

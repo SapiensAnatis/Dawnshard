@@ -41,8 +41,7 @@ public class SessionServiceTest
         );
 
         this.testCache = new MemoryDistributedCache(opts);
-        this.mockOptions
-            .SetupGet(x => x.CurrentValue)
+        this.mockOptions.SetupGet(x => x.CurrentValue)
             .Returns(new RedisOptions() { SessionExpiryTimeMinutes = 1 });
 
         sessionService = new(

@@ -51,8 +51,7 @@ public class WallTest : TestFixture
         ).data;
 
         response
-            .fail_quest_detail
-            .Should()
+            .fail_quest_detail.Should()
             .BeEquivalentTo(
                 new AtgenFailQuestDetail()
                 {
@@ -110,8 +109,7 @@ public class WallTest : TestFixture
         ).data;
 
         response
-            .user_wall_reward_list
-            .Should()
+            .user_wall_reward_list.Should()
             .ContainEquivalentOf(
                 new AtgenUserWallRewardList()
                 {
@@ -126,9 +124,7 @@ public class WallTest : TestFixture
     [Fact]
     public async Task ReceiveMonthlyRewards_ReceivesRewards()
     {
-        DbPlayerUserData oldUserData = this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         int expectedMana = 15_000;
@@ -179,8 +175,7 @@ public class WallTest : TestFixture
         ).data;
 
         response
-            .user_wall_reward_list
-            .Should()
+            .user_wall_reward_list.Should()
             .ContainEquivalentOf(
                 new AtgenUserWallRewardList()
                 {
@@ -192,19 +187,13 @@ public class WallTest : TestFixture
             );
 
         response
-            .update_data_list
-            .user_data
-            .dew_point
-            .Should()
+            .update_data_list.user_data.dew_point.Should()
             .Be(oldUserData.DewPoint + expectedDewPoint);
 
         response.update_data_list.user_data.coin.Should().Be(oldUserData.Coin + expectedCoin);
 
         response
-            .update_data_list
-            .user_data
-            .mana_point
-            .Should()
+            .update_data_list.user_data.mana_point.Should()
             .Be(oldUserData.ManaPoint + expectedMana);
     }
 }

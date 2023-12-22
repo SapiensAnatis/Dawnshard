@@ -23,8 +23,7 @@ public class GraphQlTest : GraphQlTestFixture
         this.Client.DefaultRequestHeaders.Clear();
 
         (await this.Client.PostAsync(Endpoint, new StringContent(string.Empty)))
-            .StatusCode
-            .Should()
+            .StatusCode.Should()
             .Be(HttpStatusCode.Unauthorized);
     }
 
@@ -58,9 +57,7 @@ public class GraphQlTest : GraphQlTestFixture
     public async Task Mutation_ResetCharacter_ResetsCharacter()
     {
         (
-            await this.ApiContext
-                .PlayerCharaData
-                .AsNoTracking()
+            await this.ApiContext.PlayerCharaData.AsNoTracking()
                 .SingleAsync(x => x.ViewerId == ViewerId && x.CharaId == Charas.ThePrince)
         ).Level = 100;
         await this.ApiContext.SaveChangesAsync();
@@ -81,13 +78,10 @@ public class GraphQlTest : GraphQlTestFixture
         response.Errors.Should().BeNullOrEmpty();
 
         (
-            await this.ApiContext
-                .PlayerCharaData
-                .AsNoTracking()
+            await this.ApiContext.PlayerCharaData.AsNoTracking()
                 .SingleAsync(x => x.ViewerId == ViewerId && x.CharaId == Charas.ThePrince)
         )
-            .Level
-            .Should()
+            .Level.Should()
             .Be(1);
     }
 
@@ -111,9 +105,7 @@ public class GraphQlTest : GraphQlTestFixture
         response.Errors.Should().BeNullOrEmpty();
 
         int presentId = response
-            .Data
-            .RootElement
-            .GetProperty("givePresent")
+            .Data.RootElement.GetProperty("givePresent")
             .GetProperty("presentId")
             .GetInt32();
 
@@ -155,13 +147,10 @@ public class GraphQlTest : GraphQlTestFixture
         response.Errors.Should().BeNullOrEmpty();
 
         (
-            await this.ApiContext
-                .PlayerUserData
-                .AsNoTracking()
+            await this.ApiContext.PlayerUserData.AsNoTracking()
                 .FirstAsync(x => x.ViewerId == ViewerId)
         )
-            .TutorialStatus
-            .Should()
+            .TutorialStatus.Should()
             .Be(60999);
     }
 

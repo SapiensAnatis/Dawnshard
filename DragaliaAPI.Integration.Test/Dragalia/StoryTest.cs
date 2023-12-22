@@ -22,8 +22,7 @@ public class StoryTest : TestFixture
             )
         ).data;
 
-        data.unit_story_reward_list
-            .Should()
+        data.unit_story_reward_list.Should()
             .BeEquivalentTo(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
@@ -37,9 +36,7 @@ public class StoryTest : TestFixture
             );
 
         data.update_data_list.user_data.Should().NotBeNull();
-        data.update_data_list
-            .unit_story_list
-            .Should()
+        data.update_data_list.unit_story_list.Should()
             .BeEquivalentTo(
                 new List<UnitStoryList>()
                 {
@@ -85,9 +82,7 @@ public class StoryTest : TestFixture
     [Fact]
     public async Task ReadStory_StoryNotRead_UpdatesDatabase()
     {
-        int oldCrystal = await this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        int oldCrystal = await this.ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.Crystal)
             .SingleAsync();
@@ -99,18 +94,16 @@ public class StoryTest : TestFixture
             )
         ).data;
 
-        int newCrystal = await this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        int newCrystal = await this.ApiContext.PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.Crystal)
             .SingleAsync();
 
         newCrystal.Should().Be(oldCrystal + 25);
 
-        IEnumerable<DbPlayerStoryState> stories = this.ApiContext
-            .PlayerStoryState
-            .Where(x => x.ViewerId == ViewerId);
+        IEnumerable<DbPlayerStoryState> stories = this.ApiContext.PlayerStoryState.Where(
+            x => x.ViewerId == ViewerId
+        );
 
         stories
             .Should()

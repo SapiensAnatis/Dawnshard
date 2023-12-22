@@ -54,7 +54,6 @@ public class PartyUnitListValidator : AbstractValidator<PartyUnitList>
     }
 
     private static IEnumerable<GameAbilityCrest> AllAbilityCrests(PartyUnitList unit) =>
-        unit.crest_slot_type_1_crest_list
-            .Concat(unit.crest_slot_type_2_crest_list)
+        unit.crest_slot_type_1_crest_list.Concat(unit.crest_slot_type_2_crest_list)
             .Concat(unit.crest_slot_type_3_crest_list);
 }

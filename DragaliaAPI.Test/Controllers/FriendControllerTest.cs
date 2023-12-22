@@ -29,8 +29,7 @@ public class FriendControllerTest
     [Fact]
     public async Task GetSupportCharaDetailContainsCorrectInformationWhenFound()
     {
-        this.mockHelperService
-            .Setup(x => x.GetHelpers())
+        this.mockHelperService.Setup(x => x.GetHelpers())
             .ReturnsAsync(
                 new QuestGetSupportUserListData()
                 {
@@ -50,9 +49,7 @@ public class FriendControllerTest
         data.Should().NotBeNull();
 
         data!
-            .support_user_data_detail
-            .user_support_data
-            .Should()
+            .support_user_data_detail.user_support_data.Should()
             .BeEquivalentTo(TestData.supportListEuden);
         data!.support_user_data_detail.is_friend.Should().Be(true);
 
@@ -63,8 +60,7 @@ public class FriendControllerTest
     [Fact]
     public async Task GetSupportCharaDetailContainsDefaultInformationWhenNotFound()
     {
-        this.mockHelperService
-            .Setup(x => x.GetHelpers())
+        this.mockHelperService.Setup(x => x.GetHelpers())
             .ReturnsAsync(
                 new QuestGetSupportUserListData()
                 {
@@ -84,9 +80,7 @@ public class FriendControllerTest
         data.Should().NotBeNull();
 
         data!
-            .support_user_data_detail
-            .user_support_data
-            .Should()
+            .support_user_data_detail.user_support_data.Should()
             .BeEquivalentTo(HelperService.StubData.SupportListData.support_user_list.First());
 
         data!.support_user_data_detail.is_friend.Should().Be(false);

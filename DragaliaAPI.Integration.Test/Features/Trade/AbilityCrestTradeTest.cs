@@ -33,10 +33,8 @@ public class AbilityCrestTradeTest : TestFixture
             )
         ).data;
 
-        AbilityCrests ability_crest_id = data.update_data_list
-            .ability_crest_list
-            .First()
-            .ability_crest_id;
+        AbilityCrests ability_crest_id =
+            data.update_data_list.ability_crest_list.First().ability_crest_id;
         int dewpoint = data.update_data_list.user_data.dew_point;
 
         ability_crest_id.Should().Be(expected_crest_id);
@@ -46,8 +44,7 @@ public class AbilityCrestTradeTest : TestFixture
     private int GetDewpoint()
     {
         return ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+            .PlayerUserData.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .Select(x => x.DewPoint)
             .First();

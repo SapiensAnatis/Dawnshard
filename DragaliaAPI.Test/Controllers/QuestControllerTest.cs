@@ -40,8 +40,7 @@ public class QuestControllerTest
     [Fact]
     public async Task ReadStory_ProducesExpectedResponse()
     {
-        this.mockStoryService
-            .Setup(x => x.ReadStory(StoryTypes.Quest, 1))
+        this.mockStoryService.Setup(x => x.ReadStory(StoryTypes.Quest, 1))
             .ReturnsAsync(
                 new List<AtgenBuildEventRewardEntityList>()
                 {
@@ -61,8 +60,7 @@ public class QuestControllerTest
                 }
             );
 
-        this.mockUpdateDataService
-            .Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
 
         (await this.questController.ReadStory(new QuestReadStoryRequest() { quest_story_id = 1 }))

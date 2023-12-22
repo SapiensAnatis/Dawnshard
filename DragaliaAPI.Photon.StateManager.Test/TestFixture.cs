@@ -33,9 +33,8 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IDisposab
 
         Environment.SetEnvironmentVariable("PHOTON_TOKEN", PhotonToken);
 
-        this.RedisConnectionProvider = factory
-            .Services
-            .GetRequiredService<IRedisConnectionProvider>();
+        this.RedisConnectionProvider =
+            factory.Services.GetRequiredService<IRedisConnectionProvider>();
     }
 
     protected HttpClient Client { get; }
@@ -44,8 +43,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IDisposab
 
     public void Dispose()
     {
-        this.RedisConnectionProvider
-            .RedisCollection<RedisGame>()
+        this.RedisConnectionProvider.RedisCollection<RedisGame>()
             .Delete(this.RedisConnectionProvider.RedisCollection<RedisGame>());
     }
 }

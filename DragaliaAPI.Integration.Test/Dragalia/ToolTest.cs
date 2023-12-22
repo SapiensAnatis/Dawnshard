@@ -51,9 +51,9 @@ public class ToolTest : TestFixture
     [Fact]
     public async Task Auth_PendingImport_ImportsSave()
     {
-        this.ApiContext
-            .PlayerUserData
-            .ExecuteUpdate(p => p.SetProperty(e => e.LastSaveImportTime, DateTimeOffset.UnixEpoch));
+        this.ApiContext.PlayerUserData.ExecuteUpdate(
+            p => p.SetProperty(e => e.LastSaveImportTime, DateTimeOffset.UnixEpoch)
+        );
 
         string token = TokenHelper
             .GetToken(
@@ -67,17 +67,12 @@ public class ToolTest : TestFixture
 
         await this.Client.PostMsgpack<ToolAuthData>("tool/auth", new ToolAuthRequest() { });
 
-        this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == this.ViewerId)
-            .LastSaveImportTime
-            .Should()
+            .LastSaveImportTime.Should()
             .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
 
-        this.ApiContext
-            .PlayerCharaData
-            .AsNoTracking()
+        this.ApiContext.PlayerCharaData.AsNoTracking()
             .Where(x => x.ViewerId == this.ViewerId)
             .Should()
             .HaveCountGreaterThan(200);
@@ -100,8 +95,7 @@ public class ToolTest : TestFixture
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         response.Headers.Should().ContainKey("Is-Required-Refresh-Id-Token");
         response
-            .Headers
-            .GetValues("Is-Required-Refresh-Id-Token")
+            .Headers.GetValues("Is-Required-Refresh-Id-Token")
             .Should()
             .BeEquivalentTo(new List<string>() { "true" });
     }

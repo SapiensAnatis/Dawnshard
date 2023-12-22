@@ -68,8 +68,7 @@ public class WeaponBodyController : DragaliaControllerBase
 
         foreach (
             AtgenBuildupWeaponBodyPieceList buildup in request
-                .buildup_weapon_body_piece_list
-                .OrderBy(x => x.buildup_piece_type)
+                .buildup_weapon_body_piece_list.OrderBy(x => x.buildup_piece_type)
                 .ThenBy(x => x.step)
         )
         {

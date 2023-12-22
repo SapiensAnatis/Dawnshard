@@ -91,8 +91,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         IDistributedCache cache = this.Services.GetRequiredService<IDistributedCache>();
         ApiContext ctx = this.Services.GetRequiredService<ApiContext>();
 
-        long viewerId = ctx.Players
-            .Where(x => x.AccountId == TestFixture.DeviceAccountId)
+        long viewerId = ctx.Players.Where(x => x.AccountId == TestFixture.DeviceAccountId)
             .Select(x => x.ViewerId)
             .First();
 
@@ -142,49 +141,43 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 
         playerIdentityService.StartUserImpersonation(newPlayer.ViewerId, newPlayer.AccountId);
 
-        apiContext
-            .PlayerMaterials
-            .AddRange(
-                Enum.GetValues<Materials>()
-                    .Select(
-                        x =>
-                            new DbPlayerMaterial()
-                            {
-                                ViewerId = newPlayer.ViewerId,
-                                MaterialId = x,
-                                Quantity = 99999999
-                            }
-                    )
-            );
+        apiContext.PlayerMaterials.AddRange(
+            Enum.GetValues<Materials>()
+                .Select(
+                    x =>
+                        new DbPlayerMaterial()
+                        {
+                            ViewerId = newPlayer.ViewerId,
+                            MaterialId = x,
+                            Quantity = 99999999
+                        }
+                )
+        );
 
-        apiContext
-            .PlayerDragonGifts
-            .AddRange(
-                Enum.GetValues<DragonGifts>()
-                    .Select(
-                        x =>
-                            new DbPlayerDragonGift()
-                            {
-                                ViewerId = newPlayer.ViewerId,
-                                DragonGiftId = x,
-                                Quantity = x < DragonGifts.FourLeafClover ? 1 : 999
-                            }
-                    )
-            );
+        apiContext.PlayerDragonGifts.AddRange(
+            Enum.GetValues<DragonGifts>()
+                .Select(
+                    x =>
+                        new DbPlayerDragonGift()
+                        {
+                            ViewerId = newPlayer.ViewerId,
+                            DragonGiftId = x,
+                            Quantity = x < DragonGifts.FourLeafClover ? 1 : 999
+                        }
+                )
+        );
 
         IFortRepository fortRepository = this.Services.GetRequiredService<IFortRepository>();
         await fortRepository.InitializeFort();
 
-        apiContext
-            .PlayerFortBuilds
-            .Add(
-                new DbFortBuild()
-                {
-                    ViewerId = newPlayer.ViewerId,
-                    PlantId = FortPlants.Smithy,
-                    Level = 9
-                }
-            );
+        apiContext.PlayerFortBuilds.Add(
+            new DbFortBuild()
+            {
+                ViewerId = newPlayer.ViewerId,
+                PlantId = FortPlants.Smithy,
+                Level = 9
+            }
+        );
 
         DbPlayerUserData userData = (
             await apiContext.PlayerUserData.FindAsync(newPlayer.ViewerId)
@@ -198,24 +191,22 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         userData.StaminaSingle = 999;
         userData.QuestSkipPoint = 300;
 
-        apiContext
-            .PlayerDmodeInfos
-            .Add(
-                new DbPlayerDmodeInfo
-                {
-                    ViewerId = newPlayer.ViewerId,
-                    Point1Quantity = 100_000_000,
-                    Point2Quantity = 100_000_000
-                }
-            );
+        apiContext.PlayerDmodeInfos.Add(
+            new DbPlayerDmodeInfo
+            {
+                ViewerId = newPlayer.ViewerId,
+                Point1Quantity = 100_000_000,
+                Point2Quantity = 100_000_000
+            }
+        );
 
-        apiContext
-            .PlayerDmodeDungeons
-            .Add(new DbPlayerDmodeDungeon { ViewerId = newPlayer.ViewerId });
+        apiContext.PlayerDmodeDungeons.Add(
+            new DbPlayerDmodeDungeon { ViewerId = newPlayer.ViewerId }
+        );
 
-        apiContext
-            .PlayerDmodeExpeditions
-            .Add(new DbPlayerDmodeExpedition { ViewerId = newPlayer.ViewerId });
+        apiContext.PlayerDmodeExpeditions.Add(
+            new DbPlayerDmodeExpedition { ViewerId = newPlayer.ViewerId }
+        );
 
         await apiContext.SaveChangesAsync();
     }

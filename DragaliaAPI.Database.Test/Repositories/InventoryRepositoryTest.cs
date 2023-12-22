@@ -31,42 +31,38 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
         await this.inventoryRepository.UpdateQuantity(Materials.WaterwyrmsGreatsphere, 10);
 
         (
-            await this.fixture
-                .ApiContext
-                .PlayerMaterials
-                .FindAsync(ViewerId, Materials.WaterwyrmsGreatsphere)
+            await this.fixture.ApiContext.PlayerMaterials.FindAsync(
+                ViewerId,
+                Materials.WaterwyrmsGreatsphere
+            )
         )!
-            .Quantity
-            .Should()
+            .Quantity.Should()
             .Be(10);
     }
 
     [Fact]
     public async Task AddMaterialQuantity_ExistingEntry_AddsQuantity()
     {
-        await this.fixture
-            .ApiContext
-            .AddAsync(
-                new DbPlayerMaterial()
-                {
-                    ViewerId = ViewerId,
-                    MaterialId = Materials.FirestormPrism,
-                    Quantity = 0
-                }
-            );
+        await this.fixture.ApiContext.AddAsync(
+            new DbPlayerMaterial()
+            {
+                ViewerId = ViewerId,
+                MaterialId = Materials.FirestormPrism,
+                Quantity = 0
+            }
+        );
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
         await this.inventoryRepository.UpdateQuantity(Materials.FirestormPrism, 10);
 
         (
-            await this.fixture
-                .ApiContext
-                .PlayerMaterials
-                .FindAsync(ViewerId, Materials.FirestormPrism)
+            await this.fixture.ApiContext.PlayerMaterials.FindAsync(
+                ViewerId,
+                Materials.FirestormPrism
+            )
         )!
-            .Quantity
-            .Should()
+            .Quantity.Should()
             .Be(10);
     }
 
@@ -79,52 +75,46 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
         );
 
         (await this.fixture.ApiContext.PlayerMaterials.FindAsync(ViewerId, Materials.SunlightOre))!
-            .Quantity
-            .Should()
+            .Quantity.Should()
             .Be(5);
 
         (
-            await this.fixture
-                .ApiContext
-                .PlayerMaterials
-                .FindAsync(ViewerId, Materials.SunlightStone)
+            await this.fixture.ApiContext.PlayerMaterials.FindAsync(
+                ViewerId,
+                Materials.SunlightStone
+            )
         )!
-            .Quantity
-            .Should()
+            .Quantity.Should()
             .Be(5);
     }
 
     [Fact]
     public async Task GetMaterial_FiltersByAccountId()
     {
-        await this.fixture
-            .ApiContext
-            .PlayerMaterials
-            .AddRangeAsync(
-                new List<DbPlayerMaterial>()
+        await this.fixture.ApiContext.PlayerMaterials.AddRangeAsync(
+            new List<DbPlayerMaterial>()
+            {
+                new()
                 {
-                    new()
-                    {
-                        ViewerId = ViewerId + 2,
-                        MaterialId = Materials.AbaddonOrb,
-                        Quantity = 5
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        MaterialId = Materials.AbaddonOrb,
-                        Quantity = 50,
-                    }
+                    ViewerId = ViewerId + 2,
+                    MaterialId = Materials.AbaddonOrb,
+                    Quantity = 5
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    MaterialId = Materials.AbaddonOrb,
+                    Quantity = 50,
                 }
-            );
+            }
+        );
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
         (await this.inventoryRepository.GetMaterial(Materials.AbaddonOrb))
             .Should()
             .NotBeNull()
-            .And
-            .BeEquivalentTo(
+            .And.BeEquivalentTo(
                 new DbPlayerMaterial()
                 {
                     ViewerId = ViewerId,
@@ -138,32 +128,29 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
     [Fact]
     public async Task GetMaterials_FiltersByAccountId()
     {
-        await this.fixture
-            .ApiContext
-            .PlayerMaterials
-            .AddRangeAsync(
-                new List<DbPlayerMaterial>()
+        await this.fixture.ApiContext.PlayerMaterials.AddRangeAsync(
+            new List<DbPlayerMaterial>()
+            {
+                new()
                 {
-                    new()
-                    {
-                        ViewerId = ViewerId + 4,
-                        MaterialId = Materials.AbaddonOrb,
-                        Quantity = 5
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        MaterialId = Materials.TsunamiOrb,
-                        Quantity = 50,
-                    },
-                    new()
-                    {
-                        ViewerId = ViewerId,
-                        MaterialId = Materials.InfernoOrb,
-                        Quantity = 50,
-                    }
+                    ViewerId = ViewerId + 4,
+                    MaterialId = Materials.AbaddonOrb,
+                    Quantity = 5
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    MaterialId = Materials.TsunamiOrb,
+                    Quantity = 50,
+                },
+                new()
+                {
+                    ViewerId = ViewerId,
+                    MaterialId = Materials.InfernoOrb,
+                    Quantity = 50,
                 }
-            );
+            }
+        );
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
@@ -178,8 +165,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
                 },
                 opts => opts.Excluding(x => x.Owner)
             )
-            .And
-            .ContainEquivalentOf(
+            .And.ContainEquivalentOf(
                 new DbPlayerMaterial()
                 {
                     ViewerId = ViewerId,
@@ -188,8 +174,7 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
                 },
                 opts => opts.Excluding(x => x.Owner)
             )
-            .And
-            .AllSatisfy(x => x.ViewerId.Should().Be(ViewerId));
+            .And.AllSatisfy(x => x.ViewerId.Should().Be(ViewerId));
     }
 
     [Fact]
@@ -219,24 +204,16 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture
-            .ApiContext
-            .PlayerMaterials
-            .Single(
-                x => x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Valor
-            )
-            .Quantity
-            .Should()
+        this.fixture.ApiContext.PlayerMaterials.Single(
+            x => x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Valor
+        )
+            .Quantity.Should()
             .Be(6);
 
-        this.fixture
-            .ApiContext
-            .PlayerMaterials
-            .Single(
-                x => x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Acclaim
-            )
-            .Quantity
-            .Should()
+        this.fixture.ApiContext.PlayerMaterials.Single(
+            x => x.ViewerId == IdentityTestUtils.ViewerId && x.MaterialId == Materials.Acclaim
+        )
+            .Quantity.Should()
             .Be(8);
     }
 
@@ -255,28 +232,23 @@ public class InventoryRepositoryTest : IClassFixture<DbTestFixture>
             }
         );
 
-        await this.inventoryRepository
-            .Invoking(
-                x =>
-                    x.UpdateQuantity(
-                        new Dictionary<Materials, int>() { { Materials.SummerEstelleSkin, -6 } }
-                    )
-            )
+        await this.inventoryRepository.Invoking(
+            x =>
+                x.UpdateQuantity(
+                    new Dictionary<Materials, int>() { { Materials.SummerEstelleSkin, -6 } }
+                )
+        )
             .Should()
             .ThrowAsync<InvalidOperationException>();
 
         await this.fixture.ApiContext.SaveChangesAsync();
 
-        this.fixture
-            .ApiContext
-            .PlayerMaterials
-            .Single(
-                x =>
-                    x.ViewerId == IdentityTestUtils.ViewerId
-                    && x.MaterialId == Materials.SummerEstelleSkin
-            )
-            .Quantity
-            .Should()
+        this.fixture.ApiContext.PlayerMaterials.Single(
+            x =>
+                x.ViewerId == IdentityTestUtils.ViewerId
+                && x.MaterialId == Materials.SummerEstelleSkin
+        )
+            .Quantity.Should()
             .Be(5);
     }
 

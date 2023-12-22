@@ -19,8 +19,7 @@ public class TicketRepository(ApiContext apiContext, IPlayerIdentityService play
     )
     {
         return apiContext
-            .PlayerSummonTickets
-            .Add(
+            .PlayerSummonTickets.Add(
                 new DbSummonTicket
                 {
                     ViewerId = playerIdentityService.ViewerId,

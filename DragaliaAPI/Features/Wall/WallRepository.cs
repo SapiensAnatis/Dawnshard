@@ -23,9 +23,9 @@ public class WallRepository : IWallRepository
     }
 
     public IQueryable<DbPlayerQuestWall> QuestWalls =>
-        this.apiContext
-            .PlayerQuestWalls
-            .Where(x => x.ViewerId == this.playerIdentityService.ViewerId);
+        this.apiContext.PlayerQuestWalls.Where(
+            x => x.ViewerId == this.playerIdentityService.ViewerId
+        );
 
     public async Task InitializeWall()
     {
@@ -38,17 +38,15 @@ public class WallRepository : IWallRepository
 
         for (int element = 0; element < 5; element++)
         {
-            await apiContext
-                .PlayerQuestWalls
-                .AddAsync(
-                    new DbPlayerQuestWall()
-                    {
-                        ViewerId = this.playerIdentityService.ViewerId,
-                        WallId = WallService.FlameWallId + element,
-                        WallLevel = 0, // Indicates you have not completed level 1. Goes up to 80 upon completing level 80
-                        IsStartNextLevel = false,
-                    }
-                );
+            await apiContext.PlayerQuestWalls.AddAsync(
+                new DbPlayerQuestWall()
+                {
+                    ViewerId = this.playerIdentityService.ViewerId,
+                    WallId = WallService.FlameWallId + element,
+                    WallLevel = 0, // Indicates you have not completed level 1. Goes up to 80 upon completing level 80
+                    IsStartNextLevel = false,
+                }
+            );
         }
     }
 
@@ -59,8 +57,7 @@ public class WallRepository : IWallRepository
 
     public async Task<DbPlayerQuestWall> GetQuestWall(int wallId)
     {
-        DbPlayerQuestWall? questWall = await this.QuestWalls
-            .Where(x => x.WallId == wallId)
+        DbPlayerQuestWall? questWall = await this.QuestWalls.Where(x => x.WallId == wallId)
             .FirstOrDefaultAsync();
 
         if (questWall is null)

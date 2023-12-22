@@ -30,10 +30,9 @@ public class NotFoundHandlerMiddleware
             DragaliaResponse<ResultCodeData> gameResponse =
                 new(new DataHeaders(NotFoundCode), new(NotFoundCode));
 
-            await context
-                .Response
-                .Body
-                .WriteAsync(MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options));
+            await context.Response.Body.WriteAsync(
+                MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
+            );
         }
     }
 }

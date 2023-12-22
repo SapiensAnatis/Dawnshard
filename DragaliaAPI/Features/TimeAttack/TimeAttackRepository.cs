@@ -10,9 +10,9 @@ public class TimeAttackRepository(
 ) : ITimeAttackRepository
 {
     public IQueryable<DbReceivedRankingTierReward> ReceivedRewards =>
-        apiContext
-            .ReceivedRankingTierRewards
-            .Where(x => x.ViewerId == playerIdentityService.ViewerId);
+        apiContext.ReceivedRankingTierRewards.Where(
+            x => x.ViewerId == playerIdentityService.ViewerId
+        );
 
     public async Task CreateOrUpdateClear(DbTimeAttackClear clear)
     {

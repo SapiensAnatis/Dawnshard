@@ -158,9 +158,10 @@ public class WeaponService : IWeaponService
         // TODO: Use of WeaponBodyRarity table to validate unbind/stat upgrades against refine count
 
         if (
-            !MasterAsset
-                .WeaponBodyBuildupGroup
-                .TryGetValue(buildupKey, out WeaponBodyBuildupGroup? buildupGroup)
+            !MasterAsset.WeaponBodyBuildupGroup.TryGetValue(
+                buildupKey,
+                out WeaponBodyBuildupGroup? buildupGroup
+            )
         )
         {
             this.logger.LogError("Could not find buildup group with key {key}", buildupKey);
@@ -271,9 +272,10 @@ public class WeaponService : IWeaponService
         int passiveKey = body.GetPassiveAbilityId(buildup.buildup_piece_no);
 
         if (
-            !MasterAsset
-                .WeaponPassiveAbility
-                .TryGetValue(passiveKey, out WeaponPassiveAbility? passiveAbility)
+            !MasterAsset.WeaponPassiveAbility.TryGetValue(
+                passiveKey,
+                out WeaponPassiveAbility? passiveAbility
+            )
         )
         {
             this.logger.LogError("Invalid weapon passive ability key {key}", passiveKey);
@@ -322,9 +324,10 @@ public class WeaponService : IWeaponService
         int passiveKey = body.GetBuildupLevelId(buildup.step);
 
         if (
-            !MasterAsset
-                .WeaponBodyBuildupLevel
-                .TryGetValue(passiveKey, out WeaponBodyBuildupLevel? buildupLevel)
+            !MasterAsset.WeaponBodyBuildupLevel.TryGetValue(
+                passiveKey,
+                out WeaponBodyBuildupLevel? buildupLevel
+            )
         )
         {
             this.logger.LogError("Invalid weapon stat buildup key {key}", passiveKey);

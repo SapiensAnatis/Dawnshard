@@ -28,8 +28,7 @@ public class AbilityCrestMultiplierServiceTest
     {
         int flamesOfReflectionCompendiumId = 20816;
 
-        this.mockAbilityCrestRepository
-            .Setup(x => x.AbilityCrests)
+        this.mockAbilityCrestRepository.Setup(x => x.AbilityCrests)
             .Returns(
                 new List<DbAbilityCrest>()
                 {
@@ -91,8 +90,7 @@ public class AbilityCrestMultiplierServiceTest
     {
         int flamesOfReflectionCompendiumId = 20816;
 
-        this.mockAbilityCrestRepository
-            .Setup(x => x.AbilityCrests)
+        this.mockAbilityCrestRepository.Setup(x => x.AbilityCrests)
             .Returns(
                 new List<DbAbilityCrest>()
                 {
@@ -139,8 +137,7 @@ public class AbilityCrestMultiplierServiceTest
     {
         int flamesOfReflectionCompendiumId = 20816;
 
-        this.mockAbilityCrestRepository
-            .Setup(x => x.AbilityCrests)
+        this.mockAbilityCrestRepository.Setup(x => x.AbilityCrests)
             .Returns(
                 new List<DbAbilityCrest>()
                 {
@@ -192,8 +189,7 @@ public class AbilityCrestMultiplierServiceTest
     {
         int flamesOfReflectionCompendiumId = 20816;
 
-        this.mockAbilityCrestRepository
-            .Setup(x => x.AbilityCrests)
+        this.mockAbilityCrestRepository.Setup(x => x.AbilityCrests)
             .Returns(
                 new List<DbAbilityCrest>()
                 {
@@ -240,8 +236,7 @@ public class AbilityCrestMultiplierServiceTest
     {
         int accursedArchivesCompendiumId = 20831;
 
-        this.mockAbilityCrestRepository
-            .Setup(x => x.AbilityCrests)
+        this.mockAbilityCrestRepository.Setup(x => x.AbilityCrests)
             .Returns(
                 new List<DbAbilityCrest>()
                 {

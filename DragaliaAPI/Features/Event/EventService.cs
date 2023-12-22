@@ -85,8 +85,7 @@ public class EventService(
             rewardIds != null
                 ? rewardIds.Select(x => rewards[x])
                 : rewards
-                    .Values
-                    .ExceptBy(alreadyObtainedRewardIds, x => x.Id)
+                    .Values.ExceptBy(alreadyObtainedRewardIds, x => x.Id)
                     .Where(
                         x =>
                             eventItemQuantities.ContainsKey(x.EventItemId)
@@ -127,9 +126,9 @@ public class EventService(
 
         CombatEventLocation location = MasterAsset.CombatEventLocation[locationId];
         if (
-            await questRepository
-                .Quests
-                .SingleOrDefaultAsync(x => x.QuestId == location.ClearQuestId)
+            await questRepository.Quests.SingleOrDefaultAsync(
+                x => x.QuestId == location.ClearQuestId
+            )
             is not { State: 3 }
         )
         {
@@ -137,9 +136,9 @@ public class EventService(
         }
 
         List<CombatEventLocationReward> rewards = MasterAsset
-            .CombatEventLocationReward
-            .Enumerable
-            .Where(x => x.EventId == eventId && x.LocationRewardId == location.LocationRewardId)
+            .CombatEventLocationReward.Enumerable.Where(
+                x => x.EventId == eventId && x.LocationRewardId == location.LocationRewardId
+            )
             .ToList();
 
         logger.LogDebug(
@@ -164,9 +163,7 @@ public class EventService(
     }
 
     private static readonly Dictionary<int, List<QuestData>> CombatEventQuestLookup = MasterAsset
-        .EventData
-        .Enumerable
-        .Where(x => x.EventKindType == EventKindType.Combat)
+        .EventData.Enumerable.Where(x => x.EventKindType == EventKindType.Combat)
         .Select(x => x.Id)
         .ToDictionary(
             x => x,
@@ -194,8 +191,7 @@ public class EventService(
         }
 
         IEnumerable<int> items = await eventRepository
-            .Items
-            .Where(x => x.EventId == eventId)
+            .Items.Where(x => x.EventId == eventId)
             .Select(x => x.Id)
             .ToListAsync();
 
@@ -208,8 +204,7 @@ public class EventService(
             eventRepository.CreateEventItems(eventId, itemIds);
 
         IEnumerable<int> currentEventPassiveIds = await eventRepository
-            .Passives
-            .Where(x => x.EventId == eventId)
+            .Passives.Where(x => x.EventId == eventId)
             .Select(x => x.PassiveId)
             .ToListAsync();
 
@@ -228,8 +223,7 @@ public class EventService(
                 .ToHashSet();
 
             List<int> completedQuestIds = await questRepository
-                .Quests
-                .Where(x => x.State == 3 && relevantQuestIds.Contains(x.QuestId))
+                .Quests.Where(x => x.State == 3 && relevantQuestIds.Contains(x.QuestId))
                 .Select(x => x.QuestId)
                 .ToListAsync();
 
@@ -262,9 +256,9 @@ public class EventService(
 
             foreach (
                 int locationId in MasterAsset
-                    .CombatEventLocation
-                    .Enumerable
-                    .Where(x => x.EventId == eventId && completedQuestIds.Contains(x.ClearQuestId))
+                    .CombatEventLocation.Enumerable.Where(
+                        x => x.EventId == eventId && completedQuestIds.Contains(x.ClearQuestId)
+                    )
                     .Select(x => x.Id)
             )
             {

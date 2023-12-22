@@ -163,25 +163,21 @@ public class DungeonRecordServiceTest
         int takeAccumulatePoint = 30;
         int takeBoostAccumulatePoint = 40;
 
-        this.mockQuestService
-            .Setup(x => x.ProcessQuestCompletion(session, playRecord))
+        this.mockQuestService.Setup(x => x.ProcessQuestCompletion(session, playRecord))
             .ReturnsAsync((mockQuest, true, new List<AtgenFirstClearSet>()));
 
-        this.mockUserService
-            .Setup(x => x.RemoveStamina(StaminaType.Single, 40))
+        this.mockUserService.Setup(x => x.RemoveStamina(StaminaType.Single, 40))
             .Returns(Task.CompletedTask);
-        this.mockUserService
-            .Setup(x => x.AddExperience(400))
+        this.mockUserService.Setup(x => x.AddExperience(400))
             .ReturnsAsync(new PlayerLevelResult(true, 100, 50));
 
-        this.mockDungeonRewardService
-            .Setup(x => x.ProcessQuestMissionCompletion(playRecord, session, mockQuest))
+        this.mockDungeonRewardService.Setup(
+            x => x.ProcessQuestMissionCompletion(playRecord, session, mockQuest)
+        )
             .ReturnsAsync((missionStatus, firstClearSets));
-        this.mockDungeonRewardService
-            .Setup(x => x.ProcessEnemyDrops(playRecord, session))
+        this.mockDungeonRewardService.Setup(x => x.ProcessEnemyDrops(playRecord, session))
             .ReturnsAsync((dropList, takeMana, takeCoin));
-        this.mockDungeonRewardService
-            .Setup(x => x.ProcessEventRewards(playRecord, session))
+        this.mockDungeonRewardService.Setup(x => x.ProcessEventRewards(playRecord, session))
             .ReturnsAsync(
                 new DungeonRecordRewardService.EventRewardData(
                     scoreMissionSuccessLists,
@@ -193,12 +189,10 @@ public class DungeonRecordServiceTest
                 )
             );
 
-        this.mockQuestService
-            .Setup(x => x.GetQuestStamina(lSurtrSoloId, StaminaType.Single))
+        this.mockQuestService.Setup(x => x.GetQuestStamina(lSurtrSoloId, StaminaType.Single))
             .ReturnsAsync(40);
 
-        this.mockRewardService
-            .Setup(x => x.GetConvertedEntityList())
+        this.mockRewardService.Setup(x => x.GetConvertedEntityList())
             .Returns(new List<ConvertedEntity>());
 
         IngameResultData ingameResultData =

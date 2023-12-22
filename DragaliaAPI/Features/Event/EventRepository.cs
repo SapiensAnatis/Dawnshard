@@ -84,16 +84,17 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
 
     public async Task<DbPlayerEventPassive?> GetEventPassiveAsync(int eventId, int passiveId)
     {
-        return await apiContext
-            .PlayerEventPassives
-            .FindAsync(playerIdentityService.ViewerId, eventId, passiveId);
+        return await apiContext.PlayerEventPassives.FindAsync(
+            playerIdentityService.ViewerId,
+            eventId,
+            passiveId
+        );
     }
 
     public DbPlayerEventData CreateEventData(int eventId, bool customEventFlag = false)
     {
         return apiContext
-            .PlayerEventData
-            .Add(
+            .PlayerEventData.Add(
                 new DbPlayerEventData
                 {
                     ViewerId = playerIdentityService.ViewerId,
@@ -107,8 +108,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
     public DbPlayerEventReward CreateEventReward(int eventId, int rewardId)
     {
         return apiContext
-            .PlayerEventRewards
-            .Add(
+            .PlayerEventRewards.Add(
                 new DbPlayerEventReward
                 {
                     ViewerId = playerIdentityService.ViewerId,
@@ -130,8 +130,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
         {
             items.Add(
                 apiContext
-                    .PlayerEventItems
-                    .Add(
+                    .PlayerEventItems.Add(
                         new DbPlayerEventItem
                         {
                             ViewerId = playerIdentityService.ViewerId,
@@ -160,8 +159,7 @@ public class EventRepository(ApiContext apiContext, IPlayerIdentityService playe
         {
             passives.Add(
                 apiContext
-                    .PlayerEventPassives
-                    .Add(
+                    .PlayerEventPassives.Add(
                         new DbPlayerEventPassive
                         {
                             ViewerId = playerIdentityService.ViewerId,

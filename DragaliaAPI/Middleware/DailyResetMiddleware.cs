@@ -20,12 +20,10 @@ public class DailyResetMiddleware
         if (
             context.GetEndpoint()?.Metadata.GetMetadata<AllowAnonymousAttribute>() is null
             && context.GetEndpoint()?.Metadata.GetMetadata<BypassDailyResetAttribute>() is null
-            && context
-                .Items
-                .TryGetValue(
-                    SessionAuthenticationHandler.LastLoginTime,
-                    out object? lastLoginTimeObj
-                )
+            && context.Items.TryGetValue(
+                SessionAuthenticationHandler.LastLoginTime,
+                out object? lastLoginTimeObj
+            )
             && lastLoginTimeObj is DateTimeOffset lastLoginTime
         )
         {
@@ -37,12 +35,9 @@ public class DailyResetMiddleware
                 DragaliaResponse<DataHeaders> gameResponse =
                     new(new DataHeaders(ResultCode.CommonChangeDate), ResultCode.CommonChangeDate);
 
-                await context
-                    .Response
-                    .Body
-                    .WriteAsync(
-                        MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
-                    );
+                await context.Response.Body.WriteAsync(
+                    MessagePackSerializer.Serialize(gameResponse, CustomResolver.Options)
+                );
 
                 return;
             }

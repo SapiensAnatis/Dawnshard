@@ -27,8 +27,7 @@ public class AbilityCrestMultiplierService(
         );
 
         IEnumerable<DbAbilityCrest> equippedCrests = await abilityCrestRepository
-            .AbilityCrests
-            .Where(x => equippedCrestIds.Contains(x.AbilityCrestId))
+            .AbilityCrests.Where(x => equippedCrestIds.Contains(x.AbilityCrestId))
             .ToListAsync();
 
         foreach (PartySettingList partyUnit in partySettingList)
@@ -111,9 +110,10 @@ public class AbilityCrestMultiplierService(
         foreach (DbAbilityCrest crest in crests)
         {
             if (
-                !MasterAsset
-                    .AbilityCrest
-                    .TryGetValue(crest.AbilityCrestId, out AbilityCrest? crestData)
+                !MasterAsset.AbilityCrest.TryGetValue(
+                    crest.AbilityCrestId,
+                    out AbilityCrest? crestData
+                )
             )
             {
                 continue;

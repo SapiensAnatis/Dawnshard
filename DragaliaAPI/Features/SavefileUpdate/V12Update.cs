@@ -16,9 +16,7 @@ public class V12Update(
     public int SavefileVersion => 12;
 
     private static readonly ImmutableHashSet<int> DrillGroup1MissionIds = MasterAsset
-        .DrillMission
-        .Enumerable
-        .Where(x => x.MissionDrillGroupId == 1)
+        .DrillMission.Enumerable.Where(x => x.MissionDrillGroupId == 1)
         .Select(x => x.Id)
         .ToImmutableHashSet();
 

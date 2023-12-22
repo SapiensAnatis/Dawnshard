@@ -36,9 +36,9 @@ public class CharaMutations : MutationBase
     {
         DbPlayer player = this.GetPlayer(args.ViewerId, query => query.Include(x => x.CharaList));
 
-        DbPlayerCharaData? charaData = player
-            .CharaList
-            .FirstOrDefault(x => x.CharaId == args.CharaId);
+        DbPlayerCharaData? charaData = player.CharaList.FirstOrDefault(
+            x => x.CharaId == args.CharaId
+        );
 
         if (charaData is null)
             throw new ArgumentException("Player does not own specified character");

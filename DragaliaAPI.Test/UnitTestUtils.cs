@@ -79,8 +79,7 @@ public static class UnitTestUtils
                 options
                     .Using<DateTimeOffset>(
                         ctx =>
-                            ctx.Subject
-                                .Should()
+                            ctx.Subject.Should()
                                 .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(thresholdSec))
                     )
                     .WhenTypeIs<DateTimeOffset>()
@@ -91,8 +90,7 @@ public static class UnitTestUtils
                 options
                     .Using<TimeSpan>(
                         ctx =>
-                            ctx.Subject
-                                .Should()
+                            ctx.Subject.Should()
                                 .BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(thresholdSec))
                     )
                     .WhenTypeIs<TimeSpan>()

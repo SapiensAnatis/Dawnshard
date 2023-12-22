@@ -58,14 +58,12 @@ public class LoginControllerTest
 
         this.mockResetHelper.SetupGet(x => x.LastDailyReset).Returns(DateTimeOffset.UtcNow);
 
-        this.loginBonusService
-            .Setup(x => x.RewardLoginBonus())
+        this.loginBonusService.Setup(x => x.RewardLoginBonus())
             .ReturnsAsync(Enumerable.Empty<AtgenLoginBonusList>());
 
         this.mockDailyResetAction.Setup(x => x.Apply()).Returns(Task.CompletedTask);
 
-        this.mockUpdateDataService
-            .Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
 
         await this.loginController.Index();
@@ -84,12 +82,10 @@ public class LoginControllerTest
             new DbPlayerUserData() { ViewerId = 1, LastLoginTime = DateTimeOffset.UtcNow }
         );
 
-        this.mockResetHelper
-            .SetupGet(x => x.LastDailyReset)
+        this.mockResetHelper.SetupGet(x => x.LastDailyReset)
             .Returns(DateTimeOffset.UtcNow.AddHours(-1));
 
-        this.mockUpdateDataService
-            .Setup(x => x.SaveChangesAsync())
+        this.mockUpdateDataService.Setup(x => x.SaveChangesAsync())
             .ReturnsAsync(new UpdateDataList());
 
         await this.loginController.Index();

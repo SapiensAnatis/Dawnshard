@@ -113,8 +113,7 @@ public class PartyController(
 
         // TODO: can make this single query instead of 8 (this method is called in a loop)
         IEnumerable<Charas> ownedCharaIds = await unitRepository
-            .Charas
-            .Select(x => x.CharaId)
+            .Charas.Select(x => x.CharaId)
             .ToListAsync();
 
         Charas c = (Charas)Enum.ToObject(typeof(Charas), id);
@@ -139,8 +138,7 @@ public class PartyController(
             return true;
 
         IEnumerable<long> ownedDragonKeyIds = await unitRepository
-            .Dragons
-            .Select(x => x.DragonKeyId)
+            .Dragons.Select(x => x.DragonKeyId)
             .ToListAsync();
 
         if (!ownedDragonKeyIds.Contains((long)keyId))

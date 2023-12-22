@@ -34,16 +34,13 @@ public class QuestRepositoryTest : IClassFixture<DbTestFixture>
             }
         );
 
-        this.questRepository
-            .Quests
-            .Should()
+        this.questRepository.Quests.Should()
             .BeEquivalentTo(
                 new List<DbQuest>()
                 {
                     new() { ViewerId = ViewerId, QuestId = 1 },
                 }
             )
-            .And
-            .BeEquivalentTo(this.questRepository.Quests);
+            .And.BeEquivalentTo(this.questRepository.Quests);
     }
 }

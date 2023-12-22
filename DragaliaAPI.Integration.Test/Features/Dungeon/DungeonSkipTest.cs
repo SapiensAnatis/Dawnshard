@@ -29,9 +29,7 @@ public class DungeonSkipTest : TestFixture
             }
         );
 
-        DbPlayerUserData oldUserData = this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         DragaliaResponse<DungeonSkipStartData> response =
@@ -51,52 +49,27 @@ public class DungeonSkipTest : TestFixture
 
         response.data.ingame_result_data.grow_record.take_mana.Should().NotBe(0);
         response
-            .data
-            .ingame_result_data
-            .grow_record
-            .take_player_exp
-            .Should()
+            .data.ingame_result_data.grow_record.take_player_exp.Should()
             .Be(staminaCost * 10 * playCount);
 
         response
-            .data
-            .ingame_result_data
-            .quest_party_setting_list
-            .Should()
+            .data.ingame_result_data.quest_party_setting_list.Should()
             .Contain(x => x.chara_id == Shared.Definitions.Enums.Charas.ThePrince);
         response
-            .data
-            .ingame_result_data
-            .helper_list
-            .Should()
+            .data.ingame_result_data.helper_list.Should()
             .Contain(x => x.name == "dreadfullydistinct");
 
         response
-            .data
-            .update_data_list
-            .quest_list
-            .Should()
+            .data.update_data_list.quest_list.Should()
             .Contain(x => x.quest_id == questId && x.play_count == playCount);
         response
-            .data
-            .update_data_list
-            .user_data
-            .stamina_single
-            .Should()
+            .data.update_data_list.user_data.stamina_single.Should()
             .Be(oldUserData.StaminaSingle - (staminaCost * playCount));
         response
-            .data
-            .update_data_list
-            .user_data
-            .exp
-            .Should()
+            .data.update_data_list.user_data.exp.Should()
             .Be(oldUserData.Exp + (staminaCost * 10 * playCount));
         response
-            .data
-            .update_data_list
-            .user_data
-            .quest_skip_point
-            .Should()
+            .data.update_data_list.user_data.quest_skip_point.Should()
             .Be(oldUserData.QuestSkipPoint - playCount);
     }
 
@@ -116,9 +89,7 @@ public class DungeonSkipTest : TestFixture
             }
         );
 
-        DbPlayerUserData oldUserData = this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         DragaliaResponse<DungeonSkipStartAssignUnitData> response =
@@ -141,52 +112,27 @@ public class DungeonSkipTest : TestFixture
 
         response.data.ingame_result_data.grow_record.take_mana.Should().NotBe(0);
         response
-            .data
-            .ingame_result_data
-            .grow_record
-            .take_player_exp
-            .Should()
+            .data.ingame_result_data.grow_record.take_player_exp.Should()
             .Be(staminaCost * 10 * playCount);
 
         response
-            .data
-            .ingame_result_data
-            .quest_party_setting_list
-            .Should()
+            .data.ingame_result_data.quest_party_setting_list.Should()
             .Contain(x => x.chara_id == Shared.Definitions.Enums.Charas.ThePrince);
         response
-            .data
-            .ingame_result_data
-            .helper_list
-            .Should()
+            .data.ingame_result_data.helper_list.Should()
             .Contain(x => x.name == "dreadfullydistinct");
 
         response
-            .data
-            .update_data_list
-            .quest_list
-            .Should()
+            .data.update_data_list.quest_list.Should()
             .Contain(x => x.quest_id == questId && x.play_count == playCount);
         response
-            .data
-            .update_data_list
-            .user_data
-            .stamina_single
-            .Should()
+            .data.update_data_list.user_data.stamina_single.Should()
             .Be(oldUserData.StaminaSingle - (staminaCost * playCount));
         response
-            .data
-            .update_data_list
-            .user_data
-            .exp
-            .Should()
+            .data.update_data_list.user_data.exp.Should()
             .Be(oldUserData.Exp + (staminaCost * 10 * playCount));
         response
-            .data
-            .update_data_list
-            .user_data
-            .quest_skip_point
-            .Should()
+            .data.update_data_list.user_data.quest_skip_point.Should()
             .Be(oldUserData.QuestSkipPoint - playCount);
     }
 
@@ -201,9 +147,7 @@ public class DungeonSkipTest : TestFixture
 
         int totalStamina = 9 + 9 + 9 + 12 + 9;
 
-        DbPlayerUserData oldUserData = this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         DragaliaResponse<DungeonSkipStartMultipleQuestData> response =
@@ -231,23 +175,14 @@ public class DungeonSkipTest : TestFixture
         response.data.ingame_result_data.grow_record.take_player_exp.Should().Be(totalStamina * 10);
 
         response
-            .data
-            .ingame_result_data
-            .quest_party_setting_list
-            .Should()
+            .data.ingame_result_data.quest_party_setting_list.Should()
             .Contain(x => x.chara_id == Shared.Definitions.Enums.Charas.ThePrince);
         response
-            .data
-            .ingame_result_data
-            .helper_list
-            .Should()
+            .data.ingame_result_data.helper_list.Should()
             .Contain(x => x.name == "dreadfullydistinct");
 
         response
-            .data
-            .update_data_list
-            .quest_list
-            .Select(x => x.quest_id)
+            .data.update_data_list.quest_list.Select(x => x.quest_id)
             .Should()
             .BeEquivalentTo(
                 new List<int>()
@@ -260,32 +195,17 @@ public class DungeonSkipTest : TestFixture
                 }
             );
         response
-            .data
-            .update_data_list
-            .quest_list
-            .Should()
+            .data.update_data_list.quest_list.Should()
             .AllSatisfy(x => x.play_count.Should().Be(1));
 
         response
-            .data
-            .update_data_list
-            .user_data
-            .stamina_single
-            .Should()
+            .data.update_data_list.user_data.stamina_single.Should()
             .Be(oldUserData.StaminaSingle - totalStamina);
         response
-            .data
-            .update_data_list
-            .user_data
-            .exp
-            .Should()
+            .data.update_data_list.user_data.exp.Should()
             .Be(oldUserData.Exp + (totalStamina * 10));
         response
-            .data
-            .update_data_list
-            .user_data
-            .quest_skip_point
-            .Should()
+            .data.update_data_list.user_data.quest_skip_point.Should()
             .Be(oldUserData.QuestSkipPoint - 5);
     }
 
@@ -310,9 +230,7 @@ public class DungeonSkipTest : TestFixture
             }
         );
 
-        DbPlayerUserData oldUserData = this.ApiContext
-            .PlayerUserData
-            .AsNoTracking()
+        DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
             .First(x => x.ViewerId == ViewerId);
 
         DragaliaResponse<DungeonSkipStartData> response =
@@ -328,10 +246,7 @@ public class DungeonSkipTest : TestFixture
             );
 
         response
-            .data
-            .update_data_list
-            .quest_event_list
-            .Should()
+            .data.update_data_list.quest_event_list.Should()
             .ContainEquivalentOf(
                 new QuestEventList()
                 {

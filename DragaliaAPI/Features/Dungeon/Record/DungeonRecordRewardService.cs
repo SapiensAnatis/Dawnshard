@@ -68,9 +68,10 @@ public class DungeonRecordRewardService(
         )
         {
             if (
-                !session
-                    .EnemyList
-                    .TryGetValue(record.area_idx, out IEnumerable<AtgenEnemy>? enemyList)
+                !session.EnemyList.TryGetValue(
+                    record.area_idx,
+                    out IEnumerable<AtgenEnemy>? enemyList
+                )
             )
             {
                 logger.LogWarning(

@@ -26,8 +26,9 @@ public class ItemRepository(ApiContext apiContext, IPlayerIdentityService player
         DbPlayerUseItem item =
             await GetItem(id)
             ?? apiContext
-                .PlayerUseItems
-                .Add(new DbPlayerUseItem { ViewerId = playerIdentityService.ViewerId, ItemId = id })
+                .PlayerUseItems.Add(
+                    new DbPlayerUseItem { ViewerId = playerIdentityService.ViewerId, ItemId = id }
+                )
                 .Entity;
 
         item.Quantity += quantity;

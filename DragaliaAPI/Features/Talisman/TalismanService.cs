@@ -22,8 +22,7 @@ public class TalismanService(
         List<long> deletedTalismanIds = new();
 
         List<DbTalisman> dbTalismans = await unitRepository
-            .Talismans
-            .Where(x => talismanIds.Contains(x.TalismanKeyId))
+            .Talismans.Where(x => talismanIds.Contains(x.TalismanKeyId))
             .ToListAsync();
 
         logger.LogDebug("Selling talismans {@talismanKeyIdList}", talismanIds);
@@ -51,9 +50,9 @@ public class TalismanService(
 
     public async Task SetLock(long talismanKeyId, bool locked)
     {
-        DbTalisman talisman = await unitRepository
-            .Talismans
-            .SingleAsync(x => x.TalismanKeyId == talismanKeyId);
+        DbTalisman talisman = await unitRepository.Talismans.SingleAsync(
+            x => x.TalismanKeyId == talismanKeyId
+        );
         talisman.IsLock = locked;
 
         logger.LogDebug(

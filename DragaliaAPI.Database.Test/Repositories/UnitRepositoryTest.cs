@@ -81,9 +81,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     public async Task CheckHasCharas_OwnedList_ReturnsTrue()
     {
         IEnumerable<Charas> idList = await fixture
-            .ApiContext
-            .PlayerCharaData
-            .Where(x => x.ViewerId == ViewerId)
+            .ApiContext.PlayerCharaData.Where(x => x.ViewerId == ViewerId)
             .Select(x => x.CharaId)
             .ToListAsync();
 
@@ -95,9 +93,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
     {
         IEnumerable<Charas> idList = (
             await fixture
-                .ApiContext
-                .PlayerCharaData
-                .Where(x => x.ViewerId == ViewerId)
+                .ApiContext.PlayerCharaData.Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.CharaId)
                 .ToListAsync()
         ).Append(Charas.BondforgedZethia);
@@ -148,10 +144,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync();
 
         (
-            await this.fixture
-                .ApiContext
-                .PlayerCharaData
-                .Where(x => x.ViewerId == ViewerId)
+            await this.fixture.ApiContext.PlayerCharaData.Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.CharaId)
                 .ToListAsync()
         )
@@ -200,10 +193,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
         await this.fixture.ApiContext.SaveChangesAsync();
 
         (
-            await this.fixture
-                .ApiContext
-                .PlayerDragonData
-                .Where(x => x.ViewerId == ViewerId)
+            await this.fixture.ApiContext.PlayerDragonData.Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.DragonId)
                 .ToListAsync()
         )
@@ -219,10 +209,7 @@ public class UnitRepositoryTest : IClassFixture<DbTestFixture>
             );
 
         (
-            await this.fixture
-                .ApiContext
-                .PlayerDragonReliability
-                .Where(x => x.ViewerId == ViewerId)
+            await this.fixture.ApiContext.PlayerDragonReliability.Where(x => x.ViewerId == ViewerId)
                 .Select(x => x.DragonId)
                 .ToListAsync()
         )
