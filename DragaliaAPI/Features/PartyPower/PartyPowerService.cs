@@ -148,12 +148,7 @@ public class PartyPowerService(
                     "No dragon found for power calculation"
                 );
 
-            reliability =
-                await unitRepository.FindDragonReliabilityAsync(dragon.DragonId)
-                ?? throw new DragaliaException(
-                    ResultCode.CommonDbError,
-                    "No reliability found for power calculation"
-                );
+            reliability = await unitRepository.FindDragonReliabilityAsync(dragon.DragonId);
 
             dragonData = MasterAsset.DragonData[dragon.DragonId];
             dragonRarity = MasterAsset.DragonRarity[dragonData.Rarity];
