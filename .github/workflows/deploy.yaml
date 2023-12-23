@@ -17,15 +17,11 @@ jobs:
     steps:
       - name: ssh and restart pods
         uses: appleboy/ssh-action@v0.1.6
-        env:
-          KUBECONFIG: $HOME/.kube/config
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
-          envs: KUBECONFIG
           script: |
-            echo $KUBECONFIG
-            kubectl rollout restart deployment/${{ vars.K8S_DEPLOYMENT }} -n ${{ vars.K8S_NAMESPACE }}
-            kubectl rollout status deployment/${{ vars.K8S_DEPLOYMENT }} -n ${{ vars.K8S_NAMESPACE }}
+            kubectl rollout restart deployment/${{ vars.K8S_DEPLOYMENT }} -n ${{ vars.K8S_NAMESPACE }} --kubeconfig "$HOME/.kube/config"
+            kubectl rollout status deployment/${{ vars.K8S_DEPLOYMENT }} -n ${{ vars.K8S_NAMESPACE }} --kubeconfig "$HOME/.kube/config"
