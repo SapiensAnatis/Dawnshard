@@ -1,10 +1,13 @@
 ﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Features.Dungeon.AutoRepeat;
+using DragaliaAPI.Features.Dungeon.Start;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.Definitions.Enums.Dungeon;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,11 +20,14 @@ public class DungeonRecordController(
     IDungeonRecordHelperService dungeonRecordHelperService,
     IDungeonService dungeonService,
     ITimeAttackService timeAttackService,
+    IAutoRepeatService autoRepeatService,
     IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
     [HttpPost("record")]
-    public async Task<DragaliaResult> Record(DungeonRecordRecordRequest request)
+    public async Task<DragaliaResult<DungeonRecordRecordData>> Record(
+        DungeonRecordRecordRequest request
+    )
     {
         DungeonSession session = await dungeonService.FinishDungeon(request.dungeon_key);
 
@@ -42,7 +48,7 @@ public class DungeonRecordController(
         UpdateDataList updateDataList = await updateDataService.SaveChangesAsync();
 
         DungeonRecordRecordData response =
-            new() { ingame_result_data = ingameResultData, update_data_list = updateDataList, };
+            new() { ingame_result_data = ingameResultData, update_data_list = updateDataList };
 
         if (session.QuestData?.IsSumUpTotalDamage ?? false)
         {
@@ -52,7 +58,16 @@ public class DungeonRecordController(
             );
         }
 
-        return Ok(response);
+        if (request.repeat_state != 0)
+        {
+            response.repeat_data = await autoRepeatService.RecordRepeat(
+                request.repeat_key,
+                ingameResultData,
+                updateDataList
+            );
+        }
+
+        return response;
     }
 
     [HttpPost("record_multi")]

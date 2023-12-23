@@ -8,13 +8,15 @@ public interface IDungeonStartService
     Task<IngameData> GetIngameData(
         int questId,
         IList<int> partyNoList,
+        RepeatSetting? repeatSetting = null,
         ulong? supportViewerId = null
     );
 
-    Task<IngameData> GetIngameData(
+    Task<IngameData> GetAssignUnitIngameData(
         int questId,
         IList<PartySettingList> party,
-        ulong? supportViewerId = null
+        ulong? supportViewerId = null,
+        RepeatSetting? repeatSetting = null
     );
 
     Task<IngameQuestData> InitiateQuest(int questId);

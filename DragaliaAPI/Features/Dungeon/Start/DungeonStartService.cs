@@ -31,7 +31,8 @@ public class DungeonStartService(
     IMapper mapper,
     ILogger<DungeonStartService> logger,
     IPaymentService paymentService,
-    IEventService eventService
+    IEventService eventService,
+    IAutoRepeatService autoRepeatService
 ) : IDungeonStartService
 {
     public async Task<bool> ValidateStamina(int questId, StaminaType staminaType)
@@ -63,6 +64,7 @@ public class DungeonStartService(
     public async Task<IngameData> GetIngameData(
         int questId,
         IList<int> partyNoList,
+        RepeatSetting? repeatSetting = null,
         ulong? supportViewerId = null
     )
     {
@@ -93,13 +95,20 @@ public class DungeonStartService(
             }
         );
 
+        if (repeatSetting != null)
+        {
+            await autoRepeatService.SetRepeatSetting(repeatSetting);
+            result.repeat_state = 1;
+        }
+
         return result;
     }
 
-    public async Task<IngameData> GetIngameData(
+    public async Task<IngameData> GetAssignUnitIngameData(
         int questId,
         IList<PartySettingList> party,
-        ulong? supportViewerId = null
+        ulong? supportViewerId = null,
+        RepeatSetting? repeatSetting = null
     )
     {
         IngameData result = await InitializeIngameData(questId, supportViewerId);

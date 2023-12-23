@@ -1194,13 +1194,14 @@ public class DungeonRecordRecordMultiRequest
     public DungeonRecordRecordMultiRequest() { }
 }
 
+#nullable restore
 [MessagePackObject(true)]
 public class DungeonRecordRecordRequest
 {
-    public PlayRecord play_record { get; set; }
-    public string dungeon_key { get; set; }
+    public required PlayRecord play_record { get; set; }
+    public required string dungeon_key { get; set; }
     public int repeat_state { get; set; }
-    public string repeat_key { get; set; }
+    public string? repeat_key { get; set; }
 
     public DungeonRecordRecordRequest(
         PlayRecord play_record,
@@ -1217,6 +1218,7 @@ public class DungeonRecordRecordRequest
 
     public DungeonRecordRecordRequest() { }
 }
+#nullable  disable
 
 [MessagePackObject(true)]
 public class DungeonRetryRequest
@@ -1394,16 +1396,18 @@ public class DungeonStartStartMultiRequest
     public DungeonStartStartMultiRequest() { }
 }
 
+#nullable restore
+
 [MessagePackObject(true)]
 public class DungeonStartStartRequest
 {
     public int quest_id { get; set; }
     public int party_no { get; set; }
-    public List<int> party_no_list { get; set; }
+    public required List<int> party_no_list { get; set; }
     public int bet_count { get; set; }
     public int repeat_state { get; set; }
     public ulong support_viewer_id { get; set; }
-    public RepeatSetting repeat_setting { get; set; }
+    public RepeatSetting? repeat_setting { get; set; }
 
     public DungeonStartStartRequest(
         int quest_id,
@@ -1426,6 +1430,8 @@ public class DungeonStartStartRequest
 
     public DungeonStartStartRequest() { }
 }
+
+#nullable disable
 
 [MessagePackObject(true)]
 public class EarnEventEntryRequest
