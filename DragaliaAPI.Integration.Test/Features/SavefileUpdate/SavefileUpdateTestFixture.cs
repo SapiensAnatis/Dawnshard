@@ -20,8 +20,13 @@ public abstract class SavefileUpdateTestFixture : TestFixture
             .SavefileVersion;
     }
 
-    public int GetSavefileVersion()
+    protected int GetSavefileVersion()
     {
         return this.ApiContext.Players.Find(ViewerId)!.SavefileVersion;
+    }
+
+    protected async Task LoadIndex()
+    {
+        await this.Client.PostMsgpack<LoadIndexData>("load/index", new LoadIndexRequest());
     }
 }

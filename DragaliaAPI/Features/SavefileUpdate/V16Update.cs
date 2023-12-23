@@ -42,8 +42,9 @@ public class V16Update(IEventRepository eventRepository, ILogger<V16Update> logg
             if (actualType != expectedType)
             {
                 logger.LogInformation(
-                    "Updating event item {@item} type to {expectedType}",
-                    item,
+                    "Updating event item {item} type from {currentType} to {expectedType}",
+                    item.Id,
+                    item.Type,
                     expectedType
                 );
 
