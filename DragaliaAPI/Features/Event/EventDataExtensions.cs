@@ -7,27 +7,7 @@ namespace DragaliaAPI.Features.Event;
 
 internal static class EventDataExtensions
 {
-    public static IEnumerable<int> GetEventItemTypes(this EventData data)
-    {
-        return (
-            data.EventKindType switch
-            {
-                EventKindType.Build => Enum.GetValues<BuildEventItemType>().Cast<int>(),
-                EventKindType.BattleRoyal => Enum.GetValues<BattleRoyalEventItemType>().Cast<int>(),
-                EventKindType.Clb01 => Enum.GetValues<Clb01EventItemType>().Cast<int>(),
-                EventKindType.Collect => Enum.GetValues<CollectEventItemType>().Cast<int>(),
-                EventKindType.Combat => Enum.GetValues<CombatEventItemType>().Cast<int>(),
-                EventKindType.Earn => Enum.GetValues<EarnEventItemType>().Cast<int>(),
-                EventKindType.ExHunter => Enum.GetValues<ExHunterEventItemType>().Cast<int>(),
-                EventKindType.ExRush => Enum.GetValues<ExRushEventItemType>().Cast<int>(),
-                EventKindType.Raid => Enum.GetValues<RaidEventItemType>().Cast<int>(),
-                EventKindType.Simple => Enum.GetValues<SimpleEventItemType>().Cast<int>(),
-                _ => Enumerable.Empty<int>(),
-            }
-        ).Where(x => x != 0);
-    }
-
-    public static IEnumerable<int> GetEventSpecificItemIds(this EventData data)
+    public static IEnumerable<(int Id, int Type)> GetEventSpecificItemIds(this EventData data)
     {
         int eventId = data.Id;
 
@@ -36,44 +16,44 @@ internal static class EventDataExtensions
             EventKindType.Build
                 => MasterAsset
                     .BuildEventItem.Enumerable.Where(x => x.EventId == eventId)
-                    .Select(x => x.Id),
+                    .Select(x => (x.Id, (int)x.EventItemType)),
             EventKindType.Raid
                 => MasterAsset
                     .RaidEventItem.Enumerable.Where(x => x.RaidEventId == eventId)
-                    .Select(x => x.Id),
+                    .Select(x => (x.Id, (int)x.RaidEventItemType)),
             EventKindType.Combat
                 => MasterAsset
                     .CombatEventItem.Enumerable.Where(x => x.EventId == eventId)
-                    .Select(x => x.Id),
+                    .Select(x => (x.Id, (int)x.EventItemType)),
             EventKindType.BattleRoyal
                 => MasterAsset
                     .BattleRoyalEventItem.Enumerable.Where(x => x.EventId == eventId)
-                    .Select(x => x.Id),
+                    .Select(x => (x.Id, (int)x.EventItemType)),
             EventKindType.Clb01
                 => MasterAsset
                     .Clb01EventItem.Enumerable.Where(x => x.EventId == eventId)
-                    .Select(x => x.Id),
+                    .Select(x => (x.Id, (int)x.EventItemType)),
             EventKindType.Collect
                 => MasterAsset
                     .CollectEventItem.Enumerable.Where(x => x.EventId == eventId)
-                    .Select(x => x.Id),
+                    .Select(x => (x.Id, (int)x.EventItemType)),
             EventKindType.Earn
                 => MasterAsset
                     .EarnEventItem.Enumerable.Where(x => x.EventId == eventId)
-                    .Select(x => x.Id),
+                    .Select(x => (x.Id, (int)x.EventItemType)),
             EventKindType.ExHunter
                 => MasterAsset
                     .ExHunterEventItem.Enumerable.Where(x => x.EventId == eventId)
-                    .Select(x => x.Id),
+                    .Select(x => (x.Id, (int)x.EventItemType)),
             EventKindType.ExRush
                 => MasterAsset
                     .ExRushEventItem.Enumerable.Where(x => x.EventId == eventId)
-                    .Select(x => x.Id),
+                    .Select(x => (x.Id, (int)x.EventItemType)),
             EventKindType.Simple
                 => MasterAsset
                     .SimpleEventItem.Enumerable.Where(x => x.EventId == eventId)
-                    .Select(x => x.Id),
-            _ => Enumerable.Empty<int>(),
+                    .Select(x => (x.Id, (int)x.EventItemType)),
+            _ => [],
         };
     }
 

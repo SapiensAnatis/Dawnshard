@@ -195,9 +195,10 @@ public class EventService(
             .Select(x => x.Id)
             .ToListAsync();
 
-        List<(int Id, int Type)> itemIds = data.GetEventSpecificItemIds()
-            .Zip(data.GetEventItemTypes(), (x, y) => (x, y))
-            .ExceptBy(items, info => info.x)
+        IEnumerable<(int Id, int Type)> eventSpecificItemIds = data.GetEventSpecificItemIds();
+
+        List<(int Id, int Type)> itemIds = eventSpecificItemIds
+            .ExceptBy(items, info => info.Id)
             .ToList();
 
         if (itemIds.Count > 0)
