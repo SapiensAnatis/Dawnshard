@@ -7,26 +7,6 @@ namespace DragaliaAPI.Features.Event;
 
 internal static class EventDataExtensions
 {
-    public static IEnumerable<int> GetEventItemTypes(this EventData data)
-    {
-        return (
-            data.EventKindType switch
-            {
-                EventKindType.Build => Enum.GetValues<BuildEventItemType>().Cast<int>(),
-                EventKindType.BattleRoyal => Enum.GetValues<BattleRoyalEventItemType>().Cast<int>(),
-                EventKindType.Clb01 => Enum.GetValues<Clb01EventItemType>().Cast<int>(),
-                EventKindType.Collect => Enum.GetValues<CollectEventItemType>().Cast<int>(),
-                EventKindType.Combat => Enum.GetValues<CombatEventItemType>().Cast<int>(),
-                EventKindType.Earn => Enum.GetValues<EarnEventItemType>().Cast<int>(),
-                EventKindType.ExHunter => Enum.GetValues<ExHunterEventItemType>().Cast<int>(),
-                EventKindType.ExRush => Enum.GetValues<ExRushEventItemType>().Cast<int>(),
-                EventKindType.Raid => Enum.GetValues<RaidEventItemType>().Cast<int>(),
-                EventKindType.Simple => Enum.GetValues<SimpleEventItemType>().Cast<int>(),
-                _ => Enumerable.Empty<int>(),
-            }
-        ).Where(x => x != 0);
-    }
-
     public static IEnumerable<(int Id, int Type)> GetEventSpecificItemIds(this EventData data)
     {
         int eventId = data.Id;
