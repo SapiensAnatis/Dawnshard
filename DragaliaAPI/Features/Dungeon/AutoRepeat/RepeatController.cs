@@ -1,6 +1,7 @@
 using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Dungeon.Start;
 using DragaliaAPI.Models.Generated;
+using DragaliaAPI.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DragaliaAPI.Features.Dungeon.AutoRepeat;
@@ -17,11 +18,13 @@ public class RepeatController(
     [HttpPost("end")]
     public async Task<DragaliaResult<RepeatEndData>> End()
     {
-        RepeatInfo? info = await this.autoRepeatService.GetRepeatInfo();
+        RepeatInfo? info = await this.autoRepeatService.ClearRepeatInfo();
         if (info == null)
         {
-            this.logger.LogWarning("Failed to retrieve repeat data");
-            return this.Code(ResultCode.DungeonRepeatNotPlayable);
+            throw new DragaliaException(
+                ResultCode.DungeonRepeatNotPlayable,
+                "Failed to retrieve repeat data"
+            );
         }
 
         RepeatEndData response =

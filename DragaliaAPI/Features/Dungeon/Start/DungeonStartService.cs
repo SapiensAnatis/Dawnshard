@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dungeon.AutoRepeat;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
@@ -100,6 +101,10 @@ public class DungeonStartService(
         {
             await autoRepeatService.SetRepeatSetting(repeatSetting);
             result.repeat_state = 1;
+        }
+        else
+        {
+            await autoRepeatService.ClearRepeatInfo();
         }
 
         return result;

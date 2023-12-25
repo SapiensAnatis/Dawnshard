@@ -93,10 +93,6 @@ public class AutoRepeatService(
         };
     }
 
-    /// <summary>
-    /// Attempt to get a player's pre-configured <see cref="RepeatInfo"/> from dungeon start via viewer ID lookup.
-    /// </summary>
-    /// <returns>The <see cref="RepeatInfo"/>, or <see langword="null"/> if none was found.</returns>
     public async Task<RepeatInfo?> GetRepeatInfo()
     {
         string? key = await this.distributedCache.GetStringAsync(
@@ -108,12 +104,25 @@ public class AutoRepeatService(
         return await this.GetRepeatInfo(Guid.Parse(key));
     }
 
+    public async Task<RepeatInfo?> ClearRepeatInfo()
+    {
+        RepeatInfo? info = await this.GetRepeatInfo();
+        if (info != null)
+            await this.distributedCache.RemoveAsync(Schema.RepeatInfo(info.Key));
+
+        await this.distributedCache.RemoveAsync(
+            Schema.RepeatKey(this.playerIdentityService.ViewerId)
+        );
+
+        return info;
+    }
+
     /// <summary>
     /// Attempts to get a player's <see cref="RepeatInfo"/> via key lookup.
     /// </summary>
     /// <param name="key">The <see cref="RepeatInfo"/>'s key.</param>
     /// <returns>The <see cref="RepeatInfo"/>, or <see langword="null"/> if none was found.</returns>
-    public Task<RepeatInfo?> GetRepeatInfo(Guid key) =>
+    private Task<RepeatInfo?> GetRepeatInfo(Guid key) =>
         this.distributedCache.GetJsonAsync<RepeatInfo>(Schema.RepeatInfo(key));
 
     private static class Schema
