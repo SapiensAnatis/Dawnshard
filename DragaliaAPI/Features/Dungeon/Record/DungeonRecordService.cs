@@ -162,39 +162,3 @@ public class DungeonRecordService(
         growRecord.mana_bonus_factor = 1;
     }
 }
-
-file static class Extensions
-{
-    public static IEnumerable<ConvertedEntityList> Merge(
-        this IEnumerable<ConvertedEntityList> source
-    ) =>
-        source
-            .GroupBy(
-                x =>
-                    new
-                    {
-                        x.before_entity_id,
-                        x.before_entity_type,
-                        x.after_entity_id,
-                        x.after_entity_type
-                    }
-            )
-            .Select(
-                group =>
-                    group.Aggregate(
-                        new ConvertedEntityList
-                        {
-                            before_entity_id = group.Key.before_entity_id,
-                            before_entity_type = group.Key.before_entity_type,
-                            after_entity_id = group.Key.after_entity_id,
-                            after_entity_type = group.Key.after_entity_type
-                        },
-                        (acc, current) =>
-                        {
-                            acc.before_entity_quantity += current.before_entity_quantity;
-                            acc.after_entity_quantity += current.after_entity_quantity;
-                            return acc;
-                        }
-                    )
-            );
-}

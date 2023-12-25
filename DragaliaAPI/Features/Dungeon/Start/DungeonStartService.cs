@@ -46,6 +46,7 @@ public class DungeonStartService(
         int requiredStamina = await questService.GetQuestStamina(questId, staminaType);
         int currentStamina = await userService.GetAndUpdateStamina(staminaType);
 
+        // Makes auto repeat stamina work amazingly enough
         if (currentStamina < requiredStamina)
         {
             logger.LogInformation(
