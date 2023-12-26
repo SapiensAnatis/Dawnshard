@@ -1194,13 +1194,14 @@ public class DungeonRecordRecordMultiRequest
     public DungeonRecordRecordMultiRequest() { }
 }
 
+#nullable restore
 [MessagePackObject(true)]
 public class DungeonRecordRecordRequest
 {
-    public PlayRecord play_record { get; set; }
-    public string dungeon_key { get; set; }
+    public required PlayRecord play_record { get; set; }
+    public required string dungeon_key { get; set; }
     public int repeat_state { get; set; }
-    public string repeat_key { get; set; }
+    public string? repeat_key { get; set; }
 
     public DungeonRecordRecordRequest(
         PlayRecord play_record,
@@ -1217,6 +1218,7 @@ public class DungeonRecordRecordRequest
 
     public DungeonRecordRecordRequest() { }
 }
+#nullable  disable
 
 [MessagePackObject(true)]
 public class DungeonRetryRequest
@@ -1333,7 +1335,7 @@ public class DungeonSkipStartRequest
 public class DungeonStartStartAssignUnitRequest
 {
     public int quest_id { get; set; }
-    public IEnumerable<PartySettingList> request_party_setting_list { get; set; }
+    public IList<PartySettingList> request_party_setting_list { get; set; }
     public int bet_count { get; set; }
     public int repeat_state { get; set; }
     public ulong support_viewer_id { get; set; }
@@ -1341,7 +1343,7 @@ public class DungeonStartStartAssignUnitRequest
 
     public DungeonStartStartAssignUnitRequest(
         int quest_id,
-        IEnumerable<PartySettingList> request_party_setting_list,
+        IList<PartySettingList> request_party_setting_list,
         int bet_count,
         int repeat_state,
         ulong support_viewer_id,
@@ -1363,11 +1365,11 @@ public class DungeonStartStartAssignUnitRequest
 public class DungeonStartStartMultiAssignUnitRequest
 {
     public int quest_id { get; set; }
-    public IEnumerable<PartySettingList> request_party_setting_list { get; set; }
+    public IList<PartySettingList> request_party_setting_list { get; set; }
 
     public DungeonStartStartMultiAssignUnitRequest(
         int quest_id,
-        IEnumerable<PartySettingList> request_party_setting_list
+        IList<PartySettingList> request_party_setting_list
     )
     {
         this.quest_id = quest_id;
@@ -1382,9 +1384,9 @@ public class DungeonStartStartMultiRequest
 {
     public int quest_id { get; set; }
     public int party_no { get; set; }
-    public IEnumerable<int> party_no_list { get; set; }
+    public IList<int> party_no_list { get; set; }
 
-    public DungeonStartStartMultiRequest(int quest_id, int party_no, IEnumerable<int> party_no_list)
+    public DungeonStartStartMultiRequest(int quest_id, int party_no, IList<int> party_no_list)
     {
         this.quest_id = quest_id;
         this.party_no = party_no;
@@ -1394,16 +1396,18 @@ public class DungeonStartStartMultiRequest
     public DungeonStartStartMultiRequest() { }
 }
 
+#nullable restore
+
 [MessagePackObject(true)]
 public class DungeonStartStartRequest
 {
     public int quest_id { get; set; }
     public int party_no { get; set; }
-    public List<int> party_no_list { get; set; }
+    public required List<int> party_no_list { get; set; }
     public int bet_count { get; set; }
     public int repeat_state { get; set; }
     public ulong support_viewer_id { get; set; }
-    public RepeatSetting repeat_setting { get; set; }
+    public RepeatSetting? repeat_setting { get; set; }
 
     public DungeonStartStartRequest(
         int quest_id,
@@ -1426,6 +1430,8 @@ public class DungeonStartStartRequest
 
     public DungeonStartStartRequest() { }
 }
+
+#nullable disable
 
 [MessagePackObject(true)]
 public class EarnEventEntryRequest
@@ -4299,13 +4305,13 @@ public class WallStartStartAssignUnitRequest
 {
     public int wall_id { get; set; }
     public int wall_level { get; set; }
-    public IEnumerable<PartySettingList> request_party_setting_list { get; set; }
+    public IList<PartySettingList> request_party_setting_list { get; set; }
     public ulong support_viewer_id { get; set; }
 
     public WallStartStartAssignUnitRequest(
         int wall_id,
         int wall_level,
-        IEnumerable<PartySettingList> request_party_setting_list,
+        IList<PartySettingList> request_party_setting_list,
         ulong support_viewer_id
     )
     {

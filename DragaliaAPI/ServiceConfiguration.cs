@@ -5,6 +5,7 @@ using DragaliaAPI.Features.ClearParty;
 using DragaliaAPI.Features.Dmode;
 using DragaliaAPI.Features.DmodeDungeon;
 using DragaliaAPI.Features.Dungeon;
+using DragaliaAPI.Features.Dungeon.AutoRepeat;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Dungeon.Start;
 using DragaliaAPI.Features.Emblem;
@@ -109,6 +110,7 @@ public static class ServiceConfiguration
             .AddScoped<IDungeonRecordDamageService, DungeonRecordDamageService>()
             .AddScoped<IQuestCompletionService, QuestCompletionService>()
             .AddScoped<IAbilityCrestMultiplierService, AbilityCrestMultiplierService>()
+            .AddScoped<IAutoRepeatService, AutoRepeatService>()
             // Event Feature
             .AddScoped<IEventRepository, EventRepository>()
             .AddScoped<IEventService, EventService>()
