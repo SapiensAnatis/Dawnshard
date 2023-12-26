@@ -39,7 +39,8 @@ public class RepeatController(
                     over_discard_entity_list = [],
                     over_present_limit_entity_list = [],
                     over_present_entity_list = []
-                }
+                },
+                repeat_data = new(info.Key.ToString(), info.CurrentCount, 1)
             };
 
         return response;
