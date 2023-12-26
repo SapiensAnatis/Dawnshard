@@ -184,6 +184,8 @@ public class DungeonRecordTest : TestFixture
                     last_weekly_reset_time = DateTimeOffset.UtcNow
                 }
             );
+
+        response.repeat_data.Should().BeNull();
     }
 
     [Fact]

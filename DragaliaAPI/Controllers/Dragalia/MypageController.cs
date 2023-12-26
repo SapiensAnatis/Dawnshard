@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Features.Missions;
+﻿using DragaliaAPI.Features.Dungeon.AutoRepeat;
+using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Shop;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
@@ -14,6 +15,7 @@ namespace DragaliaAPI.Controllers.Dragalia;
 public class MypageController(
     IMissionService missionService,
     IShopRepository shopRepository,
+    IAutoRepeatService autoRepeatService,
     IUpdateDataService updateDataService
 ) : DragaliaControllerBase
 {
@@ -42,6 +44,11 @@ public class MypageController(
         resp.is_shop_notification = await shopRepository.GetDailySummonCountAsync() == 0;
         resp.update_data_list = await updateDataService.SaveChangesAsync();
         resp.update_data_list.mission_notice = await missionService.GetMissionNotice(null);
+
+        RepeatInfo? repeatInfo = await autoRepeatService.GetRepeatInfo();
+
+        if (repeatInfo != null)
+            resp.repeat_data = new(repeatInfo.Key.ToString(), repeatInfo.CurrentCount, 1);
 
         return Ok(resp);
     }

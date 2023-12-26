@@ -1,4 +1,5 @@
 ﻿using DragaliaAPI.Controllers;
+using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.TimeAttack;
 using DragaliaAPI.Models.Generated;
@@ -32,6 +33,7 @@ public class DungeonStartController(
         IngameData ingameData = await dungeonStartService.GetIngameData(
             request.quest_id,
             request.party_no_list,
+            request.repeat_setting,
             request.support_viewer_id
         );
 
@@ -79,18 +81,23 @@ public class DungeonStartController(
     }
 
     [HttpPost("start_assign_unit")]
-    public async Task<DragaliaResult> StartAssignUnit(DungeonStartStartAssignUnitRequest request)
+    public async Task<DragaliaResult<DungeonStartStartAssignUnitData>> StartAssignUnit(
+        DungeonStartStartAssignUnitRequest request
+    )
     {
         if (!await dungeonStartService.ValidateStamina(request.quest_id, StaminaType.Single))
             return this.Code(ResultCode.QuestStaminaSingleShort);
 
-        IngameData ingameData = await dungeonStartService.GetIngameData(
+        IngameData ingameData = await dungeonStartService.GetAssignUnitIngameData(
             request.quest_id,
             request.request_party_setting_list,
-            request.support_viewer_id
+            request.support_viewer_id,
+            request.repeat_setting
         );
 
         DungeonStartStartData response = await BuildResponse(request.quest_id, ingameData);
+
+        response.ingame_data.repeat_state = request.repeat_state;
 
         return Ok(response);
     }
@@ -106,7 +113,7 @@ public class DungeonStartController(
         if (!await dungeonStartService.ValidateStamina(request.quest_id, StaminaType.Multi))
             return this.Code(ResultCode.QuestStaminaMultiShort);
 
-        IngameData ingameData = await dungeonStartService.GetIngameData(
+        IngameData ingameData = await dungeonStartService.GetAssignUnitIngameData(
             request.quest_id,
             request.request_party_setting_list
         );

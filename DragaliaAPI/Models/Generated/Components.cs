@@ -13,6 +13,7 @@ using DragaliaAPI.Photon.Shared.Enums;
 using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.Features.Presents;
 using DragaliaAPI.Shared.Json;
+using DragaliaAPI.Shared.Definitions.Enums.Dungeon;
 using MessagePack;
 
 namespace DragaliaAPI.Models.Generated;
@@ -8107,11 +8108,11 @@ public class RepeatData
 [MessagePackObject(true)]
 public class RepeatSetting
 {
-    public int repeat_type { get; set; }
+    public RepeatSettingType repeat_type { get; set; }
     public int repeat_count { get; set; }
-    public IEnumerable<int> use_item_list { get; set; }
+    public List<UseItem> use_item_list { get; set; }
 
-    public RepeatSetting(int repeat_type, int repeat_count, IEnumerable<int> use_item_list)
+    public RepeatSetting(RepeatSettingType repeat_type, int repeat_count, List<UseItem> use_item_list)
     {
         this.repeat_type = repeat_type;
         this.repeat_count = repeat_count;

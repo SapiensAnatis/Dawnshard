@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Extensions;
 
-public static class IEnumerableExtensions
+public static class EnumerableExtensions
 {
     public static bool TryGetElementAt<TElement>(
         this IEnumerable<TElement> enumerable,

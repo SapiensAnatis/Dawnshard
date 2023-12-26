@@ -2,6 +2,7 @@
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Scaffold;
 using DragaliaAPI.Database.Repositories;
+using DragaliaAPI.Features.Dungeon.AutoRepeat;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Player;
 using DragaliaAPI.Features.Quest;
@@ -31,7 +32,8 @@ public class DungeonStartService(
     IMapper mapper,
     ILogger<DungeonStartService> logger,
     IPaymentService paymentService,
-    IEventService eventService
+    IEventService eventService,
+    IAutoRepeatService autoRepeatService
 ) : IDungeonStartService
 {
     public async Task<bool> ValidateStamina(int questId, StaminaType staminaType)
@@ -45,6 +47,7 @@ public class DungeonStartService(
         int requiredStamina = await questService.GetQuestStamina(questId, staminaType);
         int currentStamina = await userService.GetAndUpdateStamina(staminaType);
 
+        // Makes auto repeat stamina work amazingly enough
         if (currentStamina < requiredStamina)
         {
             logger.LogInformation(
@@ -62,7 +65,8 @@ public class DungeonStartService(
 
     public async Task<IngameData> GetIngameData(
         int questId,
-        IEnumerable<int> partyNoList,
+        IList<int> partyNoList,
+        RepeatSetting? repeatSetting = null,
         ulong? supportViewerId = null
     )
     {
@@ -93,13 +97,24 @@ public class DungeonStartService(
             }
         );
 
+        if (repeatSetting != null)
+        {
+            await autoRepeatService.SetRepeatSetting(repeatSetting);
+            result.repeat_state = 1;
+        }
+        else
+        {
+            await autoRepeatService.ClearRepeatInfo();
+        }
+
         return result;
     }
 
-    public async Task<IngameData> GetIngameData(
+    public async Task<IngameData> GetAssignUnitIngameData(
         int questId,
-        IEnumerable<PartySettingList> party,
-        ulong? supportViewerId = null
+        IList<PartySettingList> party,
+        ulong? supportViewerId = null,
+        RepeatSetting? repeatSetting = null
     )
     {
         IngameData result = await InitializeIngameData(questId, supportViewerId);
@@ -169,7 +184,7 @@ public class DungeonStartService(
     public async Task<IngameData> GetWallIngameData(
         int wallId,
         int wallLevel,
-        IEnumerable<PartySettingList> party,
+        IList<PartySettingList> party,
         ulong? supportViewerId = null
     )
     {
@@ -320,7 +335,7 @@ public class DungeonStartService(
             new()
             {
                 quest_id = questId,
-                viewer_id = (ulong?)playerIdentityService.ViewerId ?? 0UL,
+                viewer_id = (ulong)playerIdentityService.ViewerId,
                 play_type = QuestPlayType.Default,
                 party_info = new() { support_data = new() },
                 start_time = DateTimeOffset.UtcNow,

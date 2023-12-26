@@ -182,7 +182,7 @@ public class DungeonStartTest : TestFixture
         (
             await Client.PostMsgpack<DungeonStartStartData>(
                 $"/dungeon_start/{endpoint}",
-                new DungeonStartStartRequest() { quest_id = 100010104 },
+                new DungeonStartStartRequest() { quest_id = 100010104, party_no_list = [1] },
                 ensureSuccessHeader: false
             )
         )
