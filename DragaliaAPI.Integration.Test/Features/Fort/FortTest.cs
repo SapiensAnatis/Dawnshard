@@ -141,14 +141,14 @@ public class FortTest : TestFixture
         ).Entity;
         await this.ApiContext.SaveChangesAsync();
 
-        FortBuildCancelData response = (
-            await this.Client.PostMsgpack<FortBuildCancelData>(
-                "/fort/build_cancel",
-                new FortBuildCancelRequest(build.BuildId)
-            )
-        ).data;
+        await this.Client.PostMsgpack<FortBuildCancelData>(
+            "/fort/build_cancel",
+            new FortBuildCancelRequest(build.BuildId)
+        );
 
-        // this removes it from the player
+        this.ApiContext.PlayerFortBuilds.AsNoTracking()
+            .Should()
+            .NotContain(x => x.PlantId == FortPlants.StaffDojo);
     }
 
     [Fact]
@@ -188,23 +188,23 @@ public class FortTest : TestFixture
     [Fact]
     public async Task BuildStart_ReturnsValidResult()
     {
-        int ExpectedPositionX = 2;
-        int ExpectedPositionZ = 2;
+        int expectedPositionX = 2;
+        int expectedPositionZ = 2;
 
         FortBuildStartData response = (
             await this.Client.PostMsgpack<FortBuildStartData>(
                 "/fort/build_start",
                 new FortBuildStartRequest(
                     FortPlants.FlameAltar,
-                    ExpectedPositionX,
-                    ExpectedPositionZ
+                    expectedPositionX,
+                    expectedPositionZ
                 )
             )
         ).data;
 
         BuildList result = response.update_data_list.build_list.First();
-        result.position_x.Should().Be(ExpectedPositionX);
-        result.position_z.Should().Be(ExpectedPositionZ);
+        result.position_x.Should().Be(expectedPositionX);
+        result.position_z.Should().Be(expectedPositionZ);
         result.build_start_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().NotBe(DateTimeOffset.UnixEpoch);
         result.build_end_date.Should().BeAfter(result.build_start_date);
@@ -256,7 +256,7 @@ public class FortTest : TestFixture
         halidom.BuildEndDate = DateTimeOffset.FromUnixTimeSeconds(1388924543);
         halidom.Level = 10;
 
-        int rows = await this.ApiContext.SaveChangesAsync();
+        await this.ApiContext.SaveChangesAsync();
 
         FortLevelupAtOnceData response = (
             await this.Client.PostMsgpack<FortLevelupAtOnceData>(
@@ -459,20 +459,20 @@ public class FortTest : TestFixture
         ).Entity;
         await this.ApiContext.SaveChangesAsync();
 
-        int ExpectedPositionX = 4;
-        int ExpectedPositionZ = 4;
+        int expectedPositionX = 4;
+        int expectedPositionZ = 4;
         FortMoveData response = (
             await this.Client.PostMsgpack<FortMoveData>(
                 "/fort/move",
-                new FortMoveRequest(build.BuildId, ExpectedPositionX, ExpectedPositionZ)
+                new FortMoveRequest(build.BuildId, expectedPositionX, expectedPositionZ)
             )
         ).data;
 
         BuildList result = response.update_data_list.build_list.First(
             x => x.build_id == (ulong)build.BuildId
         );
-        result.position_x.Should().Be(ExpectedPositionX);
-        result.position_z.Should().Be(ExpectedPositionZ);
+        result.position_x.Should().Be(expectedPositionX);
+        result.position_z.Should().Be(expectedPositionZ);
     }
 
     [Fact]
