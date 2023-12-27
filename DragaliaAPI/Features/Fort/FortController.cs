@@ -14,18 +14,21 @@ public class FortController : DragaliaControllerBase
     private readonly IBonusService bonusService;
     private readonly IUpdateDataService updateDataService;
     private readonly IRewardService rewardService;
+    private readonly IDragonService dragonService;
 
     public FortController(
         IFortService fortService,
         IBonusService bonusService,
         IUpdateDataService updateDataService,
-        IRewardService rewardService
+        IRewardService rewardService,
+        IDragonService dragonService
     )
     {
         this.fortService = fortService;
         this.bonusService = bonusService;
         this.updateDataService = updateDataService;
         this.rewardService = rewardService;
+        this.dragonService = dragonService;
     }
 
     [HttpPost("get_data")]
@@ -36,12 +39,14 @@ public class FortController : DragaliaControllerBase
 
         FortBonusList bonusList = await bonusService.GetBonusList();
 
+        int freeGiftCount = await this.dragonService.GetFreeGiftCount();
+
         FortGetDataData data =
             new()
             {
                 build_list = buildList,
                 fort_bonus_list = bonusList,
-                dragon_contact_free_gift_count = 1, // One bread
+                dragon_contact_free_gift_count = freeGiftCount,
                 production_rp = await this.fortService.GetRupieProduction(),
                 production_st = await this.fortService.GetStaminaProduction(),
                 production_df = await this.fortService.GetDragonfruitProduction(),

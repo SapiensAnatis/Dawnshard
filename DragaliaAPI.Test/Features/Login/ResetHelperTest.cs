@@ -4,15 +4,15 @@ namespace DragaliaAPI.Test.Features.Login;
 
 public class ResetHelperTest
 {
-    private readonly Mock<IDateTimeProvider> mockDateTimeProvider;
+    private readonly Mock<TimeProvider> mockTimeProvider;
 
     private readonly IResetHelper resetHelper;
 
     public ResetHelperTest()
     {
-        this.mockDateTimeProvider = new(MockBehavior.Strict);
+        this.mockTimeProvider = new(MockBehavior.Strict);
 
-        this.resetHelper = new ResetHelper(this.mockDateTimeProvider.Object);
+        this.resetHelper = new ResetHelper(this.mockTimeProvider.Object);
     }
 
     /// <summary>
@@ -83,7 +83,7 @@ public class ResetHelperTest
     [MemberData(nameof(DailyResetData))]
     public void LastDailyReset_ReturnsCorrectReset(DateTimeOffset now, DateTimeOffset expectedReset)
     {
-        this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(now);
+        this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(now);
 
         this.resetHelper.LastDailyReset.Should().Be(expectedReset);
     }
@@ -95,7 +95,7 @@ public class ResetHelperTest
         DateTimeOffset expectedReset
     )
     {
-        this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(now);
+        this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(now);
 
         this.resetHelper.LastWeeklyReset.Should().Be(expectedReset);
     }
@@ -107,7 +107,7 @@ public class ResetHelperTest
         DateTimeOffset expectedReset
     )
     {
-        this.mockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(now);
+        this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(now);
 
         this.resetHelper.LastMonthlyReset.Should().Be(expectedReset);
     }

@@ -16,4 +16,5 @@ public interface IDragonService
     Task<DragonLimitBreakData> DoDragonLimitBreak(DragonLimitBreakRequest request);
     Task<DragonSetLockData> DoDragonSetLock(DragonSetLockRequest request);
     Task<DragonSellData> DoDragonSell(DragonSellRequest request);
+    Task<int> GetFreeGiftCount();
 }

@@ -278,7 +278,7 @@ public class DragonTest : TestFixture
     public async Task DragonBuyGiftToSend_IncreasesReliabilityAndReturnsGifts()
     {
         await this.AddToDatabase(
-            DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.HighJupiter)
+            new DbPlayerDragonReliability() { DragonId = Dragons.HighJupiter, Level = 1 }
         );
 
         DragonBuyGiftToSendRequest request = new DragonBuyGiftToSendRequest()
@@ -307,6 +307,9 @@ public class DragonTest : TestFixture
             .First();
         dragonData.reliability_total_exp.Should().Be(1000);
         dragonData.reliability_level.Should().Be(6);
+        dragonData
+            .last_contact_time.Should()
+            .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
     }
 
     [Fact]

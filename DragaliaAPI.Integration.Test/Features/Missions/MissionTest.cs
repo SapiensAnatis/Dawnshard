@@ -189,7 +189,7 @@ public class MissionTest : TestFixture
         int missionId1 = 15070301; // Clear a Quest
         int missionId2 = 15070401; // Clear Three Quests
 
-        ResetHelper resetHelper = new(new DateTimeProvider());
+        ResetHelper resetHelper = new(TimeProvider.System);
 
         DateOnly today = DateOnly.FromDateTime(resetHelper.LastDailyReset.Date);
         DateOnly yesterday = today.AddDays(-1);

@@ -1,26 +1,16 @@
-using System.Globalization;
-using DragaliaAPI.Extensions;
-
 namespace DragaliaAPI.Helpers;
 
-public class ResetHelper : IResetHelper
+public class ResetHelper(TimeProvider timeProvider) : IResetHelper
 {
-    private readonly IDateTimeProvider dateTimeProvider;
+    private readonly TimeProvider timeProvider = timeProvider;
 
     private const int UtcHourReset = 6;
 
-    public ResetHelper(IDateTimeProvider dateTimeProvider)
-    {
-        this.dateTimeProvider = dateTimeProvider;
-
-        CultureInfo culture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
-        culture.DateTimeFormat.FirstDayOfWeek = DayOfWeek.Monday;
-        Thread.CurrentThread.CurrentCulture = culture;
-    }
-
     /// <inheritdoc />
     public DateTimeOffset LastDailyReset =>
-        this.dateTimeProvider.UtcNow.AddHours(-6).UtcDateTime.Date.AddHours(6);
+        this.timeProvider.GetUtcNow().AddHours(-6).UtcDateTime.Date.AddHours(6);
+
+    public DateTimeOffset UtcNow => this.timeProvider.GetUtcNow();
 
     /// <inheritdoc />
     public DateTimeOffset LastWeeklyReset
