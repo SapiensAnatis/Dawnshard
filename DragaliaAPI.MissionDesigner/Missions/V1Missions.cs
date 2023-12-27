@@ -167,7 +167,7 @@ public static class V1Missions
                 MissionType.MainStory,
                 10030201,
                 MissionCompleteType.EventGroupCleared,
-                true,
+                false,
                 Parameter: 30000,
                 Parameter2: null,
                 Parameter3: null,
