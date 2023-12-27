@@ -476,7 +476,9 @@ public class SavefileService : ISavefileService
             .ExecuteDeleteAsync();
         await this.apiContext.PlayerPassiveAbilities.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
-        await this.apiContext.PlayerDragonGifts.Where(x => x.ViewerId == viewerId)
+        await this.apiContext.PlayerDragonGifts.Where(
+            x => x.ViewerId == viewerId && x.DragonGiftId >= DragonGifts.FourLeafClover
+        )
             .ExecuteDeleteAsync();
         await this.apiContext.PlayerMissions.Where(x => x.ViewerId == viewerId)
             .ExecuteDeleteAsync();
