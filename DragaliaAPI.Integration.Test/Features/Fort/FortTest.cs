@@ -72,6 +72,25 @@ public class FortTest : TestFixture
     }
 
     [Fact]
+    public async Task GetData_ReportsFreeDragonGiftCount()
+    {
+        await this.ApiContext.PlayerDragonGifts.ExecuteDeleteAsync();
+        await this.AddToDatabase(
+            [new DbPlayerDragonGift() { DragonGiftId = DragonGifts.FreshBread, Quantity = 1 }]
+        );
+
+        (await this.Client.PostMsgpack<FortGetDataData>("/fort/get_data", new FortGetDataRequest()))
+            .data.dragon_contact_free_gift_count.Should()
+            .Be(1);
+
+        await this.ApiContext.PlayerDragonGifts.ExecuteDeleteAsync();
+
+        (await this.Client.PostMsgpack<FortGetDataData>("/fort/get_data", new FortGetDataRequest()))
+            .data.dragon_contact_free_gift_count.Should()
+            .Be(0);
+    }
+
+    [Fact]
     public async Task AddCarpenter_ReturnsValidResult()
     {
         DbPlayerUserData oldUserData = this.ApiContext.PlayerUserData.AsNoTracking()
@@ -148,7 +167,7 @@ public class FortTest : TestFixture
 
         this.ApiContext.PlayerFortBuilds.AsNoTracking()
             .Should()
-            .NotContain(x => x.PlantId == FortPlants.StaffDojo);
+            .NotContain(x => x.BuildId == build.BuildId);
     }
 
     [Fact]

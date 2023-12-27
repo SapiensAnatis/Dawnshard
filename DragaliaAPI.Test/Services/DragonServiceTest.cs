@@ -5,6 +5,7 @@ using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Game;
@@ -12,6 +13,7 @@ using DragaliaAPI.Shared.Definitions.Enums;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Test.Utils;
 using MockQueryable.Moq;
+using NSubstitute;
 using static DragaliaAPI.Test.UnitTestUtils;
 
 namespace DragaliaAPI.Test.Services;
@@ -26,6 +28,7 @@ public class DragonServiceTest
     private readonly Mock<IPaymentService> mockPaymentService;
     private readonly Mock<IRewardService> mockRewardService;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<TimeProvider> mockTimeProvider;
 
     private readonly DragonService dragonService;
 
@@ -39,6 +42,7 @@ public class DragonServiceTest
         mockPaymentService = new(MockBehavior.Strict);
         mockRewardService = new(MockBehavior.Strict);
         mockMissionProgressionService = new(MockBehavior.Strict);
+        mockTimeProvider = new(MockBehavior.Strict);
 
         dragonService = new DragonService(
             mockUserDataRepository.Object,
@@ -49,8 +53,11 @@ public class DragonServiceTest
             LoggerTestUtils.Create<DragonService>(),
             mockPaymentService.Object,
             mockRewardService.Object,
-            mockMissionProgressionService.Object
+            mockMissionProgressionService.Object,
+            new ResetHelper(this.mockTimeProvider.Object)
         );
+
+        this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(DateTimeOffset.UtcNow);
     }
 
     [Fact]
@@ -74,6 +81,42 @@ public class DragonServiceTest
         ((DragonGifts)responseData.shop_gift_list.Last().dragon_gift_id)
             .Should()
             .Be(DragonConstants.RotatingGifts[(int)DateTimeOffset.UtcNow.DayOfWeek]);
+    }
+
+    [Fact]
+    public async Task DoGetDragonContactData_RotatingGiftChangesAtReset()
+    {
+        this.mockInventoryRepository.SetupGet(x => x.DragonGifts)
+            .Returns(
+                new List<DbPlayerDragonGift>()
+                {
+                    new() { DragonGiftId = DragonGifts.FloralCirclet, Quantity = 1, },
+                    new() { DragonGiftId = DragonGifts.CompellingBook, Quantity = 1, }
+                }
+                    .AsQueryable()
+                    .BuildMock()
+            );
+
+        DateTimeOffset wednesday = new DateTimeOffset(2023, 12, 27, 19, 49, 23, TimeSpan.Zero);
+        this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(wednesday);
+
+        (await this.dragonService.DoDragonGetContactData(new DragonGetContactDataRequest() { }))
+            .shop_gift_list.Should()
+            .Contain(x => x.dragon_gift_id == (int)DragonGifts.FloralCirclet);
+
+        DateTimeOffset thuBeforeReset = new DateTimeOffset(2023, 12, 28, 01, 49, 23, TimeSpan.Zero);
+        this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(thuBeforeReset);
+
+        (await this.dragonService.DoDragonGetContactData(new DragonGetContactDataRequest() { }))
+            .shop_gift_list.Should()
+            .Contain(x => x.dragon_gift_id == (int)DragonGifts.FloralCirclet);
+
+        DateTimeOffset thursday = new DateTimeOffset(2023, 12, 28, 09, 49, 23, TimeSpan.Zero);
+        this.mockTimeProvider.Setup(x => x.GetUtcNow()).Returns(thursday);
+
+        (await this.dragonService.DoDragonGetContactData(new DragonGetContactDataRequest() { }))
+            .shop_gift_list.Should()
+            .Contain(x => x.dragon_gift_id == (int)DragonGifts.CompellingBook);
     }
 
     [Fact]
