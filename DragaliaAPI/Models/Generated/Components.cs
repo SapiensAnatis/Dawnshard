@@ -3469,9 +3469,10 @@ public class AtgenShopGiftList
     public int dragon_gift_id { get; set; }
     public int price { get; set; }
 
-    public int is_buy { get; set; }
+    [MessagePackFormatter(typeof(BoolToIntFormatter))]
+    public bool is_buy { get; set; }
 
-    public AtgenShopGiftList(int dragon_gift_id, int price, int is_buy)
+    public AtgenShopGiftList(int dragon_gift_id, int price, bool is_buy)
     {
         this.dragon_gift_id = dragon_gift_id;
         this.price = price;

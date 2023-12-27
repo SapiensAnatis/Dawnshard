@@ -254,12 +254,12 @@ public class DragonTest : TestFixture
             .shop_gift_list.Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.FreshBread)
             .First()
             .is_buy.Should()
-            .Be(0);
+            .Be(false);
         response
             .shop_gift_list.Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.TastyMilk)
             .First()
             .is_buy.Should()
-            .Be(0);
+            .Be(false);
 
         response.dragon_gift_reward_list.Should().NotBeNullOrEmpty();
         response.update_data_list.user_data.coin.Should().Be(startCoin - 1500);
@@ -297,7 +297,7 @@ public class DragonTest : TestFixture
             .shop_gift_list.Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.HeartyStew)
             .First()
             .is_buy.Should()
-            .Be(0);
+            .Be(false);
 
         response.return_gift_list.Should().NotBeNullOrEmpty();
         DragonReliabilityList dragonData = response
