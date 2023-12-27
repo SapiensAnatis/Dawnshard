@@ -73,7 +73,7 @@ public class DragonServiceTest
         responseData.shop_gift_list.Count().Should().Be(5);
         ((DragonGifts)responseData.shop_gift_list.Last().dragon_gift_id)
             .Should()
-            .Be(DragonConstants.rotatingGifts[(int)DateTimeOffset.UtcNow.DayOfWeek]);
+            .Be(DragonConstants.RotatingGifts[(int)DateTimeOffset.UtcNow.DayOfWeek]);
     }
 
     [Fact]
@@ -90,13 +90,10 @@ public class DragonServiceTest
         dragonRels.Add(DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.Garuda));
 
         mockMissionProgressionService.Setup(
-            x =>
-                x.OnDragonBondLevelUp(
-                    Dragons.Garuda,
-                    UnitElement.Wind,
-                    It.IsIn(3, 6),
-                    It.IsIn(4, 10)
-                )
+            x => x.OnDragonBondLevelUp(Dragons.Garuda, UnitElement.Wind, 3, 4)
+        );
+        mockMissionProgressionService.Setup(
+            x => x.OnDragonBondLevelUp(Dragons.Garuda, UnitElement.Wind, 6, 10)
         );
 
         mockMissionProgressionService.Setup(
