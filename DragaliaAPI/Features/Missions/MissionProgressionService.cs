@@ -182,16 +182,19 @@ public class MissionProgressionService(
         );
     }
 
-    public void OnDragonBondLevelUp(Dragons dragon, UnitElement element, int count, int total)
-    {
+    public void OnDragonBondLevelUp(
+        Dragons dragon,
+        UnitElement element,
+        int levelDiff,
+        int newLevel
+    ) =>
         EnqueueEvent(
             MissionCompleteType.DragonBondLevelUp,
-            count,
-            total,
+            levelDiff,
+            newLevel,
             (int)dragon,
             (int)element
         );
-    }
 
     public void OnItemSummon()
     {

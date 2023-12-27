@@ -1,8 +1,10 @@
 ﻿using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Factories;
+using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models;
+using DragaliaAPI.Shared.MasterAsset.Models.Missions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -254,12 +256,12 @@ public class DragonTest : TestFixture
             .shop_gift_list.Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.FreshBread)
             .First()
             .is_buy.Should()
-            .Be(0);
+            .Be(false);
         response
             .shop_gift_list.Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.TastyMilk)
             .First()
             .is_buy.Should()
-            .Be(0);
+            .Be(false);
 
         response.dragon_gift_reward_list.Should().NotBeNullOrEmpty();
         response.update_data_list.user_data.coin.Should().Be(startCoin - 1500);
@@ -297,7 +299,7 @@ public class DragonTest : TestFixture
             .shop_gift_list.Where(x => (DragonGifts)x.dragon_gift_id == DragonGifts.HeartyStew)
             .First()
             .is_buy.Should()
-            .Be(0);
+            .Be(false);
 
         response.return_gift_list.Should().NotBeNullOrEmpty();
         DragonReliabilityList dragonData = response
@@ -335,6 +337,88 @@ public class DragonTest : TestFixture
             .First();
         dragonData.reliability_total_exp.Should().Be(10000);
         dragonData.reliability_level.Should().Be(18);
+    }
+
+    [Fact]
+    public async Task DragonSendGiftMultiple_CompletesMissionsCorrectly()
+    {
+        int missionId = 302600; // Reach Bond Lv. 30 with a Dragon
+
+        await this.AddToDatabase(
+            new DbPlayerMission()
+            {
+                Type = MissionType.Drill,
+                Id = missionId,
+                State = MissionState.InProgress
+            }
+        );
+
+        await this.AddRangeToDatabase(
+            [
+                new DbPlayerDragonReliability() { DragonId = Dragons.Apollo, },
+                new DbPlayerDragonReliability() { DragonId = Dragons.Kagutsuchi }
+            ]
+        );
+
+        await this.Client.PostMsgpack<DragonSendGiftMultipleData>(
+            "dragon/send_gift_multiple",
+            new DragonSendGiftMultipleRequest()
+            {
+                dragon_id = Dragons.Apollo,
+                dragon_gift_id = DragonGifts.FourLeafClover,
+                quantity = 2,
+            }
+        );
+
+        this.ApiContext.PlayerMissions.AsNoTracking()
+            .First(x => x.Id == missionId)
+            .Progress.Should()
+            .Be(9);
+
+        await this.Client.PostMsgpack<DragonSendGiftMultipleData>(
+            "dragon/send_gift_multiple",
+            new DragonSendGiftMultipleRequest()
+            {
+                dragon_id = Dragons.Kagutsuchi,
+                dragon_gift_id = DragonGifts.FourLeafClover,
+                quantity = 1,
+            }
+        );
+
+        this.ApiContext.PlayerMissions.AsNoTracking()
+            .First(x => x.Id == missionId)
+            .Progress.Should()
+            .Be(9, "the progress is based on the highest level reached");
+
+        var completeMissionResponse = (
+            await this.Client.PostMsgpack<DragonSendGiftMultipleData>(
+                "dragon/send_gift_multiple",
+                new DragonSendGiftMultipleRequest()
+                {
+                    dragon_id = Dragons.Kagutsuchi,
+                    dragon_gift_id = DragonGifts.FourLeafClover,
+                    quantity = 200,
+                }
+            )
+        ).data;
+
+        completeMissionResponse
+            .update_data_list.mission_notice.drill_mission_notice.new_complete_mission_id_list.Should()
+            .Contain(missionId);
+
+        this.ApiContext.PlayerMissions.AsNoTracking()
+            .First(x => x.Id == missionId)
+            .Should()
+            .BeEquivalentTo(
+                new DbPlayerMission()
+                {
+                    ViewerId = this.ViewerId,
+                    Id = missionId,
+                    Type = MissionType.Drill,
+                    Progress = 30,
+                    State = MissionState.Completed
+                }
+            );
     }
 
     [Fact]

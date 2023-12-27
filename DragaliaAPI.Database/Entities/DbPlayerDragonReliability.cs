@@ -48,7 +48,7 @@ public static class DbPlayerDragonReliabilityFactory
                 ViewerId = (int)viewerId,
                 DragonId = id,
                 Level = defaultRelLevel,
-                Exp = DragonConstants.bondXpLimits[defaultRelLevel - 1],
+                Exp = DragonConstants.BondXpLimits[defaultRelLevel - 1],
                 GetTime = DateTimeOffset.UtcNow,
                 LastContactTime = DateTimeOffset.UtcNow
             };
