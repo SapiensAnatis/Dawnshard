@@ -109,7 +109,7 @@
     "_MissionType": "MainStory",
     "_MissionId": 10030201,
     "_CompleteType": "EventGroupCleared",
-    "_UseTotalValue": 1,
+    "_UseTotalValue": 0,
     "_Parameter": 30000
   },
   {
