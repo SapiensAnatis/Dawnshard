@@ -90,13 +90,7 @@ public class DragonServiceTest
         dragonRels.Add(DbPlayerDragonReliabilityFactory.Create(ViewerId, Dragons.Garuda));
 
         mockMissionProgressionService.Setup(
-            x =>
-                x.OnDragonBondLevelUp(
-                    Dragons.Garuda,
-                    UnitElement.Wind,
-                    It.IsIn(3, 6),
-                    It.IsIn(4, 10)
-                )
+            x => x.OnDragonBondLevelUp(Dragons.Garuda, UnitElement.Wind, TODO, It.IsIn(3, 6))
         );
 
         mockMissionProgressionService.Setup(
@@ -232,7 +226,7 @@ public class DragonServiceTest
         UnitElement element = MasterAsset.DragonData[dragon].ElementalType;
 
         mockMissionProgressionService.Setup(
-            x => x.OnDragonBondLevelUp(dragon, element, expectedLvl - 1, expectedLvl)
+            x => x.OnDragonBondLevelUp(dragon, element, TODO, expectedLvl - 1)
         );
 
         mockMissionProgressionService.Setup(

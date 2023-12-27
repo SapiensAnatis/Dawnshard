@@ -65,7 +65,7 @@ public interface IMissionProgressionService
         int total
     );
 
-    void OnDragonBondLevelUp(Dragons dragon, UnitElement element, int count, int total);
+    void OnDragonBondLevelUp(Dragons dragon, UnitElement element, int levelDiff, int newLevel);
     void OnItemSummon();
     void OnPartyOptimized(UnitElement element);
     void OnAbilityCrestTradeViewed();

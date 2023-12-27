@@ -30,7 +30,7 @@ public class DragonService(
         DragonGetContactDataRequest request
     )
     {
-        DragonGifts rotatingGift = DragonConstants.rotatingGifts[
+        DragonGifts rotatingGift = DragonConstants.RotatingGifts[
             (int)DateTimeOffset.UtcNow.DayOfWeek
         ];
         Dictionary<DragonGifts, DbPlayerDragonGift> gifts = await inventoryRepository
@@ -74,8 +74,6 @@ public class DragonService(
             dragonReliability.DragonId == Dragons.Puppy
                 ? DragonConstants.BondXpLimitsPuppy
                 : DragonConstants.BondXpLimits;
-
-        dragonReliability.LastContactTime = resetHelper.UtcNow;
 
         while (enumerator.MoveNext() && dragonReliability.Exp < bondXpLimits[^1])
         {
@@ -131,6 +129,7 @@ public class DragonService(
                 missionProgressionService.OnDragonBondLevelUp(
                     dragonData.Id,
                     dragonData.ElementalType,
+                    levelDifference,
                     dragonReliability.Level
                 );
             }
