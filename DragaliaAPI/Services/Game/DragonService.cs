@@ -5,6 +5,7 @@ using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Features.Shop;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.Definitions.Enums;
@@ -23,7 +24,8 @@ public class DragonService(
     ILogger<DragonService> logger,
     IPaymentService paymentService,
     IRewardService rewardService,
-    IMissionProgressionService missionProgressionService
+    IMissionProgressionService missionProgressionService,
+    IResetHelper resetHelper
 ) : IDragonService
 {
     public async Task<DragonGetContactDataData> DoDragonGetContactData(
@@ -31,8 +33,9 @@ public class DragonService(
     )
     {
         DragonGifts rotatingGift = DragonConstants.RotatingGifts[
-            (int)DateTimeOffset.UtcNow.DayOfWeek
+            (int)resetHelper.LastDailyReset.DayOfWeek
         ];
+
         Dictionary<DragonGifts, DbPlayerDragonGift> gifts = await inventoryRepository
             .DragonGifts.Where(
                 x =>
@@ -58,6 +61,15 @@ public class DragonService(
         return new DragonGetContactDataData(giftList);
     }
 
+    public Task<int> GetFreeGiftCount()
+    {
+        DragonGifts[] notificationGifts = [DragonGifts.FreshBread,];
+
+        return inventoryRepository.DragonGifts.CountAsync(
+            x => notificationGifts.Contains(x.DragonGiftId) && x.Quantity > 0
+        );
+    }
+
     private async Task<
         List<Tuple<DragonGifts, List<RewardReliabilityList>>>
     > IncreaseDragonReliability(
@@ -74,6 +86,8 @@ public class DragonService(
             dragonReliability.DragonId == Dragons.Puppy
                 ? DragonConstants.BondXpLimitsPuppy
                 : DragonConstants.BondXpLimits;
+
+        dragonReliability.LastContactTime = resetHelper.UtcNow;
 
         while (enumerator.MoveNext() && dragonReliability.Exp < bondXpLimits[^1])
         {
