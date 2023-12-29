@@ -540,7 +540,6 @@ public class DungeonRecordTest : TestFixture
     {
         int questId = 229031201; // Repelling the Frosty Fiends: Standard (Solo)
         int eventId = 22903; // One Starry Dragonyule
-        int enemyCount = 31; // Count of enemies returned from /dungeon_start/start
 
         await Client.PostMsgpack<MemoryEventActivateData>(
             "/earn_event/entry",
@@ -692,7 +691,7 @@ public class DungeonRecordTest : TestFixture
                 "/dungeon_start/start_multi",
                 new DungeonStartStartMultiRequest()
                 {
-                    party_no_list = new int[] { 4 }, // Flame team
+                    party_no_list = new[] { 4 }, // Flame team
                     quest_id = questId
                 }
             )
@@ -721,7 +720,7 @@ public class DungeonRecordTest : TestFixture
 
         this.ApiContext.TimeAttackClears.Should().ContainSingle(x => x.GameId == gameId);
 
-        DbTimeAttackClear? recordedClear = await this.ApiContext.TimeAttackClears.Include(
+        DbTimeAttackClear recordedClear = await this.ApiContext.TimeAttackClears.Include(
             x => x.Players
         )
             .ThenInclude(x => x.Units)
@@ -759,7 +758,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>() { }
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
             };
 
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
@@ -814,7 +813,7 @@ public class DungeonRecordTest : TestFixture
             {
                 Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
                 QuestData = MasterAsset.QuestData.Get(questId),
-                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>() { }
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
             };
 
         string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
@@ -845,6 +844,87 @@ public class DungeonRecordTest : TestFixture
                 ensureSuccessHeader: false
             )
         ).data_headers.result_code.Should().Be(ResultCode.Success);
+    }
+
+    [Fact]
+    public async Task Record_FirstClear_GrantsFirstClearRewards()
+    {
+        int questId = 219011101; // Volk's Wrath: Standard (Solo)
+
+        await this.AddToDatabase(
+            new DbQuest()
+            {
+                QuestId = questId,
+                State = 0,
+                PlayCount = 0,
+            }
+        );
+
+        string dungeonKey = await this.StartDungeon(
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+            }
+        );
+
+        DungeonRecordRecordRequest request =
+            new()
+            {
+                dungeon_key = dungeonKey,
+                play_record = new PlayRecord
+                {
+                    time = 10,
+                    treasure_record = new List<AtgenTreasureRecord>()
+                    {
+                        new() { area_idx = 1, enemy = [] }
+                    },
+                    live_unit_no_list = new List<int>(),
+                    damage_record = [],
+                    dragon_damage_record = [],
+                    battle_royal_record = new AtgenBattleRoyalRecord()
+                }
+            };
+
+        DungeonRecordRecordData response = (
+            await Client.PostMsgpack<DungeonRecordRecordData>("/dungeon_record/record", request)
+        ).data;
+
+        response
+            .ingame_result_data.reward_record.first_clear_set.Should()
+            .BeEquivalentTo(
+                [
+                    new AtgenFirstClearSet()
+                    {
+                        type = EntityTypes.Material,
+                        id = (int)Materials.DestituteOnesMaskFragment,
+                        quantity = 80
+                    },
+                    new AtgenFirstClearSet()
+                    {
+                        type = EntityTypes.Material,
+                        id = (int)Materials.PlaguedOnesMaskFragment,
+                        quantity = 30
+                    },
+                    new AtgenFirstClearSet() { type = EntityTypes.Wyrmite, quantity = 5 }
+                ]
+            );
+
+        request.dungeon_key = await this.StartDungeon(
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+            }
+        );
+
+        DungeonRecordRecordData response2 = (
+            await Client.PostMsgpack<DungeonRecordRecordData>("/dungeon_record/record", request)
+        ).data;
+
+        response2.ingame_result_data.reward_record.first_clear_set.Should().BeEmpty();
     }
 
     private async Task<string> StartDungeon(DungeonSession session) =>

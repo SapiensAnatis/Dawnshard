@@ -25,7 +25,6 @@ public class QuestService(
 ) : IQuestService
 {
     public async Task<(
-        DbQuest Quest,
         bool BestClearTime,
         IEnumerable<AtgenFirstClearSet> Bonus
     )> ProcessQuestCompletion(DungeonSession session, PlayRecord playRecord)
@@ -93,7 +92,7 @@ public class QuestService(
             this.ProcessEventQuestMissionProgression(questData, session, playRecord);
         }
 
-        return (quest, isBestClearTime, questEventRewards);
+        return (isBestClearTime, questEventRewards);
     }
 
     public async Task<int> GetQuestStamina(int questId, StaminaType type)

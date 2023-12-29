@@ -164,7 +164,7 @@ public class DungeonRecordServiceTest
         int takeBoostAccumulatePoint = 40;
 
         this.mockQuestService.Setup(x => x.ProcessQuestCompletion(session, playRecord))
-            .ReturnsAsync((mockQuest, true, new List<AtgenFirstClearSet>()));
+            .ReturnsAsync((true, new List<AtgenFirstClearSet>()));
 
         this.mockUserService.Setup(x => x.RemoveStamina(StaminaType.Single, 40))
             .Returns(Task.CompletedTask);
@@ -172,7 +172,7 @@ public class DungeonRecordServiceTest
             .ReturnsAsync(new PlayerLevelResult(true, 100, 50));
 
         this.mockDungeonRewardService.Setup(
-            x => x.ProcessQuestMissionCompletion(playRecord, session, mockQuest)
+            x => x.ProcessQuestMissionCompletion(playRecord, session)
         )
             .ReturnsAsync((missionStatus, firstClearSets));
         this.mockDungeonRewardService.Setup(x => x.ProcessEnemyDrops(playRecord, session))

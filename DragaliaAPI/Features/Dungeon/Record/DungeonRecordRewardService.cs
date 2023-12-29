@@ -1,10 +1,12 @@
 ﻿using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Event;
 using DragaliaAPI.Features.Missions;
 using DragaliaAPI.Features.Reward;
 using DragaliaAPI.Models;
 using DragaliaAPI.Models.Generated;
 using DragaliaAPI.Shared.Definitions.Enums;
+using DragaliaAPI.Shared.MasterAsset.Models;
 
 namespace DragaliaAPI.Features.Dungeon.Record;
 
@@ -14,19 +16,18 @@ public class DungeonRecordRewardService(
     IAbilityCrestMultiplierService abilityCrestMultiplierService,
     IEventDropService eventDropService,
     IMissionProgressionService missionProgressionService,
+    IQuestRepository questRepository,
     ILogger<DungeonRecordRewardService> logger
 ) : IDungeonRecordRewardService
 {
     public async Task<(
         QuestMissionStatus MissionStatus,
         IEnumerable<AtgenFirstClearSet> FirstClearRewards
-    )> ProcessQuestMissionCompletion(
-        PlayRecord playRecord,
-        DungeonSession session,
-        DbQuest questData
-    )
+    )> ProcessQuestMissionCompletion(PlayRecord playRecord, DungeonSession session)
     {
-        bool isFirstClear = questData.PlayCount == 0;
+        DbQuest questData = await questRepository.GetQuestDataAsync(session.QuestId);
+
+        bool isFirstClear = questData.State < 3;
 
         IEnumerable<AtgenFirstClearSet> firstClearRewards = isFirstClear
             ? await questCompletionService.GrantFirstClearRewards(questData.QuestId)

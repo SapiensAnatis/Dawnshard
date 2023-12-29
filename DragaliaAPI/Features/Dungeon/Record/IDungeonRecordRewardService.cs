@@ -9,11 +9,7 @@ public interface IDungeonRecordRewardService
     Task<(
         QuestMissionStatus MissionStatus,
         IEnumerable<AtgenFirstClearSet> FirstClearRewards
-    )> ProcessQuestMissionCompletion(
-        PlayRecord playRecord,
-        DungeonSession session,
-        DbQuest questData
-    );
+    )> ProcessQuestMissionCompletion(PlayRecord playRecord, DungeonSession session);
 
     Task<(IEnumerable<AtgenDropAll> DropList, int ManaDrop, int CoinDrop)> ProcessEnemyDrops(
         PlayRecord playRecord,

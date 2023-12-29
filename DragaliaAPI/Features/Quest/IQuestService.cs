@@ -8,11 +8,10 @@ namespace DragaliaAPI.Features.Quest;
 public interface IQuestService
 {
     Task<int> GetQuestStamina(int questId, StaminaType type);
-    Task<(
-        DbQuest Quest,
-        bool BestClearTime,
-        IEnumerable<AtgenFirstClearSet> Bonus
-    )> ProcessQuestCompletion(DungeonSession session, PlayRecord playRecord);
+    Task<(bool BestClearTime, IEnumerable<AtgenFirstClearSet> Bonus)> ProcessQuestCompletion(
+        DungeonSession session,
+        PlayRecord playRecord
+    );
 
     Task<AtgenReceiveQuestBonus> ReceiveQuestBonus(int eventGroupId, bool isReceive, int count);
 }
