@@ -13,8 +13,7 @@ jobs:
       - name: Generate report
         uses: dorny/test-reporter@v1
         with:
-          artifact: "/test-result-(.*)/"
-          name: "$1"
+          artifact: test-results
+          name: test report
           path: "*.trx"
           reporter: dotnet-trx
-          token: "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
