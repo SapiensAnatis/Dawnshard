@@ -22,6 +22,16 @@ namespace DragaliaAPI.Integration.Test;
 [Collection("DragaliaIntegration")]
 public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLifetime
 {
+    /// <summary>
+    /// The device account ID which links to the seeded savefiles <see cref="SeedDatabase"/>
+    /// </summary>
+    protected const string DeviceAccountId = "logged_in_id";
+
+    /// <summary>
+    /// The session ID which is associated with the logged in test user.
+    /// </summary>
+    private const string SessionId = "session_id";
+
     private readonly CustomWebApplicationFactory factory;
 
     protected TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
@@ -74,27 +84,47 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
     protected IServiceProvider Services { get; }
 
     /// <summary>
-    /// The device account ID which links to the seeded savefiles <see cref="SeedDatabase"/>
+    /// The viewer ID associated with the logged in user.
     /// </summary>
-    public const string DeviceAccountId = "logged_in_id";
-
+    /// <remarks>
+    /// This is not a constant -- although the database is cleared in <see cref="SeedDatabase"/> between each test,
+    /// the seeding of the identity column is not reset, so each test increments the viewer ID by 1.
+    /// </remarks>
     protected long ViewerId { get; private set; }
-
-    public const string SessionId = "session_id";
 
     protected HttpClient Client { get; }
 
     protected IMapper Mapper { get; }
 
+    /// <summary>
+    /// Instance of <see cref="ApiContext"/> to use for setting up / interrogating the database in tests.
+    /// </summary>
+    /// <remarks>
+    /// This has the change tracking behaviour set to <see cref="QueryTrackingBehavior.NoTracking"/> (i.e. change
+    /// tracking is disabled). If you want to modify existing data in a test, use
+    /// <see cref="EntityFrameworkQueryableExtensions.AsTracking{TEntity}(IQueryable{TEntity})"/> on the query.
+    /// </remarks>
     protected ApiContext ApiContext { get; }
 
     public async Task InitializeAsync()
     {
         await this.SeedDatabase();
         await this.SeedCache();
+        await this.Setup();
     }
 
     public Task DisposeAsync() => Task.CompletedTask;
+
+    /// <summary>
+    /// Defines test-specific setup to run at the end of <see cref="InitializeAsync"/>.
+    /// </summary>
+    /// <remarks>
+    /// Override this and put test-specific database seeding here, and not in a constructor, as the initial database
+    /// seeding (including the creation of the test savefile) is done in <see cref="InitializeAsync"/> which runs
+    /// after the constructor(s).
+    /// </remarks>
+    /// <returns>A task that performs setup operations.</returns>
+    protected virtual Task Setup() => Task.CompletedTask;
 
     protected void AddCharacter(Charas id)
     {
@@ -112,6 +142,7 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
         this.ApiContext.Add(data);
 
         await this.ApiContext.SaveChangesAsync();
+        this.ApiContext.ChangeTracker.Clear();
 
         return data;
     }
@@ -134,22 +165,21 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
         this.MockBaasApi.Setup(x => x.GetSavefile(It.IsAny<string>())).ReturnsAsync(GetSavefile());
     }
 
-    protected void ImportSave()
+    protected async Task ImportSave()
     {
-        this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+        using IServiceScope scope = this.factory.Services.CreateScope();
 
-        ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
+        ISavefileService savefileService =
+            scope.ServiceProvider.GetRequiredService<ISavefileService>();
         IPlayerIdentityService playerIdentityService =
-            this.Services.GetRequiredService<IPlayerIdentityService>();
+            scope.ServiceProvider.GetRequiredService<IPlayerIdentityService>();
 
         using IDisposable ctx = playerIdentityService.StartUserImpersonation(
             ViewerId,
             DeviceAccountId
         );
 
-        savefileService.Import(GetSavefile()).Wait();
-
-        this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        await savefileService.Import(GetSavefile());
     }
 
     protected long GetDragonKeyId(Dragons dragon)

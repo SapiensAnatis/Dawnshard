@@ -7,15 +7,13 @@ namespace DragaliaAPI.Integration.Test.Features.Event;
 public class RaidEventTest : TestFixture
 {
     public RaidEventTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        _ = Client
-            .PostMsgpack<MemoryEventActivateData>(
-                "memory_event/activate",
-                new MemoryEventActivateRequest(EventId)
-            )
-            .Result;
-    }
+        : base(factory, outputHelper) { }
+
+    protected override async Task Setup() =>
+        await this.Client.PostMsgpack<MemoryEventActivateData>(
+            "memory_event/activate",
+            new MemoryEventActivateRequest(EventId)
+        );
 
     private const int EventId = 20455;
     private const string Prefix = "raid_event";
@@ -36,9 +34,9 @@ public class RaidEventTest : TestFixture
     [Fact]
     public async Task ReceiveEventRewards_ReturnsEventRewards()
     {
-        DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
-            x => x.EventId == EventId && x.Type == (int)RaidEventItemType.RaidPoint1
-        );
+        DbPlayerEventItem pointItem = await ApiContext
+            .PlayerEventItems.AsTracking()
+            .SingleAsync(x => x.EventId == EventId && x.Type == (int)RaidEventItemType.RaidPoint1);
 
         pointItem.Quantity += 500;
 

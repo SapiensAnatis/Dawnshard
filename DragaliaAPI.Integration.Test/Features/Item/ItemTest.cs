@@ -6,11 +6,11 @@ namespace DragaliaAPI.Integration.Test.Features.Item;
 public class ItemTest : TestFixture
 {
     public ItemTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        ApiContext.PlayerUseItems.Where(x => x.ViewerId == ViewerId).ExecuteDelete();
+        : base(factory, outputHelper) { }
 
-        ApiContext.PlayerUseItems.Add(
+    protected override async Task Setup()
+    {
+        await this.AddToDatabase(
             new DbPlayerUseItem()
             {
                 ViewerId = ViewerId,
@@ -19,12 +19,8 @@ public class ItemTest : TestFixture
             }
         );
 
-        DbPlayerUserData userData = ApiContext.PlayerUserData.Single(x => x.ViewerId == ViewerId);
-
-        userData.StaminaSingle = 5;
-
-        ApiContext.SaveChanges();
-        ApiContext.ChangeTracker.Clear();
+        await this.ApiContext.PlayerUserData.Where(x => x.ViewerId == this.ViewerId)
+            .ExecuteUpdateAsync(e => e.SetProperty(p => p.StaminaSingle, 5));
     }
 
     [Fact]
