@@ -17,13 +17,9 @@ jobs:
           pattern: test-result-*
           merge-multiple: true
           run-id: ${{ github.event.workflow_run.id }}
-      - name: debug
-        run: |
-          tree
-          echo ${{ github.event.workflow_run.id }}
       - name: Generate report
         uses: dorny/test-reporter@v1
         with:
           name: test report
-          path: "test-results/**/*.trx"
+          path: "*.trx"
           reporter: dotnet-trx
