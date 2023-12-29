@@ -49,6 +49,9 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
         this.Client.DefaultRequestHeaders.Add("Platform", "2");
         this.Client.DefaultRequestHeaders.Add("Res-Ver", "y2XM6giU6zz56wCm");
 
+        this.MockBaasApi.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
+        this.MockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(() => DateTimeOffset.UtcNow);
+
         this.Services = factory.Services.CreateScope().ServiceProvider;
 
         this.Mapper = this.Services.GetRequiredService<IMapper>();
@@ -56,26 +59,15 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
         this.LastDailyReset = this.Services.GetRequiredService<IResetHelper>().LastDailyReset;
 
         this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-        this.ApiContext.Database.Migrate();
-
-        this.MockBaasApi.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
     }
-
-    public async Task InitializeAsync()
-    {
-        await this.SeedDatabase();
-        await this.SeedCache();
-    }
-
-    public Task DisposeAsync() => Task.CompletedTask;
 
     protected DateTimeOffset LastDailyReset { get; }
 
-    protected Mock<IBaasApi> MockBaasApi { get; } = new();
+    protected Mock<IBaasApi> MockBaasApi => this.factory.MockBaasApi;
 
-    protected Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
+    protected Mock<IPhotonStateApi> MockPhotonStateApi => this.factory.MockPhotonStateApi;
 
-    protected Mock<IDateTimeProvider> MockDateTimeProvider { get; } = new();
+    protected Mock<IDateTimeProvider> MockDateTimeProvider => this.factory.MockDateTimeProvider;
 
     protected ITestOutputHelper TestOutputHelper { get; }
 
@@ -95,6 +87,14 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
     protected IMapper Mapper { get; }
 
     protected ApiContext ApiContext { get; }
+
+    public async Task InitializeAsync()
+    {
+        await this.SeedDatabase();
+        await this.SeedCache();
+    }
+
+    public Task DisposeAsync() => Task.CompletedTask;
 
     protected void AddCharacter(Charas id)
     {
@@ -136,15 +136,6 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
 
     protected void ImportSave()
     {
-        if (
-            this.ApiContext.PlayerUserData.AsNoTracking()
-                .First(x => x.ViewerId == ViewerId)
-                .LastSaveImportTime > DateTimeOffset.UnixEpoch
-        )
-        {
-            return;
-        }
-
         this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
 
         ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
@@ -190,17 +181,8 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
         await using NpgsqlConnection connection = new(this.factory.PostgresConnectionString);
         await connection.OpenAsync();
 
-        Respawner respawner = await Respawner.CreateAsync(
-            connection,
-            new RespawnerOptions()
-            {
-                DbAdapter = DbAdapter.Postgres,
-                SchemasToInclude = ["public"],
-                TablesToIgnore = [new("__EFMigrationsHistory")],
-            }
-        );
-
-        await respawner.ResetAsync(connection);
+        ArgumentNullException.ThrowIfNull(this.factory.Respawner);
+        await this.factory.Respawner.ResetAsync(connection);
 
         ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
         IPlayerIdentityService playerIdentityService =
