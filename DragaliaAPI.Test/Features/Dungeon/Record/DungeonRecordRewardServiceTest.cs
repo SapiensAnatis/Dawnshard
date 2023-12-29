@@ -1,4 +1,5 @@
 using DragaliaAPI.Database.Entities;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Features.Dungeon;
 using DragaliaAPI.Features.Dungeon.Record;
 using DragaliaAPI.Features.Event;
@@ -19,6 +20,7 @@ public class DungeonRecordRewardServiceTest
     private readonly Mock<IAbilityCrestMultiplierService> mockAbilityCrestMultiplierService;
     private readonly Mock<IEventDropService> mockEventDropService;
     private readonly Mock<IMissionProgressionService> mockMissionProgressionService;
+    private readonly Mock<IQuestRepository> mockQuestRepository;
     private readonly Mock<ILogger<DungeonRecordRewardService>> mockLogger;
 
     private readonly IDungeonRecordRewardService dungeonRecordRewardService;
@@ -30,6 +32,7 @@ public class DungeonRecordRewardServiceTest
         this.mockAbilityCrestMultiplierService = new(MockBehavior.Strict);
         this.mockEventDropService = new(MockBehavior.Strict);
         this.mockMissionProgressionService = new(MockBehavior.Strict);
+        this.mockQuestRepository = new(MockBehavior.Strict);
         this.mockLogger = new(MockBehavior.Loose);
 
         this.dungeonRecordRewardService = new DungeonRecordRewardService(
@@ -38,6 +41,7 @@ public class DungeonRecordRewardServiceTest
             this.mockAbilityCrestMultiplierService.Object,
             this.mockEventDropService.Object,
             this.mockMissionProgressionService.Object,
+            this.mockQuestRepository.Object,
             this.mockLogger.Object
         );
     }
@@ -78,6 +82,8 @@ public class DungeonRecordRewardServiceTest
                 new List<AtgenFirstClearSet>()
             );
 
+        this.mockQuestRepository.Setup(x => x.GetQuestDataAsync(questId)).ReturnsAsync(questEntity);
+
         this.mockQuestCompletionService.Setup(
             x => x.CompleteQuestMissions(session, new[] { false, false, false }, playRecord)
         )
@@ -85,13 +91,7 @@ public class DungeonRecordRewardServiceTest
         this.mockQuestCompletionService.Setup(x => x.GrantFirstClearRewards(questId))
             .ReturnsAsync(firstClearRewards);
 
-        (
-            await this.dungeonRecordRewardService.ProcessQuestMissionCompletion(
-                playRecord,
-                session,
-                questEntity
-            )
-        )
+        (await this.dungeonRecordRewardService.ProcessQuestMissionCompletion(playRecord, session))
             .Should()
             .Be((status, firstClearRewards));
 

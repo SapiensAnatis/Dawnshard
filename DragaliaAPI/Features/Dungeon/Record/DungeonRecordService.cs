@@ -53,24 +53,17 @@ public class DungeonRecordService(
 
         await this.ProcessStaminaConsumption(session);
 
-        (
-            DbQuest questData,
-            ingameResultData.is_best_clear_time,
-            ingameResultData.reward_record.quest_bonus_list
-        ) = await questService.ProcessQuestCompletion(session, playRecord);
+        (QuestMissionStatus missionStatus, IEnumerable<AtgenFirstClearSet>? firstClearSets) =
+            await dungeonRecordRewardService.ProcessQuestMissionCompletion(playRecord, session);
+
+        (ingameResultData.is_best_clear_time, ingameResultData.reward_record.quest_bonus_list) =
+            await questService.ProcessQuestCompletion(session, playRecord);
 
         await this.ProcessExperience(
             ingameResultData.grow_record,
             ingameResultData.reward_record,
             session
         );
-
-        (QuestMissionStatus missionStatus, IEnumerable<AtgenFirstClearSet>? firstClearSets) =
-            await dungeonRecordRewardService.ProcessQuestMissionCompletion(
-                playRecord,
-                session,
-                questData
-            );
 
         ingameResultData.reward_record.first_clear_set = firstClearSets;
         ingameResultData.reward_record.missions_clear_set = missionStatus.MissionsClearSet;
