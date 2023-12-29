@@ -13,17 +13,9 @@ namespace DragaliaAPI.Integration.Test.Features.Dungeon;
 public class DungeonStartTest : TestFixture
 {
     public DungeonStartTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        ImportSave();
+        : base(factory, outputHelper) { }
 
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.StaminaSingle, e => 100)
-        );
-        this.ApiContext.PlayerUserData.ExecuteUpdate(
-            p => p.SetProperty(e => e.StaminaMulti, e => 100)
-        );
-    }
+    protected override async Task Setup() => await this.ImportSave();
 
     [Fact]
     public async Task Start_OneTeam_HasExpectedPartyUnitList()
@@ -193,6 +185,8 @@ public class DungeonStartTest : TestFixture
     [Fact]
     public async Task Start_ZeroStamina_FirstClearOfMainStory_Allows()
     {
+        await this.ApiContext.PlayerQuests.ExecuteDeleteAsync();
+
         await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
             p => p.SetProperty(e => e.StaminaSingle, e => 0)
         );
@@ -205,8 +199,6 @@ public class DungeonStartTest : TestFixture
         await this.ApiContext.PlayerUserData.ExecuteUpdateAsync(
             p => p.SetProperty(e => e.LastStaminaMultiUpdateTime, e => DateTimeOffset.UtcNow)
         );
-
-        await this.ApiContext.PlayerQuests.Where(x => x.QuestId == 100260101).ExecuteDeleteAsync();
 
         (
             await Client.PostMsgpack<DungeonStartStartData>(

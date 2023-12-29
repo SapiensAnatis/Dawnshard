@@ -6,10 +6,7 @@ namespace DragaliaAPI.Integration.Test.Features.SavefileUpdate;
 public class V2UpdateTest : SavefileUpdateTestFixture
 {
     public V2UpdateTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.ApiContext.EquippedStamps.ExecuteDelete();
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task V2Update_AddsStampList()

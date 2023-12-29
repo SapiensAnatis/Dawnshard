@@ -13,7 +13,7 @@ public class HeroParamTest : TestFixture
     [Fact]
     public async Task HeroParam_ReturnsData()
     {
-        this.ImportSave();
+        await this.ImportSave();
 
         HttpResponseMessage httpResponse = await this.Client.GetAsync($"heroparam/{ViewerId}/1");
 

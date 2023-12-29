@@ -17,9 +17,6 @@ public class PresentTest : TestFixture
         AssertionOptions.AssertEquivalencyUsing(
             opts => opts.Excluding(member => member.Name == nameof(PresentDetailList.present_id))
         );
-
-        this.ApiContext.PlayerPresents.ExecuteDelete();
-        this.ApiContext.PlayerPresentHistory.ExecuteDelete();
     }
 
     [Fact]
