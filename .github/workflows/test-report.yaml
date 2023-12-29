@@ -10,9 +10,17 @@ jobs:
   report:
     runs-on: ubuntu-latest
     steps:
-      - uses: dorny/test-reporter@v1
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
-          artifact: test-results
+          pattern: test-result-*
+          path: test-results
+          merge-multiple: true
+      - name: ls
+        run: tree
+      - name: Generate report
+        uses: dorny/test-reporter@v1
+        with:
           name: test report
-          path: "*.trx"
+          path: "test-results/**/*.trx"
           reporter: dotnet-trx
