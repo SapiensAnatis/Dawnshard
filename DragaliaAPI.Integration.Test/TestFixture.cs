@@ -1,30 +1,41 @@
 ﻿using AutoMapper;
 using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Entities.Abstract;
+using DragaliaAPI.Features.Fort;
 using DragaliaAPI.Helpers;
+using DragaliaAPI.Models;
 using DragaliaAPI.Services;
 using DragaliaAPI.Services.Api;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.PlayerDetails;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Npgsql;
+using Respawn;
 
 namespace DragaliaAPI.Integration.Test;
 
 [Collection("DragaliaIntegration")]
-public class TestFixture : IClassFixture<CustomWebApplicationFactory>
+public class TestFixture : IClassFixture<CustomWebApplicationFactory>, IAsyncLifetime
 {
-    protected TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
+    private readonly CustomWebApplicationFactory factory;
+
+    protected TestFixture(CustomWebApplicationFactory factory, ITestOutputHelper testOutputHelper)
     {
+        this.factory = factory;
+        this.TestOutputHelper = testOutputHelper;
+
         this.Client = factory
             .WithWebHostBuilder(
-                (builder) =>
+                builder =>
                     builder.ConfigureLogging(logging =>
                     {
                         logging.ClearProviders();
-                        logging.AddXUnit(outputHelper);
+                        logging.AddXUnit(this.TestOutputHelper);
                     })
             )
             .CreateClient(
@@ -39,27 +50,34 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
         this.Client.DefaultRequestHeaders.Add("Res-Ver", "y2XM6giU6zz56wCm");
 
         this.Services = factory.Services.CreateScope().ServiceProvider;
-        this.Mapper = factory.Services.GetRequiredService<IMapper>();
-        this.ApiContext = factory.Services.GetRequiredService<ApiContext>();
 
-        this.MockBaasApi = factory.MockBaasApi;
-        this.MockPhotonStateApi = factory.MockPhotonStateApi;
-        this.MockDateTimeProvider = factory.MockDateTimeProvider;
+        this.Mapper = this.Services.GetRequiredService<IMapper>();
+        this.ApiContext = this.Services.GetRequiredService<ApiContext>();
+        this.LastDailyReset = this.Services.GetRequiredService<IResetHelper>().LastDailyReset;
 
-        this.MockDateTimeProvider.SetupGet(x => x.UtcNow).Returns(() => DateTimeOffset.UtcNow);
+        this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        this.ApiContext.Database.Migrate();
 
-        this.LastDailyReset = factory.Services.GetRequiredService<IResetHelper>().LastDailyReset;
-
-        this.ViewerId = this.ApiContext.Players.First(x => x.AccountId == DeviceAccountId).ViewerId;
+        this.MockBaasApi.Setup(x => x.GetKeys()).ReturnsAsync(TokenHelper.SecurityKeys);
     }
+
+    public async Task InitializeAsync()
+    {
+        await this.SeedDatabase();
+        await this.SeedCache();
+    }
+
+    public Task DisposeAsync() => Task.CompletedTask;
 
     protected DateTimeOffset LastDailyReset { get; }
 
-    protected Mock<IBaasApi> MockBaasApi { get; }
+    protected Mock<IBaasApi> MockBaasApi { get; } = new();
 
-    protected Mock<IPhotonStateApi> MockPhotonStateApi { get; }
+    protected Mock<IPhotonStateApi> MockPhotonStateApi { get; } = new();
 
-    protected Mock<IDateTimeProvider> MockDateTimeProvider { get; }
+    protected Mock<IDateTimeProvider> MockDateTimeProvider { get; } = new();
+
+    protected ITestOutputHelper TestOutputHelper { get; }
 
     protected IServiceProvider Services { get; }
 
@@ -88,33 +106,26 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
     }
 
     protected async Task<TEntity> AddToDatabase<TEntity>(TEntity data)
-        where TEntity : class, IDbPlayerData
+        where TEntity : IDbPlayerData
     {
         data.ViewerId = this.ViewerId;
+        this.ApiContext.Add(data);
 
-        TEntity e = (await this.ApiContext.Set<TEntity>().AddAsync(data)).Entity;
         await this.ApiContext.SaveChangesAsync();
 
-        return e;
+        return data;
     }
 
-    protected async Task AddToDatabase<TEntity>(params TEntity[] data)
-        where TEntity : class, IDbPlayerData
+    protected Task AddToDatabase(params IDbPlayerData[] data) => this.AddRangeToDatabase(data);
+
+    protected async Task AddRangeToDatabase(IEnumerable<IDbPlayerData> data)
     {
-        foreach (TEntity entity in data)
+        foreach (IDbPlayerData entity in data)
+        {
             entity.ViewerId = this.ViewerId;
+            this.ApiContext.Add(entity);
+        }
 
-        await this.ApiContext.Set<TEntity>().AddRangeAsync(data);
-        await this.ApiContext.SaveChangesAsync();
-    }
-
-    protected async Task AddRangeToDatabase<TEntity>(IEnumerable<TEntity> data)
-        where TEntity : class, IDbPlayerData
-    {
-        foreach (TEntity entity in data)
-            entity.ViewerId = this.ViewerId;
-
-        await this.ApiContext.AddRangeAsync((IEnumerable<object>)data);
         await this.ApiContext.SaveChangesAsync();
     }
 
@@ -134,6 +145,8 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
             return;
         }
 
+        this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
+
         ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
         IPlayerIdentityService playerIdentityService =
             this.Services.GetRequiredService<IPlayerIdentityService>();
@@ -144,6 +157,8 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
         );
 
         savefileService.Import(GetSavefile()).Wait();
+
+        this.ApiContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 
     protected long GetDragonKeyId(Dragons dragon)
@@ -169,4 +184,118 @@ public class TestFixture : IClassFixture<CustomWebApplicationFactory>
                 ApiJsonOptions.Instance
             )!
             .data;
+
+    private async Task SeedDatabase()
+    {
+        await using NpgsqlConnection connection = new(this.factory.PostgresConnectionString);
+        await connection.OpenAsync();
+
+        Respawner respawner = await Respawner.CreateAsync(
+            connection,
+            new RespawnerOptions()
+            {
+                DbAdapter = DbAdapter.Postgres,
+                SchemasToInclude = ["public"],
+                TablesToIgnore = [new("__EFMigrationsHistory")],
+            }
+        );
+
+        await respawner.ResetAsync(connection);
+
+        ISavefileService savefileService = this.Services.GetRequiredService<ISavefileService>();
+        IPlayerIdentityService playerIdentityService =
+            this.Services.GetRequiredService<IPlayerIdentityService>();
+
+        DbPlayer newPlayer = await savefileService.Create(DeviceAccountId);
+
+        this.ViewerId = newPlayer.ViewerId;
+
+        using IDisposable ctx = playerIdentityService.StartUserImpersonation(
+            newPlayer.ViewerId,
+            newPlayer.AccountId
+        );
+
+        this.ApiContext.PlayerMaterials.AddRange(
+            Enum.GetValues<Materials>()
+                .Select(
+                    x =>
+                        new DbPlayerMaterial()
+                        {
+                            ViewerId = newPlayer.ViewerId,
+                            MaterialId = x,
+                            Quantity = 99999999
+                        }
+                )
+        );
+
+        this.ApiContext.PlayerDragonGifts.AddRange(
+            Enum.GetValues<DragonGifts>()
+                .Select(
+                    x =>
+                        new DbPlayerDragonGift()
+                        {
+                            ViewerId = newPlayer.ViewerId,
+                            DragonGiftId = x,
+                            Quantity = x < DragonGifts.FourLeafClover ? 1 : 999
+                        }
+                )
+        );
+
+        IFortRepository fortRepository = this.Services.GetRequiredService<IFortRepository>();
+        await fortRepository.InitializeFort();
+
+        this.ApiContext.PlayerFortBuilds.Add(
+            new DbFortBuild()
+            {
+                ViewerId = newPlayer.ViewerId,
+                PlantId = FortPlants.Smithy,
+                Level = 9
+            }
+        );
+
+        DbPlayerUserData userData = (
+            await this.ApiContext.PlayerUserData.FindAsync(newPlayer.ViewerId)
+        )!;
+
+        userData.Coin = 100_000_000;
+        userData.DewPoint = 100_000_000;
+        userData.ManaPoint = 100_000_000;
+        userData.Level = 250;
+        userData.Exp = 28253490;
+        userData.StaminaSingle = 999;
+        userData.QuestSkipPoint = 300;
+
+        this.ApiContext.PlayerDmodeInfos.Add(
+            new DbPlayerDmodeInfo
+            {
+                ViewerId = newPlayer.ViewerId,
+                Point1Quantity = 100_000_000,
+                Point2Quantity = 100_000_000
+            }
+        );
+
+        this.ApiContext.PlayerDmodeDungeons.Add(
+            new DbPlayerDmodeDungeon { ViewerId = newPlayer.ViewerId }
+        );
+
+        this.ApiContext.PlayerDmodeExpeditions.Add(
+            new DbPlayerDmodeExpedition { ViewerId = newPlayer.ViewerId }
+        );
+
+        await this.ApiContext.SaveChangesAsync();
+        this.ApiContext.ChangeTracker.Clear();
+    }
+
+    private async Task SeedCache()
+    {
+        IDistributedCache cache = this.Services.GetRequiredService<IDistributedCache>();
+
+        Session session =
+            new(SessionId, "id_token", DeviceAccountId, this.ViewerId, DateTimeOffset.MaxValue);
+        await cache.SetStringAsync(
+            ":session:session_id:session_id",
+            JsonSerializer.Serialize(session)
+        );
+        await cache.SetStringAsync(":session_id:device_account_id:logged_in_id", SessionId);
+    }
 }
