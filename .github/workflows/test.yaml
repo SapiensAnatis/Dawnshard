@@ -64,8 +64,8 @@ jobs:
           --logger "console;verbosity=detailed"
           --logger "trx;LogFileName=${{ matrix.project }}.trx"
       - name: Upload test report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         if: success() || failure() # run this step even if previous step failed
         with:
-          name: test-result-${{ matrix.project }}
+          name: test-results
           path: ${{ matrix.project }}/TestResults/${{ matrix.project }}.trx
