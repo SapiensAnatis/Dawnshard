@@ -69,6 +69,7 @@ public class TestContainersHelper : IAsyncLifetime
             this.postgresDatabase = "testing";
 
             this.postgresContainer = new PostgreSqlBuilder()
+                .WithImage("postgres:16")
                 .WithUsername(this.postgresUser)
                 .WithPassword(this.postgresPassword)
                 .WithDatabase(this.postgresDatabase)
@@ -76,7 +77,7 @@ public class TestContainersHelper : IAsyncLifetime
                 .Build();
 
             this.redisContainer = new ContainerBuilder()
-                .WithImage("redis")
+                .WithImage("redis/redis-stack:7.2.0-v6")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilCommandIsCompleted("redis-cli PING"))
                 .WithPortBinding(RedisContainerPort, true)
                 .Build();
