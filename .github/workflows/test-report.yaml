@@ -13,11 +13,14 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
+          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           pattern: test-result-*
-          path: test-results
           merge-multiple: true
-      - name: ls
-        run: tree
+          run-id: ${{ github.event.workflow_run.id }}
+      - name: debug
+        run: |
+          tree
+          echo ${{ github.event.workflow_run.id }}
       - name: Generate report
         uses: dorny/test-reporter@v1
         with:
