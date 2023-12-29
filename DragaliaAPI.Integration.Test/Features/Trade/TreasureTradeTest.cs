@@ -9,10 +9,7 @@ namespace DragaliaAPI.Integration.Test.Features.Trade;
 public class TreasureTradeTest : TestFixture
 {
     public TreasureTradeTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.ApiContext.PlayerTrades.ExecuteDelete();
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task GetListAll_NoTrades_ReturnsEmpty()

@@ -10,12 +10,7 @@ namespace DragaliaAPI.Integration.Test.Features.Missions;
 public class MissionTest : TestFixture
 {
     public MissionTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.ApiContext.PlayerMissions.ExecuteDelete();
-        this.ApiContext.CompletedDailyMissions.ExecuteDelete();
-        this.ApiContext.ChangeTracker.Clear();
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task UnlockDrillMissionGroup_ValidRequest_UnlocksGroup()

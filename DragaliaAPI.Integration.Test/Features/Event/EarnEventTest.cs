@@ -8,14 +8,7 @@ namespace DragaliaAPI.Integration.Test.Features.Event;
 public class EarnEventTest : TestFixture
 {
     public EarnEventTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.ApiContext.PlayerEventData.ExecuteDelete();
-        this.ApiContext.PlayerEventItems.ExecuteDelete();
-        this.ApiContext.PlayerEventRewards.ExecuteDelete();
-        this.ApiContext.PlayerEventPassives.ExecuteDelete();
-        this.ApiContext.PlayerMissions.ExecuteDelete();
-    }
+        : base(factory, outputHelper) { }
 
     // One Starry Dragonyule
     private const int EventId = 22903;
@@ -124,9 +117,11 @@ public class EarnEventTest : TestFixture
             new EarnEventEntryRequest(EventId)
         );
 
-        DbPlayerEventItem pointItem = await ApiContext.PlayerEventItems.SingleAsync(
-            x => x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint
-        );
+        DbPlayerEventItem pointItem = await ApiContext
+            .PlayerEventItems.AsTracking()
+            .SingleAsync(
+                x => x.EventId == EventId && x.Type == (int)BuildEventItemType.BuildEventPoint
+            );
 
         pointItem.Quantity += 10;
 

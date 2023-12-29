@@ -14,7 +14,6 @@ public abstract class SavefileUpdateTestFixture : TestFixture
     )
         : base(factory, outputHelper)
     {
-        this.ApiContext.Players.ExecuteUpdate(u => u.SetProperty(e => e.SavefileVersion, 0));
         this.MaxVersion = this.Services.GetServices<ISavefileUpdate>()
             .MaxBy(x => x.SavefileVersion)!
             .SavefileVersion;
@@ -29,4 +28,9 @@ public abstract class SavefileUpdateTestFixture : TestFixture
     {
         await this.Client.PostMsgpack<LoadIndexData>("load/index", new LoadIndexRequest());
     }
+
+    protected override async Task Setup() =>
+        await this.ApiContext.Players.ExecuteUpdateAsync(
+            u => u.SetProperty(e => e.SavefileVersion, 0)
+        );
 }

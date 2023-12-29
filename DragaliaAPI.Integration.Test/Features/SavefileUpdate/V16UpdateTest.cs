@@ -32,7 +32,6 @@ public class V16UpdateTest : SavefileUpdateTestFixture
                 },
             ]
         );
-        this.ApiContext.ChangeTracker.Clear();
 
         await this.LoadIndex();
 

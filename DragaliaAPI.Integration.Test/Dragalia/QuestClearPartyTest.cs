@@ -7,7 +7,7 @@ namespace DragaliaAPI.Integration.Test.Dragalia;
 /// <summary>
 /// Tests <see cref="QuestController"/>
 /// </summary>
-public class QuestClearPartyTest : TestFixture, IDisposable
+public class QuestClearPartyTest : TestFixture
 {
     public QuestClearPartyTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
@@ -18,7 +18,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
     [Fact]
     public async Task GetQuestClearParty_ReturnsSetClearParty()
     {
-        this.ImportSave();
+        await this.ImportSave();
 
         await this.AddRangeToDatabase(SoloDbEntities);
 
@@ -35,7 +35,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
     [Fact]
     public async Task GetQuestClearPartyMulti_ReturnsSetClearParty()
     {
-        this.ImportSave();
+        await this.ImportSave();
 
         await this.AddRangeToDatabase(MultiDbEntities);
 
@@ -77,7 +77,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
     [Fact]
     public async Task GetQuestClearParty_HandlesMissingEntities()
     {
-        this.ImportSave();
+        await this.ImportSave();
 
         int questId = MissingItemDbEntities[0].QuestId;
 
@@ -148,7 +148,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
     [Fact]
     public async Task SetQuestClearParty_AddsToDatabase()
     {
-        this.ImportSave();
+        await this.ImportSave();
 
         DragaliaResponse<QuestSetQuestClearPartyData> response =
             await this.Client.PostMsgpack<QuestSetQuestClearPartyData>(
@@ -174,7 +174,7 @@ public class QuestClearPartyTest : TestFixture, IDisposable
     [Fact]
     public async Task SetQuestClearPartyMulti_AddsToDatabase()
     {
-        this.ImportSave();
+        await this.ImportSave();
 
         DragaliaResponse<QuestSetQuestClearPartyData> response =
             await this.Client.PostMsgpack<QuestSetQuestClearPartyData>(
@@ -450,9 +450,4 @@ public class QuestClearPartyTest : TestFixture, IDisposable
                 EditSkill2CharaId = Charas.Marty
             }
         };
-
-    public void Dispose()
-    {
-        this.ApiContext.QuestClearPartyUnits.ExecuteDelete();
-    }
 }

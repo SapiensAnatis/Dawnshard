@@ -22,15 +22,6 @@ public class DungeonRecordTest : TestFixture
         this.ApiContext.PlayerUserData.ExecuteUpdate(
             p => p.SetProperty(e => e.StaminaMulti, e => 100)
         );
-
-        this.ApiContext.PlayerQuests.ExecuteDelete();
-        this.ApiContext.PlayerMissions.ExecuteDelete();
-        this.ApiContext.PlayerAbilityCrests.ExecuteDelete();
-        this.ApiContext.PlayerEventData.ExecuteDelete();
-        this.ApiContext.PlayerEventItems.ExecuteDelete();
-        this.ApiContext.PlayerEventPassives.ExecuteDelete();
-        this.ApiContext.PlayerEventRewards.ExecuteDelete();
-        this.ApiContext.CompletedDailyMissions.ExecuteDelete();
     }
 
     [Fact]
@@ -673,7 +664,7 @@ public class DungeonRecordTest : TestFixture
     [Fact]
     public async Task RecordTimeAttack_RegistersClear()
     {
-        this.ImportSave();
+        await this.ImportSave();
         this.SetupPhotonAuthentication();
 
         int questId = 227010104; // Volk's Wrath TA Solo

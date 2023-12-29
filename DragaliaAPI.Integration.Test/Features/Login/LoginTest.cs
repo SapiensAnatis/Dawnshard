@@ -9,14 +9,7 @@ namespace DragaliaAPI.Integration.Test.Features.Login;
 public class LoginTest : TestFixture
 {
     public LoginTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.ResetLastLoginTime();
-        this.ClearLoginBonuses();
-
-        this.ApiContext.PlayerMissions.ExecuteDelete();
-        this.ApiContext.PlayerEventData.ExecuteDelete();
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public void IDailyResetAction_HasExpectedCount()
@@ -258,8 +251,6 @@ public class LoginTest : TestFixture
             .IsComplete.Should()
             .BeTrue();
 
-        this.ResetLastLoginTime();
-
         DragaliaResponse<LoginIndexData> secondResponse =
             await this.Client.PostMsgpack<LoginIndexData>("/login/index", new LoginIndexRequest());
 
@@ -455,16 +446,4 @@ public class LoginTest : TestFixture
         await this.ApiContext.PlayerDragonGifts.AsNoTracking()
             .Where(x => x.ViewerId == ViewerId)
             .ToListAsync();
-
-    private void ResetLastLoginTime() =>
-        this.ApiContext.PlayerUserData.Where(x => x.ViewerId == ViewerId)
-            .ExecuteUpdate(
-                entity => entity.SetProperty(x => x.LastLoginTime, DateTimeOffset.UnixEpoch)
-            );
-
-    private void ClearLoginBonuses()
-    {
-        this.ApiContext.LoginBonuses.ExecuteDelete();
-        this.ApiContext.ChangeTracker.Clear();
-    }
 }

@@ -7,10 +7,7 @@ namespace DragaliaAPI.Integration.Test.Features.SavefileUpdate;
 public class V1UpdateTest : SavefileUpdateTestFixture
 {
     public V1UpdateTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
-        : base(factory, outputHelper)
-    {
-        this.ApiContext.PlayerFortBuilds.ExecuteDelete();
-    }
+        : base(factory, outputHelper) { }
 
     [Fact]
     public async Task V1Update_NoFort_StoryComplete_Adds()
@@ -35,8 +32,6 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             .Contain(x => x.PlantId == FortPlants.TheHalidom && x.ViewerId == ViewerId);
 
         this.GetSavefileVersion().Should().Be(this.MaxVersion);
-
-        await this.ApiContext.PlayerStoryState.ExecuteDeleteAsync();
     }
 
     [Fact]
@@ -62,8 +57,6 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             .Contain(x => x.PlantId == FortPlants.Smithy && x.ViewerId == ViewerId);
 
         this.GetSavefileVersion().Should().Be(this.MaxVersion);
-
-        await this.ApiContext.PlayerStoryState.ExecuteDeleteAsync();
     }
 
     [Fact]
@@ -89,8 +82,6 @@ public class V1UpdateTest : SavefileUpdateTestFixture
             .Contain(x => x.PlantId == FortPlants.FlameDracolith);
 
         this.GetSavefileVersion().Should().Be(this.MaxVersion);
-
-        await this.ApiContext.PlayerStoryState.ExecuteDeleteAsync();
     }
 
     [Fact]
@@ -118,6 +109,9 @@ public class V1UpdateTest : SavefileUpdateTestFixture
     [Fact]
     public async Task V1Update_StoryAndTutorialIncomplete_DoesNothing()
     {
+        await this.ApiContext.PlayerFortBuilds.ExecuteDeleteAsync();
+        await this.ApiContext.PlayerStoryState.ExecuteDeleteAsync();
+
         LoadIndexData data = (
             await this.Client.PostMsgpack<LoadIndexData>("/load/index", new LoadIndexRequest())
         ).data;

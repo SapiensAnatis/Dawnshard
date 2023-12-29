@@ -12,9 +12,6 @@ public class WallTest : TestFixture
         : base(factory, outputHelper)
     {
         CommonAssertionOptions.ApplyTimeOptions(toleranceSec: 2);
-
-        this.ApiContext.PlayerQuestWalls.ExecuteDelete();
-        this.ApiContext.ChangeTracker.Clear();
     }
 
     [Fact]
