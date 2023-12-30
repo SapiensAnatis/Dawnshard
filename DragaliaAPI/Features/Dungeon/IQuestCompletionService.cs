@@ -23,12 +23,5 @@ public interface IQuestCompletionService
         PlayRecord record
     );
 
-    public Task<bool> IsQuestMissionCompleted(
-        QuestCompleteType type,
-        int completionValue,
-        PlayRecord record,
-        DungeonSession session
-    );
-
     public Task<IEnumerable<AtgenFirstClearSet>> GrantFirstClearRewards(int questId);
 }

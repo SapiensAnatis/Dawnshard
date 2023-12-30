@@ -252,6 +252,55 @@ public class DungeonRecordTest : TestFixture
         response.ingame_result_data.reward_record.take_boost_accumulate_point.Should().NotBe(0);
     }
 
+    [Theory]
+    [InlineData(22220, 222200201, 0)] // Twinkling Twilight - Skirmish: Standard
+    [InlineData(22220, 222200404, 0)] // Twinkling Twilight - All-Out Assault EX
+    [InlineData(22223, 222230404, 5)] // Shadow of the Mukuroshu - Defensive Battle EX
+    public async Task Record_CombatEvent_GrantsScore(int eventId, int questId, int wave)
+    {
+        await AddToDatabase(new DbQuest() { QuestId = questId, State = 0, });
+
+        await Client.PostMsgpack<MemoryEventActivateData>(
+            "/memory_event/activate",
+            new MemoryEventActivateRequest() { event_id = eventId }
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                {
+                    { 1, Enumerable.Empty<AtgenEnemy>() }
+                }
+            };
+
+        string key = await Services.GetRequiredService<IDungeonService>().StartDungeon(mockSession);
+
+        DungeonRecordRecordData response = (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record = [],
+                        live_unit_no_list = [],
+                        damage_record = [],
+                        dragon_damage_record = [],
+                        wave = wave,
+                    }
+                }
+            )
+        ).data;
+
+        response.ingame_result_data.reward_record.take_accumulate_point.Should().NotBe(0);
+        response.ingame_result_data.reward_record.take_boost_accumulate_point.Should().Be(0);
+    }
+
     [Fact]
     public async Task Record_Event_BossBattle_CompletesMissions()
     {

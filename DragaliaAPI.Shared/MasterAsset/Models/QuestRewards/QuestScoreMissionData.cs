@@ -29,5 +29,14 @@ public record QuestScoreMissionData(
         BaseScore10
     };
 
+    public int GetScore(int index)
+    {
+        // Onslaught battles only have one score value
+        if (this.Scores.Count(x => x != 0) == 1)
+            return this.Scores.First(x => x != 0);
+
+        return this.Scores[index];
+    }
+
     public int WaveCount => this.Scores.Count(x => x != 0);
 };

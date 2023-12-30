@@ -63,6 +63,8 @@ public class DragonServiceTest
     [Fact]
     public async Task DoDragonGetContactData_ReturnsValidContactData()
     {
+        DateTimeOffset lastReset = new ResetHelper(this.mockTimeProvider.Object).LastDailyReset;
+
         SetupReliabilityMock(
             out List<DbPlayerDragonGift> gifts,
             out DbPlayerMaterial garudaEssence,
@@ -80,7 +82,7 @@ public class DragonServiceTest
         responseData.shop_gift_list.Count().Should().Be(5);
         ((DragonGifts)responseData.shop_gift_list.Last().dragon_gift_id)
             .Should()
-            .Be(DragonConstants.RotatingGifts[(int)DateTimeOffset.UtcNow.DayOfWeek]);
+            .Be(DragonConstants.RotatingGifts[(int)lastReset.DayOfWeek]);
     }
 
     [Fact]
