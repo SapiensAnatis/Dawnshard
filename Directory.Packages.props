@@ -45,7 +45,7 @@
     <PackageVersion Include="Serilog.Sinks.File" Version="5.0.1-dev-00968" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
-    <PackageVersion Include="FluentAssertions" Version="7.0.0-alpha.2" />
+    <PackageVersion Include="FluentAssertions" Version="7.0.0-alpha.3" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0-preview-23503-02" />
     <PackageVersion Include="MockQueryable.Moq" Version="7.0.0" />
