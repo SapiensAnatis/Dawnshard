@@ -4,7 +4,7 @@ public class EventTrialClearMission : Mission
 {
     protected override MissionCompleteType CompleteType => MissionCompleteType.EventTrialClear;
 
-    public required int EventId { get; init; }
+    public int EventId { get; set; }
 
     public required VariationTypes VariationType { get; init; }
 

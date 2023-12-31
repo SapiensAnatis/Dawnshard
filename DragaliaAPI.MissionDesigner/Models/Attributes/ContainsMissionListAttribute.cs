@@ -1,4 +1,7 @@
+using JetBrains.Annotations;
+
 namespace DragaliaAPI.MissionDesigner.Models.Attributes;
 
+[MeansImplicitUse]
 [AttributeUsage(AttributeTargets.Class)]
-public class ContainsMissionListAttribute : Attribute { }
+public sealed class ContainsMissionListAttribute : Attribute { }

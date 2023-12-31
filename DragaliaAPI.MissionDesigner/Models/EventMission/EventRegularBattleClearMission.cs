@@ -5,7 +5,7 @@ public class EventRegularBattleClearMission : Mission
     protected override MissionCompleteType CompleteType =>
         MissionCompleteType.EventRegularBattleClear;
 
-    public required int EventId { get; init; }
+    public int EventId { get; set; }
 
     public VariationTypes? VariationType { get; init; }
 

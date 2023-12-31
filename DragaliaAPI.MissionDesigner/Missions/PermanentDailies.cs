@@ -5,13 +5,11 @@ using JetBrains.Annotations;
 namespace DragaliaAPI.MissionDesigner.Missions;
 
 [ContainsMissionList]
-[UsedImplicitly]
 public static class PermanentDailies
 {
     private const int ProgressionGroupId = 15070;
 
-    [MissionList(Type = MissionType.Daily)]
-    [UsedImplicitly]
+    [MissionType(MissionType.Daily)]
     public static List<Mission> Missions { get; } =
         [
             // Perform an Item Summon

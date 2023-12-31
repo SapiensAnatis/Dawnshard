@@ -4,7 +4,7 @@ public class EventParticipationMission : Mission
 {
     protected override MissionCompleteType CompleteType => MissionCompleteType.EventParticipation;
 
-    public required int EventId { get; init; }
+    public int EventId { get; set; }
 
     protected override int? Parameter => this.EventId;
 }
