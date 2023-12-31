@@ -76,7 +76,12 @@ public interface IMissionProgressionService
     void OnEventRegularBattleCleared(int eventId, VariationTypes variationType);
     void OnEventQuestClearedWithCrest(int eventId, AbilityCrests crest);
     void OnEventPointCollected(int eventId, VariationTypes variationType, int quantity);
-    void OnEventChallengeBattleCleared(int eventId, VariationTypes variationType, bool fullClear);
+    void OnEventChallengeBattleCleared(
+        int eventId,
+        VariationTypes variationType,
+        bool fullClear,
+        int questId
+    );
     void OnEventTrialCleared(int eventId, VariationTypes variationType);
 
     void EnqueueEvent(

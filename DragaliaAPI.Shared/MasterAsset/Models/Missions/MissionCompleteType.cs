@@ -164,7 +164,7 @@ public enum MissionCompleteType
     EventPointCollection,
 
     /// <summary>
-    /// int eventId, int questId, bool fullClear
+    /// int eventId, VariationTypes variationType, bool fullClear, int questId
     /// </summary>
     EventChallengeBattleClear,
 
