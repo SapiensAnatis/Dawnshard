@@ -38,4 +38,4 @@ JsonSerializerOptions options =
 
 string json = JsonSerializer.Serialize(missions, options);
 
-File.WriteAllText(args[1], json);
+File.WriteAllText(args[^1], json);
