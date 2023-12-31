@@ -17,4 +17,4 @@ jobs:
       - name: Run MissionDesigner
         run: |
           dotnet run --project DragaliaAPI.MissionDesigner -- NewProgressionInfo.json
-          sha256sum --check "$(sha256sum NewProgressionInfo.json)"
+          cmp NewProgressionInfo.json DragaliaAPI.Shared/Resources/Missions/MissionProgressionInfo.json
