@@ -1,3 +1,5 @@
+name: MissionDesigner
+
 on:
   pull_request:
     paths:

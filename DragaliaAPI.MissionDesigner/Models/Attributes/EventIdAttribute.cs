@@ -6,5 +6,5 @@ public sealed class EventIdAttribute(int eventId) : ImplicitPropertyAttribute
 
     public override string Property => "EventId";
 
-    public override object Value => EventId;
+    public override object Value => this.EventId;
 }

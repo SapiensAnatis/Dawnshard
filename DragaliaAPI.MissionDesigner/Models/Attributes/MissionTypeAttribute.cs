@@ -8,5 +8,5 @@ public sealed class MissionTypeAttribute(MissionType type) : ImplicitPropertyAtt
 
     public override string Property => "Type";
 
-    public override object? Value => this.Type;
+    public override object Value => this.Type;
 }
