@@ -21,6 +21,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
           script_stop: true
           script: |
             kubectl rollout restart deployment/${{ vars.K8S_DEPLOYMENT }} -n ${{ vars.K8S_NAMESPACE }} --kubeconfig "$HOME/.kube/config"
