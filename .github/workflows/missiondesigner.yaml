@@ -1,0 +1,20 @@
+on:
+  pull_request:
+  
+env:
+  HUSKY: 0
+  
+jobs:
+  missiondesigner:
+    name: Check MissionProgressionInfo.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET Core SDK 8.0.x
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - name: Run MissionDesigner
+        run: |
+          dotnet run --project DragaliaAPI.MissionDesigner -- NewProgressionInfo.json
+          sha256sum --check "$(sha256sum NewProgressionInfo.json)"

@@ -89,7 +89,7 @@ public static class TollOfTheDeep
             // Earned from 'Completely Clear a Challenge Battle On Master'
             new EventChallengeBattleClearMission()
             {
-                MissionId = 10221301,
+                MissionId = 10221305,
                 VariationType = VariationTypes.Extreme,
                 FullClear = true,
             },
