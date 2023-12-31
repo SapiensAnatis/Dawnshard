@@ -5,7 +5,7 @@ public class EventChallengeBattleClearMission : Mission
     protected override MissionCompleteType CompleteType =>
         MissionCompleteType.EventChallengeBattleClear;
 
-    public required int EventId { get; init; }
+    public int EventId { get; set; }
 
     public int? QuestId { get; init; }
 

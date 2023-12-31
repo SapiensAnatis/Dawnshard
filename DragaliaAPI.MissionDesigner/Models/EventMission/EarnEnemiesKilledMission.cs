@@ -2,7 +2,7 @@ namespace DragaliaAPI.MissionDesigner.Models.EventMission;
 
 public class EarnEnemiesKilledMission : Mission
 {
-    public required int EventId { get; init; }
+    public int EventId { get; set; }
 
     protected override MissionCompleteType CompleteType => MissionCompleteType.EarnEnemiesKilled;
 

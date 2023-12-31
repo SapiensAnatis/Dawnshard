@@ -5,7 +5,7 @@ public class EventQuestClearWithCrestMission : Mission
     protected override MissionCompleteType CompleteType =>
         MissionCompleteType.EventQuestClearWithCrest;
 
-    public required int EventId { get; init; }
+    public int EventId { get; set; }
 
     public required AbilityCrests Crest { get; init; }
 
