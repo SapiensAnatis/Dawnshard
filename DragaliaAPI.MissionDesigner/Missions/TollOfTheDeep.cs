@@ -63,14 +63,14 @@ public static class TollOfTheDeep
             new EventChallengeBattleClearMission()
             {
                 MissionId = 10220901,
-                QuestId = 208450501,
+                VariationType = VariationTypes.VeryHard,
                 FullClear = true,
             },
             // Completely Clear a Challenge Battle on Master
             new EventChallengeBattleClearMission()
             {
                 MissionId = 10221001,
-                QuestId = 208450502,
+                VariationType = VariationTypes.Extreme,
                 FullClear = true,
             },
             // Clear a "Toll of the Deep" Trial on Standard
@@ -90,7 +90,7 @@ public static class TollOfTheDeep
             new EventChallengeBattleClearMission()
             {
                 MissionId = 10221301,
-                QuestId = 208450502,
+                VariationType = VariationTypes.Extreme,
                 FullClear = true,
             },
         };

@@ -307,6 +307,13 @@ public class DungeonRecordTest : TestFixture
         int questId = 208450301; // The Stirring Abyss: Beginner
         int eventId = 20845; // Toll of the Deep
 
+        await this.AddRangeToDatabase(
+            [
+                new DbAbilityCrest() { AbilityCrestId = AbilityCrests.HavingaSummerBall },
+                new DbAbilityCrest() { AbilityCrestId = AbilityCrests.SuperSoakingAndroids }
+            ]
+        );
+
         await Client.PostMsgpack<MemoryEventActivateData>(
             "/memory_event/activate",
             new MemoryEventActivateRequest() { event_id = eventId }
@@ -320,7 +327,8 @@ public class DungeonRecordTest : TestFixture
                     new()
                     {
                         chara_id = Charas.ThePrince,
-                        equip_crest_slot_type_2_crest_id_1 = AbilityCrests.HavingaSummerBall
+                        equip_crest_slot_type_1_crest_id_1 = AbilityCrests.SuperSoakingAndroids,
+                        equip_crest_slot_type_2_crest_id_1 = AbilityCrests.HavingaSummerBall,
                     }
                 },
                 QuestData = MasterAsset.QuestData.Get(questId),
@@ -351,6 +359,10 @@ public class DungeonRecordTest : TestFixture
                 }
             )
         ).data;
+
+        response.ingame_result_data.reward_record.take_accumulate_point.Should().NotBe(0);
+        response.ingame_result_data.reward_record.take_boost_accumulate_point.Should().NotBe(0);
+        response.ingame_result_data.score_mission_success_list.Should().NotBeEmpty();
 
         response
             .update_data_list.mission_notice.memory_event_mission_notice.new_complete_mission_id_list.Should()

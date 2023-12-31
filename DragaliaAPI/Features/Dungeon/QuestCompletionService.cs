@@ -147,7 +147,7 @@ public class QuestCompletionService(
         int questScoreMissionId = MasterAsset.QuestRewardData[questId].QuestScoreMissionId;
         int baseQuantity = MasterAsset
             .QuestScoreMissionData[questScoreMissionId]
-            .GetScore(record.wave);
+            .GetScore(record.wave, session.QuestVariation);
 
         double obtainedAmount = baseQuantity * (multiplier / 100.0f);
         int rewardQuantity = (int)Math.Floor(obtainedAmount);
