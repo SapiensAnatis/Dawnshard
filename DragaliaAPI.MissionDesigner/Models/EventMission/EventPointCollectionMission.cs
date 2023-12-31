@@ -2,7 +2,7 @@ namespace DragaliaAPI.MissionDesigner.Models.EventMission;
 
 public class EventPointCollectionMission : Mission
 {
-    public required int EventId { get; init; }
+    public int EventId { get; set; }
 
     public VariationTypes? VariationType { get; init; } = null;
 
