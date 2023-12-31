@@ -4,12 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - master
-      - develop
-    paths-ignore:
-      - "**/*.yaml"
-      - "**/*.yml"
-      - "**/*.md"
+      - main
 
 env:
   HUSKY: 0
