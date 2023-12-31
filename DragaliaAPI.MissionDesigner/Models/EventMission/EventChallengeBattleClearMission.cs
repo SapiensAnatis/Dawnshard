@@ -7,13 +7,13 @@ public class EventChallengeBattleClearMission : Mission
 
     public int EventId { get; set; }
 
-    public int? QuestId { get; init; }
+    public VariationTypes? VariationType { get; init; }
 
     public bool? FullClear { get; init; }
 
     protected override int? Parameter => this.EventId;
 
-    protected override int? Parameter2 => this.QuestId;
+    protected override int? Parameter2 => (int?)this.VariationType;
 
     protected override int? Parameter3 => this.FullClear == true ? 1 : null;
 }

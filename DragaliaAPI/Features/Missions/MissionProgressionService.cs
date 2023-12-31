@@ -250,13 +250,17 @@ public class MissionProgressionService(
             (int)variationType
         );
 
-    public void OnEventChallengeBattleCleared(int eventId, int questId, bool fullClear) =>
+    public void OnEventChallengeBattleCleared(
+        int eventId,
+        VariationTypes variationType,
+        bool fullClear
+    ) =>
         EnqueueEvent(
             MissionCompleteType.EventChallengeBattleClear,
             1,
             1,
             eventId,
-            questId,
+            (int)variationType,
             fullClear ? 1 : 0
         );
 
