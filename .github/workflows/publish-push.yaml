@@ -3,7 +3,7 @@ name: publish-push
 on:
   push:
     branches:
-      - "develop"
+      - main
 
 env:
   HUSKY: 0
