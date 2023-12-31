@@ -335,7 +335,7 @@ public class QuestService(
 
             missionProgressionService.OnEventChallengeBattleCleared(
                 questData.Gid,
-                questData.Id,
+                questData.VariationType,
                 playRecord.wave >= waveCount
             );
         }

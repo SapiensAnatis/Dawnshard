@@ -1,4 +1,6 @@
-﻿namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
+﻿using DragaliaAPI.Shared.Definitions.Enums;
+
+namespace DragaliaAPI.Shared.MasterAsset.Models.QuestRewards;
 
 public record QuestScoreMissionData(
     int Id,
@@ -14,7 +16,7 @@ public record QuestScoreMissionData(
     int BaseScore10
 )
 {
-    public readonly int[] Scores =
+    private readonly int[] scores =
     {
         0,
         BaseScore1,
@@ -29,14 +31,17 @@ public record QuestScoreMissionData(
         BaseScore10
     };
 
-    public int GetScore(int index)
+    public int GetScore(int wave, VariationTypes variationType)
     {
         // Onslaught battles only have one score value
-        if (this.Scores.Count(x => x != 0) == 1)
-            return this.Scores.First(x => x != 0);
+        if (this.scores.Count(x => x != 0) == 1)
+            return this.scores.First(x => x != 0);
 
-        return this.Scores[index];
+        if (wave != 0)
+            return this.scores[wave];
+
+        return this.scores[(int)variationType];
     }
 
-    public int WaveCount => this.Scores.Count(x => x != 0);
+    public int WaveCount => this.scores.Count(x => x != 0);
 };
