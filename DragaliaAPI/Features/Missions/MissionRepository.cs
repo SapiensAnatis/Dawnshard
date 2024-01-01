@@ -49,7 +49,11 @@ public class MissionRepository(
     {
         return (
             await Missions
-                .Where(x => x.Start < resetHelper.UtcNow && x.End > resetHelper.UtcNow)
+                .Where(
+                    x =>
+                        (x.Start == DateTimeOffset.UnixEpoch || x.Start < resetHelper.UtcNow)
+                        && (x.End == DateTimeOffset.UnixEpoch || x.End > resetHelper.UtcNow)
+                )
                 .ToListAsync()
         )
             .Where(HasProgressionInfo)
