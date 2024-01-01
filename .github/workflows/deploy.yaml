@@ -16,7 +16,7 @@ jobs:
       url: https://dawnshard.co.uk
     steps:
       - name: ssh and restart pods
-        uses: appleboy/ssh-action@v1.0.1
+        uses: appleboy/ssh-action@v1.0.2
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
