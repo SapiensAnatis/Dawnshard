@@ -45,14 +45,22 @@ public class MissionRepository(
             ) ?? throw new DragaliaException(ResultCode.MissionIdNotFound, "Mission not found");
     }
 
-    public async Task<ILookup<MissionType, DbPlayerMission>> GetAllMissionsPerTypeAsync()
+    public async Task<ILookup<MissionType, DbPlayerMission>> GetActiveMissionsPerTypeAsync()
     {
-        return (await Missions.Where(x => x.Type != MissionType.Daily).ToListAsync())
+        return (
+            await Missions
+                .Where(
+                    x =>
+                        (x.Start == DateTimeOffset.UnixEpoch || x.Start < resetHelper.UtcNow)
+                        && (x.End == DateTimeOffset.UnixEpoch || x.End > resetHelper.UtcNow)
+                )
+                .ToListAsync()
+        )
             .Where(HasProgressionInfo)
             .ToLookup(x => x.Type);
     }
 
-    public async Task<DbPlayerMission> AddMissionAsync(
+    public DbPlayerMission AddMission(
         MissionType type,
         int id,
         DateTimeOffset? startTime = null,
