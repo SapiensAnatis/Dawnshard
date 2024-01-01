@@ -46,6 +46,8 @@ public record QuestData(
     [property: JsonConverter(typeof(BoolIntJsonConverter))] bool IsSumUpTotalDamage
 )
 {
+    private int IdSuffix => this.Id % 1000;
+
     public IEnumerable<AreaInfo> AreaInfo =>
         new List<AreaInfo>()
         {
@@ -57,50 +59,36 @@ public record QuestData(
             new(this.Scene06, this.AreaName06),
         }.Where(x => !string.IsNullOrEmpty(x.ScenePath) && !string.IsNullOrEmpty(x.AreaName));
 
-    public bool IsEventRegularBattle
-    {
-        get
+    public bool IsEventRegularBattle =>
+        this.EventKindType switch
         {
-            int idSuffix = this.Id % 1000;
+            EventKindType.Build => this.IdSuffix is 301 or 302 or 303, // Boss battle
+            EventKindType.Raid => this.IdSuffix is 201 or 202 or 203, // Boss battle
+            EventKindType.Earn => this.IdSuffix is 201 or 202 or 203 or 401, // Invasion quest
+            _ => false
+        };
 
-            return this.EventKindType switch
-            {
-                EventKindType.Build => idSuffix is 301 or 302 or 303, // Boss battle
-                EventKindType.Raid => idSuffix is 201 or 202 or 203, // Boss battle
-                EventKindType.Earn => idSuffix is 201 or 202 or 203 or 401, // Invasion quest
-                _ => false
-            };
-        }
-    }
-
-    public bool IsEventChallengeBattle
-    {
-        get
+    public bool IsEventChallengeBattle =>
+        this.EventKindType switch
         {
-            int idSuffix = this.Id % 1000;
+            EventKindType.Build => this.IdSuffix is 501 or 502,
+            _ => false
+        };
 
-            return this.EventKindType switch
-            {
-                EventKindType.Build => idSuffix is 501 or 502,
-                _ => false
-            };
-        }
-    }
-
-    public bool IsEventTrial
-    {
-        get
+    public bool IsEventTrial =>
+        this.EventKindType switch
         {
-            int idSuffix = this.Id % 1000;
+            EventKindType.Build => this.IdSuffix is 701 or 702,
+            EventKindType.Earn => this.IdSuffix is 301 or 302 or 303,
+            _ => false
+        };
 
-            return this.EventKindType switch
-            {
-                EventKindType.Build => idSuffix is 701 or 702,
-                EventKindType.Earn => idSuffix is 301 or 302 or 303,
-                _ => false
-            };
-        }
-    }
+    public bool IsEventExBattle =>
+        this.EventKindType switch
+        {
+            EventKindType.Build => this.IdSuffix is 401,
+            _ => false,
+        };
 
     public EventKindType EventKindType =>
         MasterAsset.EventData.TryGetValue(this.Gid, out EventData? eventData)

@@ -77,6 +77,13 @@ public class MasterAssetData<TKey, TItem>
         this.internalKeyCollection.TryGetValue(key, out item);
 
     /// <summary>
+    /// Checks whether the master data contains the given <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key">The key to check the existence of.</param>
+    /// <returns>A bool indicating whether that key is in the dictionary.</returns>
+    public bool ContainsKey(TKey key) => this.internalKeyCollection.ContainsKey(key);
+
+    /// <summary>
     /// Creates a new instance of <see cref="MasterAssetData{TKey,TItem}"/>.
     /// </summary>
     /// <param name="jsonFilename">The filename of the JSON in <see cref="JsonFolder"/>.</param>
@@ -123,5 +130,7 @@ public class MasterAssetData<TKey, TItem>
 
         public bool TryGetValue(TKey key, [NotNullWhen(true)] out TItem? item) =>
             this.dictionary.TryGetValue(key, out item);
+
+        public bool ContainsKey(TKey key) => this.dictionary.ContainsKey(key);
     }
 }

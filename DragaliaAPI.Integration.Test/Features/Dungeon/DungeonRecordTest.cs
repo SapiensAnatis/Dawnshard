@@ -372,6 +372,169 @@ public class DungeonRecordTest : TestFixture
     }
 
     [Fact]
+    public async Task Record_Event_BossBattle_UnlocksExBattle()
+    {
+        int questId = 208260303; // Squash the Pumpking: Expert
+        int exQuestId = 208260401; // Revenge of the Pumpking
+        int eventId = 20826; // Trick or Treasure
+
+        await this.AddToDatabase(
+            new DbQuest()
+            {
+                QuestId = questId,
+                PlayCount = 2, // EX quests are forcibly triggered on every third clear
+            }
+        );
+
+        await Client.PostMsgpack<MemoryEventActivateData>(
+            "/memory_event/activate",
+            new MemoryEventActivateRequest() { event_id = eventId }
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince, } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                {
+                    { 1, Enumerable.Empty<AtgenEnemy>() }
+                }
+            };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordData response = (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record = new List<AtgenTreasureRecord>(),
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord(),
+                        wave = 3
+                    }
+                }
+            )
+        ).data;
+
+        response
+            .update_data_list.quest_list.Should()
+            .ContainEquivalentOf(
+                new QuestList() { quest_id = exQuestId, is_appear = 1, },
+                opts => opts.Including(x => x.quest_id).Including(x => x.is_appear)
+            );
+    }
+
+    [Fact]
+    public async Task Record_Event_BossBattle_NoExBattleForEvent_DoesNotUnlockExBattle()
+    {
+        int questId = 208450301; // The Stirring Abyss: Beginner
+        int exQuestId = 208450401; // Not a valid quest
+        int eventId = 20845; // Toll of the Deep
+
+        await this.AddToDatabase(new DbQuest() { QuestId = questId, PlayCount = 2, });
+
+        await Client.PostMsgpack<MemoryEventActivateData>(
+            "/memory_event/activate",
+            new MemoryEventActivateRequest() { event_id = eventId }
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince, } },
+                QuestData = MasterAsset.QuestData.Get(questId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                {
+                    { 1, Enumerable.Empty<AtgenEnemy>() }
+                }
+            };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordData response = (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record = new List<AtgenTreasureRecord>(),
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord(),
+                        wave = 3
+                    }
+                }
+            )
+        ).data;
+
+        response.update_data_list.quest_list.Should().NotContain(x => x.quest_id == exQuestId);
+    }
+
+    [Fact]
+    public async Task Record_Event_ExBossBattle_SetsIsAppearFalse()
+    {
+        int exQuestId = 208260401; // Revenge of the Pumpking
+        int eventId = 20826; // Trick or Treasure
+
+        await Client.PostMsgpack<MemoryEventActivateData>(
+            "/memory_event/activate",
+            new MemoryEventActivateRequest() { event_id = eventId }
+        );
+
+        DungeonSession mockSession =
+            new()
+            {
+                Party = new List<PartySettingList>() { new() { chara_id = Charas.ThePrince, } },
+                QuestData = MasterAsset.QuestData.Get(exQuestId),
+                EnemyList = new Dictionary<int, IEnumerable<AtgenEnemy>>()
+                {
+                    { 1, Enumerable.Empty<AtgenEnemy>() }
+                }
+            };
+
+        string key = await this.StartDungeon(mockSession);
+
+        DungeonRecordRecordData response = (
+            await Client.PostMsgpack<DungeonRecordRecordData>(
+                "/dungeon_record/record",
+                new DungeonRecordRecordRequest()
+                {
+                    dungeon_key = key,
+                    play_record = new PlayRecord
+                    {
+                        time = 10,
+                        treasure_record = new List<AtgenTreasureRecord>(),
+                        live_unit_no_list = new List<int>(),
+                        damage_record = new List<AtgenDamageRecord>(),
+                        dragon_damage_record = new List<AtgenDamageRecord>(),
+                        battle_royal_record = new AtgenBattleRoyalRecord(),
+                        wave = 3
+                    }
+                }
+            )
+        ).data;
+
+        response
+            .update_data_list.quest_list.Should()
+            .ContainEquivalentOf(
+                new QuestList() { quest_id = exQuestId, is_appear = 0, },
+                opts => opts.Including(x => x.quest_id).Including(x => x.is_appear)
+            );
+    }
+
+    [Fact]
     public async Task Record_Event_ChallengeBattle_CompletesMissions()
     {
         int questId = 208450502; // Tempestuous Assault: Master
