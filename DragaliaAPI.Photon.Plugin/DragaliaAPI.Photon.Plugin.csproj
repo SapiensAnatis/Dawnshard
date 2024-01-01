@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MessagePack" VersionOverride="2.5.108" />
+        <PackageReference Include="MessagePack" />
         <PackageReference Include="Newtonsoft.Json" />
     </ItemGroup>
 
