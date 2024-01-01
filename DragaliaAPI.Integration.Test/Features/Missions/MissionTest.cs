@@ -3,6 +3,7 @@ using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Helpers;
 using DragaliaAPI.Shared.MasterAsset;
 using DragaliaAPI.Shared.MasterAsset.Models.Missions;
+using Humanizer;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Integration.Test.Features.Missions;
@@ -226,6 +227,8 @@ public class MissionTest : TestFixture
                     Id = missionId1,
                     Type = MissionType.Daily,
                     State = MissionState.Completed,
+                    Start = resetHelper.LastDailyReset,
+                    End = resetHelper.LastDailyReset.AddDays(1)
                 },
                 new DbPlayerMission()
                 {
@@ -233,6 +236,8 @@ public class MissionTest : TestFixture
                     Id = missionId2,
                     Type = MissionType.Daily,
                     State = MissionState.Completed,
+                    Start = resetHelper.LastDailyReset,
+                    End = resetHelper.LastDailyReset.AddDays(1)
                 }
             ]
         );
@@ -489,5 +494,63 @@ public class MissionTest : TestFixture
         response
             .mission_notice.drill_mission_notice.receivable_reward_count.Should()
             .Be(1, "because otherwise the drill mission popup disappears");
+    }
+
+    [Fact]
+    public async Task GetMissionList_DoesNotReturnOutOfDateMissions()
+    {
+        DbPlayerMission expiredMission =
+            new()
+            {
+                Id = 11650101,
+                Type = MissionType.Period,
+                State = MissionState.InProgress,
+                Start = DateTimeOffset.UtcNow.AddDays(-2),
+                End = DateTimeOffset.UtcNow.AddDays(-1),
+            };
+        DbPlayerMission notStartedMission =
+            new()
+            {
+                Id = 11650201,
+                Type = MissionType.Period,
+                State = MissionState.InProgress,
+                Start = DateTimeOffset.UtcNow.AddDays(+1),
+                End = DateTimeOffset.UtcNow.AddDays(+2),
+            };
+        DbPlayerMission expectedMission =
+            new()
+            {
+                Id = 11650301,
+                Type = MissionType.Period,
+                State = MissionState.InProgress,
+                Start = DateTimeOffset.UtcNow.AddDays(-1),
+                End = DateTimeOffset.UtcNow.AddDays(+1),
+            };
+        DbPlayerMission otherExpectedMission =
+            new()
+            {
+                Id = 11650302,
+                Type = MissionType.Period,
+                State = MissionState.InProgress,
+                Start = DateTimeOffset.UnixEpoch,
+                End = DateTimeOffset.UnixEpoch,
+            };
+
+        await this.AddRangeToDatabase(
+            [expiredMission, notStartedMission, expectedMission, otherExpectedMission]
+        );
+
+        MissionGetMissionListData response = (
+            await this.Client.PostMsgpack<MissionGetMissionListData>(
+                "mission/get_mission_list",
+                new MissionGetMissionListRequest()
+            )
+        ).data;
+
+        response
+            .period_mission_list.Should()
+            .HaveCount(2)
+            .And.Contain(x => x.period_mission_id == expectedMission.Id)
+            .And.Contain(x => x.period_mission_id == otherExpectedMission.Id);
     }
 }
