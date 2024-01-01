@@ -11,9 +11,9 @@ public interface IMissionRepository
     IQueryable<DbPlayerMission> GetMissionsByType(MissionType type);
 
     Task<DbPlayerMission> GetMissionByIdAsync(MissionType type, int id);
-    Task<ILookup<MissionType, DbPlayerMission>> GetAllMissionsPerTypeAsync();
+    Task<ILookup<MissionType, DbPlayerMission>> GetActiveMissionsPerTypeAsync();
 
-    Task<DbPlayerMission> AddMissionAsync(
+    DbPlayerMission AddMission(
         MissionType type,
         int id,
         DateTimeOffset? startTime = null,
