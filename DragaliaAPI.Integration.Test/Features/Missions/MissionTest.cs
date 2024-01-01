@@ -490,4 +490,47 @@ public class MissionTest : TestFixture
             .mission_notice.drill_mission_notice.receivable_reward_count.Should()
             .Be(1, "because otherwise the drill mission popup disappears");
     }
+
+    [Fact]
+    public async Task GetMissionList_DoesNotReturnOutOfDateMissions()
+    {
+        DbPlayerMission expiredMission =
+            new()
+            {
+                Id = 11650101,
+                Type = MissionType.Period,
+                State = MissionState.InProgress,
+                End = DateTimeOffset.UtcNow.AddDays(-1),
+            };
+        DbPlayerMission notStartedMission =
+            new()
+            {
+                Id = 11650201,
+                Type = MissionType.Period,
+                State = MissionState.InProgress,
+                Start = DateTimeOffset.UtcNow.AddDays(+1),
+            };
+        DbPlayerMission expectedMission =
+            new()
+            {
+                Id = 11650301,
+                Type = MissionType.Period,
+                State = MissionState.InProgress,
+                Start = DateTimeOffset.UtcNow.AddDays(-1),
+                End = DateTimeOffset.UtcNow.AddDays(+1),
+            };
+
+        await this.AddRangeToDatabase([expiredMission, notStartedMission, expectedMission]);
+
+        MissionGetMissionListData response = (
+            await this.Client.PostMsgpack<MissionGetMissionListData>(
+                "mission/get_mission_list",
+                new MissionGetMissionListRequest()
+            )
+        ).data;
+
+        response
+            .period_mission_list.Should()
+            .ContainSingle(x => x.period_mission_id == expectedMission.Id);
+    }
 }
