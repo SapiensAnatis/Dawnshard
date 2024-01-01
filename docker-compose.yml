@@ -21,18 +21,20 @@ services:
     env_file:
       - .env
 
-  # photonstatemanager:
-  #   hostname: photonstatemanager
-  #   image: ${DOCKER_REGISTRY-}photonstatemanager
-  #   build:
-  #       context: .
-  #       dockerfile: DragaliaAPI.Photon.StateManager/Dockerfile
-  #   environment:
-  #     - HTTP_PORTS=80
-  #   ports:
-  #     - "5001:80"
-  #   env_file:
-  #     - .env
+  photonstatemanager:
+    hostname: photonstatemanager
+    image: ${DOCKER_REGISTRY-}photonstatemanager
+    build:
+        context: .
+        dockerfile: DragaliaAPI.Photon.StateManager/Dockerfile
+    environment:
+      - HTTP_PORTS=80
+    ports:
+      - "5001:80"
+    env_file:
+      - .env
+    profiles:
+      - photon
 
   postgres:
     hostname: postgres
