@@ -287,6 +287,39 @@ public class MissionTest : TestFixture
     }
 
     [Fact]
+    public async Task ReceiveReward_Stamp_GrantsWyrmite()
+    {
+        // The Miracle Of Dragonyule: Clear a Boss Battle Five Times. Grants 'Splendid!' sticker
+        int missionId = 10020502;
+
+        int oldWyrmite = this.ApiContext.PlayerUserData.First(
+            x => x.ViewerId == this.ViewerId
+        ).Crystal;
+
+        await this.AddToDatabase(
+            new DbPlayerMission()
+            {
+                Id = missionId,
+                Type = MissionType.MemoryEvent,
+                State = MissionState.Completed,
+                Progress = 5
+            }
+        );
+
+        MissionReceiveMemoryEventRewardData response = (
+            await this.Client.PostMsgpack<MissionReceiveMemoryEventRewardData>(
+                "mission/receive_memory_event_reward",
+                new MissionReceiveMemoryEventRewardRequest()
+                {
+                    memory_event_mission_id_list = [missionId],
+                }
+            )
+        ).data;
+
+        response.update_data_list.user_data.crystal.Should().Be(oldWyrmite + 25);
+    }
+
+    [Fact]
     public async Task GetDailyMissionList_ReturnsUnionOfTables()
     {
         int missionId = 15070301; // Clear a Quest

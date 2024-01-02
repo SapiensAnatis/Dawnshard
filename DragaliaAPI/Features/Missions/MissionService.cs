@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Entities;
+﻿using System.Collections.Frozen;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Database.Utils;
 using DragaliaAPI.Extensions;
@@ -25,6 +26,12 @@ public class MissionService(
     IOptionsMonitor<EventOptions> eventOptionsMonitor
 ) : IMissionService
 {
+    private static readonly FrozenSet<int> ObsoleteMemoryEventMissions = new[]
+    {
+        10020301, // The Miracle of Dragonyule: Collect 100 Holiday Cheer in One Go. Rewards a V1 weapon.
+        10020701, // The Miracle of Dragonyule: Clear Three Challenge Battles. Rewards a V1 weapon.
+    }.ToFrozenSet();
+
     private readonly ILogger<MissionService> logger = logger;
     private readonly IMissionRepository missionRepository = missionRepository;
     private readonly IMissionInitialProgressionService missionInitialProgressionService =
@@ -130,6 +137,7 @@ public class MissionService(
     {
         IEnumerable<MemoryEventMission> missions = MasterAsset
             .MemoryEventMission.Enumerable.Where(x => x.EventId == eventId)
+            .ExceptBy(ObsoleteMemoryEventMissions, mission => mission.Id)
             .ToList();
 
         if (
