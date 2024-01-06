@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using DragaliaAPI.Photon.Plugin.Helpers;
 
-namespace DragaliaAPI.Photon.Plugin.Models
+namespace DragaliaAPI.Photon.Plugin
 {
-    internal class PluginConfiguration
+    /// <summary>
+    /// Shared instance for immutable configuration to be shared between sub-plugins.
+    /// </summary>
+    public class PluginConfiguration
     {
         public Uri StateManagerUrl { get; }
 
