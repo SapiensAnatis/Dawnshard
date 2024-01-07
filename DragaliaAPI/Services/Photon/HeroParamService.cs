@@ -57,7 +57,7 @@ public class HeroParamService : IHeroParamService
         this.playerIdentityService = playerIdentityService;
     }
 
-    public async Task<IEnumerable<HeroParam>> GetHeroParam(long viewerId, int partySlot)
+    public async Task<List<HeroParam>> GetHeroParam(long viewerId, int partySlot)
     {
         this.logger.LogDebug("Fetching HeroParam for slot {partySlots}", partySlot);
 
@@ -88,7 +88,7 @@ public class HeroParamService : IHeroParamService
 
         FortBonusList bonusList = await this.bonusService.GetBonusList();
 
-        return detailedPartyUnits.Select(x => MapHeroParam(x, bonusList));
+        return detailedPartyUnits.Select(x => MapHeroParam(x, bonusList)).ToList();
     }
 
     private static HeroParam MapHeroParam(DbDetailedPartyUnit unit, FortBonusList fortBonusList)

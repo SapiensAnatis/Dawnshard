@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using FluentAssertions;
 using Xunit;
 
@@ -12,12 +10,10 @@ namespace DragaliaAPI.Photon.Plugin.Test
         public void BuildMemberCountTable_ReturnsExpectedResult(
             List<(int ActorNr, int HeroParamCount)> actorData,
             Dictionary<int, int> expectedTable
-        )
-        {
-            GluonPlugin.BuildMemberCountTable(actorData).Should().BeEquivalentTo(expectedTable);
-        }
+        ) =>
+            GameLogicPlugin.BuildMemberCountTable(actorData).Should().BeEquivalentTo(expectedTable);
 
-        public class BuildMemberCountTableData
+        private class BuildMemberCountTableData
             : TheoryData<List<(int ActorNr, int HeroParamCount)>, Dictionary<int, int>>
         {
             public BuildMemberCountTableData()

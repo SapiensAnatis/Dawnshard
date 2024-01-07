@@ -6,7 +6,6 @@
 
         public long ViewerId { get; set; }
 
-        public List<IEnumerable<HeroParam>> HeroParamLists { get; set; } =
-            new List<IEnumerable<HeroParam>>();
+        public List<List<HeroParam>> HeroParamLists { get; set; } = new List<List<HeroParam>>();
     }
 }

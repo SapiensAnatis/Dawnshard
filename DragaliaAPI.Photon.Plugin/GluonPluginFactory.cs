@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DragaliaAPI.Photon.Plugin.Models;
 using Photon.Hive.Plugin;
 
 namespace DragaliaAPI.Photon.Plugin
@@ -12,11 +13,24 @@ namespace DragaliaAPI.Photon.Plugin
             out string errorMsg
         )
         {
-            GluonPlugin plugin = new GluonPlugin();
-            if (plugin.SetupInstance(gameHost, config, out errorMsg))
-            {
-                return plugin;
-            }
+            PluginConfiguration configuration = new PluginConfiguration(config);
+            PluginStateService stateService = new PluginStateService();
+
+            GameLogicPlugin gameLogicPlugin = new GameLogicPlugin(stateService, configuration);
+            StateManagerPlugin stateManagerPlugin = new StateManagerPlugin(
+                stateService,
+                configuration
+            );
+
+            GluonPlugin gluonPlugin = new GluonPlugin(
+                stateService,
+                gameLogicPlugin,
+                stateManagerPlugin
+            );
+
+            if (gluonPlugin.SetupInstance(gameHost, config, out errorMsg))
+                return gluonPlugin;
+
             return null;
         }
     }
