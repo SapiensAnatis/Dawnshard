@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DragaliaAPI.Photon.Plugin.Models
 {
-    internal class RoomState
+    public class RoomState
     {
         public int MinGoToIngameState { get; set; }
 
@@ -15,8 +15,6 @@ namespace DragaliaAPI.Photon.Plugin.Models
         public int QuestId { get; set; }
 
         public bool IsSoloPlay { get; set; }
-
-        public bool IsUseSecondaryServer { get; set; }
 
         public bool IsRandomMatching { get; set; }
 
@@ -28,7 +26,6 @@ namespace DragaliaAPI.Photon.Plugin.Models
         {
             this.QuestId = oldState.QuestId;
             this.IsSoloPlay = oldState.IsSoloPlay;
-            this.IsUseSecondaryServer = oldState.IsUseSecondaryServer;
         }
     }
 }
