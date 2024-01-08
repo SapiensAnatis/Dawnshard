@@ -71,6 +71,11 @@ namespace DragaliaAPI.Photon.Plugin
                 ? this.configuration.SecondaryStateManagerUrl
                 : this.configuration.StateManagerUrl;
 
+        private string BearerToken =>
+            this.pluginStateService.IsUseSecondaryServer
+                ? this.configuration.SecondaryBearerToken
+                : this.configuration.BearerToken;
+
         public StateManagerPlugin(
             PluginStateService pluginStateService,
             PluginConfiguration configuration
@@ -164,6 +169,8 @@ namespace DragaliaAPI.Photon.Plugin
                 GameCloseEndpoint,
                 new GameModifyRequest { GameName = this.PluginHost.GameId, Player = null }
             );
+
+            request.Async = false;
 
             this.PluginHost.HttpRequest(request, info);
         }
@@ -312,7 +319,7 @@ namespace DragaliaAPI.Photon.Plugin
                 Method = "POST",
                 CustomHeaders = new Dictionary<string, string>()
                 {
-                    { "Authorization", $"Bearer {this.configuration.BearerToken}" },
+                    { "Authorization", $"Bearer {this.BearerToken}" },
                     { "RoomName", this.PluginHost.GameId },
                     {
                         "RoomId",
