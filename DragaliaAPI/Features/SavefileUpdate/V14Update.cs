@@ -1,3 +1,5 @@
+using DragaliaAPI.Database;
+using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Emblem;
@@ -11,6 +13,7 @@ namespace DragaliaAPI.Features.SavefileUpdate;
 public class V14Update(
     IStoryRepository storyRepository,
     IEmblemRepository emblemRepository,
+    ApiContext apiContext,
     ILogger<V14Update> logger
 ) : ISavefileUpdate
 {
@@ -40,15 +43,20 @@ public class V14Update(
             characterStoryList = MasterAsset.CharaStories[storyCharacterId].storyIds;
 
             Emblems emblem = (Emblems)storyCharacterId;
-            if (readStoryId == characterStoryList.Last() && !ownedEmblems.Contains(emblem))
-            {
-                if (!Enum.IsDefined(emblem))
-                    continue;
 
-                logger.LogDebug("Granting emblem {emblem}", emblem);
+            if (readStoryId != characterStoryList.Last() || ownedEmblems.Contains(emblem))
+                continue;
 
-                emblemRepository.AddEmblem(emblem);
-            }
+            if (!Enum.IsDefined(emblem))
+                continue;
+
+            // Avoid conflicts in case V10Update has added an equipped story epithet to the change tracker
+            if (apiContext.ChangeTracker.Entries<DbEmblem>().Any(x => x.Entity.EmblemId == emblem))
+                continue;
+
+            logger.LogDebug("Granting emblem {emblem}", emblem);
+
+            emblemRepository.AddEmblem(emblem);
         }
     }
 }
