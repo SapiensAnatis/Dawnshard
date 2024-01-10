@@ -34,9 +34,12 @@ public class CharaMutations : MutationBase
         ResetCharacterArgs args
     )
     {
-        DbPlayer player = this.GetPlayer(args.ViewerId, query => query.Include(x => x.CharaList));
+        using IDisposable userImpersonation = this.StartUserImpersonation(
+            args.ViewerId,
+            query => query.Include(x => x.CharaList)
+        );
 
-        DbPlayerCharaData? charaData = player.CharaList.FirstOrDefault(
+        DbPlayerCharaData? charaData = this.Player.CharaList.FirstOrDefault(
             x => x.CharaId == args.CharaId
         );
 
@@ -45,13 +48,13 @@ public class CharaMutations : MutationBase
 
         this.logger.LogInformation("Resetting character {chara}", args.CharaId);
 
-        player.CharaList.Remove(charaData);
-        player.CharaList.Add(new DbPlayerCharaData(player.ViewerId, args.CharaId));
+        this.Player.CharaList.Remove(charaData);
+        this.Player.CharaList.Add(new DbPlayerCharaData(this.Player.ViewerId, args.CharaId));
         db.SaveChanges();
 
         return (ctx) =>
             ctx.PlayerCharaData.First(
-                x => x.ViewerId == player.ViewerId && x.CharaId == args.CharaId
+                x => x.ViewerId == this.Player.ViewerId && x.CharaId == args.CharaId
             );
     }
 

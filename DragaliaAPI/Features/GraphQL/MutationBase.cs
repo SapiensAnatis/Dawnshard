@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.PlayerDetails;
@@ -9,13 +10,16 @@ public abstract class MutationBase
     private readonly ApiContext apiContext;
     private readonly IPlayerIdentityService identityService;
 
+    protected DbPlayer? Player { get; private set; }
+
     protected MutationBase(ApiContext apiContext, IPlayerIdentityService identityService)
     {
         this.apiContext = apiContext;
         this.identityService = identityService;
     }
 
-    protected DbPlayer GetPlayer(
+    [MemberNotNull(nameof(Player))]
+    protected IDisposable StartUserImpersonation(
         long viewerId,
         Func<IQueryable<DbPlayer>, IQueryable<DbPlayer>>? include = null
     )
@@ -32,8 +36,8 @@ public abstract class MutationBase
         if (player is null)
             throw new ArgumentException($"No player found for viewer ID {viewerId}");
 
-        this.identityService.StartUserImpersonation(viewerId, player.AccountId);
+        this.Player = player;
 
-        return player;
+        return this.identityService.StartUserImpersonation(viewerId, player.AccountId);
     }
 }

@@ -31,16 +31,19 @@ public class UserDataMutations : MutationBase
         UpdateTutorialStatusArgs args
     )
     {
-        DbPlayer player = this.GetPlayer(args.ViewerId, query => query.Include(x => x.UserData));
+        using IDisposable userImpersonation = this.StartUserImpersonation(
+            args.ViewerId,
+            query => query.Include(x => x.UserData)
+        );
 
-        if (player.UserData is null)
+        if (this.Player.UserData is null)
             throw new InvalidOperationException("UserData was null!");
 
         this.logger.LogInformation("Setting tutorial status to {newStatus}", args.NewStatus);
-        player.UserData.TutorialStatus = args.NewStatus;
+        this.Player.UserData.TutorialStatus = args.NewStatus;
         db.SaveChanges();
 
-        return (ctx) => ctx.PlayerUserData.First(x => x.ViewerId == player.ViewerId);
+        return (ctx) => ctx.PlayerUserData.First(x => x.ViewerId == this.Player.ViewerId);
     }
 
     [GraphQLMutation("Add a tutorial flag to a user.")]
@@ -49,9 +52,12 @@ public class UserDataMutations : MutationBase
         UpdateTutorialFlagArgs args
     )
     {
-        DbPlayer player = this.GetPlayer(args.ViewerId, query => query.Include(x => x.UserData));
+        using IDisposable userImpersonation = this.StartUserImpersonation(
+            args.ViewerId,
+            query => query.Include(x => x.UserData)
+        );
 
-        if (player.UserData is null)
+        if (this.Player.UserData is null)
             throw new InvalidOperationException("UserData was null!");
 
         this.logger.LogInformation("Adding tutorial flag {flag}", args.Flag);
@@ -59,7 +65,7 @@ public class UserDataMutations : MutationBase
         tutorialService.AddTutorialFlag(args.Flag);
         db.SaveChanges();
 
-        return (ctx) => ctx.PlayerUserData.First(x => x.ViewerId == player.ViewerId);
+        return (ctx) => ctx.PlayerUserData.First(x => x.ViewerId == this.Player.ViewerId);
     }
 
     [GraphQLMutation("Remove a tutorial flag to a user.")]
@@ -68,21 +74,24 @@ public class UserDataMutations : MutationBase
         UpdateTutorialFlagArgs args
     )
     {
-        DbPlayer player = this.GetPlayer(args.ViewerId, query => query.Include(x => x.UserData));
+        using IDisposable userImpersonation = this.StartUserImpersonation(
+            args.ViewerId,
+            query => query.Include(x => x.UserData)
+        );
 
-        if (player.UserData is null)
+        if (this.Player.UserData is null)
             throw new InvalidOperationException("UserData was null!");
 
         this.logger.LogInformation("Removing tutorial flag {flag}", args.Flag);
-        ISet<int> flagList = player.UserData.TutorialFlagList;
+        ISet<int> flagList = this.Player.UserData.TutorialFlagList;
 
         if (!flagList.Remove(args.Flag))
             throw new ArgumentException($"Failed to remove flag {args.Flag}");
 
-        player.UserData.TutorialFlagList = flagList;
+        this.Player.UserData.TutorialFlagList = flagList;
         db.SaveChanges();
 
-        return (ctx) => ctx.PlayerUserData.First(x => x.ViewerId == player.ViewerId);
+        return (ctx) => ctx.PlayerUserData.First(x => x.ViewerId == this.Player.ViewerId);
     }
 
     [GraphQLArguments]
