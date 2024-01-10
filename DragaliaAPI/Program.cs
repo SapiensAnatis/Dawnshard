@@ -17,6 +17,8 @@ using DragaliaAPI.Services.Health;
 using DragaliaAPI.Shared;
 using DragaliaAPI.Shared.Json;
 using DragaliaAPI.Shared.MasterAsset;
+using EntityGraphQL.AspNet;
+using EntityGraphQL.Schema;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
@@ -171,6 +173,15 @@ app.MapWhen(
         applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapGraphQL<ApiContext>(
+                configureEndpoint: endpoint =>
+                    endpoint.RequireAuthorization(
+                        policy =>
+                            policy
+                                .RequireAuthenticatedUser()
+                                .AddAuthenticationSchemes(SchemeName.Developer)
+                    )
+            );
         });
     }
 );
