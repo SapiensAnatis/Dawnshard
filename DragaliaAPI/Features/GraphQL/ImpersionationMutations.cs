@@ -30,7 +30,8 @@ public class ImpersionationMutations : MutationBase
         long targetViewerId
     )
     {
-        DbPlayer player = this.GetPlayer(viewerId);
+        using IDisposable userImpersonation = this.StartUserImpersonation(viewerId);
+
         string targetAccountId = this.apiContext.Players.Include(x => x.UserData)
             .Where(x => x.UserData!.ViewerId == targetViewerId)
             .Select(x => x.AccountId)
@@ -44,10 +45,10 @@ public class ImpersionationMutations : MutationBase
     [GraphQLMutation]
     public async Task<Expression<Func<ApiContext, DbPlayer>>> ClearImpersonation(long viewerId)
     {
-        DbPlayer player = this.GetPlayer(viewerId);
+        using IDisposable userImpersonation = this.StartUserImpersonation(viewerId);
 
         await this.sessionService.ClearUserImpersonation();
 
-        return context => context.Players.First(x => x.AccountId == player.AccountId);
+        return context => context.Players.First(x => x.AccountId == this.Player.AccountId);
     }
 }

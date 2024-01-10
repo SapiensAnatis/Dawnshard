@@ -39,14 +39,14 @@ public class MissionMutations : MutationBase
         MissionPlayerMutationArgs args
     )
     {
-        DbPlayer player = GetPlayer(args.ViewerId);
-        DbPlayerMission mission = GetMission(db, player, args);
+        using IDisposable userImpersonation = this.StartUserImpersonation(args.ViewerId);
+        DbPlayerMission mission = GetMission(db, this.Player, args);
 
         await this.missionInitialProgressionService.GetInitialMissionProgress(mission);
 
         await db.SaveChangesAsync();
 
-        return this.GetMissionExpression(player, args);
+        return this.GetMissionExpression(this.Player, args);
     }
 
     [GraphQLMutation("Completes a mission")]
@@ -55,8 +55,8 @@ public class MissionMutations : MutationBase
         MissionPlayerMutationArgs args
     )
     {
-        DbPlayer player = GetPlayer(args.ViewerId);
-        DbPlayerMission mission = GetMission(db, player, args);
+        using IDisposable userImpersonation = this.StartUserImpersonation(args.ViewerId);
+        DbPlayerMission mission = GetMission(db, this.Player, args);
 
         if (mission.State != MissionState.InProgress)
             throw new InvalidOperationException("Mission was already completed");
@@ -68,7 +68,7 @@ public class MissionMutations : MutationBase
 
         await db.SaveChangesAsync();
 
-        return this.GetMissionExpression(player, args);
+        return this.GetMissionExpression(this.Player, args);
     }
 
     [GraphQLMutation("Starts a mission")]
@@ -84,8 +84,8 @@ public class MissionMutations : MutationBase
             );
         }
 
-        DbPlayer player = GetPlayer(args.ViewerId);
-        DbPlayerMission mission = GetMission(db, player, args);
+        using IDisposable userImpersonation = this.StartUserImpersonation(args.ViewerId);
+        DbPlayerMission mission = GetMission(db, this.Player, args);
 
         if (mission != null)
             throw new InvalidOperationException("Mission is already started");
@@ -94,7 +94,7 @@ public class MissionMutations : MutationBase
 
         await db.SaveChangesAsync();
 
-        return this.GetMissionExpression(player, args);
+        return this.GetMissionExpression(this.Player, args);
     }
 
     [GraphQLMutation("Reset a mission's progress for all players")]

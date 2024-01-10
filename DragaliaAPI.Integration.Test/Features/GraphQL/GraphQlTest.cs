@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json.Serialization;
 using DragaliaAPI.Database.Entities;
 using DragaliaAPI.Shared.Features.Presents;
 using GraphQL;
@@ -8,7 +9,7 @@ namespace DragaliaAPI.Integration.Test.Features.GraphQL;
 
 public class GraphQlTest : GraphQlTestFixture
 {
-    private const string Endpoint = "savefile/graphql";
+    private const string Endpoint = "graphql";
 
     public GraphQlTest(CustomWebApplicationFactory factory, ITestOutputHelper outputHelper)
         : base(factory, outputHelper)
@@ -49,8 +50,8 @@ public class GraphQlTest : GraphQlTestFixture
 
         response.Errors.Should().BeNullOrEmpty();
 
-        response.Data.Player.CharaList.Should().Contain(x => x.CharaId == (int)Charas.ThePrince);
-        response.Data.Player.CharaList.Should().Contain(x => x.CharaId == (int)Charas.SummerMikoto);
+        response.Data.Player.CharaList.Should().Contain(x => x.CharaId == Charas.ThePrince);
+        response.Data.Player.CharaList.Should().Contain(x => x.CharaId == Charas.SummerMikoto);
     }
 
     [Fact]
@@ -192,5 +193,7 @@ public class GraphQlTest : GraphQlTestFixture
 
     private record Player(Character[] CharaList);
 
-    private record Character(int CharaId);
+    private record Character(
+        [property: JsonConverter(typeof(JsonStringEnumConverter))] Charas CharaId
+    );
 }
