@@ -5,7 +5,7 @@ using DragaliaAPI.MissionDesigner.Models.EventMission;
 namespace DragaliaAPI.MissionDesigner.Missions;
 
 [ContainsMissionList]
-public class MiracleOfDragonyule
+public static class MiracleOfDragonyule
 {
     private const int EventId = 20817;
     private const int Ep5StoryId = 2081705;
