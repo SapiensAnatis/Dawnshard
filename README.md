@@ -29,3 +29,7 @@ If you don't want to use Docker, see the [no-docker branch](https://github.com/s
 ### Dedicated server
 
 On a dedicated server, it is recommended to use the [Kubernetes helm chart](https://github.com/SapiensAnatis/helm-charts). 
+
+## Acknowledgements
+
+A big thanks to JetBrains for providing open source licenses for this project.
