@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { Card, CardContent, Chip, Skeleton, Stack, Typography } from "@mui/joy";
 
 const maxDescriptionLength = 300;
-const localStorageKey = "news-latest-read";
+const localStorageKey = (id) => `news-read-${id}`;
 
 export const SkeletonNewsItem: FC = () => {
   return (
@@ -42,19 +42,13 @@ const NewsItem: FC<{
   const [isNew, setIsNew] = useState(false);
 
   useEffect(() => {
-    const latestReadStr = localStorage.getItem(localStorageKey);
+    const key = localStorageKey(id);
+    const isRead = localStorage.getItem(key);
 
-    if (!latestReadStr) {
+    if (!isRead) {
       setIsNew(true);
-      localStorage.setItem(localStorageKey, id.toString());
+      localStorage.setItem(key, "true");
       return;
-    }
-
-    const latestRead = parseInt(latestReadStr);
-
-    if (id > latestRead) {
-      setIsNew(true);
-      localStorage.setItem(localStorageKey, id.toString());
     }
   }, [id]);
 

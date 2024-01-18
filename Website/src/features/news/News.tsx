@@ -12,13 +12,13 @@ const News: FC = () => {
       <SkeletonNewsItem />
     </>
   ) : (
-    data?.map(({ id, headline, description, date }) => (
+    data?.map(({ id, headline, description, time }) => (
       <NewsItem
         id={id}
         key={id}
         headline={headline}
         description={description}
-        date={date}
+        date={time}
       />
     ))
   );

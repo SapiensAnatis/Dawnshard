@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection;
@@ -146,13 +147,16 @@ if (Environment.GetEnvironmentVariable("DISABLE_AUTO_MIGRATION") == null)
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseResponseCompression();
+app.UseAuthorization();
+app.UseMiddleware<PlayerIdentityLoggingMiddleware>();
+app.UseSerilogRequestLogging();
 
-ImmutableArray<string> apiRoutePrefixes = new[]
+FrozenSet<string> apiRoutePrefixes = new[]
 {
     "/api",
     "/2.19.0_20220714193707",
     "/2.19.0_20220719103923"
-}.ToImmutableArray();
+}.ToFrozenSet();
 
 app.MapWhen(
     ctx => apiRoutePrefixes.Any(prefix => ctx.Request.Path.StartsWithSegments(prefix)),
@@ -162,9 +166,6 @@ app.MapWhen(
             applicationBuilder.UsePathBase(prefix);
 
         applicationBuilder.UseRouting();
-        applicationBuilder.UseAuthorization();
-        applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
-        applicationBuilder.UseSerilogRequestLogging();
         applicationBuilder.UseMiddleware<NotFoundHandlerMiddleware>();
         applicationBuilder.UseMiddleware<ExceptionHandlerMiddleware>();
         applicationBuilder.UseMiddleware<DailyResetMiddleware>();
@@ -176,19 +177,15 @@ app.MapWhen(
 );
 
 app.MapWhen(
-    ctx => !apiRoutePrefixes.Any(prefix => ctx.Request.Path.StartsWithSegments(prefix)),
+    ctx => ctx.Request.Path.StartsWithSegments("/web"),
     applicationBuilder =>
     {
+        applicationBuilder.UsePathBase("/web");
         applicationBuilder.UseRouting();
-#pragma warning disable ASP0001
-        applicationBuilder.UseAuthorization();
-#pragma warning restore ASP0001
-        applicationBuilder.UseAntiforgery();
-        applicationBuilder.UseMiddleware<PlayerIdentityLoggingMiddleware>();
+        applicationBuilder.UseCors(policy => policy.WithOrigins("http://localhost:3000"));
         applicationBuilder.UseEndpoints(endpoints =>
         {
-            endpoints.MapRazorPages();
-            endpoints.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+            endpoints.MapControllers();
         });
     }
 );
