@@ -113,7 +113,7 @@ public static class TalismanHelper
     )
     {
         int startIndex = floor >= thresholds[0] ? 2 : 1; // Guarantee ability
-        int index = rdm.Next(startIndex, pool.Count) - 1;
+        int index = rdm.Next(startIndex, pool.Count);
         if (index == 0)
             return 0;
 
