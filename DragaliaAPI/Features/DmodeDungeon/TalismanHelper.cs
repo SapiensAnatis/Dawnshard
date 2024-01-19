@@ -53,7 +53,9 @@ public static class TalismanHelper
         (121, 7), // Dragon Time
         (128, 2), // Element-specific dragon time
         (130, 1), // Element + Weapon specific dragon time
-        (131, 4) // Tradeoffs (Steady|Easy|Lucky|Hasty) Hitter I
+        (131, 4), // Tradeoffs (Steady|Easy|Lucky|Hasty) Hitter I
+        (131, 4),
+        (131, 4)
     };
 
     private const int TalismanIdDifference = 40_000_000;
@@ -112,7 +114,7 @@ public static class TalismanHelper
         IReadOnlyList<int> thresholds
     )
     {
-        int startIndex = floor >= thresholds[0] ? 2 : 1; // Guarantee ability
+        int startIndex = floor >= thresholds[0] ? 1 : 0; // Guarantee ability
         int index = rdm.Next(startIndex, pool.Count);
         if (index == 0)
             return 0;
