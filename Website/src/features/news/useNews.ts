@@ -15,17 +15,10 @@ export type NewsItem = {
   time: Date;
 };
 
-const parseResponse = ({
-  id,
-  headline,
-  description,
-  time,
-}: NewsResponse): NewsItem => {
+const parseResponse = ({ time, ...props }: NewsResponse): NewsItem => {
   return {
-    id: id,
-    headline: headline,
-    description: description,
     time: new Date(time * 1000),
+    ...props,
   };
 };
 
@@ -34,7 +27,9 @@ const useNews = () => {
   return useQuery({
     queryKey: ["news"],
     queryFn: async () =>
-      (await apiCall<NewsResponse[]>("news")).map(parseResponse),
+      (await apiCall<NewsResponse[]>("news"))
+        .sort((a, b) => b.time - a.time)
+        .map(parseResponse),
   });
 };
 

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 
-namespace DragaliaAPI.Middleware;
+namespace DragaliaAPI.Authentication;
 
 public class SessionAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
@@ -26,12 +26,11 @@ public class SessionAuthenticationHandler : AuthenticationHandler<Authentication
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
-        ISystemClock clock,
         ISessionService sessionService,
         IWebHostEnvironment webHostEnvironment,
         ApiContext apiContext
     )
-        : base(options, logger, encoder, clock)
+        : base(options, logger, encoder)
     {
         this.sessionService = sessionService;
         this.webHostEnvironment = webHostEnvironment;

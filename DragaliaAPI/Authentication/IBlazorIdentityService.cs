@@ -1,6 +1,6 @@
 ﻿using DragaliaAPI.Shared.PlayerDetails;
 
-namespace DragaliaAPI.Blazor.Authentication;
+namespace DragaliaAPI.Authentication;
 
 public interface IBlazorIdentityService : IPlayerIdentityService
 {

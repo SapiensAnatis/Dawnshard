@@ -1,6 +1,6 @@
 import { FC } from "react";
 import useNews from "./useNews.ts";
-import { Box, List, Skeleton, Stack, Typography } from "@mui/joy";
+import { Box, List, Stack, Typography } from "@mui/joy";
 import NewsItem, { SkeletonNewsItem } from "./NewsItem.tsx";
 
 const News: FC = () => {

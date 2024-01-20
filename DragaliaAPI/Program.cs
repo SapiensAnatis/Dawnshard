@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using DragaliaAPI;
+using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
 using DragaliaAPI.Features.Blazor;
 using DragaliaAPI.Features.GraphQL;
@@ -101,9 +102,8 @@ builder
     {
         opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
         opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
+        opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Baas, null);
         opts.AddScheme<PhotonAuthenticationHandler>(nameof(PhotonAuthenticationHandler), null);
-
-        opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     })
     .AddCookie(opts =>
     {
@@ -147,6 +147,7 @@ if (Environment.GetEnvironmentVariable("DISABLE_AUTO_MIGRATION") == null)
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseResponseCompression();
+app.UseRouting();
 app.UseAuthorization();
 app.UseMiddleware<PlayerIdentityLoggingMiddleware>();
 app.UseSerilogRequestLogging();
@@ -165,7 +166,6 @@ app.MapWhen(
         foreach (string prefix in apiRoutePrefixes)
             applicationBuilder.UsePathBase(prefix);
 
-        applicationBuilder.UseRouting();
         applicationBuilder.UseMiddleware<NotFoundHandlerMiddleware>();
         applicationBuilder.UseMiddleware<ExceptionHandlerMiddleware>();
         applicationBuilder.UseMiddleware<DailyResetMiddleware>();
@@ -180,12 +180,19 @@ app.MapWhen(
     ctx => ctx.Request.Path.StartsWithSegments("/web"),
     applicationBuilder =>
     {
-        applicationBuilder.UsePathBase("/web");
-        applicationBuilder.UseRouting();
         applicationBuilder.UseCors(policy => policy.WithOrigins("http://localhost:3000"));
         applicationBuilder.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllers();
+            endpoints
+                .MapControllers()
+                .RequireAuthorization(policy =>
+                {
+                    policy.AddAuthenticationSchemes(
+                        SchemeName.Baas,
+                        CookieAuthenticationDefaults.AuthenticationScheme
+                    );
+                    policy.RequireAuthenticatedUser();
+                });
         });
     }
 );

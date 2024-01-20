@@ -19,7 +19,7 @@ const FaqItem: FC<{ question: string; children: ReactNode }> = ({
       <Typography>{question}</Typography>
     </AccordionSummary>
     <AccordionDetails variant="soft">
-      <Typography sx={{ paddingTop: "1rem" }}>{children}</Typography>
+      <Box sx={{ marginTop: "0.25rem" }}>{children}</Box>
     </AccordionDetails>
   </Accordion>
 );
@@ -42,27 +42,34 @@ const FrequentlyAskedQuestions: FC = () => {
         }}
       >
         <FaqItem question="Can I link an account to save my progress across devices?">
-          Yes, if you follow the prompts to link an account in-game, you will be
-          taken to the <a href="https://baas.lukefz.xyz">BaaS website</a>, also
-          developed by LukeFZ. This is a drop-in replacement for the Nintendo
-          account linking system from the original game, which uses entirely new
-          credentials. If you create a new account and link it to your
-          game&apos;s account, you will be able to access your progress from
-          another device linked to the same account.
+          <Typography>
+            {" "}
+            Yes, if you follow the prompts to link an account in-game, you will
+            be taken to the <a href="https://baas.lukefz.xyz">BaaS website</a>,
+            also developed by LukeFZ. This is a drop-in replacement for the
+            Nintendo account linking system from the original game, which uses
+            entirely new credentials. If you create a new account and link it to
+            your game&apos;s account, you will be able to access your progress
+            from another device linked to the same account.
+          </Typography>
         </FaqItem>
         <FaqItem question="Do I have to start over, or can I recover my progress?">
-          Unfortunately, it is no longer possible to recover your progress from
-          the original servers. However, it is possible to import a save using
-          the aforementioned account linking system. If you log in to a linked
-          account, you can upload a JSON file with save data to be applied to
-          the server. You can use a preset save file, such as this{" "}
-          <a href="https://drive.google.com/drive/folders/17pR_hZtjIZ7NKBMUjtiY355FCM_-TqgO?usp=sharing">
-            maxed out save file
-          </a>
-          , to skip parts of the game you do not want to play again.
+          <Typography>
+            Unfortunately, it is no longer possible to recover your progress
+            from the original servers. However, it is possible to import a save
+            using the aforementioned account linking system. If you log in to a
+            linked account, you can upload a JSON file with save data to be
+            applied to the server. You can use a preset save file, such as this{" "}
+            <a href="https://drive.google.com/drive/folders/17pR_hZtjIZ7NKBMUjtiY355FCM_-TqgO?usp=sharing">
+              maxed out save file
+            </a>
+            , to skip parts of the game you do not want to play again.
+          </Typography>
         </FaqItem>
         <FaqItem question="What features have been implemented so far?">
-          The majority of core gameplay mechanics have been implemented:
+          <Typography>
+            The majority of core gameplay mechanics have been implemented:
+          </Typography>
           <List marker="disc" sx={{ marginLeft: "1rem" }}>
             <ListItem>Completing quests</ListItem>
             <ListItem>The Halidom castle builder</ListItem>
@@ -73,8 +80,10 @@ const FrequentlyAskedQuestions: FC = () => {
           </List>
         </FaqItem>
         <FaqItem question="What features are still being worked on?">
-          Here is a non-exhaustive list of features that are still being
-          developed:
+          <Typography>
+            Here is a non-exhaustive list of features that are still being
+            developed:
+          </Typography>
           <List marker="disc" sx={{ marginLeft: "1rem" }}>
             <ListItem>Friends</ListItem>
             <ListItem>Alliances</ListItem>

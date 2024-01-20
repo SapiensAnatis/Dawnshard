@@ -1,3 +1,4 @@
+using DragaliaAPI.Authentication;
 using DragaliaAPI.Database;
 using DragaliaAPI.Middleware;
 using EntityGraphQL;

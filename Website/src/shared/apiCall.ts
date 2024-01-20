@@ -1,13 +1,9 @@
-import { decodeAsync } from "@msgpack/msgpack";
-
-const MSGPACK_TYPE = "application/x-msgpack";
-
-const apiCall = async <TResponse>(path: string) => {
+const apiCall = async <TResponse>(path: string, request?: RequestInit) => {
   console.debug(import.meta.env.API_URL, path);
   const url = new URL(path, import.meta.env.VITE_API_URL);
   console.debug(url);
 
-  const response = await fetch(url);
+  const response = await fetch(url, request);
   console.log(response);
 
   if (!response.ok) {

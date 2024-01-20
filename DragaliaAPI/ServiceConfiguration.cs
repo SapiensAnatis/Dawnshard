@@ -1,4 +1,4 @@
-﻿using DragaliaAPI.Blazor.Authentication;
+﻿using DragaliaAPI.Authentication;
 using DragaliaAPI.Extensions;
 using DragaliaAPI.Features.Chara;
 using DragaliaAPI.Features.ClearParty;

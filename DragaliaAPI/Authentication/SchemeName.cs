@@ -1,4 +1,4 @@
-﻿namespace DragaliaAPI.Middleware;
+﻿namespace DragaliaAPI.Authentication;
 
 /// <summary>
 /// Constant names for authentication schemes.
@@ -8,4 +8,6 @@ public static class SchemeName
     public const string Session = "SessionAuthentication";
 
     public const string Developer = "DeveloperAuthentication";
+
+    public const string Baas = "BaasAuthentication";
 }

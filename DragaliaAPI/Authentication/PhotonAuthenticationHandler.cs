@@ -9,13 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 
-namespace DragaliaAPI.Middleware;
+namespace DragaliaAPI.Authentication;
 
 public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
     public const string Role = "Photon";
 
-    private readonly IUserDataRepository userDataRepository;
     private readonly ApiContext apiContext;
 
     public PhotonAuthenticationHandler(
@@ -38,13 +37,13 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
             )
         )
         {
-            Logger.LogDebug("Failed to parse Authorization header.");
+            this.Logger.LogDebug("Failed to parse Authorization header.");
             return AuthenticateResult.NoResult();
         }
 
         if (authenticationHeader.Parameter is null)
         {
-            Logger.LogDebug("AuthenticationHeader.Parameter was null");
+            this.Logger.LogDebug("AuthenticationHeader.Parameter was null");
             return AuthenticateResult.NoResult();
         }
 
@@ -54,7 +53,7 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
 
         if (authenticationHeader.Parameter != configuredToken)
         {
-            Logger.LogInformation(
+            this.Logger.LogInformation(
                 "AuthenticationHeader.Parameter value {param} did not match configured token.",
                 authenticationHeader.Parameter
             );
@@ -62,7 +61,7 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
         }
 
         if (
-            !Request.Headers.TryGetValue("Auth-ViewerId", out StringValues viewerIdStr)
+            !this.Request.Headers.TryGetValue("Auth-ViewerId", out StringValues viewerIdStr)
             || !long.TryParse(viewerIdStr, out long viewerId)
         )
         {
@@ -78,13 +77,13 @@ public class PhotonAuthenticationHandler : AuthenticationHandler<AuthenticationS
             return AuthenticateResult.Fail($"No user found for viewer ID {viewerId}");
         }
 
-        ClaimsIdentity identity = new(Scheme.Name);
+        ClaimsIdentity identity = new(this.Scheme.Name);
         identity.AddClaim(new Claim(CustomClaimType.ViewerId, viewerId.ToString()));
         identity.AddClaim(new Claim(CustomClaimType.AccountId, accountId));
         identity.AddClaim(new Claim(ClaimTypes.Role, Role));
 
         ClaimsPrincipal principal = new(identity);
-        AuthenticationTicket ticket = new(principal, Scheme.Name);
+        AuthenticationTicket ticket = new(principal, this.Scheme.Name);
 
         return AuthenticateResult.Success(ticket);
     }

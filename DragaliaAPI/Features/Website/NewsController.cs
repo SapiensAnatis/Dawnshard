@@ -1,11 +1,13 @@
 using DragaliaAPI.Database;
 using DragaliaAPI.Database.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DragaliaAPI.Features.Website;
 
-[Route("[controller]")]
+[Route("web/[controller]")]
+[AllowAnonymous]
 public class NewsController(ApiContext apiContext) : ControllerBase
 {
     private readonly ApiContext apiContext = apiContext;
@@ -20,5 +22,3 @@ public class NewsController(ApiContext apiContext) : ControllerBase
         return items;
     }
 }
-
-public record NewsItem(int Id, string Headline, DateTimeOffset Time, string Description) { }

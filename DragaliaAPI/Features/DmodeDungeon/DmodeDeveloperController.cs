@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Database.Repositories;
+﻿using DragaliaAPI.Authentication;
+using DragaliaAPI.Database.Repositories;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Services.Exceptions;
 using DragaliaAPI.Shared.PlayerDetails;

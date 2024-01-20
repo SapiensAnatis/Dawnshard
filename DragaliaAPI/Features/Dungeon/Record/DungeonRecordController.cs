@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Controllers;
+﻿using DragaliaAPI.Authentication;
+using DragaliaAPI.Controllers;
 using DragaliaAPI.Features.Dungeon.AutoRepeat;
 using DragaliaAPI.Features.Dungeon.Start;
 using DragaliaAPI.Features.TimeAttack;

@@ -1,8 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { Card, CardContent, Chip, Skeleton, Stack, Typography } from "@mui/joy";
 
-const maxDescriptionLength = 300;
-const localStorageKey = (id) => `news-read-${id}`;
+const localStorageKey = (id: number) => `news-read-${id}`;
 
 export const SkeletonNewsItem: FC = () => {
   return (
@@ -34,11 +33,6 @@ const NewsItem: FC<{
   description: string;
   date: Date;
 }> = ({ id, headline, description, date }) => {
-  const trimmedDescription =
-    description.length > maxDescriptionLength
-      ? description.substring(0, maxDescriptionLength - 1) + "…"
-      : description;
-
   const [isNew, setIsNew] = useState(false);
 
   useEffect(() => {
@@ -74,7 +68,7 @@ const NewsItem: FC<{
           )}
         </Stack>
         <Typography fontSize="small">{date.toLocaleString()}</Typography>
-        <Typography width="100%">{trimmedDescription}</Typography>
+        <Typography width="100%">{description}</Typography>
       </CardContent>
     </Card>
   );

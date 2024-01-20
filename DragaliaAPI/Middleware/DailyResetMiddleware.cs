@@ -1,4 +1,5 @@
-﻿using DragaliaAPI.Helpers;
+﻿using DragaliaAPI.Authentication;
+using DragaliaAPI.Helpers;
 using DragaliaAPI.MessagePack;
 using DragaliaAPI.Models;
 using MessagePack;

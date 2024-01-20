@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using DragaliaAPI.Authentication;
 using DragaliaAPI.Middleware;
 using DragaliaAPI.Models;
 using DragaliaAPI.Shared.PlayerDetails;
