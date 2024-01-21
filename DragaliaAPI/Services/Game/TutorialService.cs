@@ -66,6 +66,9 @@ public class TutorialService : ITutorialService
     {
         switch (storyId)
         {
+            case TutorialStoryIds.Upgrading:
+                await UpdateTutorialStatus(10600);
+                break;
             case TutorialStoryIds.Wyrmprints:
                 await SetupWyrmprintTutorial();
                 break;
@@ -137,6 +140,7 @@ public class TutorialService : ITutorialService
 
     public static class TutorialStoryIds
     {
+        public const int Upgrading = 1000103;
         public const int Wyrmprints = 1000106;
         public const int Halidom = 1000111;
         public const int MercurialGauntlet = 1000202;
