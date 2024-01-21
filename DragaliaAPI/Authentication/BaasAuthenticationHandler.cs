@@ -13,13 +13,13 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DragaliaAPI.Authentication;
 
-public class BaasAuthenticationScheme : AuthenticationHandler<AuthenticationSchemeOptions>
+public class BaasAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
     private readonly IOptionsMonitor<BaasOptions> baasOptions;
     private readonly ApiContext apiContext;
     private readonly IBaasApi baasApi;
 
-    public BaasAuthenticationScheme(
+    public BaasAuthenticationHandler(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         IOptionsMonitor<BaasOptions> baasOptions,
         ApiContext apiContext,
@@ -43,11 +43,11 @@ public class BaasAuthenticationScheme : AuthenticationHandler<AuthenticationSche
             )
         )
         {
-            return AuthenticateResult.NoResult();
+            return AuthenticateResult.Fail("No Authorization header");
         }
 
         if (authenticationHeader is not { Scheme: "Bearer", Parameter: { } idToken })
-            return AuthenticateResult.NoResult();
+            return AuthenticateResult.Fail("Invalid authorization header");
 
         JwtSecurityTokenHandler handler = new();
 
@@ -62,7 +62,14 @@ public class BaasAuthenticationScheme : AuthenticationHandler<AuthenticationSche
         );
 
         if (!tokenValidationResult.IsValid)
+        {
+            this.Logger.LogInformation(
+                tokenValidationResult.Exception,
+                "JWT {IdToken} was invalid",
+                idToken
+            );
             return AuthenticateResult.Fail(tokenValidationResult.Exception);
+        }
 
         JwtSecurityToken jwToken = (JwtSecurityToken)tokenValidationResult.SecurityToken;
 

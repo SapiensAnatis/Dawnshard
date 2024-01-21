@@ -102,7 +102,7 @@ builder
     {
         opts.AddScheme<SessionAuthenticationHandler>(SchemeName.Session, null);
         opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Developer, null);
-        opts.AddScheme<DeveloperAuthenticationHandler>(SchemeName.Baas, null);
+        opts.AddScheme<BaasAuthenticationHandler>(SchemeName.Baas, null);
         opts.AddScheme<PhotonAuthenticationHandler>(nameof(PhotonAuthenticationHandler), null);
     })
     .AddCookie(opts =>
@@ -180,17 +180,16 @@ app.MapWhen(
     ctx => ctx.Request.Path.StartsWithSegments("/web"),
     applicationBuilder =>
     {
-        applicationBuilder.UseCors(policy => policy.WithOrigins("http://localhost:3000"));
+        applicationBuilder.UseCors(
+            policy => policy.WithOrigins("http://localhost:3000").AllowCredentials()
+        );
         applicationBuilder.UseEndpoints(endpoints =>
         {
             endpoints
                 .MapControllers()
                 .RequireAuthorization(policy =>
                 {
-                    policy.AddAuthenticationSchemes(
-                        SchemeName.Baas,
-                        CookieAuthenticationDefaults.AuthenticationScheme
-                    );
+                    policy.AddAuthenticationSchemes(SchemeName.Baas);
                     policy.RequireAuthenticatedUser();
                 });
         });

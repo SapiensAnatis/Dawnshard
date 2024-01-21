@@ -1,9 +1,9 @@
-import React, { FC, useContext } from "react";
+import { FC, useContext } from "react";
 import { Box, IconButton, Stack, Typography } from "@mui/joy";
 import ColorSchemeToggle from "./ColorSchemeToggle.tsx";
 import { MenuRounded } from "@mui/icons-material";
 import useBreakpoint from "../../shared/hooks/useBreakpoint.ts";
-import UserContext from "../../userState.ts";
+import UserContext from "../../shared/context/userContext.ts";
 import LoginButton from "./LoginButton.tsx";
 
 const Header: FC<{ onClickMenu: () => void }> = ({ onClickMenu }) => {

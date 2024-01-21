@@ -3,17 +3,14 @@ const baasApiCall = async <TResponse>(
   request: RequestInit,
 ) => {
   const url = new URL(relativeUrl, import.meta.env.VITE_BAAS_URL);
-  const proxyUrl = new URL(`https://cors-anywhere.herokuapp.com/${url}`);
 
-  const response = await fetch(new Request(proxyUrl, request));
+  const response = await fetch(new Request(url, request));
 
   if (!response.ok) {
     console.error(
       `Request to ${url} failed: ${response.status} (${response.statusText})`,
     );
-    throw Error(
-      `Request to ${url} failed: ${response.status} (${response.statusText})`,
-    );
+    throw Error("BaaS API call failed");
   }
 
   const decoded = await response.json();

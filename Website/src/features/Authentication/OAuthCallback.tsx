@@ -3,8 +3,11 @@ import { doBaasAuthentication } from "./doBaasAuthentication.ts";
 import { queryParams } from "../../shared/constants.ts";
 import { Navigate, useSearchParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import UserContext from "../../userState.ts";
+import UserContext from "../../shared/context/userContext.ts";
 import { Typography } from "@mui/joy";
+import { SnackbarContext } from "../../shared/snackbar/snackbarContext.ts";
+import { SnackbarActionKind } from "../../shared/snackbar/snackbarReducer.ts";
+import { ErrorRounded } from "@mui/icons-material";
 
 const OAuthCallback: FC = () => {
   console.log("rendering oauth callback");
@@ -14,7 +17,10 @@ const OAuthCallback: FC = () => {
   const originalPage = searchParams.get(queryParams.originalPage) ?? "/";
   const sessionTokenCode = searchParams.get(queryParams.sessionTokenCode) ?? "";
 
-  const mutation = useMutation({
+  const { dispatchSnackbar } = useContext(SnackbarContext);
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["baasLogin"],
     mutationFn: async (tokenCode: string) =>
       await doBaasAuthentication(tokenCode),
     onSuccess: (response) => {
@@ -25,30 +31,38 @@ const OAuthCallback: FC = () => {
         playerName: response.playerName,
       });
     },
+    onError: (error) => {
+      dispatchSnackbar({
+        type: SnackbarActionKind.Add,
+        payload: {
+          props: {
+            variant: "solid",
+            color: "danger",
+            startDecorator: <ErrorRounded />,
+          },
+          children: (
+            <div>
+              <Typography textColor="white">Authentication failure</Typography>
+              <Typography fontSize="small">{error?.toString()}</Typography>
+            </div>
+          ),
+        },
+      });
+    },
     retry: false,
   });
 
-  console.log(mutation);
-
   useEffect(() => {
-    mutation.mutate(sessionTokenCode);
-  }, [mutation, sessionTokenCode]);
+    console.log("mutating");
+    mutate(sessionTokenCode);
+  }, [mutate, sessionTokenCode]);
 
-  if (mutation.isError) {
-    console.error(mutation.error);
-    return (
-      <>
-        <Typography>Login failed</Typography>
-        <Navigate to={"/news"} />
-      </>
-    );
+  if (!isPending) {
+    console.log("redirecting to", originalPage);
+    return <Navigate to={originalPage} />;
   }
 
-  return mutation.isPending ? (
-    <Typography>Redirecting...</Typography>
-  ) : (
-    <Navigate to={originalPage} />
-  );
+  return <Typography>Redirecting...</Typography>;
 };
 
 export default OAuthCallback;

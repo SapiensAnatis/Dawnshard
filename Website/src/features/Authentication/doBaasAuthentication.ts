@@ -7,7 +7,7 @@ type SessionTokenResponse = {
 };
 
 type SdkTokenResponse = {
-  id_token: string;
+  idToken: string;
 };
 
 type DawnshardAuthResponse = {
@@ -37,12 +37,17 @@ export const doBaasAuthentication = async (sessionTokenCode: string) => {
     sessionTokenRequest,
   );
 
+  console.log({ sessionTokenResponse });
+
   const sdkTokenRequest = {
     method: "POST",
     body: JSON.stringify({
       client_id: import.meta.env.VITE_BAAS_CLIENT_ID,
       session_token: sessionTokenResponse.session_token,
     }),
+    headers: {
+      ["Content-Type"]: "application/json",
+    },
   };
 
   const sdkTokenResponse = await baasApiCall<SdkTokenResponse>(
@@ -50,10 +55,12 @@ export const doBaasAuthentication = async (sessionTokenCode: string) => {
     sdkTokenRequest,
   );
 
-  return await apiCall<DawnshardAuthResponse>("login", {
-    method: "POST",
+  console.log({ sdkTokenResponse });
+
+  return await apiCall<DawnshardAuthResponse>("userDetails", {
+    method: "GET",
     headers: {
-      ["Authorization"]: `Bearer ${sdkTokenResponse.id_token}`,
+      ["Authorization"]: `Bearer ${sdkTokenResponse.idToken}`,
     },
   });
 };
