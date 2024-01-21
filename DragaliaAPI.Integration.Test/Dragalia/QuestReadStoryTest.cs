@@ -53,4 +53,27 @@ public class QuestReadStoryTest : TestFixture
         storyStates.Should().Contain(x => x.StoryId == 1001410 && x.State == StoryState.Read);
         this.ApiContext.PlayerCharaData.Any(x => x.CharaId == Charas.Zena).Should().BeTrue();
     }
+
+    [Fact]
+    public async Task ReadStory_TheLonePaladyn_SetsTutorialStatus()
+    {
+        /* https://github.com/SapiensAnatis/Dawnshard/issues/533 */
+
+        int theLonePaladynStoryId = 1000103;
+
+        QuestReadStoryData response = (
+            await this.Client.PostMsgpack<QuestReadStoryData>(
+                "/quest/read_story",
+                new QuestReadStoryRequest() { quest_story_id = theLonePaladynStoryId }
+            )
+        ).data;
+
+        response
+            .update_data_list.quest_story_list.Should()
+            .ContainEquivalentOf(
+                new QuestStoryList() { quest_story_id = theLonePaladynStoryId, state = 1 }
+            );
+
+        response.update_data_list.user_data.tutorial_status.Should().Be(10600);
+    }
 }
